@@ -1,0 +1,48 @@
+nil <- list()
+
+is.nil <- function(list)
+  length(list) == 0 || is.null(car(list))
+
+car <- function(list) {
+  list[[1]]
+}
+
+cdr <- function(list) {
+  length <- length(list)
+###   stopifnot(length > 0)
+###   ifelse(length == 1,
+###          nil,
+         list[2:length]
+###          )
+}
+
+cadr <- function(list) {
+  car(cdr(list))
+}
+
+caddr <- function(list) {
+  car(cdr(cdr(list)))
+}
+
+is.even <- function(a) {
+  a %% 2 == 0
+}
+
+is.odd <- function(a) {
+  !is.even(a)
+}
+
+zip <- function(...) {
+  m <- mapply(c, ...)
+  split(m, col(m))
+}
+
+pairwise <- function(list) {
+  length <- length(list)
+  length <- ifelse(is.odd(length),
+                   length - 1,
+                   length)
+  odds <- seq(1, length, 2)
+  evens <- seq(2, length, 2)
+  zip(list[odds], list[evens])
+}

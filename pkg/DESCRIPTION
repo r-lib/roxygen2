@@ -1,0 +1,9 @@
+Package: roxygen
+Version: 0.1
+License: GPL (>= 2)
+Description: A Doxygen-like in-line documentation system.
+Title: Roxygen Documentation System
+Author: Peter Danenberg <pcd@wikitex.org>,
+        Manuel Eugster <Manuel.Eugster@stat.uni-muenchen.de>
+Maintainer: Peter Danenberg <pcd@wikitex.org>
+URL: http://roxygen.org

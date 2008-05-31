@@ -1,0 +1,84 @@
+[06:24:30] pdanenberg: Hello, Manuel; are you around?
+[06:29:27] Manuel J. A. Eugster: Hi Peter.
+[06:30:20] pdanenberg: Do you have a minute to chat?
+[06:30:40] Manuel J. A. Eugster: yes.
+[06:31:41] pdanenberg: So I've taken a file and successfully "inverted" the source refs, which means to pull out the comment section preceding any given block of code.
+[06:31:47] … The question is...
+[06:32:20] … should I descend into such methods as setClass, setGenerec, setMethod to deterrmine the name of a class, method, etc.
+[06:32:32] … or should I depend on the user to give me a @name parameter?
+[06:33:45] Manuel J. A. Eugster: hm, I think you should descend into these methods. Because, maybe the user does not list every parameter, even so it should be listed in the documentation.
+[06:34:32] … and descending into these function is also how you see if it is a S3 or a S4 function/method.
+[06:34:59] pdanenberg: My only concern is that I'll be descending into an ad hoc list of methods that may change over time or become obsolete; is the set of class/method functions stable?
+[06:36:11] Manuel J. A. Eugster: i think they are pretty stable. a lot of functions depend on these "api" already, so to change them will produce a lot of mess.
+[06:37:20] … and as I see it, to "descent into these functions" means to write a regular expression which fits, so not that difficult.
+[06:37:58] pdanenberg: And if I understand the difference between S3 and S4 classes correctly; the former uses a function as a closure, while the latter depends on the formal setClass API?
+[06:38:06] … correct; or use the parse() facility.
+[06:39:36] Manuel J. A. Eugster: yes, a  S3 generic function just dispatches according to the first argument to a function where the type of the first argument is part of the function name, after the dot
+[06:40:17] … and a class is just set by assigning the class attribute with the class name as string.
+[06:40:38] pdanenberg: OK; so I should recognize S4 classe as a special entitiy, and be prepared to introspect things about them by descending into the setClass API.
+[06:41:22] Manuel J. A. Eugster: yes.
+[06:41:42] pdanenberg: S3 classes, on the other, hand, can be an arbitrary object with a class attribute, right?
+[06:41:48] … Should I also recognize them?
+[06:41:57] Manuel J. A. Eugster: that's hard I think
+[06:42:31] … because at every part of the code, the programmer could assign the class attribute
+[06:42:43] pdanenberg: That will force me to interpret the language and be aware of side effects, I take it.
+[06:42:45] Manuel J. A. Eugster: to recognize that you really really have to parse all code.
+[06:42:52] pdanenberg: right
+[06:43:07] Manuel J. A. Eugster: so i would propose to handle s3 classes like a virtual class
+[06:43:14] … or a placeholder for a class
+[06:43:28] … they are just a name in the internal representation.
+[06:43:42] … i see it that way:
+[06:44:19] pdanenberg: a placeholder for a future implementation that supports them?
+[06:45:27] Manuel J. A. Eugster: you recognize that there comes a function/method documentation block. You parse it and then you check whether it is a S3 function or a S4 method. In case of S3 you check the argument after the dot in the function name and if there is no object in the internal representation you put it into it.
+[06:46:16] … in case of S4 you got a formal definition and somewhere in your internal representation there is a object with all things you know about that class.
+[06:47:24] … so in case of S3 the class is just a name. we could think about a special documentation block which allows a formal documentation of an S3 class
+[06:47:44] … but we cannot guarantee that this documentation is always correct.
+[06:48:50] … do you see what I mean?
+[06:49:54] pdanenberg: interesting
+[06:50:05] Manuel J. A. Eugster: :-)
+[06:50:18] pdanenberg: how would I distinguish S3 and S4 procedures: based on whether the name after the dot is an S4 class I've already seen?
+[06:50:38] Manuel J. A. Eugster: an S4 method is always defined with setMethod(...)
+[06:50:44] pdanenberg: right
+[06:50:53] Manuel J. A. Eugster: an S3 method is always definde with manuel.class <- function(...)
+[06:51:20] … in the S3 case, the class must be a S3 class
+[06:51:27] pdanenberg: which may or may not be accompanied by a setGeneric in the same file?
+[06:51:46] Manuel J. A. Eugster: setGeneric only defines S4 classes
+[06:51:50] pdanenberg: i see
+[06:51:56] Manuel J. A. Eugster: an S3 class is a totally informal thing
+[06:52:03] … it is just a string
+[06:52:27] pdanenberg: ok, good; so we should document the limitation of S3 classes somewhere, so that the user knows that extracting information about them is unreliable.
+[06:52:51] … but give them the option of an S3 block which makes things explicit.
+[06:53:08] Manuel J. A. Eugster: yes, i think that would be a good idea.
+[06:53:21] pdanenberg: that sounds good
+[06:53:59] Manuel J. A. Eugster: I think I will write some examples, to make my ideas more concrete
+[06:54:25] pdanenberg: das wäre ganz hilfreich
+[06:54:28] Manuel J. A. Eugster: and that you also see how S3/S4 is used and so on ...
+[06:55:25] pdanenberg: the plan this week is to parse the key-value pairs in the roxygen blocks, and get started on the S3/S4 distinction
+[06:55:52] Manuel J. A. Eugster: oh ok, cool.
+[06:56:06] pdanenberg: will you have time next week to create some examples?
+[06:56:42] Manuel J. A. Eugster: yes, i attend a conference from sunday to wednesdy
+[06:56:59] pdanenberg: and are you available next Friday, as well?
+[06:57:11] Manuel J. A. Eugster: but maybe i have time tomorrow , otherwise on wednesday afternoon.
+[06:57:16] … yes, I'm available.
+[06:57:53] pdanenberg: good; I'll record what we talked about at roxygen-devel, and you'll drop me an email when you have some examples?
+[06:58:10] Manuel J. A. Eugster: ok!
+[06:58:23] pdanenberg: thanks, Manuel; see you next Friday.
+[06:58:31] Manuel J. A. Eugster: wait, one thing ... ;-)
+[06:58:44] pdanenberg: yes?
+[06:58:49] Manuel J. A. Eugster: can i prompt you to use the roxygen source repository?
+[06:59:08] … so that i can check out things on friday morning
+[06:59:59] … and also check in the examples in the repository, to document this ideas as well.
+[07:00:13] pdanenberg: ok; good idea
+[07:00:28] … should I package the source, by the way, as an R-module, or is informal code OK at this point?
+[07:02:07] Manuel  with special names
+[07:04:37] … yes, but at this point of work you do not have to care about that things
+[07:04:57] pdanenberg: ok, good; i'll structure the source accordingly, and check it in to the repository.
+[07:05:04] Manuel J. A. Eugster: ok great.
+[07:05:19] … i will check in the examples too.
+[07:05:33] pdanenberg: you have commit rights, don't you? i think i made you an admin at r-forge
+[07:05:47] Manuel J. A. Eugster: yes, i think.
+[07:05:53] pdanenberg: ok; let me know if there's a problem
+[07:05:57] Manuel J. A. Eugster: ok!
+[07:06:11] pdanenberg: thanks, Manuel; till Friday
+[07:06:20] Manuel J. A. Eugster: ok, bye. have a nice week!
+[07:06:29] pdanenberg: likewise 

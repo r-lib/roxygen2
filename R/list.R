@@ -34,6 +34,8 @@ zip <- function(...) {
 
 pairwise <- function(list) {
   length <- length(list)
+  if (length < 2)
+    return(nil)
   length <- ifelse(is.odd(length),
                    length - 1,
                    length)

@@ -95,8 +95,3 @@ parse.ref.srcref <- function(srcref)
 
 parse.refs <- function(prerefs.srcrefs)
   Map(parse.ref, prerefs.srcrefs)
-
-srcfile <- srcfile('example.R')
-srcrefs <- attributes(parse(srcfile$filename,
-                            srcfile=srcfile))$srcref
-parse.refs(zip.list(prerefs(srcfile), srcrefs))

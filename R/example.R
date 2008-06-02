@@ -3,7 +3,7 @@
 #' @slot fullname The full name of the person
 #' @slot birthyear The year of birth
 #' @prototype Prototype person is named John Doe
-#'      and born in the year 1971}
+#'      and born in the year 1971
 setClass('Person',
          representation = representation (
                      fullname = 'character',

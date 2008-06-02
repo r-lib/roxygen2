@@ -1,5 +1,15 @@
 all' hileth', Hephaiste; didou d'areten te kai olbon.*
 --Homer, 7 BCE
 
+The driver, `main.R', parses `example.R', the example file given by
+Manuel in the original GSoC idea-paper.
+
+Upon execution, one should see a parse-tree of parsed elements
+(represented as lists); accompanied by a srcref of the apposite
+object.
+
+The srcref can be processed for gleaning further information (S4
+class, object name, &c).
+
 -----------
 * Hail, Hephaistos! Grant skill and weal.

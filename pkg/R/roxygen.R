@@ -38,22 +38,34 @@ parse.default <- function(...) {
   list(unknown=paste(...))
 }
 
-parse.description <- function(expression)
-  list(description=expression)
-
-parser <- function(key) {
-  f <- sprintf('parse.%s', key)
-  if (length(ls(pattern=f)) > 0) f else parse.default
-}
-
-paste.list <- function(list) {
-  do.call(paste, list)
-}
-
 parse.element <- function(element) {
   tokens <- car(strsplit(element, ' ', fixed=T))
   parser <- parser(car(tokens))
   do.call(parser, as.list(cdr(tokens)))
+}
+
+parse.description <- function(expression)
+  list(description=expression)
+
+parse.slot <- function(name, ...)
+  list(slot=list(name=name, description=paste(...)))
+
+parse.prototype <- function(...)
+  list(prototype=paste(...))
+
+parse.param <- function(name, ...)
+  list(param=list(name=name, description=paste(...)))
+
+parse.export <- function(...)
+  list(export=T)
+
+parser <- function(key) {
+  f <- sprintf('parse.%s', key)
+  if (length(ls(1, pattern=f)) > 0) f else parse.default
+}
+
+paste.list <- function(list) {
+  do.call(paste, list)
 }
 
 parse.ref.preref <- function(preref) {
@@ -70,7 +82,7 @@ parse.ref.preref <- function(preref) {
   ## latex.
   joined.lines <- gsub(' {2,}', ' ', paste.list(trimmed.lines))
   elements <- Map(trim, car(strsplit(joined.lines, TAG.DELIMITER, fixed=T)))
-  ## Forced to Reduce, since Map introduces magical name-mapping.
+  ## Map introduces magical name-mapping.
   parsed.elements <- Reduce(function(parsed, element)
                             append(parsed, parse.element(element)),
                             cdr(elements), parse.description(car(elements)))

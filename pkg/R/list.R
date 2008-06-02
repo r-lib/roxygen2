@@ -8,12 +8,7 @@ car <- function(list) {
 }
 
 cdr <- function(list) {
-  length <- length(list)
-###   stopifnot(length > 0)
-###   ifelse(length == 1,
-###          nil,
-         list[2:length]
-###          )
+  list[2:length(list)]
 }
 
 cadr <- function(list) {
@@ -29,7 +24,7 @@ is.even <- function(a) {
 }
 
 is.odd <- function(a) {
-  !is.even(a)
+  Negate(is.even)(a)
 }
 
 zip <- function(...) {

@@ -1,24 +1,25 @@
 source("list.R")
-source("curry.R")
 filter.artifacts <- function(pair)
   car(pair) <= cdr(pair)
-length.line <- function(srcfile, lineno)
-  nchar(getSrcLines(srcfile, lineno, lineno))
-pair.srcref <- function(file, pair) {
-  srcfile <- srcfile(file)
-  start <- car(pair)
-  end <- cdr(pair)
-  srcref(srcfile, c(start, 1, end, length.line(srcfile, end)))
-}
+
 #' Comment blocks (possibly null) that precede a file's expressions.
-prerefs <- function(file) {
-  srcrefs <- attributes(parse(file, srcfile=srcfile(file)))$srcref
+prerefs <- function(srcfile) {
+  length.line <- function(lineno)
+    nchar(getSrcLines(srcfile, lineno, lineno))
+
+  pair.srcref <- function(pair) {
+    start <- car(pair)
+    end <- cdr(pair)
+    srcref(srcfile, c(start, 1, end, length.line(end)))
+  }
+
   lines <- unlist(Map(function(srcref)
-                      c(car(srcref) - 1,
-                        caddr(srcref) + 1),
+                      c(car(srcref) - 1, caddr(srcref) + 1),
                       srcrefs))
   pairs <- pairwise(c(1, lines))
-  Map(Curry(pair.srcref, file=file),
-      Filter(filter.artifacts, pairs))
+  Map(pair.srcref, Filter(filter.artifacts, pairs))
 }
-prerefs('example.R')
+srcfile <- srcfile('example.R')
+srcrefs <- attributes(parse(srcfile$filename,
+                            srcfile=srcfile))$srcref
+prerefs(srcfile)

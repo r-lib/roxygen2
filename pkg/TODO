@@ -1,0 +1,2 @@
+* Examine the actual srcref associated with the comment block to
+  extract names, S3/S4 class information.

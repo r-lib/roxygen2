@@ -90,7 +90,8 @@ parse.ref.preref <- function(preref) {
 } 
 
 parse.ref.srcref <- function(srcref)
-  nil
+  list(srcref=list(filename=attributes(srcref)$srcfile$filename,
+         lloc=as.vector(srcref)))
 
 parse.refs <- function(prerefs.srcrefs)
   Map(parse.ref, prerefs.srcrefs)
@@ -98,5 +99,4 @@ parse.refs <- function(prerefs.srcrefs)
 srcfile <- srcfile('example.R')
 srcrefs <- attributes(parse(srcfile$filename,
                             srcfile=srcfile))$srcref
-## parse.refs(zip.list(prerefs(srcfile), srcrefs))
-Map(unlist, Map(parse.ref, prerefs(srcfile)))
+parse.refs(zip.list(prerefs(srcfile), srcrefs))

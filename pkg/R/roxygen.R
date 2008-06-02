@@ -1,7 +1,15 @@
 source('list.R')
+source('curry.R')
 
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
+
+trim <- function(x, ...)
+  UseMethod('trim')
+
+trim.character <- function(string)
+  gsub('^[[:space:]]+', '',
+       gsub('[[:space:]]+$', '', string))
 
 incipit <- function(x, ...)
   UseMethod('incipit')

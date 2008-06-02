@@ -12,11 +12,12 @@ pair.srcref <- function(file, pair) {
 }
 #' Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(file) {
-  pairs <-
-    pairwise(c(1, unlist(Map(function(srcref)
-                             c(car(srcref) - 1,
-                               caddr(srcref) + 1),
-                             attributes(parse(file))$srcref))))
+  srcrefs <- attributes(parse(file, srcfile=srcfile(file)))$srcref
+  lines <- unlist(Map(function(srcref)
+                      c(car(srcref) - 1,
+                        caddr(srcref) + 1),
+                      srcrefs))
+  pairs <- pairwise(c(1, lines))
   Map(Curry(pair.srcref, file=file),
       Filter(filter.artifacts, pairs))
 }

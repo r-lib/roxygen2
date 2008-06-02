@@ -1,23 +1,11 @@
 source('list.R')
-source('curry.R')
 
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
 
-trim <- function(x, ...)
-  UseMethod('trim')
-
-trim.character <- function(string)
+trim <- function(string)
   gsub('^[[:space:]]+', '',
        gsub('[[:space:]]+$', '', string))
-
-incipit <- function(x, ...)
-  UseMethod('incipit')
-incipit.preref <- incipit.srcref <- car
-
-terminus <- function(x, ...)
-  UseMethod('terminus')
-terminus.preref <- terminus.srcref <- caddr
 
 #' Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(srcfile) {
@@ -32,8 +20,8 @@ prerefs <- function(srcfile) {
   }
 
   lines <- unlist(Map(function(srcref)
-                      c(incipit(srcref) - 1,
-                        terminus(srcref) + 1),
+                      c(car(srcref) - 1,
+                        caddr(srcref) + 1),
                       srcrefs))
   pairs <- pairwise(c(1, lines))
   Map(pair.preref, pairs)
@@ -45,6 +33,28 @@ parse.ref <- function(x, ...)
 parse.ref.list <- function(preref.srcref)
   append(parse.ref(car(preref.srcref)),
          parse.ref(cadr(preref.srcref)))
+
+parse.default <- function(...) {
+  list(unknown=paste(...))
+}
+
+parse.description <- function(expression)
+  list(description=expression)
+
+parser <- function(key) {
+  f <- sprintf('parse.%s', key)
+  if (length(ls(pattern=f)) > 0) f else parse.default
+}
+
+paste.list <- function(list) {
+  do.call(paste, list)
+}
+
+parse.element <- function(element) {
+  tokens <- car(strsplit(element, ' ', fixed=T))
+  parser <- parser(car(tokens))
+  do.call(parser, as.list(cdr(tokens)))
+}
 
 parse.ref.preref <- function(preref) {
   lines <- getSrcLines(attributes(preref)$srcfile,
@@ -58,8 +68,12 @@ parse.ref.preref <- function(preref) {
   ## Presumption: white-space is insignificant; there are no
   ## multi-line elements. This contradicts, for instance, verbatim or
   ## latex.
-  joined.lines <- gsub(' {2,}', ' ', do.call(paste, trimmed.lines))
-  elements <- Map(trim, strsplit(joined.lines, TAG.DELIMITER))
+  joined.lines <- gsub(' {2,}', ' ', paste.list(trimmed.lines))
+  elements <- Map(trim, car(strsplit(joined.lines, TAG.DELIMITER, fixed=T)))
+  ## Forced to Reduce, since Map introduces magical name-mapping.
+  parsed.elements <- Reduce(function(parsed, element)
+                            append(parsed, parse.element(element)),
+                            cdr(elements), parse.description(car(elements)))
 } 
 
 parse.ref.srcref <- function(srcref)

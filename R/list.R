@@ -15,8 +15,12 @@ cadr <- function(list) {
   car(cdr(list))
 }
 
+cddr <- function(list) {
+  cdr(cdr(list))
+}
+
 caddr <- function(list) {
-  car(cdr(cdr(list)))
+  car(cddr(list))
 }
 
 is.even <- function(a) {
@@ -27,9 +31,18 @@ is.odd <- function(a) {
   Negate(is.even)(a)
 }
 
-zip <- function(...) {
-  m <- mapply(c, ...)
+zip <- function(zipper, ...) {
+  m <- mapply(zipper, ...)
   split(m, col(m))
+}
+
+
+zip.c <- function(...) {
+  zip(c, ...)
+}
+
+zip.list <- function(...) {
+  zip(list, ...)
 }
 
 pairwise <- function(list) {
@@ -41,5 +54,5 @@ pairwise <- function(list) {
                    length)
   odds <- seq(1, length, 2)
   evens <- seq(2, length, 2)
-  zip(list[odds], list[evens])
+  zip.c(list[odds], list[evens])
 }

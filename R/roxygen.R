@@ -1,7 +1,4 @@
 source("list.R")
-filter.artifacts <- function(pair)
-  car(pair) <= cdr(pair)
-
 #' Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(srcfile) {
   length.line <- function(lineno)
@@ -17,7 +14,7 @@ prerefs <- function(srcfile) {
                       c(car(srcref) - 1, caddr(srcref) + 1),
                       srcrefs))
   pairs <- pairwise(c(1, lines))
-  Map(pair.srcref, Filter(filter.artifacts, pairs))
+  Map(pair.srcref, pairs)
 }
 srcfile <- srcfile('example.R')
 srcrefs <- attributes(parse(srcfile$filename,

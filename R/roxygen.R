@@ -47,17 +47,18 @@ parse.element <- function(element) {
 parse.description <- function(expression)
   list(description=expression)
 
-parse.slot <- function(name, ...)
-  list(slot=list(name=name, description=paste(...)))
-
 parse.prototype <- function(...)
   list(prototype=paste(...))
 
-parse.param <- function(name, ...)
-  list(param=list(name=name, description=paste(...)))
-
 parse.export <- function(...)
   list(export=T)
+
+parse.name.description <- function(name, ...)
+  list(slot=list(name=name, description=paste(...)))
+
+parse.slot <- parse.name.description
+
+parse.param <- parse.name.description
 
 parser <- function(key) {
   f <- sprintf('parse.%s', key)

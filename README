@@ -23,9 +23,6 @@ object:
 
 1.2. TODO
 
-The srcref is currently processed for primitive information (S4 class,
-object name, &c; see TODO); more sophisticated needs?
-
 Mode of interaction with the Roclets has yet to be determined; simple
 API via library() would suffice; though a parse-tree <-> S-expression
 translator would also work.

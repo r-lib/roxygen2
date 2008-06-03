@@ -11,6 +11,10 @@ cdr <- function(list) {
   list[2:length(list)]
 }
 
+caar <- function(list) {
+  car(car(list))
+}
+
 cadr <- function(list) {
   car(cdr(list))
 }
@@ -21,6 +25,10 @@ cddr <- function(list) {
 
 caddr <- function(list) {
   car(cddr(list))
+}
+
+cadar <- function(list) {
+  cadr(car(list))
 }
 
 is.even <- function(a) {

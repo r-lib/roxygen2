@@ -68,6 +68,13 @@ parse.param <- parse.name.description
 parse.setClass <- function(expression)
   list(class=cadr(car(expression)))
 
+parse.setGeneric <- function(expression)
+  list(generic=cadr(car(expression)))
+
+parse.setMethod <- function(expression)
+  list(method=cadr(car(expression)),
+       class=caddr(car(expression)))
+
 parser.default <- function(key, default) {
   f <- sprintf('parse.%s', key)
   if (length(ls(1, pattern=f)) > 0) f else default

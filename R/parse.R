@@ -121,3 +121,10 @@ parse.ref.srcref <- function(srcref) {
 
 parse.refs <- function(prerefs.srcrefs)
   Map(parse.ref, prerefs.srcrefs)
+
+parse.file <- function(file) {
+  srcfile <- srcfile(file)
+  srcrefs <- attributes(parse(srcfile$filename,
+                              srcfile=srcfile))$srcref
+  parse.refs(zip.list(prerefs(srcfile), srcrefs))
+}

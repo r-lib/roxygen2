@@ -69,7 +69,7 @@ parse.setClass <- function(expression)
   list(class=cadr(car(expression)))
 
 parse.setGeneric <- function(expression)
-  list(generic=cadr(car(expression)))
+  list(method=cadr(car(expression)))
 
 parse.setMethod <- function(expression)
   list(method=cadr(car(expression)),
@@ -102,7 +102,6 @@ parse.ref.preref <- function(preref) {
   ## latex.
   joined.lines <- gsub(' {2,}', ' ', paste.list(trimmed.lines))
   elements <- Map(trim, car(strsplit(joined.lines, TAG.DELIMITER, fixed=T)))
-  ## Map introduces magical name-mapping.
   parsed.elements <- Reduce(function(parsed, element)
                             append(parsed, parse.element(element)),
                             cdr(elements), parse.description(car(elements)))

@@ -108,7 +108,7 @@ parse.ref.srcref <- function(srcref) {
   pivot <- caar(expression)
   parser <- parser.srcref(as.character(pivot))
   append(do.call(parser, list(expression)),
-         list(srcref=list(filename=attributes(srcref)$srcfile$filename,
+         list(srcref=list(filename=srcfile$filename,
                 lloc=as.vector(srcref))))
          
 }

@@ -6,14 +6,14 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
 
 1.1. Execution
 
-The driver, `main.R', parses `example.R'; the example file given by
-Manuel in the original GSoC idea-paper.
+The driver, `main.R', parses an arbitrary source file; but defaults to
+`example.R' from the original GSoC proposal.
 
 Upon execution, one should see a parse-tree of parsed elements
 (represented as lists); accompanied by a srcref of the apposite
 object:
 
-    $ R --vanilla --slave < main.R
+    $ R --vanilla --slave --args example.R < main.R
 
     $`1`
     $`1`$description

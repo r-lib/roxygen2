@@ -6,7 +6,7 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
 
 1.1. Execution
 
-The driver, `main.R', parses `example.R', the example file given by
+The driver, `main.R', parses `example.R'; the example file given by
 Manuel in the original GSoC idea-paper.
 
 Upon execution, one should see a parse-tree of parsed elements

@@ -8,7 +8,11 @@ trim <- function(string)
   gsub('^[[:space:]]+', '',
        gsub('[[:space:]]+$', '', string))
 
-#' Comment blocks (possibly null) that precede a file's expressions.
+paste.list <- function(list) {
+  do.call(paste, list)
+}
+
+## Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(srcfile, srcrefs) {
   length.line <- function(lineno)
     nchar(getSrcLines(srcfile, lineno, lineno))
@@ -28,19 +32,10 @@ prerefs <- function(srcfile, srcrefs) {
   Map(pair.preref, pairs)
 }
 
-parse.ref <- function(x, ...)
-  UseMethod('parse.ref')
-
-parse.ref.list <- function(preref.srcref)
-  append(parse.ref(car(preref.srcref)),
-         parse.ref(cadr(preref.srcref)))
+## preref parsers
 
 parse.preref <- function(...) {
   list(unknown=paste(...))
-}
-
-parse.srcref <- function(...) {
-  nil
 }
 
 parse.element <- function(element) {
@@ -65,6 +60,10 @@ parse.slot <- parse.name.description
 
 parse.param <- parse.name.description
 
+## srcref parsers
+
+parse.srcref <- function(...) nil
+
 parse.setClass <- function(expression)
   list(class=cadr(car(expression)))
 
@@ -75,6 +74,8 @@ parse.setMethod <- function(expression)
   list(method=cadr(car(expression)),
        class=caddr(car(expression)))
 
+## Parser lookup
+
 parser.default <- function(key, default) {
   f <- sprintf('parse.%s', key)
   if (length(ls(1, pattern=f)) > 0) f else default
@@ -84,9 +85,12 @@ parser.preref <- Curry(parser.default, default=parse.preref)
 
 parser.srcref <- Curry(parser.default, default=parse.srcref)
 
-paste.list <- function(list) {
-  do.call(paste, list)
-}
+parse.ref <- function(x, ...)
+  UseMethod('parse.ref')
+
+parse.ref.list <- function(preref.srcref)
+  append(parse.ref(car(preref.srcref)),
+         parse.ref(cadr(preref.srcref)))
 
 parse.ref.preref <- function(preref) {
   lines <- getSrcLines(attributes(preref)$srcfile,

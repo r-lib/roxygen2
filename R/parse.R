@@ -1,4 +1,5 @@
 source('list.R')
+source('functional.R')
 
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
@@ -34,13 +35,17 @@ parse.ref.list <- function(preref.srcref)
   append(parse.ref(car(preref.srcref)),
          parse.ref(cadr(preref.srcref)))
 
-parse.default <- function(...) {
+parse.preref <- function(...) {
   list(unknown=paste(...))
+}
+
+parse.srcref <- function(...) {
+  nil
 }
 
 parse.element <- function(element) {
   tokens <- car(strsplit(element, ' ', fixed=T))
-  parser <- parser(car(tokens))
+  parser <- parser.preref(car(tokens))
   do.call(parser, as.list(cdr(tokens)))
 }
 
@@ -60,10 +65,17 @@ parse.slot <- parse.name.description
 
 parse.param <- parse.name.description
 
-parser <- function(key) {
+parse.setClass <- function(expression)
+  list(class=cadr(car(expression)))
+
+parser.default <- function(key, default) {
   f <- sprintf('parse.%s', key)
-  if (length(ls(1, pattern=f)) > 0) f else parse.default
+  if (length(ls(1, pattern=f)) > 0) f else default
 }
+
+parser.preref <- Curry(parser.default, default=parse.preref)
+
+parser.srcref <- Curry(parser.default, default=parse.srcref)
 
 paste.list <- function(list) {
   do.call(paste, list)
@@ -89,9 +101,17 @@ parse.ref.preref <- function(preref) {
                             cdr(elements), parse.description(car(elements)))
 } 
 
-parse.ref.srcref <- function(srcref)
-  list(srcref=list(filename=attributes(srcref)$srcfile$filename,
-         lloc=as.vector(srcref)))
+parse.ref.srcref <- function(srcref) {
+  srcfile <- attributes(srcref)$srcfile
+  lines <- getSrcLines(srcfile, car(srcref), caddr(srcref))
+  expression <- parse(text=lines)
+  pivot <- caar(expression)
+  parser <- parser.srcref(as.character(pivot))
+  append(do.call(parser, list(expression)),
+         list(srcref=list(filename=attributes(srcref)$srcfile$filename,
+                lloc=as.vector(srcref))))
+         
+}
 
 parse.refs <- function(prerefs.srcrefs)
   Map(parse.ref, prerefs.srcrefs)

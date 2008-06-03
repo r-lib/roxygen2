@@ -9,7 +9,7 @@ trim <- function(string)
        gsub('[[:space:]]+$', '', string))
 
 #' Comment blocks (possibly null) that precede a file's expressions.
-prerefs <- function(srcfile) {
+prerefs <- function(srcfile, srcrefs) {
   length.line <- function(lineno)
     nchar(getSrcLines(srcfile, lineno, lineno))
 
@@ -126,5 +126,5 @@ parse.file <- function(file) {
   srcfile <- srcfile(file)
   srcrefs <- attributes(parse(srcfile$filename,
                               srcfile=srcfile))$srcref
-  parse.refs(zip.list(prerefs(srcfile), srcrefs))
+  parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
 }

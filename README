@@ -11,7 +11,15 @@ Manuel in the original GSoC idea-paper.
 
 Upon execution, one should see a parse-tree of parsed elements
 (represented as lists); accompanied by a srcref of the apposite
-object.
+object:
+
+    $ R --vanilla --slave < main.R
+
+    $`1`
+    $`1`$description
+    [1] "This class represents a person."
+
+    ...
 
 1.2. TODO
 

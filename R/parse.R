@@ -12,7 +12,7 @@ paste.list <- function(list) {
   do.call(paste, list)
 }
 
-## Comment blocks (possibly null) that precede a file's expressions.
+#' Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(srcfile, srcrefs) {
   length.line <- function(lineno)
     nchar(getSrcLines(srcfile, lineno, lineno))
@@ -84,6 +84,8 @@ parser.default <- function(key, default) {
 parser.preref <- Curry(parser.default, default=parse.preref)
 
 parser.srcref <- Curry(parser.default, default=parse.srcref)
+
+## File -> {src,pre}ref mapping
 
 parse.ref <- function(x, ...)
   UseMethod('parse.ref')

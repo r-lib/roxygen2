@@ -1,5 +1,4 @@
-# An example for a 'normal' function documentation using
-# Roxygen.
+# Function documentation using Roxygen.
 
 
 

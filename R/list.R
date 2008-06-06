@@ -36,7 +36,8 @@ is.even <- function(a) {
 }
 
 is.odd <- function(a) {
-  Negate(is.even)(a)
+  #Negate(is.even)(a)
+  !is.even(a)
 }
 
 zip <- function(zipper, ...) {

@@ -1,4 +1,4 @@
-# An example for S4 documentation using Roxygen.
+# S4 documentation using Roxygen.
 
 
 
@@ -28,7 +28,7 @@ Person <- function(fullname, birthyear) {
 #' The naming of an object.
 #'
 #' @param object A object which gets a name
-setGeneric('name', function(object) standardGeneric('name'))
+setGeneric('name', function(object) standardGeneric('name'), valueClass='character')
 
 #' Name a person, the baptism.
 #'

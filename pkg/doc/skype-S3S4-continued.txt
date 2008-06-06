@@ -1,0 +1,145 @@
+[08:19:06] pdanenberg: Are you still in the office, Manuel?
+[08:19:26] Manuel J. A. Eugster: yep.
+[08:19:43] pdanenberg: I notice you checked some stuff in to the sandbox
+[08:20:03] Manuel J. A. Eugster: yes, i wrote you some e-mails and also a maillinglist message.
+[08:20:14] pdanenberg: oh, good
+[08:20:30] … did you manage to get a towers of hanoi working?
+[08:20:49] Manuel J. A. Eugster: no, i did a "better" example, monte-carlo estimation of pi
+[08:21:02] pdanenberg: ah, that's one of my favorites, too
+[08:21:16] Manuel J. A. Eugster: fine ;-)
+[08:21:32] pdanenberg: did you get a chance to look at the code?
+[08:22:28] Manuel J. A. Eugster: yes; the result is great
+[08:22:48] pdanenberg: I wasn't sure how "deep" you wanted to descend into the S4 classes
+[08:22:57] … I'm merely pulling out class name, etc.
+[08:23:26] Manuel J. A. Eugster: hm, check my examples for this topic
+[08:23:40] pdanenberg: okay
+[08:23:42] Manuel J. A. Eugster: i listed some things for discussion
+[08:24:31] … i'm not sure how far we should go, but just think about it. you can better decide what is easy and what is obviate hard
+[08:24:48] pdanenberg: I notice you have some in-line roxygen comments in the function block
+[08:24:54] … should we try to pick those up, too?
+[08:25:08] Manuel J. A. Eugster: no; in the mailling list message I wrote that we ignore them
+[08:25:26] pdanenberg: good; that will simplify things for the time being
+[08:25:45] Manuel J. A. Eugster: yes.
+[08:26:13] pdanenberg: also, Negate is in the SVN version of R
+[08:26:17] … which version are you using?
+[08:26:20] Manuel J. A. Eugster: it is really cool what you allready produced.
+[08:26:26] pdanenberg: thanks, Manuel
+[08:26:32] … I'm glad it worked for you
+[08:29:00] Manuel J. A. Eugster: oh, ok. I'm using 2.6.2
+[08:29:30] … most of the time, because I teach an R course and the students have this version in the computer rooms.
+[08:29:49] pdanenberg: also, they were trying to get Curry into R along with Map, etc.; maybe I'll submit a patch to Rd
+[08:30:13] Manuel J. A. Eugster: oh, ok.
+[08:30:42] pdanenberg: so this weeks tasks are to implement the things you talked about in the email to Roxygen-devel?
+[08:32:07] Manuel J. A. Eugster: yes, and discuss the questions.
+[08:33:20] pdanenberg: when you say @return with the type of the return value, you mean to descend into the function and determine the class of the thing they're returning?
+[08:33:48] … or type, mode, etc.
+[08:34:24] Manuel J. A. Eugster: no, if the user can specify the return type with this @return tag.
+[08:34:33] pdanenberg: oh, ok; good
+[08:34:38] … that would have been hard ;)
+[08:34:38] Manuel J. A. Eugster: and if it is empty, then it is NULL
+[08:34:39] … or so.
+[08:34:45] … yes ;)
+[08:35:35] pdanenberg: okay: so I'll think more about a S3 roxygen block this week, too
+[08:36:00] … should it generally contain the same thing that S4 classes specify, or are things like prototype irrelevant?
+[08:37:01] Manuel J. A. Eugster: hm, i think irrelevant; the only "problem" is, that there are a lot of ways one can build such a S3 class.
+[08:37:07] … easiest way is a list
+[08:37:14] … but one can also use attributes
+[08:37:22] pdanenberg: or an environment, etc?
+[08:37:23] Manuel J. A. Eugster: and add the meta-information there.
+[08:38:05] … yes, maybe environments too.
+[08:38:23] pdanenberg: so maybe just a class description and a list of slots?
+[08:38:42] Manuel J. A. Eugster: i think; is it important where the information is stored?
+[08:39:03] … actually not, or? it is more important that this information is available
+[08:39:24] pdanenberg: not really; I can just add a roxygen block, since there's already an internal roxygen->srcref mapping
+[08:40:06] Manuel J. A. Eugster: hm, maybe we add a roxygen keyword to describe the way the information is stored
+[08:40:22] … e.g., @listObject, @attributeObject
+[08:40:24] … or so?
+[08:40:27] pdanenberg: good point
+[08:41:09] Manuel J. A. Eugster: if @listObject is set, then this means, that the object is a list, and the information is stored in list elements.
+[08:41:41] … @attributeObject means the object is somewhat and additional information is stored in attributes
+[08:41:48] … and so on
+[08:42:01] pdanenberg: should I try to inspect the S3 object myself, or depend on the user to specify its types and slots?
+[08:43:07] Manuel J. A. Eugster: hm; i think the user should specifiy.
+[08:43:24] … because, it could also be a list with attributes
+[08:43:55] pdanenberg: so, if it basically comes down to a list of slots; why does it matter to us whether it's a list- or attribute-object?
+[08:44:14] … isn't the internal representation indifferent?
+[08:44:20] Manuel J. A. Eugster: not for us, but for the user documentation
+[08:44:31] pdanenberg: ach so; good point
+[08:46:47] … also, how is export treated in the NAMESPACE file: one specifies the name of a function, etc?
+[08:48:10] Manuel J. A. Eugster: S3 methods are exported with export(f1, f2, ...)
+[08:48:31] … S4 methods are exported with exportMethods(f1, f2, ...)
+[08:48:42] … and S4 classes with exportClass(c1, c2, ...)
+[08:48:45] pdanenberg: ok; the other thing: should I start to work on the intermediate representation this week?
+[08:48:58] … or wouldn't it be easier for Roclets to use Roxygen as a library?
+[08:49:18] Manuel J. A. Eugster: what do you mean by a library?
+[08:49:42] pdanenberg: call library(Roxygen), for instance, which exposes, say, parse-file
+[08:50:18] Manuel J. A. Eugster: yeah, but i think the Roxygen library should also contains our Roclets
+[08:51:20] … library(Roxygen) exposes parse-file which, returns an object
+[08:51:41] … and then it exposes some roclets which can handle this object returned form parse-file
+[08:51:44] … or so
+[08:51:52] pdanenberg: oh: so if they're in the same library, we shouldn't need to worry about serializing the parse tree in a readable format
+[08:52:55] Manuel J. A. Eugster: but for other people it should be "easily" possible to write own Roclets
+[08:53:06] pdanenberg: even outside of R?
+[08:53:12] Manuel J. A. Eugster: no.
+[08:54:24] pdanenberg: ok; so people can call parse-file and then simply execute their Roclet on the parse-tree list?
+[08:54:51] Manuel J. A. Eugster: yes. i think you should also create some class system.
+[08:55:28] … maybe use a simple S4 class hierarchy. which brings me to point, that you should document your code using Roxygen ;-)
+[08:55:37] pdanenberg: heh ;)
+[08:57:45] … so maybe each documentable object corresponds to a Roxygen class, and parse-file() returns a vector of instantiated Roxygen objects?
+[08:58:34] Manuel J. A. Eugster: that would be the cleanest way
+[08:58:37] … i think.
+[08:58:49] pdanenberg: ok, that's a lot to think about this week
+[08:59:31] Manuel J. A. Eugster: yeah, just think about that; its just an idea, i don't know if its feasible.
+[08:59:55] … actually, there is an internal representation of the S4 classes
+[09:00:31] … where all this information is collacted, maybe we should use them anformation is collacted, maybe we should use them and add similar things only for S3 and normal functions.
+[09:00:49] pdanenberg: hmm; that's interesting
+[09:01:15] Manuel J. A. Eugster: wait, i have some code i think.
+[09:01:17] … somewhere ...
+[09:02:49] pdanenberg: ok let me know if you find it
+[09:03:39] Manuel J. A. Eugster: ok
+[09:03:40] … str(getClass('numeric'))
+[09:03:43] … check this out in R
+[09:04:04] … getClass returns a class `classRepresentation`
+[09:04:28] pdanenberg: fascinating
+[09:04:42] Manuel J. A. Eugster: i'm back in a minute ...
+[09:04:47] pdanenberg: ok
+[09:06:49] Manuel J. A. Eugster: ok, back.
+[09:09:05] … hm, i don't know if we should use that
+[09:09:30] … this would mean that we have to execute the code
+[09:09:47] pdanenberg: indeed
+[09:10:04] … it does have subclass/superclass information though
+[09:10:11] Manuel J. A. Eugster: yes.
+[09:10:13] pdanenberg: we can extract that without executing, can't we?
+[09:10:23] Manuel J. A. Eugster: es, it is in the definition of the class
+[09:10:30] pdanenberg: the subclass, too?
+[09:10:40] Manuel J. A. Eugster: oh, no, only the superclass
+[09:10:44] pdanenberg: right
+[09:10:53] Manuel J. A. Eugster: maybe we can use their code
+[09:11:00] … ?
+[09:11:31] … or parts of their code for parsing? i don't know how they get the information
+[09:12:07] pdanenberg: it looks like it's in the files SClasses.R and RClassUtils.R
+[09:12:13] … I'll check those out
+[09:12:21] Manuel J. A. Eugster: hm, that's all handled by the setClass, setMethod, ... functions
+[09:16:06] pdanenberg: so maybe I should determine this week what's discoverable without execution and try to include that?
+[09:16:17] Manuel J. A. Eugster: yes, that would be a good idea.
+[09:16:36] … can we have a fall back mode?
+[09:17:13] … all things we can determine without execution is determined, but if the user wants more information, parts are executed.
+[09:18:22] pdanenberg: that's interesting; would I have to selectively execute the internals of the class, or could I just call eval() on the whole expression returned by parse(), do you think?
+[09:18:53] Manuel J. A. Eugster: eval on the whole expression i think
+[09:19:21] … but i don't know ...
+[09:19:32] pdanenberg: yeah; maybe I'll do some experimenting
+[09:19:43] Manuel J. A. Eugster: yeah, just do :-)
+[09:20:05] pdanenberg: it's good talking to you, Manuel; I have a lot of things to think about this week
+[09:20:36] Manuel J. A. Eugster: yes, our talks are productive
+[09:20:48] pdanenberg: should we try to meet at the same time next week?
+[09:21:22] Manuel J. A. Eugster: ehm, next time i have lecture until 18 o'clock
+[09:21:41] … so we can meet afterward
+[09:21:42] pdanenberg: should we try later Friday, or would another day be better?
+[09:21:43] … ok
+[09:22:01] Manuel J. A. Eugster: ok, then i'll be in my office.
+[09:22:17] pdanenberg: schöne Woche wünsch' ich dir, noch, Manuel ;)
+[09:22:32] Manuel J. A. Eugster: maybe a few minutes later, depends on the questions the students ask :)
+[09:22:41] … ja, dir auch eine schöne Woche!
+[09:22:41] pdanenberg: ok
+[09:22:47] … bis dann
+[09:22:54] Manuel J. A. Eugster: bis dann, Tschau!

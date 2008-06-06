@@ -1,4 +1,4 @@
-# An example for S3 documentation using Roxygen.
+# S3 documentation using Roxygen.
 
 
 

@@ -1,5 +1,5 @@
-source('list.R')
-source('functional.R')
+source('../R/list.R')
+source('../R/functional.R')
 
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'

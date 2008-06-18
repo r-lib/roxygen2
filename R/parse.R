@@ -31,8 +31,14 @@ prerefs <- function(srcfile, srcrefs) {
 
 ## preref parsers
 
+parse.message <- function(key, message)
+  sprintf('@%s %s.', key, message)
+
 parse.error <- function(key, message)
-  stop(sprintf('@%s %s.', key, message))
+  stop(parse.message(key, message))
+
+parse.warning <- function(key, message)
+  warning(parse.message(key, message))
 
 parse.preref <- function(...) {
   list(unknown=paste(...))
@@ -55,14 +61,16 @@ args.to.string <- function(...)
 parse.default <- function(key, ...)
   as.list(structure(args.to.string(...), names=key))
 
-## Possibly NA, for which the Roclets can do something more
+## Possibly NA; in which case, the Roclets can do something more
 ## sophisticated with the srcref.
 parse.export <- Curry(parse.default, key='export')
 
-parse.value <- function(key, ...)
-  ifelse(is.empty(...),
-         parse.error(key, 'requires a value'),
-         parse.default(key, ...))
+parse.value <- function(key, ...) {
+  if (is.empty(...))
+    parse.error(key, 'requires a value')
+  else
+    parse.default(key, ...)
+}
   
 parse.prototype <- Curry(parse.value, key='prototype')
 
@@ -96,9 +104,15 @@ parse.slot <- Curry(parse.name.description, key='slot')
 
 parse.param <- Curry(parse.name.description, key='param')
 
-## For S3 classes; single name only, and glean description from top
-## line of block?
-parse.class <- Curry(parse.name.description, key='class')
+parse.name <- function(key, name, ...) {
+  if (is.na(name))
+    parse.error(key, 'requires a name')
+  else if (Negate(is.empty)(...))
+    parse.warning(key, 'discards extra-nominal entries')
+  parse.default(key, name)
+}
+
+parse.S3class <- Curry(parse.name, key='S3class')
 
 parse.toggle <- function(key, ...)
   as.list(structure(T, names=key))

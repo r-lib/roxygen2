@@ -1,5 +1,3 @@
-source('../R/functional.R')
-
 nil <- list()
 
 is.nil <- function(list)

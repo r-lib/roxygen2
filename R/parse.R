@@ -34,6 +34,9 @@ prerefs <- function(srcfile, srcrefs) {
 
 ## preref parsers
 
+parse.error <- function(key, message)
+  stop(sprintf('@%s %s.', key, message))
+
 parse.preref <- function(...) {
   list(unknown=paste(...))
 }
@@ -47,18 +50,52 @@ parse.element <- function(element) {
 parse.description <- function(expression)
   list(description=expression)
 
-parse.prototype <- function(...)
-  list(prototype=paste(...))
+is.empty <- function(...) is.nil(c(...)) || is.na(car(as.list(...)))
 
-parse.export <- function(...)
-  list(export=T)
+args.to.string <- function(...)
+  ifelse(is.empty(...), NA, paste(...))
 
-parse.name.description <- function(name, ...)
-  list(slot=list(name=name, description=paste(...)))
+parse.default <- function(key, ...)
+  as.list(structure(args.to.string(...), names=key))
 
-parse.slot <- parse.name.description
+## Possibly NA, for which the Roclets can do something more
+## sophisticated with the srcref.
+parse.export <- Curry(parse.default, key='export')
 
-parse.param <- parse.name.description
+parse.value <- function(key, ...)
+  ifelse(is.empty(...),
+         parse.error(key, 'requires a value'),
+         parse.default(key, ...))
+  
+parse.prototype <- Curry(parse.value, key='prototype')
+
+parse.exportClasses <- Curry(parse.value, key='exportClasses')
+
+parse.exportMethods <- Curry(parse.value, key='exportMethods')
+
+parse.exportPattern <- Curry(parse.value, key='exportPattern')
+
+parse.S3method <- Curry(parse.value, key='S3method')
+
+parse.import <- Curry(parse.value, key='import')
+
+parse.importFrom <- Curry(parse.value, key='importFrom')
+
+parse.importClassesFrom <- Curry(parse.value, key='importClassesFrom')
+
+parse.importMethodsFrom <- Curry(parse.value, key='importMethodsFrom')
+
+parse.name.description <- function(key, name, ...)
+  ifelse(any(is.na(name),
+             is.empty(...)),
+         parse.error(key, 'requires a name and description'),
+         as.list(structure(list(list(name=name,
+                                     description=args.to.string(...))),
+                           names=key)))
+
+parse.slot <- Curry(parse.name.description, key='slot')
+
+parse.param <- Curry(parse.name.description, key='param')
 
 ## srcref parsers
 

@@ -4,3 +4,7 @@ Curry <- function(FUN,...) {
   .orig = list(...);
   function(...) do.call(FUN,c(.orig,list(...)))
 }
+
+## Borrowed from src/library/base/R/funprog.R for pre-2.7 Rs.
+Negate <- function(f)
+  function(...) ! match.fun(f)(...)

@@ -1,3 +1,5 @@
+source('../R/functional.R')
+
 nil <- list()
 
 is.nil <- function(list)
@@ -36,8 +38,7 @@ is.even <- function(a) {
 }
 
 is.odd <- function(a) {
-  #Negate(is.even)(a)
-  !is.even(a)
+  Negate(is.even)(a)
 }
 
 zip <- function(zipper, ...) {

@@ -4,6 +4,7 @@
 #' @slot birthyear The year of birth
 #' @prototype Prototype person is named John Doe
 #'      and born in the year 1971
+#' @export
 setClass('person',
          representation=
          representation(fullname='character',

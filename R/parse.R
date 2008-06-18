@@ -85,17 +85,32 @@ parse.importClassesFrom <- Curry(parse.value, key='importClassesFrom')
 
 parse.importMethodsFrom <- Curry(parse.value, key='importMethodsFrom')
 
-parse.name.description <- function(key, name, ...)
-  ifelse(any(is.na(name),
-             is.empty(...)),
-         parse.error(key, 'requires a name and description'),
-         as.list(structure(list(list(name=name,
-                                     description=args.to.string(...))),
-                           names=key)))
+parse.name.description <- function(key, name, ...) {
+  if (any(is.na(name),
+          is.empty(...)))
+    parse.error(key, 'requires a name and description')
+  else
+    as.list(structure(list(list(name=name,
+                                description=args.to.string(...))),
+                      names=key))
+}
 
 parse.slot <- Curry(parse.name.description, key='slot')
 
 parse.param <- Curry(parse.name.description, key='param')
+
+## For S3 classes; single name only, and glean description from top
+## line of block?
+parse.class <- Curry(parse.name.description, key='class')
+
+parse.toggle <- function(key, ...)
+  as.list(structure(T, names=key))
+
+parse.listObject <- Curry(parse.toggle, key='listObject')
+
+parse.attributeObject <- Curry(parse.toggle, key='attributeObject')
+
+parse.environmentObject <- Curry(parse.toggle, key='environmentObject')
 
 ## srcref parsers
 

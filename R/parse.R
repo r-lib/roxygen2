@@ -1,6 +1,3 @@
-source('../R/list.R')
-source('../R/functional.R')
-
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
 

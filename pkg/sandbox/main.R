@@ -7,8 +7,4 @@ argv <- commandArgs(trailingOnly=T)
 argc <- length(argv)
 file <- ifelse(argc > 0, car(argv), FILE)
 
-l <- parse.file(file)
-str(l)
-
-
-l1 <- parse.file('example-S4-person.R')
+str(parse.file(file))

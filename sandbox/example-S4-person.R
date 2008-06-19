@@ -8,6 +8,7 @@
 #' @slot birthyear The year of birth
 #' @prototype Prototype person is named John Doe
 #'      and born in the year 1971
+#' @exportClass Person
 setClass('Person',
          representation=
          representation(fullname='character',
@@ -19,8 +20,9 @@ setClass('Person',
 #' Constructor function for Person object.
 #' @param fullname The name of the person.
 #' @param birthyear The year of birth.
-#' @return Person The Person object
-#' @export
+#' @returnType Person
+#' @return The Person object
+#' @exportMethod Person
 Person <- function(fullname, birthyear) {
   return(new('Person', fullname=fullname, birthyear=birthyear))
 }
@@ -33,7 +35,7 @@ setGeneric('name', function(object) standardGeneric('name'), valueClass='charact
 #' Name a person, the baptism.
 #'
 #' @param object A Person object
-#' @export
+#' @exportMethod name
 setMethod('name', 'Person',
 function(object) {
   return(object@fullname)

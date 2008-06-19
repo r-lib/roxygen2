@@ -57,8 +57,6 @@ args.to.string <- function(...)
 parse.default <- function(key, ...)
   as.list(structure(args.to.string(...), names=key))
 
-parse.preref <- Curry(parse.default, key='unknown')
-
 ## Possibly NA; in which case, the Roclets can do something more
 ## sophisticated with the srcref.
 parse.export <- Curry(parse.default, key='export')
@@ -88,7 +86,11 @@ parse.importClassesFrom <- Curry(parse.value, key='importClassesFrom')
 
 parse.importMethodsFrom <- Curry(parse.value, key='importMethodsFrom')
 
-parse.return <- Curry(parse.value, key='importMethodsFrom')
+parse.return <- Curry(parse.value, key='return')
+
+parse.reference <- Curry(parse.value, key='reference')
+
+parse.author <- Curry(parse.value, key='author')
 
 parse.name.description <- function(key, name, ...) {
   if (any(is.na(name),
@@ -143,10 +145,10 @@ parse.setMethod <- function(expression)
 
 parser.default <- function(key, default) {
   f <- sprintf('parse.%s', key)
-  if (length(ls(1, pattern=f)) > 0) f else default
+  if (length(ls(1, pattern=f)) > 0) f else Curry(default, key=key)
 }
 
-parser.preref <- Curry(parser.default, default=parse.preref)
+parser.preref <- Curry(parser.default, default=parse.default)
 
 parser.srcref <- Curry(parser.default, default=parse.srcref)
 

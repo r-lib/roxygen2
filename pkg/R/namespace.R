@@ -1,6 +1,6 @@
 namespace <- function(partita) {
   parse.default <- function(procedure, parameters)
-    sprintf('%s(%s)', procedure, gsub(' {2,}', ', ', parameters))
+    sprintf('%s(%s)', procedure, gsub(' +', ', ', parameters))
   
   parse.exportClass <- function(procedure, parameters)
     parse.default('exportClasses', parameters)

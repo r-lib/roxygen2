@@ -4,7 +4,7 @@
 #' @slot birthyear The year of birth
 #' @prototype Prototype person is named John Doe
 #'      and born in the year 1971
-#' @export
+#' @exportClass person
 setClass('person',
          representation=
          representation(fullname='character',
@@ -21,7 +21,7 @@ setGeneric('name', function(object) standardGeneric('name'))
 #' Name a person, the baptism.
 #'
 #' @param object A Person object
-#' @export
+#' @exportMethod name
 setMethod('name', 'person', function(object) object@fullname)
 
 ## name(new('person', fullname='Jane Roe', birthyear=1776))

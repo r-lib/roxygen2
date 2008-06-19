@@ -8,3 +8,12 @@ Curry <- function(FUN,...) {
 ## Borrowed from src/library/base/R/funprog.R for pre-2.7 Rs.
 Negate <- function(f)
   function(...) ! match.fun(f)(...)
+
+## My Happy Hacking keyboard gave out during the writing of this
+## procedure; moment of silence, please.
+Compose <- function(...) {
+  fs <- list(...)
+  function(...) Reduce(function(x, f) f(x),
+                       fs,
+                       ...)
+}

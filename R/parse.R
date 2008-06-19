@@ -206,3 +206,6 @@ parse.file <- function(file) {
                               srcfile=srcfile))$srcref
   parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
 }
+
+parse.files <- function(...)
+  Reduce(append, Map(parse.file, list(...)), NULL)

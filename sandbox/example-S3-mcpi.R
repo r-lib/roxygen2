@@ -1,14 +1,21 @@
 # S3 documentation using Roxygen.
 
-
+#' Container for the number of throws and pi estimation.
+#'
+#' @S3class mcpi
+#' @slot pi Estimation of pi
+#' @slot throws Number of throws
+#' @listObject
+NA
 
 #' A monte carlo algorithm to calculate PI. Extended
 #' version which returns the throws.
 #'
 #' @param trials The number of trials to throw
-#'
-#' @return mcpi a list containing the approximated
-#'              PI value and the throws
+#' @returnType mcpi
+#' @return a list containing the approximated
+#'         PI value and the throws
+#' @export mcpiX
 mcpiX <- function(trials) {
 
   throws <- matrix(NA, nrow=trials,
@@ -34,18 +41,21 @@ mcpiX <- function(trials) {
 }
 
 #' Print function for 'mcpi' objects.
+#'
 #' @param x The 'mcpi' object
 #' @param ... Ignored
 #' @return NULL
+#' @S3method print mcpi
 print.mcpi <- function(x, ...) {
   cat('Approximated PI value (using', nrow(x$throws), 'throws) =', x$pi, '\n')
 }
 
 #' Plot function for 'mcpi' objects.
+#'
 #' @param x The 'mcpi' object
 #' @return NULL
-#'
-#' @import pgirmess polycircle 
+#' @importFrom pgirmess polycircle
+#' @S3method plot mcpi
 plot.mcpi <- function(x, ...) {
   plot(x$throws[,1:2], col=x$throws[,3]+1,
        xlim=c(0,1), ylim=c(0,1), pch=19,
@@ -56,14 +66,17 @@ plot.mcpi <- function(x, ...) {
 }
 
 #' Return base data of a monte carlo algorithm.
+#'
 #' @param x A object created with a monte carlo algorithm
 mcbase <- function(x, ...) {
   UseMethod('mcbase')
 }
 
 #' Base of PI approximation with motne carlo algorithm.
+#'
 #' @param x The 'mcpi' object
 #' @return The throws
+#' @S3method mcbase mcpi
 mcbase.mcpi <- function(x, ...) {
   return(x$throws)
 }

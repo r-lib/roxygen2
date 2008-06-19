@@ -40,10 +40,6 @@ parse.error <- function(key, message)
 parse.warning <- function(key, message)
   warning(parse.message(key, message))
 
-parse.preref <- function(...) {
-  list(unknown=paste(...))
-}
-
 parse.element <- function(element) {
   tokens <- car(strsplit(element, ' ', fixed=T))
   parser <- parser.preref(car(tokens))
@@ -60,6 +56,8 @@ args.to.string <- function(...)
 
 parse.default <- function(key, ...)
   as.list(structure(args.to.string(...), names=key))
+
+parse.preref <- Curry(parse.default, key='unknown')
 
 ## Possibly NA; in which case, the Roclets can do something more
 ## sophisticated with the srcref.
@@ -90,6 +88,8 @@ parse.importClassesFrom <- Curry(parse.value, key='importClassesFrom')
 
 parse.importMethodsFrom <- Curry(parse.value, key='importMethodsFrom')
 
+parse.return <- Curry(parse.value, key='importMethodsFrom')
+
 parse.name.description <- function(key, name, ...) {
   if (any(is.na(name),
           is.empty(...)))
@@ -113,6 +113,8 @@ parse.name <- function(key, name, ...) {
 }
 
 parse.S3class <- Curry(parse.name, key='S3class')
+
+parse.returnType <- Curry(parse.name, key='returnType')
 
 parse.toggle <- function(key, ...)
   as.list(structure(T, names=key))

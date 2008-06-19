@@ -140,11 +140,11 @@ parse.setClass <- function(expression)
   list(class=cadr(car(expression)))
 
 parse.setGeneric <- function(expression)
-  list(method=cadr(car(expression)))
+  list(generic=cadr(car(expression)))
 
 parse.setMethod <- function(expression)
   list(method=cadr(car(expression)),
-       class=caddr(car(expression)))
+       signature=caddr(car(expression)))
 
 ## Parser lookup
 

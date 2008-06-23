@@ -1,0 +1,156 @@
+[Thu Jun 19 2008 00:47:02] pdanenberg: Are you available, Manuel?
+[06:08:47] … Bist du zugänglich, Manuel?
+[06:09:05] Manuel J. A. Eugster: Hi Peter.
+[06:09:17] pdanenberg: hello, Manuel
+[06:09:56] … it looks like I'll be coming into Frankfurt this Saturday, so at least we'll be on the same time for awhile
+[06:10:21] … unfortunately, I have to be up in three hours, but I'd thought I'd see if you saw the latest code
+[06:10:55] Manuel J. A. Eugster: oh great.
+[06:11:15] … so you fly to europe today?
+[06:11:29] pdanenberg: on Friday, actually
+[06:12:00] Manuel J. A. Eugster: oh ok. how long will you be in frankfurt?
+[06:12:16] pdanenberg: just long enough to grab the Zug and head to Freiburg ;)
+[06:12:31] Manuel J. A. Eugster: :-) ah. and how long will you be there?
+[06:12:33] pdanenberg: are you closer to Frankfurt?
+[06:12:37] … about 5 weeks
+[06:12:57] … deep in the Schwarzwald, though; so I'll have to figure out about internet
+[06:13:09] Manuel J. A. Eugster: ;) ah, i think freiburg has internet
+[06:13:26] pdanenberg: Hinterzarten, heisst es; in der Nähe von Heideggers Hüte
+[06:13:34] … heh
+[06:13:55] Manuel J. A. Eugster: hm, i don't know that place
+[06:14:04] … do you plan to come to munich?
+[06:14:17] pdanenberg: I'd like to visit, if you have time
+[06:14:21] Manuel J. A. Eugster: sure.
+[06:14:30] … would be great
+[06:14:36] pdanenberg: is there a particular time in July that's better for you?
+[06:15:57] Manuel J. A. Eugster: hm, lectures are until july, 18.
+[06:16:19] pdanenberg: okay, so maybe in the latter half of July?
+[06:16:49] … we have a little time to figure it out
+[06:16:55] Manuel J. A. Eugster: yes.
+[06:17:23] pdanenberg: there'sa proof-of-concept namespace roclet that i checked in, by the way
+[06:17:31] Manuel J. A. Eugster: yes, i played with it
+[06:17:35] pdanenberg: but it requires a compromise on representing S3 classes
+[06:18:07] … NA, or similar has to follow the comment block, unless we associate the S3class docs with the constructor
+[06:18:27] Manuel J. A. Eugster: maybe we should introduce a function for that
+[06:18:40] … a dummy function.
+[06:18:48] pdanenberg: that's interesting
+[06:19:14] … so it's not too much to ask to have the block associated with an R expression?
+[06:19:47] … otherwise, white space will have to be significant between blocks
+[06:20:07] Manuel J. A. Eugster: ;)
+[06:21:01] … i thought about something like to create a S3ClassRoxygen() function
+[06:21:16] … and i think it even does not have to evaluated
+[06:21:31] pdanenberg: purely as a placeholder, or will it contain information?
+[06:21:38] Manuel J. A. Eugster: just placeholder
+[06:21:47] pdanenberg: nice
+[06:21:50] Manuel J. A. Eugster: it would be better than a NA, or?
+[06:21:55] pdanenberg: indeed
+[06:22:55] … also, the Manigfaltigkeit of @export, @exportClass, @exportMethod, etc. make me uncomfortable; but I think we can attempt something more clever
+[06:23:18] … those are placeholders, so to speak, for the proof of concept
+[06:23:33] Manuel J. A. Eugster: yes, maybe for the "user interface"
+[06:23:51] … but for the information you want to map to, they are correct
+[06:24:15] pdanenberg: we could have a generic @export tag with no arguments which attemps to guess the correct concept
+[06:24:25] … but we could keep the more specific ones for "power users"
+[06:24:31] Manuel J. A. Eugster: yes, and i think that's not that hard, or?
+[06:24:32] pdanenberg: or when the system guesses incorrectly
+[06:24:35] … no
+[06:24:43] Manuel J. A. Eugster: yes, that would be good
+[06:25:20] pdanenberg: i planned for that actually; and have a stub where the argumentless @export evaluation will go
+[06:25:39] … problem is, I notice a lot of non-S3 methods have periods
+[06:25:59] … exclude.too.far() for instance
+[06:26:04] … in mgcv
+[06:26:06] Manuel J. A. Eugster: :-) yes
+[06:26:27] … best example for that case is
+[06:26:29] … t.test
+[06:26:37] … is that a statistc t.test
+[06:26:43] … or the transpose of a test object
+[06:27:04] pdanenberg: interesting
+[06:27:08] Manuel J. A. Eugster: so that's one thing, why the people introduced S4
+[06:27:13] pdanenberg: in that case one would fall back on @S3method, right?
+[06:27:36] … and the S4 methods are pretty unambiguous, correct?
+[06:27:48] Manuel J. A. Eugster: hm, yes.
+[06:27:54] … through the formal definition
+[06:27:59] … it's a lot clearer.
+[06:28:23] pdanenberg: such as setGeneric, etc.?
+[06:28:27] Manuel J. A. Eugster: yes.
+[06:29:13] pdanenberg: it turns out that extracting default arguments with parse() can be tricky
+[06:29:18] … x <- f(x=y)
+[06:29:19] Manuel J. A. Eugster: i think i such S3 cases we should just let the use specify what is currect
+[06:29:25] … eh correct.
+[06:29:48] pdanenberg: let the user specify with the @S3class, @S3method tags?
+[06:29:52] Manuel J. A. Eugster: yes.
+[06:30:11] pdanenberg: will it be clear to people that @S3class is actually a namespace directive?
+[06:30:18] … sorry, @S3method
+[06:30:46] Manuel J. A. Eugster: hm
+[06:31:09] pdanenberg: maybe it can double as a descriptive; but right now the namespace roclet uses it
+[06:31:42] Manuel J. A. Eugster: hm, actually each roclet can use it
+[06:31:48] pdanenberg: that's true
+[06:31:53] Manuel J. A. Eugster: so it is just the description of the method
+[06:32:10] pdanenberg: although, it may have the unintended effect of actually exporting a function
+[06:32:20] … how would you describe a private @S3method, then?
+[06:32:27] Manuel J. A. Eugster: hm, right.
+[06:32:43] … that's why i thought about the @export
+[06:32:51] pdanenberg: right, exactly
+[06:33:03] … maybe an @exportS3method, then, for power users
+[06:33:27] Manuel J. A. Eugster: i think we do not need that
+[06:33:47] … we can find out wheter it is a S4class or method
+[06:34:04] pdanenberg: what if you try to @export t.test, though?
+[06:34:07] Manuel J. A. Eugster: with regex. and in all other cases it is just the export(...) derictive in the namespace file.
+[06:34:36] pdanenberg: oh; so export() works for S3 methods, too?
+[06:34:45] Manuel J. A. Eugster: yes.
+[06:35:00] pdanenberg: hmm; why did they need a S3method(), do you think?
+[06:35:40] Manuel J. A. Eugster: puh, i don't know; but i always use just export()
+[06:36:12] pdanenberg: that's good, then; that clears up a source of indeterminacy
+[06:36:32] Manuel J. A. Eugster: but actually we could create a @export
+[06:36:46] … with an argument which indicates what it is
+[06:36:55] … @export S3 functionname
+[06:37:05] … and if it is only @export than the system guesses
+[06:37:12] pdanenberg: exactly; that's the way it's set up now: it has an optional argument
+[06:37:38] … do you mean that literal `S3' would be a special keyword after @export?
+[06:38:09] Manuel J. A. Eugster: hm
+[06:38:17] … i don't know if that would be nice
+[06:38:25] pdanenberg: or were you just referring to a generic function name?
+[06:38:37] … i think it might be too complex
+[06:38:41] Manuel J. A. Eugster: yes, maybe
+[06:38:53] pdanenberg: but an optional argument to @export seems fine
+[06:39:26] Manuel J. A. Eugster: yes, than you can help the system if the guess is wrong.
+[06:39:38] pdanenberg: should we keep @exportClass, etc. around then; or just have the one @export keyword with optional argument?
+[06:40:07] Manuel J. A. Eugster: no, if the @export works correct then we only need that one, or?
+[06:40:28] pdanenberg: that's what I was thinking; it will be a complex parse, but it's doable
+[06:40:53] … i may have to resort to greps, which i have been avoiding ;)
+[06:40:58] Manuel J. A. Eugster: great ;) I mean than we have all possibilieties
+[06:41:22] … if you get it work, than great, if it is too complex, then we can use the individual keywords.
+[06:41:48] pdanenberg: okay; when parsing, i always think of regular expressions as a kind of failure, for some reason
+[06:41:58] … but i may have to swallow my pride ;)
+[06:42:05] Manuel J. A. Eugster: ;)
+[06:42:17] … give them a chance ...
+[06:42:21] pdanenberg: heh
+[06:42:50] … okay, i'll get started on the universal @export this week
+[06:43:02] Manuel J. A. Eugster: ok. isn't it the same for default values?
+[06:43:31] … if you use regexps, then you also get the default values easily?
+[06:43:34] pdanenberg: exactly; the difference between x <- f(x=y) and f(x=y) tends to be complex with parse()
+[06:44:03] … they can do tricky things like:
+[06:44:06] … f(x=y,
+[06:44:09] … z=2)
+[06:44:20] … print(2)
+[06:44:23] … for instance
+[06:44:29] … on separate lines and no {}
+[06:44:36] … but maybe I can cover those cases
+[06:44:56] Manuel J. A. Eugster: yes, i see. that's hard.
+[06:45:33] … if you don't get the default values easily then the user can specify them at the @slot keyword
+[06:45:35] … for example
+[06:45:55] pdanenberg: good point; i'll try to take it as far as i can with parse() and regexps, and see what happens
+[06:46:20] Manuel J. A. Eugster: yes, good idea
+[06:46:55] pdanenberg: unfortunately, Manuel; I have to get a little sleep. should we try to talk again before I leave, or after I'm in Deutschland?
+[06:47:30] Manuel J. A. Eugster: let's talk when you are in germany.
+[06:47:48] pdanenberg: i should arrive saturday; should i try to contact you on monday?
+[06:48:11] Manuel J. A. Eugster: yes, i'm in the office.
+[06:48:29] pdanenberg: okay; thanks for the good talk, Manuel
+[06:48:44] Manuel J. A. Eugster: thanks for getting up for me ;)
+[06:49:04] pdanenberg: heh; it should be easier when we're in the same time zone
+[06:49:11] Manuel J. A. Eugster: that's true.
+[06:49:28] … so have a good night, for the rest of the night.
+[06:49:32] pdanenberg: schöne Woche noch, Manuel
+[06:49:36] … bis Montag, dann
+[06:49:37] Manuel J.  A. Eugster: dir auch.
+[06:49:42] … Guten Flug.
+[06:49:49] pdanenberg: thanks
+[06:50:03] Manuel J. A. Eugster: Bye.

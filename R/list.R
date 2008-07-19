@@ -8,7 +8,14 @@ car <- function(list) {
 }
 
 cdr <- function(list) {
-  list[2:length(list)]
+  length <- length(list)
+  cdr <- switch(length + 1,
+                stop('CDRing a null list'),
+                nil)
+  if(is.null(cdr))
+    list[2:length]
+  else
+    cdr
 }
 
 caar <- function(list) {

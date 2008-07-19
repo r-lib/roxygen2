@@ -1,12 +1,15 @@
 #' @include list.R string.R functional.R
 Rd <- function(partita) {
-  ## TODO: param
+  Rd.expression <- function(key, ...)
+    sprintf('\\%s%s\n',
+            key,
+            Reduce.paste(function(expression)
+                         sprintf('{%s}', trim(expression)),
+                         c(...),
+                         NIL.STRING))
 
-  Rd.expression <- function(key, expression)
-    sprintf('\\%s{%s}\n', key, expression)
-
-  parse.default <- function(key, expression)
-    cat(Rd.expression(key, trim(expression)))
+  parse.default <- function(key, ...)
+    cat(Rd.expression(key, c(...)))
 
   parse.name <- Curry(parse.default, key='name')
 
@@ -49,6 +52,25 @@ Rd <- function(partita) {
       parse.default('details', details)
   }
 
+  params <- nil
+
+  parse.param <- function(expression)
+    ## Hack to access persistent `params'
+    assign('params',
+           append(params, list(expression)),
+           envir=parent.env(environment()))
+    
+  parse.params <- function(params)
+    Reduce.paste(function(name.param)
+                 Rd.expression('item',
+                     car(name.param),
+                     cadr(name.param)),
+                 params,
+                 '')
+
+  parse.arguments <- function(params)
+    parse.default('arguments', parse.params(params))
+
   parse.noop <- function(expression) NULL
 
   parsers <- list(name=parse.name,
@@ -63,12 +85,17 @@ Rd <- function(partita) {
                   concept=parse.concept,
                   aliases=parse.aliases,
                   keywords=parse.keywords,
-                  description=parse.description)
+                  description=parse.description,
+                  param=parse.param)
 
   parser <- function(key)
     if (is.null(f <- parsers[[key]])) parse.noop else f
 
+  ## Parse the rest first for side-effects (i.e. parameter-gathering).
   for (partitum in partita)
     for (key.value in zip.list(attributes(partitum)$names, partitum))
       do.call(parser(car(key.value)), cdr(key.value))
+
+  ## Then parse the arguments.
+  parse.arguments(params)
 }

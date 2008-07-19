@@ -14,12 +14,6 @@ trim <- function(string)
 
 is.null.string <- function(string) regexpr(MATTER, string) < 0
 
-## Major source of inefficiency; resort to a words-string datatype
-## with pre-delineated words?
-words <- function(string) gregexpr(MATTER, string)[[1]]
-
-nwords <- function(string) length(words(string))
-
 word.ref <- function(string, n) {
   continue <- function(string, n, init) {
     word <- regexpr(MATTER, string)
@@ -42,10 +36,11 @@ strcar <- function(string) {
 strcdr <- function(string) {
   if (is.null.string(string))
     stop('CDRing null-string')
-  nwords <- nwords(string)
-  if (nwords == 1) NIL.STRING
+  ref <- word.ref(string, 2)
+  if (ref$end < ref$start)
+    NIL.STRING
   else
-    substr(string, word.ref(string, 2)$start, nchar(string))
+    substr(string, ref$start, nchar(string))
 }
 
 strcons <- function(consor, consee, sep) {
@@ -53,8 +48,8 @@ strcons <- function(consor, consee, sep) {
   else paste(consor, consee, sep=sep)
 }
 
-## General enough to be designated `map'? Should it preserve
-## non-matter?
+## General enough to be designated `map': isn't it closer to a
+## specialized reduce?
 strmap <- function(proc, sep, string) {
   continue <- function(string)
     if (is.null.string(string))
@@ -69,9 +64,16 @@ strmap <- function(proc, sep, string) {
 debug <- function(...) {
   values <- list(...)
   var.values <- zip.list(attributes(values)$names, values)
-  cat(Reduce(function(pairs, var.value)
-             Curry(paste, sep='')
-             (pairs, sprintf('%s: %s; ', car(var.value), cadr(var.value))),
-             var.values,
-             NULL), '\n')
+  cat(Reduce.paste(function(var.value)
+                   sprintf('%s: %s; ', car(var.value), cadr(var.value)),
+                   var.values,
+                   NIL.STRING),
+      '\n')
 }
+
+Reduce.paste <- function(proc, elts, sep)
+  Reduce(function(parsed, elt)
+         Curry(paste, sep=sep)
+         (parsed, proc(elt)),
+         elts,
+         NIL.STRING)

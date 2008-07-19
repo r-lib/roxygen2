@@ -1,12 +1,13 @@
-#' @include functional.R
+#' @include functional.R @include list.R
 SPACE <- '[[:space:]]+'
 MATTER <- '[^[:space:]]+'
+NIL.STRING <- ''
 
 trim.left <- function(string)
-  gsub(sprintf('^%s', SPACE), '', string)
+  gsub(sprintf('^%s', SPACE), NIL.STRING, string)
 
 trim.right <- function(string)
-  gsub(sprintf('%s$', SPACE), '', string)
+  gsub(sprintf('%s$', SPACE), NIL.STRING, string)
 
 trim <- function(string)
   Compose(trim.left, trim.right)(string)
@@ -50,10 +51,27 @@ strcdr <- function(string) {
   if (is.null.string(string))
     stop('CDRing null-string')
   nwords <- nwords(string)
-  if (nwords == 1)
-    ''
+  if (nwords == 1) NIL.STRING
   else
     substr(string, word.ref(string, 2)$start, nchar(string))
+}
+
+strcons <- function(consor, consee, sep) {
+  if (is.null.string(consee)) consor
+  else paste(consor, consee, sep=sep)
+}
+
+## General enough to be designated `map'? Should it preserve
+## non-matter?
+strmap <- function(proc, sep, string) {
+  continue <- function(string)
+    if (is.null.string(string))
+      NIL.STRING
+    else
+      strcons(strcar(string),
+              continue(strcdr(string)),
+              sep=sep)
+  continue(string)
 }
 
 debug <- function(...) {

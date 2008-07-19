@@ -15,26 +15,38 @@ is.null.string <- function(string) regexpr(MATTER, string) < 0
 
 ## Major source of inefficiency; resort to a words-string datatype
 ## with pre-delineated words?
-words.default <- function(string, matter) gregexpr(matter, string)[[1]]
+words <- function(string) gregexpr(MATTER, string)[[1]]
 
-nwords.default <- function(string, words) length(words(string))
+nwords <- function(string) length(words(string))
 
-word.ref.default <- function(string, n, words) {
-  words <- words(string)
-  start <- words[[n]]
-  length <- attributes(words)$match.length[[n]]
-  end <- start + length - 1
-  list(start=start, end=end)
+## word.ref <- function(string, n) {
+##   words <- words(string)
+##   start <- words[[n]]
+##   length <- attributes(words)$match.length[[n]]
+##   end <- start + length - 1
+##   list(start=start, end=end)
+## }
+
+word.ref <- function(string, n) {
+  continue <- function(string, n, init) {
+    word <- regexpr(MATTER, string)
+    start <- word[[1]]
+    length <- attributes(word)$match.length[[1]]
+    end <- start + length
+    if (n <= 1) list(start=start + init, end=end + init)
+    else continue(substr(string, end, nchar(string)), n - 1, init + length)
+  }
+  continue(string, n, 0)
 }
 
-strcar.default <- function(string, word.ref) {
+strcar <- function(string) {
   if (is.null.string(string))
     stop('CARing null-string')
   ref <- word.ref(string, 1)
-  substr(string, ref$start, ref$end)
+  substr(string, ref$start, ref$end - 1)
 }
 
-strcdr.default <- function(string, nwords, word.ref) {
+strcdr <- function(string) {
   if (is.null.string(string))
     stop('CDRing null-string')
   nwords <- nwords(string)
@@ -44,12 +56,12 @@ strcdr.default <- function(string, nwords, word.ref) {
     substr(string, word.ref(string, 2)$start, nchar(string))
 }
 
-words <- Curry(words.default, matter=MATTER)
-
-nwords <- Curry(nwords.default, words=words)
-
-word.ref <- Curry(word.ref.default, words=words)
-
-strcar <- Curry(strcar.default, word.ref=word.ref)
-
-strcdr <- Curry(strcdr.default, nwords=nwords, word.ref=word.ref)
+debug <- function(...) {
+  values <- list(...)
+  var.values <- zip.list(attributes(values)$names, values)
+  cat(Reduce(function(pairs, var.value)
+             Curry(paste, sep='')
+             (pairs, sprintf('%s: %s; ', car(var.value), cadr(var.value))),
+             var.values,
+             NULL), '\n')
+}

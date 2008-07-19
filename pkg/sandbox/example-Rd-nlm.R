@@ -3,7 +3,7 @@
 #'
 #'
 #' Note that arguments after \code{\dots} must be matched exactly.
-#' 
+#'
 #' If a gradient or hessian is supplied but evaluates to the wrong mode
 #' or length, it will be ignored if \code{check.analyticals = TRUE} (the
 #' default) with a warning.  The hessian is not even checked unless the

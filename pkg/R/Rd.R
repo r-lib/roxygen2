@@ -1,4 +1,4 @@
-#' @include list.R
+#' @include list.R string.R functional.R
 Rd <- function(partita) {
   relevators <- c('name',
                   'aliases',
@@ -40,21 +40,33 @@ Rd <- function(partita) {
 
   parse.concept <- Curry(parse.default, key='concept')
 
-  parse.split <- function(key, expressions)
-    for (expression in strsplit(expressions, SPACE))
-      parse.default(key, expression)
+  parse.split <- function(key, expressions) {
+    expression <- strcar(expressions)
+    rest <- strcdr(expressions)
+    parse.default(key, expression)
+    if (!is.null.string(rest))
+      parse.split(key, rest)
+  }
 
   parse.keywords <- Curry(parse.split, key='keyword')
 
   parse.aliases <- Curry(parse.split, key='alias')
 
   parse.description <- function(expressions) {
-    print(expressions)
-    paragraphs <- strsplit(expressions, '\n\n', fixed=T)
+    paragraphs <- car(strsplit(expressions, '\n\n', fixed=T))
     description <- car(paragraphs)
-    details <- do.call(paste, c(cdr(paragraphs), sep='\n\n'))
+    details <- do.call(paste, list(cdr(paragraphs), sep='\n\n'))
+    print(expressions)
+###     matter <- '[^\n]+'
+###     words <- Curry(words.default, matter=matter)
+###     nwords <- Curry(nwords.default, words=words)
+###     word.ref <- Curry(word.ref.default, words=words)
+###     strcar <- Curry(strcar.default, word.ref=word.ref)
+###     strcdr <- Curry(strcdr.default, nwords=nwords, word.ref=word.ref)
+###     description <- strcar(expressions)
+###     details <- strcdr(expressions)
     parse.default('description', description)
-    if (Negate(is.nil)(details))
+    if (!is.null.string(details))
       parse.default('details', details)
   }
 

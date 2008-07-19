@@ -2,10 +2,6 @@
 LINE.DELIMITER <- '#\' '
 TAG.DELIMITER <- '@'
 
-paste.list <- function(list) {
-  do.call(paste, c(list, sep="\n"))
-}
-
 #' Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(srcfile, srcrefs) {
   length.line <- function(lineno)
@@ -38,36 +34,32 @@ parse.warning <- function(key, message)
   warning(parse.message(key, message))
 
 parse.element <- function(element) {
-  tokens <- car(strsplit(element, SPACE))
-  parser <- parser.preref(car(tokens))
-  do.call(parser, as.list(cdr(tokens)))
+  tag <- strcar(element)
+  rest <- strcdr(element)
+  parser <- parser.preref(tag)
+  do.call(parser, list(rest))
 }
 
 parse.description <- function(expression)
   list(description=expression)
 
-is.empty <- function(...) is.nil(c(...)) || is.na(car(as.list(...)))
+parse.default <- function(key, rest)
+  as.list(structure(rest, names=key))
 
-args.to.string <- function(...)
-  ifelse(is.empty(...), NA, paste(...))
-
-parse.default <- function(key, ...)
-  as.list(structure(args.to.string(...), names=key))
-
-parse.preref <- function(key, ...) {
+parse.preref <- function(key, rest) {
   parse.warning(sprintf('<%s>', key), 'is an unknown key')
-  parse.default(key, ...)
+  parse.default(key, rest)
 }
 
 ## Possibly NA; in which case, the Roclets can do something more
 ## sophisticated with the srcref.
 parse.export <- Curry(parse.default, key='export')
 
-parse.value <- function(key, ...) {
-  if (is.empty(...))
+parse.value <- function(key, rest) {
+  if (is.null.string(rest))
     parse.error(key, 'requires a value')
   else
-    parse.default(key, ...)
+    parse.default(key, rest)
 }
   
 parse.prototype <- Curry(parse.value, key='prototype')
@@ -114,13 +106,14 @@ parse.return <- Curry(parse.value, key='return')
 
 parse.author <- Curry(parse.value, key='author')
 
-parse.name.description <- function(key, name, ...) {
-  if (any(is.na(name),
-          is.empty(...)))
+parse.name.description <- function(key, rest) {
+  name <- strcar(rest)
+  rest <- strcdr(rest)
+  if (is.null.string(name))
     parse.error(key, 'requires a name and description')
   else
     as.list(structure(list(list(name=name,
-                                description=args.to.string(...))),
+                                description=rest)),
                       names=key))
 }
 
@@ -128,19 +121,17 @@ parse.slot <- Curry(parse.name.description, key='slot')
 
 parse.param <- Curry(parse.name.description, key='param')
 
-parse.name.internal <- function(key, name, ...) {
-  if (is.na(name))
+parse.name.internal <- function(key, name) {
+  if (is.null.string(name))
     parse.error(key, 'requires a name')
-  else if (Negate(is.empty)(...))
-    parse.warning(key, 'discards extra-nominal entries')
-  parse.default(key, name)
+  parse.default(key, strcar(name))
 }
 
 parse.S3class <- Curry(parse.name.internal, key='S3class')
 
 parse.returnType <- Curry(parse.name.internal, key='returnType')
 
-parse.toggle <- function(key, ...)
+parse.toggle <- function(key, rest)
   as.list(structure(T, names=key))
 
 parse.listObject <- Curry(parse.toggle, key='listObject')
@@ -192,14 +183,12 @@ parse.ref.preref <- function(preref) {
   trimmed.lines <-
     Map(function(line) substr(line, nchar(LINE.DELIMITER) + 1, nchar(line)),
         delimited.lines)
-  ## Presumption: white-space is insignificant.
-###   joined.lines <- gsub(' {2,}', ' ', paste.list(trimmed.lines))
-  joined.lines <- paste.list(trimmed.lines)
+  joined.lines <- do.call(paste, c(trimmed.lines, sep='\n'))
   if (is.nil(joined.lines))
     nil
   else {
 ###     print(joined.lines)
-    elements <- Map(trim, car(strsplit(joined.lines, TAG.DELIMITER, fixed=T)))
+    elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
 ###     elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
 ###     print(str(elements))
     description <- car(elements)

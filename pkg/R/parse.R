@@ -1,12 +1,18 @@
-LINE.DELIMITER <- '#\''
+LINE.DELIMITER <- '#\' '
 TAG.DELIMITER <- '@'
+SPACE <- '([[:space:]]|\n)'
+
+trim.left <- function(string)
+  gsub(sprintf('^%s+', SPACE), '', string)
+
+trim.right <- function(string)
+  gsub(sprintf('%s+$', SPACE), '', string)
 
 trim <- function(string)
-  gsub('^[[:space:]]+', '',
-       gsub('[[:space:]]+$', '', string))
+  Compose(trim.left, trim.right)(string)
 
 paste.list <- function(list) {
-  do.call(paste, list)
+  do.call(paste, c(list, sep=" \n"))
 }
 
 #' Comment blocks (possibly null) that precede a file's expressions.
@@ -58,7 +64,7 @@ parse.default <- function(key, ...)
   as.list(structure(args.to.string(...), names=key))
 
 parse.preref <- function(key, ...) {
-  parse.warning(key, 'is an unknown key')
+  parse.warning(sprintf('<%s>', key), 'is an unknown key')
   parse.default(key, ...)
 }
 
@@ -91,9 +97,29 @@ parse.importClassesFrom <- Curry(parse.value, key='importClassesFrom')
 
 parse.importMethodsFrom <- Curry(parse.value, key='importMethodsFrom')
 
-parse.return <- Curry(parse.value, key='return')
+## Rd stuff
 
-parse.reference <- Curry(parse.value, key='reference')
+parse.name <- Curry(parse.value, key='name')
+
+parse.aliases <- Curry(parse.value, key='aliases')
+
+parse.title <- Curry(parse.value, key='title')
+
+parse.usage <- Curry(parse.value, key='usage')
+
+parse.references <- Curry(parse.value, key='references')
+
+parse.concept <- Curry(parse.value, key='concept')
+
+parse.note <- Curry(parse.value, key='note')
+
+parse.seealso <- Curry(parse.value, key='seealso')
+
+parse.examples <- Curry(parse.value, key='examples')
+
+parse.keywords <- Curry(parse.value, key='keywords')
+
+parse.return <- Curry(parse.value, key='return')
 
 parse.author <- Curry(parse.value, key='author')
 
@@ -111,7 +137,7 @@ parse.slot <- Curry(parse.name.description, key='slot')
 
 parse.param <- Curry(parse.name.description, key='param')
 
-parse.name <- function(key, name, ...) {
+parse.name.internal <- function(key, name, ...) {
   if (is.na(name))
     parse.error(key, 'requires a name')
   else if (Negate(is.empty)(...))
@@ -119,9 +145,9 @@ parse.name <- function(key, name, ...) {
   parse.default(key, name)
 }
 
-parse.S3class <- Curry(parse.name, key='S3class')
+parse.S3class <- Curry(parse.name.internal, key='S3class')
 
-parse.returnType <- Curry(parse.name, key='returnType')
+parse.returnType <- Curry(parse.name.internal, key='returnType')
 
 parse.toggle <- function(key, ...)
   as.list(structure(T, names=key))
@@ -149,7 +175,7 @@ parse.setMethod <- function(expression)
 ## Parser lookup
 
 parser.default <- function(key, default) {
-  f <- ls(1, pattern=sprintf('parse.%s', key))[1]
+  f <- ls(1, pattern=sprintf('parse.%s', trim(key)))[1]
   if (is.na(f)) Curry(default, key=key) else f
 }
 
@@ -175,14 +201,21 @@ parse.ref.preref <- function(preref) {
   trimmed.lines <-
     Map(function(line) substr(line, nchar(LINE.DELIMITER) + 1, nchar(line)),
         delimited.lines)
-  ## Presumption: white-space is insignificant; there are no
-  ## multi-line elements. This contradicts, for instance, verbatim or
-  ## latex.
-  joined.lines <- gsub(' {2,}', ' ', paste.list(trimmed.lines))
-  elements <- Map(trim, car(strsplit(joined.lines, TAG.DELIMITER, fixed=T)))
-  parsed.elements <- Reduce(function(parsed, element)
-                            append(parsed, parse.element(element)),
-                            cdr(elements), parse.description(car(elements)))
+  ## Presumption: white-space is insignificant.
+###   joined.lines <- gsub(' {2,}', ' ', paste.list(trimmed.lines))
+  joined.lines <- paste.list(trimmed.lines)
+  if (is.nil(joined.lines))
+    nil
+  else {
+###     print(joined.lines)
+    elements <- Map(trim, car(strsplit(joined.lines, TAG.DELIMITER, fixed=T)))
+###     elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
+###     print(str(elements))
+    parsed.elements <- Reduce(function(parsed, element)
+                              append(parsed, parse.element(element)),
+                              cdr(elements),
+                              parse.description(car(elements)))
+  }
 } 
 
 parse.ref.srcref <- function(srcref) {

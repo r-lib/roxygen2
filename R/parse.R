@@ -188,9 +188,21 @@ parse.ref.preref <- function(preref) {
   if (is.nil(joined.lines))
     nil
   else {
-    ## Must be modified (with a PCRE look-behind?) to skip escaped
-    ## TAG.DELIMITERs.
-    elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
+    ## Thanks to Fegis on #regex at Freenode for the
+    ## lookahead/lookbehind hack; as he notes, however, "it's not
+    ## proper escaping though... it will not split a@@@b."
+    elements <- car(strsplit(joined.lines,
+                             sprintf('(?<!%s)%s(?!%s)',
+                                     TAG.DELIMITER,
+                                     TAG.DELIMITER,
+                                     TAG.DELIMITER),
+                             perl=T))
+    ## Compress the escaped delimeters.
+    elements <- Map(function(element)
+                    gsub(sprintf('%s{2}', TAG.DELIMITER),
+                         TAG.DELIMITER,
+                         element),
+                    elements)
     description <- car(elements)
     parsed.elements <- Reduce(function(parsed, element)
                               append(parsed, parse.element(element)),

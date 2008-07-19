@@ -6,7 +6,7 @@ Rd <- function(partita) {
     sprintf('\\%s{%s}\n', key, expression)
 
   parse.default <- function(key, expression)
-    cat(Rd.expression(key, expression))
+    cat(Rd.expression(key, trim(expression)))
 
   parse.name <- Curry(parse.default, key='name')
 
@@ -43,16 +43,7 @@ Rd <- function(partita) {
   parse.description <- function(expressions) {
     paragraphs <- car(strsplit(expressions, '\n\n', fixed=T))
     description <- car(paragraphs)
-    details <- do.call(paste, list(cdr(paragraphs), sep='\n\n'))
-    print(expressions)
-###     matter <- '[^\n]+'
-###     words <- Curry(words.default, matter=matter)
-###     nwords <- Curry(nwords.default, words=words)
-###     word.ref <- Curry(word.ref.default, words=words)
-###     strcar <- Curry(strcar.default, word.ref=word.ref)
-###     strcdr <- Curry(strcdr.default, nwords=nwords, word.ref=word.ref)
-###     description <- strcar(expressions)
-###     details <- strcdr(expressions)
+    details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
     parse.default('description', description)
     if (!is.null.string(details))
       parse.default('details', details)

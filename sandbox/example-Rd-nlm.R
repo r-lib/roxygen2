@@ -1,7 +1,6 @@
 #' This function carries out a minimization of the function \code{f}
 #' using a Newton-type algorithm.  See the references for details.
 #'
-#'
 #' Note that arguments after \code{\dots} must be matched exactly.
 #'
 #' If a gradient or hessian is supplied but evaluates to the wrong mode

@@ -1,5 +1,5 @@
 #' @include string.R list.R
-LINE.DELIMITER <- '#\' '
+LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
 
 #' Comment blocks (possibly null) that precede a file's expressions.
@@ -180,17 +180,15 @@ parse.ref.preref <- function(preref) {
                        caddr(preref))
   delimited.lines <-
     Filter(function(line) grep(LINE.DELIMITER, line), lines)
+  ## Trim LINE.DELIMITER + one space
   trimmed.lines <-
-    Map(function(line) substr(line, nchar(LINE.DELIMITER) + 1, nchar(line)),
+    Map(function(line) substr(line, nchar(LINE.DELIMITER) + 2, nchar(line)),
         delimited.lines)
   joined.lines <- do.call(paste, c(trimmed.lines, sep='\n'))
   if (is.nil(joined.lines))
     nil
   else {
-###     print(joined.lines)
     elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
-###     elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
-###     print(str(elements))
     description <- car(elements)
     parsed.elements <- Reduce(function(parsed, element)
                               append(parsed, parse.element(element)),

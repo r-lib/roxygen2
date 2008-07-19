@@ -18,6 +18,7 @@
 #' @aliases nlm
 #' @title Non-Linear Minimization
 #' @concept optimization
+#' @author Example Author \email{author@@example.com}
 #' @usage
 #' nlm(f, p, \dots, hessian = FALSE, typsize = rep(1, length(p)),
 #'     fscale = 1, print.level = 0, ndigit = 12, gradtol = 1e-6,

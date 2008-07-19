@@ -1,18 +1,6 @@
 #' @include list.R string.R functional.R
 Rd <- function(partita) {
-  relevators <- c('name',
-                  'aliases',
-                  'title',
-                  'description',
-                  'usage',
-                  'param',
-                  'return',
-                  'references',
-                  'note',
-                  'author',
-                  'seealso',
-                  'examples',
-                  'keywords')
+  ## TODO: param
 
   Rd.expression <- function(key, expression)
     sprintf('\\%s{%s}\n', key, expression)

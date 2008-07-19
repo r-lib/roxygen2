@@ -1,3 +1,4 @@
+#' @include list.R
 Rd <- function(partita) {
   relevators <- c('name',
                   'aliases',
@@ -47,6 +48,16 @@ Rd <- function(partita) {
 
   parse.aliases <- Curry(parse.split, key='alias')
 
+  parse.description <- function(expressions) {
+    print(expressions)
+    paragraphs <- strsplit(expressions, '\n\n', fixed=T)
+    description <- car(paragraphs)
+    details <- do.call(paste, c(cdr(paragraphs), sep='\n\n'))
+    parse.default('description', description)
+    if (Negate(is.nil)(details))
+      parse.default('details', details)
+  }
+
   parse.noop <- function(expression) NULL
 
   parsers <- list(name=parse.name,
@@ -60,7 +71,8 @@ Rd <- function(partita) {
                   examples=parse.examples,
                   concept=parse.concept,
                   aliases=parse.aliases,
-                  keywords=parse.keywords)
+                  keywords=parse.keywords,
+                  description=parse.description)
 
   parser <- function(key)
     if (is.null(f <- parsers[[key]])) parse.noop else f

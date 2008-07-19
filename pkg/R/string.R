@@ -20,14 +20,6 @@ words <- function(string) gregexpr(MATTER, string)[[1]]
 
 nwords <- function(string) length(words(string))
 
-## word.ref <- function(string, n) {
-##   words <- words(string)
-##   start <- words[[n]]
-##   length <- attributes(words)$match.length[[n]]
-##   end <- start + length - 1
-##   list(start=start, end=end)
-## }
-
 word.ref <- function(string, n) {
   continue <- function(string, n, init) {
     word <- regexpr(MATTER, string)

@@ -1,3 +1,4 @@
+#' @include string.R
 namespace <- function(partita) {
   parse.default <- function(procedure, parameters)
     sprintf('%s(%s)', procedure, gsub(' +', ', ', parameters))

@@ -1,7 +1,7 @@
-#' @include string.R
+#' @include string.R functional.R
 namespace <- function(partita) {
   parse.default <- function(procedure, parameters)
-    sprintf('%s(%s)', procedure, gsub(' +', ', ', parameters))
+    sprintf('%s(%s)', procedure, strmap(Identity, ', ', parameters))
   
   parse.exportClass <- function(procedure, parameters)
     parse.default('exportClasses', parameters)

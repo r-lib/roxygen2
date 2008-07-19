@@ -1,18 +1,9 @@
+#' @include string.R list.R
 LINE.DELIMITER <- '#\' '
 TAG.DELIMITER <- '@'
-SPACE <- '([[:space:]]|\n)'
-
-trim.left <- function(string)
-  gsub(sprintf('^%s+', SPACE), '', string)
-
-trim.right <- function(string)
-  gsub(sprintf('%s+$', SPACE), '', string)
-
-trim <- function(string)
-  Compose(trim.left, trim.right)(string)
 
 paste.list <- function(list) {
-  do.call(paste, c(list, sep=" \n"))
+  do.call(paste, c(list, sep="\n"))
 }
 
 #' Comment blocks (possibly null) that precede a file's expressions.
@@ -47,7 +38,7 @@ parse.warning <- function(key, message)
   warning(parse.message(key, message))
 
 parse.element <- function(element) {
-  tokens <- car(strsplit(element, ' ', fixed=T))
+  tokens <- car(strsplit(element, SPACE))
   parser <- parser.preref(car(tokens))
   do.call(parser, as.list(cdr(tokens)))
 }
@@ -211,10 +202,12 @@ parse.ref.preref <- function(preref) {
     elements <- Map(trim, car(strsplit(joined.lines, TAG.DELIMITER, fixed=T)))
 ###     elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
 ###     print(str(elements))
+    description <- car(elements)
     parsed.elements <- Reduce(function(parsed, element)
                               append(parsed, parse.element(element)),
                               cdr(elements),
-                              parse.description(car(elements)))
+                              if (is.null.string(description)) NULL
+                              else parse.description(description))
   }
 } 
 

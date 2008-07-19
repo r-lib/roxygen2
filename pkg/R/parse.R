@@ -180,7 +180,7 @@ parse.ref.preref <- function(preref) {
                        caddr(preref))
   delimited.lines <-
     Filter(function(line) grep(LINE.DELIMITER, line), lines)
-  ## Trim LINE.DELIMITER + one space
+  ## Trim LINE.DELIMITER + one space (benign for spaceless delimeters).
   trimmed.lines <-
     Map(function(line) substr(line, nchar(LINE.DELIMITER) + 2, nchar(line)),
         delimited.lines)
@@ -188,6 +188,8 @@ parse.ref.preref <- function(preref) {
   if (is.nil(joined.lines))
     nil
   else {
+    ## Must be modified (with a PCRE look-behind?) to skip escaped
+    ## TAG.DELIMITERs.
     elements <- car(strsplit(joined.lines, TAG.DELIMITER, fixed=T))
     description <- car(elements)
     parsed.elements <- Reduce(function(parsed, element)

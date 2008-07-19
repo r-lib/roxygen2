@@ -17,3 +17,6 @@ Compose <- function(...) {
                        fs,
                        ...)
 }
+
+## Is concatenation benign?
+Identity <- function(...) c(...)

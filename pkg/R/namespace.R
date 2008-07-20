@@ -1,45 +1,31 @@
-#' @include string.R functional.R
+#' @include string.R
+#' @include functional.R
+#' @include list.R
+#' Revamp to use noop; relevata-model unnecessary.
 namespace <- function(partita) {
-  parse.default <- function(procedure, parameters)
-    sprintf('%s(%s)', procedure, strmap(Identity, ', ', parameters))
+  parse.default <- function(proc, parms)
+    cat(sprintf('%s(%s)\n', proc, strmap(Identity, ', ', parms)))
   
-  parse.exportClass <- function(procedure, parameters)
-    parse.default('exportClasses', parameters)
+  parsers <- list(exportClass=function(proc, parms)
+                  parse.default('exportClasses', parms),
+                  exportMethod=function(proc, parms)
+                  parse.default('exportMethods', parms),
+                  export=parse.default,
+                  exportPattern=parse.default,
+                  S3method=parse.default,
+                  import=parse.default,
+                  importFrom=parse.default,
+                  importClassesFrom=parse.default,
+                  importMethodsFrom=parse.default)
 
-  parse.exportMethod <- function(procedure, parameters)
-    parse.default('exportMethods', parameters)
+  parse.noop <- function(procedure, parameters) NULL
 
-  parsers <- list(exportClass=parse.exportClass,
-                  exportMethod=parse.exportMethod)
+  parser <- function(procedure)
+    if (is.null(f <- parsers[[procedure]])) parse.noop else f
 
-  relevators <- c('export',
-                  'exportClass',
-                  'exportMethod',
-                  'exportPattern',
-                  'S3method',
-                  'import',
-                  'importFrom',
-                  'importClassesFrom',
-                  'importMethodsFrom')
-  relevata <-
-    Reduce(append,
-           Map(function(partitum)
-               Filter(function(key.value) car(key.value) %in% relevators,
-                      zip.list(attributes(partitum)$names,
-                               partitum)),
-               partita),
-           NULL)
-  directives <-
-    Map(function(relevatum) {
-      procedure <- car(relevatum)
-      parameters <- cadr(relevatum)
-      parser <- parsers[[procedure]]
-      if (is.null(parser))
-        parse.default(procedure, parameters)
-      else
-        parser(procedure, parameters)
-    },
-        relevata)
-  for (directive in directives)
-    cat(directive, "\n")
+  for (partitum in partita)
+    for (key.value in key.values(partitum)) {
+      key <- car(key.value)
+      do.call(parser(key), list(key, cdr(key.value)))
+    }
 }

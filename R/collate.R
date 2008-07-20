@@ -6,15 +6,9 @@ make.collate.roclet <- function() {
   make.vertex <- function(file) {
     vertex <- new.env(parent=emptyenv())
     vertex$file <- trim(file)
-    vertex$discovered <- -1
-    vertex$finished <- -1
-    vertex$predecessor <- NULL
+    vertex$discovered <- F
     vertex$ancestors <- NULL
-    vertex$is.discovered <-
-      function() vertex$discovered >= 0
-    vertex$is.finished <-
-      function() vertex$discovered >= 0
-    structure(vertex, class='vertex')
+    vertex
   }
 
   maybe.append.vertex <- function(file)
@@ -50,24 +44,18 @@ make.collate.roclet <- function() {
   }
 
   topological.sort <- function(vertices) {
-    time <- 0
     sorted <- NULL
     visit <- function(predecessor) {
-      assign.parent('time', time + 1, environment())
-      predecessor$discovered <- time
+      predecessor$discovered <- T
       for (ancestor in predecessor$ancestors)
-        if (!ancestor$is.discovered()) {
-          ancestor$predecessor <- predecessor
+        if (!ancestor$discovered)
           visit(ancestor)
-        }
-      assign.parent('time', time + 1, environment())
-      predecessor$finished <- time
       assign.parent('sorted',
                     append(sorted, predecessor),
                     environment())
     }
     for (vertex in vertices)
-      if (!vertex$is.discovered())
+      if (!vertex$discovered)
         visit(vertex)
   }
 

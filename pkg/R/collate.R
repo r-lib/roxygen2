@@ -17,21 +17,37 @@ make.collate.roclet <- function() {
     structure(vertex, class='vertex')
   }
 
-  maybe.append.vertex <- function(file) {
-    file <- trim(file)
+  maybe.append.vertex <- function(file)
     if (is.null(vertices[[file]]))
       assign.parent('vertices',
                     append(vertices,
                            as.list(structure(c(make.vertex(file)),
                                              names=file))),
                     environment())
-  }
 
-  parse.include <- function(key, file)
+  maybe.append.ancestor <- function(predecessor, ancestor)
+    if (!c(ancestor) %in% predecessor$ancestors)
+      predecessor$ancestors <-
+        append(ancestor, predecessor$ancestors)
+
+  current.predecessor <- NULL
+
+  parse.include <- function(key, file) {
+    file <- trim(file)
     maybe.append.vertex(file)
+    ancestor <- vertices[[file]]
+    maybe.append.ancestor(current.predecessor,
+                          ancestor)
+  }
   
-  pre.parse <- function(partitum)
-    maybe.append.vertex(partitum$srcref$filename)
+  pre.parse <- function(partitum) {
+    file <- partitum$srcref$filename
+    maybe.append.vertex(file)
+    vertex <- vertices[[file]]
+    assign.parent('current.predecessor',
+                  vertex,
+                  environment())
+  }
 
   topological.sort <- function(vertices) {
     time <- 0
@@ -46,7 +62,7 @@ make.collate.roclet <- function() {
         }
       predecessor$finished <- time
       assign.parent('sorted',
-                    append(predecessor, sorted),
+                    append(sorted, predecessor),
                     environment())
     }
     for (vertex in vertices)
@@ -55,10 +71,12 @@ make.collate.roclet <- function() {
   }
 
   post.files <-
-    function() cat(Reduce.paste(function(vertex) vertex$file,
+    function() cat('collate',
+                   Reduce.paste(function(vertex) vertex$file,
                                 topological.sort(vertices),
                                 ' '),
-                   '\n')
+                   '\n',
+                   sep='')
 
   roclet <- make.roclet(parse.include,
                         pre.parse=pre.parse,

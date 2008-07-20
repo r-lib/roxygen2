@@ -46,7 +46,7 @@ make.collate.roclet <- function() {
         }
       predecessor$finished <- time
       assign.parent('sorted',
-                    append(predecessor$file, sorted),
+                    append(predecessor, sorted),
                     environment())
     }
     for (vertex in vertices)
@@ -54,7 +54,11 @@ make.collate.roclet <- function() {
         visit(vertex)
   }
 
-  post.files <- function() print(topological.sort(vertices))
+  post.files <-
+    function() cat(Reduce.paste(function(vertex) vertex$file,
+                                topological.sort(vertices),
+                                ' '),
+                   '\n')
 
   roclet <- make.roclet(parse.include,
                         pre.parse=pre.parse,

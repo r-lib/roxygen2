@@ -48,7 +48,7 @@ Rd <- function(partita) {
     description <- car(paragraphs)
     details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
     parse.default('description', description)
-    if (!is.null.string(details))
+    if (length(details) > 0 && !is.null.string(details))
       parse.default('details', details)
   }
 
@@ -69,7 +69,8 @@ Rd <- function(partita) {
                  '')
 
   parse.arguments <- function(params)
-    parse.default('arguments', parse.params(params))
+    if (length(params) > 0)
+      parse.default('arguments', parse.params(params))
 
   parse.noop <- function(expression) NULL
 

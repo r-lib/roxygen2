@@ -60,6 +60,7 @@ make.collate.roclet <- function() {
           ancestor$predecessor <- predecessor
           visit(ancestor)
         }
+      assign.parent('time', time + 1, environment())
       predecessor$finished <- time
       assign.parent('sorted',
                     append(sorted, predecessor),

@@ -1,4 +1,5 @@
-#' @include functional.R @include list.R
+#' @include functional.R
+#' @include list.R
 SPACE <- '[[:space:]]+'
 MATTER <- '[^[:space:]]+'
 NIL.STRING <- ''
@@ -13,6 +14,11 @@ trim <- function(string)
   Compose(trim.left, trim.right)(string)
 
 is.null.string <- function(string) regexpr(MATTER, string) < 0
+
+nwords <- function(string) {
+  if (is.null.string(string)) 0
+  else length(gregexpr(MATTER, string))
+}
 
 word.ref <- function(string, n) {
   continue <- function(string, n, init) {

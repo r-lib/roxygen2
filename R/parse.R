@@ -1,4 +1,5 @@
-#' @include string.R list.R
+#' @include string.R
+#' @include list.R
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
 
@@ -50,7 +51,7 @@ parse.default <- function(key, rest)
   as.list(structure(rest, names=key))
 
 parse.preref <- function(key, rest) {
-  parse.warning(sprintf('<%s>', key), 'is an unknown key')
+  parse.warning(key, 'is an unknown key')
   parse.default(key, rest)
 }
 
@@ -109,6 +110,8 @@ parse.return <- Curry(parse.value, key='return')
 
 parse.author <- Curry(parse.value, key='author')
 
+parse.include <- Curry(parse.value, key='include')
+
 parse.name.description <- function(key, rest) {
   name <- strcar(rest)
   rest <- strcdr(rest)
@@ -127,6 +130,8 @@ parse.param <- Curry(parse.name.description, key='param')
 parse.name.internal <- function(key, name) {
   if (is.null.string(name))
     parse.error(key, 'requires a name')
+  else if (nwords(name) > 1)
+    parse.warning(key, 'ignoring extra arguments')
   parse.default(key, strcar(name))
 }
 

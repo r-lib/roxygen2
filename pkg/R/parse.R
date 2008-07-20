@@ -4,7 +4,7 @@ LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
 
 #' No-op for sourceless files
-roxygen <- NULL
+roxygen <- function() NULL
 
 #' Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(srcfile, srcrefs) {
@@ -227,15 +227,15 @@ parse.ref.srcref <- function(srcref) {
   srcfile <- attributes(srcref)$srcfile
   lines <- getSrcLines(srcfile, car(srcref), caddr(srcref))
   expression <- parse(text=lines)
+  parsed <- list(srcref=list(filename=srcfile$filename,
+                   lloc=as.vector(srcref)))
   pivot <- tryCatch(caar(expression), error=function(e) NULL)
-  if (is.null(pivot))
-    nil
-  else {
+  if (!is.null(pivot)) {
     parser <- parser.srcref(as.character(pivot))
-    append(do.call(parser, list(expression)),
-           list(srcref=list(filename=srcfile$filename,
-                  lloc=as.vector(srcref))))
+    parsed <- append(do.call(parser, list(expression)),
+                     parsed)
   }
+  parsed
 }
 
 parse.refs <- function(preref.srcrefs)
@@ -247,11 +247,8 @@ parse.file <- function(file) {
                               srcfile=srcfile))$srcref
   if (length(srcrefs) > 0)
     parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
-  else {
-    warning(sprintf('%s has no statements (not even `roxygen\')',
-                    srcfile$filename))
+  else
     nil
-  }
 }
 
 parse.files <- function(...)

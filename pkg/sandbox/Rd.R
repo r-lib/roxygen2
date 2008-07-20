@@ -11,4 +11,5 @@ argv <- commandArgs(trailingOnly=T)
 argc <- length(argv)
 files <- ifelse(argc > 0, as.list(argv), FILES)
 
-Rd(do.call(parse.file, files))
+roclet <- make.Rd.roclet()
+do.call(roclet$parse, files)

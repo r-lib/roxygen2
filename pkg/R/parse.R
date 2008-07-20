@@ -2,6 +2,9 @@
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
 
+#' No-op for sourceless files
+roxygen <- NULL
+
 #' Comment blocks (possibly null) that precede a file's expressions.
 prerefs <- function(srcfile, srcrefs) {
   length.line <- function(lineno)
@@ -157,8 +160,11 @@ parse.setMethod <- function(expression)
 ## Parser lookup
 
 parser.default <- function(key, default) {
-  f <- ls(1, pattern=sprintf('parse.%s', trim(key)))[1]
-  if (is.na(f)) Curry(default, key=key) else f
+  if (is.na(f <- tryCatch(ls(1, pattern=sprintf('parse.%s', trim(key)))[1],
+                          error=function(e) NA)))
+    Curry(default, key=key)
+  else
+    f
 }
 
 parser.preref <- Curry(parser.default, default=parse.preref)
@@ -216,22 +222,31 @@ parse.ref.srcref <- function(srcref) {
   srcfile <- attributes(srcref)$srcfile
   lines <- getSrcLines(srcfile, car(srcref), caddr(srcref))
   expression <- parse(text=lines)
-  pivot <- caar(expression)
-  parser <- parser.srcref(as.character(pivot))
-  append(do.call(parser, list(expression)),
-         list(srcref=list(filename=srcfile$filename,
-                lloc=as.vector(srcref))))
-         
+  pivot <- tryCatch(caar(expression), error=function(e) NULL)
+  if (is.null(pivot))
+    nil
+  else {
+    parser <- parser.srcref(as.character(pivot))
+    append(do.call(parser, list(expression)),
+           list(srcref=list(filename=srcfile$filename,
+                  lloc=as.vector(srcref))))
+  }
 }
 
-parse.refs <- function(prerefs.srcrefs)
-  Map(parse.ref, prerefs.srcrefs)
+parse.refs <- function(preref.srcrefs)
+  Map(parse.ref, preref.srcrefs)
 
 parse.file <- function(file) {
   srcfile <- srcfile(file)
   srcrefs <- attributes(parse(srcfile$filename,
                               srcfile=srcfile))$srcref
-  parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
+  if (length(srcrefs) > 0)
+    parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
+  else {
+    warning(sprintf('%s has no statements (not even `roxygen\')',
+                    srcfile$filename))
+    nil
+  }
 }
 
 parse.files <- function(...)

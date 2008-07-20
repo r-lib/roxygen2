@@ -13,4 +13,5 @@ argv <- commandArgs(trailingOnly=T)
 argc <- length(argv)
 files <- if (argc > 0) as.list(argv) else FILES
 
-namespace.roclet(do.call(parse.files, files))
+roclet <- make.namespace.roclet()
+do.call(roclet$parse, files)

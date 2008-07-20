@@ -1,4 +1,6 @@
-#' @include list.R string.R functional.R
+#' @include list.R
+#' @include string.R
+#' @include functional.R
 Rd <- function(partita) {
   Rd.expression <- function(key, ...)
     sprintf('\\%s%s\n',
@@ -94,7 +96,7 @@ Rd <- function(partita) {
 
   ## Parse the rest first for side-effects (i.e. parameter-gathering).
   for (partitum in partita)
-    for (key.value in zip.list(attributes(partitum)$names, partitum))
+    for (key.value in key.values(partitum))
       do.call(parser(car(key.value)), cdr(key.value))
 
   ## Then parse the arguments.

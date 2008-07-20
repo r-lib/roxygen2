@@ -6,7 +6,7 @@
 #' @slot pi Estimation of pi
 #' @slot throws Number of throws
 #' @listObject
-NA
+roxygen
 
 #' A monte carlo algorithm to calculate PI. Extended
 #' version which returns the throws.

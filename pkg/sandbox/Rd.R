@@ -9,7 +9,7 @@ FILES <- list('example-Rd-nlm.R')
 
 argv <- commandArgs(trailingOnly=T)
 argc <- length(argv)
-files <- ifelse(argc > 0, as.list(argv), FILES)
+files <- if (argc > 0) as.list(argv) else FILES
 
 roclet <- make.Rd.roclet()
 do.call(roclet$parse, files)

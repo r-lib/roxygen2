@@ -1,31 +1,23 @@
+#' @include roclet.R
 #' @include string.R
-#' @include functional.R
-#' @include list.R
-#' Revamp to use noop; relevata-model unnecessary.
-namespace <- function(partita) {
-  parse.default <- function(proc, parms)
-    cat(sprintf('%s(%s)\n', proc, strmap(Identity, ', ', parms)))
+parse.namespace.directive <- function(proc, parms)
+  cat(sprintf('%s(%s)\n', proc, strmap(Identity, ', ', parms)))
   
-  parsers <- list(exportClass=function(proc, parms)
-                  parse.default('exportClasses', parms),
-                  exportMethod=function(proc, parms)
-                  parse.default('exportMethods', parms),
-                  export=parse.default,
-                  exportPattern=parse.default,
-                  S3method=parse.default,
-                  import=parse.default,
-                  importFrom=parse.default,
-                  importClassesFrom=parse.default,
-                  importMethodsFrom=parse.default)
+namespace.roclet <- roclet(parse.namespace.directive)
 
-  parse.noop <- function(procedure, parameters) NULL
+namespace.roclet$register.parser('exportClass',
+                                 function(proc, parms)
+                                 default.parse('exportClasses', parms))
+namespace.roclet$register.parser('exportMethod',
+                                 function(proc, parms)
+                                 default.parse('exportMethods', parms))
 
-  parser <- function(procedure)
-    if (is.null(f <- parsers[[procedure]])) parse.noop else f
+namespace.roclet$register.default.parser('export')
+namespace.roclet$register.default.parser('exportPattern')
+namespace.roclet$register.default.parser('S3method')
+namespace.roclet$register.default.parser('import')
+namespace.roclet$register.default.parser('importFrom')
+namespace.roclet$register.default.parser('importClassesFrom')
+namespace.roclet$register.default.parser('importMethodsFrom')
 
-  for (partitum in partita)
-    for (key.value in key.values(partitum)) {
-      key <- car(key.value)
-      do.call(parser(key), list(key, cdr(key.value)))
-    }
-}
+namespace.roclet <- namespace.roclet$parse

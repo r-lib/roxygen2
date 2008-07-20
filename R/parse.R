@@ -26,7 +26,29 @@ prerefs <- function(srcfile, srcrefs) {
   Map(pair.preref, pairs)
 }
 
-## preref parsers
+preref.parsers <- new.env(parent=emptyenv())
+
+srcref.parsers <- new.env(parent=emptyenv())
+
+register.parser <- function(table, key, parser)
+  table[[key]] <- parser
+
+register.preref.parser <- Curry(register.parser,
+                                table=preref.parsers)
+
+register.srcref.parser <- Curry(register.parser,
+                                table=preref.parsers)
+
+register.parsers <- function(table, parser, ...) {
+  for (key in c(...))
+    register.parser(table, key, parser)
+}
+  
+register.preref.parsers <- Curry(register.parsers,
+                                 table=preref.parsers)
+
+register.srcref.parsers <- Curry(register.parsers,
+                                 table=srcref.parsers)
 
 parse.message <- function(key, message)
   sprintf('@%s %s.', key, message)
@@ -41,8 +63,10 @@ parse.element <- function(element) {
   tag <- strcar(element)
   rest <- strcdr(element)
   parser <- parser.preref(tag)
-  do.call(parser, list(rest))
+  do.call(parser, list(tag, rest))
 }
+
+## preref parsers
 
 parse.description <- function(expression)
   list(description=expression)
@@ -57,7 +81,7 @@ parse.preref <- function(key, rest) {
 
 ## Possibly NA; in which case, the Roclets can do something more
 ## sophisticated with the srcref.
-parse.export <- Curry(parse.default, key='export')
+register.preref.parser('export', parse.default)
 
 parse.value <- function(key, rest) {
   if (is.null.string(rest))
@@ -66,51 +90,29 @@ parse.value <- function(key, rest) {
     parse.default(key, rest)
 }
   
-parse.prototype <- Curry(parse.value, key='prototype')
-
-parse.exportClass <- Curry(parse.value, key='exportClass')
-
-parse.exportMethod <- Curry(parse.value, key='exportMethod')
-
-parse.exportPattern <- Curry(parse.value, key='exportPattern')
-
-parse.S3method <- Curry(parse.value, key='S3method')
-
-parse.import <- Curry(parse.value, key='import')
-
-parse.importFrom <- Curry(parse.value, key='importFrom')
-
-parse.importClassesFrom <- Curry(parse.value, key='importClassesFrom')
-
-parse.importMethodsFrom <- Curry(parse.value, key='importMethodsFrom')
-
-## Rd stuff
-
-parse.name <- Curry(parse.value, key='name')
-
-parse.aliases <- Curry(parse.value, key='aliases')
-
-parse.title <- Curry(parse.value, key='title')
-
-parse.usage <- Curry(parse.value, key='usage')
-
-parse.references <- Curry(parse.value, key='references')
-
-parse.concept <- Curry(parse.value, key='concept')
-
-parse.note <- Curry(parse.value, key='note')
-
-parse.seealso <- Curry(parse.value, key='seealso')
-
-parse.examples <- Curry(parse.value, key='examples')
-
-parse.keywords <- Curry(parse.value, key='keywords')
-
-parse.return <- Curry(parse.value, key='return')
-
-parse.author <- Curry(parse.value, key='author')
-
-parse.include <- Curry(parse.value, key='include')
+register.preref.parsers(parse.value,
+                        'prototype',
+                        'exportClass',
+                        'exportMethod',
+                        'exportPattern',
+                        'S3method',
+                        'import',
+                        'importFrom',
+                        'importClassesFrom',
+                        'importMethodsFrom',
+                        'name',
+                        'aliases',
+                        'title',
+                        'usage',
+                        'references',
+                        'concept',
+                        'note',
+                        'seealso',
+                        'examples',
+                        'keywords',
+                        'return',
+                        'author',
+                        'include')
 
 parse.name.description <- function(key, rest) {
   name <- strcar(rest)
@@ -123,11 +125,11 @@ parse.name.description <- function(key, rest) {
                       names=key))
 }
 
-parse.slot <- Curry(parse.name.description, key='slot')
+register.preref.parsers(parse.name.description,
+                        'slot',
+                        'param')
 
-parse.param <- Curry(parse.name.description, key='param')
-
-parse.name.internal <- function(key, name) {
+parse.name <- function(key, name) {
   if (is.null.string(name))
     parse.error(key, 'requires a name')
   else if (nwords(name) > 1)
@@ -135,46 +137,46 @@ parse.name.internal <- function(key, name) {
   parse.default(key, strcar(name))
 }
 
-parse.S3class <- Curry(parse.name.internal, key='S3class')
-
-parse.returnType <- Curry(parse.name.internal, key='returnType')
+register.preref.parsers(parse.name,
+                        'S3class',
+                        'returnType')
 
 parse.toggle <- function(key, rest)
   as.list(structure(T, names=key))
 
-parse.listObject <- Curry(parse.toggle, key='listObject')
-
-parse.attributeObject <- Curry(parse.toggle, key='attributeObject')
-
-parse.environmentObject <- Curry(parse.toggle, key='environmentObject')
+register.preref.parsers(parse.toggle,
+                        'listObject',
+                        'attributeObject',
+                        'environmentObject')
 
 ## srcref parsers
 
-parse.srcref <- function(...) nil
+parse.srcref <- function(pivot, expression) nil
 
-parse.setClass <- function(expression)
-  list(class=cadr(car(expression)))
+register.srcref.parser('setClass',
+                       function(pivot, expression)
+                       list(class=cadr(car(expression))))
 
-parse.setGeneric <- function(expression)
-  list(generic=cadr(car(expression)))
-
-parse.setMethod <- function(expression)
-  list(method=cadr(car(expression)),
-       signature=caddr(car(expression)))
+register.srcref.parser('setGeneric',
+                       function(pivot, expression)
+                       list(generic=cadr(car(expression))))
+register.srcref.parser('setMethod',
+                       function(pivot, expression)
+                       list(method=cadr(car(expression)),
+                            signature=caddr(car(expression))))
 
 ## Parser lookup
 
-parser.default <- function(key, default) {
-  if (is.na(f <- tryCatch(ls(1, pattern=sprintf('parse.%s', trim(key)))[1],
-                          error=function(e) NA)))
-    Curry(default, key=key)
-  else
-    f
-}
+parser.default <- function(table, key, default)
+  if (is.null(f <- table[[key]])) default else f
 
-parser.preref <- Curry(parser.default, default=parse.preref)
+parser.preref <- Curry(parser.default,
+                       table=preref.parsers,
+                       default=parse.preref)
 
-parser.srcref <- Curry(parser.default, default=parse.srcref)
+parser.srcref <- Curry(parser.default,
+                       table=srcref.parsers,
+                       default=parse.srcref)
 
 ## File -> {src,pre}ref mapping
 
@@ -227,12 +229,12 @@ parse.ref.srcref <- function(srcref) {
   srcfile <- attributes(srcref)$srcfile
   lines <- getSrcLines(srcfile, car(srcref), caddr(srcref))
   expression <- parse(text=lines)
+  pivot <- tryCatch(caar(expression), error=function(e) NULL)
   parsed <- list(srcref=list(filename=srcfile$filename,
                    lloc=as.vector(srcref)))
-  pivot <- tryCatch(caar(expression), error=function(e) NULL)
   if (!is.null(pivot)) {
     parser <- parser.srcref(as.character(pivot))
-    parsed <- append(do.call(parser, list(expression)),
+    parsed <- append(do.call(parser, list(pivot, expression)),
                      parsed)
   }
   parsed

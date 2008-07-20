@@ -7,11 +7,11 @@ make.namespace.roclet <- function() {
   roclet <- make.roclet(parse.directive)
 
   roclet$register.parser('exportClass',
-                                   function(proc, parms)
-                                   default.parse('exportClasses', parms))
+                         function(proc, parms)
+                         parse.directive('exportClasses', parms))
   roclet$register.parser('exportMethod',
-                                   function(proc, parms)
-                                   default.parse('exportMethods', parms))
+                         function(proc, parms)
+                         parse.directive('exportMethods', parms))
 
   roclet$register.default.parsers('export',
                                   'exportPattern',

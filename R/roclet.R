@@ -1,7 +1,9 @@
 #' @include list.R
 make.roclet <- function(parse.default,
                         pre.parse=NULL,
-                        post.parse=NULL) {
+                        post.parse=NULL,
+                        pre.files=NULL,
+                        post.files=NULL) {
   roclet <- new.env(parent=emptyenv())
 
   roclet$parsers <- list()
@@ -33,17 +35,19 @@ make.roclet <- function(parse.default,
       if (!is.null(proc))
         do.call(proc, list(...))
 
+    maybe.call(pre.files)
     for (partitum in parse.files(...)) {
       maybe.call(pre.parse, partitum)
       for (key.value in key.values(partitum)) {
         key <- car(key.value)
-        do.call(parser(key), list(key, cdr(key.value)))
+        do.call(parser(key), c(key, cdr(key.value)))
       }
       maybe.call(post.parse, partitum)
     }
+    maybe.call(post.files)
   }
 
-  roclet
+  structure(roclet, class='roclet')
 }
 
 assign.parent <- function(var, value, env)

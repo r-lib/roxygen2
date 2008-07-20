@@ -60,7 +60,7 @@ make.Rd.roclet <- function() {
 
   parse.param <- function(key, expression)
     assign.parent('params',
-                  append(params, expression),
+                  append(params, list(expression)),
                   environment())
     
   parse.params <- function()

@@ -8,7 +8,7 @@ roxygen()
 #' \item{register.parsers}{takes \code{parser} and \code{keys}}
 #' \item{register.default.parser}{takes a \code{key}}
 #' \item{register.default.parsers}{take \code{parsers}}
-#' \item{parse}{parses material returned by \code{parse.files}}
+#' \item{parse}{parses material contained in files}
 #'
 #' @param parse.default the default parser taking \code{key}
 #' and \code{value}
@@ -29,20 +29,37 @@ make.roclet <- function(parse.default,
 
   roclet$parsers <- list()
 
+  #' Register parser in the parser table.
+  #' @param key key upon which to register
+  #' @param parser the parser to register
+  #' @return \code{NULL}
   roclet$register.parser <- function(key, parser)
     roclet$parsers[[key]] <- parser
 
+  #' Register many parsers at once.
+  #' @param parser the parser to register
+  #' @param \dots the keys under which to register
+  #' @return \code{NULL}
   roclet$register.parsers <- function(parser, ...)
     for (key in c(...))
       roclet$register.parser(key, parser)
 
+  #' Register a default parser.
+  #' @param key key upon which to register
+  #' @return \code{NULL}
   roclet$register.default.parser <- function(key)
     roclet$parsers[[key]] <- parse.default
 
+  #' Register many default parsers.
+  #' @param \dots the keys under which to register
+  #' @return \code{NULL}
   roclet$register.default.parsers <- function(...)
     for (parser in c(...))
       roclet$register.default.parser(parser)
 
+  #' Parse material contained in files.
+  #' @param \dots the files to parse
+  #' @return \code{NULL}
   roclet$parse <- function(...) {
     key.values <- function(partitum)
       zip.list(attributes(partitum)$names, partitum)

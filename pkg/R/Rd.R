@@ -25,13 +25,16 @@ make.Rd.roclet <- function() {
   roclet$register.default.parsers('name',
                                   'title',
                                   'usage',
-                                  'value',
                                   'references',
                                   'note',
                                   'author',
                                   'seealso',
                                   'examples',
                                   'concept')
+
+  roclet$register.parser('return',
+                         function(key, expressions)
+                         parse.expression('value', expressions))
 
   parse.split <- function(key, expressions) {
     expression <- strcar(expressions)
@@ -41,9 +44,13 @@ make.Rd.roclet <- function() {
       parse.split(key, rest)
   }
 
-  roclet$register.parsers(parse.split,
-                          'keyword',
-                          'alias')
+  roclet$register.parser('aliases',
+                         function(key, expressions)
+                         parse.split('alias', expressions))
+
+  roclet$register.parser('keywords',
+                         function(key, expressions)
+                         parse.split('keyword', expressions))
 
   parse.description <- function(key, expressions) {
     paragraphs <- car(strsplit(car(expressions), '\n\n', fixed=T))

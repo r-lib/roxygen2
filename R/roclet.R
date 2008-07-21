@@ -1,4 +1,25 @@
 #' @include list.R
+roxygen()
+
+#' Abstract roclet that serves as a rudimentary API.
+#'
+#' Contains the following member functions:
+#' \item{register.parser}{takes \code{key} and \code{parser}}
+#' \item{register.parsers}{takes \code{parser} and \code{keys}}
+#' \item{register.default.parser}{takes a \code{key}}
+#' \item{register.default.parsers}{take \code{parsers}}
+#' \item{parse}{parses material returned by \code{parse.files}}
+#'
+#' @param parse.default the default parser taking \code{key}
+#' and \code{value}
+#' @param pre.parse a callback function taking a list of parsed
+#' elements; called before processing a file
+#' @param post.parse a callback function taking a list of parsed
+#' elements; called after processing a file
+#' @param pre.files a callback function with no arguments;
+#' called before any file has been parsed
+#' @param post.files a callback function with no arguments;
+#' called after every file has been parsed
 make.roclet <- function(parse.default,
                         pre.parse=NULL,
                         post.parse=NULL,
@@ -50,5 +71,11 @@ make.roclet <- function(parse.default,
   structure(roclet, class='roclet')
 }
 
+#' Assign a variable in the parent environment when \code{<<-}
+#' doesn't see to work.
+#' @param var string of the variable to assign
+#' @param value value to be assigned
+#' @param env environment of the assignment (\code{environment()})
+#' @return NULL
 assign.parent <- function(var, value, env)
   assign(var, value, envir=parent.env(env))

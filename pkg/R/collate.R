@@ -1,5 +1,15 @@
 #' @include roclet.R
 #' @include string.R
+roxygen()
+
+#' Make collate roclet which parses the result of \code{parse.files},
+#' topologically sorting \code{@include}s and writing a \code{collate} directive
+#' to standard out.
+#'
+#' Contains the member function \code{parse} which parses the result
+#' of \code{parse.files}.
+#'
+#' @return Rd roclet
 make.collate.roclet <- function() {
   vertices <- NULL
 

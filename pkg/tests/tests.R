@@ -1,3 +1,6 @@
+cat('Try, for instance, `R --slave < main.R\' to run the tests.',
+    '\n')
+
 test.namespace <- function() {
   roclet <- make.namespace.roclet()
   checkEquals(capture.output(roclet$parse('namespace.R')),

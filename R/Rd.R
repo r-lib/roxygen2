@@ -1,5 +1,16 @@
 #' @include list.R
 #' @include string.R
+roxygen()
+
+#' Make an Rd roclet which parses the result of \code{parse.files}
+#' and writes the Rd format to standard out (TODO: write
+#' to the file designated by \code{@name}). Requires the \code{@name}
+#' parameter.
+#'
+#' Contains the member function \code{parse} which parses the result
+#' of \code{parse.files}.
+#'
+#' @return Rd roclet
 make.Rd.roclet <- function() {
   Rd.expression <- function(key, ...)
     sprintf('\\%s%s\n',

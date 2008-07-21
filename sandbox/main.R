@@ -1,5 +1,6 @@
 source('../R/functional.R')
 source('../R/list.R')
+source('../R/string.R')
 source('../R/parse.R')
 
 FILE <- 'example-S3-mcpi.R'

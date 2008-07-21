@@ -1,5 +1,14 @@
 #' @include roclet.R
 #' @include string.R
+roxygen()
+
+#' Make a namespace roclet which parses the result of \code{parse.files}
+#' and writes a list of namespace directives to standard out.
+#'
+#' Contains the member function \code{parse} which parses the result
+#' of \code{parse.files}.
+#'
+#' @return Namespace roclet
 make.namespace.roclet <- function() {
   parse.directive <- function(proc, parms)
     cat(sprintf('%s(%s)\n', proc, strmap(Identity, ', ', parms)))

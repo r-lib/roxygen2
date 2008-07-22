@@ -7,4 +7,4 @@ Author: Peter Danenberg <r-forge@wikitex.org>,
         Manuel Eugster <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Peter Danenberg <r-forge@wikitex.org>
 URL: http://roxygen.org
-Collate: list.R string.R functional.R parse.R roclet.R collate.R namespace.R Rd.R
+Collate: functional.R string.R parse.R collate.R list.R roclet.R namespace.R Rd.R

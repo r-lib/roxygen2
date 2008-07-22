@@ -1,3 +1,4 @@
+#' @include parse.R
 #' @include roclet.R
 #' @include string.R
 roxygen()

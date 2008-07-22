@@ -1,3 +1,4 @@
+#' @include parse.R
 #' @include roclet.R
 #' @include string.R
 roxygen()
@@ -56,10 +57,12 @@ make.collate.roclet <- function() {
   topological.sort <- function(vertices) {
     sorted <- NULL
     visit <- function(predecessor) {
+      debug(visit=predecessor$file)
       predecessor$discovered <- TRUE
       for (ancestor in predecessor$ancestors)
         if (!ancestor$discovered)
           visit(ancestor)
+      debug(finish=predecessor$file)
       assign.parent('sorted',
                     append(sorted, predecessor),
                     environment())

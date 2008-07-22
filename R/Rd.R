@@ -1,3 +1,4 @@
+#' @include parse.R
 #' @include list.R
 #' @include string.R
 #' @include roclet.R

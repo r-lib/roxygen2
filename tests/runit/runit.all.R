@@ -1,9 +1,6 @@
-cat('Try, for instance, `R --slave < main.R\' to run the tests.',
-    '\n')
-
 test.namespace <- function() {
   roclet <- make.namespace.roclet()
-  checkEquals(capture.output(roclet$parse('namespace.R')),
+  checkEquals(capture.output(roclet$parse('runit/namespace.R')),
               c('exportClasses(test)',
                 'exportMethods(test)',
                 'export(test)',
@@ -17,7 +14,7 @@ test.namespace <- function() {
 
 test.Rd <- function() {
   roclet <- make.Rd.roclet()
-  checkEquals(capture.output(roclet$parse('Rd.R')),
+  checkEquals(capture.output(roclet$parse('runit/Rd.R')),
               c('\\description{description}',
                 '\\details{details}',
                 '\\name{test}',
@@ -41,17 +38,18 @@ test.Rd <- function() {
 
 test.collate <- function() {
   roclet <- make.collate.roclet()
-  checkEquals(capture.output(roclet$parse('collate/belt.R',
-                                          'collate/jacket.R',
-                                          'collate/pants.R',
-                                          'collate/shirt.R',
-                                          'collate/shoes.R',
-                                          'collate/socks.R',
-                                          'collate/tie.R',
-                                          'collate/undershorts.R',
-                                          'collate/watch.R')),
-              paste('collate collate/undershorts.R collate/pants.R',
-                    'collate/belt.R collate/shirt.R collate/tie.R',
-                    'collate/jacket.R collate/socks.R collate/shoes.R',
-                    'collate/watch.R'))
+  checkEquals(capture.output(roclet$parse('runit/collate/belt.R',
+                                          'runit/collate/jacket.R',
+                                          'runit/collate/pants.R',
+                                          'runit/collate/shirt.R',
+                                          'runit/collate/shoes.R',
+                                          'runit/collate/socks.R',
+                                          'runit/collate/tie.R',
+                                          'runit/collate/undershorts.R',
+                                          'runit/collate/watch.R')),
+              paste('Collate: runit/collate/undershorts.R',
+                    'runit/collate/pants.R runit/collate/belt.R',
+                    'runit/collate/shirt.R runit/collate/tie.R',
+                    'runit/collate/jacket.R runit/collate/socks.R',
+                    'runit/collate/shoes.R runit/collate/watch.R'))
 }

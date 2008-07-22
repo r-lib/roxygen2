@@ -57,12 +57,10 @@ make.collate.roclet <- function() {
   topological.sort <- function(vertices) {
     sorted <- NULL
     visit <- function(predecessor) {
-      debug(visit=predecessor$file)
       predecessor$discovered <- TRUE
       for (ancestor in predecessor$ancestors)
         if (!ancestor$discovered)
           visit(ancestor)
-      debug(finish=predecessor$file)
       assign.parent('sorted',
                     append(sorted, predecessor),
                     environment())
@@ -73,7 +71,7 @@ make.collate.roclet <- function() {
   }
 
   post.files <-
-    function() cat('collate',
+    function() cat('Collate:',
                    Reduce.paste(function(vertex) vertex$file,
                                 topological.sort(vertices),
                                 ' '),

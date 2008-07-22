@@ -3,7 +3,7 @@
 roxygen()
 
 #' Make collate roclet which parses the result of \code{parse.files},
-#' topologically sorting \code{@include}s and writing a \code{collate} directive
+#' topologically sorting \code{@@include}s and writing a \code{collate} directive
 #' to standard out.
 #'
 #' Contains the member function \code{parse} which parses the result
@@ -16,7 +16,7 @@ make.collate.roclet <- function() {
   make.vertex <- function(file) {
     vertex <- new.env(parent=emptyenv())
     vertex$file <- trim(file)
-    vertex$discovered <- F
+    vertex$discovered <- FALSE
     vertex$ancestors <- NULL
     vertex
   }
@@ -56,7 +56,7 @@ make.collate.roclet <- function() {
   topological.sort <- function(vertices) {
     sorted <- NULL
     visit <- function(predecessor) {
-      predecessor$discovered <- T
+      predecessor$discovered <- TRUE
       for (ancestor in predecessor$ancestors)
         if (!ancestor$discovered)
           visit(ancestor)

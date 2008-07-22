@@ -1,10 +1,11 @@
 #' @include list.R
 #' @include string.R
+#' @include roclet.R
 roxygen()
 
 #' Make an Rd roclet which parses the result of \code{parse.files}
 #' and writes the Rd format to standard out (TODO: write
-#' to the file designated by \code{@name}). Requires the \code{@name}
+#' to the file designated by \code{@@name}). Requires the \code{@@name}
 #' parameter.
 #'
 #' Contains the member function \code{parse} which parses the result
@@ -64,7 +65,7 @@ make.Rd.roclet <- function() {
                          parse.split('keyword', expressions))
 
   parse.description <- function(key, expressions) {
-    paragraphs <- car(strsplit(car(expressions), '\n\n', fixed=T))
+    paragraphs <- car(strsplit(car(expressions), '\n\n', fixed=TRUE))
     description <- car(paragraphs)
     details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
     parse.expression('description', description)

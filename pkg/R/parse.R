@@ -1,5 +1,6 @@
 #' @include string.R
 #' @include list.R
+#' @include functional.R
 LINE.DELIMITER <- '#\''
 TAG.DELIMITER <- '@'
 
@@ -188,7 +189,7 @@ register.preref.parsers(parse.value,
                         'include')
 
 #' Parse an element containing a mandatory name
-#' and description (such as @param).
+#' and description (such as @@param).
 #' @param key the parsing key
 #' @param rest the expression to be parsed
 #' @return A list containing the key, name and
@@ -230,7 +231,7 @@ register.preref.parsers(parse.name,
 #' @param rest the expression to be parsed
 #' @return A list with the key and \code{TRUE}
 parse.toggle <- function(key, rest)
-  as.list(structure(T, names=key))
+  as.list(structure(TRUE, names=key))
 
 register.preref.parsers(parse.toggle,
                         'listObject',
@@ -293,25 +294,26 @@ parser.srcref <- Curry(parser.default,
                        default=parse.srcref)
 
 #' Parse either srcrefs, prerefs or pairs of the same.
-#' @param x the srcref, preref or pair of the same
+#' @param ref the srcref, preref or pair of the same
 #' @return List containing the parsed srcref/preref
-parse.ref <- function(x, ...)
+parse.ref <- function(ref, ...)
   UseMethod('parse.ref')
 
 #' Parse a preref/srcrefs pair
-#' @param preref.srcref the preref/srcref pair
+#' @param ref the preref/srcref pair
 #' @return List combining the parsed preref/srcref
-parse.ref.list <- function(preref.srcref)
-  append(parse.ref(car(preref.srcref)),
-         parse.ref(cadr(preref.srcref)))
+parse.ref.list <- function(ref, ...)
+  append(parse.ref(car(ref)),
+         parse.ref(cadr(ref)))
+
 
 #' Parse a preref
-#' @param preref the preref to be parsed
+#' @param ref the preref to be parsed
 #' @return List containing the parsed preref
-parse.ref.preref <- function(preref) {
-  lines <- getSrcLines(attributes(preref)$srcfile,
-                       car(preref),
-                       caddr(preref))
+parse.ref.preref <- function(ref, ...) {
+  lines <- getSrcLines(attributes(ref)$srcfile,
+                       car(ref),
+                       caddr(ref))
   delimited.lines <-
     Filter(function(line) grep(LINE.DELIMITER, line), lines)
   ## Trim LINE.DELIMITER + one space (benign for spaceless delimeters).
@@ -330,7 +332,7 @@ parse.ref.preref <- function(preref) {
                                      TAG.DELIMITER,
                                      TAG.DELIMITER,
                                      TAG.DELIMITER),
-                             perl=T))
+                             perl=TRUE))
     ## Compress the escaped delimeters.
     elements <- Map(function(element)
                     gsub(sprintf('%s{2}', TAG.DELIMITER),
@@ -347,15 +349,15 @@ parse.ref.preref <- function(preref) {
 } 
 
 #' Parse a srcref
-#' @param srcref the srcref to be parsed
+#' @param ref the srcref to be parsed
 #' @return List containing the parsed srcref
-parse.ref.srcref <- function(srcref) {
-  srcfile <- attributes(srcref)$srcfile
-  lines <- getSrcLines(srcfile, car(srcref), caddr(srcref))
+parse.ref.srcref <- function(ref, ...) {
+  srcfile <- attributes(ref)$srcfile
+  lines <- getSrcLines(srcfile, car(ref), caddr(ref))
   expression <- parse(text=lines)
   pivot <- tryCatch(caar(expression), error=function(e) NULL)
   parsed <- list(srcref=list(filename=srcfile$filename,
-                   lloc=as.vector(srcref)))
+                   lloc=as.vector(ref)))
   if (!is.null(pivot)) {
     parser <- parser.srcref(as.character(pivot))
     parsed <- append(do.call(parser, list(pivot, expression)),
@@ -386,6 +388,6 @@ parse.file <- function(file) {
 #' Parse many files at one.
 #' @param \dots files to be parsed
 #' @return List containing parsed directives
-#' @seealsa \code{\link{parse.file}}
+#' @seealso \code{\link{parse.file}}
 parse.files <- function(...)
   Reduce(append, Map(parse.file, list(...)), NULL)

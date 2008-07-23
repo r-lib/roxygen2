@@ -6,13 +6,20 @@ roxygen()
 
 #' Make an Rd roclet which parses the given files and writes the Rd
 #' format to standard out (TODO: write to the file designated by
-#' \code{@@name}). Requires the \code{@@name} parameter.
+#' \code{@@name}). Tries to guess \name and \usage unless explicitly
+#' given.
 #'
 #' Contains the member function \code{parse} which parses the result
 #' of \code{parse.files}.
 #'
 #' @return Rd roclet
 make.Rd.roclet <- function() {
+  #' Translate a key and expressions into an Rd expression;
+  #' multiple expressions take their own braces.
+  #' @param key the expression's key
+  #' @param \dots the arguments
+  #' @return A string containing the key and arguments
+  #' in LaTeX-like gestalt.
   Rd.expression <- function(key, ...)
     sprintf('\\%s%s\n',
             key,
@@ -21,12 +28,25 @@ make.Rd.roclet <- function() {
                          c(...),
                          ''))
 
+  #' Push the Rd-expression to standard out (or current
+  #' sink).
+  #' @param key the expression's key
+  #' @param \dots the arguments
+  #' @return \code{NULL}
   parse.expression <- function(key, ...)
     cat(Rd.expression(key, c(...)))
 
+  #' Find the first non-null argument.
+  #' @param \dots the arguments
+  #' @return The first non-null argument
   first.non.null <- function(...)
     append(NULL, c(...))[[1]]
 
+  #' Reconstruct the \name directive from amongst
+  #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
+  #' \code{@@setGeneric}, \code{@@assignee}, etc.
+  #' @param partitum the pre-parsed elements
+  #' @return \code{NULL}
   parse.name <- function(partitum) {
     name <- partitum$name
     assignee <- partitum$assignee
@@ -39,6 +59,10 @@ make.Rd.roclet <- function() {
       parse.expression('name', name)
   }
   
+  #' Turn a list of formal arguments into a human-readable
+  #' function-like.
+  #' @param partitum the pre-parsed elements
+  #' @return \code{NULL}
   parse.formals <- function(partitum) {
     formals <- partitum$formals
     if (!is.null(formals)) {
@@ -61,6 +85,9 @@ make.Rd.roclet <- function() {
     }
   }
 
+  #' Prefer explicit \code{@@usage} to a \code{@@formals} list.
+  #' @param partitum the pre-parsed elements
+  #' @return \code{NULL}
   parse.usage <- function(partitum) {
     if (is.null(partitum$usage))
       parse.formals(partitum)
@@ -68,12 +95,18 @@ make.Rd.roclet <- function() {
       parse.expression('usage', partitum$usage)
   }
 
+  #' Reset params; parse name and usage.
+  #' @param partitum the pre-parsed elements
+  #' @return \code{NULL}
   pre.parse <- function(partitum) {
     assign.parent('params', nil, environment())
     parse.name(partitum)
     parse.usage(partitum)
   }
 
+  #' Parse params.
+  #' @param partitum the pre-parsed elements
+  #' @return \code{NULL}
   post.parse <- function(partitum) {
     parse.arguments()
     ## sink(NULL)
@@ -95,6 +128,10 @@ make.Rd.roclet <- function() {
                          function(key, expressions)
                          parse.expression('value', expressions))
 
+  #' Split a plural into its constituent singulars.
+  #' @param key the singular key
+  #' @param expressions the plurality of expressions
+  #' @return \code{NULL}
   parse.split <- function(key, expressions) {
     expression <- strcar(expressions)
     rest <- strcdr(expressions)
@@ -111,6 +148,11 @@ make.Rd.roclet <- function() {
                          function(key, expressions)
                          parse.split('keyword', expressions))
 
+  #' Split the introductory matter into its description followed
+  #' by details (separated by a blank line).
+  #' @param key ignored
+  #' @param expressions the to-be-parsed description and details
+  #' @return \code{NULL}
   parse.description <- function(key, expressions) {
     paragraphs <- car(strsplit(car(expressions), '\n\n', fixed=TRUE))
     description <- car(paragraphs)
@@ -124,11 +166,19 @@ make.Rd.roclet <- function() {
 
   params <- nil
 
+  #' Add a parameter to the global param list.
+  #' @param key ignored
+  #' @param expression the parameter
+  #' @return \code{NULL}
   parse.param <- function(key, expression)
     assign.parent('params',
                   append(params, list(expression)),
                   environment())
     
+  #' Reduce and paste together the various parameters
+  #' in an Rd-readable list (with \code{\\item}s, etc.).
+  #' @param name.param name-param pair
+  #' @return A list of Rd-readable expressions
   parse.params <- function()
     Reduce.paste(function(name.param)
                  Rd.expression('item',
@@ -137,6 +187,9 @@ make.Rd.roclet <- function() {
                  params,
                  '')
 
+  #' Paste and label the Rd-readable expressions
+  #' returned by \code{parse.params}.
+  #' @return \code{NULL}
   parse.arguments <- function()
     if (length(params) > 0)
       parse.expression('arguments', parse.params())

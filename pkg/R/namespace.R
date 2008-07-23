@@ -3,8 +3,8 @@
 #' @include string.R
 roxygen()
 
-#' Make a namespace roclet which parses the result of \code{parse.files}
-#' and writes a list of namespace directives to standard out.
+#' Make a namespace roclet which parses the given files writes a list of
+#' namespace directives to standard out.
 #'
 #' Contains the member function \code{parse} which parses the result
 #' of \code{parse.files}.

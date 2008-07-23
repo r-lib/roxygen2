@@ -62,6 +62,13 @@ cadar <- function(list) {
   cadr(car(list))
 }
 
+#' Composite \code{car}/\code{cdr}
+#' @param list the list from which to extract
+#' @return The extracted elements
+cdddr <- function(list) {
+  cddr(cdr(list))
+}
+
 #' Is a number even?
 #' @param a the number to test
 #' @return Whether the number is even

@@ -14,16 +14,10 @@
 #' The functions supplied must always return finite (including not
 #' \code{NA} and not \code{NaN}) values.
 #'
-#' @name nlm
 #' @aliases nlm
 #' @title Non-Linear Minimization
 #' @concept optimization
 #' @author Example Author \email{author@@example.com}
-#' @usage
-#' nlm(f, p, \dots, hessian = FALSE, typsize = rep(1, length(p)),
-#'     fscale = 1, print.level = 0, ndigit = 12, gradtol = 1e-6,
-#'     stepmax = max(1000 * sqrt(sum((p/typsize)^2)), 1000),
-#'     steptol = 1e-6, iterlim = 100, check.analyticals = TRUE)
 #'
 #' @param f the function to be minimized.  If the function value has
 #'   an attribute called \code{gradient} or both \code{gradient} and

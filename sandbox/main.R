@@ -3,7 +3,7 @@ source('../R/list.R')
 source('../R/string.R')
 source('../R/parse.R')
 
-FILE <- 'example-S3-mcpi.R'
+FILE <- 'example-S4-person.R'
 
 argv <- commandArgs(trailingOnly=T)
 argc <- length(argv)

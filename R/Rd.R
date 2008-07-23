@@ -4,10 +4,9 @@
 #' @include roclet.R
 roxygen()
 
-#' Make an Rd roclet which parses the result of \code{parse.files}
-#' and writes the Rd format to standard out (TODO: write
-#' to the file designated by \code{@@name}). Requires the \code{@@name}
-#' parameter.
+#' Make an Rd roclet which parses the given files and writes the Rd
+#' format to standard out (TODO: write to the file designated by
+#' \code{@@name}). Requires the \code{@@name} parameter.
 #'
 #' Contains the member function \code{parse} which parses the result
 #' of \code{parse.files}.
@@ -25,19 +24,66 @@ make.Rd.roclet <- function() {
   parse.expression <- function(key, ...)
     cat(Rd.expression(key, c(...)))
 
-  pre.parse <- function(partitum)
-    assign.parent('params', nil, environment())
+  first.non.null <- function(...)
+    append(NULL, c(...))[[1]]
 
-  post.parse <- function(partitum)
+  parse.name <- function(partitum) {
+    name <- partitum$name
+    assignee <- partitum$assignee
+    S4 <- first.non.null(partitum$S4class,
+                         partitum$S4method,
+                         partitum$S4generic)
+    name <- first.non.null(name, assignee, S4)
+    ## sink(name)
+    if (!is.null(name))
+      parse.expression('name', name)
+  }
+  
+  parse.formals <- function(partitum) {
+    formals <- partitum$formals
+    if (!is.null(formals)) {
+      name.defaults <- zip.c(names(formals), formals)
+      args <-
+        do.call(paste, c(Map(function(name.default) {
+          name <- car(name.default)
+          default <- cadr(name.default)
+          if (is.null.string(default))
+            name
+          else
+            sprintf('%s=%s', name, default)
+        },
+                             name.defaults),
+                         sep=', '))
+      cat(strwrap(Rd.expression('usage',
+          sprintf('%s(%s)', partitum$assignee, args)),
+                  exdent=4),
+          sep='\n')
+    }
+  }
+
+  parse.usage <- function(partitum) {
+    if (is.null(partitum$usage))
+      parse.formals(partitum)
+    else
+      parse.expression('usage', partitum$usage)
+  }
+
+  pre.parse <- function(partitum) {
+    assign.parent('params', nil, environment())
+    parse.name(partitum)
+    parse.usage(partitum)
+  }
+
+  post.parse <- function(partitum) {
     parse.arguments()
+    ## sink(NULL)
+  }
 
   roclet <- make.roclet(parse.expression,
                         pre.parse,
                         post.parse)
 
-  roclet$register.default.parsers('name',
-                                  'title',
-                                  'usage',
+  roclet$register.default.parsers('title',
                                   'references',
                                   'note',
                                   'author',

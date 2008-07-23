@@ -3,9 +3,9 @@
 #' @include string.R
 roxygen()
 
-#' Make collate roclet which parses the result of \code{parse.files},
-#' topologically sorting \code{@@include}s and writing a \code{collate} directive
-#' to standard out.
+#' Make collate roclet which parses the given files; topologically
+#' sorting \code{@@include}s and writing a \code{Collate} directive to
+#' standard out.
 #'
 #' Contains the member function \code{parse} which parses the result
 #' of \code{parse.files}.

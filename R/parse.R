@@ -64,7 +64,7 @@ register.preref.parser <- Curry(register.parser,
 #' @return \code{NULL}
 #' @seealso \code{\link{register.parser}}
 register.srcref.parser <- Curry(register.parser,
-                                table=preref.parsers)
+                                table=srcref.parsers)
 
 #' Register many parsers at once.
 #' @param table the table under which to register
@@ -250,7 +250,7 @@ parse.srcref <- function(pivot, expression) nil
 #' @return An list containing the class to be set
 register.srcref.parser('setClass',
                        function(pivot, expression)
-                       list(class=cadr(car(expression))))
+                       list(S4class=car(expression)))
 
 #' Parse S4 \code{setGeneric} method.
 #' @param pivot the parsing pivot
@@ -258,7 +258,7 @@ register.srcref.parser('setClass',
 #' @return A list containing the generic
 register.srcref.parser('setGeneric',
                        function(pivot, expression)
-                       list(generic=cadr(car(expression))))
+                       list(S4generic=car(expression)))
 
 #' Parse S4 \code{setMethod} method.
 #' @param pivot the parsing pivot
@@ -266,8 +266,8 @@ register.srcref.parser('setGeneric',
 #' @return A list containing the method to be set
 register.srcref.parser('setMethod',
                        function(pivot, expression)
-                       list(method=cadr(car(expression)),
-                            signature=caddr(car(expression))))
+                       list(S4method=car(expression),
+                            signature=cadr(expression)))
 
 #' Default parser-lookup; if key not found, return
 #' the default parser specified.
@@ -348,22 +348,110 @@ parse.ref.preref <- function(ref, ...) {
   }
 } 
 
+#' Recursively walk an expression (as returned by \code{parse}) in
+#' preorder.
+#' @param proc the procedure to apply to each subexpression
+#' @param expression the root of the expression
+#' @return NULL
+preorder.walk.expression <- function(proc, expression) {
+  if (length(expression) > 0)
+    for (i in c(1:length(expression))) {
+      member <- tryCatch(expression[[i]], error=function(e) NULL)
+      if (!is.null(member) && !identical(member, expression)) {
+        proc(member)
+        if (typeof(member) != 'pairlist')
+          preorder.walk.expression(proc, member)
+      }
+    }
+}
+
+#' Flatten a nested expression into a list, preorderly.
+#' @param expression the root of the expression to be
+#' flattened
+#' @return A list containing the flattened expression
+preorder.flatten.expression <- function(expression) {
+  flattened <- NULL
+  preorder.walk.expression(function(expression)
+      flattened <<- append(flattened, expression),
+      expression)
+  flattened
+}
+
+#' Whether the expression implies assignment by \code{<-}
+#' or \code{=}.
+#' @param expression the expression to check for assignment
+#' @return Whether or not the expression assigns by \code{<-}
+#' \code{=}
+is.assignment <- function(expression) {
+  class <- class(expression)
+  class == '<-' | class == '='
+}
+
+#' Whether the expression assigns function
+#' @param expression the expression to check for assignment
+#' @return Whether the expression assigns a function
+is.function.definition <- function(expression)
+  expression == 'function'
+
+#' Find the formal arguments associated with a given
+#' expression (may be \code{NULL}).
+#' @param expressions the expressions from which to extract
+#' formal arguments
+#' @return The formal arguments of said expression or
+#' \code{NULL}
+parse.formals <- function(expressions) {
+  formals <- NULL
+  call <- car(expressions)
+  if (is.call(call)) {
+    f <- cadr(expressions)
+    if (is.function.definition(f))
+      formals <- tryCatch(formals(eval(call)),
+                          error=function(e) NULL)
+  }
+  if (is.null(formals)) formals
+  else list(formals=Map(function(formal)
+              if (is.call(formal)) capture.output(formal)
+              else as.character(formal), formals))
+}
+
+#' Find the assignee of the expression
+#' @param expression the expression in which to find the
+#' assignee
+#' @return The expression's assignee
+parse.assignee <- function(expression)
+  list(assignee=as.character(car(expression)))
+
+#' Parse a function call, paying special attention to
+#' assignments by \code{<-} or \code{=}.
+#' @param expressions the expression to search through
+#' @return List of formals and assignee in case of
+#' assignment, the processed expression in case of
+#' non-assigning function calls (see \code{parse.srcref}).
+parse.call <- function(expressions) {
+  call <- car(expressions)
+  if (is.assignment(call)) {
+    assignee <- parse.assignee(cddr(expressions))
+    formals <- parse.formals(cdddr(expressions))
+    append(assignee, formals)
+  } else {
+    lhs <- as.character(cadr(expressions))
+    parser.srcref(lhs)(lhs, cddr(expressions))
+  }
+}
+
 #' Parse a srcref
 #' @param ref the srcref to be parsed
 #' @return List containing the parsed srcref
 parse.ref.srcref <- function(ref, ...) {
   srcfile <- attributes(ref)$srcfile
-  lines <- getSrcLines(srcfile, car(ref), caddr(ref))
-  expression <- parse(text=lines)
-  pivot <- tryCatch(caar(expression), error=function(e) NULL)
-  parsed <- list(srcref=list(filename=srcfile$filename,
+  srcref <- list(srcref=list(filename=srcfile$filename,
                    lloc=as.vector(ref)))
-  if (!is.null(pivot)) {
-    parser <- parser.srcref(as.character(pivot))
-    parsed <- append(do.call(parser, list(pivot, expression)),
-                     parsed)
-  }
-  parsed
+  lines <- getSrcLines(srcfile, car(ref), caddr(ref))
+  expressions <- preorder.flatten.expression(parse(text=lines))
+  parsed <- NULL
+  if (is.call(car(expressions)))
+    parsed <- parse.call(expressions)
+  append(parsed, srcref)
 }
 
 #' Parse each of a list of preref/srcref pairs.

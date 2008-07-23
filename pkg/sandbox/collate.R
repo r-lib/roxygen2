@@ -15,7 +15,7 @@ FILES <- list('collate/belt.R',
               'collate/undershorts.R',
               'collate/watch.R')
 
-argv <- commandArgs(trailingOnly=T)
+argv <- commandArgs(trailingOnly=TRUE)
 argc <- length(argv)
 files <- if (argc > 0) as.list(argv) else FILES
 

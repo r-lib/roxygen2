@@ -12,6 +12,7 @@ roxygen()
 #' Contains the member function \code{parse} which parses the result
 #' of \code{parse.files}.
 #'
+#' @param stdout whether to cat to standard out (e.g. for testing)
 #' @return Rd roclet
 make.Rd.roclet <- function(stdout=FALSE) {
   #' Translate a key and expressions into an Rd expression;

@@ -39,11 +39,11 @@ make.namespace.roclet <- function() {
   parse.export <- function(proc, parms) {
     if (is.null.string(parms)) {
       if (!is.null(exportee$S4method))
-        parse.exportMethod(exportee$S4method)
+        parse.exportMethod(NULL, exportee$S4method)
       else if (!is.null(exportee$S4class))
-        parse.exportClass(exportee$S4class)
-      else if (!is.null(exportee$S4method))
-        parse.exportMethod(exportee$S4method)
+        parse.exportClass(NULL, exportee$S4class)
+      else if (!is.null(exportee$S4generic))
+        parse.exportMethod(NULL, exportee$S4generic)
       else {
         exportee <- first.non.null(exportee$name,
                                    exportee$assignee)
@@ -52,6 +52,8 @@ make.namespace.roclet <- function() {
         else
           parse.directive('export', exportee)
       }
+    } else {
+      parse.directive('export', parms)
     }
   }
 

@@ -359,8 +359,8 @@ preorder.walk.expression <- function(proc, expression) {
       member <- tryCatch(expression[[i]], error=function(e) NULL)
       if (!is.null(member) && !identical(member, expression)) {
         proc(member)
-        if (typeof(member) != 'pairlist')
-          preorder.walk.expression(proc, member)
+        try(preorder.walk.expression(proc, member),
+            silent=TRUE)
       }
     }
 }

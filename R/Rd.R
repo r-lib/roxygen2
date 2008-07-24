@@ -36,12 +36,6 @@ make.Rd.roclet <- function() {
   parse.expression <- function(key, ...)
     cat(Rd.expression(key, c(...)))
 
-  #' Find the first non-null argument.
-  #' @param \dots the arguments
-  #' @return The first non-null argument
-  first.non.null <- function(...)
-    append(NULL, c(...))[[1]]
-
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
   #' \code{@@setGeneric}, \code{@@assignee}, etc.

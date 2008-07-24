@@ -15,7 +15,7 @@ roxygen
 #' @returnType mcpi
 #' @return a list containing the approximated
 #'         PI value and the throws
-#' @export mcpiX
+#' @export
 mcpiX <- function(trials) {
 
   throws <- matrix(NA, nrow=trials,

@@ -97,3 +97,10 @@ make.roclet <- function(parse.default,
 #' @return NULL
 assign.parent <- function(var, value, env)
   assign(var, value, envir=parent.env(env))
+
+#' Find the first non-null argument.
+#' @param \dots the arguments
+#' @return The first non-null argument
+first.non.null <- function(...)
+  append(NULL, c(...))[[1]]
+

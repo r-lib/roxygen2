@@ -13,7 +13,7 @@ roxygen()
 #' of \code{parse.files}.
 #'
 #' @return Rd roclet
-make.Rd.roclet <- function() {
+make.Rd.roclet <- function(stdout=FALSE) {
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
   #' @param key the expression's key
@@ -72,10 +72,13 @@ make.Rd.roclet <- function() {
         },
                              name.defaults),
                          sep=', '))
-      cat(strwrap(Rd.expression('usage',
-          sprintf('%s(%s)', partitum$assignee, args)),
-                  exdent=4),
-          sep='\n')
+      parse.expression('usage',
+          do.call(paste,
+                  c(as.list(strwrap(sprintf('%s(%s)',
+                                            partitum$assignee,
+                                            args),
+                                    exdent=4)),
+                    sep='\n')))
     }
   }
 
@@ -93,7 +96,8 @@ make.Rd.roclet <- function() {
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
-    assign.parent('params', nil, environment())
+    assign.parent('params', NULL, environment())
+    assign.parent('examples', NULL, environment())
     parse.name(partitum)
     parse.usage(partitum)
   }
@@ -103,6 +107,7 @@ make.Rd.roclet <- function() {
   #' @return \code{NULL}
   post.parse <- function(partitum) {
     parse.arguments()
+    parse.examples()
     ## sink(NULL)
   }
 
@@ -115,7 +120,6 @@ make.Rd.roclet <- function() {
                                   'note',
                                   'author',
                                   'seealso',
-                                  'examples',
                                   'concept')
 
   roclet$register.parser('return',
@@ -158,7 +162,7 @@ make.Rd.roclet <- function() {
 
   roclet$register.parser('description', parse.description)
 
-  params <- nil
+  params <- NULL
 
   #' Add a parameter to the global param list.
   #' @param key ignored
@@ -189,6 +193,26 @@ make.Rd.roclet <- function() {
       parse.expression('arguments', parse.params())
 
   roclet$register.parser('param', parse.param)
+
+  examples <- NULL
+
+  parse.example <- function(key, expression)
+    assign.parent('examples',
+                  append(examples, expression),
+                  environment())
+
+  parse.examples <- function() {
+    examples <- Reduce(c, Map(function(file)
+                              tryCatch(readLines(trim(file)),
+                                       error=function(e) NULL),
+                              examples),
+                       NULL)
+    if (!is.null(examples))
+      cat(Rd.expression('examples',
+          do.call(paste, c(as.list(examples), sep='\n'))))
+  }
+
+  roclet$register.parser('example', parse.example)
 
   roclet
 }

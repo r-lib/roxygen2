@@ -5,7 +5,8 @@ source('../R/string.R')
 source('../R/roclet.R')
 source('../R/Rd.R')
 
-FILES <- list('example-Rd-nlm.R')
+## FILES <- list('example-Rd-nlm.R')
+FILES <- list('../R/Rd.R')
 
 argv <- commandArgs(trailingOnly=T)
 argc <- length(argv)

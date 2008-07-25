@@ -12,9 +12,10 @@ roxygen()
 #' Contains the member function \code{parse} which parses the result
 #' of \code{parse.files}.
 #'
-#' @param stdout whether to cat to standard out (e.g. for testing)
+#' @param subdir directory into which to place the Rd files; if
+#' \code{NULL}, standard out.
 #' @return Rd roclet
-make.Rd.roclet <- function(stdout=FALSE) {
+make.Rd.roclet <- function(subdir=NULL) {
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
   #' @param key the expression's key
@@ -35,7 +36,23 @@ make.Rd.roclet <- function(stdout=FALSE) {
   #' @param \dots the arguments
   #' @return \code{NULL}
   parse.expression <- function(key, ...)
-    cat(Rd.expression(key, c(...)))
+    cat(Rd.expression(key, c(...)), file=filename, append=T)
+
+  filename <- ''
+
+  reset.filename <- function()
+    assign.parent('filename', '', environment())
+
+  first.source.line <- function(partitum) {
+    srcfile <- srcfile(partitum$srcref$filename)
+    first.line <- car(partitum$srcref$lloc)
+    getSrcLines(srcfile, first.line, first.line)
+  }
+
+  NULL.STATEMENT <- 'roxygen()'
+
+  is.null.statement <- function(source.line)
+    length(grep(NULL.STATEMENT, source.line) > 0)
 
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
@@ -49,9 +66,29 @@ make.Rd.roclet <- function(stdout=FALSE) {
                          partitum$S4method,
                          partitum$S4generic)
     name <- first.non.null(name, assignee, S4)
-    ## sink(name)
-    if (!is.null(name))
+    if (is.null(name) && !is.null(subdir)) {
+      filename <- partitum$srcref$filename
+      first.line <- car(partitum$srcref$lloc)
+      first.source.line <- first.source.line(partitum)
+      if (!is.null.statement(first.source.line))
+        warning(sprintf(paste('No name found for the',
+                              'following expression in %s',
+                              'line %s:\n  `%s . . .\''),
+                        filename,
+                        first.line,
+                        first.source.line),
+                immediate.=T)
+    } else if (!is.null(name)) {
+      name <- trim(name)
+      if (!is.null(subdir)) {
+        assign.parent('filename',
+                      file.path(subdir, sprintf('%s.Rd', name)),
+                      environment())
+        cat(sprintf('Writing %s to %s\n', name, filename))
+        unlink(filename)
+      }
       parse.expression('name', name)
+    }
   }
   
   #' Turn a list of formal arguments into a human-readable
@@ -109,7 +146,10 @@ make.Rd.roclet <- function(stdout=FALSE) {
   post.parse <- function(partitum) {
     parse.arguments()
     parse.examples(partitum)
-    ## sink(NULL)
+    ## Assuming the previous sink was successful;
+    ## if not, it will destroy the sink stack.
+    ## (Should fail if unwritable, anyway.)
+    reset.filename()
   }
 
   roclet <- make.roclet(parse.expression,

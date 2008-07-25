@@ -108,7 +108,7 @@ make.Rd.roclet <- function(stdout=FALSE) {
   #' @return \code{NULL}
   post.parse <- function(partitum) {
     parse.arguments()
-    parse.examples()
+    parse.examples(partitum)
     ## sink(NULL)
   }
 
@@ -197,20 +197,33 @@ make.Rd.roclet <- function(stdout=FALSE) {
 
   examples <- NULL
 
+  #' Parse individual \code{@@example} clauses by adding the
+  #' pointed-to file to a global store.
+  #' @param key ignored
+  #' @param expression the file containing the example(s)
+  #' @return \code{NULL}
   parse.example <- function(key, expression)
     assign.parent('examples',
                   append(examples, expression),
                   environment())
 
-  parse.examples <- function() {
-    examples <- Reduce(c, Map(function(file)
-                              tryCatch(readLines(trim(file)),
-                                       error=function(e) NULL),
-                              examples),
-                       NULL)
-    if (!is.null(examples))
-      cat(Rd.expression('examples',
-          do.call(paste, c(as.list(examples), sep='\n'))))
+  #' If \code{@@examples} is provided, use that; otherwise, concatenate
+  #' the files pointed to by each \code{@@example}.
+  #' @param partitum the parsed elements
+  #' @return \code{NULL}
+  parse.examples <- function(partitum) {
+    if (!is.null(partitum$examples))
+      parse.expression('examples', partitum$examples)
+    else {
+      examples <- Reduce(c, Map(function(file)
+                                tryCatch(readLines(trim(file)),
+                                         error=function(e) NULL),
+                                examples),
+                         NULL)
+      if (!is.null(examples))
+        parse.expression('examples',
+            do.call(paste, c(as.list(examples), sep='\n')))
+    }
   }
 
   roclet$register.parser('example', parse.example)

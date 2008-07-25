@@ -24,11 +24,12 @@ test.free.example.overriding.example.file <- function()
 
 test.blank.file <- function()
   check.Rd.roclet(function(roclet)
-                  is.null(roclet$parse.parsed(parse.text(""))))
+                  checkTrue(is.null(roclet$parse.parsed(parse.text("")))))
 
 test.naked.roxygen <- function()
   check.Rd.roclet(function(roclet)
-                  is.null(roclet$parse.parsed(parse.text("roxygen()"))))
+                  checkTrue(is.null(roclet$parse.parsed
+                                    (parse.text("roxygen()")))))
 
 test.name.from.assignment <- function()
   check.Rd.output('a <- 2',

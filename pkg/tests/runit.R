@@ -5,10 +5,10 @@ check.roclet <- function(make.roclet, test) {
 
 check.output <- function(..., make.roclet, output)
   check.roclet(make.roclet,
-               test=function(roclet)
-               checkEquals(capture.output(roclet$parse.parsed
-                                          (parse.text(...))),
-                           output))
+               test=function(roclet) {
+                 parsed <- capture.output(roclet$parse.parsed(parse.text(...)))
+                 checkEquals(parsed, output, msg=parsed)
+               })
 
 if (require('RUnit')) {
   library(roxygen)

@@ -26,14 +26,13 @@ object:
 
     ...
 
+To test the Rd, namespace and collate roclets: there are similarly
+`Rd.R', `namespace.R' and `collate.R' in the same directory.
+
 1.2. TODO
 
-Mode of interaction with the Roclets has yet to be determined; simple
-API via library() would suffice; though a parse-tree <-> S-expression
-translator would also work.
-
-The advantage of the latter, I suppose, is that extra-R tools could
-process the parse tree.
+Create a driver (possibly used by `R CMD roxygen') which farms out the
+results of each roclet to appropriate files in a package skeleton.
 
 -----------
 * Hail, Hephaistos! Grant skill and weal.

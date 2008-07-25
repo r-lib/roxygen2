@@ -81,3 +81,18 @@ test.splitting.keys <- function()
                     "\\keyword{b}",
                     "\\alias{a}",
                     "\\alias{b}"))
+
+test.generic.keys <- function()
+  check.Rd.output("#' @title test
+                   #' @references test
+                   #' @note test
+                   #' @author test
+                   #' @seealso test
+                   #' @concept test
+                   roxygen()",
+                  output=c("\\title{test}",
+                    "\\references{test}",
+                    "\\note{test}",
+                    "\\author{test}",
+                    "\\seealso{test}",
+                    "\\concept{test}"))

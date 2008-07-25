@@ -31,7 +31,7 @@ test.override.S4method <- function()
                           setMethod('b', 'a')",
                          output='exportMethods(c)')
 
-test.keys <- function()
+test.generic.keys <- function()
   check.namespace.output("#' @exportPattern test
                           #' @S3method test test
                           #' @import test

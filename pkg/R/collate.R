@@ -72,7 +72,8 @@ make.collate.roclet <- function() {
 
   post.files <-
     function() cat('Collate:',
-                   Reduce.paste(function(vertex) vertex$file,
+                   Reduce.paste(function(vertex)
+                                sprintf("'%s'", vertex$file),
                                 topological.sort(vertices),
                                 ' '),
                    '\n',

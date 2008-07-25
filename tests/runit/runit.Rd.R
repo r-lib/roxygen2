@@ -49,3 +49,34 @@ test.explicit.usage <- function()
                    a <- function(a=1) {}",
                   output=c("\\name{a}",
                     "\\usage{a(a=2)}"))
+
+test.params <- function()
+  check.Rd.output("#' @param a an incipit letter
+                   #' @param z a terminal letter
+                   a <- function(a=1, z=2) {}",
+                  output=c("\\name{a}",
+                    "\\usage{a(a=1, z=2)}",
+                    "\\arguments{\\item{a}{an incipit letter}",
+                    "\\item{z}{a terminal letter}}"))
+
+test.description <- function()
+  check.Rd.output("#' description
+                   roxygen()",
+                  output="\\description{description}")
+
+test.description.details <- function()
+  check.Rd.output("#' description
+                   #'
+                   #' details
+                   roxygen()",
+                  output=c("\\description{description}",
+                    "\\details{details}"))
+
+test.splitting.keys <- function()
+  check.Rd.output("#' @keywords a b
+                   #' @aliases a b
+                   roxygen()",
+                  output=c("\\keyword{a}",
+                    "\\keyword{b}",
+                    "\\alias{a}",
+                    "\\alias{b}"))

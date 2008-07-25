@@ -58,10 +58,14 @@ make.roclet <- function(parse.default,
     for (parser in c(...))
       roclet$register.default.parser(parser)
 
+  roclet$parse <- function(...)
+    roclet$parse.parsed(parse.files(...))
+
   #' Parse material contained in files.
-  #' @param \dots the files to parse
+  #' @param partita the parsed elements
+  #' (from e.g. \code{parse.files})
   #' @return \code{NULL}
-  roclet$parse <- function(...) {
+  roclet$parse.parsed <- function(partita) {
     key.values <- function(partitum)
       zip.list(attributes(partitum)$names, partitum)
     
@@ -75,7 +79,7 @@ make.roclet <- function(parse.default,
         do.call(proc, list(...))
 
     maybe.call(pre.files)
-    for (partitum in parse.files(...)) {
+    for (partitum in partita) {
       maybe.call(pre.parse, partitum)
       for (key.value in key.values(partitum)) {
         key <- car(key.value)

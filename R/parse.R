@@ -151,6 +151,7 @@ parse.preref <- function(key, rest) {
 
 #' Possibly NA; in which case, the Roclets can do something more
 #' sophisticated with the srcref.
+#' @name parse.preref.export
 register.preref.parser('export', parse.default)
 
 #' Parse an element with a mandatory value.
@@ -164,6 +165,12 @@ parse.value <- function(key, rest) {
     parse.default(key, rest)
 }
   
+#' Parsers with a mandatory value.
+#' @name value.parsers
+#' @aliases prototype exportClass exportMethod exportPattern S3method
+#' @aliases import importFrom importClassesFrom importMethodsFrom name
+#' @aliases aliases title usage references concept note seealso example
+#' @aliases examples keywords return author include
 register.preref.parsers(parse.value,
                         'prototype',
                         'exportClass',
@@ -206,6 +213,9 @@ parse.name.description <- function(key, rest) {
                       names=key))
 }
 
+#' Parsers with name and description
+#' @name name.description.parsers
+#' @aliases slot param
 register.preref.parsers(parse.name.description,
                         'slot',
                         'param')
@@ -223,6 +233,9 @@ parse.name <- function(key, name) {
   parse.default(key, strcar(name))
 }
 
+#' Parsers taking a name
+#' @name name.parsers
+#' @aliases S3class returnType
 register.preref.parsers(parse.name,
                         'S3class',
                         'returnType')
@@ -234,6 +247,9 @@ register.preref.parsers(parse.name,
 parse.toggle <- function(key, rest)
   as.list(structure(TRUE, names=key))
 
+#' Toggling parsers
+#' @name toggle.parsers
+#' @aliases listObject attributeObject environmentObject
 register.preref.parsers(parse.toggle,
                         'listObject',
                         'attributeObject',
@@ -246,6 +262,7 @@ register.preref.parsers(parse.toggle,
 parse.srcref <- function(pivot, expression) nil
 
 #' Parse S4 \code{setClass} method.
+#' @name parse.srcref.setClass
 #' @param pivot the parsing pivot
 #' @param expression the expression to be parsed
 #' @return An list containing the class to be set
@@ -254,6 +271,7 @@ register.srcref.parser('setClass',
                        list(S4class=car(expression)))
 
 #' Parse S4 \code{setGeneric} method.
+#' @name parse.srcref.setGeneric
 #' @param pivot the parsing pivot
 #' @param expression the expression to be parsed
 #' @return A list containing the generic
@@ -262,6 +280,7 @@ register.srcref.parser('setGeneric',
                        list(S4generic=car(expression)))
 
 #' Parse S4 \code{setMethod} method.
+#' @name parse.srcref.setMethod
 #' @param pivot the parsing pivot
 #' @param expression the expression to be parsed
 #' @return A list containing the method to be set
@@ -411,7 +430,8 @@ parse.formals <- function(expressions) {
   }
   if (is.null(formals)) formals
   else list(formals=Map(function(formal)
-              if (is.call(formal)) capture.output(formal)
+              if (is.null(formal)) ''
+              else if (is.call(formal)) capture.output(formal)
               else as.character(formal), formals))
 }
 

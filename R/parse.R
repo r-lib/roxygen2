@@ -183,6 +183,7 @@ register.preref.parsers(parse.value,
                         'note',
                         'seealso',
                         'example',
+                        'examples',
                         'keywords',
                         'return',
                         'author',
@@ -311,11 +312,11 @@ parse.ref.list <- function(ref, ...)
 #' @param ref the preref to be parsed
 #' @return List containing the parsed preref
 parse.ref.preref <- function(ref, ...) {
-  lines <- getSrcLines(attributes(ref)$srcfile,
-                       car(ref),
-                       caddr(ref))
+  lines <- Map(trim.left, getSrcLines(attributes(ref)$srcfile,
+                                      car(ref),
+                                      caddr(ref)))
   delimited.lines <-
-    Filter(function(line) grep(LINE.DELIMITER, line), lines)
+    Filter(function(line) grep(sprintf('^%s', LINE.DELIMITER), line), lines)
   ## Trim LINE.DELIMITER + one space (benign for spaceless delimeters).
   trimmed.lines <-
     Map(function(line) substr(line, nchar(LINE.DELIMITER) + 2, nchar(line)),
@@ -479,3 +480,12 @@ parse.file <- function(file) {
 #' @seealso \code{\link{parse.file}}
 parse.files <- function(...)
   Reduce(append, Map(parse.file, list(...)), NULL)
+
+#' Text-parsing hack using tempfiles for more facility.
+#' @param \dots lines of text to be parsed
+#' @return The parse tree
+parse.text <- function(...) {
+  file <- tempfile()
+  cat(..., sep='\n', file=file)
+  parse.file(file)
+}

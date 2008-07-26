@@ -13,21 +13,21 @@ roxygen()
 #'
 #' \tabular{ll}{
 #' Roxygen tag \tab Rd analogue\cr
-#' \code{@@author} \tab \code{author}\cr
-#' \code{@@aliases} \tab \code{alias}\cr
-#' \code{@@concept} \tab \code{concept}\cr
+#' \code{@@author} \tab \code{\\author}\cr
+#' \code{@@aliases} \tab \code{\\alias}\cr
+#' \code{@@concept} \tab \code{\\concept}\cr
 #' \code{@@example} \tab \emph{n/a}\cr
-#' \code{@@examples} \tab \code{examples}\cr
-#' \code{@@keywords} \tab \code{keyword}\cr
-#' \code{@@method} \tab \code{method}\cr
-#' \code{@@name} \tab \code{name}\cr
-#' \code{@@note} \tab \code{note}\cr
-#' \code{@@param} \tab \code{\arguments{\item{} ...}}\cr
-#' \code{@@references} \tab \code{references}\cr
-#' \code{@@return} \tab \code{value}\cr
-#' \code{@@seealso} \tab \code{seealso}\cr
-#' \code{@@title} \tab \code{title}\cr
-#' \code{@@usage} \tab \code{usage}\cr
+#' \code{@@examples} \tab \code{\\examples}\cr
+#' \code{@@keywords} \tab \code{\\keyword}\cr
+#' \code{@@method} \tab \code{\\method}\cr
+#' \code{@@name} \tab \code{\\name}\cr
+#' \code{@@note} \tab \code{\\note}\cr
+#' \code{@@param} \tab \code{\\arguments{\\item{} ...}}\cr
+#' \code{@@references} \tab \code{\\references}\cr
+#' \code{@@return} \tab \code{\\value}\cr
+#' \code{@@seealso} \tab \code{\\seealso}\cr
+#' \code{@@title} \tab \code{\\title}\cr
+#' \code{@@usage} \tab \code{\\usage}\cr
 #' }
 #'
 #' \enumerate{

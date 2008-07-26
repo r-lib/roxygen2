@@ -241,7 +241,8 @@ parse.name <- function(key, name) {
 #' @aliases S3class returnType
 register.preref.parsers(parse.name,
                         'S3class',
-                        'returnType')
+                        'returnType',
+                        'docType')
 
 #' Turn a binary element on; parameters are ignored.
 #' @param key parsing key

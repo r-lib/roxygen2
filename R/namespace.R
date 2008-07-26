@@ -1,3 +1,4 @@
+#' @include roxygen.R
 #' @include parse.R
 #' @include roclet.R
 #' @include string.R

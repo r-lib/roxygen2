@@ -1,17 +1,14 @@
+#' @include roxygen.R
 #' @include string.R
 #' @include list.R
 #' @include functional.R
-NULL
+roxygen()
 
 #' Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '#\''
 
 #' Symbol that delimits tags.
 TAG.DELIMITER <- '@'
-
-#' No-op for sourceless files
-#' @return \code{NULL}
-roxygen <- function() NULL
 
 #' Comment blocks (possibly null) that precede a file's expressions.
 #' @param srcfile result of running \code{srcfile} on an interesting

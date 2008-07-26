@@ -13,6 +13,4 @@ argc <- length(argv)
 files <- if (argc > 0) as.list(argv) else FILES
 
 roclet <- make.Rd.roclet()
-## do.call(roclet$parse, files)
-roclet$parse.parsed(parse.text("#' Is a number odd?
-                   a <- 2"))
+do.call(roclet$parse, files)

@@ -65,7 +65,7 @@ make.Rd.roclet <- function(subdir=NULL) {
     gsub('\\\\[^{]*\\{([^}]*)(}|)',
          '\\1',
          string,
-         perl=T)
+         perl=TRUE)
 
   #' First sentence of a string, defined as first
   #' period, question mark or newline.
@@ -75,7 +75,7 @@ make.Rd.roclet <- function(subdir=NULL) {
     description <- de.tex(description)
     r <- regexpr('[^.?\n]*(\\.(?!\\w)|\\?|\n|)',
                  description,
-                 perl=T)
+                 perl=TRUE)
     sentence <- substr(description, r, attr(r, 'match.length'))
     if (is.null.string(sentence))
       NULL

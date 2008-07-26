@@ -1,6 +1,7 @@
+#' @include roxygen.R
 #' @include functional.R
 #' @include list.R
-NULL
+roxygen()
 
 #' Absense of words
 SPACE <- '[[:space:]]+'

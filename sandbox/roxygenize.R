@@ -1,6 +1,7 @@
 if (!file.exists('pkg/R/parse.R'))
   stop('Run one directory above `pkg\'.')
 
+source('pkg/R/roxygen.R')
 source('pkg/R/functional.R')
 source('pkg/R/list.R')
 source('pkg/R/parse.R')

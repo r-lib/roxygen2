@@ -110,7 +110,7 @@ test.generic.keys <- function()
 test.title.from.description <- function()
   check.Rd.output("#' Description with sentence. That continueth.
                    a <- 2",
-                  output=c("\\title{Description with sentence}",
+                  output=c("\\title{Description with sentence.}",
                     "\\name{a}",
                     "\\alias{a}",
                     paste("\\description{Description with sentence.",
@@ -128,7 +128,7 @@ test.question.mark.end.of.sentence <- function()
 test.ellipsis.on.no.period <- function()
   check.Rd.output("#' Whether a number is odd
                    is.odd <- function(a) {}",
-                  output=c('\\title{Whether a number is odd\dots}',
+                  output=c('\\title{Whether a number is odd\\dots}',
                     '\\name{is.odd}',
                     '\\alias{is.odd}',
                     '\\usage{is.odd(a)}',

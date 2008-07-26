@@ -3,7 +3,7 @@
 #' @include list.R
 roxygen()
 
-#' Absense of words
+#' Absence of words
 SPACE <- '[[:space:]]+'
 
 #' Anti-anti-words

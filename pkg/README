@@ -6,28 +6,22 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
 
 1.1. Execution
 
-The driver in the `sandbox' directory, `main.R', parses an arbitrary
-source file; but defaults to `example.R' from the original GSoC
-proposal.
+The driver in the `sandbox' directory, `roxygenize.R', creates a package
+skeleton `pkg.roxygen'; populates its `man' directory with Rd files from
+the source; generates a NAMESPACE; and modifies the Collate field in
+`DESCRIPTION'.
 
-Upon execution, one should see a parse-tree of parsed elements
-(represented as lists); accompanied by a srcref of the apposite
-object:
+Run it from the root of the repository (i.e. one above the package
+root):
 
-    $ cd sandbox
-    $ R --vanilla --slave --args example.R < main.R
+    R --slave --vanilla < pkg/sandbox/roxygenize.R
 
-    List of 3
-     $ 1:List of 6
-      ..$ description: chr "This class represents a person."
-      ..$ slot       :List of 2
-      .. ..$ name       : chr "fullname"
-      .. ..$ description: chr "The full name of the person"
+If all goes well, you should be able to run `R CMD check' on the
+newly created directory; and find `roxygen-manual.pdf' in
+`pkg.roxygen.Rcheck':
 
-    ...
-
-To test the Rd, namespace and collate roclets: there are similarly
-`Rd.R', `namespace.R' and `collate.R' in the same directory.
+    R CMD check pkg.roxygen && \
+    xpdf pkg.roxygen.Rcheck/roxygen-manual.pdf
 
 1.2. TODO
 

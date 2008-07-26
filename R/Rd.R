@@ -6,11 +6,14 @@ roxygen()
 
 #' Make an Rd roclet which parses the given files and writes the Rd
 #' format to standard out (TODO: write to the file designated by
-#' \code{@@name}). Tries to guess \name and \usage unless explicitly
-#' given.
+#' \code{@@name}). Tries to guess \code{@@name} and \code{@@usage} unless
+#' explicitly given.
 #'
 #' Contains the member function \code{parse} which parses the result
 #' of \code{parse.files}.
+#'
+#' If \code{@@title} isn't present, substitutes \code{@@name} or
+#' equivalent.
 #'
 #' @param subdir directory into which to place the Rd files; if
 #' \code{NULL}, standard out.
@@ -36,7 +39,7 @@ make.Rd.roclet <- function(subdir=NULL) {
   #' @param \dots the arguments
   #' @return \code{NULL}
   parse.expression <- function(key, ...)
-    cat(Rd.expression(key, c(...)), file=filename, append=T)
+    cat(Rd.expression(key, c(...)), file=filename, append=TRUE)
 
   filename <- ''
 
@@ -49,11 +52,58 @@ make.Rd.roclet <- function(subdir=NULL) {
     getSrcLines(srcfile, first.line, first.line)
   }
 
-  NULL.STATEMENT <- 'roxygen()'
+  #' What does the noop look like?
+  NULL.STATEMENT <- 'roxygen[[:space:]]*()'
 
+  #' Does the statement contain a noop-like?
+  #' @param source.line the line of source code
+  #' @return Whether the statement contains a noop
   is.null.statement <- function(source.line)
     length(grep(NULL.STATEMENT, source.line) > 0)
 
+  de.tex <- function(string)
+    gsub('\\\\[^{]*\\{([^}]*)(}|)',
+         '\\1',
+         string,
+         perl=T)
+
+  #' First sentence of a string, defined as first
+  #' period, question mark or newline.
+  #' @param description the string to be first-sentenced
+  #' @return The first sentence
+  first.sentence <- function(description) {
+    description <- de.tex(description)
+    r <- regexpr('[^.?\n]*(\\.(?!\\w)|\\?|\n|)',
+                 description,
+                 perl=T)
+    sentence <- substr(description, r, attr(r, 'match.length'))
+    if (is.null.string(sentence))
+      NULL
+    else {
+      chars <- nchar(sentence)
+      last.char <- substr(sentence, chars, chars)
+      if (last.char == '.' || last.char == '?')
+        sentence
+      else
+        paste(trim(sentence), '\\dots', sep='')
+    }
+  }
+
+  #' If \code{@@title} is specified, use it; or
+  #' take the first sentence of the description;
+  #' or, lastly, take the name.
+  #' @param partitum the parsed elements
+  #' @param name the calculated name-fallback
+  #' @return The parsed title
+  parse.title <- function(partitum, name) {
+    if (!is.null(partitum$title))
+      partitum$title
+    else if (!is.null(partitum$description))
+      first.sentence(partitum$description)
+    else
+      name
+  }
+  
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
   #' \code{@@setGeneric}, \code{@@assignee}, etc.
@@ -77,7 +127,7 @@ make.Rd.roclet <- function(subdir=NULL) {
                         filename,
                         first.line,
                         first.source.line),
-                immediate.=T)
+                immediate.=TRUE)
     } else if (!is.null(name)) {
       name <- trim(name)
       if (!is.null(subdir)) {
@@ -87,10 +137,22 @@ make.Rd.roclet <- function(subdir=NULL) {
         cat(sprintf('Writing %s to %s\n', name, filename))
         unlink(filename)
       }
+      parse.expression('title', parse.title(partitum, name))
       parse.expression('name', name)
+      if (is.null(partitum$aliases))
+        parse.expression('alias', name)
     }
   }
   
+  parse.function.name <- function(partitum) {
+    if (!is.null(partitum$method))
+      Rd.expression('method',
+          car(partitum$method),
+          cadr(partitum$method))
+    else
+      partitum$assignee
+  }
+
   #' Turn a list of formal arguments into a human-readable
   #' function-like.
   #' @param partitum the pre-parsed elements
@@ -112,10 +174,11 @@ make.Rd.roclet <- function(subdir=NULL) {
                          sep=', '))
       parse.expression('usage',
           do.call(paste,
-                  c(as.list(strwrap(sprintf('%s(%s)',
-                                            partitum$assignee,
-                                            args),
-                                    exdent=4)),
+                  c(as.list(strwrap
+                            (sprintf('%s(%s)',
+                                     parse.function.name(partitum),
+                                     args),
+                             exdent=4)),
                     sep='\n')))
     }
   }

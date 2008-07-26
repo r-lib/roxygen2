@@ -1,7 +1,12 @@
 #' @include string.R
 #' @include list.R
 #' @include functional.R
+NULL
+
+#' Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '#\''
+
+#' Symbol that delimits tags.
 TAG.DELIMITER <- '@'
 
 #' No-op for sourceless files
@@ -218,7 +223,8 @@ parse.name.description <- function(key, rest) {
 #' @aliases slot param
 register.preref.parsers(parse.name.description,
                         'slot',
-                        'param')
+                        'param',
+                        'method')
 
 #' Parse an element containing a single name and only a name;
 #' extra material will be ignored and a warning issued.
@@ -315,12 +321,15 @@ parser.srcref <- Curry(parser.default,
 
 #' Parse either srcrefs, prerefs or pairs of the same.
 #' @param ref the srcref, preref or pair of the same
+#' @param \dots ignored
 #' @return List containing the parsed srcref/preref
 parse.ref <- function(ref, ...)
   UseMethod('parse.ref')
 
 #' Parse a preref/srcrefs pair
+#' @method parse.ref list
 #' @param ref the preref/srcref pair
+#' @param \dots ignored
 #' @return List combining the parsed preref/srcref
 parse.ref.list <- function(ref, ...)
   append(parse.ref(car(ref)),
@@ -328,7 +337,9 @@ parse.ref.list <- function(ref, ...)
 
 
 #' Parse a preref
+#' @method parse.ref preref
 #' @param ref the preref to be parsed
+#' @param \dots ignored
 #' @return List containing the parsed preref
 parse.ref.preref <- function(ref, ...) {
   lines <- Map(trim.left, getSrcLines(attributes(ref)$srcfile,
@@ -461,7 +472,9 @@ parse.call <- function(expressions) {
 }
 
 #' Parse a srcref
+#' @method parse.ref srcref
 #' @param ref the srcref to be parsed
+#' @param \dots ignored
 #' @return List containing the parsed srcref
 parse.ref.srcref <- function(ref, ...) {
   srcfile <- attributes(ref)$srcfile

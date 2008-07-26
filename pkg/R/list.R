@@ -86,7 +86,7 @@ is.odd <- function(a) {
 #' Zip \emph{n} lists together into tuplets of
 #' length \emph{n}.
 #' @param zipper the zipping function
-#' @param dots the lists to be zipped
+#' @param \dots the lists to be zipped
 #' @return A list of tuplets
 zip <- function(zipper, ...) {
   m <- mapply(zipper, ...)

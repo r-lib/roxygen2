@@ -33,29 +33,39 @@ test.naked.roxygen <- function()
 
 test.name.from.assignment <- function()
   check.Rd.output('a <- 2',
-                  output='\\name{a}')
+                  output=c('\\title{a}',
+                    '\\name{a}',
+                    '\\alias{a}'))
 
 test.name.overriding.assignment <- function()
   check.Rd.output("#' @name b
                    a <- 2",
-                  output='\\name{b}')
+                  output=c('\\title{b}',
+                    '\\name{b}',
+                    '\\alias{b}'))
 
 test.implicit.usage.from.formals <- function()
   check.Rd.output("a <- function(a=1) {}",
-                  output=c("\\name{a}",
+                  output=c("\\title{a}",
+                    "\\name{a}",
+                    "\\alias{a}",
                     "\\usage{a(a=1)}"))
 
 test.explicit.usage <- function()
   check.Rd.output("#' @usage a(a=2)
                    a <- function(a=1) {}",
-                  output=c("\\name{a}",
+                  output=c("\\title{a}",
+                    "\\name{a}",
+                    "\\alias{a}",
                     "\\usage{a(a=2)}"))
 
 test.params <- function()
   check.Rd.output("#' @param a an incipit letter
                    #' @param z a terminal letter
                    a <- function(a=1, z=2) {}",
-                  output=c("\\name{a}",
+                  output=c("\\title{a}",
+                    "\\name{a}",
+                    "\\alias{a}",
                     "\\usage{a(a=1, z=2)}",
                     "\\arguments{\\item{a}{an incipit letter}",
                     "\\item{z}{a terminal letter}}"))
@@ -96,3 +106,30 @@ test.generic.keys <- function()
                     "\\author{test}",
                     "\\seealso{test}",
                     "\\concept{test}"))
+
+test.title.from.description <- function()
+  check.Rd.output("#' Description with sentence. That continueth.
+                   a <- 2",
+                  output=c("\\title{Description with sentence}",
+                    "\\name{a}",
+                    "\\alias{a}",
+                    paste("\\description{Description with sentence.",
+                          "That continueth.}")))
+
+test.question.mark.end.of.sentence <- function()
+  check.Rd.output("#' Is a number odd?
+                   is.odd <- function(a) {}",
+                  output=c('\\title{Is a number odd?}',
+                    '\\name{is.odd}',
+                    '\\alias{is.odd}',
+                    '\\usage{is.odd(a)}',
+                    '\\description{Is a number odd?}'))
+
+test.ellipsis.on.no.period <- function()
+  check.Rd.output("#' Whether a number is odd
+                   is.odd <- function(a) {}",
+                  output=c('\\title{Whether a number is odd\dots}',
+                    '\\name{is.odd}',
+                    '\\alias{is.odd}',
+                    '\\usage{is.odd(a)}',
+                    '\\description{Whether a number is odd}'))

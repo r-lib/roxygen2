@@ -5,13 +5,25 @@
 roxygen()
 
 #' Make collate roclet which parses the given files; topologically
-#' sorting \code{@@include}s and writing a \code{Collate} directive to
+#' sorting \code{@@include}s and writing a \code{Collate:} directive to
 #' standard out.
 #'
-#' Contains the member function \code{parse} which parses the result
-#' of \code{parse.files}.
+#' Each \code{@@include} tag should specify the filename of one intrapackage
+#' dependency; multiple \code{@@include} tags may be given.
 #'
+#' Contains the member function \code{parse} which parses an arbitrary number
+#' of files.
+#'
+#' @seealso \code{\link{make.roclet}}
 #' @return Rd roclet
+#' @examples
+#' #' An example source file, example.R
+#' #' @@include roxygen.R
+#' #' @@include collate.R
+#' roxygen()
+#'
+#' roclet <- make.collate.roclet()
+#' \dontrun{roclet$parse('example.R')}
 make.collate.roclet <- function() {
   vertices <- NULL
 

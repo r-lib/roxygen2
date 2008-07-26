@@ -41,6 +41,9 @@ To test the Rd, namespace and collate roclets: there are similarly
 * Edit the R emacs mode to identify roxygen delimiters when filling,
   etc.
 
+* Find a reasonable way to document the inner functions of make.roclet,
+  etc.
+
 1.3. BUGS
 
 * parse.formals doesn't distinguish between no default argument and
@@ -50,7 +53,7 @@ To test the Rd, namespace and collate roclets: there are similarly
   desirable?
 
 * first.sentence is fooled by infix periods, whereupon it resorts to
-  \dots.
+  `...'.
 
 -----------
 * Hail, Hephaistos! Grant skill and weal.

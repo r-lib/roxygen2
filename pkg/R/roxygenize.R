@@ -13,6 +13,37 @@ MAN.DIR <- 'man'
 #' Whence to copy source code
 R.DIR <- 'R'
 
+#' Recursively copy a directory thither; optionally unlinking
+#' the target first; optionally overwriting; optionally
+#' verbalizing.
+#' @param source the source directory
+#' @param target the target directory
+#' @param unlink.target delete target directory first?
+#' @param overwrite overwrite target files?
+#' @param verbose verbalize transaction?
+#' @return \code{NULL}
+#' @note Not tested on non-linux platforms
+copy.dir <- function(source,
+                     target,
+                     unlink.target=FALSE,
+                     overwrite=FALSE,
+                     verbose=FALSE) {
+  if (unlink.target)
+    unlink(target, recursive=TRUE)
+  files <- list.files(source, full.name=TRUE, recursive=TRUE)
+  for (source.file in files) {
+    promoted.file <- sub('[^/\\]*(/|\\\\)', '', source.file)
+    target.file <- file.path(target, promoted.file)
+    target.dir <- dirname(target.file)
+    ## Could create, instead, a list of unique directories in
+    ## Theta(n).
+    dir.create(target.dir, recursive=TRUE, showWarnings=FALSE)
+    if (verbose)
+      cat(sprintf('%s -> %s', source.file, target.file), '\n')
+    file.copy(source.file, target.file, overwrite=overwrite)
+  }
+}
+
 #' Process a package with the Rd, namespace and collate roclets.
 #' @param package.dir the package's top directory
 #' @param copy.package if R.utils is present, copies the package
@@ -24,12 +55,12 @@ roxygenize <- function(package.dir,
   man.dir <- file.path(roxygen.dir, MAN.DIR)
   skeleton <- c(roxygen.dir, man.dir)
 
-###   if (copy.package) {
-###     if (require('R.utils', quietly=T))
-###       copyDirectory(package.dir, roxygen.dir, overwrite=TRUE)
-###     else
-###       warning('`R.utils\' package not present; not copying package.')
-###   }
+  if (copy.package)
+    copy.dir(package.dir,
+             roxygen.dir,
+             unlink.target=TRUE,
+             overwrite=TRUE,
+             verbose=TRUE)
 
   for (dir in skeleton) dir.create(dir, showWarnings=FALSE)
   r.dir <- file.path(package.dir, R.DIR)

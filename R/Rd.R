@@ -313,7 +313,8 @@ make.Rd.roclet <- function(subdir=NULL) {
                                   'note',
                                   'author',
                                   'seealso',
-                                  'concept')
+                                  'concept',
+                                  'docType')
 
   roclet$register.parser('return',
                          function(key, expressions)

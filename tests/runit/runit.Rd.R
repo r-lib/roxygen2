@@ -116,9 +116,9 @@ test.title.from.description <- function()
 
 test.override.title <- function()
   check.Rd.output("#' Would be title
-                   #' @title Overriden title
+                   #' @title Overridden title
                    roxygen()",
-                  output=c("\\title{Overriden title}",
+                  output=c("\\title{Overridden title}",
                     "\\description{Would be title}"))
 
 test.question.mark.end.of.sentence <- function()

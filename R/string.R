@@ -1,7 +1,14 @@
 #' @include functional.R
 #' @include list.R
+NULL
+
+#' Absense of words
 SPACE <- '[[:space:]]+'
+
+#' Anti-anti-words
 MATTER <- '[^[:space:]]+'
+
+#' Analogue to the empty list
 NIL.STRING <- ''
 
 #' Trim [:space:] to the left of a string.

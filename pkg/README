@@ -35,6 +35,12 @@ To test the Rd, namespace and collate roclets: there are similarly
   the results of each roclet to appropriate files in a package
   skeleton.
 
+* Create some automatic method for detecting S3 methods without
+  resorting to @method <generic> <class>.
+
+* Edit the R emacs mode to identify roxygen delimiters when filling,
+  etc.
+
 1.3. BUGS
 
 * parse.formals doesn't distinguish between no default argument and

@@ -1,3 +1,4 @@
+#' @include roxygen.R
 #' @include Rd.R
 #' @include namespace.R
 #' @include collate.R

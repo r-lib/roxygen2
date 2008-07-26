@@ -33,39 +33,39 @@ test.naked.roxygen <- function()
 
 test.name.from.assignment <- function()
   check.Rd.output('a <- 2',
-                  output=c('\\title{a}',
-                    '\\name{a}',
-                    '\\alias{a}'))
+                  output=c('\\name{a}',
+                    '\\alias{a}',
+                    '\\title{a}'))
 
 test.name.overriding.assignment <- function()
   check.Rd.output("#' @name b
                    a <- 2",
-                  output=c('\\title{b}',
-                    '\\name{b}',
-                    '\\alias{b}'))
+                  output=c('\\name{b}',
+                    '\\alias{b}',
+                    '\\title{b}'))
 
 test.implicit.usage.from.formals <- function()
   check.Rd.output("a <- function(a=1) {}",
-                  output=c("\\title{a}",
-                    "\\name{a}",
+                  output=c("\\name{a}",
                     "\\alias{a}",
+                    "\\title{a}",
                     "\\usage{a(a=1)}"))
 
 test.explicit.usage <- function()
   check.Rd.output("#' @usage a(a=2)
                    a <- function(a=1) {}",
-                  output=c("\\title{a}",
-                    "\\name{a}",
+                  output=c("\\name{a}",
                     "\\alias{a}",
+                    "\\title{a}",
                     "\\usage{a(a=2)}"))
 
 test.params <- function()
   check.Rd.output("#' @param a an incipit letter
                    #' @param z a terminal letter
                    a <- function(a=1, z=2) {}",
-                  output=c("\\title{a}",
-                    "\\name{a}",
+                  output=c("\\name{a}",
                     "\\alias{a}",
+                    "\\title{a}",
                     "\\usage{a(a=1, z=2)}",
                     "\\arguments{\\item{a}{an incipit letter}",
                     "\\item{z}{a terminal letter}}"))
@@ -93,15 +93,13 @@ test.splitting.keys <- function()
                     "\\alias{b}"))
 
 test.generic.keys <- function()
-  check.Rd.output("#' @title test
-                   #' @references test
+  check.Rd.output("#' @references test
                    #' @note test
                    #' @author test
                    #' @seealso test
                    #' @concept test
                    roxygen()",
-                  output=c("\\title{test}",
-                    "\\references{test}",
+                  output=c("\\references{test}",
                     "\\note{test}",
                     "\\author{test}",
                     "\\seealso{test}",
@@ -110,26 +108,33 @@ test.generic.keys <- function()
 test.title.from.description <- function()
   check.Rd.output("#' Description with sentence. That continueth.
                    a <- 2",
-                  output=c("\\title{Description with sentence.}",
-                    "\\name{a}",
+                  output=c("\\name{a}",
                     "\\alias{a}",
+                    "\\title{Description with sentence.}",
                     paste("\\description{Description with sentence.",
                           "That continueth.}")))
+
+test.override.title <- function()
+  check.Rd.output("#' Would be title
+                   #' @title Overriden title
+                   roxygen()",
+                  output=c("\\title{Overriden title}",
+                    "\\description{Would be title}"))
 
 test.question.mark.end.of.sentence <- function()
   check.Rd.output("#' Is a number odd?
                    is.odd <- function(a) {}",
-                  output=c('\\title{Is a number odd?}',
-                    '\\name{is.odd}',
+                  output=c('\\name{is.odd}',
                     '\\alias{is.odd}',
+                    '\\title{Is a number odd?}',
                     '\\usage{is.odd(a)}',
                     '\\description{Is a number odd?}'))
 
 test.ellipsis.on.no.period <- function()
   check.Rd.output("#' Whether a number is odd
                    is.odd <- function(a) {}",
-                  output=c('\\title{Whether a number is odd\\dots}',
-                    '\\name{is.odd}',
+                  output=c('\\name{is.odd}',
                     '\\alias{is.odd}',
+                    '\\title{Whether a number is odd...}',
                     '\\usage{is.odd(a)}',
                     '\\description{Whether a number is odd}'))

@@ -53,5 +53,7 @@ newly created directory; and find `roxygen-manual.pdf' in
 
 * de.tex doesn't work recursively (i.e. de-TeXs only the top level).
 
+* `<<' in titles produces a spurious box.
+
 -----------
 * Hail, Hephaistos! Grant skill and weal.

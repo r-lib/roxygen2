@@ -55,5 +55,7 @@ newly created directory; and find `roxygen-manual.pdf' in
 
 * `<<' in titles produces a spurious box.
 
+* Nameless Rd entries are written to standard out with no warning.
+
 -----------
 * Hail, Hephaistos! Grant skill and weal.

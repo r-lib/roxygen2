@@ -55,7 +55,6 @@ copy.dir <- function(source,
 #' @param copy.package if R.utils is present, copies the package
 #' over before adding/manipulating files.
 #' @return \code{NULL}
-#' @importFrom tools file_path_as_absolute
 roxygenize <- function(package.dir,
                        copy.package=TRUE) {
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)

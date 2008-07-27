@@ -7,4 +7,3 @@ Author: Peter Danenberg <pcd@roxygen.org>,
         Manuel Eugster <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Peter Danenberg <pcd@roxygen.org>
 URL: http://roxygen.org
-Collate: 'roxygen.R' 'functional.R' 'string.R' 'parse.R' 'collate.R' 'list.R' 'roclet.R' 'namespace.R' 'Rd.R' 'roxygenize.R'

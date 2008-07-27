@@ -149,6 +149,7 @@ make.Rd.roclet <- function(subdir=NULL) {
   is.null.statement <- function(source.line)
     length(grep(NULL.STATEMENT, source.line) > 0)
 
+  #' @note Doesn't work recursively!
   de.tex <- function(string)
     gsub('\\\\[^{]*\\{([^}]*)(}|)',
          '\\1',

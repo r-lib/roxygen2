@@ -55,12 +55,14 @@ copy.dir <- function(source,
 #' @param copy.package if R.utils is present, copies the package
 #' over before adding/manipulating files.
 #' @return \code{NULL}
+#' @importFrom tools file_path_as_absolute
 roxygenize <- function(package.dir,
                        copy.package=TRUE) {
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)
   man.dir <- file.path(roxygen.dir, MAN.DIR)
   namespace.file <- file.path(roxygen.dir, NAMESPACE.FILE)
-  description.file <- file.path(roxygen.dir, DESCRIPTION.FILE)
+  package.description <- file_path_as_absolute(file.path(package.dir, DESCRIPTION.FILE))
+  roxygen.description <- file_path_as_absolute(file.path(roxygen.dir, DESCRIPTION.FILE))
   skeleton <- c(roxygen.dir, man.dir)
 
   if (copy.package)
@@ -72,9 +74,14 @@ roxygenize <- function(package.dir,
 
   for (dir in skeleton) dir.create(dir, showWarnings=FALSE)
   r.dir <- file.path(package.dir, R.DIR)
-  source.files <- as.list(list.files(r.dir, recursive=TRUE, full.names=TRUE))
+  files <- as.list(list.files(r.dir, recursive=TRUE, full.names=TRUE))
   Rd <- make.Rd.roclet(man.dir)
-  do.call(Rd$parse, source.files)
+  do.call(Rd$parse, files)
   namespace <- make.namespace.roclet(namespace.file)
-  do.call(namespace$parse, source.files)
+  do.call(namespace$parse, files)
+  setwd(r.dir)
+  files <- as.list(list.files('.', recursive=TRUE))
+  collate <- make.collate.roclet(merge.file=package.description,
+                                 target.file=roxygen.description)
+  do.call(collate$parse, files)
 }

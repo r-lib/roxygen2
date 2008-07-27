@@ -81,6 +81,8 @@ roxygen()
 #'
 #' @param subdir directory into which to place the Rd files; if
 #' \code{NULL}, standard out.
+#' @param verbose whether to declare what we're doing in the
+#' \var{subdir}
 #' @return Rd roclet
 #' @examples
 #' #' This sentence describes the function.
@@ -106,7 +108,8 @@ roxygen()
 #' roclet <- make.Rd.roclet('man')
 #' \dontrun{roclet$parse('example.R')}
 #' @export
-make.Rd.roclet <- function(subdir=NULL) {
+make.Rd.roclet <- function(subdir=NULL,
+                           verbose=TRUE) {
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
   #' @param key the expression's key
@@ -224,7 +227,8 @@ make.Rd.roclet <- function(subdir=NULL) {
         assign.parent('filename',
                       file.path(subdir, sprintf('%s.Rd', name)),
                       environment())
-        cat(sprintf('Writing %s to %s\n', name, filename))
+        if (verbose)
+          cat(sprintf('Writing %s to %s\n', name, filename))
         unlink(filename)
       }
       parse.expression('name', name)

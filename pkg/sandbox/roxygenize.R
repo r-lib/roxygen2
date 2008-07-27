@@ -1,3 +1,5 @@
+library(tools)
+
 if (!file.exists('pkg/R/parse.R'))
   stop('Run one directory above `pkg\'.')
 

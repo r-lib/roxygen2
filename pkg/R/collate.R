@@ -110,7 +110,7 @@ make.collate.roclet <- function(merge.file=NULL,
                                          trim(line))) == 0,
                              lines)
     if (verbose && !is.null.string(target.file))
-      cat(sprintf('Merging `Collate:\' from %s to %s',
+      cat(sprintf('Merging collate directive with %s to %s',
                   merge.file,
                   target.file), '\n')
     cat(filtered.lines, directive, file=target.file, sep='\n')

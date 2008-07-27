@@ -25,9 +25,7 @@ newly created directory; and find `roxygen-manual.pdf' in
 
 1.2. TODO
 
-* Create a driver (possibly used by `R CMD roxygen') which farms out
-  the results of each roclet to appropriate files in a package
-  skeleton.
+* Convert the `sandbox/roxygenize.R' driver into an `R CMD roxygen'.
 
 * Create some automatic method for detecting S3 methods without
   resorting to @method <generic> <class>.

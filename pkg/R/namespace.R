@@ -48,6 +48,7 @@ roxygen()
 #'                                   Extensions}.}
 #' }
 #'
+#' @param outfile whither to send output; '' == standard out
 #' @return Namespace roclet
 #' @examples
 #' #' An example file, example.R, which imports
@@ -61,9 +62,12 @@ roxygen()
 #'
 #' roclet <- make.namespace.roclet()
 #' \dontrun{roclet$parse('example.R')}
-make.namespace.roclet <- function() {
+#' @export
+make.namespace.roclet <- function(outfile='') {
   parse.directive <- function(proc, parms)
-    cat(sprintf('%s(%s)\n', proc, strmap(Identity, ', ', parms)))
+    cat(sprintf('%s(%s)\n', proc, strmap(Identity, ', ', parms)),
+        file=outfile,
+        append=TRUE)
   
   exportee <- NULL
 
@@ -74,8 +78,12 @@ make.namespace.roclet <- function() {
                       S4generic=partitum$S4method,
                       S4class=partitum$S4class)
 
+  pre.files <- function()
+    unlink(outfile)
+
   roclet <- make.roclet(parse.directive,
-                        pre.parse)
+                        pre.parse=pre.parse,
+                        pre.files=pre.files)
 
   parse.exportClass <- function(proc, parms)
     parse.directive('exportClasses', parms)

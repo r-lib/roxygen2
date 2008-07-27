@@ -105,6 +105,7 @@ roxygen()
 #'
 #' roclet <- make.Rd.roclet('man')
 #' \dontrun{roclet$parse('example.R')}
+#' @export
 make.Rd.roclet <- function(subdir=NULL) {
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.

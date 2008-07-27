@@ -24,6 +24,7 @@ roxygen()
 #'
 #' roclet <- make.collate.roclet()
 #' \dontrun{roclet$parse('example.R')}
+#' @export
 make.collate.roclet <- function() {
   vertices <- NULL
 

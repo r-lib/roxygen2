@@ -13,6 +13,12 @@ MAN.DIR <- 'man'
 #' Whence to copy source code
 R.DIR <- 'R'
 
+#' Whither to copy namespace
+NAMESPACE.FILE <- 'NAMESPACE'
+
+#' Whither to copy collate
+DESCRIPTION.FILE <- 'DESCRIPTION'
+
 #' Recursively copy a directory thither; optionally unlinking
 #' the target first; optionally overwriting; optionally
 #' verbalizing.
@@ -53,6 +59,8 @@ roxygenize <- function(package.dir,
                        copy.package=TRUE) {
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)
   man.dir <- file.path(roxygen.dir, MAN.DIR)
+  namespace.file <- file.path(roxygen.dir, NAMESPACE.FILE)
+  description.file <- file.path(roxygen.dir, DESCRIPTION.FILE)
   skeleton <- c(roxygen.dir, man.dir)
 
   if (copy.package)
@@ -60,11 +68,13 @@ roxygenize <- function(package.dir,
              roxygen.dir,
              unlink.target=TRUE,
              overwrite=TRUE,
-             verbose=TRUE)
+             verbose=FALSE)
 
   for (dir in skeleton) dir.create(dir, showWarnings=FALSE)
   r.dir <- file.path(package.dir, R.DIR)
-  source.files <- list.files(r.dir, recursive=TRUE, full.names=TRUE)
+  source.files <- as.list(list.files(r.dir, recursive=TRUE, full.names=TRUE))
   Rd <- make.Rd.roclet(man.dir)
-  do.call(Rd$parse, as.list(source.files))
+  do.call(Rd$parse, source.files)
+  namespace <- make.namespace.roclet(namespace.file)
+  do.call(namespace$parse, source.files)
 }

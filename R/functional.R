@@ -5,6 +5,7 @@
 #' @param FUN the function to be curried
 #' @param \dots the determining parameters
 #' @return A new function partially determined
+#' @export
 Curry <- function(FUN,...) {
   .orig = list(...);
   function(...) do.call(FUN,c(.orig,list(...)))

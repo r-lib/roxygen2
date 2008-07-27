@@ -1,7 +1,6 @@
 #' @include roxygen.R
-#' @include parse.R
-#' @include roclet.R
 #' @include string.R
+#' @include roclet.R
 roxygen()
 
 #' Make collate roclet which parses the given files; topologically
@@ -14,8 +13,14 @@ roxygen()
 #' Contains the member function \code{parse} which parses an arbitrary number
 #' of files.
 #'
-#' @seealso \code{\link{make.roclet}}
+#' @param merge.file \file{DESCRIPTION} file with which to merge directive;
+#' or \code{NULL} for none
+#' @param target.file whither to \code{cat} directive (whether merged or
+#' not); blank line is standard out
+#' @param verbose whether to describe what we're doing with the
+#' target.file
 #' @return Rd roclet
+#' @seealso \code{\link{make.roclet}}
 #' @examples
 #' #' An example source file, example.R
 #' #' @@include roxygen.R
@@ -25,7 +30,9 @@ roxygen()
 #' roclet <- make.collate.roclet()
 #' \dontrun{roclet$parse('example.R')}
 #' @export
-make.collate.roclet <- function() {
+make.collate.roclet <- function(merge.file=NULL,
+                                target.file='',
+                                verbose=TRUE) {
   vertices <- NULL
 
   make.vertex <- function(file) {
@@ -44,8 +51,15 @@ make.collate.roclet <- function() {
                                              names=file))),
                     environment())
 
+  member <- function(ancestor, ancestors) {
+    for (vertex in ancestors)
+      if (identical(ancestor, vertex))
+        TRUE
+    FALSE
+  }
+
   maybe.append.ancestor <- function(predecessor, ancestor)
-    if (!c(ancestor) %in% predecessor$ancestors)
+    if (!member(ancestor, predecessor$ancestors))
       predecessor$ancestors <-
         append(ancestor, predecessor$ancestors)
 
@@ -84,14 +98,33 @@ make.collate.roclet <- function() {
         visit(vertex)
   }
 
-  post.files <-
-    function() cat('Collate:',
-                   Reduce.paste(function(vertex)
-                                sprintf("'%s'", vertex$file),
-                                topological.sort(vertices),
-                                ' '),
-                   '\n',
-                   sep='')
+  COLLATE.FIELD <- 'Collate:'
+
+  merge <- function(directive) {
+    lines <- readLines(merge.file)
+    filtered.lines <- Filter(function(line)
+                             length(grep(sprintf('^%s', COLLATE.FIELD),
+                                         trim(line))) == 0,
+                             lines)
+    if (verbose && !is.null.string(target.file))
+      cat(sprintf('Merging `Collate:\' from %s to %s',
+                  merge.file,
+                  target.file), '\n')
+    cat(filtered.lines, directive, file=target.file, sep='\n')
+  }
+
+  post.files <- function() {
+    directive <-
+      sprintf('Collate:%s',
+              Reduce.paste(function(vertex)
+                           sprintf("'%s'", vertex$file),
+                           topological.sort(vertices),
+                           ' '))
+    if (!is.null(merge.file))
+      merge(directive)
+    else
+      cat(directive, '\n', file=target.file, sep='')
+  }
 
   roclet <- make.roclet(parse.include,
                         pre.parse=pre.parse,

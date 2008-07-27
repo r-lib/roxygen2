@@ -38,6 +38,8 @@ newly created directory; and find `roxygen-manual.pdf' in
 * Find a reasonable way to document the inner functions of make.roclet,
   etc.
 
+* Move demos from `sandbox' to `demos'.
+
 1.3. BUGS
 
 * parse.formals doesn't distinguish between no default argument and

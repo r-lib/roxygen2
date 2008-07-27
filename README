@@ -49,5 +49,7 @@ newly created directory; and find `roxygen-manual.pdf' in
 * first.sentence is fooled by infix periods, whereupon it resorts to
   `...'.
 
+* de.tex doesn't work recursively (i.e. de-TeXs only the top level).
+
 -----------
 * Hail, Hephaistos! Grant skill and weal.

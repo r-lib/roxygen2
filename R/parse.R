@@ -321,6 +321,7 @@ parser.srcref <- Curry(parser.default,
 #' @param ref the srcref, preref or pair of the same
 #' @param \dots ignored
 #' @return List containing the parsed srcref/preref
+#' @export
 parse.ref <- function(ref, ...)
   UseMethod('parse.ref')
 
@@ -329,6 +330,7 @@ parse.ref <- function(ref, ...)
 #' @param ref the preref/srcref pair
 #' @param \dots ignored
 #' @return List combining the parsed preref/srcref
+#' @export
 parse.ref.list <- function(ref, ...)
   append(parse.ref(car(ref)),
          parse.ref(cadr(ref)))
@@ -339,6 +341,7 @@ parse.ref.list <- function(ref, ...)
 #' @param ref the preref to be parsed
 #' @param \dots ignored
 #' @return List containing the parsed preref
+#' @export
 parse.ref.preref <- function(ref, ...) {
   lines <- Map(trim.left, getSrcLines(attributes(ref)$srcfile,
                                       car(ref),
@@ -474,6 +477,7 @@ parse.call <- function(expressions) {
 #' @param ref the srcref to be parsed
 #' @param \dots ignored
 #' @return List containing the parsed srcref
+#' @export
 parse.ref.srcref <- function(ref, ...) {
   srcfile <- attributes(ref)$srcfile
   srcref <- list(srcref=list(filename=srcfile$filename,
@@ -515,6 +519,7 @@ parse.files <- function(...)
 #' Text-parsing hack using tempfiles for more facility.
 #' @param \dots lines of text to be parsed
 #' @return The parse tree
+#' @export
 parse.text <- function(...) {
   file <- tempfile()
   cat(..., sep='\n', file=file)

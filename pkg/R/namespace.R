@@ -5,7 +5,8 @@
 roxygen()
 
 #' Make a namespace roclet which parses the given files and writes a list of
-#' namespace directives to standard out; see \cite{Writing R Extensions}
+#' namespace directives to a given file or standard out; see
+#' \cite{Writing R Extensions}
 #' (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
 #'
 #' The namespace roclet supports the following tags:
@@ -48,7 +49,7 @@ roxygen()
 #'                                   Extensions}.}
 #' }
 #'
-#' @param outfile whither to send output; '' == standard out
+#' @param outfile whither to send output; blank string means standard out
 #' @param verbose whether to anounce what we're doing with
 #' the \var{outfile}
 #' @return Namespace roclet

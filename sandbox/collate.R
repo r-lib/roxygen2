@@ -1,3 +1,4 @@
+source('../R/roxygen.R')
 source('../R/functional.R')
 source('../R/list.R')
 source('../R/parse.R')

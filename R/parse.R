@@ -1,7 +1,7 @@
 #' @include roxygen.R
+#' @include functional.R
 #' @include string.R
 #' @include list.R
-#' @include functional.R
 roxygen()
 
 #' Sequence that distinguishes roxygen comment from normal comment.

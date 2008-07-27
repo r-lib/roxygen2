@@ -61,8 +61,8 @@ roxygenize <- function(package.dir,
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)
   man.dir <- file.path(roxygen.dir, MAN.DIR)
   namespace.file <- file.path(roxygen.dir, NAMESPACE.FILE)
-  package.description <- file_path_as_absolute(file.path(package.dir, DESCRIPTION.FILE))
-  roxygen.description <- file_path_as_absolute(file.path(roxygen.dir, DESCRIPTION.FILE))
+  package.description <- file.path(package.dir, DESCRIPTION.FILE)
+  roxygen.description <- file.path(roxygen.dir, DESCRIPTION.FILE)
   skeleton <- c(roxygen.dir, man.dir)
 
   if (copy.package)
@@ -79,9 +79,7 @@ roxygenize <- function(package.dir,
   do.call(Rd$parse, files)
   namespace <- make.namespace.roclet(namespace.file)
   do.call(namespace$parse, files)
-  setwd(r.dir)
-  files <- as.list(list.files('.', recursive=TRUE))
   collate <- make.collate.roclet(merge.file=package.description,
                                  target.file=roxygen.description)
-  do.call(collate$parse, files)
+  collate$parse.dir(r.dir)
 }

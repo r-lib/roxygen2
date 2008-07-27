@@ -14,7 +14,4 @@ argc <- length(argv)
 files <- if (argc > 0) as.list(argv) else FILES
 
 roclet <- make.Rd.roclet()
-## do.call(roclet$parse, files)
-roclet$parse.parsed(parse.text("#' Would be title
-                   #' @title Overriden title
-                   roxygen()"))
+do.call(roclet$parse, files)

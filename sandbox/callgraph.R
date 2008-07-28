@@ -46,7 +46,7 @@ is.callable <- function(name)
 
 exprofundum <- expression(roxygenize)
 
-discover.subcalls <- function(exprofundum, depth=2)
+discover.subcalls <- function(exprofundum, depth=3)
   if (is.name(exprofundum)) {
     subcall <- as.character(exprofundum)
     if (is.callable(subcall) && call.stack$top <= depth) {

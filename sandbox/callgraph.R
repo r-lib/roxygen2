@@ -41,8 +41,10 @@ subcalls <- new.env(parent=emptyenv())
 
 calls <- NULL
 
-is.callable <- function(name)
-  exists(name, mode='function')
+is.callable <- function(name) {
+  f <- tryCatch(get(name, mode='function'), error=function(e) NULL)
+  !is.null(f) && !is.primitive(f)
+}
 
 exprofundum <- expression(roxygenize)
 
@@ -61,8 +63,7 @@ discover.subcalls <- function(exprofundum, depth=3)
           subcalls[[supercall]] <<-
             append(subsupercalls, subcall)
       }
-      if (!subcall %in% calls &&
-          !is.primitive(get(subcall, mode='function'))) {
+      if (!subcall %in% calls) {
         call.stack$push(subcall)
         calls <<- append(subcall, calls)
         subcalls[[subcall]] <<- NULL

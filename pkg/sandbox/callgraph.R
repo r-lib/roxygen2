@@ -9,18 +9,6 @@ source('../R/namespace.R')
 source('../R/collate.R')
 source('../R/roxygenize.R')
 
-preorder.walk.expression <- function(proc, expression) {
-  if (length(expression) > 0)
-    for (i in c(1:length(expression))) {
-      member <- tryCatch(expression[[i]], error=function(e) NULL)
-      if (!is.null(member) && !identical(member, expression)) {
-        proc(member)
-        try(preorder.walk.expression(proc, member),
-            silent=TRUE)
-      }
-    }
-}
-
 make.stack <- function() {
   stack <- new.env(parent=emptyenv())
   stack$top <- 0
@@ -56,8 +44,6 @@ calls <- NULL
 is.callable <- function(name)
   exists(name, mode='function')
 
-exprofundum <- expression(append)
-exprofundum <- expression(is.callable)
 exprofundum <- expression(roxygenize)
 
 discover.subcalls <- function(exprofundum, depth=2)
@@ -91,22 +77,14 @@ preorder.walk.expression(discover.subcalls, exprofundum)
 
 graphviz <- function(subcalls) {
   cat('digraph G { graph[splines=true]; ')
-  nodes <- NULL
-  i <- 0
   supercalls <- ls(subcalls)
   for (supercall in supercalls) {
-    i <- i + 1
-    nodes[[supercall]] <- i
-    cat(sprintf('%s [label="%s"]; ', i, supercall))
-  }
-  for (supercall in supercalls) {
+    cat(sprintf('"%s"; ', supercall))
     subsupercalls <- subcalls[[supercall]]
-    for (subsupercall in subsupercalls) {
-      cat(sprintf('%s -> %s; ',
-                  nodes[[supercall]],
-                  tryCatch(nodes[[subsupercall]],
-                           error=function(e) 'UNKNOWN')))
-    }
+    for (subsupercall in subsupercalls)
+      cat(sprintf('"%s" -> "%s"; ',
+                  supercall,
+                  subsupercall))
   }
   cat('}')
 }

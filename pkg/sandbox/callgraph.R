@@ -76,7 +76,7 @@ discover.subcalls <- function(exprofundum, depth=2)
 preorder.walk.expression(discover.subcalls, exprofundum)
 
 graphviz <- function(subcalls) {
-  cat('digraph G { graph[splines=true]; ')
+  cat('digraph G { graph [splines=true]; node [fontname=monospace]; ')
   supercalls <- ls(subcalls)
   for (supercall in supercalls) {
     cat(sprintf('"%s"; ', supercall))

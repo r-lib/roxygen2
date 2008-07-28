@@ -61,7 +61,8 @@ discover.subcalls <- function(exprofundum, depth=3)
           subcalls[[supercall]] <<-
             append(subsupercalls, subcall)
       }
-      if (!subcall %in% calls) {
+      if (!subcall %in% calls &&
+          !is.primitive(get(subcall, mode='function'))) {
         call.stack$push(subcall)
         calls <<- append(subcall, calls)
         subcalls[[subcall]] <<- NULL

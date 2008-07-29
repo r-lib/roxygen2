@@ -53,7 +53,7 @@ exprofundum <- expression(append)
 exprofundum <- expression(roxygenize)
 
 discover.subcalls <- function(exprofundum,
-                              depth=2,
+                              depth=6,
                               include.primitives=FALSE)
   if (is.name(exprofundum)) {
     subcall <- as.character(exprofundum)

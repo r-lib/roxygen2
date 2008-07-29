@@ -170,9 +170,9 @@ parse.value <- function(key, rest) {
 #' Parsers with a mandatory value.
 #' @name value.parsers
 #' @aliases prototype exportClass exportMethod exportPattern S3method
-#' @aliases import importFrom importClassesFrom importMethodsFrom name
-#' @aliases aliases title usage references concept note seealso example
-#' @aliases examples keywords return author include
+#' import importFrom importClassesFrom importMethodsFrom name
+#' title usage references concept note seealso example
+#' examples keywords return author include callGraphDepth
 register.preref.parsers(parse.value,
                         'prototype',
                         'exportClass',
@@ -196,7 +196,8 @@ register.preref.parsers(parse.value,
                         'keywords',
                         'return',
                         'author',
-                        'include')
+                        'include',
+                        'callGraphDepth')
 
 #' Parse an element containing a mandatory name
 #' and description (such as @@param).
@@ -254,10 +255,13 @@ parse.toggle <- function(key, rest)
 #' Toggling parsers
 #' @name toggle.parsers
 #' @aliases listObject attributeObject environmentObject
+#' callGraph callGraphPrimitives
 register.preref.parsers(parse.toggle,
                         'listObject',
                         'attributeObject',
-                        'environmentObject')
+                        'environmentObject',
+                        'callGraph',
+                        'callGraphPrimitives')
 
 #' By default, srcrefs are ignored; this parser returns \code{nil}.
 #' @param pivot the parsing pivot

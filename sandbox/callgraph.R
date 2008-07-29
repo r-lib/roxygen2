@@ -52,8 +52,8 @@ is.callable <- function(name, include.primitives) {
   !is.null(f) && !is.primitive(f)
 }
 
-exprofundum <- expression(roxygenize)
 exprofundum <- expression(append)
+exprofundum <- expression(roxygenize)
 
 discover.subcalls <- function(exprofundum,
                               depth=2,
@@ -110,25 +110,26 @@ graphviz <- function(subcalls) {
   attrs <- list(graph=list(size=NULL))
   nodeAttrs <- makeNodeAttrs(graph,
                              fixedsize=FALSE,
-                             shape='ellipsis')
+                             shape='ellipse')
+###   attrs <- list(node=list(shape='ellipse',
+###                   fixedsize=FALSE))
   for (supercall in supercalls)
     for (subsupercall in subcalls[[supercall]])
-      try(graph <- addEdge(supercall,
-                           subsupercall,
-                           graph))
-  plot(agopen(graph,
-              'roxygenize'
-###               attrs=attrs,
-###               nodeAttrs=nodeAttrs
-       ))
-###   agraph <- agopenSimple(graph, 'roxygenize')
+      try(graph <- addEdge(supercall, subsupercall, graph))
+###   plot(graph,
+###        attrs=attrs
+###        )
+  agraph <- agopenSimple(graph, 'roxygenize')
+  agraph <- agopen(graph,
+                   'roxygenize',
+                   nodeAttrs=nodeAttrs)
 ###   graphDataDefaults(agraph, 'size') <- NULL
-###   nodeDataDefaults(agraph, c('shape', 'fixedsize')) <-
-###     c('ellipsis', FALSE)
-###   toFile(agraph,
-###          layoutType='fdp',
-###          filename='test.ps',
-###          fileType='ps')
+  nodeDataDefaults(agraph, c('shape', 'fixedsize')) <-
+    c('ellipse', FALSE)
+  toFile(agraph,
+         layoutType='fdp',
+         filename='test.ps',
+         fileType='ps')
 ###   plot(agraph, 'fdp')
 ###   toFile(agopen(graph,
 ###                 name='roxygenize',

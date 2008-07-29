@@ -54,7 +54,7 @@ exprofundum <- expression(roxygenize)
 
 discover.subcalls <- function(exprofundum,
                               depth=2,
-                              include.primitives=TRUE)
+                              include.primitives=FALSE)
   if (is.name(exprofundum)) {
     subcall <- as.character(exprofundum)
     if (is.callable(subcall, include.primitives) &&

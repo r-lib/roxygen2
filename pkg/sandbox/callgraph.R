@@ -106,11 +106,20 @@ preorder.walk.expression(discover.subcalls, exprofundum)
 
 graphviz <- function(subcalls) {
   supercalls <- ls(subcalls)
-  graph <- new('graphNEL', nodes=supercalls)
-  attrs <- list(graph=list(size=NULL))
-  nodeAttrs <- makeNodeAttrs(graph,
-                             fixedsize=FALSE,
-                             shape='ellipse')
+  graph <- new('graphNEL',
+               nodes=supercalls,
+               edgemode='directed')
+  attrs <- list(graph=list(size='24.0,24.0'),
+                edge=list(arrowhead='normal',
+                  dir='forward'),
+                node=list(fixedsize=FALSE,
+                  shape='ellipse',
+                  fontname='monospace'),
+                cluster=list())
+###   nodeAttrs <- makeNodeAttrs(graph,
+###                              fixedsize=FALSE,
+###                              shape='ellipse',
+###                              fontname='monospace')
 ###   attrs <- list(node=list(shape='ellipse',
 ###                   fixedsize=FALSE))
   for (supercall in supercalls)
@@ -119,14 +128,20 @@ graphviz <- function(subcalls) {
 ###   plot(graph,
 ###        attrs=attrs
 ###        )
-  agraph <- agopenSimple(graph, 'roxygenize')
-  agraph <- agopen(graph,
-                   'roxygenize',
-                   nodeAttrs=nodeAttrs)
-###   graphDataDefaults(agraph, 'size') <- NULL
-  nodeDataDefaults(agraph, c('shape', 'fixedsize')) <-
-    c('ellipse', FALSE)
-  toFile(agraph,
+###   print(checkAttrs(attrs))
+  print(str(getDefaultAttrs(attrs)))
+###   agraph <- agopenSimple(graph, 'roxygenize')
+  ag <- agopen(graph,
+               'roxygenize',
+               attrs=getDefaultAttrs(attrs),
+               edgeMode='directed')
+###   print(graphData(ag))
+###   graphData(agraph, 'size') <- NULL
+###   print(graphData(agraph, 'size'))
+###   nodeDataDefaults(agraph, c('shape', 'fixedsize')) <-
+###     c('ellipse', FALSE)
+###   edgeDataDefaults(agraph, 'arrowhead') <- 'normal'
+  toFile(ag,
          layoutType='fdp',
          filename='test.ps',
          fileType='ps')

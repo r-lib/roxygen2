@@ -46,10 +46,7 @@ calls <- NULL
 
 is.callable <- function(name, include.primitives) {
   f <- tryCatch(get(name, mode='function'), error=function(e) NULL)
-###   !is.null(f) && ifelse(include.primitives,
-###                         is.primitive(f),
-###                         TRUE)
-  !is.null(f) && !is.primitive(f)
+  !is.null(f) && ifelse(include.primitives, TRUE, !is.primitive(f))
 }
 
 exprofundum <- expression(append)
@@ -57,7 +54,7 @@ exprofundum <- expression(roxygenize)
 
 discover.subcalls <- function(exprofundum,
                               depth=2,
-                              include.primitives=FALSE)
+                              include.primitives=TRUE)
   if (is.name(exprofundum)) {
     subcall <- as.character(exprofundum)
     if (is.callable(subcall, include.primitives) &&
@@ -90,73 +87,40 @@ discover.subcalls <- function(exprofundum,
 
 preorder.walk.expression(discover.subcalls, exprofundum)
 
-## graphviz <- function(subcalls) {
-##   cat('digraph G { graph [splines=true]; node [fontname=monospace]; ')
-##   supercalls <- ls(subcalls)
-##   for (supercall in supercalls) {
-##     cat(sprintf('"%s"; ', supercall))
-##     subsupercalls <- subcalls[[supercall]]
-##     for (subsupercall in subsupercalls)
-##       cat(sprintf('"%s" -> "%s"; ',
-##                   supercall,
-##                   subsupercall))
-##   }
-##   cat('}')
-## }
+formals(toFile) <- alist(graph=,
+                         layoutType = c("dot", "neato", "twopi",
+                           "circo", "fdp"),
+                         filename=,
+                         fileType = c("canon", "dot", "xdot",
+                           "dia", "fig", "gd", "gd2", "gif", "hpgl",
+                           "imap", "cmapx", "ismap", "mif", "mp", "pcl",
+                           "pdf", "pic", "plain", "plain-ext", "png", "ps",
+                           "ps2", "svg", "svgz", "vrml", "vtx", "wbmp"))
+                         
+
+remove.edge.separators <- function(string)
+  gsub('\\|', '&#x7c;', string)
+
+PHI <- (1 + sqrt(5)) / 2
 
 graphviz <- function(subcalls) {
   supercalls <- ls(subcalls)
-  graph <- new('graphNEL',
-               nodes=supercalls,
-               edgemode='directed')
-  attrs <- list(graph=list(size='24.0,24.0'),
-                edge=list(arrowhead='normal',
-                  dir='forward'),
-                node=list(fixedsize=FALSE,
-                  shape='ellipse',
-                  fontname='monospace'),
-                cluster=list())
-###   nodeAttrs <- makeNodeAttrs(graph,
-###                              fixedsize=FALSE,
-###                              shape='ellipse',
-###                              fontname='monospace')
-###   attrs <- list(node=list(shape='ellipse',
-###                   fixedsize=FALSE))
+  graph <- new('graphNEL', nodes=unlist(Map(remove.edge.separators,
+                             supercalls)))
   for (supercall in supercalls)
     for (subsupercall in subcalls[[supercall]])
-      try(graph <- addEdge(supercall, subsupercall, graph))
-###   plot(graph,
-###        attrs=attrs
-###        )
-###   print(checkAttrs(attrs))
-  print(str(getDefaultAttrs(attrs)))
-###   agraph <- agopenSimple(graph, 'roxygenize')
-  ag <- agopen(graph,
-               'roxygenize',
-               attrs=getDefaultAttrs(attrs),
-               edgeMode='directed')
-###   print(graphData(ag))
-###   graphData(agraph, 'size') <- NULL
-###   print(graphData(agraph, 'size'))
-###   nodeDataDefaults(agraph, c('shape', 'fixedsize')) <-
-###     c('ellipse', FALSE)
-###   edgeDataDefaults(agraph, 'arrowhead') <- 'normal'
+      try(graph <- addEdge(remove.edge.separators(supercall),
+                           remove.edge.separators(subsupercall),
+                           graph))
+  ag <- agopenSimple(graph, 'roxygenize')
+  graphDataDefaults(ag, 'ratio') <- PHI
+  graphDataDefaults(ag, 'splines') <- 'true'
+  nodeDataDefaults(ag, 'fontname') <- 'monospace'
+  edgeDataDefaults(ag, 'arrowtail') <- 'normal'
   toFile(ag,
          layoutType='fdp',
-         filename='test.ps',
-         fileType='ps')
-###   plot(agraph, 'fdp')
-###   toFile(agopen(graph,
-###                 name='roxygenize',
-###                 attrs=getDefaultAttrs(attrs)),
-###          layoutType='fdp',
-###          filename='test.ps',
-###          fileType='ps'
-### ###               attrs=list(nodes=
-### ###                 list(shape='ellipsis',
-### ###                      fixedsize=FALSE),
-### ###                 graph=list(size=NULL))
-###          )
+         filename='test.pdf',
+         fileType='pdf')
 }
 
 graphviz(subcalls)

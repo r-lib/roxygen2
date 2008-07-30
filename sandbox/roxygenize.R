@@ -1,3 +1,5 @@
+library(Rgraphviz)
+
 if (!file.exists('pkg/R/parse.R'))
   stop('Run one directory above `pkg\'.')
 
@@ -12,6 +14,7 @@ source('pkg/R/namespace.R')
 source('pkg/R/collate.R')
 source('pkg/R/roxygenize.R')
 source('pkg/R/description.R')
+source('pkg/R/callgraph.R')
 
 PKG.DIR <- 'pkg'
 

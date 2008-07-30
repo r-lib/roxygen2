@@ -10,6 +10,12 @@ ROXYGEN.DIR <- '%s.roxygen'
 #' Whither to copy Rds
 MAN.DIR <- 'man'
 
+#' Whither to copy installables
+INST.DIR <- 'inst'
+
+#' Whither to install docs
+DOC.DIR <- 'doc'
+
 #' Whence to copy source code
 R.DIR <- 'R'
 
@@ -55,14 +61,19 @@ copy.dir <- function(source,
 #' @param copy.package if R.utils is present, copies the package
 #' over before adding/manipulating files.
 #' @return \code{NULL}
+#' @callGraph
 roxygenize <- function(package.dir,
                        copy.package=TRUE) {
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)
   man.dir <- file.path(roxygen.dir, MAN.DIR)
+  inst.dir <- file.path(roxygen.dir, INST.DIR)
+  doc.dir <- file.path(inst.dir, DOC.DIR)
   namespace.file <- file.path(roxygen.dir, NAMESPACE.FILE)
   package.description <- file.path(package.dir, DESCRIPTION.FILE)
   roxygen.description <- file.path(roxygen.dir, DESCRIPTION.FILE)
-  skeleton <- c(roxygen.dir, man.dir)
+  skeleton <- c(roxygen.dir,
+                man.dir,
+                doc.dir)
 
   if (copy.package)
     copy.dir(package.dir,
@@ -81,4 +92,9 @@ roxygenize <- function(package.dir,
   collate <- make.collate.roclet(merge.file=package.description,
                                  target.file=roxygen.description)
   collate$parse.dir(r.dir)
+  callgraph <-
+    make.callgraph.roclet(description.dependencies(package.description),
+                          doc.dir)
+  do.call(callgraph$parse, files)
+                          
 }

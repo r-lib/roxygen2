@@ -504,6 +504,8 @@ parse.refs <- function(preref.srcrefs)
 #' Parse a source file containing roxygen directives.
 #' @param file string naming file to be parsed
 #' @return List containing parsed directives
+#' @callGraph
+#' @callGraphDepth 4
 parse.file <- function(file) {
   srcfile <- srcfile(file)
   srcrefs <- attributes(parse(srcfile$filename,

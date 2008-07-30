@@ -24,6 +24,8 @@ Negate <- function(f)
 #' procedure; moment of silence, please.
 #' @param \dots the functions to be composed
 #' @return A composed function
+#' @callGraphPrimitives
+#' @callGraphDepth 3
 Compose <- function(...) {
   fs <- list(...)
   function(...) Reduce(function(x, f) f(x),

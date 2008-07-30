@@ -4,42 +4,48 @@
 roxygen()
 
 #' @importFrom Rgraphviz toFile
-make.callgraph.roclet <- function(dir='.',
+make.callgraph.roclet <- function(dependencies=NULL,
+                                  dir='.',
                                   verbose=TRUE) {
   DEFAULT.DEPTH <- 2
 
   do.callgraph <- FALSE
   do.callgraph.primitives <- FALSE
   depth <- DEFAULT.DEPTH
+  name <- NULL
 
   parse.default <- function(key, expression) NULL
 
   reset.state <- function(partitum) {
-    do.callgraph <- FALSE
-    do.callgraph.primitives <- FALSE
-    depth <- DEFAULT.DEPTH
-    call.stack <- make.stack()
-    subcalls <- new.env(parent=emptyenv())
-    calls <- NULL
+    do.callgraph <<- FALSE
+    do.callgraph.primitives <<- FALSE
+    depth <<- DEFAULT.DEPTH
+    call.stack <<- make.stack()
+    subcalls <<- new.env(parent=emptyenv())
+    calls <<- NULL
+    name <<- guess.name(partitum)
   }
 
   post.parse <- function(partitum) {
-    if (is.null(name <- guess.name(partitum)))
-      stop('Nameless callgraph')
+    if (is.null(name))
+      stop('Callgraph needs a name')
     else {
       if (do.callgraph || do.callgraph.primitives) {
-        env <- new.env()
-        eval(parse(text=src.lines(partitum)),
-             envir=env)
-        e <- parse(text=src.lines(partitum))
+        successes <-
+          mapply(function(package)
+                 tryCatch(require(package,
+                                  character.only=TRUE,
+                                  quietly=TRUE),
+                          warning=function(e) FALSE),
+                 dependencies)
+        if (!all(successes))
+          warning(sprintf(paste('Package(s) %s wouldn\'t load;',
+                                'callgraph might be incomplete.'),
+                          do.call(Curry(paste, sep=', '),
+                                  Map(Curry(sprintf, fmt='`%s\''),
+                                      dependencies[!successes]))))
         preorder.walk.expression(discover.subcalls,
-###             expression(eval(parse(text=src.lines(partitum))))
-###             parse(as.expression(call(name)))
-###             expression(append)
-###             as.expression(call(get(name, env)))
-###             as.expression(call(name))
-            e
-            )
+            parse(text=src.lines(partitum)))
         graphviz(subcalls)
       }
     }
@@ -89,7 +95,7 @@ make.callgraph.roclet <- function(dir='.',
           call.stack$top < depth) {
         supercall <-
           if (call.stack$is.empty())
-            NULL
+            name
           else
             call.stack$peek()
         if (!is.null(supercall)) {
@@ -125,25 +131,34 @@ make.callgraph.roclet <- function(dir='.',
                              "pdf", "pic", "plain", "plain-ext", "png", "ps",
                              "ps2", "svg", "svgz", "vrml", "vtx", "wbmp"))
 
+  OUTFILE <- '%s-callgraph.pdf'
+
   graphviz <- function(subcalls) {
     supercalls <- ls(subcalls)
     ## Check for is.null(supercalls)
-    graph <- new('graphNEL', nodes=unlist(Map(remove.edge.separators,
-                               supercalls)))
-    for (supercall in supercalls)
-      for (subsupercall in subcalls[[supercall]])
-        try(graph <- addEdge(remove.edge.separators(supercall),
-                             remove.edge.separators(subsupercall),
-                             graph))
-    ag <- agopenSimple(graph, 'roxygenize')
-    graphDataDefaults(ag, 'ratio') <- PHI
-    graphDataDefaults(ag, 'splines') <- 'true'
-    nodeDataDefaults(ag, 'fontname') <- 'monospace'
-    edgeDataDefaults(ag, 'arrowtail') <- 'normal'
-    toFile(ag,
-           layoutType='fdp',
-           filename='test.pdf',
-           fileType='pdf')
+    if (is.null(supercalls) || length(supercalls) < 1)
+      warning(sprintf('Omitting call-less call-graph for `%s\'.',
+                      name))
+    else {
+      graph <- new('graphNEL',
+                   nodes=unlist(Map(remove.edge.separators, supercalls)),
+                   edgemode='directed')
+      for (supercall in supercalls)
+        for (subsupercall in subcalls[[supercall]])
+          tryCatch(graph <- addEdge(remove.edge.separators(supercall),
+                                    remove.edge.separators(subsupercall),
+                                    graph),
+                   error=function(e)
+                   warning(sprintf('Unknown node %s', subsupercall)))
+      ag <- agopenSimple(graph, 'roxygenize')
+      graphDataDefaults(ag, 'ratio') <- PHI
+      graphDataDefaults(ag, 'splines') <- 'true'
+      nodeDataDefaults(ag, 'fontname') <- 'monospace'
+      toFile(ag,
+             layoutType='fdp',
+             filename=sprintf(OUTFILE, name),
+             fileType='pdf')
+    }
   }
 
   roclet <- make.roclet(parse.default,

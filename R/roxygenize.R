@@ -62,6 +62,7 @@ copy.dir <- function(source,
 #' over before adding/manipulating files.
 #' @return \code{NULL}
 #' @callGraph
+#' @callGraphDepth 1
 roxygenize <- function(package.dir,
                        copy.package=TRUE) {
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)

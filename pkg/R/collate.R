@@ -1,5 +1,6 @@
 #' @include roxygen.R
 #' @include string.R
+#' @include functional.R
 #' @include roclet.R
 roxygen()
 
@@ -103,33 +104,32 @@ make.collate.roclet <- function(merge.file=NULL,
 
   COLLATE.FIELD <- 'Collate:'
 
-  merge <- function(directive) {
-    lines <- readLines(merge.file)
-    filtered.lines <- Filter(function(line)
-                             length(grep(sprintf('^%s', COLLATE.FIELD),
-                                         trim(line))) == 0,
-                             lines)
+  merge <- function(files) {
+    unlink(target.file)
     if (verbose && !is.null.string(target.file))
       cat(sprintf('Merging collate directive with %s to %s',
                   merge.file,
                   target.file), '\n')
-    cat(filtered.lines, directive, file=target.file, sep='\n')
+    post.parse <- function(parsed.fields)
+      cat.description('Collate', files, file=target.file)
+    parse.default <- Curry(cat.description, file=target.file)
+    parser <- make.description.parser(parse.default,
+                                      post.parse=post.parse)
+    parser$register.parser('Collate', noop.description)
+    parser$parse(parse.description.file(merge.file))
   }
 
   post.files <- function() {
-    directive <-
-      sprintf('Collate:%s',
-              Reduce.paste(function(vertex)
-                           sprintf("'%s'", vertex$file),
-                           topological.sort(vertices),
-                           ' '))
+    files <- do.call(paste, Map(function(vertex)
+                                sprintf("'%s'", vertex$file),
+                                topological.sort(vertices)))
     if (!is.null(cwd))
       setwd(cwd)
     assign.parent('cwd', NULL, environment())
     if (!is.null(merge.file))
-      merge(directive)
+      merge(files)
     else
-      cat(directive, '\n', file=target.file, sep='')
+      cat.description('Collate', files, file=target.file)
   }
 
   roclet <- make.roclet(parse.include,

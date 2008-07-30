@@ -3,6 +3,21 @@
 #' @include functional.R
 roxygen()
 
+#' Make a callgraph roclet.
+#'
+#' The callgraph roclet is awkward in the sense that
+#' it requires a function's package to be loadable;
+#' which means, like calling LaTeX multiple times,
+#' one has to run roxygen on a package, install it,
+#' run roxygen again to get the callgraphs, and possibly
+#' install the package again.
+#'
+#' Messy. Aweful.
+#'
+#' @param dependencies packages required to evaluate
+#' interesting functions
+#' @param dir the directory to place the callgraphs in
+#' @param verbose anounce what we're doing
 #' @importFrom Rgraphviz toFile
 make.callgraph.roclet <- function(dependencies=NULL,
                                   dir='.',

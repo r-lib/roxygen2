@@ -505,7 +505,7 @@ parse.refs <- function(preref.srcrefs)
 #' @param file string naming file to be parsed
 #' @return List containing parsed directives
 #' @callGraph
-#' @callGraphDepth 4
+#' @callGraphDepth 3
 parse.file <- function(file) {
   srcfile <- srcfile(file)
   srcrefs <- attributes(parse(srcfile$filename,

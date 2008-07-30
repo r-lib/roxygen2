@@ -12,8 +12,6 @@ roxygen()
 #' run roxygen again to get the callgraphs, and possibly
 #' install the package again.
 #'
-#' Messy. Aweful.
-#'
 #' @param dependencies packages required to evaluate
 #' interesting functions
 #' @param dir the directory to place the callgraphs in

@@ -67,7 +67,7 @@ parse.description.file <- function(description.file)
 #' @return \code{NULL}
 cat.description <- function(field, value, file='')
   cat(strwrap(sprintf('%s: %s', field, value),
-              exdent=2),
+              exdent=4),
       sep='\n',
       file=file,
       append=TRUE)
@@ -99,6 +99,9 @@ make.description.parser <- function(parse.default=cat.description,
   parsers <- new.env(parent=emptyenv())
   parser$register.parser <- function(field, parser)
     parsers[[field]] <- parser
+  parser$register.parsers <- function(registrate, ...)
+    for (field in c(...))
+      parser$register.parser(field, registrate)
   parser$parse <- function(parsed.fields) {
     field.values <- function(parsed.fields)
       zip.list(names(parsed.fields),
@@ -116,4 +119,28 @@ make.description.parser <- function(parse.default=cat.description,
     if (!is.null(post.parse)) post.parse(parsed.fields)
   }
   parser
+}
+
+#' Gather a \file{DESCRIPTION}'s dependencies from the
+#' \code{Package}, \code{Depends}, \code{Imports}, \code{Suggests},
+#' and \code{Enhances} fields.
+#' @param description.file the \file{DESCRIPTION} to parse
+#' @return A list of dependencies
+#' @TODO Test this!
+description.dependencies <- function(description.file) {
+  dependencies <- NULL
+  split.dependencies <- function(parsed.fields)
+    strsplit(dependencies, split='[[:space:]]+')
+  parser <- make.description.parser(noop.description,
+                                    post.parse=split.dependencies)
+  augment.dependencies <- function(field, value)
+    dependencies <<- paste(value, dependencies)
+  
+  parser$register.parsers(augment.dependencies,
+                          'Package',
+                          'Depends',
+                          'Imports',
+                          'Suggests',
+                          'Enhances')
+  parser$parse(parse.description.file(description.file))
 }

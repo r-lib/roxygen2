@@ -138,3 +138,8 @@ test.ellipsis.on.no.period <- function()
                     '\\title{Whether a number is odd...}',
                     '\\usage{is.odd(a)}',
                     '\\description{Whether a number is odd}'))
+
+test.todo <- function()
+  check.Rd.output("#' @TODO test this
+                   roxygen()",
+                  output=c('\\section{TODO}{test this}'))

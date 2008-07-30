@@ -197,7 +197,8 @@ register.preref.parsers(parse.value,
                         'return',
                         'author',
                         'include',
-                        'callGraphDepth')
+                        'callGraphDepth',
+                        'TODO')
 
 #' Parse an element containing a mandatory name
 #' and description (such as @@param).

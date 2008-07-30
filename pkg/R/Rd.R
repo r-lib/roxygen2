@@ -29,7 +29,7 @@ roxygen()
 #' \code{@@return} \tab \code{\\value}\cr
 #' \code{@@seealso} \tab \code{\\seealso}\cr
 #' \code{@@title} \tab \code{\\title}\cr
-#' \code{@@todo} \tab \emph{n/a}\cr
+#' \code{@@TODO} \tab \emph{n/a}\cr
 #' \code{@@usage} \tab \code{\\usage}\cr
 #' }
 #'
@@ -75,7 +75,7 @@ roxygen()
 #'                       In the absence of a description, the title becomes
 #'                       the \code{@@name} or assignee; lastly, it can be
 #'                       overridden with \code{@@title}.}
-#' \item{\code{@@todo}}{Note to developers to get off their asses.}
+#' \item{\code{@@TODO}}{Note to developers to get off their asses.}
 #' \item{\code{@@usage}}{A default usage is construed from a function's formals,
 #'                       but can be overridden with \code{@@usage} (e.g. in the case
 #'                       of multiple functions in one Rd unit).}
@@ -89,15 +89,15 @@ roxygen()
 #' @examples
 #' #' This sentence describes the function.
 #' #'
-#' #' Here are the details (notice the blank line);
-#' #' the name, title, usage and alias will be
+#' #' Here are the details (notice the preceding blank
+#' #' line); the name, title, usage and alias will be
 #' #' automatically generated.
 #' #'
 #' #' @@param a a parameter
 #' #' @@return NULL
 #' f <- function(a=1) NULL
 #'
-#' #' S3 function's require a @@method tag for
+#' #' S3 functions require a @@method tag for
 #' #' the time being.
 #' #'
 #' #' @@method specialize foo

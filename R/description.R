@@ -130,7 +130,7 @@ make.description.parser <- function(parse.default=cat.description,
 description.dependencies <- function(description.file) {
   dependencies <- NULL
   split.dependencies <- function(parsed.fields)
-    strsplit(dependencies, split='[[:space:]]+')
+    car(strsplit(dependencies, split='[[:space:]]+'))
   parser <- make.description.parser(noop.description,
                                     post.parse=split.dependencies)
   augment.dependencies <- function(field, value)

@@ -29,6 +29,23 @@ make.callgraph.roclet <- function(dependencies=NULL,
   depth <- DEFAULT.DEPTH
   name <- NULL
 
+  load.dependencies <- function() {
+    successes <-
+      mapply(function(package)
+             tryCatch(require(package,
+                              character.only=TRUE,
+                              quietly=TRUE),
+                      warning=function(e) FALSE),
+             dependencies)
+
+    if (!all(successes))
+      warning(sprintf(paste('Package(s) %s wouldn\'t load;',
+                            'callgraphs might be incomplete.'),
+                      do.call(Curry(paste, sep=', '),
+                              Map(Curry(sprintf, fmt='`%s\''),
+                                  dependencies[!successes]))))
+  }
+  
   parse.default <- function(key, expression) NULL
 
   reset.state <- function(partitum) {
@@ -42,23 +59,10 @@ make.callgraph.roclet <- function(dependencies=NULL,
   }
 
   post.parse <- function(partitum) {
-    if (is.null(name))
-      stop('Callgraph needs a name')
-    else {
-      if (do.callgraph || do.callgraph.primitives) {
-        successes <-
-          mapply(function(package)
-                 tryCatch(require(package,
-                                  character.only=TRUE,
-                                  quietly=TRUE),
-                          warning=function(e) FALSE),
-                 dependencies)
-        if (!all(successes))
-          warning(sprintf(paste('Package(s) %s wouldn\'t load;',
-                                'callgraph might be incomplete.'),
-                          do.call(Curry(paste, sep=', '),
-                                  Map(Curry(sprintf, fmt='`%s\''),
-                                      dependencies[!successes]))))
+    if (do.callgraph || do.callgraph.primitives) {
+      if (is.null(name))
+        stop('Callgraph needs a name')
+      else {
         preorder.walk.expression(discover.subcalls,
             parse(text=src.lines(partitum)))
         graphviz(subcalls)
@@ -150,8 +154,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
 
   graphviz <- function(subcalls) {
     supercalls <- ls(subcalls)
-    ## Check for is.null(supercalls)
-    if (is.null(supercalls) || length(supercalls) < 1)
+    if (length(supercalls) < 1 || is.null(supercalls))
       warning(sprintf('Omitting call-less call-graph for `%s\'.',
                       name))
     else {
@@ -169,9 +172,12 @@ make.callgraph.roclet <- function(dependencies=NULL,
       graphDataDefaults(ag, 'ratio') <- PHI
       graphDataDefaults(ag, 'splines') <- 'true'
       nodeDataDefaults(ag, 'fontname') <- 'monospace'
+      outfile <- file.path(dir, sprintf(OUTFILE, name))
+      if (verbose)
+        cat(sprintf('Outputting callgraph to %s\n', outfile))
       toFile(ag,
              layoutType='fdp',
-             filename=sprintf(OUTFILE, name),
+             filename=outfile,
              fileType='pdf')
     }
   }
@@ -202,6 +208,8 @@ make.callgraph.roclet <- function(dependencies=NULL,
                          parse.callgraph.primitives)
   roclet$register.parser('callGraphDepth',
                          parse.callgraph.depth)
+
+  load.dependencies()
 
   roclet
 }

@@ -17,6 +17,7 @@ roxygen()
 #' @param dir the directory to place the callgraphs in
 #' @param verbose anounce what we're doing
 #' @importFrom Rgraphviz toFile
+#' @export
 make.callgraph.roclet <- function(dependencies=NULL,
                                   dir='.',
                                   verbose=TRUE) {
@@ -107,7 +108,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
     if (is.name(exprofundum)) {
       subcall <- as.character(exprofundum)
       if (is.callable(subcall, do.callgraph.primitives) &&
-          call.stack$top < depth) {
+          call.stack$top <= depth) {
         supercall <-
           if (call.stack$is.empty())
             name

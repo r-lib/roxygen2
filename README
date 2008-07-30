@@ -55,5 +55,7 @@ newly created directory; and find `roxygen-manual.pdf' in
 
 * Nameless Rd entries are written to standard out with no warning.
 
+* @deprecated?
+
 -----------
 * Hail, Hephaistos! Grant skill and weal.

@@ -29,6 +29,7 @@ roxygen()
 #' \code{@@return} \tab \code{\\value}\cr
 #' \code{@@seealso} \tab \code{\\seealso}\cr
 #' \code{@@title} \tab \code{\\title}\cr
+#' \code{@@todo} \tab \emph{n/a}\cr
 #' \code{@@usage} \tab \code{\\usage}\cr
 #' }
 #'
@@ -74,6 +75,7 @@ roxygen()
 #'                       In the absence of a description, the title becomes
 #'                       the \code{@@name} or assignee; lastly, it can be
 #'                       overridden with \code{@@title}.}
+#' \item{\code{@@todo}}{Note to developers to get off their asses.}
 #' \item{\code{@@usage}}{A default usage is construed from a function's formals,
 #'                       but can be overridden with \code{@@usage} (e.g. in the case
 #'                       of multiple functions in one Rd unit).}
@@ -421,6 +423,11 @@ make.Rd.roclet <- function(subdir=NULL,
   }
 
   roclet$register.parser('example', parse.example)
+
+  parse.todo <- function(key, value)
+    parse.expression('section', 'TODO', value)
+
+  roclet$register.parser('TODO', parse.todo)
 
   roclet
 }

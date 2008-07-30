@@ -108,3 +108,21 @@ assign.parent <- function(var, value, env)
 #' @return The first non-null argument
 first.non.null <- function(...)
   append(NULL, c(...))[[1]]
+
+#' Pluck name from a hierarchy of candidates; viz. name,
+#' assignee, S4class, S4method, S4generic.
+#' @param partitum the parsed elements
+#' @return The guessed name (possibly \code{NULL})
+guess.name <- function(partitum)
+  first.non.null(partitum$name,
+                 partitum$assignee,
+                 partitum$S4class,
+                 partitum$S4method,
+                 partitum$S4generic)
+
+src.lines <- function(partitum) {
+    srcfile <- srcfile(partitum$srcref$filename)
+    first.line <- car(partitum$srcref$lloc)
+    last.line <- caddr(partitum$srcref$lloc)
+    getSrcLines(srcfile, first.line, last.line)
+}

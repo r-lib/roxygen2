@@ -203,12 +203,7 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.name <- function(partitum) {
-    name <- partitum$name
-    assignee <- partitum$assignee
-    S4 <- first.non.null(partitum$S4class,
-                         partitum$S4method,
-                         partitum$S4generic)
-    name <- first.non.null(name, assignee, S4)
+    name <- guess.name(partitum)
     if (is.null(name) && !is.null(subdir)) {
       filename <- partitum$srcref$filename
       first.line <- car(partitum$srcref$lloc)

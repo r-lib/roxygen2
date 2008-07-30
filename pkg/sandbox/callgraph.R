@@ -49,11 +49,11 @@ is.callable <- function(name, include.primitives) {
   !is.null(f) && ifelse(include.primitives, TRUE, !is.primitive(f))
 }
 
-exprofundum <- expression(append)
 exprofundum <- expression(roxygenize)
+exprofundum <- as.expression(call('roxygenize'))
 
 discover.subcalls <- function(exprofundum,
-                              depth=3,
+                              depth=2,
                               include.primitives=FALSE)
   if (is.name(exprofundum)) {
     subcall <- as.character(exprofundum)
@@ -105,6 +105,7 @@ PHI <- (1 + sqrt(5)) / 2
 
 graphviz <- function(subcalls) {
   supercalls <- ls(subcalls)
+  ## Check for is.null(supercalls)
   graph <- new('graphNEL', nodes=unlist(Map(remove.edge.separators,
                              supercalls)))
   for (supercall in supercalls)

@@ -97,9 +97,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
   }
 
   call.stack <- make.stack()
-
   subcalls <- new.env(parent=emptyenv())
-
   calls <- NULL
 
   is.callable <- function(name, include.primitives) {
@@ -174,7 +172,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
       nodeDataDefaults(ag, 'fontname') <- 'monospace'
       outfile <- file.path(dir, sprintf(OUTFILE, name))
       if (verbose)
-        cat(sprintf('Outputting callgraph to %s\n', outfile))
+        cat(sprintf('Outputting call graph to %s\n', outfile))
       toFile(ag,
              layoutType='fdp',
              filename=outfile,

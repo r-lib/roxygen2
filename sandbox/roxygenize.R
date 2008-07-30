@@ -11,6 +11,7 @@ source('pkg/R/Rd.R')
 source('pkg/R/namespace.R')
 source('pkg/R/collate.R')
 source('pkg/R/roxygenize.R')
+source('pkg/R/description.R')
 
 PKG.DIR <- 'pkg'
 

@@ -68,7 +68,7 @@ make.roclet <- function(parse.default,
   #' @return \code{NULL}
   roclet$parse.parsed <- function(partita) {
     key.values <- function(partitum)
-      zip.list(attributes(partitum)$names, partitum)
+      zip.list(names(partitum), partitum)
     
     parse.noop <- function(key, value) NULL
 
@@ -120,6 +120,9 @@ guess.name <- function(partitum)
                  partitum$S4method,
                  partitum$S4generic)
 
+#' Extract the source code from parsed elements
+#' @param partitum the parsed elements
+#' @return The lines of source code
 src.lines <- function(partitum) {
     srcfile <- srcfile(partitum$srcref$filename)
     first.line <- car(partitum$srcref$lloc)

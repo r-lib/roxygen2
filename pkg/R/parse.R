@@ -56,6 +56,7 @@ register.parser <- function(table, key, parser)
 #' a function taking \code{key} and \code{expression}
 #' @return \code{NULL}
 #' @seealso \code{\link{register.parser}}
+#' @export
 register.preref.parser <- Curry(register.parser,
                                 table=preref.parsers)
 
@@ -250,6 +251,7 @@ register.preref.parsers(parse.name,
 #' @param key parsing key
 #' @param rest the expression to be parsed
 #' @return A list with the key and \code{TRUE}
+#' @export
 parse.toggle <- function(key, rest)
   as.list(structure(TRUE, names=key))
 

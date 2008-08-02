@@ -2,7 +2,6 @@
 #' @include functional.R
 #' @include string.R
 #' @include list.R
-#' @TODO number parser?
 roxygen()
 
 #' Sequence that distinguishes roxygen comment from normal comment.
@@ -37,6 +36,7 @@ prerefs <- function(srcfile, srcrefs) {
 }
 
 #' Preref parser table
+#' @TODO number parser?
 preref.parsers <- new.env(parent=emptyenv())
 
 #' Srcref parser table

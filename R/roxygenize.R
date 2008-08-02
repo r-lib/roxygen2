@@ -63,8 +63,8 @@ copy.dir <- function(source,
 #' @return \code{NULL}
 #' @callGraph
 #' @callGraphDepth 1
-#' @TODO Options to enable/disable specific roclet (--no-callgraphs,
-#' etc.)
+#' @TODO Options to enable/disable specific roclet
+#' (\command{--no-callgraphs}, etc.)
 roxygenize <- function(package.dir,
                        copy.package=TRUE) {
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)

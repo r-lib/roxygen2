@@ -41,8 +41,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
       warning(sprintf(paste('Package(s) %s wouldn\'t load;',
                             'callgraphs might be incomplete.'),
                       do.call(Curry(paste, sep=', '),
-                              Map(Curry(sprintf, fmt='`%s\''),
-                                  dependencies[!successes]))))
+                              Map(sQuote, dependencies[!successes]))))
   }
   
   parse.default <- function(key, expression) NULL
@@ -150,10 +149,10 @@ make.callgraph.roclet <- function(dependencies=NULL,
   OUTFILE <- '%s-callgraph.pdf'
 
   graphviz <- function(subcalls) {
-    supercalls <- ls(subcalls)
+    supercalls <- ls(subcalls, all.names=TRUE)
     if (length(supercalls) < 1 || is.null(supercalls))
-      warning(sprintf('Omitting call-less call-graph for `%s\'.',
-                      name))
+      warning(sprintf('Omitting call-less call-graph for %s.',
+                      sQuote(name)))
     else {
       graph <- new('graphNEL',
                    nodes=unlist(Map(remove.edge.separators, supercalls)),
@@ -164,14 +163,14 @@ make.callgraph.roclet <- function(dependencies=NULL,
                                     remove.edge.separators(subsupercall),
                                     graph),
                    error=function(e)
-                   warning(sprintf('Unknown node %s', subsupercall)))
+                   warning(sprintf('Unknown node %s', sQuote(subsupercall))))
       ag <- agopenSimple(graph, 'roxygenize')
       graphDataDefaults(ag, 'ratio') <- PHI
       graphDataDefaults(ag, 'splines') <- 'true'
       nodeDataDefaults(ag, 'fontname') <- 'monospace'
       outfile <- file.path(dir, sprintf(OUTFILE, name))
       if (verbose)
-        cat(sprintf('Outputting call graph to %s\n', outfile))
+        cat(sprintf('Outputting call graph to %s\n', sQuote(outfile)))
       toFile(ag,
              layoutType='fdp',
              filename=outfile,

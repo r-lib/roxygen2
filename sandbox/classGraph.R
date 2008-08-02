@@ -2,8 +2,6 @@
 
 require(roxygen)
 
-
-
 #' Exemplar class: the JAVA bicycle class.
 #' @classGraph
 setClass('Bicycle',
@@ -12,10 +10,7 @@ setClass('Bicycle',
            speed='numeric',
            gear='numeric'))
 
-
-
-#source('../R/parse.R')
-### Roclet:
+## Register tag with the main parser
 register.preref.parser('classGraph', parse.toggle)
 
 make.classGraph.roclet <- function(package, dir='.') {
@@ -24,7 +19,6 @@ make.classGraph.roclet <- function(package, dir='.') {
   
   if ( !require(classGraph) )
     stop('This roclet needs the ', sQuote('classGraph'), 'package!')
-
   
   ### Roclet parser:
   
@@ -32,18 +26,19 @@ make.classGraph.roclet <- function(package, dir='.') {
   file <- NULL
   
   pre.parse <- function(partitum) {
-    if ( partitum$S4class != '' ) {
+    if ( !is.null(partitum$S4class) ) {
       class <<- partitum$S4class
       file <<- partitum$srcref$filename
     }
   }
 
+  ## parse.classGraph only called on @classGraph;
+  ## no need to check the key
   parse.classGraph <- function(key, value) {
-    if ( key == 'classGraph' )
-      if ( !is.null(class) )
-        create.callGraph()
-      else
-        warning('@classGraph set but no S4 class far and wide.')
+    if ( !is.null(class) )
+      create.callGraph()
+    else
+      warning('@classGraph set but no S4 class far and wide.')
   }
   
   post.parse <- function(partitum) {
@@ -51,12 +46,11 @@ make.classGraph.roclet <- function(package, dir='.') {
     file <<- NULL
   }
 
-  roclet <- roxygen:::make.roclet(parse.classGraph,
-                                  pre.parse,
-                                  post.parse)
+  ## No default parser
+  roclet <- roxygen:::make.roclet(pre.parse=pre.parse,
+                                  post.parse=post.parse)
 
-  roclet$register.default.parsers('classGraph')
-
+  roclet$register.parser('classGraph', parse.classGraph)
 
   ### Action:
 

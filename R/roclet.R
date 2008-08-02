@@ -22,7 +22,8 @@ roxygen()
 #' called before any file has been parsed
 #' @param post.files a callback function with no arguments;
 #' called after every file has been parsed
-make.roclet <- function(parse.default,
+#' @export
+make.roclet <- function(parse.default=NULL,
                         pre.parse=NULL,
                         post.parse=NULL,
                         pre.files=NULL,

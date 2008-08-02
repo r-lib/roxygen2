@@ -23,9 +23,11 @@ make.callgraph.roclet <- function(dependencies=NULL,
                                   verbose=TRUE) {
   DEFAULT.DEPTH <- 2
 
-  do.callgraph <- FALSE
-  do.callgraph.primitives <- FALSE
-  depth <- DEFAULT.DEPTH
+  do.callgraph <- NULL
+  do.callgraph.primitives <- NULL
+  depth <- NULL
+  call.stack <- NULL
+  subcalls <- NULL
   name <- NULL
 
   load.dependencies <- function() {
@@ -44,15 +46,12 @@ make.callgraph.roclet <- function(dependencies=NULL,
                               Map(sQuote, dependencies[!successes]))))
   }
   
-  parse.default <- function(key, expression) NULL
-
   reset.state <- function(partitum) {
     do.callgraph <<- FALSE
     do.callgraph.primitives <<- FALSE
     depth <<- DEFAULT.DEPTH
     call.stack <<- make.stack()
     subcalls <<- new.env(parent=emptyenv())
-    calls <<- NULL
     name <<- guess.name(partitum)
   }
 
@@ -94,10 +93,6 @@ make.callgraph.roclet <- function(dependencies=NULL,
     stack
   }
 
-  call.stack <- make.stack()
-  subcalls <- new.env(parent=emptyenv())
-  calls <- NULL
-
   is.callable <- function(name, include.primitives) {
     f <- tryCatch(get(name, mode='function'), error=function(e) NULL)
     !is.null(f) && ifelse(include.primitives, TRUE, !is.primitive(f))
@@ -107,7 +102,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
     if (is.name(exprofundum)) {
       subcall <- as.character(exprofundum)
       if (is.callable(subcall, do.callgraph.primitives) &&
-          call.stack$top <= depth) {
+          call.stack$top < depth) {
         supercall <-
           if (call.stack$is.empty())
             name
@@ -119,9 +114,8 @@ make.callgraph.roclet <- function(dependencies=NULL,
             subcalls[[supercall]] <<-
               append(subsupercalls, subcall)
         }
-        if (!subcall %in% calls) {
+        if (!subcall %in% ls(subcalls, all.names=TRUE)) {
           call.stack$push(subcall)
-          calls <<- append(subcall, calls)
           subcalls[[subcall]] <<- NULL
           body <- tryCatch(body(subcall), error=function(e) NULL)
           if (!is.null(body))
@@ -136,6 +130,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
 
   PHI <- (1 + sqrt(5)) / 2
 
+  #' @TODO Use svn version of Rgraphviz to de-necessitate formals-hack.
   formals(toFile) <- alist(graph=,
                            layoutType=c("dot", "neato", "twopi",
                              "circo", "fdp"),
@@ -148,6 +143,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
 
   OUTFILE <- '%s-callgraph.pdf'
 
+  #' @note Thanks to Manuel for suggesting the all.names fix.
   graphviz <- function(subcalls) {
     supercalls <- ls(subcalls, all.names=TRUE)
     if (length(supercalls) < 1 || is.null(supercalls))
@@ -178,8 +174,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
     }
   }
 
-  roclet <- make.roclet(parse.default,
-                        pre.parse=reset.state,
+  roclet <- make.roclet(pre.parse=reset.state,
                         post.parse=post.parse)
 
   parse.callgraph <- function(key, expression)

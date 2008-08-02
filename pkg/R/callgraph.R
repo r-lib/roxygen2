@@ -18,10 +18,10 @@ roxygen()
 #' @param verbose anounce what we're doing
 #' @export
 #' @TODO \itemize{
-#' \item{\file{index.html} in \file{inst/doc} for
+#' \item{index.html}{\file{index.html} in \file{inst/doc} for
 #' callgraphs, possibly with thumbnails in png}
-#' \item{Option for text-only callgraph (which are clearer,
-#' in my opinion)}
+#' \item{Text-only option}{Option for text-only callgraph
+#' (which are clearer, in my opinion)}
 #' }
 make.callgraph.roclet <- function(dependencies=NULL,
                                   dir='.',

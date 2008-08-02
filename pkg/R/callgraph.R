@@ -20,7 +20,7 @@ roxygen()
 #' @TODO \itemize{
 #' \item{index.html}{\file{index.html} in \file{inst/doc} for
 #' callgraphs, possibly with thumbnails in png}
-#' \item{Text-only option}{Option for text-only callgraph
+#' \item{Text-only option}{Option for text-only callgraphs
 #' (which are clearer, in my opinion)}
 #' }
 make.callgraph.roclet <- function(dependencies=NULL,

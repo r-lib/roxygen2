@@ -27,6 +27,9 @@ newly created directory; and find `roxygen-manual.pdf' in
 
 * Convert the `sandbox/roxygenize.R' driver into an `R CMD roxygen'.
 
+  * Makefile.win which uses sed to chop off the first line; else:
+    simple script to `#! /bin/sh'. See Sweave.
+
 * Create some automatic method for detecting S3 methods without
   resorting to @method <generic> <class>.
 

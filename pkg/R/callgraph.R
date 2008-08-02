@@ -16,8 +16,13 @@ roxygen()
 #' interesting functions
 #' @param dir the directory to place the callgraphs in
 #' @param verbose anounce what we're doing
-#' @importFrom Rgraphviz toFile
 #' @export
+#' @TODO \itemize{
+#' \item{\file{index.html} in \file{inst/doc} for
+#' callgraphs, possibly with thumbnails in png}
+#' \item{Option for text-only callgraph (which are clearer,
+#' in my opinion)}
+#' }
 make.callgraph.roclet <- function(dependencies=NULL,
                                   dir='.',
                                   verbose=TRUE) {
@@ -35,7 +40,8 @@ make.callgraph.roclet <- function(dependencies=NULL,
       mapply(function(package)
              tryCatch(require(package,
                               character.only=TRUE,
-                              quietly=TRUE),
+                              quietly=TRUE,
+                              warn.conflicts=FALSE),
                       warning=function(e) FALSE),
              dependencies)
 
@@ -43,7 +49,8 @@ make.callgraph.roclet <- function(dependencies=NULL,
       warning(sprintf(paste('Package(s) %s wouldn\'t load;',
                             'callgraphs might be incomplete.'),
                       do.call(Curry(paste, sep=', '),
-                              Map(sQuote, dependencies[!successes]))))
+                              Map(sQuote, dependencies[!successes]))),
+              immediate.=TRUE)
   }
   
   reset.state <- function(partitum) {
@@ -62,7 +69,13 @@ make.callgraph.roclet <- function(dependencies=NULL,
       else {
         preorder.walk.expression(discover.subcalls,
             parse(text=src.lines(partitum)))
-        graphviz(subcalls)
+        if (require(Rgraphviz, quietly=TRUE))
+          graphviz(subcalls)
+        else {
+          warning(paste('Rgraphviz not present; replacing',
+                        'callgraphs with text-only call-lists.'))
+          text(subcalls)
+        }
       }
     }
   }
@@ -130,21 +143,29 @@ make.callgraph.roclet <- function(dependencies=NULL,
 
   PHI <- (1 + sqrt(5)) / 2
 
-  #' @TODO Use svn version of Rgraphviz to de-necessitate formals-hack.
-  formals(toFile) <- alist(graph=,
-                           layoutType=c("dot", "neato", "twopi",
-                             "circo", "fdp"),
-                           filename=,
-                           fileType=c("canon", "dot", "xdot",
-                             "dia", "fig", "gd", "gd2", "gif", "hpgl",
-                             "imap", "cmapx", "ismap", "mif", "mp", "pcl",
-                             "pdf", "pic", "plain", "plain-ext", "png", "ps",
-                             "ps2", "svg", "svgz", "vrml", "vtx", "wbmp"))
+  outfile <- function(dir, template, name, format)
+    file.path(dir, sprintf(template, name, format))
 
-  OUTFILE <- '%s-callgraph.pdf'
+  OUTFILE <- '%s-callgraph.%s'
 
   #' @note Thanks to Manuel for suggesting the all.names fix.
+  #' @TODO Use svn version of Rgraphviz to de-necessitate
+  #' formals-hack.
+  #' @TODO Fall back on native alternate if Rgraphviz not
+  #' available?
   graphviz <- function(subcalls) {
+    FORMAT <- 'pdf'
+    
+    formals(toFile) <- alist(graph=,
+                             layoutType=c("dot", "neato", "twopi",
+                               "circo", "fdp"),
+                             filename=,
+                             fileType=c("canon", "dot", "xdot",
+                               "dia", "fig", "gd", "gd2", "gif", "hpgl",
+                               "imap", "cmapx", "ismap", "mif", "mp",
+                               "pcl", "pdf", "pic", "plain", "plain-ext",
+                               "png", "ps", "ps2", "svg", "svgz", "vrml",
+                               "vtx", "wbmp"))
     supercalls <- ls(subcalls, all.names=TRUE)
     if (length(supercalls) < 1 || is.null(supercalls))
       warning(sprintf('Omitting call-less call-graph for %s.',
@@ -164,7 +185,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
       graphDataDefaults(ag, 'ratio') <- PHI
       graphDataDefaults(ag, 'splines') <- 'true'
       nodeDataDefaults(ag, 'fontname') <- 'monospace'
-      outfile <- file.path(dir, sprintf(OUTFILE, name))
+      outfile <- outfile(dir, OUTFILE, name, FORMAT)
       if (verbose)
         cat(sprintf('Outputting call graph to %s\n', sQuote(outfile)))
       toFile(ag,
@@ -174,6 +195,20 @@ make.callgraph.roclet <- function(dependencies=NULL,
     }
   }
 
+  text <- function(subcalls) {
+    FORMAT <- 'txt'
+    outfile <- outfile(dir, OUTFILE, name, FORMAT)
+    if (verbose)
+      cat(sprintf('Outputting text-only call-list to %s\n',
+                  sQuote(outfile)))
+    cat(strwrap(capture.output(str(as.list(subcalls),
+                                   vec.len=2^10,
+                                   nchar.max=2^10)),
+                exdent=2),
+        sep='\n',
+        file=outfile)
+  }
+  
   roclet <- make.roclet(pre.parse=reset.state,
                         post.parse=post.parse)
 

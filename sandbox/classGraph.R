@@ -47,8 +47,8 @@ make.classGraph.roclet <- function(package, dir='.') {
   }
 
   ## No default parser
-  roclet <- roxygen:::make.roclet(pre.parse=pre.parse,
-                                  post.parse=post.parse)
+  roclet <- make.roclet(pre.parse=pre.parse,
+                        post.parse=post.parse)
 
   roclet$register.parser('classGraph', parse.classGraph)
 

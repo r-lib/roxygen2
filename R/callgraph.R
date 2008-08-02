@@ -74,8 +74,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
           graphviz(subcalls)
         else {
           warning(paste('Rgraphviz not present; replacing',
-                        'callgraphs with text-only call-lists.'),
-                  immediate.=TRUE)
+                        'callgraphs with text-only call-lists.'))
           text(subcalls)
         }
       }

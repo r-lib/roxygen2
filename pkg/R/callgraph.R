@@ -69,11 +69,13 @@ make.callgraph.roclet <- function(dependencies=NULL,
       else {
         preorder.walk.expression(discover.subcalls,
             parse(text=src.lines(partitum)))
-        if (require(Rgraphviz, quietly=TRUE))
+        if (tryCatch(require(Rgraphviz, quietly=TRUE),
+                     warning=function(e) FALSE))
           graphviz(subcalls)
         else {
           warning(paste('Rgraphviz not present; replacing',
-                        'callgraphs with text-only call-lists.'))
+                        'callgraphs with text-only call-lists.'),
+                  immediate.=TRUE)
           text(subcalls)
         }
       }

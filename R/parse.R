@@ -2,6 +2,7 @@
 #' @include functional.R
 #' @include string.R
 #' @include list.R
+#' @TODO number parser?
 roxygen()
 
 #' Sequence that distinguishes roxygen comment from normal comment.
@@ -66,6 +67,7 @@ register.preref.parser <- Curry(register.parser,
 #' a function taking \code{key} and \code{expression}
 #' @return \code{NULL}
 #' @seealso \code{\link{register.parser}}
+#' @export
 register.srcref.parser <- Curry(register.parser,
                                 table=srcref.parsers)
 
@@ -83,6 +85,7 @@ register.parsers <- function(table, parser, ...) {
 #' @param parser the parser to register
 #' @param \dots the keys upon which to register
 #' @return \code{NULL}
+#' @export
 register.preref.parsers <- Curry(register.parsers,
                                  table=preref.parsers)
 
@@ -90,6 +93,7 @@ register.preref.parsers <- Curry(register.parsers,
 #' @param parser the parser to register
 #' @param \dots the keys upon which to register
 #' @return \code{NULL}
+#' @export
 register.srcref.parsers <- Curry(register.parsers,
                                  table=srcref.parsers)
 
@@ -137,6 +141,7 @@ parse.description <- function(expression)
 #' @param rest the expression to be parsed
 #' @return A list containing the key and expression (possibly
 #' null)
+#' @export
 parse.default <- function(key, rest)
   as.list(structure(rest, names=key))
 
@@ -161,6 +166,7 @@ register.preref.parser('export', parse.default)
 #' @param key the parsing key
 #' @param rest the expression to be parsed
 #' @return A list containing the key and value
+#' @export
 parse.value <- function(key, rest) {
   if (is.null.string(rest))
     parse.error(key, 'requires a value')
@@ -207,6 +213,7 @@ register.preref.parsers(parse.value,
 #' @param rest the expression to be parsed
 #' @return A list containing the key, name and
 #' description
+#' @export
 parse.name.description <- function(key, rest) {
   name <- strcar(rest)
   rest <- strcdr(rest)
@@ -231,6 +238,7 @@ register.preref.parsers(parse.name.description,
 #' @param key parsing key
 #' @param name the name to be parsed
 #' @return A list containing key and name
+#' @export
 parse.name <- function(key, name) {
   if (is.null.string(name))
     parse.error(key, 'requires a name')
@@ -474,7 +482,7 @@ parse.call <- function(expressions) {
     formals <- parse.formals(cdddr(expressions))
     append(assignee, formals)
   } else {
-    lhs <- as.character(cadr(expressions))
+    lhs <- cadr(as.character(expressions))
     parser.srcref(lhs)(lhs, cddr(expressions))
   }
 }
@@ -506,6 +514,7 @@ parse.refs <- function(preref.srcrefs)
 #' Parse a source file containing roxygen directives.
 #' @param file string naming file to be parsed
 #' @return List containing parsed directives
+#' @export
 #' @callGraph
 #' @callGraphDepth 3
 parse.file <- function(file) {
@@ -522,6 +531,7 @@ parse.file <- function(file) {
 #' @param \dots files to be parsed
 #' @return List containing parsed directives
 #' @seealso \code{\link{parse.file}}
+#' @export
 parse.files <- function(...)
   Reduce(append, Map(parse.file, list(...)), NULL)
 

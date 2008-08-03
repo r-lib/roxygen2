@@ -42,7 +42,10 @@ copy.dir <- function(source,
                      verbose=FALSE) {
   if (unlink.target)
     unlink(target, recursive=TRUE)
-  files <- list.files(source, full.name=TRUE, recursive=TRUE)
+  files <- list.files(source,
+                      full.name=TRUE,
+                      recursive=TRUE,
+                      all.files=TRUE)
   for (source.file in files) {
     promoted.file <- sub('[^/\\]*(/|\\\\)', '', source.file)
     target.file <- file.path(target, promoted.file)
@@ -87,7 +90,11 @@ roxygenize <- function(package.dir,
 
   for (dir in skeleton) dir.create(dir, showWarnings=FALSE)
   r.dir <- file.path(package.dir, R.DIR)
-  files <- as.list(list.files(r.dir, recursive=TRUE, full.names=TRUE))
+  files <- as.list(list.files(r.dir,
+                              pattern='\\.(R|r)$',
+                              recursive=TRUE,
+                              full.names=TRUE,
+                              all.files=TRUE))
   Rd <- make.Rd.roclet(man.dir)
   do.call(Rd$parse, files)
   namespace <- make.namespace.roclet(namespace.file)

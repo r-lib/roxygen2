@@ -1,5 +1,7 @@
 #' @include roxygen.R
 #' @include list.R
+#' @include string.R
+#' @include functional.R
 roxygen()
 
 #' Parse lines of text corresponding to a package DESCRIPTION file.
@@ -14,19 +16,8 @@ parse.description.text <- function(description) {
   contains.field <- function(line)
     length(grep(paste(FIELD, SEPARATOR, sep=''), line)) > 0
 
-  substr.regexp <- function(pattern, text) {
-    matches <- regexpr(pattern, text, perl=TRUE)
-    if (length(match) < 1)
-      NULL
-    else {
-      start <- car(matches)
-      end <- car(attr(matches, 'match.length'))
-      substr(text, start, end)
-    }
-  }
-
   field <- function(line)
-    substr.regexp(FIELD, line)
+    substr.regexpr(FIELD, line)
   
   rest <- function(line)
     substr(line, nchar(field(line)) + 2, nchar(line))
@@ -130,11 +121,12 @@ make.description.parser <- function(parse.default=cat.description,
 description.dependencies <- function(description.file) {
   dependencies <- NULL
   split.dependencies <- function(parsed.fields)
-    car(strsplit(dependencies, split='[[:space:]]+'))
+    Map(Curry(substr.regexpr, pattern='[^[:space:](]*'),
+        trim(car(strsplit(dependencies, split=',', fixed=TRUE))))
   parser <- make.description.parser(noop.description,
                                     post.parse=split.dependencies)
   augment.dependencies <- function(field, value)
-    dependencies <<- paste(value, dependencies)
+    dependencies <<- paste(value, dependencies, sep=',')
   
   parser$register.parsers(augment.dependencies,
                           'Package',

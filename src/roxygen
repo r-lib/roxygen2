@@ -1,0 +1,22 @@
+#! /bin/sh
+
+usage="Usage: R CMD roxygen PACKAGE
+
+A simple front-end for roxygenize()
+
+Options:
+  -h, --help    print short help message and exit
+  -v, --version print roxygen version info and exit
+
+Report bugs to <roxygen-devel@lists.r-forge.r-project.org>."
+
+case ${1} in
+    -h|--help)
+        echo "${usage}"; exit 0 ;;
+    -v|--version)
+        echo "${version}"; exit 0 ;;
+esac
+
+R_EXE="${R_HOME}/bin/R"
+echo "library(roxygen); roxygenize('${1}')" | \
+    "${R_EXE}" --no-restore --slave

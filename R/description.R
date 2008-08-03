@@ -39,7 +39,9 @@ parse.description.text <- function(description) {
     }
   }
   continue(description)
-  as.list(fields)
+  ## Reverse the fields, since they come out of the environment in
+  ## cons-order.
+  rev(as.list(fields))
 }
 
 #' Convenience function to call

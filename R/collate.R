@@ -2,6 +2,7 @@
 #' @include string.R
 #' @include functional.R
 #' @include roclet.R
+#' @include description.R
 roxygen()
 
 #' Make collate roclet which parses the given files; topologically

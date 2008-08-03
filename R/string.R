@@ -143,3 +143,20 @@ Reduce.paste <- function(proc, elts, sep)
          (parsed, proc(elt)),
          elts,
          NIL.STRING)
+
+#' Actually do the substring representation that
+#' regexpr should do; does not acknowledge groups,
+#' since \code{regexpr} doesn't.
+#' @param pattern the pattern to match
+#' @param text the text to match against
+#' @return The matched substring
+substr.regexpr <- function(pattern, text) {
+  matches <- regexpr(pattern, text, perl=TRUE)
+  if (length(match) < 1)
+    NULL
+  else {
+    start <- car(matches)
+    end <- car(attr(matches, 'match.length'))
+    substr(text, start, end)
+  }
+}

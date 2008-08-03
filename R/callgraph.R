@@ -157,6 +157,8 @@ make.callgraph.roclet <- function(dependencies=NULL,
   graphviz <- function(subcalls) {
     FORMAT <- 'pdf'
     
+    ## This should be in here until the current Rgraphviz (19.2)
+    ## becomes mainstream.
     formals(toFile) <- alist(graph=,
                              layoutType=c("dot", "neato", "twopi",
                                "circo", "fdp"),

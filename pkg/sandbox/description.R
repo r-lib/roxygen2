@@ -5,5 +5,4 @@ source('../R/string.R')
 source('../R/description.R')
 
 parser <- make.description.parser()
-## parser$parse(parse.description.file('../DESCRIPTION'))
 description.dependencies('../DESCRIPTION')

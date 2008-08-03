@@ -4,6 +4,7 @@ source('../R/list.R')
 source('../R/parse.R')
 source('../R/string.R')
 source('../R/roclet.R')
+source('../R/description.R')
 source('../R/collate.R')
 
 FILES <- list('collate/belt.R',

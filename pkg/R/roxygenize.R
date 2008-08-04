@@ -68,6 +68,7 @@ copy.dir <- function(source,
 #' @callGraphDepth 1
 #' @TODO Options to enable/disable specific roclet
 #' (\command{--no-callgraphs}, etc.)
+#' @export
 roxygenize <- function(package.dir,
                        copy.package=TRUE) {
   roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)

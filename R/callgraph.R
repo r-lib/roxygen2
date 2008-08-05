@@ -3,6 +3,13 @@
 #' @include functional.R
 roxygen()
 
+register.preref.parsers(parse.value,
+                        'callGraphDepth')
+
+register.preref.parsers(parse.toggle,
+                        'callGraph',
+                        'callGraphPrimitives')
+
 #' Make a callgraph roclet.
 #'
 #' The callgraph roclet is awkward in the sense that

@@ -4,6 +4,19 @@
 #' @include string.R
 roxygen()
 
+register.preref.parsers(parse.default,
+                        'export')
+
+register.preref.parsers(parse.value,
+                        'exportClass',
+                        'exportMethod',
+                        'exportPattern',
+                        'S3method',
+                        'import',
+                        'importFrom',
+                        'importClassesFrom',
+                        'importMethodsFrom')
+
 #' Make a namespace roclet which parses the given files and writes a list of
 #' namespace directives to a given file or standard out; see
 #' \cite{Writing R Extensions}

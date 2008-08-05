@@ -3,7 +3,11 @@
 #' @include functional.R
 #' @include roclet.R
 #' @include description.R
+#' @include parse.R
 roxygen()
+
+register.preref.parsers(parse.value,
+                        'include')
 
 #' Make collate roclet which parses the given files; topologically
 #' sorting \code{@@include}s, and either merging the \code{Collate:}

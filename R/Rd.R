@@ -2,7 +2,44 @@
 #' @include list.R
 #' @include string.R
 #' @include roclet.R
+#' @include parse.R
 roxygen()
+
+register.preref.parsers(parse.value,
+                        'name',
+                        'aliases',
+                        'title',
+                        'usage',
+                        'references',
+                        'concept',
+                        'note',
+                        'seealso',
+                        'example',
+                        'examples',
+                        'keywords',
+                        'return',
+                        'author',
+                        'TODO')
+
+register.preref.parsers(parse.name.description,
+                        'param',
+                        'method')
+
+register.preref.parsers(parse.name,
+                        'docType')
+
+register.srcref.parser('setClass',
+                       function(pivot, expression)
+                       list(S4class=car(expression)))
+
+register.srcref.parser('setGeneric',
+                       function(pivot, expression)
+                       list(S4generic=car(expression)))
+
+register.srcref.parser('setMethod',
+                       function(pivot, expression)
+                       list(S4method=car(expression),
+                            signature=cadr(expression)))
 
 #' Make an Rd roclet which parses the given files and, if specified, populates
 #' the given subdirectory with Rd files; or writes to standard out.  See

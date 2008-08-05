@@ -4,7 +4,10 @@ source('../R/list.R')
 source('../R/parse.R')
 source('../R/string.R')
 source('../R/roclet.R')
+source('../R/namespace.R')
+source('../R/collate.R')
 source('../R/Rd.R')
+source('../R/callgraph.R')
 
 FILES <- list('../R/Rd.R')
 

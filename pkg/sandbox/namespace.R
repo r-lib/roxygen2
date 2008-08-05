@@ -1,9 +1,13 @@
+source('../R/roxygen.R')
 source('../R/functional.R')
 source('../R/list.R')
 source('../R/string.R')
 source('../R/parse.R')
 source('../R/roclet.R')
 source('../R/namespace.R')
+source('../R/collate.R')
+source('../R/Rd.R')
+source('../R/callgraph.R')
 
 FILES <- list('example-function-mcpi.R',
               'example-S3-mcpi.R',

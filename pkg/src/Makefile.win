@@ -1,0 +1,6 @@
+ROXYGEN=$(R_HOME)/bin/roxygen.sh
+
+all: roxygen
+	sed -e 1d $< > $(ROXYGEN)
+
+clean:

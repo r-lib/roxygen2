@@ -1,6 +1,7 @@
-all:
-	echo > empty.so && \
-	install -v roxygen $(R_HOME)/bin || \
-	true
+ROXYGEN=$(R_HOME)/bin/roxygen
+
+all: roxygen
+	touch roxygen.so && \
+	install $< $(ROXYGEN)
 
 clean:

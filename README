@@ -6,69 +6,69 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
 
 1.1. Execution
 
-After installing Roxygen, `R CMD roxygen' or, on Windows, `Rcmd
-roxygen.sh' should be available. Run it above the base of your package
-(hereafter `<package>') like so:
+  After installing Roxygen, `R CMD roxygen' or, on Windows, `Rcmd
+  roxygen.sh' should be available. Run it above the base of your
+  package (hereafter `<package>') like so:
 
-    R CMD roxygen <package>
+      R CMD roxygen <package>
 
-or, on Windows:
+  or, on Windows:
 
-    Rcmd roxygen.sh <package>
+      Rcmd roxygen.sh <package>
 
-If `R CMD roxygen' is unavailable, you can invoke Roxygen within R:
+  If `R CMD roxygen' is unavailable, you can invoke Roxygen within R:
 
-    library(roxygen)
-    roxygenize('<package>')
+      library(roxygen)
+      roxygenize('<package>')
 
-Roxygen creates a package skeleton `<package>.roxygen'; populates its
-`man' directory with Rd files from the source; generates a
-`NAMESPACE'; modifies the Collate field in `DESCRIPTION'; and creates
-call graphs in `inst/doc'.
+  Roxygen creates a package skeleton `<package>.roxygen'; populates
+  its `man' directory with Rd files from the source; generates a
+  `NAMESPACE'; modifies the Collate field in `DESCRIPTION'; and
+  creates call graphs in `inst/doc'.
 
-You should now be able check, build and install from the new
-directory:
+  You should now be able check, build and install from the new
+  directory:
 
-    R CMD check <package>.roxygen
+      R CMD check <package>.roxygen
 
-On Windows, however, you may need to rename the directory.
+  On Windows, however, you may need to rename the directory.
 
 1.2. TODO
 
-* Convert the `sandbox/roxygenize.R' driver into an `R CMD roxygen'.
+  * Convert the `sandbox/roxygenize.R' driver into an `R CMD roxygen'.
 
-  * Makefile.win which uses sed to chop off the first line; else:
-    simple script to `#! /bin/sh'. See Sweave.
+    * Makefile.win which uses sed to chop off the first line; else:
+      simple script to `#! /bin/sh'. See Sweave.
 
-* Create some automatic method for detecting S3 methods without
-  resorting to @method <generic> <class>.
+  * Create some automatic method for detecting S3 methods without
+    resorting to @method <generic> <class>.
 
-* Edit the R emacs mode to identify roxygen delimiters when filling,
-  etc.
+  * Edit the R emacs mode to identify roxygen delimiters when filling,
+    etc.
 
-* Find a reasonable way to document the inner functions of make.roclet,
-  etc.
+  * Find a reasonable way to document the inner functions of
+    make.roclet, etc.
 
-* Move demos from `sandbox' to `demos'.
+  * Move demos from `sandbox' to `demos'.
 
 1.3. BUGS
 
-* parse.formals doesn't distinguish between no default argument and
-  NULL; need a special value?
+  * parse.formals doesn't distinguish between no default argument and
+    NULL; need a special value?
 
-* Skeletal Rds are created for assignments without Roxygen-blocks;
-  desirable?
+  * Skeletal Rds are created for assignments without Roxygen-blocks;
+    desirable?
 
-* first.sentence is fooled by infix periods, whereupon it resorts to
-  `...'.
+  * first.sentence is fooled by infix periods, whereupon it resorts to
+    `...'.
 
-* de.tex doesn't work recursively (i.e. de-TeXs only the top level).
+  * de.tex doesn't work recursively (i.e. de-TeXs only the top level).
 
-* `<<' in titles produces a spurious box.
+  * `<<' in titles produces a spurious box.
 
-* Nameless Rd entries are written to standard out with no warning.
+  * Nameless Rd entries are written to standard out with no warning.
 
-* @deprecated?
+  * @deprecated?
 
 -----------
 * Hail, Hephaistos! Grant skill and weal.

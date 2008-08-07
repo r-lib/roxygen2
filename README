@@ -8,7 +8,7 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
 
 After installing Roxygen, `R CMD roxygen' or, on Windows, `Rcmd
 roxygen.sh' should be available. Run it above the base of your package
-like so:
+(hereafter `<package>') like so:
 
     R CMD roxygen <package>
 
@@ -30,6 +30,8 @@ You should now be able check, build and install from the new
 directory:
 
     R CMD check <package>.roxygen
+
+On Windows, however, you may need to rename the directory.
 
 1.2. TODO
 

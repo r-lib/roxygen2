@@ -1,25 +1,25 @@
 library(Rgraphviz)
 
-if (!file.exists('pkg/R/parse.R'))
-  stop('Run one directory above `pkg\'.')
-
-source('pkg/R/roxygen.R')
-source('pkg/R/functional.R')
-source('pkg/R/list.R')
-source('pkg/R/parse.R')
-source('pkg/R/string.R')
-source('pkg/R/roclet.R')
-source('pkg/R/Rd.R')
-source('pkg/R/namespace.R')
-source('pkg/R/collate.R')
-source('pkg/R/roxygenize.R')
-source('pkg/R/description.R')
-source('pkg/R/callgraph.R')
-
 PKG.DIR <- 'pkg'
 
 argv <- commandArgs(trailingOnly=T)
 argc <- length(argv)
-pkg.dir <- if (argc > 0) car(argv) else PKG.DIR
+pkg.dir <- if (argc > 0) argv[[1]] else PKG.DIR
+
+sources <- c('%s/R/roxygen.R',
+             '%s/R/functional.R',
+             '%s/R/list.R',
+             '%s/R/parse.R',
+             '%s/R/string.R',
+             '%s/R/roclet.R',
+             '%s/R/Rd.R',
+             '%s/R/namespace.R',
+             '%s/R/collate.R',
+             '%s/R/roxygenize.R',
+             '%s/R/description.R',
+             '%s/R/callgraph.R')
+
+for (source in sources)
+  source(sprintf(source, pkg.dir))
 
 roxygenize(pkg.dir)

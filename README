@@ -6,22 +6,30 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
 
 1.1. Execution
 
-The driver in the `sandbox' directory, `roxygenize.R', creates a
-package skeleton `pkg.roxygen'; populates its `man' directory with Rd
-files from the source; generates a `NAMESPACE'; modifies the Collate
-field in `DESCRIPTION'; and creates call graphs in `inst/doc'.
+After installing Roxygen, `R CMD roxygen' or, on Windows, `Rcmd
+roxygen.sh' should be available. Run it above the base of your package
+like so:
 
-Run it from the root of the repository (i.e. one above the package
-root):
+    R CMD roxygen <package>
 
-    R --slave --vanilla < pkg/sandbox/roxygenize.R
+or, on Windows:
 
-If all goes well, you should be able to run `R CMD check' on the
-newly created directory; and find `roxygen-manual.pdf' in
-`pkg.roxygen.Rcheck':
+    Rcmd roxygen.sh <package>
 
-    R CMD check pkg.roxygen && \
-    xpdf pkg.roxygen.Rcheck/roxygen-manual.pdf
+If `R CMD roxygen' is unavailable, you can invoke Roxygen within R:
+
+    library(roxygen)
+    roxygenize('<package>')
+
+Roxygen creates a package skeleton `<package>.roxygen'; populates its
+`man' directory with Rd files from the source; generates a
+`NAMESPACE'; modifies the Collate field in `DESCRIPTION'; and creates
+call graphs in `inst/doc'.
+
+You should now be able check, build and install from the new
+directory:
+
+    R CMD check <package>.roxygen
 
 1.2. TODO
 

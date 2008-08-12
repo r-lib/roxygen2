@@ -58,8 +58,7 @@ warning () {
     echo ${BASENAME}: "WARNING!" ${1} >&2
 }
 
-# Can't use `readlink -f' because it doesn't ship with Rtools
-source="'${1}'"
+source="${1}"
 
 if test ${#} -eq 1
 then target="NULL"
@@ -68,7 +67,7 @@ else
     then warning "Both -d (Destructive) and TARGET specified; using TARGET."
         destructive="FALSE"
     fi
-    target="'${2}'"
+    target="${2}"
 fi
 
 if test "${destructive}" = "TRUE"
@@ -80,7 +79,7 @@ then
     target="${source}"
 fi
 
-if test "${source}" = "${target}" -o "${destructive}" = "TRUE"
+if test "${source}" -ef "${target}" -o "${destructive}" = "TRUE"
 then
     if test "${unlink}" = "TRUE"
     then warning "SOURCE and TARGET are identical; unsetting -u (Unlink)."
@@ -89,12 +88,20 @@ then
     copy="FALSE"
 fi
 
+source="'${source}'"
+if "${target}" != "NULL"
+then target="'${target}'"
+fi
+
 : ${unlink:="FALSE"}
 : ${copy:="TRUE"}
 
 debug () {
     echo source: "${source}"\; target: "${target}"\; copy: "${copy}"\; unlink: "${unlink}"
 }
+
+debug
+exit 0
 
 R_EXE="${R_HOME}/bin/R"
 echo "library(roxygen)

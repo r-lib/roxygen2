@@ -110,18 +110,22 @@ make.collate.roclet <- function(merge.file=NULL,
   COLLATE.FIELD <- 'Collate:'
 
   merge <- function(files) {
-    unlink(target.file)
     if (verbose && !is.null.string(target.file))
       cat(sprintf('Merging collate directive with %s to %s',
                   merge.file,
                   target.file), '\n')
+    pre.parse <- function(parsed.fields) unlink(target.file)
     post.parse <- function(parsed.fields)
       cat.description('Collate', files, file=target.file)
     parse.default <- Curry(cat.description, file=target.file)
     parser <- make.description.parser(parse.default,
+                                      pre.parse=pre.parse,
                                       post.parse=post.parse)
     parser$register.parser('Collate', noop.description)
-    parser$parse(parse.description.file(merge.file))
+    ## Force parse.description.file to be evaluated before
+    ## parser$parser (applicative order).
+    parsed.file <- parse.description.file(merge.file)
+    parser$parse(parsed.file)
   }
 
   post.files <- function() {

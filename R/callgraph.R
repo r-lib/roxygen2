@@ -3,9 +3,16 @@
 #' @include functional.R
 roxygen()
 
+#' Callgraph value parsers
+#' @name callGraphDepth
+#' @seealso make.callgraph.roclet
 register.preref.parsers(parse.value,
                         'callGraphDepth')
 
+#' Callgraph toggle parsers
+#' @name callGraph
+#' @aliases callGraph callGraphPrimitives
+#' @seealso make.callgraph.roclet
 register.preref.parsers(parse.toggle,
                         'callGraph',
                         'callGraphPrimitives')

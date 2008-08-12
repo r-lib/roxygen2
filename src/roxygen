@@ -100,9 +100,6 @@ debug () {
     echo source: "${source}"\; target: "${target}"\; copy: "${copy}"\; unlink: "${unlink}"
 }
 
-debug
-exit 0
-
 R_EXE="${R_HOME}/bin/R"
 echo "library(roxygen)
       roxygenize(package.dir=${source},

@@ -1,29 +1,104 @@
-#! /bin/sh
+#!/bin/sh
+declare -r DESTRUCTIVE="FALSE"
+declare -r BASENAME="$(basename $0)"
 
 version="Roxygen 0.1"
 
-usage="Usage: R CMD roxygen PACKAGE
+usage="Usage: R CMD roxygen [OPTIONS] SOURCE [TARGET]
 
-A simple front-end for roxygenize()
+Uses roxygenize() to process package in SOURCE, optionally placing
+processed files in TARGET.
+
+With -d (Destructive), roxygen operates in place; otherwise, TARGET
+defaults to \`SOURCE.roxygen'.
+
+WARNING: Be careful with -u (Unlink) when SOURCE and TARGET are
+identical.
 
 Options:
-  -h, --help    print short help message and exit
-  -v, --version print roxygen version info and exit
+  -d  (Destructive) operate in place on SOURCE
+  -u       (Unlink) clean TARGET first
+
+  -h         (Help) print short help message and exit
+  -v      (Version) print roxygen version info and exit
 
 Report bugs to <roxygen-devel@lists.r-forge.r-project.org>."
 
-if [ ${#} -ne 1 ]; then
-    echo "${usage}"
+while getopts duhv OPT; do
+    case $OPT in
+        d|+d)
+            destructive="TRUE"
+            ;;
+        u|+u)
+            unlink="TRUE"
+            ;;
+        h|+h)
+            echo ${usage}
+            exit 0
+            ;;
+        v|+v)
+            echo ${version}
+            exit 0
+            ;;
+        *)
+            echo ${usage}
+            exit 2
+    esac
+done
+shift `expr $OPTIND - 1`
+OPTIND=1
+
+if [ ${#} -eq 0 ]; then
+    echo "${usage}" >&2
     exit 1
 fi
 
-case ${1} in
-    -h|--help)
-        echo "${usage}"; exit 0 ;;
-    -v|--version)
-        echo "${version}"; exit 0 ;;
-esac
+warning () {
+    echo ${BASENAME}: "WARNING!" ${1} >&2
+}
+
+# Can't use `readlink -f' because it doesn't ship with Rtools
+source="'$(cd "${1}"; pwd)'"    #'
+
+if [ ${#} -eq 1 ]
+then target="NULL"
+else
+    if [[ ${destructive} = "TRUE" ]]
+    then warning "Both -d (Destructive) and TARGET specified; using TARGET."
+        destructive="FALSE"
+    fi
+    target="'$(cd "${2}"; pwd)'" #'
+fi
+
+if [[ ${destructive} = "TRUE" ]]
+then
+    if [[ ${unlink} = "TRUE" ]]
+    then warning "Specified -d (Destructive) and -u (Unlink); unsetting -u."
+        unlink="FALSE"
+    fi
+    target="${source}"
+fi
+
+if [[ "${source}" = "${target}" || ${destructive} = "TRUE" ]]
+then copy="FALSE"
+    if [[ ${unlink} = "TRUE" ]]
+    then warning "SOURCE and TARGET are identical; unsetting -u (Unlink)."
+        unlink="FALSE"
+    fi
+fi
+
+: ${unlink:="FALSE"}
+: ${copy:="TRUE"}
+
+debug () {
+    printf "source: %s; target: %s; copy: %s; unlink: %s" \
+        ${source} ${target} ${copy} ${unlink}
+}
 
 R_EXE="${R_HOME}/bin/R"
-echo "library(roxygen); roxygenize('${1}')" | \
+echo "library(roxygen)
+      roxygenize(package.dir=${source},
+                 roxygen.dir=${target},
+                 copy.package=${copy},
+                 unlink.target=${unlink})" | \
     "${R_EXE}" --no-restore --slave

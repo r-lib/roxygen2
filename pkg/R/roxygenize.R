@@ -61,8 +61,9 @@ copy.dir <- function(source,
 
 #' Process a package with the Rd, namespace and collate roclets.
 #' @param package.dir the package's top directory
-#' @param copy.package if R.utils is present, copies the package
-#' over before adding/manipulating files.
+#' @param roxygen.dir whither to copy roxygen files
+#' @param copy.package copies the package over before
+#' adding/manipulating files.
 #' @return \code{NULL}
 #' @callGraph
 #' @callGraphDepth 1
@@ -70,8 +71,12 @@ copy.dir <- function(source,
 #' (\command{--no-callgraphs}, etc.)
 #' @export
 roxygenize <- function(package.dir,
-                       copy.package=TRUE) {
-  roxygen.dir <- sprintf(ROXYGEN.DIR, package.dir)
+                       roxygen.dir=NULL,
+                       copy.package=TRUE,
+                       overwrite=TRUE,
+                       unlink.target=FALSE) {
+  if (is.null(roxygen.dir)) roxygen.dir <-
+    sprintf(ROXYGEN.DIR, package.dir)
   man.dir <- file.path(roxygen.dir, MAN.DIR)
   inst.dir <- file.path(roxygen.dir, INST.DIR)
   doc.dir <- file.path(inst.dir, DOC.DIR)
@@ -85,8 +90,8 @@ roxygenize <- function(package.dir,
   if (copy.package)
     copy.dir(package.dir,
              roxygen.dir,
-             unlink.target=TRUE,
-             overwrite=TRUE,
+             unlink.target=unlink.target,
+             overwrite=overwrite,
              verbose=FALSE)
 
   for (dir in skeleton) dir.create(dir, showWarnings=FALSE)

@@ -89,7 +89,7 @@ then
 fi
 
 source="'${source}'"
-if "${target}" != "NULL"
+if test "${target}" != "NULL"
 then target="'${target}'"
 fi
 

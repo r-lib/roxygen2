@@ -64,6 +64,9 @@ copy.dir <- function(source,
 #' @param roxygen.dir whither to copy roxygen files
 #' @param copy.package copies the package over before
 #' adding/manipulating files.
+#' @param overwrite overwrite target files
+#' @param unlink.target unlink target directory before
+#' processing files
 #' @return \code{NULL}
 #' @callGraph
 #' @callGraphDepth 1

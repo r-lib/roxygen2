@@ -12,11 +12,10 @@ processed files in TARGET.
 With -d (Destructive), roxygen operates in place; otherwise, TARGET
 defaults to \`SOURCE.roxygen'.
 
-With -u (Unlink), roxygen deletes TARGET before copying the processed
-files thither.
+With -u (Unlink), roxygen deletes TARGET before processing files.
 
-WARNING: Be careful with -u (Unlink) when SOURCE and TARGET are
-the same.
+WARNING: Be careful using -u (Unlink) when SOURCE and TARGET are
+the same or with -d (Destructive).
 
 Options:
   -d  (Destructive) operate in place on SOURCE

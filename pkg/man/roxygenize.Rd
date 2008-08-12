@@ -10,4 +10,7 @@
 \arguments{\item{package.dir}{the package's top directory}
 \item{roxygen.dir}{whither to copy roxygen files}
 \item{copy.package}{copies the package over before
-adding/manipulating files.}}
+adding/manipulating files.}
+\item{overwrite}{overwrite target files}
+\item{unlink.target}{unlink target directory before
+processing files}}

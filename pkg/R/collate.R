@@ -6,6 +6,9 @@
 #' @include parse.R
 roxygen()
 
+#' Collate value parser
+#' @name include
+#' @seealso make.collate.roclet
 register.preref.parsers(parse.value,
                         'include')
 

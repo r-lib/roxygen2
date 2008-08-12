@@ -4,9 +4,19 @@
 #' @include string.R
 roxygen()
 
+#' Namespace default parser
+#' @name export
+#' @title Namespace default parser
+#' @seealso make.namespace.parser
 register.preref.parsers(parse.default,
                         'export')
 
+#' Namespace value parsers
+#' @name exportClass
+#' @aliases exportClass exportMethod exportPattern
+#' S3method import importFrom importClassesFrom
+#' importMethodsFrom
+#' @seealso make.namespace.roclet
 register.preref.parsers(parse.value,
                         'exportClass',
                         'exportMethod',

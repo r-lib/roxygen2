@@ -1,6 +1,5 @@
 #!/bin/sh
-declare -r DESTRUCTIVE="FALSE"
-declare -r BASENAME="$(basename $0)"
+BASENAME="$(basename $0)"
 
 version="Roxygen 0.1"
 
@@ -60,30 +59,30 @@ warning () {
 }
 
 # Can't use `readlink -f' because it doesn't ship with Rtools
-source="'$(cd "${1}"; pwd)'"    #'
+source="'${1}'"
 
-if [ ${#} -eq 1 ]
+if test ${#} -eq 1
 then target="NULL"
 else
-    if [[ ${destructive} = "TRUE" ]]
+    if test "${destructive}" = "TRUE"
     then warning "Both -d (Destructive) and TARGET specified; using TARGET."
         destructive="FALSE"
     fi
-    target="'$(cd "${2}"; pwd)'" #'
+    target="'${2}'"
 fi
 
-if [[ ${destructive} = "TRUE" ]]
+if test "${destructive}" = "TRUE"
 then
-    if [[ ${unlink} = "TRUE" ]]
+    if test "${unlink}" = "TRUE"
     then warning "Specified -d (Destructive) and -u (Unlink); unsetting -u."
         unlink="FALSE"
     fi
     target="${source}"
 fi
 
-if [[ "${source}" = "${target}" || ${destructive} = "TRUE" ]]
+if test "${source}" = "${target}" -o "${destructive}" = "TRUE"
 then
-    if [[ ${unlink} = "TRUE" ]]
+    if test "${unlink}" = "TRUE"
     then warning "SOURCE and TARGET are identical; unsetting -u (Unlink)."
         unlink="FALSE"
     fi
@@ -94,8 +93,7 @@ fi
 : ${copy:="TRUE"}
 
 debug () {
-    printf "source: %s; target: %s; copy: %s; unlink: %s" \
-        ${source} ${target} ${copy} ${unlink}
+    echo source: "${source}"\; target: "${target}"\; copy: "${copy}"\; unlink: "${unlink}"
 }
 
 R_EXE="${R_HOME}/bin/R"

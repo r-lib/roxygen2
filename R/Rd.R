@@ -31,7 +31,7 @@ register.preref.parsers(parse.value,
 #' @name param
 #' @aliases param method
 #' @seealso make.Rd.roclet
-nregister.preref.parsers(parse.name.description,
+register.preref.parsers(parse.name.description,
                         'param',
                         'method')
 

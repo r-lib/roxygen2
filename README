@@ -35,11 +35,6 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
 
 1.2. TODO
 
-  * Convert the `sandbox/roxygenize.R' driver into an `R CMD roxygen'.
-
-    * Makefile.win which uses sed to chop off the first line; else:
-      simple script to `#! /bin/sh'. See Sweave.
-
   * Create some automatic method for detecting S3 methods without
     resorting to @method <generic> <class>.
 
@@ -50,6 +45,8 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
     make.roclet, etc.
 
   * Move demos from `sandbox' to `demos'.
+
+  * @defunct, @deprecated, @internal
 
 1.3. BUGS
 
@@ -65,10 +62,6 @@ all' hileth', Hephaiste; didou d'areten te kai olbon.*
   * de.tex doesn't work recursively (i.e. de-TeXs only the top level).
 
   * `<<' in titles produces a spurious box.
-
-  * Nameless Rd entries are written to standard out with no warning.
-
-  * @deprecated?
 
 -----------
 * Hail, Hephaistos! Grant skill and weal.

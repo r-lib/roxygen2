@@ -5,7 +5,7 @@
 roxygen()
 
 #' Sequence that distinguishes roxygen comment from normal comment.
-LINE.DELIMITER <- '#\''
+LINE.DELIMITER <- '#+\''
 
 #' Symbol that delimits tags.
 TAG.DELIMITER <- '@'
@@ -271,16 +271,14 @@ parse.ref.preref <- function(ref, ...) {
                                       car(ref),
                                       caddr(ref)))
   delimited.lines <-
-    Filter(function(line) grep(sprintf('^%s', LINE.DELIMITER), line), lines)
-  ## Trim LINE.DELIMITER + one space (benign for spaceless delimeters).
-  trimmed.lines <-
-    Map(function(line) substr(line, nchar(LINE.DELIMITER) + 2, nchar(line)),
-        delimited.lines)
+    Filter(function(line) grep(LINE.DELIMITER, line), lines)
+  ## Take next word after delimiter.
+  trimmed.lines <- Map(strcdr, delimited.lines)
   joined.lines <- do.call(paste, c(trimmed.lines, sep='\n'))
   if (is.nil(joined.lines))
     nil
   else {
-    ## Thanks to Fegis on #regex at Freenode for the
+    ## Thanks to Fegis at #regex on Freenode for the
     ## lookahead/lookbehind hack; as he notes, however, "it's not
     ## proper escaping though... it will not split a@@@b."
     elements <- car(strsplit(joined.lines,

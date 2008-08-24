@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{fancyvrb}
+\begin{document}
+\begin{figure}
+  \centering
+  \VerbatimInput[numbers=left, frame=single]{example-pseudoprime.R}
+  \caption{Roxygen example \texttt{example-pseudoprime.R}}
+\end{figure}
+\end{document}

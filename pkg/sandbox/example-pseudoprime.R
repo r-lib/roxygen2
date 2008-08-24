@@ -1,8 +1,8 @@
 #' Test an integer for primality with Fermat's Little Theorem.
 #'
 #' Fermat's Little Theorem states that if \eqn{n} is a prime number and
-#' \eqn{a} is any positive integer less than \eqn{n}, then a raised to the
-#' \eqn{n}th power is congruent to \eqn{a modulo n}.
+#' \eqn{a} is any positive integer less than \eqn{n}, then \eqn{a} raised
+#' to the \eqn{n}th power is congruent to \eqn{a modulo n}.
 #'
 #' @author Peter Danenberg \email{pcd@@roxygen.org}
 #' @param n the integer to test for primality

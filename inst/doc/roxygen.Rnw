@@ -1,9 +1,54 @@
 \documentclass{article}
 \usepackage{fancyvrb}
+\usepackage{url}
+\newcommand{\Roxygen}{\texttt{Roxygen}}
+%% filename, caption, label
+\newcommand{\listing}[3]{        %
+  \begin{figure}                 %
+    \centering                   %
+    \VerbatimInput[numbers=left, %
+      frame=single,              %
+      label=#1]{#1}              %
+    \caption{#2}                 %
+    \label{#3}                   %
+  \end{figure}                   %
+}
+\author{Peter Danenberg \url{<pcd@roxygen.org>}}
+\title{\Roxygen{} Vignette}
 \begin{document}
-\begin{figure}
-  \centering
-  \VerbatimInput[numbers=left, frame=single]{example-pseudoprime.R}
-  \caption{Roxygen example \texttt{example-pseudoprime.R}}
-\end{figure}
+\maketitle
+\begin{abstract}
+  The purpose of the \Roxygen{} Vignette is to show how to get up and
+  running with \Roxygen{}; for details, including a complete list of
+  tags, consult the help pages for:
+  \begin{itemize}
+  \item \texttt{make.callgraph.roclet}
+  \item \texttt{make.collate.roclet}
+  \item \texttt{make.namespace.roclet}
+  \item \texttt{make.Rd.roclet}
+  \end{itemize}
+\end{abstract}
+\tableofcontents
+\section{Minimal example}
+
+\listing{hello-roxygen.R}
+        {Roxygen sanity-check \texttt{hello-roxygen.R}}
+        {hello-roxygen}
+
+A minimal example that serves as a sanity check is found in
+\texttt{hello-roxygen.R} (see Figure \ref{hello-roxygen}). It merely
+replaces the package description so that \texttt{R CMD check} will run
+after \Roxygen{} has processed the package skeleton:
+
+<<results=hide, keep.source=true>>=
+library(roxygen)
+package.skeleton('helloRoxygen',
+                 code_files='hello-roxygen.R',
+                 force=TRUE)
+# `R CMD roxygen helloRoxygen' works, too.
+roxygenize('helloRoxygen')
+@
+\listing{pseudoprime.R}
+        {Roxygen example \texttt{pseudoprime.R}}
+        {pseudoprime}
 \end{document}

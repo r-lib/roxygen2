@@ -61,7 +61,8 @@ copy.dir <- function(source,
 
 #' Process a package with the Rd, namespace and collate roclets.
 #' @param package.dir the package's top directory
-#' @param roxygen.dir whither to copy roxygen files
+#' @param roxygen.dir whither to copy roxygen files; defaults to
+#' \file{package.roxygen}.
 #' @param copy.package copies the package over before
 #' adding/manipulating files.
 #' @param overwrite overwrite target files

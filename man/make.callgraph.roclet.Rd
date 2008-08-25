@@ -9,10 +9,11 @@ primitives.}
 \enumerate{
 \item{\code{@callGraph}}{Create a call graph of the default
 depth (currently 2), excluding primitive functions.}
-\item{\code{@callGraphPrimitives}{Create a call graph of the
+\item{\code{@callGraphPrimitives}}{Create a call graph of the
 default depth (currently 2), including primitive functions.}
-\item{\code{@callGraphDepth}{Change the depth of the callgraph
+\item{\code{@callGraphDepth}}{Change the depth of the callgraph
 from the default of 2.}
+}
 
 The callgraph roclet is awkward in the sense that
 it requires a function's package to be loadable;

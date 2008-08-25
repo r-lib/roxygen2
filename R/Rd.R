@@ -76,7 +76,6 @@ register.srcref.parser('setMethod',
 #' \item{\code{@@aliases}}{A default alias is plucked from the \code{@@name} or
 #'                         assignee; otherwise, \code{@@alias a b ...} translates
 #'                         to \code{\alias{a}}, \code{\alias{b}}, &c.
-#'
 #'                         If you specify one alias, however, specify them all.}
 #' \item{\code{@@concept}}{See \dQuote{2.8 Indices} from
 #'                         \cite{Writing R Extensions}.}
@@ -84,7 +83,6 @@ register.srcref.parser('setMethod',
 #'                         relative to the package head; if the file resides in
 #'                         \file{tests}, for instance, it will be checked with
 #'                         \command{R CMD check}.
-#'
 #'                         The contents of the file will
 #'                         be concatenated under \code{\examples{...}}.}
 #' \item{\code{@@examples}}{Verbatim examples; see \dQuote{2.1.1
@@ -108,7 +106,6 @@ register.srcref.parser('setMethod',
 #' \item{\code{@@title}}{A default title is plucked from the first sentence
 #'                       of the description; that is, the first phrase ending
 #'                       with a period, question mark or newline.
-#'
 #'                       In the absence of a description, the title becomes
 #'                       the \code{@@name} or assignee; lastly, it can be
 #'                       overridden with \code{@@title}.}

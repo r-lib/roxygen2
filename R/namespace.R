@@ -4,19 +4,9 @@
 #' @include string.R
 roxygen()
 
-#' Namespace default parser
-#' @name export
-#' @title Namespace default parser
-#' @seealso make.namespace.parser
 register.preref.parsers(parse.default,
                         'export')
 
-#' Namespace value parsers
-#' @name exportClass
-#' @aliases exportClass exportMethod exportPattern
-#' S3method import importFrom importClassesFrom
-#' importMethodsFrom
-#' @seealso make.namespace.roclet
 register.preref.parsers(parse.value,
                         'exportClass',
                         'exportMethod',
@@ -89,6 +79,9 @@ register.preref.parsers(parse.value,
 #' roclet <- make.namespace.roclet()
 #' \dontrun{roclet$parse('example.R')}
 #' @export
+#' @aliases make.namespace.roclet exportClass exportMethod
+#' exportPattern S3method import importFrom importClassesFrom
+#' importMethodsFrom export
 make.namespace.roclet <- function(outfile='',
                                   verbose=TRUE) {
   parse.directive <- function(proc, parms)

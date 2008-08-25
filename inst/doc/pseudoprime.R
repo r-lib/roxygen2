@@ -9,8 +9,6 @@
 #' @param n the integer to test for primality
 #' @return Whether the integer passes the Fermat test
 #'   for a randomized \eqn{0 < a < n}
-#' @callGraphPrimitives
-#' @callGraphDepth 5
 #' @note \code{fermat.test} doesn't work for integers above
 #'   approximately fifteen because modulus loses precision.
 fermat.test <- function(n) {

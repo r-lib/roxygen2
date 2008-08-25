@@ -4,8 +4,8 @@
 \usage{word.ref(string, n)}
 \description{Find the nth word in a string.}
 \value{A list containing:
-  \item{start}{the first letter of the word.}
-  \item{end}{the last letter of the word.}
+\item{start}{the first letter of the word.}
+\item{end}{the last letter of the word.}
 Undefined if no such word; though \code{end} may be less than
 \code{start} in such a case.}
 \arguments{\item{string}{the string to search in}

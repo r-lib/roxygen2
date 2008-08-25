@@ -57,6 +57,10 @@ A new \texttt{helloRoxygen/man/helloRoxygen-package.Rd} should have
 been created with the contents of Figure \ref{hello-roxygen}; and
 `\texttt{R CMD check helloRoxygen}' should terminate successfully.
 
+\section{Detailed example}
+
+Forthcoming . . .
+
 \listing{pseudoprime.R}
         {Roxygen example \texttt{pseudoprime.R}}
         {pseudoprime}

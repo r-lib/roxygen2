@@ -116,7 +116,7 @@ parse.error <- function(key, message)
 #' @param message the apposite message
 #' @return \code{NULL}
 parse.warning <- function(key, message)
-  warning(parse.message(key, message))
+  warning(parse.message(key, message), immediate.=TRUE)
 
 #' Parse a raw string containing key and expressions.
 #' @param element the string containing key and expressions

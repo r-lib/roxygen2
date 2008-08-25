@@ -33,7 +33,7 @@ roxygen <- function() NULL
 #' Maintainer: Peter Danenberg \email{pcd@@roxygen.org}
 #' @name roxygen-package
 #' @docType package
-#' @title Roxygen: Literate Programming in R
+#' @title Literate Programming in R
 #' @keywords package
 #' @examples
 #' ## To process a package in `pkg', run `R CMD roxygen pkg'; or:

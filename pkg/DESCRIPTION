@@ -3,7 +3,7 @@ Version: 0.1
 License: GPL (>= 2)
 Description: A Doxygen-like in-source documentation system for Rd,
     collation, namespace and callgraphs.
-Title: Roxygen: Literate Programming in R
+Title: Literate Programming in R
 Author: Peter Danenberg <pcd@roxygen.org>, Manuel Eugster
     <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Peter Danenberg <pcd@roxygen.org>

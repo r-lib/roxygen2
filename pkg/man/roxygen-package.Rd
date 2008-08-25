@@ -1,6 +1,6 @@
 \name{roxygen-package}
 \alias{roxygen-package}
-\title{Roxygen: Literate Programming in R}
+\title{Literate Programming in R}
 \description{Roxygen is a Doxygen-like documentation system for R; allowing
 in-source specification of Rd files, collation and namespace
 directives.}

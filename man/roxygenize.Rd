@@ -8,7 +8,8 @@
 \section{TODO}{Options to enable/disable specific roclet
 (\command{--no-callgraphs}, etc.)}
 \arguments{\item{package.dir}{the package's top directory}
-\item{roxygen.dir}{whither to copy roxygen files}
+\item{roxygen.dir}{whither to copy roxygen files; defaults to
+\file{package.roxygen}.}
 \item{copy.package}{copies the package over before
 adding/manipulating files.}
 \item{overwrite}{overwrite target files}

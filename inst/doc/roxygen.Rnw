@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage{fancyvrb}
 \usepackage{url}
+%% \VignetteIndexEntry{Roxygen Vignette}
 \newcommand{\Roxygen}{\texttt{Roxygen}}
 %% filename, caption, label
 \newcommand{\listing}[3]{        %

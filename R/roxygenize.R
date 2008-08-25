@@ -98,7 +98,9 @@ roxygenize <- function(package.dir,
              overwrite=overwrite,
              verbose=FALSE)
 
-  for (dir in skeleton) dir.create(dir, showWarnings=FALSE)
+  for (dir in skeleton) dir.create(dir,
+                                   recursive=TRUE,
+                                   showWarnings=FALSE)
   r.dir <- file.path(package.dir, R.DIR)
   files <- as.list(list.files(r.dir,
                               pattern='\\.(R|r)$',

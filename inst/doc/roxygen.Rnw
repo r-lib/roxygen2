@@ -4,7 +4,7 @@
 \newcommand{\Roxygen}{\texttt{Roxygen}}
 %% filename, caption, label
 \newcommand{\listing}[3]{        %
-  \begin{figure}                 %
+  \begin{figure}[h]              %
     \centering                   %
     \VerbatimInput[numbers=left, %
       frame=single,              %
@@ -37,17 +37,25 @@
 
 A minimal example that serves as a sanity check is found in
 \texttt{hello-roxygen.R} (see Figure \ref{hello-roxygen}). It merely
-replaces the package description so that \texttt{R CMD check} will run
+replaces the package description so that `\texttt{R CMD check}' will run
 after \Roxygen{} has processed the package skeleton:
 
-<<results=hide, keep.source=true>>=
+<<keep.source=true>>=
 library(roxygen)
 package.skeleton('helloRoxygen',
                  code_files='hello-roxygen.R',
                  force=TRUE)
-# `R CMD roxygen helloRoxygen' works, too.
-roxygenize('helloRoxygen')
+# `R CMD roxygen -d helloRoxygen' works, too.
+roxygenize('helloRoxygen',
+           roxygen.dir='helloRoxygen',
+           copy.package=FALSE,
+           unlink.target=FALSE)
 @
+
+A new \texttt{helloRoxygen/man/helloRoxygen-package.Rd} should have
+been created with the contents of Figure \ref{hello-roxygen}; and
+`\texttt{R CMD check helloRoxygen}' should terminate successfully.
+
 \listing{pseudoprime.R}
         {Roxygen example \texttt{pseudoprime.R}}
         {pseudoprime}

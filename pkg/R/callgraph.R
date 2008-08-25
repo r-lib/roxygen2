@@ -3,21 +3,26 @@
 #' @include functional.R
 roxygen()
 
-#' Callgraph value parsers
-#' @name callGraphDepth
-#' @seealso make.callgraph.roclet
 register.preref.parsers(parse.value,
                         'callGraphDepth')
 
-#' Callgraph toggle parsers
-#' @name callGraph
-#' @aliases callGraph callGraphPrimitives
-#' @seealso make.callgraph.roclet
 register.preref.parsers(parse.toggle,
                         'callGraph',
                         'callGraphPrimitives')
 
-#' Make a callgraph roclet.
+#' Make a callgraph roclet which produces a static call graph
+#' from a given function at a given depth with or without
+#' primitives.
+#'
+#' The callgraph roclet supports the following tags:
+#'
+#' \enumerate{
+#' \item{\code{@@callGraph}}{Create a call graph of the default
+#'   depth (currently 2), excluding primitive functions.}
+#' \item{\code{@@callGraphPrimitives}{Create a call graph of the
+#'   default depth (currently 2), including primitive functions.}
+#' \item{\code{@@callGraphDepth}{Change the depth of the callgraph
+#'   from the default of 2.}
 #'
 #' The callgraph roclet is awkward in the sense that
 #' it requires a function's package to be loadable;
@@ -37,6 +42,8 @@ register.preref.parsers(parse.toggle,
 #' \item{Text-only option}{Option for text-only callgraphs
 #' (which are clearer, in my opinion)}
 #' }
+#' @aliases make.callgraph.roclet callGraph callGraphPrimitives
+#' callGraphDepth
 make.callgraph.roclet <- function(dependencies=NULL,
                                   dir='.',
                                   verbose=TRUE) {

@@ -5,12 +5,6 @@
 #' @include parse.R
 roxygen()
 
-#' Rd value parsers
-#' @name name
-#' @aliases name aliases title usage references concept
-#' note seealso example examples keywords return author
-#' TODO
-#' @seealso make.Rd.roclet
 register.preref.parsers(parse.value,
                         'name',
                         'aliases',
@@ -27,37 +21,21 @@ register.preref.parsers(parse.value,
                         'author',
                         'TODO')
 
-#' Rd name-description parsers
-#' @name param
-#' @aliases param method
-#' @seealso make.Rd.roclet
 register.preref.parsers(parse.name.description,
                         'param',
                         'method')
 
-#' Rd name parser
-#' @name docType
-#' @seealso make.Rd.roclet
 register.preref.parsers(parse.name,
                         'docType')
 
-#' Rd srcref parsers
-#' @name setClass
-#' @seealso make.Rd.roclet
 register.srcref.parser('setClass',
                        function(pivot, expression)
                        list(S4class=car(expression)))
 
-#' Rd srcref parsers
-#' @name setGeneric
-#' @seealso make.Rd.roclet
 register.srcref.parser('setGeneric',
                        function(pivot, expression)
                        list(S4generic=car(expression)))
 
-#' Rd srcref parsers
-#' @name setMethod
-#' @seealso make.Rd.roclet
 register.srcref.parser('setMethod',
                        function(pivot, expression)
                        list(S4method=car(expression),
@@ -169,6 +147,10 @@ register.srcref.parser('setMethod',
 #' roclet <- make.Rd.roclet('man')
 #' \dontrun{roclet$parse('example.R')}
 #' @export
+#' @aliases name aliases title usage references concept
+#' note seealso example examples keywords return author
+#' TODO param method setClass setGeneric setMethod
+#' make.Rd.roclet
 make.Rd.roclet <- function(subdir=NULL,
                            verbose=TRUE) {
   #' Translate a key and expressions into an Rd expression;

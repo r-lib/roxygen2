@@ -2,5 +2,4 @@
 #'
 #' @name helloRoxygen-package
 #' @docType package
-#' @import roxygen
-roxygen()
+NA

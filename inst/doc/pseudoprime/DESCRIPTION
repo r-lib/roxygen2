@@ -10,4 +10,4 @@ Description: A probabilistic primality test using Fermat's little
 License: GPL (>= 2)
 LazyLoad: yes
 Depends: roxygen
-Collate: 'pseudoprime-package.R' 'pseudoprime.R'
+Collate: 'fermat.R' 'pseudoprime-package.R' 'pseudoprime.R'

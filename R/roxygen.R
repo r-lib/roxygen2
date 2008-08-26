@@ -38,9 +38,9 @@ roxygen <- function() NULL
 #' @examples
 #' ## To process a package in `pkg', run `R CMD roxygen pkg'; or:
 #' \dontrun{roxygenize('pkg')}
-#' @seealso See \code{\link{make.Rd.roclet}},
-#' \code{\link{make.namespace.roclet}},
-#' \code{\link{make.collate.roclet}},
+#' @seealso See \code{\link{make.Rd.roclet}}, 
+#' \code{\link{make.namespace.roclet}}, 
+#' \code{\link{make.collate.roclet}}, 
 #' \code{\link{make.callgraph.roclet}}
 #' for an overview of roxygen tags.
 #'

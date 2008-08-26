@@ -8,9 +8,9 @@ primitives.}
 
 \enumerate{
 \item{\code{@callGraph}}{Create a call graph of the default
-depth (currently 2), excluding primitive functions.}
+depth, excluding primitive functions.}
 \item{\code{@callGraphPrimitives}}{Create a call graph of the
-default depth (currently 2), including primitive functions.}
+default depth, including primitive functions.}
 \item{\code{@callGraphDepth}}{Change the depth of the callgraph
 from the default of 2.}
 }

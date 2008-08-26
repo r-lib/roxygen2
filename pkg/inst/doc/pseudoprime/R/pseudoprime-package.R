@@ -1,11 +1,11 @@
-#' Tests pseudoprimality by Fermat's Little Theorem.
+#' Tests pseudoprimality by Fermat's little theorem.
 #'
 #' \tabular{ll}{
 #' Package: \tab pseudoprime\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.0\cr
+#' Version: \tab 0.1\cr
 #' Date: \tab 2008-08-24\cr
-#' License: \tab What license is it under?\cr
+#' License: \tab GPL (>= 2)\cr
 #' LazyLoad: \tab yes\cr
 #' }
 #'
@@ -19,14 +19,10 @@
 #' @name pseudoprime-package
 #' @aliases pseudoprime
 #' @docType package
-#' @title Tests pseudoprimality by Fermat's Little Theorem
+#' @title Tests pseudoprimality by Fermat's little theorem
 #' @author Peter Danenberg \email{pcd@@roxygen.org}
 #' @references
 #' \url{http://en.wikipedia.org/wiki/Fermat's_little_theorem}
-#'
-#' \url{http://en.wikipedia.org/wiki/Fermat_primality_test}
-#'
-#' \url{http://en.wikipedia.org/wiki/Carmichael_number}
 #' @keywords package
 #' @seealso \code{\link{is.pseudoprime}}
 #' @examples

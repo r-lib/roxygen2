@@ -4,13 +4,13 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{grffile}
-\usepackage{afterpage}
+%% \usepackage{afterpage}
 \usepackage{float}
 %% \VignetteIndexEntry{Roxygen Vignette}
 \newcommand{\Roxygen}{\texttt{Roxygen}}
 %% path, filename, caption, label
 \newcommand{\listing}[4]{        %
-  \begin{figure}[ht]             %
+  \begin{figure}[H]              %
     \centering                   %
     \VerbatimInput[numbers=left, %
       frame=single,              %
@@ -26,7 +26,7 @@
 \begin{abstract}
   The purpose of the \Roxygen{} Vignette is to show how to get up and
   running with \Roxygen{}; for details, including a complete list of
-  tags, consult the help pages for:
+  tags, consult the help pages or manual for:
   \begin{itemize}
   \item \texttt{make.callgraph.roclet}
   \item \texttt{make.collate.roclet}
@@ -42,10 +42,10 @@
         {Roxygen sanity-check}
         {hello-roxygen}
 
-A minimal example that serves as a sanity check is found in
-\texttt{hello-roxygen.R} (see figure \ref{hello-roxygen}). It merely
-replaces the package description so that `\texttt{R CMD check}' will run
-after \Roxygen{} has processed the package skeleton:
+\texttt{hello-roxygen.R} (fig. \ref{hello-roxygen}) is a minimal
+example to check the sanity of your local \Roxygen{} installation. It
+merely replaces the package description so that `\texttt{R CMD check}'
+will run after \Roxygen{} has processed the package skeleton:
 
 <<keep.source=true>>=
 library(roxygen)
@@ -64,6 +64,7 @@ been created with the contents of figure \ref{hello-roxygen}; and
 `\texttt{R CMD check helloRoxygen}' should terminate successfully.
 
 \section{Example: Pseudoprimality}
+
 \subsection{Package Description}
 
 \listing{pseudoprime/R/pseudoprime-package.R}
@@ -100,20 +101,45 @@ Furthermore, although \Roxygen{} tags replace many of the structural
 Rd elements such as \verb=\title=, \verb=\keyword=, etc.; many of the
 stylistic Rd elements such as \verb=\emph= and \verb=\email= can be
 used freely within \Roxygen{} tags. See ``Writing R Extensions'' for
-details.
+details. [TODO: bibtex reference]
 
-\subsection{Source Code}
+\subsection{Fermat Test}
+
+\listing{pseudoprime/R/fermat.R}
+        {fermat.R}
+        {Roxygen example \texttt{fermat.R}}
+        {fermat}
+
+When documenting functions (fig. \ref{fermat}), every parameter must
+be documented with a \texttt{@param} tag (line 8); which consists of
+\texttt{@param <variable> <description>}. Similarly, the return value
+must be documented with \texttt{@return <description>} (lines 9-10).
+
+Notice \texttt{@callGraphPrimitives} on line 11: it creates a call
+graph at the default depth similar to figure \ref{fermat-test},
+including primitive functions; \texttt{@callGraph}, on the other hand,
+would exclude primitive functions.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph}
+  \caption{\texttt{fermat.test} call graph with primitives}
+  \label{fermat-test}
+\end{figure}
+
+\subsection{Pseudoprime}
 
 \listing{pseudoprime/R/pseudoprime.R}
         {pseudoprime.R}
         {Roxygen example \texttt{pseudoprime.R}}
         {pseudoprime}
 
-TODO: split \texttt{pseudoprime.R} into \texttt{fermat.R} and
-\texttt{pseudoprime.R}; talk about \texttt{@param}, \texttt{@return},
-\texttt{@callGraphPrimitives} in the context of \texttt{fermat.R},
-and \texttt{@include} and \texttt{@export} in the context of
+Talk about \texttt{@include} and \texttt{@export} in the context of
 \texttt{pseudoprime.R}.
+
+\subsection{Running \Roxygen{}}
+
+Talk about \texttt{R CMD roxygen} vs. \texttt{roxygenize}.
 
 <<>>=
 roxygenize('pseudoprime',
@@ -123,10 +149,4 @@ roxygenize('pseudoprime',
 
 @
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph}
-  \caption{\texttt{fermat.test} call graph with primitives}
-  \label{fermat-test}
-\end{figure}
 \end{document}

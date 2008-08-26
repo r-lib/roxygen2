@@ -28,9 +28,9 @@ Manuel Eugster \email{Manuel.Eugster@stat.uni-muenchen.de}
 Maintainer: Peter Danenberg \email{pcd@roxygen.org}}
 \docType{package}
 \keyword{package}
-\seealso{See \code{\link{make.Rd.roclet}},
-\code{\link{make.namespace.roclet}},
-\code{\link{make.collate.roclet}},
+\seealso{See \code{\link{make.Rd.roclet}}, 
+\code{\link{make.namespace.roclet}}, 
+\code{\link{make.collate.roclet}}, 
 \code{\link{make.callgraph.roclet}}
 for an overview of roxygen tags.
 

@@ -5,4 +5,5 @@ roxygen.pdf: roxygen.tex
 	pdflatex roxygen
 
 roxygen-manual.pdf:
+	rm -vf $@ && \
 	R CMD Rd2dvi --no-preview --pdf -o $@ ../..

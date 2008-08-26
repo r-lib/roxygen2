@@ -134,12 +134,12 @@ would exclude primitive functions.
         {Roxygen example \texttt{pseudoprime.R}}
         {pseudoprime}
 
-Talk about \texttt{@include} and \texttt{@export} in the context of
+TODO: talk about \texttt{@include} and \texttt{@export} in the context of
 \texttt{pseudoprime.R}.
 
 \subsection{Running \Roxygen{}}
 
-Talk about \texttt{R CMD roxygen} vs. \texttt{roxygenize}.
+TODO: talk about \texttt{R CMD roxygen} vs. \texttt{roxygenize}.
 
 <<>>=
 roxygenize('pseudoprime',

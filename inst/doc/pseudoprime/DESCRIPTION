@@ -1,0 +1,13 @@
+Package: pseudoprime
+Type: Package
+Title: Pseudoprimality with Fermat's little theorem
+Version: 0.1
+Date: 2008-08-24
+Author: Peter Danenberg <pcd@roxygen.org>
+Maintainer: Peter Danenberg <pcd@roxygen.org>
+Description: A probabilistic primality test using Fermat's little
+    theorem that is fooled every time by Carmichael numbers.
+License: GPL (>= 2)
+LazyLoad: yes
+Depends: roxygen
+Collate: 'pseudoprime-package.R' 'pseudoprime.R'

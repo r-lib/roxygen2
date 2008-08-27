@@ -2,6 +2,8 @@ all: roxygen.pdf roxygen-manual.pdf
 
 roxygen.pdf: roxygen.tex
 	pdflatex roxygen && \
+	bibtex roxygen && \
+	pdflatex roxygen && \
 	pdflatex roxygen
 
 roxygen-manual.pdf:

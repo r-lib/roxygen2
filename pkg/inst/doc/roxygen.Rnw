@@ -152,15 +152,20 @@ will be added to an export directive in \texttt{NAMESPACE}.
 
 \subsection{Running \Roxygen{}}
 
-TODO: talk about \texttt{R CMD roxygen} vs. \texttt{roxygenize}.
+Running \texttt{`R CMD roxygen -d pseudoprime'} populates \texttt{man}
+with Rd files, edits \texttt{DESCRIPTION} and \texttt{NAMESPACE}, and
+puts call graphs in \texttt{inst/doc}:
 
-<<>>=
+<<echo=false>>=
 roxygenize('pseudoprime',
            roxygen.dir='pseudoprime',
            copy.package=FALSE,
            unlink.target=FALSE)
 
 @ 
+
+The \texttt{roxygenize} function is an alternative to \texttt{`R CMD
+  roxygen'}; see the help page for details.
 
 \bibliographystyle{plainnat}
 \bibliography{roxygen}

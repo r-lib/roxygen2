@@ -57,7 +57,7 @@ roxygenize('helloRoxygen',
            roxygen.dir='helloRoxygen',
            copy.package=FALSE,
            unlink.target=FALSE)
-@
+@ 
 
 A new \texttt{helloRoxygen/man/helloRoxygen-package.Rd} should have
 been created with the contents of figure \ref{hello-roxygen}; and
@@ -110,6 +110,14 @@ details. \citep[\S2.3 ``Marking text'']{r-core}
         {Roxygen example \texttt{fermat.R}}
         {fermat}
 
+<<echo=false, results=hide>>=
+roxygenize('pseudoprime',
+           roxygen.dir='pseudoprime',
+           copy.package=FALSE,
+           unlink.target=FALSE)
+
+@ 
+
 When documenting functions (fig. \ref{fermat}), every parameter must
 be documented with a \texttt{@param} tag (line 8); which consists of
 \texttt{@param <variable> <description>}. Similarly, the return value
@@ -137,10 +145,10 @@ would exclude primitive functions.
 Notice the header in \texttt{pseudoprime.R} (fig. \ref{pseudoprime})
 terminated by \texttt{roxygen()}; `\texttt{@include fermat.R}' signals
 that \texttt{fermat.R} should be loaded before \texttt{pseudoprime.R}.
-The collate roclet will update \texttt{DESCRIPTION} accordingly.
+\texttt{DESCRIPTION} will be updated accordingly.
 
-TODO: talk about \texttt{@include} and \texttt{@export} in the context of
-\texttt{pseudoprime.R}.
+\texttt{@export} in line 15 signifies that \texttt{is.pseudoprime}
+will be added to an export directive in \texttt{NAMESPACE}.
 
 \subsection{Running \Roxygen{}}
 
@@ -152,7 +160,7 @@ roxygenize('pseudoprime',
            copy.package=FALSE,
            unlink.target=FALSE)
 
-@
+@ 
 
 \bibliographystyle{plainnat}
 \bibliography{roxygen}

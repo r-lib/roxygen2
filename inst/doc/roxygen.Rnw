@@ -4,8 +4,8 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{grffile}
-%% \usepackage{afterpage}
 \usepackage{float}
+\usepackage{natbib}
 %% \VignetteIndexEntry{Roxygen Vignette}
 \newcommand{\Roxygen}{\texttt{Roxygen}}
 %% path, filename, caption, label
@@ -43,9 +43,9 @@
         {hello-roxygen}
 
 \texttt{hello-roxygen.R} (fig. \ref{hello-roxygen}) is a minimal
-example to check the sanity of your local \Roxygen{} installation. It
-merely replaces the package description so that `\texttt{R CMD check}'
-will run after \Roxygen{} has processed the package skeleton:
+example to check the sanity of your \Roxygen{} installation. It merely
+replaces the package description so that `\texttt{R CMD check}' will
+run after \Roxygen{} has processed the package skeleton:
 
 <<keep.source=true>>=
 library(roxygen)
@@ -98,10 +98,10 @@ ampersands have to be escaped with a double-ampersand, as in
 23).
 
 Furthermore, although \Roxygen{} tags replace many of the structural
-Rd elements such as \verb=\title=, \verb=\keyword=, etc.; many of the
-stylistic Rd elements such as \verb=\emph= and \verb=\email= can be
-used freely within \Roxygen{} tags. See ``Writing R Extensions'' for
-details. [TODO: bibtex reference]
+Rd elements such as \verb=\title=, \verb=\keyword=, etc.; stylistic Rd
+elements such as \verb=\emph= and \verb=\email= can be used freely
+within \Roxygen{} tags. See ``Writing R Extensions'' for
+details. \citep[\S2.3 ``Marking text'']{r-core}
 
 \subsection{Fermat Test}
 
@@ -134,6 +134,11 @@ would exclude primitive functions.
         {Roxygen example \texttt{pseudoprime.R}}
         {pseudoprime}
 
+Notice the header in \texttt{pseudoprime.R} (fig. \ref{pseudoprime})
+terminated by \texttt{roxygen()}; `\texttt{@include fermat.R}' signals
+that \texttt{fermat.R} should be loaded before \texttt{pseudoprime.R}.
+The collate roclet will update \texttt{DESCRIPTION} accordingly.
+
 TODO: talk about \texttt{@include} and \texttt{@export} in the context of
 \texttt{pseudoprime.R}.
 
@@ -149,4 +154,6 @@ roxygenize('pseudoprime',
 
 @
 
+\bibliographystyle{plainnat}
+\bibliography{roxygen}
 \end{document}

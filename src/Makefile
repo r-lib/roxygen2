@@ -7,4 +7,4 @@ all: roxygen
 	echo --- R CMD roxygen will be unavailable. ---
 
 clean:
-	rm -v $(FAKE_OBJ)
+	rm -fv $(FAKE_OBJ)

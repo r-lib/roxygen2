@@ -1,5 +1,5 @@
 Package: roxygen
-Version: 0.2
+Version: 0.1
 License: GPL (>= 2)
 Description: A Doxygen-like in-source documentation system for Rd,
     collation, namespace and callgraphs.

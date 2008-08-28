@@ -96,7 +96,7 @@ make.roclet <- function(parse.default=NULL,
 }
 
 #' Assign a variable in the parent environment when \code{<<-}
-#' doesn't see to work.
+#' doesn't seem to work.
 #' @param var string of the variable to assign
 #' @param value value to be assigned
 #' @param env environment of the assignment (\code{environment()})

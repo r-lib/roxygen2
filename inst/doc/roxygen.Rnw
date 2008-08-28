@@ -123,7 +123,7 @@ be documented with a \texttt{@param} tag (line 8); which consists of
 \texttt{@param <variable> <description>}. Similarly, the return value
 must be documented with \texttt{@return <description>} (lines 9-10).
 
-Notice \texttt{@callGraphPrimitives} on line 11: it creates a call
+Notice \texttt{@callGraphPrimitives} (line 11): it creates a call
 graph at the default depth similar to figure \ref{fermat-test},
 including primitive functions; \texttt{@callGraph}, on the other hand,
 would exclude primitive functions.
@@ -143,12 +143,13 @@ would exclude primitive functions.
         {pseudoprime}
 
 Notice the header in \texttt{pseudoprime.R} (fig. \ref{pseudoprime})
-terminated by \texttt{roxygen()}; `\texttt{@include fermat.R}' signals
-that \texttt{fermat.R} should be loaded before \texttt{pseudoprime.R}.
-\texttt{DESCRIPTION} will be updated accordingly.
+terminated by \texttt{roxygen()}; \texttt{@include fermat.R} (line 1)
+signals that \texttt{fermat.R} should be loaded before
+\texttt{pseudoprime.R}.  The collate roclet will update
+\texttt{DESCRIPTION} accordingly.
 
-\texttt{@export} in line 15 signifies that \texttt{is.pseudoprime}
-will be added to an export directive in \texttt{NAMESPACE}.
+\texttt{@export} (line 15) signifies that \texttt{is.pseudoprime} will
+be added to an export directive in \texttt{NAMESPACE}.
 
 \subsection{Running \Roxygen{}}
 

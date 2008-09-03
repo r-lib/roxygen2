@@ -9,7 +9,7 @@
 #'
 #' @return The approximation of PI
 #'
-#' @references http://www.datastructures.info/the-monte-carlo-algorithmmethod/
+#' @references \url{http://www.datastructures.info/the-monte-carlo-algorithmmethod/}
 #' @author Manuel J. A. Eugster
 mcpi <- function(trials, verbose=FALSE) {
   hits <- 0                             #' Number of successfull trials

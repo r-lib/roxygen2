@@ -19,7 +19,9 @@ register.preref.parsers(parse.value,
                         'keywords',
                         'return',
                         'author',
-                        'TODO')
+                        'TODO',
+                        'format',
+                        'source')
 
 register.preref.parsers(parse.name.description,
                         'param',
@@ -57,6 +59,7 @@ register.srcref.parser('setMethod',
 #' \code{@@concept} \tab \code{\\concept}\cr
 #' \code{@@example} \tab \emph{n/a}\cr
 #' \code{@@examples} \tab \code{\\examples}\cr
+#' \code{@@format} \tab \code{\\format}\cr
 #' \code{@@keywords} \tab \code{\\keyword, ...}\cr
 #' \code{@@method} \tab \code{\\method}\cr
 #' \code{@@name} \tab \code{\\name}\cr
@@ -65,6 +68,7 @@ register.srcref.parser('setMethod',
 #' \code{@@references} \tab \code{\\references}\cr
 #' \code{@@return} \tab \code{\\value}\cr
 #' \code{@@seealso} \tab \code{\\seealso}\cr
+#' \code{@@source} \tab \code{\\source}\cr
 #' \code{@@title} \tab \code{\\title}\cr
 #' \code{@@TODO} \tab \emph{n/a}\cr
 #' \code{@@usage} \tab \code{\\usage}\cr
@@ -88,6 +92,8 @@ register.srcref.parser('setMethod',
 #' \item{\code{@@examples}}{Verbatim examples; see \dQuote{2.1.1
 #'                          Documenting functions} from \cite{Writing R
 #'                          Extensions}.}
+#' \item{\code{@@format}}{See \dQuote{2.1.2 Documenting data sets} from
+#'                        \cite{Writing R Extensions}.}
 #' \item{\code{@@keywords}}{\code{@@keywords a b ...} translates to
 #'                          \code{\keyword{a}}, \code{\keyword{b}}, &c.}
 #' \item{\code{@@method}}{Use \code{@@method <generic> <class>} to document
@@ -103,6 +109,8 @@ register.srcref.parser('setMethod',
 #' \item{\code{@@return}}{The return value of the function, or \code{NULL}.}
 #' \item{\code{@@seealso}}{See \dQuote{2.1.1 Documenting functions} from
 #'                         \cite{Writing R Extensions}.}
+#' \item{\code{@@source}}{See \dQuote{2.1.2 Documenting data sets} from
+#'                        \cite{Writing R Extensions}.}
 #' \item{\code{@@title}}{A default title is plucked from the first sentence
 #'                       of the description; that is, the first phrase ending
 #'                       with a period, question mark or newline.

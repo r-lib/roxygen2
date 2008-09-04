@@ -16,6 +16,7 @@ Roxygen tag \tab Rd analogue\cr
 \code{@concept} \tab \code{\\concept}\cr
 \code{@example} \tab \emph{n/a}\cr
 \code{@examples} \tab \code{\\examples}\cr
+\code{@format} \tab \code{\\format}\cr
 \code{@keywords} \tab \code{\\keyword, ...}\cr
 \code{@method} \tab \code{\\method}\cr
 \code{@name} \tab \code{\\name}\cr
@@ -24,6 +25,7 @@ Roxygen tag \tab Rd analogue\cr
 \code{@references} \tab \code{\\references}\cr
 \code{@return} \tab \code{\\value}\cr
 \code{@seealso} \tab \code{\\seealso}\cr
+\code{@source} \tab \code{\\source}\cr
 \code{@title} \tab \code{\\title}\cr
 \code{@TODO} \tab \emph{n/a}\cr
 \code{@usage} \tab \code{\\usage}\cr
@@ -47,6 +49,8 @@ be concatenated under \code{\examples{...}}.}
 \item{\code{@examples}}{Verbatim examples; see \dQuote{2.1.1
 Documenting functions} from \cite{Writing R
 Extensions}.}
+\item{\code{@format}}{See \dQuote{2.1.2 Documenting data sets} from
+\cite{Writing R Extensions}.}
 \item{\code{@keywords}}{\code{@keywords a b ...} translates to
 \code{\keyword{a}}, \code{\keyword{b}}, &c.}
 \item{\code{@method}}{Use \code{@method <generic> <class>} to document
@@ -61,6 +65,8 @@ name of an assignment is plucked from the assignee.}
 \cite{Writing R Extensions}.}
 \item{\code{@return}}{The return value of the function, or \code{NULL}.}
 \item{\code{@seealso}}{See \dQuote{2.1.1 Documenting functions} from
+\cite{Writing R Extensions}.}
+\item{\code{@source}}{See \dQuote{2.1.2 Documenting data sets} from
 \cite{Writing R Extensions}.}
 \item{\code{@title}}{A default title is plucked from the first sentence
 of the description; that is, the first phrase ending

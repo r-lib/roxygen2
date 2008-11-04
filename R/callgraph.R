@@ -4,7 +4,8 @@
 roxygen()
 
 register.preref.parsers(parse.value,
-                        'callGraphDepth')
+                        'callGraphDepth',
+				'callGraphType')
 
 register.preref.parsers(parse.toggle,
                         'callGraph',
@@ -49,10 +50,12 @@ make.callgraph.roclet <- function(dependencies=NULL,
                                   dir='.',
                                   verbose=TRUE) {
   DEFAULT.DEPTH <- 2
+  DEFAULT.TYPE <- 'pdf'
 
   do.callgraph <- NULL
   do.callgraph.primitives <- NULL
   depth <- NULL
+  type <- NULL
   call.stack <- NULL
   subcalls <- NULL
   name <- NULL
@@ -79,6 +82,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
     do.callgraph <<- FALSE
     do.callgraph.primitives <<- FALSE
     depth <<- DEFAULT.DEPTH
+    type <<- DEFAULT.TYPE
     call.stack <<- make.stack()
     subcalls <<- new.env(parent=emptyenv())
     name <<- guess.name(partitum)
@@ -177,8 +181,6 @@ make.callgraph.roclet <- function(dependencies=NULL,
   #' @TODO Fall back on native alternate if Rgraphviz not
   #' available?
   graphviz <- function(subcalls) {
-    FORMAT <- 'pdf'
-    
     ## This should be in here until the current Rgraphviz (19.2)
     ## becomes mainstream.
     formals(toFile) <- alist(graph=,
@@ -210,13 +212,13 @@ make.callgraph.roclet <- function(dependencies=NULL,
       graphDataDefaults(ag, 'ratio') <- PHI
       graphDataDefaults(ag, 'splines') <- 'true'
       nodeDataDefaults(ag, 'fontname') <- 'monospace'
-      outfile <- outfile(dir, OUTFILE, name, FORMAT)
+      outfile <- outfile(dir, OUTFILE, name, type)
       if (verbose)
         cat(sprintf('Outputting call graph to %s\n', sQuote(outfile)))
       toFile(ag,
              layoutType='fdp',
              filename=outfile,
-             fileType='pdf')
+             fileType=type)
     }
   }
 
@@ -253,12 +255,18 @@ make.callgraph.roclet <- function(dependencies=NULL,
       assign.parent('depth', depth, environment())
   }
 
+  #' @TODO: check type against supported formats?
+  parse.callgraph.type <- function(key, expression)
+	assign.parent('type', expression, environment())
+
   roclet$register.parser('callGraph',
                          parse.callgraph)
   roclet$register.parser('callGraphPrimitives',
                          parse.callgraph.primitives)
   roclet$register.parser('callGraphDepth',
                          parse.callgraph.depth)
+  roclet$register.parser('callGraphType',
+                         parse.callgraph.type)
 
   load.dependencies()
 

@@ -15,7 +15,8 @@ register.preref.parsers(parse.value,
                         'import',
                         'importFrom',
                         'importClassesFrom',
-                        'importMethodsFrom')
+                        'importMethodsFrom',
+						'useDynLib')
 
 #' Make a namespace roclet which parses the given files and writes a list of
 #' namespace directives to a given file or standard out; see
@@ -148,7 +149,8 @@ make.namespace.roclet <- function(outfile='',
                                   'import',
                                   'importFrom',
                                   'importClassesFrom',
-                                  'importMethodsFrom')
+                                  'importMethodsFrom',
+								  'useDynLib')
 
   roclet
 }

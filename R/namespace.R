@@ -150,7 +150,7 @@ make.namespace.roclet <- function(outfile='',
                                   'importFrom',
                                   'importClassesFrom',
                                   'importMethodsFrom',
-								  'useDynLib')
+                                  'useDynLib')
 
   roclet
 }

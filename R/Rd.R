@@ -5,6 +5,9 @@
 #' @include parse.R
 roxygen()
 
+register.preref.parsers(parse.default,
+                        'noRd')
+
 register.preref.parsers(parse.value,
                         'name',
                         'aliases',
@@ -155,6 +158,7 @@ register.srcref.parser('setMethod',
 #' @aliases name aliases title usage references concept
 #' note seealso example examples keywords return author
 #' TODO param method setClass setGeneric setMethod
+#' TODO exportOnly parameter to handle createRd
 #' make.Rd.roclet
 make.Rd.roclet <- function(subdir=NULL,
                            verbose=TRUE) {
@@ -177,9 +181,12 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param key the expression's key
   #' @param \dots the arguments
   #' @return \code{NULL}
-  parse.expression <- function(key, ...)
-    cat(Rd.expression(key, c(...)), file=filename, append=TRUE)
+  parse.expression <- function(key, ...) {
+    if ( createRd )
+      cat(Rd.expression(key, c(...)), file=filename, append=TRUE)
+  }
 
+  createRd <- FALSE
   filename <- ''
 
   reset.filename <- function()
@@ -251,6 +258,9 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.name <- function(partitum) {
+    if ( !createRd )
+      return;
+    
     name <- guess.name(partitum)
     if (is.null(name) && !is.null(subdir)) {
       filename <- partitum$srcref$filename
@@ -336,6 +346,10 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
+    #' Create Rd files of exported functions only.
+    if ( is.null(partitum$noRd) & !is.null(partitum$export) )
+      createRd <<- TRUE
+    
     assign.parent('params', NULL, environment())
     assign.parent('examples', NULL, environment())
     parse.name(partitum)
@@ -352,6 +366,7 @@ make.Rd.roclet <- function(subdir=NULL,
     ## if not, it will destroy the sink stack.
     ## (Should fail if unwritable, anyway.)
     reset.filename()
+    createRd <<- FALSE
   }
 
   roclet <- make.roclet(parse.expression,

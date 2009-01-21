@@ -91,9 +91,9 @@ object; and may be followed directly by a \Roxygen{} tag
 begins after the intervening blank line, and continues until the first
 \Roxygen{} tag (fig. \ref{pseudoprime-package}, line 19).
 
-Each \Roxygen{} tag begins with an ampersand, like \texttt{@name},
+Each \Roxygen{} tag begins with an asperand, like \texttt{@name},
 \texttt{@author}, etc.; which means, incidentally, that all real
-ampersands have to be escaped with a double-ampersand, as in
+asperands have to be escaped with a double-asperand, as in
 \verb=\email{pcd@@roxygen.org}= (fig. \ref{pseudoprime-package}, line
 23).
 

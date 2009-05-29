@@ -25,6 +25,13 @@ source('../R/Rd_API.R')
 source('../R/Rd.R')
 source('../R/Rd_merge.R')
 
+roc <- make.Rd.roclet(subdir='.')
+roc$parse('example-pseudoprime.R')
+
+
+
+
+### Benchmark package:
 
 roxygenize2 <- function(package.dir,
                         roxygen.dir=NULL,
@@ -61,6 +68,8 @@ roxygenize2 <- function(package.dir,
                               all.files=TRUE))
   Rd <- make.Rd.roclet(man.dir)
   do.call(Rd$parse, files)
+  Rd$write()
+  
   namespace <- make.namespace.roclet(namespace.file)
   do.call(namespace$parse, files)
   collate <- make.collate.roclet(merge.file=package.description,
@@ -70,11 +79,13 @@ roxygenize2 <- function(package.dir,
   #  make.callgraph.roclet(description.dependencies(package.description),
   #                        doc.dir)
   #do.call(callgraph$parse, files)
+
+  return(Rd)
 }                    
 
 setwd('Z:/Research/Benchmarking')
 
-roxygenize2('pkg', roxygen.dir='builds/benchmark')
+r <- roxygenize2('pkg', roxygen.dir='builds/benchmark')
 
 r <- parse_Rd('builds/benchmark/man/basicplots.Rd')
 r <- parse_Rd('builds/benchmark/man/bench-class.Rd')

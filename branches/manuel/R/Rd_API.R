@@ -30,7 +30,10 @@ itemTag <- function(x, y=NULL) {
                      list(textTag(y))), '\\item'))
 }
 
-argumentsTag <- function(..., x=list(...)) {
+argumentsTag <- function(..., x=list(...), newline=FALSE) {
+  if ( newline )
+    x <- newlineSeperators(x)
+    
   return(Rd_tag(x, '\\arguments'))
 }
 
@@ -47,6 +50,15 @@ newlineTag <- function() {
   return(textTag('\n'))
 }
 
+newlineSeperators <- function(x) {
+  l <- 2 * length(x)
+  
+  t <- vector('list', length=l)
+  t[seq(1, l, by=2)] <- x
+  t[seq(2, l, by=2)] <- newlineTag()
+  
+  return(t)
+}
 
 
 ### Basic tag elements:

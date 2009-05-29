@@ -109,6 +109,7 @@ roxygenize <- function(package.dir,
                               all.files=TRUE))
   Rd <- make.Rd.roclet(man.dir)
   do.call(Rd$parse, files)
+  Rd$write()
   namespace <- make.namespace.roclet(namespace.file)
   do.call(namespace$parse, files)
   collate <- make.collate.roclet(merge.file=package.description,

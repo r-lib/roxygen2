@@ -1,65 +1,42 @@
 
-Rd_merge <- function(x, y, appenders=simpleappenders(), mergers=simplemergers()) {
-  # x is the base Rd, all tags from y are merged into x.
+Rd_merge <- function(rdlist, base=Rd(), mergefn=merge.Rd) { 
+  for ( rd in names(rdlist) )
+    base <- mergefn(base, rdlist[[rd]], yname=rd)
+
+  return(list(base))
+}
+
+merge.Rd <- function(x, y, yname=NULL, mergers=simplemergers(), ...) {
+  # NOTE: x is the base rd.
 
   getMerger <- function(name)
     if ( !is.null(mergers[[name]]) ) mergers[[name]] else mergers$DEFAULT
 
-  getAppender <- function(name)
-    if ( !is.null(appenders[[name]]) ) appenders[[name]] else appenders$DEFAULT
-
-  
-  yname <- unlist(y[[which(sapply(y, attr, 'Rd_tag') == '\\alias')[1]]])
   
   MULTIPLE <- c('\\alias', '\\keyword')
-  
+    
   xtagnames <- tools:::RdTags(x)
   ytagnames <- tools:::RdTags(y)  
-
+  
   for ( yat in which(ytagnames != 'TEXT') ) {
     ytagname <- ytagnames[yat]
     ytag <- y[[yat]]
     
     xat <- NULL
-
-    if ( !(ytagname %in% MULTIPLE) ) {      
-      if ( ytagname %in% xtagnames ) {
+    
+    if ( !(ytagname %in% MULTIPLE) ) {  
+      if ( ytagname %in% xtagnames )
         xat <- which(xtagnames == ytagname)
-        merger <- getMerger(substring(ytagname, 2))
-        
-        ytag <- merger(x[[xat]], ytag, yname)
-      }
+
+      merger <- getMerger(substring(ytagname, 2))
+      ytag <- merger(if (is.null(xat)) NULL else x[[xat]], ytag, yname)
     }
     
-    #x <- Rd_append_tag(x, ytag, xat)
-    appender <- getAppender(substring(ytagname, 2))
-    x <- appender(x, ytag, xat, yname)
+    x <- Rd_append_tag(x, ytag, xat)
   }
 
   return(x)
 }
-
-
-
-### Appender:
-
-simpleappenders <- function() {
-  return(list(DEFAULT=default.appender,
-              value=value.appender))
-}
-
-default.appender <- function(x, y, at, name) {
-  return(Rd_append_tag(x, y, at))
-}
-
-value.appender <- function(x, y, at, name) {
-  x <- Rd_tag_append_tag(x, textTag(sprintf('\\code{%s}:', name)))
-  return(Rd_append_tag(x, y))
-}
-
-
-
-### Merger:
 
 simplemergers <- function() {
   return(list(DEFAULT=default.merger,
@@ -67,19 +44,26 @@ simplemergers <- function() {
               description=omity.merger,
               author=omity.merger,
               title=omity.merger,
-              value=value.merger,
+              value=paragraph.merger,
+              description=paragraph.merger,
               arguments=arguments.merger))
 }
 
-default.merger <- function(x, y, name) {
+default.merger <- function(x, y, yname) {
+  if ( is.null(x) )
+    return(y)
+
   return(Rd_tag_append_tag(x, y))
 }
 
-omity.merger <- function(x, y, name) {
+omity.merger <- function(x, y, yname) {
   return(x)
 }
 
 arguments.merger <- function(x, y, name) {
+  if ( is.null(x) )
+    return(y)
+  
   attr <- attributes(x)
     
   xitems <- unlist(sapply(x, '[[', 1))
@@ -93,6 +77,15 @@ arguments.merger <- function(x, y, name) {
   return(x)
 }
 
-value.merger <- function(x, y, name) {
-  return(Rd_tag_append_tag(x, y))
+paragraph.merger <- function(x, y, yname) {
+  t <- textTag(sprintf('\\emph{%s}: ', yname))
+  attr <- attributes(y)
+  y <- c(t, y, newlineTag(), newlineTag())
+  attributes(y) <- attr
+  
+  if ( is.null(x) )
+    return(y)
+
+  return(Rd_tag_append_tag(x, y))  
 }
+

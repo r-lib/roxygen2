@@ -165,7 +165,6 @@ make.Rd.roclet <- function(subdir=NULL,
                            mergefn=Rd_merge,
                            exportonly=FALSE,
                            debug=FALSE) {  
-  
   writeRd <- TRUE
 
   set.writeRd <- function()
@@ -176,17 +175,18 @@ make.Rd.roclet <- function(subdir=NULL,
 
   reset.writeRd <- function()
     set.writeRd()
-
   
   rd <- Rd()
 
   write.Rd <- function() {
     if ( writeRd ) {
-      if ( !debug ) 
-        cat(tools:::as.character.Rd(rd),
-            sep='', collapse='\n', file=filename)
-      else
-        save(rd, file=paste(filename, 'Rdata', sep='.'))
+      #if ( !debug ) 
+      #  cat(tools:::as.character.Rd(rd),
+      #      sep='', collapse='\n', file=filename)
+      #else
+      #  save(rd, file=paste(filename, 'Rdata', sep='.'))
+
+      rdtank.add(rd, name, filename)
     }
 
     if ( verbose )
@@ -242,6 +242,7 @@ make.Rd.roclet <- function(subdir=NULL,
     
 
   filename <- ''
+  name <- ''
   
   reset.filename <- function()
     assign.parent('filename', '', environment())
@@ -338,9 +339,11 @@ make.Rd.roclet <- function(subdir=NULL,
           cat(sprintf('Processing %s:', name))
         #unlink(filename)
       }
-        
+      
       parse.expression('name', basename)
       parse.expression('alias', name)
+
+      assign.parent('name', name, environment())
     }
     if ((!is.null(name) || !is.null(partitum$title)) &&
         !is.null(title <- parse.title(partitum, name)))
@@ -421,8 +424,8 @@ make.Rd.roclet <- function(subdir=NULL,
     parse.arguments()
     parse.examples(partitum)
     
-    if ( file.exists(filename) )
-      merge.Rd(existing.Rd())
+    #if ( file.exists(filename) )
+    #  merge.Rd(existing.Rd())
     
     write.Rd()
     reset.Rd()
@@ -521,7 +524,7 @@ make.Rd.roclet <- function(subdir=NULL,
   parse.arguments <- function()
     if (length(params) > 0)
       #parse.expression('\\arguments', parse.params())
-      append.Rd(argumentsTag(x=parse.params()))
+      append.Rd(argumentsTag(x=parse.params(), newline=TRUE))
 
   roclet$register.parser('param', parse.param)
 
@@ -563,5 +566,32 @@ make.Rd.roclet <- function(subdir=NULL,
 
   roclet$register.parser('TODO', parse.todo)
 
+  
+  ### Rd tank:
+  roclet$rdtank <- new.env(parent=emptyenv())
+  roclet$rdtank$documents <- list()
+  roclet$rdtank$mergelist <- list()
+  
+  rdtank.add <- function(rd, name, filename) {
+    roclet$rdtank$documents[[name]] <- rd
+    roclet$rdtank$mergelist[[filename]] <-
+      c(roclet$rdtank$mergelist[[filename]], name)
+  }
+
+  roclet$write <- function() {  
+    for ( filename in names(roclet$rdtank$mergelist) ) {
+
+      base <- if ( file.exists(filename) ) parse_Rd(filename) else NULL
+      final <- roclet$rdtank$documents[roclet$rdtank$mergelist[[filename]]]
+
+      if ( length(final) > 1 || !is.null(base) )
+        final <- do.call('mergefn', list(final, base))
+
+      #rdtank.add(final, paste(filename, '2', sep=''), '1')
+      cat(tools:::as.character.Rd(final[[1]]),
+          sep='', collapse='\n', file=filename)
+    }
+  }
+  
   roclet
 }

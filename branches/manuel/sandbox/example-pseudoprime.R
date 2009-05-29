@@ -37,6 +37,7 @@ fermat.test <- function(n) {
 #' @keywords pseudoprime fermat
 #' @examples
 #' is.pseudoprime(13, 4)  # TRUE most of the time
+#' @rdname fermat
 is.pseudoprime <- function(n, times) {
   if (times == 0) TRUE
   else if (fermat.test(n)) is.pseudoprime(n, times - 1)

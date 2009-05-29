@@ -30,7 +30,7 @@ itemTag <- function(x, y=NULL) {
                      list(textTag(y))), '\\item'))
 }
 
-argumentsTag <- function(..., x=list(...), newline=FALSE) {
+argumentsTag <- function(..., x=list(...), newline=TRUE) {
   if ( newline )
     x <- newlineSeperators(x)
     
@@ -43,6 +43,9 @@ methodTag <- function(x, y) {
 }
 
 usageTag <- function(x, y, newline=TRUE) {
+  if ( newline )
+    x <- newlineSeperators(x)
+  
   return(Rd_tag(list(x, rcodeTag(sprintf('(%s)', y))), '\\usage'))
 }
 

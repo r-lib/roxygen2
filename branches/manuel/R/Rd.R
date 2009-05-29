@@ -5,6 +5,9 @@
 #' @include parse.R
 roxygen()
 
+register.preref.parsers(parse.default,
+                        'nord')
+
 register.preref.parsers(parse.value,
                         'name',
                         'aliases',
@@ -21,7 +24,8 @@ register.preref.parsers(parse.value,
                         'author',
                         'TODO',
                         'format',
-                        'source')
+                        'source',
+                        'rdname')
 
 register.preref.parsers(parse.name.description,
                         'param',
@@ -158,31 +162,52 @@ register.srcref.parser('setMethod',
 #' make.Rd.roclet
 make.Rd.roclet <- function(subdir=NULL,
                            verbose=TRUE,
-                           mergefn=merge.Rd) {
+                           mergefn=Rd_merge,
+                           exportonly=FALSE,
+                           debug=FALSE) {  
+  
+  writeRd <- TRUE
 
-  Rd <- list()
+  set.writeRd <- function()
+    assign.parent('writeRd', TRUE, environment())
 
-  nlTag.Rd <- function()
-    return(list(structure('\n', Rd_tag='TEXT')))
-    
-  tag.Rd <- function(x, tag='TEXT')
-    return(list(structure(x, Rd_tag=tag)))
+  unset.writeRd <- function()
+    assign.parent('writeRd', FALSE, environment())
 
-  itemTag.Rd <- function(x)
-    return(structure(list(tag.Rd(x[[1]]), tag.Rd(x[[2]])), Rd_tag='\\item'))
+  reset.writeRd <- function()
+    set.writeRd()
 
-  write.Rd <- function(plain=TRUE)
-    cat(tools:::as.character.Rd(structure(Rd, class='Rd')),
-        sep='', collapse='\n', file=filename)
+  
+  rd <- Rd()
+
+  write.Rd <- function() {
+    if ( writeRd ) {
+      if ( !debug ) 
+        cat(tools:::as.character.Rd(rd),
+            sep='', collapse='\n', file=filename)
+      else
+        save(rd, file=paste(filename, 'Rdata', sep='.'))
+    }
+
+    if ( verbose )
+      if ( writeRd )
+        cat(sprintf(' witten to %s', filename))
+      else
+        cat(' omitted')
+  }
 
   reset.Rd <- function()
-    assign.parent('Rd', '', environment())
+    assign.parent('rd', Rd(), environment())
 
   append.Rd <- function(x)
-    assign.parent('Rd', append(append(Rd, x), nlTag.Rd()), environment())
+    assign.parent('rd', Rd_append_tag(rd, x), environment())
 
-  merge2.Rd <- function(x)
-    assign.parent('Rd', mergefn(x, Rd), environment())
+  merge.Rd <- function(x) {
+    assign.parent('rd', mergefn(x, rd), environment())
+    
+    if ( verbose )
+      cat(sprintf(' merged,'))
+  }
 
   existing.Rd <- function()
     parse_Rd(filename)
@@ -201,7 +226,9 @@ make.Rd.roclet <- function(subdir=NULL,
     #                     sprintf('{%s}', trim(expression)),
     #                     c(...),
     #                     ''))
-    sapply(lapply(c(...), tag.Rd), tag.Rd, paste('\\', key, sep=''))
+    #lapply(lapply(c(...), textTag), Rd_tag, paste('\\', key, sep=''))
+    Rd_tag(textTag(trim(c(...))), paste('\\', key, sep=''))
+    
     
 
   #' Push the Rd-expression to standard out (or current
@@ -300,17 +327,20 @@ make.Rd.roclet <- function(subdir=NULL,
                 immediate.=TRUE)
     } else if (!is.null(name)) {
       name <- trim(name)
+      rdname <- trim(partitum$rdname)
+      basename <- if ( length(rdname) == 0 ) name else rdname
+      
       if (!is.null(subdir)) {
         assign.parent('filename',
-                      file.path(subdir, sprintf('%s.Rd', name)),
+                      file.path(subdir, sprintf('%s.Rd', basename)),
                       environment())
         if (verbose)
-          cat(sprintf('Writing %s to %s\n', name, filename))
+          cat(sprintf('Processing %s:', name))
         #unlink(filename)
       }
-      parse.expression('name', name)
-      if (is.null(partitum$aliases))
-        parse.expression('alias', name)
+        
+      parse.expression('name', basename)
+      parse.expression('alias', name)
     }
     if ((!is.null(name) || !is.null(partitum$title)) &&
         !is.null(title <- parse.title(partitum, name)))
@@ -319,11 +349,13 @@ make.Rd.roclet <- function(subdir=NULL,
   
   parse.function.name <- function(partitum) {
     if (!is.null(partitum$method))
-      Rd.expression('method',
-          car(partitum$method),
-          cadr(partitum$method))
+      #Rd.expression('method',
+      #    car(partitum$method),
+      #    cadr(partitum$method))
+      methodTag(trim(car(partitum$method)), trim(cadr(partitum$method)))
     else
-      partitum$assignee
+      #partitum$assignee
+      textTag(partitum$assignee)
   }
 
   #' Turn a list of formal arguments into a human-readable
@@ -345,14 +377,15 @@ make.Rd.roclet <- function(subdir=NULL,
         },
                              name.defaults),
                          sep=', '))
-      parse.expression('usage',
-          do.call(paste,
-                  c(as.list(strwrap
-                            (sprintf('%s(%s)',
-                                     parse.function.name(partitum),
-                                     args),
-                             exdent=4)),
-                    sep='\n')))
+      #parse.expression('usage',
+      #    do.call(paste,
+      #            c(as.list(strwrap
+      #                      (sprintf('%s(%s)',
+      #                               parse.function.name(partitum),
+      #                               args),
+      #                       exdent=4)),
+      #              sep='\n')))
+      append.Rd(usageTag(parse.function.name(partitum), args))
     }
   }
 
@@ -370,6 +403,11 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
+    if ( !is.null(partitum$nord) )
+      unset.writeRd()
+    if ( exportonly && is.null(partitum$export) )
+      unset.writeRd()
+    
     assign.parent('params', NULL, environment())
     assign.parent('examples', NULL, environment())
     parse.name(partitum)
@@ -382,17 +420,21 @@ make.Rd.roclet <- function(subdir=NULL,
   post.parse <- function(partitum) {
     parse.arguments()
     parse.examples(partitum)
-   
+    
     if ( file.exists(filename) )
-      merge2.Rd(existing.Rd())
+      merge.Rd(existing.Rd())
     
     write.Rd()
     reset.Rd()
+
+    if ( verbose )
+      cat('\n')
     
     ## Assuming the previous sink was successful;
     ## if not, it will destroy the sink stack.
     ## (Should fail if unwritable, anyway.)
     reset.filename()
+    reset.writeRd()
   }
 
   roclet <- make.roclet(parse.expression,
@@ -409,6 +451,7 @@ make.Rd.roclet <- function(subdir=NULL,
   roclet$register.parser('return',
                          function(key, expressions)
                          parse.expression('value', expressions))
+
 
   #' Split a plural into its constituent singulars.
   #' @param key the singular key
@@ -468,7 +511,7 @@ make.Rd.roclet <- function(subdir=NULL,
     #                 cadr(name.param)),
     #             params,
     #             '')
-    lapply(params, itemTag.Rd)
+    lapply(lapply(params, trim), itemTag)
     
     
 
@@ -478,7 +521,7 @@ make.Rd.roclet <- function(subdir=NULL,
   parse.arguments <- function()
     if (length(params) > 0)
       #parse.expression('\\arguments', parse.params())
-      append.Rd(tag.Rd(parse.params(), '\\arguments'))
+      append.Rd(argumentsTag(x=parse.params()))
 
   roclet$register.parser('param', parse.param)
 

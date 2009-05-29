@@ -11,7 +11,7 @@
 #'   for a randomized \eqn{0 < a < n}
 #' @note \code{fermat.test} doesn't work for integers above
 #'   approximately fifteen because modulus loses precision.
-#' @name fermat
+#' @rdname fermat
 fermat.test <- function(n) {
   a <- floor(runif(1, min=1, max=n))
   a ^ n %% n == a
@@ -37,7 +37,6 @@ fermat.test <- function(n) {
 #' @keywords pseudoprime fermat
 #' @examples
 #' is.pseudoprime(13, 4)  # TRUE most of the time
-#' @name fermat
 is.pseudoprime <- function(n, times) {
   if (times == 0) TRUE
   else if (fermat.test(n)) is.pseudoprime(n, times - 1)

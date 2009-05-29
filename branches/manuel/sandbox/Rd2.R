@@ -19,22 +19,62 @@ for (source in sources)
 # Changes:
 library(tools)
 
-source('../R/print.Rd.R')
-source('../R/merge.Rd.R')
+setwd('Z:\\Projects\\Roxygen\\r-forge\\branches\\manuel\\sandbox')
+
+source('../R/Rd_API.R')
 source('../R/Rd.R')
-
-rd <- make.Rd.roclet(subdir='.')
-rd$parse('example-pseudoprime.R')
-
-p <- parse_Rd('is.pseudoprime.Rd')
-p
-
-parse_Rd('fermat.Rd')
-
-p1 <- parse_Rd('fermat.test.Rd')
-p2 <- parse_Rd('is.pseudoprime.Rd')
-
-merge.Rd(p1, p2)
+source('../R/Rd_merge.R')
 
 
-merge.Rd(p2, p1)[[25]][[1]]
+roxygenize2 <- function(package.dir,
+                        roxygen.dir=NULL,
+                        copy.package=TRUE,
+                        overwrite=TRUE,
+                        unlink.target=FALSE) {
+  if (is.null(roxygen.dir)) roxygen.dir <-
+    sprintf(ROXYGEN.DIR, package.dir)
+  man.dir <- file.path(roxygen.dir, MAN.DIR)
+  inst.dir <- file.path(roxygen.dir, INST.DIR)
+  doc.dir <- file.path(inst.dir, DOC.DIR)
+  namespace.file <- file.path(roxygen.dir, NAMESPACE.FILE)
+  package.description <- file.path(package.dir, DESCRIPTION.FILE)
+  roxygen.description <- file.path(roxygen.dir, DESCRIPTION.FILE)
+  skeleton <- c(roxygen.dir,
+                man.dir,
+                doc.dir)
+
+  if (copy.package)
+    copy.dir(package.dir,
+             roxygen.dir,
+             unlink.target=unlink.target,
+             overwrite=overwrite,
+             verbose=FALSE)
+
+  for (dir in skeleton) dir.create(dir,
+                                   recursive=TRUE,
+                                   showWarnings=FALSE)
+  r.dir <- file.path(package.dir, R.DIR)
+  files <- as.list(list.files(r.dir,
+                              pattern='\\.(R|r)$',
+                              recursive=TRUE,
+                              full.names=TRUE,
+                              all.files=TRUE))
+  Rd <- make.Rd.roclet(man.dir)
+  do.call(Rd$parse, files)
+  namespace <- make.namespace.roclet(namespace.file)
+  do.call(namespace$parse, files)
+  collate <- make.collate.roclet(merge.file=package.description,
+                                 target.file=roxygen.description)
+  collate$parse.dir(r.dir)
+  #callgraph <-
+  #  make.callgraph.roclet(description.dependencies(package.description),
+  #                        doc.dir)
+  #do.call(callgraph$parse, files)
+}                    
+
+setwd('Z:/Research/Benchmarking')
+
+roxygenize2('pkg', roxygen.dir='builds/benchmark')
+
+r <- parse_Rd('builds/benchmark/man/basicplots.Rd')
+r <- parse_Rd('builds/benchmark/man/bench-class.Rd')

@@ -40,12 +40,12 @@ merge.Rd <- function(x, y, yname=NULL, mergers=simplemergers(), ...) {
 
 simplemergers <- function() {
   return(list(DEFAULT=default.merger,
-              name=omity.merger,
-              description=omity.merger,
-              author=omity.merger,
-              title=omity.merger,
+              name=one.merger,
+              description=one.merger,
+              author=one.merger,
+              title=one.merger,
               value=paragraph.merger,
-              description=paragraph.merger,
+              details=paragraph.merger,
               arguments=arguments.merger))
 }
 
@@ -53,10 +53,13 @@ default.merger <- function(x, y, yname) {
   if ( is.null(x) )
     return(y)
 
-  return(Rd_tag_append_tag(x, y))
+  return(Rd_tag_append_tag(x, y, newline=FALSE))
 }
 
-omity.merger <- function(x, y, yname) {
+one.merger <- function(x, y, yname) {
+  if ( is.null(x) )
+    return(y)
+  
   return(x)
 }
 
@@ -78,7 +81,7 @@ arguments.merger <- function(x, y, name) {
 }
 
 paragraph.merger <- function(x, y, yname) {
-  t <- textTag(sprintf('\\emph{%s}: ', yname))
+  t <- textTag(sprintf('\\code{%s}: ', yname))
   attr <- attributes(y)
   y <- c(t, y, newlineTag(), newlineTag())
   attributes(y) <- attr

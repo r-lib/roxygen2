@@ -42,11 +42,12 @@ methodTag <- function(x, y) {
                      list(textTag(y))), '\\method'))
 }
 
-usageTag <- function(x, y, newline=TRUE) {
-  if ( newline )
-    x <- newlineSeperators(x)
-  
-  return(Rd_tag(list(x, rcodeTag(sprintf('(%s)', y))), '\\usage'))
+usageTag <- function(x, y) {
+  y <- sprintf('(%s)', paste(strwrap(y, exdent=4), collapse="\n"))
+  tag <- Rd_tag(list(x, rcodeTag(y)), '\\usage')
+  tag <- Rd_tag_append_tag(tag, newlineTag(), newline=FALSE)
+
+  return(tag)
 }
 
 newlineTag <- function() {
@@ -110,7 +111,7 @@ Rd_tag_append_tag <- function(tag1, tag2, newline=TRUE) {
 
 ### Rd functions:
 
-Rd_append_tag <- function(rd, tag, at=NULL, newline=TRUE) {
+Rd_append_tag <- function(rd, tag, at=NULL, newline=FALSE) {
   if ( is.null(at) )
     at <- length(rd) + 1
   

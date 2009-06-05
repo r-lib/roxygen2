@@ -68,7 +68,6 @@ roxygenize2 <- function(package.dir,
                               all.files=TRUE))
   Rd <- make.Rd.roclet(man.dir)
   do.call(Rd$parse, files)
-  Rd$write()
   
   namespace <- make.namespace.roclet(namespace.file)
   do.call(namespace$parse, files)
@@ -83,8 +82,12 @@ roxygenize2 <- function(package.dir,
   return(Rd)
 }                    
 
-setwd('Z:/Research/Benchmarking')
+setwd('Z:\\Projects\\Roxygen\\r-forge\\branches\\manuel\\sandbox')
+source('../R/Rd_API.R')
+source('../R/Rd.R')
+source('../R/Rd_merge.R')
 
+setwd('Z:/Research/Benchmarking')
 r <- roxygenize2('pkg', roxygen.dir='builds/benchmark')
 
 r <- parse_Rd('builds/benchmark/man/basicplots.Rd')

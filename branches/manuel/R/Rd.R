@@ -162,9 +162,9 @@ register.srcref.parser('setMethod',
 #' make.Rd.roclet
 make.Rd.roclet <- function(subdir=NULL,
                            verbose=TRUE,
-                           mergefn=Rd_merge,
                            exportonly=FALSE,
-                           debug=FALSE) {  
+                           documentedonly=TRUE,
+                           mergefn=Rd_merge) {  
   writeRd <- TRUE
 
   set.writeRd <- function()
@@ -175,9 +175,9 @@ make.Rd.roclet <- function(subdir=NULL,
 
   reset.writeRd <- function()
     set.writeRd()
-  
-  rd <- Rd()
 
+  rd <- NULL
+  
   write.Rd <- function() {
     if ( writeRd ) {
       #if ( !debug ) 
@@ -201,13 +201,6 @@ make.Rd.roclet <- function(subdir=NULL,
 
   append.Rd <- function(x)
     assign.parent('rd', Rd_append_tag(rd, x), environment())
-
-  merge.Rd <- function(x) {
-    assign.parent('rd', mergefn(x, rd), environment())
-    
-    if ( verbose )
-      cat(sprintf(' merged,'))
-  }
 
   existing.Rd <- function()
     parse_Rd(filename)
@@ -366,8 +359,10 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.formals <- function(partitum) {
-    formals <- partitum$formals
+    formals <- partitum$formals    
     if (!is.null(formals)) {
+      formals <- lapply(formals, trim)
+      formals <- lapply(formals, paste, collapse=" ")
       name.defaults <- zip.c(names(formals), formals)
       args <-
         do.call(paste, c(Map(function(name.default) {
@@ -402,14 +397,21 @@ make.Rd.roclet <- function(subdir=NULL,
       parse.expression('usage', partitum$usage)
   }
 
+  is.documented <- function(partitum)
+    length(partitum) > 3
+
   #' Reset params; parse name and usage.
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
+    if ( documentedonly && !is.documented(partitum) )
+      unset.writeRd()
     if ( !is.null(partitum$nord) )
       unset.writeRd()
     if ( exportonly && is.null(partitum$export) )
       unset.writeRd()
+
+    # TODO: interrupt the processing?
     
     assign.parent('params', NULL, environment())
     assign.parent('examples', NULL, environment())
@@ -430,8 +432,7 @@ make.Rd.roclet <- function(subdir=NULL,
     write.Rd()
     reset.Rd()
 
-    if ( verbose )
-      cat('\n')
+    if ( verbose ) cat('\n')
     
     ## Assuming the previous sink was successful;
     ## if not, it will destroy the sink stack.
@@ -440,9 +441,25 @@ make.Rd.roclet <- function(subdir=NULL,
     reset.writeRd()
   }
 
+  post.files <- function() {
+    for ( filename in names(roclet$rdtank$mergelist) ) {
+      
+      base <- if ( file.exists(filename) ) parse_Rd(filename) else NULL
+      final <- roclet$rdtank$documents[roclet$rdtank$mergelist[[filename]]]
+
+      if ( length(final) > 1 || !is.null(base) )
+        final <- do.call('mergefn', list(final, base))
+
+      #rdtank.add(final, paste(filename, '2', sep=''), '1')
+      cat(tools:::as.character.Rd(final[[1]]),
+          sep='', collapse='\n', file=filename)
+    } 
+  }
+
   roclet <- make.roclet(parse.expression,
                         pre.parse,
-                        post.parse)
+                        post.parse,
+                        post.files=post.files)
 
   roclet$register.default.parsers('references',
                                   'note',
@@ -578,20 +595,6 @@ make.Rd.roclet <- function(subdir=NULL,
       c(roclet$rdtank$mergelist[[filename]], name)
   }
 
-  roclet$write <- function() {  
-    for ( filename in names(roclet$rdtank$mergelist) ) {
-
-      base <- if ( file.exists(filename) ) parse_Rd(filename) else NULL
-      final <- roclet$rdtank$documents[roclet$rdtank$mergelist[[filename]]]
-
-      if ( length(final) > 1 || !is.null(base) )
-        final <- do.call('mergefn', list(final, base))
-
-      #rdtank.add(final, paste(filename, '2', sep=''), '1')
-      cat(tools:::as.character.Rd(final[[1]]),
-          sep='', collapse='\n', file=filename)
-    }
-  }
   
   roclet
 }

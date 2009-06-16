@@ -164,33 +164,28 @@ make.Rd.roclet <- function(subdir=NULL,
                            verbose=TRUE,
                            exportonly=FALSE,
                            documentedonly=TRUE,
-                           mergefn=Rd_merge) {  
-  writeRd <- TRUE
+                           mergefn=Rd_merge) {
 
-  set.writeRd <- function()
-    assign.parent('writeRd', TRUE, environment())
+  saveRd <- TRUE
 
-  unset.writeRd <- function()
-    assign.parent('writeRd', FALSE, environment())
+  set.saveRd <- function()
+    assign.parent('saveRd', TRUE, environment())
 
-  reset.writeRd <- function()
-    set.writeRd()
+  set.ignoreRd <- function()
+    assign.parent('saveRd', FALSE, environment())
 
+  reset.saveRd <- function()
+    set.saveRd()
+
+  
   rd <- NULL
   
-  write.Rd <- function() {
-    if ( writeRd ) {
-      #if ( !debug ) 
-      #  cat(tools:::as.character.Rd(rd),
-      #      sep='', collapse='\n', file=filename)
-      #else
-      #  save(rd, file=paste(filename, 'Rdata', sep='.'))
-
+  save.Rd <- function() {
+    if ( saveRd )
       rdtank.add(rd, name, filename)
-    }
 
     if ( verbose )
-      if ( writeRd )
+      if ( saveRd )
         cat(sprintf(' witten to %s', filename))
       else
         cat(' omitted')
@@ -201,10 +196,7 @@ make.Rd.roclet <- function(subdir=NULL,
 
   append.Rd <- function(x)
     assign.parent('rd', Rd_append_tag(rd, x), environment())
-
-  existing.Rd <- function()
-    parse_Rd(filename)
-
+ 
   
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
@@ -213,16 +205,8 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @return A string containing the key and arguments
   #' in LaTeX-like gestalt.
   Rd.expression <- function(key, ...)
-    #sprintf('\\%s%s\n',
-    #        key,
-    #        Reduce.paste(function(expression)
-    #                     sprintf('{%s}', trim(expression)),
-    #                     c(...),
-    #                     ''))
-    #lapply(lapply(c(...), textTag), Rd_tag, paste('\\', key, sep=''))
     Rd_tag(textTag(trim(c(...))), paste('\\', key, sep=''))
-    
-    
+  
 
   #' Push the Rd-expression to standard out (or current
   #' sink).
@@ -230,7 +214,6 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param \dots the arguments
   #' @return \code{NULL}
   parse.expression <- function(key, ...)
-    #cat(Rd.expression(key, c(...)), file=filename, append=TRUE)
     append.Rd(Rd.expression(key, c(...)))
     
 
@@ -345,12 +328,8 @@ make.Rd.roclet <- function(subdir=NULL,
   
   parse.function.name <- function(partitum) {
     if (!is.null(partitum$method))
-      #Rd.expression('method',
-      #    car(partitum$method),
-      #    cadr(partitum$method))
       methodTag(trim(car(partitum$method)), trim(cadr(partitum$method)))
     else
-      #partitum$assignee
       textTag(partitum$assignee)
   }
 
@@ -375,14 +354,7 @@ make.Rd.roclet <- function(subdir=NULL,
         },
                              name.defaults),
                          sep=', '))
-      #parse.expression('usage',
-      #    do.call(paste,
-      #            c(as.list(strwrap
-      #                      (sprintf('%s(%s)',
-      #                               parse.function.name(partitum),
-      #                               args),
-      #                       exdent=4)),
-      #              sep='\n')))
+      
       append.Rd(usageTag(parse.function.name(partitum), args))
     }
   }
@@ -405,13 +377,13 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
     if ( documentedonly && !is.documented(partitum) )
-      unset.writeRd()
+      set.ignoreRd()
     if ( !is.null(partitum$nord) )
-      unset.writeRd()
+      set.ignoreRd()
     if ( exportonly && is.null(partitum$export) )
-      unset.writeRd()
+      set.ignoreRd()
 
-    # TODO: interrupt the processing?
+    # TODO: interrupt process?
     
     assign.parent('params', NULL, environment())
     assign.parent('examples', NULL, environment())
@@ -426,10 +398,7 @@ make.Rd.roclet <- function(subdir=NULL,
     parse.arguments()
     parse.examples(partitum)
     
-    #if ( file.exists(filename) )
-    #  merge.Rd(existing.Rd())
-    
-    write.Rd()
+    save.Rd()
     reset.Rd()
 
     if ( verbose ) cat('\n')
@@ -438,21 +407,18 @@ make.Rd.roclet <- function(subdir=NULL,
     ## if not, it will destroy the sink stack.
     ## (Should fail if unwritable, anyway.)
     reset.filename()
-    reset.writeRd()
+    reset.saveRd()
   }
 
   post.files <- function() {
-    for ( filename in names(roclet$rdtank$mergelist) ) {
-      
-      base <- if ( file.exists(filename) ) parse_Rd(filename) else NULL
-      final <- roclet$rdtank$documents[roclet$rdtank$mergelist[[filename]]]
+    for ( filename in rdtank.filenames() ) {
+      base <- baseRd(filename)
+      final <- rdtank.get(filename)
 
       if ( length(final) > 1 || !is.null(base) )
         final <- do.call('mergefn', list(final, base))
 
-      #rdtank.add(final, paste(filename, '2', sep=''), '1')
-      cat(tools:::as.character.Rd(final[[1]]),
-          sep='', collapse='\n', file=filename)
+      writeRd(final[[1]], filename)
     } 
   }
 
@@ -525,22 +491,13 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param name.param name-param pair
   #' @return A list of Rd-readable expressions
   parse.params <- function()
-    #Reduce.paste(function(name.param)
-    #             Rd.expression('item',
-    #                 car(name.param),
-    #                 cadr(name.param)),
-    #             params,
-    #             '')
     lapply(lapply(params, trim), itemTag)
     
-    
-
   #' Paste and label the Rd-readable expressions
   #' returned by \code{parse.params}.
   #' @return \code{NULL}
   parse.arguments <- function()
     if (length(params) > 0)
-      #parse.expression('\\arguments', parse.params())
       append.Rd(argumentsTag(x=parse.params(), newline=TRUE))
 
   roclet$register.parser('param', parse.param)
@@ -583,8 +540,7 @@ make.Rd.roclet <- function(subdir=NULL,
 
   roclet$register.parser('TODO', parse.todo)
 
-  
-  ### Rd tank:
+
   roclet$rdtank <- new.env(parent=emptyenv())
   roclet$rdtank$documents <- list()
   roclet$rdtank$mergelist <- list()
@@ -595,6 +551,20 @@ make.Rd.roclet <- function(subdir=NULL,
       c(roclet$rdtank$mergelist[[filename]], name)
   }
 
+  rdtank.get <- function(filename)
+    roclet$rdtank$documents[roclet$rdtank$mergelist[[filename]]]
+
+  rdtank.filenames <- function()
+    names(roclet$rdtank$mergelist)
+
   
+  baseRd <- function(filename)
+    if ( file.exists(filename) ) parse_Rd(filename) else NULL
+
+  writeRd <- function(rd, filename)
+    cat(tools:::as.character.Rd(rd),
+        sep='', collapse='\n', file=filename)
+  
+    
   roclet
 }

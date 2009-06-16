@@ -26,7 +26,9 @@ source('../R/Rd.R')
 source('../R/Rd_merge.R')
 
 roc <- make.Rd.roclet(subdir='.')
+roc$parse('Bicycle.R')
 roc$parse('example-pseudoprime.R')
+
 
 
 
@@ -92,3 +94,25 @@ r <- roxygenize2('pkg', roxygen.dir='builds/benchmark')
 
 r <- parse_Rd('builds/benchmark/man/basicplots.Rd')
 r <- parse_Rd('builds/benchmark/man/bench-class.Rd')
+
+
+
+### Rd API:
+
+setwd('Z:\\Projects\\Roxygen\\r-forge\\branches\\manuel\\sandbox')
+source('../R/Rd_API.R')
+source('../R/Rd_merge.R')
+
+rd <- Rd()
+rd <- Rd_append_tag(rd, nameTag("Manuel"))
+rd <- Rd_append_tag(rd, aliasTag("Manuel"))
+rd <- Rd_append_tag(rd, aliasTag("Eugster"))
+rd <- Rd_append_tag(rd, methodTag('do', 'x, a=1, b=2'))
+
+
+
+
+
+
+
+

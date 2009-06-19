@@ -366,7 +366,7 @@ parse.formals <- function(expressions) {
   else list(formals=Map(function(formal)
               if (is.null(formal)) ''
               else if (is.call(formal)) capture.output(formal)
-              else as.character(formal), formals))
+              else as.character(maybe.quote(formal)), formals))
 }
 
 #' Find the assignee of the expression

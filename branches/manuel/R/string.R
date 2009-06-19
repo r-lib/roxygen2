@@ -162,3 +162,13 @@ substr.regexpr <- function(pattern, text) {
     substr(text, start, end)
   }
 }
+
+#' Quote characters and return all other types untouched.
+#' @param x the value to maybe quote
+#' @return The quoted character or the untouched value
+maybe.quote <- function(x) {
+  if ( is.character(x) )
+    dQuote(x)
+  else
+    x
+}

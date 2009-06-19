@@ -17,3 +17,11 @@ files <- if (argc > 0) as.list(argv) else FILES
 
 roclet <- make.Rd.roclet()
 do.call(roclet$parse, files)
+
+
+### "Missing quotes in default arguments" bug:
+
+package.skeleton('helloRoxygen', code_files = 'hello-roxygen.R', force = TRUE)
+
+roclet <- make.Rd.roclet()
+roclet$parse('helloRoxygen/R/hello-roxygen.R')

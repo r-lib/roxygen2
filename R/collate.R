@@ -108,6 +108,8 @@ make.collate.roclet <- function(merge.file=NULL,
     for (vertex in vertices)
       if (!vertex$discovered)
         visit(vertex)
+
+    sorted
   }
 
   COLLATE.FIELD <- 'Collate:'

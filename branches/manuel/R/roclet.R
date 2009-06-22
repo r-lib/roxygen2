@@ -114,12 +114,17 @@ first.non.null <- function(...)
 #' assignee, S4class, S4method, S4generic.
 #' @param partitum the parsed elements
 #' @return The guessed name (possibly \code{NULL})
-guess.name <- function(partitum)
-  first.non.null(partitum$name,
-                 partitum$assignee,
-                 partitum$S4class,
-                 partitum$S4method,
-                 partitum$S4generic)
+guess.name <- function(partitum) {
+  name <- first.non.null(partitum$name,
+                         partitum$assignee,
+                         partitum$S4class,
+                         partitum$S4method,
+                         partitum$S4generic)
+  if ( !is.null(partitum$S4class) )
+    name <- sprintf('%s-class', name)
+
+  name
+}
 
 #' Extract the source code from parsed elements
 #' @param partitum the parsed elements

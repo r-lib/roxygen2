@@ -29,23 +29,27 @@ register.preref.parsers(parse.value,
 
 register.preref.parsers(parse.name.description,
                         'param',
-                        'method')
+                        'method',
+                        'slot')
 
 register.preref.parsers(parse.name,
                         'docType')
 
 register.srcref.parser('setClass',
                        function(pivot, expression)
-                       list(S4class=car(expression)))
+                       list(S4class=car(expression),
+                            S4formals=parseS4.class(cdr(expression))))
 
 register.srcref.parser('setGeneric',
                        function(pivot, expression)
                        list(S4generic=car(expression)))
 
 register.srcref.parser('setMethod',
-                       function(pivot, expression)
-                       list(S4method=car(expression),
-                            signature=cadr(expression)))
+                       function(pivot, expression) {
+                         browser()
+                         list(S4method=car(expression),
+                              signature=cadr(expression))
+                       })
 
 #' Make an Rd roclet which parses the given files and, if specified, populates
 #' the given subdirectory with Rd files; or writes to standard out.  See
@@ -282,7 +286,7 @@ make.Rd.roclet <- function(subdir=NULL,
     else
       name
   }
-  
+ 
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
   #' \code{@@setGeneric}, \code{@@assignee}, etc.
@@ -386,6 +390,7 @@ make.Rd.roclet <- function(subdir=NULL,
     # TODO: interrupt process?
     
     assign.parent('params', NULL, environment())
+    assign.parent('slots', NULL, environment())
     assign.parent('examples', NULL, environment())
     parse.name(partitum)
     parse.usage(partitum)
@@ -397,6 +402,11 @@ make.Rd.roclet <- function(subdir=NULL,
   post.parse <- function(partitum) {
     parse.arguments()
     parse.examples(partitum)
+
+    if ( !is.null(partitum$S4class) ) {
+      parse.slots(partitum$S4formals)
+      parse.contains(partitum$S4formals)
+    }
     
     save.Rd()
     reset.Rd()
@@ -419,7 +429,9 @@ make.Rd.roclet <- function(subdir=NULL,
         final <- do.call('mergefn', list(final, base))
 
       writeRd(final[[1]], filename)
-    } 
+    }
+
+    reset.rdtank()
   }
 
   roclet <- make.roclet(parse.expression,
@@ -491,17 +503,45 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param name.param name-param pair
   #' @return A list of Rd-readable expressions
   parse.params <- function()
-    lapply(lapply(params, trim), itemTag)
+    lapply(params, itemTag)
     
   #' Paste and label the Rd-readable expressions
   #' returned by \code{parse.params}.
   #' @return \code{NULL}
-  parse.arguments <- function()
+  parse.arguments <- function() {
     if (length(params) > 0)
       append.Rd(argumentsTag(x=parse.params(), newline=TRUE))
+  }
 
   roclet$register.parser('param', parse.param)
 
+  slots <- NULL
+
+  parse.slot <- function(key, expression)
+    assign.parent('slots',
+                  append(slots, list(expression)),
+                  environment())
+  
+  parse.slots <- function(partitum) {
+    names <- sapply(slots, '[[', 'name')
+    repr <- partitum$representation
+    proto <- partitum$prototype
+
+    for ( i in match(names(repr), names) )
+      slots[[i]]$type <- repr[[slots[[i]]$name]]
+    for ( i in match(names(proto), names) )
+      slots[[i]]$default <- proto[[slots[[i]]$name]]
+    
+    append.Rd(slotsTag(x=lapply(slots,
+                         function(x) do.call('slotTag', x))))
+  }
+
+  roclet$register.parser('slot', parse.slot)
+  
+  parse.contains <- function(partitum)
+    if ( !is.null(partitum$contains) )
+      append.Rd(containsTag(x=partitum$contains))
+  
   examples <- NULL
 
   #' Parse individual \code{@@example} clauses by adding the
@@ -557,6 +597,10 @@ make.Rd.roclet <- function(subdir=NULL,
   rdtank.filenames <- function()
     names(roclet$rdtank$mergelist)
 
+  reset.rdtank <- function() {
+    roclet$rdtank$documents <- list()
+    roclet$rdtank$mergelist <- list()
+  }  
   
   baseRd <- function(filename)
     if ( file.exists(filename) ) parse_Rd(filename) else NULL

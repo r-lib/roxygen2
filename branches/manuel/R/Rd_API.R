@@ -1,5 +1,28 @@
 
 
+### Composed Rd tag elements (mainly for S4 purpose):
+
+slotTag <- function(name, description=NULL, type=NULL, default=NULL) {
+  return(itemTag(sprintf('\\code{%s} [\\code{\\link{%s}}]:',
+                         name, trim(type)),
+                 sprintf('%s. %s',
+                         trim(description),
+                         ifelse(is.null(default), '',
+                                sprintf('(Default: \\code{%s})', default)))))
+}
+
+slotsTag <- function(..., x=list(...)) {
+  return(sectionTag('Slots', list(describeTag(x))))
+}
+
+containsTag <- function(..., x=list(...)) {
+  return(sectionTag('Superclasses',
+                    list(textTag(paste('\\code{\\linkS4class{', x, '}}',
+                                       collapse=', ', sep='')))))
+}
+
+
+
 ### Rd tag elements:
 
 nameTag <- function(x) {
@@ -23,11 +46,11 @@ detailsTag <- function(..., x=list(...)) {
 }
 
 itemTag <- function(x, y=NULL) {
-  if ( is.null(y) )
+  if ( is.list(x) )
     y <- x[[2]]; x <- x[[1]]
   
-  return(Rd_tag(list(list(textTag(x)),
-                     list(textTag(y))), '\\item'))
+  return(Rd_tag(list(list(textTag(trim(x))),
+                     list(textTag(trim(y)))), '\\item'))
 }
 
 argumentsTag <- function(..., x=list(...), newline=TRUE) {
@@ -48,6 +71,14 @@ usageTag <- function(x, y) {
   tag <- Rd_tag_append_tag(tag, newlineTag(), newline=FALSE)
 
   return(tag)
+}
+
+sectionTag <- function(x, y) {
+  return(Rd_tag(list(list(textTag(x)), y), '\\section'))
+}
+
+describeTag <- function(x) {
+  return(Rd_tag(x, '\\describe'))
 }
 
 newlineTag <- function() {

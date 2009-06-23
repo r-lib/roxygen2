@@ -45,11 +45,9 @@ register.srcref.parser('setGeneric',
                        list(S4generic=car(expression)))
 
 register.srcref.parser('setMethod',
-                       function(pivot, expression) {
-                         browser()
-                         list(S4method=car(expression),
-                              signature=cadr(expression))
-                       })
+                       function(pivot, expression)
+                       list(S4method=car(expression),
+                            S4formals=parseS4.method(cdr(expression))))
 
 #' Make an Rd roclet which parses the given files and, if specified, populates
 #' the given subdirectory with Rd files; or writes to standard out.  See
@@ -170,6 +168,9 @@ make.Rd.roclet <- function(subdir=NULL,
                            documentedonly=TRUE,
                            mergefn=Rd_merge) {
 
+  rdtank <- make.Rdtank()
+
+  
   saveRd <- TRUE
 
   set.saveRd <- function()
@@ -186,7 +187,7 @@ make.Rd.roclet <- function(subdir=NULL,
   
   save.Rd <- function() {
     if ( saveRd )
-      rdtank.add(rd, name, filename)
+      rdtank$add.Rd(rd, name, filename)
 
     if ( verbose )
       if ( saveRd )
@@ -317,7 +318,6 @@ make.Rd.roclet <- function(subdir=NULL,
                       environment())
         if (verbose)
           cat(sprintf('Processing %s:', name))
-        #unlink(filename)
       }
       
       parse.expression('name', basename)
@@ -404,8 +404,15 @@ make.Rd.roclet <- function(subdir=NULL,
     parse.examples(partitum)
 
     if ( !is.null(partitum$S4class) ) {
+      rdtank$register.S4class(partitum$S4class, name)
+      
       parse.slots(partitum$S4formals)
       parse.contains(partitum$S4formals)
+    }
+
+    if ( !is.null(partitum$S4method) ) {
+      rdtank$register.S4method(name, partitum$S4formals$signature,
+                                      partitum$description)
     }
     
     save.Rd()
@@ -420,18 +427,34 @@ make.Rd.roclet <- function(subdir=NULL,
     reset.saveRd()
   }
 
-  post.files <- function() {
-    for ( filename in rdtank.filenames() ) {
+  post.files.write <- function() {   
+    for ( filename in rdtank$filenames() ) {
       base <- baseRd(filename)
-      final <- rdtank.get(filename)
-
+      final <- rdtank$get.Rd.by(filename=filename)
+      
       if ( length(final) > 1 || !is.null(base) )
         final <- do.call('mergefn', list(final, base))
-
+      
       writeRd(final[[1]], filename)
     }
+  }
 
-    reset.rdtank()
+  post.files.classmethods <- function() {
+    for ( class in rdtank$classnames() ) {
+      if ( rdtank$class.exists(class) ) {
+        rd <- rdtank$get.Rd.by(classname=class)[[1]]
+        tag <- do.call('classmethodsTag',
+                       lapply(rdtank$get.class.methods(class),
+                              function(x) do.call('classmethodTag', x)))
+        rdtank$update.Rd(Rd_append_tag(rd, tag), classname=class)
+      }
+    }
+  }
+  
+  post.files <- function() {
+    post.files.classmethods()
+    post.files.write()
+    rdtank$reset()
   }
 
   roclet <- make.roclet(parse.expression,
@@ -580,28 +603,6 @@ make.Rd.roclet <- function(subdir=NULL,
 
   roclet$register.parser('TODO', parse.todo)
 
-
-  roclet$rdtank <- new.env(parent=emptyenv())
-  roclet$rdtank$documents <- list()
-  roclet$rdtank$mergelist <- list()
-  
-  rdtank.add <- function(rd, name, filename) {
-    roclet$rdtank$documents[[name]] <- rd
-    roclet$rdtank$mergelist[[filename]] <-
-      c(roclet$rdtank$mergelist[[filename]], name)
-  }
-
-  rdtank.get <- function(filename)
-    roclet$rdtank$documents[roclet$rdtank$mergelist[[filename]]]
-
-  rdtank.filenames <- function()
-    names(roclet$rdtank$mergelist)
-
-  reset.rdtank <- function() {
-    roclet$rdtank$documents <- list()
-    roclet$rdtank$mergelist <- list()
-  }  
-  
   baseRd <- function(filename)
     if ( file.exists(filename) ) parse_Rd(filename) else NULL
 

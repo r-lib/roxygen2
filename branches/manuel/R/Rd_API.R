@@ -16,11 +16,21 @@ slotsTag <- function(..., x=list(...)) {
 }
 
 containsTag <- function(..., x=list(...)) {
-  return(sectionTag('Superclasses',
+  return(sectionTag('Extends',
                     list(textTag(paste('\\code{\\linkS4class{', x, '}}',
                                        collapse=', ', sep='')))))
 }
 
+classmethodTag <- function(name, signature, description) {
+  return(itemTag(name,
+                 sprintf('\\code{signature(%s)}: %s',
+                         paste(names(signature), dQuote(signature), sep=' = ', collapse=', '),
+                         trim(description))))
+}
+
+classmethodsTag <- function(..., x=list(...)) {
+  return(sectionTag('Methods', list(describeTag(x))))
+}
 
 
 ### Rd tag elements:

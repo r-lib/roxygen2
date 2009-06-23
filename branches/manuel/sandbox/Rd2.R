@@ -1,4 +1,6 @@
 
+setwd('Z:\\Projects\\Roxygen\\r-forge\\branches\\manuel\\sandbox')
+
 # Roxygen base:
 sources <- c('%s/R/roxygen.R',
              '%s/R/functional.R',
@@ -19,15 +21,18 @@ for (source in sources)
 # Changes:
 library(tools)
 
-setwd('Z:\\Projects\\Roxygen\\r-forge\\branches\\manuel\\sandbox')
-
-source('../R/Rd_API.R')
-source('../R/Rd.R')
 source('../R/Rd_merge.R')
+source('../R/Rd_API.R')
+source('../R/parseS4.R')
+source('../R/Rd.R')
+
 
 roc <- make.Rd.roclet(subdir='.')
+roc$parse('example-S4-person.R')
+
 roc$parse('Bicycle.R')
 roc$parse('example-pseudoprime.R')
+
 
 
 
@@ -107,7 +112,7 @@ rd <- Rd()
 rd <- Rd_append_tag(rd, nameTag("Manuel"))
 rd <- Rd_append_tag(rd, aliasTag("Manuel"))
 rd <- Rd_append_tag(rd, aliasTag("Eugster"))
-rd <- Rd_append_tag(rd, methodTag('do', 'x, a=1, b=2'))
+rd <- Rd_append_tag(rd, usageTag(methodTag('do', 'x, a=1, b=2')))
 
 
 

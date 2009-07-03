@@ -122,7 +122,9 @@ guess.name <- function(partitum) {
                          partitum$S4generic)
   if ( !is.null(partitum$S4class) )
     name <- sprintf('%s-class', name)
-
+  if ( !is.null(partitum$S4method) )
+    name <- sprintf('%s,%s-method', name,
+                    paste(partitum$S4formals$signature, collapse=','))
   name
 }
 

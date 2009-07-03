@@ -26,7 +26,10 @@ Person <- function(fullname, birthyear) {
 
 #' The naming of an object.
 #'
+#' Details about the generic naming of an object.
+#'
 #' @param object A object which gets a name
+#' @param y Another argument
 setGeneric('name', function(object, y, ...) standardGeneric('name'), valueClass='character')
 
 #' Name a person, the baptism.
@@ -36,6 +39,15 @@ setGeneric('name', function(object, y, ...) standardGeneric('name'), valueClass=
 setMethod('name', signature=signature(object='Person', y='numeric'),
 function(object, y, ...) {
   return(object@fullname)
+})
+
+#' Name a person, the baptism.
+#'
+#' @param object A Person's name
+#' @export
+setMethod('name', signature=signature(object='character', y='numeric'),
+function(object, y, ...) {
+  return(object)
 })
 
 #' Blub a person.

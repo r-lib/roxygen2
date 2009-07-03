@@ -21,10 +21,13 @@ for (source in sources)
 # Changes:
 library(tools)
 
+source('../R/roclet.R')
+
 source('../R/Rd_merge.R')
 source('../R/Rd_API.R')
 source('../R/parseS4.R')
 source('../R/Rd.R')
+source('../R/Rdtank.R')
 
 
 roc <- make.Rd.roclet(subdir='.')

@@ -45,9 +45,12 @@ register.srcref.parser('setGeneric',
                        list(S4generic=car(expression)))
 
 register.srcref.parser('setMethod',
-                       function(pivot, expression)
-                       list(S4method=car(expression),
-                            S4formals=parseS4.method(cdr(expression))))
+                       function(pivot, expression) {
+                         S4formals <- parseS4.method(cdr(expression))
+                         list(S4method=car(expression),
+                              S4formals=S4formals,
+                              formals=S4formals$definition)
+                       })
 
 #' Make an Rd roclet which parses the given files and, if specified, populates
 #' the given subdirectory with Rd files; or writes to standard out.  See
@@ -411,8 +414,10 @@ make.Rd.roclet <- function(subdir=NULL,
     }
 
     if ( !is.null(partitum$S4method) ) {
-      rdtank$register.S4method(name, partitum$S4formals$signature,
-                                      partitum$description)
+      rdtank$register.S4method(partitum$S4method,
+                               name,
+                               partitum$S4formals$signature,
+                               partitum$description)
     }
     
     save.Rd()
@@ -450,9 +455,20 @@ make.Rd.roclet <- function(subdir=NULL,
       }
     }
   }
+
+  post.files.methods <- function() {
+    for ( generic in rdtank$generics() ) {
+      rd <- rdtank$get.Rd.by(name=generic)
+      tag <- do.call('genericmethodsTag',
+                     lapply(rdtank$get.methods(generic),
+                            function(x) do.call('genericmethodTag', x)))
+      rdtank$update.Rd(Rd_append_tag(rd, tag), name=generic)
+    }
+  }
   
   post.files <- function() {
     post.files.classmethods()
+    post.files.methods()
     post.files.write()
     rdtank$reset()
   }

@@ -7,6 +7,7 @@ make.Rdtank <- function() {
   tank$mergelist <- list()
   tank$classmethods <- list()
   tank$classlist <- list()
+  tank$methods <- list()
 
   tank$add.Rd <- function(rd, name, filename=NULL) {
     tank$documents[[name]] <- rd
@@ -36,13 +37,17 @@ make.Rdtank <- function() {
   tank$register.S4class <- function(classname, name)
     tank$classlist[[classname]] <- name
 
-  tank$register.S4method <- function(name, signature, description) {
+  tank$register.S4method <- function(generic, name, signature, description) {
     for ( class in signature )
       tank$classmethods[[class]] <-
         c(tank$classmethods[[class]],
-          list(list(name=name, signature=signature, description=description)))
+          list(list(generic=generic, name=name,
+                    signature=signature, description=description)))
     
-    invisible(NULL)
+    tank$methods[[generic]] <-
+      c(tank$methods[[generic]], list(list(name=name,
+                                           signature=signature,
+                                           description=description)))
   }
   
   tank$filenames <- function()
@@ -51,12 +56,17 @@ make.Rdtank <- function() {
   tank$classnames <- function()
     names(tank$classmethods)
 
+  tank$generics <- function()
+    names(tank$methods)
+  
   tank$class.exists <- function(class)
     !is.null(tank$documents[[class]])
 
   tank$get.class.methods <- function(class)
     tank$classmethods[[class]]
 
+  tank$get.methods <- function(generic)
+    tank$methods[[generic]]
   
   tank$reset <- function() {
     tank$documents <- list()

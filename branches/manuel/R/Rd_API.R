@@ -4,11 +4,13 @@
 
 slotTag <- function(name, description=NULL, type=NULL, default=NULL) {
   return(itemTag(sprintf('\\code{%s} [\\code{\\link{%s}}]:',
-                         name, trim(type)),
+                         name,
+                         trim(type)),
                  sprintf('%s. %s',
                          trim(description),
                          ifelse(is.null(default), '',
-                                sprintf('(Default: \\code{%s})', default)))))
+                                sprintf('(Default: \\code{%s})',
+                                        default)))))
 }
 
 slotsTag <- function(..., x=list(...)) {
@@ -21,14 +23,37 @@ containsTag <- function(..., x=list(...)) {
                                        collapse=', ', sep='')))))
 }
 
-classmethodTag <- function(name, signature, description) {
-  return(itemTag(name,
-                 sprintf('\\code{signature(%s)}: %s',
-                         paste(names(signature), dQuote(signature), sep=' = ', collapse=', '),
+classmethodSignature <- function(signature)
+  sprintf('signature(%s)',
+          paste(names(signature), dQuote(signature),
+                sep=' = ', collapse=', '))  
+
+classmethodTag <- function(generic, name, signature, description) {
+  return(itemTag(sprintf('\\code{\\link[=%s]{%s}}',
+                         name,
+                         generic),
+                 sprintf('\\code{%s}: %s',
+                         classmethodSignature(signature),
                          trim(description))))
 }
 
 classmethodsTag <- function(..., x=list(...)) {
+  return(sectionTag('Methods', list(describeTag(x))))
+}
+
+genericmethodSignature <- function(signature)
+  sprintf('signature(%s)',
+          paste(names(signature), dQuote(sprintf('\\link{%s}', signature)),
+                sep=' = ', collapse=', '))
+
+genericmethodTag <- function(name, signature, description) {
+  return(itemTag(sprintf('\\code{%s}',
+                         genericmethodSignature(signature)),
+                 sprintf('\\link[=%s]{Details}',
+                         name)))
+}
+
+genericmethodsTag <- function(..., x=list(...)) {
   return(sectionTag('Methods', list(describeTag(x))))
 }
 

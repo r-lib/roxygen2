@@ -307,6 +307,7 @@ parse.ref.preref <- function(ref, ...) {
 #' @param proc the procedure to apply to each subexpression
 #' @param expression the root of the expression
 #' @return NULL
+#' @export
 preorder.walk.expression <- function(proc, expression) {
   if (length(expression) > 0)
     for (i in c(1:length(expression))) {
@@ -323,6 +324,7 @@ preorder.walk.expression <- function(proc, expression) {
 #' @param expression the root of the expression to be
 #' flattened
 #' @return A list containing the flattened expression
+#' @export
 preorder.flatten.expression <- function(expression) {
   flattened <- NULL
   preorder.walk.expression(function(expression)

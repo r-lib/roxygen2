@@ -26,6 +26,7 @@ Negate <- function(f)
 #' @return A composed function
 #' @callGraphPrimitives
 #' @callGraphDepth 3
+#' @export
 Compose <- function(...) {
   fs <- list(...)
   function(...) Reduce(function(x, f) f(x),

@@ -8,6 +8,7 @@ make.Rdtank <- function() {
   tank$classmethods <- list()
   tank$classlist <- list()
   tank$methods <- list()
+  tank$generics <- list()
 
   tank$add.Rd <- function(rd, name, filename=NULL) {
     tank$documents[[name]] <- rd
@@ -25,7 +26,8 @@ make.Rdtank <- function() {
       tank$documents[[tank$classlist[[classname]]]] <- rd
   }
 
-  tank$get.Rd.by <- function(name=NULL, filename=NULL, classname=NULL) {
+  tank$get.Rd.by <- function(name=NULL, filename=NULL, classname=NULL,
+                             generic=NULL) {
     if ( !is.null(name) )
       return(tank$documents[name])
     if ( !is.null(filename) )
@@ -59,8 +61,8 @@ make.Rdtank <- function() {
   tank$generics <- function()
     names(tank$methods)
   
-  tank$class.exists <- function(class)
-    !is.null(tank$documents[[class]])
+  tank$class.exists <- function(classname)
+    !is.null(tank$classlist[[classname]])
 
   tank$get.class.methods <- function(class)
     tank$classmethods[[class]]

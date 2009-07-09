@@ -1,17 +1,20 @@
 # NOTE: Most of the parsers require full specification, e.g.,
 # representation=representation(...) or signature=signature(object="numeric")
 
+cdr.expression <- function(expression)
+  cdr(preorder.flatten.expression(expression))
 
 parseS4.class <- function(expression) {
   formals <- list(representation=
-                  cdr(preorder.flatten.expression(expression$representation)))
+                  cdr.expression(expression$representation))
   if ( !is.null(expression$contains) )
     formals <- append(formals,
-                      list(contains=expression$contains))
+                      list(contains=
+                           cdr.expression(expression$contains)))
   if ( !is.null(expression$prototype) )
     formals <- append(formals,
                       list(prototype=
-                           cdr(preorder.flatten.expression(expression$prototype))))
+                           cdr.expression(expression$prototype)))
   formals
 }
 
@@ -21,7 +24,7 @@ parseS4.method <- function(expression) {
   def <- which(sapply(expression, is.call) & names(expression) == '')[1]
 
   formals <- list(signature=
-                  cdr(preorder.flatten.expression(expression$signature)),
+                  cdr.expression(expression$signature),
                   definition=
                   parse.formals(expression[c(def, def+1)])[[1]])
   

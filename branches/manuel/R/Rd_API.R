@@ -1,20 +1,32 @@
 
 
 ### Composed Rd tag elements (mainly for S4 purpose):
+### TODO: rewrite using code, emph, etc. tags and overload +
+### to compose tags.
 
 slotTag <- function(name, description=NULL, type=NULL, default=NULL) {
-  return(itemTag(sprintf('\\code{%s} [\\code{\\link{%s}}]:',
-                         name,
-                         trim(type)),
-                 sprintf('%s. %s',
-                         trim(description),
-                         ifelse(is.null(default), '',
-                                sprintf('(Default: \\code{%s})',
-                                        default)))))
+  return(itemTag(sprintf('\\code{%s}:',
+                         name),
+                 sprintf('(\\code{\\link{%s}}) %s',
+                         trim(type),
+                         trim(description))))
 }
 
 slotsTag <- function(..., x=list(...)) {
   return(sectionTag('Slots', list(describeTag(x))))
+}
+
+prototypeTag <- function(name, value, inherit) {
+  return(itemTag(sprintf(ifelse(inherit,
+                                '\\emph{\\code{%s}} =',
+                                '\\code{%s} ='),
+                         name),
+                 sprintf('%s',
+                         trim(value))))
+}
+
+prototypesTag <- function(..., x=list(...)) {
+  return(sectionTag('Prototype', list(describeTag(x))))
 }
 
 containsTag <- function(..., x=list(...)) {
@@ -38,22 +50,6 @@ classmethodTag <- function(generic, name, signature, description) {
 }
 
 classmethodsTag <- function(..., x=list(...)) {
-  return(sectionTag('Methods', list(describeTag(x))))
-}
-
-genericmethodSignature <- function(signature)
-  sprintf('signature(%s)',
-          paste(names(signature), dQuote(sprintf('\\link{%s}', signature)),
-                sep=' = ', collapse=', '))
-
-genericmethodTag <- function(name, signature, description) {
-  return(itemTag(sprintf('\\code{%s}',
-                         genericmethodSignature(signature)),
-                 sprintf('\\link[=%s]{Details}',
-                         name)))
-}
-
-genericmethodsTag <- function(..., x=list(...)) {
   return(sectionTag('Methods', list(describeTag(x))))
 }
 
@@ -98,6 +94,11 @@ argumentsTag <- function(..., x=list(...), newline=TRUE) {
 methodTag <- function(x, y) {
   return(Rd_tag(list(list(textTag(x)),
                      list(textTag(y))), '\\method'))
+}
+
+S4methodTag <- function(x, y) {
+  return(Rd_tag(list(list(textTag(x)),
+                     list(textTag(y))), '\\S4method'))
 }
 
 usageTag <- function(x, y) {
@@ -177,7 +178,7 @@ Rd_tag_append_tag <- function(tag1, tag2, newline=TRUE) {
 
 ### Rd functions:
 
-Rd_append_tag <- function(rd, tag, at=NULL, newline=FALSE) {
+Rd_append_tag <- function(rd, tag, at=NULL, newline=TRUE) {
   if ( is.null(at) )
     at <- length(rd) + 1
   

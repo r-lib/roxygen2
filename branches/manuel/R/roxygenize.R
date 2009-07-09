@@ -109,15 +109,14 @@ roxygenize <- function(package.dir,
                               all.files=TRUE))
   Rd <- make.Rd.roclet(man.dir)
   do.call(Rd$parse, files)
-  Rd$write()
   namespace <- make.namespace.roclet(namespace.file)
   do.call(namespace$parse, files)
   collate <- make.collate.roclet(merge.file=package.description,
                                  target.file=roxygen.description)
   collate$parse.dir(r.dir)
-  callgraph <-
-    make.callgraph.roclet(description.dependencies(package.description),
-                          doc.dir)
-  do.call(callgraph$parse, files)
+  #callgraph <-
+  #  make.callgraph.roclet(description.dependencies(package.description),
+  #                        doc.dir)
+  #do.call(callgraph$parse, files)
                           
 }

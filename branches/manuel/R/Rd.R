@@ -335,7 +335,11 @@ make.Rd.roclet <- function(subdir=NULL,
   
   parse.function.name <- function(partitum) {
     if (!is.null(partitum$method))
-      methodTag(trim(car(partitum$method)), trim(cadr(partitum$method)))
+      methodTag(trim(car(partitum$method)),
+                trim(cadr(partitum$method)))
+    else if (!is.null(partitum$S4method))
+      S4methodTag(partitum$S4method,
+                  paste(partitum$S4formals$signature, collapse=','))
     else
       textTag(partitum$assignee)
   }
@@ -345,7 +349,7 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.formals <- function(partitum) {
-    formals <- partitum$formals    
+    formals <- partitum$formals
     if (!is.null(formals)) {
       formals <- lapply(formals, trim)
       formals <- lapply(formals, paste, collapse=" ")
@@ -395,6 +399,7 @@ make.Rd.roclet <- function(subdir=NULL,
     assign.parent('params', NULL, environment())
     assign.parent('slots', NULL, environment())
     assign.parent('examples', NULL, environment())
+    assign.parent('description', NULL, environment())
     parse.name(partitum)
     parse.usage(partitum)
   }
@@ -411,13 +416,14 @@ make.Rd.roclet <- function(subdir=NULL,
       
       parse.slots(partitum$S4formals)
       parse.contains(partitum$S4formals)
+      parse.prototypes(partitum$S4formals)
     }
 
     if ( !is.null(partitum$S4method) ) {
       rdtank$register.S4method(partitum$S4method,
                                name,
                                partitum$S4formals$signature,
-                               partitum$description)
+                               description)
     }
     
     save.Rd()
@@ -456,19 +462,19 @@ make.Rd.roclet <- function(subdir=NULL,
     }
   }
 
-  post.files.methods <- function() {
-    for ( generic in rdtank$generics() ) {
-      rd <- rdtank$get.Rd.by(name=generic)
-      tag <- do.call('genericmethodsTag',
-                     lapply(rdtank$get.methods(generic),
-                            function(x) do.call('genericmethodTag', x)))
-      rdtank$update.Rd(Rd_append_tag(rd, tag), name=generic)
-    }
-  }
+  #post.files.methods <- function() {
+  #  for ( generic in rdtank$generics() ) {
+  #    rd <- rdtank$get.Rd.by(name=generic)
+  #    tag <- do.call('genericmethodsTag',
+  #                   lapply(rdtank$get.methods(generic),
+  #                          function(x) do.call('genericmethodTag', x)))
+  #    rdtank$update.Rd(Rd_append_tag(rd, tag), name=generic)
+  #  }
+  #}
   
   post.files <- function() {
     post.files.classmethods()
-    post.files.methods()
+    #post.files.methods()
     post.files.write()
     rdtank$reset()
   }
@@ -510,6 +516,8 @@ make.Rd.roclet <- function(subdir=NULL,
                          function(key, expressions)
                          parse.split('keyword', expressions))
 
+  description <- NULL
+  
   #' Split the introductory matter into its description followed
   #' by details (separated by a blank line).
   #' @param key ignored
@@ -520,6 +528,7 @@ make.Rd.roclet <- function(subdir=NULL,
     description <- car(paragraphs)
     details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
     parse.expression('description', description)
+    assign.parent('description', description, environment())
     if (length(details) > 0 && !is.null.string(details))
       parse.expression('details', details)
   }
@@ -563,20 +572,35 @@ make.Rd.roclet <- function(subdir=NULL,
   
   parse.slots <- function(partitum) {
     names <- sapply(slots, '[[', 'name')
-    repr <- partitum$representation
-    proto <- partitum$prototype
 
-    for ( i in match(names(repr), names) )
-      slots[[i]]$type <- repr[[slots[[i]]$name]]
-    for ( i in match(names(proto), names) )
-      slots[[i]]$default <- proto[[slots[[i]]$name]]
+    if ( !is.nil(names) ) {
+      repr <- partitum$representation
+      
+      for ( i in match(names(repr), names) )
+        slots[[i]]$type <- repr[[slots[[i]]$name]]
     
-    append.Rd(slotsTag(x=lapply(slots,
-                         function(x) do.call('slotTag', x))))
+      append.Rd(slotsTag(x=lapply(slots,
+                           function(x) do.call('slotTag', x))))
+    }
+  }
+
+  parse.prototypes <- function(partitum) {
+    if ( !is.null(partitum$prototype) ) {
+      slotnames <- sapply(slots, '[[', 'name')
+
+      proto <- lapply(names(partitum$prototype),
+                      function(x)
+                      list(name=x,
+                           value=maybe.quote(partitum$prototype[[x]]),
+                           inherit=!(x %in% slotnames)))
+      
+      append.Rd(prototypesTag(x=lapply(proto,
+                                function(x) do.call('prototypeTag', x))))
+    }
   }
 
   roclet$register.parser('slot', parse.slot)
-  
+
   parse.contains <- function(partitum)
     if ( !is.null(partitum$contains) )
       append.Rd(containsTag(x=partitum$contains))

@@ -1,20 +1,27 @@
 # NOTE: Most of the parsers require full specification, e.g.,
 # representation=representation(...) or signature=signature(object="numeric")
 
-cdr.expression <- function(expression)
+cdrpfe <- function(expression)
   cdr(preorder.flatten.expression(expression))
 
 parseS4.class <- function(expression) {
+  browser()
   formals <- list(representation=
-                  cdr.expression(expression$representation))
+                  cdrpfe(expression$representation))
+
+  if ( !is.na(i <- match('VIRTUAL', formals$representation)) ) {
+    formals$virtual <- TRUE
+    formals$representation[i] <- NULL
+  }
+  
   if ( !is.null(expression$contains) )
     formals <- append(formals,
                       list(contains=
-                           cdr.expression(expression$contains)))
+                           cdrpfe(expression$contains)))
   if ( !is.null(expression$prototype) )
     formals <- append(formals,
                       list(prototype=
-                           cdr.expression(expression$prototype)))
+                           cdrpfe(expression$prototype)))
   formals
 }
 
@@ -24,7 +31,7 @@ parseS4.method <- function(expression) {
   def <- which(sapply(expression, is.call) & names(expression) == '')[1]
 
   formals <- list(signature=
-                  cdr.expression(expression$signature),
+                  cdrpfe(expression$signature),
                   definition=
                   parse.formals(expression[c(def, def+1)])[[1]])
   

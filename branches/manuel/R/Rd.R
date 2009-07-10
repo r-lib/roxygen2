@@ -290,14 +290,27 @@ make.Rd.roclet <- function(subdir=NULL,
     else
       name
   }
- 
+
+  maybe.S4extend.name <- function(name, partitum) {
+    if ( !is.null(partitum$S4class) )
+      sprintf('%s-class', name)
+    else if ( !is.null(partitum$S4method) )
+      sprintf('%s,%s-method', name,
+              paste(partitum$S4formals$signature, collapse=','))
+    else if ( !is.null(partitum$S4generic) )
+      sprintf('%s-methods', name)
+    else
+      name
+  }
+  
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
   #' \code{@@setGeneric}, \code{@@assignee}, etc.
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.name <- function(partitum) {
-    name <- guess.name(partitum)
+    rawname <- guess.name(partitum)
+    name <- maybe.S4extend.name(rawname, partitum)
     if (is.null(name) && !is.null(subdir)) {
       filename <- partitum$srcref$filename
       first.line <- car(partitum$srcref$lloc)
@@ -325,7 +338,9 @@ make.Rd.roclet <- function(subdir=NULL,
       
       parse.expression('name', basename)
       parse.expression('alias', name)
-
+      if ( rawname != name )
+        parse.expression('alias', rawname)
+        
       assign.parent('name', name, environment())
     }
     if ((!is.null(name) || !is.null(partitum$title)) &&
@@ -425,7 +440,7 @@ make.Rd.roclet <- function(subdir=NULL,
                                partitum$S4formals$signature,
                                description)
     }
-    
+
     save.Rd()
     reset.Rd()
 

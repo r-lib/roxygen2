@@ -110,31 +110,17 @@ assign.parent <- function(var, value, env)
 first.non.null <- function(...)
   append(NULL, c(...))[[1]]
 
-#' Similar to sprintf, but returns NULL instead of
-#' character(0) if value is NULL.
-#' @param fmt the format string
-#' @param \dots the values
-#' @return The \code{sprintf} return value or \code{NULL}
-sprintf.null <- function(fmt, ...) {
-  if ( length(s <- sprintf(fmt, ...)) == 0 )
-    NULL
-  else
-    s
-}
-
 #' Pluck name from a hierarchy of candidates; viz. name,
 #' assignee, S4class, S4method, S4generic.
 #' @param partitum the parsed elements
 #' @return The guessed name (possibly \code{NULL})
-guess.name <- function(partitum) {
+guess.name <- function(partitum)
   first.non.null(partitum$name,
                  partitum$assignee,
-                 sprintf.null('%s-class', partitum$S4class),
-                 sprintf.null('%s,%s-method', partitum$S4method,
-                              paste(partitum$S4formals$signature,
-                                    collapse=',')),
-                 sprintf.null('%s-methods', partitum$S4generic))
-}
+                 partitum$S4class,
+                 partitum$S4method,
+                 partitum$S4generic)
+
 #' Extract the source code from parsed elements
 #' @param partitum the parsed elements
 #' @return The lines of source code

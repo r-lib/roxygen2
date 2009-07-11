@@ -1,7 +1,7 @@
 \name{cat.description}
 \alias{cat.description}
 \title{Print the field-value pair to a given file or standard out.}
-\usage{cat.description(field, value, file)}
+\usage{cat.description(field, value, file="")}
 \description{Print the field-value pair to a given file or standard out.}
 \value{\code{NULL}}
 \arguments{\item{field}{the field to be printed}

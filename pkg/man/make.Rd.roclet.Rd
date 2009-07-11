@@ -93,13 +93,8 @@ of multiple functions in one Rd unit).}
 \alias{keywords}
 \alias{return}
 \alias{author}
-\alias{TODO}
-\alias{param}
-\alias{method}
-\alias{setClass}
-\alias{setGeneric}
-\alias{setMethod}
-\alias{make.Rd.roclet}
+\section{TODO}{param method setClass setGeneric setMethod
+make.Rd.roclet}
 \arguments{\item{subdir}{directory into which to place the Rd files; if
 \code{NULL}, standard out.}
 \item{verbose}{whether to declare what we're doing in the

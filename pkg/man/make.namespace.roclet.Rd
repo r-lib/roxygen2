@@ -1,6 +1,6 @@
 \name{make.namespace.roclet}
 \title{Make a namespace roclet which parses the given files and writes a list of...}
-\usage{make.namespace.roclet(outfile, verbose=TRUE)}
+\usage{make.namespace.roclet(outfile="", verbose=TRUE)}
 \description{Make a namespace roclet which parses the given files and writes a list of
 namespace directives to a given file or standard out; see
 \cite{Writing R Extensions}

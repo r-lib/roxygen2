@@ -1,7 +1,7 @@
 \name{make.collate.roclet}
 \alias{make.collate.roclet}
 \title{Make collate roclet which parses the given files; topologically...}
-\usage{make.collate.roclet(merge.file, target.file, verbose=TRUE)}
+\usage{make.collate.roclet(merge.file, target.file="", verbose=TRUE)}
 \description{Make collate roclet which parses the given files; topologically
 sorting \code{@include}s, and either merging the \code{Collate:}
 directive with a pre-existing \file{DESCRIPTION} or writing to

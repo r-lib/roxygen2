@@ -1,6 +1,6 @@
 \name{make.callgraph.roclet}
 \title{Make a callgraph roclet which produces a static call graph...}
-\usage{make.callgraph.roclet(dependencies, dir=., verbose=TRUE)}
+\usage{make.callgraph.roclet(dependencies, dir=".", verbose=TRUE)}
 \description{Make a callgraph roclet which produces a static call graph
 from a given function at a given depth with or without
 primitives.}

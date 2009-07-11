@@ -130,3 +130,11 @@ src.lines <- function(partitum) {
     last.line <- caddr(partitum$srcref$lloc)
     getSrcLines(srcfile, first.line, last.line)
 }
+
+#' Extract the expression from the parse tree.
+#' @param partitum the parsed elements
+#' @return the extracted expression
+#' @export
+expression.from.partitum <- function(partitum)
+  parse(text=src.lines(partitum))
+

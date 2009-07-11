@@ -167,8 +167,8 @@ substr.regexpr <- function(pattern, text) {
 #' @param x the value to maybe quote
 #' @return The quoted character or the untouched value
 maybe.quote <- function(x) {
-  if ( is.character(x) )
-    dQuote(x)
+  if (is.character(x))
+    sprintf('"%s"', x)
   else
     x
 }

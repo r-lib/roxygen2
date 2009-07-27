@@ -130,7 +130,7 @@ would exclude primitive functions.
 
 \begin{figure}[H]
   \centering
-  \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph}
+  \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph.pdf}
   \caption{\texttt{fermat.test} call graph with primitives}
   \label{fermat-test}
 \end{figure}

@@ -36,7 +36,7 @@ Roxygen tag \tab Rd analogue\cr
 \cite{Writing R Extensions}.}
 \item{\code{@aliases}}{A default alias is plucked from the \code{@name} or
 assignee; otherwise, \code{@alias a b ...} translates
-to \code{\alias{a}}, \code{\alias{b}}, &c.
+to \code{\\alias{a}}, \code{\\alias{b}}, &c.
 If you specify one alias, however, specify them all.}
 \item{\code{@concept}}{See \dQuote{2.8 Indices} from
 \cite{Writing R Extensions}.}
@@ -45,14 +45,14 @@ relative to the package head; if the file resides in
 \file{tests}, for instance, it will be checked with
 \command{R CMD check}.
 The contents of the file will
-be concatenated under \code{\examples{...}}.}
+be concatenated under \code{\\examples{...}}.}
 \item{\code{@examples}}{Verbatim examples; see \dQuote{2.1.1
 Documenting functions} from \cite{Writing R
 Extensions}.}
 \item{\code{@format}}{See \dQuote{2.1.2 Documenting data sets} from
 \cite{Writing R Extensions}.}
 \item{\code{@keywords}}{\code{@keywords a b ...} translates to
-\code{\keyword{a}}, \code{\keyword{b}}, &c.}
+\code{\\keyword{a}}, \code{\\keyword{b}}, &c.}
 \item{\code{@method}}{Use \code{@method <generic> <class>} to document
 S3 functions.}
 \item{\code{@name}}{In the absense of an explicit \code{@name} tag, the
@@ -93,6 +93,7 @@ of multiple functions in one Rd unit).}
 \alias{keywords}
 \alias{return}
 \alias{author}
+\alias{make.Rd.roclet}
 \section{TODO}{param method setClass setGeneric setMethod
 make.Rd.roclet}
 \arguments{\item{subdir}{directory into which to place the Rd files; if

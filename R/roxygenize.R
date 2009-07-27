@@ -68,6 +68,7 @@ copy.dir <- function(source,
 #' @param overwrite overwrite target files
 #' @param unlink.target unlink target directory before
 #' processing files
+#' @param use.Rd2 use the Rd2 roclet
 #' @return \code{NULL}
 #' @callGraph
 #' @callGraphDepth 1
@@ -78,7 +79,8 @@ roxygenize <- function(package.dir,
                        roxygen.dir=NULL,
                        copy.package=TRUE,
                        overwrite=TRUE,
-                       unlink.target=FALSE) {
+                       unlink.target=FALSE,
+                       use.Rd2=FALSE) {
   if (is.null(roxygen.dir)) roxygen.dir <-
     sprintf(ROXYGEN.DIR, package.dir)
   man.dir <- file.path(roxygen.dir, MAN.DIR)
@@ -107,7 +109,12 @@ roxygenize <- function(package.dir,
                               recursive=TRUE,
                               full.names=TRUE,
                               all.files=TRUE))
-  Rd <- make.Rd.roclet(man.dir)
+  Rd <- {
+    if ( use.Rd2 )
+      make.Rd2.roclet(man.dir)
+    else
+      make.Rd.roclet(man.dir)
+  }
   do.call(Rd$parse, files)
   namespace <- make.namespace.roclet(namespace.file)
   do.call(namespace$parse, files)

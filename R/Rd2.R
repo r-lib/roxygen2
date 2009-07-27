@@ -1,8 +1,15 @@
+#' @include parse.R
 #' @include list.R
 #' @include string.R
 #' @include roclet.R
-#' @include parse.R
+#' @include parseS4.R
+#' @include Rdtank.R
+#' @include Rdapi.R
+#' @include Rdmerge.R
 roxygen()
+
+register.preref.parsers(parse.default,
+                        'nord')
 
 register.preref.parsers(parse.value,
                         'name',
@@ -20,144 +27,100 @@ register.preref.parsers(parse.value,
                         'author',
                         'TODO',
                         'format',
-                        'source')
+                        'source',
+                        'rdname')
 
 register.preref.parsers(parse.name.description,
                         'param',
-                        'method')
+                        'method',
+                        'slot')
 
 register.preref.parsers(parse.name,
                         'docType')
 
 register.srcref.parser('setClass',
                        function(pivot, expression)
-                       list(S4class=car(expression)))
+                       list(S4class=car(expression),
+                            S4formals=parseS4.class(cdr(expression))))
 
 register.srcref.parser('setGeneric',
                        function(pivot, expression)
                        list(S4generic=car(expression)))
 
 register.srcref.parser('setMethod',
-                       function(pivot, expression)
-                       list(S4method=car(expression),
-                            signature=cadr(expression)))
+                       function(pivot, expression) {
+                         S4formals <- parseS4.method(cdr(expression))
+                         list(S4method=car(expression),
+                              S4formals=S4formals,
+                              formals=S4formals$definition)
+                       })
 
-#' Make an Rd roclet which parses the given files and, if specified, populates
-#' the given subdirectory with Rd files; or writes to standard out.  See
-#' \cite{Writing R Extensions}
-#' (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
+#' New implementation of the Rd roclet; same functionality as the original
+#' implementation plus basic S4 handling.
 #'
-#' The first paragraph of a roxygen block constitutes its description, the
-#' subsequent paragraphs its details; moreover, the Rd roclet supports these
-#' tags:
-#'
-#' \tabular{ll}{
-#' Roxygen tag \tab Rd analogue\cr
-#' \code{@@author} \tab \code{\\author}\cr
-#' \code{@@aliases} \tab \code{\\alias, ...}\cr
-#' \code{@@concept} \tab \code{\\concept}\cr
-#' \code{@@example} \tab \emph{n/a}\cr
-#' \code{@@examples} \tab \code{\\examples}\cr
-#' \code{@@format} \tab \code{\\format}\cr
-#' \code{@@keywords} \tab \code{\\keyword, ...}\cr
-#' \code{@@method} \tab \code{\\method}\cr
-#' \code{@@name} \tab \code{\\name}\cr
-#' \code{@@note} \tab \code{\\note}\cr
-#' \code{@@param} \tab \code{\\arguments{\\item, ...}}\cr
-#' \code{@@references} \tab \code{\\references}\cr
-#' \code{@@return} \tab \code{\\value}\cr
-#' \code{@@seealso} \tab \code{\\seealso}\cr
-#' \code{@@source} \tab \code{\\source}\cr
-#' \code{@@title} \tab \code{\\title}\cr
-#' \code{@@TODO} \tab \emph{n/a}\cr
-#' \code{@@usage} \tab \code{\\usage}\cr
-#' }
-#'
+#' See \code{\link{make.Rd.roclet}} for description and available tags; new
+#' tags are:
+#' 
 #' \enumerate{
-#' \item{\code{@@author}}{See \dQuote{2.1.1 Documenting functions} from
-#'                        \cite{Writing R Extensions}.}
-#' \item{\code{@@aliases}}{A default alias is plucked from the \code{@@name} or
-#'                         assignee; otherwise, \code{@@alias a b ...} translates
-#'                         to \code{\\alias{a}}, \code{\\alias{b}}, &c.
-#'                         If you specify one alias, however, specify them all.}
-#' \item{\code{@@concept}}{See \dQuote{2.8 Indices} from
-#'                         \cite{Writing R Extensions}.}
-#' \item{\code{@@example}}{Each \code{@@example} tag specifies an example file
-#'                         relative to the package head; if the file resides in
-#'                         \file{tests}, for instance, it will be checked with
-#'                         \command{R CMD check}.
-#'                         The contents of the file will
-#'                         be concatenated under \code{\\examples{...}}.}
-#' \item{\code{@@examples}}{Verbatim examples; see \dQuote{2.1.1
-#'                          Documenting functions} from \cite{Writing R
-#'                          Extensions}.}
-#' \item{\code{@@format}}{See \dQuote{2.1.2 Documenting data sets} from
-#'                        \cite{Writing R Extensions}.}
-#' \item{\code{@@keywords}}{\code{@@keywords a b ...} translates to
-#'                          \code{\\keyword{a}}, \code{\\keyword{b}}, &c.}
-#' \item{\code{@@method}}{Use \code{@@method <generic> <class>} to document
-#'                        S3 functions.}
-#' \item{\code{@@name}}{In the absense of an explicit \code{@@name} tag, the
-#'                      name of an assignment is plucked from the assignee.}
-#' \item{\code{@@note}}{See \dQuote{2.1.1 Documenting functions} from
-#'                      \cite{Writing R Extensions}.}
-#' \item{\code{@@param}}{Each function variable should have a
-#'                       \code{@@param <variable> <description>} specified.}
-#' \item{\code{@@references}}{See \dQuote{2.1.1 Documenting functions} from
-#'                            \cite{Writing R Extensions}.}
-#' \item{\code{@@return}}{The return value of the function, or \code{NULL}.}
-#' \item{\code{@@seealso}}{See \dQuote{2.1.1 Documenting functions} from
-#'                         \cite{Writing R Extensions}.}
-#' \item{\code{@@source}}{See \dQuote{2.1.2 Documenting data sets} from
-#'                        \cite{Writing R Extensions}.}
-#' \item{\code{@@title}}{A default title is plucked from the first sentence
-#'                       of the description; that is, the first phrase ending
-#'                       with a period, question mark or newline.
-#'                       In the absence of a description, the title becomes
-#'                       the \code{@@name} or assignee; lastly, it can be
-#'                       overridden with \code{@@title}.}
-#' \item{\code{@@TODO}}{Note to developers to get off their asses.}
-#' \item{\code{@@usage}}{A default usage is construed from a function's formals,
-#'                       but can be overridden with \code{@@usage} (e.g. in the case
-#'                       of multiple functions in one Rd unit).}
+#' \item{\code{@@nord}}{Suppress Rd creation.}
+#' \item{\code{@@rdname}}{Definition of the Rd name; blocks with the same
+#'                        \code{@@rdname} are merged into one Rd file.}
+#' \item{\code{@@slot}}{Each S4 class slot should have a
+#'                      \code{@@slot <name> <description>} specified.}
 #' }
 #'
 #' @param subdir directory into which to place the Rd files; if
 #' \code{NULL}, standard out.
 #' @param verbose whether to declare what we're doing in the
 #' \var{subdir}
+#' @param exportonly create Rd files only for exported "things"
+#' @param documentedonly create Rd files only for "things" which
+#' are documented with Roxygen
 #' @return Rd roclet
-#' @examples
-#' #' This sentence describes the function.
-#' #'
-#' #' Here are the details (notice the preceding blank
-#' #' line); the name, title, usage and alias will be
-#' #' automatically generated.
-#' #'
-#' #' @@param a a parameter
-#' #' @@return NULL
-#' f <- function(a=1) NULL
-#'
-#' #' S3 functions require a @@method tag for
-#' #' the time being.
-#' #'
-#' #' @@method specialize foo
-#' #' @@param f a generic foo
-#' #' @@param ... ignored
-#' #' @@return The specialized foo
-#' specialize.foo <- function(f, ...)
-#'   actually.specialize(f)
-#'
-#' roclet <- make.Rd.roclet('man')
-#' \dontrun{roclet$parse('example.R')}
 #' @export
-#' @aliases name aliases title usage references concept
-#' note seealso example examples keywords return author
-#' make.Rd.roclet
-#' @TODO param method setClass setGeneric setMethod
-#' make.Rd.roclet
-make.Rd.roclet <- function(subdir=NULL,
-                           verbose=TRUE) {
+#' @aliases nord rdname slot make.Rd2.roclet
+make.Rd2.roclet <- function(subdir=NULL,
+                            verbose=TRUE,
+                            exportonly=FALSE,
+                            documentedonly=TRUE) {
+
+  require(tools)
+  
+  rdtank <- make.Rdtank()
+
+  
+  saveRd <- TRUE
+
+  set.saveRd <- function()
+    assign.parent('saveRd', TRUE, environment())
+
+  set.ignoreRd <- function()
+    assign.parent('saveRd', FALSE, environment())
+
+  reset.saveRd <- function()
+    set.saveRd()
+
+  
+  rd <- NULL
+  
+  save.Rd <- function() {
+    if ( saveRd )
+      rdtank$add.Rd(rd, name, filename)
+
+    if ( verbose )
+      if ( saveRd )
+        cat(sprintf(' witten to %s', filename))
+      else
+        cat(' omitted')
+  }
+
+  reset.Rd <- function()
+    assign.parent('rd', Rd(), environment())
+
+  append.Rd <- function(x)
+    assign.parent('rd', Rd_append_tag(rd, x), environment())
+ 
+  
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
   #' @param key the expression's key
@@ -165,12 +128,8 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @return A string containing the key and arguments
   #' in LaTeX-like gestalt.
   Rd.expression <- function(key, ...)
-    sprintf('\\%s%s\n',
-            key,
-            Reduce.paste(function(expression)
-                         sprintf('{%s}', trim(expression)),
-                         c(...),
-                         ''))
+    Rd_tag(textTag(trim(c(...))), paste('\\', key, sep=''))
+  
 
   #' Push the Rd-expression to standard out (or current
   #' sink).
@@ -178,10 +137,12 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param \dots the arguments
   #' @return \code{NULL}
   parse.expression <- function(key, ...)
-    cat(Rd.expression(key, c(...)), file=filename, append=TRUE)
+    append.Rd(Rd.expression(key, c(...)))
+    
 
   filename <- ''
-
+  name <- ''
+  
   reset.filename <- function()
     assign.parent('filename', '', environment())
 
@@ -244,6 +205,18 @@ make.Rd.roclet <- function(subdir=NULL,
     else
       name
   }
+
+  maybe.S4extend.name <- function(name, partitum) {
+    if ( !is.null(partitum$S4class) )
+      sprintf('%s-class', name)
+    else if ( !is.null(partitum$S4method) )
+      sprintf('%s,%s-method', name,
+              paste(partitum$S4formals$signature, collapse=','))
+    else if ( !is.null(partitum$S4generic) )
+      sprintf('%s-methods', name)
+    else
+      name
+  }
   
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
@@ -251,7 +224,8 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.name <- function(partitum) {
-    name <- guess.name(partitum)
+    rawname <- guess.name(partitum)
+    name <- maybe.S4extend.name(rawname, partitum)
     if (is.null(name) && !is.null(subdir)) {
       filename <- partitum$srcref$filename
       first.line <- car(partitum$srcref$lloc)
@@ -266,17 +240,23 @@ make.Rd.roclet <- function(subdir=NULL,
                 immediate.=TRUE)
     } else if (!is.null(name)) {
       name <- trim(name)
+      rdname <- trim(partitum$rdname)
+      basename <- if ( length(rdname) == 0 ) name else rdname
+      
       if (!is.null(subdir)) {
         assign.parent('filename',
-                      file.path(subdir, sprintf('%s.Rd', name)),
+                      file.path(subdir, sprintf('%s.Rd', basename)),
                       environment())
         if (verbose)
-          cat(sprintf('Writing %s to %s\n', name, filename))
-        unlink(filename)
+          cat(sprintf('Processing %s:', name))
       }
-      parse.expression('name', name)
-      if (is.null(partitum$aliases))
-        parse.expression('alias', name)
+      
+      parse.expression('name', basename)
+      parse.expression('alias', name)
+      if ( rawname != name )
+        parse.expression('alias', rawname)
+        
+      assign.parent('name', name, environment())
     }
     if ((!is.null(name) || !is.null(partitum$title)) &&
         !is.null(title <- parse.title(partitum, name)))
@@ -285,11 +265,13 @@ make.Rd.roclet <- function(subdir=NULL,
   
   parse.function.name <- function(partitum) {
     if (!is.null(partitum$method))
-      Rd.expression('method',
-          car(partitum$method),
-          cadr(partitum$method))
+      methodTag(trim(car(partitum$method)),
+                trim(cadr(partitum$method)))
+    else if (!is.null(partitum$S4method))
+      S4methodTag(partitum$S4method,
+                  paste(partitum$S4formals$signature, collapse=','))
     else
-      partitum$assignee
+      textTag(partitum$assignee)
   }
 
   #' Turn a list of formal arguments into a human-readable
@@ -299,6 +281,8 @@ make.Rd.roclet <- function(subdir=NULL,
   parse.formals <- function(partitum) {
     formals <- partitum$formals
     if (!is.null(formals)) {
+      formals <- lapply(formals, trim)
+      formals <- lapply(formals, paste, collapse=" ")
       name.defaults <- zip.c(names(formals), formals)
       args <-
         do.call(paste, c(Map(function(name.default) {
@@ -311,14 +295,8 @@ make.Rd.roclet <- function(subdir=NULL,
         },
                              name.defaults),
                          sep=', '))
-      parse.expression('usage',
-          do.call(paste,
-                  c(as.list(strwrap
-                            (sprintf('%s(%s)',
-                                     parse.function.name(partitum),
-                                     args),
-                             exdent=4)),
-                    sep='\n')))
+      
+      append.Rd(usageTag(parse.function.name(partitum), args))
     }
   }
 
@@ -332,12 +310,26 @@ make.Rd.roclet <- function(subdir=NULL,
       parse.expression('usage', partitum$usage)
   }
 
+  is.documented <- function(partitum)
+    length(partitum) > 3
+
   #' Reset params; parse name and usage.
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
+    if ( documentedonly && !is.documented(partitum) )
+      set.ignoreRd()
+    if ( !is.null(partitum$nord) )
+      set.ignoreRd()
+    if ( exportonly && is.null(partitum$export) )
+      set.ignoreRd()
+
+    # TODO: interrupt process?
+    
     assign.parent('params', NULL, environment())
+    assign.parent('slots', NULL, environment())
     assign.parent('examples', NULL, environment())
+    assign.parent('description', NULL, environment())
     parse.name(partitum)
     parse.usage(partitum)
   }
@@ -348,15 +340,79 @@ make.Rd.roclet <- function(subdir=NULL,
   post.parse <- function(partitum) {
     parse.arguments()
     parse.examples(partitum)
+
+    if ( !is.null(partitum$S4class) ) {
+      rdtank$register.S4class(partitum$S4class, name)
+      
+      parse.slots(partitum$S4formals)
+      parse.contains(partitum$S4formals)
+      parse.prototypes(partitum$S4formals)
+    }
+
+    if ( !is.null(partitum$S4method) ) {
+      rdtank$register.S4method(partitum$S4method,
+                               name,
+                               partitum$S4formals$signature,
+                               description)
+    }
+
+    save.Rd()
+    reset.Rd()
+
+    if ( verbose ) cat('\n')
+    
     ## Assuming the previous sink was successful;
     ## if not, it will destroy the sink stack.
     ## (Should fail if unwritable, anyway.)
     reset.filename()
+    reset.saveRd()
+  }
+
+  post.files.write <- function() {   
+    for ( filename in rdtank$filenames() ) {
+      base <- baseRd(filename)
+      final <- rdtank$get.Rd.by(filename=filename)
+      
+      if ( length(final) > 1 || !is.null(base) )
+        final <- do.call('Rdmerge', list(final, base))
+      
+      writeRd(final[[1]], filename)
+    }
+  }
+
+  post.files.classmethods <- function() {
+    for ( class in rdtank$classnames() ) {
+      if ( rdtank$class.exists(class) ) {
+        rd <- rdtank$get.Rd.by(classname=class)[[1]]
+        tag <- do.call('classmethodsTag',
+                       lapply(rdtank$get.class.methods(class),
+                              function(x) do.call('classmethodTag', x)))
+        rdtank$update.Rd(Rd_append_tag(rd, tag), classname=class)
+      }
+    }
+  }
+
+  #post.files.methods <- function() {
+  #  for ( generic in rdtank$generics() ) {
+  #    rd <- rdtank$get.Rd.by(name=generic)
+  #    tag <- do.call('genericmethodsTag',
+  #                   lapply(rdtank$get.methods(generic),
+  #                          function(x) do.call('genericmethodTag', x)))
+  #    rdtank$update.Rd(Rd_append_tag(rd, tag), name=generic)
+  #  }
+  #}
+  
+  post.files <- function() {
+    post.files.classmethods()
+    #post.files.methods()
+    post.files.write()
+    rdtank$reset()
   }
 
   roclet <- make.roclet(parse.expression,
                         pre.parse,
-                        post.parse)
+                        post.parse,
+                        post.files=post.files)
 
   roclet$register.default.parsers('references',
                                   'note',
@@ -368,6 +424,7 @@ make.Rd.roclet <- function(subdir=NULL,
   roclet$register.parser('return',
                          function(key, expressions)
                          parse.expression('value', expressions))
+
 
   #' Split a plural into its constituent singulars.
   #' @param key the singular key
@@ -389,6 +446,8 @@ make.Rd.roclet <- function(subdir=NULL,
                          function(key, expressions)
                          parse.split('keyword', expressions))
 
+  description <- NULL
+  
   #' Split the introductory matter into its description followed
   #' by details (separated by a blank line).
   #' @param key ignored
@@ -399,6 +458,7 @@ make.Rd.roclet <- function(subdir=NULL,
     description <- car(paragraphs)
     details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
     parse.expression('description', description)
+    assign.parent('description', description, environment())
     if (length(details) > 0 && !is.null.string(details))
       parse.expression('details', details)
   }
@@ -421,22 +481,60 @@ make.Rd.roclet <- function(subdir=NULL,
   #' @param name.param name-param pair
   #' @return A list of Rd-readable expressions
   parse.params <- function()
-    Reduce.paste(function(name.param)
-                 Rd.expression('item',
-                     car(name.param),
-                     cadr(name.param)),
-                 params,
-                 '')
-
+    lapply(params, itemTag)
+    
   #' Paste and label the Rd-readable expressions
   #' returned by \code{parse.params}.
   #' @return \code{NULL}
-  parse.arguments <- function()
+  parse.arguments <- function() {
     if (length(params) > 0)
-      parse.expression('arguments', parse.params())
+      append.Rd(argumentsTag(x=parse.params(), newline=TRUE))
+  }
 
   roclet$register.parser('param', parse.param)
 
+  slots <- NULL
+
+  parse.slot <- function(key, expression)
+    assign.parent('slots',
+                  append(slots, list(expression)),
+                  environment())
+  
+  parse.slots <- function(partitum) {
+    names <- sapply(slots, '[[', 'name')
+
+    if ( !is.nil(names) ) {
+      repr <- partitum$representation
+      
+      for ( i in match(names(repr), names) )
+        slots[[i]]$type <- repr[[slots[[i]]$name]]
+    
+      append.Rd(slotsTag(x=lapply(slots,
+                           function(x) do.call('slotTag', x))))
+    }
+  }
+
+  parse.prototypes <- function(partitum) {
+    if ( !is.null(partitum$prototype) ) {
+      slotnames <- sapply(slots, '[[', 'name')
+
+      proto <- lapply(names(partitum$prototype),
+                      function(x)
+                      list(name=x,
+                           value=maybe.quote(partitum$prototype[[x]]),
+                           inherit=!(x %in% slotnames)))
+      
+      append.Rd(prototypesTag(x=lapply(proto,
+                                function(x) do.call('prototypeTag', x))))
+    }
+  }
+
+  roclet$register.parser('slot', parse.slot)
+
+  parse.contains <- function(partitum)
+    if ( !is.null(partitum$contains) )
+      append.Rd(containsTag(x=partitum$contains))
+  
   examples <- NULL
 
   #' Parse individual \code{@@example} clauses by adding the
@@ -475,5 +573,13 @@ make.Rd.roclet <- function(subdir=NULL,
 
   roclet$register.parser('TODO', parse.todo)
 
+  baseRd <- function(filename)
+    if ( file.exists(filename) ) parse_Rd(filename) else NULL
+
+  writeRd <- function(rd, filename)
+    cat(tools:::as.character.Rd(rd),
+        sep='', collapse='\n', file=filename)
+  
+    
   roclet
 }

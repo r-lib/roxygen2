@@ -2,7 +2,7 @@
 \alias{roxygenize}
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{roxygenize(package.dir, roxygen.dir, copy.package=TRUE, overwrite=TRUE,
-    unlink.target=FALSE)}
+    unlink.target=FALSE, use.Rd2=FALSE)}
 \description{Process a package with the Rd, namespace and collate roclets.}
 \value{\code{NULL}}
 \section{TODO}{Options to enable/disable specific roclet
@@ -14,4 +14,5 @@
 adding/manipulating files.}
 \item{overwrite}{overwrite target files}
 \item{unlink.target}{unlink target directory before
-processing files}}
+processing files}
+\item{use.Rd2}{use the Rd2 roclet}}

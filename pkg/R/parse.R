@@ -309,15 +309,17 @@ parse.ref.preref <- function(ref, ...) {
 #' @return NULL
 #' @export
 preorder.walk.expression <- function(proc, expression) {
-  if (length(expression) > 0)
+  if (length(expression) > 0) {
+    names <- names(expression)
     for (i in c(1:length(expression))) {
       member <- tryCatch(expression[[i]], error=function(e) NULL)
       if (!is.null(member) && !identical(member, expression)) {
-        proc(member)
+        proc(structure(list(member), names=names[i]))
         try(preorder.walk.expression(proc, member),
             silent=TRUE)
       }
     }
+  }
 }
 
 #' Flatten a nested expression into a list, preorderly.

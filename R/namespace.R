@@ -16,7 +16,7 @@ register.preref.parsers(parse.value,
                         'importFrom',
                         'importClassesFrom',
                         'importMethodsFrom',
-						'useDynLib')
+                        'useDynLib')
 
 #' Make a namespace roclet which parses the given files and writes a list of
 #' namespace directives to a given file or standard out; see

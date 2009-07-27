@@ -1,5 +1,5 @@
 Package: roxygen
-Version: 0.1
+Version: 0.1-1
 License: GPL (>= 2)
 Description: A Doxygen-like in-source documentation system for Rd,
     collation, namespace and callgraphs.
@@ -8,7 +8,8 @@ Author: Peter Danenberg <pcd@roxygen.org>, Manuel Eugster
     <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Peter Danenberg <pcd@roxygen.org>
 URL: http://roxygen.org
-Suggests: Rgraphviz (>= 1.19.2)
+Suggests: Rgraphviz (>= 1.19.2), tools (>= 2.9.1)
 Collate: 'functional.R' 'list.R' 'roxygen.R' 'string.R' 'parse.R'
-    'roclet.R' 'callgraph.R' 'description.R' 'collate.R' 'namespace.R'
-    'Rd.R' 'roxygenize.R'
+    'parseS4.R' 'roclet.R' 'callgraph.R' 'description.R' 'collate.R' 
+    'namespace.R' 'Rd.R' 'Rdmerge.R' 'Rdapi.R' 'Rdtank.R' 'Rd2.R'
+    'roxygenize.R'

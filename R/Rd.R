@@ -122,8 +122,11 @@ register.srcref.parser('setMethod',
 #'                       of multiple functions in one Rd unit).}
 #' }
 #'
+#' @param package.dir the package's top directory
+#' @param roxygen.dir where to create roxygen output; defaults to
+#' \file{package.roxygen}.
 #' @param subdir directory into which to place the Rd files; if
-#' \code{NULL}, standard out.
+#' \code{NULL}, \file{roxygen.dir/man}.
 #' @param verbose whether to declare what we're doing in the
 #' \var{subdir}
 #' @return Rd roclet
@@ -156,8 +159,15 @@ register.srcref.parser('setMethod',
 #' make.Rd.roclet
 #' @TODO param method setClass setGeneric setMethod
 #' make.Rd.roclet
-make.Rd.roclet <- function(subdir=NULL,
+make.Rd.roclet <- function(package.dir, 
+                           roxygen.dir, 
+                           subdir=NULL,
                            verbose=TRUE) {
+                             
+  if (is.null(subdir)) {
+    subdir <- file.path(roxygen.dir, MAN.DIR)
+  }
+  
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
   #' @param key the expression's key
@@ -354,7 +364,9 @@ make.Rd.roclet <- function(subdir=NULL,
     reset.filename()
   }
 
-  roclet <- make.roclet(parse.expression,
+  roclet <- make.roclet(package.dir,
+                        roxygen.dir, 
+                        parse.expression,
                         pre.parse,
                         post.parse)
 

@@ -33,6 +33,9 @@ register.preref.parsers(parse.toggle,
 #' run roxygen again to get the callgraphs, and possibly
 #' install the package again.
 #'
+#' @param package.dir the package's top directory
+#' @param roxygen.dir where to create roxygen output; defaults to
+#' \file{package.roxygen}.
 #' @param dependencies packages required to evaluate
 #' interesting functions
 #' @param dir the directory to place the callgraphs in
@@ -46,9 +49,20 @@ register.preref.parsers(parse.toggle,
 #' }
 #' @aliases make.callgraph.roclet callGraph callGraphPrimitives
 #' callGraphDepth
-make.callgraph.roclet <- function(dependencies=NULL,
-                                  dir='.',
+make.callgraph.roclet <- function(package.dir, roxygen.dir, dependencies=NULL,
+                                  dir = NULL,
                                   verbose=TRUE) {
+                                    
+  if (is.null(dependencies)) {
+    package.description <- file.path(package.dir, DESCRIPTION.FILE)
+    dependencies <- description.dependencies(package.description)
+  }
+  
+  if (is.null(dir)) {
+    dir <- file.path(roxygen.dir, INST.DIR, DOC.DIR)
+  }
+  
+                                    
   DEFAULT.DEPTH <- 2
   DEFAULT.TYPE <- 'pdf'
 
@@ -236,7 +250,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
         file=outfile)
   }
   
-  roclet <- make.roclet(pre.parse=reset.state,
+  roclet <- make.roclet(package.dir, roxygen.dir, pre.parse=reset.state,
                         post.parse=post.parse)
 
   parse.callgraph <- function(key, expression)

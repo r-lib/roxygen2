@@ -23,7 +23,9 @@ roxygen()
 #' @param post.files a callback function with no arguments;
 #' called after every file has been parsed
 #' @export
-make.roclet <- function(parse.default=NULL,
+make.roclet <- function(package.dir, 
+                        roxygen.dir, 
+                        parse.default=NULL,
                         pre.parse=NULL,
                         post.parse=NULL,
                         pre.files=NULL,
@@ -62,6 +64,16 @@ make.roclet <- function(parse.default=NULL,
 
   roclet$parse <- function(...)
     roclet$parse.parsed(parse.files(...))
+    
+  roclet$parse.dir <- function() {
+    r.dir <- file.path(package.dir, R.DIR)
+    files <- as.list(list.files(r.dir,
+                                pattern='\\.(R|r)$',
+                                recursive=TRUE,
+                                full.names=TRUE,
+                                all.files=TRUE))
+    do.call(roclet$parse, files)
+  }
 
   #' Parse material contained in files.
   #' @param partita the parsed elements

@@ -61,7 +61,7 @@ copy.dir <- function(source,
 
 #' Process a package with the Rd, namespace and collate roclets.
 #' @param package.dir the package's top directory
-#' @param roxygen.dir whither to copy roxygen files; defaults to
+#' @param roxygen.dir where to create roxygen output; defaults to
 #' \file{package.roxygen}.
 #' @param copy.package copies the package over before
 #' adding/manipulating files.
@@ -76,22 +76,16 @@ copy.dir <- function(source,
 #' (\command{--no-callgraphs}, etc.)
 #' @export
 roxygenize <- function(package.dir,
-                       roxygen.dir=NULL,
-                       copy.package=TRUE,
+                       roxygen.dir=sprintf(ROXYGEN.DIR, package.dir),
+                       copy.package=package.dir != roxygen.dir,
                        overwrite=TRUE,
                        unlink.target=FALSE,
-                       use.Rd2=FALSE) {
-  if (is.null(roxygen.dir)) roxygen.dir <-
-    sprintf(ROXYGEN.DIR, package.dir)
-  man.dir <- file.path(roxygen.dir, MAN.DIR)
-  inst.dir <- file.path(roxygen.dir, INST.DIR)
-  doc.dir <- file.path(inst.dir, DOC.DIR)
-  namespace.file <- file.path(roxygen.dir, NAMESPACE.FILE)
-  package.description <- file.path(package.dir, DESCRIPTION.FILE)
-  roxygen.description <- file.path(roxygen.dir, DESCRIPTION.FILE)
+                       roclets=c("Rd", "namespace", "collate", "callgraph")) {
+
   skeleton <- c(roxygen.dir,
-                man.dir,
-                doc.dir)
+                file.path(roxygen.dir, MAN.DIR),
+                file.path(roxygen.dir, INST.DIR),
+                file.path(roxygen.dir, INST.DIR, DOC.DIR))
 
   if (copy.package)
     copy.dir(package.dir,
@@ -103,27 +97,10 @@ roxygenize <- function(package.dir,
   for (dir in skeleton) dir.create(dir,
                                    recursive=TRUE,
                                    showWarnings=FALSE)
-  r.dir <- file.path(package.dir, R.DIR)
-  files <- as.list(list.files(r.dir,
-                              pattern='\\.(R|r)$',
-                              recursive=TRUE,
-                              full.names=TRUE,
-                              all.files=TRUE))
-  Rd <- {
-    if ( use.Rd2 )
-      make.Rd2.roclet(man.dir)
-    else
-      make.Rd.roclet(man.dir)
+  
+  roclets <- paste("make.", roclets, ".roclet", sep = "")
+  for (roclet in roclets) {
+    maker <- match.fun(roclet)
+    maker(package.dir, roxygen.dir)$parse.dir()
   }
-  do.call(Rd$parse, files)
-  namespace <- make.namespace.roclet(namespace.file)
-  do.call(namespace$parse, files)
-  collate <- make.collate.roclet(merge.file=package.description,
-                                 target.file=roxygen.description)
-  collate$parse.dir(r.dir)
-  callgraph <-
-    make.callgraph.roclet(description.dependencies(package.description),
-                          doc.dir)
-  do.call(callgraph$parse, files)
-                          
 }

@@ -69,8 +69,11 @@ register.srcref.parser('setMethod',
 #'                      \code{@@slot <name> <description>} specified.}
 #' }
 #'
+#' @param package.dir the package's top directory
+#' @param roxygen.dir where to create roxygen output; defaults to
+#' \file{package.roxygen}.
 #' @param subdir directory into which to place the Rd files; if
-#' \code{NULL}, standard out.
+#' \code{NULL}, \file{roxygen.dir/man}.
 #' @param verbose whether to declare what we're doing in the
 #' \var{subdir}
 #' @param exportonly create Rd files only for exported "things"
@@ -79,13 +82,18 @@ register.srcref.parser('setMethod',
 #' @return Rd roclet
 #' @export
 #' @aliases nord rdname slot make.Rd2.roclet
-make.Rd2.roclet <- function(subdir=NULL,
+make.Rd2.roclet <- function(package.dir,
+                            roxygen.dir, 
+                            subdir=NULL,
                             verbose=TRUE,
                             exportonly=FALSE,
                             documentedonly=TRUE) {
-
-  require(tools)
   
+  if (is.null(subdir)) {
+    subdir <- file.path(roxygen.dir, MAN.DIR)
+  }
+  
+  require(tools)
   rdtank <- make.Rdtank()
 
   
@@ -409,7 +417,9 @@ make.Rd2.roclet <- function(subdir=NULL,
     rdtank$reset()
   }
 
-  roclet <- make.roclet(parse.expression,
+  roclet <- make.roclet(package.dir,
+                        roxygen.dir, 
+                        parse.expression,
                         pre.parse,
                         post.parse,
                         post.files=post.files)

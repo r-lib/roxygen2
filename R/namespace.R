@@ -63,6 +63,9 @@ register.preref.parsers(parse.value,
 #'                                   Extensions}.}
 #' }
 #'
+#' @param package.dir the package's top directory
+#' @param roxygen.dir where to create roxygen output; defaults to
+#' \file{package.roxygen}.
 #' @param outfile whither to send output; blank string means standard out
 #' @param verbose whether to anounce what we're doing with
 #' the \var{outfile}
@@ -83,8 +86,11 @@ register.preref.parsers(parse.value,
 #' @aliases make.namespace.roclet exportClass exportMethod
 #' exportPattern S3method import importFrom importClassesFrom
 #' importMethodsFrom export
-make.namespace.roclet <- function(outfile='',
+make.namespace.roclet <- function(package.dir, roxygen.dir, outfile = NULL,
                                   verbose=TRUE) {
+  if (is.null(outfile)) {
+    outfile <- file.path(roxygen.dir, NAMESPACE.FILE)
+  }
 
   namespace <- list()
 
@@ -123,7 +129,9 @@ make.namespace.roclet <- function(outfile='',
     namespace.reset()
   }
 
-  roclet <- make.roclet(parse.directive,
+  roclet <- make.roclet(package.dir, 
+                        roxygen.dir, 
+                        parse.directive,
                         pre.parse=pre.parse,
                         pre.files=pre.files)
 

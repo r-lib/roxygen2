@@ -23,6 +23,9 @@ register.preref.parsers(parse.value,
 #' Contains the member function \code{parse} which parses an arbitrary number
 #' of files, and \code{parse.dir} which recursively parses a directory tree.
 #'
+#' @param package.dir the package's top directory
+#' @param roxygen.dir where to create roxygen output; defaults to
+#' \file{package.roxygen}.
 #' @param merge.file \file{DESCRIPTION} file with which to merge directive;
 #' or \code{NULL} for none
 #' @param target.file whither to \code{cat} directive (whether merged or
@@ -42,9 +45,19 @@ register.preref.parsers(parse.value,
 #' roclet <- make.collate.roclet()
 #' \dontrun{roclet$parse.dir('example')}
 #' @export
-make.collate.roclet <- function(merge.file=NULL,
-                                target.file='',
+make.collate.roclet <- function(package.dir, 
+                                roxygen.dir, 
+                                merge.file=NULL,
+                                target.file=NULL,
                                 verbose=TRUE) {
+                                  
+  if (is.null(merge.file)) {
+    merge.file <- file.path(package.dir, DESCRIPTION.FILE)
+  }
+  if (is.null(target.file)) {
+    target.file <- file.path(roxygen.dir, DESCRIPTION.FILE)
+  }
+  
   vertices <- NULL
 
   make.vertex <- function(file) {
@@ -146,7 +159,7 @@ make.collate.roclet <- function(merge.file=NULL,
       cat.description('Collate', files, file=target.file)
   }
 
-  roclet <- make.roclet(parse.include,
+  roclet <- make.roclet(package.dir, roxygen.dir, parse.include,
                         pre.parse=pre.parse,
                         post.files=post.files)
 
@@ -154,7 +167,8 @@ make.collate.roclet <- function(merge.file=NULL,
 
   cwd <- NULL
 
-  roclet$parse.dir <- function(dir) {
+  roclet$parse.dir <- function() {
+    dir <- file.path(package.dir, R.DIR)
     assign.parent('cwd', getwd(), environment())
     setwd(dir)
     do.call(roclet$parse,

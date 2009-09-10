@@ -246,8 +246,7 @@ parser.srcref <- Curry(parser.default,
 #' @param \dots ignored
 #' @return List containing the parsed srcref/preref
 #' @export
-parse.ref <- function(ref, ...) 
-  UseMethod('parse.ref')
+parse.ref <- function(ref, ...) UseMethod('parse.ref')
 
 #' Parse a preref/srcrefs pair
 #' @method parse.ref list
@@ -418,7 +417,7 @@ parse.ref.srcref <- function(ref, ...) {
 #' @param preref.srcrefs list of preref/srcref pairs
 #' @return List combining parsed preref/srcrefs
 parse.refs <- function(preref.srcrefs) {
-  lapply(preref.srcrefs, parse.ref)
+  lapply(preref.srcrefs, cached.parse.ref)
 }
   
 

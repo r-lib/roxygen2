@@ -9,7 +9,7 @@ Author: Peter Danenberg <pcd@roxygen.org>, Manuel Eugster
 Maintainer: Peter Danenberg <pcd@roxygen.org>
 URL: http://roxygen.org
 Suggests: Rgraphviz (>= 1.19.2), tools (>= 2.9.1)
-Collate: 'functional.R' 'list.R' 'roxygen.R' 'string.R' 'parse.R'
+Collate: 'functional.R' 'list.R' 'roxygen.R' 'string.R' 'parse.R' 'parse-cache.R'
     'parseS4.R' 'roclet.R' 'callgraph.R' 'description.R' 'collate.R' 
     'namespace.R' 'Rd.R' 'Rdmerge.R' 'Rdapi.R' 'Rdtank.R' 'Rd2.R'
     'roxygenize.R'

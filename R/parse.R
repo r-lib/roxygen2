@@ -246,7 +246,7 @@ parser.srcref <- Curry(parser.default,
 #' @param \dots ignored
 #' @return List containing the parsed srcref/preref
 #' @export
-parse.ref <- function(ref, ...)
+parse.ref <- function(ref, ...) 
   UseMethod('parse.ref')
 
 #' Parse a preref/srcrefs pair
@@ -373,29 +373,25 @@ parse.formals <- function(expressions) {
               else as.character(maybe.quote(formal)), formals))
 }
 
-#' Find the assignee of the expression
-#' @param expression the expression in which to find the
-#' assignee
-#' @return The expression's assignee
-parse.assignee <- function(expression)
-  list(assignee=as.character(car(expression)))
-
 #' Parse a function call, paying special attention to
 #' assignments by \code{<-} or \code{=}.
 #' @param expressions the expression to search through
 #' @return List of formals and assignee in case of
 #' assignment, the processed expression in case of
 #' non-assigning function calls (see \code{parse.srcref}).
-parse.call <- function(expressions) {
-  call <- car(expressions)
-  if (is.assignment(call)) {
-    assignee <- parse.assignee(cddr(expressions))
-    formals <- parse.formals(cdddr(expressions))
-    append(assignee, formals)
-  } else {
-    lhs <- cadr(as.character(expressions))
-    parser.srcref(lhs)(lhs, cddr(expressions))
-  }
+parse.call <- function(expression) {
+  if (!is.call(expression)) return(NULL)
+  
+  assignee_string <- as.character(expression[[2]])
+  formals <- as.list(expression[[3]][[2]])
+  
+  formals_string <- lapply(formals, function(formal) {
+    if (is.null(formal)) ''
+    else if (is.call(formal)) capture.output(formal)
+    else as.character(maybe.quote(formal))
+  })
+  
+  list(assignee = assignee_string, formals = formals_string)
 }
 
 #' Parse a srcref
@@ -409,18 +405,22 @@ parse.ref.srcref <- function(ref, ...) {
   srcref <- list(srcref=list(filename=srcfile$filename,
                    lloc=as.vector(ref)))
   lines <- getSrcLines(srcfile, car(ref), caddr(ref))
-  expressions <- preorder.flatten.expression(parse(text=lines))
-  parsed <- NULL
-  if (is.call(car(expressions)))
-    parsed <- parse.call(expressions)
+  
+  # Lines will only ever contain a single expression, so we'll just focus
+  # on first element.
+  expression <- parse(text=lines)[[1]]
+  parsed <- parse.call(expression)
+    
   append(parsed, srcref)
 }
 
 #' Parse each of a list of preref/srcref pairs.
 #' @param preref.srcrefs list of preref/srcref pairs
 #' @return List combining parsed preref/srcrefs
-parse.refs <- function(preref.srcrefs)
+parse.refs <- function(preref.srcrefs) {
   lapply(preref.srcrefs, parse.ref)
+}
+  
 
 #' Parse a source file containing roxygen directives.
 #' @param file string naming file to be parsed

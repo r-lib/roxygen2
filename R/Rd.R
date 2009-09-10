@@ -307,8 +307,9 @@ make.Rd.roclet <- function(package.dir,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.formals <- function(partitum) {
+    
     formals <- partitum$formals
-    if (!is.null(formals)) {
+    if (length(formals) > 0) {
       name.defaults <- zip.c(names(formals), formals)
       args <-
         do.call(paste, c(Map(function(name.default) {

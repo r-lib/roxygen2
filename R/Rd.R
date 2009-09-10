@@ -202,7 +202,7 @@ make.Rd.roclet <- function(package.dir,
   }
 
   #' What does the noop look like?
-  NULL.STATEMENT <- 'roxygen[[:space:]]*()'
+  NULL.STATEMENT <- 'roxygen[[:space:]]*()|NULL'
 
   #' Does the statement contain a noop-like?
   #' @param source.line the line of source code
@@ -347,8 +347,13 @@ make.Rd.roclet <- function(package.dir,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
-    assign.parent('params', NULL, environment())
-    assign.parent('examples', NULL, environment())
+    if (!is.documented(partitum) ) {
+      filename <<- NULL
+      return()
+    }
+    
+    params <<- NULL
+    examples <<- NULL
     parse.name(partitum)
     parse.usage(partitum)
   }
@@ -490,3 +495,7 @@ make.Rd.roclet <- function(package.dir,
 
   roclet
 }
+
+
+is.documented <- function(partitum)
+  length(partitum) > 3

@@ -382,13 +382,21 @@ parse.call <- function(expression) {
   if (!is.call(expression)) return(NULL)
   
   assignee_string <- as.character(expression[[2]])
-  formals <- as.list(expression[[3]][[2]])
+  
+  if (length(expression[[3]]) == 1) return(NULL)
+  while (as.character(expression[[3]][[1]]) == "<-") {
+    expression[[3]] <- expression[[3]][[3]]
+    if (length(expression[[3]]) == 1) return(NULL)
+  }
+  formals <- as.list(expression[[3]][[2]])  
   
   formals_string <- lapply(formals, function(formal) {
     if (is.null(formal)) ''
     else if (is.call(formal)) capture.output(formal)
     else as.character(maybe.quote(formal))
   })
+  
+  # if (length(formals_string) == 1) browser()
   
   list(assignee = assignee_string, formals = formals_string)
 }
@@ -443,7 +451,7 @@ parse.file <- function(file) {
 #' @seealso \code{\link{parse.file}}
 #' @export
 parse.files <- function(paths) {
-  unlist(lapply(paths, parse.file), recursive = FALSE)
+  unlist(lapply(paths, cached.parse.file), recursive = FALSE)
 }
   
 

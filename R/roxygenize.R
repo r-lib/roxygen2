@@ -36,7 +36,7 @@ DESCRIPTION.FILE <- 'DESCRIPTION'
 #' @return \code{NULL}
 #' @note Not tested on non-linux platforms
 copy.dir <- function(source,
-                     target,
+                     target = source,
                      unlink.target=FALSE,
                      overwrite=FALSE,
                      verbose=FALSE) {
@@ -76,11 +76,11 @@ copy.dir <- function(source,
 #' (\command{--no-callgraphs}, etc.)
 #' @export
 roxygenize <- function(package.dir,
-                       roxygen.dir=sprintf(ROXYGEN.DIR, package.dir),
+                       roxygen.dir=package.dir,
                        copy.package=package.dir != roxygen.dir,
                        overwrite=TRUE,
                        unlink.target=FALSE,
-                       roclets=c("Rd", "namespace", "collate", "callgraph")) {
+                       roclets=c("had", "collate")) {
 
   skeleton <- c(roxygen.dir,
                 file.path(roxygen.dir, MAN.DIR),
@@ -104,3 +104,5 @@ roxygenize <- function(package.dir,
     maker(package.dir, roxygen.dir)$parse.dir()
   }
 }
+
+roxygenise <- roxygenize

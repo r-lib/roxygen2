@@ -29,17 +29,20 @@ new_cache <- function() {
   )
 }
 
-ref_cache <- new_cache()
-
-cached.parse.ref <- function(ref, ...) {
-  hash <- digest(ref)
+memoize <- function(f) {
+  cache <- new_cache()
   
-  if (ref_cache$has_key(hash)) {
-    ref_cache$get(hash)
-  } else {
-    res <- parse.ref(ref)
-    ref_cache$set(hash, res)
-    res
+  function(...) {
+    hash <- digest(list(...))
+    
+    if (cache$has_key(hash)) {
+      cache$get(hash)
+    } else {
+      res <- f(...)
+      cache$set(hash, res)
+      res
+    }
   }
-  
 }
+cached.parse.ref <- memoize(parse.ref)
+cached.parse.file <- memoize(parse.file)

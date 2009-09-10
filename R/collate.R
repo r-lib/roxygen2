@@ -147,16 +147,14 @@ make.collate.roclet <- function(package.dir,
   }
 
   post.files <- function() {
-    files <- do.call(paste, Map(function(vertex)
-                                sprintf("'%s'", vertex$file),
-                                topological.sort(vertices)))
-    if (!is.null(cwd))
-      setwd(cwd)
-    assign.parent('cwd', NULL, environment())
+    sorted <- topological.sort(vertices)
+    names <- basename(sapply(sorted, function(x) x$file))
+    name_string <- paste(sprintf("'%s'", names), collapse = " ")
+
     if (!is.null(merge.file))
-      merge(files)
+      merge(name_string)
     else
-      cat.description('Collate', files, file=target.file)
+      cat.description('Collate', name_string, file=target.file)
   }
 
   roclet <- make.roclet(package.dir, roxygen.dir, parse.include,
@@ -164,18 +162,6 @@ make.collate.roclet <- function(package.dir,
                         post.files=post.files)
 
   roclet$register.default.parser('include')
-
-  cwd <- NULL
-
-  roclet$parse.dir <- function() {
-    dir <- file.path(package.dir, R.DIR)
-    assign.parent('cwd', getwd(), environment())
-    setwd(dir)
-    do.call(roclet$parse,
-            as.list(list.files('.',
-                               recursive=TRUE,
-                               full.names=FALSE)))
-  }
 
   roclet
 }

@@ -420,7 +420,7 @@ parse.ref.srcref <- function(ref, ...) {
 #' @param preref.srcrefs list of preref/srcref pairs
 #' @return List combining parsed preref/srcrefs
 parse.refs <- function(preref.srcrefs)
-  Map(parse.ref, preref.srcrefs)
+  lapply(preref.srcrefs, parse.ref)
 
 #' Parse a source file containing roxygen directives.
 #' @param file string naming file to be parsed
@@ -443,8 +443,10 @@ parse.file <- function(file) {
 #' @return List containing parsed directives
 #' @seealso \code{\link{parse.file}}
 #' @export
-parse.files <- function(...)
-  Reduce(append, Map(parse.file, list(...)), NULL)
+parse.files <- function(paths) {
+  unlist(lapply(paths, parse.file), recursive = FALSE)
+}
+  
 
 #' Text-parsing hack using tempfiles for more facility.
 #' @param \dots lines of text to be parsed

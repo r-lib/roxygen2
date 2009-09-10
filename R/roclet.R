@@ -62,8 +62,11 @@ make.roclet <- function(package.dir,
     for (parser in c(...))
       roclet$register.default.parser(parser)
 
-  roclet$parse <- function(...)
-    roclet$parse.parsed(parse.files(...))
+  roclet$parse <- function(paths) {
+    parsed <- parse.files(paths)
+    roclet$parse.parsed(parsed)
+  }
+    
     
   roclet$parse.dir <- function() {
     r.dir <- file.path(package.dir, R.DIR)
@@ -72,7 +75,7 @@ make.roclet <- function(package.dir,
                                 recursive=TRUE,
                                 full.names=TRUE,
                                 all.files=TRUE))
-    do.call(roclet$parse, files)
+    roclet$parse(files)
   }
 
   #' Parse material contained in files.

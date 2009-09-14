@@ -86,11 +86,14 @@ make.had.roclet <- function(package.dir,
     }
     
     cat(sprintf('Writing %s\n', basename(filename)))
-    cat(output, file=filename, append=TRUE)
+    cat(output, file = filename)
   }
 
   filename <- NULL
   output <- character()
+  params <- NULL
+  examples <- NULL
+  
 
   reset <- function() {
     filename <<- NULL
@@ -320,16 +323,13 @@ make.had.roclet <- function(package.dir,
 
   roclet$register.parser('description', parse.description)
 
-  params <- NULL
-
   #' Add a parameter to the global param list.
   #' @param key ignored
   #' @param expression the parameter
   #' @return \code{NULL}
-  parse.param <- function(key, expression)
-    assign.parent('params',
-                  append(params, list(expression)),
-                  environment())
+  parse.param <- function(key, expression) {
+    params <<- append(params, list(expression))
+  }
     
   #' Reduce and paste together the various parameters
   #' in an Rd-readable list (with \code{\\item}s, etc.).
@@ -346,23 +346,22 @@ make.had.roclet <- function(package.dir,
   #' Paste and label the Rd-readable expressions
   #' returned by \code{parse.params}.
   #' @return \code{NULL}
-  parse.arguments <- function()
-    if (length(params) > 0)
+  parse.arguments <- function() {
+    if (length(params) > 0) {
       parse.expression('arguments', parse.params())
+    }
+  }
 
   roclet$register.parser('param', parse.param)
-
-  examples <- NULL
 
   #' Parse individual \code{@@example} clauses by adding the
   #' pointed-to file to a global store.
   #' @param key ignored
   #' @param expression the file containing the example(s)
   #' @return \code{NULL}
-  parse.example <- function(key, expression)
-    assign.parent('examples',
-                  append(examples, expression),
-                  environment())
+  parse.example <- function(key, expression) {
+    examples <<- append(examples, expression)
+  }
 
   #' If \code{@@examples} is provided, use that; otherwise, concatenate
   #' the files pointed to by each \code{@@example}.

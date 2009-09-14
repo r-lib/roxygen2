@@ -71,13 +71,33 @@ make.had.roclet <- function(package.dir,
   #' @param key the expression's key
   #' @param \dots the arguments
   #' @return \code{NULL}
-  parse.expression <- function(key, ...)
-    cat(Rd.expression(key, c(...)), file=filename, append=TRUE)
+  parse.expression <- function(key, ...) {
+    expr <- Rd.expression(key, c(...))
+    output <<- c(output, expr)
+  }
 
-  filename <- ''
+  save.Rd <- function() {
+    if (is.null(filename)) return()
+    
+    output <- paste(output, collapse = "")
+    if (file.exists(filename)) {
+      cur <- paste(paste(readLines(filename), collapse = "\n"), "\n", sep="")
+      if (identical(cur, output)) return()
+    }
+    
+    cat(sprintf('Writing %s\n', basename(filename)))
+    cat(output, file=filename, append=TRUE)
+  }
 
-  reset.filename <- function()
-    assign.parent('filename', '', environment())
+  filename <- NULL
+  output <- character()
+
+  reset <- function() {
+    filename <<- NULL
+    params <<- NULL
+    examples <<- NULL
+    output <<- character()
+  }
 
   first.source.line <- function(partitum) {
     srcfile <- srcfile(partitum$srcref$filename)
@@ -161,12 +181,7 @@ make.had.roclet <- function(package.dir,
     } else if (!is.null(name)) {
       name <- trim(name)
       if (!is.null(subdir)) {
-        assign.parent('filename',
-                      file.path(subdir, sprintf('%s.Rd', name)),
-                      environment())
-        if (verbose)
-          cat(sprintf('Writing %s to %s\n', name, filename))
-        unlink(filename)
+        filename <<- file.path(subdir, sprintf('%s.Rd', name))
       }
       parse.expression('name', name)
       if (is.null(partitum$aliases))
@@ -231,8 +246,8 @@ make.had.roclet <- function(package.dir,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
-    assign.parent('params', NULL, environment())
-    assign.parent('examples', NULL, environment())
+    reset()
+    
     parse.name(partitum)
     parse.usage(partitum)
   }
@@ -243,10 +258,8 @@ make.had.roclet <- function(package.dir,
   post.parse <- function(partitum) {
     parse.arguments()
     parse.examples(partitum)
-    ## Assuming the previous sink was successful;
-    ## if not, it will destroy the sink stack.
-    ## (Should fail if unwritable, anyway.)
-    reset.filename()
+    
+    save.Rd()
   }
 
   roclet <- make.roclet(package.dir,

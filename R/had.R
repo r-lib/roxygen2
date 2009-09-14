@@ -250,6 +250,11 @@ make.had.roclet <- function(package.dir,
     
     parse.name(partitum)
     parse.usage(partitum)
+
+    # Don't output undocumented functions
+    if (length(partitum) == 3) {
+      filename <<- NULL
+    }
   }
 
   #' Parse params.

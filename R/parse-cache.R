@@ -45,4 +45,4 @@ memoize <- function(f) {
   }
 }
 cached.parse.ref <- memoize(parse.ref)
-cached.parse.file <- memoize(parse.file)
+cached.parse.srcfile <- memoize(parse.srcfile)

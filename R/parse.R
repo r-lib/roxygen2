@@ -109,7 +109,7 @@ parse.message <- function(key, message)
 #' @param message the apposite message
 #' @return \code{NULL}
 parse.error <- function(key, message)
-  stop(parse.message(key, message))
+  stop(parse.message(key, message), call. = FALSE)
 
 #' Centrally formatted warning
 #' @param key the offending key
@@ -437,12 +437,17 @@ parse.refs <- function(preref.srcrefs) {
 #' @callGraphDepth 3
 parse.file <- function(file) {
   srcfile <- srcfile(file)
+  cached.parse.srcfile(srcfile)
+}
+
+parse.srcfile <- function(srcfile) {
   srcrefs <- attributes(parse(srcfile$filename,
                               srcfile=srcfile))$srcref
   if (length(srcrefs) > 0)
     parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
   else
     nil
+  
 }
 
 #' Parse many files at one.
@@ -451,7 +456,7 @@ parse.file <- function(file) {
 #' @seealso \code{\link{parse.file}}
 #' @export
 parse.files <- function(paths) {
-  unlist(lapply(paths, cached.parse.file), recursive = FALSE)
+  unlist(lapply(paths, parse.file), recursive = FALSE)
 }
   
 

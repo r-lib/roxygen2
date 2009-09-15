@@ -316,9 +316,18 @@ make.had.roclet <- function(package.dir,
     paragraphs <- car(strsplit(car(expressions), '\n\n', fixed=TRUE))
     description <- car(paragraphs)
     details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
-    parse.expression('description', description)
-    if (length(details) > 0 && !is.null.string(details))
-      parse.expression('details', details)
+
+    description <- paste(strwrap(description, exdent = 2, indent = 2),
+      collapse = "\n")
+    expr <- paste("\n\\description{\n", description, "\n}\n", sep = "")
+    output <<- c(output, expr)
+    
+    if (length(details) > 0 && !is.null.string(details)) {
+      details <- paste(strwrap(details, exdent = 2, indent = 2), collapse = "\n")
+      expr <- paste("\n\\details{\n", details, "\n}\n", sep = "")
+      output <<- c(output, expr)
+    }
+      
   }
 
   roclet$register.parser('description', parse.description)
@@ -331,24 +340,20 @@ make.had.roclet <- function(package.dir,
     params <<- append(params, list(expression))
   }
     
-  #' Reduce and paste together the various parameters
-  #' in an Rd-readable list (with \code{\\item}s, etc.).
-  #' @param name.param name-param pair
-  #' @return A list of Rd-readable expressions
-  parse.params <- function()
-    Reduce.paste(function(name.param)
-                 Rd.expression('item',
-                     car(name.param),
-                     cadr(name.param)),
-                 params,
-                 '')
 
-  #' Paste and label the Rd-readable expressions
-  #' returned by \code{parse.params}.
-  #' @return \code{NULL}
   parse.arguments <- function() {
     if (length(params) > 0) {
-      parse.expression('arguments', parse.params())
+      
+      name <- sapply(params, "[[", "name")
+      desc <- trim(sapply(params, "[[", "description"))
+      
+      params_str <- paste(
+        "  \\item{", name, "}{",  desc, "}", 
+        sep = "", collapse = "\n")
+      
+      expr <- paste("\\arguments{\n", params_str, "\n}\n", sep = "")
+      
+      output <<- c(output, expr)
     }
   }
 

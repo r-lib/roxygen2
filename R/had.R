@@ -173,14 +173,14 @@ make.had.roclet <- function(package.dir,
       filename <- partitum$srcref$filename
       first.line <- car(partitum$srcref$lloc)
       first.source.line <- first.source.line(partitum)
-      if (!is.null.statement(first.source.line))
-        warning(sprintf(paste('No name found for the',
-                              'following expression in %s',
-                              'line %s:\n  `%s . . .\''),
-                        filename,
-                        first.line,
-                        first.source.line),
-                immediate.=TRUE)
+      # if (!is.null.statement(first.source.line))
+        # warning(sprintf(paste('No name found for the',
+        #                       'following expression in %s',
+        #                       'line %s:\n  `%s . . .\''),
+        #                 filename,
+        #                 first.line,
+        #                 first.source.line),
+        #         immediate.=TRUE)
     } else if (!is.null(name)) {
       name <- trim(name)
       if (!is.null(subdir)) {

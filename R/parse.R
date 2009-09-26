@@ -380,13 +380,18 @@ parse.formals <- function(expressions) {
 #' non-assigning function calls (see \code{parse.srcref}).
 parse.call <- function(expression) {
   if (!is.call(expression)) return(NULL)
-  
+  if (length(expression) < 3) return(NULL)
+
   assignee_string <- as.character(expression[[2]])
   
   if (length(expression[[3]]) == 1) return(NULL)
   while (as.character(expression[[3]][[1]]) == "<-") {
     expression[[3]] <- expression[[3]][[3]]
     if (length(expression[[3]]) == 1) return(NULL)
+  }
+
+  if (!identical(expression[[3]][[1]], as.name("function"))) {
+    return(list(assignee = assignee_string))
   }
   formals <- as.list(expression[[3]][[2]])  
   

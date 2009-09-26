@@ -373,9 +373,11 @@ make.had.roclet <- function(package.dir,
   #' @param partitum the parsed elements
   #' @return \code{NULL}
   parse.examples <- function(partitum) {
-    if (!is.null(partitum$examples))
-      parse.expression('examples', partitum$examples)
-    else {
+    if (!is.null(partitum$examples)) {
+      ex <- partitum$examples
+      ex <- gsub("([%\\])", "\\\\\\1", ex)
+      parse.expression('examples', ex)
+    } else {
       examples <- Reduce(c, Map(function(file)
                                 tryCatch(readLines(trim(file)),
                                          error=function(e) NULL),

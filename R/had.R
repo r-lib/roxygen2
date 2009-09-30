@@ -376,6 +376,7 @@ make.had.roclet <- function(package.dir,
     if (!is.null(partitum$examples)) {
       ex <- partitum$examples
       ex <- gsub("([%\\])", "\\\\\\1", ex)
+      ex <- gsub("\\\\dont", "\\dont", ex)
       parse.expression('examples', ex)
     } else {
       examples <- Reduce(c, Map(function(file)

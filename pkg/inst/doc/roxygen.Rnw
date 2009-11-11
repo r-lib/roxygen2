@@ -57,7 +57,7 @@ roxygenize('helloRoxygen',
            roxygen.dir='helloRoxygen',
            copy.package=FALSE,
            unlink.target=FALSE)
-@ 
+@
 
 A new \texttt{helloRoxygen/man/helloRoxygen-package.Rd} should have
 been created with the contents of figure \ref{hello-roxygen}; and
@@ -116,7 +116,7 @@ roxygenize('pseudoprime',
            copy.package=FALSE,
            unlink.target=FALSE)
 
-@ 
+@
 
 When documenting functions (fig. \ref{fermat}), every parameter must
 be documented with a \texttt{@param} tag (line 8); which consists of
@@ -126,14 +126,17 @@ must be documented with \texttt{@return <description>} (lines 9-10).
 Notice \texttt{@callGraphPrimitives} (line 11): it creates a call
 graph at the default depth similar to figure \ref{fermat-test},
 including primitive functions; \texttt{@callGraph}, on the other hand,
-would exclude primitive functions.
+would exclude primitive functions. Note that this roclet requires
+package {\tt Rgraphviz} $\geq 1.19.2$, and with {\tt Roxygen} $0.1-1$
+the {\tt callgraph} roclet is not automatically executed anymore; see
+help for function {\tt make.callgraph.roclet}\ref{running}.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph.pdf}
-  \caption{\texttt{fermat.test} call graph with primitives}
-  \label{fermat-test}
-\end{figure}
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph.pdf}
+%  \caption{\texttt{fermat.test} call graph with primitives}
+%  \label{fermat-test}
+%\end{figure}
 
 \subsection{Pseudoprime}
 
@@ -163,10 +166,11 @@ roxygenize('pseudoprime',
            copy.package=FALSE,
            unlink.target=FALSE)
 
-@ 
+@
 
 The \texttt{roxygenize} function is an alternative to \texttt{`R CMD
   roxygen'}; see the help page for details.
+
 
 \bibliographystyle{plainnat}
 \bibliography{roxygen}

@@ -5,11 +5,13 @@ Description: A Doxygen-like in-source documentation system for Rd,
     collation, namespace and callgraphs.
 Title: Literate Programming in R
 Author: Peter Danenberg <pcd@roxygen.org>, Manuel Eugster
-    <Manuel.Eugster@stat.uni-muenchen.de>
+    <Manuel.Eugster@stat.uni-muenchen.de> with contributions
+    from Hadley Wickham <hadley@rice.edu>
 Maintainer: Peter Danenberg <pcd@roxygen.org>
 URL: http://roxygen.org
+Depends: digest
 Suggests: Rgraphviz (>= 1.19.2), tools (>= 2.9.1)
-Collate: 'functional.R' 'list.R' 'roxygen.R' 'string.R' 'parse.R'
-    'parseS4.R' 'roclet.R' 'callgraph.R' 'description.R' 'collate.R' 
+Collate: 'functional.R' 'list.R' 'roxygen.R' 'string.R' 'memoize.R' 'parse.R'
+    'parseS4.R' 'roclet.R' 'callgraph.R' 'description.R' 'collate.R'
     'namespace.R' 'Rd.R' 'Rdmerge.R' 'Rdapi.R' 'Rdtank.R' 'Rd2.R'
     'roxygenize.R'

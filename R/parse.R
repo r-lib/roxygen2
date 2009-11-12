@@ -428,21 +428,32 @@ parse.refs <- function(preref.srcrefs)
 
 #' Parse a source file containing roxygen directives;
 #' with the help of memoization (by Hadley Wickham).
-#' param file string naming file to be parsed
-#' @param ... string naming file to be parsed
+#' @param file string naming file to be parsed
 #' @return List containing parsed directives
 #' @export
 #' @callGraph
 #' @callGraphDepth 3
-parse.file <- memoize(function(file) {
+parse.file <- function(file) {
   srcfile <- srcfile(file)
+  cached.parse.srcfile(srcfile)
+}
+
+#' Memoized parse.srcfile (by Hadley Wickham).
+#' @param ... the srcfile object
+#' @return List containing parsed directives
+cached.parse.srcfile <- memoize(parse.srcfile)
+
+#' Parse a srcfile object.
+#' @param srcfile the srcfile object
+#' @return List containing parsed directives
+parse.srcfile <- function(srcfile) {
   srcrefs <- attributes(parse(srcfile$filename,
                               srcfile=srcfile))$srcref
   if (length(srcrefs) > 0)
     parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
   else
     nil
-})
+}
 
 #' Parse many files at one.
 #' @param \dots files to be parsed

@@ -299,7 +299,12 @@ make.Rd.roclet <- function(subdir=NULL,
   parse.formals <- function(partitum) {
     formals <- partitum$formals
     if (!is.null(formals)) {
-      name.defaults <- zip.c(names(formals), formals)
+      ## name.defaults <- zip.c(names(formals), formals)
+      name.defaults <-
+        zip.c(names(formals),
+              Map(function(formal) tryCatch(toString(formal),
+                                            error=function(e) '<closure>'),
+                  formals))
       args <-
         do.call(paste, c(Map(function(name.default) {
           name <- car(name.default)

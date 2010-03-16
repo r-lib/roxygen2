@@ -2,3 +2,5 @@
 * TODO document all tags
   when using roxygen, i have to resort to reading code to get the full
   list of tags; which should never have to be.
+
+* TODO @encoding tag

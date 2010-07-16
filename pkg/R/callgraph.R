@@ -5,7 +5,7 @@ roxygen()
 
 register.preref.parsers(parse.value,
                         'callGraphDepth',
-				'callGraphType')
+                        'callGraphType')
 
 register.preref.parsers(parse.toggle,
                         'callGraph',
@@ -245,6 +245,7 @@ make.callgraph.roclet <- function(dependencies=NULL,
   parse.callgraph.primitives <- function(key, expression)
     do.callgraph.primitives <<- TRUE
 
+  ## oh, yeah; we meant to do a parse.number once upon a time.
   parse.callgraph.depth <- function(key, expression) {
     depth <- tryCatch(as.numeric(expression),
                       warning=function(e) NULL,

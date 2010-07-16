@@ -49,6 +49,7 @@ make.bibtex.roclet <- function() {
   roclet
 }
 
-make.bibtex.roclet()$parse.parsed(parse.text("#' @cite frankfurt:2010",
+make.bibtex.roclet()$parse.parsed(parse.text("#' @bibliography REFERENCES.bib",
+                                             "#' @cite frankfurt:2010",
                                              "#' @cite non-existent-key",
                                              "NA"))

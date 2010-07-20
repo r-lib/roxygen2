@@ -1,14 +1,4 @@
-source('../R/roxygen.R')
-source('../R/functional.R')
-source('../R/list.R')
-source('../R/memoize.R')
-source('../R/parse.R')
-source('../R/string.R')
-source('../R/roclet.R')
-source('../R/namespace.R')
-source('../R/collate.R')
-source('../R/Rd.R')
-source('../R/callgraph.R')
+library(roxygen)
 library(bibtex)
 
 debug <- function(..., print=str)
@@ -21,16 +11,13 @@ register.preref.parsers(parse.name,
 make.bibtex.roclet <- function() {
   roclet <- make.roclet()
   roclet$bibliography <- 'REFERENCES.bib'
-  roclet$citationList <- NULL
 
-  ## candidate for pre.files
   parse.bibliography <- function(key, expression)
     roclet$bibliography <- expression
 
   parse.cite <- function(key, expression) {
-    if (is.nil(roclet$citationList))
-      roclet$citationList <- read.bib(file=roclet$bibliography)
-    for (citation in roclet$citationList) {
+    citationList <- read.bib(file=roclet$bibliography)
+    for (citation in citationList) {
       if (attributes(citation)$key == expression) {
         cat(sprintf("%s. %s. %s. %s.\n",
                     citation$editor,
@@ -45,6 +32,7 @@ make.bibtex.roclet <- function() {
             immediate.=TRUE)
   }
 
+  roclet$register.parser('bibliography', parse.bibliography)
   roclet$register.parser('cite', parse.cite)
   roclet
 }

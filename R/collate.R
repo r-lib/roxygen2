@@ -160,7 +160,8 @@ make.collate.roclet <- function(merge.file=NULL,
     do.call(roclet$parse,
             as.list(list.files('.',
                                recursive=TRUE,
-                               full.names=FALSE)))
+                               full.names=FALSE,
+                               pattern="\\.[Rr]$")))
   }
 
   roclet

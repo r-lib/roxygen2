@@ -19,19 +19,23 @@ the same or with -d (Destructive).
 Options:
   -d  (Destructive) operate in place on SOURCE
   -u       (Unlink) clean TARGET first
+  -s  (Rd2) enable parsing of S4 tags
 
   -h         (Help) print short help message and exit
   -v      (Version) print roxygen version info and exit
 
 Report bugs to <roxygen-devel@lists.r-forge.r-project.org>."
 
-while getopts duhv OPT; do
+while getopts dushv OPT; do
     case $OPT in
         d|+d)
             destructive="TRUE"
             ;;
         u|+u)
             unlink="TRUE"
+            ;;
+        s|+s)
+            rd2="TRUE"
             ;;
         h|+h)
             echo ${usage}
@@ -95,15 +99,18 @@ fi
 
 : ${unlink:="FALSE"}
 : ${copy:="TRUE"}
+: ${rd2:="FALSE"}
 
 debug () {
-    echo source: "${source}"\; target: "${target}"\; copy: "${copy}"\; unlink: "${unlink}"
+    echo source: "${source}"\; target: "${target}"\; copy: "${copy}"\; unlink: "${unlink}"\; rd2: "${rd2}"
 }
+
 
 R_EXE="${R_HOME}/bin/R"
 echo "library(roxygen)
       roxygenize(package.dir=${source},
                  roxygen.dir=${target},
                  copy.package=${copy},
-                 unlink.target=${unlink})" | \
+                 unlink.target=${unlink},
+                 use.Rd2=${rd2})" | \
     "${R_EXE}" --no-restore --slave

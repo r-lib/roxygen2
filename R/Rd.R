@@ -328,7 +328,7 @@ make.Rd.roclet <- function(package.dir,
                             (sprintf('%s(%s)',
                                      parse.function.name(partitum),
                                      args),
-                             exdent=4)),
+                             exdent=4, width = 60)),
                     sep='\n')))
     }
   }

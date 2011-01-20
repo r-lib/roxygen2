@@ -245,7 +245,7 @@ make.callgraph.roclet <- function(package.dir, roxygen.dir, dependencies=NULL,
     cat(strwrap(capture.output(str(as.list(subcalls),
                                    vec.len=2^10,
                                    nchar.max=2^10)),
-                exdent=2),
+                exdent=2, width = 60),
         sep='\n',
         file=outfile)
   }

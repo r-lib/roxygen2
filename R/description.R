@@ -60,7 +60,7 @@ parse.description.file <- function(description.file)
 #' @return \code{NULL}
 cat.description <- function(field, value, file='')
   cat(strwrap(sprintf('%s: %s', field, value),
-              exdent=4),
+              exdent=4, width = 60),
       sep='\n',
       file=file,
       append=TRUE)

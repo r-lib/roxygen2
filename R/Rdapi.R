@@ -102,7 +102,7 @@ S4methodTag <- function(x, y) {
 }
 
 usageTag <- function(x, y) {
-  y <- sprintf('(%s)', paste(strwrap(y, exdent=4), collapse="\n"))
+  y <- sprintf('(%s)', paste(strwrap(y, exdent=4, width = 60), collapse="\n"))
   tag <- Rd_tag(list(x, rcodeTag(y)), '\\usage')
   tag <- Rd_tag_append_tag(tag, newlineTag(), newline=FALSE)
 

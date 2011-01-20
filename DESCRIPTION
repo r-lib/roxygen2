@@ -8,6 +8,7 @@ Author: Peter Danenberg <pcd@roxygen.org>, Manuel Eugster
     <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Peter Danenberg <pcd@roxygen.org>
 URL: http://roxygen.org
+Depends: digest
 Suggests: Rgraphviz (>= 1.19.2), tools (>= 2.9.1)
 Collate: 'functional.R' 'list.R' 'roxygen.R' 'string.R' 'parse.R' 'parse-cache.R' 'memoize.R'
     'parseS4.R' 'roclet.R' 'callgraph.R' 'description.R' 'collate.R' 

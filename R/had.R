@@ -109,7 +109,7 @@ make.had.roclet <- function(package.dir,
   }
 
   #' What does the noop look like?
-  NULL.STATEMENT <- 'roxygen[[:space:]]*()'
+  NULL.STATEMENT <- 'NULL'
 
   #' Does the statement contain a noop-like?
   #' @param source.line the line of source code
@@ -169,18 +169,19 @@ make.had.roclet <- function(package.dir,
   #' @return \code{NULL}
   parse.name <- function(partitum) {
     name <- guess.name(partitum)
+
     if (is.null(name) && !is.null(subdir)) {
       filename <- partitum$srcref$filename
       first.line <- car(partitum$srcref$lloc)
       first.source.line <- first.source.line(partitum)
       # if (!is.null.statement(first.source.line))
-        # warning(sprintf(paste('No name found for the',
-        #                       'following expression in %s',
-        #                       'line %s:\n  `%s . . .\''),
-        #                 filename,
-        #                 first.line,
-        #                 first.source.line),
-        #         immediate.=TRUE)
+      #   warning(sprintf(paste('No name found for the',
+      #                         'following expression in %s',
+      #                         'line %s:\n  `%s . . .\''),
+      #                   filename,
+      #                   first.line,
+      #                   first.source.line),
+      #           immediate.=TRUE)
     } else if (!is.null(name)) {
       name <- trim(name)
       if (!is.null(subdir)) {
@@ -216,7 +217,7 @@ make.had.roclet <- function(package.dir,
       args <-
         do.call(paste, c(Map(function(name.default) {
           name <- car(name.default)
-          default <- cadr(name.default)
+          default <- gsub("\\\\", "\\\\\\\\", cadr(name.default))
           if (is.null.string(default))
             name
           else
@@ -224,13 +225,14 @@ make.had.roclet <- function(package.dir,
         },
                              name.defaults),
                          sep=', '))
+                         
       parse.expression('usage',
           do.call(paste,
                   c(as.list(strwrap
                             (sprintf('%s(%s)',
                                      parse.function.name(partitum),
                                      args),
-                             exdent=4)),
+                             exdent=4, width = 60)),
                     sep='\n')))
     }
   }
@@ -255,7 +257,7 @@ make.had.roclet <- function(package.dir,
     parse.usage(partitum)
 
     # Don't output undocumented functions
-    if (length(partitum) == 3) {
+    if (length(partitum) <= 3) {
       filename <<- NULL
     }
   }
@@ -317,13 +319,13 @@ make.had.roclet <- function(package.dir,
     description <- car(paragraphs)
     details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
 
-    description <- paste(strwrap(description, exdent = 2, indent = 2),
+    description <- paste(strwrap(description, exdent = 2, indent = 2, width = 60),
       collapse = "\n")
     expr <- paste("\n\\description{\n", description, "\n}\n", sep = "")
     output <<- c(output, expr)
     
     if (length(details) > 0 && !is.null.string(details)) {
-      details <- paste(strwrap(details, exdent = 2, indent = 2), collapse = "\n")
+      details <- paste(strwrap(details, exdent = 2, indent = 2, width = 60), collapse = "\n")
       expr <- paste("\n\\details{\n", details, "\n}\n", sep = "")
       output <<- c(output, expr)
     }

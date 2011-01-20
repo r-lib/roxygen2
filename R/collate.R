@@ -132,7 +132,7 @@ make.collate.roclet <- function(package.dir,
       cat(sprintf('Merging collate directive with %s to %s',
                   merge.file,
                   target.file), '\n')
-    pre.parse <- function(parsed.fields) unlink(target.file)
+    pre.parse <- function(parsed.fields) file.remove(target.file)
     post.parse <- function(parsed.fields)
       cat.description('Collate', files, file=target.file)
     parse.default <- Curry(cat.description, file=target.file)

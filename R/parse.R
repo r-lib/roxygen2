@@ -384,8 +384,9 @@ parse.call <- function(expression) {
 
   assignee_string <- as.character(expression[[2]])
   
-  if (length(expression[[3]]) == 1) return(NULL)
-  while (as.character(expression[[3]][[1]]) == "<-") {
+  if (length(expression[[3]]) <= 1) return(NULL)
+  
+  while (deparse(expression[[3]][[1]]) == "<-") {
     expression[[3]] <- expression[[3]][[3]]
     if (length(expression[[3]]) == 1) return(NULL)
   }
@@ -442,7 +443,12 @@ parse.refs <- function(preref.srcrefs) {
 #' @callGraphDepth 3
 parse.file <- function(file) {
   srcfile <- srcfile(file)
-  cached.parse.srcfile(srcfile)
+  
+  res <- try(cached.parse.srcfile(srcfile), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    stop("Can't pass", file, "\n", res, call. = FALSE)
+  }
+  res
 }
 
 parse.srcfile <- function(srcfile) {

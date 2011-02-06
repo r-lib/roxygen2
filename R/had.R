@@ -217,7 +217,10 @@ make.had.roclet <- function(package.dir,
       args <-
         do.call(paste, c(Map(function(name.default) {
           name <- car(name.default)
+
           default <- gsub("\\\\", "\\\\\\\\", cadr(name.default))
+          default <- gsub("([%])", "\\\\\\1", default)
+          
           if (is.null.string(default))
             name
           else

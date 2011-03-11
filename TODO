@@ -1,4 +1,104 @@
 # -*- mode: org; -*-
+* DONE translate filenames with non-alphabetic characters
+  CLOSED: [2011-03-10 Thu 18:58]
+  need translations for:
+
+  - =!=
+  - "
+  - =#=
+  - =$=
+  - =%=
+  - =&=
+  - '
+  - =(=
+  - =)=
+  - =*=
+  - =+=
+  - ,
+  - =-=
+  - =.=
+  - =/=
+  - =:=
+  - =;=
+  - =<=
+  - =
+  - =>=
+  - =?=
+  - =@=
+  - =[=
+  - =\=
+  - =]=
+  - =^=
+  - =_=
+  - =`=
+  - ={=
+  - =|=
+  - =}=
+  - =~=
+
+  not going to touch unicode.
+
+  #+BEGIN_SRC R :tangle test-substitution.R :shebang #!/usr/bin/env Rscript
+    library(gsubfn)
+    library(functional)
+    library(RUnit)
+    
+    substitutions=c(
+      `!`='bang',
+      `"`='quote',
+      `#`='hash',
+      `$`='money',
+      `%`='grapes',
+      `&`='and',
+      `'`='single-quote',
+      `(`='open-paren',
+      `)`='close-paren',
+      `*`='star',
+      `+`='plus',
+      `,`='comma',
+      `-`='dash',
+      `.`='dot',
+      `/`='slash',
+      `:`='colon',
+      `;`='semi-colon',
+      `<`='less-than',
+      `=`='equals',
+      `>`='greater-than',
+      `?`='p',
+      `@`='asperand',
+      `[`='open-brace',
+      `\\`='backslash',
+      `]`='close-brace',
+      `^`='hat',
+      `_`='sub',
+      '`'='backtick',                       # let's add another ` to
+                                            # rectify syntax highlighting
+                                            # in emacs; thanks.
+      `{`='open-curly',
+      `|`='pipe',
+      `}`='close',
+      `~`='not'
+      )
+    
+    nil.if.lambda <- function(string)
+      if (nchar(string)) string else NULL
+    
+    translate.questionable.characters <- function(filename)
+      do.call(Curry(paste, collapse="-"),
+              strapply(filename,
+                       pattern='([[:punct:]]|)([^[:punct:]]*|)',
+                       function(punctuation, letters)
+                       c(substitutions[nil.if.lambda(punctuation)],
+                         nil.if.lambda(letters))))
+    
+    checkEquals(translate.questionable.characters('ha@@o'),
+                'ha-asperand-asperand-o')
+    checkEquals(translate.questionable.characters('nonquestionable'),
+                'nonquestionable')
+    checkEquals(translate.questionable.characters(''),
+                '')
+    
+  #+END_SRC
 * TODO document all tags
   when using roxygen, i have to resort to reading code to get the full
   list of tags; which should never have to be.

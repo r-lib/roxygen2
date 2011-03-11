@@ -42,6 +42,63 @@ register.srcref.parser('setMethod',
                        list(S4method=car(expression),
                             signature=cadr(expression)))
 
+##' Substitutions of questionable characters with a hacker-joke to
+##' boot.
+substitutions=c(
+  `!`='bang',
+  `"`='quote',
+  `#`='hash',
+  `$`='money',
+  `%`='grapes',
+  `&`='and',
+  `'`='single-quote',
+  `(`='open-paren',
+  `)`='close-paren',
+  `*`='star',
+  `+`='plus',
+  `,`='comma',
+  `-`='dash',
+  `.`='dot',
+  `/`='slash',
+  `:`='colon',
+  `;`='semi-colon',
+  `<`='less-than',
+  `=`='equals',
+  `>`='greater-than',
+  `?`='p',
+  `@`='asperand',
+  `[`='open-brace',
+  `\\`='backslash',
+  `]`='close-brace',
+  `^`='hat',
+  `_`='sub',
+  '`'='backtick',                       # let's add another ` to
+                                        # rectify syntax highlighting
+                                        # in emacs; thanks.
+  `{`='open-curly',
+  `|`='pipe',
+  `}`='close',
+  `~`='not'
+  )
+
+##' \code{NULL} if empty-string.
+##' @param string string to check
+##' @return \code{NULL} or identity
+nil.if.lambda <- function(string)
+  if (nchar(string)) string else NULL
+
+##' Translate file-system-questionable characters (i.e. punctuation
+##' within ASCII).
+##' @param filename the filename to translate
+##' @return the translated filename
+translate.questionable.characters <- function(filename)
+  do.call(Curry(paste, collapse="-"),
+          strapply(filename,
+                   pattern='([[:punct:]]|)([^[:punct:]]*|)',
+                   function(punctuation, letters)
+                   c(substitutions[nil.if.lambda(punctuation)],
+                     nil.if.lambda(letters))))
+
 #' Make an Rd roclet which parses the given files and, if specified, populates
 #' the given subdirectory with Rd files; or writes to standard out.  See
 #' \cite{Writing R Extensions}
@@ -268,7 +325,9 @@ make.Rd.roclet <- function(subdir=NULL,
       name <- trim(name)
       if (!is.null(subdir)) {
         assign.parent('filename',
-                      file.path(subdir, sprintf('%s.Rd', name)),
+                      file.path(subdir,
+                                sprintf('%s.Rd',
+                                        translate.questionable.characters(name))),
                       environment())
         if (verbose)
           cat(sprintf('Writing %s to %s\n', name, filename))

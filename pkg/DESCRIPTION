@@ -9,7 +9,7 @@ Author: Peter Danenberg <pcd@roxygen.org>, Manuel Eugster
     from Hadley Wickham <hadley@rice.edu>
 Maintainer: Peter Danenberg <pcd@roxygen.org>
 URL: http://roxygen.org
-Depends: digest
+Depends: digest, gsubfn
 Suggests: Rgraphviz (>= 1.19.2), tools (>= 2.9.1), testthat
 Collate: 'functional.R' 'list.R' 'roxygen.R' 'string.R' 'memoize.R' 'parse.R'
     'parseS4.R' 'roclet.R' 'callgraph.R' 'description.R' 'collate.R'

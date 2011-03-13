@@ -109,7 +109,7 @@ make.Rd2.roclet <- function(subdir=NULL,
 
     if ( verbose )
       if ( saveRd )
-        cat(sprintf(' witten to %s', filename))
+        cat(sprintf(' written to %s', filename))
       else
         cat(' omitted')
   }
@@ -245,7 +245,9 @@ make.Rd2.roclet <- function(subdir=NULL,
       
       if (!is.null(subdir)) {
         assign.parent('filename',
-                      file.path(subdir, sprintf('%s.Rd', basename)),
+                      file.path(subdir,
+                                sprintf('%s.Rd',
+                                        translate.questionable.characters(basename))),
                       environment())
         if (verbose)
           cat(sprintf('Processing %s:', name))

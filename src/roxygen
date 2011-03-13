@@ -38,7 +38,7 @@ while getopts dushv OPT; do
             rd2="TRUE"
             ;;
         h|+h)
-            echo ${usage}
+            echo "${usage}"
             exit 0
             ;;
         v|+v)
@@ -46,7 +46,7 @@ while getopts dushv OPT; do
             exit 0
             ;;
         *)
-            echo ${usage}
+            echo "${usage}"
             exit 2
     esac
 done

@@ -1,4 +1,8 @@
 # -*- mode: org; -*-
+* DONE ignore *~
+  CLOSED: [2011-03-12 Sat 17:18]
+  - CLOSING NOTE [2011-03-12 Sat 17:18] \\
+    looks like this is already the case.
 * DONE translate filenames with non-alphabetic characters
   CLOSED: [2011-03-10 Thu 18:58]
   need translations for:

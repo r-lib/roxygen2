@@ -1,4 +1,54 @@
 # -*- mode: org; -*-
+* TODO handling default args
+  =read.table=; also, =NULL=.
+
+  #+BEGIN_SRC R :noweb yes :tangle test-default-args.R
+    <<preamble>>
+    
+    test_that("double quotes are escaped appropriately", {
+      expect.rd(c("\\name{lambda}",
+                  "\\alias{lambda}",
+                  "\\title{lambda}",
+                  "\\usage{lambda(a=\"\\\"'\", b)}"),
+                "lambda <- function(a=\"\\\"'\", b=NULL) NA")
+    })
+    
+  #+END_SRC
+* TODO preamble for testing code
+  hadley had some automatic way of doing this once; i think we had to
+  revert to manual sourcing because of collation, though.
+  
+  #+srcname: preamble
+  #+BEGIN_SRC R
+    library(gsubfn)
+    library(testthat)
+    
+    source('R/functional.R')
+    source('R/list.R')
+    source('R/roxygen.R')
+    source('R/string.R')
+    source('R/memoize.R')
+    source('R/parse.R')
+    source('R/parseS4.R')
+    source('R/roclet.R')
+    source('R/callgraph.R')
+    source('R/description.R')
+    source('R/collate.R')
+    source('R/namespace.R')
+    source('R/Rd.R')
+    source('R/Rdmerge.R')
+    source('R/Rdapi.R')
+    source('R/Rdtank.R')
+    source('R/Rd2.R')
+    source('R/roxygenize.R')
+    
+    capture.roclet.output <- function(roclet, ...)
+      capture.output(roclet$parse.parsed(parse.text(...)))
+    
+    expect.rd <- function(expected, ...)
+      expect_equal(expected, capture.roclet.output(make.Rd.roclet(), ...))
+    
+  #+END_SRC
 * DONE ignore *~
   CLOSED: [2011-03-12 Sat 17:18]
   - CLOSING NOTE [2011-03-12 Sat 17:18] \\

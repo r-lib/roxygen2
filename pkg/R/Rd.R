@@ -368,6 +368,10 @@ make.Rd.roclet <- function(subdir=NULL,
         do.call(paste, c(Map(function(name.default) {
           name <- car(name.default)
           default <- cadr(name.default)
+          default <- gsubfn("\"(.*)\"",
+                            function(x)
+                            sprintf("\"%s\"", gsub("\"", "\\\\\"", x)),
+                            as.character(default))
           if (is.null.string(default))
             name
           else

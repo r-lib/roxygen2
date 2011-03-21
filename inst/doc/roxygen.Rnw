@@ -126,10 +126,10 @@ must be documented with \texttt{@return <description>} (lines 9-10).
 Notice \texttt{@callGraphPrimitives} (line 11): it creates a call
 graph at the default depth similar to figure \ref{fermat-test},
 including primitive functions; \texttt{@callGraph}, on the other hand,
-would exclude primitive functions. Note that this roclet requires
-package {\tt Rgraphviz} $\geq 1.19.2$, and with {\tt Roxygen} $0.1-1$
-the {\tt callgraph} roclet is not automatically executed anymore; see
-help for function {\tt make.callgraph.roclet}\ref{running}.
+would exclude primitive functions.\footnote{Note that this feature requires
+package {\tt Rgraphviz} $\geq 1.19.2$, and as of {\tt Roxygen} $0.1-1$
+the {\tt callgraph} feature is not automatically executed; see
+help for {\tt make.callgraph.roclet}\ref{running}.}
 
 %\begin{figure}[H]
 %  \centering
@@ -148,7 +148,7 @@ help for function {\tt make.callgraph.roclet}\ref{running}.
 Notice the header in \texttt{pseudoprime.R} (fig. \ref{pseudoprime})
 terminated by \texttt{roxygen()}; \texttt{@include fermat.R} (line 1)
 signals that \texttt{fermat.R} should be loaded before
-\texttt{pseudoprime.R}.  The collate roclet will update
+\texttt{pseudoprime.R}.  Roxygen will update
 \texttt{DESCRIPTION} accordingly.
 
 \texttt{@export} (line 15) signifies that \texttt{is.pseudoprime} will

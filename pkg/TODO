@@ -1,5 +1,8 @@
 # -*- mode: org; -*-
-* TODO handling default args
+* TODO how to convert an existing package at top of vignette
+* TODO distinguish between =arg=NULL= and no default arg
+* DONE handling double-quotes in default args
+  CLOSED: [2011-03-21 Mon 02:53]
   =read.table=; also, =NULL=.
 
   #+BEGIN_SRC R :noweb yes :tangle test-default-args.R
@@ -14,7 +17,8 @@
     })
     
   #+END_SRC
-* TODO preamble for testing code
+* DONE preamble for testing code
+  CLOSED: [2011-03-21 Mon 02:53]
   hadley had some automatic way of doing this once; i think we had to
   revert to manual sourcing because of collation, though.
   

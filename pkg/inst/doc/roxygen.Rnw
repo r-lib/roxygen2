@@ -47,19 +47,26 @@
 \texttt{hello-roxygen.R} (fig. \ref{hello-roxygen}) is a minimal
 example to check the sanity of your \Roxygen{} installation. It merely
 replaces the package description so that `\texttt{R CMD check}' will
-run after \Roxygen{} has processed the package skeleton:
+run after \Roxygen{} has processed the package skeleton.
 
+First, create the package skeleton:
 <<keep.source=true>>=
 library(roxygen)
 package.skeleton('helloRoxygen',
                  code_files='hello-roxygen.R',
                  force=TRUE)
-# `R CMD roxygen -d helloRoxygen' works, too.
+@ 
+<<echo=false, results=hide>>=
 roxygenize('helloRoxygen',
            roxygen.dir='helloRoxygen',
            copy.package=FALSE,
            unlink.target=FALSE)
 @
+then, run \Roxygen{} on the new directory:
+
+\begin{quote}
+  \texttt{R CMD roxygen -d helloRoxygen}.
+\end{quote}
 
 A new \texttt{helloRoxygen/man/helloRoxygen-package.Rd} should have
 been created with the contents of figure \ref{hello-roxygen}; and
@@ -150,7 +157,7 @@ help for {\tt make.callgraph.roclet}.}
 Notice the header in \texttt{pseudoprime.R} (fig. \ref{pseudoprime})
 terminated by \texttt{roxygen()}; \texttt{@include fermat.R} (line 1)
 signals that \texttt{fermat.R} should be loaded before
-\texttt{pseudoprime.R}.  Roxygen will update
+\texttt{pseudoprime.R}.  \Roxygen{} will update
 \texttt{DESCRIPTION} accordingly.
 
 \texttt{@export} (line 15) signifies that \texttt{is.pseudoprime} will

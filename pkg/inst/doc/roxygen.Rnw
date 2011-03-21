@@ -1,7 +1,9 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fancyvrb}
+\usepackage[pdfborder={0 0 0}]{hyperref}
 \usepackage{url}
+\usepackage{upquote}
 \usepackage{graphicx}
 \usepackage{grffile}
 \usepackage{float}
@@ -75,7 +77,7 @@ been created with the contents of figure \ref{hello-roxygen}; and
 One could imagine, for instance, a less trivial package that actually
 does something; enter \texttt{pseudoprime}, a toy that tests for
 primes using Fermat's little
-theorem.\footnote{\url{http://en.wikipedia.org/wiki/Fermat's_little_theorem}}
+theorem.\footnote{\href{http://en.wikipedia.org/wiki/Fermat\%27s_little_theorem}{http://en.wikipedia.org/wiki/Fermat\textquotesingle s\_little\_theorem}}
 
 A package description has been provided in figure
 \ref{pseudoprime-package}; notice the \texttt{roxygen()} statement in
@@ -129,14 +131,14 @@ including primitive functions; \texttt{@callGraph}, on the other hand,
 would exclude primitive functions.\footnote{Note that this feature requires
 package {\tt Rgraphviz} $\geq 1.19.2$, and as of {\tt Roxygen} $0.1-1$
 the {\tt callgraph} feature is not automatically executed; see
-help for {\tt make.callgraph.roclet}\ref{running}.}
+help for {\tt make.callgraph.roclet}.}
 
-%\begin{figure}[H]
-%  \centering
-%  \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph.pdf}
-%  \caption{\texttt{fermat.test} call graph with primitives}
-%  \label{fermat-test}
-%\end{figure}
+\begin{figure}[H]
+ \centering
+ \includegraphics{pseudoprime/inst/doc/fermat.test-callgraph.pdf}
+ \caption{\texttt{fermat.test} call graph with primitives}
+ \label{fermat-test}
+\end{figure}
 
 \subsection{Pseudoprime}
 

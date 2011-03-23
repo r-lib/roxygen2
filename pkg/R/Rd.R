@@ -488,15 +488,13 @@ make.Rd.roclet <- function(subdir=NULL,
   #' in an Rd-readable list (with \code{\\item}s, etc.).
   #' @param name.param name-param pair
   #' @return A list of Rd-readable expressions
-  parse.params <- function() {
-    debug(params=params)
+  parse.params <- function()
     Reduce.paste(function(name.param)
                  Rd.expression('item',
                      car(name.param),
                      cadr(name.param)),
                  params,
                  '')
-  }
 
   #' Paste and label the Rd-readable expressions
   #' returned by \code{parse.params}.

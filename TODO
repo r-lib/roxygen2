@@ -1,5 +1,10 @@
 # -*- mode: org; -*-
-* TODO named signature arg in =setMethod=
+* DONE named signature arg in =setMethod=
+  CLOSED: [2011-03-23 Wed 03:19]
+  - CLOSING NOTE [2011-03-23 Wed 03:19] \\
+    this was caused, apparently, by conflicting registrations of the
+    srcref parsers. solved, i believe, for the Rd case (but not the
+    Rd2 case).
   #+BEGIN_SRC R :noweb yes :tangle test-named-signature.R
     <<preamble>>
     

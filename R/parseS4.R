@@ -31,7 +31,6 @@ parseS4.method <- function(expression) {
   # Heuristic that the first unnamed language
   # object is the definition:
   def <- which(sapply(expression, is.call) & names(expression) == '')[1]
-
   formals <- list(definition=
                   parse.formals(expression[c(def, def+1)])[[1]])
 

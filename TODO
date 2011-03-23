@@ -1,4 +1,11 @@
 # -*- mode: org; -*-
+* TODO named signature arg in =setMethod=
+  #+BEGIN_SRC R :noweb yes :tangle test-named-signature.R
+    <<preamble>>
+    
+    capture.output(make.Rd.roclet()$parse('sandbox/example-S4-person.R'))
+    
+  #+END_SRC
 * TODO how to convert an existing package at top of vignette
 * TODO distinguish between =arg=NULL= and no default arg
 * DONE handling double-quotes in default args

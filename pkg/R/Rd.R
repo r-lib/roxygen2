@@ -4,44 +4,6 @@
 #' @include parse.R
 roxygen()
 
-register.preref.parsers(parse.value,
-                        'name',
-                        'aliases',
-                        'title',
-                        'usage',
-                        'references',
-                        'concept',
-                        'note',
-                        'seealso',
-                        'example',
-                        'examples',
-                        'keywords',
-                        'return',
-                        'author',
-                        'TODO',
-                        'format',
-                        'source')
-
-register.preref.parsers(parse.name.description,
-                        'param',
-                        'method')
-
-register.preref.parsers(parse.name,
-                        'docType')
-
-register.srcref.parser('setClass',
-                       function(pivot, expression)
-                       list(S4class=car(expression)))
-
-register.srcref.parser('setGeneric',
-                       function(pivot, expression)
-                       list(S4generic=car(expression)))
-
-register.srcref.parser('setMethod',
-                       function(pivot, expression)
-                       list(S4method=car(expression),
-                            signature=cadr(expression)))
-
 ##' Substitutions of questionable characters with a hacker-joke to
 ##' boot.
 substitutions=c(
@@ -215,6 +177,44 @@ translate.questionable.characters <- function(filename)
 #' make.Rd.roclet
 make.Rd.roclet <- function(subdir=NULL,
                            verbose=TRUE) {
+  register.preref.parsers(parse.value,
+                          'name',
+                          'aliases',
+                          'title',
+                          'usage',
+                          'references',
+                          'concept',
+                          'note',
+                          'seealso',
+                          'example',
+                          'examples',
+                          'keywords',
+                          'return',
+                          'author',
+                          'TODO',
+                          'format',
+                          'source')
+
+  register.preref.parsers(parse.name.description,
+                          'param',
+                          'method')
+
+  register.preref.parsers(parse.name,
+                          'docType')
+
+  register.srcref.parser('setClass',
+                         function(pivot, expression)
+                         list(S4class=car(expression)))
+
+  register.srcref.parser('setGeneric',
+                         function(pivot, expression)
+                         list(S4generic=car(expression)))
+
+  register.srcref.parser('setMethod',
+                         function(pivot, expression)
+                         list(S4method=car(expression),
+                              signature=cadr(expression)))
+
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
   #' @param key the expression's key
@@ -488,13 +488,15 @@ make.Rd.roclet <- function(subdir=NULL,
   #' in an Rd-readable list (with \code{\\item}s, etc.).
   #' @param name.param name-param pair
   #' @return A list of Rd-readable expressions
-  parse.params <- function()
+  parse.params <- function() {
+    debug(params=params)
     Reduce.paste(function(name.param)
                  Rd.expression('item',
                      car(name.param),
                      cadr(name.param)),
                  params,
                  '')
+  }
 
   #' Paste and label the Rd-readable expressions
   #' returned by \code{parse.params}.

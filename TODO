@@ -1,4 +1,13 @@
 # -*- mode: org; -*-
+* TODO switch to the =exec= method of install an =R CMD=
+  see e.g. [[http://cran.r-project.org/web/packages/ant/index.html][ant]].
+* TODO how to convert an existing package at top of vignette
+* TODO distinguish between =arg=NULL= and no default arg
+* TODO document all tags
+  when using roxygen, i have to resort to reading code to get the full
+  list of tags; which should never have to be.
+
+* TODO @encoding tag
 * DONE named signature arg in =setMethod=
   CLOSED: [2011-03-23 Wed 03:19]
   - CLOSING NOTE [2011-03-23 Wed 03:19] \\
@@ -11,8 +20,6 @@
     capture.output(make.Rd.roclet()$parse('sandbox/example-S4-person.R'))
     
   #+END_SRC
-* TODO how to convert an existing package at top of vignette
-* TODO distinguish between =arg=NULL= and no default arg
 * DONE handling double-quotes in default args
   CLOSED: [2011-03-21 Mon 02:53]
   =read.table=; also, =NULL=.
@@ -169,8 +176,3 @@
                 '')
     
   #+END_SRC
-* TODO document all tags
-  when using roxygen, i have to resort to reading code to get the full
-  list of tags; which should never have to be.
-
-* TODO @encoding tag

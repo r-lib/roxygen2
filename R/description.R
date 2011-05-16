@@ -58,12 +58,22 @@ parse.description.file <- function(description.file)
 #' @param file the file whither to print (a blank string being
 #' standard out)
 #' @return \code{NULL}
-cat.description <- function(field, value, file='')
-  cat(strwrap(sprintf('%s: %s', field, value),
-              exdent=4, width = 60),
-      sep='\n',
-      file=file,
-      append=TRUE)
+cat.description <- function(field, value, file='') {
+  comma_sep <- any(field %in% c("Suggests", "Depends", "Extends", "Imports"))
+  individual_lines <- field %in% c("Collate")
+  
+  if (comma_sep) {
+    value <- str_split(value, ",\\s+")[[1]]
+    value <- gsub("^\\s+|\\s+$", "", value)
+    value_string <- paste("    ", value, collapse = ",\n", sep = "")
+    out <- paste(field, ":\n", value_string, sep = "")
+  } else {
+    width <- if (individual_lines) 0 else 60
+    out <- strwrap(sprintf('%s: %s', field, value), exdent=4, width = width)    
+  }
+
+  cat(out, sep='\n', file=file, append=TRUE)
+}
 
 #' Description parser that does nothing
 #' @param field the field to be parsed

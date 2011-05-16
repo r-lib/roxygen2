@@ -4,53 +4,17 @@
 #' @include functional.R
 roxygen()
 
-#' Parse lines of text corresponding to a package DESCRIPTION file.
-#' @param description the lines of tex
-#' @return A list of values indexed by field
-parse.description.text <- function(description) {
-  fields <- new.env(parent=emptyenv())
-  current.field <- NULL
-  FIELD <- '^[^:[:space:]]*'
-  SEPARATOR <- ':'
-
-  contains.field <- function(line)
-    length(grep(paste(FIELD, SEPARATOR, sep=''), line)) > 0
-
-  field <- function(line)
-    substr.regexpr(FIELD, line)
-  
-  rest <- function(line)
-    substr(line, nchar(field(line)) + 2, nchar(line))
-
-  continue <- function(description) {
-    if (!is.nil(description)) {
-      line <- car(description)
-      if (contains.field(line)) {
-        field <- field(line)
-        rest <- rest(line)
-        fields[[field]] <- trim(rest)
-        current.field <<- field
-      } else {
-        fields[[current.field]] <-
-          paste(fields[[current.field]],
-                trim(line))
-      }
-      continue(cdr(description))
-    }
-  }
-  continue(description)
-  ## Reverse the fields, since they come out of the environment in
-  ## cons-order.
-  rev(as.list(fields))
-}
-
 #' Convenience function to call
 #' \code{\link{parse.description.text}}
 #' with the given \file{DESCRIPTION} file.
 #' @param description.file the \file{DESCRIPTION} file to be parsed
-#' @return \code{NULL}
-parse.description.file <- function(description.file)
-  parse.description.text(readLines(description.file))
+parse.description.file <- function(description.file) {
+  dcf <- read.dcf(description.file)
+  
+  dcf_list <- setNames(as.list(dcf[1, ]), colnames(dcf))
+  lapply(dcf_list, trim)
+}
+  
 
 #' Print the field-value pair to a given file or standard out.
 #' @param field the field to be printed
@@ -63,7 +27,7 @@ cat.description <- function(field, value, file='') {
   individual_lines <- field %in% c("Collate")
   
   if (comma_sep) {
-    value <- str_split(value, ",\\s+")[[1]]
+    value <- strsplit(value, ",\\s+")[[1]]
     value <- gsub("^\\s+|\\s+$", "", value)
     value_string <- paste("    ", value, collapse = ",\n", sep = "")
     out <- paste(field, ":\n", value_string, sep = "")

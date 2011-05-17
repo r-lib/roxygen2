@@ -77,7 +77,7 @@ make.had.roclet <- function(package.dir,
   }
 
   save.Rd <- function() {
-    if (is.null(filename)) return()
+    if (is.null(filename) || !has_contents) return()
     
     output <- paste(output, collapse = "")
     if (file.exists(filename)) {
@@ -93,6 +93,7 @@ make.had.roclet <- function(package.dir,
   output <- character()
   params <- NULL
   examples <- NULL
+  has_contents <- FALSE
   
 
   reset <- function() {
@@ -100,6 +101,7 @@ make.had.roclet <- function(package.dir,
     params <<- NULL
     examples <<- NULL
     output <<- character()
+    has_contents <<- FALSE
   }
 
   first.source.line <- function(partitum) {
@@ -153,8 +155,10 @@ make.had.roclet <- function(package.dir,
   #' @param name the calculated name-fallback
   #' @return The parsed title
   parse.title <- function(partitum, name) {
-    if (!is.null(partitum$title))
-      partitum$title
+    if (!is.null(partitum$title)) {
+      has_contents <<- TRUE
+      partitum$title      
+    } 
     else if (!is.null(first.sentence <-
                       first.sentence(partitum$description)))
       first.sentence
@@ -246,8 +250,10 @@ make.had.roclet <- function(package.dir,
   parse.usage <- function(partitum) {
     if (is.null(partitum$usage))
       parse.formals(partitum)
-    else
-      parse.expression('usage', partitum$usage)
+    else {
+      has_contents <<- TRUE
+      parse.expression('usage', partitum$usage)      
+    }
   }
 
   #' Reset params; parse name and usage.
@@ -258,11 +264,6 @@ make.had.roclet <- function(package.dir,
     
     parse.name(partitum)
     parse.usage(partitum)
-
-    # Don't output undocumented functions
-    if (length(partitum) <= 3) {
-      filename <<- NULL
-    }
   }
 
   #' Parse params.
@@ -318,6 +319,7 @@ make.had.roclet <- function(package.dir,
   #' @param expressions the to-be-parsed description and details
   #' @return \code{NULL}
   parse.description <- function(key, expressions) {
+    has_contents <<- TRUE
     paragraphs <- car(strsplit(car(expressions), '\n\n', fixed=TRUE))
     description <- car(paragraphs)
     details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))

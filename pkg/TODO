@@ -1,4 +1,5 @@
 # -*- mode: org; -*-
+* TODO switch to =codetools=
 * TODO switch to the =exec= method of install an =R CMD=
   see e.g. [[http://cran.r-project.org/web/packages/ant/index.html][ant]].
 * TODO how to convert an existing package at top of vignette

@@ -8,53 +8,6 @@
 #' @include Rdmerge.R
 roxygen()
 
-register.preref.parsers(parse.default,
-                        'nord')
-
-register.preref.parsers(parse.value,
-                        'name',
-                        'aliases',
-                        'title',
-                        'usage',
-                        'references',
-                        'concept',
-                        'note',
-                        'seealso',
-                        'example',
-                        'examples',
-                        'keywords',
-                        'return',
-                        'author',
-                        'TODO',
-                        'format',
-                        'source',
-                        'rdname')
-
-register.preref.parsers(parse.name.description,
-                        'param',
-                        'method',
-                        'slot')
-
-register.preref.parsers(parse.name,
-                        'docType')
-
-register.srcref.parser('setClass',
-                       function(pivot, expression)
-                       list(S4class=car(expression),
-                            S4formals=parseS4.class(cdr(expression))))
-
-register.srcref.parser('setGeneric',
-                       function(pivot, expression)
-                       list(S4generic=car(expression)))
-
-register.srcref.parser('setMethod',
-                       function(pivot, expression) {
-                         S4formals <- parseS4.method(cdr(expression))
-                         list(S4method=car(expression),
-                              S4formals=S4formals,
-                              formals=S4formals$definition)
-                       })
-
 #' New implementation of the Rd roclet; same functionality as the original
 #' implementation plus basic S4 handling.
 #'
@@ -83,6 +36,53 @@ make.Rd2.roclet <- function(subdir=NULL,
                             verbose=TRUE,
                             exportonly=FALSE,
                             documentedonly=TRUE) {
+
+  register.preref.parsers(parse.default,
+                          'nord')
+
+  register.preref.parsers(parse.value,
+                          'name',
+                          'aliases',
+                          'title',
+                          'usage',
+                          'references',
+                          'concept',
+                          'note',
+                          'seealso',
+                          'example',
+                          'examples',
+                          'keywords',
+                          'return',
+                          'author',
+                          'TODO',
+                          'format',
+                          'source',
+                          'rdname')
+
+  register.preref.parsers(parse.name.description,
+                          'param',
+                          'method',
+                          'slot')
+
+  register.preref.parsers(parse.name,
+                          'docType')
+
+  register.srcref.parser('setClass',
+                         function(pivot, expression)
+                         list(S4class=car(expression),
+                              S4formals=parseS4.class(cdr(expression))))
+
+  register.srcref.parser('setGeneric',
+                         function(pivot, expression)
+                         list(S4generic=car(expression)))
+
+  register.srcref.parser('setMethod',
+                         function(pivot, expression) {
+                           S4formals <- parseS4.method(cdr(expression))
+                           list(S4method=car(expression),
+                                S4formals=S4formals,
+                                formals=S4formals$definition)
+                         })
 
   require(tools)
   

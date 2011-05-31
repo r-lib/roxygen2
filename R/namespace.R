@@ -125,7 +125,7 @@ make.namespace.roclet <- function(package.dir, roxygen.dir, outfile = NULL,
   pre.files <- function() {
     if (verbose && !is.null.string(outfile))
       cat(sprintf('Writing namespace directives to %s', outfile), '\n')
-    if (file.exists(outfile)) file.remove(outfile)
+    unlink(outfile)
     namespace.reset()
   }
 

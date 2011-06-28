@@ -446,7 +446,7 @@ parse.file <- function(file) {
   
   res <- try(cached.parse.srcfile(srcfile), silent = TRUE)
   if (inherits(res, "try-error")) {
-    stop("Can't pass", file, "\n", res, call. = FALSE)
+    stop("Can't parse ", file, "\n", res, call. = FALSE)
   }
   res
 }

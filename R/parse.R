@@ -36,89 +36,6 @@ prerefs <- function(srcfile, srcrefs) {
   Map(pair.preref, pairs)
 }
 
-#' Preref parser table
-#' @TODO number parser?
-preref.parsers <- new.env(parent=emptyenv())
-
-#' Srcref parser table
-srcref.parsers <- new.env(parent=emptyenv())
-
-#' Register a parser with a table
-#' @param table the table under which to register
-#' @param key the key upon which to register
-#' @param parser the parser callback to register;
-#' a function taking \code{key} and \code{expression}
-#' @return \code{NULL}
-register.parser <- function(table, key, parser)
-  table[[key]] <- parser
-
-#' Specifically register a preref parser
-#' @param key the key upon which to register
-#' @param parser the parser callback to register;
-#' a function taking \code{key} and \code{expression}
-#' @return \code{NULL}
-#' @seealso \code{\link{register.parser}}
-#' @export
-register.preref.parser <- Curry(register.parser,
-                                table=preref.parsers)
-
-#' Specifically register a srcref parser
-#' @param key the key upon which to register
-#' @param parser the parser callback to register;
-#' a function taking \code{key} and \code{expression}
-#' @return \code{NULL}
-#' @seealso \code{\link{register.parser}}
-#' @export
-register.srcref.parser <- Curry(register.parser,
-                                table=srcref.parsers)
-
-#' Register many parsers at once.
-#' @param table the table under which to register
-#' @param parser the parser to register
-#' @param \dots the keys upon which to register
-#' @return \code{NULL}
-register.parsers <- function(table, parser, ...) {
-  for (key in c(...))
-    register.parser(table, key, parser)
-}
-  
-#' Register many preref parsers at once.
-#' @param parser the parser to register
-#' @param \dots the keys upon which to register
-#' @return \code{NULL}
-#' @export
-register.preref.parsers <- Curry(register.parsers,
-                                 table=preref.parsers)
-
-#' Register many srcref parsers at once.
-#' @param parser the parser to register
-#' @param \dots the keys upon which to register
-#' @return \code{NULL}
-#' @export
-register.srcref.parsers <- Curry(register.parsers,
-                                 table=srcref.parsers)
-
-#' Centrally formatted message
-#' @param key the offending key
-#' @param message the apposite message
-#' @return The formatted message
-parse.message <- function(key, message)
-  sprintf('@%s %s.', key, message)
-
-#' Centrally formatted error; stopping execution
-#' @param key the offending key
-#' @param message the apposite message
-#' @return \code{NULL}
-parse.error <- function(key, message)
-  stop(parse.message(key, message), call. = FALSE)
-
-#' Centrally formatted warning
-#' @param key the offending key
-#' @param message the apposite message
-#' @return \code{NULL}
-parse.warning <- function(key, message)
-  warning(parse.message(key, message), immediate.=TRUE, call. = FALSE)
-
 #' Parse a raw string containing key and expressions.
 #' @param element the string containing key and expressions
 #' @return A list containing the parsed constituents
@@ -156,7 +73,7 @@ parse.default <- function(key, rest)
 #' null)
 #' @seealso \code{\link{parse.default}}
 parse.preref <- function(key, rest) {
-  parse.warning(key, 'is an unknown key')
+  warning(key, ' is an unknown key', call. = FALSE)
   parse.default(key, rest)
 }
 
@@ -167,7 +84,7 @@ parse.preref <- function(key, rest) {
 #' @export
 parse.value <- function(key, rest) {
   if (is.null.string(rest))
-    parse.error(key, 'requires a value')
+    stop(key, 'requires a value', call. = FALSE)
   else
     parse.default(key, rest)
 }
@@ -183,7 +100,7 @@ parse.name.description <- function(key, rest) {
   name <- strcar(rest)
   rest <- strcdr(rest)
   if (is.null.string(name))
-    parse.error(key, 'requires a name and description')
+    stop(key, 'requires a name and description', call. = FALSE)
   else
     as.list(structure(list(list(name=name,
                                 description=rest)),
@@ -198,9 +115,9 @@ parse.name.description <- function(key, rest) {
 #' @export
 parse.name <- function(key, name) {
   if (is.null.string(name))
-    parse.error(key, 'requires a name')
+    stop(key, ' requires a name', call. = FALSE)
   else if (nwords(name) > 1)
-    parse.warning(key, 'ignoring extra arguments')
+    warning(key, ' ignoring extra arguments', call. = FALSE)
   parse.default(key, strcar(name))
 }
 
@@ -302,77 +219,6 @@ parse.ref.preref <- function(ref, ...) {
                               else parse.description(description))
   }
 } 
-
-#' Recursively walk an expression (as returned by \code{parse}) in
-#' preorder.
-#' @param proc the procedure to apply to each subexpression
-#' @param expression the root of the expression
-#' @return NULL
-#' @export
-preorder.walk.expression <- function(proc, expression) {
-  if (length(expression) > 0) {
-    names <- names(expression)
-    for (i in c(1:length(expression))) {
-      member <- tryCatch(expression[[i]], error=function(e) NULL)
-      if (!is.null(member) && !identical(member, expression)) {
-        proc(structure(list(member), names=names[i]))
-        try(preorder.walk.expression(proc, member),
-            silent=TRUE)
-      }
-    }
-  }
-}
-
-#' Flatten a nested expression into a list, preorderly.
-#' @param expression the root of the expression to be
-#' flattened
-#' @return A list containing the flattened expression
-#' @export
-preorder.flatten.expression <- function(expression) {
-  flattened <- NULL
-  preorder.walk.expression(function(expression)
-      flattened <<- append(flattened, expression),
-      expression)
-  flattened
-}
-
-#' Whether the expression implies assignment by \code{<-}
-#' or \code{=}.
-#' @param expression the expression to check for assignment
-#' @return Whether or not the expression assigns by \code{<-}
-#' \code{=}
-is.assignment <- function(expression) {
-  class <- class(expression)
-  class == '<-' | class == '='
-}
-
-#' Whether the expression assigns function
-#' @param expression the expression to check for assignment
-#' @return Whether the expression assigns a function
-is.function.definition <- function(expression)
-  expression == 'function'
-
-#' Find the formal arguments associated with a given
-#' expression (may be \code{NULL}).
-#' @param expressions the expressions from which to extract
-#' formal arguments
-#' @return The formal arguments of said expression or
-#' \code{NULL}
-parse.formals <- function(expressions) {
-  formals <- NULL
-  call <- car(expressions)
-  if (is.call(call)) {
-    f <- cadr(expressions)
-    if (is.function.definition(f))
-      formals <- tryCatch(formals(eval(call)),
-                          error=function(e) NULL)
-  }
-  if (is.null(formals)) formals
-  else list(formals=Map(function(formal)
-              if (is.null(formal)) ''
-              else if (is.call(formal)) capture.output(formal)
-              else as.character(maybe.quote(formal)), formals))
-}
 
 #' Parse a function call, paying special attention to
 #' assignments by \code{<-} or \code{=}.

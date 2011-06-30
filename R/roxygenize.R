@@ -1,6 +1,4 @@
 #' @include roxygen.R
-#' @include namespace.R
-#' @include collate.R
 NULL
 
 #' Whither to copy package

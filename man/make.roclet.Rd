@@ -10,13 +10,12 @@
 }
 
 \details{
-  Contains the following member functions:
-  \itemize{\item{register.parser}{takes \code{key} and
-  \code{parser}} \item{register.parsers}{takes
-  \code{parser} and \code{keys}}
-  \item{register.default.parser}{takes a \code{key}}
-  \item{register.default.parsers}{take \code{parsers}}
-  \item{parse}{parses material contained in files}}
+  Contains the following member functions: \itemize{ \item
+  \code{register.parser}: takes \code{key} and
+  \code{parser} \item \code{register.parsers}: takes
+  \code{parser} and \code{keys} \item
+  \code{register.default.parser}: takes a \code{key} \item
+  \code{parse} parses material contained in files }
 }
 \arguments{
   \item{parse.default}{the default parser taking \code{key}

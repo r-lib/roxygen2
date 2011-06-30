@@ -39,28 +39,28 @@ register.preref.parsers(parse.value,
 #' }
 #'
 #' \enumerate{
-#' \item{\code{@@export}}{May be specified with or without value;
+#' \item \code{@@export}: May be specified with or without value;
 #'                       if unadorned, roxygen will try to guess
 #'                       the exported value by assignee, \code{setMethod},
 #'                       \code{setClass}, etc. Otherwise,
 #'                       \code{@@export f g ...}
 #'                       translates to
-#'                       \code{export(f, g, ...)}.}
-#' \item{\code{@@exportClass}}{Overrides \code{setClass}.}
-#' \item{\code{@@exportMethod}}{Overrides \code{setMethod} or \code{setGeneric}.}
-#' \item{\code{@@exportPattern}}{See \dQuote{1.6.2 Registering S3 methods} from
-#'                               \cite{Writing R Extensions}.}
-#' \item{\code{@@S3method}}{Overrides the export of an S3 method.}
-#' \item{\code{@@import}}{See \dQuote{1.6.1 Specifying imports and exports}
-#'                        from \cite{Writing R Extensions}.}
-#' \item{\code{@@importFrom}}{See \dQuote{1.6.1 Specifying imports and exports}
-#'                            from \cite{Writing R Extensions}.}
-#' \item{\code{@@importClassesFrom}}{See \dQuote{1.6.6 Name spaces with formal
+#'                       \code{export(f, g, ...)}.
+#' \item \code{@@exportClass}: Overrides \code{setClass}.
+#' \item \code{@@exportMethod}: Overrides \code{setMethod} or \code{setGeneric}.
+#' \item \code{@@exportPattern}: See \dQuote{1.6.2 Registering S3 methods} from
+#'                               \cite{Writing R Extensions}.
+#' \item \code{@@S3method}: Overrides the export of an S3 method.
+#' \item \code{@@import}: See \dQuote{1.6.1 Specifying imports and exports}
+#'                        from \cite{Writing R Extensions}.
+#' \item \code{@@importFrom}: See \dQuote{1.6.1 Specifying imports and exports}
+#'                            from \cite{Writing R Extensions}.
+#' \item \code{@@importClassesFrom}: See \dQuote{1.6.6 Name spaces with formal
 #'                                   classes and methods} from \cite{Writing R
-#'                                   Extensions}.}
-#' \item{\code{@@importMethodsFrom}}{See \dQuote{1.6.6 Name spaces with formal
+#'                                   Extensions}.
+#' \item \code{@@importMethodsFrom}: See \dQuote{1.6.6 Name spaces with formal
 #'                                   classes and methods} from \cite{Writing R
-#'                                   Extensions}.}
+#'                                   Extensions}.
 #' }
 #'
 #' @param package.dir the package's top directory

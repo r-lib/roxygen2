@@ -34,51 +34,50 @@
   \code{@TODO} \tab \emph{n/a}\cr \code{@usage} \tab
   \code{\\usage}\cr }
 
-  \enumerate{ \item{\code{@author}}{See \dQuote{2.1.1
-  Documenting functions} from \cite{Writing R Extensions}.}
-  \item{\code{@aliases}}{A default alias is plucked from
+  \enumerate{ \item \code{@author}: See \dQuote{2.1.1
+  Documenting functions} from \cite{Writing R Extensions}.
+  \item \code{@aliases}: A default alias is plucked from
   the \code{@name} or assignee; otherwise, \code{@alias a b
   ...} translates to \code{\\alias{a}}, \code{\\alias{b}},
-  &c. If you specify one alias, however, specify them all.}
-  \item{\code{@concept}}{See \dQuote{2.8 Indices} from
-  \cite{Writing R Extensions}.} \item{\code{@example}}{Each
+  &c. If you specify one alias, however, specify them all.
+  \item \code{@concept}: See \dQuote{2.8 Indices} from
+  \cite{Writing R Extensions}. \item \code{@example}: Each
   \code{@example} tag specifies an example file relative to
   the package head; if the file resides in \file{tests},
   for instance, it will be checked with \command{R CMD
   check}. The contents of the file will be concatenated
-  under \code{\\examples{...}}.}
-  \item{\code{@examples}}{Verbatim examples; see
-  \dQuote{2.1.1 Documenting functions} from \cite{Writing R
-  Extensions}.} \item{\code{@format}}{See \dQuote{2.1.2
-  Documenting data sets} from \cite{Writing R Extensions}.}
-  \item{\code{@keywords}}{\code{@keywords a b ...}
-  translates to \code{\\keyword{a}}, \code{\\keyword{b}},
-  &c.} \item{\code{@method}}{Use \code{@method <generic>
-  <class>} to document S3 functions.}
-  \item{\code{@name}}{In the absense of an explicit
-  \code{@name} tag, the name of an assignment is plucked
-  from the assignee.} \item{\code{@note}}{See \dQuote{2.1.1
-  Documenting functions} from \cite{Writing R Extensions}.}
-  \item{\code{@param}}{Each function variable should have a
-  \code{@param <variable> <description>} specified.}
-  \item{\code{@references}}{See \dQuote{2.1.1 Documenting
-  functions} from \cite{Writing R Extensions}.}
-  \item{\code{@return}}{The return value of the function,
-  or \code{NULL}.} \item{\code{@seealso}}{See \dQuote{2.1.1
-  Documenting functions} from \cite{Writing R Extensions}.}
-  \item{\code{@source}}{See \dQuote{2.1.2 Documenting data
-  sets} from \cite{Writing R Extensions}.}
-  \item{\code{@title}}{A default title is plucked from the
-  first sentence of the description; that is, the first
-  phrase ending with a period, question mark or newline. In
-  the absence of a description, the title becomes the
+  under \code{\\examples{...}}. \item \code{@examples}:
+  Verbatim examples; see \dQuote{2.1.1 Documenting
+  functions} from \cite{Writing R Extensions}. \item
+  \code{@format}: See \dQuote{2.1.2 Documenting data sets}
+  from \cite{Writing R Extensions}. \item \code{@keywords}:
+  \code{@keywords a b ...} translates to
+  \code{\\keyword{a}}, \code{\\keyword{b}}, &c. \item
+  \code{@method}: Use \code{@method <generic> <class>} to
+  document S3 functions. \item \code{@name}: In the absense
+  of an explicit \code{@name} tag, the name of an
+  assignment is plucked from the assignee. \item
+  \code{@note}: See \dQuote{2.1.1 Documenting functions}
+  from \cite{Writing R Extensions}. \item \code{@param}:
+  Each function variable should have a \code{@param
+  <variable> <description>} specified. \item
+  \code{@references}: See \dQuote{2.1.1 Documenting
+  functions} from \cite{Writing R Extensions}. \item
+  \code{@return}: The return value of the function, or
+  \code{NULL}. \item \code{@seealso}: See \dQuote{2.1.1
+  Documenting functions} from \cite{Writing R Extensions}.
+  \item \code{@source}: See \dQuote{2.1.2 Documenting data
+  sets} from \cite{Writing R Extensions}. \item
+  \code{@title}: A default title is plucked from the first
+  sentence of the description; that is, the first phrase
+  ending with a period, question mark or newline. In the
+  absence of a description, the title becomes the
   \code{@name} or assignee; lastly, it can be overridden
-  with \code{@title}.} \item{\code{@TODO}}{Note to
-  developers to get off their asses.}
-  \item{\code{@usage}}{A default usage is construed from a
-  function's formals, but can be overridden with
-  \code{@usage} (e.g. in the case of multiple functions in
-  one Rd unit).} }
+  with \code{@title}. \item \code{@TODO}: Note to
+  developers to get off their asses. \item \code{@usage}: A
+  default usage is constructed from a function's formals,
+  but can be overridden with \code{@usage} (e.g. in the
+  case of multiple functions in one Rd unit). }
 }
 \value{Rd roclet}
 \alias{name}

@@ -13,11 +13,11 @@
   See \code{\link{make.Rd.roclet}} for description and
   available tags; new tags are:
 
-  \enumerate{ \item{\code{@nord}}{Suppress Rd creation.}
-  \item{\code{@rdname}}{Definition of the Rd name; blocks
-  with the same \code{@rdname} are merged into one Rd
-  file.} \item{\code{@slot}}{Each S4 class slot should have
-  a \code{@slot <name> <description>} specified.} }
+  \enumerate{ \item \code{@nord}: Suppress Rd creation.
+  \item \code{@rdname}: Definition of the Rd name; blocks
+  with the same \code{@rdname} are merged into one Rd file.
+  \item \code{@slot}: Each S4 class slot should have a
+  \code{@slot <name> <description>} specified. }
 }
 \value{Rd roclet}
 \alias{nord}

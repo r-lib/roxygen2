@@ -220,10 +220,9 @@ make.had.roclet <- function(package.dir,
     if (length(formals) == 0) return()
     
     args <- usage(formals)
-    usage <- paste(parse.function.name(partitum), "(", args, ")", sep = "")
+    usage <- str_c(parse.function.name(partitum), "(", args, ")")
     
-    parse.expression('usage', 
-      paste(strwrap(usage, width = 60, exdent = 4), collapse = "\n"))
+    parse.expression('usage', str_wrap(usage, width = 60, exdent = 4))
   }
 
   #' Prefer explicit \code{@@usage} to a \code{@@formals} list.

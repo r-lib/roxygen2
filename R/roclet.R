@@ -6,11 +6,13 @@ roxygen()
 #' Abstract roclet that serves as a rudimentary API.
 #'
 #' Contains the following member functions:
-#' \itemize{\item{register.parser}{takes \code{key} and \code{parser}}
-#' \item{register.parsers}{takes \code{parser} and \code{keys}}
-#' \item{register.default.parser}{takes a \code{key}}
-#' \item{register.default.parsers}{take \code{parsers}}
-#' \item{parse}{parses material contained in files}}
+#' \itemize{
+#'   \item \code{register.parser}: takes \code{key} and \code{parser}
+#'   \item \code{register.parsers}: takes \code{parser} and \code{keys}
+#'   \item \code{register.default.parser}: takes a \code{key}
+#    \item \code{register.default.parsers}: take \code{parsers}
+#'   \item \code{parse} parses material contained in files
+#' }
 #'
 #' @param parse.default the default parser taking \code{key}
 #' and \code{value}

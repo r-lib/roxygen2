@@ -74,7 +74,7 @@ copy.dir <- function(source,
 #' @callGraphDepth 1
 #' @TODO Options to enable/disable specific roclet
 #' (\command{--no-callgraphs}, etc.)
-#' @export roxygenize roxyngenise
+#' @export roxygenize roxygenise
 roxygenize <- function(package.dir,
                        roxygen.dir=package.dir,
                        copy.package=package.dir != roxygen.dir,

@@ -18,12 +18,12 @@ register.preref.parsers(parse.toggle,
 #' The callgraph roclet supports the following tags:
 #'
 #' \enumerate{
-#' \item{\code{@@callGraph}}{Create a call graph of the default
-#'   depth, excluding primitive functions.}
-#' \item{\code{@@callGraphPrimitives}}{Create a call graph of the
-#'   default depth, including primitive functions.}
-#' \item{\code{@@callGraphDepth}}{Change the depth of the callgraph
-#'   from the default of 2.}
+#' \item \code{@@callGraph}: Create a call graph of the default
+#'   depth, excluding primitive functions.
+#' \item \code{@@callGraphPrimitives}: Create a call graph of the
+#'   default depth, including primitive functions.
+#' \item \code{@@callGraphDepth}: Change the depth of the callgraph
+#'   from the default of 2.
 #' }
 #'
 #' The callgraph roclet is awkward in the sense that
@@ -42,10 +42,10 @@ register.preref.parsers(parse.toggle,
 #' @param verbose anounce what we're doing
 #' @export
 #' @TODO \itemize{
-#' \item{index.html}{\file{index.html} in \file{inst/doc} for
-#' callgraphs, possibly with thumbnails in png}
-#' \item{Text-only option}{Option for text-only callgraphs
-#' (which are clearer, in my opinion)}
+#' \item \code{index.html}: \file{index.html} in \file{inst/doc} for
+#' callgraphs, possibly with thumbnails in png
+#' \item Text-only option: Option for text-only callgraphs
+#' (which are clearer, in my opinion)
 #' }
 #' @aliases make.callgraph.roclet callGraph callGraphPrimitives
 #' callGraphDepth

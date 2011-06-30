@@ -1,7 +1,7 @@
 \name{make.callgraph.roclet}
 \title{Make a callgraph roclet which produces a static call graph...}
 \usage{make.callgraph.roclet(package.dir, roxygen.dir,
-    dependencies=NULL, dir=NULL, verbose=TRUE)}
+    dependencies = NULL, dir = NULL, verbose = TRUE)}
 
 \description{
   Make a callgraph roclet which produces a static call

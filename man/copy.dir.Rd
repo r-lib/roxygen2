@@ -1,8 +1,8 @@
 \name{copy.dir}
 \alias{copy.dir}
 \title{Recursively copy a directory thither; optionally unlinking...}
-\usage{copy.dir(source, target=source, unlink.target=FALSE,
-    overwrite=FALSE, verbose=FALSE)}
+\usage{copy.dir(source, target = source, unlink.target = FALSE,
+    overwrite = FALSE, verbose = FALSE)}
 
 \description{
   Recursively copy a directory thither; optionally

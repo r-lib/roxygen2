@@ -1,9 +1,9 @@
 \name{make.description.parser}
 \alias{make.description.parser}
 \title{Make a parser to parse DESCRIPTION files.}
-\usage{make.description.parser(parse.default=cat.description,
-    pre.parse=noop.description,
-    post.parse=noop.description)}
+\usage{make.description.parser(parse.default = cat.description,
+    pre.parse = noop.description, post.parse =
+    noop.description)}
 
 \description{
   Make a parser to parse \file{DESCRIPTION} files.

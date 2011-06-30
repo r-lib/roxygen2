@@ -87,28 +87,3 @@ make.description.parser <- function(parse.default=cat.description,
   }
   parser
 }
-
-#' Gather a \file{DESCRIPTION}'s dependencies from the
-#' \code{Package}, \code{Depends}, \code{Imports}, \code{Suggests},
-#' and \code{Enhances} fields.
-#' @param description.file the \file{DESCRIPTION} to parse
-#' @return A list of dependencies
-#' @TODO Test this!
-description.dependencies <- function(description.file) {
-  dependencies <- NULL
-  split.dependencies <- function(parsed.fields)
-    Map(Curry(substr.regexpr, pattern='[^[:space:](]*'),
-        trim(car(strsplit(dependencies, split=',', fixed=TRUE))))
-  parser <- make.description.parser(noop.description,
-                                    post.parse=split.dependencies)
-  augment.dependencies <- function(field, value)
-    dependencies <<- paste(value, dependencies, sep=',')
-  
-  parser$register.parsers(augment.dependencies,
-                          'Package',
-                          'Depends',
-                          'Imports',
-                          'Suggests',
-                          'Enhances')
-  parser$parse(parse.description.file(description.file))
-}

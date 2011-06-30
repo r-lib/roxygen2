@@ -96,11 +96,8 @@ make.namespace.roclet <- function(package.dir, roxygen.dir, outfile = NULL,
 
   exportee <- NULL
   pre.parse <- function(partitum) {
-    exportee <<- list(name=partitum$name,
-                      assignee=partitum$assignee,
-                      S4method=partitum$S4method,
-                      S4generic=partitum$S4method,
-                      S4class=partitum$S4class)
+    exportee <<- partitum[c("name", "assignee", "method", 
+      "S4method", "S4generic", "S4class")]
   }
 
   post.files <- function() { 
@@ -127,23 +124,26 @@ make.namespace.roclet <- function(package.dir, roxygen.dir, outfile = NULL,
     record.directive('exportMethods', parms)
   }
   parse.export <- function(proc, parms) {
-    if (is.null.string(parms)) {
-      if (!is.null(exportee$S4method))
-        parse.exportMethod(NULL, exportee$S4method)
-      else if (!is.null(exportee$S4class))
-        parse.exportClass(NULL, exportee$S4class)
-      else if (!is.null(exportee$S4generic))
-        parse.exportMethod(NULL, exportee$S4generic)
-      else {
-        exportee <- first.non.null(exportee$name,
-                                   exportee$assignee)
-        if (is.null(exportee))
-          warning('Empty export directive')
-        else
-          record.directive('export', quote_if_needed(exportee))
-      }
-    } else {
+    if (!is.null.string(parms)) {
       record.directive('export', words(parms))
+      return()
+    }
+    
+    if (!is.null(exportee$S4method)) {
+      parse.exportMethod(NULL, exportee$S4method)
+    } else if (!is.null(exportee$S4class)) {
+      parse.exportClass(NULL, exportee$S4class)
+    } else if (!is.null(exportee$S4generic)){
+      parse.exportMethod(NULL, exportee$S4generic)
+    } else if (!is.null(exportee$method)) {
+      record.directive("S3method", str_c(unlist(exportee$method), 
+        collapse = ","))
+    } else {
+      exportee <- first.non.null(exportee$name, exportee$assignee)
+      if (is.null(exportee))
+        warning('Empty export directive')
+      else
+        record.directive('export', quote_if_needed(exportee))
     }
   }
   

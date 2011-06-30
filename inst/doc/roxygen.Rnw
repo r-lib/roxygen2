@@ -78,10 +78,10 @@ primes using Fermat's little
 theorem.\footnote{\url{http://en.wikipedia.org/wiki/Fermat's_little_theorem}}
 
 A package description has been provided in figure
-\ref{pseudoprime-package}; notice the \texttt{roxygen()} statement in
+\ref{pseudoprime-package}; notice the \texttt{NULL} statement in
 line 30: each \Roxygen{} description block must be followed by a
 statement, even header material that describes a file or package in
-lieu of a specific function. \texttt{roxygen()} is provided as a
+lieu of a specific function. \texttt{NULL} is provided as a
 \texttt{NOOP} (null statement) to stand in for such cases.
 
 The first sentence of any \Roxygen{} block briefly describes its
@@ -143,7 +143,7 @@ would exclude primitive functions.
         {pseudoprime}
 
 Notice the header in \texttt{pseudoprime.R} (fig. \ref{pseudoprime})
-terminated by \texttt{roxygen()}; \texttt{@include fermat.R} (line 1)
+terminated by \texttt{NULL}; \texttt{@include fermat.R} (line 1)
 signals that \texttt{fermat.R} should be loaded before
 \texttt{pseudoprime.R}.  The collate roclet will update
 \texttt{DESCRIPTION} accordingly.

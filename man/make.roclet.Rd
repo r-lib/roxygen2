@@ -18,14 +18,13 @@
   \code{parse} parses material contained in files }
 }
 \arguments{
-  \item{parse.default}{the default parser taking \code{key}
-and \code{value}}
-  \item{pre.parse}{a callback function taking a list of parsed
-elements; called before processing a file}
-  \item{post.parse}{a callback function taking a list of parsed
-elements; called after processing a file}
-  \item{pre.files}{a callback function with no arguments;
-called before any file has been parsed}
-  \item{post.files}{a callback function with no arguments;
-called after every file has been parsed}
+  \item{parse.default}{the default parser taking \code{key} and \code{value}}
+  \item{pre.parse}{a callback function taking a list of parsed elements;
+called before processing a file}
+  \item{post.parse}{a callback function taking a list of parsed elements;
+called after processing a file}
+  \item{pre.files}{a callback function with no arguments; called before any
+file has been parsed}
+  \item{post.files}{a callback function with no arguments; called after every
+file has been parsed}
 }

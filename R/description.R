@@ -2,7 +2,7 @@
 #' @include list.R
 #' @include string.R
 #' @include functional.R
-roxygen()
+NULL
 
 #' Convenience function to call
 #' \code{\link{parse.description.text}}

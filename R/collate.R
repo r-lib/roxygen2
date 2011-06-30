@@ -4,7 +4,7 @@
 #' @include roclet.R
 #' @include description.R
 #' @include parse.R
-roxygen()
+NULL
 
 #' Collate value parser
 #' @name include
@@ -40,7 +40,7 @@ register.preref.parsers(parse.value,
 #' #' a -> {b, c}. This is `example-a.R'.
 #' #' @@include example-b.R
 #' #' @@include example-c.R
-#' roxygen()
+#' NULL
 #'
 #' roclet <- make.collate.roclet()
 #' \dontrun{roclet$parse.dir('example')}

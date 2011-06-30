@@ -1,7 +1,7 @@
 #' @include roxygen.R
 #' @include namespace.R
 #' @include collate.R
-roxygen()
+NULL
 
 #' Whither to copy package
 ROXYGEN.DIR <- '%s.roxygen'

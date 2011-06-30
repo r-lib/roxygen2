@@ -1,7 +1,7 @@
 #' @include roxygen.R
 #' @include list.R
 #' @include parse.R
-roxygen()
+NULL
 
 #' Abstract roclet that serves as a rudimentary API.
 #'

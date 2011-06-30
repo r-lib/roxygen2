@@ -27,4 +27,4 @@
 #' @seealso \code{\link{is.pseudoprime}}
 #' @examples
 #' is.pseudoprime(13, 4)
-roxygen()
+NULL

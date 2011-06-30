@@ -3,7 +3,7 @@
 #' @include roclet.R
 #' @include parse.R
 #' @import stringr
-roxygen()
+NULL
 
 register.preref.parsers(parse.value,
                         'name',

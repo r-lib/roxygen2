@@ -49,7 +49,7 @@ test_that("other namespace tags produce correct output", {
                           #' @importFrom test test
                           #' @importClassesFrom test test
                           #' @importMethodsFrom test test
-                          roxygen()",
+                          NULL",
                          expected=c("exportPattern(test)",
                            "S3method(test, test)",
                            "import(test)",

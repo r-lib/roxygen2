@@ -1,5 +1,5 @@
 #' @include fermat.R
-roxygen()
+NULL
 
 #' Check an integer for pseudo-primality to an arbitrary
 #' precision.

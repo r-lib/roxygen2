@@ -2,7 +2,7 @@
 #' @include parse.R
 #' @include roclet.R
 #' @include string.R
-roxygen()
+NULL
 
 register.preref.parsers(parse.default,
                         'export')
@@ -74,7 +74,7 @@ register.preref.parsers(parse.value,
 #' #' An example file, example.R, which imports
 #' #' packages foo and bar
 #' #' @@import foo bar
-#' roxygen()
+#' NULL
 #'
 #' #' An exportable function
 #' #' @@export

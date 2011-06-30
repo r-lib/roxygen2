@@ -1,8 +1,3 @@
-#' No-op for sourceless files
-#' @return \code{NULL}
-#' @export
-roxygen <- function() NULL
-
 #' Roxygen is a Doxygen-like documentation system for R; allowing
 #' in-source specification of Rd files, collation and namespace
 #' directives.
@@ -45,4 +40,4 @@ roxygen <- function() NULL
 #' for an overview of roxygen tags.
 #'
 #' See \code{\link{roxygenize}} for an alternative to `R CMD roxygen'.
-roxygen()
+NULL

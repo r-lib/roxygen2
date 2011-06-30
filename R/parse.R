@@ -3,7 +3,7 @@
 #' @include string.R
 #' @include list.R
 #' @import memoise
-roxygen()
+NULL
 
 #' Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '#+\''

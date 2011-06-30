@@ -68,7 +68,7 @@ the \var{outfile}}
 \examples{#' An example file, example.R, which imports
 #' packages foo and bar
 #' @import foo bar
-roxygen()
+NULL
 
 #' An exportable function
 #' @export

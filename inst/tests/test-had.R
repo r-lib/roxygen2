@@ -8,21 +8,21 @@ expect_rd <- function(roxygen, expected) {
 test_that("@example loads from specified files", {
   expect_rd("#' @example Rd-example-1.R
                    #' @example Rd-example-2.R
-                   roxygen()",
+                   NULL",
                   expected=c("\\examples{example <- 'example1'",
                     "example <- 'example2'}"))
 })
 
 test_that("@examples captures examples", {
   expect_rd("#' @examples a <- 2
-                   roxygen()",
+                   NULL",
                   expected="\\examples{a <- 2}")  
 })
 
 test_that("@examples overrides @example", {
   expect_rd("#' @example expectedRd-example-1.R
                    #' @examples a <- 2
-                   roxygen()",
+                   NULL",
                   expected="\\examples{a <- 2}")  
 })
 
@@ -33,7 +33,7 @@ test_that("empty file gives NULL expected", {
 })
 
 test_that("naked roxygen gives NULL expected", {
-  output <- make.Rd.roclet()$parse.parsed(parse.text("roxygen()"))
+  output <- make.Rd.roclet()$parse.parsed(parse.text("NULL"))
   expect_identical(output, NULL)
 })
 
@@ -88,7 +88,7 @@ test_that("@param documents arguments", {
 
 test_that("description taken from first line", {
   expect_rd("#' description
-                   roxygen()",
+                   NULL",
                   expected="\\description{description}")  
 })
 
@@ -96,7 +96,7 @@ test_that("details taken from subsequent lines", {
   expect_rd("#' description
                    #'
                    #' details
-                   roxygen()",
+                   NULL",
                   expected=c("\\description{description}",
                     "\\details{details}"))
   
@@ -105,7 +105,7 @@ test_that("details taken from subsequent lines", {
 test_that("keywords and aliases split into pieces", {
   expect_rd("#' @keywords a b
                    #' @aliases a b
-                   roxygen()",
+                   NULL",
                   expected=c("\\keyword{a}",
                     "\\keyword{b}",
                     "\\alias{a}",
@@ -118,7 +118,7 @@ test_that("generic keys produce desired expected", {
                    #' @author test
                    #' @seealso test
                    #' @concept test
-                   roxygen()",
+                   NULL",
                   expected=c("\\references{test}",
                     "\\note{test}",
                     "\\author{test}",
@@ -140,7 +140,7 @@ test_that("title taken from first sentence", {
 test_that("@title overrides default title", {
   expect_rd("#' Would be title
                    #' @title Overridden title
-                   roxygen()",
+                   NULL",
                   expected=c("\\title{Overridden title}",
                     "\\description{Would be title}"))  
 })
@@ -168,7 +168,7 @@ test_that("no ending punctuation produces ellipsis", {
 
 test_that("@TODO creates todo section", {
   expect_rd("#' @TODO test this
-                   roxygen()",
+                   NULL",
                   expected=c('\\section{TODO}{test this}'))
   
 })

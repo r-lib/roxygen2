@@ -215,9 +215,11 @@ make.had.roclet <- function(package.dir,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.formals <- function(partitum) {
-    
     formals <- partitum$formals
-    if (length(formals) > 0) {
+    if (length(formals) == 0) return()
+    
+    use <- usage(formals)
+      
       name.defaults <- zip.c(names(formals), formals)
       args <-
         do.call(paste, c(Map(function(name.default) {
@@ -242,7 +244,7 @@ make.had.roclet <- function(package.dir,
                                      args),
                              exdent=4, width = 60)),
                     sep='\n')))
-    }
+
   }
 
   #' Prefer explicit \code{@@usage} to a \code{@@formals} list.

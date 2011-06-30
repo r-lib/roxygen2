@@ -1,10 +1,10 @@
 \name{usage}
 \alias{usage}
-\title{Given function, produce usage string for it.}
-\usage{usage(name)}
+\title{Given argument list, produce usage string for it.}
+\usage{usage(args)}
 
 \description{
-  Given function, produce usage string for it.
+  Given argument list, produce usage string for it.
 }
 
 \details{
@@ -12,5 +12,5 @@
 }
 \value{a string}
 \arguments{
-  \item{f}{name of function, as string}
+  \item{f}{function, or name of function, as string}
 }

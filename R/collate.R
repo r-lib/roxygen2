@@ -99,7 +99,7 @@ make.collate.roclet <- function(package.dir,
   }
   
   pre.parse <- function(partitum) {
-    file <- partitum$srcref$filename
+    file <- basename(partitum$srcref$filename)
     maybe.append.vertex(file)
     vertex <- vertices[[file]]
     assign.parent('current.predecessor',

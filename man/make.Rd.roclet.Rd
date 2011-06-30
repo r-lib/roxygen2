@@ -1,6 +1,6 @@
 \name{make.Rd.roclet}
 \title{Make an Rd roclet which parses the given files and, if specified, populates...}
-\usage{make.Rd.roclet(package.dir, roxygen.dir, subdir,
+\usage{make.Rd.roclet(package.dir, roxygen.dir, subdir=NULL,
     verbose=TRUE)}
 
 \description{

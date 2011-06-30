@@ -1,6 +1,6 @@
 \name{make.Rd2.roclet}
 \title{New implementation of the Rd roclet; same functionality as the original...}
-\usage{make.Rd2.roclet(package.dir, roxygen.dir, subdir,
+\usage{make.Rd2.roclet(package.dir, roxygen.dir, subdir=NULL,
     verbose=TRUE, exportonly=FALSE, documentedonly=TRUE)}
 
 \description{

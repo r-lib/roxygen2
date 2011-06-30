@@ -6,16 +6,20 @@
 #' @return a string
 usage <- function(args) {
   is.missing.arg <- function(arg) {
-    typeof(arg) == "symbol" && deparse(arg) == ""
+    is.symbol(arg) && deparse(arg) == ""
   }
   arg_to_text <- function(arg) {
     if (is.missing.arg(arg)) return("")
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
     
-    paste(" = ", paste(text, collapse = "\n"), sep = "")
+    paste("=", paste(text, collapse = "\n"), sep = "")
   }
 
   arg_values <- vapply(args, arg_to_text, character(1))
   
   paste(names(args), arg_values, collapse = ", ", sep = "")
 }
+
+# Just in case we do need more escaping
+# default <- gsub("\\\\", "\\\\\\\\", cadr(name.default))
+# default <- gsub("([%])", "\\\\\\1", default)

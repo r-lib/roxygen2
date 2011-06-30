@@ -394,17 +394,10 @@ parse.call <- function(expression) {
   if (!identical(expression[[3]][[1]], as.name("function"))) {
     return(list(assignee = assignee_string))
   }
+
   formals <- as.list(expression[[3]][[2]])  
   
-  formals_string <- lapply(formals, function(formal) {
-    if (is.null(formal)) ''
-    else if (is.call(formal)) capture.output(formal)
-    else as.character(maybe.quote(formal))
-  })
-  
-  # if (length(formals_string) == 1) browser()
-  
-  list(assignee = assignee_string, formals = formals_string)
+  list(assignee = assignee_string, formals = formals)
 }
 
 #' Parse a srcref

@@ -1,8 +1,9 @@
 \name{make.roclet}
 \alias{make.roclet}
 \title{Abstract roclet that serves as a rudimentary API.}
-\usage{make.roclet(package.dir, roxygen.dir, parse.default,
-    pre.parse, post.parse, pre.files, post.files)}
+\usage{make.roclet(package.dir, roxygen.dir, parse.default=NULL,
+    pre.parse=NULL, post.parse=NULL, pre.files=NULL,
+    post.files=NULL)}
 
 \description{
   Abstract roclet that serves as a rudimentary API.

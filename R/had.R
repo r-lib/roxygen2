@@ -218,33 +218,11 @@ make.had.roclet <- function(package.dir,
     formals <- partitum$formals
     if (length(formals) == 0) return()
     
-    use <- usage(formals)
-      
-      name.defaults <- zip.c(names(formals), formals)
-      args <-
-        do.call(paste, c(Map(function(name.default) {
-          name <- car(name.default)
-
-          default <- gsub("\\\\", "\\\\\\\\", cadr(name.default))
-          default <- gsub("([%])", "\\\\\\1", default)
-          
-          if (is.null.string(default))
-            name
-          else
-            sprintf('%s=%s', name, default)
-        },
-                             name.defaults),
-                         sep=', '))
-                         
-      parse.expression('usage',
-          do.call(paste,
-                  c(as.list(strwrap
-                            (sprintf('%s(%s)',
-                                     parse.function.name(partitum),
-                                     args),
-                             exdent=4, width = 60)),
-                    sep='\n')))
-
+    args <- usage(formals)
+    usage <- paste(parse.function.name(partitum), "(", args, ")", sep = "")
+    
+    parse.expression('usage', 
+      paste(strwrap(usage, width = 60, exdent = 4), collapse = "\n"))
   }
 
   #' Prefer explicit \code{@@usage} to a \code{@@formals} list.

@@ -118,8 +118,6 @@ make.collate.roclet <- function(package.dir,
     sorted
   }
 
-  COLLATE.FIELD <- 'Collate:'
-
   merge <- function(files) {
     if (verbose && !is.null.string(target.file))
       cat(sprintf('Merging collate directive with %s to %s',

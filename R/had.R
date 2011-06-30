@@ -43,6 +43,7 @@ register.srcref.parser('setMethod',
                             signature=cadr(expression)))
 
 
+#' @export
 make.had.roclet <- function(package.dir, 
                            roxygen.dir, 
                            subdir=NULL,

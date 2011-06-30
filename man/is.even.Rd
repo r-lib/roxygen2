@@ -2,6 +2,11 @@
 \alias{is.even}
 \title{Is a number even?}
 \usage{is.even(a)}
-\description{Is a number even?}
+
+\description{
+  Is a number even?
+}
 \value{Whether the number is even}
-\arguments{\item{a}{the number to test}}
+\arguments{
+  \item{a}{the number to test}
+}

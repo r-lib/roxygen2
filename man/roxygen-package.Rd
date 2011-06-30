@@ -1,27 +1,30 @@
 \name{roxygen-package}
 \alias{roxygen-package}
 \title{Literate Programming in R}
-\description{Roxygen is a Doxygen-like documentation system for R; allowing
-in-source specification of Rd files, collation and namespace
-directives.}
-\details{\tabular{ll}{
-Package: \tab Roxygen\cr
-Type: \tab Package\cr
-Version: \tab 0.1-1\cr
-Date: \tab 2008-08-25\cr
-License: \tab GPL (>= 2)\cr
-LazyLoad: \tab yes\cr
+
+\description{
+  Roxygen is a Doxygen-like documentation system for R;
+  allowing in-source specification of Rd files, collation
+  and namespace directives.
 }
 
-Roxygen is run on a package (hereafter <package>) by
-\command{R CMD roxygen <package>} or \command{Rcmd roxygen.sh <package>}
-on Windows. By default, it creates a directory \file{<package>.roxygen}
-with the complete package cum populated Rd files, \file{NAMESPACE}, etc.;
-but can also operate descructively on the package itself with the
-\option{-d} option.
+\details{
+  \tabular{ll}{ Package: \tab Roxygen\cr Type: \tab
+  Package\cr Version: \tab 0.1-1\cr Date: \tab
+  2008-08-25\cr License: \tab GPL (>= 2)\cr LazyLoad: \tab
+  yes\cr }
 
-See the vignette (\file{roxygen.pdf}) or manual (\file{roxygen-manual.pdf})
-for details.}
+  Roxygen is run on a package (hereafter <package>) by
+  \command{R CMD roxygen <package>} or \command{Rcmd
+  roxygen.sh <package>} on Windows. By default, it creates
+  a directory \file{<package>.roxygen} with the complete
+  package cum populated Rd files, \file{NAMESPACE}, etc.;
+  but can also operate descructively on the package itself
+  with the \option{-d} option.
+
+  See the vignette (\file{roxygen.pdf}) or manual
+  (\file{roxygen-manual.pdf}) for details.
+}
 \author{Peter Danenberg \email{pcd@roxygen.org},
 Manuel Eugster \email{Manuel.Eugster@stat.uni-muenchen.de}
 

@@ -3,7 +3,7 @@ read.description <- function(file) {
   dcf <- read.dcf(file)
   
   dcf_list <- setNames(as.list(dcf[1, ]), colnames(dcf))
-  lapply(dcf_list, trim)
+  lapply(dcf_list, str_trim)
 }
 
 # Write parsed DESCRIPTION back out to disk

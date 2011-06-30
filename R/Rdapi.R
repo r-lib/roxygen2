@@ -8,8 +8,8 @@ slotTag <- function(name, description=NULL, type=NULL, default=NULL) {
   return(itemTag(sprintf('\\code{%s}:',
                          name),
                  sprintf('(\\code{\\link{%s}}) %s',
-                         trim(type),
-                         trim(description))))
+                         str_trim(type),
+                         str_trim(description))))
 }
 
 slotsTag <- function(..., x=list(...)) {
@@ -22,7 +22,7 @@ prototypeTag <- function(name, value, inherit) {
                                 '\\code{%s} ='),
                          name),
                  sprintf('%s',
-                         trim(value))))
+                         str_trim(value))))
 }
 
 prototypesTag <- function(..., x=list(...)) {
@@ -46,7 +46,7 @@ classmethodTag <- function(generic, name, signature, description) {
                          generic),
                  sprintf('\\code{%s}: %s',
                          classmethodSignature(signature),
-                         trim(description))))
+                         str_trim(description))))
 }
 
 classmethodsTag <- function(..., x=list(...)) {

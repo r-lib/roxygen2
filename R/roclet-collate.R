@@ -62,7 +62,7 @@ make.collate.roclet <- function(package.dir,
 
   make.vertex <- function(file) {
     vertex <- new.env(parent=emptyenv())
-    vertex$file <- trim(file)
+    vertex$file <- str_trim(file)
     vertex$discovered <- FALSE
     vertex$ancestors <- NULL
     vertex
@@ -88,7 +88,7 @@ make.collate.roclet <- function(package.dir,
   current.predecessor <- NULL
 
   parse.include <- function(key, file) {
-    file <- trim(file)
+    file <- str_trim(file)
     maybe.append.vertex(file)
     ancestor <- vertices[[file]]
     maybe.append.ancestor(current.predecessor,

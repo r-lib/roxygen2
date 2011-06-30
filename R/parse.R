@@ -185,7 +185,7 @@ parse.ref.list <- function(ref, ...)
 #' @return List containing the parsed preref
 #' @export
 parse.ref.preref <- function(ref, ...) {
-  lines <- Map(trim.left, getSrcLines(attributes(ref)$srcfile,
+  lines <- Map(str_trim, getSrcLines(attributes(ref)$srcfile,
                                       ref[[1]],
                                       ref[[3]]))
   delimited.lines <-

@@ -65,7 +65,7 @@ make.had.roclet <- function(package.dir,
     sprintf('\\%s%s\n',
             key,
             Reduce.paste(function(expression)
-                         sprintf('{%s}', trim(expression)),
+                         sprintf('{%s}', str_trim(expression)),
                          c(...),
                          ''))
   
@@ -164,7 +164,7 @@ make.had.roclet <- function(package.dir,
       if (last.char == '.' || last.char == '?')
         sentence
       else
-        paste(trim(sentence), '...', sep='')
+        paste(str_trim(sentence), '...', sep='')
     }
   }
 
@@ -207,7 +207,7 @@ make.had.roclet <- function(package.dir,
       #                   first.source.line),
       #           immediate.=TRUE)
     } else if (!is.null(name)) {
-      name <- trim(name)
+      name <- str_trim(name)
       filename <<- sprintf('%s.Rd', name)
       parse.expression('name', name)
       if (is.null(partitum$aliases))
@@ -349,7 +349,7 @@ make.had.roclet <- function(package.dir,
     if (length(params) > 0) {
       
       name <- sapply(params, "[[", "name")
-      desc <- trim(sapply(params, "[[", "description"))
+      desc <- str_trim(sapply(params, "[[", "description"))
       
       params_str <- paste(
         "  \\item{", name, "}{",  desc, "}", 
@@ -384,7 +384,7 @@ make.had.roclet <- function(package.dir,
       parse.expression('examples', ex)
     } else {
       examples <- Reduce(c, Map(function(file)
-                                tryCatch(readLines(trim(file)),
+                                tryCatch(readLines(str_trim(file)),
                                          error=function(e) NULL),
                                 examples),
                          NULL)

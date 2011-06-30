@@ -12,24 +12,6 @@ MATTER <- '[^[:space:]]+'
 # Analogue to the empty list
 NIL.STRING <- ''
 
-# Trim [:space:] to the left of a string.
-# @param string the string to be trimmed
-# @return A left-trimmed string
-trim.left <- function(string)
-  gsub(sprintf('^%s', SPACE), NIL.STRING, string)
-
-# Trim [:space:] to the right of a string.
-# @param string the string to be trimmed
-# @return A right-trimmed string
-trim.right <- function(string)
-  gsub(sprintf('%s$', SPACE), NIL.STRING, string)
-
-# Trim [:space:] on both sides of a string.
-# @param string the string to be trimmed
-# @return A trimmed string
-trim <- function(string)
-  Compose(trim.left, trim.right)(string)
-
 # Does the string contain no matter, but very well [:space:]?
 # @param string the string to check
 # @return TRUE if the string contains words, otherwise FALSE

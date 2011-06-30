@@ -22,14 +22,14 @@ prerefs <- function(srcfile, srcrefs) {
     nchar(getSrcLines(srcfile, lineno, lineno))
 
   pair.preref <- function(pair) {
-    start <- car(pair)
-    end <- cadr(pair)
+    start <- pair[[1]]
+    end <- pair[[2]]
     structure(srcref(srcfile, c(start, 1, end, length.line(end))),
               class='preref')
   }
 
   lines <- unlist(Map(function(srcref)
-                      c(car(srcref) - 1,
+                      c(srcref[[1]] - 1,
                         srcref[[3]] + 1),
                       srcrefs))
   pairs <- pairwise(c(1, lines))
@@ -174,8 +174,8 @@ cached.parse.ref <- memoize(parse.ref)
 #' @return List combining the parsed preref/srcref
 #' @export
 parse.ref.list <- function(ref, ...)
-  append(parse.ref(car(ref)),
-         parse.ref(cadr(ref)))
+  append(parse.ref(ref[[1]]),
+         parse.ref(ref[[2]]))
 
 
 #' Parse a preref
@@ -186,7 +186,7 @@ parse.ref.list <- function(ref, ...)
 #' @export
 parse.ref.preref <- function(ref, ...) {
   lines <- Map(trim.left, getSrcLines(attributes(ref)$srcfile,
-                                      car(ref),
+                                      ref[[1]],
                                       ref[[3]]))
   delimited.lines <-
     Filter(function(line) grep(LINE.DELIMITER, line), lines)
@@ -199,22 +199,22 @@ parse.ref.preref <- function(ref, ...) {
     ## Thanks to Fegis at #regex on Freenode for the
     ## lookahead/lookbehind hack; as he notes, however, "it's not
     ## proper escaping though... it will not split a@@@b."
-    elements <- car(strsplit(joined.lines,
+    elements <- strsplit(joined.lines,
                              sprintf('(?<!%s)%s(?!%s)',
                                      TAG.DELIMITER,
                                      TAG.DELIMITER,
                                      TAG.DELIMITER),
-                             perl=TRUE))
+                             perl=TRUE)[[1]]
     ## Compress the escaped delimeters.
     elements <- Map(function(element)
                     gsub(sprintf('%s{2}', TAG.DELIMITER),
                          TAG.DELIMITER,
                          element),
                     elements)
-    description <- car(elements)
+    description <- elements[[1]]
     parsed.elements <- Reduce(function(parsed, element)
                               append(parsed, parse.element(element)),
-                              cdr(elements),
+                              elements[-1],
                               if (is.null.string(description)) NULL
                               else parse.description(description))
   }
@@ -258,7 +258,7 @@ parse.ref.srcref <- function(ref, ...) {
   srcfile <- attributes(ref)$srcfile
   srcref <- list(srcref=list(filename=srcfile$filename,
                    lloc=as.vector(ref)))
-  lines <- getSrcLines(srcfile, car(ref), ref[[3]])
+  lines <- getSrcLines(srcfile, ref[[1]], ref[[3]])
   
   # Lines will only ever contain a single expression, so we'll just focus
   # on first element.

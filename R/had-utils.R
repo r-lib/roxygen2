@@ -21,5 +21,5 @@ usage <- function(args) {
 }
 
 # Just in case we do need more escaping
-# default <- gsub("\\\\", "\\\\\\\\", cadr(name.default))
+# default <- gsub("\\\\", "\\\\\\\\", name.default[[2]])
 # default <- gsub("([%])", "\\\\\\1", default)

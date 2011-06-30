@@ -100,8 +100,8 @@ make.roclet <- function(package.dir,
     for (partitum in partita) {
       maybe.call(pre.parse, partitum)
       for (key.value in key.values(partitum)) {
-        key <- car(key.value)
-        do.call(parser(key), c(key, cdr(key.value)))
+        key <- key.value[[1]]
+        do.call(parser(key), c(key, key.value[-1]))
       }
       maybe.call(post.parse, partitum)
     }
@@ -133,7 +133,7 @@ guess.name <- function(partitum)
 #' @return The lines of source code
 src.lines <- function(partitum) {
     srcfile <- srcfile(partitum$srcref$filename)
-    first.line <- car(partitum$srcref$lloc)
+    first.line <- partitum$srcref$lloc[[1]]
     last.line <- partitum$srcref$lloc[[3]]
     getSrcLines(srcfile, first.line, last.line)
 }

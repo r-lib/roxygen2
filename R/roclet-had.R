@@ -32,16 +32,16 @@ register.preref.parsers(parse.name,
 
 register.srcref.parser('setClass',
                        function(pivot, expression)
-                       list(S4class=car(expression)))
+                       list(S4class=expression[[1]]))
 
 register.srcref.parser('setGeneric',
                        function(pivot, expression)
-                       list(S4generic=car(expression)))
+                       list(S4generic=expression[[1]]))
 
 register.srcref.parser('setMethod',
                        function(pivot, expression)
-                       list(S4method=car(expression),
-                            signature=cadr(expression)))
+                       list(S4method=expression[[1]],
+                            signature=expression[[2]]))
 
 
 #' @export
@@ -108,7 +108,7 @@ make.had.roclet <- function(package.dir,
 
   first.source.line <- function(partitum) {
     srcfile <- srcfile(partitum$srcref$filename)
-    first.line <- car(partitum$srcref$lloc)
+    first.line <- partitum$srcref$lloc[[1]]
     getSrcLines(srcfile, first.line, first.line)
   }
 
@@ -178,7 +178,7 @@ make.had.roclet <- function(package.dir,
 
     if (is.null(name) && !is.null(subdir)) {
       filename <- partitum$srcref$filename
-      first.line <- car(partitum$srcref$lloc)
+      first.line <- partitum$srcref$lloc[[1]]
       first.source.line <- first.source.line(partitum)
       # if (!is.null.statement(first.source.line))
       #   warning(sprintf(paste('No name found for the',
@@ -205,8 +205,8 @@ make.had.roclet <- function(package.dir,
   parse.function.name <- function(partitum) {
     if (!is.null(partitum$method))
       Rd.expression('method',
-          car(partitum$method),
-          cadr(partitum$method))
+          partitum$method[[1]],
+          partitum$method[[2]])
     else
       partitum$assignee
   }
@@ -301,9 +301,9 @@ make.had.roclet <- function(package.dir,
   #' @return \code{NULL}
   parse.description <- function(key, expressions) {
     has_contents <<- TRUE
-    paragraphs <- car(strsplit(car(expressions), '\n\n', fixed=TRUE))
-    description <- car(paragraphs)
-    details <- do.call(paste, append(cdr(paragraphs), list(sep='\n\n')))
+    paragraphs <- strsplit(expressions[[1]], '\n\n', fixed=TRUE)[[1]]
+    description <- paragraphs[[1]]
+    details <- do.call(paste, append(paragraphs[-1], list(sep='\n\n')))
 
     description <- paste(strwrap(description, exdent = 2, indent = 2, width = 60),
       collapse = "\n")

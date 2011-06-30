@@ -5,48 +5,7 @@ nil <- list()
 # @param list the list to test
 # @return Whether the list is empty
 is.nil <- function(list)
-  length(list) == 0 || is.null(car(list))
-
-# First element of a list
-# @param list the list to first
-# @return The first element
-car <- function(list)
-  list[[1]]
-
-# Return elements after the first of a list.
-# @param list the list from which to extract
-# @return The elements after the first, or \code{nil}
-# if only one
-cdr <- function(list) {
-  if (is.nil(list))
-    stop('CDRing a null list')
-  length <- length(list)
-  if (length == 1)
-    nil
-  else
-    list[2:length]
-}
-
-# Composite \code{car}/\code{cdr}
-# @param list the list from which to extract
-# @return The extracted elements
-caar <- function(list) {
-  car(car(list))
-}
-
-# Composite \code{car}/\code{cdr}
-# @param list the list from which to extract
-# @return The extracted elements
-cadr <- function(list) {
-  car(cdr(list))
-}
-
-# Composite \code{car}/\code{cdr}
-# @param list the list from which to extract
-# @return The extracted elements
-cddr <- function(list) {
-  cdr(cdr(list))
-}
+  length(list) == 0 || is.null(list[[1]])
 
 # Is a number even?
 # @param a the number to test

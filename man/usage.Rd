@@ -14,3 +14,4 @@
 \arguments{
   \item{f}{function, or name of function, as string}
 }
+

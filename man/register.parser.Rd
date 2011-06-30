@@ -13,3 +13,4 @@
   \item{parser}{the parser callback to register;
 a function taking \code{key} and \code{expression}}
 }
+

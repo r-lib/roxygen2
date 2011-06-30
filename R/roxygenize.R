@@ -1,25 +1,25 @@
 #' @include roxygen.R
 NULL
 
-#' Whither to copy package
+# Whither to copy package
 ROXYGEN.DIR <- '%s.roxygen'
 
-#' Whither to copy Rds
+# Whither to copy Rds
 MAN.DIR <- 'man'
 
-#' Whither to copy installables
+# Whither to copy installables
 INST.DIR <- 'inst'
 
-#' Whither to install docs
+# Whither to install docs
 DOC.DIR <- 'doc'
 
-#' Whence to copy source code
+# Whence to copy source code
 R.DIR <- 'R'
 
-#' Whither to copy namespace
+# Whither to copy namespace
 NAMESPACE.FILE <- 'NAMESPACE'
 
-#' Whither to copy collate
+# Whither to copy collate
 DESCRIPTION.FILE <- 'DESCRIPTION'
 
 #' Recursively copy a directory thither; optionally unlinking

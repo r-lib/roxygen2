@@ -5,10 +5,10 @@
 #' @import memoise
 NULL
 
-#' Sequence that distinguishes roxygen comment from normal comment.
+# Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '#+\''
 
-#' Symbol that delimits tags.
+# Symbol that delimits tags.
 TAG.DELIMITER <- '@'
 
 #' Comment blocks (possibly null) that precede a file's expressions.

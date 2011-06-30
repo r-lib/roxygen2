@@ -10,3 +10,4 @@
   \item{parser}{the parser to register}
   \item{\dots}{the keys upon which to register}
 }
+

@@ -6,3 +6,4 @@
   Collate value parser
 }
 \seealso{make.collate.roclet}
+

@@ -42,3 +42,4 @@ NULL
 
 roclet <- make.collate.roclet()
 \dontrun{roclet$parse.dir('example')}}
+

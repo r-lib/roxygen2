@@ -53,6 +53,7 @@ make.had.roclet <- function(package.dir,
   if (is.null(subdir)) {
     subdir <- file.path(roxygen.dir, MAN.DIR)
   }
+  subdir <- normalizePath(subdir)
   
   #' Translate a key and expressions into an Rd expression;
   #' multiple expressions take their own braces.
@@ -67,7 +68,8 @@ make.had.roclet <- function(package.dir,
                          sprintf('{%s}', trim(expression)),
                          c(...),
                          ''))
-
+  
+  
   #' Push the Rd-expression to standard out (or current
   #' sink).
   #' @param key the expression's key
@@ -75,35 +77,51 @@ make.had.roclet <- function(package.dir,
   #' @return \code{NULL}
   parse.expression <- function(key, ...) {
     expr <- Rd.expression(key, c(...))
-    output <<- c(output, expr)
+    add.output(expr)
   }
 
+  #' Save all Rd files to disk
   save.Rd <- function() {
-    if (is.null(filename) || !has_contents) return()
+    to_write <- names(Filter(isTRUE, has_contents))
+    topics <- as.list(output, all.names = TRUE)[to_write]
+    contents <- vapply(topics, paste, character(1), collapse = "")
     
-    output <- paste(output, collapse = "")
-    if (file.exists(filename)) {
-      cur <- paste(paste(readLines(filename), collapse = "\n"), "\n", sep="")
-      if (identical(cur, output)) return()
+    write_out <- function(filename, contents) {
+      if (the_same(filename, contents)) return()
+      
+      cat(sprintf('Writing %s\n', basename(filename)))
+      writeLines(contents, filename)
+    }
+    the_same <- function(path, new) {
+      if (!file.exists(path)) return(FALSE)
+
+      old <- str_c(readLines(path), collapse = "\n")
+      return(identical(old, new))
     }
     
-    cat(sprintf('Writing %s\n', basename(filename)))
-    cat(output, file = filename)
+    paths <- file.path(subdir, names(topics))
+    mapply(write_out, paths, contents)    
   }
 
   filename <- NULL
-  output <- character()
+  output <- new.env(TRUE, emptyenv())
   params <- NULL
   examples <- NULL
-  has_contents <- FALSE
+  has_contents <- list()
   
+  add.output <- function(expr) {
+    if (is.null(filename)) stop("Trying to write to unknown file")
+   
+    output[[filename]] <- c(output[[filename]], expr)
+  }
+  should_write <- function() {
+    has_contents[filename] <<- TRUE
+  }
 
   reset <- function() {
     filename <<- NULL
     params <<- NULL
     examples <<- NULL
-    output <<- character()
-    has_contents <<- FALSE
   }
 
   first.source.line <- function(partitum) {
@@ -158,7 +176,7 @@ make.had.roclet <- function(package.dir,
   #' @return The parsed title
   parse.title <- function(partitum, name) {
     if (!is.null(partitum$title)) {
-      has_contents <<- TRUE
+      should_write()
       partitum$title      
     } 
     else if (!is.null(first.sentence <-
@@ -177,7 +195,7 @@ make.had.roclet <- function(package.dir,
     name <- guess.name(partitum)
 
     if (is.null(name) && !is.null(subdir)) {
-      filename <- partitum$srcref$filename
+      filename <<- partitum$srcref$filename
       first.line <- partitum$srcref$lloc[[1]]
       first.source.line <- first.source.line(partitum)
       # if (!is.null.statement(first.source.line))
@@ -190,13 +208,12 @@ make.had.roclet <- function(package.dir,
       #           immediate.=TRUE)
     } else if (!is.null(name)) {
       name <- trim(name)
-      if (!is.null(subdir)) {
-        filename <<- file.path(subdir, sprintf('%s.Rd', name))
-      }
+      filename <<- sprintf('%s.Rd', name)
       parse.expression('name', name)
       if (is.null(partitum$aliases))
         parse.expression('alias', name)
     }
+
     if ((!is.null(name) || !is.null(partitum$title)) &&
         !is.null(title <- parse.title(partitum, name)))
       parse.expression('title', title)
@@ -232,7 +249,7 @@ make.had.roclet <- function(package.dir,
     if (is.null(partitum$usage))
       parse.formals(partitum)
     else {
-      has_contents <<- TRUE
+      should_write()
       parse.expression('usage', partitum$usage)      
     }
   }
@@ -253,15 +270,14 @@ make.had.roclet <- function(package.dir,
   post.parse <- function(partitum) {
     parse.arguments()
     parse.examples(partitum)
-    
-    save.Rd()
   }
 
   roclet <- make.roclet(package.dir,
                         roxygen.dir, 
                         parse.expression,
                         pre.parse,
-                        post.parse)
+                        post.parse, 
+                        post.files = save.Rd)
 
   roclet$register.default.parsers('references',
                                   'note',
@@ -300,7 +316,7 @@ make.had.roclet <- function(package.dir,
   #' @param expressions the to-be-parsed description and details
   #' @return \code{NULL}
   parse.description <- function(key, expressions) {
-    has_contents <<- TRUE
+    should_write()
     paragraphs <- strsplit(expressions[[1]], '\n\n', fixed=TRUE)[[1]]
     description <- paragraphs[[1]]
     details <- do.call(paste, append(paragraphs[-1], list(sep='\n\n')))
@@ -308,12 +324,12 @@ make.had.roclet <- function(package.dir,
     description <- paste(strwrap(description, exdent = 2, indent = 2, width = 60),
       collapse = "\n")
     expr <- paste("\n\\description{\n", description, "\n}\n", sep = "")
-    output <<- c(output, expr)
+    add.output(expr)
     
     if (length(details) > 0 && !is.null.string(details)) {
       details <- paste(strwrap(details, exdent = 2, indent = 2, width = 60), collapse = "\n")
       expr <- paste("\n\\details{\n", details, "\n}\n", sep = "")
-      output <<- c(output, expr)
+      add.output(expr)
     }
       
   }
@@ -341,7 +357,7 @@ make.had.roclet <- function(package.dir,
       
       expr <- paste("\\arguments{\n", params_str, "\n}\n", sep = "")
       
-      output <<- c(output, expr)
+      add.output(expr)
     }
   }
 

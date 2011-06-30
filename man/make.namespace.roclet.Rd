@@ -76,3 +76,4 @@ fun <- function() {}
 
 roclet <- make.namespace.roclet()
 \dontrun{roclet$parse('example.R')}}
+

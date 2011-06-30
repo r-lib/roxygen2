@@ -125,7 +125,7 @@ make.collate.roclet <- function(package.dir,
       cat(sprintf('Merging collate directive with %s to %s',
                   merge.file,
                   target.file), '\n')
-                  
+    
     desc <- read.description(merge.file)
     desc$Collate <- files
     write.description(desc, target.file)

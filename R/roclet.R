@@ -112,15 +112,6 @@ make.roclet <- function(package.dir,
   structure(roclet, class='roclet')
 }
 
-#' Assign a variable in the parent environment when \code{<<-}
-#' doesn't seem to work.
-#' @param var string of the variable to assign
-#' @param value value to be assigned
-#' @param env environment of the assignment (\code{environment()})
-#' @return NULL
-assign.parent <- function(var, value, env)
-  assign(var, value, envir=parent.env(env))
-
 #' Find the first non-null argument.
 #' @param \dots the arguments
 #' @return The first non-null argument

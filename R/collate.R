@@ -70,11 +70,8 @@ make.collate.roclet <- function(package.dir,
 
   maybe.append.vertex <- function(file)
     if (is.null(vertices[[file]]))
-      assign.parent('vertices',
-                    append(vertices,
-                           as.list(structure(c(make.vertex(file)),
-                                             names=file))),
-                    environment())
+      vertices <<- append(vertices, as.list(structure(c(make.vertex(file)),
+          names=file)))
 
   member <- function(ancestor, ancestors) {
     for (vertex in ancestors)
@@ -102,9 +99,7 @@ make.collate.roclet <- function(package.dir,
     file <- basename(partitum$srcref$filename)
     maybe.append.vertex(file)
     vertex <- vertices[[file]]
-    assign.parent('current.predecessor',
-                  vertex,
-                  environment())
+    current.predecessor <<- vertex
   }
 
   topological.sort <- function(vertices) {
@@ -114,9 +109,7 @@ make.collate.roclet <- function(package.dir,
       for (ancestor in predecessor$ancestors)
         if (!ancestor$discovered)
           visit(ancestor)
-      assign.parent('sorted',
-                    append(sorted, predecessor),
-                    environment())
+      sorted <<- append(sorted, predecessor)
     }
     for (vertex in vertices)
       if (!vertex$discovered)

@@ -11,21 +11,12 @@ Curry <- function(FUN,...) {
   function(...) do.call(FUN,c(.orig,list(...)))
 }
 
-# Negate a function; borrowed from src/library/base/R/funprog.R for
-# pre-2.7 Rs.
-# @param f the function to be negated
-# @return The negated function
-Negate <- function(f)
-  function(...) ! match.fun(f)(...)
-
 # Compose an arbitrary number of functions.
 #
 # My Happy Hacking keyboard gave out during the writing of this
 # procedure; moment of silence, please.
 # @param \dots the functions to be composed
 # @return A composed function
-# @callGraphPrimitives
-# @callGraphDepth 3
 # @export
 Compose <- function(...) {
   fs <- list(...)

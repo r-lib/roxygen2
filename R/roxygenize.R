@@ -1,5 +1,4 @@
 #' @include roxygen.R
-#' @include Rd.R
 #' @include namespace.R
 #' @include collate.R
 roxygen()
@@ -70,8 +69,6 @@ copy.dir <- function(source,
 #' processing files
 #' @param use.Rd2 use the Rd2 roclet
 #' @return \code{NULL}
-#' @callGraph
-#' @callGraphDepth 1
 #' @TODO Options to enable/disable specific roclet
 #' (\command{--no-callgraphs}, etc.)
 #' @export roxygenize roxygenise

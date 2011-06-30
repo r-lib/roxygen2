@@ -13,26 +13,18 @@ Imports:
     memoise
 Depends:
     digest
-Suggests:
-    Rgraphviz (>= 1.19.2),
-    tools (>= 2.9.1)
 Collate:
-    'functional.R'
     'list.R'
+    'functional.R'
     'roxygen.R'
     'string.R'
     'parse.R'
-    'roclet.R'
-    'callgraph.R'
     'description.R'
+    'roclet.R'
     'collate.R'
     'had-utils.R'
     'had.R'
     'namespace.R'
     'parseS4.R'
-    'Rd.R'
-    'Rdmerge.R'
     'Rdapi.R'
-    'Rdtank.R'
-    'Rd2.R'
     'roxygenize.R'

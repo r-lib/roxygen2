@@ -2,6 +2,7 @@
 #' @include string.R
 #' @include roclet.R
 #' @include parse.R
+#' @import stringr
 roxygen()
 
 register.preref.parsers(parse.value,

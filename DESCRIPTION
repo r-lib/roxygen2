@@ -8,6 +8,8 @@ Author: Peter Danenberg <pcd@roxygen.org>, Manuel Eugster
     <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Peter Danenberg <pcd@roxygen.org>
 URL: http://roxygen.org
+Imports:
+    stringr (>= 0.5)
 Depends:
     digest
 Suggests:

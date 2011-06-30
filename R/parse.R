@@ -30,7 +30,7 @@ prerefs <- function(srcfile, srcrefs) {
 
   lines <- unlist(Map(function(srcref)
                       c(car(srcref) - 1,
-                        caddr(srcref) + 1),
+                        srcref[[3]] + 1),
                       srcrefs))
   pairs <- pairwise(c(1, lines))
   Map(pair.preref, pairs)
@@ -187,7 +187,7 @@ parse.ref.list <- function(ref, ...)
 parse.ref.preref <- function(ref, ...) {
   lines <- Map(trim.left, getSrcLines(attributes(ref)$srcfile,
                                       car(ref),
-                                      caddr(ref)))
+                                      ref[[3]]))
   delimited.lines <-
     Filter(function(line) grep(LINE.DELIMITER, line), lines)
   ## Take next word after delimiter.
@@ -258,7 +258,7 @@ parse.ref.srcref <- function(ref, ...) {
   srcfile <- attributes(ref)$srcfile
   srcref <- list(srcref=list(filename=srcfile$filename,
                    lloc=as.vector(ref)))
-  lines <- getSrcLines(srcfile, car(ref), caddr(ref))
+  lines <- getSrcLines(srcfile, car(ref), ref[[3]])
   
   # Lines will only ever contain a single expression, so we'll just focus
   # on first element.

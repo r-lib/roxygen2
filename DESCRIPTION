@@ -14,13 +14,13 @@ Imports:
 Depends:
     digest
 Collate:
+    'description.R'
     'functional.R'
+    'had-utils.R'
     'list.R'
+    'parse-registry.R'
     'roxygen.R'
     'string.R'
-    'description.R'
-    'had-utils.R'
-    'parse-registry.R'
     'parse.R'
     'Rdapi.R'
     'roclet.R'

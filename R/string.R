@@ -71,6 +71,7 @@ word.ref <- function(string, n) {
 # @param string the string whose word to finde
 # @return The first word
 strcar <- function(string) {
+  
   if (is.null.string(string))
     stop('CARing null-string')
   ref <- word.ref(string, 1)
@@ -120,19 +121,6 @@ strmap <- function(proc, sep, string) {
   continue(string)
 }
 
-# Convenience function to print variable-value pairs.
-#
-# @param \dots named variable of the form a=b, \dots
-# @return NULL
-debug <- function(...) {
-  values <- list(...)
-  var.values <- zip.list(attributes(values)$names, values)
-  cat(Reduce.paste(function(var.value)
-                   sprintf('%s: %s; ', car(var.value), cadr(var.value)),
-                   var.values,
-                   NIL.STRING),
-      '\n')
-}
 
 # Ad-hoc abstraction to paste processed list-elements together.
 # @param proc the procedure to apply to the elements
@@ -145,30 +133,3 @@ Reduce.paste <- function(proc, elts, sep)
          (parsed, proc(elt)),
          elts,
          NIL.STRING)
-
-# Actually do the substring representation that
-# regexpr should do; does not acknowledge groups,
-# since \code{regexpr} doesn't.
-# @param pattern the pattern to match
-# @param text the text to match against
-# @return The matched substring
-substr.regexpr <- function(pattern, text) {
-  matches <- regexpr(pattern, text, perl=TRUE)
-  if (length(match) < 1)
-    NULL
-  else {
-    start <- car(matches)
-    end <- car(attr(matches, 'match.length'))
-    substr(text, start, end)
-  }
-}
-
-# Quote characters and return all other types untouched.
-# @param x the value to maybe quote
-# @return The quoted character or the untouched value
-maybe.quote <- function(x) {
-  if (is.character(x))
-    sprintf('"%s"', x)
-  else
-    x
-}

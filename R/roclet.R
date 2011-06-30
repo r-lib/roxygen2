@@ -134,7 +134,7 @@ guess.name <- function(partitum)
 src.lines <- function(partitum) {
     srcfile <- srcfile(partitum$srcref$filename)
     first.line <- car(partitum$srcref$lloc)
-    last.line <- caddr(partitum$srcref$lloc)
+    last.line <- partitum$srcref$lloc[[3]]
     getSrcLines(srcfile, first.line, last.line)
 }
 

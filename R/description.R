@@ -1,27 +1,19 @@
-#' @include roxygen.R
-#' @include list.R
-#' @include string.R
-#' @include functional.R
-NULL
-
-#' Convenience function to call
-#' \code{\link{parse.description.text}}
-#' with the given \file{DESCRIPTION} file.
-#' @param description.file the \file{DESCRIPTION} file to be parsed
-parse.description.file <- function(description.file) {
-  dcf <- read.dcf(description.file)
+# Parse DESCRIPTION into convenient format
+read.description <- function(file) {
+  dcf <- read.dcf(file)
   
   dcf_list <- setNames(as.list(dcf[1, ]), colnames(dcf))
   lapply(dcf_list, trim)
 }
-  
 
-#' Print the field-value pair to a given file or standard out.
-#' @param field the field to be printed
-#' @param value the value to be printed
-#' @param file the file whither to print (a blank string being
-#' standard out)
-#' @return \code{NULL}
+# Write parsed DESCRIPTION back out to disk
+write.description <- function(desc, file = "") {
+  unlink(file)
+  mapply(cat.description, names(desc), desc, MoreArgs = list(file = file))
+  invisible()
+}
+
+# Print the field-value pair to a given file or standard out.
 cat.description <- function(field, value, file='') {
   comma_sep <- any(field %in% c("Suggests", "Depends", "Extends", "Imports"))
   individual_lines <- field %in% c("Collate")
@@ -37,53 +29,4 @@ cat.description <- function(field, value, file='') {
   }
 
   cat(out, sep='\n', file=file, append=TRUE)
-}
-
-#' Description parser that does nothing
-#' @param field the field to be parsed
-#' @param value the value to be parsed
-#' @return \code{NULL}
-noop.description <- function(field, value) NULL
-
-#' Make a parser to parse \file{DESCRIPTION} files.
-#'
-#' Contains the member functions \code{register.parser},
-#' taking a field and parser; and \code{parse}, taking the
-#' parsed fields from \code{\link{parse.description.file}}
-#' or similar.
-#'
-#' @param parse.default the default parser receiving
-#' a field and value
-#' @param pre.parse a function receiving the parsed fields
-#' before individual parsing
-#' @param post.parse a function receiving the parsed fields
-#' after individual parsing
-#' @return \code{NULL}
-make.description.parser <- function(parse.default=cat.description,
-                                    pre.parse=noop.description,
-                                    post.parse=noop.description) {
-  parser <- new.env(parent=emptyenv())
-  parsers <- new.env(parent=emptyenv())
-  parser$register.parser <- function(field, parser)
-    parsers[[field]] <- parser
-  parser$register.parsers <- function(registrate, ...)
-    for (field in c(...))
-      parser$register.parser(field, registrate)
-  parser$parse <- function(parsed.fields) {
-    field.values <- function(parsed.fields)
-      zip.list(names(parsed.fields),
-               parsed.fields)
-    if (!is.null(pre.parse)) pre.parse(parsed.fields)
-    for (field.value in field.values(parsed.fields)) {
-      field <- car(field.value)
-      value <- cadr(field.value)
-      parser <- parsers[[field]]
-      if (is.null(parser))
-        parse.default(field, value)
-      else
-        parser(field, value)
-    }
-    if (!is.null(post.parse)) post.parse(parsed.fields)
-  }
-  parser
 }

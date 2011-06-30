@@ -10,24 +10,3 @@ Curry <- function(FUN,...) {
   .orig = list(...);
   function(...) do.call(FUN,c(.orig,list(...)))
 }
-
-# Compose an arbitrary number of functions.
-#
-# My Happy Hacking keyboard gave out during the writing of this
-# procedure; moment of silence, please.
-# @param \dots the functions to be composed
-# @return A composed function
-# @export
-Compose <- function(...) {
-  fs <- list(...)
-  function(...) Reduce(function(x, f) f(x),
-                       fs,
-                       ...)
-}
-
-# Identity function.
-#
-# Is concatenation benign?
-# @param \dots tautological arguments
-# @return The tautologized arguments, concatenated
-Identity <- function(...) c(...)

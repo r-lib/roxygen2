@@ -2,6 +2,7 @@
 #' @include functional.R
 #' @include string.R
 #' @include list.R
+#' @import memoise
 roxygen()
 
 #' Sequence that distinguishes roxygen comment from normal comment.
@@ -247,6 +248,7 @@ parser.srcref <- Curry(parser.default,
 #' @return List containing the parsed srcref/preref
 #' @export
 parse.ref <- function(ref, ...) UseMethod('parse.ref')
+cached.parse.ref <- memoize(parse.ref)
 
 #' Parse a preref/srcrefs pair
 #' @method parse.ref list
@@ -451,8 +453,8 @@ parse.srcfile <- function(srcfile) {
     parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
   else
     nil
-  
 }
+cached.parse.srcfile <- memoize(parse.srcfile)
 
 #' Parse many files at one.
 #' @param \dots files to be parsed

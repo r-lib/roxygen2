@@ -1,6 +1,3 @@
-#' @include list.R
-#' @include string.R
-#' @include roclet.R
 #' @include parse.R
 #' @import stringr
 NULL

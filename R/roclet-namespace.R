@@ -1,7 +1,4 @@
-#' @include roxygen.R
 #' @include parse.R
-#' @include roclet.R
-#' @include string.R
 NULL
 
 register.preref.parsers(parse.default,

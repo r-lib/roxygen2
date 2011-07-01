@@ -1,7 +1,3 @@
-#' @include roxygen.R
-#' @include functional.R
-#' @include string.R
-#' @include list.R
 #' @import memoise
 NULL
 

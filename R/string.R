@@ -1,8 +1,3 @@
-#' @include roxygen.R
-#' @include functional.R
-#' @include list.R
-NULL
-
 # Absence of words
 SPACE <- '[[:space:]]+'
 

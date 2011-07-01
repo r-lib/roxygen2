@@ -125,11 +125,11 @@ parse.name <- function(key, name) {
 parse.toggle <- function(key, rest)
   as.list(structure(TRUE, names=key))
 
-#' By default, srcrefs are ignored; this parser returns \code{nil}.
+#' By default, srcrefs are ignored; this parser returns \code{list()}.
 #' @param pivot the parsing pivot
 #' @param expression the expression to be parsed
-#' @return \code{nil}
-parse.srcref <- function(pivot, expression) nil
+#' @return \code{list()}
+parse.srcref <- function(pivot, expression) list()
 
 #' Default parser-lookup; if key not found, return
 #' the default parser specified.
@@ -185,8 +185,8 @@ parse.ref.preref <- function(ref, ...) {
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
 
-  if (is.nil(trimmed.lines))
-    nil
+  if (length(trimmed.lines) == 0)
+    list()
   else {
     joined.lines <- str_c(trimmed.lines, collapse = '\n')
     ## Thanks to Fegis at #regex on Freenode for the
@@ -286,11 +286,11 @@ parse.file <- function(file) {
 parse.srcfile <- function(srcfile) {
   srcrefs <- attributes(parse(srcfile$filename,
                               srcfile=srcfile))$srcref
-                         
+                        
   if (length(srcrefs) > 0)
     parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
   else
-    nil
+    list()
 }
 cached.parse.srcfile <- memoize(parse.srcfile)
 

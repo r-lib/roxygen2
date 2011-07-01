@@ -1,26 +1,3 @@
-# The empty list
-nil <- list()
-
-# Whether a list is empty.
-# @param list the list to test
-# @return Whether the list is empty
-is.nil <- function(list)
-  length(list) == 0 || is.null(list[[1]])
-
-# Is a number even?
-# @param a the number to test
-# @return Whether the number is even
-is.even <- function(a) {
-  a %% 2 == 0
-}
-
-# Is a number odd?
-# @param a the number to test
-# @return Whether the number is odd
-is.odd <- function(a) {
-  Negate(is.even)(a)
-}
-
 # Zip \emph{n} lists together into tuplets of
 # length \emph{n}.
 # @param zipper the zipping function
@@ -29,14 +6,6 @@ is.odd <- function(a) {
 zip <- function(zipper, ...) {
   m <- mapply(zipper, ...)
   split(m, col(m))
-}
-
-# Zip using \code{c}.
-# @param \dots the lists to be zipped
-# @return A list of tuplets
-# @seealso \code{\link{zip}}
-zip.c <- function(...) {
-  zip(c, ...)
 }
 
 # Zip using \code{list}.
@@ -55,7 +24,7 @@ zip.list <- function(...) {
 pairwise <- function(list) {
   length <- length(list)
   if (length < 2)
-    return(nil)
+    return(list())
   length <- ifelse(is.odd(length),
                    length - 1,
                    length)

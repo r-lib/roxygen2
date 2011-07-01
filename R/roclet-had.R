@@ -101,7 +101,6 @@ had_roclet <- function(package.dir,
 
   filename <- NULL
   output <- new.env(TRUE, emptyenv())
-  examples <- NULL
   has_contents <- list()
   
   add.output <- function(expr) {
@@ -115,7 +114,6 @@ had_roclet <- function(package.dir,
 
   reset <- function() {
     filename <<- NULL
-    examples <<- NULL
   }
 
   first.source.line <- function(partitum) {
@@ -345,15 +343,6 @@ had_roclet <- function(package.dir,
     add.output(expr)
   }
 
-  #' Parse individual \code{@@example} clauses by adding the
-  #' pointed-to file to a global store.
-  #' @param key ignored
-  #' @param expression the file containing the example(s)
-  #' @return \code{NULL}
-  parse.example <- function(key, expression) {
-    examples <<- append(examples, expression)
-  }
-
   #' If \code{@@examples} is provided, use that; otherwise, concatenate
   #' the files pointed to by each \code{@@example}.
   #' @param partitum the parsed elements
@@ -364,19 +353,16 @@ had_roclet <- function(package.dir,
       ex <- gsub("([%\\])", "\\\\\\1", ex)
       ex <- gsub("\\\\dont", "\\dont", ex)
       parse.expression('examples', ex)
-    } else {
-      examples <- Reduce(c, Map(function(file)
-                                tryCatch(readLines(str_trim(file)),
-                                         error=function(e) NULL),
-                                examples),
-                         NULL)
-      if (!is.null(examples))
-        parse.expression('examples',
-            do.call(paste, c(as.list(examples), sep='\n')))
+    } 
+    
+    paths <- partitum[names(partitum) == "example"]
+    if (length(paths) > 0) {
+      paths <- file.path(package.dir, str_trim(paths))
+      examples <- unlist(lapply(readLines, paths))
+      
+      parse.expression('examples', paste(examples, collapse = "\n"))
     }
   }
-
-  roclet$register.parser('example', parse.example)
 
   parse.todo <- function(key, value)
     parse.expression('section', 'TODO', value)

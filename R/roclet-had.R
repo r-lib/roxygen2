@@ -6,7 +6,8 @@
 NULL
 
 register.preref.parsers(parse.value,
-                        'name',
+                        'name', 
+                        'rdname',
                         'aliases',
                         'title',
                         'usage',
@@ -82,8 +83,14 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
     write_out <- function(filename, contents) {
       if (the_same(filename, contents)) return()
       
-      cat(sprintf('Writing %s\n', basename(filename)))
-      writeLines(contents, filename)
+      name <- basename(filename)
+      if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
+        cat("Skipping invalid filename: ", name, "\n")
+      } else {
+        cat(sprintf('Writing %s\n', name))
+        writeLines(contents, filename)        
+      }
+      
     }
     the_same <- function(path, new) {
       if (!file.exists(path)) return(FALSE)
@@ -125,9 +132,8 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
       filename <<- NULL
       return()
     }
+    filename <<- sprintf('%s.Rd', partitum$rdname %||% name)
     
-    name <- str_trim(name)
-    filename <<- sprintf('%s.Rd', name)
     process.expression('name', name)
 
     # If no aliases, use name

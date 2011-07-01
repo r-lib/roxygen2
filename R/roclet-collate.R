@@ -60,8 +60,7 @@ collate_roclet <- function(package.dir) {
     }    
   }
   
-  roclet <- make.roclet(package.dir, process, output)
-  roclet
+  make.roclet(package.dir, process, output)
 }
 
 make_vertices <- function() {

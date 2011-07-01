@@ -10,7 +10,6 @@
 \alias{importMethodsFrom}
 \alias{export}
 \title{Namespace roclet builds NAMESPACE.}
-\usage{namespace_roclet(package.dir)}
 \arguments{
   \item{package.dir}{the package's top directory
 the \var{outfile}}

@@ -79,98 +79,103 @@ register.preref.parsers(parse.value,
 #' @aliases namespace_roclet exportClass exportMethod
 #' exportPattern S3method import importFrom importClassesFrom
 #' importMethodsFrom export
-namespace_roclet <- function(package.dir) {
-
-  directive <- function(tag, parms) {
-    str_c(tag, "(", str_trim(parms), ")")
-  }
-  
-  default <- function(tag, parms, all) {
-    directive(tag, words(parms))
-  }
-  exportClass <- function(tag, parms, all) {
-    directive('exportClasses', parms)
-  }
-  exportMethod <- function(tag, parms, all) {
-    directive('exportMethods', parms)
-  }
-  export <- function(tag, parms, all) {
-    if (!is.null.string(parms)) {
-      return(directive('export', words(parms)))
-    }
-    
-    if (!is.null(all$S4method)) {
-      exportMethod(NULL, all$S4method)
-    } else if (!is.null(all$S4class)) {
-      exportClass(NULL, all$S4class)
-    } else if (!is.null(all$S4generic)){
-      exportMethod(NULL, all$S4generic)
-    } else if (!is.null(all$method)) {
-      directive("S3method", str_c(unlist(all$method), collapse = ","))
-    } else {
-      name <- all$name %||% all$assignee
-      if (is.null(name)) {
-        warning('Empty export directive')
-      } else {
-        directive('export', quote_if_needed(name))
-      }
-    }
-  }
-  S3method <- function(tag, parms, all) {
-    params <- words(parms)
-    if (length(params) != 2) {
-      warning("Invalid @S3method: ", parms, call. = FALSE)
-    }
-    directive(tag, str_c(params, collapse = ","))
-  }
-  importFrom <- function(tag, parms) {
-    params <- words(parms)
-    directive(tag, str_c(params[1], ",", params[-1]))
-  }
-
-  process <- function(partita) {
-    ns <- character()
-    for (partitum in partita) {
-      ns_one <- c( 
-        process_tag(partitum, "export", export),
-        process_tag(partitum, "S3method", S3method),
-        process_tag(partitum, "importFrom", importFrom),
-        process_tag(partitum, 'export', export),
-        process_tag(partitum, 'exportClass', exportClass),
-        process_tag(partitum, 'exportMethod', exportMethod),
-        process_tag(partitum, 'exportPattern', default),
-        process_tag(partitum, 'import', default),
-        process_tag(partitum, 'importClassesFrom', default),
-        process_tag(partitum, 'importMethodsFrom', default),
-        process_tag(partitum, 'useDynLib', default)
-      )
-      ns <- c(ns, ns_one)
-    }
-    ns
-  }
-  
-  process_tag <- function(partitum, tag, f) {
-    params <- partitum[[tag]]
-    if (is.null(params)) return()
-    
-    f(tag, params, partitum)
-  }
-  
-  output <- function(results) { 
-    NAMESPACE <- file.path(package.dir, "NAMESPACE")
-    
-    new <- sort(unique(results))
-    old <- readLines(NAMESPACE)
-    
-    if (!identical(new, old)) {
-      message("Updating namespace directives")
-      writeLines(new, NAMESPACE)
-    }
-  }
-  
-  make.roclet(package.dir, process, output)
+namespace_roclet <- function() {
+  new_roclet(list, "namespace")
 }
 
+#' @S3method roc_process namespace
+roc_process.namespace <- function(roclet, partita) {
+  ns <- character()
+  for (partitum in partita) {
+    ns_one <- c( 
+      process_tag(partitum, "export", ns_export),
+      process_tag(partitum, "S3method", ns_S3method),
+      process_tag(partitum, "importFrom", ns_importFrom),
+      process_tag(partitum, 'export', ns_export),
+      process_tag(partitum, 'exportClass', ns_exportClass),
+      process_tag(partitum, 'exportMethod', ns_exportMethod),
+      process_tag(partitum, 'exportPattern', ns_default),
+      process_tag(partitum, 'import', ns_default),
+      process_tag(partitum, 'importClassesFrom', ns_default),
+      process_tag(partitum, 'importMethodsFrom', ns_default),
+      process_tag(partitum, 'useDynLib', ns_default)
+    )
+    ns <- c(ns, ns_one)
+  }
+  ns
+}
+
+
+#' @S3method roc_output namespace
+roc_output.namespace <- function(roclet, results, path) { 
+  NAMESPACE <- file.path(path, "NAMESPACE")
+  
+  new <- sort(unique(results))
+  old <- readLines(NAMESPACE)
+  
+  if (!identical(new, old)) {
+    message("Updating namespace directives")
+    writeLines(new, NAMESPACE)
+  }
+}
+
+
+ns_directive <- function(tag, parms) {
+  str_c(tag, "(", str_trim(parms), ")")
+}
+
+ns_default <- function(tag, parms, all) {
+  directive(tag, words(parms))
+}
+ns_exportClass <- function(tag, parms, all) {
+  directive('exportClasses', parms)
+}
+ns_exportMethod <- function(tag, parms, all) {
+  directive('exportMethods', parms)
+}
+ns_export <- function(tag, parms, all) {
+  if (!is.null.string(parms)) {
+    return(directive('export', words(parms)))
+  }
+  
+  if (!is.null(all$S4method)) {
+    exportMethod(NULL, all$S4method)
+  } else if (!is.null(all$S4class)) {
+    exportClass(NULL, all$S4class)
+  } else if (!is.null(all$S4generic)){
+    exportMethod(NULL, all$S4generic)
+  } else if (!is.null(all$method)) {
+    directive("S3method", str_c(unlist(all$method), collapse = ","))
+  } else {
+    name <- all$name %||% all$assignee
+    if (is.null(name)) {
+      warning('Empty export directive')
+    } else {
+      directive('export', quote_if_needed(name))
+    }
+  }
+}
+ns_S3method <- function(tag, parms, all) {
+  params <- words(parms)
+  if (length(params) != 2) {
+    warning("Invalid @S3method: ", parms, call. = FALSE)
+  }
+  directive(tag, str_c(params, collapse = ","))
+}
+ns_importFrom <- function(tag, parms) {
+  params <- words(parms)
+  directive(tag, str_c(params[1], ",", params[-1]))
+}
+
+
+process_tag <- function(partitum, tag, f) {
+  params <- partitum[[tag]]
+  if (is.null(params)) return()
+  
+  f(tag, params, partitum)
+}
+  
+  
 words <- function(x) {
   quote_if_needed(str_split(str_trim(x), "\\s+")[[1]])
 }

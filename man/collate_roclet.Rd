@@ -1,7 +1,6 @@
 \name{collate_roclet}
 \alias{collate_roclet}
 \title{Collate roclet topological sorts R files and records in Collate field of...}
-\usage{collate_roclet(package.dir)}
 \arguments{
   \item{package.dir}{the package's top directory}
 }

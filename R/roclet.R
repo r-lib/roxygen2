@@ -1,20 +1,47 @@
-#' Abstract roclet that serves as a rudimentary API.
+#' Build new roclet object.
 #'
 #' @export
-make.roclet <- function(package.dir, process, output) {
-  roclet <- new.env(parent = emptyenv())
+#' @keywords internal
+new_roclet <- function(obj, subclass = NULL) {
+  structure(obj, class = c(subclass, 'roclet'))
+}
 
-  roclet$parse <- function(paths) {
-    parsed <- parse.files(paths)
-    contents <- Filter(function(x) length(x) > 1, parsed)
-    results <- process(contents)
-    output(results)
-  }
+is.roclet <- function(x) inherits(x, "roclet")
 
-  roclet$parse.dir <- function(path = file.path(package.dir, "R")) {
-    files <- as.list(dir(path, pattern = '\\.(R|r)$', full.names = TRUE))
-    roclet$parse(files)
-  }
+#' Process roclet and capture results.
+#' 
+#' @param roclet to use for processing
+#' @param input character vector of paths to files to process
+#' @keywords internal
+roc_proc <- function(roclet, paths) {
+  stopifnot(is.roclet(roclet))
+  
+  parsed <- parse.files(paths)
+  # Remove srcrefs with no attached roxygen comments
+  contents <- Filter(function(x) length(x) > 1, parsed)
+  roc_process(roclet, contents)
+} 
 
-  structure(roclet, class='roclet')
+#' Process roclet and output results.
+#' 
+#' @param roclet to use for processing
+#' @param input character vector of paths to files to process
+#' @param output_path base directory in which to save output
+#' @keywords internal
+#' @export
+roc_out <- function(roclet, input, path) {
+  stopifnot(is.roclet(roclet))
+
+  results <- roc_proc(roclet, input)
+  roc_output(roclet, results, path)
+}
+
+# Internal methods for processing and output
+
+roc_output <- function(roclet, results, path) {
+  UseMethod("roc_output", roclet)
+}
+
+roc_process <- function(roclet, partita) {
+  UseMethod("roc_process", roclet)
 }

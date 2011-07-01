@@ -30,8 +30,9 @@ roxygenize <- function(package.dir,
   
   roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {
-    maker <- match.fun(roclet)
-    maker(roxygen.dir)$parse.dir()
+    roclet <- match.fun(roclet)()
+    r_files <- dir(file.path(roxygen.dir, "R"), "[.Rr]$", full.names = TRUE)
+    roc_out(roclet, r_files, roxygen.dir)
   }
 }
 

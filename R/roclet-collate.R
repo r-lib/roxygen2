@@ -27,40 +27,41 @@ register.preref.parsers(parse.value,
 #' roclet <- collate_roclet()
 #' \dontrun{roclet$parse.dir('example')}
 #' @export
-collate_roclet <- function(package.dir) {
-                                  
+collate_roclet <- function() {
+  new_roclet(list(), "collate")
+}
+
+#' @S3method roc_process collate
+roc_process.collate <- function(roclet, partita) {
   vertices <- make_vertices()
+  
+  for (partitum in partita) {
+    file <- basename(partitum$srcref$filename)
+    vertex <- vertices$add(file)
 
-  process <- function(partita) {
-    for (partitum in partita) {
-      file <- basename(partitum$srcref$filename)
-      vertex <- vertices$add(file)
-
-      if (!is.null(partitum$include)) {
-        file <- str_trim(file)
-        vertices$add(file)
-        vertices$add_ancestor(vertex, file)
-      }
+    if (!is.null(partitum$include)) {
+      file <- str_trim(file)
+      vertices$add(file)
+      vertices$add_ancestor(vertex, file)
     }
+  }
 
-    sorted <- vertices$topological_sort()
-    names <- basename(sapply(sorted, function(x) x$file))
-    paste(sprintf("'%s'", names), collapse = " ")
-  }
+  sorted <- vertices$topological_sort()
+  names <- basename(sapply(sorted, function(x) x$file))
+  paste(sprintf("'%s'", names), collapse = " ")
+}
+                                  
+#' @S3method roc_output collate
+roc_output.collate <- function(roclet, results, path) {
+  DESCRIPTION <- file.path(path, "DESCRIPTION")
+  old <- read.description(DESCRIPTION)
+  new <- old
+  new$Collate <- results
+  write.description(new, DESCRIPTION)
   
-  output <- function(results) {
-    DESCRIPTION <- file.path(package.dir, "DESCRIPTION")
-    old <- read.description(DESCRIPTION)
-    new <- old
-    new$Collate <- results
-    write.description(new, DESCRIPTION)
-    
-    if (!identical(old, read.description(DESCRIPTION))) {
-      cat('Updating collate directive in ', DESCRIPTION, "\n")
-    }    
-  }
-  
-  make.roclet(package.dir, process, output)
+  if (!identical(old, read.description(DESCRIPTION))) {
+    cat('Updating collate directive in ', DESCRIPTION, "\n")
+  }    
 }
 
 make_vertices <- function() {

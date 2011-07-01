@@ -112,26 +112,12 @@ make.roclet <- function(package.dir,
   structure(roclet, class='roclet')
 }
 
-#' Find the first non-null argument.
-#' @param \dots the arguments
-#' @return The first non-null argument
-first.non.null <- function(...)
-  append(NULL, c(...))[[1]]
-
-#' Extract the source code from parsed elements
-#' @param partitum the parsed elements
-#' @return The lines of source code
+# Extract the source code from parsed elements
+# @param partitum the parsed elements
+# @return The lines of source code
 src.lines <- function(partitum) {
     srcfile <- srcfile(partitum$srcref$filename)
     first.line <- partitum$srcref$lloc[[1]]
     last.line <- partitum$srcref$lloc[[3]]
     getSrcLines(srcfile, first.line, last.line)
 }
-
-#' Extract the expression from the parse tree.
-#' @param partitum the parsed elements
-#' @return the extracted expression
-#' @export
-expression.from.partitum <- function(partitum)
-  parse(text=src.lines(partitum))
-

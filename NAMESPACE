@@ -1,5 +1,4 @@
 export(collate_roclet)
-export(expression.from.partitum)
 export(had_roclet)
 export(make.roclet)
 export(namespace_roclet)

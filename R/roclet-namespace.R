@@ -139,7 +139,7 @@ namespace_roclet <- function(package.dir, roxygen.dir, outfile = NULL,
       record.directive("S3method", str_c(unlist(exportee$method), 
         collapse = ","))
     } else {
-      exportee <- first.non.null(exportee$name, exportee$assignee)
+      exportee <- exportee$name %||% exportee$assignee
       if (is.null(exportee))
         warning('Empty export directive')
       else

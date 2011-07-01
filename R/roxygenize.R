@@ -1,27 +1,3 @@
-#' @include roxygen.R
-NULL
-
-# Whither to copy package
-ROXYGEN.DIR <- '%s.roxygen'
-
-# Whither to copy Rds
-MAN.DIR <- 'man'
-
-# Whither to copy installables
-INST.DIR <- 'inst'
-
-# Whither to install docs
-DOC.DIR <- 'doc'
-
-# Whence to copy source code
-R.DIR <- 'R'
-
-# Whither to copy namespace
-NAMESPACE.FILE <- 'NAMESPACE'
-
-# Whither to copy collate
-DESCRIPTION.FILE <- 'DESCRIPTION'
-
 #' Recursively copy a directory thither; optionally unlinking
 #' the target first; optionally overwriting; optionally
 #' verbalizing.
@@ -78,9 +54,9 @@ roxygenize <- function(package.dir,
                        roclets=c("had", "collate", "namespace")) {
 
   skeleton <- c(roxygen.dir,
-                file.path(roxygen.dir, MAN.DIR),
-                file.path(roxygen.dir, INST.DIR),
-                file.path(roxygen.dir, INST.DIR, DOC.DIR))
+                file.path(roxygen.dir, "mac"),
+                file.path(roxygen.dir, "inst"),
+                file.path(roxygen.dir, "inst", "doc"))
 
   if (copy.package)
     copy.dir(package.dir,

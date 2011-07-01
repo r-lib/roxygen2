@@ -89,7 +89,7 @@ register.preref.parsers(parse.value,
 namespace_roclet <- function(package.dir, roxygen.dir, outfile = NULL,
                                   verbose=TRUE) {
   if (is.null(outfile)) {
-    outfile <- file.path(roxygen.dir, NAMESPACE.FILE)
+    outfile <- file.path(roxygen.dir, "NAMESPACE")
   }
 
   namespace <- character()

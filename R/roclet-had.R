@@ -51,7 +51,7 @@ had_roclet <- function(package.dir,
                            verbose=TRUE) {
                              
   if (is.null(subdir)) {
-    subdir <- file.path(roxygen.dir, MAN.DIR)
+    subdir <- file.path(roxygen.dir, "man")
   }
   subdir <- normalizePath(subdir)
   

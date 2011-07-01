@@ -70,7 +70,7 @@ make.roclet <- function(package.dir,
     
     
   roclet$parse.dir <- function() {
-    r.dir <- file.path(package.dir, R.DIR)
+    r.dir <- file.path(package.dir, "R")
     files <- as.list(list.files(r.dir,
                                 pattern='\\.(R|r)$',
                                 recursive=TRUE,

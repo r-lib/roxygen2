@@ -52,10 +52,10 @@ collate_roclet <- function(package.dir,
                                 verbose=TRUE) {
                                   
   if (is.null(merge.file)) {
-    merge.file <- file.path(package.dir, DESCRIPTION.FILE)
+    merge.file <- file.path(package.dir, "DESCRIPTION")
   }
   if (is.null(target.file)) {
-    target.file <- file.path(roxygen.dir, DESCRIPTION.FILE)
+    target.file <- file.path(roxygen.dir, "DESCRIPTION")
   }
   
   vertices <- NULL

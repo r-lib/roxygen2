@@ -14,6 +14,8 @@ TAG.DELIMITER <- '@'
 # @return A list of prerefs that resemble srcrefs in form, i.e. with srcfile
 #   and lloc
 prerefs <- function(srcfile, srcrefs) {
+  if (length(srcrefs) == 0) return(list())
+  
   length.line <- function(lineno)
     nchar(getSrcLines(srcfile, lineno, lineno))
 

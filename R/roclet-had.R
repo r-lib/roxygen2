@@ -8,6 +8,7 @@ NULL
 register.preref.parsers(parse.value,
                         'name', 
                         'rdname',
+                        'merge',
                         'aliases',
                         'title',
                         'usage',
@@ -44,7 +45,10 @@ register.srcref.parser('setMethod',
                        list(S4method=expression[[1]],
                             signature=expression[[2]]))
 
-
+#' \itemize{
+#'  \item \code{@@merge topicname}: Merges contents of this topic with
+#'    contents of specific topic, silently dropping name and title components.
+#' }
 #' @export
 had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
                              
@@ -109,6 +113,7 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
   
   add.output <- function(expr) {
     if (is.null(filename)) return()
+    if (!is.character(filename)) browser()
    
     output[[filename]] <- c(output[[filename]], expr)
   }
@@ -122,8 +127,13 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
   #' @param partitum the pre-processd elements
   #' @return \code{NULL}
   process.name <- function(partitum) {
-    name <- partitum$name %||% partitum$assignee %||% partitum$S4class %||% 
-      partitum$S4method %||% partitum$S4generic
+    name <- partitum$name %||% partitum$S4class %||% partitum$S4method %||%
+      partitum$S4generic
+
+    # Only use assignee if it's a single element
+    if (is.null(name) && length(partitum$assignee) == 1) {
+       name <- partitum$assignee
+    }
     
     if (is.null(name)) {
       # No name, so skip this file.  Do this silently because of other
@@ -132,18 +142,22 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
       filename <<- NULL
       return()
     }
-    filename <<- sprintf('%s.Rd', partitum$rdname %||% name)
+    filename <<- str_c(partitum$merge %||% partitum$rdname %||% name, ".Rd")
     
-    process.expression('name', name)
+    if (is.null(partitum$merge)) {
+      process.expression('name', name)      
+    }
 
     # If no aliases, use name
     if (is.null(partitum$aliases)) {
       process.expression('alias', name)
     }
-
-    title <- partitum$title %||% first.sentence(partitum$description) %||%
-      name
-    process.expression('title', title)
+    
+    if (is.null(partitum$merge)) {
+      title <- partitum$title %||% first.sentence(partitum$description) %||%
+        name
+      process.expression('title', title)      
+    }
   }
   
   #' Prefer explicit \code{@@usage} to a \code{@@formals} list.

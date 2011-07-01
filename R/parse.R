@@ -17,19 +17,18 @@ prerefs <- function(srcfile, srcrefs) {
   length.line <- function(lineno)
     nchar(getSrcLines(srcfile, lineno, lineno))
 
-  pair.preref <- function(pair) {
-    start <- pair[[1]]
-    end <- pair[[2]]
+  pair.preref <- function(start, end) {
     structure(srcref(srcfile, c(start, 1, end, length.line(end))),
-              class='preref')
+      class = 'preref')
   }
+  
+  src_start <- vapply(srcrefs, "[[", integer(1), 1) - 1
+  src_end <- vapply(srcrefs, "[[", integer(1), 3) + 1
+  
+  comments_start <- c(1, src_end[-length(src_end)])
+  comments_end <- src_start
 
-  lines <- unlist(Map(function(srcref)
-                      c(srcref[[1]] - 1,
-                        srcref[[3]] + 1),
-                      srcrefs))
-  pairs <- pairwise(c(1, lines))
-  Map(pair.preref, pairs)
+  Map(pair.preref, comments_start, comments_end)
 }
 
 # Parse a raw string containing key and expressions.
@@ -274,13 +273,12 @@ parse.file <- function(file) {
 }
 
 parse.srcfile <- function(srcfile) {
-  srcrefs <- attributes(parse(srcfile$filename,
-                              srcfile=srcfile))$srcref
-                        
-  if (length(srcrefs) > 0)
-    parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
-  else
-    list()
+  src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
+  pre_refs <- prerefs(srcfile, src_refs)
+
+  if (length(src_refs) == 0) return(list())
+  
+  parse.refs(mapply(list, src_refs, pre_refs, SIMPLIFY = FALSE))
 }
 cached.parse.srcfile <- memoize(parse.srcfile)
 

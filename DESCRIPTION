@@ -17,7 +17,6 @@ Depends:
     digest
 Collate:
     'description.R'
-    'list.R'
     'parse-registry.R'
     'parse.R'
     'roclet-collate.R'

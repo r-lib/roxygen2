@@ -306,12 +306,13 @@ parse.files <- function(paths) {
   
 #' Text-parsing hack using tempfiles for more facility.
 #'
-#' @param \dots lines of text to be parsed
+#' @param text stringr containing text to be parsed
 #' @return The parse tree
 #' @keywords internal
 #' @export
-parse.text <- function(...) {
+parse.text <- function(text) {
   file <- tempfile()
-  cat(..., sep='\n', file=file)
+  writeLines(text, file)
+  on.exit(unlink(file))
   parse.file(file)
 }

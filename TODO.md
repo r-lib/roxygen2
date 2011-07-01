@@ -1,5 +1,3 @@
-* Get tests working again
-
 * Build proper model of Rd file, so can more easily merge contents from
   separate documentation blocks
 

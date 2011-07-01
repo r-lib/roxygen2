@@ -69,7 +69,7 @@ register.srcref.parser('setMethod', function(call) {
 #'    contents of specific topic, silently dropping name and title components.
 #' }
 #' @export
-had_roclet <- function() {
+rd_roclet <- function() {
   new_roclet(list(), "had")
 }
 

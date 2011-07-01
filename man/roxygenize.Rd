@@ -4,7 +4,7 @@
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{roxygenize(package.dir, roxygen.dir = package.dir,
     copy.package = package.dir != roxygen.dir, overwrite =
-    TRUE, unlink.target = FALSE, roclets = c("had",
+    TRUE, unlink.target = FALSE, roclets = c("rd",
     "collate", "namespace"))}
 \arguments{
   \item{package.dir}{the package's top directory}

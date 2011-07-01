@@ -1,5 +1,5 @@
 context("Rd")
-roc <- had_roclet()
+roc <- rd_roclet()
 
 
 test_that("@example loads from specified files", {

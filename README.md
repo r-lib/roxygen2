@@ -62,7 +62,7 @@ When you `roxygenise` your package these comments will be automatically transfor
   all you need to do is label functions, methods and classes that you want to
   export with the `@export` tag
 
-* `had_roclet`: produces Rd files by inspecting both function definitions and
+* `rd_roclet`: produces Rd files by inspecting both function definitions and
   roxygen comments in the source code.
 
 By default, `roxygenise` will run all three, but you can choose which ones to run using the `roclet` parameter. It's also possible to write your own roclets - more on this in the future.

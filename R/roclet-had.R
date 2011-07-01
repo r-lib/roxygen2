@@ -101,7 +101,6 @@ had_roclet <- function(package.dir,
 
   filename <- NULL
   output <- new.env(TRUE, emptyenv())
-  params <- NULL
   examples <- NULL
   has_contents <- list()
   
@@ -116,7 +115,6 @@ had_roclet <- function(package.dir,
 
   reset <- function() {
     filename <<- NULL
-    params <<- NULL
     examples <<- NULL
   }
 
@@ -264,7 +262,7 @@ had_roclet <- function(package.dir,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   post.parse <- function(partitum) {
-    parse.arguments()
+    parse.arguments(partitum)
     parse.examples(partitum)
   }
 
@@ -329,35 +327,23 @@ had_roclet <- function(package.dir,
     }
       
   }
-
   roclet$register.parser('description', parse.description)
+  
+  parse.arguments <- function(partitum) {
+    params <- partitum[names(partitum) == "param"]
+    if (length(params) == 0) return() 
 
-  #' Add a parameter to the global param list.
-  #' @param key ignored
-  #' @param expression the parameter
-  #' @return \code{NULL}
-  parse.param <- function(key, expression) {
-    params <<- append(params, list(expression))
-  }
+    name <- sapply(params, "[[", "name")
+    desc <- str_trim(sapply(params, "[[", "description"))
     
-
-  parse.arguments <- function() {
-    if (length(params) > 0) {
-      
-      name <- sapply(params, "[[", "name")
-      desc <- str_trim(sapply(params, "[[", "description"))
-      
-      params_str <- paste(
-        "  \\item{", name, "}{",  desc, "}", 
-        sep = "", collapse = "\n")
-      
-      expr <- paste("\\arguments{\n", params_str, "\n}\n", sep = "")
-      
-      add.output(expr)
-    }
+    params_str <- paste(
+      "  \\item{", name, "}{",  desc, "}", 
+      sep = "", collapse = "\n")
+    
+    expr <- paste("\\arguments{\n", params_str, "\n}\n", sep = "")
+    
+    add.output(expr)
   }
-
-  roclet$register.parser('param', parse.param)
 
   #' Parse individual \code{@@example} clauses by adding the
   #' pointed-to file to a global store.

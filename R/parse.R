@@ -36,8 +36,10 @@ prerefs <- function(srcfile, srcrefs) {
 # @param element the string containing key and expressions
 # @return A list containing the parsed constituents
 parse.element <- function(element) {
-  tag <- strcar(element)
-  rest <- strcdr(element)
+  pieces <- str_split_fixed(element, "[[:space:]]+", 2)
+  
+  tag <- pieces[, 1]
+  rest <- pieces[, 2]
 
   do.call(parser.preref(tag), list(tag, rest))
 }
@@ -99,8 +101,11 @@ parse.value <- function(key, rest) {
 #' @keywords internal
 #' @export
 parse.name.description <- function(key, rest) {
-  name <- strcar(rest)
-  rest <- str_trim(strcdr(rest))
+  pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
+  
+  name <- pieces[, 1]
+  rest <- str_trim(pieces[, 2])
+
   if (is.null.string(name))
     stop(key, 'requires a name and description', call. = FALSE)
   else
@@ -118,11 +123,15 @@ parse.name.description <- function(key, rest) {
 #' @keywords internal
 #' @export
 parse.name <- function(key, name) {
-  if (is.null.string(name))
+  name <- str_trim(name)
+  
+  if (is.null.string(name)) {
     stop(key, ' requires a name', call. = FALSE)
-  else if (nwords(name) > 1)
+  } else if (str_count(name, "\\s+") > 1) {
     warning(key, ' ignoring extra arguments', call. = FALSE)
-  parse.default(key, strcar(name))
+  }
+    
+  parse.default(key, word(name, 1))
 }
 
 #' Turn a binary element on; parameters are ignored.

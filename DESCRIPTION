@@ -25,5 +25,4 @@ Collate:
     'roclet.R'
     'roxygen.R'
     'roxygenize.R'
-    'string.R'
     'utils.R'

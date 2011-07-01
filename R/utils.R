@@ -23,3 +23,10 @@ usage <- function(args) {
   
   paste(names(args), arg_values, collapse = ", ", sep = "")
 }
+
+# Does the string contain no matter, but very well [:space:]?
+# @param string the string to check
+# @return TRUE if the string contains words, otherwise FALSE
+is.null.string <- function(string) {
+  str_length(str_trim(string)) == 0
+}

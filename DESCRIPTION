@@ -20,7 +20,6 @@ Collate:
     'list.R'
     'parse-registry.R'
     'parse.R'
-    'Rdapi.R'
     'roclet-collate.R'
     'roclet-had.R'
     'roclet-namespace.R'

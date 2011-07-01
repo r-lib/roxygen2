@@ -1,6 +1,4 @@
-* Separate roclet steps into process and output
-  * Process should return object that's passed to output
-  * Will support better testing
+* Rewrite roclets as S3
 
 * Get tests working again
 

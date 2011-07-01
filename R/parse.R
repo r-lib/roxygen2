@@ -157,8 +157,7 @@ parser.preref <- Curry(parser.default,
 # @param key the key upon which to look
 # @return The parser
 parser.srcref <- Curry(parser.default,
-                       table=srcref.parsers,
-                       default=parse.srcref)
+                       table=srcref.parsers)
 
 #' Parse either srcrefs, prerefs or pairs of the same.
 #'

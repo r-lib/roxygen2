@@ -1,4 +1,4 @@
 library(testthat)
-library(rxygen)
+library(rxygn)
 
-test_package("rxygen")
+test_package("rxygn")

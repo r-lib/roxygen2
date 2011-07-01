@@ -23,6 +23,21 @@ roc_proc <- function(roclet, paths, base_path) {
   roc_process(roclet, parsed, base_path)
 } 
 
+#' Process roclet on string and capture results.
+#' Useful for testing.
+#'
+#' @param roclet to use for processing
+#' @param input source string
+#' @export
+#' @keywords internal
+roc_proc_text <- function(roclet, input) {
+  stopifnot(is.roclet(roclet))
+  
+  parsed <- parse.text(input)
+  roc_process(roclet, parsed, base_path = ".")
+} 
+
+
 #' Process roclet and output results.
 #' 
 #' @param roclet to use for processing

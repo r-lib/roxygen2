@@ -7,5 +7,3 @@
   generic documentation
   class documentation
   method documentation - individual, class, generic
-
-* Update todo with my suggested style of working

@@ -153,19 +153,18 @@ ns_S3method <- function(tag, parms, all) {
   }
   directive(tag, str_c(params, collapse = ","))
 }
-ns_importFrom <- function(tag, parms) {
+ns_importFrom <- function(tag, parms, all) {
   params <- words(parms)
   directive(tag, str_c(params[1], ",", params[-1]))
 }
 
 
 process_tag <- function(partitum, tag, f) {
-  params <- partitum[[tag]]
-  if (is.null(params)) return()
+  matches <- partitum[names(partitum) == tag]
+  if (length(matches) == 0) return()
   
-  f(tag, params, partitum)
+  unlist(lapply(matches, f, tag = tag, all = partitum))
 }
-  
   
 words <- function(x) {
   quote_if_needed(str_split(str_trim(x), "\\s+")[[1]])

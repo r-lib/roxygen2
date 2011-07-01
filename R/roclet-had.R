@@ -231,10 +231,10 @@ process.todo <- function(key, value) {
 }
 
 process_had_tag <- function(partitum, tag, f = rd_tag) {
-  params <- partitum[[tag]]
-  if (is.null(params)) return()
-  
-  f(tag, params)
+  matches <- partitum[names(partitum) == tag]
+  if (length(matches) == 0) return()
+
+  unlist(lapply(matches, function(p) f(tag, p)))
 }
 
 

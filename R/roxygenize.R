@@ -31,7 +31,7 @@ roxygenize <- function(package.dir,
   roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {
     maker <- match.fun(roclet)
-    maker(package.dir, roxygen.dir)$parse.dir()
+    maker(roxygen.dir)$parse.dir()
   }
 }
 

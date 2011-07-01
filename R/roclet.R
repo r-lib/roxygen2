@@ -19,59 +19,49 @@
 #' @param post.files a callback function with no arguments; called after every
 #'   file has been parsed
 #' @export
-make.roclet <- function(package.dir,
-                        roxygen.dir,
-                        parse.default = NULL,
-                        pre.parse=NULL,
-                        post.parse=NULL,
-                        pre.files=NULL,
-                        post.files=NULL) {
-  roclet <- new.env(parent=emptyenv())
+make.roclet <- function(package.dir, process, output) {
+  roclet <- new.env(parent = emptyenv())
 
-  roclet$parsers <- list()
-
-  #' Register parser in the parser table.
-  #' @param key key upon which to register
-  #' @param parser the parser to register
-  #' @return \code{NULL}
-  roclet$register.parser <- function(key, parser)
-    roclet$parsers[[key]] <- parser
-
-  #' Register many parsers at once.
-  #' @param parser the parser to register
-  #' @param \dots the keys under which to register
-  #' @return \code{NULL}
-  roclet$register.parsers <- function(parser, ...)
-    for (key in c(...))
-      roclet$register.parser(key, parser)
-
-  #' Register a default parser.
-  #' @param key key upon which to register
-  #' @return \code{NULL}
-  roclet$register.default.parser <- function(key)
-    roclet$parsers[[key]] <- parse.default
-
-  #' Register many default parsers.
-  #' @param \dots the keys under which to register
-  #' @return \code{NULL}
-  roclet$register.default.parsers <- function(...)
-    for (parser in c(...))
-      roclet$register.default.parser(parser)
+  # roclet$parsers <- list()
+  # 
+  # #' Register parser in the parser table.
+  # #' @param key key upon which to register
+  # #' @param parser the parser to register
+  # #' @return \code{NULL}
+  # roclet$register.parser <- function(key, parser)
+  #   roclet$parsers[[key]] <- parser
+  # 
+  # #' Register many parsers at once.
+  # #' @param parser the parser to register
+  # #' @param \dots the keys under which to register
+  # #' @return \code{NULL}
+  # roclet$register.parsers <- function(parser, ...)
+  #   for (key in c(...))
+  #     roclet$register.parser(key, parser)
+  # 
+  # #' Register a default parser.
+  # #' @param key key upon which to register
+  # #' @return \code{NULL}
+  # roclet$register.default.parser <- function(key)
+  #   roclet$parsers[[key]] <- parse.default
+  # 
+  # #' Register many default parsers.
+  # #' @param \dots the keys under which to register
+  # #' @return \code{NULL}
+  # roclet$register.default.parsers <- function(...)
+  #   for (parser in c(...))
+  #     roclet$register.default.parser(parser)
 
   roclet$parse <- function(paths) {
     parsed <- parse.files(paths)
     contents <- Filter(function(x) length(x) > 1, parsed)
-    roclet$parse.parsed(contents)
+    results <- process(contents)
+    output(results)
   }
-    
-    
+
   roclet$parse.dir <- function() {
     r.dir <- file.path(package.dir, "R")
-    files <- as.list(list.files(r.dir,
-                                pattern='\\.(R|r)$',
-                                recursive=TRUE,
-                                full.names=TRUE,
-                                all.files=TRUE))
+    files <- as.list(dir(r.dir, pattern = '\\.(R|r)$', full.names = TRUE))
     roclet$parse(files)
   }
 
@@ -105,14 +95,4 @@ make.roclet <- function(package.dir,
   }
 
   structure(roclet, class='roclet')
-}
-
-# Extract the source code from parsed elements
-# @param partitum the parsed elements
-# @return The lines of source code
-src.lines <- function(partitum) {
-    srcfile <- srcfile(partitum$srcref$filename)
-    first.line <- partitum$srcref$lloc[[1]]
-    last.line <- partitum$srcref$lloc[[3]]
-    getSrcLines(srcfile, first.line, last.line)
 }

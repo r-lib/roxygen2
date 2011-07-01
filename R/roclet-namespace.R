@@ -75,7 +75,7 @@ namespace_roclet <- function() {
 }
 
 #' @S3method roc_process namespace
-roc_process.namespace <- function(roclet, partita) {
+roc_process.namespace <- function(roclet, partita, base_path) {
   ns <- character()
   for (partitum in partita) {
     ns_one <- c( 
@@ -98,8 +98,8 @@ roc_process.namespace <- function(roclet, partita) {
 
 
 #' @S3method roc_output namespace
-roc_output.namespace <- function(roclet, results, path) { 
-  NAMESPACE <- file.path(path, "NAMESPACE")
+roc_output.namespace <- function(roclet, results, base_path) { 
+  NAMESPACE <- file.path(base_path, "NAMESPACE")
   
   new <- sort(unique(results))
   old <- readLines(NAMESPACE)
@@ -116,17 +116,17 @@ ns_directive <- function(tag, parms) {
 }
 
 ns_default <- function(tag, parms, all) {
-  directive(tag, words(parms))
+  ns_directive(tag, words(parms))
 }
 ns_exportClass <- function(tag, parms, all) {
-  directive('exportClasses', parms)
+  ns_directive('exportClasses', parms)
 }
 ns_exportMethod <- function(tag, parms, all) {
-  directive('exportMethods', parms)
+  ns_directive('exportMethods', parms)
 }
 ns_export <- function(tag, parms, all) {
   if (!is.null.string(parms)) {
-    return(directive('export', words(parms)))
+    return(ns_directive('export', words(parms)))
   }
   
   if (!is.null(all$S4method)) {
@@ -142,7 +142,7 @@ ns_export <- function(tag, parms, all) {
     if (is.null(name)) {
       warning('Empty export directive')
     } else {
-      directive('export', quote_if_needed(name))
+      ns_directive('export', quote_if_needed(name))
     }
   }
 }
@@ -151,11 +151,11 @@ ns_S3method <- function(tag, parms, all) {
   if (length(params) != 2) {
     warning("Invalid @S3method: ", parms, call. = FALSE)
   }
-  directive("S3method", str_c(quote_if_needed(params), collapse = ","))
+  ns_directive("S3method", str_c(quote_if_needed(params), collapse = ","))
 }
 ns_importFrom <- function(tag, parms, all) {
   params <- words(parms)
-  directive(tag, str_c(params[1], ",", params[-1]))
+  ns_directive(tag, str_c(params[1], ",", params[-1]))
 }
 
 

@@ -52,7 +52,7 @@ had_roclet <- function() {
 }
 
 #' @S3method roc_process had
-roc_process.had <- function(roclet, partita) {
+roc_process.had <- function(roclet, partita, base_path) {
   topics <- list()
   for (partitum in partita) {
     has_rd <- any(names(partitum) %in% c("description", "param", "return",
@@ -101,7 +101,7 @@ roc_process.had <- function(roclet, partita) {
         process.split('keyword', param)
       }),
       process_had_tag(partitum, 'TODO', process.todo),
-      process.examples(partitum)
+      process.examples(partitum, base_path)
     )
     topics[[filename]] <- rd
   }
@@ -109,8 +109,8 @@ roc_process.had <- function(roclet, partita) {
 }
 
 #' @S3method roc_output had
-roc_output.had <- function(roclet, results, path) { 
-  man <- normalizePath(file.path(path, "man"))
+roc_output.had <- function(roclet, results, base_path) { 
+  man <- normalizePath(file.path(base_path, "man"))
   contents <- vapply(results, paste, character(1), collapse = "")
   
   write_out <- function(filename, contents) {
@@ -206,7 +206,7 @@ process.arguments <- function(partitum) {
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
-process.examples <- function(partitum) {
+process.examples <- function(partitum, base_path) {
   if (!is.null(partitum$examples)) {      
     ex <- partitum$examples
     ex <- gsub("([%\\])", "\\\\\\1", ex)
@@ -216,7 +216,7 @@ process.examples <- function(partitum) {
   
   paths <- partitum[names(partitum) == "example"]
   if (length(paths) > 0) {
-    paths <- file.path(package.dir, str_trim(paths))
+    paths <- file.path(base_path, str_trim(paths))
     examples <- unlist(lapply(readLines, paths))
     
     return(rd_tag('examples', str_c(examples, collapse = "\n")))

@@ -11,16 +11,6 @@
 #' LazyLoad: \tab yes\cr
 #' }
 #'
-#' Roxygen is run on a package (hereafter <package>) by
-#' \command{R CMD roxygen <package>} or \command{Rcmd roxygen.sh <package>}
-#' on Windows. By default, it creates a directory \file{<package>.roxygen}
-#' with the complete package cum populated Rd files, \file{NAMESPACE}, etc.;
-#' but can also operate descructively on the package itself with the
-#' \option{-d} option.
-#'
-#' See the vignette (\file{roxygen.pdf}) or manual (\file{roxygen-manual.pdf})
-#' for details.
-#'
 #' @author
 #' Peter Danenberg \email{pcd@@roxygen.org},
 #' Manuel Eugster \email{Manuel.Eugster@@stat.uni-muenchen.de}
@@ -31,13 +21,8 @@
 #' @title Literate Programming in R
 #' @keywords package
 #' @examples
-#' ## To process a package in `pkg', run `R CMD roxygen pkg'; or:
 #' \dontrun{roxygenize('pkg')}
-#' @seealso See \code{\link{make.Rd.roclet}}, 
-#' \code{\link{namespace_roclet}}, 
+#' @seealso See \code{\link{namespace_roclet}}, 
 #' \code{\link{collate_roclet}}, 
-#' \code{\link{make.callgraph.roclet}}
 #' for an overview of roxygen tags.
-#'
-#' See \code{\link{roxygenize}} for an alternative to `R CMD roxygen'.
 NULL

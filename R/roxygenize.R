@@ -9,6 +9,7 @@
 #' @param unlink.target unlink target directory before processing files?
 #' @param roclets character vector of roclet names to apply to package
 #' @return \code{NULL}
+#' @aliases roxygenize roxygenise
 #' @export roxygenize roxygenise
 roxygenize <- function(package.dir,
                        roxygen.dir=package.dir,

@@ -28,7 +28,7 @@ collate_roclet <- function() {
 }
 
 #' @S3method roc_process collate
-roc_process.collate <- function(roclet, partita) {
+roc_process.collate <- function(roclet, partita, base_path) {
   vertices <- make_vertices()
   
   for (partitum in partita) {
@@ -48,8 +48,8 @@ roc_process.collate <- function(roclet, partita) {
 }
                                   
 #' @S3method roc_output collate
-roc_output.collate <- function(roclet, results, path) {
-  DESCRIPTION <- file.path(path, "DESCRIPTION")
+roc_output.collate <- function(roclet, results, base_path) {
+  DESCRIPTION <- file.path(base_path, "DESCRIPTION")
   old <- read.description(DESCRIPTION)
   new <- old
   new$Collate <- results

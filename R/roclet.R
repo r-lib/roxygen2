@@ -12,39 +12,40 @@ is.roclet <- function(x) inherits(x, "roclet")
 #' 
 #' @param roclet to use for processing
 #' @param input character vector of paths to files to process
+#' @param base_path base directory 
 #' @seealso \code{\link{roxygenise}} for user-friendly interface
 #' @keywords internal
 #' @export
-roc_proc <- function(roclet, paths) {
+roc_proc <- function(roclet, paths, base_path) {
   stopifnot(is.roclet(roclet))
   
   parsed <- parse.files(paths)
   # Remove srcrefs with no attached roxygen comments
   contents <- Filter(function(x) length(x) > 1, parsed)
-  roc_process(roclet, contents)
+  roc_process(roclet, contents, base_path)
 } 
 
 #' Process roclet and output results.
 #' 
 #' @param roclet to use for processing
 #' @param input character vector of paths to files to process
-#' @param output_path base directory in which to save output
+#' @param base_path base directory in which to save output
 #' @keywords internal
 #' @seealso \code{\link{roxygenise}} for user-friendly interface
 #' @export
-roc_out <- function(roclet, input, path) {
+roc_out <- function(roclet, input, base_path) {
   stopifnot(is.roclet(roclet))
 
-  results <- roc_proc(roclet, input)
-  roc_output(roclet, results, path)
+  results <- roc_proc(roclet, input, base_path)
+  roc_output(roclet, results, base_path)
 }
 
 # Internal methods for processing and output
 
-roc_output <- function(roclet, results, path) {
+roc_output <- function(roclet, results, base_path) {
   UseMethod("roc_output", roclet)
 }
 
-roc_process <- function(roclet, partita) {
+roc_process <- function(roclet, partita, base_path) {
   UseMethod("roc_process", roclet)
 }

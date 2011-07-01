@@ -1,4 +1,4 @@
 library(testthat)
-library(roxygen)
+library(rxygen)
 
-test_package("roxygen")
+test_package("rxygen")

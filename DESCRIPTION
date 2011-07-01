@@ -11,6 +11,8 @@ Maintainer: Hadley Wickham <hadley@rice.edu>
 Imports:
     stringr (>= 0.5),
     memoise
+Suggests:
+    testthat
 Depends:
     digest
 Collate:

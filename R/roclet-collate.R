@@ -8,7 +8,7 @@ NULL
 
 #' Collate value parser
 #' @name include
-#' @seealso make.collate.roclet
+#' @seealso collate_roclet
 register.preref.parsers(parse.value,
                         'include')
 
@@ -42,10 +42,10 @@ register.preref.parsers(parse.value,
 #' #' @@include example-c.R
 #' NULL
 #'
-#' roclet <- make.collate.roclet()
+#' roclet <- collate_roclet()
 #' \dontrun{roclet$parse.dir('example')}
 #' @export
-make.collate.roclet <- function(package.dir, 
+collate_roclet <- function(package.dir, 
                                 roxygen.dir, 
                                 merge.file=NULL,
                                 target.file=NULL,

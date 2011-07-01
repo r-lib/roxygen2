@@ -1,7 +1,7 @@
 context("Namespace")
 
 expect_namespace <- function(roxygen, expected) {
-  output <- capture_roclet_output(make.namespace.roclet("."), roxygen)
+  output <- capture_roclet_output(namespace_roclet("."), roxygen)
   expect_equal(output, expected)
 }
 

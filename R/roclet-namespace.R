@@ -80,13 +80,13 @@ register.preref.parsers(parse.value,
 #' #' @@export
 #' fun <- function() {}
 #'
-#' roclet <- make.namespace.roclet()
+#' roclet <- namespace_roclet()
 #' \dontrun{roclet$parse('example.R')}
 #' @export
-#' @aliases make.namespace.roclet exportClass exportMethod
+#' @aliases namespace_roclet exportClass exportMethod
 #' exportPattern S3method import importFrom importClassesFrom
 #' importMethodsFrom export
-make.namespace.roclet <- function(package.dir, roxygen.dir, outfile = NULL,
+namespace_roclet <- function(package.dir, roxygen.dir, outfile = NULL,
                                   verbose=TRUE) {
   if (is.null(outfile)) {
     outfile <- file.path(roxygen.dir, NAMESPACE.FILE)

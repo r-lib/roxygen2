@@ -75,7 +75,7 @@ roxygenize <- function(package.dir,
                        copy.package=package.dir != roxygen.dir,
                        overwrite=TRUE,
                        unlink.target=FALSE,
-                       roclets=c("had", "collate")) {
+                       roclets=c("had", "collate", "namespace")) {
 
   skeleton <- c(roxygen.dir,
                 file.path(roxygen.dir, MAN.DIR),
@@ -93,7 +93,7 @@ roxygenize <- function(package.dir,
                                    recursive=TRUE,
                                    showWarnings=FALSE)
   
-  roclets <- paste("make.", roclets, ".roclet", sep = "")
+  roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {
     maker <- match.fun(roclet)
     maker(package.dir, roxygen.dir)$parse.dir()

@@ -2,7 +2,7 @@ context("Collation")
 
 test_that("collation as expected", {
 
-  roclet <- make.collate.roclet()
+  roclet <- collate_roclet()
   collation <- capture.output(roclet$parse('collate/belt.R',
                                            'collate/jacket.R',
                                            'collate/pants.R',

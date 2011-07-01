@@ -1,8 +1,8 @@
-\name{make.collate.roclet}
-\alias{make.collate.roclet}
+\name{collate_roclet}
+\alias{collate_roclet}
 \title{Make collate roclet which parses the given files; topologically...}
-\usage{make.collate.roclet(package.dir, roxygen.dir, merge.file =
-    NULL, target.file = NULL, verbose = TRUE)}
+\usage{collate_roclet(package.dir, roxygen.dir, merge.file = NULL,
+    target.file = NULL, verbose = TRUE)}
 
 \description{
   Make collate roclet which parses the given files;
@@ -40,6 +40,6 @@ target.file}
 #' @include example-c.R
 NULL
 
-roclet <- make.collate.roclet()
+roclet <- collate_roclet()
 \dontrun{roclet$parse.dir('example')}}
 

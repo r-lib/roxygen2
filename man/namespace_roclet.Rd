@@ -1,7 +1,7 @@
-\name{make.namespace.roclet}
+\name{namespace_roclet}
 \title{Make a namespace roclet which parses the given files and writes a list of...}
-\usage{make.namespace.roclet(package.dir, roxygen.dir, outfile =
-    NULL, verbose = TRUE)}
+\usage{namespace_roclet(package.dir, roxygen.dir, outfile = NULL,
+    verbose = TRUE)}
 
 \description{
   Make a namespace roclet which parses the given files and
@@ -47,7 +47,7 @@
   methods} from \cite{Writing R Extensions}. }
 }
 \value{Namespace roclet}
-\alias{make.namespace.roclet}
+\alias{namespace_roclet}
 \alias{exportClass}
 \alias{exportMethod}
 \alias{exportPattern}
@@ -74,6 +74,6 @@ NULL
 #' @export
 fun <- function() {}
 
-roclet <- make.namespace.roclet()
+roclet <- namespace_roclet()
 \dontrun{roclet$parse('example.R')}}
 

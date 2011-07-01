@@ -5,5 +5,5 @@
 \description{
   Collate value parser
 }
-\seealso{make.collate.roclet}
+\seealso{collate_roclet}
 

@@ -4,7 +4,7 @@
 \usage{roxygenize(package.dir, roxygen.dir = package.dir,
     copy.package = package.dir != roxygen.dir, overwrite =
     TRUE, unlink.target = FALSE, roclets = c("had",
-    "collate"))}
+    "collate", "namespace"))}
 
 \description{
   Process a package with the Rd, namespace and collate

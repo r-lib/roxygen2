@@ -1,7 +1,7 @@
 context("Rd")
 
 expect_rd <- function(roxygen, expected) {
-  expected <- capture_roclet_output(make.had.roclet("."))
+  expected <- capture_roclet_output(had_roclet("."))
   expect_equal(expected, expected)
 }
 

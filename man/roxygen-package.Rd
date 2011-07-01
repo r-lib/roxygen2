@@ -32,8 +32,8 @@ Maintainer: Peter Danenberg \email{pcd@roxygen.org}}
 \docType{package}
 \keyword{package}
 \seealso{See \code{\link{make.Rd.roclet}},
-\code{\link{make.namespace.roclet}},
-\code{\link{make.collate.roclet}},
+\code{\link{namespace_roclet}},
+\code{\link{collate_roclet}},
 \code{\link{make.callgraph.roclet}}
 for an overview of roxygen tags.
 

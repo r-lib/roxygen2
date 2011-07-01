@@ -34,8 +34,8 @@
 #' ## To process a package in `pkg', run `R CMD roxygen pkg'; or:
 #' \dontrun{roxygenize('pkg')}
 #' @seealso See \code{\link{make.Rd.roclet}}, 
-#' \code{\link{make.namespace.roclet}}, 
-#' \code{\link{make.collate.roclet}}, 
+#' \code{\link{namespace_roclet}}, 
+#' \code{\link{collate_roclet}}, 
 #' \code{\link{make.callgraph.roclet}}
 #' for an overview of roxygen tags.
 #'

@@ -11,17 +11,14 @@
   roclets.
 }
 \value{\code{NULL}}
-\section{TODO}{Options to enable/disable specific roclet
-(\command{--no-callgraphs}, etc.)}
 \arguments{
   \item{package.dir}{the package's top directory}
   \item{roxygen.dir}{where to create roxygen output; defaults to
 \file{package.roxygen}.}
-  \item{copy.package}{copies the package over before
-adding/manipulating files.}
-  \item{overwrite}{overwrite target files}
-  \item{unlink.target}{unlink target directory before
-processing files}
-  \item{use.Rd2}{use the Rd2 roclet}
+  \item{copy.package}{copies the package over before adding/manipulating
+files.}
+  \item{overwrite}{overwrite target files?}
+  \item{unlink.target}{unlink target directory before processing files?}
+  \item{roclets}{character vector of roclet names to apply to package}
 }
 

@@ -53,21 +53,16 @@ roxygenize <- function(package.dir,
                        unlink.target=FALSE,
                        roclets=c("had", "collate", "namespace")) {
 
-  skeleton <- c(roxygen.dir,
-                file.path(roxygen.dir, "mac"),
-                file.path(roxygen.dir, "inst"),
-                file.path(roxygen.dir, "inst", "doc"))
+  skeleton <- c(roxygen.dir, file.path(roxygen.dir, c("man", "inst")))
 
-  if (copy.package)
-    copy.dir(package.dir,
-             roxygen.dir,
-             unlink.target=unlink.target,
-             overwrite=overwrite,
-             verbose=FALSE)
+  if (copy.package) {
+    copy.dir(package.dir, roxygen.dir, unlink.target = unlink.target,
+      overwrite = overwrite, verbose = FALSE)
+  }
 
-  for (dir in skeleton) dir.create(dir,
-                                   recursive=TRUE,
-                                   showWarnings=FALSE)
+  for (dir in skeleton) {
+    dir.create(dir, recursive=TRUE, showWarnings=FALSE)
+  }
   
   roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {

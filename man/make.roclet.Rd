@@ -28,3 +28,4 @@ file has been parsed}
   \item{post.files}{a callback function with no arguments; called after every
 file has been parsed}
 }
+

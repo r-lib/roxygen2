@@ -25,10 +25,10 @@ pairwise <- function(list) {
   length <- length(list)
   if (length < 2)
     return(list())
-  length <- ifelse(is.odd(length),
+  length <- ifelse(length %% 2 == 1,
                    length - 1,
                    length)
   odds <- seq(1, length, 2)
   evens <- seq(2, length, 2)
-  zip.c(list[odds], list[evens])
+  zip(c, list[odds], list[evens])
 }

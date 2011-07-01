@@ -40,3 +40,4 @@ NULL
 
 roclet <- collate_roclet()
 \dontrun{roclet$parse.dir('example')}}
+

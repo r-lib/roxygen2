@@ -40,3 +40,4 @@ for an overview of roxygen tags.
 See \code{\link{roxygenize}} for an alternative to `R CMD roxygen'.}
 \examples{## To process a package in `pkg', run `R CMD roxygen pkg'; or:
 \dontrun{roxygenize('pkg')}}
+

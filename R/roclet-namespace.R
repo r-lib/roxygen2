@@ -130,13 +130,13 @@ ns_export <- function(tag, parms, all) {
   }
   
   if (!is.null(all$S4method)) {
-    exportMethod(NULL, all$S4method)
+    ns_exportMethod(NULL, all$S4method)
   } else if (!is.null(all$S4class)) {
-    exportClass(NULL, all$S4class)
+    ns_exportClass(NULL, all$S4class)
   } else if (!is.null(all$S4generic)){
-    exportMethod(NULL, all$S4generic)
+    ns_exportMethod(NULL, all$S4generic)
   } else if (!is.null(all$method)) {
-    directive("S3method", str_c(unlist(all$method), collapse = ","))
+    ns_S3method(parms = str_c(unlist(all$method), collapse = " "))
   } else {
     name <- all$name %||% all$assignee
     if (is.null(name)) {
@@ -151,7 +151,7 @@ ns_S3method <- function(tag, parms, all) {
   if (length(params) != 2) {
     warning("Invalid @S3method: ", parms, call. = FALSE)
   }
-  directive(tag, str_c(params, collapse = ","))
+  directive("S3method", str_c(quote_if_needed(params), collapse = ","))
 }
 ns_importFrom <- function(tag, parms, all) {
   params <- words(parms)

@@ -1,21 +1,14 @@
 #' @include parse.R
 NULL
 
-register.preref.parsers(parse.value,
-                        'include')
+register.preref.parsers(parse.value, 'include')
 
-#' Collate roclet topological sorts R files and records in Collate field of
-#' \file{DESCRIPTION}. 
+#' Topologically sort R files and record in Collate field.
 #'
 #' Each \code{@@include} tag should specify the filename of one intrapackage
 #' dependency; multiple \code{@@include} tags may be given.
 #'
-#' Contains the member function \code{parse} which parses an arbitrary number
-#' of files, and \code{parse.dir} which recursively parses a directory tree.
-#'
-#' @param package.dir the package's top directory
 #' @return Rd roclet
-#' @seealso \code{\link{make.roclet}}
 #' @examples
 #' #' `example-a.R', `example-b.R' and `example-c.R' reside
 #' #' in the `example' directory, with dependencies
@@ -25,7 +18,10 @@ register.preref.parsers(parse.value,
 #' NULL
 #'
 #' roclet <- collate_roclet()
-#' \dontrun{roclet$parse.dir('example')}
+#' \dontrun{
+#'   roc_proc(roclet, dir('example'))
+#'   roc_out(roclet, dir('example'), "example")
+#' }
 #' @export
 collate_roclet <- function() {
   new_roclet(list(), "collate")

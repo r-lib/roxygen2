@@ -9,5 +9,6 @@
 \description{
   Process roclet and capture results.
 }
+\seealso{\code{\link{roxygenise}} for user-friendly interface}
 \keyword{internal}
 

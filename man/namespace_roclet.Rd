@@ -9,13 +9,9 @@
 \alias{importClassesFrom}
 \alias{importMethodsFrom}
 \alias{export}
-\title{Namespace roclet builds NAMESPACE.}
-\arguments{
-  \item{package.dir}{the package's top directory
-the \var{outfile}}
-}
+\title{Build namespace.}
 \description{
-  Namespace roclet builds NAMESPACE.
+  Build namespace.
 }
 \details{\cite{Writing R Extensions}
   (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
@@ -65,5 +61,6 @@ NULL
 fun <- function() {}
 
 roclet <- namespace_roclet()
-\dontrun{roclet$parse('example.R')}}
+\dontrun{roc_proc(roclet, "example.R")}
+\dontrun{roc_out(roclet, "example.R", ".")}}
 

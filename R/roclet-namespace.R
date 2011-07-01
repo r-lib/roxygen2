@@ -1,21 +1,13 @@
 #' @include parse.R
 NULL
 
-register.preref.parsers(parse.default,
-                        'export')
+register.preref.parsers(parse.default, 'export')
 
-register.preref.parsers(parse.value,
-                        'exportClass',
-                        'exportMethod',
-                        'exportPattern',
-                        'S3method',
-                        'import',
-                        'importFrom',
-                        'importClassesFrom',
-                        'importMethodsFrom',
-                        'useDynLib')
+register.preref.parsers(parse.value, 'exportClass', 'exportMethod',
+  'exportPattern', 'S3method', 'import', 'importFrom', 'importClassesFrom',
+  'importMethodsFrom', 'useDynLib')
 
-#' Namespace roclet builds NAMESPACE.
+#' Build namespace.
 #' 
 #' \cite{Writing R Extensions}
 #' (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
@@ -60,8 +52,6 @@ register.preref.parsers(parse.value,
 #'                                   Extensions}.
 #' }
 #'
-#' @param package.dir the package's top directory
-#' the \var{outfile}
 #' @return Namespace roclet
 #' @examples
 #' #' An example file, example.R, which imports
@@ -74,7 +64,8 @@ register.preref.parsers(parse.value,
 #' fun <- function() {}
 #'
 #' roclet <- namespace_roclet()
-#' \dontrun{roclet$parse('example.R')}
+#' \dontrun{roc_proc(roclet, "example.R")}
+#' \dontrun{roc_out(roclet, "example.R", ".")}
 #' @export
 #' @aliases namespace_roclet exportClass exportMethod
 #' exportPattern S3method import importFrom importClassesFrom

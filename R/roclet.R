@@ -12,7 +12,9 @@ is.roclet <- function(x) inherits(x, "roclet")
 #' 
 #' @param roclet to use for processing
 #' @param input character vector of paths to files to process
+#' @seealso \code{\link{roxygenise}} for user-friendly interface
 #' @keywords internal
+#' @export
 roc_proc <- function(roclet, paths) {
   stopifnot(is.roclet(roclet))
   
@@ -28,6 +30,7 @@ roc_proc <- function(roclet, paths) {
 #' @param input character vector of paths to files to process
 #' @param output_path base directory in which to save output
 #' @keywords internal
+#' @seealso \code{\link{roxygenise}} for user-friendly interface
 #' @export
 roc_out <- function(roclet, input, path) {
   stopifnot(is.roclet(roclet))

@@ -1,21 +1,12 @@
 \name{collate_roclet}
 \alias{collate_roclet}
-\title{Collate roclet topological sorts R files and records in Collate field of...}
-\arguments{
-  \item{package.dir}{the package's top directory}
-}
+\title{Topologically sort R files and record in Collate field.}
 \description{
-  Collate roclet topological sorts R files and records in
-  Collate field of \file{DESCRIPTION}.
+  Topologically sort R files and record in Collate field.
 }
 \details{Each \code{@include} tag should specify the filename of
   one intrapackage dependency; multiple \code{@include}
-  tags may be given.
-
-  Contains the member function \code{parse} which parses an
-  arbitrary number of files, and \code{parse.dir} which
-  recursively parses a directory tree.}
-\seealso{\code{\link{make.roclet}}}
+  tags may be given.}
 \value{Rd roclet}
 \examples{#' `example-a.R', `example-b.R' and `example-c.R' reside
 #' in the `example' directory, with dependencies
@@ -25,5 +16,8 @@
 NULL
 
 roclet <- collate_roclet()
-\dontrun{roclet$parse.dir('example')}}
+\dontrun{
+roc_proc(roclet, dir('example'))
+roc_out(roclet, dir('example'), "example")
+}}
 

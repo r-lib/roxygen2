@@ -68,7 +68,7 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
   #' @param key the expression's key
   #' @param \dots the arguments
   #' @return \code{NULL}
-  parse.expression <- function(key, ...) {
+  process.expression <- function(key, ...) {
     expr <- Rd.expression(key, c(...))
     add.output(expr)
   }
@@ -112,9 +112,9 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
   #' \code{@@setGeneric}, assignee, etc.
-  #' @param partitum the pre-parsed elements
+  #' @param partitum the pre-processd elements
   #' @return \code{NULL}
-  parse.name <- function(partitum) {
+  process.name <- function(partitum) {
     name <- partitum$name %||% partitum$assignee %||% partitum$S4class %||% 
       partitum$S4method %||% partitum$S4generic
     
@@ -128,25 +128,25 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
     
     name <- str_trim(name)
     filename <<- sprintf('%s.Rd', name)
-    parse.expression('name', name)
+    process.expression('name', name)
 
     # If no aliases, use name
     if (is.null(partitum$aliases)) {
-      parse.expression('alias', name)
+      process.expression('alias', name)
     }
 
     title <- partitum$title %||% first.sentence(partitum$description) %||%
       name
-    parse.expression('title', title)
+    process.expression('title', title)
   }
   
   #' Prefer explicit \code{@@usage} to a \code{@@formals} list.
-  #' @param partitum the pre-parsed elements
+  #' @param partitum the pre-processd elements
   #' @return \code{NULL}
-  parse.usage <- function(partitum) {
+  process.usage <- function(partitum) {
     if (!is.null(partitum$usage)) {
       should_write()
-      parse.expression('usage', partitum$usage)   
+      process.expression('usage', partitum$usage)   
       return()   
     }
     
@@ -162,32 +162,32 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
     }
     usage <- str_c(fun_name, "(", args, ")")
     
-    parse.expression('usage', str_wrap(usage, width = 60, exdent = 4))
+    process.expression('usage', str_wrap(usage, width = 60, exdent = 4))
   }
 
-  #' Reset params; parse name and usage.
-  #' @param partitum the pre-parsed elements
+  #' Reset params; process name and usage.
+  #' @param partitum the pre-processd elements
   #' @return \code{NULL}
-  pre.parse <- function(partitum) {
-    parse.name(partitum)
-    parse.usage(partitum)
+  pre.process <- function(partitum) {
+    process.name(partitum)
+    process.usage(partitum)
   }
 
-  #' Parse params.
-  #' @param partitum the pre-parsed elements
+  #' process params.
+  #' @param partitum the pre-processd elements
   #' @return \code{NULL}
-  post.parse <- function(partitum) {
-    parse.arguments(partitum)
-    parse.examples(partitum)
+  post.process <- function(partitum) {
+    process.arguments(partitum)
+    process.examples(partitum)
   }
 
 
   #' Split the introductory matter into its description followed
   #' by details (separated by a blank line).
   #' @param key ignored
-  #' @param expressions the to-be-parsed description and details
+  #' @param expressions the to-be-processd description and details
   #' @return \code{NULL}
-  parse.description <- function(key, expressions) {
+  process.description <- function(key, expressions) {
     should_write()
     paragraphs <- strsplit(expressions[[1]], '\n\n', fixed=TRUE)[[1]]
     description <- paragraphs[[1]]
@@ -205,7 +205,7 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
     }
       
   }
-  parse.arguments <- function(partitum) {
+  process.arguments <- function(partitum) {
     params <- partitum[names(partitum) == "param"]
     if (length(params) == 0) return() 
 
@@ -223,16 +223,16 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
 
   #' If \code{@@examples} is provided, use that; otherwise, concatenate
   #' the files pointed to by each \code{@@example}.
-  #' @param partitum the parsed elements
+  #' @param partitum the processd elements
   #' @return \code{NULL}
-  parse.examples <- function(partitum) {
+  process.examples <- function(partitum) {
     if (!is.null(partitum$examples)) {
       should_write()
       
       ex <- partitum$examples
       ex <- gsub("([%\\])", "\\\\\\1", ex)
       ex <- gsub("\\\\dont", "\\dont", ex)
-      parse.expression('examples', ex)
+      process.expression('examples', ex)
     } 
     
     paths <- partitum[names(partitum) == "example"]
@@ -240,19 +240,19 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
       paths <- file.path(package.dir, str_trim(paths))
       examples <- unlist(lapply(readLines, paths))
       
-      parse.expression('examples', paste(examples, collapse = "\n"))
+      process.expression('examples', paste(examples, collapse = "\n"))
     }
   }
 
-  parse.todo <- function(key, value)
-    parse.expression('section', 'TODO', value)
+  process.todo <- function(key, value)
+    process.expression('section', 'TODO', value)
 
 
   roclet <- make.roclet(package.dir,
                         roxygen.dir, 
-                        parse.expression,
-                        pre.parse,
-                        post.parse, 
+                        process.expression,
+                        pre.process,
+                        post.process, 
                         post.files = save.Rd)
 
   roclet$register.default.parsers('references',
@@ -261,30 +261,24 @@ had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
                                   'seealso',
                                   'concept',
                                   'docType')
-  roclet$register.parser('description', parse.description)  
+  roclet$register.parser('description', process.description)  
   roclet$register.parser('return', function(key, expressions) {
-    parse.expression('value', expressions)
+    process.expression('value', expressions)
   })
 
-  parse.split <- function(key, expressions) {
+  process.split <- function(key, expressions) {
     pieces <- str_split(str_trim(expressions), "\\s+")[[1]]
-    lapply(pieces, parse.expression, key = key)
+    lapply(pieces, process.expression, key = key)
   }
   roclet$register.parser('aliases', function(key, expressions) {
-    parse.split('alias', expressions)
+    process.split('alias', expressions)
   })
   roclet$register.parser('keywords', function(key, expressions) {
-    parse.split('keyword', expressions)
+    process.split('keyword', expressions)
   })
-  roclet$register.parser('TODO', parse.todo)
+  roclet$register.parser('TODO', process.todo)
 
   roclet
-}
-
-first.source.line <- function(partitum) {
-  srcfile <- srcfile(partitum$srcref$filename)
-  first.line <- partitum$srcref$lloc[[1]]
-  getSrcLines(srcfile, first.line, first.line)
 }
 
 # @note Doesn't work recursively!

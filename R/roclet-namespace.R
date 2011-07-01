@@ -105,7 +105,7 @@ roc_output.namespace <- function(roclet, results, path) {
   old <- readLines(NAMESPACE)
   
   if (!identical(new, old)) {
-    message("Updating namespace directives")
+    cat("Updating namespace directives\n")
     writeLines(new, NAMESPACE)
   }
 }

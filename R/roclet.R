@@ -20,9 +20,7 @@ roc_proc <- function(roclet, paths, base_path) {
   stopifnot(is.roclet(roclet))
   
   parsed <- parse.files(paths)
-  # Remove srcrefs with no attached roxygen comments
-  contents <- Filter(function(x) length(x) > 1, parsed)
-  roc_process(roclet, contents, base_path)
+  roc_process(roclet, parsed, base_path)
 } 
 
 #' Process roclet and output results.

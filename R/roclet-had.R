@@ -53,6 +53,9 @@ had_roclet <- function() {
 
 #' @S3method roc_process had
 roc_process.had <- function(roclet, partita, base_path) {
+  # Remove srcrefs with no attached roxygen comments
+  partita <- Filter(function(x) length(x) > 1, partita)
+  
   topics <- list()
   for (partitum in partita) {
     has_rd <- any(names(partitum) %in% c("description", "param", "return",

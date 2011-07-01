@@ -32,19 +32,19 @@ roc_process.collate <- function(roclet, partita, base_path) {
   vertices <- make_vertices()
   
   for (partitum in partita) {
-    file <- basename(partitum$srcref$filename)
+    file <- base_path(partitum$srcref$filename, base_path)
     vertex <- vertices$add(file)
-
-    if (!is.null(partitum$include)) {
-      file <- str_trim(file)
-      vertices$add(file)
-      vertices$add_ancestor(vertex, file)
+    
+    includes <- partitum[names(partitum) == "include"]
+    if (length(includes) > 0) {
+      for (include in includes) {
+        vertices$add_ancestor(vertex, include)
+      }
     }
   }
 
   sorted <- vertices$topological_sort()
-  names <- basename(sapply(sorted, function(x) x$file))
-  paste(sprintf("'%s'", names), collapse = " ")
+  unique(basename(sapply(sorted, function(x) x$file)))
 }
                                   
 #' @S3method roc_output collate
@@ -52,7 +52,7 @@ roc_output.collate <- function(roclet, results, base_path) {
   DESCRIPTION <- file.path(base_path, "DESCRIPTION")
   old <- read.description(DESCRIPTION)
   new <- old
-  new$Collate <- results
+  new$Collate <- str_c("'", results, "'", collapse = " ")
   write.description(new, DESCRIPTION)
   
   if (!identical(old, read.description(DESCRIPTION))) {
@@ -60,12 +60,19 @@ roc_output.collate <- function(roclet, results, base_path) {
   }    
 }
 
+base_path <- function(path, base) {
+  path <- normalizePath(path)
+  base <- normalizePath(base)
+  
+  str_replace(path, fixed(str_c(base, "/")), "")
+}
+
 make_vertices <- function() {
   vertices <- NULL
 
   make.vertex <- function(file) {
-    vertex <- new.env(parent=emptyenv())
-    vertex$file <- str_trim(file)
+    vertex <- new.env(parent = emptyenv())
+    vertex$file <- file
     vertex$discovered <- FALSE
     vertex$ancestors <- NULL
     vertex
@@ -73,8 +80,7 @@ make_vertices <- function() {
 
   maybe.append.vertex <- function(file) {
     if (is.null(vertices[[file]])) {
-      vertices <<- append(vertices, 
-        as.list(structure(c(make.vertex(file)), names=file)))
+      vertices[[file]] <<- make.vertex(file)
     }
     vertices[[file]]
   }
@@ -82,20 +88,16 @@ make_vertices <- function() {
   member <- function(ancestor, ancestors) {
     for (vertex in ancestors)
       if (identical(ancestor, vertex))
-        return(TRUE)
+        TRUE
     FALSE
   }
   
-  get_vertex <- function(file) {
-    vertices[[file]]
-  }
-
   maybe.append.ancestor <- function(predecessor, ancestor_name) {
-    ancestor <- vertices[[ancestor_name]]
+    ancestor <- maybe.append.vertex(ancestor_name)
     
-    if (!member(ancestor, predecessor$ancestors))
-      predecessor$ancestors <-
-        append(ancestor, predecessor$ancestors)
+    if (!member(ancestor, predecessor$ancestors)) {
+      predecessor$ancestors <- append(ancestor, predecessor$ancestors)
+    }
   }
 
 
@@ -103,14 +105,19 @@ make_vertices <- function() {
     sorted <- NULL
     visit <- function(predecessor) {
       predecessor$discovered <- TRUE
-      for (ancestor in predecessor$ancestors)
-        if (!ancestor$discovered)
+      for (ancestor in predecessor$ancestors) {
+        if (!ancestor$discovered) {
           visit(ancestor)
+        }
+      }
       sorted <<- append(sorted, predecessor)
     }
-    for (vertex in vertices)
-      if (!vertex$discovered)
-        visit(vertex)
+    
+    for (vertex in vertices) {
+      if (!vertex$discovered) {
+        visit(vertex)        
+      }
+    }
 
     sorted
   }

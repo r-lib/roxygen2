@@ -61,13 +61,9 @@ had_roclet <- function(package.dir,
   #' @param \dots the arguments
   #' @return A string containing the key and arguments
   #' in LaTeX-like gestalt.
-  Rd.expression <- function(key, ...)
-    sprintf('\\%s%s\n',
-            key,
-            Reduce.paste(function(expression)
-                         sprintf('{%s}', str_trim(expression)),
-                         c(...),
-                         ''))
+  Rd.expression <- function(key, ...) {
+    str_c("\\", key, str_c("{", str_trim(c(...)), "}", collapse = ""), "\n")                         
+  }
   
   
   #' Push the Rd-expression to standard out (or current

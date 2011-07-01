@@ -102,16 +102,3 @@ strmap <- function(proc, sep, string) {
               sep=sep)
   continue(string)
 }
-
-
-# Ad-hoc abstraction to paste processed list-elements together.
-# @param proc the procedure to apply to the elements
-# @param elts the elements to be processed
-# @param sep the glue to joined the processed elements
-# @return The processed elements as a glued string
-Reduce.paste <- function(proc, elts, sep)
-  Reduce(function(parsed, elt)
-         Curry(paste, sep=sep)
-         (parsed, proc(elt)),
-         elts,
-         NIL.STRING)

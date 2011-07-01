@@ -1,59 +1,47 @@
 context("Namespace")
-
-expect_namespace <- function(roxygen, expected) {
-  output <- capture_roclet_output(namespace_roclet("."), roxygen)
-  expect_equal(output, expected)
-}
+roc <- namespace_roclet()
 
 test_that("export detects object name", {
-  expect_namespace("#' @export
-                          a <- 2",
-                         expected='export(a)')  
+  out <- roc_proc_text(roc, "#' @export\na <- function(){}")
+  expect_equal(out, 'export(a)')
 })
 
 test_that("export parameter overrides default", {
-  expect_namespace("#' @export b
-                          a <- 2",
-                         expected='export(b)')  
+  out <- roc_proc_text(roc, "#' @export b\na <- function(){}")
+  expect_equal(out, 'export(b)')
 })
 
 test_that("export detects S4 class", {
-  expect_namespace("#' @export
-                          setClass('a')",
-                         expected='exportClasses(a)')  
+  out <- roc_proc_text(roc, "#' @export\nsetClass('a')")
+  expect_equal(out, 'exportClasses(a)')
 })
 
-
 test_that("exportClass overrides default class name", {
-  expect_namespace("#' @exportClass b
-                          setClass('a')",
-                         expected='exportClasses(b)')  
+  out <- roc_proc_text(roc, "#' @exportClass b\nsetClass('a')")
+  expect_equal(out, 'exportClasses(b)')
 })
 
 test_that("export detects method name", {
-  expect_namespace("#' @export
-                          setMethod('b', 'a')",
-                         expected='exportMethods(b)')  
+  out <- roc_proc_text(roc, "#' @export\nsetMethod('b', 'a')")
+  expect_equal(out, 'exportMethods(b)')  
 })
 
 test_that("exportMethod overrides default method name", {
-  expect_namespace("#' @exportMethod c
-                          setMethod('b', 'a')",
-                         expected='exportMethods(c)')  
+  out <- roc_proc_text(roc, "#' @exportMethod c\nsetMethod('b', 'a')")
+  expect_equal(out, 'exportMethods(c)')  
 })
 
 test_that("other namespace tags produce correct output", {
-  expect_namespace("#' @exportPattern test
-                          #' @S3method test test
-                          #' @import test
-                          #' @importFrom test test
-                          #' @importClassesFrom test test
-                          #' @importMethodsFrom test test
-                          NULL",
-                         expected=c("exportPattern(test)",
-                           "S3method(test, test)",
-                           "import(test)",
-                           "importFrom(test, test)",
-                           "importClassesFrom(test, test)",
-                           "importMethodsFrom(test, test)"))  
+  out <- roc_proc_text(roc, "
+    #' @exportPattern test
+    #' @S3method test test
+    #' @import test
+    #' @importFrom test test
+    #' @importClassesFrom test test
+    #' @importMethodsFrom test test
+    NULL")
+
+  expect_equal(sort(out), sort(c("exportPattern(test)", "S3method(test,test)",
+    "import(test)", "importFrom(test,test)", "importClassesFrom(test,test)",
+    "importMethodsFrom(test,test)")))
 })

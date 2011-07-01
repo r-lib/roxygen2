@@ -29,18 +29,40 @@ register.preref.parsers(parse.name.description,
 register.preref.parsers(parse.name,
                         'docType')
 
-register.srcref.parser('setClass',
-                       function(pivot, expression)
-                       list(S4class=expression[[1]]))
+register.srcref.parser('<-', function(call) {
+  
+  assignee_string <- as.character(call[[2]])
+  
+  if (length(call[[3]]) <= 1) return(NULL)
+  
+  while (deparse(call[[3]][[1]]) == "<-") {
+    call[[3]] <- call[[3]][[3]]
+    if (length(call[[3]]) == 1) return(NULL)
+  }
+  
+  if (!identical(call[[3]][[1]], as.name("function"))) {
+    return(list(assignee = assignee_string))
+  }
 
-register.srcref.parser('setGeneric',
-                       function(pivot, expression)
-                       list(S4generic=expression[[1]]))
+  formals <- as.list(call[[3]][[2]])  
+  
+  list(assignee = assignee_string, formals = formals)
+})
 
-register.srcref.parser('setMethod',
-                       function(pivot, expression)
-                       list(S4method=expression[[1]],
-                            signature=expression[[2]]))
+
+register.srcref.parser('setClass', function(call) {
+  list(S4class = as.character(call$Class))
+})
+
+register.srcref.parser('setGeneric', function(call) {
+  list(S4generic = as.character(call$name))
+})
+
+register.srcref.parser('setMethod', function(call) {
+  list(
+    S4method = as.character(call$f), 
+    signature = as.character(call$signature))
+})
 
 #' \itemize{
 #'  \item \code{@@merge topicname}: Merges contents of this topic with

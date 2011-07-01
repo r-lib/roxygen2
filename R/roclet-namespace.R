@@ -82,18 +82,17 @@ roc_process.namespace <- function(roclet, partita, base_path) {
       process_tag(partitum, "export", ns_export),
       process_tag(partitum, "S3method", ns_S3method),
       process_tag(partitum, "importFrom", ns_importFrom),
-      process_tag(partitum, 'export', ns_export),
       process_tag(partitum, 'exportClass', ns_exportClass),
       process_tag(partitum, 'exportMethod', ns_exportMethod),
       process_tag(partitum, 'exportPattern', ns_default),
       process_tag(partitum, 'import', ns_default),
-      process_tag(partitum, 'importClassesFrom', ns_default),
-      process_tag(partitum, 'importMethodsFrom', ns_default),
+      process_tag(partitum, 'importClassesFrom', ns_collapse),
+      process_tag(partitum, 'importMethodsFrom', ns_collapse),
       process_tag(partitum, 'useDynLib', ns_default)
     )
     ns <- c(ns, ns_one)
   }
-  ns
+  sort(unique(ns))
 }
 
 
@@ -101,12 +100,11 @@ roc_process.namespace <- function(roclet, partita, base_path) {
 roc_output.namespace <- function(roclet, results, base_path) { 
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   
-  new <- sort(unique(results))
   old <- readLines(NAMESPACE)
   
-  if (!identical(new, old)) {
+  if (!identical(results, old)) {
     cat("Updating namespace directives\n")
-    writeLines(new, NAMESPACE)
+    writeLines(results, NAMESPACE)
   }
 }
 
@@ -118,6 +116,11 @@ ns_directive <- function(tag, parms) {
 ns_default <- function(tag, parms, all) {
   ns_directive(tag, words(parms))
 }
+ns_collapse <- function(tag, parms, all) {
+  ns_directive(tag, str_c(words(parms), collapse = ","))
+}
+
+
 ns_exportClass <- function(tag, parms, all) {
   ns_directive('exportClasses', parms)
 }
@@ -140,7 +143,8 @@ ns_export <- function(tag, parms, all) {
   } else {
     name <- all$name %||% all$assignee
     if (is.null(name)) {
-      warning('Empty export directive')
+      warning('Empty export directive', call. = FALSE)
+      NULL
     } else {
       ns_directive('export', quote_if_needed(name))
     }
@@ -163,7 +167,7 @@ process_tag <- function(partitum, tag, f) {
   matches <- partitum[names(partitum) == tag]
   if (length(matches) == 0) return()
   
-  unlist(lapply(matches, f, tag = tag, all = partitum))
+  unlist(lapply(matches, f, tag = tag, all = partitum), use.names = FALSE)
 }
   
 words <- function(x) {

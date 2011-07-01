@@ -136,13 +136,6 @@ parse.name <- function(key, name) {
 parse.toggle <- function(key, rest)
   as.list(structure(TRUE, names=key))
 
-# By default, srcrefs are ignored; this parser returns \code{list()}.
-#
-# @param pivot the parsing pivot
-# @param expression the expression to be parsed
-# @return \code{list()}
-parse.srcref <- function(pivot, expression) list()
-
 # Default parser-lookup; if key not found, return
 # the default parser specified.
 # @param table the parser table from which to look
@@ -230,35 +223,6 @@ parse.ref.preref <- function(ref, ...) {
   }
 } 
 
-# Parse a function call, paying special attention to
-# assignments by \code{<-} or \code{=}.
-#
-# @param expressions the expression to search through
-# @return List of formals and assignee in case of
-# assignment, the processed expression in case of
-# non-assigning function calls (see \code{parse.srcref}).
-parse.call <- function(expression) {
-  if (!is.call(expression)) return(NULL)
-  if (length(expression) < 3) return(NULL)
-
-  assignee_string <- as.character(expression[[2]])
-  
-  if (length(expression[[3]]) <= 1) return(NULL)
-  
-  while (deparse(expression[[3]][[1]]) == "<-") {
-    expression[[3]] <- expression[[3]][[3]]
-    if (length(expression[[3]]) == 1) return(NULL)
-  }
-
-  if (!identical(expression[[3]][[1]], as.name("function"))) {
-    return(list(assignee = assignee_string))
-  }
-
-  formals <- as.list(expression[[3]][[2]])  
-  
-  list(assignee = assignee_string, formals = formals)
-}
-
 #' Parse a srcref
 #'
 #' @method parse.ref srcref
@@ -269,16 +233,30 @@ parse.call <- function(expression) {
 #' @export
 parse.ref.srcref <- function(ref, ...) {
   srcfile <- attributes(ref)$srcfile
-  srcref <- list(srcref=list(filename=srcfile$filename,
-                   lloc=as.vector(ref)))
+  srcref <- list(srcref = 
+    list(filename = srcfile$filename, lloc = as.vector(ref)))
+
+  # Get code from source and parse to extract first call
   lines <- getSrcLines(srcfile, ref[[1]], ref[[3]])
+  call <- parse(text = lines)[[1]]
   
-  # Lines will only ever contain a single expression, so we'll just focus
-  # on first element.
-  expression <- parse(text=lines)[[1]]
-  parsed <- parse.call(expression)
-    
-  append(parsed, srcref)
+  if (!is.call(call)) {
+    return(c(srcref, list(value = deparse(call))))
+  }
+
+  # Dispatch to registered srcref parsers based on call
+  name <- as.character(call[[1]])
+  
+  parser <- srcref.parsers[[name]]
+  if (is.null(parser)) return(srcref)
+  
+  f <- eval(call[[1]])
+  # If not a primitive function, use match.call so argument handlers
+  # can use argument names
+  if (!is.primitive(f)) {
+    call <- match.call(eval(call[[1]]), call)    
+  }
+  c(srcref, parser(call))
 }
 
 # Parse each of a list of preref/srcref pairs.

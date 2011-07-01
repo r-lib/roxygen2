@@ -65,7 +65,8 @@ make.roclet <- function(package.dir,
 
   roclet$parse <- function(paths) {
     parsed <- parse.files(paths)
-    roclet$parse.parsed(parsed)
+    contents <- Filter(function(x) length(x) > 1, parsed)
+    roclet$parse.parsed(contents)
   }
     
     

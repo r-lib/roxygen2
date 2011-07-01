@@ -104,60 +104,12 @@ had_roclet <- function(package.dir,
   has_contents <- list()
   
   add.output <- function(expr) {
-    if (is.null(filename)) stop("Trying to write to unknown file")
+    if (is.null(filename)) return()
    
     output[[filename]] <- c(output[[filename]], expr)
   }
   should_write <- function() {
     has_contents[filename] <<- TRUE
-  }
-
-  reset <- function() {
-    filename <<- NULL
-  }
-
-  first.source.line <- function(partitum) {
-    srcfile <- srcfile(partitum$srcref$filename)
-    first.line <- partitum$srcref$lloc[[1]]
-    getSrcLines(srcfile, first.line, first.line)
-  }
-
-  #' What does the noop look like?
-  NULL.STATEMENT <- 'NULL'
-
-  #' Does the statement contain a noop-like?
-  #' @param source.line the line of source code
-  #' @return Whether the statement contains a noop
-  is.null.statement <- function(source.line)
-    length(grep(NULL.STATEMENT, source.line) > 0)
-
-  #' @note Doesn't work recursively!
-  de.tex <- function(string)
-    gsub('\\\\[^{]*\\{([^}]*)(}|)',
-         '\\1',
-         string,
-         perl=TRUE)
-
-  #' First sentence of a string, defined as first
-  #' period, question mark or newline.
-  #' @param description the string to be first-sentenced
-  #' @return The first sentence
-  first.sentence <- function(description) {
-    description <- de.tex(description)
-    r <- regexpr('[^.?\n]*(\\.(?!\\w)|\\?|\n|)',
-                 description,
-                 perl=TRUE)
-    sentence <- substr(description, r, attr(r, 'match.length'))
-    if (length(sentence) == 0 || is.null.string(sentence))
-      NULL
-    else {
-      chars <- nchar(sentence)
-      last.char <- substr(sentence, chars, chars)
-      if (last.char == '.' || last.char == '?')
-        sentence
-      else
-        paste(str_trim(sentence), '...', sep='')
-    }
   }
 
   #' If \code{@@title} is specified, use it; or
@@ -185,30 +137,25 @@ had_roclet <- function(package.dir,
   #' @return \code{NULL}
   parse.name <- function(partitum) {
     name <- guess.name(partitum)
+    
+    if (is.null(name)) {
+      # No name, so essentially skip this file.  Do this silently because
+      # of other roclets: e.g. collate and namespace
+      filename <<- NULL
+      return()
+    }
+    
+    name <- str_trim(name)
+    filename <<- sprintf('%s.Rd', name)
+    parse.expression('name', name)
 
-    if (is.null(name) && !is.null(subdir)) {
-      filename <<- partitum$srcref$filename
-      first.line <- partitum$srcref$lloc[[1]]
-      first.source.line <- first.source.line(partitum)
-      # if (!is.null.statement(first.source.line))
-      #   warning(sprintf(paste('No name found for the',
-      #                         'following expression in %s',
-      #                         'line %s:\n  `%s . . .\''),
-      #                   filename,
-      #                   first.line,
-      #                   first.source.line),
-      #           immediate.=TRUE)
-    } else if (!is.null(name)) {
-      name <- str_trim(name)
-      filename <<- sprintf('%s.Rd', name)
-      parse.expression('name', name)
-      if (is.null(partitum$aliases))
-        parse.expression('alias', name)
+    # If no aliases, use name
+    if (is.null(partitum$aliases)) {
+      parse.expression('alias', name)
     }
 
-    if ((!is.null(name) || !is.null(partitum$title)) &&
-        !is.null(title <- parse.title(partitum, name)))
-      parse.expression('title', title)
+    title <- parse.title(partitum, name)
+    parse.expression('title', title)
   }
   
   parse.function.name <- function(partitum) {
@@ -250,8 +197,6 @@ had_roclet <- function(package.dir,
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   pre.parse <- function(partitum) {
-    reset()
-    
     parse.name(partitum)
     parse.usage(partitum)
   }
@@ -264,24 +209,6 @@ had_roclet <- function(package.dir,
     parse.examples(partitum)
   }
 
-  roclet <- make.roclet(package.dir,
-                        roxygen.dir, 
-                        parse.expression,
-                        pre.parse,
-                        post.parse, 
-                        post.files = save.Rd)
-
-  roclet$register.default.parsers('references',
-                                  'note',
-                                  'author',
-                                  'seealso',
-                                  'concept',
-                                  'docType')
-
-  roclet$register.parser('return',
-                         function(key, expressions)
-                         parse.expression('value', expressions))
-
   #' Split a plural into its constituent singulars.
   #' @param key the singular key
   #' @param expressions the plurality of expressions
@@ -293,14 +220,6 @@ had_roclet <- function(package.dir,
     if (!is.null.string(rest))
       parse.split(key, rest)
   }
-
-  roclet$register.parser('aliases',
-                         function(key, expressions)
-                         parse.split('alias', expressions))
-
-  roclet$register.parser('keywords',
-                         function(key, expressions)
-                         parse.split('keyword', expressions))
 
   #' Split the introductory matter into its description followed
   #' by details (separated by a blank line).
@@ -325,8 +244,6 @@ had_roclet <- function(package.dir,
     }
       
   }
-  roclet$register.parser('description', parse.description)
-  
   parse.arguments <- function(partitum) {
     params <- partitum[names(partitum) == "param"]
     if (length(params) == 0) return() 
@@ -367,7 +284,70 @@ had_roclet <- function(package.dir,
   parse.todo <- function(key, value)
     parse.expression('section', 'TODO', value)
 
+
+  roclet <- make.roclet(package.dir,
+                        roxygen.dir, 
+                        parse.expression,
+                        pre.parse,
+                        post.parse, 
+                        post.files = save.Rd)
+
+  roclet$register.default.parsers('references',
+                                  'note',
+                                  'author',
+                                  'seealso',
+                                  'concept',
+                                  'docType')
+  roclet$register.parser('description', parse.description)  
+  roclet$register.parser('return', function(key, expressions) {
+    parse.expression('value', expressions)
+  })
+  roclet$register.parser('aliases', function(key, expressions) {
+    parse.split('alias', expressions)
+  })
+  roclet$register.parser('keywords', function(key, expressions) {
+    parse.split('keyword', expressions)
+  })
   roclet$register.parser('TODO', parse.todo)
 
   roclet
 }
+
+first.source.line <- function(partitum) {
+  srcfile <- srcfile(partitum$srcref$filename)
+  first.line <- partitum$srcref$lloc[[1]]
+  getSrcLines(srcfile, first.line, first.line)
+}
+
+# @note Doesn't work recursively!
+de.tex <- function(string)
+  gsub('\\\\[^{]*\\{([^}]*)(}|)',
+       '\\1',
+       string,
+       perl=TRUE)
+
+# First sentence of a string, defined as first
+# period, question mark or newline.
+# @param description the string to be first-sentenced
+# @return The first sentence
+first.sentence <- function(description) {
+  description <- de.tex(description)
+  r <- regexpr('[^.?\n]*(\\.(?!\\w)|\\?|\n|)',
+               description,
+               perl=TRUE)
+  sentence <- substr(description, r, attr(r, 'match.length'))
+  if (length(sentence) == 0 || is.null.string(sentence))
+    NULL
+  else {
+    chars <- nchar(sentence)
+    last.char <- substr(sentence, chars, chars)
+    if (last.char == '.' || last.char == '?')
+      sentence
+    else
+      paste(str_trim(sentence), '...', sep='')
+  }
+}
+
+# warning("All roxygen elements must have name: ",
+#   partitum$srcref$filename, ":", partitum$srcref$lloc[1], ":",
+#   partitum$srcref$lloc[2], call. = FALSE)

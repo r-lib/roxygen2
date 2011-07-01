@@ -185,17 +185,14 @@ parse.ref.list <- function(ref, ...)
 #' @return List containing the parsed preref
 #' @export
 parse.ref.preref <- function(ref, ...) {
-  lines <- Map(str_trim, getSrcLines(attributes(ref)$srcfile,
-                                      ref[[1]],
-                                      ref[[3]]))
-  delimited.lines <-
-    Filter(function(line) grep(LINE.DELIMITER, line), lines)
-  ## Take next word after delimiter.
-  trimmed.lines <- Map(strcdr, delimited.lines)
-  joined.lines <- do.call(paste, c(trimmed.lines, sep='\n'))
-  if (is.nil(joined.lines))
+  lines <- str_trim(getSrcLines(attributes(ref)$srcfile, ref[[1]], ref[[3]]))
+  delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
+  trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
+
+  if (is.nil(trimmed.lines))
     nil
   else {
+    joined.lines <- str_c(trimmed.lines, collapse = '\n')
     ## Thanks to Fegis at #regex on Freenode for the
     ## lookahead/lookbehind hack; as he notes, however, "it's not
     ## proper escaping though... it will not split a@@@b."
@@ -293,6 +290,7 @@ parse.file <- function(file) {
 parse.srcfile <- function(srcfile) {
   srcrefs <- attributes(parse(srcfile$filename,
                               srcfile=srcfile))$srcref
+                         
   if (length(srcrefs) > 0)
     parse.refs(zip.list(prerefs(srcfile, srcrefs), srcrefs))
   else

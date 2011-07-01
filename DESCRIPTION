@@ -18,7 +18,6 @@ Depends:
 Collate:
     'description.R'
     'functional.R'
-    'had-utils.R'
     'list.R'
     'parse-registry.R'
     'parse.R'

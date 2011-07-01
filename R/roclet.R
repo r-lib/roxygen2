@@ -59,9 +59,8 @@ make.roclet <- function(package.dir, process, output) {
     output(results)
   }
 
-  roclet$parse.dir <- function() {
-    r.dir <- file.path(package.dir, "R")
-    files <- as.list(dir(r.dir, pattern = '\\.(R|r)$', full.names = TRUE))
+  roclet$parse.dir <- function(path = file.path(package.dir, "R")) {
+    files <- as.list(dir(path, pattern = '\\.(R|r)$', full.names = TRUE))
     roclet$parse(files)
   }
 

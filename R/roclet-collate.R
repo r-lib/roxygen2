@@ -14,14 +14,6 @@ register.preref.parsers(parse.value,
 #' of files, and \code{parse.dir} which recursively parses a directory tree.
 #'
 #' @param package.dir the package's top directory
-#' @param roxygen.dir where to create roxygen output; defaults to
-#' \file{package.roxygen}.
-#' @param merge.file \file{DESCRIPTION} file with which to merge directive;
-#' or \code{NULL} for none
-#' @param target.file whither to \code{cat} directive (whether merged or
-#' not); blank line is standard out
-#' @param verbose whether to describe what we're doing with the
-#' target.file
 #' @return Rd roclet
 #' @seealso \code{\link{make.roclet}}
 #' @examples
@@ -35,19 +27,44 @@ register.preref.parsers(parse.value,
 #' roclet <- collate_roclet()
 #' \dontrun{roclet$parse.dir('example')}
 #' @export
-collate_roclet <- function(package.dir, 
-                                roxygen.dir, 
-                                merge.file=NULL,
-                                target.file=NULL,
-                                verbose=TRUE) {
+collate_roclet <- function(package.dir) {
                                   
-  if (is.null(merge.file)) {
-    merge.file <- file.path(package.dir, "DESCRIPTION")
-  }
-  if (is.null(target.file)) {
-    target.file <- file.path(roxygen.dir, "DESCRIPTION")
+  vertices <- make_vertices()
+
+  process <- function(partita) {
+    for (partitum in partita) {
+      file <- basename(partitum$srcref$filename)
+      vertex <- vertices$add(file)
+
+      if (!is.null(partitum$include)) {
+        file <- str_trim(file)
+        vertices$add(file)
+        vertices$add_ancestor(vertex, file)
+      }
+    }
+
+    sorted <- vertices$topological_sort()
+    names <- basename(sapply(sorted, function(x) x$file))
+    paste(sprintf("'%s'", names), collapse = " ")
   }
   
+  output <- function(results) {
+    DESCRIPTION <- file.path(package.dir, "DESCRIPTION")
+    old <- read.description(DESCRIPTION)
+    new <- old
+    new$Collate <- results
+    write.description(new, DESCRIPTION)
+    
+    if (!identical(old, read.description(DESCRIPTION))) {
+      cat('Updating collate directive in ', DESCRIPTION, "\n")
+    }    
+  }
+  
+  roclet <- make.roclet(package.dir, process, output)
+  roclet
+}
+
+make_vertices <- function() {
   vertices <- NULL
 
   make.vertex <- function(file) {
@@ -58,41 +75,35 @@ collate_roclet <- function(package.dir,
     vertex
   }
 
-  maybe.append.vertex <- function(file)
-    if (is.null(vertices[[file]]))
-      vertices <<- append(vertices, as.list(structure(c(make.vertex(file)),
-          names=file)))
+  maybe.append.vertex <- function(file) {
+    if (is.null(vertices[[file]])) {
+      vertices <<- append(vertices, 
+        as.list(structure(c(make.vertex(file)), names=file)))
+    }
+    vertices[[file]]
+  }
 
   member <- function(ancestor, ancestors) {
     for (vertex in ancestors)
       if (identical(ancestor, vertex))
-        TRUE
+        return(TRUE)
     FALSE
   }
+  
+  get_vertex <- function(file) {
+    vertices[[file]]
+  }
 
-  maybe.append.ancestor <- function(predecessor, ancestor)
+  maybe.append.ancestor <- function(predecessor, ancestor_name) {
+    ancestor <- vertices[[ancestor_name]]
+    
     if (!member(ancestor, predecessor$ancestors))
       predecessor$ancestors <-
         append(ancestor, predecessor$ancestors)
-
-  current.predecessor <- NULL
-
-  parse.include <- function(key, file) {
-    file <- str_trim(file)
-    maybe.append.vertex(file)
-    ancestor <- vertices[[file]]
-    maybe.append.ancestor(current.predecessor,
-                          ancestor)
-  }
-  
-  pre.parse <- function(partitum) {
-    file <- basename(partitum$srcref$filename)
-    maybe.append.vertex(file)
-    vertex <- vertices[[file]]
-    current.predecessor <<- vertex
   }
 
-  topological.sort <- function(vertices) {
+
+  topological.sort <- function() {
     sorted <- NULL
     visit <- function(predecessor) {
       predecessor$discovered <- TRUE
@@ -107,35 +118,9 @@ collate_roclet <- function(package.dir,
 
     sorted
   }
-
-  merge <- function(files) {
-    if (verbose && !is.null.string(target.file))
-      cat(sprintf('Merging collate directive with %s to %s',
-                  merge.file,
-                  target.file), '\n')
-    
-    desc <- read.description(merge.file)
-    desc$Collate <- files
-    write.description(desc, target.file)
-  }
-
-  post.files <- function() {
-    sorted <- topological.sort(vertices)
-    names <- basename(sapply(sorted, function(x) x$file))
-    name_string <- paste(sprintf("'%s'", names), collapse = " ")
-    
-    if (!is.null(merge.file)) {
-      merge(name_string)
-    } else {
-      cat.description('Collate', name_string, file = target.file)
-    }
-  }
-
-  roclet <- make.roclet(package.dir, roxygen.dir, parse.include,
-                        pre.parse=pre.parse,
-                        post.files=post.files)
-
-  roclet$register.default.parser('include')
-
-  roclet
+  
+  list(add = maybe.append.vertex, 
+     add_ancestor = maybe.append.ancestor, 
+     topological_sort = topological.sort
+  )
 }

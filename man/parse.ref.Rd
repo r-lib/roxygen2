@@ -2,14 +2,13 @@
 \alias{parse.ref}
 \title{Parse either srcrefs, prerefs or pairs of the same.}
 \usage{parse.ref(ref, ...)}
-
+\arguments{
+  \item{ref}{the srcref, preref or pair of the same}
+  \item{\dots}{ignored}
+}
 \description{
   Parse either srcrefs, prerefs or pairs of the same.
 }
 \value{List containing the parsed srcref/preref}
 \keyword{internal}
-\arguments{
-  \item{ref}{the srcref, preref or pair of the same}
-  \item{\dots}{ignored}
-}
 

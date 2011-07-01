@@ -2,7 +2,10 @@
 \alias{parse.default}
 \title{Default parser which simply emits the key and expression;...}
 \usage{parse.default(key, rest)}
-
+\arguments{
+  \item{key}{the parsing key}
+  \item{rest}{the expression to be parsed}
+}
 \description{
   Default parser which simply emits the key and expression;
   used for elements with optional values (like
@@ -11,8 +14,4 @@
 }
 \value{A list containing the key and expression (possibly null)}
 \keyword{internal}
-\arguments{
-  \item{key}{the parsing key}
-  \item{rest}{the expression to be parsed}
-}
 

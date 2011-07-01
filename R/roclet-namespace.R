@@ -169,7 +169,6 @@ namespace_roclet <- function(package.dir) {
   }
   
   make.roclet(package.dir, process, output)
-
 }
 
 words <- function(x) {

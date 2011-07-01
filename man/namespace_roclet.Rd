@@ -1,14 +1,24 @@
 \name{namespace_roclet}
+\alias{namespace_roclet}
+\alias{exportClass}
+\alias{exportMethod}
+\alias{exportPattern}
+\alias{S3method}
+\alias{import}
+\alias{importFrom}
+\alias{importClassesFrom}
+\alias{importMethodsFrom}
+\alias{export}
 \title{Namespace roclet builds NAMESPACE.}
-\usage{namespace_roclet(package.dir, roxygen.dir, outfile = NULL,
-    verbose = TRUE)}
-
+\usage{namespace_roclet(package.dir)}
+\arguments{
+  \item{package.dir}{the package's top directory
+the \var{outfile}}
+}
 \description{
   Namespace roclet builds NAMESPACE.
 }
-
-\details{
-  \cite{Writing R Extensions}
+\details{\cite{Writing R Extensions}
   (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
   for details.
 
@@ -44,27 +54,8 @@
   with formal classes and methods} from \cite{Writing R
   Extensions}. \item \code{@importMethodsFrom}: See
   \dQuote{1.6.6 Name spaces with formal classes and
-  methods} from \cite{Writing R Extensions}. }
-}
+  methods} from \cite{Writing R Extensions}. }}
 \value{Namespace roclet}
-\alias{namespace_roclet}
-\alias{exportClass}
-\alias{exportMethod}
-\alias{exportPattern}
-\alias{S3method}
-\alias{import}
-\alias{importFrom}
-\alias{importClassesFrom}
-\alias{importMethodsFrom}
-\alias{export}
-\arguments{
-  \item{package.dir}{the package's top directory}
-  \item{roxygen.dir}{where to create roxygen output; defaults to
-\file{package.roxygen}.}
-  \item{outfile}{whither to send output; blank string means standard out}
-  \item{verbose}{whether to anounce what we're doing with
-the \var{outfile}}
-}
 \examples{#' An example file, example.R, which imports
 #' packages foo and bar
 #' @import foo bar

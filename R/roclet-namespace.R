@@ -95,7 +95,7 @@ namespace_roclet <- function(package.dir, roxygen.dir, outfile = NULL,
   namespace <- character()
 
   exportee <- NULL
-  pre.parse <- function(partitum) {
+  pre.process <- function(partitum) {
     exportee <<- partitum[c("name", "assignee", "method", 
       "S4method", "S4generic", "S4class")]
   }
@@ -110,31 +110,31 @@ namespace_roclet <- function(package.dir, roxygen.dir, outfile = NULL,
     }
   }
 
-  record.directive <- function(proc, parms) {
-    namespace <<- c(namespace, str_c(proc, "(", str_trim(parms), ")"))
+  record.directive <- function(tag, parms) {
+    namespace <<- c(namespace, str_c(tag, "(", str_trim(parms), ")"))
   }
   
-  parse.default <- function(proc, parms) {
-    record.directive(proc, words(parms))
+  process.default <- function(tag, parms) {
+    record.directive(tag, words(parms))
   }
-  parse.exportClass <- function(proc, parms) {
+  process.exportClass <- function(tag, parms) {
     record.directive('exportClasses', parms)
   }
-  parse.exportMethod <- function(proc, parms) {
+  process.exportMethod <- function(tag, parms) {
     record.directive('exportMethods', parms)
   }
-  parse.export <- function(proc, parms) {
+  process.export <- function(tag, parms) {
     if (!is.null.string(parms)) {
       record.directive('export', words(parms))
       return()
     }
     
     if (!is.null(exportee$S4method)) {
-      parse.exportMethod(NULL, exportee$S4method)
+      process.exportMethod(NULL, exportee$S4method)
     } else if (!is.null(exportee$S4class)) {
-      parse.exportClass(NULL, exportee$S4class)
+      process.exportClass(NULL, exportee$S4class)
     } else if (!is.null(exportee$S4generic)){
-      parse.exportMethod(NULL, exportee$S4generic)
+      process.exportMethod(NULL, exportee$S4generic)
     } else if (!is.null(exportee$method)) {
       record.directive("S3method", str_c(unlist(exportee$method), 
         collapse = ","))
@@ -147,29 +147,29 @@ namespace_roclet <- function(package.dir, roxygen.dir, outfile = NULL,
     }
   }
   
-  parse.S3method <- function(proc, parms) {
+  process.S3method <- function(tag, parms) {
     params <- words(parms)
     if (length(params) != 2) {
       warning("Invalid @S3method: ", parms, call. = FALSE)
     }
-    record.directive(proc, str_c(params, collapse = ","))
+    record.directive(tag, str_c(params, collapse = ","))
   }
-  parse.importFrom <- function(proc, parms) {
+  process.importFrom <- function(tag, parms) {
     params <- words(parms)
-    record.directive(proc, str_c(params[1], ",", params[-1]))
+    record.directive(tag, str_c(params[1], ",", params[-1]))
   }
 
 
   roclet <- make.roclet(package.dir, roxygen.dir, 
-    parse.default = parse.default,
-    pre.parse = pre.parse,
+    parse.default = process.default,
+    pre.parse = pre.process,
     post.files = post.files)
 
-  roclet$register.parser('S3method', parse.S3method)
-  roclet$register.parser('importFrom', parse.importFrom)
-  roclet$register.parser('export', parse.export)
-  roclet$register.parser('exportClass', parse.exportClass)
-  roclet$register.parser('exportMethod', parse.exportMethod)
+  roclet$register.parser('S3method', process.S3method)
+  roclet$register.parser('importFrom', process.importFrom)
+  roclet$register.parser('export', process.export)
+  roclet$register.parser('exportClass', process.exportClass)
+  roclet$register.parser('exportMethod', process.exportMethod)
   roclet$register.default.parsers('exportPattern',
     'import',
     'importClassesFrom',

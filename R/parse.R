@@ -42,8 +42,8 @@ prerefs <- function(srcfile, srcrefs) {
 parse.element <- function(element) {
   tag <- strcar(element)
   rest <- strcdr(element)
-  parser <- parser.preref(tag)
-  do.call(parser, list(tag, rest))
+
+  do.call(parser.preref(tag), list(tag, rest))
 }
 
 #' Parse description: the premier part of a roxygen block
@@ -52,7 +52,7 @@ parse.element <- function(element) {
 #' @param expression the description to be parsed
 #' @return A list containing the parsed description
 parse.description <- function(expression)
-  list(description=expression)
+  list(description=str_trim(expression))
 
 #' Default parser which simply emits the key and expression;
 #' used for elements with optional values (like \code{@@export})
@@ -63,7 +63,7 @@ parse.description <- function(expression)
 #' null)
 #' @export
 parse.default <- function(key, rest)
-  as.list(structure(rest, names=key))
+  as.list(structure(str_trim(rest), names=key))
 
 #' Resorts to the default parser but with a warning about the
 #' unknown key.
@@ -98,7 +98,7 @@ parse.value <- function(key, rest) {
 #' @export
 parse.name.description <- function(key, rest) {
   name <- strcar(rest)
-  rest <- strcdr(rest)
+  rest <- str_trim(strcdr(rest))
   if (is.null.string(name))
     stop(key, 'requires a name and description', call. = FALSE)
   else

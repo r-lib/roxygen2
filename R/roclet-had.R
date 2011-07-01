@@ -45,10 +45,7 @@ register.srcref.parser('setMethod',
 
 
 #' @export
-had_roclet <- function(package.dir, 
-                           roxygen.dir, 
-                           subdir=NULL,
-                           verbose=TRUE) {
+had_roclet <- function(package.dir, roxygen.dir, subdir = NULL) {
                              
   if (is.null(subdir)) {
     subdir <- file.path(roxygen.dir, "man")
@@ -112,35 +109,19 @@ had_roclet <- function(package.dir,
     has_contents[filename] <<- TRUE
   }
 
-  #' If \code{@@title} is specified, use it; or
-  #' take the first sentence of the description;
-  #' or, lastly, take the name.
-  #' @param partitum the parsed elements
-  #' @param name the calculated name-fallback
-  #' @return The parsed title
-  parse.title <- function(partitum, name) {
-    if (!is.null(partitum$title)) {
-      should_write()
-      partitum$title      
-    } 
-    else if (!is.null(first.sentence <-
-                      first.sentence(partitum$description)))
-      first.sentence
-    else
-      name
-  }
-  
   #' Reconstruct the \name directive from amongst
   #' \code{@@name}, \code{@@setMethod}, \code{@@setClass},
-  #' \code{@@setGeneric}, \code{@@assignee}, etc.
+  #' \code{@@setGeneric}, assignee, etc.
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.name <- function(partitum) {
-    name <- guess.name(partitum)
+    name <- partitum$name %||% partitum$assignee %||% partitum$S4class %||% 
+      partitum$S4method %||% partitum$S4generic
     
     if (is.null(name)) {
-      # No name, so essentially skip this file.  Do this silently because
-      # of other roclets: e.g. collate and namespace
+      # No name, so skip this file.  Do this silently because of other
+      # roclets: e.g. collate and namespace.  Should really check that the
+      # next line is NULL.
       filename <<- NULL
       return()
     }
@@ -154,43 +135,34 @@ had_roclet <- function(package.dir,
       parse.expression('alias', name)
     }
 
-    title <- parse.title(partitum, name)
+    title <- partitum$title %||% first.sentence(partitum$description) %||%
+      name
     parse.expression('title', title)
   }
   
-  parse.function.name <- function(partitum) {
-    if (!is.null(partitum$method))
-      Rd.expression('method',
-          partitum$method[[1]],
-          partitum$method[[2]])
-    else
-      partitum$assignee
-  }
-
-  #' Turn a list of formal arguments into a human-readable
-  #' function-like.
-  #' @param partitum the pre-parsed elements
-  #' @return \code{NULL}
-  parse.formals <- function(partitum) {
-    formals <- partitum$formals
-    if (length(formals) == 0) return()
-    
-    args <- usage(formals)
-    usage <- str_c(parse.function.name(partitum), "(", args, ")")
-    
-    parse.expression('usage', str_wrap(usage, width = 60, exdent = 4))
-  }
-
   #' Prefer explicit \code{@@usage} to a \code{@@formals} list.
   #' @param partitum the pre-parsed elements
   #' @return \code{NULL}
   parse.usage <- function(partitum) {
-    if (is.null(partitum$usage))
-      parse.formals(partitum)
-    else {
+    if (!is.null(partitum$usage)) {
       should_write()
-      parse.expression('usage', partitum$usage)      
+      parse.expression('usage', partitum$usage)   
+      return()   
     }
+    
+    formals <- partitum$formals
+    if (length(formals) == 0) return()
+    
+    args <- usage(formals)
+    
+    fun_name <- if (!is.null(partitum$method)) {
+      Rd.expression('method', partitum$method[[1]], partitum$method[[2]])
+    } else {
+      partitum$assignee
+    }
+    usage <- str_c(fun_name, "(", args, ")")
+    
+    parse.expression('usage', str_wrap(usage, width = 60, exdent = 4))
   }
 
   #' Reset params; parse name and usage.
@@ -209,17 +181,6 @@ had_roclet <- function(package.dir,
     parse.examples(partitum)
   }
 
-  #' Split a plural into its constituent singulars.
-  #' @param key the singular key
-  #' @param expressions the plurality of expressions
-  #' @return \code{NULL}
-  parse.split <- function(key, expressions) {
-    expression <- strcar(expressions)
-    rest <- strcdr(expressions)
-    parse.expression(key, expression)
-    if (!is.null.string(rest))
-      parse.split(key, rest)
-  }
 
   #' Split the introductory matter into its description followed
   #' by details (separated by a blank line).
@@ -266,6 +227,8 @@ had_roclet <- function(package.dir,
   #' @return \code{NULL}
   parse.examples <- function(partitum) {
     if (!is.null(partitum$examples)) {
+      should_write()
+      
       ex <- partitum$examples
       ex <- gsub("([%\\])", "\\\\\\1", ex)
       ex <- gsub("\\\\dont", "\\dont", ex)
@@ -302,6 +265,11 @@ had_roclet <- function(package.dir,
   roclet$register.parser('return', function(key, expressions) {
     parse.expression('value', expressions)
   })
+
+  parse.split <- function(key, expressions) {
+    pieces <- str_split(str_trim(expressions), "\\s+")[[1]]
+    lapply(pieces, parse.expression, key = key)
+  }
   roclet$register.parser('aliases', function(key, expressions) {
     parse.split('alias', expressions)
   })

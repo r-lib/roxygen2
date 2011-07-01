@@ -28,3 +28,4 @@ Collate:
     'roclet-had.R'
     'roclet-namespace.R'
     'roxygenize.R'
+    'utils.R'

@@ -1,174 +1,181 @@
 context("Rd")
+roc <- had_roclet()
 
-expect_rd <- function(roxygen, expected) {
-  expected <- capture_roclet_output(had_roclet("."))
-  expect_equal(expected, expected)
-}
 
 test_that("@example loads from specified files", {
-  expect_rd("#' @example Rd-example-1.R
-                   #' @example Rd-example-2.R
-                   NULL",
-                  expected=c("\\examples{example <- 'example1'",
-                    "example <- 'example2'}"))
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-1.R
+    #' @example Rd-example-2.R
+    NULL")[[1]]
+  
+  expect_equal(length(out), 4)
+  expect_match(out, fixed("example <- 'example1'"), all = FALSE)
+  expect_match(out, fixed("example <- 'example2'"), all = FALSE)
 })
 
 test_that("@examples captures examples", {
-  expect_rd("#' @examples a <- 2
-                   NULL",
-                  expected="\\examples{a <- 2}")  
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @examples a <- 2
+    NULL")[[1]]
+  
+  expect_equal(length(out), 4)
+  expect_match(out, fixed("\\examples{a <- 2}"), all = FALSE)
 })
 
 test_that("@examples overrides @example", {
-  expect_rd("#' @example expectedRd-example-1.R
-                   #' @examples a <- 2
-                   NULL",
-                  expected="\\examples{a <- 2}")  
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example expectedRd-example-1.R
+    #' @examples a <- 2
+    NULL")[[1]]
+  expect_match(out, fixed("\\examples{a <- 2}"), all = FALSE)
 })
 
 
-test_that("empty file gives NULL expected", {
-  output <- make.Rd.roclet()$parse.parsed(parse.text(""))
-  expect_identical(output, NULL)
+test_that("empty file gives empty list", {
+  out <- roc_proc_text(roc, "")
+  expect_identical(out, list())
 })
 
-test_that("naked roxygen gives NULL expected", {
-  output <- make.Rd.roclet()$parse.parsed(parse.text("NULL"))
-  expect_identical(output, NULL)
+test_that("NULL gives empty list", {
+  out <- roc_proc_text(roc, "NULL")
+  expect_identical(out, list())
 })
 
 
 test_that("name captured from assignment", {
-  expect_rd('a <- 2',
-                  expected=c('\\name{a}',
-                    '\\alias{a}',
-                    '\\title{a}'))  
+  out <- roc_proc_text(roc, "
+    #' Title.
+    a <- function() {} ")[[1]]
+
+  expect_match(out, fixed("\\name{a}"), all = FALSE)
+  expect_match(out, fixed("\\alias{a}"), all = FALSE)
+  expect_match(out, "title[{]\\s*Title.\\s*[}]", all = FALSE)
 })
 
-
 test_that("@name overides default", {
-  expect_rd("#' @name b
-                   a <- 2",
-                  expected=c('\\name{b}',
-                    '\\alias{b}',
-                    '\\title{b}'))
-  
+  out <- roc_proc_text(roc, "
+    #' @name b
+    a <- function() {}")[[1]]
+    
+  expect_match(out, fixed("\\name{b}"), all = FALSE)
+  expect_match(out, fixed("\\alias{b}"), all = FALSE)
+  expect_match(out, fixed("\\title{b}"), all = FALSE)
 })
 
 test_that("usage captured from formals", {
-  expect_rd("a <- function(a=1) {}",
-                  expected=c("\\name{a}",
-                    "\\alias{a}",
-                    "\\title{a}",
-                    "\\usage{a(a=1)}"))  
+  out <- roc_proc_text(roc, "
+    #' Title.
+    a <- function(a=1) {}")[[1]]
+  expect_match(out, fixed("\\usage{a(a = 1)}"), all = FALSE)
 })
 
 
 test_that("@usage overrides default", {
-  expect_rd("#' @usage a(a=2)
-                   a <- function(a=1) {}",
-                  expected=c("\\name{a}",
-                    "\\alias{a}",
-                    "\\title{a}",
-                    "\\usage{a(a=2)}"))  
+  out <- roc_proc_text(roc, "
+    #' @usage a(a=2)
+    a <- function(a=1) {}")[[1]]
+  expect_match(out, fixed("\\usage{a(a=2)}"), all = FALSE)
 })
 
 
 test_that("@param documents arguments", {
-  expect_rd("#' @param a an incipit letter
-                   #' @param z a terminal letter
-                   a <- function(a=1, z=2) {}",
-                  expected=c("\\name{a}",
-                    "\\alias{a}",
-                    "\\title{a}",
-                    "\\usage{a(a=1, z=2)}",
-                    "\\arguments{\\item{a}{an incipit letter}",
-                    "\\item{z}{a terminal letter}}"))
+  out <- roc_proc_text(roc, "
+    #' @param a an incipit letter
+    #' @param z a terminal letter
+    a <- function(a=1, z=2) {}")[[1]]
+  expect_match(out, fixed("\\item{a}{an incipit letter"), all = FALSE)
+  expect_match(out, fixed("\\item{z}{a terminal letter}"), all = FALSE)
 })
 
 test_that("description taken from first line", {
-  expect_rd("#' description
-                   NULL",
-                  expected="\\description{description}")  
+  out <- roc_proc_text(roc, "
+    #' description
+    #' @name a
+    NULL")[[1]]
+  expect_match(out, "description[{]\\s*description\\s*[}]", all = FALSE)
 })
 
 test_that("details taken from subsequent lines", {
-  expect_rd("#' description
-                   #'
-                   #' details
-                   NULL",
-                  expected=c("\\description{description}",
-                    "\\details{details}"))
-  
+  out <- roc_proc_text(roc, "
+    #' description
+    #'
+    #' details
+    #' @name a
+    NULL")[[1]]
+    expect_match(out, "description[{]\\s*description\\s*[}]", all = FALSE)
+    expect_match(out, "details[{]\\s*details\\s*[}]", all = FALSE)
 })
 
 test_that("keywords and aliases split into pieces", {
-  expect_rd("#' @keywords a b
-                   #' @aliases a b
-                   NULL",
-                  expected=c("\\keyword{a}",
-                    "\\keyword{b}",
-                    "\\alias{a}",
-                    "\\alias{b}"))
+  out <- roc_proc_text(roc, "
+    #' @keywords a b
+    #' @aliases a b
+    #' @name a
+    NULL")[[1]]
+  expect_match(out, fixed("\\keyword{a}"), all = FALSE)
+  expect_match(out, fixed("\\keyword{b}"), all = FALSE)
+  expect_match(out, fixed("\\alias{a}"), all = FALSE)
+  expect_match(out, fixed("\\alias{b}"), all = FALSE)
 })
 
 test_that("generic keys produce desired expected", {
-  expect_rd("#' @references test
-                   #' @note test
-                   #' @author test
-                   #' @seealso test
-                   #' @concept test
-                   NULL",
-                  expected=c("\\references{test}",
-                    "\\note{test}",
-                    "\\author{test}",
-                    "\\seealso{test}",
-                    "\\concept{test}"))  
+  out <- roc_proc_text(roc, "
+    #' @references test
+    #' @note test
+    #' @author test
+    #' @seealso test
+    #' @concept test
+    #' @name a
+    NULL")[[1]]
+  expect_match(out, fixed("\\references{test}"), all = FALSE)
+  expect_match(out, fixed("\\note{test}"), all = FALSE)
+  expect_match(out, fixed("\\seealso{test}"), all = FALSE)
+  expect_match(out, fixed("\\concept{test}"), all = FALSE)
+  expect_match(out, fixed("\\author{test}"), all = FALSE)
 })
 
 test_that("title taken from first sentence", {
-  expect_rd("#' Description with sentence. That continueth.
-                   a <- 2",
-                  expected=c("\\name{a}",
-                    "\\alias{a}",
-                    "\\title{Description with sentence.}",
-                    paste("\\description{Description with sentence.",
-                          "That continueth.}")))
-  
+  out <- roc_proc_text(roc, "
+    #' Description with sentence. That continueth.
+    #' @name a
+    NULL")[[1]]
+  expect_match(out, fixed("\\title{Description with sentence.}"), all = FALSE)
+  expect_match(out, all = FALSE, 
+    fixed("Description with sentence. That continueth."))  
 })
 
 test_that("@title overrides default title", {
-  expect_rd("#' Would be title
-                   #' @title Overridden title
-                   NULL",
-                  expected=c("\\title{Overridden title}",
-                    "\\description{Would be title}"))  
+  out <- roc_proc_text(roc, "
+    #' Would be title
+    #' @title Overridden title
+    #' @name a
+    NULL")[[1]]
+  expect_match(out, fixed("\\title{Overridden title}"), all = FALSE)
+  expect_match(out, "description[{]\\s*Would be title", all = FALSE)
 })
 
 
 test_that("question mark ends sentence", {
-  expect_rd("#' Is a number odd?
-                   is.odd <- function(a) {}",
-                  expected=c('\\name{is.odd}',
-                    '\\alias{is.odd}',
-                    '\\title{Is a number odd?}',
-                    '\\usage{is.odd(a)}',
-                    '\\description{Is a number odd?}'))  
+  out <- roc_proc_text(roc, "
+    #' Is a number odd?
+    is.odd <- function(a) {}")[[1]]
+  expect_match(out, fixed("\\title{Is a number odd?}"), all = FALSE)
 })
 
 test_that("no ending punctuation produces ellipsis", {
-  expect_rd("#' Whether a number is odd
-                   is.odd <- function(a) {}",
-                  expected=c('\\name{is.odd}',
-                    '\\alias{is.odd}',
-                    '\\title{Whether a number is odd...}',
-                    '\\usage{is.odd(a)}',
-                    '\\description{Whether a number is odd}'))  
+  out <- roc_proc_text(roc, "
+    #' Whether a number is odd
+    is.odd <- function(a) {}")[[1]]
+  expect_match(out, fixed("\\title{Whether a number is odd...}"), all = FALSE)
 })
 
 test_that("@TODO creates todo section", {
-  expect_rd("#' @TODO test this
-                   NULL",
-                  expected=c('\\section{TODO}{test this}'))
-  
+  out <- roc_proc_text(roc, "
+    #' @TODO test this
+    #' @name a
+    NULL")[[1]]
+  expect_match(out, fixed("\\section{TODO}{test this}"), all = FALSE)
 })

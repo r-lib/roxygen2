@@ -81,7 +81,7 @@ roc_process.had <- function(roclet, partita, base_path) {
   topics <- list()
   for (partitum in partita) {
     has_rd <- any(names(partitum) %in% c("description", "param", "return",
-      "title", "examples", "docType"))
+      "title", "example", "examples", "docType", "name", "rdname", "usage"))
     if (!has_rd) next()
     
     # Figure out topic name
@@ -239,10 +239,10 @@ process.examples <- function(partitum, base_path) {
     return(rd_tag('examples', ex))
   } 
   
-  paths <- partitum[names(partitum) == "example"]
+  paths <- unlist(partitum[names(partitum) == "example"])
   if (length(paths) > 0) {
     paths <- file.path(base_path, str_trim(paths))
-    examples <- unlist(lapply(readLines, paths))
+    examples <- unlist(lapply(paths, readLines))
     
     return(rd_tag('examples', str_c(examples, collapse = "\n")))
   }

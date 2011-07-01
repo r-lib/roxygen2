@@ -9,10 +9,9 @@
   \code{@export}) where roclets can do more sophisticated
   things with \code{NULL}.
 }
-\value{A list containing the key and expression (possibly
-null)}
+\value{A list containing the key and expression (possibly null)}
+\keyword{internal}
 \arguments{
   \item{key}{the parsing key}
   \item{rest}{the expression to be parsed}
 }
-

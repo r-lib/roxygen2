@@ -7,8 +7,8 @@
   Parse a srcref
 }
 \value{List containing the parsed srcref}
+\keyword{internal}
 \arguments{
   \item{ref}{the srcref to be parsed}
   \item{\dots}{ignored}
 }
-

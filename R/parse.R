@@ -7,12 +7,12 @@ LINE.DELIMITER <- '#+\''
 # Symbol that delimits tags.
 TAG.DELIMITER <- '@'
 
-#' Comment blocks (possibly null) that precede a file's expressions.
-#' @param srcfile result of running \code{srcfile} on an interesting
-#' file
-#' @param srcrefs the resultant srcrefs
-#' @return A list of prerefs that resemble srcrefs in form, i.e.
-#' with srcfile and lloc
+# Comment blocks (possibly null) that precede a file's expressions.
+#
+# @param srcfile result of running \code{srcfile} on an interesting file
+# @param srcrefs the resultant srcrefs
+# @return A list of prerefs that resemble srcrefs in form, i.e. with srcfile
+#   and lloc
 prerefs <- function(srcfile, srcrefs) {
   length.line <- function(lineno)
     nchar(getSrcLines(srcfile, lineno, lineno))
@@ -32,9 +32,10 @@ prerefs <- function(srcfile, srcrefs) {
   Map(pair.preref, pairs)
 }
 
-#' Parse a raw string containing key and expressions.
-#' @param element the string containing key and expressions
-#' @return A list containing the parsed constituents
+# Parse a raw string containing key and expressions.
+#
+# @param element the string containing key and expressions
+# @return A list containing the parsed constituents
 parse.element <- function(element) {
   tag <- strcar(element)
   rest <- strcdr(element)
@@ -42,41 +43,46 @@ parse.element <- function(element) {
   do.call(parser.preref(tag), list(tag, rest))
 }
 
-#' Parse description: the premier part of a roxygen block
-#' containing description and option details separated by
-#' a blank roxygen line.
-#' @param expression the description to be parsed
-#' @return A list containing the parsed description
+# Parse description: the premier part of a roxygen block
+# containing description and option details separated by
+# a blank roxygen line.
+#
+# @param expression the description to be parsed
+# @return A list containing the parsed description
 parse.description <- function(expression)
   list(description=str_trim(expression))
 
 #' Default parser which simply emits the key and expression;
 #' used for elements with optional values (like \code{@@export})
 #' where roclets can do more sophisticated things with \code{NULL}.
+#'
 #' @param key the parsing key
 #' @param rest the expression to be parsed
-#' @return A list containing the key and expression (possibly
-#' null)
+#' @return A list containing the key and expression (possibly null)
+#' @keywords internal
 #' @export
 parse.default <- function(key, rest)
   as.list(structure(str_trim(rest), names=key))
 
-#' Resorts to the default parser but with a warning about the
-#' unknown key.
-#' @param key the parsing key
-#' @param rest the expression to be parsed
-#' @return A list containing the key and expression (possibly
-#' null)
-#' @seealso \code{\link{parse.default}}
+# Resorts to the default parser but with a warning about the
+# unknown key.
+#
+# @param key the parsing key
+# @param rest the expression to be parsed
+# @return A list containing the key and expression (possibly
+# null)
+# @seealso \code{\link{parse.default}}
 parse.preref <- function(key, rest) {
   warning(key, ' is an unknown key', call. = FALSE)
   parse.default(key, rest)
 }
 
 #' Parse an element with a mandatory value.
+#'
 #' @param key the parsing key
 #' @param rest the expression to be parsed
 #' @return A list containing the key and value
+#' @keywords internal
 #' @export
 parse.value <- function(key, rest) {
   if (is.null.string(rest))
@@ -87,10 +93,11 @@ parse.value <- function(key, rest) {
   
 #' Parse an element containing a mandatory name
 #' and description (such as \code{@@param}).
+#'
 #' @param key the parsing key
 #' @param rest the expression to be parsed
-#' @return A list containing the key, name and
-#' description
+#' @return A list containing the key, name and description
+#' @keywords internal
 #' @export
 parse.name.description <- function(key, rest) {
   name <- strcar(rest)
@@ -105,9 +112,11 @@ parse.name.description <- function(key, rest) {
 
 #' Parse an element containing a single name and only a name;
 #' extra material will be ignored and a warning issued.
+#'
 #' @param key parsing key
 #' @param name the name to be parsed
 #' @return A list containing key and name
+#' @keywords internal
 #' @export
 parse.name <- function(key, name) {
   if (is.null.string(name))
@@ -118,56 +127,63 @@ parse.name <- function(key, name) {
 }
 
 #' Turn a binary element on; parameters are ignored.
+#'
 #' @param key parsing key
 #' @param rest the expression to be parsed
 #' @return A list with the key and \code{TRUE}
+#' @keywords internal
 #' @export
 parse.toggle <- function(key, rest)
   as.list(structure(TRUE, names=key))
 
-#' By default, srcrefs are ignored; this parser returns \code{list()}.
-#' @param pivot the parsing pivot
-#' @param expression the expression to be parsed
-#' @return \code{list()}
+# By default, srcrefs are ignored; this parser returns \code{list()}.
+#
+# @param pivot the parsing pivot
+# @param expression the expression to be parsed
+# @return \code{list()}
 parse.srcref <- function(pivot, expression) list()
 
-#' Default parser-lookup; if key not found, return
-#' the default parser specified.
-#' @param table the parser table from which to look
-#' @param key the key upon which to look
-#' @param default the parser to return upon unsuccessful
-#' lookup
-#' @return The parser
+# Default parser-lookup; if key not found, return
+# the default parser specified.
+# @param table the parser table from which to look
+# @param key the key upon which to look
+# @param default the parser to return upon unsuccessful
+# lookup
+# @return The parser
 parser.default <- function(table, key, default)
   if (is.null(f <- table[[key]])) default else f
 
-#' Preref parser-lookup; defaults to \code{parse.preref}.
-#' @param key the key upon which to look
-#' @return The parser
+# Preref parser-lookup; defaults to \code{parse.preref}.
+# @param key the key upon which to look
+# @return The parser
 parser.preref <- Curry(parser.default,
                        table=preref.parsers,
                        default=parse.preref)
 
-#' Srcref parser-lookup; defaults to \code{parse.srcref}.
-#' @param key the key upon which to look
-#' @return The parser
+# Srcref parser-lookup; defaults to \code{parse.srcref}.
+# @param key the key upon which to look
+# @return The parser
 parser.srcref <- Curry(parser.default,
                        table=srcref.parsers,
                        default=parse.srcref)
 
 #' Parse either srcrefs, prerefs or pairs of the same.
+#'
 #' @param ref the srcref, preref or pair of the same
 #' @param \dots ignored
 #' @return List containing the parsed srcref/preref
+#' @keywords internal
 #' @export
 parse.ref <- function(ref, ...) UseMethod('parse.ref')
 cached.parse.ref <- memoize(parse.ref)
 
 #' Parse a preref/srcrefs pair
+#'
 #' @method parse.ref list
 #' @param ref the preref/srcref pair
 #' @param \dots ignored
 #' @return List combining the parsed preref/srcref
+#' @keywords internal
 #' @export
 parse.ref.list <- function(ref, ...)
   append(parse.ref(ref[[1]]),
@@ -179,6 +195,7 @@ parse.ref.list <- function(ref, ...)
 #' @param ref the preref to be parsed
 #' @param \dots ignored
 #' @return List containing the parsed preref
+#' @keywords internal
 #' @export
 parse.ref.preref <- function(ref, ...) {
   lines <- str_trim(getSrcLines(attributes(ref)$srcfile, ref[[1]], ref[[3]]))
@@ -213,12 +230,13 @@ parse.ref.preref <- function(ref, ...) {
   }
 } 
 
-#' Parse a function call, paying special attention to
-#' assignments by \code{<-} or \code{=}.
-#' @param expressions the expression to search through
-#' @return List of formals and assignee in case of
-#' assignment, the processed expression in case of
-#' non-assigning function calls (see \code{parse.srcref}).
+# Parse a function call, paying special attention to
+# assignments by \code{<-} or \code{=}.
+#
+# @param expressions the expression to search through
+# @return List of formals and assignee in case of
+# assignment, the processed expression in case of
+# non-assigning function calls (see \code{parse.srcref}).
 parse.call <- function(expression) {
   if (!is.call(expression)) return(NULL)
   if (length(expression) < 3) return(NULL)
@@ -242,10 +260,12 @@ parse.call <- function(expression) {
 }
 
 #' Parse a srcref
+#'
 #' @method parse.ref srcref
 #' @param ref the srcref to be parsed
 #' @param \dots ignored
 #' @return List containing the parsed srcref
+#' @keywords internal
 #' @export
 parse.ref.srcref <- function(ref, ...) {
   srcfile <- attributes(ref)$srcfile
@@ -261,17 +281,19 @@ parse.ref.srcref <- function(ref, ...) {
   append(parsed, srcref)
 }
 
-#' Parse each of a list of preref/srcref pairs.
-#' @param preref.srcrefs list of preref/srcref pairs
-#' @return List combining parsed preref/srcrefs
+# Parse each of a list of preref/srcref pairs.
+# @param preref.srcrefs list of preref/srcref pairs
+# @return List combining parsed preref/srcrefs
 parse.refs <- function(preref.srcrefs) {
   lapply(preref.srcrefs, cached.parse.ref)
 }
   
 
 #' Parse a source file containing roxygen directives.
+#'
 #' @param file string naming file to be parsed
 #' @return List containing parsed directives
+#' @keywords internal
 #' @export
 parse.file <- function(file) {
   srcfile <- srcfile(file)
@@ -295,18 +317,21 @@ parse.srcfile <- function(srcfile) {
 cached.parse.srcfile <- memoize(parse.srcfile)
 
 #' Parse many files at one.
+#'
 #' @param \dots files to be parsed
 #' @return List containing parsed directives
 #' @seealso \code{\link{parse.file}}
+#' @keywords internal
 #' @export
 parse.files <- function(paths) {
   unlist(lapply(paths, parse.file), recursive = FALSE)
 }
   
-
 #' Text-parsing hack using tempfiles for more facility.
+#'
 #' @param \dots lines of text to be parsed
 #' @return The parse tree
+#' @keywords internal
 #' @export
 parse.text <- function(...) {
   file <- tempfile()

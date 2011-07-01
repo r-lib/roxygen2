@@ -8,7 +8,7 @@
 }
 \value{List containing parsed directives}
 \seealso{\code{\link{parse.file}}}
+\keyword{internal}
 \arguments{
   \item{\dots}{files to be parsed}
 }
-

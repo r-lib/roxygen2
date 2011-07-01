@@ -1,17 +1,17 @@
 \name{namespace_roclet}
-\title{Make a namespace roclet which parses the given files and writes a list of...}
+\title{Namespace roclet builds NAMESPACE.}
 \usage{namespace_roclet(package.dir, roxygen.dir, outfile = NULL,
     verbose = TRUE)}
 
 \description{
-  Make a namespace roclet which parses the given files and
-  writes a list of namespace directives to a given file or
-  standard out; see \cite{Writing R Extensions}
-  (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
-  for details.
+  Namespace roclet builds NAMESPACE.
 }
 
 \details{
+  \cite{Writing R Extensions}
+  (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
+  for details.
+
   The namespace roclet supports the following tags:
 
   \tabular{ll}{ Roxygen tag \tab \file{NAMESPACE}
@@ -76,4 +76,3 @@ fun <- function() {}
 
 roclet <- namespace_roclet()
 \dontrun{roclet$parse('example.R')}}
-

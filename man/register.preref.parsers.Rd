@@ -6,8 +6,8 @@
   Register many preref parsers at once.
 }
 \value{\code{NULL}}
+\keyword{internal}
 \arguments{
   \item{parser}{the parser to register}
   \item{\dots}{the keys upon which to register}
 }
-

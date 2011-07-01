@@ -1,16 +1,11 @@
 #' @include parse.R
 NULL
 
-#' Collate value parser
-#' @name include
-#' @seealso collate_roclet
 register.preref.parsers(parse.value,
                         'include')
 
-#' Make collate roclet which parses the given files; topologically
-#' sorting \code{@@include}s, and either merging the \code{Collate:}
-#' directive with a pre-existing \file{DESCRIPTION} or writing to
-#' standard out.
+#' Collate roclet topological sorts R files and records in Collate field of
+#' \file{DESCRIPTION}. 
 #'
 #' Each \code{@@include} tag should specify the filename of one intrapackage
 #' dependency; multiple \code{@@include} tags may be given.

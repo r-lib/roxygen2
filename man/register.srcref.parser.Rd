@@ -7,9 +7,9 @@
 }
 \value{\code{NULL}}
 \seealso{\code{\link{register.parser}}}
+\keyword{internal}
 \arguments{
   \item{key}{the key upon which to register}
   \item{parser}{the parser callback to register;
 a function taking \code{key} and \code{expression}}
 }
-

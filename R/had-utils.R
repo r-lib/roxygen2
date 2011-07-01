@@ -1,9 +1,9 @@
-#' Given argument list, produce usage string for it.
-#' 
-#' Adapted from \code{\link{prompt}}.
-#'
-#' @param f function, or name of function, as string
-#' @return a string
+# Given argument list, produce usage string for it.
+# 
+# Adapted from \code{\link{prompt}}.
+#
+# @param f function, or name of function, as string
+# @return a string
 usage <- function(args) {
   is.missing.arg <- function(arg) {
     is.symbol(arg) && deparse(arg) == ""

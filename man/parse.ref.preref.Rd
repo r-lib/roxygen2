@@ -7,8 +7,8 @@
   Parse a preref
 }
 \value{List containing the parsed preref}
+\keyword{internal}
 \arguments{
   \item{ref}{the preref to be parsed}
   \item{\dots}{ignored}
 }
-

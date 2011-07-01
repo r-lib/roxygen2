@@ -21,4 +21,3 @@ files.}
   \item{unlink.target}{unlink target directory before processing files?}
   \item{roclets}{character vector of roclet names to apply to package}
 }
-

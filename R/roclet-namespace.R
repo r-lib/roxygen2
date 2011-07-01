@@ -15,8 +15,8 @@ register.preref.parsers(parse.value,
                         'importMethodsFrom',
                         'useDynLib')
 
-#' Make a namespace roclet which parses the given files and writes a list of
-#' namespace directives to a given file or standard out; see
+#' Namespace roclet builds NAMESPACE.
+#' 
 #' \cite{Writing R Extensions}
 #' (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
 #'

@@ -7,8 +7,8 @@
   Parse either srcrefs, prerefs or pairs of the same.
 }
 \value{List containing the parsed srcref/preref}
+\keyword{internal}
 \arguments{
   \item{ref}{the srcref, preref or pair of the same}
   \item{\dots}{ignored}
 }
-

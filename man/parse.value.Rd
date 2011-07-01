@@ -7,8 +7,8 @@
   Parse an element with a mandatory value.
 }
 \value{A list containing the key and value}
+\keyword{internal}
 \arguments{
   \item{key}{the parsing key}
   \item{rest}{the expression to be parsed}
 }
-

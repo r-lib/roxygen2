@@ -8,4 +8,3 @@
   of this topic with contents of specific topic, silently
   dropping name and title components. }
 }
-

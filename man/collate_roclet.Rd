@@ -1,14 +1,12 @@
 \name{collate_roclet}
 \alias{collate_roclet}
-\title{Make collate roclet which parses the given files; topologically...}
+\title{Collate roclet topological sorts R files and records in Collate field of...}
 \usage{collate_roclet(package.dir, roxygen.dir, merge.file = NULL,
     target.file = NULL, verbose = TRUE)}
 
 \description{
-  Make collate roclet which parses the given files;
-  topologically sorting \code{@include}s, and either
-  merging the \code{Collate:} directive with a pre-existing
-  \file{DESCRIPTION} or writing to standard out.
+  Collate roclet topological sorts R files and records in
+  Collate field of \file{DESCRIPTION}.
 }
 
 \details{
@@ -42,4 +40,3 @@ NULL
 
 roclet <- collate_roclet()
 \dontrun{roclet$parse.dir('example')}}
-

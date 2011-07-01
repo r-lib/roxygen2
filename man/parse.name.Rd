@@ -9,8 +9,8 @@
   issued.
 }
 \value{A list containing key and name}
+\keyword{internal}
 \arguments{
   \item{key}{parsing key}
   \item{name}{the name to be parsed}
 }
-

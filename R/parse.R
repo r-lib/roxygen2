@@ -136,28 +136,19 @@ parse.name <- function(key, name) {
 parse.toggle <- function(key, rest)
   as.list(structure(TRUE, names=key))
 
-# Default parser-lookup; if key not found, return
-# the default parser specified.
-# @param table the parser table from which to look
-# @param key the key upon which to look
-# @param default the parser to return upon unsuccessful
-# lookup
-# @return The parser
-parser.default <- function(table, key, default)
-  if (is.null(f <- table[[key]])) default else f
-
 # Preref parser-lookup; defaults to \code{parse.preref}.
 # @param key the key upon which to look
 # @return The parser
-parser.preref <- Curry(parser.default,
-                       table=preref.parsers,
-                       default=parse.preref)
+parser.preref <- function(key, default) {
+  preref.parsers[[key]] %||% default
+}
 
 # Srcref parser-lookup; defaults to \code{parse.srcref}.
 # @param key the key upon which to look
 # @return The parser
-parser.srcref <- Curry(parser.default,
-                       table=srcref.parsers)
+parser.srcref <- function(key, default) {
+  srcref.parsers[[key]] %||% default
+}
 
 #' Parse either srcrefs, prerefs or pairs of the same.
 #'

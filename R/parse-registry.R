@@ -1,20 +1,9 @@
-# Preref parser table
-# @TODO number parser?
-preref.parsers <- new.env(parent=emptyenv())
-
-# Srcref parser table
-srcref.parsers <- new.env(parent=emptyenv())
-
-#' Register a parser with a table
-#'
-#' @param table the table under which to register
-#' @param key the key upon which to register
-#' @param parser the parser callback to register;
-#' a function taking \code{key} and \code{expression}
-#' @return \code{NULL}
-#' @keywords internal
-register.parser <- function(table, key, parser)
-  table[[key]] <- parser
+if (!exists("preref.parsers")) {
+  # Preref parser table
+  preref.parsers <- new.env(parent=emptyenv())
+  # Srcref parser table
+  srcref.parsers <- new.env(parent=emptyenv())
+}
 
 #' Specifically register a preref parser
 #'
@@ -22,11 +11,11 @@ register.parser <- function(table, key, parser)
 #' @param parser the parser callback to register;
 #' a function taking \code{key} and \code{expression}
 #' @return \code{NULL}
-#' @seealso \code{\link{register.parser}}
 #' @export
 #' @keywords internal
-register.preref.parser <- Curry(register.parser,
-                                table=preref.parsers)
+register.preref.parser <- function(key, parser) {
+  preref.parsers[[key]] <- parser
+}
 
 #' Specifically register a srcref parser
 #'
@@ -34,24 +23,12 @@ register.preref.parser <- Curry(register.parser,
 #' @param parser the parser callback to register;
 #' a function taking \code{key} and \code{expression}
 #' @return \code{NULL}
-#' @seealso \code{\link{register.parser}}
 #' @export
 #' @keywords internal
-register.srcref.parser <- Curry(register.parser,
-                                table=srcref.parsers)
-
-#' Register many parsers at once.
-#'
-#' @param table the table under which to register
-#' @param parser the parser to register
-#' @param \dots the keys upon which to register
-#' @return \code{NULL}
-#' @keywords internal
-register.parsers <- function(table, parser, ...) {
-  for (key in c(...))
-    register.parser(table, key, parser)
+register.srcref.parser <- function(key, parser) {
+  srcref.parsers[[key]] <- parser
 }
-  
+
 #' Register many preref parsers at once.
 #'
 #' @param parser the parser to register
@@ -59,8 +36,11 @@ register.parsers <- function(table, parser, ...) {
 #' @return \code{NULL}
 #' @export
 #' @keywords internal
-register.preref.parsers <- Curry(register.parsers,
-                                 table=preref.parsers)
+register.preref.parsers <- function(parser, ...) {
+  for (key in c(...)) {
+    register.preref.parser(key, parser)
+  }
+}
 
 #' Register many srcref parsers at once.
 #'
@@ -69,5 +49,8 @@ register.preref.parsers <- Curry(register.parsers,
 #' @return \code{NULL}
 #' @export
 #' @keywords internal
-register.srcref.parsers <- Curry(register.parsers,
-                                 table=srcref.parsers)
+register.srcref.parsers <- function(parser, ...) {
+  for (key in c(...)) {
+    register.srcref.parser(key, parser)
+  }
+}

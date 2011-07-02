@@ -1,5 +1,10 @@
 # Translate a tag and expressions into an Rd expression;
 # multiple expressions take their own braces.
+#
+# Tags have two methods: \code{merge} and \code{format}.  Currently for all
+# tags, merge just combines all values, and format selects from these to 
+# display the tags in the appropriate way. 
+#
 new_tag <- function(tag, values, subclass) {
   subc <- str_c(tag, "_tag")
   list(structure(list(tag = tag, values = values), class = c(subc, "rd_tag")))
@@ -12,8 +17,8 @@ print.rd_tag <- function(x, ...) {
   cat(format(x), "\n")
 }
 
-# Translate a tag and expressions into an Rd expression;
-# multiple expressions take their own braces.
+# Translate a tag and values into an Rd expression; multiple values get their
+# own braces.
 rd_tag <- function(tag, ..., space = FALSE) {
   if (space) {
     values <- str_c("\n", str_c(..., collapse = "\n"), "\n")
@@ -23,9 +28,7 @@ rd_tag <- function(tag, ..., space = FALSE) {
   str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")                         
 }
 
-# c(new_tag("name", "hadley"), new_tag("name", "John"))
-# merge(new_tag("name", "hadley"), new_tag("name", "John"))
-
+#' @S3method format rd_tag
 format.rd_tag <- function(x, ...) stop("Unimplemented format")
 
 #' @S3method merge rd_tag
@@ -36,7 +39,8 @@ merge.rd_tag <- function(x, y, ...) {
 
 # Tags that repeat multiple times --------------------------------------------
 
-#' @S3method format rd_tag
+#' @S3method format keyword_tag
+#' @S3method format alias_tag
 format_rd <- function(x, ...) {
   vapply(x$values, rd_tag, tag = x$tag, FUN.VALUE = character(1))
 }
@@ -47,6 +51,9 @@ format.alias_tag <- format_rd
 format_first <- function(x, ...) {
   rd_tag(x$tag, x$values[1])
 } 
+#' @S3method format name_tag
+#' @S3method format title_tag
+#' @S3method format docType_tag
 format.name_tag <- format_first
 format.title_tag <- format_first
 format.docType_tag <- format_first
@@ -57,7 +64,12 @@ format_collapse <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n\n")
   rd_tag(x$tag, str_wrap(values, width = 60, indent = 2, exdent = 2), space = TRUE)
 } 
-
+#' @S3method format author_tag
+#' @S3method format seealso_tag
+#' @S3method format references_tag
+#' @S3method format value_tag
+#' @S3method format note_tag
+#' @S3method format concept_tag
 format.author_tag <- format_collapse
 format.seealso_tag <- format_collapse
 format.references_tag <- format_collapse
@@ -72,12 +84,16 @@ format_wrap <- function(x, ...) {
   rd_tag('description', str_wrap(desc, width = 60, indent = 2, exdent = 2), space = TRUE)
 }
 
+#' @S3method format description_tag
+#' @S3method format details_tag
+#' @S3method format usage_tag
 format.description_tag <- format_collapse
 format.details_tag <- format_collapse
 format.usage_tag <- format_collapse
 
 # Tags with special errors or other semantics --------------------------------
 
+#' @S3method format arguments_tag
 format.arguments_tag <- function(x, ...) {
   names <- names(x$values)
   dups <- duplicated(names)
@@ -90,12 +106,13 @@ format.arguments_tag <- function(x, ...) {
   rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)
 }
 
+#' @S3method format section_tag
 format.section_tag <- function(x, ...) {
   stop("Not implemented")
 }
+
+#' @S3method format examples_tag
 format.examples_tag <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n\n")
-  rd_tag(x$tag, values, space = TRUE)
-  
+  rd_tag(x$tag, values, space = TRUE)  
 }
-

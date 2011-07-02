@@ -19,6 +19,7 @@ Collate:
     'description.R'
     'parse-registry.R'
     'parse.R'
+    'rd-api.R'
     'roclet-collate.R'
     'roclet-namespace.R'
     'roclet-rd.R'

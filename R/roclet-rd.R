@@ -104,12 +104,12 @@ roc_process.had <- function(roclet, partita, base_path) {
     title <- partitum$title %||% first.sentence(partitum$description) %||%
       name
     rd <- c(rd, 
-      rd_tag('name', name),
-      if (is.null(partitum$aliases)) rd_tag('alias', name),
+      new_tag("name", name),
+      if (is.null(partitum$aliases)) new_tag("alias", name),
       process_had_tag(partitum, 'aliases', function(tag, param) {
-        process.split('alias', param)
+        new_tag('alias', param)
       }),
-      rd_tag('title', title),
+      new_tag("title", title),
       process.usage(partitum),
       process.arguments(partitum),
       process_had_tag(partitum, 'docType'),
@@ -120,15 +120,16 @@ roc_process.had <- function(roclet, partita, base_path) {
       process_had_tag(partitum, "references"),
       process_had_tag(partitum, 'concept'),
       process_had_tag(partitum, 'return', function(tag, param) {
-        rd_tag('value', param)
+        new_tag("value", param)
       }),
       process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
-        process.split('keyword', param)
+        new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
       }),
       process_had_tag(partitum, 'TODO', process.todo),
       process.examples(partitum, base_path)
     )
-    topics[[filename]] <- rd
+    browser()
+    topics[[filename]] <- c(topics[[filename]], rd)
   }
   topics
 }
@@ -162,21 +163,11 @@ roc_output.had <- function(roclet, results, base_path) {
 }
 
 
-# Translate a key and expressions into an Rd expression;
-# multiple expressions take their own braces.
-rd_tag <- function(key, ..., space = FALSE) {
-  if (space) {
-    values <- str_c("\n", str_c(..., collapse = "\n"), "\n")
-  } else {
-    values <- str_trim(c(...))
-  }
-  str_c("\\", key, str_c("{", values, "}", collapse = ""), "\n")                         
-}
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {
   if (!is.null(partitum$usage)) {
-    return(rd_tag('usage', partitum$usage))
+    return(new_tag("usage", partitum$usage))
   }
   
   formals <- partitum$formals
@@ -189,9 +180,9 @@ process.usage <- function(partitum) {
   } else {
     partitum$assignee
   }
+
   usage <- str_c(fun_name, "(", args, ")")
-  
-  rd_tag('usage', str_wrap(usage, width = 60, exdent = 4))
+  new_tag("usage", usage)
 }
 
 # Split the introductory matter into its description followed
@@ -203,12 +194,12 @@ process.description <- function(key, expressions) {
 
   desc <- paste(strwrap(desc, exdent = 2, indent = 2, width = 60),
     collapse = "\n")
-  desc_rd <- rd_tag("description", desc, space = TRUE)
+  desc_rd <- new_tag("description", desc)
   
   if (length(details) > 0 && !is.null.string(details)) {
     details <- str_wrap(details, exdent = 2, indent = 2, width = 60)
     
-    details_rd <- rd_tag("details", details, space = FALSE)
+    details_rd <- new_tag("details", details, space = FALSE)
   } else {
     details_rd <- NULL
   }
@@ -219,24 +210,21 @@ process.arguments <- function(partitum) {
   params <- partitum[names(partitum) == "param"]
   if (length(params) == 0) return() 
 
-  name <- sapply(params, "[[", "name")
   desc <- str_trim(sapply(params, "[[", "description"))
+  names(desc) <- sapply(params, "[[", "name")
   
-  params_str <- paste(
-    "  \\item{", name, "}{",  desc, "}", 
-    sep = "", collapse = "\n")
-  
-  rd_tag("arguments", params_str, space = TRUE)
+  new_tag("arguments", desc)
 }
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
 process.examples <- function(partitum, base_path) {
+  out <- list()
   if (!is.null(partitum$examples)) {      
     ex <- partitum$examples
     ex <- gsub("([%\\])", "\\\\\\1", ex)
     ex <- gsub("\\\\dont", "\\dont", ex)
-    return(rd_tag('examples', ex))
+    out <- c(out, new_tag("examples", ex))
   } 
   
   paths <- unlist(partitum[names(partitum) == "example"])
@@ -244,22 +232,19 @@ process.examples <- function(partitum, base_path) {
     paths <- file.path(base_path, str_trim(paths))
     examples <- unlist(lapply(paths, readLines))
     
-    return(rd_tag('examples', str_c(examples, collapse = "\n")))
+    out <- c(out, new_tag("examples", examples))
   }
-}
-process.split <- function(key, expressions) {
-  pieces <- str_split(str_trim(expressions), "\\s+")[[1]]
-  unlist(lapply(pieces, rd_tag, key = key))
+  out
 }
 process.todo <- function(key, value) {
-  rd_tag('section', 'TODO', value)
+  new_tag("section", list(TODO = value))
 }
 
-process_had_tag <- function(partitum, tag, f = rd_tag) {
+process_had_tag <- function(partitum, tag, f = new_tag) {
   matches <- partitum[names(partitum) == tag]
   if (length(matches) == 0) return()
 
-  unlist(lapply(matches, function(p) f(tag, p)))
+  unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)
 }
 
 

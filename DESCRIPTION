@@ -28,4 +28,5 @@ Collate:
     'roclet.R'
     'roxygen.R'
     'roxygenize.R'
+    'topo-sort.R'
     'utils.R'

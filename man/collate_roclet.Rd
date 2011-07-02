@@ -1,13 +1,15 @@
 \name{collate_roclet}
 \alias{collate_roclet}
-\title{Topologically sort R files and record in Collate field.}
+\title{Roclet: make Collate field in DESCRIPTION.}
 \value{
   Rd roclet
 }
 \description{
-  Topologically sort R files and record in Collate field.
+  Roclet: make Collate field in DESCRIPTION.
 }
 \details{
+  Topologically sort R files and record in Collate field.
+
   Each \code{@include} tag should specify the filename of
   one intrapackage dependency; multiple \code{@include}
   tags may be given.

@@ -7,7 +7,7 @@ register.preref.parsers(parse.value, 'exportClass', 'exportMethod',
   'exportPattern', 'S3method', 'import', 'importFrom', 'importClassesFrom',
   'importMethodsFrom', 'useDynLib')
 
-#' Build namespace.
+#' Roclet: make NAMESPACE.
 #' 
 #' \cite{Writing R Extensions}
 #' (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.

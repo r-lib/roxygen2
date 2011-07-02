@@ -2,10 +2,16 @@
 
 The `rxygn` package is a fork of `roxygen`, and as the name might suggest, it's leaner and meaner.  Compared to `roxygen`, `rxygen`: 
 
-* works with run-time details to give more accurate output
+* works with run-time details to give more accurate output - this requires
+  that the source code that roxygen is documenting be loaded prior to
+  documentation
+
 * is written in idiomatic R
+
 * uses S3 instead of a homegrown class system
+
 * doesn't do call graphs
+
 * roclets build up an internal data structure instead of writing to disk
 
 # Why use rxygn?

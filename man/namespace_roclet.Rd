@@ -1,5 +1,6 @@
 \name{namespace_roclet}
 \alias{namespace_roclet}
+\alias{namespace_roclet}
 \alias{exportClass}
 \alias{exportMethod}
 \alias{exportPattern}
@@ -9,12 +10,12 @@
 \alias{importClassesFrom}
 \alias{importMethodsFrom}
 \alias{export}
-\title{Build namespace.}
+\title{Roclet: make NAMESPACE.}
 \value{
   Namespace roclet
 }
 \description{
-  Build namespace.
+  Roclet: make NAMESPACE.
 }
 \details{
   \cite{Writing R Extensions}

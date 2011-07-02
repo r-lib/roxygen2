@@ -4,9 +4,6 @@ NULL
 # Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '#+\''
 
-# Symbol that delimits tags.
-TAG.DELIMITER <- '@'
-
 # Comment blocks (possibly null) that precede a file's expressions.
 #
 # @param srcfile result of running \code{srcfile} on an interesting file
@@ -52,8 +49,10 @@ parse.element <- function(element) {
 #
 # @param expression the description to be parsed
 # @return A list containing the parsed description
-parse.description <- function(expression)
-  list(description=str_trim(expression))
+parse.description <- function(expression) {
+  if (is.null.string(expression)) return(NULL)
+  list(description = str_trim(expression))
+}
 
 #' Default parser which simply emits the key and expression;
 #' used for elements with optional values (like \code{@@export})
@@ -180,32 +179,22 @@ parse.ref.preref <- function(ref) {
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
 
-  if (length(trimmed.lines) == 0)
-    list()
-  else {
-    joined.lines <- str_c(trimmed.lines, collapse = '\n')
-    ## Thanks to Fegis at #regex on Freenode for the
-    ## lookahead/lookbehind hack; as he notes, however, "it's not
-    ## proper escaping though... it will not split a@@@b."
-    elements <- strsplit(joined.lines,
-                             sprintf('(?<!%s)%s(?!%s)',
-                                     TAG.DELIMITER,
-                                     TAG.DELIMITER,
-                                     TAG.DELIMITER),
-                             perl=TRUE)[[1]]
-    ## Compress the escaped delimeters.
-    elements <- Map(function(element)
-                    gsub(sprintf('%s{2}', TAG.DELIMITER),
-                         TAG.DELIMITER,
-                         element),
-                    elements)
-    description <- elements[[1]]
-    parsed.elements <- Reduce(function(parsed, element)
-                              append(parsed, parse.element(element)),
-                              elements[-1],
-                              if (is.null.string(description)) NULL
-                              else parse.description(description))
-  }
+  if (length(trimmed.lines) == 0) return(list())
+
+  joined.lines <- str_c(trimmed.lines, collapse = '\n')
+  ## Thanks to Fegis at #regex on Freenode for the
+  ## lookahead/lookbehind hack; as he notes, however, "it's not
+  ## proper escaping though... it will not split a@@@b."
+  elements <- strsplit(joined.lines, '(?<!@)@(?!@)', perl = TRUE)[[1]]
+
+  ## Compress the escaped delimeters.
+  elements <- str_replace_all(elements, fixed("@@"), "@")
+
+  parsed.description <- parse.description(elements[[1]])
+  parsed.elements <- unlist(lapply(elements[-1], parse.element), 
+    recursive = FALSE)
+  
+  c(parsed.description, parsed.elements)
 } 
 
 #' Parse a srcref

@@ -1,14 +1,19 @@
 \name{parse.ref.srcref}
 \alias{parse.ref.srcref}
 \title{Parse a srcref...}
-\usage{\method{parse.ref}{srcref} (ref, ...)}
+\usage{
+  \method{parse.ref}{srcref} (ref, ...)
+}
 \arguments{
   \item{ref}{the srcref to be parsed}
+
   \item{\dots}{ignored}
+}
+\value{
+  List containing the parsed srcref
 }
 \description{
   Parse a srcref
 }
-\value{List containing the parsed srcref}
 \keyword{internal}
 

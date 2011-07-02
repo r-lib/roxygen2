@@ -98,38 +98,40 @@ roc_process.had <- function(roclet, partita, base_path) {
     
     rd <- topics[[filename]]
     if (is.null(rd)) {
-      rd <- character()
+      rd <- new_rd_file()
+      topics[[filename]] <- rd
     }
 
     title <- partitum$title %||% first.sentence(partitum$description) %||%
       name
-    rd <- c(rd, 
-      new_tag("name", name),
-      if (is.null(partitum$aliases)) new_tag("alias", name),
-      process_had_tag(partitum, 'aliases', function(tag, param) {
-        new_tag('alias', param)
-      }),
-      new_tag("title", title),
-      process.usage(partitum),
-      process.arguments(partitum),
-      process_had_tag(partitum, 'docType'),
-      process_had_tag(partitum, 'description', process.description),
-      process_had_tag(partitum, 'note'),
-      process_had_tag(partitum, 'author'),
-      process_had_tag(partitum, 'seealso'),
-      process_had_tag(partitum, "references"),
-      process_had_tag(partitum, 'concept'),
-      process_had_tag(partitum, 'return', function(tag, param) {
+
+    add_tag(rd, new_tag("name", name))
+    if (is.null(partitum$aliases)) {
+      add_tag(rd, new_tag("alias", name))
+    }
+    add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
+        new_tag('alias', words(param))
+      }))
+    add_tag(rd, new_tag("title", title))
+    add_tag(rd, process.usage(partitum))
+    add_tag(rd, process.arguments(partitum))
+    add_tag(rd, process_had_tag(partitum, 'docType'))
+    add_tag(rd, process_had_tag(partitum, 'description', process.description))
+    add_tag(rd, process_had_tag(partitum, 'note'))
+    add_tag(rd, process_had_tag(partitum, 'author'))
+    add_tag(rd, process_had_tag(partitum, 'seealso'))
+    add_tag(rd, process_had_tag(partitum, "references"))
+    add_tag(rd, process_had_tag(partitum, 'concept'))
+    add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
         new_tag("value", param)
-      }),
-      process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
+      }))
+    add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
         new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
-      }),
-      process_had_tag(partitum, 'TODO', process.todo),
-      process.examples(partitum, base_path)
-    )
-    browser()
-    topics[[filename]] <- c(topics[[filename]], rd)
+      }))
+    add_tag(rd, process_had_tag(partitum, 'TODO', process.todo))
+    add_tag(rd, process.examples(partitum, base_path))
+
+    topics[[filename]] <- rd
   }
   topics
 }
@@ -137,7 +139,7 @@ roc_process.had <- function(roclet, partita, base_path) {
 #' @S3method roc_output had
 roc_output.had <- function(roclet, results, base_path) { 
   man <- normalizePath(file.path(base_path, "man"))
-  contents <- vapply(results, paste, character(1), collapse = "")
+  contents <- vapply(results, format, character(1))
   
   write_out <- function(filename, contents) {
     if (the_same(filename, contents)) return()
@@ -199,7 +201,7 @@ process.description <- function(key, expressions) {
   if (length(details) > 0 && !is.null.string(details)) {
     details <- str_wrap(details, exdent = 2, indent = 2, width = 60)
     
-    details_rd <- new_tag("details", details, space = FALSE)
+    details_rd <- new_tag("details", details)
   } else {
     details_rd <- NULL
   }

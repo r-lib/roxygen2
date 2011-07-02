@@ -10,10 +10,14 @@
 \alias{importMethodsFrom}
 \alias{export}
 \title{Build namespace.}
+\value{
+  Namespace roclet
+}
 \description{
   Build namespace.
 }
-\details{\cite{Writing R Extensions}
+\details{
+  \cite{Writing R Extensions}
   (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
   for details.
 
@@ -49,9 +53,10 @@
   with formal classes and methods} from \cite{Writing R
   Extensions}. \item \code{@importMethodsFrom}: See
   \dQuote{1.6.6 Name spaces with formal classes and
-  methods} from \cite{Writing R Extensions}. }}
-\value{Namespace roclet}
-\examples{#' An example file, example.R, which imports
+  methods} from \cite{Writing R Extensions}. }
+}
+\examples{
+#' An example file, example.R, which imports
 #' packages foo and bar
 #' @import foo bar
 NULL
@@ -62,5 +67,6 @@ fun <- function() {}
 
 roclet <- namespace_roclet()
 \dontrun{roc_proc(roclet, "example.R")}
-\dontrun{roc_out(roclet, "example.R", ".")}}
+\dontrun{roc_out(roclet, "example.R", ".")}
+}
 

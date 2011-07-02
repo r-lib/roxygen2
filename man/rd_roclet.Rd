@@ -5,6 +5,12 @@
   Roclet: make Rd files.
 }
 \details{
+  This roclet is the workhorse of \pkg{roxygen}, producing
+  the Rd files that document that functions in your
+  package.
+
+  Valid tags for \code{rd_roclet} are:
+
   \describe{ \item{\code{@name topicname}}{Override the
   default topic name, which is taken by default from the
   object that is assigned to in the code immediately
@@ -25,6 +31,16 @@
   \code{[[<-}), or you want to merge documentation for
   multiple function into a single file.}
 
+  \item{\code{@usage usage_string}}{Override the default
+  usage string. You should not need to use this tag - if
+  you are trying to document multiple functions in the same
+  topic, use \code{@rdname}.}
+
   }
+}
+\examples{
+roclet <- rd_roclet()
+\dontrun{roc_proc(roclet, "example.R")}
+\dontrun{roc_out(roclet, "example.R", ".")}
 }
 

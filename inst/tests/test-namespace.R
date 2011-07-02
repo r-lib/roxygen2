@@ -22,12 +22,16 @@ test_that("exportClass overrides default class name", {
 })
 
 test_that("export detects method name", {
-  out <- roc_proc_text(roc, "#' @export\nsetMethod('b', 'a')")
-  expect_equal(out, 'exportMethods(b)')  
+  out <- roc_proc_text(roc, "
+    #' @export\n
+    setMethod('max', 'a', function(x, ...) x[1])")
+  expect_equal(out, 'exportMethods(max)')  
 })
 
 test_that("exportMethod overrides default method name", {
-  out <- roc_proc_text(roc, "#' @exportMethod c\nsetMethod('b', 'a')")
+  out <- roc_proc_text(roc, "
+    #' @exportMethod c
+    setMethod('max', 'a', function(x, ...) x[1])")
   expect_equal(out, 'exportMethods(c)')  
 })
 

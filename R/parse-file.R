@@ -8,6 +8,7 @@ parse.file <- function(file, env) {
   srcfile <- srcfile(file)
   
   res <- parse.srcfile(srcfile, env)
+  setPackageName("test", env)
   # res <- try(cached.parse.srcfile(srcfile, env), silent = TRUE)
   # if (inherits(res, "try-error")) {
   #   stop("Can't parse ", file, "\n", res, call. = FALSE)

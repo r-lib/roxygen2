@@ -1,7 +1,10 @@
-\name{register.srcref.parser}
+\name{register.preref.parser}
+\alias{register.preref.parser}
 \alias{register.srcref.parser}
-\title{Specifically register a srcref parser...}
+\title{Register parsers.}
 \usage{
+  register.preref.parser(key, parser)
+
   register.srcref.parser(key, parser)
 }
 \arguments{
@@ -14,7 +17,7 @@
   \code{NULL}
 }
 \description{
-  Specifically register a srcref parser
+  Register parsers.
 }
 \keyword{internal}
 

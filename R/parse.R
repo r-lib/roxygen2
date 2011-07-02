@@ -42,7 +42,7 @@ parse.element <- function(element) {
   
   tag <- pieces[, 1]
   rest <- pieces[, 2]
-
+  
   do.call(parser.preref(tag), list(tag, rest))
 }
 
@@ -149,7 +149,7 @@ parse.toggle <- function(key, rest)
 # Preref parser-lookup; defaults to \code{parse.preref}.
 # @param key the key upon which to look
 # @return The parser
-parser.preref <- function(key, default) {
+parser.preref <- function(key, default = parse.preref) {
   preref.parsers[[key]] %||% default
 }
 

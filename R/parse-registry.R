@@ -5,7 +5,7 @@ if (!exists("preref.parsers")) {
   srcref.parsers <- new.env(parent=emptyenv())
 }
 
-#' Specifically register a preref parser
+#' Register parsers.
 #'
 #' @param key the key upon which to register
 #' @param parser the parser callback to register;
@@ -13,18 +13,13 @@ if (!exists("preref.parsers")) {
 #' @return \code{NULL}
 #' @export
 #' @keywords internal
+#' @rdname register-parser
 register.preref.parser <- function(key, parser) {
   preref.parsers[[key]] <- parser
 }
 
-#' Specifically register a srcref parser
-#'
-#' @param key the key upon which to register
-#' @param parser the parser callback to register;
-#' a function taking \code{key} and \code{expression}
-#' @return \code{NULL}
 #' @export
-#' @keywords internal
+#' @rdname register-parser
 register.srcref.parser <- function(key, parser) {
   srcref.parsers[[key]] <- parser
 }

@@ -31,7 +31,11 @@ add_tag <- function(file, tag) {
   stopifnot(is.rd_tag(tag))
   
   existing <- file[[1]][[tag$tag]]
-  file[[1]][[tag$tag]] <- if (is.null(existing)) tag else merge(existing, tag)
+  if (is.null(existing)) {
+    file[[1]][[tag$tag]] <- tag 
+  } else {
+    file[[1]][[tag$tag]] <- merge(existing, tag)[[1]]
+  }
 
   invisible()
 }

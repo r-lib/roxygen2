@@ -17,7 +17,7 @@ register.preref.parsers(parse.value,
                         'keywords',
                         'return',
                         'author',
-                        'TODO',
+                        'section',
                         'format',
                         'source')
 
@@ -59,6 +59,8 @@ register.srcref.parser('setMethod', function(call) {
 #' This roclet is the workhorse of \pkg{roxygen}, producing the Rd files that
 #' document that functions in your package.  
 #'
+#' @section Tags:
+#'
 #' Valid tags for \code{rd_roclet} are:
 #' 
 #' \describe{
@@ -81,6 +83,10 @@ register.srcref.parser('setMethod', function(call) {
 #'  \item{\code{@@usage usage_string}}{Override the default usage string. 
 #'    You should not need to use this tag - if you are trying to document
 #'    multiple functions in the same topic, use \code{@@rdname}.}
+#'
+#'  \item{\code{@@section Name: contents}}{Use to add to an arbitrary section
+#'    to the documentation. The name of the section will be the content before
+#'    the first colon, and the contents will be everything after the colon.} 
 #'
 #'  }
 #' @examples
@@ -145,7 +151,7 @@ roc_process.had <- function(roclet, partita, base_path) {
     add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
         new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
       }))
-    add_tag(rd, process_had_tag(partitum, 'TODO', process.todo))
+    add_tag(rd, process_had_tag(partitum, 'section', process.section))
     add_tag(rd, process.examples(partitum, base_path))
 
     topics[[filename]] <- rd
@@ -255,8 +261,10 @@ process.examples <- function(partitum, base_path) {
   }
   out
 }
-process.todo <- function(key, value) {
-  new_tag("section", list(TODO = value))
+process.section <- function(key, value) {
+  pieces <- str_split_fixed(value, ":", n = 2)[1, ]
+  
+  new_tag("section", list(list(name = pieces[1], content = pieces[2])))
 }
 
 process_had_tag <- function(partitum, tag, f = new_tag) {

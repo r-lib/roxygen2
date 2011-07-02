@@ -108,7 +108,13 @@ format.arguments_tag <- function(x, ...) {
 
 #' @S3method format section_tag
 format.section_tag <- function(x, ...) {
-  stop("Not implemented")
+  names <- vapply(x$values, "[[", "name", FUN.VALUE = character(1))
+
+  contents <- vapply(x$values, "[[", "content", FUN.VALUE = character(1))
+  contents <- str_wrap(str_trim(contents), width = 60, exdent = 2, indent = 2)
+  
+  setions <- str_c("\\section{", names, "}{\n", contents, "\n}\n", 
+    collapse = "\n")
 }
 
 #' @S3method format examples_tag

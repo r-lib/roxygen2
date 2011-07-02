@@ -8,7 +8,8 @@
   This roclet is the workhorse of \pkg{roxygen}, producing
   the Rd files that document that functions in your
   package.
-
+}
+\section{Tags}{
   Valid tags for \code{rd_roclet} are:
 
   \describe{ \item{\code{@name topicname}}{Override the
@@ -35,6 +36,11 @@
   usage string. You should not need to use this tag - if
   you are trying to document multiple functions in the same
   topic, use \code{@rdname}.}
+
+  \item{\code{@section Name: contents}}{Use to add to an
+  arbitrary section to the documentation. The name of the
+  section will be the content before the first colon, and
+  the contents will be everything after the colon.}
 
   }
 }

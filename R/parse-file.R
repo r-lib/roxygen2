@@ -4,24 +4,25 @@
 #' @return List containing parsed directives
 #' @keywords internal
 #' @export
-parse.file <- function(file) {
+parse.file <- function(file, env) {
   srcfile <- srcfile(file)
   
-  res <- try(cached.parse.srcfile(srcfile), silent = TRUE)
-  if (inherits(res, "try-error")) {
-    stop("Can't parse ", file, "\n", res, call. = FALSE)
-  }
+  res <- parse.srcfile(srcfile, env)
+  # res <- try(cached.parse.srcfile(srcfile, env), silent = TRUE)
+  # if (inherits(res, "try-error")) {
+  #   stop("Can't parse ", file, "\n", res, call. = FALSE)
+  # }
   res
 }
 
-parse.srcfile <- function(srcfile) {
+parse.srcfile <- function(srcfile, env) {
   src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
   pre_refs <- prerefs(srcfile, src_refs)
 
   if (length(src_refs) == 0) return(list())
   
-  src_parsed <- lapply(src_refs, cached.parse.ref)
-  pre_parsed <- lapply(pre_refs, cached.parse.ref)
+  src_parsed <- lapply(src_refs, parse.ref, env = env)
+  pre_parsed <- lapply(pre_refs, parse.ref, env = env)
   mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)
 }
 cached.parse.srcfile <- memoize(parse.srcfile)
@@ -34,7 +35,12 @@ cached.parse.srcfile <- memoize(parse.srcfile)
 #' @keywords internal
 #' @export
 parse.files <- function(paths) {
-  unlist(lapply(paths, parse.file), recursive = FALSE)
+  # Source all files into their own environment so that parsing code can
+  # access them.
+  env <- new.env(parent = parent.env(globalenv()))
+  lapply(paths, sys.source, chdir = TRUE, envir = env)
+  
+  unlist(lapply(paths, parse.file, env = env), recursive = FALSE)
 }
   
 #' Text-parsing hack using tempfiles for more facility.
@@ -47,5 +53,5 @@ parse.text <- function(text) {
   file <- tempfile()
   writeLines(text, file)
   on.exit(unlink(file))
-  parse.file(file)
+  parse.files(file)
 }

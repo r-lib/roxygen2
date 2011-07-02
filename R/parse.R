@@ -165,7 +165,7 @@ parser.srcref <- function(key, default) {
 #' @return List containing the parsed srcref/preref
 #' @keywords internal
 #' @export
-parse.ref <- function(ref) UseMethod('parse.ref')
+parse.ref <- function(ref, env) UseMethod('parse.ref')
 cached.parse.ref <- memoize(parse.ref)
 
 #' Parse a preref
@@ -174,7 +174,7 @@ cached.parse.ref <- memoize(parse.ref)
 #' @return List containing the parsed preref
 #' @keywords internal
 #' @export
-parse.ref.preref <- function(ref) {
+parse.ref.preref <- function(ref, env) {
   lines <- str_trim(getSrcLines(attributes(ref)$srcfile, ref[[1]], ref[[3]]))
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
@@ -204,7 +204,7 @@ parse.ref.preref <- function(ref) {
 #' @return List containing the parsed srcref
 #' @keywords internal
 #' @export
-parse.ref.srcref <- function(ref) {
+parse.ref.srcref <- function(ref, env) {
   srcfile <- attributes(ref)$srcfile
   srcref <- list(srcref = 
     list(filename = srcfile$filename, lloc = as.vector(ref)))
@@ -223,11 +223,11 @@ parse.ref.srcref <- function(ref) {
   parser <- srcref.parsers[[name]]
   if (is.null(parser)) return(srcref)
   
-  f <- eval(call[[1]])
+  f <- eval(call[[1]], env)
   # If not a primitive function, use match.call so argument handlers
   # can use argument names
   if (!is.primitive(f)) {
-    call <- match.call(eval(call[[1]]), call)    
+    call <- match.call(eval(call[[1]], env), call)
   }
-  c(srcref, parser(call))
+  c(srcref, parser(call, env))
 }

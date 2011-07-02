@@ -2,7 +2,7 @@
 \alias{parse.file}
 \title{Parse a source file containing roxygen directives.}
 \usage{
-  parse.file(file)
+  parse.file(file, env)
 }
 \arguments{
   \item{file}{string naming file to be parsed}

@@ -2,7 +2,7 @@
 \alias{parse.ref.preref}
 \title{Parse a preref...}
 \usage{
-  \method{parse.ref}{preref} (ref)
+  \method{parse.ref}{preref} (ref, env)
 }
 \arguments{
   \item{ref}{the preref to be parsed}

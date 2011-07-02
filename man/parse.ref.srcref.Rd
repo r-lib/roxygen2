@@ -2,7 +2,7 @@
 \alias{parse.ref.srcref}
 \title{Parse a srcref...}
 \usage{
-  \method{parse.ref}{srcref} (ref)
+  \method{parse.ref}{srcref} (ref, env)
 }
 \arguments{
   \item{ref}{the srcref to be parsed}

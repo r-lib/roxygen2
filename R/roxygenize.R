@@ -28,12 +28,32 @@ roxygenize <- function(package.dir,
   for (dir in skeleton) {
     dir.create(dir, recursive=TRUE, showWarnings=FALSE)
   }
+
+  roxygen.dir <- normalizePath(roxygen.dir)
+  r_files <- dir(file.path(roxygen.dir, "R"), "[.Rr]$", full.names = TRUE)
+
+  # If description present, use Collate to order the files 
+  # (but still include them all, and silently remove missing)
+  DESCRIPTION <- file.path(package.dir, "DESCRIPTION")
+  if (file.exists(DESCRIPTION)) {
+    raw_collate <- read.description(DESCRIPTION)$Collate
+    
+    con <- textConnection(raw_collate)
+    on.exit(close(con))
+    collate <- scan(con, "character", sep = " ", quiet = TRUE)
+    
+    collate_path <- file.path(roxygen.dir, "R", collate)
+    collate_exists <- Filter(file.exists, collate_path)
+    r_files <- c(collate_path, setdiff(r_files, collate_exists))
+  }
   
+  parsed <- parse.files(r_files)
+
   roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {
-    roclet <- match.fun(roclet)()
-    r_files <- dir(file.path(roxygen.dir, "R"), "[.Rr]$", full.names = TRUE)
-    roc_out(roclet, r_files, roxygen.dir)
+    roc <- match.fun(roclet)()
+    results <- roc_process(roc, parsed, roxygen.dir)
+    roc_output(roc, results, roxygen.dir)
   }
 }
 

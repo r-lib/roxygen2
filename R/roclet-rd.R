@@ -28,9 +28,9 @@ register.preref.parsers(parse.name.description,
 register.preref.parsers(parse.name,
                         'docType')
 
-register.srcref.parser('<-', function(call) {
+register.srcref.parser('<-', function(call, env) {
   assignee <- call[[2]]
-  value <- eval(assignee)
+  value <- eval(assignee, env)
   
   if (!is.function(value)) {
     list(assignee = as.character(assignee))
@@ -40,15 +40,15 @@ register.srcref.parser('<-', function(call) {
 })
 
 
-register.srcref.parser('setClass', function(call) {
+register.srcref.parser('setClass', function(call, env) {
   list(S4class = as.character(call$Class))
 })
 
-register.srcref.parser('setGeneric', function(call) {
+register.srcref.parser('setGeneric', function(call, env) {
   list(S4generic = as.character(call$name))
 })
 
-register.srcref.parser('setMethod', function(call) {
+register.srcref.parser('setMethod', function(call, env) {
   list(
     S4method = as.character(call$f), 
     signature = as.character(call$signature))

@@ -217,13 +217,9 @@ process.description <- function(key, expressions) {
   desc <- paragraphs[[1]]
   details <- do.call(paste, append(paragraphs[-1], list(sep='\n\n')))
 
-  desc <- paste(strwrap(desc, exdent = 2, indent = 2, width = 60),
-    collapse = "\n")
-  desc_rd <- new_tag("description", desc)
+  desc_rd <- new_tag("description", str_c(desc, collapse = "\n"))
   
   if (length(details) > 0 && !is.null.string(details)) {
-    details <- str_wrap(details, exdent = 2, indent = 2, width = 60)
-    
     details_rd <- new_tag("details", details)
   } else {
     details_rd <- NULL

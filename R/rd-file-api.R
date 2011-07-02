@@ -28,6 +28,10 @@ length.rd_file <- function(x) {
   length(x[[1]])
 }
 
+get_tag <- function(file, tagname) {
+  file[[1]][[tagname]]
+}
+
 add_tag <- function(file, tag) {
   if (is.null(tag)) return()
   stopifnot(is.rd_file(file))

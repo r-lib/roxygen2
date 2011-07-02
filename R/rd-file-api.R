@@ -5,11 +5,13 @@ new_rd_file <- function() {
 }
 is.rd_file <- function(x) inherits(x, "rd_file")
 
+#' @S3method print rd_file
 print.rd_file <- function(x, ...) {
   tags <- vapply(as.list(x[[1]]), "[[", "tag", FUN.VALUE = character(1))
   cat("Rd file with tags ", str_c(tags, collapse = ", "), "\n", sep = "")
 }
 
+#' @S3method format rd_file
 format.rd_file <- function(x, ...) {
   tags <- as.list(x[[1]])
   order <- c("docType", "name", "alias", "title", "usage", "arguments",
@@ -19,6 +21,11 @@ format.rd_file <- function(x, ...) {
   tags <- tags[intersect(order, names(tags))]
   
   str_c(unlist(lapply(tags, format)), collapse = "")
+}
+
+#' @S3method length rd_file
+length.rd_file <- function(x) {
+  length(x[[1]])
 }
 
 add_tag <- function(file, tag) {

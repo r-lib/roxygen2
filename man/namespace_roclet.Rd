@@ -1,6 +1,5 @@
 \name{namespace_roclet}
 \alias{namespace_roclet}
-\alias{namespace_roclet}
 \alias{exportClass}
 \alias{exportMethod}
 \alias{exportPattern}

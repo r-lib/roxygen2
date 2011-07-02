@@ -29,23 +29,14 @@ register.preref.parsers(parse.name,
                         'docType')
 
 register.srcref.parser('<-', function(call) {
+  assignee <- call[[2]]
+  value <- eval(assignee)
   
-  assignee_string <- as.character(call[[2]])
-  
-  if (length(call[[3]]) <= 1) return(NULL)
-  
-  while (deparse(call[[3]][[1]]) == "<-") {
-    call[[3]] <- call[[3]][[3]]
-    if (length(call[[3]]) == 1) return(NULL)
+  if (!is.function(value)) {
+    list(assignee = as.character(assignee))
+  } else {
+    list(assignee = as.character(assignee), formals = formals(value))
   }
-  
-  if (!identical(call[[3]][[1]], as.name("function"))) {
-    return(list(assignee = assignee_string))
-  }
-
-  formals <- as.list(call[[3]][[2]])  
-  
-  list(assignee = assignee_string, formals = formals)
 })
 
 

@@ -163,21 +163,19 @@ parser.srcref <- function(key, default) {
 #' Parse either srcrefs, prerefs or pairs of the same.
 #'
 #' @param ref the srcref, preref or pair of the same
-#' @param \dots ignored
 #' @return List containing the parsed srcref/preref
 #' @keywords internal
 #' @export
-parse.ref <- function(ref, ...) UseMethod('parse.ref')
+parse.ref <- function(ref) UseMethod('parse.ref')
 cached.parse.ref <- memoize(parse.ref)
 
 #' Parse a preref
 #' @method parse.ref preref
 #' @param ref the preref to be parsed
-#' @param \dots ignored
 #' @return List containing the parsed preref
 #' @keywords internal
 #' @export
-parse.ref.preref <- function(ref, ...) {
+parse.ref.preref <- function(ref) {
   lines <- str_trim(getSrcLines(attributes(ref)$srcfile, ref[[1]], ref[[3]]))
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
@@ -214,11 +212,10 @@ parse.ref.preref <- function(ref, ...) {
 #'
 #' @method parse.ref srcref
 #' @param ref the srcref to be parsed
-#' @param \dots ignored
 #' @return List containing the parsed srcref
 #' @keywords internal
 #' @export
-parse.ref.srcref <- function(ref, ...) {
+parse.ref.srcref <- function(ref) {
   srcfile <- attributes(ref)$srcfile
   srcref <- list(srcref = 
     list(filename = srcfile$filename, lloc = as.vector(ref)))

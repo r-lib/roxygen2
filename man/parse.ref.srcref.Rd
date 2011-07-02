@@ -2,12 +2,10 @@
 \alias{parse.ref.srcref}
 \title{Parse a srcref...}
 \usage{
-  \method{parse.ref}{srcref} (ref, ...)
+  \method{parse.ref}{srcref} (ref)
 }
 \arguments{
   \item{ref}{the srcref to be parsed}
-
-  \item{\dots}{ignored}
 }
 \value{
   List containing the parsed srcref

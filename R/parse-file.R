@@ -8,7 +8,6 @@ parse.file <- function(file, env) {
   srcfile <- srcfile(file)
   
   res <- parse.srcfile(srcfile, env)
-  setPackageName("test", env)
   # res <- try(cached.parse.srcfile(srcfile, env), silent = TRUE)
   # if (inherits(res, "try-error")) {
   #   stop("Can't parse ", file, "\n", res, call. = FALSE)
@@ -39,6 +38,7 @@ parse.files <- function(paths) {
   # Source all files into their own environment so that parsing code can
   # access them.
   env <- new.env(parent = parent.env(globalenv()))
+  setPackageName("test", env)
   lapply(paths, sys.source, chdir = TRUE, envir = env)
   
   unlist(lapply(paths, parse.file, env = env), recursive = FALSE)

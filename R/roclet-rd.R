@@ -106,9 +106,7 @@ roc_process.had <- function(roclet, partita, base_path) {
       name
 
     add_tag(rd, new_tag("name", name))
-    if (is.null(partitum$aliases)) {
-      add_tag(rd, new_tag("alias", name))
-    }
+    add_tag(rd, new_tag("alias", name))
     add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
         new_tag('alias', words(param))
       }))

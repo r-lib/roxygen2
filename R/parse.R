@@ -170,19 +170,6 @@ parser.srcref <- function(key, default) {
 parse.ref <- function(ref, ...) UseMethod('parse.ref')
 cached.parse.ref <- memoize(parse.ref)
 
-#' Parse a preref/srcrefs pair
-#'
-#' @method parse.ref list
-#' @param ref the preref/srcref pair
-#' @param \dots ignored
-#' @return List combining the parsed preref/srcref
-#' @keywords internal
-#' @export
-parse.ref.list <- function(ref, ...)
-  append(parse.ref(ref[[1]]),
-         parse.ref(ref[[2]]))
-
-
 #' Parse a preref
 #' @method parse.ref preref
 #' @param ref the preref to be parsed
@@ -257,62 +244,4 @@ parse.ref.srcref <- function(ref, ...) {
     call <- match.call(eval(call[[1]]), call)    
   }
   c(srcref, parser(call))
-}
-
-# Parse each of a list of preref/srcref pairs.
-# @param preref.srcrefs list of preref/srcref pairs
-# @return List combining parsed preref/srcrefs
-parse.refs <- function(preref.srcrefs) {
-  lapply(preref.srcrefs, cached.parse.ref)
-}
-  
-
-#' Parse a source file containing roxygen directives.
-#'
-#' @param file string naming file to be parsed
-#' @return List containing parsed directives
-#' @keywords internal
-#' @export
-parse.file <- function(file) {
-  srcfile <- srcfile(file)
-  
-  res <- try(cached.parse.srcfile(srcfile), silent = TRUE)
-  if (inherits(res, "try-error")) {
-    stop("Can't parse ", file, "\n", res, call. = FALSE)
-  }
-  res
-}
-
-parse.srcfile <- function(srcfile) {
-  src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
-  pre_refs <- prerefs(srcfile, src_refs)
-
-  if (length(src_refs) == 0) return(list())
-  
-  parse.refs(mapply(list, src_refs, pre_refs, SIMPLIFY = FALSE))
-}
-cached.parse.srcfile <- memoize(parse.srcfile)
-
-#' Parse many files at one.
-#'
-#' @param \dots files to be parsed
-#' @return List containing parsed directives
-#' @seealso \code{\link{parse.file}}
-#' @keywords internal
-#' @export
-parse.files <- function(paths) {
-  unlist(lapply(paths, parse.file), recursive = FALSE)
-}
-  
-#' Text-parsing hack using tempfiles for more facility.
-#'
-#' @param text stringr containing text to be parsed
-#' @return The parse tree
-#' @keywords internal
-#' @export
-parse.text <- function(text) {
-  file <- tempfile()
-  writeLines(text, file)
-  on.exit(unlink(file))
-  parse.file(file)
 }

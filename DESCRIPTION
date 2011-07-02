@@ -17,6 +17,7 @@ Depends:
     digest
 Collate:
     'description.R'
+    'parse-file.R'
     'parse-registry.R'
     'parse.R'
     'rd-file-api.R'

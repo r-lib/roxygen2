@@ -1,4 +1,4 @@
-#' @include parse.R
+#' @include parse-registry.R
 NULL
 
 register.preref.parsers(parse.value, 'include')

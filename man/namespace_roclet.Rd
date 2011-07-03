@@ -1,14 +1,13 @@
 \name{namespace_roclet}
 \alias{namespace_roclet}
+\alias{export}
 \alias{exportClass}
 \alias{exportMethod}
-\alias{exportPattern}
 \alias{S3method}
 \alias{import}
 \alias{importFrom}
 \alias{importClassesFrom}
 \alias{importMethodsFrom}
-\alias{export}
 \title{Roclet: make NAMESPACE.}
 \value{
   Namespace roclet
@@ -17,43 +16,71 @@
   Roclet: make NAMESPACE.
 }
 \details{
-  \cite{Writing R Extensions}
+  This roclet automates the production of a
+  \file{NAMESPACE} file, see \cite{Writing R Extensions}
   (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
   for details.
+}
+\section{Tags
 
-  The namespace roclet supports the following tags:
+There are four tags for exporting objects from the package}{
+  \describe{
 
-  \tabular{ll}{ Roxygen tag \tab \file{NAMESPACE}
-  equivalent\cr \code{@export} \tab \code{export}\cr
-  \code{@exportClass} \tab \code{exportClasses}\cr
-  \code{@exportMethod} \tab \code{exportMethod}\cr
-  \code{@exportPattern} \tab \code{exportPattern}\cr
-  \code{@S3method} \tab \code{S3method}\cr \code{@import}
-  \tab \code{import}\cr \code{@importFrom} \tab
-  \code{importFrom}\cr \code{@importClassesFrom} \tab
-  \code{importClassesFrom}\cr \code{@importMethodsFrom}
-  \tab \code{importMethodsFrom}\cr }
+  \item{\code{@export}}{May be specified with or without
+  value; if without, roxygen guess at the type of export:
+  \code{exportMethod} for S4 methods, \code{S3method} for
+  S3 methods, \code{exportClass} for S4 classes,
+  \code{export} for functions and so on.
 
-  \enumerate{ \item \code{@export}: May be specified with
-  or without value; if unadorned, roxygen will try to guess
-  the exported value by assignee, \code{setMethod},
-  \code{setClass}, etc. Otherwise, \code{@export f g ...}
-  translates to \code{export(f, g, ...)}. \item
-  \code{@exportClass}: Overrides \code{setClass}. \item
-  \code{@exportMethod}: Overrides \code{setMethod} or
-  \code{setGeneric}. \item \code{@exportPattern}: See
-  \dQuote{1.6.2 Registering S3 methods} from \cite{Writing
-  R Extensions}. \item \code{@S3method}: Overrides the
-  export of an S3 method. \item \code{@import}: See
-  \dQuote{1.6.1 Specifying imports and exports} from
-  \cite{Writing R Extensions}. \item \code{@importFrom}:
-  See \dQuote{1.6.1 Specifying imports and exports} from
-  \cite{Writing R Extensions}. \item
-  \code{@importClassesFrom}: See \dQuote{1.6.6 Name spaces
-  with formal classes and methods} from \cite{Writing R
-  Extensions}. \item \code{@importMethodsFrom}: See
-  \dQuote{1.6.6 Name spaces with formal classes and
-  methods} from \cite{Writing R Extensions}. }
+  If you specify a value, it overrides this process and
+  will produce multiple export direction, e.g.
+  \code{@export f} will add \code{export(f)} and
+  \code{export(g)} directives.
+
+  This is the only directive you should need for documented
+  function, the other directives are useful if you want to
+  export (e.g.) methods but not document them}
+
+  \item{\code{@exportClass x}}{Produces
+  \code{exportClasses(x)} directive.}
+
+  \item{\code{@exportMethod x}}{Produces
+  \code{exportMethods(x)} directive.} .
+  \item{\code{@S3method generic class}}{Produces
+  \code{S3method(generic,class)} directive}
+
+  }
+
+  There are four tags for importing object into the
+  package:
+
+  \describe{
+
+  \item{\code{@import package}}{Produces
+  \code{import(package) directive to import all functions
+  from the given package}}
+
+  \item{\code{@importFrom package functiona functionb
+  ...}}{Produces multiple \code{importFrom(package,
+  function)} directives to import selected functions from a
+  package.}
+
+  \item{\code{@importClassesFrom package classa classb
+  ...}}{Produces multiple \code{importClassesFrom(package,
+  class)} directives to import selected classes from a
+  package.}
+
+  \item{\code{@importMethodsFrom package methoda methodb
+  ...}}{Produces multiple \code{importMethodsFrom(package,
+  method)} directives to import selected methods from a
+  package.}
+
+  }
+
+  Only unique directives are saved to the \file{NAMESPACE}
+  file, so you can repeat them as needed to maintain a
+  close link between the functions where they are needed
+  and the namespace file..
 }
 \examples{
 #' An example file, example.R, which imports

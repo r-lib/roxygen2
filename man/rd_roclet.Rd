@@ -12,11 +12,13 @@
 \section{Tags}{
   Valid tags for \code{rd_roclet} are:
 
-  \describe{ \item{\code{@name topicname}}{Override the
-  default topic name, which is taken by default from the
-  object that is assigned to in the code immediately
-  following the roxygen block. This tag is useful when
-  documenting datasets, and other non-function elements.}
+  \describe{
+
+  \item{\code{@name topicname}}{Override the default topic
+  name, which is taken by default from the object that is
+  assigned to in the code immediately following the roxygen
+  block. This tag is useful when documenting datasets, and
+  other non-function elements.}
 
   \item{\code{@aliases space separated aliases}}{Add
   additional aliases. The topic name is always included in

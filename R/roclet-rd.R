@@ -1,4 +1,4 @@
-#' @include parse.R
+#' @include parse-registry.R
 #' @import stringr
 NULL
 
@@ -64,6 +64,7 @@ register.srcref.parser('setMethod', function(call, env) {
 #' Valid tags for \code{rd_roclet} are:
 #' 
 #' \describe{
+#'
 #'  \item{\code{@@name topicname}}{Override the default topic name, which is
 #'    taken by default from the object that is assigned to in the code
 #'    immediately following the roxygen block. This tag is useful when

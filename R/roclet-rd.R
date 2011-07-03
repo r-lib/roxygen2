@@ -60,6 +60,10 @@ register.srcref.parser('setMethod', function(call, env) {
 #' This roclet is the workhorse of \pkg{roxygen}, producing the Rd files that
 #' document that functions in your package.  
 #'
+#' This roclet also automatically runs \code{\link[tools]{checkRd}} on all
+#' generated Rd files so that you know as early as possible if there's a
+#' problem.
+#'
 #' @section Tags:
 #'
 #' Valid tags for \code{rd_roclet} are:
@@ -169,6 +173,7 @@ roclet_rd_one <- function(partitum) {
 }
 
 #' @S3method roc_output had
+#' @importFrom tools checkRd
 roc_output.had <- function(roclet, results, base_path) { 
   man <- normalizePath(file.path(base_path, "man"))
   
@@ -184,7 +189,8 @@ roc_output.had <- function(roclet, results, base_path) {
       cat("Skipping invalid filename: ", name, "\n")
     } else {
       cat(sprintf('Writing %s\n', name))
-      writeLines(contents, filename)        
+      writeLines(contents, filename)    
+      checkRd(filename)
     }
     
   }

@@ -9,7 +9,8 @@ Author: Hadley Wickham <hadley@rice.edu>, Peter Danenberg
     <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Hadley Wickham <hadley@rice.edu>
 Imports:
-    stringr (>= 0.5)
+    stringr (>= 0.5),
+    tools
 Suggests:
     testthat
 Depends:

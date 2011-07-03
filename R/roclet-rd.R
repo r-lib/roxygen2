@@ -160,10 +160,21 @@ roc_process.had <- function(roclet, partita, base_path) {
   topics
 }
 
+output_cache <- new.env(parent = emptyenv())
+
 #' @S3method roc_output had
 roc_output.had <- function(roclet, results, base_path) { 
   man <- normalizePath(file.path(base_path, "man"))
-  contents <- vapply(results, format, character(1))
+  
+  # Cache results of format
+  keys <- suppressWarnings(vapply(results, digest, character(1)))
+  names(keys) <- names(results)
+  need_caching <- setdiff(keys, ls(output_cache))
+  
+  for(key in need_caching) {
+    output_cache[[key]] <- format(results[[names(keys[keys == key])]])
+  }
+  contents <- as.list(output_cache)[keys]
   
   write_out <- function(filename, contents) {
     if (the_same(filename, contents)) return()
@@ -187,6 +198,7 @@ roc_output.had <- function(roclet, results, base_path) {
   paths <- file.path(man, names(results))
   mapply(write_out, paths, contents)    
 }
+
 
 
 

@@ -25,7 +25,7 @@ format.rd_file <- function(x, ...) {
 }
 
 #' @S3method merge rd_file
-merge.rd_file <- function(x, y, ..) {
+merge.rd_file <- function(x, y, ...) {
   rd <- new_rd_file()
   for(tag_x in as.list(x[[1]])) {
     add_tag(rd, tag_x)

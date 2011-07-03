@@ -1,6 +1,6 @@
 \name{roxygenize}
-\alias{roxygenize}
 \alias{roxygenise}
+\alias{roxygenize}
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{
   roxygenize(package.dir, roxygen.dir = package.dir,

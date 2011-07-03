@@ -1,13 +1,13 @@
 \name{namespace_roclet}
-\alias{namespace_roclet}
 \alias{export}
 \alias{exportClass}
 \alias{exportMethod}
-\alias{S3method}
 \alias{import}
-\alias{importFrom}
 \alias{importClassesFrom}
+\alias{importFrom}
 \alias{importMethodsFrom}
+\alias{namespace_roclet}
+\alias{S3method}
 \title{Roclet: make NAMESPACE.}
 \value{
   Namespace roclet

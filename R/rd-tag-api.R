@@ -42,7 +42,8 @@ merge.rd_tag <- function(x, y, ...) {
 #' @S3method format keyword_tag
 #' @S3method format alias_tag
 format_rd <- function(x, ...) {
-  vapply(unique(x$values), rd_tag, tag = x$tag, FUN.VALUE = character(1))
+  vapply(sort(unique(x$values)), rd_tag, tag = x$tag, 
+    FUN.VALUE = character(1))
 }
 format.keyword_tag <- format_rd
 format.alias_tag <- format_rd

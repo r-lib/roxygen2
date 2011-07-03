@@ -40,7 +40,8 @@ parse.element <- function(element) {
   tag <- pieces[, 1]
   rest <- pieces[, 2]
   
-  do.call(parser.preref(tag), list(tag, rest))
+  tag_parser <- preref.parsers[[tag]] %||% parse.preref 
+  tag_parser(tag, rest)
 }
 
 # Parse description: the premier part of a roxygen block
@@ -145,36 +146,8 @@ parse.name <- function(key, name) {
 parse.toggle <- function(key, rest)
   as.list(structure(TRUE, names=key))
 
-# Preref parser-lookup; defaults to \code{parse.preref}.
-# @param key the key upon which to look
-# @return The parser
-parser.preref <- function(key, default = parse.preref) {
-  preref.parsers[[key]] %||% default
-}
-
-# Srcref parser-lookup; defaults to \code{parse.srcref}.
-# @param key the key upon which to look
-# @return The parser
-parser.srcref <- function(key, default) {
-  srcref.parsers[[key]] %||% default
-}
-
-#' Parse either srcrefs, prerefs or pairs of the same.
-#'
-#' @param ref the srcref, preref or pair of the same
-#' @return List containing the parsed srcref/preref
-#' @keywords internal
-#' @export
-parse.ref <- function(ref, env) UseMethod('parse.ref')
-cached.parse.ref <- memoize(parse.ref)
-
-#' Parse a preref
-#' @method parse.ref preref
-#' @param ref the preref to be parsed
-#' @return List containing the parsed preref
-#' @keywords internal
-#' @export
-parse.ref.preref <- function(ref, env) {
+# Parse a preref
+parse.preref <- function(ref) {
   lines <- str_trim(getSrcLines(attributes(ref)$srcfile, ref[[1]], ref[[3]]))
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
@@ -197,14 +170,8 @@ parse.ref.preref <- function(ref, env) {
   c(parsed.description, parsed.elements)
 } 
 
-#' Parse a srcref
-#'
-#' @method parse.ref srcref
-#' @param ref the srcref to be parsed
-#' @return List containing the parsed srcref
-#' @keywords internal
-#' @export
-parse.ref.srcref <- function(ref, env) {
+# Parse a srcref
+parse.srcref <- function(ref, env) {
   srcfile <- attributes(ref)$srcfile
   srcref <- list(srcref = 
     list(filename = srcfile$filename, lloc = as.vector(ref)))

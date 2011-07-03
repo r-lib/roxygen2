@@ -21,8 +21,8 @@ parse.srcfile <- function(srcfile, env) {
 
   if (length(src_refs) == 0) return(list())
   
-  src_parsed <- lapply(src_refs, parse.ref, env = env)
-  pre_parsed <- lapply(pre_refs, parse.ref, env = env)
+  src_parsed <- lapply(src_refs, parse.srcref, env = env)
+  pre_parsed <- lapply(pre_refs, parse.preref)
   mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)
 }
 cached.parse.srcfile <- memoize(parse.srcfile)

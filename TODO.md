@@ -9,8 +9,5 @@
   collate can be run first to figure out the order in which the files should
   be loaded
 
-* Figure out how to cache parsing code, given that it now depends on the state
-  of source.
-
 * Figure out how to cache processing to avoid duplication when nothing has
   changed.

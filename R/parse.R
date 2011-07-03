@@ -1,3 +1,7 @@
+if (!exists("parse_cache")) {
+  parse_cache <- new.env(parent = emptyenv())
+}
+
 #' Parse a source file containing roxygen directives.
 #'
 #' @param file string naming file to be parsed
@@ -6,6 +10,14 @@
 #' @export
 parse.file <- function(file, env) {
   srcfile <- srcfile(file)
+  
+  # Build cache key and check for presence
+  env_hash <- suppressWarnings(digest(env))
+  file_hash <- digest(readLines(file, warn = FALSE))
+  key <- digest(c(env_hash, file_hash))
+  
+  cached <- parse_cache[[key]]
+  if (!is.null(cached)) return(cached)
   
   src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
   pre_refs <- prerefs(srcfile, src_refs)
@@ -17,7 +29,9 @@ parse.file <- function(file, env) {
   
   stopifnot(length(src_parsed) == length(pre_parsed))
   
-  mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)
+  parsed <- mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)
+  parse_cache[[key]] <- parsed
+  parsed
 }
 
 #' Parse many files at one.

@@ -7,10 +7,10 @@ parse_cache <- new_cache()
 #' @return List containing parsed directives
 #' @keywords internal
 #' @export
-parse.file <- function(file, env) {
+parse.file <- function(file, env, env_hash) {
   srcfile <- srcfile(file)
   
-  parse_cache$compute(c(env, readLines(file, warn = FALSE)), {
+  parse_cache$compute(c(env_hash, readLines(file, warn = FALSE)), {
     src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
     pre_refs <- prerefs(srcfile, src_refs)
 
@@ -36,10 +36,13 @@ parse.files <- function(paths) {
   # Source all files into their own environment so that parsing code can
   # access them.
   env <- new.env(parent = parent.env(globalenv()))
+  env_hash <- suppressWarnings(digest(env))
+  
   setPackageName("test", env)
   lapply(paths, sys.source, chdir = TRUE, envir = env)
   
-  unlist(lapply(paths, parse.file, env = env), recursive = FALSE)
+  unlist(lapply(paths, parse.file, env = env, env_hash = env_hash), 
+    recursive = FALSE)
 }
   
 #' Text-parsing hack using tempfiles for more facility.

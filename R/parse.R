@@ -14,6 +14,9 @@ parse.file <- function(file, env) {
   
   src_parsed <- lapply(src_refs, parse.srcref, env = env)
   pre_parsed <- lapply(pre_refs, parse.preref)
+  
+  stopifnot(length(src_parsed) == length(pre_parsed))
+  
   mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)
 }
 

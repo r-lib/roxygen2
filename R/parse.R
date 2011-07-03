@@ -1,6 +1,5 @@
-if (!exists("parse_cache")) {
-  parse_cache <- new.env(parent = emptyenv())
-}
+#' @include cache.R
+parse_cache <- new_cache()
 
 #' Parse a source file containing roxygen directives.
 #'
@@ -11,27 +10,19 @@ if (!exists("parse_cache")) {
 parse.file <- function(file, env) {
   srcfile <- srcfile(file)
   
-  # Build cache key and check for presence
-  env_hash <- suppressWarnings(digest(env))
-  file_hash <- digest(readLines(file, warn = FALSE))
-  key <- digest(c(env_hash, file_hash))
-  
-  cached <- parse_cache[[key]]
-  if (!is.null(cached)) return(cached)
-  
-  src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
-  pre_refs <- prerefs(srcfile, src_refs)
+  parse_cache$compute(c(env, readLines(file, warn = FALSE)), {
+    src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
+    pre_refs <- prerefs(srcfile, src_refs)
 
-  if (length(src_refs) == 0) return(list())
-  
-  src_parsed <- lapply(src_refs, parse.srcref, env = env)
-  pre_parsed <- lapply(pre_refs, parse.preref)
-  
-  stopifnot(length(src_parsed) == length(pre_parsed))
-  
-  parsed <- mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)
-  parse_cache[[key]] <- parsed
-  parsed
+    if (length(src_refs) == 0) return(list())
+
+    src_parsed <- lapply(src_refs, parse.srcref, env = env)
+    pre_parsed <- lapply(pre_refs, parse.preref)
+
+    stopifnot(length(src_parsed) == length(pre_parsed))
+
+    mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)    
+  })
 }
 
 #' Parse many files at one.

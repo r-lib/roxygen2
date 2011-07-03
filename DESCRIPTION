@@ -15,6 +15,7 @@ Suggests:
 Depends:
     digest
 Collate:
+    'cache.R'
     'description.R'
     'parse.R'
     'parse-preref.R'

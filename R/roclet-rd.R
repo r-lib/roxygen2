@@ -1,4 +1,5 @@
 #' @include parse-registry.R
+#' @include cache.R
 #' @import stringr
 NULL
 
@@ -99,8 +100,8 @@ rd_roclet <- function() {
   new_roclet(list(), "had")
 }
 
-
-process_cache <- new.env(parent = emptyenv())
+rd_proc_cache <- new_cache()
+rd_out_cache <- new_cache()
 
 #' @S3method roc_process had
 roc_process.had <- function(roclet, partita, base_path) {
@@ -109,14 +110,7 @@ roc_process.had <- function(roclet, partita, base_path) {
   
   topics <- list()
   for (partitum in partita) {
-    key <- digest(partitum)
-    if (exists(key, process_cache)) {
-      new <- process_cache[[key]]
-    } else {
-      new <- roclet_rd_one(partitum)
-      process_cache[[key]] <- new      
-    }
-    
+    new <- rd_proc_cache$compute(partitum, roclet_rd_one(partitum))    
     if (is.null(new)) next; 
     
     old <- topics[[new$filename]]
@@ -174,21 +168,13 @@ roclet_rd_one <- function(partitum) {
   list(rd = rd, filename = filename)
 }
 
-output_cache <- new.env(parent = emptyenv())
-
 #' @S3method roc_output had
 roc_output.had <- function(roclet, results, base_path) { 
   man <- normalizePath(file.path(base_path, "man"))
   
-  # Cache results of format
-  keys <- suppressWarnings(vapply(results, digest, character(1)))
-  names(keys) <- names(results)
-  need_caching <- setdiff(keys, ls(output_cache))
-  
-  for(key in need_caching) {
-    output_cache[[key]] <- format(results[[names(keys[keys == key])]])
-  }
-  contents <- as.list(output_cache)[keys]
+  contents <- vapply(results, FUN.VALUE = character(1), function(x) {
+    rd_out_cache$compute(x, format(x))
+  })
   
   write_out <- function(filename, contents) {
     if (the_same(filename, contents)) return()

@@ -17,7 +17,7 @@ Depends:
     digest
 Collate:
     'description.R'
-    'parse-file.R'
+    'parse.R'
     'parse-preref.R'
     'parse-srcref.R'
     'parse-registry.R'

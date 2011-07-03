@@ -24,26 +24,22 @@ register.srcref.parser <- function(key, parser) {
   srcref.parsers[[key]] <- parser
 }
 
-#' Register many preref parsers at once.
+#' Register many parsers at once.
 #'
 #' @param parser the parser to register
 #' @param \dots the keys upon which to register
 #' @return \code{NULL}
 #' @export
 #' @keywords internal
+#' @rdname register-parsers
 register.preref.parsers <- function(parser, ...) {
   for (key in c(...)) {
     register.preref.parser(key, parser)
   }
 }
 
-#' Register many srcref parsers at once.
-#'
-#' @param parser the parser to register
-#' @param \dots the keys upon which to register
-#' @return \code{NULL}
 #' @export
-#' @keywords internal
+#' @rdname register-parsers
 register.srcref.parsers <- function(parser, ...) {
   for (key in c(...)) {
     register.srcref.parser(key, parser)

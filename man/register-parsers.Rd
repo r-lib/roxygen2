@@ -1,8 +1,11 @@
 \name{register.preref.parsers}
 \alias{register.preref.parsers}
-\title{Register many preref parsers at once.}
+\alias{register.srcref.parsers}
+\title{Register many parsers at once.}
 \usage{
   register.preref.parsers(parser, ...)
+
+  register.srcref.parsers(parser, ...)
 }
 \arguments{
   \item{parser}{the parser to register}
@@ -13,7 +16,7 @@
   \code{NULL}
 }
 \description{
-  Register many preref parsers at once.
+  Register many parsers at once.
 }
 \keyword{internal}
 

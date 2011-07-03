@@ -25,7 +25,6 @@ parse.srcfile <- function(srcfile, env) {
   pre_parsed <- lapply(pre_refs, parse.preref)
   mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)
 }
-cached.parse.srcfile <- memoize(parse.srcfile)
 
 #' Parse many files at one.
 #'

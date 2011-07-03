@@ -1,6 +1,3 @@
-#' @import memoise
-NULL
-
 # Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '#+\''
 

@@ -114,7 +114,7 @@ roc_process.had <- function(roclet, partita, base_path) {
   
   topics <- list()
   for (partitum in partita) {
-    new <- rd_proc_cache$compute(partitum, roclet_rd_one(partitum))    
+    new <- rd_proc_cache$compute(partitum, roclet_rd_one(partitum, base_path))    
     if (is.null(new)) next; 
     
     old <- topics[[new$filename]]
@@ -123,7 +123,7 @@ roc_process.had <- function(roclet, partita, base_path) {
   topics
 }
 
-roclet_rd_one <- function(partitum) {
+roclet_rd_one <- function(partitum, base_path) {
   rd <- new_rd_file()
   
   has_rd <- any(names(partitum) %in% c("description", "param", "return",

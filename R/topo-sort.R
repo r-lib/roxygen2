@@ -49,7 +49,6 @@ topo_sort <- function() {
         visit(vertex)        
       }
     }
-
     vapply(sorted, function(x) x$file, character(1))
   }
   

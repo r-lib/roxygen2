@@ -44,7 +44,7 @@ roxygenize <- function(package.dir,
     
     collate_path <- file.path(roxygen.dir, "R", collate)
     collate_exists <- Filter(file.exists, collate_path)
-    r_files <- c(collate_path, setdiff(r_files, collate_exists))
+    r_files <- c(collate_exists, setdiff(r_files, collate_exists))
   }
   
   parsed <- parse.files(r_files)

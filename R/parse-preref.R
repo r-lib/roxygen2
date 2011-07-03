@@ -1,7 +1,5 @@
 # Parse a preref
-parse.preref <- function(ref) {
-  lines <- str_trim(getSrcLines(attributes(ref)$srcfile, ref[[1]], ref[[3]]))
-  
+parse.preref <- function(lines) {
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
 
@@ -34,22 +32,15 @@ LINE.DELIMITER <- '#+\''
 #   and lloc
 prerefs <- function(srcfile, srcrefs) {
   if (length(srcrefs) == 0) return(list())
-  
-  length.line <- function(lineno)
-    nchar(getSrcLines(srcfile, lineno, lineno))
-
-  pair.preref <- function(start, end) {
-    structure(srcref(srcfile, c(start, 1, end, length.line(end))),
-      class = 'preref')
-  }
-  
+    
   src_start <- vapply(srcrefs, "[[", integer(1), 1) - 1
   src_end <- vapply(srcrefs, "[[", integer(1), 3) + 1
   
   comments_start <- c(1, src_end[-length(src_end)])
   comments_end <- src_start
-
-  Map(pair.preref, comments_start, comments_end)
+  
+  src <- readLines(srcfile$filename, warn = FALSE)
+  Map(function(start, end) src[start:end], comments_start, comments_end)
 }
 
 # Parse a raw string containing key and expressions.

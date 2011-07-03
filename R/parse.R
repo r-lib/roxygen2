@@ -7,15 +7,6 @@
 parse.file <- function(file, env) {
   srcfile <- srcfile(file)
   
-  res <- parse.srcfile(srcfile, env)
-  # res <- try(cached.parse.srcfile(srcfile, env), silent = TRUE)
-  # if (inherits(res, "try-error")) {
-  #   stop("Can't parse ", file, "\n", res, call. = FALSE)
-  # }
-  res
-}
-
-parse.srcfile <- function(srcfile, env) {
   src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
   pre_refs <- prerefs(srcfile, src_refs)
 

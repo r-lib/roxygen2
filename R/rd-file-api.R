@@ -24,6 +24,18 @@ format.rd_file <- function(x, ...) {
   str_c(unlist(formatted), collapse = "")
 }
 
+#' @S3method merge rd_file
+merge.rd_file <- function(x, y, ..) {
+  rd <- new_rd_file()
+  for(tag_x in as.list(x[[1]])) {
+    add_tag(rd, tag_x)
+  }
+  for(tag_y in as.list(y[[1]])) {
+    add_tag(rd, tag_y)
+  }
+  rd
+}
+
 #' @S3method length rd_file
 length.rd_file <- function(x) {
   length(x[[1]])

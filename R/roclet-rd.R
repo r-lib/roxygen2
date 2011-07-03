@@ -99,6 +99,9 @@ rd_roclet <- function() {
   new_roclet(list(), "had")
 }
 
+
+process_cache <- new.env(parent = emptyenv())
+
 #' @S3method roc_process had
 roc_process.had <- function(roclet, partita, base_path) {
   # Remove srcrefs with no attached roxygen comments
@@ -106,58 +109,69 @@ roc_process.had <- function(roclet, partita, base_path) {
   
   topics <- list()
   for (partitum in partita) {
-    has_rd <- any(names(partitum) %in% c("description", "param", "return",
-      "title", "example", "examples", "docType", "name", "rdname", "usage"))
-    if (!has_rd) next()
-    
-    # Figure out topic name
-    name <- partitum$name %||% partitum$S4class %||% partitum$S4method %||%
-      partitum$S4generic
-    # Only use assignee if it's a single element
-    if (is.null(name) && length(partitum$assignee) == 1) {
-       name <- partitum$assignee
+    key <- digest(partitum)
+    if (exists(key, process_cache)) {
+      new <- process_cache[[key]]
+    } else {
+      new <- roclet_rd_one(partitum)
+      process_cache[[key]] <- new      
     }
-    if (is.null(name)) stop("Missing name")
-
-    # Work out file name and initialise Rd object
-    filename <- str_c(partitum$merge %||% partitum$rdname %||% name, ".Rd")
     
-    rd <- topics[[filename]]
-    if (is.null(rd)) {
-      rd <- new_rd_file()
-      topics[[filename]] <- rd
-    }
-
-    title <- partitum$title %||% first.sentence(partitum$description) %||%
-      name
-
-    add_tag(rd, new_tag("name", name))
-    add_tag(rd, new_tag("alias", name))
-    add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
-        new_tag('alias', words(param))
-      }))
-    add_tag(rd, new_tag("title", title))
-    add_tag(rd, process.usage(partitum))
-    add_tag(rd, process.arguments(partitum))
-    add_tag(rd, process_had_tag(partitum, 'docType'))
-    add_tag(rd, process_had_tag(partitum, 'description', process.description))
-    add_tag(rd, process_had_tag(partitum, 'note'))
-    add_tag(rd, process_had_tag(partitum, 'author'))
-    add_tag(rd, process_had_tag(partitum, 'seealso'))
-    add_tag(rd, process_had_tag(partitum, "references"))
-    add_tag(rd, process_had_tag(partitum, 'concept'))
-    add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
-        new_tag("value", param)
-      }))
-    add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
-        new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
-      }))
-    add_tag(rd, process_had_tag(partitum, 'section', process.section))
-    add_tag(rd, process.examples(partitum, base_path))
-
-    topics[[filename]] <- rd
+    if (is.null(new)) next; 
+    
+    old <- topics[[new$filename]]
+    topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
   }
   topics
+}
+
+roclet_rd_one <- function(partitum) {
+  rd <- new_rd_file()
+  
+  has_rd <- any(names(partitum) %in% c("description", "param", "return",
+    "title", "example", "examples", "docType", "name", "rdname", "usage"))
+  if (!has_rd) return()
+  
+  # Figure out topic name
+  name <- partitum$name %||% partitum$S4class %||% partitum$S4method %||%
+    partitum$S4generic
+  # Only use assignee if it's a single element
+  if (is.null(name) && length(partitum$assignee) == 1) {
+     name <- partitum$assignee
+  }
+  if (is.null(name)) stop("Missing name")
+
+  # Work out file name and initialise Rd object
+  filename <- str_c(partitum$merge %||% partitum$rdname %||% name, ".Rd")
+  
+  title <- partitum$title %||% first.sentence(partitum$description) %||%
+    name
+
+  add_tag(rd, new_tag("name", name))
+  add_tag(rd, new_tag("alias", name))
+  add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
+      new_tag('alias', words(param))
+    }))
+  add_tag(rd, new_tag("title", title))
+  add_tag(rd, process.usage(partitum))
+  add_tag(rd, process.arguments(partitum))
+  add_tag(rd, process_had_tag(partitum, 'docType'))
+  add_tag(rd, process_had_tag(partitum, 'description', process.description))
+  add_tag(rd, process_had_tag(partitum, 'note'))
+  add_tag(rd, process_had_tag(partitum, 'author'))
+  add_tag(rd, process_had_tag(partitum, 'seealso'))
+  add_tag(rd, process_had_tag(partitum, "references"))
+  add_tag(rd, process_had_tag(partitum, 'concept'))
+  add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
+      new_tag("value", param)
+    }))
+  add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
+      new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
+    }))
+  add_tag(rd, process_had_tag(partitum, 'section', process.section))
+  add_tag(rd, process.examples(partitum, base_path))
+
+  list(rd = rd, filename = filename)
 }
 
 output_cache <- new.env(parent = emptyenv())

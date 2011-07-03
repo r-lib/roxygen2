@@ -18,8 +18,9 @@ Depends:
 Collate:
     'description.R'
     'parse-file.R'
+    'parse-preref.R'
+    'parse-srcref.R'
     'parse-registry.R'
-    'parse.R'
     'rd-file-api.R'
     'rd-tag-api.R'
     'roclet-collate.R'

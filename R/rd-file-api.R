@@ -20,7 +20,8 @@ format.rd_file <- function(x, ...) {
     
   tags <- tags[intersect(order, names(tags))]
   
-  str_c(unlist(lapply(tags, format)), collapse = "")
+  formatted <- lapply(tags, "format")
+  str_c(unlist(formatted), collapse = "")
 }
 
 #' @S3method length rd_file

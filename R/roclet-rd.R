@@ -190,10 +190,13 @@ rd_out_cache <- new_cache()
 roc_process.had <- function(roclet, partita, base_path) {
   # Remove srcrefs with no attached roxygen comments
   partita <- Filter(function(x) length(x) > 1, partita)
+  templates <- dir(file.path(base_path, "roxygen"), full = TRUE)
+  template_hash <- digest(lapply(templates, readLines))
   
   topics <- list()
   for (partitum in partita) {
-    new <- rd_proc_cache$compute(partitum, roclet_rd_one(partitum, base_path))    
+    key <- c(template_hash, digest(partitum))
+    new <- rd_proc_cache$compute(key, roclet_rd_one(partitum, base_path)) 
     if (is.null(new)) next; 
     
     old <- topics[[new$filename]]

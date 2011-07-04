@@ -34,8 +34,6 @@
 
 * Templates, evaluated with brew
   
-    * fix caching again (how?)
-  
   For plyr would have:
   
         @template in-d

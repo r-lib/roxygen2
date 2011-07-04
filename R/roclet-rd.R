@@ -131,6 +131,7 @@ register.srcref.parser('setMethod', function(call, env) {
 #'
 #'  }
 #'
+#' @template template
 #' @section Optional tags that override defaults:
 #'
 #' These tags all override the default values that roxygen guess from 
@@ -203,6 +204,10 @@ roc_process.had <- function(roclet, partita, base_path) {
 
 roclet_rd_one <- function(partitum, base_path) {
   rd <- new_rd_file()
+  
+  # Add in templates
+  templates <- process_templates(partitum, base_path)
+  partitum <- c(partitum, templates)
   
   has_rd <- any(names(partitum) %in% c("description", "param", "return",
     "title", "example", "examples", "docType", "name", "rdname", "usage"))
@@ -366,6 +371,7 @@ process_had_tag <- function(partitum, tag, f = new_tag) {
 
   unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)
 }
+
 
 
 # @note Doesn't work recursively!

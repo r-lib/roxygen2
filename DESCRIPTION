@@ -10,7 +10,8 @@ Author: Hadley Wickham <hadley@rice.edu>, Peter Danenberg
 Maintainer: Hadley Wickham <hadley@rice.edu>
 Imports:
     stringr (>= 0.5),
-    tools
+    tools,
+    brew
 Suggests:
     testthat
 Depends:
@@ -32,3 +33,4 @@ Collate:
     'roxygenize.R'
     'topo-sort.R'
     'utils.R'
+    'template.R'

@@ -33,14 +33,10 @@
   param just to inherit matching parameters?
 
 * Templates, evaluated with brew
-
-        @template templateName
-        @templateVar name String mapped to variable name
-        @templateVar value String mapped to variable value.
-
-  If you wanted to use multiple templates, you'd need to ensure that their
-  parameters had different names - not a huge problem in practice. @template
-  tags in templates will be ignored.
+  
+    * fix caching again (how?)
+    * ensure that templates are inserted in the location they appear
+    * 
   
   For plyr would have:
   

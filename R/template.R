@@ -16,8 +16,9 @@ template_eval <- function(template_path, vars) {
 }
 
 process_templates <- function(partitum, base_path) {
-  template_tags <- partitum[names(partitum) == "template"]
-  if (length(template_tags) == 0) return()
+  template_locs <- names(partitum) == "template"
+  template_tags <- partitum[template_locs]
+  if (length(template_tags) == 0) return(partitum)
 
   templates <- unlist(template_tags, use.names = FALSE)
   paths <- vapply(templates, template_find, base_path = base_path, 
@@ -29,5 +30,10 @@ process_templates <- function(partitum, base_path) {
   
   results <- lapply(paths, template_eval, vars = list2env(vars))
   
-  unlist(lapply(results, parse.preref), recursive = FALSE)
+  # Insert templates back in the location where they came from
+  partitum_pieces <- as.list(partitum)
+  partitum_pieces[template_locs] <- lapply(results, parse.preref)
+  names(partitum_pieces)[template_locs] <- ""
+  
+  unlist(partitum_pieces, recursive = FALSE)
 }

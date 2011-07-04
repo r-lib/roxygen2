@@ -35,8 +35,6 @@
 * Templates, evaluated with brew
   
     * fix caching again (how?)
-    * ensure that templates are inserted in the location they appear
-    * 
   
   For plyr would have:
   

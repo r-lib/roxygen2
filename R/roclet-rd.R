@@ -206,8 +206,7 @@ roclet_rd_one <- function(partitum, base_path) {
   rd <- new_rd_file()
   
   # Add in templates
-  templates <- process_templates(partitum, base_path)
-  partitum <- c(partitum, templates)
+  partitum <- process_templates(partitum, base_path)
   
   has_rd <- any(names(partitum) %in% c("description", "param", "return",
     "title", "example", "examples", "docType", "name", "rdname", "usage"))

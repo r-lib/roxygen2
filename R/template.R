@@ -2,7 +2,7 @@ register.preref.parsers(parse.value, "template")
 register.preref.parsers(parse.name.description, "templateVar")
 
 template_find <- function(base_path, template_name) {
-  path <- file.path(base_path, "roxygen", str_c(template_name, ".R"))
+  path <- file.path(base_path, "roxygen-man", str_c(template_name, ".R"))
   if (!file.exists(path)) {
     stop("Can not find template ", template_name, call. = FALSE)
   } 

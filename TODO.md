@@ -27,8 +27,21 @@
         
   Would require parse through all partitum (caching issues?)
 
-* @inherit tag to automatically inherit tags from another topic? @inherit
-  param just to inherit matching parameters?
+* Start with `@inheritParam package::functionname` or `@inheritParam topic`.  
+
+  Works either with roxygen topic in current package, or Rd for topic in
+  another package.  Determined based on whether :: used in the parameter name.
+  
+  For roxygen topic:
+    * need to topologically sort topics.
+    * requires that names be preprocessed
+    * (and adds another caching dependency)
+  
+  For Rd topic:
+    * need to find file for that topic
+    * need to parse file and extract list of arguments.
+  
+  Eventually need to do this automatically for methods: inherit from generic.
 
 * Suggests that we may want user specifiable plugins for rd_roclet (like there
   were before!) that you can choose between.

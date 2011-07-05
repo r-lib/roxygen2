@@ -1,1 +1,3 @@
-roxygen()
+NULL
+
+x <- 2

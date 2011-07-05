@@ -1,19 +1,19 @@
 context("Collation")
 
 test_that("collation as expected", {
+  results <- roc_proc(collate_roclet(), dir("collate", full = TRUE), ".")
+  names <- str_replace(basename(results), "\\..*$", "")
 
-  roclet <- make.collate.roclet()
-  collation <- capture.output(roclet$parse('collate/belt.R',
-                                           'collate/jacket.R',
-                                           'collate/pants.R',
-                                           'collate/shirt.R',
-                                           'collate/shoes.R',
-                                           'collate/socks.R',
-                                           'collate/tie.R',
-                                           'collate/undershorts.R',
-                                           'collate/watch.R'))
-                                           
-  collation <- gsub("\\s +", " ", paste(collation, collapse = ""))
-  expect_equal(collation,
-    c("Collate: 'collate/shirt.R' 'collate/undershorts.R' 'collate/pants.R' 'collate/belt.R' 'collate/tie.R' 'collate/jacket.R' 'collate/socks.R' 'collate/shoes.R' 'collate/watch.R'"))
+  before <- function(a, b) {
+    all(which(names %in% a) < which(names %in% b))
+  }
+
+  expect_true(before("undershorts", "pants"))
+  expect_true(before(c("tie", "belt"), "jacket"))
+  expect_true(before(c("socks", "undershorts", "pants"), "shoes"))
+  
+  expected <- c('shirt.R', 'undershorts.R','pants.R', 'belt.R', 'tie.R',
+    'jacket.R', 'socks.R', 'shoes.R', 'watch.R')
+
+  expect_equal(results, expected)
 })

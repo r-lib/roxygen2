@@ -1,3 +1,4 @@
+export(clear_caches)
 export(collate_roclet)
 export(namespace_roclet)
 export(new_roclet)

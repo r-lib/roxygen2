@@ -1,6 +1,3 @@
-#' @include cache.R
-parse_cache <- new_cache()
-
 #' Parse a source file containing roxygen directives.
 #'
 #' @param file string naming file to be parsed

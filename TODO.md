@@ -14,8 +14,6 @@
 
 * if @docType data, automatically add dataset keyword, format and usage.
 
-* clear caches function
-
 # Reducing duplication
 
 * @family tag for automatically generating seealso for related functions?

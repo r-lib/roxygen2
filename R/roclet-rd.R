@@ -1,5 +1,4 @@
 #' @include parse-registry.R
-#' @include cache.R
 #' @import stringr
 NULL
 
@@ -182,9 +181,6 @@ register.srcref.parser('setMethod', function(call, env) {
 rd_roclet <- function() {
   new_roclet(list(), "had")
 }
-
-rd_proc_cache <- new_cache()
-rd_out_cache <- new_cache()
 
 #' @S3method roc_process had
 roc_process.had <- function(roclet, partita, base_path) {

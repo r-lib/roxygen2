@@ -1,5 +1,5 @@
-Package: rxygn
-Version: 0.2
+Package: roxygen
+Version: 1.0
 License: GPL (>= 2)
 Description: A Doxygen-like in-source documentation system
     for Rd, collation, and NAMESPACE.

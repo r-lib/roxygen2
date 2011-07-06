@@ -41,3 +41,4 @@
   \code{\link{collate_roclet}}, for documentation on how to
   use each one.
 }
+

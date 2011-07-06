@@ -1,6 +1,6 @@
 \docType{package}
-\name{roxygen2-package}
-\alias{roxygen2-package}
+\name{roxygen-package}
+\alias{roxygen-package}
 \title{Literate Programming in R}
 \description{
   Roxygen is a Doxygen-like documentation system for R;
@@ -28,3 +28,4 @@
   tags.
 }
 \keyword{package}
+

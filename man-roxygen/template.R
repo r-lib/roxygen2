@@ -4,7 +4,7 @@
 #' duplication. A template is an \file{R} file processed with
 #' \code{\link[brew]{brew}} and then inserted into the roxygen block.
 #' Templates can use variables, accessible from within brew with 
-#' \code{<=% varname =>}.  
+#' \code{<=\% varname =>}.  
 #'
 #' Templates are not parsed recursively, so you can not include templates
 #' from within other templates.

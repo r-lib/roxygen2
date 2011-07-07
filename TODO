@@ -1,6 +1,10 @@
 # -*- mode: org; -*-
-* TODO merge hadley's code, create roxygen2.
-* TODO replace questionable characters without =Curry=.
+* DONE merge hadley's code, create roxygen2.
+  CLOSED: [2011-07-06 Wed 19:40]
+  - CLOSING NOTE [2011-07-06 Wed 19:40] \\
+    Done on 2.0 branch; waiting for HEAD's word.
+* CANCELED replace questionable characters without =Curry=.
+  CLOSED: [2011-07-06 Wed 19:41]
   #+BEGIN_SRC R :tangle replace-characters.R :shebang #!/usr/local/bin/R --vanilla --slave -f
     library(gsubfn)
     library(functional)

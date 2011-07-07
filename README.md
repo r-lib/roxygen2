@@ -1,22 +1,9 @@
-# rxygn
+# roxygen2
 
-The `rxygn` package is a fork of `roxygen`, and as the name might suggest, it's leaner and meaner.  Compared to `roxygen`, `rxygen`: 
 
-* works with run-time details to give more accurate output - this requires
-  that the source code that roxygen is documenting be loaded prior to
-  documentation
+# Why use roxygen?
 
-* is written in idiomatic R
-
-* uses S3 instead of a homegrown class system
-
-* doesn't do call graphs
-
-* roclets build up an internal data structure instead of writing to disk
-
-# Why use rxygn?
-
-The premise of `rxygn` is simple: describe your functions in comments next to where their definitions and `rxygen` will process your source code and comments to produce R compatible Rd files.  Here's a simple example from the `stringr` package:
+The premise of `roxygen` is simple: describe your functions in comments next to where their definitions and `rxygen` will process your source code and comments to produce R compatible Rd files.  Here's a simple example from the `stringr` package:
 
     #' The length of a string (in characters).
     #'
@@ -60,7 +47,7 @@ When you `roxygenise` your package these comments will be automatically transfor
 
 # Roclets
 
-`rxygn` comes with three roclets, three tools for parsing your source code and producing files useful for documenting your package:
+`roxygen` comes with three roclets, three tools for parsing your source code and producing files useful for documenting your package:
 
 * `collate_roclet`: allows you to add `@include` directives to ensure that
   files are loaded in the order they are needed

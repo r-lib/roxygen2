@@ -14,19 +14,14 @@ rd2rd <- function(x) {
   paste(unlist(tools:::as.character.Rd(x)), collapse = "")
 }
 
-named_list <- function(contents, name) {
-  setNames(list(contents), name)
-}
-
 # rd_arguments(get_rd("mean"))
 rd_arguments <- function(rd) {
   arguments <- has_tag(rd, "\\arguments")[[1]]
   items <- has_tag(arguments, "\\item")
   
-  items_text <- lapply(items, function(x) {
-    named_list(rd2rd(x[[2]]), rd2rd(x[[1]]))
-  })
+  values <- lapply(items, function(x) rd2rd(x[[2]]))
+  params <- vapply(items, function(x) rd2rd(x[[1]]), character(1))
   
-  do.call("c", items_text)
+  setNames(values, params)
 }
 

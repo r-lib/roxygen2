@@ -3,7 +3,7 @@ PDF=roxygen.pdf roxygen-manual.pdf
 all: $(PDF)
 
 roxygen.tex: roxygen.Rnw
-	R CMD Sweave roxygen.Rnw
+	$(R_HOME)/bin/R CMD Sweave roxygen.Rnw
 
 roxygen.pdf: roxygen.tex
 	pdflatex roxygen && \
@@ -13,7 +13,7 @@ roxygen.pdf: roxygen.tex
 
 roxygen-manual.pdf:
 	rm -vf $@ && \
-	R CMD Rd2dvi --no-preview --pdf -o $@ ../..
+	$(R_HOME)/bin/R CMD Rd2dvi --no-preview --pdf -o $@ ../..
 
 clean:
 	rm -fv $(PDF)

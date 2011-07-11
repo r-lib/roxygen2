@@ -1,0 +1,49 @@
+roxygen2 2.0
+------------
+
+MAJOR CHANGES
+
+* now works with run-time details to give more accurate output. This requires
+  that the source code that roxygen is documenting be loaded prior to
+  documentation. roxygen will attempt to do so, but you need to ensure
+  required packages are loaded.
+
+  Run-time data fixes some long standing bugs where roxygen couldn't correctly
+  figure out function usage. We are not aware of any cases where you still
+  need to use the `@usage` tag.
+
+* written in idiomatic R, and uses S3 instead of a homegrown class system.
+
+* roclets build up an internal data structure instead of writing to disk
+  directly. This means that you can now use the `@rdname` tag to merge
+  documentation for multiple functions into one file, and that only unique
+  namespace directives are written to `NAMESPACE` (which makes `@importFrom`
+  much more useful).
+
+* some features have been removed, and may or may not (based on your feedback)
+  be reincluded. These include the callgraph roclet, and `R CMD roxygen`,
+  which only worked on some systems.
+
+* a templating system: use the `@template` tag to insert a `brew` template
+  stored in `man-roxygen`. Template variables can be set using `@templateVar
+  name value` and retrieved from within the template with `<%= name %>`
+
+* extensive use of caching to make repeated runs as fast as possible. To clear
+  caches and guarantee a complete rebuild, use `clear_caches()`.
+
+MINOR CHANGES
+
+* `@name` is always output as an alias, even if `@aliases` are used.
+
+* `@export` correctly uses `@method` to generate `@S3method` namespace
+  directive
+
+NEW TAGS
+
+* `@rdname filename` - sets the output filename (without extension). Use for
+  functions non-alphanumeric functions (e.g. `[<-`) or if you want to document
+  multiple functions in one file
+
+* `@template templatename` - includes a documentation template (see above)
+
+* `@section Section title: contents` - include a section with any title

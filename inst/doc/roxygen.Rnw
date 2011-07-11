@@ -51,12 +51,15 @@ run after \Roxygen{} has processed the package skeleton.
 
 First, create the package skeleton:
 <<keep.source=true>>=
-library(roxygen)
+library(roxygen2)
 package.skeleton('helloRoxygen',
                  code_files='hello-roxygen.R',
                  force=TRUE)
 @ 
-<<echo=false, results=hide>>=
+
+%% XXX: eval=false for the sake of R CMD check and roxygen2; we need
+%% to write an actual vignette at some point.
+<<echo=false, results=hide, eval=false>>=
 roxygenize('helloRoxygen',
            roxygen.dir='helloRoxygen',
            copy.package=FALSE,
@@ -119,7 +122,9 @@ details. \citep[\S2.3 ``Marking text'']{r-core}
         {Roxygen example \texttt{fermat.R}}
         {fermat}
 
-<<echo=false, results=hide>>=
+%% XXX: eval=false for the sake of R CMD check and roxygen2; we need
+%% to write an actual vignette at some point.
+<<echo=false, results=hide, eval=false>>=
 roxygenize('pseudoprime',
            roxygen.dir='pseudoprime',
            copy.package=FALSE,
@@ -169,7 +174,9 @@ Running \texttt{`R CMD roxygen -d pseudoprime'} populates \texttt{man}
 with Rd files, edits \texttt{DESCRIPTION} and \texttt{NAMESPACE}, and
 puts call graphs in \texttt{inst/doc}:
 
-<<echo=false>>=
+%% XXX: eval=false for the sake of R CMD check and roxygen2; we need
+%% to write an actual vignette at some point.
+<<echo=false, eval=false>>=
 roxygenize('pseudoprime',
            roxygen.dir='pseudoprime',
            copy.package=FALSE,

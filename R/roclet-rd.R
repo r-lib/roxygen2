@@ -88,13 +88,6 @@ register.srcref.parser('setMethod', function(call, env) {
 #' 
 #' \describe{
 #'
-#'  \item{\code{@@aliases space separated aliases}}{Add additional aliases, 
-#'    through which the user can find the documentation with \code{?}. 
-#'    The topic name is always included in the list of aliases.}
-#' 
-#'  \item{\code{@@concepts space separated concepts}}{Similar to
-#'    \code{@@aliases} but for \code{\link{help.search}}}
-#'
 #'  \item{\code{@@examples R code...}}{Highly recommended: example code that
 #'    demonstrates how to use your function.  Use \\dontrun{} to tag code
 #'    that should not automatically be run.}
@@ -112,12 +105,6 @@ register.srcref.parser('setMethod', function(call, env) {
 #'    authors of the function.  This is typically only necessary if the
 #'    author is not the same as the package author.}
 #'
-#'  \item{\code{@@references free text reference}}{Pointers to the literature
-#'    related to this object.}
-#'
-#'  \item{\code{@@seealso Text with \\code{\\link{function}}}}{Pointers to
-#'    related R objects, and why you might be interested in them.}
-#'
 #'  \item{\code{@@note contents}}{Create a note section containing additional
 #'    information.}
 #' 
@@ -131,6 +118,28 @@ register.srcref.parser('setMethod', function(call, env) {
 #'    keyword for functions that should not appear in the main function
 #'    listing.}
 #'
+#'  }
+#'
+#' @section Optional tags for cross-referencing:
+#'
+#' \describe{
+#'
+#'  \item{\code{@@aliases space separated aliases}}{Add additional aliases, 
+#'    through which the user can find the documentation with \code{?}. 
+#'    The topic name is always included in the list of aliases.}
+#' 
+#'  \item{\code{@@concepts space separated concepts}}{Similar to
+#'    \code{@@aliases} but for \code{\link{help.search}}}
+#'
+#'  \item{\code{@@references free text reference}}{Pointers to the literature
+#'    related to this object.}
+#'
+#'  \item{\code{@@seealso Text with \\code{\\link{function}}}}{Pointers to
+#'    related R objects, and why you might be interested in them.}
+#'
+#'  \item{\code{@@family family name}}{Automatically adds see-also
+#'     cross-references between all functions in a family. A function can
+#'     belong to multiple families.}
 #'  }
 #'
 #' @template template

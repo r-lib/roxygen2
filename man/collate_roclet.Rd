@@ -26,4 +26,8 @@ roc_proc(roclet, dir('example'))
 roc_out(roclet, dir('example'), "example")
 }
 }
+\seealso{
+  Other roclets: \code{\link{namespace_roclet}},
+  \code{\link{rd_roclet}}
+}
 

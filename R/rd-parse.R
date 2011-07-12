@@ -4,6 +4,8 @@ get_rd <- function(topic, package = NULL) {
   utils:::.getHelpFile(top)
 }
 
+# get_rd should parse Rd into a rd_file so I don't need to maintain
+# two parallel apis
 
 get_tags <- function(rd, tag) {
   rd_tag <- function(x) attr(x, "Rd_tag")

@@ -17,5 +17,10 @@
   \code{@export}) where roclets can do more sophisticated
   things with \code{NULL}.
 }
+\seealso{
+  Other preref parsing functions: \code{\link{parse.name}},
+  \code{\link{parse.name.description}},
+  \code{\link{parse.toggle}}, \code{\link{parse.value}}
+}
 \keyword{internal}
 

@@ -10,6 +10,7 @@ register.preref.parsers(parse.value, 'include')
 #' Each \code{@@include} tag should specify the filename of one intrapackage
 #' dependency; multiple \code{@@include} tags may be given.
 #'
+#' @family roclets
 #' @return Rd roclet
 #' @examples
 #' #' `example-a.R', `example-b.R' and `example-c.R' reside

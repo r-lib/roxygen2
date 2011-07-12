@@ -18,6 +18,7 @@ register.preref.parsers(parse.value,
                         'return',
                         'author',
                         'section',
+                        'family',
                         'format',
                         'source')
 
@@ -175,6 +176,7 @@ register.srcref.parser('setMethod', function(call, env) {
 #'  \item{\code{@@source text}}{The original source of the data.}
 #' 
 #'}
+#' @family roclets
 #' @examples
 #' roclet <- rd_roclet()
 #' \dontrun{roc_proc(roclet, "example.R")}
@@ -200,6 +202,34 @@ roc_process.had <- function(roclet, partita, base_path) {
     old <- topics[[new$filename]]
     topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
   }
+  
+  # Second parse through to process family arguments
+  invert <- function(x) unstack(rev(stack(x)))
+  get_values <- function(topics, tag) {
+    tags <- lapply(topics, get_tag, tag)
+    tags <- Filter(Negate(is.null), tags)
+    lapply(tags, "[[", "values")
+  }
+  
+  family_lookup <- invert(get_values(topics, "family"))
+  name_lookup <- get_values(topics, "name")
+
+  for(family in names(family_lookup)) {
+    related <- family_lookup[[family]]
+    
+    for(topic_name in related) {
+      topic <- topics[[topic_name]]
+      others <- setdiff(related, topic_name)
+      other_topics <- sort(unlist(name_lookup[others], use.names = FALSE))
+
+      links <- paste("\\code{\\link{", other_topics, "}}", 
+        collapse =", ", sep = "")
+      seealso <- paste("Other ", family, ": ", links, sep = "")
+      
+      add_tag(topic, new_tag("seealso", seealso))
+    }
+  }
+  
   topics
 }
 
@@ -238,6 +268,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process.arguments(partitum))
   add_tag(rd, process_had_tag(partitum, 'docType'))
   add_tag(rd, process_had_tag(partitum, 'note'))
+  add_tag(rd, process_had_tag(partitum, 'family'))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))

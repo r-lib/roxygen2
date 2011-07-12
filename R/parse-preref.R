@@ -77,6 +77,7 @@ parse.introduction <- function(expression) {
 #' @param rest the expression to be parsed
 #' @return A list containing the key and expression (possibly null)
 #' @keywords internal
+#' @family preref parsing functions
 #' @export
 parse.default <- function(key, rest)
   as.list(structure(str_trim(rest), names=key))
@@ -99,6 +100,7 @@ parse.unknown <- function(key, rest) {
 #' @param key the parsing key
 #' @param rest the expression to be parsed
 #' @return A list containing the key and value
+#' @family preref parsing functions
 #' @keywords internal
 #' @export
 parse.value <- function(key, rest) {
@@ -114,6 +116,7 @@ parse.value <- function(key, rest) {
 #' @param key the parsing key
 #' @param rest the expression to be parsed
 #' @return A list containing the key, name and description
+#' @family preref parsing functions
 #' @keywords internal
 #' @export
 parse.name.description <- function(key, rest) {
@@ -137,6 +140,7 @@ parse.name.description <- function(key, rest) {
 #' @param key parsing key
 #' @param name the name to be parsed
 #' @return A list containing key and name
+#' @family preref parsing functions
 #' @keywords internal
 #' @export
 parse.name <- function(key, name) {
@@ -156,6 +160,7 @@ parse.name <- function(key, name) {
 #' @param key parsing key
 #' @param rest the expression to be parsed
 #' @return A list with the key and \code{TRUE}
+#' @family preref parsing functions
 #' @keywords internal
 #' @export
 parse.toggle <- function(key, rest)

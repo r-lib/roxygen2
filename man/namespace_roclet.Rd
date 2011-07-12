@@ -90,4 +90,8 @@ roclet <- namespace_roclet()
 \dontrun{roc_proc(roclet, "example.R")}
 \dontrun{roc_out(roclet, "example.R", ".")}
 }
+\seealso{
+  Other roclets: \code{\link{collate_roclet}},
+  \code{\link{rd_roclet}}
+}
 

@@ -65,6 +65,7 @@ register.preref.parsers(parse.value, 'exportClass', 'exportMethod',
 #' repeat them as needed to maintain a close link between the functions where
 #' they are needed and the namespace file..
 #' 
+#' @family roclets
 #' @examples
 #' #' An example file, example.R, which imports
 #' #' packages foo and bar

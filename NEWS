@@ -56,3 +56,6 @@ NEW TAGS
 
 * `@description` and `@details` tags allow you to specify description and
   details components in a template
+
+* `@family Family name` automatically adds see-also cross-references between
+  all functions in a family. A function can belong to multiple families.

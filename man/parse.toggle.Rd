@@ -15,5 +15,11 @@
 \description{
   Turn a binary element on; parameters are ignored.
 }
+\seealso{
+  Other preref parsing functions:
+  \code{\link{parse.default}}, \code{\link{parse.name}},
+  \code{\link{parse.name.description}},
+  \code{\link{parse.value}}
+}
 \keyword{internal}
 

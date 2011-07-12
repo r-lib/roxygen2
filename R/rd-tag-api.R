@@ -94,6 +94,13 @@ format.description_tag <- format_collapse
 format.details_tag <- format_collapse
 format.usage_tag <- format_collapse
 
+# Tags that don't have output ------------------------------------------------
+
+format_null <- function(x, ...) NULL
+
+#' @S3method format family_tag
+format.family_tag <- format_null
+
 # Tags with special errors or other semantics --------------------------------
 
 #' @S3method format arguments_tag

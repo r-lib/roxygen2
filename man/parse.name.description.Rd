@@ -17,5 +17,10 @@ and description (such as \code{@param}).}
   Parse an element containing a mandatory name and
   description (such as \code{@param}).
 }
+\seealso{
+  Other preref parsing functions:
+  \code{\link{parse.default}}, \code{\link{parse.name}},
+  \code{\link{parse.toggle}}, \code{\link{parse.value}}
+}
 \keyword{internal}
 

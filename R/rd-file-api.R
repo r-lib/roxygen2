@@ -7,9 +7,14 @@ is.rd_file <- function(x) inherits(x, "rd_file")
 
 #' @S3method print rd_file
 print.rd_file <- function(x, ...) {
-  tags <- vapply(as.list(x[[1]]), "[[", "tag", FUN.VALUE = character(1))
-  cat("Rd file with tags ", str_c(tags, collapse = ", "), "\n", sep = "")
+  cat("Rd file with tags ", str_c(names(x), collapse = ", "), "\n", sep = "")
 }
+
+#' @S3method names rd_file
+names.rd_file <- function(x) {
+  vapply(as.list(x[[1]]), "[[", "tag", FUN.VALUE = character(1))
+}
+
 
 #' @S3method format rd_file
 format.rd_file <- function(x, ...) {

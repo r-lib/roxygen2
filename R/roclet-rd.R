@@ -272,7 +272,7 @@ roc_output.had <- function(roclet, results, base_path) {
     } else {
       cat(sprintf('Writing %s\n', name))
       writeLines(contents, filename)    
-      checkRd(filename)
+      try(checkRd(filename))
     }
     
   }

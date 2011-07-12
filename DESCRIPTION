@@ -34,3 +34,4 @@ Collate:
     'topo-sort.R'
     'utils.R'
     'template.R'
+    'rd-parse.R'

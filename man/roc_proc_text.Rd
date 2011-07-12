@@ -1,6 +1,7 @@
 \name{roc_proc_text}
 \alias{roc_proc_text}
-\title{Process roclet on string and capture results.}
+\title{Process roclet on string and capture results.
+Useful for testing.}
 \usage{
   roc_proc_text(roclet, input)
 }

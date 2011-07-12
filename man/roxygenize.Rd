@@ -29,10 +29,6 @@
   \code{NULL}
 }
 \description{
-  Process a package with the Rd, namespace and collate
-  roclets.
-}
-\details{
   This is the workhorse function that uses roclets, the
   built-in document tranformation functions, to build all
   documentation for a package.  See the documentation for

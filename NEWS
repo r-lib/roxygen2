@@ -31,6 +31,12 @@ MAJOR CHANGES
 * extensive use of caching to make repeated runs as fast as possible. To clear
   caches and guarantee a complete rebuild, use `clear_caches()`.
 
+* parsing of "introduction" (the text before the first tag) has changed. Now
+  the title consists of the first paragraph (i.e. all text before the first
+  empty line), the second paragraph is the description and all others are put
+  in the details. Any component can be overridden with `@title`,
+  `@description` and `@details` as appropriate.
+
 MINOR CHANGES
 
 * `@name` is always output as an alias, even if `@aliases` are used.
@@ -47,3 +53,6 @@ NEW TAGS
 * `@template templatename` - includes a documentation template (see above)
 
 * `@section Section title: contents` - include a section with any title
+
+* `@description` and `@details` tags allow you to specify description and
+  details components in a template

@@ -23,7 +23,9 @@ register.preref.parsers(parse.value,
 
 register.preref.parsers(parse.name.description,
                         'param',
-                        'method')
+                        'method',
+                        'description',
+                        'details')
 
 register.preref.parsers(parse.name,
                         'docType')
@@ -208,7 +210,8 @@ roclet_rd_one <- function(partitum, base_path) {
   partitum <- process_templates(partitum, base_path)
   
   has_rd <- any(names(partitum) %in% c("description", "param", "return",
-    "title", "example", "examples", "docType", "name", "rdname", "usage"))
+    "title", "example", "examples", "docType", "name", "rdname", "usage",
+    "details", "introduction"))
   if (!has_rd) return()
   
   # Figure out topic name
@@ -223,19 +226,17 @@ roclet_rd_one <- function(partitum, base_path) {
   # Work out file name and initialise Rd object
   filename <- str_c(partitum$merge %||% partitum$rdname %||% name, ".Rd")
   
-  title <- partitum$title %||% first.sentence(partitum$description) %||%
-    name
-
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", name))
+
+  add_tag(rd, process_description(partitum, base_path))
+
   add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
       new_tag('alias', words(param))
     }))
-  add_tag(rd, new_tag("title", title))
   add_tag(rd, process.usage(partitum))
   add_tag(rd, process.arguments(partitum))
   add_tag(rd, process_had_tag(partitum, 'docType'))
-  add_tag(rd, process_had_tag(partitum, 'description', process.description))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
@@ -310,21 +311,48 @@ process.usage <- function(partitum) {
   new_tag("usage", usage)
 }
 
+# Process title, description and details. 
+#
 # Split the introductory matter into its description followed
 # by details (separated by a blank line).
-process.description <- function(key, expressions) {
-  paragraphs <- strsplit(expressions[[1]], '\n\n', fixed=TRUE)[[1]]
-  desc <- paragraphs[[1]]
-  details <- do.call(paste, append(paragraphs[-1], list(sep='\n\n')))
+process_description <- function(partitum, base_path) {
+  intro <- partitum$introduction
+  if (is.null(intro)) return()
+  paragraphs <- str_trim(strsplit(intro, '\n\n', fixed=TRUE)[[1]])
 
-  desc_rd <- new_tag("description", str_c(desc, collapse = "\n"))
-  
-  if (length(details) > 0 && !is.null.string(details)) {
-    details_rd <- new_tag("details", details)
+  # 1st paragraph = title (unless has @title)
+  if (!is.null(partitum$title)) {
+    title <- partitum$title
+  } else if (length(paragraphs) > 0) {
+    title <- paragraphs[1]
+    paragraphs <- paragraphs[-1]
   } else {
-    details_rd <- NULL
+    title <- NULL
   }
-  c(desc_rd, details_rd)
+  
+  
+  # 2nd paragraph = description (unless has @description)
+  if (!is.null(partitum$description)) {
+    description <- partitum$description
+  } else if (length(paragraphs) > 0) {
+    description <- paragraphs[1]
+    paragraphs <- paragraphs[-1]
+  } else {
+    # Description is required, so if missing description, repeat title.
+    description <- title
+  }
+
+  # Every thing else = details, combined with @details.
+  details <- c(paragraphs, partitum$details)
+  if (length(details) > 0) {
+    details <- paste(details, collapse = "\n\n")
+  } else {
+    details <- NULL
+  }
+
+  c(new_tag("title", title),
+    new_tag("description", description), 
+    new_tag("details", details))
 }
 
 process.arguments <- function(partitum) {
@@ -368,37 +396,6 @@ process_had_tag <- function(partitum, tag, f = new_tag) {
   if (length(matches) == 0) return()
 
   unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)
-}
-
-
-
-# @note Doesn't work recursively!
-de.tex <- function(string)
-  gsub('\\\\[^{]*\\{([^}]*)(}|)',
-       '\\1',
-       string,
-       perl=TRUE)
-
-# First sentence of a string, defined as first
-# period, question mark or newline.
-# @param description the string to be first-sentenced
-# @return The first sentence
-first.sentence <- function(description) {
-  description <- de.tex(description)
-  r <- regexpr('[^.?\n]*(\\.(?!\\w)|\\?|\n|)',
-               description,
-               perl=TRUE)
-  sentence <- substr(description, r, attr(r, 'match.length'))
-  if (length(sentence) == 0 || is.null.string(sentence))
-    NULL
-  else {
-    chars <- nchar(sentence)
-    last.char <- substr(sentence, chars, chars)
-    if (last.char == '.' || last.char == '?')
-      sentence
-    else
-      paste(str_trim(sentence), '...', sep='')
-  }
 }
 
 # warning("All roxygen elements must have name: ",

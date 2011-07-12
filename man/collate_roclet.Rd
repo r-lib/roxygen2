@@ -5,11 +5,9 @@
   Rd roclet
 }
 \description{
-  Roclet: make Collate field in DESCRIPTION.
+  Topologically sort R files and record in Collate field.
 }
 \details{
-  Topologically sort R files and record in Collate field.
-
   Each \code{@include} tag should specify the filename of
   one intrapackage dependency; multiple \code{@include}
   tags may be given.

@@ -1,6 +1,6 @@
 \name{parse.default}
 \alias{parse.default}
-\title{Default parser which simply emits the key and expression;...}
+\title{Default parser which simply emits the key and expression.}
 \usage{
   parse.default(key, rest)
 }
@@ -13,8 +13,7 @@
   A list containing the key and expression (possibly null)
 }
 \description{
-  Default parser which simply emits the key and expression;
-  used for elements with optional values (like
+  Used for elements with optional values (like
   \code{@export}) where roclets can do more sophisticated
   things with \code{NULL}.
 }

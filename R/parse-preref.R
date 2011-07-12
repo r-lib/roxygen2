@@ -14,11 +14,11 @@ parse.preref <- function(lines) {
   ## Compress the escaped delimeters.
   elements <- str_replace_all(elements, fixed("@@"), "@")
 
-  parsed.description <- parse.description(elements[[1]])
+  parsed.introduction <- parse.introduction(elements[[1]])
   parsed.elements <- unlist(lapply(elements[-1], parse.element), 
     recursive = FALSE)
   
-  c(parsed.description, parsed.elements)
+  c(parsed.introduction, parsed.elements)
 } 
 
 # Sequence that distinguishes roxygen comment from normal comment.
@@ -57,19 +57,20 @@ parse.element <- function(element) {
   tag_parser(tag, rest)
 }
 
-# Parse description: the premier part of a roxygen block
+# Parse introduction: the premier part of a roxygen block
 # containing description and option details separated by
 # a blank roxygen line.
 #
 # @param expression the description to be parsed
 # @return A list containing the parsed description
-parse.description <- function(expression) {
+parse.introduction <- function(expression) {
   if (is.null.string(expression)) return(NULL)
-  list(description = str_trim(expression))
+  list(introduction = str_trim(expression))
 }
 
-#' Default parser which simply emits the key and expression;
-#' used for elements with optional values (like \code{@@export})
+#' Default parser which simply emits the key and expression.
+#'
+#' Used for elements with optional values (like \code{@@export})
 #' where roclets can do more sophisticated things with \code{NULL}.
 #'
 #' @param key the parsing key
@@ -129,8 +130,9 @@ parse.name.description <- function(key, rest) {
                       names=key))
 }
 
-#' Parse an element containing a single name and only a name;
-#' extra material will be ignored and a warning issued.
+#' Parse an element containing a single name and only a name.
+#'
+#' Extra material will be ignored and a warning issued.
 #'
 #' @param key parsing key
 #' @param name the name to be parsed

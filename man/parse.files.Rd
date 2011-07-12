@@ -1,6 +1,6 @@
 \name{parse.files}
 \alias{parse.files}
-\title{Parse many files at one.}
+\title{Parse many files at once.}
 \usage{
   parse.files(paths)
 }
@@ -11,7 +11,7 @@
   List containing parsed directives
 }
 \description{
-  Parse many files at one.
+  Parse many files at once.
 }
 \seealso{
   \code{\link{parse.file}}

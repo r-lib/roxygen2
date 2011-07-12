@@ -9,8 +9,6 @@ test_that("@example loads from specified files", {
     #' @example Rd-example-2.R
     NULL")[[1]]
   
-  expect_equal(length(out), 4)
-  
   examples <- get_tag(out, "examples")$values
   expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
   expect_match(examples, fixed("example <- 'example2'"), all = FALSE)
@@ -22,7 +20,6 @@ test_that("@examples captures examples", {
     #' @examples a <- 2
     NULL")[[1]]
   
-  expect_equal(length(out), 4)
   examples <- get_tag(out, "examples")$values
   expect_match(examples, fixed("a <- 2"), all = FALSE)
 })
@@ -68,7 +65,6 @@ test_that("@name overides default", {
     
     expect_equal(get_tag(out, "name")$values, "b")
     expect_equal(get_tag(out, "alias")$values, "b")
-    expect_equal(get_tag(out, "title")$values, "b")
 })
 
 test_that("usage captured from formals", {
@@ -98,16 +94,19 @@ test_that("@param documents arguments", {
   expect_equivalent(args["z"], "a terminal letter")
 })
 
-test_that("description taken from first line", {
+test_that("title and description taken from first line if only one", {
   out <- roc_proc_text(roc, "
     #' description
     #' @name a
     NULL")[[1]]
   expect_equal(get_tag(out, "description")$values, "description")
+  expect_equal(get_tag(out, "title")$values, "description")
 })
 
-test_that("details taken from subsequent lines", {
+test_that("title, description and details extracted correctly", {
   out <- roc_proc_text(roc, "
+    #' title
+    #'
     #' description
     #'
     #' details
@@ -146,14 +145,16 @@ test_that("generic keys produce desired expected", {
   expect_equal(get_tag(out, "author")$values, "test")
 })
 
-test_that("title taken from first sentence", {
+test_that("title taken from first paragraph", {
   out <- roc_proc_text(roc, "
-    #' Description with sentence. That continueth.
+    #' Description with sentence. 
+    #'
+    #' That continueth.
     #' @name a
     NULL")[[1]]
   expect_equal(get_tag(out, "title")$values, "Description with sentence.")
   expect_equal(get_tag(out, "description")$values, 
-    "Description with sentence. That continueth.")
+    "That continueth.")
 })
 
 test_that("@title overrides default title", {
@@ -175,9 +176,9 @@ test_that("question mark ends sentence", {
   
 })
 
-test_that("no ending punctuation produces ellipsis", {
+test_that("no ending punctuation does not produce ellipsis", {
   out <- roc_proc_text(roc, "
     #' Whether a number is odd
     is.odd <- function(a) {}")[[1]]
-  expect_equal(get_tag(out, "title")$values, "Whether a number is odd...")
+  expect_equal(get_tag(out, "title")$values, "Whether a number is odd")
 })

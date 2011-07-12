@@ -1,6 +1,7 @@
 \name{parse.name.description}
 \alias{parse.name.description}
-\title{Parse an element containing a mandatory name...}
+\title{Parse an element containing a mandatory name
+and description (such as \code{@param}).}
 \usage{
   parse.name.description(key, rest)
 }

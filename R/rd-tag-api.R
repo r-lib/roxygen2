@@ -5,7 +5,9 @@
 # tags, merge just combines all values, and format selects from these to 
 # display the tags in the appropriate way. 
 #
-new_tag <- function(tag, values, subclass) {
+new_tag <- function(tag, values) {
+  if (is.null(values)) return()
+  
   subc <- str_c(tag, "_tag")
   list(structure(list(tag = tag, values = values), class = c(subc, "rd_tag")))
 }

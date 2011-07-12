@@ -2,13 +2,11 @@
 \alias{rd_roclet}
 \title{Roclet: make Rd files.}
 \description{
-  Roclet: make Rd files.
-}
-\details{
   This roclet is the workhorse of \pkg{roxygen}, producing
   the Rd files that document that functions in your
   package.
-
+}
+\details{
   This roclet also automatically runs
   \code{\link[tools]{checkRd}} on all generated Rd files so
   that you know as early as possible if there's a problem.

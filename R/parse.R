@@ -22,7 +22,7 @@ parse.file <- function(file, env, env_hash) {
   })
 }
 
-#' Parse many files at one.
+#' Parse many files at once.
 #'
 #' @param \dots files to be parsed
 #' @return List containing parsed directives

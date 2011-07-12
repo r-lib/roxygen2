@@ -100,6 +100,8 @@ format_null <- function(x, ...) NULL
 
 #' @S3method format family_tag
 format.family_tag <- format_null
+format.inheritParams_tag <- format_null
+format.formals_tag <- format_null
 
 # Tags with special errors or other semantics --------------------------------
 

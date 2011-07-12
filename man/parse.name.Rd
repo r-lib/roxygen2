@@ -5,9 +5,9 @@
   parse.name(key, name)
 }
 \arguments{
-  \item{key}{parsing key}
-
   \item{name}{the name to be parsed}
+
+  \item{key}{the parsing key}
 }
 \value{
   A list containing key and name

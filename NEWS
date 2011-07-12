@@ -59,3 +59,7 @@ NEW TAGS
 
 * `@family Family name` automatically adds see-also cross-references between
   all functions in a family. A function can belong to multiple families.
+
+* `@inheritParams name` allows you to inherit the documentation for parameters
+  from another function. Currently only supports single inheritance, and from
+  other roxygenised functions in the current package.

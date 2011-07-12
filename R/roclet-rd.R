@@ -19,6 +19,7 @@ register.preref.parsers(parse.value,
                         'author',
                         'section',
                         'family',
+                        'inheritParams',
                         'format',
                         'source')
 
@@ -212,7 +213,7 @@ roc_process.had <- function(roclet, partita, base_path) {
     topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
   }
   
-  # Second parse through to process family arguments
+  # Second parse through to process @family
   invert <- function(x) unstack(rev(stack(x)))
   get_values <- function(topics, tag) {
     tags <- lapply(topics, get_tag, tag)
@@ -238,6 +239,29 @@ roc_process.had <- function(roclet, partita, base_path) {
       add_tag(topic, new_tag("seealso", seealso))
     }
   }
+  
+  # And to process @inheritParams
+  
+  # Currently no topological sort, so @inheritParams will only traverse
+  # one-level - you can't inherit params that have been inherited from
+  # another function (and you can't currently use multiple inherit tags)
+  inherits <- get_values(topics, "inheritParams")
+  
+  for(topic_name in names(inherits)) {
+    topic <- topics[[topic_name]]
+    
+    missing_params <- setdiff(get_tag(topic, "formals")$values,
+      names(get_tag(topic, "params")$values))
+    
+    inheritor <- inherits[[topic_name]]
+    rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
+    
+    params <- get_tag(topics[[rd_name]], "arguments")$values
+    matching_params <- intersect(missing_params, names(params))
+    
+    add_tag(topic, new_tag("arguments", params[matching_params]))
+  }
+  
   
   topics
 }
@@ -267,6 +291,7 @@ roclet_rd_one <- function(partitum, base_path) {
   
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", name))
+  add_tag(rd, new_tag("formals", names(partitum$formals)))
 
   add_tag(rd, process_description(partitum, base_path))
 
@@ -278,6 +303,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'docType'))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
+  add_tag(rd, process_had_tag(partitum, 'inheritParams'))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))

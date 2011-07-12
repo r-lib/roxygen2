@@ -97,8 +97,7 @@ parse.unknown <- function(key, rest) {
 
 #' Parse an element with a mandatory value.
 #'
-#' @param key the parsing key
-#' @param rest the expression to be parsed
+#' @inheritParams parse.default
 #' @return A list containing the key and value
 #' @family preref parsing functions
 #' @keywords internal
@@ -113,8 +112,7 @@ parse.value <- function(key, rest) {
 #' Parse an element containing a mandatory name
 #' and description (such as \code{@@param}).
 #'
-#' @param key the parsing key
-#' @param rest the expression to be parsed
+#' @inheritParams parse.default
 #' @return A list containing the key, name and description
 #' @family preref parsing functions
 #' @keywords internal
@@ -137,7 +135,7 @@ parse.name.description <- function(key, rest) {
 #'
 #' Extra material will be ignored and a warning issued.
 #'
-#' @param key parsing key
+#' @inheritParams parse.default
 #' @param name the name to be parsed
 #' @return A list containing key and name
 #' @family preref parsing functions
@@ -157,8 +155,7 @@ parse.name <- function(key, name) {
 
 #' Turn a binary element on; parameters are ignored.
 #'
-#' @param key parsing key
-#' @param rest the expression to be parsed
+#' @inheritParams parse.default
 #' @return A list with the key and \code{TRUE}
 #' @family preref parsing functions
 #' @keywords internal

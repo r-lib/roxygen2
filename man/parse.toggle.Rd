@@ -5,7 +5,7 @@
   parse.toggle(key, rest)
 }
 \arguments{
-  \item{key}{parsing key}
+  \item{key}{the parsing key}
 
   \item{rest}{the expression to be parsed}
 }

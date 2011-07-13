@@ -15,8 +15,8 @@
 #' @param unlink.target unlink target directory before processing files?
 #' @param roclets character vector of roclet names to apply to package
 #' @return \code{NULL}
-#' @aliases roxygenize roxygenise
-#' @export roxygenize roxygenise
+#' @rdname roxygenize
+#' @export
 roxygenize <- function(package.dir,
                        roxygen.dir=package.dir,
                        copy.package=package.dir != roxygen.dir,
@@ -63,6 +63,8 @@ roxygenize <- function(package.dir,
   }
 }
 
+#' @rdname roxygenize
+#' @export
 roxygenise <- roxygenize
 
 # Recursively copy a directory thither; optionally unlinking

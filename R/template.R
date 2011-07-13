@@ -32,7 +32,7 @@ process_templates <- function(partitum, base_path) {
   results <- lapply(paths, template_eval, vars = list2env(vars))
   
   # Insert templates back in the location where they came from
-  partitum_pieces <- as.list(partitum)
+  partitum_pieces <- lapply(partitum, list)
   partitum_pieces[template_locs] <- lapply(results, parse.preref)
   names(partitum_pieces)[template_locs] <- ""
   

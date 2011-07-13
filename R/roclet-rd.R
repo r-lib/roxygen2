@@ -214,7 +214,10 @@ roc_process.had <- function(roclet, partita, base_path) {
   }
   
   # Second parse through to process @family
-  invert <- function(x) unstack(rev(stack(x)))
+  invert <- function(x) {
+    if (length(x) == 0) return()
+    unstack(rev(stack(x)))
+  }
   get_values <- function(topics, tag) {
     tags <- lapply(topics, get_tag, tag)
     tags <- Filter(Negate(is.null), tags)

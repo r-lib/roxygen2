@@ -253,16 +253,18 @@ roc_process.had <- function(roclet, partita, base_path) {
   for(topic_name in names(inherits)) {
     topic <- topics[[topic_name]]
     
-    missing_params <- setdiff(get_tag(topic, "formals")$values,
-      names(get_tag(topic, "params")$values))
+    for(inheritor in inherits[[topic_name]]) {
+      rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
+
+      params <- get_tag(topics[[rd_name]], "arguments")$values
+
+      missing_params <- setdiff(get_tag(topic, "formals")$values,
+        names(get_tag(topic, "arguments")$values))
+      matching_params <- intersect(missing_params, names(params))
+      
+      add_tag(topic, new_tag("arguments", params[matching_params]))
+    }
     
-    inheritor <- inherits[[topic_name]]
-    rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
-    
-    params <- get_tag(topics[[rd_name]], "arguments")$values
-    matching_params <- intersect(missing_params, names(params))
-    
-    add_tag(topic, new_tag("arguments", params[matching_params]))
   }
   
   

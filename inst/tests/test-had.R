@@ -182,3 +182,14 @@ test_that("no ending punctuation does not produce ellipsis", {
     is.odd <- function(a) {}")[[1]]
   expect_equal(get_tag(out, "title")$values, "Whether a number is odd")
 })
+
+
+test_that("multiple @inheritParam tags gathers all params", {
+  out <- roc_process(roc, parse.files("Rd-collate.R"), base_path = ".")
+  
+  params <- get_tag(out[["c.Rd"]], "arguments")$values
+  expect_equal(length(params), 2)
+  
+  expect_equal(params[["x"]], "X")
+  expect_equal(params[["y"]], "Y")  
+})

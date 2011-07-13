@@ -77,6 +77,11 @@ register.srcref.parser('setMethod', function(call, env) {
 #'  \item{\code{@@param name description}}{Document a parameter.  
 #'    Documentation is required for every parameter.}
 #'
+#'  \item{\code{@@inheritParams source_function}}{Alternatively, you can
+#'    inherit parameter description from another function.  This tag will
+#'    bring in all documentation for parameters that are undocumented in the
+#'    current function, but documented in the source function.}
+#'
 #'  \item{\code{@@method generic class}}{Required if your function is an S3
 #'    method.  This helps R to distinguish between (e.g.) \code{t.test} and 
 #'    the \code{t} method for the \code{test} class.}

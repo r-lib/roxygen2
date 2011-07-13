@@ -167,6 +167,16 @@ test_that("@title overrides default title", {
   expect_equal(get_tag(out, "description")$values, "Would be title")
 })
 
+test_that("@noRd inhibits documentation", {
+  out <- roc_proc_text(roc, "
+    #' Would be title
+    #' @title Overridden title
+    #' @name a
+    #' @noRd
+    NULL")
+  
+  expect_equal(length(out), 0)
+})
 
 test_that("question mark ends sentence", {
   out <- roc_proc_text(roc, "

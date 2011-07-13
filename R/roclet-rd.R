@@ -32,6 +32,10 @@ register.preref.parsers(parse.name.description,
 register.preref.parsers(parse.name,
                         'docType')
 
+register.preref.parsers(parse.default,
+                        'noRd')
+
+
 register.srcref.parser('<-', function(call, env) {
   assignee <- call[[2]]
   value <- eval(assignee, env)
@@ -305,6 +309,8 @@ roclet_rd_one <- function(partitum, base_path) {
     "title", "example", "examples", "docType", "name", "rdname", "usage",
     "details", "introduction"))
   if (!has_rd) return()
+  
+  if (any(names(partitum) == "noRd")) return()
   
   # Figure out topic name
   name <- partitum$name %||% partitum$S4class %||% partitum$S4method %||%

@@ -78,9 +78,11 @@ register.srcref.parser('setMethod', function(call, env) {
 #'    Documentation is required for every parameter.}
 #'
 #'  \item{\code{@@inheritParams source_function}}{Alternatively, you can
-#'    inherit parameter description from another function.  This tag will
+#'    inherit parameter description from another function. This tag will
 #'    bring in all documentation for parameters that are undocumented in the
-#'    current function, but documented in the source function.}
+#'    current function, but documented in the source function. The source 
+#'    can be a function in the current package, \code{function}, or another
+#'    package \code{package::function}.}
 #'
 #'  \item{\code{@@method generic class}}{Required if your function is an S3
 #'    method.  This helps R to distinguish between (e.g.) \code{t.test} and 
@@ -259,9 +261,26 @@ roc_process.had <- function(roclet, partita, base_path) {
     topic <- topics[[topic_name]]
     
     for(inheritor in inherits[[topic_name]]) {
-      rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
+      if (grepl("::", inheritor, fixed = TRUE)) {
+        # Reference to another package
+        pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
+        params <- rd_arguments(get_rd(pieces[2], pieces[1]))
+        
+      } else {
+        # Reference within this package
+        
+        rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
+        
+        if (length(rd_name) != 1) {
+          warning("@inheritParams: can't find topic ", inheritor, 
+            call. = FALSE, immediate. = TRUE)
+          next
+        }
 
-      params <- get_tag(topics[[rd_name]], "arguments")$values
+        params <- get_tag(topics[[rd_name]], "arguments")$values
+        
+      }
+      
 
       missing_params <- setdiff(get_tag(topic, "formals")$values,
         names(get_tag(topic, "arguments")$values))

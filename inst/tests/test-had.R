@@ -193,3 +193,14 @@ test_that("multiple @inheritParam tags gathers all params", {
   expect_equal(params[["x"]], "X")
   expect_equal(params[["y"]], "Y")  
 })
+
+test_that("multiple @inheritParam inherits from existing topics", {
+  out <- roc_proc_text(roc, "
+    #' My mean
+    #' 
+    #' @inheritParams base::mean
+    mymean <- function(x, trim) {}")[[1]]
+  params <- get_tag(out, "arguments")$values
+  expect_equal(length(params), 2)
+  expect_equal(sort(names(params)), c("trim", "x"))
+})

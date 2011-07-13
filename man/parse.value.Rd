@@ -19,7 +19,7 @@
   Other preref parsing functions:
   \code{\link{parse.default}}, \code{\link{parse.name}},
   \code{\link{parse.name.description}},
-  \code{\link{parse.toggle}}
+  \code{\link{parse.toggle}}, \code{\link{parse.unknown}}
 }
 \keyword{internal}
 

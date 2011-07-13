@@ -82,14 +82,16 @@ parse.introduction <- function(expression) {
 parse.default <- function(key, rest)
   as.list(structure(str_trim(rest), names=key))
 
-# Resorts to the default parser but with a warning about the
-# unknown key.
-#
-# @param key the parsing key
-# @param rest the expression to be parsed
-# @return A list containing the key and expression (possibly
-# null)
-# @seealso \code{\link{parse.default}}
+#' Parse an unknown tag.
+#'
+#' Resorts to the default parser but with a warning about the
+#' unknown tag.
+#'
+#' @inheritParams parse.default
+#' @return A list containing the key and expression (possibly null)
+#' @family preref parsing functions
+#' @keywords internal
+#' @export
 parse.unknown <- function(key, rest) {
   warning(key, ' is an unknown key', call. = FALSE)
   parse.default(key, rest)

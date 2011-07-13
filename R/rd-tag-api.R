@@ -57,9 +57,11 @@ format_first <- function(x, ...) {
 #' @S3method format name_tag
 #' @S3method format title_tag
 #' @S3method format docType_tag
+#' @S3method format format_tag
 format.name_tag <- format_first
 format.title_tag <- format_first
 format.docType_tag <- format_first
+format.format_tag <- format_first
 
 # Tags collapse their values into a single string ----------------------------
 

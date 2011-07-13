@@ -61,5 +61,7 @@ NEW TAGS
   all functions in a family. A function can belong to multiple families.
 
 * `@inheritParams name` allows you to inherit the documentation for parameters
-  from another function. Currently only supports single inheritance, and from
-  other roxygenised functions in the current package.
+  from another function, either within the current package (`function`) or in
+  any other installed package (`package:function`). Currently only supports
+  single inheritance (i.e. you can't inherit from a function that inherits
+  from another function), but you can have multiple @inheritParams tags.

@@ -1,9 +1,12 @@
 # roxygen2
 
+> all' hileth', Hephaiste; didou d'areten te kai olbon.*
+> --Homer, 7th century BCE
+
 
 # Why use roxygen?
 
-The premise of `roxygen` is simple: describe your functions in comments next to where their definitions and `rxygen` will process your source code and comments to produce R compatible Rd files.  Here's a simple example from the `stringr` package:
+The premise of `roxygen` is simple: describe your functions in comments next to where their definitions and `roxygen` will process your source code and comments to produce R compatible Rd files.  Here's a simple example from the `stringr` package:
 
     #' The length of a string (in characters).
     #'
@@ -45,6 +48,13 @@ When you `roxygenise` your package these comments will be automatically transfor
       str_length(c("i", "like", "programming", NA))
     }
 
+# Running roxygen
+
+    library(roxygen)
+    roxygenize('<package>')
+
+By default, `roxygen` will create files in the package `man` directory, although if you're worried you can override the defaults to copy the complete package to a new directory and create the files there.
+
 # Roclets
 
 `roxygen` comes with three roclets, three tools for parsing your source code and producing files useful for documenting your package:
@@ -60,3 +70,11 @@ When you `roxygenise` your package these comments will be automatically transfor
   roxygen comments in the source code.
 
 By default, `roxygenise` will run all three, but you can choose which ones to run using the `roclet` parameter. It's also possible to write your own roclets - more on this in the future.
+
+# Thanks
+
+* Tobias Verbeke, for catching an unadorned URL.
+
+
+-----------
+* Hail, Hephaistos! Grant skill and weal.

@@ -267,8 +267,7 @@ roc_process.had <- function(roclet, partita, base_path) {
         params <- rd_arguments(get_rd(pieces[2], pieces[1]))
         
       } else {
-        # Reference within this package
-        
+        # Reference within this package        
         rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
         
         if (length(rd_name) != 1) {
@@ -277,10 +276,8 @@ roc_process.had <- function(roclet, partita, base_path) {
           next
         }
 
-        params <- get_tag(topics[[rd_name]], "arguments")$values
-        
+        params <- get_tag(topics[[rd_name]], "arguments")$values  
       }
-      
 
       missing_params <- setdiff(get_tag(topic, "formals")$values,
         names(get_tag(topic, "arguments")$values))

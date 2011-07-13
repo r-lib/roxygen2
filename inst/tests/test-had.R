@@ -74,6 +74,13 @@ test_that("usage captured from formals", {
   expect_equal(get_tag(out, "usage")$values, "a(a = 1)")
 })
 
+test_that("% is escaped in usage", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    a <- function(a='%') {}")[[1]]
+  expect_equal(get_tag(out, "usage")$values, "a(a = \"\\%\")")
+})
+
 
 test_that("@usage overrides default", {
   out <- roc_proc_text(roc, "

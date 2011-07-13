@@ -46,18 +46,19 @@ MINOR CHANGES
 
 NEW TAGS
 
-* `@rdname filename` - sets the output filename (without extension). Use for
+* `@rdname filename` sets the output filename (without extension). Use for
   functions non-alphanumeric functions (e.g. `[<-`) or if you want to document
   multiple functions in one file
 
-* `@template templatename` - includes a documentation template (see above)
+* `@template templatename` includes a documentation template (see above)
 
-* `@section Section title: contents` - include a section with any title
+* `@section Section title: contents` includes a section with any title. Don't
+  forget the colon! That separates the title of the section from its contents.
 
 * `@description` and `@details` tags allow you to specify description and
   details components in a template
 
-* `@family Family name` automatically adds see-also cross-references between
+* `@family family name` automatically adds see-also cross-references between
   all functions in a family. A function can belong to multiple families.
 
 * `@inheritParams name` allows you to inherit the documentation for parameters

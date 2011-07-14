@@ -219,6 +219,8 @@ roc_process.had <- function(roclet, partita, base_path) {
     key <- c(template_hash, digest(partitum))
     new <- rd_proc_cache$compute(key, roclet_rd_one(partitum, base_path)) 
     if (is.null(new)) next; 
+    # Clone output so cached object isn't modified
+    new$rd[[1]] <- list2env(as.list(new$rd[[1]]))
     
     old <- topics[[new$filename]]
     topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)

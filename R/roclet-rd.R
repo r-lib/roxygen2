@@ -282,9 +282,9 @@ roc_process.had <- function(roclet, partita, base_path) {
             call. = FALSE, immediate. = TRUE)
           next
         }
-
         params <- get_tag(topics[[rd_name]], "arguments")$values  
       }
+      params <- unlist(params)
 
       missing_params <- setdiff(get_tag(topic, "formals")$values,
         names(get_tag(topic, "arguments")$values))

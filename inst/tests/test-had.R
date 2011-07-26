@@ -231,3 +231,13 @@ test_that("multiple @inheritParam inherits from existing topics", {
   expect_equal(length(params), 2)
   expect_equal(sort(names(params)), c("trim", "x"))
 })
+
+test_that("`$` not to be parsed as assignee in foo$bar(a = 1)", {
+  out <- roc_proc_text(roc, "
+    #' foo object
+    foo <- list(bar = function(a) a)
+    foo$bar(a = 1)")[[1]]
+    
+    expect_equal(get_tag(out, "name")$values, "foo")
+})
+

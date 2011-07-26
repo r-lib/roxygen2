@@ -36,7 +36,7 @@ register.preref.parsers(parse.default,
                         'noRd')
 
 
-register.srcref.parser('<-', function(call, env) {
+register.srcref.parsers(function(call, env) {
   assignee <- call[[2]]
   value <- eval(assignee, env)
   
@@ -45,17 +45,7 @@ register.srcref.parser('<-', function(call, env) {
   } else {
     list(assignee = as.character(assignee), formals = formals(value))
   }
-})
-register.srcref.parser('=', function(call, env) {
-  assignee <- call[[2]]
-  value <- eval(assignee, env)
-  
-  if (!is.function(value)) {
-    list(assignee = as.character(assignee))
-  } else {
-    list(assignee = as.character(assignee), formals = formals(value))
-  }
-})
+}, '<-', '=')
 
 
 register.srcref.parser('setClass', function(call, env) {

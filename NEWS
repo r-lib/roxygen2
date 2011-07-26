@@ -66,3 +66,6 @@ NEW TAGS
   any other installed package (`package:function`). Currently only supports
   single inheritance (i.e. you can't inherit from a function that inherits
   from another function), but you can have multiple @inheritParams tags.
+  
+* `@format` and `@source` are implemented; they existed in the roxygen package 
+  but were actually ignored

@@ -46,6 +46,16 @@ register.srcref.parser('<-', function(call, env) {
     list(assignee = as.character(assignee), formals = formals(value))
   }
 })
+register.srcref.parser('=', function(call, env) {
+  assignee <- call[[2]]
+  value <- eval(assignee, env)
+  
+  if (!is.function(value)) {
+    list(assignee = as.character(assignee))
+  } else {
+    list(assignee = as.character(assignee), formals = formals(value))
+  }
+})
 
 
 register.srcref.parser('setClass', function(call, env) {

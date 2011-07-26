@@ -1,0 +1,20 @@
+th {
+  background: lightgray;
+}
+
+table {
+  width: 61.8%;
+}
+
+span.footnote {
+  vertical-align: super;
+  font-size: small;
+}
+
+span.footnote a {
+  text-decoration: none;
+}
+
+span.na {
+  font-style: italic;
+}

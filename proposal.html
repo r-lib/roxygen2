@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xml:lang="en" >
+    <head>
+        <title>Roxygen</title>
+        <style type="text/css">@import "proposal.css";</style>
+    </head>
+    <body>
+        <h1>Roxygen</h1>
+        <h2>Proposal</h2>
+        <ol>
+            <li><a href="#deliverables">Deliverables</a></li>
+            <li><a href="#timeline">Timeline</a></li>
+            <li><a href="#grammar">Grammar</a></li>
+            <li><a href="#equivalence"><code>Rd</code>-roxygen equivalence</a></li>
+            <li><a href="#representation">Intermediate representation</a></li>
+        </ol>
+        <h3><a id="deliverables">Deliverables</a></h3>
+        <ul>
+            <li>R-program to parse Roxygen blocks and apposite objects;
+            including:
+                <ul>
+                    <li>Roxygen grammar,</li>
+                    <li>Intermediate parse-tree representation.</li>
+                </ul></li>
+            <li>Documentation-, Namespace- and Collate-Roclets for
+            producing:
+                <ul>
+                    <li><code>Rd</code>;</li>
+                    <li>package namespaces;</li>
+                    <li>collated package descriptions.</li>
+                </ul></li>
+            <li>If time permits, write an <code>Ruml</code> Roclet;
+            and provide graphs and diagrams.</li>
+        </ul>
+        <h3><a id="timeline">Timeline</a></h3>
+        <p>A conceivable timeline is as follows:</p>
+        <blockquote>
+            <dl>
+                <dt>May 26&ndash;June 1</dt>
+                <dd>Parse R objects and extract relevant data</dd>
+                <dt>June 1&ndash;July 7</dt>
+                <dd>Parse Roxygen tags</dd>
+                <dt>July 7&ndash;July 20</dt>
+                <dd>Generate intermediate representation</dd>
+                <dt>July 20&ndash;August 11</dt>
+                <dd>Translate <code>Rd</code>, namespaces and collations
+                    from intermediate representation</dd>
+            </dl>
+        </blockquote>
+        <h3><a id="grammar">Grammar</a></h3>
+        <p>Although R should be parsed using internal procedures like
+            <code>parse()</code>, <code>formals()</code>, etc.; Roxygen
+            blocks require a formal grammar. The following EBNF
+            representation needs to be refined to include composite
+            elements:</p>
+        <blockquote>
+            <pre>body = [ [ brief description, ] detailed description, ] { elements };
+brief description = { escaped text }, newline;
+detailed description = { escaped text }, newline, newline;
+element = { simple element | demarcated element | list element |
+            composite element};
+simple element = tag symbol, keyword, { escaped text };
+demarcated element = tag symbol, demarcated keyword, { text },
+                     tag symbol, "end", demarcated keyword;
+list element = tag symbol, list keyword, { items },
+               tag symbol, "end", list keyword;
+item = tag symbol, "item", { escaped text };
+composite element = table | function | displayed function;
+keyword = "name" | "alias" | "title" | "brief" | "usage" | "param" |
+          "details" | "return" | "reference" | "note" | "attention" |
+          "author" | "sa" | "see" | "example" | "keyword" | "source" |
+          "n" | "section" | "e" | "em" | "b" | "squote" | "dquote" |
+          "kbd" | "samp" | "package" | "file" | "email" | "url" |
+          "var" | "env" | "option" | "command" | "dfn" | "cite" |
+          "acronym" | "ref" | "R" | "dots" | "ldots" | "export" |
+          "import" | "include" | "enc" | "concept" | "encoding" |
+          "tab";
+demarcated keyword = "code" | "verbatim" | "f" | "df";
+list keyword = "enumeration" | "itemize" | "describe";
+table = tag symbol, "table", { row }, tag symbol, "endtable";
+row = { text, [field delimiter] }, row delimeter;
+field delimeter = tag symbol, "tab";
+row delimeter = tag symbol, "n";
+function = tag symbol, "f", { text }, tag symbol, "endf";
+displayed function = tag symbol, "df", { text }, tag symbol, "enddf";
+tag symbol = "@";
+escaped tag symbol = "\@";
+text = ? UTF-8 visible characters ?;
+escaped text = text - tag symbol | escaped tag symbol;</pre>
+        </blockquote>
+        <h3><a id="equivalence">Rd-roxygen equivalence</a></h3>
+        <blockquote>
+            <table>
+                <tr><th>Rd keyword</th><th>Roxygen equivalent</th></tr>
+                <tr><td>name</td>
+                    <td>name<span class="footnote"><a href="#semantics">&dagger;</a></span>
+                    </td></tr>
+                <tr><td>alias</td>
+                    <td>alias<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>title</td>
+                    <td>title<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>description</td>
+                    <td>brief</td></tr>
+                <tr><td>usage</td>
+                    <td>usage<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>arguments</td>
+                    <td>param</td></tr>
+                <tr><td>details</td>
+                    <td>details</td></tr>
+                <tr><td>value</td>
+                    <td>return</td></tr>
+                <tr><td>reference</td>
+                    <td>reference<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>note</td>
+                    <td>note, attention</td></tr>
+                <tr><td>author</td>
+                    <td>author</td></tr>
+                <tr><td>seealso</td>
+                    <td>sa, see</td></tr>
+                <tr><td>examples</td>
+                    <td>example</td></tr>
+                <tr><td>keyword</td>
+                    <td>keyword<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>docType</td>
+                    <td><span class="na">n/a</span></td></tr>
+                <tr><td>format</td>
+                    <td><span class="na">n/a</span></td></tr>
+                <tr><td>source</td>
+                    <td>source<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>S4method</td>
+                    <td><span class="na">n/a</span></td></tr>
+                <tr><td>cr</td>
+                    <td>n</td></tr>
+                <tr><td>section</td>
+                    <td>section</td></tr>
+                <tr><td>emph</td>
+                    <td>e, em</td></tr>
+                <tr><td>strong</td>
+                    <td>b</td></tr>
+                <tr><td>bold</td>
+                    <td>b</td></tr>
+                <tr><td>sQuote</td>
+                    <td>squote<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>dQuote</td>
+                    <td>dquote<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>code</td>
+                    <td>code</td></tr>
+                <tr><td>preformatted</td>
+                    <td>verbatim</td></tr>
+                <tr><td>kbd</td>
+                    <td>kbd<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>samp</td>
+                    <td>samp<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>pkg</td>
+                    <td>pkg<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>file</td>
+                    <td>file<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>email</td>
+                    <td>email<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>url</td>
+                    <td>url<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>var</td>
+                    <td>var<span class="footnote"><a href="#semantics">&dagger;</a></span>
+                    </td></tr>
+                <tr><td>env</td>
+                    <td>env</td></tr>
+                <tr><td>options</td>
+                    <td>options<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>command</td>
+                    <td>command<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>dfn</td>
+                    <td>dfn<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>cite</td>
+                    <td>cite<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>acronym</td>
+                    <td>acronym<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>itemize</td>
+                    <td>itemize<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>enumerate</td>
+                    <td>enumerate<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>item</td>
+                    <td>item<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>describe</td>
+                    <td>describe<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>tabular</td>
+                    <td>tabular<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>link</td>
+                    <td>ref</td></tr>
+                <tr><td>linkS4class</td>
+                    <td><span class="na">n/a</span></td></tr>
+                <tr><td>eqn</td>
+                    <td>f<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>deqn</td>
+                    <td>df<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>R</td>
+                    <td>R<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>enc</td>
+                    <td>enc<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>concept</td>
+                    <td>concept<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>encoding</td>
+                    <td>encoding<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>export</td>
+                    <td>export<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>import</td>
+                    <td>import<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>include</td>
+                    <td>include<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>slot</td>
+                    <td>slot<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+                <tr><td>prototye</td>
+                    <td>prototye<span class="footnote"><a href="#new">*</a></span>
+                    </td></tr>
+            </table>
+        </blockquote>
+        <p>
+            <span id="new" class="footnote">*</span> New keyword not found in
+            Doxygen.<br />
+            <span id="semantics" class="footnote">&dagger;</span> Keyword
+            exists in Doxygen, but with different semantics.
+        </p>
+        <h3><a id="representation">Intermediate representation</a></h3>
+        <p>S-expressions are readily parsible and less verbose
+            than their XML counterpart, without sacrificing
+            readability. We propose, therefore, something like
+            the following for an intermediate parse-tree
+            representation:</p>
+        <blockquote>
+        <pre>(class (name "person")
+       (slot (name "fullname")
+             (description "The full name of the person"))
+       (slot (name "birthyear")
+             (description "The year of birth"))
+       (prototype "Prototype person is named John Doe, 1971"))</pre>
+        </blockquote>
+        <p>The above is merely an example; the intermediate representation
+        should be extensible and tied intimately to the grammar.</p>
+        <address><a href="http://peter.danenberg.name">Peter Danenberg</a>
+        &lt;pcd at roxygen dot org&gt;</address>
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+            var pageTracker = _gat._getTracker("UA-2650403-14");
+            pageTracker._initData();
+            pageTracker._trackPageview();
+        </script>
+    </body>
+</html>

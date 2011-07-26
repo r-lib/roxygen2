@@ -33,11 +33,11 @@ collate_roclet <- function() {
 #' @S3method roc_process collate
 roc_process.collate <- function(roclet, partita, base_path) {
   topo <- topo_sort()
-  
+
   for (partitum in partita) {
     file <- base_path(partitum$srcref$filename, base_path)
     vertex <- topo$add(file)
-    
+
     includes <- partitum[names(partitum) == "include"]
     if (length(includes) > 0) {
       for (include in includes) {
@@ -48,7 +48,7 @@ roc_process.collate <- function(roclet, partita, base_path) {
 
   unique(basename(topo$sort()))
 }
-                                  
+
 #' @S3method roc_output collate
 roc_output.collate <- function(roclet, results, base_path) {
   DESCRIPTION <- file.path(base_path, "DESCRIPTION")
@@ -56,16 +56,16 @@ roc_output.collate <- function(roclet, results, base_path) {
   new <- old
   new$Collate <- str_c("'", results, "'", collapse = " ")
   write.description(new, DESCRIPTION)
-  
+
   if (!identical(old, read.description(DESCRIPTION))) {
     cat('Updating collate directive in ', DESCRIPTION, "\n")
-  }    
+  }
 }
 
 base_path <- function(path, base) {
-  path <- normalizePath(path)
-  base <- normalizePath(base)
-  
+  path <- normalizePath(path, winslash = "/")
+  base <- normalizePath(base, winslash = "/")
+
   str_replace(path, fixed(str_c(base, "/")), "")
 }
 

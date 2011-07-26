@@ -43,8 +43,7 @@ roxygenize <- function(package.dir,
   DESCRIPTION <- file.path(package.dir, "DESCRIPTION")
   if (file.exists(DESCRIPTION)) {
     desc <- read.description(DESCRIPTION)
-    raw_collate <- desc$Collate
-    if (is.null(raw_collate)) raw_collate <- ""
+    raw_collate <- desc$Collate %||% ""
     con <- textConnection(raw_collate)
     on.exit(close(con))
     collate <- scan(con, "character", sep = " ", quiet = TRUE)

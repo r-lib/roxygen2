@@ -54,8 +54,10 @@ roxygenize <- function(package.dir,
     # load the dependencies
     pkgs <- paste(c(desc$Depends, desc$Imports), collapse = ", ")
     if (pkgs != "") {
-      pkgs <- gsub("\n| *|\\(.*", "", unlist(strsplit(pkgs, ",")))
-      sapply(pkgs, require, character.only = TRUE)
+      pkgs <- gsub("\\s*\\(.*?\\)", "", pkgs)
+      pkgs <- strsplit(pkgs, ",")[[1]]
+      pkgs <- gsub("^\\s+|\\s+$", "", pkgs)
+      lapply(pkgs[pkgs != "R"], require, character.only = TRUE)
     }
   }
   

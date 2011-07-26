@@ -17,7 +17,7 @@
   \item{package.dir}{the package's top directory}
 
   \item{roxygen.dir}{where to create roxygen output;
-  defaults to \file{package.roxygen}.}
+  defaults to \file{package.dir}.}
 
   \item{copy.package}{copies the package over before
   adding/manipulating files.}

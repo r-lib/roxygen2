@@ -8,7 +8,7 @@
 #'
 #' @param package.dir the package's top directory
 #' @param roxygen.dir where to create roxygen output; defaults to
-#'   \file{package.roxygen}.
+#'   \file{package.dir}.
 #' @param copy.package copies the package over before adding/manipulating
 #'    files.
 #' @param overwrite overwrite target files?

@@ -1,3 +1,6 @@
+* added support for the `@source` tag
+
+
 roxygen2 2.0
 ------------
 
@@ -67,5 +70,5 @@ NEW TAGS
   single inheritance (i.e. you can't inherit from a function that inherits
   from another function), but you can have multiple @inheritParams tags.
   
-* `@format` and `@source` are implemented; they existed in the roxygen package 
-  but were actually ignored
+* `@format` has been implemented; it existed in the roxygen package but was 
+  actually ignored

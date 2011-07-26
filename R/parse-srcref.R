@@ -15,7 +15,7 @@ parse.srcref <- function(ref, env) {
 
   # Dispatch to registered srcref parsers based on call
   name <- as.character(call[[1]])
-  
+  if (length(name) > 1) return(srcref)
   parser <- srcref.parsers[[name]]
   if (is.null(parser)) return(srcref)
   

@@ -75,12 +75,14 @@ format_collapse <- function(x, ...) {
 #' @S3method format value_tag
 #' @S3method format note_tag
 #' @S3method format concept_tag
+#' @S3method format source_tag
 format.author_tag <- format_collapse
 format.seealso_tag <- format_collapse
 format.references_tag <- format_collapse
 format.value_tag <- format_collapse
 format.note_tag <- format_collapse
 format.concept_tag <- format_collapse
+format.source_tag <- format_collapse
 
 # Tags that collapse and wrap their input ------------------------------------
 

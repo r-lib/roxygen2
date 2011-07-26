@@ -353,6 +353,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'inheritParams'))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'format'))
+  add_tag(rd, process_had_tag(partitum, 'source'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
   add_tag(rd, process_had_tag(partitum, 'concept'))

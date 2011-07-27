@@ -112,7 +112,7 @@ roc_process.namespace <- function(roclet, partita, base_path) {
 roc_output.namespace <- function(roclet, results, base_path) { 
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   
-  old <- readLines(NAMESPACE)
+  old <- if (file.exists(NAMESPACE)) readLines(NAMESPACE) else ""
   
   if (!identical(results, old)) {
     cat("Updating namespace directives\n")

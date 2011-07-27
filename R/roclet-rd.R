@@ -36,7 +36,7 @@ register.preref.parsers(parse.default,
                         'noRd')
 
 
-register.srcref.parser('<-', function(call, env) {
+register.srcref.parsers(function(call, env) {
   assignee <- call[[2]]
   value <- eval(assignee, env)
   
@@ -45,7 +45,7 @@ register.srcref.parser('<-', function(call, env) {
   } else {
     list(assignee = as.character(assignee), formals = formals(value))
   }
-})
+}, '<-', '=')
 
 
 register.srcref.parser('setClass', function(call, env) {
@@ -343,6 +343,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'inheritParams'))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'format'))
+  add_tag(rd, process_had_tag(partitum, 'source'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
   add_tag(rd, process_had_tag(partitum, 'concept'))

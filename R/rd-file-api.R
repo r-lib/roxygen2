@@ -19,7 +19,7 @@ names.rd_file <- function(x) {
 #' @S3method format rd_file
 format.rd_file <- function(x, ...) {
   tags <- as.list(x[[1]])
-  order <- c("docType", "name", "alias", "title", "format", "usage",
+  order <- c("docType", "name", "alias", "title", "format", "source", "usage",
     "arguments", "value", "description", "details", "note", "section",
     "examples", "author", "references", "seealso", "concept", "keyword")
     

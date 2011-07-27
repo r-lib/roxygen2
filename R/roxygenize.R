@@ -42,8 +42,8 @@ roxygenize <- function(package.dir,
   # (but still include them all, and silently remove missing)
   DESCRIPTION <- file.path(package.dir, "DESCRIPTION")
   if (file.exists(DESCRIPTION)) {
-    raw_collate <- read.description(DESCRIPTION)$Collate
-    
+    desc <- read.description(DESCRIPTION)
+    raw_collate <- desc$Collate %||% ""
     con <- textConnection(raw_collate)
     on.exit(close(con))
     collate <- scan(con, "character", sep = " ", quiet = TRUE)
@@ -51,6 +51,14 @@ roxygenize <- function(package.dir,
     collate_path <- file.path(roxygen.dir, "R", collate)
     collate_exists <- Filter(file.exists, collate_path)
     r_files <- c(collate_exists, setdiff(r_files, collate_exists))
+    # load the dependencies
+    pkgs <- paste(c(desc$Depends, desc$Imports), collapse = ", ")
+    if (pkgs != "") {
+      pkgs <- gsub("\\s*\\(.*?\\)", "", pkgs)
+      pkgs <- strsplit(pkgs, ",")[[1]]
+      pkgs <- gsub("^\\s+|\\s+$", "", pkgs)
+      lapply(pkgs[pkgs != "R"], require, character.only = TRUE)
+    }
   }
   
   parsed <- parse.files(r_files)

@@ -1,5 +1,17 @@
-* added support for the `@source` tag
+* package dependencies loaded automatically (thanks to Yihui Xie)
 
+* added support for the `@source` tag (thanks to Yihui Xie)
+
+BUG FIXES
+
+* `NAMESPACE` file no longer needs to exist (thanks to Yihui Xie)
+
+* `Collate` field in `DESCRIPTION` no longer needs to exist (thanks to Yihui
+  Xie)
+
+* `=` now recognised as way of assigning functions(thanks to Yihui Xie)
+
+* `x$y <- function() {...}` no longer causes error (thanks to Yihui Xie)
 
 roxygen2 2.0
 ------------

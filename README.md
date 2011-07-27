@@ -4,9 +4,9 @@
 > --Homer, 7th century BCE
 
 
-# Why use roxygen?
+# Why use roxygen2?
 
-The premise of `roxygen` is simple: describe your functions in comments next to where their definitions and `roxygen` will process your source code and comments to produce R compatible Rd files.  Here's a simple example from the `stringr` package:
+The premise of `roxygen2` is simple: describe your functions in comments next to where their definitions and `roxygen2` will process your source code and comments to produce R compatible Rd files.  Here's a simple example from the `stringr` package:
 
     #' The length of a string (in characters).
     #'
@@ -48,16 +48,16 @@ When you `roxygenise` your package these comments will be automatically transfor
       str_length(c("i", "like", "programming", NA))
     }
 
-# Running roxygen
+# Running roxygen2
 
-    library(roxygen)
+    library(roxygen2)
     roxygenize('<package>')
 
-By default, `roxygen` will create files in the package `man` directory, although if you're worried you can override the defaults to copy the complete package to a new directory and create the files there.
+By default, `roxygen2` will create files in the package `man` directory, although if you're worried you can override the defaults to copy the complete package to a new directory and create the files there.
 
 # Roclets
 
-`roxygen` comes with three roclets, three tools for parsing your source code and producing files useful for documenting your package:
+`roxygen2` comes with three roclets, three tools for parsing your source code and producing files useful for documenting your package:
 
 * `collate_roclet`: allows you to add `@include` directives to ensure that
   files are loaded in the order they are needed
@@ -67,7 +67,7 @@ By default, `roxygen` will create files in the package `man` directory, although
   export with the `@export` tag
 
 * `rd_roclet`: produces Rd files by inspecting both function definitions and
-  roxygen comments in the source code.
+  roxygen2 comments in the source code.
 
 By default, `roxygenise` will run all three, but you can choose which ones to run using the `roclet` parameter. It's also possible to write your own roclets - more on this in the future.
 

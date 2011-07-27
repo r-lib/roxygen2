@@ -62,7 +62,7 @@ By default, `roxygen` will create files in the package `man` directory, although
 * `collate_roclet`: allows you to add `@include` directives to ensure that
   files are loaded in the order they are needed
 
-* `namespace_roclet`: creates your `NAMESPACe` automatically. 95% of the time
+* `namespace_roclet`: creates your `NAMESPACE` automatically. 95% of the time
   all you need to do is label functions, methods and classes that you want to
   export with the `@export` tag
 

@@ -135,6 +135,6 @@ format.section_tag <- function(x, ...) {
 
 #' @S3method format examples_tag
 format.examples_tag <- function(x, ...) {
-  values <- str_c(x$values, collapse = "\n\n")
+  values <- str_c(x$values, collapse = "\n")
   rd_tag(x$tag, values, space = TRUE)  
 }

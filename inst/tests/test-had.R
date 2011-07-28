@@ -36,6 +36,16 @@ test_that("@examples and @example combine", {
   expect_match(examples, fixed("a <- 2"), all = FALSE)
 })
 
+test_that("@example does not introduce extra empty lines", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-3.R
+    NULL")[[1]]
+  
+  examples <- get_tag(out, "examples")$values
+  expect_identical(length(examples), 2L)
+})
+
 
 test_that("empty file gives empty list", {
   out <- roc_proc_text(roc, "")

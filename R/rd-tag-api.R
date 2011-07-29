@@ -113,10 +113,6 @@ format.formals_tag <- format_null
 format.arguments_tag <- function(x, ...) {
   names <- names(x$values)
   dups <- duplicated(names)
-  if (any(dups)) {
-    warning("Duplicated parameters: ", str_c(names[dups], collapse = ","), 
-      call. = FALSE)
-  }
   
   items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
   rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)

@@ -96,7 +96,10 @@ format_wrap <- function(x, ...) {
 #' @S3method format usage_tag
 format.description_tag <- format_collapse
 format.details_tag <- format_collapse
-format.usage_tag <- format_collapse
+format.usage_tag <- function(x, ...) {
+  values <- str_c(x$values, collapse = "\n\n  ")
+  rd_tag(x$tag, paste("  ", values, sep = ""), space = TRUE)
+} 
 
 # Tags that don't have output ------------------------------------------------
 

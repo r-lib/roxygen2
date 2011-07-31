@@ -22,7 +22,10 @@ usage <- function(args) {
 
   arg_values <- vapply(args, arg_to_text, character(1))
   
-  paste(names(args), arg_values, collapse = ", ", sep = "")
+  results <- paste(names(args), arg_values, sep = "")
+  cuml <- cumsum(nchar(results))
+  results <- split(results, cuml %/% 60)
+  paste(lapply(results, paste, collapse = ", "), collapse = ", \n  ")
 }
 
 # Does the string contain no matter, but very well [:space:]?

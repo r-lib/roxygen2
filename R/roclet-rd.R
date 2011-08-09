@@ -327,7 +327,13 @@ roclet_rd_one <- function(partitum, base_path) {
   filename <- str_c(partitum$merge %||% partitum$rdname %||% name, ".Rd")
   
   add_tag(rd, new_tag("name", name))
-  add_tag(rd, new_tag("alias", name))
+  # alias is not name for S4 classes and methods...
+  alias <- name
+  if (!is.null(partitum$S4class))
+    alias <- paste(alias, "-class", sep = "")
+  if (!is.null(partitum$S4method))
+    alias <- paste(alias, ",", partitum$signature, "-method", sep = "")
+  add_tag(rd, new_tag("alias", alias))
   add_tag(rd, new_tag("formals", names(partitum$formals)))
 
   add_tag(rd, process_description(partitum, base_path))

@@ -70,33 +70,26 @@ format_collapse <- function(x, ...) {
   rd_tag(x$tag, str_wrap(values, width = 60, indent = 2, exdent = 2), space = TRUE)
 } 
 #' @S3method format author_tag
-#' @S3method format seealso_tag
-#' @S3method format references_tag
-#' @S3method format value_tag
-#' @S3method format note_tag
 #' @S3method format concept_tag
-#' @S3method format source_tag
-format.author_tag <- format_collapse
-format.seealso_tag <- format_collapse
-format.references_tag <- format_collapse
-format.value_tag <- format_collapse
-format.note_tag <- format_collapse
-format.concept_tag <- format_collapse
-format.source_tag <- format_collapse
-
-# Tags that collapse and wrap their input ------------------------------------
-
-format_wrap <- function(x, ...) {
-  desc <- str_c(x$values, collapse = "\n\n")
-  rd_tag('description', str_wrap(desc, width = 60, indent = 2, exdent = 2), space = TRUE)
-}
-
 #' @S3method format description_tag
 #' @S3method format details_tag
+#' @S3method format note_tag
+#' @S3method format references_tag
+#' @S3method format seealso_tag
+#' @S3method format source_tag
 #' @S3method format usage_tag
+#' @S3method format value_tag
+format.author_tag <- format_collapse
+format.concept_tag <- format_collapse
 format.description_tag <- format_collapse
 format.details_tag <- format_collapse
+format.note_tag <- format_collapse
+format.references_tag <- format_collapse
+format.seealso_tag <- format_collapse
+format.source_tag <- format_collapse
 format.usage_tag <- format_collapse
+format.value_tag <- format_collapse
+
 
 # Tags that don't have output ------------------------------------------------
 

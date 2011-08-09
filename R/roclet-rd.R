@@ -21,13 +21,13 @@ register.preref.parsers(parse.value,
                         'family',
                         'inheritParams',
                         'format',
-                        'source')
+                        'source', 
+                        'description',
+                        'details')
 
 register.preref.parsers(parse.name.description,
                         'param',
-                        'method',
-                        'description',
-                        'details')
+                        'method')
 
 register.preref.parsers(parse.name,
                         'docType')

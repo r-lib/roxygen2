@@ -1,3 +1,5 @@
+* `@details` and `@description` now work correctly
+
 roxygen2 2.1
 ------------
 

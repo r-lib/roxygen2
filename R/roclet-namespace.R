@@ -182,8 +182,9 @@ process_tag <- function(partitum, tag, f) {
   unlist(lapply(matches, f, tag = tag, all = partitum), use.names = FALSE)
 }
   
-words <- function(x) {
-  quote_if_needed(str_split(str_trim(x), "\\s+")[[1]])
+words <- function(x, quote = TRUE) {
+  x <- str_split(str_trim(x), "\\s+")[[1]]
+  if (quote) quote_if_needed(x) else x
 }
 is.syntactic <- function(x) make.names(x) == x
 has.quotes <- function(x) str_detect(x, "'|\"")

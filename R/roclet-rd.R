@@ -16,6 +16,7 @@ register.preref.parsers(parse.value,
                         'examples',
                         'keywords',
                         'return',
+                        'returnClass',
                         'author',
                         'section',
                         'family',
@@ -25,23 +26,17 @@ register.preref.parsers(parse.value,
                         'description',
                         'details')
 
-# -----
-# AA 2012-08-12:
-#register.preref.parsers(parse.name.description,
-#                        'param',
-#                        'method')
 register.preref.parsers(parse.name.description,
                         'param',
                         'method',
                         'returnItem')
-# -----
-
 
 register.preref.parsers(parse.name,
                         'docType')
 
 register.preref.parsers(parse.default,
-                        'noRd')
+                        'noRd',
+                        'returnList')
 
 
 register.srcref.parsers(function(call, env) {
@@ -355,13 +350,10 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
   add_tag(rd, process_had_tag(partitum, 'concept'))
-# -----
-# AA 2011-08-12:
 #  add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
 #      new_tag("value", param)
 #    }))
   add_tag(rd, process.return(partitum))
-# -----
   add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
     }))
@@ -482,14 +474,24 @@ process.arguments <- function(partitum) {
   new_tag("arguments", desc)
 }
 
-# -----
-# AA 2011-08-12:
 process.return <- function(partitum) {
 	# general description of return value
 	ret <- unname(unlist(partitum[names(partitum) == "return"]))
-	# additional list components
+	# list or class of return value, and additional list components
+	retList <- unname(unlist(partitum[names(partitum) == "returnList"]))
+	retClass <- unname(unlist(partitum[names(partitum) == "returnClass"]))
 	retItems <- partitum[names(partitum) == "returnItem"]
+	if (length(ret) == 0) {
+		# general description overrides 'returnList' or 'returnClass'
+		if (length(retList) > 0) {
+			ret <- "A list"
+		} else if (length(retClass) > 0) {
+			ret <- paste("An object of class \\code{\"", retClass, "\"}", sep="")
+		}
+		ret <- paste(ret, if (length(retItems) > 0) " with the following components:" else ".", sep="")
+	}
 	if (length(retItems) > 0) {
+		# add list components
 		desc <- str_trim(sapply(retItems, "[[", "description"))
 		names(desc) <- sapply(retItems, "[[", "name")
 		ret <- c(ret, desc)
@@ -498,7 +500,6 @@ process.return <- function(partitum) {
 	if (length(ret) == 0) return()
 	new_tag("value", ret)
 }
-# -----
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.

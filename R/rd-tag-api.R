@@ -88,7 +88,10 @@ format.references_tag <- format_collapse
 format.seealso_tag <- format_collapse
 format.source_tag <- format_collapse
 format.usage_tag <- format_collapse
-format.value_tag <- format_collapse
+# -----
+# AA 2011-08-12:
+#format.value_tag <- format_collapse
+# -----
 
 
 # Tags that don't have output ------------------------------------------------
@@ -103,13 +106,43 @@ format.formals_tag <- format_null
 # Tags with special errors or other semantics --------------------------------
 
 #' @S3method format arguments_tag
-format.arguments_tag <- function(x, ...) {
-  names <- names(x$values)
-  dups <- duplicated(names)
-  
-  items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
-  rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)
+# -----
+# AA 2011-08-12:
+#format.arguments_tag <- function(x, ...) {
+#  names <- names(x$values)
+#  dups <- duplicated(names)	# AA 2011-08-13: this is unused here since warning was removed
+#  
+#  items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
+#  rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)
+#}
+get_items <- function(x) {
+	names <- names(x$values)
+	dups <- duplicated(names)
+	if (any(dups)) {
+		# warning is still included here
+		warning("Duplicated parameters: ", str_c(names[dups], collapse = ","), 
+			call. = FALSE)
+	}
+	str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
 }
+format.arguments_tag <- function(x, ...) {
+	items <- get_items(x)
+	rd_tag(x$tag, str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)
+}
+format.value_tag <- function(x, ...) {
+	# general description of return value
+	general <- names(x$values) == ""
+	str <- x$values[general]
+	# additional list components
+	x$values <- x$values[!general]
+	if (length(x$values) > 0) {
+		items <- get_items(x)
+		str <- str_c(c(str, items), collapse="\n\n")
+	}
+	# return tag
+	rd_tag(x$tag, str_wrap(str, width = 60, exdent = 2, indent = 2), space = TRUE)
+}
+# -----
 
 #' @S3method format section_tag
 format.section_tag <- function(x, ...) {

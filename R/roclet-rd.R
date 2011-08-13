@@ -25,9 +25,17 @@ register.preref.parsers(parse.value,
                         'description',
                         'details')
 
+# -----
+# AA 2012-08-12:
+#register.preref.parsers(parse.name.description,
+#                        'param',
+#                        'method')
 register.preref.parsers(parse.name.description,
                         'param',
-                        'method')
+                        'method',
+                        'returnItem')
+# -----
+
 
 register.preref.parsers(parse.name,
                         'docType')
@@ -347,9 +355,13 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
   add_tag(rd, process_had_tag(partitum, 'concept'))
-  add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
-      new_tag("value", param)
-    }))
+# -----
+# AA 2011-08-12:
+#  add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
+#      new_tag("value", param)
+#    }))
+  add_tag(rd, process.return(partitum))
+# -----
   add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
     }))
@@ -469,6 +481,24 @@ process.arguments <- function(partitum) {
   
   new_tag("arguments", desc)
 }
+
+# -----
+# AA 2011-08-12:
+process.return <- function(partitum) {
+	# general description of return value
+	ret <- unname(unlist(partitum[names(partitum) == "return"]))
+	# additional list components
+	retItems <- partitum[names(partitum) == "returnItem"]
+	if (length(retItems) > 0) {
+		desc <- str_trim(sapply(retItems, "[[", "description"))
+		names(desc) <- sapply(retItems, "[[", "name")
+		ret <- c(ret, desc)
+	}
+	# return nothing if there were no matches for keywords, otherwise value tag
+	if (length(ret) == 0) return()
+	new_tag("value", ret)
+}
+# -----
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.

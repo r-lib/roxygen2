@@ -106,7 +106,7 @@ parse.unknown <- function(key, rest) {
 #' @export
 parse.value <- function(key, rest) {
   if (is.null.string(rest))
-    stop(key, 'requires a value', call. = FALSE)
+    stop(key, ' requires a value', call. = FALSE)
   else
     parse.default(key, rest)
 }
@@ -126,11 +126,35 @@ parse.name.description <- function(key, rest) {
   rest <- str_trim(pieces[, 2])
 
   if (is.null.string(name))
-    stop(key, 'requires a name and description', call. = FALSE)
+    stop(key, ' requires a name and description', call. = FALSE)
   else
     as.list(structure(list(list(name=name,
                                 description=rest)),
                       names=key))
+}
+
+# Parse an element containing multiple names with a common description. 
+parse.multiname.description <- function(key, rest) {
+	# get number of names
+	pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
+	n <- as.integer(pieces[, 1])
+	if (!isTRUE(n > 0)) {
+		stop(key, ' requires to specify a positive number of names', 
+			call. = FALSE)
+	}
+    rest <- str_trim(pieces[, 2])
+	
+	# get names and description
+	pieces <- str_split_fixed(rest, "[[:space:]]+", n+1)
+	names <- pieces[, seq_len(n)]
+	if (any(is.null.string(names))) {
+		stop(key, ' requires the specified number of names and a description', 
+			call. = FALSE)
+	}
+	names <- str_c(names, collapse=", ")
+    rest <- str_trim(pieces[, n+1])
+	
+    as.list(structure(list(list(name=names, description=rest)), names=key))
 }
 
 #' Parse an element containing a single name and only a name.

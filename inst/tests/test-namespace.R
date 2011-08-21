@@ -6,6 +6,12 @@ test_that("export detects object name", {
   expect_equal(out, 'export(a)')
 })
 
+
+test_that("export escapes quotes name if needed", {
+  out <- roc_proc_text(roc, "#' @export\n'a<-' <- function(){}")
+  expect_equal(out, 'export("a<-")')
+})
+
 test_that("export parameter overrides default", {
   out <- roc_proc_text(roc, "#' @export b\na <- function(){}")
   expect_equal(out, 'export(b)')

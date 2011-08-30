@@ -134,10 +134,10 @@ ns_collapse <- function(tag, parms, all) {
 
 
 ns_exportClass <- function(tag, parms, all) {
-  ns_directive('exportClasses', parms)
+  ns_directive('exportClasses', quote_if_needed(parms))
 }
 ns_exportMethod <- function(tag, parms, all) {
-  ns_directive('exportMethods', parms)
+  ns_directive('exportMethods', quote_if_needed(parms))
 }
 ns_export <- function(tag, parms, all) {
   if (!is.null.string(parms)) {

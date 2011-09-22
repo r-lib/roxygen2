@@ -1,5 +1,11 @@
 * `@details` and `@description` now work correctly
 
+* `@useDynLib` now works correctly: 
+   @useDynLib packageName routine1 routine2 
+   produces
+   useDynLib(packageName, routine1, routine2) 
+   in the NAMESPACE file, instead of separate (wrong) useDynLib statements as before.
+
 roxygen2 2.1
 ------------
 

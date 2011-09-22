@@ -100,7 +100,7 @@ roc_process.namespace <- function(roclet, partita, base_path) {
       process_tag(partitum, 'import', ns_default),
       process_tag(partitum, 'importClassesFrom', ns_collapse),
       process_tag(partitum, 'importMethodsFrom', ns_collapse),
-      process_tag(partitum, 'useDynLib', ns_default)
+      process_tag(partitum, 'useDynLib', ns_collapse)
     )
     ns <- c(ns, ns_one)
   }

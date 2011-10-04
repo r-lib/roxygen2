@@ -4,7 +4,13 @@
    @useDynLib packageName routine1 routine2 
    produces
    useDynLib(packageName, routine1, routine2) 
-   in the NAMESPACE file, instead of separate (wrong) useDynLib statements as before.
+   in the NAMESPACE file, instead of separate (wrong) useDynLib 
+   statements as before.
+
+* In example files included with `@example` you can now use infix operators 
+  (e.g. %*%) or other things with %, because they will be preceded by a 
+  backslash in the Rd file. This behaviour was already in place for examples 
+  directly included with `@examples`.
 
 roxygen2 2.1
 ------------

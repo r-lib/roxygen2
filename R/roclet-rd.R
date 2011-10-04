@@ -485,6 +485,7 @@ process.examples <- function(partitum, base_path) {
   if (length(paths) > 0) {
     paths <- file.path(base_path, str_trim(paths))
     examples <- unlist(lapply(paths, readLines))
+    examples <- gsub("([%\\])", "\\\\\\1", examples)                        
     
     out <- c(out, new_tag("examples", examples))
   }

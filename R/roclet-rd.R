@@ -488,7 +488,9 @@ process.return <- function(partitum) {
 		} else if (length(retClass) > 0) {
 			ret <- paste("An object of class \\code{\"", retClass, "\"}", sep="")
 		}
-		ret <- paste(ret, if (length(retItems) > 0) " with the following components:" else ".", sep="")
+		if (length(ret) > 0) {
+			ret <- paste(ret, if (length(retItems) > 0) " with the following components:" else ".", sep="")
+		}
 	}
 	if (length(retItems) > 0) {
 		# add list components

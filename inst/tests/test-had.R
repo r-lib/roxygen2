@@ -318,7 +318,7 @@ test_that("no ending punctuation does not produce ellipsis", {
 
 
 test_that("multiple @inheritParam tags gathers all params", {
-  out <- roc_process(roc, parse.files("Rd-collate.R"), base_path = ".")
+  out <- roc_process(roc, parse.files("Rd-params.R"), base_path = ".")
   
   params <- get_tag(out[["c.Rd"]], "arguments")$values
   expect_equal(length(params), 2)

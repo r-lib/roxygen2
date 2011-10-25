@@ -9,6 +9,9 @@
 \alias{namespace_roclet}
 \alias{S3method}
 \title{Roclet: make NAMESPACE.}
+\usage{
+  namespace_roclet()
+}
 \description{
   This roclet automates the production of a
   \file{NAMESPACE} file, see \cite{Writing R Extensions}

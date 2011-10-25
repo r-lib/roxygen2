@@ -1,6 +1,9 @@
 \name{collate_roclet}
 \alias{collate_roclet}
 \title{Roclet: make Collate field in DESCRIPTION.}
+\usage{
+  collate_roclet()
+}
 \value{
   Rd roclet
 }
@@ -22,8 +25,8 @@ NULL
 
 roclet <- collate_roclet()
 \dontrun{
-roc_proc(roclet, dir('example'))
-roc_out(roclet, dir('example'), "example")
+  roc_proc(roclet, dir('example'))
+  roc_out(roclet, dir('example'), "example")
 }
 }
 \seealso{

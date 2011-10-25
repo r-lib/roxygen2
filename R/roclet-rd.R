@@ -37,8 +37,11 @@ register.preref.parsers(parse.default,
 
 
 register.srcref.parsers(function(call, env) {
-  assignee <- call[[2]]
-  value <- get(as.character(assignee), env)
+  assignee <- as.character(call[[2]])
+  
+  # If it doesn't exist (any more), don't document it.
+  if (!exists(assignee, env)) return()
+  value <- get(assignee, env)
   
   out <- list(assignee = as.character(assignee))
   out$fun <- is.function(value)

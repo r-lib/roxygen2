@@ -1,7 +1,6 @@
 context("Rd")
 roc <- rd_roclet()
 
-
 test_that("@example loads from specified files", {
   out <- roc_proc_text(roc, "
     #' @name a
@@ -141,6 +140,8 @@ test_that("quoted topics have usage statements", {
   expect_equal(get_tag(out, "usage")$values, "f(a = 1, b = 2)")
   
 })
+
+
 
 test_that("@name overides default", {
   out <- roc_proc_text(roc, "
@@ -354,6 +355,11 @@ test_that("`$` not to be parsed as assignee in foo$bar(a = 1)", {
     foo$bar(a = 1)")[[1]]
     
     expect_equal(get_tag(out, "name")$values, "foo")
+})
+
+test_that("documentation closure work", {
+  out <- roc_process(roc, parse.files("Rd-closure.R"), base_path = ".")
+  expect_equal(names(out), "f2.Rd")
 })
 
 

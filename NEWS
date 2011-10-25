@@ -41,6 +41,8 @@
 
 * Functions with quoted names now get correct usage statements (Fixes #41)
 
+* Objects that no longer exist are not documented (Fixes #42)
+
 roxygen2 2.1
 ------------
 

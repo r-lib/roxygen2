@@ -88,7 +88,6 @@ format.references_tag <- format_collapse
 format.seealso_tag <- format_collapse
 format.source_tag <- format_collapse
 format.usage_tag <- format_collapse
-#format.value_tag <- format_collapse
 
 
 # Tags that don't have output ------------------------------------------------
@@ -103,13 +102,6 @@ format.formals_tag <- format_null
 # Tags with special errors or other semantics --------------------------------
 
 #' @S3method format arguments_tag
-#format.arguments_tag <- function(x, ...) {
-#  names <- names(x$values)
-#  dups <- duplicated(names)	# AA 2011-08-13: this is unused here since warning was removed
-#  
-#  items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
-#  rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)
-#}
 get_items <- function(x) {
 	names <- names(x$values)
 	dups <- duplicated(names)

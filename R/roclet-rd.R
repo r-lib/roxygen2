@@ -350,9 +350,6 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
   add_tag(rd, process_had_tag(partitum, 'concept'))
-#  add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
-#      new_tag("value", param)
-#    }))
   add_tag(rd, process.return(partitum))
   add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
@@ -476,10 +473,10 @@ process.arguments <- function(partitum) {
 
 process.return <- function(partitum) {
 	# general description of return value
-	ret <- unname(unlist(partitum[names(partitum) == "return"]))
+	ret <- unlist(partitum[names(partitum) == "return"], use.names=FALSE)
 	# list or class of return value, and additional list components
-	retList <- unname(unlist(partitum[names(partitum) == "returnList"]))
-	retClass <- unname(unlist(partitum[names(partitum) == "returnClass"]))
+	retList <- unlist(partitum[names(partitum) == "returnList"], use.names=FALSE)
+	retClass <- unlist(partitum[names(partitum) == "returnClass"], use.names=FALSE)
 	retItems <- partitum[names(partitum) == "returnItem"]
 	if (length(ret) == 0) {
 		# general description overrides 'returnList' or 'returnClass'

@@ -29,6 +29,8 @@
 
 * Functions with no arguments now correctly get usage statements (Fixes #35)
 
+* Indentation in examples now preserved (Fixes #27)
+
 roxygen2 2.1
 ------------
 

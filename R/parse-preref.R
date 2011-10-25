@@ -1,7 +1,8 @@
 # Parse a preref
 parse.preref <- function(lines) {
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
-  trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
+  trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""),
+    "right")
 
   if (length(trimmed.lines) == 0) return(list())
 
@@ -22,7 +23,7 @@ parse.preref <- function(lines) {
 } 
 
 # Sequence that distinguishes roxygen comment from normal comment.
-LINE.DELIMITER <- '#+\''
+LINE.DELIMITER <- '\\s*#+\' ?'
 
 # Comment blocks (possibly null) that precede a file's expressions.
 #

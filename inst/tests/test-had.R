@@ -46,6 +46,17 @@ test_that("@example does not introduce extra empty lines", {
   expect_identical(length(examples), 2L)
 })
 
+test_that("indentation in examples preserved", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @examples a <-
+    #'     2
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_match(examples, fixed("a <-\n    2"), all = FALSE)
+})
+
 test_that("% in @example escaped", {
   out <- roc_proc_text(roc, "
     #' @name a

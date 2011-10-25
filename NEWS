@@ -31,6 +31,9 @@
 
 * Indentation in examples now preserved (Fixes #27)
 
+* roxygen2 will replace characters that are not valid in filenames with a
+  character substitute, e.g. `[]` becomes `sub`, `<-` becomes `set` (Fixes #6)
+
 roxygen2 2.1
 ------------
 

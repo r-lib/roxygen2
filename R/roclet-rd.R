@@ -326,7 +326,8 @@ roclet_rd_one <- function(partitum, base_path) {
   if (is.null(name)) stop("Missing name")
 
   # Work out file name and initialise Rd object
-  filename <- str_c(partitum$merge %||% partitum$rdname %||% name, ".Rd")
+  filename <- str_c(partitum$merge %||% partitum$rdname %||% nice_name(name),
+    ".Rd")
   
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", name))

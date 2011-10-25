@@ -31,3 +31,47 @@ usage <- function(args) {
 is.null.string <- function(string) {
   str_length(str_trim(string)) == 0
 }
+
+
+subs <- matrix(ncol = 2, byrow = T, c(
+  '[]', 'sub',
+  '<-', 'set',
+  '!', 'not',
+  '"', 'quote',
+  '#', 'hash',
+  '$', 'cash',
+  '%', 'grapes',
+  '&', 'and',
+  '|', 'or',
+  "'", 'single-quote',
+  '(', 'open-paren',
+  ')', 'close-paren',
+  '*', 'star',
+  '+', 'plus',
+  ',', 'comma',
+  '/', 'slash',
+  ':', 'colon',
+  ';', 'semi-colon',
+  '<', 'less-than',
+  '=', 'equals',
+  '>', 'greater-than',
+  '?', 'p',
+  '@', 'at',
+  '[', 'open-brace',
+  '\\', 'backslash',
+  ']', 'close-brace',
+  '^', 'hat',
+  '`', 'tick',
+  '{', 'open-curly',
+  '}', 'close',
+  '~', 'twiddle'
+))
+subs[, 2] <- str_c("-", subs[, 2])
+
+nice_name <- function(x) {
+  for(i in seq_len(nrow(subs))) {
+    x <- str_replace_all(x, fixed(subs[i, 1]), subs[i, 2])
+  }
+  x <- str_replace(x, "-+", "-")
+  x
+}

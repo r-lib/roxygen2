@@ -73,5 +73,5 @@ test_that("useDynLib imports only selected functions", {
     NULL")
   
     expect_equal(sort(out), sort(
-      c("useDynLib(test)", "useDynLib(test,a)", "useDynLib(test,a,b)")))
+      c("useDynLib(test)", "useDynLib(test,a)", "useDynLib(test,b)")))
 })

@@ -40,7 +40,7 @@ register.preref.parsers(parse.value, 'exportClass', 'exportMethod',
 #'
 #' }
 #'
-#' There are four tags for importing objects into the package:
+#' There are five tags for importing objects into the package:
 #'
 #' \describe{
 #'
@@ -59,6 +59,13 @@ register.preref.parsers(parse.value, 'exportClass', 'exportMethod',
 #'   multiple \code{importMethodsFrom(package, method)} directives to import
 #'   selected methods from a package.}
 #'
+#' \item{\code{@@useDynLib package}}{produces a \code{useDynLib(package)}
+#'   directive to import all compiled routines from the shared objects in
+#'   the specified package}
+#'
+#' \item{\code{@@useDynLib paackage routinea routineb}}{produces multiple
+#'   \code{useDynLib(package,routine)} directions to import specified 
+#'   compiled routines from a package.}
 #' }
 #'
 #' Only unique directives are saved to the \file{NAMESPACE} file, so you can
@@ -129,9 +136,13 @@ ns_default <- function(tag, parms, all) {
   ns_directive(tag, words(parms))
 }
 ns_collapse <- function(tag, parms, all) {
-  ns_directive(tag, str_c(words(parms), collapse = ","))
+  params <- words(parms)
+  if (length(params) == 1) {
+    ns_directive(tag, params)
+  } else {
+    ns_directive(tag, str_c(params[1], ",", params[-1]))
+  }
 }
-
 
 ns_exportClass <- function(tag, parms, all) {
   ns_directive('exportClasses', quote_if_needed(parms))

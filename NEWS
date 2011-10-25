@@ -27,6 +27,8 @@
 * Replacement functions (e.g. `foo<-`) now get correct usage statements:
   `foo() <- value` instead of `foo()<-value`. (Fixes #38)
 
+* Functions with no arguments now correctly get usage statements (Fixes #35)
+
 roxygen2 2.1
 ------------
 

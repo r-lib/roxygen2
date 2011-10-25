@@ -134,6 +134,13 @@ test_that("usage correct for modification functions", {
   expect_equal(get_tag(out, "usage")$values, "foo(a = 1) <- value")
 })
 
+test_that("usage correct for functions with no arguments", {
+  out <- roc_proc_text(roc, "
+      #' Function without parameters
+      f <- function() 1")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, "f()")
+})
 
 test_that("% is escaped in usage", {
   out <- roc_proc_text(roc, "
@@ -149,8 +156,6 @@ test_that("@usage overrides default", {
     a <- function(a=1) {}")[[1]]
     expect_equal(get_tag(out, "usage")$values, "a(a=2)")
 })
-
-
 
 test_that("@param documents arguments", {
   out <- roc_proc_text(roc, "

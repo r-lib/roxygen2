@@ -40,11 +40,13 @@ register.srcref.parsers(function(call, env) {
   assignee <- call[[2]]
   value <- eval(assignee, env)
   
-  if (!is.function(value)) {
-    list(assignee = as.character(assignee))
-  } else {
-    list(assignee = as.character(assignee), formals = formals(value))
+  out <- list(assignee = as.character(assignee))
+  out$fun <- is.function(value)
+  
+  if (out$fun) {
+    out$formals <- formals(value)
   }
+  out
 }, '<-', '=')
 
 
@@ -393,24 +395,22 @@ roc_output.had <- function(roclet, results, base_path) {
 }
 
 
-
-
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {
+  if (is.null(partitum$fun) || !partitum$fun) {
+    return(new_tag("usage", NULL))
+  }
+  
   if (!is.null(partitum$usage)) {
     return(new_tag("usage", partitum$usage))
   }
-  
-  formals <- partitum$formals
-  if (length(formals) == 0) return()
-  
-  args <- usage(formals)
-  
+    
   fun_name <- if (!is.null(partitum$method)) {
     rd_tag('method', partitum$method[[1]], partitum$method[[2]])
   } else {
     partitum$assignee
   }
+  args <- usage(partitum$formals)
   
   if (str_detect(fun_name, fixed("<-"))) {
     fun_name <- str_replace(fun_name, fixed("<-"), "")
@@ -418,7 +418,6 @@ process.usage <- function(partitum) {
   } else {
     new_tag("usage", str_c(fun_name, "(", args, ")"))
   }
-
 }
 
 # Process title, description and details. 

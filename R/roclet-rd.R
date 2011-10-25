@@ -31,6 +31,9 @@ register.preref.parsers(parse.name.description,
 
 register.preref.parsers(parse.name,
                         'docType')
+					
+register.preref.parsers(parse.multiname.description,
+	                    'multiParam')
 
 register.preref.parsers(parse.default,
                         'noRd')
@@ -461,7 +464,8 @@ process_description <- function(partitum, base_path) {
 }
 
 process.arguments <- function(partitum) {
-  params <- partitum[names(partitum) == "param"]
+#  params <- partitum[names(partitum) == "param"]
+  params <- partitum[names(partitum) %in% c("param", "multiParam")]
   if (length(params) == 0) return() 
 
   desc <- str_trim(sapply(params, "[[", "description"))

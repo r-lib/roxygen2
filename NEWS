@@ -24,6 +24,9 @@
 
 * Aliases are no longer quoted, and % is escaped with a backslash (Fixes #24)
 
+* Replacement functions (e.g. `foo<-`) now get correct usage statements:
+  `foo() <- value` instead of `foo()<-value`. (Fixes #38)
+
 roxygen2 2.1
 ------------
 

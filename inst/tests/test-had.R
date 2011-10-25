@@ -108,7 +108,6 @@ test_that("quoted names captured from assignment", {
   
   expect_equal(get_tag(out, "name")$values, "my function")
   expect_equal(get_tag(out, "alias")$values, "my function")
-  
 })
 
 test_that("@name overides default", {
@@ -127,6 +126,15 @@ test_that("usage captured from formals", {
   expect_equal(get_tag(out, "usage")$values, "a(a = 1)")
 })
 
+test_that("usage correct for modification functions", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    `foo<-` <- function(a=1) {}")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, "foo(a = 1) <- value")
+})
+
+
 test_that("% is escaped in usage", {
   out <- roc_proc_text(roc, "
     #' Title.
@@ -141,6 +149,7 @@ test_that("@usage overrides default", {
     a <- function(a=1) {}")[[1]]
     expect_equal(get_tag(out, "usage")$values, "a(a=2)")
 })
+
 
 
 test_that("@param documents arguments", {

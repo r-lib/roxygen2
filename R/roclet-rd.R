@@ -411,9 +411,14 @@ process.usage <- function(partitum) {
   } else {
     partitum$assignee
   }
+  
+  if (str_detect(fun_name, fixed("<-"))) {
+    fun_name <- str_replace(fun_name, fixed("<-"), "")
+    new_tag("usage", str_c(fun_name, "(", args, ") <- value"))
+  } else {
+    new_tag("usage", str_c(fun_name, "(", args, ")"))
+  }
 
-  usage <- str_c(fun_name, "(", args, ")")
-  new_tag("usage", usage)
 }
 
 # Process title, description and details. 

@@ -88,6 +88,29 @@ test_that("name also captured from assignment by =", {
   expect_equal(get_tag(out, "title")$values, "Title.")
 })
 
+test_that("quoted names captured from assignment", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    \"myfunction\" <- function(...) {}")[[1]]
+  
+  expect_equal(get_tag(out, "name")$values, "myfunction")
+  expect_equal(get_tag(out, "alias")$values, "myfunction")
+  
+  out <- roc_proc_text(roc, "
+    #' Title.
+    `myfunction` <- function(...) {}")[[1]]
+  expect_equal(get_tag(out, "name")$values, "myfunction")
+  expect_equal(get_tag(out, "alias")$values, "myfunction")
+  
+  out <- roc_proc_text(roc, "
+    #' Title.
+    \"my function\" <- function(...) {}")[[1]]
+  
+  expect_equal(get_tag(out, "name")$values, "my function")
+  expect_equal(get_tag(out, "alias")$values, "my function")
+  
+})
+
 test_that("@name overides default", {
   out <- roc_proc_text(roc, "
     #' @name b

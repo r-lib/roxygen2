@@ -39,6 +39,8 @@
   problems in the unlikely event that you have default value containing a
   non-breaking space (`"\uA0"')  (Fixes #21)
 
+* Functions with quoted names now get correct usage statements (Fixes #41)
+
 roxygen2 2.1
 ------------
 

@@ -133,6 +133,15 @@ test_that("quoted names captured from assignment", {
   expect_equal(get_tag(out, "alias")$values, "my function")
 })
 
+test_that("quoted topics have usage statements", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    \"f\" <- function(a = 1, b = 2) {}")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, "f(a = 1, b = 2)")
+  
+})
+
 test_that("@name overides default", {
   out <- roc_proc_text(roc, "
     #' @name b
@@ -346,4 +355,5 @@ test_that("`$` not to be parsed as assignee in foo$bar(a = 1)", {
     
     expect_equal(get_tag(out, "name")$values, "foo")
 })
+
 

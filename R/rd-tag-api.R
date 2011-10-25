@@ -27,6 +27,8 @@ rd_tag <- function(tag, ..., space = FALSE) {
   } else {
     values <- str_trim(c(...))
   }
+  # Turn non-breaking spaces back into regular spaces
+  values <- str_replace_all(values, fixed("\uA0"), " ")
   str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")                         
 }
 
@@ -70,7 +72,8 @@ format.format_tag <- format_first
 
 format_collapse <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n\n")
-  rd_tag(x$tag, str_wrap(values, width = 60, indent = 2, exdent = 2), space = TRUE)
+  rd_tag(x$tag, str_wrap(values, width = 60, indent = 2, exdent = 2), 
+    space = TRUE)
 } 
 #' @S3method format author_tag
 #' @S3method format concept_tag
@@ -111,7 +114,8 @@ format.arguments_tag <- function(x, ...) {
   dups <- duplicated(names)
   
   items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
-  rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)
+  rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2),
+    space = TRUE)
 }
 
 #' @S3method format section_tag

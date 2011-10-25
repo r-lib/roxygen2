@@ -16,8 +16,9 @@ usage <- function(args) {
     if (is.missing.arg(arg)) return("")
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
     text <- str_replace_all(text, fixed("%"), "\\%")
+    text <- str_replace_all(text, fixed(" "), "\uA0")
     
-    paste(" = ", paste(text, collapse = "\n"), sep = "")
+    paste("\uA0=\uA0", paste(text, collapse = "\n"), sep = "")
   }
 
   arg_values <- vapply(args, arg_to_text, character(1))

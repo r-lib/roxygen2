@@ -34,6 +34,11 @@
 * roxygen2 will replace characters that are not valid in filenames with a
   character substitute, e.g. `[]` becomes `sub`, `<-` becomes `set` (Fixes #6)
 
+* Usage strings use non-breaking spaces to prevent string default values
+  containing whitespace to be split across multiple lines. This may cause
+  problems in the unlikely event that you have default value containing a
+  non-breaking space (`"\uA0"')  (Fixes #21)
+
 roxygen2 2.1
 ------------
 

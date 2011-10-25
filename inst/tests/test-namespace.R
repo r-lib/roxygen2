@@ -64,3 +64,14 @@ test_that("other namespace tags produce correct output", {
     "import(test)", "importFrom(test,test)", "importClassesFrom(test,test)",
     "importMethodsFrom(test,test)")))
 })
+
+test_that("useDynLib imports only selected functions", {
+  out <- roc_proc_text(roc, "
+    #' @useDynLib test
+    #' @useDynLib test a
+    #' @useDynLib test a b
+    NULL")
+  
+    expect_equal(sort(out), sort(
+      c("useDynLib(test)", "useDynLib(test,a)", "useDynLib(test,a,b)")))
+})

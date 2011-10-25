@@ -46,6 +46,16 @@ test_that("@example does not introduce extra empty lines", {
   expect_identical(length(examples), 2L)
 })
 
+test_that("% in @example escaped", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-4.R
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_equal(examples, "x \\%*\\% y")  
+})
+
 
 test_that("empty file gives empty list", {
   out <- roc_proc_text(roc, "")

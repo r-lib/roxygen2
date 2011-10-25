@@ -1,11 +1,21 @@
 * `@details` and `@description` now work correctly
 
 * `@useDynLib` now works correctly: 
-   @useDynLib packageName routine1 routine2 
+
+       @useDynLib packageName routine1 routine2 
+
    produces
-   useDynLib(packageName, routine1, routine2) 
-   in the NAMESPACE file, instead of separate (wrong) useDynLib 
-   statements as before.
+
+       useDynLib(packageName, routine1)
+       useDynLib(packageName, routine2)
+
+   in the NAMESPACE file, instead of separate (wrong) useDynLib statements as
+   before.
+
+* All namespace import directives now behave in the same way as the export
+  directives, producing multiple single directives instead one multiple
+  directive: `@importClassesFrom pkg a b` now produces 
+  `importClassesFrom(pkg, a)` and `importClassesFrom(pkg, b)`
 
 * In example files included with `@example` you can now use infix operators
   (e.g. %*%) or other things with %, because they will be preceded by a

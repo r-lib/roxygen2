@@ -100,7 +100,7 @@ roc_process.namespace <- function(roclet, partita, base_path) {
     ns_one <- c( 
       process_tag(partitum, "export", ns_export),
       process_tag(partitum, "S3method", ns_S3method),
-      process_tag(partitum, "importFrom", ns_importFrom),
+      process_tag(partitum, "importFrom", ns_collapse),
       process_tag(partitum, 'exportClass', ns_exportClass),
       process_tag(partitum, 'exportMethod', ns_exportMethod),
       process_tag(partitum, 'exportPattern', ns_default),
@@ -179,10 +179,6 @@ ns_S3method <- function(tag, parms, all) {
     warning("Invalid @S3method: ", parms, call. = FALSE)
   }
   ns_directive("S3method", str_c(quote_if_needed(params), collapse = ","))
-}
-ns_importFrom <- function(tag, parms, all) {
-  params <- words(parms)
-  ns_directive(tag, str_c(params[1], ",", params[-1]))
 }
 
 

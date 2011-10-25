@@ -333,8 +333,8 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_description(partitum, base_path))
 
   add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
-      new_tag('alias', words(param))
-    }))
+    new_tag('alias', str_split(str_trim(param), "\\s+")[[1]])
+  }))
   add_tag(rd, process.usage(partitum))
   add_tag(rd, process.arguments(partitum))
   add_tag(rd, process_had_tag(partitum, 'docType'))

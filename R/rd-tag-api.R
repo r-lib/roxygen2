@@ -45,10 +45,13 @@ merge.rd_tag <- function(x, y, ...) {
 #' @S3method format alias_tag
 format_rd <- function(x, ...) {
   vapply(sort(unique(x$values)), rd_tag, tag = x$tag, 
-    FUN.VALUE = character(1))
+    FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 format.keyword_tag <- format_rd
-format.alias_tag <- format_rd
+format.alias_tag <- function(x, ...) {
+  x$values <- str_replace_all(x$values, fixed("%"), "\\%")
+  format_rd(x, ...)
+}
 
 # Tags that keep the first occurence -----------------------------------------
 format_first <- function(x, ...) {

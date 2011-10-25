@@ -12,6 +12,8 @@
   backslash in the Rd file. This behaviour was already in place for examples
   directly included with `@examples`.
 
+* Aliases are no longer quoted, and % is escaped with a backslash (Fixes #24)
+
 roxygen2 2.1
 ------------
 

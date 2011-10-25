@@ -166,6 +166,21 @@ test_that("keywords and aliases split into pieces", {
   expect_match(get_tag(out, "alias")$values, fixed("b"), all = FALSE)
 })
 
+test_that("aliases escaped, not quoted", {
+  out1 <- roc_proc_text(roc, "
+    #' @aliases a
+    #' @name %a%
+    NULL")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' @aliases %a%
+    #' @name a
+    NULL")[[1]]
+  alias1 <- format(get_tag(out1, "alias"))
+  alias2 <- format(get_tag(out2, "alias"))
+  expect_equal(alias1, c("\\alias{\\%a\\%}\n", "\\alias{a}\n"))
+  expect_equal(alias2, c("\\alias{\\%a\\%}\n", "\\alias{a}\n"))
+})
+
 test_that("generic keys produce desired expected", {
   out <- roc_proc_text(roc, "
     #' @references test

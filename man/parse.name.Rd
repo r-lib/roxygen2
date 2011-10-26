@@ -2,12 +2,15 @@
 \alias{parse.name}
 \title{Parse an element containing a single name and only a name.}
 \usage{
-  parse.name(key, name)
+  parse.name(key, name, srcref)
 }
 \arguments{
   \item{name}{the name to be parsed}
 
   \item{key}{the parsing key}
+
+  \item{srcref}{srcref providing location of file name and
+  line number}
 }
 \value{
   A list containing key and name

@@ -76,3 +76,17 @@ nice_name <- function(x) {
   x <- str_replace(x, "-+", "-")
   x
 }
+
+
+roxygen_stop <- function(..., srcref = NULL) {
+  stop(..., srcref_location(srcref), call. = FALSE)
+}
+
+roxygen_warning <- function(..., srcref = NULL) {
+  warning(..., srcref_location(srcref), call. = FALSE)
+}
+
+srcref_location <- function(srcref = NULL) {
+  if (is.null(srcref)) return()
+  str_c(" in block ", basename(srcref$filename), ":", srcref$lloc[1])
+}

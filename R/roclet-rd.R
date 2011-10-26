@@ -22,6 +22,7 @@ register.preref.parsers(parse.value,
                         'inheritParams',
                         'format',
                         'source', 
+                        'encoding',
                         'description',
                         'details')
 
@@ -338,6 +339,7 @@ roclet_rd_one <- function(partitum, base_path) {
     ".Rd")
     
   
+  add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", name))
   add_tag(rd, new_tag("formals", names(partitum$formals)))

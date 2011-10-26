@@ -53,6 +53,9 @@
   default format. (Fixes #5). Data docType automatically added to data
   objects.
 
+* New `@encoding` tag for manually setting non-ASCII encodings when needed.
+  (Fixes #7)
+
 roxygen2 2.1
 ------------
 

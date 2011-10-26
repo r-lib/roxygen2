@@ -1,3 +1,17 @@
+NEW FEATURES
+
+* Package docType will automatically add package alias, if needed. (Fixes #4)
+
+* Data docType will automatically add `datasets` keyword, default usage, and
+  default format. (Fixes #5). Data docType automatically added to data
+  objects.
+
+* New `@encoding` tag for manually setting non-ASCII encodings when needed.
+  (Fixes #7)
+
+
+BUG FIXES
+
 * `@details` and `@description` now work correctly
 
 * `@useDynLib` now works correctly: 
@@ -47,15 +61,6 @@
 * Errors now display file name and line number of roxygen block to help you
   find the problem. Thanks to code contributions from Renaud Gaujoux. (Fixes
   #13)
-
-* Package docType will automatically add package alias, if needed. (Fixes #4)
-
-* Data docType will automatically add `datasets` keyword, default usage, and
-  default format. (Fixes #5). Data docType automatically added to data
-  objects.
-
-* New `@encoding` tag for manually setting non-ASCII encodings when needed.
-  (Fixes #7)
 
 roxygen2 2.1
 ------------

@@ -47,6 +47,8 @@
   find the problem. Thanks to code contributions from Renaud Gaujoux. (Fixes
   #13)
 
+* Package docType will automatically add package alias, if needed. (Fixes #4)
+
 roxygen2 2.1
 ------------
 

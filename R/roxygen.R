@@ -16,7 +16,7 @@
 #' Manuel Eugster \email{Manuel.Eugster@@stat.uni-muenchen.de}
 #'
 #' Maintainer: Peter Danenberg \email{pcd@@roxygen.org}
-#' @name roxygen-package
+#' @name roxygen
 #' @docType package
 #' @title Literate Programming in R
 #' @keywords package

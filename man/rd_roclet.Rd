@@ -171,7 +171,8 @@
 
   \item{\code{@docType type}}{Type of object being
   documented. Useful values are \code{data} and
-  \code{package}. }
+  \code{package}. Package doc type will automatically add a
+  \code{package-} alias if needed.}
 
   \item{\code{@format description}}{A textual description
   of the format of the object.}

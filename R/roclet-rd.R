@@ -194,7 +194,8 @@ register.srcref.parser('setMethod', function(call, env) {
 #'    documenting datasets, and other non-function elements.}
 #'
 #'  \item{\code{@@docType type}}{Type of object being documented. Useful 
-#'    values are \code{data} and \code{package}. }
+#'    values are \code{data} and \code{package}. Package doc type will
+#'    automatically add a \code{package-} alias if needed.}
 #' 
 #'  \item{\code{@@format description}}{A textual description of the format
 #'    of the object.}
@@ -331,6 +332,7 @@ roclet_rd_one <- function(partitum, base_path) {
   # Work out file name and initialise Rd object
   filename <- str_c(partitum$merge %||% partitum$rdname %||% nice_name(name),
     ".Rd")
+    
   
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", name))
@@ -343,7 +345,7 @@ roclet_rd_one <- function(partitum, base_path) {
   }))
   add_tag(rd, process.usage(partitum))
   add_tag(rd, process.arguments(partitum))
-  add_tag(rd, process_had_tag(partitum, 'docType'))
+  add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
   add_tag(rd, process_had_tag(partitum, 'inheritParams'))
@@ -503,6 +505,22 @@ process.section <- function(key, value) {
   pieces <- str_split_fixed(value, ":", n = 2)[1, ]
   
   new_tag("section", list(list(name = pieces[1], content = pieces[2])))
+}
+
+process.docType <- function(partitum) {
+  doctype <- partitum$docType
+  
+  if (is.null(doctype)) return()
+  tags <- list(new_tag("docType", doctype))
+  
+  if (doctype == "package") {
+    name <- partitum$name
+    if (!str_detect(name, "-package")) {
+      tags <- c(tags, new_tag("alias", str_c(name, "-package")))
+    }
+  }
+  
+  tags
 }
 
 process_had_tag <- function(partitum, tag, f = new_tag) {

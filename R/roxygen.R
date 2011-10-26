@@ -1,3 +1,5 @@
+#' In-line documentation for R.
+#' 
 #' Roxygen is a Doxygen-like documentation system for R; allowing
 #' in-source specification of Rd files, collation and namespace
 #' directives.

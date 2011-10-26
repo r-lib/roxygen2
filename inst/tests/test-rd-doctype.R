@@ -19,3 +19,26 @@ test_that("@docType package automatically adds package alias when needed", {
   alias_2 <- get_tag(out[[2]], "alias")$values
   expect_equal(alias_2, c("a-package"))
 })
+
+
+# Data --------------------------------------------------------------------
+
+test_that("@docType data automatically adds sensible defaults", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    #'
+    #' @docType data
+    a <- data.frame(a = 1:10)")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, "a")
+  expect_equal(get_tag(out, "keyword")$values, "dataset")
+  expect_equal(is.null(get_tag(out, "format")$values), FALSE)
+})
+
+test_that("@docType data automatically added to data objects", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    a <- data.frame(a = 1:10)")[[1]]
+  
+  expect_equal(get_tag(out, "docType")$values, "data")  
+})

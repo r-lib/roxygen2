@@ -49,6 +49,10 @@
 
 * Package docType will automatically add package alias, if needed. (Fixes #4)
 
+* Data docType will automatically add `datasets` keyword, default usage, and
+  default format. (Fixes #5). Data docType automatically added to data
+  objects.
+
 roxygen2 2.1
 ------------
 

@@ -48,6 +48,10 @@ register.srcref.parsers(function(call, env) {
   
   if (out$fun) {
     out$formals <- formals(value)
+  } else {
+    if (is.null(out$docType)) out$docType <- "data"
+    out$str <- str_c(capture.output(str(value, max.level = 1)), 
+      collapse = "\n")
   }
   out
 }, '<-', '=')
@@ -314,7 +318,7 @@ roclet_rd_one <- function(partitum, base_path) {
   partitum <- process_templates(partitum, base_path)
   
   has_rd <- any(names(partitum) %in% c("description", "param", "return",
-    "title", "example", "examples", "docType", "name", "rdname", "usage",
+    "title", "example", "examples", "name", "rdname", "usage",
     "details", "introduction"))
   if (!has_rd) return()
   
@@ -518,6 +522,14 @@ process.docType <- function(partitum) {
     if (!str_detect(name, "-package")) {
       tags <- c(tags, new_tag("alias", str_c(name, "-package")))
     }
+  } else if (doctype == "data") {
+    if (is.null(partitum$format)) {
+      tags <- c(tags, new_tag("format", partitum$str))
+    }
+    if (is.null(partitum$usage)) {
+      tags <- c(tags, new_tag("usage", partitum$assignee))
+    }
+    tags <- c(tags, new_tag("keyword", "dataset"))
   }
   
   tags

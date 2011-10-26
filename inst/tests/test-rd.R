@@ -23,6 +23,13 @@ test_that("name also captured from assignment by =", {
   expect_equal(get_tag(out, "title")$values, "Title.")
 })
 
+test_that("names escaped, not quoted", {
+  out <- roc_proc_text(roc, "
+    #' Title
+    '%a%' <- function(x, y) x + y")[[1]]
+  expect_equal(format(get_tag(out, "name")), "\\name{\\%a\\%}\n")
+})
+
 test_that("filename doesn't contain invalid characters", {
   out <- roc_proc_text(roc, "
     #' Title.

@@ -24,3 +24,8 @@ test_that("Left-side padding works for the empty string", {
     expect_equal(leftPadNSpaces("", n = 4), "    ")
   }
 )
+
+test_that("Left-side padding doesn't pad for n < 0", {
+    expect_equal(leftPadNSpaces("test", n = -1), "test")
+  }
+)

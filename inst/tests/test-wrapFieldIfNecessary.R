@@ -14,15 +14,9 @@ leftPadNSpaces <- function(string, n) {
 leftPadNSpaces("test", n = 2)
 
 context("Wrapping DESCRIPTION fields only when necessary")
-test_that(
-  "wrap_field_if_necessary does not wrap fields whose line length is less than the wrap.threshold", {
-    less_than_80_characters <- c(
-      "Author: Alan Turing",
-      "    Alonzo Church"
-    )
-  
+test_that("Left-side padding works properly", {
     expect_equal(leftPadNSpaces("test", n = 2), "  test" )
-  
+    expect_equal(leftPadNSpaces("test", n = 0), "test")
   }
 
 )

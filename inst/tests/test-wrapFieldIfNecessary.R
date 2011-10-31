@@ -17,6 +17,7 @@ context("Wrapping DESCRIPTION fields only when necessary")
 test_that("Left-side padding works properly", {
     expect_equal(leftPadNSpaces("test", n = 2), "  test" )
     expect_equal(leftPadNSpaces("test", n = 0), "test")
+    expect_equal(leftPadNSpaces("", n = 4), "    ")
   }
 
 )

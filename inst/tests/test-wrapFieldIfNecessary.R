@@ -1,17 +1,28 @@
+library(stringr)
 library(testthat)
 
-context("Wrapping DESCRIPTION fields only when necessary")
-test_that("wrap_field_if_necessary does not wrap fields 
-           whose line length is less than the wrap.threshold", 
-{
-  less_than_80_characters <- c(
-    "Author: Alan Turing",
-    "    Alonzo Church"
-  )
-  
-  expect_that(less_than_80_characters, equals(wrap_field_if_necessary()))
-             
-
+wrap_field_if_necessary <- function(field, value) {
+   # if (lines lengths exceed wrap threshold) {
+   # strwrap(sprintf('%s: %s', field, value), exdent=4, width = width)
+   return(0)
 }
+
+leftPadNSpaces <- function(string, n) {
+  str_pad(string, width = (nchar(string) + n), side = "left")
+}
+
+leftPadNSpaces("test", n = 2)
+
+context("Wrapping DESCRIPTION fields only when necessary")
+test_that(
+  "wrap_field_if_necessary does not wrap fields whose line length is less than the wrap.threshold", {
+    less_than_80_characters <- c(
+      "Author: Alan Turing",
+      "    Alonzo Church"
+    )
+  
+    expect_equal(leftPadNSpaces("test", n = 2), "  test" )
+  
+  }
 
 )

@@ -75,10 +75,10 @@ format.encoding_tag <- format_first
 
 # Tags collapse their values into a single string ----------------------------
 
-format_collapse <- function(x, ...) {
+format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   values <- str_c(x$values, collapse = "\n\n")
-  rd_tag(x$tag, str_wrap(values, width = 60, indent = 2, exdent = 2), 
-    space = TRUE)
+  rd_tag(x$tag, str_wrap(values, width = 60, indent = indent, 
+    exdent = exdent), space = TRUE)
 } 
 #' @S3method format author_tag
 #' @S3method format concept_tag
@@ -98,7 +98,7 @@ format.note_tag <- format_collapse
 format.references_tag <- format_collapse
 format.seealso_tag <- format_collapse
 format.source_tag <- format_collapse
-format.usage_tag <- format_collapse
+format.usage_tag <- function(x, ...) format_collapse(x, ..., exdent = 4)
 format.value_tag <- format_collapse
 
 

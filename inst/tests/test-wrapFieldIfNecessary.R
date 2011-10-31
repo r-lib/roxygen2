@@ -14,10 +14,13 @@ leftPadNSpaces <- function(string, n) {
 leftPadNSpaces("test", n = 2)
 
 context("Wrapping DESCRIPTION fields only when necessary")
-test_that("Left-side padding works properly", {
+test_that("Left-side padding works properly for n > 0", {
     expect_equal(leftPadNSpaces("test", n = 2), "  test" )
-    expect_equal(leftPadNSpaces("test", n = 0), "test")
+    expect_equal(leftPadNSpaces("test", n = 4), "    test")
+  }
+)
+
+test_that("Left-side padding works for the empty string", {
     expect_equal(leftPadNSpaces("", n = 4), "    ")
   }
-
 )

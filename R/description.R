@@ -38,7 +38,7 @@ wrap_field_if_necessary <- function(field, value) {
    return(0)
 }
 
-mock_original_formatting <- function(field, value) {
+mock_formatted_text <- function(field, value) {
   text <- str_split(sprintf("%s: %s", field, value), "\n")[[1]]
   number.of.lines <- length(text)
   

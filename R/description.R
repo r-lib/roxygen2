@@ -49,7 +49,6 @@ mock_original_formatting <- function(field, value) {
 }
 
 leftPadNSpaces <- function(x, n) {
-  padded_lengths <- nchar(x) + n
   sapply(x, FUN = function(x) (str_pad(string = x, width = (nchar(x) + n), side = "left")), USE.NAMES = FALSE)
 }
 

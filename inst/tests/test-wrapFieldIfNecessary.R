@@ -7,8 +7,9 @@ wrap_field_if_necessary <- function(field, value) {
    return(0)
 }
 
-leftPadNSpaces <- function(string, n) {
-  str_pad(string, width = (nchar(string) + n), side = "left")
+leftPadNSpaces <- function(x, n) {
+  padded_lengths <- nchar(x) + n
+  sapply(x, FUN = function(x) (str_pad(string = x, width = (nchar(x) + n), side = "left")), USE.NAMES = FALSE)
 }
 
 leftPadNSpaces("test", n = 2)
@@ -30,3 +31,17 @@ test_that("Left-side padding doesn't pad for n < 0", {
     expect_equal(leftPadNSpaces("test", n = -1), "test")
   }
 )
+
+test_that("Left-side padding is vectorized", {
+    test_names   <- c("Alan Turing", "Alonzo Church")
+    padded_names <- c("    Alan Turing", "    Alonzo Church")
+    leftPadNSpaces(test_names, n = 4)
+    expect_equal(leftPadNSpaces(test_names, n = 4), padded_names)
+  }
+)
+
+
+
+
+
+

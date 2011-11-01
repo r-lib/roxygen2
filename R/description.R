@@ -30,3 +30,26 @@ cat.description <- function(field, value, file='') {
 
   cat(out, sep='\n', file=file, append=TRUE)
 }
+
+# Determine whether a given field is too long and should be text-wrapped
+wrap_field_if_necessary <- function(field, value) {
+   # if (lines lengths exceed wrap threshold) {
+   # strwrap(sprintf('%s: %s', field, value), exdent=4, width = width)
+   return(0)
+}
+
+mock_original_formatting <- function(field, value) {
+  text <- str_split(sprintf("%s: %s", field, value), "\n")[[1]]
+  number.of.lines <- length(text)
+  
+  if (number.of.lines > 1) {
+    text[2:number.of.lines] <- leftPadNSpaces(text[2:number.of.lines], n = 4)
+  }
+  text
+}
+
+leftPadNSpaces <- function(x, n) {
+  padded_lengths <- nchar(x) + n
+  sapply(x, FUN = function(x) (str_pad(string = x, width = (nchar(x) + n), side = "left")), USE.NAMES = FALSE)
+}
+

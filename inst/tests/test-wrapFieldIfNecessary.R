@@ -1,19 +1,3 @@
-library(stringr)
-library(testthat)
-
-wrap_field_if_necessary <- function(field, value) {
-   # if (lines lengths exceed wrap threshold) {
-   # strwrap(sprintf('%s: %s', field, value), exdent=4, width = width)
-   return(0)
-}
-
-leftPadNSpaces <- function(x, n) {
-  padded_lengths <- nchar(x) + n
-  sapply(x, FUN = function(x) (str_pad(string = x, width = (nchar(x) + n), side = "left")), USE.NAMES = FALSE)
-}
-
-leftPadNSpaces("test", n = 2)
-
 context("Wrapping DESCRIPTION fields only when necessary")
 test_that("Left-side padding works properly for n > 0", {
     expect_equal(leftPadNSpaces("test", n = 2), "  test" )
@@ -35,8 +19,23 @@ test_that("Left-side padding doesn't pad for n < 0", {
 test_that("Left-side padding is vectorized", {
     test_names   <- c("Alan Turing", "Alonzo Church")
     padded_names <- c("    Alan Turing", "    Alonzo Church")
-    leftPadNSpaces(test_names, n = 4)
     expect_equal(leftPadNSpaces(test_names, n = 4), padded_names)
+  }
+)
+
+test_that("Can properly mock formatted output", {
+    single_author_raw <- "Alan Turing <alan@turing.fake>"
+    single_author_formatted <- "Author: Alan Turing <alan@turing.fake>"
+    double_author_raw <- "Alan Turing <alan@turing.fake>,\nAlonzo Church <alonzo@church.fake>"
+    double_author_formatted <- c("Author: Alan Turing <alan@turing.fake>,", "    Alonzo Church <alonzo@church.fake>")
+    triple_author_raw       <- "Alan Turing <alan@turing.fake>,\nAlonzo Church <alonzo@church.fake>,\nCharles Babbage <charles@babbage.fake>"
+    triple_author_formatted <- c("Author: Alan Turing <alan@turing.fake>,",
+                                 "    Alonzo Church <alonzo@church.fake>,",
+                                 "    Charles Babbage <charles@babbage.fake>")
+    
+    expect_equal(mock_formatted_text("Author", single_author_raw), single_author_formatted)
+    expect_equal(mock_formatted_text("Author", double_author_raw), double_author_formatted)
+    expect_equal(mock_formatted_text("Author", triple_author_raw), triple_author_formatted)
   }
 )
 

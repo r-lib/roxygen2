@@ -25,8 +25,10 @@ test_that("Left-side padding is vectorized", {
 
 test_that("Can properly mock formatted output", {
     single_author_formatted <- "Author: Alan Turing <alan@turing.fake>"
-    double_author_formatted <- c("Author: Alan Turing <alan@turing.fake>", "    Alonzo Church <alonzo@church.fake>")
+    double_author_raw <- "Alan Turing <alan@turing.fake>,\nAlonzo Church <alonzo@church.fake>"
+    double_author_formatted <- c("Author: Alan Turing <alan@turing.fake>,", "    Alonzo Church <alonzo@church.fake>")
     expect_equal(mock_formatted_text("Author", "Alan Turing <alan@turing.fake>"), single_author_formatted)
+    expect_equal(mock_formatted_text("Author", double_author_raw), double_author_formatted)
   }
 )
 

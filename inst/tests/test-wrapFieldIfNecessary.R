@@ -18,8 +18,8 @@ test_that("Left-side padding doesn't pad for n < 0", {
 
 test_that("Left-side padding is vectorized", {
     test.names   <- c("Alan Turing", "Alonzo Church")
-    padded_names <- c("    Alan Turing", "    Alonzo Church")
-    expect_equal(leftPadNSpaces(test.names, n = 4), padded_names)
+    padded.names <- c("    Alan Turing", "    Alonzo Church")
+    expect_equal(leftPadNSpaces(test.names, n = 4), padded.names)
   }
 )
 

@@ -24,8 +24,8 @@ cat.description <- function(field, value, file='') {
     value_string <- paste("    ", value, collapse = ",\n", sep = "")
     out <- paste(field, ":\n", value_string, sep = "")
   } else {
-    width <- if (individual_lines) 0 else 60
-    out <- WrapFieldIfNecessary(field, value, wrap.threshold = 80)    
+    width <- if (individual_lines) 0 else 80
+    out <- WrapFieldIfNecessary(field, value, wrap.threshold = width)    
   }
 
   cat(out, sep='\n', file=file, append=TRUE)

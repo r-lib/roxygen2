@@ -1,4 +1,4 @@
-context("Wrapping DESCRIPTION fields only when necessary")
+context("Wrap DESCRIPTION fields only when necessary")
 test_that("Left-side padding works properly for n > 0", {
     expect_equal(leftPadNSpaces("test", n = 2), "  test" )
     expect_equal(leftPadNSpaces("test", n = 4), "    test")
@@ -49,9 +49,34 @@ test_that("DESCRIPTION fields get wrapped if a line length exceeds the wrapping 
       WrapFieldIfNecessary("Description", desc$Description, wrap.threshold = 60), 
       strwrap(sprintf('%s: %s', "Description", desc$Description), exdent = 4, width = 60)
     )
+    expect_equal(
+      WrapFieldIfNecessary("Author", desc$Author, wrap.threshold = 40),
+      strwrap(sprintf('%s: %s', "Author", desc$Author), exdent = 4, width = 40)
+    )
   }
 )
 
+test_that("DESCRIPTION fields get wrapped if they are marked as individual_lines", {
+    desc <- read.description("description-example.txt")
+    expect_equal(
+      WrapFieldIfNecessary("Collate", desc$Collate, wrap.threshold = 0),
+      strwrap(sprintf('%s: %s', "Collate", desc$Collate), exdent = 4, width = 0)
+    )
+  }
+)
+
+test_that("DESCRIPTION fields DO NOT get wrapped if no line exceeds the wrapping threshold", {
+    desc <- read.description("description-example.txt")
+    expect_equal(
+      WrapFieldIfNecessary("Author", desc$Author, wrap.threshold = 60),
+      MockFormattedText("Author", desc$Author)
+    )
+    expect_equal(
+      WrapFieldIfNecessary("Author", desc$Author, wrap.threshold = 80),
+      MockFormattedText("Author", desc$Author)
+    )
+  }
+)
 
 
 

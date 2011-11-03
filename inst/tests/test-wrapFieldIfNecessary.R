@@ -39,7 +39,14 @@ test_that("Can properly mock formatted output", {
   }
 )
 
-
+test_that("DESCRIPTION fields get wrapped if a line length exceeds the wrapping threshold", {
+    desc <- read.description("description-example.txt")
+    expect_equal(
+      wrap_field_if_necessary("Description", desc$Description, wrap.threshold = 80), 
+      strwrap(sprintf('%s: %s', "Description", desc$Description), exdent=4, width=80)
+    )
+  }
+)
 
 
 

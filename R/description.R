@@ -32,10 +32,15 @@ cat.description <- function(field, value, file='') {
 }
 
 # Determine whether a given field is too long and should be text-wrapped
-wrap_field_if_necessary <- function(field, value) {
-   # if (lines lengths exceed wrap threshold) {
-   # strwrap(sprintf('%s: %s', field, value), exdent=4, width = width)
-   return(0)
+wrap_field_if_necessary <- function(field, value, wrap.threshold) {
+   text <- mock_formatted_text(field, value)
+   longest.line <- max(nchar(text))
+   
+   if (longest.line > wrap.threshold) {
+     text <- strwrap(sprintf('%s: %s', field, value), exdent=4, width=wrap.threshold)
+   }
+   
+   return(text)
 }
 
 mock_formatted_text <- function(field, value) {

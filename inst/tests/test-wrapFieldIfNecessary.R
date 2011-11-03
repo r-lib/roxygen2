@@ -49,6 +49,10 @@ test_that("DESCRIPTION fields get wrapped if a line length exceeds the wrapping 
       WrapFieldIfNecessary("Description", desc$Description, wrap.threshold = 60), 
       strwrap(sprintf('%s: %s', "Description", desc$Description), exdent = 4, width = 60)
     )
+    expect_equal(
+      WrapFieldIfNecessary("Author", desc$Author, wrap.threshold = 40),
+      strwrap(sprintf('%s: %s', "Author", desc$Author), exdent = 4, width = 40)
+    )
   }
 )
 

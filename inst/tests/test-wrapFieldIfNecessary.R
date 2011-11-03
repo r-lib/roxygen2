@@ -1,6 +1,6 @@
 context("Wrap DESCRIPTION fields only when necessary")
 
-test_that("Can properly mock formatted output", {
+test_that("Can properly simulate formatted output", {
     single.author.raw <- "Alan Turing <alan@turing.fake>"
     single.author.formatted <- "Author: Alan Turing <alan@turing.fake>"
     double.author.raw <- "Alan Turing <alan@turing.fake>,\nAlonzo Church <alonzo@church.fake>"

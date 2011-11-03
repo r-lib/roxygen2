@@ -67,6 +67,10 @@ test_that("DESCRIPTION fields DO NOT get wrapped if no line exceeds the wrapping
       WrapFieldIfNecessary("Author", desc$Author, wrap.threshold = 60),
       MockFormattedText("Author", desc$Author)
     )
+    expect_equal(
+      WrapFieldIfNecessary("Author", desc$Author, wrap.threshold = 80),
+      MockFormattedText("Author", desc$Author)
+    )
   }
 )
 

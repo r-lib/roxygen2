@@ -48,12 +48,12 @@ MockFormattedText <- function(field, value) {
   number.of.lines <- length(text)
   
   if (number.of.lines > 1) {
-    text[2:number.of.lines] <- leftPadNSpaces(text[2:number.of.lines], n = 4)
+    text[2:number.of.lines] <- LeftPadFourSpaces(text[2:number.of.lines])
   }
   text
 }
 
-leftPadNSpaces <- function(x, n) {
-  sapply(x, FUN = function(x) (str_pad(string = x, width = (nchar(x) + n), side = "left")), USE.NAMES = FALSE)
+LeftPadFourSpaces <- function(x) {
+  sapply(x, FUN = function(x) (paste("    ", x, sep = "")), USE.NAMES = FALSE)
 }
 

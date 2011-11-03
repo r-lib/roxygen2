@@ -43,6 +43,7 @@ WrapFieldIfNecessary <- function(field, value, wrap.threshold) {
    return(text)
 }
 
+# Simulate what was probably the user's intended field formatting
 MockFormattedText <- function(field, value) {
   text <- str_split(sprintf("%s: %s", field, value), "\n")[[1]]
   number.of.lines <- length(text)

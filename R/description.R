@@ -37,7 +37,7 @@ WrapFieldIfNecessary <- function(field, value, wrap.threshold) {
    longest.line <- max(nchar(text))
    
    if (longest.line > wrap.threshold) {
-     text <- strwrap(sprintf('%s: %s', field, value), exdent=4, width=wrap.threshold)
+     text <- strwrap(sprintf('%s: %s', field, value), exdent = 4, width = wrap.threshold)
    }
    
    return(text)

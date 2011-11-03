@@ -1,25 +1,19 @@
 context("Wrap DESCRIPTION fields only when necessary")
 test_that("Left-side padding works properly for n > 0", {
-    expect_equal(leftPadNSpaces("test", n = 2), "  test" )
-    expect_equal(leftPadNSpaces("test", n = 4), "    test")
-    expect_equal(leftPadNSpaces("Alan Turing <alan@turing.fake>", n = 4), "    Alan Turing <alan@turing.fake>")
+    expect_equal(LeftPadFourSpaces("test"), "    test")
+    expect_equal(LeftPadFourSpaces("Alan Turing <alan@turing.fake>"), "    Alan Turing <alan@turing.fake>")
   }
 )
 
 test_that("Left-side padding works for the empty string", {
-    expect_equal(leftPadNSpaces("", n = 4), "    ")
-  }
-)
-
-test_that("Left-side padding doesn't pad for n < 0", {
-    expect_equal(leftPadNSpaces("test", n = -1), "test")
+    expect_equal(LeftPadFourSpaces(""), "    ")
   }
 )
 
 test_that("Left-side padding is vectorized", {
     test.names   <- c("Alan Turing", "Alonzo Church")
     padded.names <- c("    Alan Turing", "    Alonzo Church")
-    expect_equal(leftPadNSpaces(test.names, n = 4), padded.names)
+    expect_equal(LeftPadFourSpaces(test.names), padded.names)
   }
 )
 

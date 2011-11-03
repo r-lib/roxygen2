@@ -25,36 +25,32 @@ cat.description <- function(field, value, file='') {
     out <- paste(field, ":\n", value_string, sep = "")
   } else {
     width <- if (individual_lines) 0 else 80
-    out <- WrapFieldIfNecessary(field, value, wrap.threshold = width)    
+    out <- wrap_field_if_necessary(field, value, wrap.threshold = width)    
   }
 
   cat(out, sep='\n', file=file, append=TRUE)
 }
 
 # Determine whether a given field is too long and should be text-wrapped
-WrapFieldIfNecessary <- function(field, value, wrap.threshold) {
-   text <- MockFormattedText(field, value)
-   longest.line <- max(nchar(text))
+wrap_field_if_necessary <- function(field, value, wrap.threshold) {
+   text <- simulate_formatted_text(field, value)
+   longest.line <- max(str_length(text))
    
    if (longest.line > wrap.threshold) {
-     text <- strwrap(sprintf('%s: %s', field, value), exdent = 4, width = wrap.threshold)
+     text <- str_wrap(str_c(field, ": ", value), exdent = 4, width = wrap.threshold)
    }
    
    return(text)
 }
 
 # Simulate what was probably the user's intended field formatting
-MockFormattedText <- function(field, value) {
-  text <- str_split(sprintf("%s: %s", field, value), "\n")[[1]]
+simulate_formatted_text <- function(field, value) {
+  text <- str_split(str_c(field, ": ", value), "\n")[[1]]
   number.of.lines <- length(text)
   
   if (number.of.lines > 1) {
-    text[2:number.of.lines] <- LeftPadFourSpaces(text[2:number.of.lines])
+    text[-1] <- paste("    ", text[-1], sep = "")
   }
   text
-}
-
-LeftPadFourSpaces <- function(x) {
-  sapply(x, FUN = function(x) (paste("    ", x, sep = "")), USE.NAMES = FALSE)
 }
 

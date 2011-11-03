@@ -33,9 +33,9 @@ test_that("Can properly mock formatted output", {
                                  "    Alonzo Church <alonzo@church.fake>,",
                                  "    Charles Babbage <charles@babbage.fake>")
     
-    expect_equal(mock_formatted_text("Author", single.author.raw), single.author.formatted)
-    expect_equal(mock_formatted_text("Author", double.author.raw), double.author.formatted)
-    expect_equal(mock_formatted_text("Author", triple.author.raw), triple.author.formatted)
+    expect_equal(MockFormattedText("Author", single.author.raw), single.author.formatted)
+    expect_equal(MockFormattedText("Author", double.author.raw), double.author.formatted)
+    expect_equal(MockFormattedText("Author", triple.author.raw), triple.author.formatted)
   }
 )
 

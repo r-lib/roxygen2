@@ -54,7 +54,6 @@ test_that("DESCRIPTION fields get wrapped if a line length exceeds the wrapping 
 
 test_that("DESCRIPTION fields get wrapped if they are marked as individual_lines", {
     desc <- read.description("description-example.txt")
-    print(WrapFieldIfNecessary("Collate", desc$Collate, wrap.threshold = 0))
     expect_equal(
       WrapFieldIfNecessary("Collate", desc$Collate, wrap.threshold = 0),
       strwrap(sprintf('%s: %s', "Collate", desc$Collate), exdent = 4, width = 0)

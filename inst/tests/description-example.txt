@@ -17,22 +17,4 @@ Suggests:
     testthat
 Depends:
     digest
-Collate:
-    'cache.R'
-    'description.R'
-    'parse.R'
-    'parse-preref.R'
-    'parse-srcref.R'
-    'parse-registry.R'
-    'rd-file-api.R'
-    'rd-tag-api.R'
-    'roclet-collate.R'
-    'roclet-namespace.R'
-    'roclet-rd.R'
-    'roclet.R'
-    'roxygen.R'
-    'roxygenize.R'
-    'topo-sort.R'
-    'utils.R'
-    'template.R'
-    'rd-parse.R'
+Collate: 'cache.R' 'description.R' 'parse.R' 'parse-preref.R' 'parse-srcref.R' 'parse-registry.R' 'rd-file-api.R' 'rd-tag-api.R' 'roclet-collate.R' 'roclet-namespace.R' 'roclet-rd.R' 'roclet.R' 'roxygen.R' 'roxygenize.R' 'topo-sort.R' 'utils.R' 'template.R' 'rd-parse.R'

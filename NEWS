@@ -12,6 +12,10 @@ NEW FEATURES
 
 BUG FIXES
 
+* `write.description()` now tries much harder to respect 
+  users' original DESCRIPTION field formatting instead of forcibly 
+  re-wrapping certain fields at 60 characters.
+
 * `@details` and `@description` now work correctly
 
 * `@useDynLib` now works correctly: 

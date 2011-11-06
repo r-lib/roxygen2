@@ -1,6 +1,9 @@
 get_rd <- function(topic, package = NULL) {
   help_call <- substitute(help(t, p), list(t = topic, p = package))
   top <- eval(help_call)
+  
+  if (length(top) == 0) return(list())
+  
   utils:::.getHelpFile(top)
 }
 

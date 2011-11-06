@@ -18,7 +18,7 @@ parse.file <- function(file, env, env_hash) {
 
     stopifnot(length(src_parsed) == length(pre_parsed))
 
-    mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)    
+    mapply(modifyList, src_parsed, pre_parsed, SIMPLIFY = FALSE)
   })
 }
 

@@ -33,7 +33,7 @@ parse_class <- function(call, env) {
   list(
     docType = "class",
     src_name = name,
-    alias = str_c("class-", name),
+    alias = c(name, str_c(name, "-class")),
     extends = showExtends(class@contains, printTo = FALSE),
     slots = class@slots
   )
@@ -45,24 +45,23 @@ parse_generic <- function(call, env) {
   
   list(
     docType = "function",
-    name = name,
-    alias = c(name, str_c("methods-", name))
+    name = topic_name(f),
+    alias = c(name, str_c(name, "-methods"))
   )
 }
 
 parse_method <- function(call, env) {
   name <- as.character(call$f)
-  f <- getMethod(name, where = env)
+  f <- getMethod(name, eval(call$signature), where = env)
   
   # class?MethodDefinition
   list(
     docType = "method",
-    src_name = name,
-    alias = str_c("method-", f@target, str_c(f@signature, collapse = ","))
+    name = topic_name(f),
     type = "S4-method",
-    inheritParams = f@generic,
+    inheritParams = f@generic
   )
-})
+}
 
 register.srcref.parser('<-', parse_assignment)
 register.srcref.parser('=', parse_assignment)
@@ -70,3 +69,10 @@ register.srcref.parser('setClass', parse_class)
 register.srcref.parser('setGeneric', parse_generic)
 register.srcref.parser('setMethod', parse_method)
 # register.srcref.parser('setReplaceMethod', parse_method)
+
+setGeneric("topic_name", function(x) {
+  standardGeneric("topic_name")
+})
+setMethod("topic_name", signature(x = "MethodDefinition"), function(x) {
+  str_c(str_c(c(x@generic, x@defined), collapse = ","), "-method")
+})

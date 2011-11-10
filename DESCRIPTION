@@ -36,6 +36,7 @@ Collate:
     'roxygen.R'
     'roxygenize.R'
     'template.R'
+    'srcrefs.R'
     'topo-sort.R'
     'util-locale.R'
     'utils.R'

@@ -66,6 +66,9 @@ BUG FIXES
   find the problem. Thanks to code contributions from Renaud Gaujoux. (Fixes
   #13)
 
+* Documentation with no untagged text but with `@title`, `@description` and
+  `@details` tags now produces correct output.
+
 roxygen2 2.1
 ------------
 

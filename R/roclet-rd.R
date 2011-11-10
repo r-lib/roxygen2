@@ -410,7 +410,7 @@ roc_output.had <- function(roclet, results, base_path) {
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {
-  if ((is.null(partitum$fun) || !partitum$fun) && (is.null(partitum$S4method))) {
+  if ((is.null(partitum$fun) || !partitum$fun) && (is.null(partitum$S4method)) && (is.null(partitum$S4generic) || is.null(partitum$usage))) {
     return(new_tag("usage", NULL))
   }
   

@@ -1,3 +1,6 @@
+roxygen2 2.2
+------------
+
 NEW FEATURES
 
 * Package docType will automatically add package alias, if needed. (Fixes #4)

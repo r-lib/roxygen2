@@ -1,3 +1,10 @@
+roxygen2 2.2.1
+--------------
+
+* Use unicode escapes in test files so tests pass on all platforms.
+
+* Work around bug in `gsub` in C locale by manually specifying `Encoding()`. 
+
 roxygen2 2.2
 ------------
 

@@ -28,7 +28,7 @@ rd_tag <- function(tag, ..., space = FALSE) {
     values <- str_trim(c(...))
   }
   # Turn non-breaking spaces back into regular spaces
-  values <- str_replace_all(values, fixed("\uA0"), " ")
+  values <- str_replace_all(values, fixed("\u{A0}"), " ")
   str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")                         
 }
 

@@ -53,8 +53,13 @@ test_that("@usage overrides default", {
 test_that("quoted topics have usage statements", {
   out <- roc_proc_text(roc, "
     #' Title.
-    \"f\" <- function(a = 1, b = 2) {}")[[1]]
+    \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
   
-  expect_equal(get_tag(out, "usage")$values, "f(a = 1, b = 2)")
+  expect_equal(get_tag(out, "usage")$values, 
+    "f(a\u{A0}=\u{A0}1, b\u{A0}=\u{A0}2, c\u{A0}=\u{A0}a\u{A0}+\u{A0}b)")
+  
+  expect_equal(format(get_tag(out, "usage")),
+    "\\usage{\n  f(a = 1, b = 2, c = a + b)\n}\n"  
+  )
   
 })

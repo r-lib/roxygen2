@@ -49,6 +49,8 @@ register.srcref.parsers(function(call, env) {
   
   if (out$fun) {
     out$formals <- formals(value)
+  } else if (inherits(value, "refObjectGenerator")) {
+    # Reference class
   } else {
     if (is.null(out$docType)) out$docType <- "data"
     out$str <- str_c(capture.output(str(value, max.level = 1)), 

@@ -63,3 +63,15 @@ test_that("quoted topics have usage statements", {
   )
   
 })
+
+
+test_that ("@usage has highest priority",{
+  ## checks that @usage is used even for unknown srcrefs (e.g. setMethod before S4 patch).
+
+  out <- roc_proc_text(roc, "
+    #' @name foo
+    #' @usage xxx
+   invisible (NULL)")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, "xxx")
+})

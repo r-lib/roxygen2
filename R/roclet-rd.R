@@ -69,9 +69,19 @@ register.srcref.parser('setGeneric', function(call, env) {
 })
 
 register.srcref.parser('setMethod', function(call, env) {
+  if (is.call (call$signature)){                     # signature = c (x = "y")
+    call$signature <- eval (call$signature)
+  }
+  call$signature <- as.pairlist (call$signature)     # pairlist leaves more possibilities later 
+                                                     # on than character.
+                                                     # character can be produced by usage ()
+  definition <- eval (call$definition, env)
+  
   list(
     S4method = as.character(call$f), 
-    signature = as.character(call$signature))
+    signature = call$signature,
+    formals =  formals (definition)
+       )
 })
 
 #' Roclet: make Rd files.
@@ -411,14 +421,29 @@ roc_output.had <- function(roclet, results, base_path) {
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {
-  if (is.null(partitum$fun) || !partitum$fun) {
-    return(new_tag("usage", NULL))
-  }
-  
+
+  ## check for partitum$usage first: highest priority
   if (!is.null(partitum$usage)) {
     return(new_tag("usage", partitum$usage))
   }
+
+  if (!is.null (partitum$S4method)){
+    signature <- paste (as.character (partitum$signature), collapse = ",")
     
+    return(list (new_tag("usage",
+                         str_c ("\\S4method{",partitum$S4method, "}{",
+                                signature, "}(",
+                                usage (partitum$formals), ")")),
+                 new_tag ("alias",  str_c (partitum$S4method, ",",signature,"-method"))
+                 ))
+  }
+  
+  ## check for partitum$fun last, otherwise @usage or partitum$S4method will 
+  ## always return NULL!
+  if (is.null(partitum$fun) || !partitum$fun) {
+    return (new_tag("usage", NULL))
+  }
+
   fun_name <- if (!is.null(partitum$method)) {
     rd_tag('method', partitum$method[[1]], partitum$method[[2]])
   } else {

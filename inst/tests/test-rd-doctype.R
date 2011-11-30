@@ -31,7 +31,7 @@ test_that("@docType data automatically adds sensible defaults", {
     a <- data.frame(a = 1:10)")[[1]]
   
   expect_equal(get_tag(out, "usage")$values, "a")
-  expect_equal(get_tag(out, "keyword")$values, "dataset")
+  expect_equal(get_tag(out, "keyword")$values, "datasets")
   expect_equal(is.null(get_tag(out, "format")$values), FALSE)
 })
 

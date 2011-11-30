@@ -1,3 +1,6 @@
+roxygen2 2.2.2
+--------------
+
 * Correctly use keyword `datasets` not `dataset` (Fixes #60)
 
 * Reference classes no longer given incorrect docType (data).

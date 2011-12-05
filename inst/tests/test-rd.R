@@ -266,3 +266,14 @@ test_that("deleted objects not documented", {
   expect_equal(names(out), "f2.Rd")
 })
 
+
+test_that("merge duplicated arguments", {
+  out <- roc_proc_text(roc, "
+    #' @param a aaa
+    #' @param b bbb
+    #' @param a ccc
+    foo <- list(bar = function(a) a)")[[1]]
+    
+    expect_equal(get_tag(out, "arguments")$values,
+                 c (a = "aaa\n\nccc", b = "bbb" ))
+})

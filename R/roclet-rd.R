@@ -584,18 +584,22 @@ process_had_tag <- function(partitum, tag, f = new_tag) {
 
 merge_arguments <- function (topic){
   args <- topic [[1]]$arguments$values
-  argnames <- names (args)
-  dupnames <- unique (argnames [duplicated (argnames)])
 
-  if (! is.null (args) && length (dupnames) > 0L){
-    for (argname in dupnames){
-      i <- which (argnames == argname)
-      args [[i [1]]] <- paste (args [i], collapse = "\n\n")
-      args <- args [- i [-1]]
+  if (! is.null (args)){
+  
+    argnames <- names (args)
+    dupnames <- unique (argnames [duplicated (argnames)])
+
+    if (! is.null (args) && length (dupnames) > 0L){
+      for (argname in dupnames){
+        i <- which (argnames == argname)
+        args [[i [1]]] <- paste (args [i], collapse = "\n\n")
+        args <- args [- i [-1]]
+      }
     }
+
+    topic [[1]]$arguments$values <- args
   }
-
-  topic [[1]]$arguments$values <- args
-
+  
   topic
 }

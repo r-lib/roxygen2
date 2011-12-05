@@ -565,7 +565,7 @@ process.docType <- function(partitum) {
     if (is.null(partitum$usage)) {
       tags <- c(tags, new_tag("usage", partitum$assignee))
     }
-    tags <- c(tags, new_tag("keyword", "dataset"))
+    tags <- c(tags, new_tag("keyword", "datasets"))
   }
   
   tags

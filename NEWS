@@ -1,3 +1,20 @@
+roxygen2 2.2.2
+--------------
+
+* Correctly use keyword `datasets` not `dataset` (Fixes #60)
+
+* Reference classes no longer given incorrect docType (data).
+
+roxygen2 2.2.1
+--------------
+
+* Use unicode escapes in test files so tests pass on all platforms.
+
+* Work around bug in `gsub` in C locale by manually specifying `Encoding()`. 
+
+roxygen2 2.2
+------------
+
 NEW FEATURES
 
 * Package docType will automatically add package alias, if needed. (Fixes #4)
@@ -65,6 +82,9 @@ BUG FIXES
 * Errors now display file name and line number of roxygen block to help you
   find the problem. Thanks to code contributions from Renaud Gaujoux. (Fixes
   #13)
+
+* Documentation with no untagged text but with `@title`, `@description` and
+  `@details` tags now produces correct output.
 
 roxygen2 2.1
 ------------

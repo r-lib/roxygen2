@@ -16,9 +16,10 @@ usage <- function(args) {
     if (is.missing.arg(arg)) return("")
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
     text <- str_replace_all(text, fixed("%"), "\\%")
-    text <- str_replace_all(text, fixed(" "), "\uA0")
+    text <- str_replace_all(text, fixed(" "), "\u{A0}")
+    Encoding(text) <- "UTF-8"    
     
-    paste("\uA0=\uA0", paste(text, collapse = "\n"), sep = "")
+    str_c("\u{A0}=\u{A0}", paste(text, collapse = "\n"))
   }
 
   arg_values <- vapply(args, arg_to_text, character(1))

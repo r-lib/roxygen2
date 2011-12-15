@@ -153,6 +153,17 @@ test_that("@title overrides default title", {
   expect_equal(get_tag(out, "description")$values, "Would be title")
 })
 
+test_that("docs parsed correctly if no blank text", {
+  out <- roc_proc_text(roc, "
+    #' @title My title
+    #' @description My description
+    #' @param x value
+    a <- function(x) {}")[[1]]
+  
+  expect_equal(get_tag(out, "title")$values, "My title")
+  expect_equal(get_tag(out, "description")$values, "My description")
+})
+
 test_that("question mark ends sentence", {
   out <- roc_proc_text(roc, "
     #' Is a number odd?

@@ -49,6 +49,8 @@ register.srcref.parsers(function(call, env) {
   
   if (out$fun) {
     out$formals <- formals(value)
+  } else if (inherits(value, "refObjectGenerator")) {
+    # Reference class
   } else {
     if (is.null(out$docType)) out$docType <- "data"
     out$str <- str_c(capture.output(str(value, max.level = 1)), 
@@ -451,8 +453,12 @@ process.usage <- function(partitum) {
 # by details (separated by a blank line).
 process_description <- function(partitum, base_path) {
   intro <- partitum$introduction
-  if (is.null(intro)) return()
-  paragraphs <- str_trim(strsplit(intro, '\n\n', fixed=TRUE)[[1]])
+  
+  if (!is.null(intro)) {
+    paragraphs <- str_trim(str_split(intro, fixed('\n\n'))[[1]])
+  } else {
+    paragraphs <- NULL
+  } 
 
   # 1st paragraph = title (unless has @title)
   if (!is.null(partitum$title)) {
@@ -544,7 +550,7 @@ process.docType <- function(partitum) {
     if (is.null(partitum$usage)) {
       tags <- c(tags, new_tag("usage", partitum$assignee))
     }
-    tags <- c(tags, new_tag("keyword", "dataset"))
+    tags <- c(tags, new_tag("keyword", "datasets"))
   }
   
   tags

@@ -62,6 +62,7 @@ setMethod("link_text", signature(x = "MethodDefinition"), function(x) {
   sig <- x@defined
   str_c(x@generic, "(", str_c(sig@names, " = ", sig), ")")
 })
+
 lookup_rd <- function(x, package = NULL) {
   get_rd(topic_name(x), package = package)
 }

@@ -18,9 +18,13 @@ parse_assignment <- function(call, env) {
     out$formals <- formals(value)
   } else {
     out$docType <- "data"
-    out$format <- str_c(capture.output(str(value, max.level = 1)), 
-      collapse = "\n")
-    out$usage <- out$src_name
+    if (is.null(out$format)) {
+      out$format <- str_c(capture.output(str(value, max.level = 1)), 
+        collapse = "\n")      
+    }
+    if (is.null(out$usage)) {
+      out$usage <- out$src_name      
+    }
   }
   out
 }
@@ -32,7 +36,7 @@ parse_class <- function(call, env) {
   # class?classRepresentation
   list(
     docType = "class",
-    src_name = name,
+    name = name,
     alias = c(name, str_c(name, "-class")),
     extends = showExtends(class@contains, printTo = FALSE),
     slots = class@slots
@@ -59,6 +63,7 @@ parse_method <- function(call, env) {
     docType = "method",
     name = topic_name(f),
     type = "S4-method",
+    generic = f@generic,
     inheritParams = f@generic
   )
 }
@@ -75,4 +80,7 @@ setGeneric("topic_name", function(x) {
 })
 setMethod("topic_name", signature(x = "MethodDefinition"), function(x) {
   str_c(str_c(c(x@generic, x@defined), collapse = ","), "-method")
+})
+setMethod("topic_name", signature(x = "standardGeneric"), function(x) {
+  x@generic
 })

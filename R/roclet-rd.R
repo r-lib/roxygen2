@@ -365,14 +365,14 @@ roc_output.had <- function(roclet, results, base_path) {
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {
-  if (is.null(partitum$fun) || !partitum$fun) {
-    return(new_tag("usage", NULL))
-  }
-  
   if (!is.null(partitum$usage)) {
     return(new_tag("usage", partitum$usage))
   }
-    
+  
+  if (length(partitum$formals) < 1) {
+    return(new_tag("usage", NULL))
+  }
+  
   fun_name <- if (!is.null(partitum$method)) {
     rd_tag('method', partitum$method[[1]], partitum$method[[2]])
   } else {

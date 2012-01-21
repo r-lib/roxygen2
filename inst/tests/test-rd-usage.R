@@ -50,6 +50,18 @@ test_that("@usage overrides default", {
     expect_equal(get_tag(out, "usage")$values, "a(a=2)")
 })
 
+test_that("@usage overrides default for @docType data", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    #'
+    #' @name abc
+    #' @docType data
+    #' @usage data(abc)
+    NULL")[[1]]
+
+  expect_equal(get_tag(out, "usage")$values, "data(abc)")
+})
+
 test_that("quoted topics have usage statements", {
   out <- roc_proc_text(roc, "
     #' Title.

@@ -371,17 +371,22 @@ process.usage <- function(partitum) {
 
   # Only function usages are generated here
   type <- partitum$docType %||% partitum$src_type
-  if (!identical(type, "function")) {
+  if (!identical(type, "function") && !identical(type, "method")) {
     return(new_tag("usage", NULL))
   }
-  
-  fun_name <- if (!is.null(partitum$method)) {
-    rd_tag('method', partitum$method[[1]], partitum$method[[2]])
+
+  if (type == "method") {
+    signature <- str_c(partitum$signature, collapse = ",")
+    fun_name <- str_c("\\S4method{", partitum$generic, "}{", signature, "}")
   } else {
-    partitum$src_name
+    if (is.null(partitum$method)) {
+      fun_name <- partitum$src_name
+    } else {
+      fun_name <- rd_tag('method', partitum$method[[1]], partitum$method[[2]])
+    }
   }
-  args <- usage(partitum$formals)
   
+  args <- usage(partitum$formals)
   if (str_detect(fun_name, fixed("<-"))) {
     fun_name <- str_replace(fun_name, fixed("<-"), "")
     new_tag("usage", str_c(fun_name, "(", args, ") <- value"))

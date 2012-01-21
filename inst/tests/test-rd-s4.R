@@ -12,3 +12,13 @@ test_that("Method documentation has correct defaults", {
 
 })
 
+test_that ("@usage for S4methods",{
+  out <- roc_proc_text(roc, "
+    #' Title.
+    setMethod('show', signature = c(object = 'array'), function (object) {})
+    ")[[1]]
+  expect_equal(get_tag(out, "usage")$values,
+    "\\S4method{show}{array}(object)")
+  expect_equal(get_tag(out, "alias")$values,
+    c("show,array-method"))
+})

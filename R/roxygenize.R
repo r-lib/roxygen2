@@ -24,7 +24,7 @@ roxygenize <- function(package.dir,
                        unlink.target=FALSE,
                        roclets=c("collate", "namespace", "rd")) {
 
-  skeleton <- c(roxygen.dir, file.path(roxygen.dir, c("man", "inst")))
+  skeleton <- c(roxygen.dir, file.path(roxygen.dir, c("man")))
 
   if (copy.package) {
     copy.dir(package.dir, roxygen.dir, unlink.target = unlink.target,

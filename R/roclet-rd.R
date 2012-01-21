@@ -71,7 +71,8 @@ register.srcref.parser('setGeneric', function(call, env) {
 register.srcref.parser('setMethod', function(call, env) {
   list(
     S4method = as.character(call$f), 
-    signature = as.character(call$signature))
+    signature = as.character(call$signature),
+    formals = formals(eval(call$definition)))
 })
 
 #' Roclet: make Rd files.
@@ -412,27 +413,39 @@ roc_output.had <- function(roclet, results, base_path) {
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {
-  if (is.null(partitum$fun) || !partitum$fun) {
+  if ((is.null(partitum$fun) || !partitum$fun) && (is.null(partitum$S4method)) && (is.null(partitum$S4generic) || is.null(partitum$usage))) {
     return(new_tag("usage", NULL))
   }
   
   if (!is.null(partitum$usage)) {
     return(new_tag("usage", partitum$usage))
   }
-    
+  
   fun_name <- if (!is.null(partitum$method)) {
     rd_tag('method', partitum$method[[1]], partitum$method[[2]])
+  } else if (!is.null(partitum$S4method)) {
+  	partitum$S4method
   } else {
     partitum$assignee
   }
-  args <- usage(partitum$formals)
   
   if (str_detect(fun_name, fixed("<-"))) {
     fun_name <- str_replace(fun_name, fixed("<-"), "")
-    new_tag("usage", str_c(fun_name, "(", args, ") <- value"))
+    suffix <- " <- value"
   } else {
-    new_tag("usage", str_c(fun_name, "(", args, ")"))
+  	suffix <- ""
   }
+  
+  if (!is.null(partitum$S4method) && !is.null(partitum$signature)) {
+    fun_name <- paste("\\S4method{", fun_name, "}{", paste(partitum$signature, collapse=","), "}", sep="")
+    if (suffix == " <- value") {
+      partitum$formals <- partitum$formals[-length(partitum$formals)]
+    }
+  }
+  
+  args <- usage(partitum$formals)
+  
+  new_tag("usage", str_c(fun_name, "(", args, ")", suffix))
 }
 
 # Process title, description and details. 

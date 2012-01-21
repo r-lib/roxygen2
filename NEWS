@@ -1,3 +1,6 @@
+* Explicitly depends on `utils` and `methods` packages to make roxygen more
+  compatible with `Rscript`.  Fixes #72
+
 * Now imports `digest` package instead of depending on it.
 
 * Always use C locale when sorting `NAMESPACE` file. This ensures a consistent

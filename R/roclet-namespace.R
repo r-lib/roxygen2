@@ -158,9 +158,9 @@ ns_export <- function(tag, parms, all) {
   if (all$docType == "method") {
     ns_exportMethod(NULL, all$generic)
   } else if (all$docType == "class") {
-    ns_exportClass(NULL, all$name)
+    ns_exportClass(NULL, all$src_name)
   } else if (all$docType == "method") {
-    ns_S3method(name)
+    ns_S3method(all$src_name)
   } else {
     name <- all$name %||% all$assignee
     if (is.null(name)) {

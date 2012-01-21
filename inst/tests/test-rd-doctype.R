@@ -45,7 +45,7 @@ test_that("@docType data automatically added to data objects", {
 
 # Reference classes ----------------------------------------------------------
 
-test_that("@docType data automatically added to data objects", {
+test_that("@docType data not automatically added to reference classes", {
   out <- roc_proc_text(roc, "
     #' Title.
     a <- setRefClass('a')")[[1]]

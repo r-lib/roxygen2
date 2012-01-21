@@ -16,6 +16,8 @@ parse_assignment <- function(call, env) {
   if (is.function(value)) {
     out$docType <- "function"
     out$formals <- formals(value)
+  } else if (inherits(value, "refObjectGenerator")) {
+    # Reference class
   } else {
     out$docType <- "data"
     if (is.null(out$format)) {
@@ -36,8 +38,8 @@ parse_class <- function(call, env) {
   # class?classRepresentation
   list(
     docType = "class",
-    name = name,
-    alias = c(name, str_c(name, "-class")),
+    src_name = name,
+    src_alias = c(name, str_c(name, "-class")),
     extends = showExtends(class@contains, printTo = FALSE),
     slots = class@slots
   )
@@ -49,8 +51,8 @@ parse_generic <- function(call, env) {
   
   list(
     docType = "function",
-    name = topic_name(f),
-    alias = c(name, str_c(name, "-methods"))
+    src_name = topic_name(f),
+    src_alias = c(name, str_c(name, "-methods"))
   )
 }
 
@@ -61,7 +63,7 @@ parse_method <- function(call, env) {
   # class?MethodDefinition
   list(
     docType = "method",
-    name = topic_name(f),
+    src_name = topic_name(f),
     type = "S4-method",
     generic = f@generic,
     inheritParams = f@generic

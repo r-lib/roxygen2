@@ -1,3 +1,6 @@
+* Always use C locale when sorting `NAMESPACE` file. This ensures a consistent
+  ordering across systems.
+
 roxygen2 2.2.2
 --------------
 

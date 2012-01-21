@@ -111,7 +111,7 @@ roc_process.namespace <- function(roclet, partita, base_path) {
     )
     ns <- c(ns, ns_one)
   }
-  sort(unique(ns))
+  with_locale("C", sort(unique(ns)))
 }
 
 

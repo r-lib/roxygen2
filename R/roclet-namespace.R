@@ -155,14 +155,14 @@ ns_export <- function(tag, parms, all) {
     return(ns_directive('export', words(parms)))
   }
   
-  if (all$docType == "method") {
+  if (all$src_type == "method") {
     ns_exportMethod(NULL, all$generic)
-  } else if (all$docType == "class") {
+  } else if (all$src_type == "class") {
     ns_exportClass(NULL, all$src_name)
-  } else if (all$docType == "method") {
+  } else if (all$src_type == "method") {
     ns_S3method(all$src_name)
   } else {
-    name <- all$name %||% all$assignee
+    name <- all$name %||% all$src_name
     if (is.null(name)) {
       warning('Empty export directive', call. = FALSE)
       NULL

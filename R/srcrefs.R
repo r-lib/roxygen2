@@ -5,29 +5,23 @@ parse_assignment <- function(call, env) {
   
   # If it doesn't exist (any more), don't document it.
   if (!exists(assignee, env)) return()
-  value <- get(assignee, env)
-  
-  out <- list(assignee = as.character(assignee))
-  if (length(assignee) == 1) {
-     out$src_name <- out$assignee
-  }
-  out$src_alias <- out$src_name
 
+  out <- list(
+    src_name = assignee,
+    src_alias = assignee)
+
+  value <- get(assignee, env)
   if (is.function(value)) {
-    out$docType <- "function"
+    out$src_type <- "function"
     out$formals <- formals(value)
   } else if (inherits(value, "refObjectGenerator")) {
-    # Reference class
+    out$src_type <- "ref-class"
   } else {
-    out$docType <- "data"
-    if (is.null(out$format)) {
-      out$format <- str_c(capture.output(str(value, max.level = 1)), 
-        collapse = "\n")      
-    }
-    if (is.null(out$usage)) {
-      out$usage <- out$src_name      
-    }
+    out$src_type <- "data"
+    out$str <- str_c(capture.output(str(value, max.level = 1)), 
+      collapse = "\n")
   }
+
   out
 }
 
@@ -37,7 +31,7 @@ parse_class <- function(call, env) {
 
   # class?classRepresentation
   list(
-    docType = "class",
+    src_type = "class",
     src_name = name,
     src_alias = c(name, str_c(name, "-class")),
     extends = showExtends(class@contains, printTo = FALSE),
@@ -50,7 +44,7 @@ parse_generic <- function(call, env) {
   f <- getGeneric(name, where = env)
   
   list(
-    docType = "function",
+    src_type = "function",
     src_name = topic_name(f),
     src_alias = c(name, str_c(name, "-methods"))
   )
@@ -62,9 +56,9 @@ parse_method <- function(call, env) {
   
   # class?MethodDefinition
   list(
-    docType = "method",
+    src_type = "method",
     src_name = topic_name(f),
-    type = "S4-method",
+    src_alias = topic_name(f),
     generic = f@generic,
     inheritParams = f@generic
   )

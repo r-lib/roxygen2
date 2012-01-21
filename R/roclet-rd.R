@@ -297,7 +297,7 @@ roclet_rd_one <- function(partitum, base_path) {
 
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
-  add_tag(rd, new_tag("alias", partitum$src_alias %||% partitum$name))
+  add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
   add_tag(rd, new_tag("formals", names(partitum$formals)))
 
   add_tag(rd, process_description(partitum, base_path))
@@ -368,15 +368,17 @@ process.usage <- function(partitum) {
   if (!is.null(partitum$usage)) {
     return(new_tag("usage", partitum$usage))
   }
-  
-  if (length(partitum$formals) < 1) {
+
+  # Only function usages are generated here
+  type <- partitum$docType %||% partitum$src_type
+  if (!identical(type, "function")) {
     return(new_tag("usage", NULL))
   }
   
   fun_name <- if (!is.null(partitum$method)) {
     rd_tag('method', partitum$method[[1]], partitum$method[[2]])
   } else {
-    partitum$assignee
+    partitum$src_name
   }
   args <- usage(partitum$formals)
   
@@ -474,22 +476,25 @@ process.section <- function(key, value) {
 }
 
 process.docType <- function(partitum) {
-  doctype <- partitum$docType
+  doctype <- partitum$docType %||% partitum$src_type
   
   if (is.null(doctype)) return()
-  tags <- list(new_tag("docType", doctype))
+  
+  tags <- list()
   
   if (doctype == "package") {
     name <- partitum$name
+    tags <- c(tags, new_tag("docType", "package"))
     if (!str_detect(name, "-package")) {
       tags <- c(tags, new_tag("alias", str_c(name, "-package")))
     }
   } else if (doctype == "data") {
+    tags <- c(tags, new_tag("docType", "data"))
     if (is.null(partitum$format)) {
       tags <- c(tags, new_tag("format", partitum$str))
     }
     if (is.null(partitum$usage)) {
-      tags <- c(tags, new_tag("usage", partitum$assignee))
+      tags <- c(tags, new_tag("usage", partitum$src_name))
     }
     tags <- c(tags, new_tag("keyword", "datasets"))
   }

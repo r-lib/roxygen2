@@ -60,7 +60,8 @@ parse_method <- function(call, env) {
     src_name = topic_name(f),
     src_alias = topic_name(f),
     generic = f@generic,
-    inheritParams = f@generic
+    formals = formals(f@.Data),
+    inheritParams = str_c(attr(f@generic, "package"), "::", f@generic)
   )
 }
 

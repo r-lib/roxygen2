@@ -221,6 +221,7 @@ rd_roclet <- function() {
 }
 
 #' @S3method roc_process had
+#' @importFrom digest digest
 roc_process.had <- function(roclet, partita, base_path) {
   # Remove srcrefs with no attached roxygen comments
   partita <- Filter(function(x) length(x) > 1, partita)

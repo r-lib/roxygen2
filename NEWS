@@ -1,3 +1,5 @@
+* Now imports `digest` package instead of depending on it.
+
 * Always use C locale when sorting `NAMESPACE` file. This ensures a consistent
   ordering across systems.
 

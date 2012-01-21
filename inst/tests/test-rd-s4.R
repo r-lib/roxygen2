@@ -12,7 +12,7 @@ test_that("Method documentation has correct defaults", {
 
 })
 
-test_that ("@usage for S4methods",{
+test_that("@usage for S4methods", {
   out <- roc_proc_text(roc, "
     #' Title.
     setMethod('show', signature = c(object = 'array'), function (object) {})

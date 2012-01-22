@@ -1,6 +1,9 @@
 \name{rd_roclet}
 \alias{rd_roclet}
 \title{Roclet: make Rd files.}
+\usage{
+  rd_roclet()
+}
 \description{
   This roclet is the workhorse of \pkg{roxygen}, producing
   the Rd files that document that functions in your
@@ -19,7 +22,7 @@
   \describe{
 
   \item{\code{@param name description}}{Document a
-  parameter. Documentation is required for every
+  parameter.  Documentation is required for every
   parameter.}
 
   \item{\code{@inheritParams
@@ -87,7 +90,7 @@
 
   \item{\code{@aliases space separated aliases}}{Add
   additional aliases, through which the user can find the
-  documentation with \code{?}. The topic name is always
+  documentation with \code{?}.  The topic name is always
   included in the list of aliases.}
 
   \item{\code{@concepts space separated concepts}}{Similar
@@ -147,7 +150,7 @@
   the roxygen block.}
 
   \item{\code{@usage usage_string}}{Override the default
-  usage string. You should not need to use this tag - if
+  usage string.  You should not need to use this tag - if
   you are trying to document multiple functions in the same
   topic, use \code{@rdname}.}
 
@@ -168,7 +171,8 @@
 
   \item{\code{@docType type}}{Type of object being
   documented. Useful values are \code{data} and
-  \code{package}. }
+  \code{package}. Package doc type will automatically add a
+  \code{package-} alias if needed.}
 
   \item{\code{@format description}}{A textual description
   of the format of the object.}

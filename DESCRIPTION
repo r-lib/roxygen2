@@ -1,29 +1,33 @@
 Package: roxygen2
-Version: 2.1
+Version: 2.2.2
 License: GPL (>= 2)
 Description: A Doxygen-like in-source documentation system
     for Rd, collation, and NAMESPACE.
 Title: In-source documentation for R
-Author: Hadley Wickham <hadley@rice.edu>, Peter Danenberg
-    <pcd@roxygen.org>, Manuel Eugster
-    <Manuel.Eugster@stat.uni-muenchen.de>
+Author: Hadley Wickham <hadley@rice.edu>,
+    Peter Danenberg <pcd@roxygen.org>,
+    Manuel Eugster <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Hadley Wickham <hadley@rice.edu>
+Depends:
+    R (>= 2.14),
+    stats,
+    methods
 Imports:
     stringr (>= 0.5),
     tools,
-    brew
+    brew,
+    digest
 Suggests:
     testthat
-Depends:
-    digest
 Collate:
     'cache.R'
     'description.R'
-    'parse.R'
     'parse-preref.R'
-    'parse-srcref.R'
     'parse-registry.R'
+    'parse-srcref.R'
+    'parse.R'
     'rd-file-api.R'
+    'rd-parse.R'
     'rd-tag-api.R'
     'roclet-collate.R'
     'roclet-namespace.R'
@@ -31,7 +35,7 @@ Collate:
     'roclet.R'
     'roxygen.R'
     'roxygenize.R'
-    'topo-sort.R'
-    'utils.R'
     'template.R'
-    'rd-parse.R'
+    'topo-sort.R'
+    'util-locale.R'
+    'utils.R'

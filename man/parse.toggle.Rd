@@ -2,12 +2,15 @@
 \alias{parse.toggle}
 \title{Turn a binary element on; parameters are ignored.}
 \usage{
-  parse.toggle(key, rest)
+  parse.toggle(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}
 
   \item{rest}{the expression to be parsed}
+
+  \item{srcref}{srcref providing location of file name and
+  line number}
 }
 \value{
   A list with the key and \code{TRUE}

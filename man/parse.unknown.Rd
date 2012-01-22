@@ -2,12 +2,15 @@
 \alias{parse.unknown}
 \title{Parse an unknown tag.}
 \usage{
-  parse.unknown(key, rest)
+  parse.unknown(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}
 
   \item{rest}{the expression to be parsed}
+
+  \item{srcref}{srcref providing location of file name and
+  line number}
 }
 \value{
   A list containing the key and expression (possibly null)

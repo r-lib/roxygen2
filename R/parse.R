@@ -29,13 +29,14 @@ parse.file <- function(file, env, env_hash) {
 #' @seealso \code{\link{parse.file}}
 #' @keywords internal
 #' @export
+#' @importFrom digest digest
 parse.files <- function(paths) {
   # Source all files into their own environment so that parsing code can
   # access them.
   env <- new.env(parent = parent.env(globalenv()))
   env_hash <- suppressWarnings(digest(env))
   
-  setPackageName("test", env)
+  setPackageName("roxygen_destest", env)
   lapply(paths, sys.source, chdir = TRUE, envir = env)
   
   unlist(lapply(paths, parse.file, env = env, env_hash = env_hash), 

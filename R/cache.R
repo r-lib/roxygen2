@@ -1,3 +1,4 @@
+#' @importFrom digest digest
 new_cache <- function() {
   cache <- new.env(parent = emptyenv())
   

@@ -1,7 +1,12 @@
 # Parse a preref
 parse.preref <- function(lines) {
+  # Extract srcrefs
+  srcrefs <- attr(lines, 'srcref')
+  srcrefs$lloc[1] <- srcrefs$lloc[1] + 1 
+  
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
-  trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""))
+  trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""),
+    "right")
 
   if (length(trimmed.lines) == 0) return(list())
 
@@ -15,14 +20,14 @@ parse.preref <- function(lines) {
   elements <- str_replace_all(elements, fixed("@@"), "@")
 
   parsed.introduction <- parse.introduction(elements[[1]])
-  parsed.elements <- unlist(lapply(elements[-1], parse.element), 
-    recursive = FALSE)
+  parsed.elements <- unlist(lapply(elements[-1], parse.element, 
+    srcref = srcrefs), recursive = FALSE)
   
   c(parsed.introduction, parsed.elements)
 } 
 
 # Sequence that distinguishes roxygen comment from normal comment.
-LINE.DELIMITER <- '#+\''
+LINE.DELIMITER <- '\\s*#+\' ?'
 
 # Comment blocks (possibly null) that precede a file's expressions.
 #
@@ -40,21 +45,27 @@ prerefs <- function(srcfile, srcrefs) {
   comments_end <- src_start
   
   src <- readLines(srcfile$filename, warn = FALSE)
-  Map(function(start, end) src[start:end], comments_start, comments_end)
+  
+  extract <- function(start, end) {
+    srcref <- list(filename = srcfile$filename, lloc = c(start, 0 , end, 0))
+    structure(src[start:end], srcref = srcref)
+  }
+  
+  Map(extract, comments_start, comments_end)
 }
 
 # Parse a raw string containing key and expressions.
 #
 # @param element the string containing key and expressions
 # @return A list containing the parsed constituents
-parse.element <- function(element) {
+parse.element <- function(element, srcref) {
   pieces <- str_split_fixed(element, "[[:space:]]+", 2)
   
   tag <- pieces[, 1]
   rest <- pieces[, 2]
   
   tag_parser <- preref.parsers[[tag]] %||% parse.unknown 
-  tag_parser(tag, rest)
+  tag_parser(tag, rest, srcref)
 }
 
 # Parse introduction: the premier part of a roxygen block
@@ -75,11 +86,12 @@ parse.introduction <- function(expression) {
 #'
 #' @param key the parsing key
 #' @param rest the expression to be parsed
+#' @param srcref srcref providing location of file name and line number
 #' @return A list containing the key and expression (possibly null)
 #' @keywords internal
 #' @family preref parsing functions
 #' @export
-parse.default <- function(key, rest)
+parse.default <- function(key, rest, srcref)
   as.list(structure(str_trim(rest), names=key))
 
 #' Parse an unknown tag.
@@ -92,8 +104,8 @@ parse.default <- function(key, rest)
 #' @family preref parsing functions
 #' @keywords internal
 #' @export
-parse.unknown <- function(key, rest) {
-  warning(key, ' is an unknown key', call. = FALSE)
+parse.unknown <- function(key, rest, srcref) {
+  roxygen_warning(key, ' is an unknown key', srcref = srcref)
   parse.default(key, rest)
 }
 
@@ -104,9 +116,9 @@ parse.unknown <- function(key, rest) {
 #' @family preref parsing functions
 #' @keywords internal
 #' @export
-parse.value <- function(key, rest) {
+parse.value <- function(key, rest, srcref) {
   if (is.null.string(rest))
-    stop(key, 'requires a value', call. = FALSE)
+    roxygen_stop(key, ' requires a value', srcref = srcref)
   else
     parse.default(key, rest)
 }
@@ -119,14 +131,14 @@ parse.value <- function(key, rest) {
 #' @family preref parsing functions
 #' @keywords internal
 #' @export
-parse.name.description <- function(key, rest) {
+parse.name.description <- function(key, rest, srcref) {
   pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
   
   name <- pieces[, 1]
   rest <- str_trim(pieces[, 2])
 
   if (is.null.string(name))
-    stop(key, 'requires a name and description', call. = FALSE)
+    roxygen_stop(key, ' requires a name and description', srcref = srcref)
   else
     as.list(structure(list(list(name=name,
                                 description=rest)),
@@ -143,13 +155,13 @@ parse.name.description <- function(key, rest) {
 #' @family preref parsing functions
 #' @keywords internal
 #' @export
-parse.name <- function(key, name) {
+parse.name <- function(key, name, srcref) {
   name <- str_trim(name)
   
   if (is.null.string(name)) {
-    stop(key, ' requires a name', call. = FALSE)
+    roxygen_stop(key, ' requires a name', srcref = srcref)
   } else if (str_count(name, "\\s+") > 1) {
-    warning(key, ' ignoring extra arguments', call. = FALSE)
+    roxygen_warning(key, ' ignoring extra arguments', srcref = srcref)
   }
     
   parse.default(key, word(name, 1))
@@ -162,5 +174,5 @@ parse.name <- function(key, name) {
 #' @family preref parsing functions
 #' @keywords internal
 #' @export
-parse.toggle <- function(key, rest)
+parse.toggle <- function(key, rest, srcref)
   as.list(structure(TRUE, names=key))

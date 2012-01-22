@@ -1,0 +1,67 @@
+context("Rd - examples")
+roc <- rd_roclet()
+
+test_that("@example loads from specified files", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-1.R
+    #' @example Rd-example-2.R
+    NULL")[[1]]
+  
+  examples <- get_tag(out, "examples")$values
+  expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
+  expect_match(examples, fixed("example <- 'example2'"), all = FALSE)
+})
+
+test_that("@examples captures examples", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @examples a <- 2
+    NULL")[[1]]
+  
+  examples <- get_tag(out, "examples")$values
+  expect_match(examples, fixed("a <- 2"), all = FALSE)
+})
+
+test_that("@examples and @example combine", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-1.R
+    #' @examples a <- 2
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
+  expect_match(examples, fixed("a <- 2"), all = FALSE)
+})
+
+test_that("@example does not introduce extra empty lines", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-3.R
+    NULL")[[1]]
+  
+  examples <- get_tag(out, "examples")$values
+  expect_identical(length(examples), 2L)
+})
+
+test_that("indentation in examples preserved", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @examples a <-
+    #'     2
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_match(examples, fixed("a <-\n    2"), all = FALSE)
+})
+
+test_that("% in @example escaped", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-4.R
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_equal(examples, "x \\%*\\% y")  
+})

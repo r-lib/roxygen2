@@ -1,4 +1,100 @@
+* `inst` directory not automatically created.  (Fixes #53)
+
+* Explicitly depends on `utils` and `methods` packages to make roxygen more
+  compatible with `Rscript`.  Fixes #72
+
+* Now imports `digest` package instead of depending on it.
+
+* Always use C locale when sorting `NAMESPACE` file. This ensures a consistent
+  ordering across systems.
+
+roxygen2 2.2.2
+--------------
+
+* Correctly use keyword `datasets` not `dataset` (Fixes #60)
+
+* Reference classes no longer given incorrect docType (data).
+
+roxygen2 2.2.1
+--------------
+
+* Use unicode escapes in test files so tests pass on all platforms.
+
+* Work around bug in `gsub` in C locale by manually specifying `Encoding()`. 
+
+roxygen2 2.2
+------------
+
+NEW FEATURES
+
+* Package docType will automatically add package alias, if needed. (Fixes #4)
+
+* Data docType will automatically add `datasets` keyword, default usage, and
+  default format. (Fixes #5). Data docType automatically added to data
+  objects.
+
+* New `@encoding` tag for manually setting non-ASCII encodings when needed.
+  (Fixes #7)
+
+
+BUG FIXES
+
+* `write.description()` now tries much harder to respect 
+  users' original DESCRIPTION field formatting instead of forcibly 
+  re-wrapping certain fields at 60 characters.
+
 * `@details` and `@description` now work correctly
+
+* `@useDynLib` now works correctly: 
+
+       @useDynLib packageName routine1 routine2 
+
+   produces
+
+       useDynLib(packageName, routine1)
+       useDynLib(packageName, routine2)
+
+   in the NAMESPACE file, instead of separate (wrong) useDynLib statements as
+   before.
+
+* All namespace import directives now behave in the same way as the export
+  directives, producing multiple single directives instead one multiple
+  directive: `@importClassesFrom pkg a b` now produces 
+  `importClassesFrom(pkg, a)` and `importClassesFrom(pkg, b)`
+
+* In example files included with `@example` you can now use infix operators
+  (e.g. %*%) or other things with %, because they will be preceded by a
+  backslash in the Rd file. This behaviour was already in place for examples
+  directly included with `@examples`.
+
+* Aliases are no longer quoted, and % is escaped with a backslash (Fixes #24).
+  Names also have % escaped (Fixes #50)
+
+* Replacement functions (e.g. `foo<-`) now get correct usage statements:
+  `foo() <- value` instead of `foo()<-value`. (Fixes #38)
+
+* Functions with no arguments now correctly get usage statements (Fixes #35)
+
+* Indentation in examples now preserved (Fixes #27)
+
+* roxygen2 will replace characters that are not valid in filenames with a
+  character substitute, e.g. `[]` becomes `sub`, `<-` becomes `set` (Fixes #6)
+
+* Usage strings use non-breaking spaces to prevent string default values
+  containing whitespace to be split across multiple lines. This may cause
+  problems in the unlikely event that you have default value containing a
+  non-breaking space (`"\uA0"')  (Fixes #21)
+
+* Functions with quoted names now get correct usage statements (Fixes #41)
+
+* Objects that no longer exist are not documented (Fixes #42)
+
+* Errors now display file name and line number of roxygen block to help you
+  find the problem. Thanks to code contributions from Renaud Gaujoux. (Fixes
+  #13)
+
+* Documentation with no untagged text but with `@title`, `@description` and
+  `@details` tags now produces correct output.
 
 roxygen2 2.1
 ------------

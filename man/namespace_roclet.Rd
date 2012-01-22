@@ -9,6 +9,9 @@
 \alias{namespace_roclet}
 \alias{S3method}
 \title{Roclet: make NAMESPACE.}
+\usage{
+  namespace_roclet()
+}
 \description{
   This roclet automates the production of a
   \file{NAMESPACE} file, see \cite{Writing R Extensions}
@@ -45,7 +48,7 @@
 
   }
 
-  There are four tags for importing objects into the
+  There are five tags for importing objects into the
   package:
 
   \describe{
@@ -69,7 +72,15 @@
   method)} directives to import selected methods from a
   package.}
 
-  }
+  \item{\code{@useDynLib package}}{produces a
+  \code{useDynLib(package)} directive to import all
+  compiled routines from the shared objects in the
+  specified package}
+
+  \item{\code{@useDynLib paackage routinea
+  routineb}}{produces multiple
+  \code{useDynLib(package,routine)} directions to import
+  specified compiled routines from a package.} }
 
   Only unique directives are saved to the \file{NAMESPACE}
   file, so you can repeat them as needed to maintain a

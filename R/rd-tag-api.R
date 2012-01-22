@@ -27,6 +27,8 @@ rd_tag <- function(tag, ..., space = FALSE) {
   } else {
     values <- str_trim(c(...))
   }
+  # Turn non-breaking spaces back into regular spaces
+  values <- str_replace_all(values, fixed("\u{A0}"), " ")
   str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")                         
 }
 
@@ -45,10 +47,13 @@ merge.rd_tag <- function(x, y, ...) {
 #' @S3method format alias_tag
 format_rd <- function(x, ...) {
   vapply(sort(unique(x$values)), rd_tag, tag = x$tag, 
-    FUN.VALUE = character(1))
+    FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 format.keyword_tag <- format_rd
-format.alias_tag <- format_rd
+format.alias_tag <- function(x, ...) {
+  x$values <- str_replace_all(x$values, fixed("%"), "\\%")
+  format_rd(x, ...)
+}
 
 # Tags that keep the first occurence -----------------------------------------
 format_first <- function(x, ...) {
@@ -58,16 +63,22 @@ format_first <- function(x, ...) {
 #' @S3method format title_tag
 #' @S3method format docType_tag
 #' @S3method format format_tag
-format.name_tag <- format_first
+#' @S3method format encoding_tag
+format.name_tag <- function(x, ...) {
+  x$values <- str_replace_all(x$values, fixed("%"), "\\%")
+  format_first(x, ...)
+}
 format.title_tag <- format_first
 format.docType_tag <- format_first
 format.format_tag <- format_first
+format.encoding_tag <- format_first
 
 # Tags collapse their values into a single string ----------------------------
 
-format_collapse <- function(x, ...) {
+format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   values <- str_c(x$values, collapse = "\n\n")
-  rd_tag(x$tag, str_wrap(values, width = 60, indent = 2, exdent = 2), space = TRUE)
+  rd_tag(x$tag, str_wrap(values, width = 60, indent = indent, 
+    exdent = exdent), space = TRUE)
 } 
 #' @S3method format author_tag
 #' @S3method format concept_tag
@@ -87,7 +98,7 @@ format.note_tag <- format_collapse
 format.references_tag <- format_collapse
 format.seealso_tag <- format_collapse
 format.source_tag <- format_collapse
-format.usage_tag <- format_collapse
+format.usage_tag <- function(x, ...) format_collapse(x, ..., exdent = 4)
 
 
 # Tags that don't have output ------------------------------------------------
@@ -102,39 +113,42 @@ format.formals_tag <- format_null
 # Tags with special errors or other semantics --------------------------------
 
 #' @S3method format arguments_tag
-get_items <- function(x) {
-	names <- names(x$values)
-	dups <- duplicated(names)
-	if (any(dups)) {
-		# warning is still included here
-		warning("Duplicated parameters: ", str_c(names[dups], collapse = ","), 
-			call. = FALSE)
-	}
-	str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
+get_items <- function(x, check = FALSE) {
+  names <- names(x$values)
+  if (check) {
+    # check for duplicated and throw warning if there are any
+    dups <- duplicated(names)
+    if (any(dups)) {
+      warning("Duplicated parameters: ", str_c(names[dups], collapse = ","), 
+        call. = FALSE)
+    }
+  }
+  str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
 }
 format.arguments_tag <- function(x, ...) {
-	items <- get_items(x)
-	rd_tag(x$tag, str_wrap(items, width = 60, exdent = 2, indent = 2), space = TRUE)
+  items <- get_items(x)
+  rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2),
+    space = TRUE)
 }
 format.value_tag <- function(x, ...) {
-	# general description of return value
-	names <- names(x$values)
-	if(is.null(names)) {
-		# no itemization
-		str <- x$values
-	} else {
-		# extract general description first
-		general <- names == ""
-		str <- x$values[general]
-		# additional list components
-		x$values <- x$values[!general]
-		if (length(x$values) > 0) {
-			items <- get_items(x)
-			str <- str_c(c(str, items), collapse="\n\n")
-		}
-	}
-	# return tag
-	rd_tag(x$tag, str_wrap(str, width = 60, exdent = 2, indent = 2), space = TRUE)
+  # general description of return value
+  names <- names(x$values)
+  if(is.null(names)) {
+    # no itemization
+    str <- x$values
+  } else {
+    # extract general description first
+    general <- names == ""
+    str <- x$values[general]
+    # additional list components
+    x$values <- x$values[!general]
+    if (length(x$values) > 0) {
+      items <- get_items(x, check = TRUE)
+      str <- str_c(c(str, items), collapse = "\n\n")
+    }
+  }
+  # return tag
+  rd_tag(x$tag, str_wrap(str, width = 60, exdent = 2, indent = 2), space = TRUE)
 }
 
 #' @S3method format section_tag

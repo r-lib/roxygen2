@@ -1,6 +1,11 @@
+#' In-line documentation for R.
+#' 
 #' Roxygen is a Doxygen-like documentation system for R; allowing
 #' in-source specification of Rd files, collation and namespace
 #' directives.
+#'
+#' If you have existing Rd files, check out the \code{Rd2roxygen} package
+#' for a convenient way of converting Rd files to roxygen comments.
 #'
 #' \tabular{ll}{
 #' Package: \tab Roxygen2\cr
@@ -16,7 +21,7 @@
 #' Manuel Eugster \email{Manuel.Eugster@@stat.uni-muenchen.de}
 #'
 #' Maintainer: Peter Danenberg \email{pcd@@roxygen.org}
-#' @name roxygen-package
+#' @name roxygen
 #' @docType package
 #' @title Literate Programming in R
 #' @keywords package

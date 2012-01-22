@@ -40,7 +40,7 @@ register.preref.parsers(parse.value, 'exportClass', 'exportMethod',
 #'
 #' }
 #'
-#' There are four tags for importing objects into the package:
+#' There are five tags for importing objects into the package:
 #'
 #' \describe{
 #'
@@ -59,6 +59,13 @@ register.preref.parsers(parse.value, 'exportClass', 'exportMethod',
 #'   multiple \code{importMethodsFrom(package, method)} directives to import
 #'   selected methods from a package.}
 #'
+#' \item{\code{@@useDynLib package}}{produces a \code{useDynLib(package)}
+#'   directive to import all compiled routines from the shared objects in
+#'   the specified package}
+#'
+#' \item{\code{@@useDynLib paackage routinea routineb}}{produces multiple
+#'   \code{useDynLib(package,routine)} directions to import specified 
+#'   compiled routines from a package.}
 #' }
 #'
 #' Only unique directives are saved to the \file{NAMESPACE} file, so you can
@@ -93,18 +100,18 @@ roc_process.namespace <- function(roclet, partita, base_path) {
     ns_one <- c( 
       process_tag(partitum, "export", ns_export),
       process_tag(partitum, "S3method", ns_S3method),
-      process_tag(partitum, "importFrom", ns_importFrom),
+      process_tag(partitum, "importFrom", ns_collapse),
       process_tag(partitum, 'exportClass', ns_exportClass),
       process_tag(partitum, 'exportMethod', ns_exportMethod),
       process_tag(partitum, 'exportPattern', ns_default),
       process_tag(partitum, 'import', ns_default),
       process_tag(partitum, 'importClassesFrom', ns_collapse),
       process_tag(partitum, 'importMethodsFrom', ns_collapse),
-      process_tag(partitum, 'useDynLib', ns_default)
+      process_tag(partitum, 'useDynLib', ns_collapse)
     )
     ns <- c(ns, ns_one)
   }
-  sort(unique(ns))
+  with_locale("C", sort(unique(ns)))
 }
 
 
@@ -129,15 +136,19 @@ ns_default <- function(tag, parms, all) {
   ns_directive(tag, words(parms))
 }
 ns_collapse <- function(tag, parms, all) {
-  ns_directive(tag, str_c(words(parms), collapse = ","))
+  params <- words(parms)
+  if (length(params) == 1) {
+    ns_directive(tag, params)
+  } else {
+    ns_directive(tag, str_c(params[1], ",", params[-1]))
+  }
 }
-
 
 ns_exportClass <- function(tag, parms, all) {
-  ns_directive('exportClasses', parms)
+  ns_directive('exportClasses', quote_if_needed(parms))
 }
 ns_exportMethod <- function(tag, parms, all) {
-  ns_directive('exportMethods', parms)
+  ns_directive('exportMethods', quote_if_needed(parms))
 }
 ns_export <- function(tag, parms, all) {
   if (!is.null.string(parms)) {
@@ -168,10 +179,6 @@ ns_S3method <- function(tag, parms, all) {
     warning("Invalid @S3method: ", parms, call. = FALSE)
   }
   ns_directive("S3method", str_c(quote_if_needed(params), collapse = ","))
-}
-ns_importFrom <- function(tag, parms, all) {
-  params <- words(parms)
-  ns_directive(tag, str_c(params[1], ",", params[-1]))
 }
 
 

@@ -1,14 +1,14 @@
-\name{collate_roclet}
-\alias{collate_roclet}
-\title{Roclet: make Collate field in DESCRIPTION.}
+\name{depends_roclet}
+\alias{depends_roclet}
+\title{Roclet: make Depend field in DESCRIPTION.}
 \usage{
-  collate_roclet()
+  depends_roclet()
 }
 \value{
   Rd roclet
 }
 \description{
-  Topologically sort R files and record in Collate field.
+  Topologically sort R files and record in Depend field.
 }
 \details{
   Each \code{@include} tag should specify the filename of
@@ -23,14 +23,14 @@
 #' @include example-c.R
 NULL
 
-roclet <- collate_roclet()
+roclet <- depends_roclet()
 \dontrun{
   roc_proc(roclet, dir('example'))
   roc_out(roclet, dir('example'), "example")
 }
 }
 \seealso{
-  Other roclets: \code{\link{depends_roclet}},
+  Other roclets: \code{\link{collate_roclet}},
   \code{\link{index_roclet}},
   \code{\link{namespace_roclet}}, \code{\link{rd_roclet}}
 }

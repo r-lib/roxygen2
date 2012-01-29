@@ -1,0 +1,25 @@
+clear_caches           Clear all roxygen caches.
+collate_roclet         Roclet: make Collate field in DESCRIPTION.
+depends_roclet         Roclet: make Depend field in DESCRIPTION.
+index_roclet           Roclet: make INDEX.
+namespace_roclet       Roclet: make NAMESPACE.
+new_roclet             Build new roclet object.
+parse.default          Default parser which simply emits the key and expression.
+parse.file             Parse a source file containing roxygen directives.
+parse.files            Parse many files at once.
+parse.name.description Parse an element containing a mandatory name
+and description (such as \code{@param}).
+parse.name             Parse an element containing a single name and only a name.
+parse.text             Text-parsing hack using tempfiles for more facility.
+parse.toggle           Turn a binary element on; parameters are ignored.
+parse.unknown          Parse an unknown tag.
+parse.value            Parse an element with a mandatory value.
+rd_roclet              Roclet: make Rd files.
+register.preref.parser Register parsers.
+register.preref.parsers
+                       Register many parsers at once.
+roc_out                Process roclet and output results.
+roc_proc               Process roclet and capture results.
+roc_proc_text          Process roclet on string and capture results.
+Useful for testing.
+roxygenize             Process a package with the Rd, namespace and collate roclets.

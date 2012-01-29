@@ -125,6 +125,21 @@ roc_output.namespace <- function(roclet, results, base_path) {
     cat("Updating namespace directives\n")
     writeLines(results, NAMESPACE)
   }
+
+  DESCRIPTION <- file.path(base_path, "DESCRIPTION")  
+  oldd <- read.description(DESCRIPTION)
+  newd <- oldd
+  imports <- grep("import(ClassesFrom|From|MethodsFrom)?(.*)",results,value=TRUE)
+  if(length(imports) > 0) {
+    packages <- sub("import(ClassesFrom|From|MethodsFrom)?\\(([^,]*)(,.*)?\\)","\\2",imports)
+    x <- str_c(packages, ",", collapse = "\n")
+    newd$Imports <- substr(x,1,nchar(x)-1)
+  } else newd$Imports <- NULL
+  write.description(newd, DESCRIPTION)
+  
+  if (!identical(oldd, read.description(DESCRIPTION))) {
+    cat('Updating Imports directive in ', DESCRIPTION, "\n")
+  }
 }
 
 

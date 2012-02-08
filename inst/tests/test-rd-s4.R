@@ -12,6 +12,22 @@ test_that("Method documentation has correct defaults", {
 
 })
 
+test_that("Method documentation has correct defaults even when generic not documented", {
+  out <- roc_proc_text(roc, "
+    #' Blah.
+    #'
+    #' @param object blah blah blah
+    setGeneric('blah', function(object){
+      standardGeneric('blah')
+    })
+    #' Title.
+    setMethod('blah', 'numeric', function(object){ show(NA) })
+    ")[[2]]
+
+  expect_equal(get_tag(out, "alias")$values, "blah,numeric-method")
+  expect_equal(names(get_tag(out, "arguments")$values), c("object"))
+})
+
 test_that("generic documentation generated correctly", {
   out <- roc_proc_text(roc, "
     #' My foo function.

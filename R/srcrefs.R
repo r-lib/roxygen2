@@ -55,6 +55,13 @@ parse_method <- function(call, env) {
   name <- as.character(call$f)
   f <- getMethod(name, eval(call$signature), where = env)
 
+  pkg <- attr(f@generic, "package")
+  if (pkg == "roxygen_test") {
+    inherit <- f@generic
+  } else {
+    inherit <- str_c(pkg, "::", f@generic)
+  }
+
   # class?MethodDefinition
   list(
     src_type = "method",
@@ -63,7 +70,7 @@ parse_method <- function(call, env) {
     generic = f@generic,
     formals = formals(f@.Data),
     signature = as.character(f@defined),
-    inheritParams = str_c(attr(f@generic, "package"), "::", f@generic)
+    inheritParams = inherit
   )
 }
 

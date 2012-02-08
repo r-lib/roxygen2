@@ -46,7 +46,8 @@ parse_generic <- function(call, env) {
   list(
     src_type = "function",
     src_name = topic_name(f),
-    src_alias = c(name, str_c(name, "-methods"))
+    src_alias = c(name, str_c(name, "-methods")),
+    formals = formals(f@.Data)
   )
 }
 
@@ -82,3 +83,7 @@ setMethod("topic_name", signature(x = "MethodDefinition"), function(x) {
 setMethod("topic_name", signature(x = "standardGeneric"), function(x) {
   x@generic
 })
+setMethod("topic_name", signature(x = "nonstandardGenericFunction"), function(x) {
+  x@generic
+})
+

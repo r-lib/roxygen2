@@ -12,6 +12,21 @@ test_that("Method documentation has correct defaults", {
 
 })
 
+test_that("generic documentation generated correctly", {
+  out <- roc_proc_text(roc, "
+    #' My foo function.
+    #'
+    #' Foo will have S4 methods
+    #' @param object my object
+    setGeneric('foo', function(object){
+        standardGeneric('foo')
+    })    
+    ")[[1]]
+  expect_equal(get_tag(out, "usage")$values, "foo(object)")
+  expect_equal(get_tag(out, "alias")$values, c("foo", "foo-methods"))
+})
+
+
 test_that("@usage for S4methods", {
   out <- roc_proc_text(roc, "
     #' Title.

@@ -38,11 +38,27 @@ parse.files <- function(paths) {
   
   setPackageName("roxygen_test", env)
   lapply(paths, sys.source, chdir = TRUE, envir = env)
+  on.exit(cleanup_s4(env))
   
   unlist(lapply(paths, parse.file, env = env, env_hash = env_hash), 
     recursive = FALSE)
 }
+
+
+cleanup_s4 <- function(env) {
+  classes <- getClasses(env)
+  generics <- getGenerics(env)
+
+  lapply(classes, removeClass, where = env)
+  lapply(generics@.Data, removeMethods, where = env)
   
+  pkg_gen <- generics@.Data[generics@package == "roxygen_test"]
+  lapply(pkg_gen, removeGeneric, where = env)
+  
+  browser()
+  invisible(TRUE)
+}
+
 #' Text-parsing hack using tempfiles for more facility.
 #'
 #' @param text stringr containing text to be parsed

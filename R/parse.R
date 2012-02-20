@@ -55,7 +55,6 @@ cleanup_s4 <- function(env) {
   pkg_gen <- generics@.Data[generics@package == "roxygen_test"]
   lapply(pkg_gen, removeGeneric, where = env)
   
-  browser()
   invisible(TRUE)
 }
 

@@ -1,3 +1,9 @@
+* roxygen now supports S4:
+  
+  * `@slot` tag allows you to document the slots of a class.
+  
+  * Correct usage, export statements and aliases are automatically generated
+
 * `inst` directory not automatically created.  (Fixes #53)
 
 * Explicitly depends on `utils` and `methods` packages to make roxygen more

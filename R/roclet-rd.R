@@ -28,6 +28,7 @@ register.preref.parsers(parse.value,
 
 register.preref.parsers(parse.name.description,
                         'param',
+                        'slot',
                         'method')
 
 register.preref.parsers(parse.name,
@@ -307,6 +308,7 @@ roclet_rd_one <- function(partitum, base_path) {
   }))
   add_tag(rd, process.usage(partitum))
   add_tag(rd, process.arguments(partitum))
+  add_tag(rd, process.slot(partitum))
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
@@ -452,6 +454,17 @@ process.arguments <- function(partitum) {
   
   new_tag("arguments", desc)
 }
+
+process.slot <- function(partitum) {
+  params <- partitum[names(partitum) == "slot"]
+  if (length(params) == 0) return() 
+
+  desc <- str_trim(sapply(params, "[[", "description"))
+  names(desc) <- sapply(params, "[[", "name")
+  
+  new_tag("slot", desc)
+}
+
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.

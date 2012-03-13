@@ -290,8 +290,11 @@ roc_process.had <- function(roclet, partita, base_path) {
         params <- rd_arguments(get_rd(pieces[2], pieces[1]))
         
       } else {
-        # Reference within this package        
-        rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
+        # Reference within this package
+
+        # ! name_lookup contains full aliases ("name,-class-method")
+        # whereas inheritor is the name only
+        rd_name <- names(Filter(function(x) inheritor %in% sub (",.*$", "", x), name_lookup))
         
         if (length(rd_name) != 1) {
           warning("@inheritParams: can't find topic ", inheritor, 

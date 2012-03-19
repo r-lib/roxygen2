@@ -126,7 +126,7 @@ format.arguments_tag <- function(x, ...) {
 #' @S3method format slot_tag
 format.slot_tag <- function(x, ...) {
   names <- names(x$values)
-  items <- str_c("\\item{\\code{", names, "}:}{", x$values, "}", collapse = "\n\n")
+  items <- str_c("\\item{\\code{", names, "}}{", x$values, "}", collapse = "\n\n")
   str_c("\\section{Slots}{\n",
     "\\describe{\n", 
     str_wrap(items, width = 60, exdent = 2, indent = 2),

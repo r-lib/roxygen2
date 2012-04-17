@@ -36,7 +36,6 @@ register.preref.parsers(parse.name,
 register.preref.parsers(parse.default,
                         'noRd')
 
-
 register.srcref.parsers(function(call, env) {
   assignee <- as.character(call[[2]])
   
@@ -363,6 +362,18 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'source'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
+  add_tag(rd, process_had_tag(partitum, "cite", function(tag, param){
+		
+		# load entry from the standard REFERENCES.bib:
+		# It should have already been updated by roclet_bibliography as necessary
+		bib <- getBibEntry(param, pkgBibfile(base_path))
+		# substitute citation keys with the formated reference
+		if( length(bib) > 0L ){
+			param <- format(bib)
+		}else
+			roxygen_warning("Citation key '", param, "' not found", srcref=partitum$srcref)
+		new_tag("references", param)	  
+	}))
   add_tag(rd, process_had_tag(partitum, 'concept'))
   add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
       new_tag("value", param)

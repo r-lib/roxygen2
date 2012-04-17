@@ -265,4 +265,3 @@ test_that("deleted objects not documented", {
   out <- roc_process(roc, parse.files("Rd-closure.R"), base_path = ".")
   expect_equal(names(out), "f2.Rd")
 })
-

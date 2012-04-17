@@ -91,3 +91,88 @@ srcref_location <- function(srcref = NULL) {
   if (is.null(srcref)) return()
   str_c(" in block ", basename(srcref$filename), ":", srcref$lloc[1])
 }
+
+
+# From the bibtex package dev version
+write.bib <- function(entry=NULL, file="Rpackages.bib", append = FALSE, verbose = TRUE)
+{
+	# special handling of file=NULL: use stdout()
+	if( is.null(file) ){
+		file <- stdout()
+		verbose <- FALSE
+	}	
+	## use all installed packages if nothing is specified
+	if( is.null(entry) ){ 
+		if( verbose ) message("Generating Bibtex entries for all installed packages ", appendLF=FALSE)
+		entry <- unique(installed.packages()[,1])
+		if( verbose ) message("[", length(entry), "]")
+	}
+	
+	bibs <- 
+			if( is(entry, 'bibentry') )	entry
+			else if( is.character(entry) ){
+				if( length(entry) == 0 ){
+					if( verbose ) message("Empty package list: nothing to be done.")
+					return(invisible())
+				}
+				
+				pkgs <- entry
+				bibs <- sapply(pkgs, function(x) try(citation(x)), simplify=FALSE)
+				#bibs <- lapply(pkgs, function(x) try(toBibtex(citation(x))))
+				n.installed <- length(bibs)
+				
+				## omit failed citation calls
+				ok <- sapply(bibs, is, 'bibentry')
+				pkgs <- pkgs[ok]
+				bibs <- bibs[ok]
+				n.converted <- sum(ok)
+				
+				## add bibtex keys to each entry
+				pkgs <- lapply(seq_along(pkgs), function(i) if(length(bibs[[i]]) > 1)
+								paste(pkgs[i], c('', 2:length(bibs[[i]])), sep = "") else pkgs[i])
+				pkgs <- do.call("c", pkgs)
+				bibs <- do.call("c", bibs)		
+				# formatting function for bibtex keys:
+				# names with special characters must be enclosed in {}, others not.
+				as.bibkey <- function(x){
+					i <- grep("[.]", x)
+					if( length(i) > 0 )
+						x[i] <- paste("{", x[i], "}", sep='')
+					x
+				}		
+				bibs <- mapply(function(b,k){ if( is.null(b$key) ) b$key <- k; b}, bibs, pkgs, SIMPLIFY=FALSE)
+				bibs <- do.call("c", bibs)
+				
+				if(verbose) message("Converted ", n.converted, " of ", n.installed, " package citations to BibTeX")					
+				bibs
+			} else
+				stop("Invalid argument `entry`: expected a bibentry object or a character vector of package names.")
+	
+	if( length(bibs) == 0 ){
+		if( verbose ) message("Empty bibentry list: nothing to be done.")
+		return(invisible())
+	}
+	
+	## write everything to the .bib file
+	fh <- if( is.character(file) ){
+				if( !grepl("\\.bib$", file) ) # add .bib extension if necessary 
+					file <- paste(file, '.bib', sep='')
+				fh <- file(file, open = if(append) "a+" else "w+" )
+				on.exit( if( isOpen(fh) ) close(fh) )
+				fh
+			} else if( is(file, 'connection') )
+				file
+			else
+				stop("Invalid argument `file`: expected a filename, NULL, or a connection [", class(file), "]")
+	
+	if( !is(fh, 'connection') )
+		stop("Invalid connection: ", fh)		
+	file.desc <- summary(fh)['description']
+	
+	if( verbose ) message(if( append ) "Adding " else "Writing ", length(bibs) , " Bibtex entries ... ", appendLF=FALSE)
+	writeLines(toBibtex(bibs), fh)
+	if(verbose) message("OK\nResults written to file '", file.desc, "'")
+	
+	## return Bibtex items invisibly
+	invisible(bibs)
+}

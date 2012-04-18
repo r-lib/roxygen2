@@ -53,11 +53,34 @@ NULL"
 	expect_identical(out$key, getBibEntry("Albator1984", outfile)$key, str_c("After output: only new references are in file '", outfile, "'"))
 	
 	# check warning for unresolved bibtex key at rd_process time
-	expect_warning(fout <- roc_proc_text(roc, chunk), "Unresolved bibtex key 'NotAKey'", "Warning is thrown for unresolved bibtex keys")
+	expect_warning(fout <- roc_proc_text(roc, chunk), "Unresolved BibTeX key\\(s\\) 'NotAKey'", "Warning is thrown for unresolved bibtex keys")
 	# check formating of rd references tags 
 	refs <- get_tag(fout[[1]], "references")$values
 	expect_equivalent(refs, c(format(getBibEntry(c("Toto2008", "Albator1984"), refbib)), "NotAKey"), "References are correctly formated")
 	
+	# inline citations
+	# clean up 
+	clear_caches()
+	file.remove(outfile)
+	chunk <- str_c("#' This is a function
+#' 
+#' This function implements the method of \\rcite{Albator1984}, which estimates 
+#' something.
+#' This function does more than \\rcite{Mimi2009}, but less than \\rcite{NotAKey}
+#'
+#' @name testCite
+#' @bibliography REFdb.bib
+NULL")
+	out <- roc_proc_text(bibroc, chunk)
+	keys <- c("Albator1984","Mimi2009")
+	bib <- getBibEntry(keys, refbib)
+	expect_identical(length(out), length(keys), str_c("Inline citations with \\rcite are correctly extracted (length is OK)"))
+	expect_identical(getBibEntry(keys, out), getBibEntry(keys, refbib), str_c("Inline citations with \\rcite are correctly extracted"))
+	roc_output(bibroc, out, base_path='.')
+	expect_identical(out$key, getBibEntry(keys, outfile)$key, str_c("Inline citations with \\rcite are added to file '", outfile, "'"))		
+	expect_warning(fout <- roc_proc_text(roc, chunk), "Unresolved BibTeX key\\(s\\) 'NotAKey'", "Inline citations with \\rcite: warning is thrown for unresolved bibtex keys")
+	
+	## CLEANUP
 	# remove file inst/REFERENCES.bib if everything went well
 	if( file.exists(outfile) )
 		file.remove(outfile)

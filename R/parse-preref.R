@@ -76,7 +76,11 @@ parse.element <- function(element, srcref) {
 # @return A list containing the parsed description
 parse.introduction <- function(expression) {
   if (is.null.string(expression)) return(NULL)
-  list(introduction = str_trim(expression))
+  intro <- str_trim(expression)
+  # extract possible references
+  cite <- extract.cite('introduction', intro)
+  # return result
+  c(list(introduction = intro), cite)
 }
 
 #' Default parser which simply emits the key and expression.
@@ -91,8 +95,13 @@ parse.introduction <- function(expression) {
 #' @keywords internal
 #' @family preref parsing functions
 #' @export
-parse.default <- function(key, rest, srcref)
-  as.list(structure(str_trim(rest), names=key))
+parse.default <- function(key, rest, srcref){
+  rest <- str_trim(rest)  
+  # extract possible citations
+  cite <- extract.cite(key, rest)  
+  # return result
+  c(as.list(structure(rest, names=key)), cite)
+}
 
 #' Parse an unknown tag.
 #'

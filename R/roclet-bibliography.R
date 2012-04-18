@@ -10,13 +10,6 @@ register.preref.parser('bibliography', function(key, name, srcref) {
 		res <- list()
 		if( file.exists(file) ){
 			res$bibliography <- normalizePath(file)
-#				bibfiles <- roxygenGlobal('bibfiles')
-#				# add the file to the global vector of bibliography files
-#				if( length(bibfiles) == 0 || !file %in% names(bibfiles) ){
-#					bibfiles <- c(bibfiles, FALSE)
-#					names(bibfiles)[length(bibfiles)] <- file
-#					roxygenGlobal('bibfiles', bibfiles)
-#				}			
 		}else{
 			roxygen_warning("Bibliography file '", file, "' does not exists", srcref=srcref)
 		}
@@ -24,13 +17,31 @@ register.preref.parser('bibliography', function(key, name, srcref) {
 	}
 )
 
-# parser for @cite tags: separate BibTeX keys
-register.preref.parser('cite', function(key, name, srcref) {
-		keys <- str_split(str_trim(name), "\\s+")[[1]]		
-		res <- setNames(keys, rep('cite', length(keys)))
-		as.list(res)
+parse.cite <- function(key, name, srcref) {
+	keys <- str_split(str_trim(name), "[, ]+")[[1]]		
+	res <- setNames(keys, rep('cite', length(keys)))
+	as.list(res)
+}
+
+# Extract \cite commands from a string and returns them separated in a named list
+# with all names equal to 'cite'
+extract.cite <- function(key, str, noescape=FALSE){
+	
+	if( key %in% c('examples') ) return()
+	
+#	if( grepl("rcite", str))
+#		print(str)	
+	# check for the presence of \cite commands
+	p <- if( noescape ) "[^\\]?\\rcite\\{([^}]*)\\}" else "[^\\]\\\\rcite\\{([^}]*)\\}"  
+	cite <- str_match_all(str, p)
+	if( length(cite[[1]]) > 0L ){
+		#print(cite)
+		cite <- unlist(lapply(cite[[1]][,2], parse.cite, key='cite'))
+		as.list(setNames(unlist(cite), rep('cite', length(cite))))
 	}
-)
+}
+# parser for @cite tags: separate BibTeX keys
+register.preref.parser('cite', parse.cite)
 
 #' Roclet to Generate File REFERENCES.bib
 #' 
@@ -38,7 +49,7 @@ register.preref.parser('cite', function(key, name, srcref) {
 #' sub-directory, based on BibTeX database files declared with tag \code{@@bibliography} 
 #' citations specified with tag \code{@@cite}.
 #' 
-#'@section Specific tags:
+#'@section Specific tags and command:
 #'
 #' This roclet processes the following tags:
 #'
@@ -58,22 +69,42 @@ register.preref.parser('cite', function(key, name, srcref) {
 #' this BibTeX file is searched by default if already present. 
 #' }
 #'
-#'  \item{\code{@@cite space separated BibTeX citation keys}}{Keys of BibTeX entries 
+#'  \item{\code{@@cite space/comma separated BibTeX citation keys}}{Keys of BibTeX entries 
 #' that will be substituted by full references and inserted in the \emph{References} 
 #' section of the corresponding Rd file.
 #' 
 #' \code{@@cite} tags should be put in the roxygen chunks corresponding to the Rd 
 #' where they must appear.
 #' }
+#' 
+#' \item{\code{\\rcite{single BibTeX citation key}}}{This 
+#' command can be used within the body of roxygen tags, e.g. in descriptions, 
+#' details, sections, etc...
+#' 
+#' The command is substituted in the Rd file by a quick reference, wrapped in a 
+#' \code{\\cite}, while a full reference is added in the \emph{References} section.
+#' Unresolved keys are left unchanged, also wrapped in a \code{\\cite} command.
+#' 
+#' For example:
+#' 
+#' - \\rcite{Toto2008} would sds generate something like \dQuote{\cite{Toto et al. (2008)}}
+#' 
+#' - If unresolved, \\rcite{Toto2010} would generate \dQuote{\cite{Toto2010}}
+#' 
+#' }
 #'  
 #'}
 #'  
+#' @bibliography cite/inst/tests/REFdb.bib
 #' @author Renaud Gaujoux
 #' @family roclets
 #' @export
 #' @examples
 #' 
-#' #' A very nice package
+#' #' An example file, example.R, which document a package
+#' #'
+#' #' A very nice package.
+#' #' For more info see \rcite{Somebody2012}
 #' #'
 #' #' @@name NicePkg
 #' #' @@docType package
@@ -82,9 +113,9 @@ register.preref.parser('cite', function(key, name, srcref) {
 #'
 #' #' Some function
 #' #'
-#' #' This function implements the method from Toto (2010). 
+#' #' This function implements the method from \rcite{Toto2008}. 
 #' #'
-#' #' @@cite Toto2010
+#' #' @@cite Tata1980
 #' fun <- function() {}
 #'
 #' roclet <- bibliography_roclet()
@@ -100,9 +131,16 @@ bibliography_roclet <- function() {
 emptybib <- function(){ x <- list(); class(x) <- 'bibentry'; x}
 
 # returns the path to the package standard REFERENCES.bib file
-pkgBibfile <- function(path){
-	file.path(path, 'inst/REFERENCES.bib')
-}
+pkgBibfile <- local({
+	.path <- NULL
+	function(path){
+		if( !missing(path) ) .path <<- path
+		if( is.null(.path) )
+			stop("Unexpected error: Bibliography file is not set.")
+		
+		file.path(.path, 'inst/REFERENCES.bib')
+	}
+})
 
 #' @S3method roc_process bibliography
 roc_process.bibliography <- function(roclet, partita, base_path) {
@@ -166,34 +204,41 @@ roc_output.bibliography <- function(roclet, results, base_path) {
 }
 
 # select bibentries from a set of bibentries or a bib file 
-getBibEntry <- function(key, bibentry){
+getBibEntry <- function(key, bibentry=pkgBibfile()){
 	
 	# load from file if necessary
 	if( !is(bibentry, 'bibentry') ){
 		if( !file.exists(bibentry) ) return(emptybib())
-		bibentry <- BibTeX::read.bib(bibentry)
+		bibentry <- bibtex::read.bib(bibentry)
 	}
 	k <- unlist(bibentry$key)
-	bibentry[k %in% key]
-	
+	i <- match(key, k, nomatch=0L)
+	bibentry[i[i!=0L]]
 }
 
 # Lookup References from Bibliography Files
 lookupBibentry <- function(keys, bibfiles, partitum, skip=TRUE){
 	
+	# initialize result
+	bibs <- emptybib()
+	
+	# exit early if no bibfiles were passed
+	if( length(bibfiles) == 0L ) return(bibs)
+	
 	.loadBibfile <- function(bibfile){
-		message("\nLoading bibliography file '", bibfile, "' ... ", appendLF=FALSE)
+		message("Loading bibliography file '", bibfile, "' ... ", appendLF=FALSE)
 		info <- file.info(bibfile)
 		if( info$size != 0 )
-			suppressWarnings(suppressMessages(capture.output(bibs <- BibTeX::read.bib(bibfile))))
+			suppressWarnings(suppressMessages(capture.output(bibs <- bibtex::read.bib(bibfile))))
 		else bibs <- emptybib()
+		message("OK")
 		bibs		
 	}
 	
 	# lookup one key in bibfiles until finding it.
 	# bibfiles are loaded and cached based on their md5 sum
 	.lookup <- function(k, bibfiles){
-		message("Lookup for citation key '", k, "' ... ", appendLF=FALSE)
+		#message("Lookup for citation key '", k, "' ... ", appendLF=FALSE)
 		for(i in seq_along(bibfiles) ){
 			f <- bibfiles[i]
 			hash <- c(f, tools::md5sum(f))
@@ -201,18 +246,17 @@ lookupBibentry <- function(keys, bibfiles, partitum, skip=TRUE){
 			bib_db <- rd_proc_cache$compute(hash,.loadBibfile(f))
 			bibitem <- getBibEntry(k, bib_db)
 			if( length(bibitem) > 0L ){
-				message("OK")
+				#message("OK")
 				# return result only if was not found in the first bibfile 
 				# which is the package REFERENCES.bib file
 				if( !skip || i > 1L ) return(bibitem) else return(NULL);
 			}
 		}
-		message("NA")
+		#message("NA")
 		#roxygen_warning("Citation key '", k, "' not found", srcref=partitum$srcref)
 		NULL
 	}
 	
-	bibs <- emptybib()
 	lapply(keys, function(k){
 		hash <- c(k, bibfiles, tools::md5sum(bibfiles))
 		bibitem <- rd_proc_cache$compute(hash, .lookup(k, bibfiles))
@@ -226,16 +270,42 @@ lookupBibentry <- function(keys, bibfiles, partitum, skip=TRUE){
 
 # Process tags @cites: load full reference from inst/REFERENCES.bib file
 # that has been generated by the bibliography roclet.
-process.cite <- function(partitum, base_path){
-	process_had_tag(partitum, "cite", function(tag, param){		
-		# load entry from the standard REFERENCES.bib:
-		# It should have already been updated by roclet_bibliography as necessary
-		bib <- getBibEntry(param, pkgBibfile(base_path))
-		# substitute citation keys with the formated reference
-		if( length(bib) > 0L ){
-			param <- format(bib)
-		}else
-			roxygen_warning("Unresolved BibTeX key '", param, "'", srcref=partitum$srcref)
-		new_tag("references", param)	  
-	})
+process.cite <- function(partitum, base_path){	
+	
+	keys <- unlist(unique(partitum[names(partitum) == 'cite']))
+	if (length(keys) == 0) return()
+	
+	# load entry from the standard REFERENCES.bib:
+	# It should have already been updated by roclet_bibliography as necessary
+	bib <- getBibEntry(keys, pkgBibfile(base_path))
+	# substitute citation keys with the formated reference
+	ik <- keys %in% bib$key
+	if( length(bib) > 0L ){
+		keys[ik] <- format(bib)
+	}	
+	if( length(bib) != length(keys) )
+		roxygen_warning("Unresolved BibTeX key(s) ", str_c("'", keys[!ik], "'", collapse=','), srcref=partitum$srcref)
+	
+	# return tags with formated references
+	unlist(lapply(keys, function(p) new_tag("references", p)), recursive = FALSE)	
+}
+
+shortcite <- function(b){
+	
+	res <- b$author[1]$family
+	if( length(b$author) > 1L )
+		res <- str_c(res, " et al.")
+	str_c(res, " (", b$year, ')')
+}
+
+format_cite <- function(str){
+	cite <- extract.cite('cite', str)
+	if( length(cite) > 0L ){
+		for(ci in cite){
+			b <- getBibEntry(ci)
+			e <- if( length(b) == 0L ) ci else shortcite(b)	
+			str <- gsub(str_c("([^\\])\\\\rcite\\{", ci, "\\}"), str_c("\\1\\\\cite{", e, "}"), str)
+		}
+	}
+	str
 }

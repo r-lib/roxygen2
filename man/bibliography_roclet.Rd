@@ -10,7 +10,7 @@
   database files declared with tag \code{@bibliography}
   citations specified with tag \code{@cite}.
 }
-\section{Specific tags}{
+\section{Specific tags and command}{
   This roclet processes the following tags:
 
   \describe{
@@ -31,7 +31,7 @@
   inst/REFERENCES.bib}, as this BibTeX file is searched by
   default if already present. }
 
-  \item{\code{@cite space separated BibTeX citation
+  \item{\code{@cite space/comma separated BibTeX citation
   keys}}{Keys of BibTeX entries that will be substituted by
   full references and inserted in the \emph{References}
   section of the corresponding Rd file.
@@ -39,10 +39,33 @@
   \code{@cite} tags should be put in the roxygen chunks
   corresponding to the Rd where they must appear. }
 
+  \item{\code{\\rcite{single BibTeX citation key}}}{This
+  command can be used within the body of roxygen tags, e.g.
+  in descriptions, details, sections, etc...
+
+  The command is substituted in the Rd file by a quick
+  reference, wrapped in a \code{\\cite}, while a full
+  reference is added in the \emph{References} section.
+  Unresolved keys are left unchanged, also wrapped in a
+  \code{\\cite} command.
+
+  For example:
+
+  - \\rcite{Toto2008} would sds generate something like
+  \dQuote{\cite{Toto et al. (2008)}}
+
+  - If unresolved, \\rcite{Toto2010} would generate
+  \dQuote{\cite{Toto2010}}
+
+  }
+
   }
 }
 \examples{
-#' A very nice package
+#' An example file, example.R, which document a package
+#'
+#' A very nice package.
+#' For more info see \\rcite{Somebody2012}
 #'
 #' @name NicePkg
 #' @docType package
@@ -51,9 +74,9 @@ NULL
 
 #' Some function
 #'
-#' This function implements the method from Toto (2010).
+#' This function implements the method from \\rcite{Toto2008}.
 #'
-#' @cite Toto2010
+#' @cite Tata1980
 fun <- function() {}
 
 roclet <- bibliography_roclet()

@@ -77,6 +77,8 @@ format.encoding_tag <- format_first
 
 format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   values <- str_c(x$values, collapse = "\n\n")
+  # substitute citation keys
+  values <- format_cite(values)
   rd_tag(x$tag, str_wrap(values, width = 60, indent = indent, 
     exdent = exdent), space = TRUE)
 } 
@@ -155,6 +157,9 @@ format.section_tag <- function(x, ...) {
 
   contents <- vapply(x$values, "[[", "content", FUN.VALUE = character(1))
   contents <- str_wrap(str_trim(contents), width = 60, exdent = 2, indent = 2)
+  
+  # substitute citation keys
+  contents <- format_cite(contents)
   
   setions <- str_c("\\section{", names, "}{\n", contents, "\n}\n", 
     collapse = "\n")

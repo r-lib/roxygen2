@@ -24,7 +24,7 @@ register.preref.parser('bibliography', function(key, name, srcref) {
 	}
 )
 
-# parser for @cite tags: separate bibtex keys
+# parser for @cite tags: separate BibTeX keys
 register.preref.parser('cite', function(key, name, srcref) {
 		keys <- str_split(str_trim(name), "\\s+")[[1]]		
 		res <- setNames(keys, rep('cite', length(keys)))
@@ -32,7 +32,66 @@ register.preref.parser('cite', function(key, name, srcref) {
 	}
 )
 
+#' Roclet to Generate File REFERENCES.bib
+#' 
+#' This roclet generates a file REFERENCES.bib in the package's \dQuote{inst} 
+#' sub-directory, based on BibTeX database files declared with tag \code{@@bibliography} 
+#' citations specified with tag \code{@@cite}.
+#' 
+#'@section Specific tags:
+#'
+#' This roclet processes the following tags:
+#'
+#' \describe{
+#'
+#'  \item{\code{@@bibliography filename}}{Declare a BibTeX database file where 
+#' citation keys are looked for.
+#' Multiple database files are declared using multiple \code{@@bibliography} tags, 
+#' one for each file.
+#' The files are searched by order of declaration, and the first entry that matches 
+#' the looked-up key is used to generate a full reference string.
+#' 
+#' \code{@@bibliography} tags are typically put in the roxygen chunk that describes the package
+#' (i.e.. that contains the tag \code{@@docType package}).  
+#' 
+#' There is no need to add a tag \code{@@bibliography inst/REFERENCES.bib}, as 
+#' this BibTeX file is searched by default if already present. 
+#' }
+#'
+#'  \item{\code{@@cite space separated BibTeX citation keys}}{Keys of BibTeX entries 
+#' that will be substituted by full references and inserted in the \emph{References} 
+#' section of the corresponding Rd file.
+#' 
+#' \code{@@cite} tags should be put in the roxygen chunks corresponding to the Rd 
+#' where they must appear.
+#' }
+#'  
+#'}
+#'  
+#' @author Renaud Gaujoux
+#' @family roclets
 #' @export
+#' @examples
+#' 
+#' #' A very nice package
+#' #'
+#' #' @@name NicePkg
+#' #' @@docType package
+#' #' @@bibliography /home/username/articles/library.bib
+#' NULL
+#'
+#' #' Some function
+#' #'
+#' #' This function implements the method from Toto (2010). 
+#' #'
+#' #' @@cite Toto2010
+#' fun <- function() {}
+#'
+#' roclet <- bibliography_roclet()
+#' \dontrun{roc_proc(roclet, "example.R")}
+#' \dontrun{roc_out(roclet, "example.R", ".")}
+
+#' 
 bibliography_roclet <- function() {
 	new_roclet(list, "bibliography")
 }
@@ -112,7 +171,7 @@ getBibEntry <- function(key, bibentry){
 	# load from file if necessary
 	if( !is(bibentry, 'bibentry') ){
 		if( !file.exists(bibentry) ) return(emptybib())
-		bibentry <- bibtex::read.bib(bibentry)
+		bibentry <- BibTeX::read.bib(bibentry)
 	}
 	k <- unlist(bibentry$key)
 	bibentry[k %in% key]
@@ -126,7 +185,7 @@ lookupBibentry <- function(keys, bibfiles, partitum, skip=TRUE){
 		message("\nLoading bibliography file '", bibfile, "' ... ", appendLF=FALSE)
 		info <- file.info(bibfile)
 		if( info$size != 0 )
-			suppressWarnings(suppressMessages(capture.output(bibs <- bibtex::read.bib(bibfile))))
+			suppressWarnings(suppressMessages(capture.output(bibs <- BibTeX::read.bib(bibfile))))
 		else bibs <- emptybib()
 		bibs		
 	}
@@ -176,7 +235,7 @@ process.cite <- function(partitum, base_path){
 		if( length(bib) > 0L ){
 			param <- format(bib)
 		}else
-			roxygen_warning("Unresolved bibtex key '", param, "'", srcref=partitum$srcref)
+			roxygen_warning("Unresolved BibTeX key '", param, "'", srcref=partitum$srcref)
 		new_tag("references", param)	  
 	})
 }

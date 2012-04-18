@@ -30,7 +30,7 @@ roclet <- collate_roclet()
 }
 }
 \seealso{
-  Other roclets: \code{\link{namespace_roclet}},
-  \code{\link{rd_roclet}}
+  Other roclets: \code{\link{bibliography_roclet}},
+  \code{\link{namespace_roclet}}, \code{\link{rd_roclet}}
 }
 

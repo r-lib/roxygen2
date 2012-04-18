@@ -36,11 +36,6 @@ roxygenize <- function(package.dir,
                        overwrite=TRUE,
                        unlink.target=FALSE,
                        roclets=c("collate", "namespace", "bibliography", "rd")) {
-
-#  # clean globals
-#  roxygenGlobal(clear=TRUE)
-#  # add package.dir to the globals
-#  roxygenGlobal('package.dir', normalizePath(package.dir))
   
   skeleton <- c(roxygen.dir, file.path(roxygen.dir, c("man", "inst")))
 

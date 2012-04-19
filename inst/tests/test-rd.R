@@ -266,3 +266,22 @@ test_that("deleted objects not documented", {
   expect_equal(names(out), "f2.Rd")
 })
 
+test_that("warning/error line numbers", {
+			
+	chunk <- "#' Title.
+	#' @param
+	a <- function() {}"
+
+	.test <- function(chunk, l, ...){
+		expect_error(roc_proc_text(roc, chunk), "@param requires a name and description", info="Error is thrown", ...)
+		err <- tryCatch(roc_proc_text(roc, chunk), error= function(e) e)
+		expect_match(err$message, str_c(".*:", l, "$"), info="Line number is correct", ...)
+	}
+	
+	.test(chunk, 1, label="No line before chunk")
+	.test(str_c("\n", chunk), 2, label="Empty line before chunk")
+	.test(str_c("\n\n", chunk), 3, label="Two empty lines before chunk")
+	.test(str_c("#\n", chunk), 2, label="Comment line before chunk")
+	.test(str_c("#\n\n", chunk), 3, label="Comment + empty lines before chunk")
+	
+})

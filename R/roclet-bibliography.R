@@ -25,19 +25,28 @@ parse.cite <- function(key, name, srcref) {
 
 # Extract \cite commands from a string and returns them separated in a named list
 # with all names equal to 'cite'
-extract.cite <- function(key, str, noescape=FALSE){
+extract.cite <- function(key, str, full=FALSE){
 	
+	# do not extract from some specific tags
 	if( key %in% c('examples') ) return()
 	
-#	if( grepl("rcite", str))
+#	if( grepl("cite", str))
 #		print(str)	
 	# check for the presence of \cite commands
-	p <- if( noescape ) "[^\\]?\\rcite\\{([^}]*)\\}" else "[^\\]\\\\rcite\\{([^}]*)\\}"  
+	p <- "(^|[^\\])(\\\\cite\\{([^} ]*)\\})"  
 	cite <- str_match_all(str, p)
+	#print(cite)
 	if( length(cite[[1]]) > 0L ){
 		#print(cite)
-		cite <- unlist(lapply(cite[[1]][,2], parse.cite, key='cite'))
-		as.list(setNames(unlist(cite), rep('cite', length(cite))))
+		if( !full ){
+			cite <- unlist(lapply(cite[[1]][,4], parse.cite, key='cite'))
+			as.list(setNames(unlist(cite), rep('cite', length(cite))))
+		}else{
+			mapply(function(s, cmd){
+				list(keys=unlist(parse.cite(s, key='cite'))
+					, cmd=cmd, skeys=s)
+			}, cite[[1]][,4], cite[[1]][,3], SIMPLIFY=FALSE)
+		}
 	}
 }
 # parser for @cite tags: separate BibTeX keys
@@ -46,8 +55,8 @@ register.preref.parser('cite', parse.cite)
 #' Roclet to Generate File REFERENCES.bib
 #' 
 #' This roclet generates a file REFERENCES.bib in the package's \dQuote{inst} 
-#' sub-directory, based on BibTeX database files declared with tag \code{@@bibliography} 
-#' citations specified with tag \code{@@cite}.
+#' sub-directory, based on BibTeX database files declared with tags \code{@@bibliography} 
+#' and citations specified with tags \code{@@cite}.
 #' 
 #'@section Specific tags and command:
 #'
@@ -55,21 +64,26 @@ register.preref.parser('cite', parse.cite)
 #'
 #' \describe{
 #'
-#'  \item{\code{@@bibliography filename}}{Declare a BibTeX database file where 
-#' citation keys are looked for.
+#'  \item{\code{@@bibliography filename}: }{Declare a BibTeX database file where 
+#' citation keys from \code{@@cite} tags and \code{\\cite} commands are looked for.
 #' Multiple database files are declared using multiple \code{@@bibliography} tags, 
 #' one for each file.
 #' The files are searched by order of declaration, and the first entry that matches 
-#' the looked-up key is used to generate a full reference string.
+#' the looked-up key is used to generate a full reference string in the Rd files' 
+#' \emph{References} sections.
 #' 
-#' \code{@@bibliography} tags are typically put in the roxygen chunk that describes the package
-#' (i.e.. that contains the tag \code{@@docType package}).  
+#' \code{@@bibliography} tags are typically put in the roxygen chunk that describes 
+#' the package being documented (i.e. the chunk that contains the tag 
+#' \code{@@docType package}).
+#' However they can be put in any other chunk, in any given collated R file.  
 #' 
-#' There is no need to add a tag \code{@@bibliography inst/REFERENCES.bib}, as 
-#' this BibTeX file is searched by default if already present. 
+#' There is no need to manually create the package's default BibTeX file 
+#' (\dQuote{inst/REFERENCES.bib}) or add a \code{@@bibliography} tag to declare it,
+#' as it is always searched if present -- and is created automatically if any 
+#' citation was found in roxygen chunks and an external bibliography file is declared. 
 #' }
 #'
-#'  \item{\code{@@cite space/comma separated BibTeX citation keys}}{Keys of BibTeX entries 
+#'  \item{\code{@@cite space/comma separated BibTeX citation keys}: }{Keys of BibTeX entries 
 #' that will be substituted by full references and inserted in the \emph{References} 
 #' section of the corresponding Rd file.
 #' 
@@ -77,34 +91,60 @@ register.preref.parser('cite', parse.cite)
 #' where they must appear.
 #' }
 #' 
-#' \item{\code{\\rcite{single BibTeX citation key}}}{This 
-#' command can be used within the body of roxygen tags, e.g. in descriptions, 
-#' details, sections, etc...
+#' \item{\code{\\cite{comma separated BibTeX citation keys}}: }{This 
+#' command can be used within the body of any relevant roxygen tags, e.g. 
+#' in @@descriptions, @@details, @@sections, etc...
 #' 
-#' The command is substituted in the Rd file by a quick reference, wrapped in a 
-#' \code{\\cite}, while a full reference is added in the \emph{References} section.
-#' Unresolved keys are left unchanged, also wrapped in a \code{\\cite} command.
+#' The commands that contain BibTeX citation keys are substituted in the Rd file 
+#' by short citation strings, still wrapped in a \code{\\cite} command that is 
+#' rendered accordingly by R Rd engine (e.g. \cite{Toto et al. (2008)}), 
+#' and a full reference is added in the \emph{References} section.
+#' Unresolved citation keys are left unchanged, also wrapped in a 
+#' \code{\\cite} command.
 #' 
-#' For example:
+#' The \code{\\cite} commands are substituted in the generated Rd files 
+#' with the following rules:
 #' 
-#' - \\rcite{Toto2008} would sds generate something like \dQuote{\cite{Toto et al. (2008)}}
+#' \itemize{
 #' 
-#' - If unresolved, \\rcite{Toto2010} would generate \dQuote{\cite{Toto2010}}
+#' \item If the citation key \dQuote{Toto2008} exists in one of the declared 
+#' BibTeX files, then the command \code{\\cite{Toto2008}} is substituted by 
+#' \code{\\cite{Toto (2008)}} or \code{\\cite{Toto et al. (2008)}} if the 
+#' reference is from a single or multiple authors respectively;
+#' 
+#' \item Multiple citations are specified with commas (no space allowed, see last rule)
+#' , e.g. \code{\\cite{Toto2008,Tata1989}}, and are substituted as: 
+#' \dQuote{\cite{Toto et al. (2008), Tata (1989)}};
+#' 
+#' \item Unresolved citation keys (e.g. Unknown2010) remain unchanged: 
+#' \code{\\cite{Unknown2010}} remains \code{\\cite{Unknown2010}} and 
+#' \code{\\cite{Tata1989,Unknown2010}} becomes \code{\\cite{Tata (1989), Unknown2010}};
+#' 
+#' \item Escaped commands \code{\\\\cite} are not substituted;
+#' 
+#' \item Commands that contain spaces are not considered as being BibTeX 
+#' citations, and are therefore ignored by roxygen.
+#' Hence roxygen will not try to find a BibTeX entry from the command 
+#' \code{\\cite{Writing R Extensions}}, which will remain unchanged.
+#' In the -- unlikely -- case where one wants to use \code{\\cite} with a 
+#' single word, that also happens to be a BibTeX citation key, then a 
+#' leading or trailing space should be added -- or the BibTeX entry key be changed.  
+#' 
+#' }% end itemize
 #' 
 #' }
 #'  
 #'}
 #'  
-#' @bibliography cite/inst/tests/REFdb.bib
 #' @author Renaud Gaujoux
 #' @family roclets
 #' @export
 #' @examples
 #' 
-#' #' An example file, example.R, which document a package
+#' ### An example file, example.R, which document a package
 #' #'
 #' #' A very nice package.
-#' #' For more info see \rcite{Somebody2012}
+#' #' For more info see \cite{Somebody2012}
 #' #'
 #' #' @@name NicePkg
 #' #' @@docType package
@@ -113,15 +153,15 @@ register.preref.parser('cite', parse.cite)
 #'
 #' #' Some function
 #' #'
-#' #' This function implements the method from \rcite{Toto2008}. 
+#' #' This function implements the method from \cite{Toto2008}. 
 #' #'
 #' #' @@cite Tata1980
 #' fun <- function() {}
+#' ###
 #'
 #' roclet <- bibliography_roclet()
 #' \dontrun{roc_proc(roclet, "example.R")}
 #' \dontrun{roc_out(roclet, "example.R", ".")}
-
 #' 
 bibliography_roclet <- function() {
 	new_roclet(list, "bibliography")
@@ -290,6 +330,7 @@ process.cite <- function(partitum, base_path){
 	unlist(lapply(keys, function(p) new_tag("references", p)), recursive = FALSE)	
 }
 
+# create short citation from a single bibentry
 shortcite <- function(b){
 	
 	res <- b$author[1]$family
@@ -298,13 +339,29 @@ shortcite <- function(b){
 	str_c(res, " (", b$year, ')')
 }
 
-format_cite <- function(str){
-	cite <- extract.cite('cite', str)
-	if( length(cite) > 0L ){
+# substitutes \cite commands with short citations in a string, based on a BibTeX
+# database file possibly passed in ...:
+#
+# \cite{Toto2010} -> \cite{Toto (2010)} or \cite{Toto et al. (2010)}
+# \cite{Toto2010, Tata1989} -> \cite{Toto et al. (2010), Tata (1989)}
+format_cite <- function(str, ...){
+	cite <- extract.cite('cite', str, full=TRUE)
+	if( length(cite) > 0L ){		
 		for(ci in cite){
-			b <- getBibEntry(ci)
-			e <- if( length(b) == 0L ) ci else shortcite(b)	
-			str <- gsub(str_c("([^\\])\\\\rcite\\{", ci, "\\}"), str_c("\\1\\\\cite{", e, "}"), str)
+			#message("#cmd=", ci$cmd)
+			#message("#str in=", str)
+			e <- sapply(ci$keys, function(x){
+				b <- getBibEntry(x, ...)
+				if( length(b) == 0L ) x else shortcite(b)
+			})
+			e <- str_c(e, collapse=", ")
+			ncmd <- gsub(ci$skeys, e, ci$cmd, fixed=TRUE)
+			ncmd <- gsub("\\", "\\\\", ncmd, fixed=TRUE)
+			#print(ncmd)
+			pa <- str_replace_all(ci$cmd, "([\\{}])", "\\\\\\1")
+			#print(pa)
+			str <- gsub(str_c("(^|[^\\])", pa), str_c("\\1", ncmd), str)
+			#message("#str out=", str)
 		}
 	}
 	str

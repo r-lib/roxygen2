@@ -216,11 +216,18 @@ test_that("Replacement generic documentation generated correctly", {
 	expect_equal(get_tag(out, "usage")$values, "foo(object, value2) <- value"
 		, info="Usage with other argument named 'value2' is correct")
 
+   # with '...' arguments
+	out <- roc_proc_text(roc, "
+	#' My foo function.	
+	setGeneric('foo<-', function(object, ..., value){ standardGeneric('foo<-')})")[[1]]
+	expect_equal(get_tag(out, "usage")$values, "foo(object, ...) <- value"
+			, info="Usage with other argument '...' is correct")
+
 		
 })
 
 
-test_that("@usage for S4methods", {
+test_that("@usage and alias for S4methods", {
   out <- roc_proc_text(roc, "
     #' Title.
     setMethod('show', signature = c(object = 'array'), function (object) {})
@@ -229,6 +236,17 @@ test_that("@usage for S4methods", {
     "\\S4method{show}{array}(object)")
   expect_equal(get_tag(out, "alias")$values,
     c("show,array-method"))
+
+	# with arguments '...'
+	out <- roc_proc_text(roc, "
+	#' Title.
+	setMethod('summary', 'array', function (object, ...) {})
+	")[[1]]
+	expect_equal(get_tag(out, "usage")$values,
+			"\\S4method{summary}{array}(object, ...)"
+			, info="Usage is correct if argument '...'")
+	expect_equal(get_tag(out, "alias")$values,
+			c("summary,array-method"), info="Alias are correct if argument '...'")
 })
 
 test_that("S4 classes have correct aliases", {

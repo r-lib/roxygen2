@@ -191,7 +191,14 @@ roc_process.had <- function(roclet, partita, base_path) {
   templates <- dir(file.path(base_path, "max-roxygen"), full = TRUE)
   template_hash <- digest(lapply(templates, readLines))
   
+  get_values <- function(topics, tag) {
+	  tags <- lapply(topics, get_tag, tag)
+	  tags <- Filter(Negate(is.null), tags)
+	  lapply(tags, "[[", "values")
+  }
+  
   topics <- list()
+  topics_traceback <- list()
   for (partitum in partita) {
     key <- c(template_hash, digest(partitum))
     new <- rd_proc_cache$compute(key, roclet_rd_one(partitum, base_path)) 
@@ -201,17 +208,27 @@ roc_process.had <- function(roclet, partita, base_path) {
     
     old <- topics[[new$filename]]
     topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
+	
+	## update topic traceback
+	old_trace <- topics_traceback[[new$filename]]
+	if (is.null(old_trace)) old_trace <- list()
+	add_trace <- list()
+	# inheritParams track
+	if( length(inheritor <- get_values(list(new$rd), "inheritParams")) > 0L ){
+		add_trace$inheritParams <- 
+			setNames(replicate(length(inheritor), list(srcref=partitum$srcref)
+					, simplify=FALSE), inheritor)
+	}
+	# append to traceback if necessary
+	if( length(add_trace) > 0L ) 
+		topics_traceback[[new$filename]] <- c(old_trace, add_trace)
+	##
   }
   
   # Second parse through to process @family
   invert <- function(x) {
     if (length(x) == 0) return()
     unstack(rev(stack(x)))
-  }
-  get_values <- function(topics, tag) {
-    tags <- lapply(topics, get_tag, tag)
-    tags <- Filter(Negate(is.null), tags)
-    lapply(tags, "[[", "values")
   }
   
   family_lookup <- invert(get_values(topics, "family"))
@@ -244,27 +261,54 @@ roc_process.had <- function(roclet, partita, base_path) {
   inherits <- get_values(topics, "inheritParams")
   
   for(topic_name in names(inherits)) {
+	#message("# Topic: ", topic_name)
     topic <- topics[[topic_name]]
     
     for(inheritor in inherits[[topic_name]]) {
+		
+	  # define warning function that gives details on the roxygen chunk
+  	  inherit_warning <- function(...){
+		  # get detailed info from traceback
+		  tb <- topics_traceback[[topic_name]]$inheritParams[[inheritor]]
+		  roxygen_warning("@inheritParams: ", ...,
+			  			srcref=tb$srcref, immediate. = TRUE)
+	  }
+	  
+	  #message("# Looking up topic: ", inheritor)
       if (grepl("::", inheritor, fixed = TRUE)) {
         # Reference to another package
         pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
-        params <- rd_arguments(get_rd(pieces[2], pieces[1]))
-        
+		params <- get_rd(pieces[2], pieces[1])
+		if (length(params) == 0L){
+			inherit_warning("can't find topic `", pieces[2], "` in package ", pieces[1])
+		}else{
+			params <- rd_arguments(params)
+			if (length(params) == 0L){
+				inherit_warning("can't find argument section for topic `", pieces[2], "` in package ", pieces[1])
+			}
+		}
       } else {
+		#message("# Look within package")
         # Reference within this package        
         rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
-        
-        if (length(rd_name) != 1) {
-          warning("@inheritParams: can't find topic ", inheritor, 
-            call. = FALSE, immediate. = TRUE)
-          next
-        }
-        params <- get_tag(topics[[rd_name]], "arguments")$values  
+        params <- 
+        if (length(rd_name) == 0L){
+			inherit_warning("can't find topic `", inheritor, "`")
+			list()
+		}else{
+			#message("# Found in Rd: ", if( length(rd_name) > 0L ) str_c("'", rd_name,"'", collapse=", "))
+			if( length(rd_name) > 1L ){
+				inherit_warning("found multiple Rd files for topic `"
+							, inheritor, "`: ", str_c("'", rd_name,"'", collapse=", "))
+				list()
+			}else get_tag(topics[[rd_name]], "arguments")$values  
+		}
       }
       params <- unlist(params)
-
+	  
+	  # skip if topic could not be resolved
+	  if( length(params)  == 0L ) next
+	
       missing_params <- setdiff(get_tag(topic, "formals")$values,
         names(get_tag(topic, "arguments")$values))
       matching_params <- intersect(missing_params, names(params))
@@ -381,7 +425,9 @@ process.usage <- function(partitum) {
     signature <- str_c(partitum$signature, collapse = ",")
     fun_name <- str_c("\\S4method{", partitum$generic, "}{", signature, "}")
   } else {
-    if (is.null(partitum$method)) {
+	if ( !is.null(partitum$generic)) {
+	  fun_name <- partitum$generic
+	} else if (is.null(partitum$method)) {
       fun_name <- partitum$src_name
     } else {
       fun_name <- rd_tag('method', partitum$method[[1]], partitum$method[[2]])

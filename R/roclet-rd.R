@@ -391,6 +391,9 @@ process.usage <- function(partitum) {
   args <- usage(partitum$formals)
   if (str_detect(fun_name, fixed("<-"))) {
     fun_name <- str_replace(fun_name, fixed("<-"), "")
+	# remove argument 'value' from the argument list:
+	# correct usage specification is "fun(x, y) <- value"
+	args <- str_replace(args, ", value$", "")
     new_tag("usage", str_c(fun_name, "(", args, ") <- value"))
   } else {
     new_tag("usage", str_c(fun_name, "(", args, ")"))

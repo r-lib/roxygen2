@@ -51,10 +51,18 @@ parse_generic <- function(call, env) {
   )
 }
 
-parse_method <- function(call, env) {
-  name <- as.character(call$f)
-  f <- getMethod(name, eval(call$signature), where = env)
+parse_method <- function(call, env, replace=FALSE) {
 
+  name <- as.character(call$f)
+  sig <- eval(call$signature)
+
+  # handle replacement methods
+  if( replace ){
+	  name <- str_c(name, '<-')
+	  sig <- eval(call[[3]])
+  }
+  
+  f <- getMethod(name, sig, where = env)
   pkg <- attr(f@generic, "package")
   if (pkg == "roxygen_test") {
     inherit <- f@generic
@@ -69,7 +77,7 @@ parse_method <- function(call, env) {
     src_alias = topic_name(f),
     generic = f@generic,
     formals = formals(f@.Data),
-    signature = as.character(f@defined),
+    signature = method_signature(f),
     inheritParams = inherit
   )
 }
@@ -79,13 +87,28 @@ register.srcref.parser('=', parse_assignment)
 register.srcref.parser('setClass', parse_class)
 register.srcref.parser('setGeneric', parse_generic)
 register.srcref.parser('setMethod', parse_method)
-# register.srcref.parser('setReplaceMethod', parse_method)
+register.srcref.parser('setReplaceMethod', function(...) parse_method(..., replace=TRUE))
+
+# compute complete method signature
+method_signature <- function(x){
+	# check for the case where not all arguments get tagged as class 'ANY'
+	sig <- as.character(x@defined)
+	if( is.function(x@.Data) && length(formalArgs(x@.Data)) != length(sig) ){
+		l <- length(formalArgs(x@.Data)) - length(sig)
+		if( l > 0 ){
+			sig <- c(sig, setNames(rep('ANY', l), tail(formalArgs(x@.Data), l)))
+		}else
+			warning("roxygen::topic_name - Unexpectedly unable to infer signature for method "
+					, x@generic, ",", sig, call.=FALSE)
+	}
+	sig
+}
 
 setGeneric("topic_name", function(x) {
   standardGeneric("topic_name")
 })
 setMethod("topic_name", signature(x = "MethodDefinition"), function(x) {
-  str_c(str_c(c(x@generic, x@defined), collapse = ","), "-method")
+  str_c(str_c(c(x@generic, method_signature(x)), collapse = ","), "-method")
 })
 setMethod("topic_name", signature(x = "standardGeneric"), function(x) {
   x@generic
@@ -93,4 +116,3 @@ setMethod("topic_name", signature(x = "standardGeneric"), function(x) {
 setMethod("topic_name", signature(x = "nonstandardGenericFunction"), function(x) {
   x@generic
 })
-

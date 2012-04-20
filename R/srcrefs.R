@@ -29,11 +29,24 @@ parse_class <- function(call, env) {
   name <- as.character(call$Class)
   class <- getClass(name, where = env)
 
+  # Default alias is A-class
+  aliases <- str_c(name, "-class")
+  # add plain name to aliases only if there is no function named like the class, 
+  # which would typically be a constructor method. 
+  if( is.null(getFunction(name, where = env, mustFind=FALSE)) ){
+	  aliases <- c(name, aliases)
+  }
+  
   # class?classRepresentation
+  # - Default rdname should be A-class.rd and not duplicate alias if a 
+  # function exists with the same name as the class (see above). 
+  # NB: name is added to aliases in roclet_rd_one by:
+  # add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
+  #
   list(
     src_type = "class",
-    src_name = name,
-    src_alias = c(name, str_c(name, "-class")),
+    src_name = str_c(name, "-class"), 
+    src_alias = aliases,
     extends = showExtends(class@contains, printTo = FALSE),
     slots = class@slots
   )

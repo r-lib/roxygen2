@@ -231,6 +231,34 @@ test_that("@usage for S4methods", {
     c("show,array-method"))
 })
 
+test_that("S4 classes have correct aliases", {
+	
+	# check only default alias NAME-class if a function exists with same name
+	.test <- function(chunk, aliases, ...){
+		
+		chunk <- str_c("
+		#' Important class.
+		#' 
+		setClass('AAA')
+		", chunk, "\n")
+		out <- roc_proc_text(roc, chunk)[[1]]
+		
+		expect_equal(get_tag(out, "alias")$values, aliases
+				, info="Aliases are correct", ...)
+	}
+	
+	.test(""
+		, aliases=c("AAA", "AAA-class")
+		, label="No function exists with same name")
+	.test("AAA <- function(){}"
+		, aliases="AAA-class"
+		, label="A standard function exists with same name")
+	.test("setGeneric('AAA', function(object) standardGenric('AAA'))"
+		, aliases="AAA-class"
+		, label="An S4 generic exists with same name")
+	
+})
+
 test_that("@slot creates a new section and lists slots", {
   out <- roc_proc_text(roc, "
     #' Important class.

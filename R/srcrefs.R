@@ -47,7 +47,6 @@ parse_class <- function(call, env) {
     src_type = "class",
     src_name = str_c(name, "-class"), 
     src_alias = aliases,
-	classname = name,
     extends = showExtends(class@contains, printTo = FALSE),
     slots = class@slots
   )
@@ -57,15 +56,10 @@ parse_generic <- function(call, env) {
   name <- as.character(call$name)
   f <- getGeneric(name, where = env)
   
-  # it is probably safer to use NAME-methods for src_name, to prevent clash with 
-  # classes or functions and ensure unique match in inheritParam name lookup 
-  # (NAME-methods is also added as an alias anyway)
-  # add element generic to use in usage
   list(
     src_type = "function",
-    src_name = str_c(topic_name(f), "-methods"),
+    src_name = topic_name(f),
     src_alias = c(name, str_c(name, "-methods")),
-	generic = name,
     formals = formals(f@.Data)
   )
 }
@@ -84,7 +78,7 @@ parse_method <- function(call, env, replace=FALSE) {
   f <- getMethod(name, sig, where = env)
   pkg <- attr(f@generic, "package")
   if (pkg == "roxygen_test") {
-    inherit <- str_c(f@generic, '-methods')
+    inherit <- f@generic
   } else {
     inherit <- str_c(pkg, "::", f@generic)
   }

@@ -164,21 +164,56 @@ test_that("setReplaceMethod for local documented generic: documentation is corre
 	
 })
 
-test_that("Method documentation has correct defaults even when generic not documented", {
-  out <- roc_proc_text(roc, "
-    #' Blah.
-    #'
-    #' @param object blah blah blah
-    setGeneric('blah', function(object){
+test_that("Method documentation has no defaults when generic NOT documented", {
+  chunk <- "
+    setGeneric('blah', function(object, ...){
       standardGeneric('blah')
     })
     #' Title.
-    setMethod('blah', 'numeric', function(object){ show(NA) })
-    ")[[2]]
-
+    setMethod('blah', 'numeric', function(object, extra){ show(NA) })
+    "
+  
+  expect_warning(out <- roc_proc_text(roc, chunk)[[1]], "can't find parent topic .*blah"
+	, info="Warning is thrown if target topic for @inheritParams is not found") 
   expect_equal(get_tag(out, "alias")$values, "blah,numeric-method")
-  expect_equal(names(get_tag(out, "arguments")$values), c("object"))
+  expect_equal(get_tag(out, "arguments")$values, NULL)
 })
+
+test_that("Method documentation of inheritParams", {
+	chunk <- "
+		#' @name blah
+		#' @rdname toto
+		myfun <- function(){}
+
+		#' A generic
+		setGeneric('blah', function(object, ...){ standardGeneric('blah') })
+
+		#' Title.
+		setMethod('blah', 'numeric', function(object, extra){ show(NA) })
+		"
+
+	expect_warning(out <- roc_proc_text(roc, chunk)[[3]], "multiple matches for parent topic .*blah"
+			, info="Warning is thrown if target topic for @inheritParams is matched multiple times") 
+	expect_equal(get_tag(out, "alias")$values, "blah,numeric-method")
+	expect_equal(get_tag(out, "arguments")$values, NULL)
+})
+
+test_that("Method documentation has correct defaults when generic is documented", {
+	out <- roc_proc_text(roc, "
+	#' Blah.
+	#'
+	#' @param object a nice blah object 
+	setGeneric('blah', function(object){
+	standardGeneric('blah')
+	})
+	#' Title.
+	setMethod('blah', 'numeric', function(object){ show(NA) })
+	")[[2]]
+	
+	expect_equal(get_tag(out, "alias")$values, "blah,numeric-method")
+	expect_equal(get_tag(out, "arguments")$values, c(object="a nice blah object"))
+})
+
 
 test_that("generic documentation generated correctly", {
   out <- roc_proc_text(roc, "
@@ -288,3 +323,5 @@ test_that("@slot creates a new section and lists slots", {
   
   expect_equal(get_tag(out, "slot")$values, c(a="This is slot a", b="This other slot is b"))
 })
+
+

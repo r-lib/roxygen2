@@ -242,26 +242,72 @@ roc_process.had <- function(roclet, partita, base_path) {
   # one-level - you can't inherit params that have been inherited from
   # another function (and you can't currently use multiple inherit tags)
   inherits <- get_values(topics, "inheritParams")
+  # get srcref data to build detailed and informative warnings
+  srcref_lookup <- get_values(topics, "srcref")
+  
+  # define warning function that gives details on the roxygen chunk
+  inherit_warning <- function(topic, subtopic){
+	  function(..., srcref=NULL){
+	  
+		  # default is to show srcref details of child-topic
+		  child_srcref <- srcref_lookup[[topic]][subtopic]
+		  if( is.null(srcref) ){
+			  srcref <- child_srcref
+			  header <- "@inheritParams - "
+		  }else{
+			  header <- str_c("@inheritParams (", srcref_location(child_srcref), ") - ")
+		  }
+		  # throw warning
+		  roxygen_warning(header, ..., srcref = srcref, immediate. = TRUE)
+		  
+	  }	  
+  }
   
   for(topic_name in names(inherits)) {
+	#message("# Topic: ", topic_name)
     topic <- topics[[topic_name]]
-    
-    for(inheritor in inherits[[topic_name]]) {
+    for(i in seq_along(inherits[[topic_name]]) ){
+	  # get inheritParam target
+	  inheritor <- inherits[[topic_name]][i]
+	  # setup warning function
+	  warn <- inherit_warning(topic_name, names(inherits[[topic_name]])[i])
+	  
+	  #message("# Looking up topic: ", inheritor)
       if (grepl("::", inheritor, fixed = TRUE)) {
         # Reference to another package
         pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
-        params <- rd_arguments(get_rd(pieces[2], pieces[1]))
-        
+		params <- get_rd(pieces[2], pieces[1])
+		if (length(params) == 0L){
+			warn("can't find parent topic `", pieces[2], "` from package ", pieces[1])
+		}else{
+			params <- rd_arguments(params)
+			if (length(params) == 0L){
+				warn("can't find argument section for parent topic `", pieces[2], "` from package ", pieces[1])
+			}
+		}
       } else {
+		#message("# Look within package")
         # Reference within this package        
         rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
-        
-        if (length(rd_name) != 1) {
-          warning("@inheritParams: can't find topic ", inheritor, 
-            call. = FALSE, immediate. = TRUE)
-          next
-        }
-        params <- get_tag(topics[[rd_name]], "arguments")$values  
+        params <- 
+        if (length(rd_name) == 0L){
+			warn("can't find parent topic `", inheritor, "`")
+			list()
+		}else{
+			#message("# Found in Rd file: ", if( length(rd_name) > 0L ) str_c("'", rd_name,"'", collapse=", "))
+			if( length(rd_name) > 1L ){
+
+				# show srcref of origin of name duplication
+				srcref <- srcref_lookup[names(srcref_lookup) %in% rd_name]
+				srcref <- lapply(srcref, function(x) x[[inheritor]])
+				warn("multiple matches for parent topic `"
+							, inheritor, "`: ", srcref=srcref)
+				list()
+			}else{
+				# extract arguments from the computed Rd file structure
+				get_tag(topics[[rd_name]], "arguments")$values  
+			}
+		}
       }
       params <- unlist(params)
 
@@ -303,6 +349,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
   add_tag(rd, new_tag("formals", names(partitum$formals)))
+  add_tag(rd, new_tag("srcref", setNames(list(partitum$srcref), name)))
 
   add_tag(rd, process_description(partitum, base_path))
 
@@ -315,7 +362,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
-  add_tag(rd, process_had_tag(partitum, 'inheritParams'))
+  add_tag(rd, process.inheritParams(partitum, name))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'format'))
   add_tag(rd, process_had_tag(partitum, 'source'))
@@ -367,6 +414,13 @@ roc_output.had <- function(roclet, results, base_path) {
   mapply(write_out, paths, contents)    
 }
 
+
+# Add names to inheritParams to track back original chunk
+process.inheritParams <- function(partitum, name){
+	if( !is.null(partitum$inheritParams) )
+		names(partitum$inheritParams) <- rep(name, length(partitum$inheritParams)) 
+	process_had_tag(partitum, 'inheritParams')
+}
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {

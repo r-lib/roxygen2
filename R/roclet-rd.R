@@ -28,6 +28,9 @@ register.preref.parsers(parse.value,
 
 register.preref.parsers(parse.name.description,
                         'param',
+						'newcommand',
+						'renewcommand',
+                        'slot',
                         'method')
 
 register.preref.parsers(parse.name,
@@ -35,44 +38,6 @@ register.preref.parsers(parse.name,
 
 register.preref.parsers(parse.default,
                         'noRd')
-
-
-register.srcref.parsers(function(call, env) {
-  assignee <- as.character(call[[2]])
-  
-  # If it doesn't exist (any more), don't document it.
-  if (!exists(assignee, env)) return()
-  value <- get(assignee, env)
-  
-  out <- list(assignee = as.character(assignee))
-  out$fun <- is.function(value)
-  
-  if (out$fun) {
-    out$formals <- formals(value)
-  } else if (inherits(value, "refObjectGenerator")) {
-    # Reference class
-  } else {
-    if (is.null(out$docType)) out$docType <- "data"
-    out$str <- str_c(capture.output(str(value, max.level = 1)), 
-      collapse = "\n")
-  }
-  out
-}, '<-', '=')
-
-
-register.srcref.parser('setClass', function(call, env) {
-  list(S4class = as.character(call$Class))
-})
-
-register.srcref.parser('setGeneric', function(call, env) {
-  list(S4generic = as.character(call$name))
-})
-
-register.srcref.parser('setMethod', function(call, env) {
-  list(
-    S4method = as.character(call$f), 
-    signature = as.character(call$signature))
-})
 
 #' Roclet: make Rd files.
 #'
@@ -279,29 +244,78 @@ roc_process.had <- function(roclet, partita, base_path) {
   # one-level - you can't inherit params that have been inherited from
   # another function (and you can't currently use multiple inherit tags)
   inherits <- get_values(topics, "inheritParams")
+  # get srcref data to build detailed and informative warnings
+  srcref_lookup <- get_values(topics, "srcref")
+  
+  # define warning function that gives details on the roxygen chunk
+  inherit_warning <- function(topic, subtopic){
+	  function(..., srcref=NULL){
+	  
+		  # default is to show srcref details of child-topic
+		  child_srcref <- srcref_lookup[[topic]][subtopic]
+		  if( is.null(srcref) ){
+			  srcref <- child_srcref
+			  header <- "@inheritParams - "
+		  }else{
+			  header <- str_c("@inheritParams (", srcref_location(child_srcref), ") - ")
+		  }
+		  # throw warning
+		  roxygen_warning(header, ..., srcref = srcref, immediate. = TRUE)
+		  
+	  }	  
+  }
   
   for(topic_name in names(inherits)) {
+	#message("# Topic: ", topic_name)
     topic <- topics[[topic_name]]
-    
-    for(inheritor in inherits[[topic_name]]) {
+    for(i in seq_along(inherits[[topic_name]]) ){
+	  # get inheritParam target
+	  inheritor <- inherits[[topic_name]][i]
+	  # setup warning function
+	  warn <- inherit_warning(topic_name, names(inherits[[topic_name]])[i])
+	  
+	  #message("# Looking up topic: ", inheritor)
       if (grepl("::", inheritor, fixed = TRUE)) {
         # Reference to another package
         pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
-        params <- rd_arguments(get_rd(pieces[2], pieces[1]))
-        
+		params <- get_rd(pieces[2], pieces[1])
+		if (length(params) == 0L){
+			warn("can't find parent topic `", pieces[2], "` from package ", pieces[1])
+		}else{
+			params <- rd_arguments(params)
+			if (length(params) == 0L){
+				warn("can't find argument section for parent topic `", pieces[2], "` from package ", pieces[1])
+			}
+		}
       } else {
+		#message("# Look within package")
         # Reference within this package        
         rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
-        
-        if (length(rd_name) != 1) {
-          warning("@inheritParams: can't find topic ", inheritor, 
-            call. = FALSE, immediate. = TRUE)
-          next
-        }
-        params <- get_tag(topics[[rd_name]], "arguments")$values  
+        params <- 
+        if (length(rd_name) == 0L){
+			warn("can't find parent topic `", inheritor, "`")
+			list()
+		}else{
+			#message("# Found in Rd file: ", if( length(rd_name) > 0L ) str_c("'", rd_name,"'", collapse=", "))
+			if( length(rd_name) > 1L ){
+
+				# show srcref of origin of name duplication
+				srcref <- srcref_lookup[names(srcref_lookup) %in% rd_name]
+				srcref <- lapply(srcref, function(x) x[[inheritor]])
+				warn("multiple matches for parent topic `"
+							, inheritor, "`: ", srcref=srcref)
+				list()
+			}else{
+				# extract arguments from the computed Rd file structure
+				get_tag(topics[[rd_name]], "arguments")$values  
+			}
+		}
       }
       params <- unlist(params)
 
+	  # skip if topic documentation cannot not be improved
+	  if( length(params)  == 0L ) next
+	  
       missing_params <- setdiff(get_tag(topic, "formals")$values,
         names(get_tag(topic, "arguments")$values))
       matching_params <- intersect(missing_params, names(params))
@@ -315,37 +329,34 @@ roc_process.had <- function(roclet, partita, base_path) {
   topics
 }
 
-roclet_rd_one <- function(partitum, base_path) {
-  rd <- new_rd_file()
-  
+roclet_rd_one <- function(partitum, base_path) {  
   # Add in templates
   partitum <- process_templates(partitum, base_path)
   
   has_rd <- any(names(partitum) %in% c("description", "param", "return",
     "title", "example", "examples", "name", "rdname", "usage",
     "details", "introduction"))
-  if (!has_rd) return()
-  
-  if (any(names(partitum) == "noRd")) return()
+  dont_rd <- any(names(partitum) == "noRd")
+  if (!has_rd || dont_rd) return()
   
   # Figure out topic name
-  name <- partitum$name %||% partitum$S4class %||% partitum$S4method %||%
-    partitum$S4generic
-  # Only use assignee if it's a single element
-  if (is.null(name) && length(partitum$assignee) == 1) {
-     name <- partitum$assignee
-  }
+  name <- partitum$name %||% partitum$src_topic %||% partitum$src_name  
   if (is.null(name)) roxygen_stop("Missing name", srcref = partitum$srcref)
 
   # Work out file name and initialise Rd object
-  filename <- str_c(partitum$merge %||% partitum$rdname %||% nice_name(name),
-    ".Rd")
-    
-  
+  filename <- str_c(partitum$rdname %||% nice_name(name), ".Rd")
+  # warning if invalid filename from user specification
+  if( !is.null(partitum$rdname) && !is_valid_rdname(filename) ){
+	  roxygen_warning("@rdname - Invalid filename specification"
+					  , srcref=partitum$srcref, immediate.=TRUE)
+  }
+  rd <- new_rd_file()  
+
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
-  add_tag(rd, new_tag("alias", name))
+  add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
   add_tag(rd, new_tag("formals", names(partitum$formals)))
+  add_tag(rd, new_tag("srcref", setNames(list(partitum$srcref), name)))
 
   add_tag(rd, process_description(partitum, base_path))
 
@@ -354,15 +365,17 @@ roclet_rd_one <- function(partitum, base_path) {
   }))
   add_tag(rd, process.usage(partitum))
   add_tag(rd, process.arguments(partitum))
+  add_tag(rd, process.slot(partitum))
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
-  add_tag(rd, process_had_tag(partitum, 'inheritParams'))
+  add_tag(rd, process.inheritParams(partitum, name))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'format'))
   add_tag(rd, process_had_tag(partitum, 'source'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
+  add_tag(rd, process.cite(partitum, base_path))
   add_tag(rd, process_had_tag(partitum, 'concept'))
   add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
       new_tag("value", param)
@@ -371,6 +384,8 @@ roclet_rd_one <- function(partitum, base_path) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
     }))
   add_tag(rd, process_had_tag(partitum, 'section', process.section))
+  add_tag(rd, process.name_description(partitum, 'newcommand'))
+  add_tag(rd, process.name_description(partitum, 'renewcommand'))
   add_tag(rd, process.examples(partitum, base_path))
 
   list(rd = rd, filename = filename)
@@ -389,7 +404,7 @@ roc_output.had <- function(roclet, results, base_path) {
     if (the_same(filename, contents)) return()
     
     name <- basename(filename)
-    if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
+    if ( !is_valid_rdname(name) ) {
       cat("Skipping invalid filename: ", name, "\n")
     } else {
       cat(sprintf('Writing %s\n', name))
@@ -410,25 +425,42 @@ roc_output.had <- function(roclet, results, base_path) {
 }
 
 
+# Add names to inheritParams to track back original chunk
+process.inheritParams <- function(partitum, name){
+	if( !is.null(partitum$inheritParams) )
+		names(partitum$inheritParams) <- rep(name, length(partitum$inheritParams)) 
+	process_had_tag(partitum, 'inheritParams')
+}
+
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 process.usage <- function(partitum) {
-  if (is.null(partitum$fun) || !partitum$fun) {
-    return(new_tag("usage", NULL))
-  }
-  
   if (!is.null(partitum$usage)) {
     return(new_tag("usage", partitum$usage))
   }
-    
-  fun_name <- if (!is.null(partitum$method)) {
-    rd_tag('method', partitum$method[[1]], partitum$method[[2]])
-  } else {
-    partitum$assignee
+
+  # Only function usages are generated here
+  type <- partitum$docType %||% partitum$src_type
+  if (!identical(type, "function") && !identical(type, "method")) {
+    return(new_tag("usage", NULL))
   }
-  args <- usage(partitum$formals)
+
+  if (type == "method") {
+    signature <- str_c(partitum$signature, collapse = ",")
+    fun_name <- str_c("\\S4method{", partitum$generic, "}{", signature, "}")
+  } else {
+    if (is.null(partitum$method)) {
+      fun_name <- partitum$src_name
+    } else {
+      fun_name <- rd_tag('method', partitum$method[[1]], partitum$method[[2]])
+    }
+  }
   
+  args <- usage(partitum$formals)
   if (str_detect(fun_name, fixed("<-"))) {
     fun_name <- str_replace(fun_name, fixed("<-"), "")
+	# remove argument 'value' from the argument list:
+	# correct usage specification is "fun(x, y) <- value"
+	args <- str_replace(args, ", value$", "")
     new_tag("usage", str_c(fun_name, "(", args, ") <- value"))
   } else {
     new_tag("usage", str_c(fun_name, "(", args, ")"))
@@ -493,6 +525,17 @@ process.arguments <- function(partitum) {
   new_tag("arguments", desc)
 }
 
+process.slot <- function(partitum) {
+  params <- partitum[names(partitum) == "slot"]
+  if (length(params) == 0) return() 
+
+  desc <- str_trim(sapply(params, "[[", "description"))
+  names(desc) <- sapply(params, "[[", "name")
+  
+  new_tag("slot", desc)
+}
+
+
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
 process.examples <- function(partitum, base_path) {
@@ -521,22 +564,25 @@ process.section <- function(key, value) {
 }
 
 process.docType <- function(partitum) {
-  doctype <- partitum$docType
+  doctype <- partitum$docType %||% partitum$src_type
   
   if (is.null(doctype)) return()
-  tags <- list(new_tag("docType", doctype))
+  
+  tags <- list()
   
   if (doctype == "package") {
     name <- partitum$name
+    tags <- c(tags, new_tag("docType", "package"))
     if (!str_detect(name, "-package")) {
       tags <- c(tags, new_tag("alias", str_c(name, "-package")))
     }
   } else if (doctype == "data") {
+    tags <- c(tags, new_tag("docType", "data"))
     if (is.null(partitum$format)) {
       tags <- c(tags, new_tag("format", partitum$str))
     }
     if (is.null(partitum$usage)) {
-      tags <- c(tags, new_tag("usage", partitum$assignee))
+      tags <- c(tags, new_tag("usage", partitum$src_name))
     }
     tags <- c(tags, new_tag("keyword", "datasets"))
   }
@@ -554,3 +600,13 @@ process_had_tag <- function(partitum, tag, f = new_tag) {
 # warning("All roxygen elements must have name: ",
 #   partitum$srcref$filename, ":", partitum$srcref$lloc[1], ":",
 #   partitum$srcref$lloc[2], call. = FALSE)
+#   partitum$srcref$lloc[2], call. = FALSE)
+process.name_description <- function(partitum, tag) {
+	tags <- partitum[names(partitum) == tag]
+	if (length(tags) == 0) return()	
+	
+	desc <- str_trim(sapply(tags, "[[", "description"))
+	names(desc) <- sapply(tags, "[[", "name")
+	
+	new_tag(tag, desc)
+}

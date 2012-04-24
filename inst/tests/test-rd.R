@@ -266,3 +266,100 @@ test_that("deleted objects not documented", {
   expect_equal(names(out), "f2.Rd")
 })
 
+test_that("warning/error line numbers", {
+			
+	chunk <- "#' Title.
+	#' @param
+	a <- function() {}"
+
+	.test <- function(chunk, l, ...){
+		expect_error(roc_proc_text(roc, chunk), "@param requires a name and description", info="Error is thrown", ...)
+		err <- tryCatch(roc_proc_text(roc, chunk), error= function(e) e)
+		expect_match(err$message, str_c(".*:", l, "$"), info="Line number is correct", ...)
+	}
+	
+	.test(chunk, 1, label="No line before chunk")
+	.test(str_c("\n", chunk), 2, label="Empty line before chunk")
+	.test(str_c("\n\n", chunk), 3, label="Two empty lines before chunk")
+	.test(str_c("#\n", chunk), 2, label="Comment line before chunk")
+	.test(str_c("#\n\n", chunk), 3, label="Comment + empty lines before chunk")
+	
+})
+
+test_that("missing/empty name or description for name-description pairs produces errors/warnings", {
+	
+	clear_caches()
+	tags <- c('param', 'method', 'newcommand', 'renewcommand')
+	lapply(tags, function(key){
+		# missing name
+		expect_error(roc_proc_text(roc, sprintf("#' @name a\n#' @%s\nNULL", key))
+				, sprintf("@%s requires a name and description", key))
+		# empty name
+		expect_error(roc_proc_text(roc, sprintf("#' @name a\n#' @%s    \nNULL", key))
+				, sprintf("@%s requires a name and description", key))
+		
+		# missing description
+		expect_that(roc_proc_text(roc, sprintf("#' @name a\n#' @%s toto\nNULL", key))
+				, gives_warning(sprintf("@%s `toto` has an empty description", key)))
+		# empty description
+		expect_that(roc_proc_text(roc, sprintf("#' @name a\n#' @%s toto   \nNULL", key))
+				, gives_warning(sprintf("@%s `toto` has an empty description", key)))
+	})
+		
+})
+
+test_that("tags @rdname with invalid filename throw a warning", {
+	
+	.test <- function(chunk, info){
+		expect_warning(roc_proc_text(roc, chunk)
+			, "Invalid filename specification", info=info)	
+	}
+	
+	.test("#' @rdname .Toto\n#' @name a\nNULL", "Leading dot")
+	.test("#' @rdname _Toto\n#' @name a\nNULL", "Leading '_'")
+	.test("#' @rdname -Toto\n#' @name a\nNULL", "Leading '-'")
+	
+})
+
+test_that("tags @newcommand and @renewcommand are correctly extracted and formated", {
+			
+	clear_caches()
+	out <- roc_proc_text(roc, "
+		#' @newcommand noarg noarg:\\alpha
+		#' @newcommand noarg2 {noarg2:\\alpha}
+		#' @newcommand cmd [1]{cmd:\\texttt{#1}}
+		#' @newcommand cmd2 [1]{cmd2:\\texttt{#1}}
+		#'
+		#' @renewcommand recmdNoarg recmdNoarg:\\beta
+		#' @renewcommand recmdNoarg2 {recmdNoarg2:\\beta}
+		#' @renewcommand recmd [1]{recmd:\\textit{#1}}
+		#' @name a
+		NULL")[[1]]
+
+	# extraction
+	cmd <- get_tag(out, "newcommand")$values
+	expect_equivalent(cmd['noarg'], "noarg:\\alpha")
+	expect_equivalent(cmd['noarg2'], "{noarg2:\\alpha}")
+	expect_equivalent(cmd['cmd'], "[1]{cmd:\\texttt{#1}}")
+	expect_equivalent(cmd['cmd2'], "[1]{cmd2:\\texttt{#1}}")
+	recmd <- get_tag(out, "renewcommand")$values
+	expect_equivalent(recmd['recmdNoarg'], "recmdNoarg:\\beta")
+	expect_equivalent(recmd['recmdNoarg2'], "{recmdNoarg2:\\beta}")
+	expect_equivalent(recmd['recmd'], "[1]{recmd:\\textit{#1}}")
+	
+	# output
+	expect_equal(strsplit(format(get_tag(out, "newcommand")), "\n")[[1]]
+	, c("\\newcommand{\\noarg}{noarg:\\alpha}"
+		,"\\newcommand{\\noarg2}{noarg2:\\alpha}"
+		, "\\newcommand{\\cmd}[1]{cmd:\\texttt{#1}}"
+		, "\\newcommand{\\cmd2}[1]{cmd2:\\texttt{#1}}"
+		)
+		, info="tag newcommand are correctly formated")
+	expect_equal(strsplit(format(get_tag(out, "renewcommand")), "\n")[[1]]
+		, c("\\renewcommand{\\recmdNoarg}{recmdNoarg:\\beta}"
+				,"\\renewcommand{\\recmdNoarg2}{recmdNoarg2:\\beta}"
+				, "\\renewcommand{\\recmd}[1]{recmd:\\textit{#1}}"
+		)
+		, info="tag renewcommand are correctly formated"
+		)		
+})

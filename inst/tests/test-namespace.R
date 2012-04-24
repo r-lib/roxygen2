@@ -27,6 +27,13 @@ test_that("exportClass overrides default class name", {
   expect_equal(out, 'exportClasses(b)')
 })
 
+test_that("export detects generic name", {
+  out <- roc_proc_text(roc, "	  	
+	#' @export
+	setGeneric('xxx', function(x, ...) standardGeneric('xxx'))")
+  expect_equal(out, 'export(xxx)')  
+})
+
 test_that("export detects method name", {
   out <- roc_proc_text(roc, "
     #' @export\n

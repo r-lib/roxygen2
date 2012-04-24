@@ -265,6 +265,9 @@ roc_process.had <- function(roclet, partita, base_path) {
       }
       params <- unlist(params)
 
+	  # skip if topic documentation cannot not be improved
+	  if( length(params)  == 0L ) next
+	  
       missing_params <- setdiff(get_tag(topic, "formals")$values,
         names(get_tag(topic, "arguments")$values))
       matching_params <- intersect(missing_params, names(params))

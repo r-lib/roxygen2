@@ -29,24 +29,19 @@ parse_class <- function(call, env) {
   name <- as.character(call$Class)
   class <- getClass(name, where = env)
 
-  # Default alias is A-class
-  aliases <- str_c(name, "-class")
-  # add plain name to aliases only if there is no function named like the class, 
-  # which would typically be a constructor method. 
-  if( is.null(getFunction(name, where = env, mustFind=FALSE)) ){
-	  aliases <- c(name, aliases)
-  }
-  
   # class?classRepresentation
-  # - Default rdname should be A-class.rd and not duplicate alias if a 
-  # function exists with the same name as the class (see above). 
-  # NB: name is added to aliases in roclet_rd_one by:
-  # add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
-  #
+  # Default @name should be CLASSNAME-class and not CLASSNAME, as it can clash 
+  # with a function with te same name (e.g. a constructor function), which 
+  # must have this @name.
+  # This is achieved via $src_topic which takes precedence over $src_name for default 
+  # @name ($src_name is used in several places as the R access name for the class)
+  # Access via ?CLASSNAME is ensured by appropriate default @alias.
+  topic <- topic_name(class)
   list(
     src_type = "class",
-    src_name = str_c(name, "-class"), 
-    src_alias = aliases,
+    src_name = name, 
+    src_alias = c(name, topic),
+	src_topic = topic,
     extends = showExtends(class@contains, printTo = FALSE),
     slots = class@slots
   )
@@ -78,7 +73,9 @@ parse_method <- function(call, env, replace=FALSE) {
   f <- getMethod(name, sig, where = env)
   pkg <- attr(f@generic, "package")
   if (pkg == "roxygen_test") {
-    inherit <- f@generic
+	# inherit from the generic defined within the package
+	# which is uniquely identified by its topic_name
+    inherit <- topic_name(getGeneric(f@generic, where = env))
   } else {
     inherit <- str_c(pkg, "::", f@generic)
   }
@@ -129,6 +126,9 @@ method_signature <- function(x){
 
 setGeneric("topic_name", function(x) {
   standardGeneric("topic_name")
+})
+setMethod("topic_name", signature(x = "classRepresentation"), function(x) {
+  str_c(x@className, "-class")
 })
 setMethod("topic_name", signature(x = "MethodDefinition"), function(x) {
   str_c(str_c(c(x@generic, method_signature(x)), collapse = ","), "-method")

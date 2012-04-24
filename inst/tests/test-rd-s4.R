@@ -269,10 +269,10 @@ test_that("S4 classes have correct aliases", {
 		, aliases=c("AAA", "AAA-class")
 		, label="No function exists with same name")
 	.test("AAA <- function(){}"
-		, aliases="AAA-class"
+		, aliases=c("AAA", "AAA-class")
 		, label="A standard function exists with same name")
 	.test("setGeneric('AAA', function(object) standardGenric('AAA'))"
-		, aliases="AAA-class"
+		, aliases=c("AAA", "AAA-class")
 		, label="An S4 generic exists with same name")
 	
 })

@@ -95,6 +95,39 @@ parse_method <- function(call, env, replace=FALSE) {
   )
 }
 
+#' Extracting Local Function Definition
+#' 
+#' Extracts local function from wrapper functions of the following type, typically 
+#' used in S4 methods:
+#' \samp{
+#' function(a, b, ...){
+#' 	.local <- function(a, b, c, d, ...){
+#'
+#' 	}
+#'	.local(a, b, ...)
+#' }
+#' }
+#'
+#' @param f definition of the wrapper function
+#' 
+#' @return a function
+#' @keyword internal
+extractLocalFun <- function(f){
+	bf <- body(f)
+	
+	txt <- as.character(bf)[2]
+	# in R-2.14.2 -- at least, as.character does not return the complete body
+	# so some text manipulation is necessary 
+	if( !grepl("\\{", txt) ){
+		sf <- capture.output(print(bf))
+		w <- tail(grep("^\\s*\\.local\\(", sf), 1L)
+		txt <- paste(sf[-w], collapse="\n")
+	}
+	expr <- parse(text=txt)
+	e <- new.env()
+	eval(expr, e)
+} 
+
 # Extract all formals including from S4 methods
 #
 # Works for methods that are created (setMethod) as a wrapper function to an 
@@ -110,10 +143,8 @@ allFormals <- function(f){
 		lf <- try(codetools::getAssignedVar(body(f)), silent=TRUE)
 		if( !identical(lf, '.local') ) return( formals(f) )
 		# extract arguments from local function
-		expr <- parse(text=as.character(body(f))[2])
-		e <- new.env()
-		eval(expr, e)
-		res <- formals(e$.local)
+		lfun <- extractLocalFun(f)
+		res <- formals(lfun)
 		# set default values from the generic, only for arguments that have no 
 		# default values in the method
 		generic_args <- formals(f)

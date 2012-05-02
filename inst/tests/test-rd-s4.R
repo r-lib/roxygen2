@@ -192,8 +192,9 @@ test_that("Method documentation of inheritParams", {
 		setMethod('blah', 'numeric', function(object, extra){ show(NA) })
 		"
 
-	expect_warning(out <- roc_proc_text(roc, chunk)[[3]], "multiple matches for parent topic .*blah"
-			, info="Warning is thrown if target topic for @inheritParams is matched multiple times") 
+	#expect_warning(out <- roc_proc_text(roc, chunk)[[3]], "multiple matches for parent topic .*blah"
+	#		, info="Warning is thrown if target topic for @inheritParams is matched multiple times")
+	out <- roc_proc_text(roc, chunk)[[3]]
 	expect_equal(get_tag(out, "alias")$values, "blah,numeric-method")
 	expect_equal(get_tag(out, "arguments")$values, NULL)
 })

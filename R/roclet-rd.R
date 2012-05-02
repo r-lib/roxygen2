@@ -215,7 +215,7 @@ roc_process.had <- function(roclet, partita, base_path) {
   }
   
   family_lookup <- invert(get_values(topics, "family"))
-  name_lookup <- get_values(topics, "name")
+  name_lookup <- get_values(topics, "rdID")
 
   for(family in names(family_lookup)) {
     related <- family_lookup[[family]]
@@ -337,19 +337,22 @@ roclet_rd_one <- function(partitum, base_path) {
   dont_rd <- any(names(partitum) == "noRd")
   if (!has_rd || dont_rd) return()
   
+  # Define topic unique identifier
+  rdID <- partitum$src_topic %||% partitum$src_name
   # Figure out topic name
-  name <- partitum$name %||% partitum$src_topic %||% partitum$src_name  
+  name <- partitum$name %||% rdID
   if (is.null(name)) roxygen_stop("Missing name", srcref = partitum$srcref)
 
   # Work out file name and initialise Rd object
   filename <- str_c(partitum$rdname %||% nice_name(name), ".Rd")
   rd <- new_rd_file()  
 
+  add_tag(rd, new_tag("rdID", rdID))
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
   add_tag(rd, new_tag("formals", names(partitum$formals)))
-  add_tag(rd, new_tag("srcref", setNames(list(partitum$srcref), name)))
+  add_tag(rd, new_tag("srcref", setNames(list(partitum$srcref), rdID)))
 
   add_tag(rd, process_description(partitum, base_path))
 
@@ -362,7 +365,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
-  add_tag(rd, process.inheritParams(partitum, name))
+  add_tag(rd, process.inheritParams(partitum, rdID))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'format'))
   add_tag(rd, process_had_tag(partitum, 'source'))
@@ -378,7 +381,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'section', process.section))
   add_tag(rd, process.examples(partitum, base_path))
 
-  list(rd = rd, filename = filename)
+  list(rd = rd, filename = filename, rdID=rdID)
 }
 
 #' @S3method roc_output had

@@ -533,6 +533,10 @@ addS4method <- function(topics, rd_proc, partitum){
 	data <- list(introduction = mget_values(tags, s4tags) 
 				, signature = partitum$signature)
 
+	# skip description if it is identical to title
+	if( identical(data$introduction$title, data$introduction$description) )
+		data$introduction$description <- NULL
+
 	# link to specific topic if not inline
 	if( !inline_doc ){
 		data$introduction$links <-  

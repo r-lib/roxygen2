@@ -381,7 +381,9 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
-  add_tag(rd, process.inheritParams(partitum, rdID))
+  add_tag(rd, process_had_tag(partitum, 'inheritParams', function(tag, param){ 
+	    new_tag(tag, setNames(param, rdID))
+    }))
   add_tag(rd, process_had_tag(partitum, 'author'))
   add_tag(rd, process_had_tag(partitum, 'format'))
   add_tag(rd, process_had_tag(partitum, 'source'))
@@ -431,14 +433,6 @@ roc_output.had <- function(roclet, results, base_path) {
   
   paths <- file.path(man, names(results))
   mapply(write_out, paths, contents)    
-}
-
-
-# Add names to inheritParams to track back original chunk
-process.inheritParams <- function(partitum, name){
-	if( !is.null(partitum$inheritParams) )
-		names(partitum$inheritParams) <- rep(name, length(partitum$inheritParams)) 
-	process_had_tag(partitum, 'inheritParams')
 }
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
@@ -551,7 +545,8 @@ addS4method <- function(topics, rd_proc, partitum){
 		
 		# merge into parent: all but introduction, keywords and alias tags
 		# usage tag is skipped if the method was labelled as automatically merged
-		skip_tags <- c(s4tags, 'keyword', 'alias', if( partitum$src_inline ) 'usage')
+		skip_tags <- c(s4tags, 'inline', 'rdID', 'keyword', 'alias'
+						, if( partitum$src_inline ) 'usage')
 		tags <- tags[ !names(tags) %in% skip_tags ]
 		add_tag(parent_rd, tags)
 	}

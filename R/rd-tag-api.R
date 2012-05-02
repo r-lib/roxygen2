@@ -111,6 +111,8 @@ format.family_tag <- format_null
 format.inheritParams_tag <- format_null
 format.formals_tag <- format_null
 format.srcref_tag <- format_null
+format.rdID_tag <- format_null
+format.inline_tag <- format_null
 
 # Tags with special errors or other semantics --------------------------------
 

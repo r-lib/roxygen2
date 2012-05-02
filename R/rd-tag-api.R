@@ -161,7 +161,7 @@ format.S4method_tag <- function(x, ...) {
 			str_c("\n\\item{\\code{signature(", str_c(x$signature, collapse=", "),")}}{\n",desc,"\n}")
 		})
 		value <- str_c(value, collapse="\n")
-		header <- str_c("Methods", if( !is.null(fname) ) str_c(" for \\code{", fname, "}"))
+		header <- str_c("Methods", if( !is.null(fname) ) str_c(" for ", fname))
 		format(process.section("section", str_c(header, ":\\describe{\n", value, "\n\n}\n"))[[1]])
 	}
 	

@@ -86,10 +86,46 @@ parse_method <- function(call, env, replace=FALSE) {
     src_name = topic_name(f),
     src_alias = topic_name(f),
     generic = f@generic,
-    formals = formals(f@.Data),
+    formals = allFormals(f),
     signature = method_signature(f),
     inheritParams = inherit
   )
+}
+
+# Extract all formals including from S4 methods
+#
+# Works for methods that are created (setMethod) as a wrapper function to an 
+# internal function named .local
+#
+allFormals <- function(f){
+	
+	# look inside method for S4 methods
+	if( is(f, 'MethodDefinition') ){
+		
+		# check if the method is defined as a wrapper function
+		f <- f@.Data
+		lf <- try(codetools::getAssignedVar(body(f)), silent=TRUE)
+		if( !identical(lf, '.local') ) return( formals(f) )
+		# extract arguments from local function
+		expr <- parse(text=as.character(body(f))[2])
+		e <- new.env()
+		eval(expr, e)
+		res <- formals(e$.local)
+		# set default values from the generic, only for arguments that have no 
+		# default values in the method
+		generic_args <- formals(f)
+		meth_no_default <- sapply(res, is.symbol) 
+		gen_no_default <- sapply(generic_args, is.symbol)
+		generic_args <- generic_args[ !gen_no_default ]
+		generic_args <- generic_args[ names(generic_args) %in% names(res[meth_no_default]) ]
+		if( length(generic_args) ){
+			res[names(generic_args)] <- generic_args
+		}
+		# return complete list of arguments
+		res
+		
+	}else if( is.function(f) ) formals(f)
+	
 }
 
 register.srcref.parser('<-', parse_assignment)

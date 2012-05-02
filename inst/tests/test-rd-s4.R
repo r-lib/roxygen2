@@ -261,8 +261,12 @@ test_that("Replacement generic documentation generated correctly", {
 		
 })
 
+stripUTF8 <- function(x){
+	gsub("\u{A0}"," ",x, fixed=TRUE)
+}
 
 test_that("@usage and alias for S4methods", {
+			
   out <- roc_proc_text(roc, "
     #' Title.
     setMethod('show', signature = c(object = 'array'), function (object) {})
@@ -282,6 +286,19 @@ test_that("@usage and alias for S4methods", {
 			, info="Usage is correct if argument '...'")
 	expect_equal(get_tag(out, "alias")$values,
 			c("summary,array-method"), info="Alias are correct if argument '...'")
+	
+	# with other extra arguments
+	out <- roc_proc_text(roc, "
+	#' New Generic
+	setGeneric('gen', function(a, b=3, ...) standardGeneric('gen'))
+	#' Title.
+	setMethod('gen', signature('numeric', 'numeric'), function (a=1, b, c, d=NULL, ...) {})
+	")[[2]]
+	expect_identical(stripUTF8(get_tag(out, "usage")$values)
+			, "\\S4method{gen}{numeric,numeric}(a = 1, b = 3, c, d = NULL, ...)"
+			, info="Usage is correct if other extra arguments")
+	expect_equal(get_tag(out, "alias")$values,
+			c("gen,numeric,numeric-method"), info="Alias are correct if other extra arguments")
 })
 
 test_that("S4 classes have correct aliases", {
@@ -325,3 +342,40 @@ test_that("@slot creates a new section and lists slots", {
 })
 
 
+test_that("function allFormals works correctly", {
+			
+	e <- new.env()
+	eval(parse(text="
+	fun <- function(a, b, c, d=4, ...){}
+	e <- environment()
+	setGeneric('gen', function(a, b=10, ...) standardGeneric('gen'), where=e)
+	setMethod('gen', signature('numeric', 'numeric'), fun, where=e)
+	meth <- getMethod('gen', signature('numeric', 'numeric'), where=e)
+	
+	setGeneric('gen2', function(a=3, b=10, ...) standardGeneric('gen2'), where=e)
+	fun2 <- function(a, b=5, c, d=4, ...){}
+	setMethod('gen2', signature('numeric', 'numeric'), fun2, where=e)
+	meth2 <- getMethod('gen2', signature('numeric', 'numeric'), where=e)
+	"), e)
+	
+	expect_identical(allFormals(e$gen), formals(function(a, b=10, ...){})
+		, info="On the generic: returns external arguments")
+	expect_identical(formals(e$meth), formals(function(a, b=10, ...){})
+		, info="On method: normal formal does not see internal arguments")
+	
+	arg <- formals(e$fun)
+	marg <- allFormals(e$meth)
+	expect_identical(marg[names(marg) != 'b'], arg[names(arg) != 'b']
+		, info="On method WITHOUT default on dispatch: allFormals sees internal arguments with no defaults")
+	expect_identical(marg$b, 10
+		, info="On method WITHOUT default on dispatch: allFormals uses defaults values from generic")
+	
+	arg <- formals(e$fun2)
+	marg <- allFormals(e$meth2)
+	expect_identical(marg[!names(marg) %in% c('a','b')], arg[!names(arg)  %in% c('a','b')]
+		, info="On method WITH default on dispatch: allFormals sees internal arguments with no defaults")
+	expect_identical(marg$a, 3
+		, info="On method WITH default on dispatch: allFormals sees internal arguments and use default values from generic if none is defined on method")
+	expect_identical(marg$b, 5
+		, info="On method WITH default on dispatch: allFormals sees internal arguments and uses defaults values from method if defined")
+})

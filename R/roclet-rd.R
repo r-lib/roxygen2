@@ -364,6 +364,7 @@ roclet_rd_one <- function(partitum, base_path) {
 
   add_tag(rd, new_tag("rdID", rdID))
   add_tag(rd, new_tag("encoding", partitum$encoding))
+  add_tag(rd, new_tag("inline", partitum$inline))
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
   add_tag(rd, new_tag("formals", names(partitum$formals)))
@@ -517,6 +518,10 @@ addS4method <- function(topics, rd_proc, partitum){
 	if( is.null(pinfo) ) return()
 	parent_rd <- topics[[pinfo$filename]]
 	
+	# if the parent generic is inline => force all methods to be inline
+	parent_inline <- get_tag(parent_rd, 'inline')
+	inline_doc <- inline_doc || (parent_inline$values %||% FALSE) 
+	
 	# build and add tag S4method to parent
 	tags <- as.list(rd_proc$rd[[1]])
 	mget_values <- function(x, tags){
@@ -528,7 +533,8 @@ addS4method <- function(topics, rd_proc, partitum){
 	data <- list(introduction = mget_values(tags, s4tags) 
 				, signature = partitum$signature)
 
-	if( !inline_doc ){ # link to topic if not inline
+	# link to specific topic if not inline
+	if( !inline_doc ){
 		data$introduction$links <-  
 			str_c("See \\code{\\link{", rd_proc$rdID, "}} for more details.")
 	}

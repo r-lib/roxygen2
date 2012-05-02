@@ -21,7 +21,7 @@ format.rd_file <- function(x, ...) {
   tags <- as.list(x[[1]])
   order <- c("docType", "encoding", "name", "alias", "title", "format",
     "source", "usage", "arguments", "value", "description", "details", "slot",
-    "note", "section", "examples", "author", "references", "seealso",
+    "note", "S4method", "section", "examples", "author", "references", "seealso",
     "concept", "keyword")
     
   tags <- tags[intersect(order, names(tags))]

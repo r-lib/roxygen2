@@ -80,13 +80,16 @@ parse_method <- function(call, env, replace=FALSE) {
     inherit <- str_c(pkg, "::", f@generic)
   }
 
+  args <- allFormals(f)
   # class?MethodDefinition
   list(
     src_type = "method",
     src_name = topic_name(f),
     src_alias = topic_name(f),
     generic = f@generic,
-    formals = allFormals(f),
+    formals = args,
+	# describe within generic if the method has no extra arguments
+	src_inline = identical(args, formals(f)),
     signature = method_signature(f),
     inheritParams = inherit
   )

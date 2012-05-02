@@ -37,6 +37,9 @@ register.preref.parsers(parse.name,
 register.preref.parsers(parse.default,
                         'noRd')
 
+register.preref.parsers(parse.toggle,
+						'inline')
+
 #' Roclet: make Rd files.
 #'
 #' This roclet is the workhorse of \pkg{roxygen}, producing the Rd files that
@@ -192,13 +195,25 @@ roc_process.had <- function(roclet, partita, base_path) {
   template_hash <- digest(lapply(templates, readLines))
   
   topics <- list()
+  # reset rd_lookup (use not really as a cache, but rather as a global environment)
+  rd_lookup_cache$reset()
   for (partitum in partita) {
     key <- c(template_hash, digest(partitum))
     new <- rd_proc_cache$compute(key, roclet_rd_one(partitum, base_path)) 
     if (is.null(new)) next; 
+
+	# add rd to lookup: access key is default topic name
+	# (subset with [1L] to get data naked from attributes)
+	rd_lookup_cache$compute(new$rdID[1L], list(hash=key, filename=new$filename))
+
     # Clone output so cached object isn't modified
     new$rd[[1]] <- list2env(as.list(new$rd[[1]]))
     
+	# add S4method tags if necessary: this potentially updates both the 
+	# current topic and its parent generic's topic
+	addS4method(topics, new, partitum)
+	
+	# merge topic
     old <- topics[[new$filename]]
     topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
   }
@@ -458,6 +473,79 @@ process.usage <- function(partitum) {
   } else {
     new_tag("usage", str_c(fun_name, "(", args, ")"))
   }
+}
+
+#' Automatic S4 Method Inline Documentation
+#'
+#' Adds a tag "S4method" to the Rd file that documents the generic for S4 methods 
+#' that have no extra argument compared to their generic, or have been manually 
+#' flagged with tag \emph{@@merge}.
+#' This function works with a side-effect on both the current topic stored in 
+#' \code{rd_proc} and the element of \code{topics} that stores the parent 
+#' generic's topic.
+#' 
+#' @param topics list of topics already processed.
+#' @param rd_proc result from the processing of argument \code{partitum} 
+#' (as returned by \code{roclet_rd_one}).
+#' @param partitum partitum that has just been processed.
+#' 
+#' @return Returns nothing, but changes its arguments \code{topics} and 
+#' \code{rd__proc}
+#'  
+#' @keyword internal
+addS4method <- function(topics, rd_proc, partitum){
+	
+	# do something only for S4 method
+	type <- partitum$src_type
+	if( is.null(type) || type != 'method' ) return()
+	
+	# Full inline documentation if @inline is on (manually or determined in srcrefs.R), 
+	inline_doc <- (partitum$inline %||% partitum$src_inline  %||% FALSE)
+		
+	parent <- partitum$generic
+	if( is.null(parent) ){
+		roxygen_warning("Unexpectedly missing element partitum$generic"
+						, srcref=partitum$srcref)
+		return()
+	}
+	
+	# get parent topic to merge into it
+	# (subset with [1L] to get data naked from attributes)
+	parent <- sub("^.*::", "", parent)[1L]
+	pinfo <- rd_lookup_cache$get(parent)
+	# do nothing if the parent topic is not documented in the package
+	if( is.null(pinfo) ) return()
+	parent_rd <- topics[[pinfo$filename]]
+	
+	# build and add tag S4method to parent
+	tags <- as.list(rd_proc$rd[[1]])
+	mget_values <- function(x, tags){
+		x <- x[ names(x) %in% tags ]
+		lapply(x, "[[", "values")
+	}
+	# add details if inline
+	s4tags <- c('description', 'title', if( inline_doc ) 'details')
+	data <- list(introduction = mget_values(tags, s4tags) 
+				, signature = partitum$signature)
+
+	if( !inline_doc ){ # link to topic if not inline
+		data$introduction$links <-  
+			str_c("See \\code{\\link{", rd_proc$rdID, "}} for more details.")
+	}
+	add_tag(parent_rd, new_tag("S4method", setNames(list(data), parent)))
+	
+	# inline doc: hide topic and merge it into parent 
+	if( inline_doc ){
+		# add internal keyword to the method topic
+		add_tag(rd_proc$rd, new_tag('keyword', 'internal'))
+		
+		# merge into parent: all but introduction, keywords and alias tags
+		# usage tag is skipped if the method was labelled as automatically merged
+		skip_tags <- c(s4tags, 'keyword', 'alias', if( partitum$src_inline ) 'usage')
+		tags <- tags[ !names(tags) %in% skip_tags ]
+		add_tag(parent_rd, tags)
+	}
+	
 }
 
 # Process title, description and details. 

@@ -5,11 +5,13 @@
 # tags, merge just combines all values, and format selects from these to 
 # display the tags in the appropriate way. 
 #
-new_tag <- function(tag, values) {
+new_tag <- function(tag, values, rdID=NULL) {
   if (is.null(values)) return()
   
   subc <- str_c(tag, "_tag")
-  list(structure(list(tag = tag, values = values), class = c(subc, "rd_tag")))
+  list(structure(list(tag = tag, values = values
+  	, rdID = rdID)
+  	, class = c(subc, "rd_tag")))
 }
 
 is.rd_tag <- function(x) inherits(x, "rd_tag")
@@ -17,6 +19,7 @@ is.rd_tag <- function(x) inherits(x, "rd_tag")
 #' @S3method print rd_tag
 print.rd_tag <- function(x, ...) {
   cat(format(x), "\n")
+  cat("rdID(s):", toString(x$rdID), "\n")
 }
 
 # Translate a tag and values into an Rd expression; multiple values get their
@@ -38,7 +41,7 @@ format.rd_tag <- function(x, ...) stop("Unimplemented format")
 #' @S3method merge rd_tag
 merge.rd_tag <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))  
-  new_tag(x$tag, c(x$values, y$values))
+  new_tag(x$tag, c(x$values, y$values), c(x$rdID, y$rdID))
 }
 
 # Tags that repeat multiple times --------------------------------------------

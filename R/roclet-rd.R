@@ -198,6 +198,13 @@ roc_process.had <- function(roclet, partita, base_path) {
   # reset rd_lookup (use not really as a cache, but rather as a global environment)
   rd_lookup_cache$reset()
   for (partitum in partita) {
+	
+	## Dealing with tags that have an impact across rd file
+	## must be done out of the cached processing
+	# @inline: @inline on a generic enforces it on its methods
+	partitum <- process.inline(partitum)
+	##
+	  
     key <- c(template_hash, digest(partitum))
     new <- rd_proc_cache$compute(key, roclet_rd_one(partitum, base_path)) 
     if (is.null(new)) next; 
@@ -208,11 +215,13 @@ roc_process.had <- function(roclet, partita, base_path) {
 
     # Clone output so cached object isn't modified
     new$rd[[1]] <- list2env(as.list(new$rd[[1]]))
-    
-	# add S4method tags if necessary: this potentially updates both the 
-	# current topic and its parent generic's topic
-	addS4method(topics, new, partitum)
 	
+	# add internal tag S4method to the topics of the  
+	# parent S4 generic and the S4 class of the first dispatched argument. 
+	# Inline S4 methods are merged into the parent generic topic.
+	# NB: changes occur on rd_file objects from the list `topics` not from the cache
+	addS4method(topics, new, partitum)
+    
 	# merge topic
     old <- topics[[new$filename]]
     topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
@@ -278,9 +287,22 @@ roc_process.had <- function(roclet, partita, base_path) {
 	  }	  
   }
   
+  
+  list_missing_params <- function(topic){
+	  setdiff(get_tag(topic, "formals")$values,
+			  names(get_tag(topic, "arguments")$values))
+  }
+  
   for(topic_name in names(inherits)) {
 	#message("# Topic: ", topic_name)
     topic <- topics[[topic_name]]
+	
+	# 1. check if it is necessary to pull @param descriptions from parent topics 
+	missing_params <- list_missing_params(topic)
+	if( length(missing_params) == 0L ) next;
+	#message("Missing arguments: ", toString(missing_params))
+	
+	# 2. lookup for the missing arguments
     for(i in seq_along(inherits[[topic_name]]) ){
 	  # get inheritParam target
 	  inheritor <- inherits[[topic_name]][i]
@@ -329,13 +351,40 @@ roc_process.had <- function(roclet, partita, base_path) {
 	  # skip if topic documentation cannot not be improved
 	  if( length(params)  == 0L ) next
 	  
-      missing_params <- setdiff(get_tag(topic, "formals")$values,
-        names(get_tag(topic, "arguments")$values))
       matching_params <- intersect(missing_params, names(params))
-      
-      add_tag(topic, new_tag("arguments", params[matching_params]))
+	  #if( length(matching_params) ) message("Found arguments: ", toString(matching_params))
+      add_tag(topic, new_tag("arguments", params[matching_params], inheritor))
+	  
+	  # update missing_params
+  	  missing_params <- list_missing_params(topic)
+	  if( length(missing_params) == 0L ) break;
+
     }
-    
+
+	# check for unfound arguments
+	missing_params <- which(! get_tag(topic, "formals")$values 
+							%in% names(get_tag(topic, "arguments")$values))
+	
+	# throw description warning on unfound arguments but skip inline topics 
+	# since their arguments are handled in the parent topic and 
+	# they do not generate Rd files 
+	if( length(missing_params) && !is_inline(topic) ){
+		# get missing argument names
+		params <- get_tag(topic, "formals")$values[missing_params]
+		# get original rdID for these arguments
+		ids <- get_tag(topic, "formals")$rdID[missing_params]
+		params <- split(params, factor(ids, levels=unique(ids)))
+		srcref <- mapply(function(id, p){
+			# get the original processed partitum from cache
+			rd_proc <- get_rd_proc(id)
+			desc <- str_c(str_c("`", p, "`", collapse=', '), ' of ', id
+						, '(', srcref_location(rd_proc$srcref, header=FALSE), ')')
+			roxygen_warning("No inherited description for argument(s) ", desc
+							, srcref=srcref_lookup[[topic_name]][1])
+		}, unique(ids), params)
+	
+	}
+
   }
   
   
@@ -367,7 +416,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, new_tag("inline", partitum$inline))
   add_tag(rd, new_tag("name", name))
   add_tag(rd, new_tag("alias", partitum$name %||% partitum$src_alias))
-  add_tag(rd, new_tag("formals", names(partitum$formals)))
+  add_tag(rd, new_tag("formals", names(partitum$formals), rep(rdID, length(partitum$formals))))
   add_tag(rd, new_tag("srcref", setNames(list(partitum$srcref), rdID)))
 
   add_tag(rd, process_description(partitum, base_path))
@@ -399,7 +448,8 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'section', process.section))
   add_tag(rd, process.examples(partitum, base_path))
 
-  list(rd = rd, filename = filename, rdID=rdID)
+  list(rd = rd, filename = filename
+  		, rdID=rdID, srcref=partitum$srcref)
 }
 
 #' @S3method roc_output had
@@ -408,10 +458,20 @@ roc_output.had <- function(roclet, results, base_path) {
   man <- normalizePath(file.path(base_path, "man"))
   
   contents <- vapply(results, FUN.VALUE = character(1), function(x) {
-    rd_out_cache$compute(x, format(x))
+    rd_out_cache$compute(x, {
+			# do not format for inlined topics: writing file will skip
+			if( is_inline(x) ){
+				rd_proc <- get_rd_proc(get_tag(x, 'rdID')$values[1])
+				cat("Skipping inline doc:", rd_proc$filename, "\n")
+				as.character(NA) 
+			}else format(x)
+		})
   })
   
   write_out <- function(filename, contents) {
+	
+	# skip NA contents (i.e. to inline docs)
+	if( is.na(contents) ) return()
     if (the_same(filename, contents)) return()
     
     name <- basename(filename)
@@ -470,6 +530,96 @@ process.usage <- function(partitum) {
   }
 }
 
+
+#' Retrieve Processed rd_file Objects
+#' 
+#' @param id a rdID (i.e. a character string)
+#' @param topics optional list of topics, indexed by Rd filename, from where to 
+#' retrieve the rd_file object
+#' @return a list as returned by \code{roclet_rd_one} that contains
+#' the processed rd_file object if \code{topics=NULL} or a rd_file object 
+#' otherwise. Returns \code{NULL} if the id is not found, meaning that the 
+#' topic is not documented in the package or has not been processed yet.
+#' 
+#' @keyword internal
+get_rd_proc <- function(id, topics=NULL){
+	info <- rd_lookup_cache$get(id)
+	if( is.null(info) ) return()
+	# look into the cache 
+	res <- rd_proc_cache$get(info$hash)
+	if( !is.null(topics) )
+		res$rd <- topics[[info$filename]]
+	res
+}
+
+# get cached parent  
+get_rd_proc_parent <- function(id, ...){
+	
+	if( is.list(id) ){ # id is assumed to be partitum
+		partitum <- id
+		# do something only for S4 method
+		type <- partitum$src_type
+		if( is.null(type) || type != 'method' ) return()
+		# lookup generic name
+		id <- partitum$generic
+		if( is.null(id) ){
+			roxygen_warning("Unexpectedly missing internal element $generic for S4 method"
+					, srcref=partitum$srcref)
+			return()
+		}
+	}
+	
+	# remove package part
+	# (subset with [1L] to get data naked from attributes)
+	parent <- sub("^.*::", "", id)[1L]
+	get_rd_proc(parent, ...)	
+}
+
+is_inline <- function(x){
+	
+	if( is.rd_file(x) ){
+		inline_tag <- get_tag(x, 'inline')$values
+		rdID <- get_tag(x, 'rdID')$values[1]
+	}else if( is.list(x) ){ # rd_file as a list of tags
+		inline_tag <- x$inline$values
+		rdID <- x$rdID$values[1]
+	}else if( is.character(x) ){
+		return( is_inline(get_rd_proc(id)$rd) )
+	}
+	else 
+		stop("Invalid argument x [", class(x), ']')
+	
+	any( inline_tag %||% FALSE ) && grepl('-method$', rdID)
+	
+}
+
+# enforces inline on S4 methods from generics that have tag @inline
+process.inline <- function(partitum){
+	# do something only for S4 method
+	type <- partitum$src_type
+	if( is.null(type) || type != 'method' ) return(partitum)
+	
+	# if @inline is on already (manually or determined in srcrefs.R)
+	# then ensure tag is set and return
+	if( partitum$inline %||% partitum$src_inline  %||% FALSE ){
+		partitum$inline <- TRUE
+		return(partitum)
+	}
+	
+	## check if original parent generic is tagged with @inline:
+	# a parent generic inline means its methods are inline
+	parent_rd <- get_rd_proc_parent(partitum)
+	# cannot have inline the parent topic is not documented in the package
+	if( is.null(parent_rd) ) return(partitum)
+	if( any(get_tag(parent_rd$rd, 'inline')$values) ){
+		partitum$inline <- TRUE
+		partitum$parent_inline <- TRUE 
+	}
+	
+	# return updated partitum
+	partitum
+}
+
 #' Automatic S4 Method Inline Documentation
 #'
 #' Adds a tag "S4method" to the Rd file that documents the generic for S4 methods 
@@ -494,27 +644,17 @@ addS4method <- function(topics, rd_proc, partitum){
 	type <- partitum$src_type
 	if( is.null(type) || type != 'method' ) return()
 	
-	# Full inline documentation if @inline is on (manually or determined in srcrefs.R), 
-	inline_doc <- (partitum$inline %||% partitum$src_inline  %||% FALSE)
+	# Full inline documentation if @inline is on 
+	inline_doc <- (partitum$inline %||% FALSE)
 		
-	parent <- partitum$generic
-	if( is.null(parent) ){
-		roxygen_warning("Unexpectedly missing element partitum$generic"
-						, srcref=partitum$srcref)
-		return()
-	}
-	
-	# get parent topic to merge into it
-	# (subset with [1L] to get data naked from attributes)
-	parent <- sub("^.*::", "", parent)[1L]
-	pinfo <- rd_lookup_cache$get(parent)
+	# get parent in the list topics to add the S4method tag
+	#, and merge if the method is inline
+	parent_rd_proc <- get_rd_proc_parent(partitum, topics)
 	# do nothing if the parent topic is not documented in the package
-	if( is.null(pinfo) ) return()
-	parent_rd <- topics[[pinfo$filename]]
-	
-	# if the parent generic is inline => force all methods to be inline
-	parent_inline <- get_tag(parent_rd, 'inline')
-	inline_doc <- inline_doc || (parent_inline$values %||% FALSE) 
+	# TODO: also tags to the class of first dispatching argument 
+	if( is.null(parent_rd_proc) ) return()
+	parent_rd <- parent_rd_proc$rd
+	parent_id <- parent_rd_proc$rdID
 	
 	# build and add tag S4method to parent
 	tags <- as.list(rd_proc$rd[[1]])
@@ -536,17 +676,17 @@ addS4method <- function(topics, rd_proc, partitum){
 		data$introduction$links <-  
 			str_c("See \\code{\\link{", rd_proc$rdID, "}} for more details.")
 	}
-	add_tag(parent_rd, new_tag("S4method", setNames(list(data), parent)))
+	add_tag(parent_rd, new_tag("S4method", setNames(list(data), parent_id)))
 	
-	# inline doc: hide topic and merge it into parent 
+	# inline doc: merge it into parent 
 	if( inline_doc ){
-		# add internal keyword to the method topic
-		add_tag(rd_proc$rd, new_tag('keyword', 'internal'))
-		
+#		message("Merging ", rd_proc$rdID, " into ", parent_id
+#				, " [inline:", if( partitum$src_inline ) 'auto' 
+#				else if( partitum$parent_inline %||% FALSE ) 'parent'
+#				else 'tag', ']')
 		# merge into parent: all but introduction, keywords and alias tags
 		# usage tag is skipped if the method was labelled as automatically merged
-		skip_tags <- c(s4tags, 'inline', 'rdID', 'keyword', 'alias'
-						, if( partitum$src_inline ) 'usage')
+		skip_tags <- c(s4tags, 'inline', 'rdID', if( partitum$src_inline ) 'usage')
 		tags <- tags[ !names(tags) %in% skip_tags ]
 		add_tag(parent_rd, tags)
 	}

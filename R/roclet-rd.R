@@ -242,7 +242,9 @@ roc_process.had <- function(roclet, partita, base_path) {
   name_lookup <- get_values(topics, "rdID")
 
   for(family in names(family_lookup)) {
-    related <- family_lookup[[family]]
+	# get rd_file objects that should include links
+	# use unique to remove duplications due to rd_file merging
+    related <- unique(family_lookup[[family]])
     
     for(topic_name in related) {
       topic <- topics[[topic_name]]

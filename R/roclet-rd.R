@@ -295,14 +295,16 @@ roc_process.had <- function(roclet, partita, base_path) {
 			  names(get_tag(topic, "arguments")$values))
   }
   
+  lmessage <- function(...) NULL
+  #lmessage <- message
   for(topic_name in names(inherits)) {
-	#message("# Topic: ", topic_name)
+	lmessage("# Topic: ", topic_name)
     topic <- topics[[topic_name]]
 	
 	# 1. check if it is necessary to pull @param descriptions from parent topics 
 	missing_params <- list_missing_params(topic)
 	if( length(missing_params) == 0L ) next;
-	#message("Missing arguments: ", toString(missing_params))
+	lmessage("Missing arguments: ", toString(missing_params))
 	
 	# 2. lookup for the missing arguments
     for(i in seq_along(inherits[[topic_name]]) ){
@@ -311,7 +313,7 @@ roc_process.had <- function(roclet, partita, base_path) {
 	  # setup warning function
 	  warn <- inherit_warning(topic_name, names(inherits[[topic_name]])[i])
 	  
-	  #message("# Looking up topic: ", inheritor)
+	  lmessage("# Looking up topic: ", inheritor)
       if (grepl("::", inheritor, fixed = TRUE)) {
         # Reference to another package
         pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
@@ -325,7 +327,7 @@ roc_process.had <- function(roclet, partita, base_path) {
 			}
 		}
       } else {
-		#message("# Look within package")
+		lmessage("# Look within package")
         # Reference within this package        
         rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
         params <- 
@@ -333,7 +335,7 @@ roc_process.had <- function(roclet, partita, base_path) {
 			warn("can't find parent topic `", inheritor, "`")
 			list()
 		}else{
-			#message("# Found in Rd file: ", if( length(rd_name) > 0L ) str_c("'", rd_name,"'", collapse=", "))
+			lmessage("# Found in Rd file: ", if( length(rd_name) > 0L ) str_c("'", rd_name,"'", collapse=", "))
 			if( length(rd_name) > 1L ){
 
 				# show srcref of origin of name duplication
@@ -354,7 +356,7 @@ roc_process.had <- function(roclet, partita, base_path) {
 	  if( length(params)  == 0L ) next
 	  
       matching_params <- intersect(missing_params, names(params))
-	  #if( length(matching_params) ) message("Found arguments: ", toString(matching_params))
+	  if( length(matching_params) ) lmessage("Found arguments: ", toString(matching_params))
       add_tag(topic, new_tag("arguments", params[matching_params], inheritor))
 	  
 	  # update missing_params
@@ -667,15 +669,22 @@ addS4method <- function(topics, rd_proc, partitum){
 	# add details if inline
 	s4tags <- c('description', 'title', if( inline_doc ) 'details')
 	data <- list(introduction = mget_values(tags, s4tags) 
-				, signature = partitum$signature)
+				, signature = partitum$signature
+				, links=list())
 
-	# skip description if it is identical to title
+	# skip title if it is identical to description
 	if( identical(data$introduction$title, data$introduction$description) )
-		data$introduction$description <- NULL
+		data$introduction$title <- NULL
 
 	# link to specific topic if not inline
 	if( !inline_doc ){
-		data$introduction$links <-  
+		# skip title if the doc is not merged into another rd_file via @rdname, 
+		# as it probably does not integrate well in the itemize.
+		if( is.null(partitum$rdname) 
+				|| partitum$rdname == sub("\\.Rd$", "", rd_proc$filename) )
+			data$introduction$title <- NULL
+		# add link-out to method own Rd file
+		data$links[[rd_proc$rdID]] <-  
 			str_c("See \\code{\\link{", rd_proc$rdID, "}} for more details.")
 	}
 	add_tag(parent_rd, new_tag("S4method", setNames(list(data), parent_id)))
@@ -686,8 +695,12 @@ addS4method <- function(topics, rd_proc, partitum){
 #				, " [inline:", if( partitum$src_inline ) 'auto' 
 #				else if( partitum$parent_inline %||% FALSE ) 'parent'
 #				else 'tag', ']')
-		# merge into parent: all but introduction, keywords and alias tags
-		# usage tag is skipped if the method was labelled as automatically merged
+		# merge all tags but: 
+		# - tags included in the S4method tag
+		# - rdID not to have duplicates in the name lookup.
+		# - inline which is specific to the original rd_file 
+		# - usage tag is included only if the method was not labelled as to be 
+		# automatically merged (usage does not differ from generic signature)
 		skip_tags <- c(s4tags, 'inline', 'rdID', if( partitum$src_inline ) 'usage')
 		tags <- tags[ !names(tags) %in% skip_tags ]
 		add_tag(parent_rd, tags)

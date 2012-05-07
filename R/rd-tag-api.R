@@ -159,7 +159,7 @@ format.S4method_tag <- function(x, ...) {
 	
 	.local <- function(x, fname=NULL){
 		value <- sapply(x$values, function(x){
-			desc <- str_c(unlist(x$introduction), collapse="\n\n")
+			desc <- str_c(c(unlist(x$introduction), unlist(x$links)), collapse="\n\n")
 			str_c("\n\\item{\\code{signature(", str_c(x$signature, collapse=", "),")}}{\n",desc,"\n}")
 		})
 		value <- str_c(value, collapse="\n")

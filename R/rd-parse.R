@@ -34,7 +34,18 @@ rd_arguments <- function(rd) {
   values <- lapply(items, function(x) rd2rd(x[[2]]))
   params <- vapply(items, function(x) rd2rd(x[[1]]), character(1))
   
-  setNames(values, params)
+  # set names, substituting \dots commands by '...'
+  params <- setNames(values, sub("\\dots", "...", params, fixed=TRUE))
+  # split compound argument lines, e.g. "x, object: an object that ..."
+  res <- params
+  sapply(names(params), function(x){
+	 if( !grepl("[,]", x) ) return()
+	 args <- str_trim(strsplit(x, ',', fixed=TRUE)[[1]])
+	 res <<- c(res, setNames(as.list(rep(res[[x]], length(args))), args))
+	 res[[x]] <<- NULL
+  })
+  # return result
+  res
 }
 
 rd_title <- function(rd) {

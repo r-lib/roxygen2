@@ -157,24 +157,29 @@ format.examples_tag <- function(x, ...) {
 #' @S3method format S4method_tag
 format.S4method_tag <- function(x, ...) {
 	
-	.local <- function(x, fname=NULL){
+	.local <- function(x, fname){
 		value <- sapply(x$values, function(x){
+			# skip empty descriptions
+			if( length(x$introduction) == 0L ) return(NA)
 			desc <- str_c(c(unlist(x$introduction), unlist(x$links)), collapse="\n\n")
-			str_c("\n\\item{\\code{signature(", str_c(x$signature, collapse=", "),")}}{\n",desc,"\n}")
+			str_c("\n\\item{",fname,"}{\\code{signature("
+					, str_c(names(x$signature), ' = "', x$signature, '"', collapse=", ")
+					,")}: ",desc,"\n}")
 		})
-		value <- str_c(value, collapse="\n")
-		header <- str_c("Methods", if( !is.null(fname) ) str_c(" for ", fname))
-		format(process.section("section", str_c(header, ":\\describe{\n", value, "\n\n}\n"))[[1]])
+		value <- str_c(value[!is.na(value)], collapse="\n")
+		# return NA if all are NA
+		if( nchar(value) == 0L ) return(NA)
+		value
 	}
 	
 	# look for multiple generics
-	f <- unique(names(x$values))
-	if( length(f) > 1L ){
-		res <- sapply(f, function(fname){
-				x$values <- x$values[names(x$values) == fname]
-				.local(x, fname)
-		})
-		str_c(res, collapse="\n\n")
-	}else .local(x)
+	f <- sort(unique(names(x$values)))
+	res <- sapply(f, function(fname){
+			x$values <- x$values[names(x$values) == fname]
+			.local(x, fname)
+	})
 	
+	res <- str_c(res[!is.na(res)], collapse="\n\n")
+	if( nchar(res) == 0L ) return()
+	format(process.section("section", str_c("Methods:\\describe{\n", res, "\n\n}\n"))[[1]])
 }

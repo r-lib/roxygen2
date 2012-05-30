@@ -52,6 +52,7 @@ parse_generic <- function(call, env) {
   f <- getGeneric(name, where = env)
   
   list(
+	src_s4 = TRUE,
     src_type = "function",
     src_name = topic_name(f),
     src_alias = c(name, str_c(name, "-methods")),
@@ -81,17 +82,20 @@ parse_method <- function(call, env, replace=FALSE) {
   }
 
   args <- allFormals(f)
+  gargs <- formals(args(f))
   # class?MethodDefinition
   list(
+	src_s4 = TRUE,
     src_type = "method",
     src_name = topic_name(f),
     src_alias = topic_name(f),
     generic = f@generic,
     formals = args,
 	# describe within generic if the method has no extra arguments
-	src_inline = identical(args, formals(f)),
+	src_inline = identical(args[names(args) != '...'], gargs[names(gargs) != '...']),
     signature = method_signature(f),
     inheritParams = inherit
+	, keywords = 'methods'
   )
 }
 
@@ -141,7 +145,7 @@ allFormals <- function(f){
 		# check if the method is defined as a wrapper function
 		f <- f@.Data
 		lf <- try(codetools::getAssignedVar(body(f)), silent=TRUE)
-		if( !identical(lf, '.local') ) return( formals(f) )
+		if( !identical(lf, '.local') ) return( formals(args(f)) )
 		# extract arguments from local function
 		lfun <- extractLocalFun(f)
 		res <- formals(lfun)
@@ -184,12 +188,17 @@ method_signature <- function(x){
 		# remove possible argument '...'
 		args <- args[args != '...']
 		l <- length(args) - length(sig)
-		if( l > 0L ){
-			# append correct number of 'ANY'
-			sig <- c(sig, setNames(rep('ANY', l), tail(args, l)))
+		
+		# append correct number of 'ANY', except if all arguments except the 
+		# first one are 'ANY'
+		if( l == length(args) - 1L )
+			args <- args[1L]
+		else if( l > 0L ){
+			sig <- c(sig, rep('ANY', l))
 		}else if( l < 0L )
 			warning("roxygen::topic_name - Unexpectedly unable to infer signature for method "
 					, x@generic, ",", sig, call.=FALSE, immediate.=TRUE)
+		names(sig) <- args 
 	}
 	sig
 }

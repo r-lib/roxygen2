@@ -398,12 +398,14 @@ roc_process.had <- function(roclet, partita, base_path) {
 roclet_rd_one <- function(partitum, base_path) {  
   # Add in templates
   partitum <- process_templates(partitum, base_path)
+  # check if s4 method or generic
+  doProcessS4 <- (partitum$src_s4 %||% FALSE) && (partitum$inline %||% FALSE) 
   
   has_rd <- any(names(partitum) %in% c("description", "param", "return",
     "title", "example", "examples", "name", "rdname", "usage",
     "details", "introduction"))
   dont_rd <- any(names(partitum) == "noRd")
-  if (!has_rd || dont_rd) return()
+  if ( (!has_rd && !doProcessS4) || dont_rd) return()
   
   # Define topic unique identifier
   rdID <- partitum$src_topic %||% partitum$src_name
@@ -466,7 +468,7 @@ roc_output.had <- function(roclet, results, base_path) {
 			# do not format for inlined topics: writing file will skip
 			if( is_inline(x) ){
 				rd_proc <- get_rd_proc(get_tag(x, 'rdID')$values[1])
-				cat("Skipping inline doc:", rd_proc$filename, "\n")
+				#message("Skipping inline doc:", rd_proc$filename, "\n")
 				as.character(NA) 
 			}else format(x)
 		})
@@ -582,10 +584,10 @@ get_rd_proc_parent <- function(id, ...){
 is_inline <- function(x){
 	
 	if( is.rd_file(x) ){
-		inline_tag <- get_tag(x, 'inline')$values
+		inline_tag <- get_tag(x, 'inline')$values[1]
 		rdID <- get_tag(x, 'rdID')$values[1]
 	}else if( is.list(x) ){ # rd_file as a list of tags
-		inline_tag <- x$inline$values
+		inline_tag <- x$inline$values[1]
 		rdID <- x$rdID$values[1]
 	}else if( is.character(x) ){
 		return( is_inline(get_rd_proc(id)$rd) )
@@ -599,25 +601,38 @@ is_inline <- function(x){
 
 # enforces inline on S4 methods from generics that have tag @inline
 process.inline <- function(partitum){
-	# do something only for S4 method
-	type <- partitum$src_type
-	if( is.null(type) || type != 'method' ) return(partitum)
+	# do something only for S4 methods and generics
+	s4 <- partitum$src_s4 %||% FALSE
+	if( !s4 ) return( partitum )
 	
-	# if @inline is on already (manually or determined in srcrefs.R)
-	# then ensure tag is set and return
-	if( partitum$inline %||% partitum$src_inline  %||% FALSE ){
-		partitum$inline <- TRUE
+	# force value for flag inline
+	partitum$inline <- partitum$inline %||% FALSE
+	
+	# do something more only for S4 methods
+	type <- partitum$src_type
+	if( type != 'method' ) return(partitum)
+	
+	# get parent generic processed rd_file
+	parent_rd <- get_rd_proc_parent(partitum)
+	
+	# @inline is not relevant for methods whose parent generic is not documented 
+	# within the package
+	if( is.null(parent_rd) ){
+		partitum$inline <- FALSE
 		return(partitum)
 	}
 	
 	## check if original parent generic is tagged with @inline:
 	# a parent generic inline means its methods are inline
-	parent_rd <- get_rd_proc_parent(partitum)
-	# cannot have inline the parent topic is not documented in the package
-	if( is.null(parent_rd) ) return(partitum)
 	if( any(get_tag(parent_rd$rd, 'inline')$values) ){
-		partitum$inline <- TRUE
 		partitum$parent_inline <- TRUE 
+	}
+	
+	# if @inline is on already (manually or determined in srcrefs.R)
+	# then ensure tag is set and return
+	if( partitum$parent_inline %||% partitum$src_inline  %||% FALSE ){
+		partitum$inline <- TRUE
+		return(partitum)
 	}
 	
 	# return updated partitum
@@ -626,9 +641,9 @@ process.inline <- function(partitum){
 
 #' Automatic S4 Method Inline Documentation
 #'
-#' Adds a tag "S4method" to the Rd file that documents the generic for S4 methods 
+#' Adds a tag "S4method" to the Rd file that documents the generic of S4 methods 
 #' that have no extra argument compared to their generic, or have been manually 
-#' flagged with tag \emph{@@merge}.
+#' flagged with tag \emph{@@inline}.
 #' This function works with a side-effect on both the current topic stored in 
 #' \code{rd_proc} and the element of \code{topics} that stores the parent 
 #' generic's topic.
@@ -639,7 +654,7 @@ process.inline <- function(partitum){
 #' @param partitum partitum that has just been processed.
 #' 
 #' @return Returns nothing, but changes its arguments \code{topics} and 
-#' \code{rd__proc}
+#' \code{rd__proc} in place.
 #'  
 #' @keyword internal
 addS4method <- function(topics, rd_proc, partitum){
@@ -648,64 +663,110 @@ addS4method <- function(topics, rd_proc, partitum){
 	type <- partitum$src_type
 	if( is.null(type) || type != 'method' ) return()
 	
-	# Full inline documentation if @inline is on 
+	# check inline 
 	inline_doc <- (partitum$inline %||% FALSE)
-		
-	# get parent in the list topics to add the S4method tag
-	#, and merge if the method is inline
-	parent_rd_proc <- get_rd_proc_parent(partitum, topics)
-	# do nothing if the parent topic is not documented in the package
-	# TODO: also tags to the class of first dispatching argument 
-	if( is.null(parent_rd_proc) ) return()
-	parent_rd <- parent_rd_proc$rd
-	parent_id <- parent_rd_proc$rdID
+	# check merging
+	merge_doc <- !is.null(topics[[rd_proc$filename]])
 	
-	# build and add tag S4method to parent
+	# build complete tag S4method
 	tags <- as.list(rd_proc$rd[[1]])
 	mget_values <- function(x, tags){
 		x <- x[ names(x) %in% tags ]
 		lapply(x, "[[", "values")
 	}
-	# add details if inline
-	s4tags <- c('description', 'title', if( inline_doc ) 'details')
-	data <- list(introduction = mget_values(tags, s4tags) 
-				, signature = partitum$signature
-				, links=list())
-
-	# skip title if it is identical to description
-	if( identical(data$introduction$title, data$introduction$description) )
-		data$introduction$title <- NULL
-
-	# link to specific topic if not inline
-	if( !inline_doc ){
-		# skip title if the doc is not merged into another rd_file via @rdname, 
-		# as it probably does not integrate well in the itemize.
-		if( is.null(partitum$rdname) 
-				|| partitum$rdname == sub("\\.Rd$", "", rd_proc$filename) )
-			data$introduction$title <- NULL
-		# add link-out to method own Rd file
-		data$links[[rd_proc$rdID]] <-  
-			str_c("See \\code{\\link{", rd_proc$rdID, "}} for more details.")
-	}
-	add_tag(parent_rd, new_tag("S4method", setNames(list(data), parent_id)))
+	s4tag_names <- c('description', 'title', 'details')
+	s4tag_data <- list(introduction = mget_values(tags, s4tag_names) 
+			, signature = partitum$signature
+			, links=list())
 	
-	# inline doc: merge it into parent 
-	if( inline_doc ){
-#		message("Merging ", rd_proc$rdID, " into ", parent_id
-#				, " [inline:", if( partitum$src_inline ) 'auto' 
-#				else if( partitum$parent_inline %||% FALSE ) 'parent'
-#				else 'tag', ']')
-		# merge all tags but: 
-		# - tags included in the S4method tag
-		# - rdID not to have duplicates in the name lookup.
-		# - inline which is specific to the original rd_file 
-		# - usage tag is included only if the method was not labelled as to be 
-		# automatically merged (usage does not differ from generic signature)
-		skip_tags <- c(s4tags, 'inline', 'rdID', if( partitum$src_inline ) 'usage')
-		tags <- tags[ !names(tags) %in% skip_tags ]
-		add_tag(parent_rd, tags)
+	# skip title if:
+	# - it is identical to description
+	# - if the doc is not @inline but is the primary topic of merged rd_files 
+	#	via @rdname, as it probably does not integrate well in the _Methods_ items.
+	if( identical(s4tag_data$introduction$title, s4tag_data$introduction$description) ||
+		(!inline_doc && (is.null(partitum$rdname) || !merge_doc)) )
+			s4tag_data$introduction$title <- NULL
+	
+	lmessage <- function(...) NULL
+	#lmessage <- message
+	
+	# add S4method tag to the rd_file that documents the class of the first dispatching argument
+	args <- partitum$signature
+	class_rd_proc <- get_rd_proc(str_c(args[1], '-class'), topics)
+	if( !is.null(class_rd_proc) ){
+		#lmessage("Adding S4method tag for ", rd_proc$rdID, " in class ", class_rd_proc$filename)
+		s4tag <- s4tag_data # copy full description
+		
+		if( !is.null(s4tag$introduction$details) ){
+			# only add shorten S4method tag (no details)
+			s4tag$introduction$details <- NULL		
+			# link-out to method own Rd file
+			s4tag$links[[rd_proc$rdID]] <-  
+					str_c("See \\code{\\link{", rd_proc$rdID, "}} for more details.")
+			
+		}		
+		# add
+		add_tag(class_rd_proc$rd, new_tag("S4method", setNames(list(s4tag), partitum$generic)))
+				
 	}
 	
+	# get parent in `topics` (not the cache) 
+	# add the S4method tag to parent if possible, and merge @inline method
+	parent_rd_proc <- get_rd_proc_parent(partitum, topics)
+	if( !is.null(parent_rd_proc) ){ 
+		parent_rd <- parent_rd_proc$rd
+		parent_id <- parent_rd_proc$rdID		
+		if( inline_doc ){			
+			lmessage("Merging ", rd_proc$rdID, " into ", parent_id
+					, " [inline:", if( partitum$src_inline ) 'auto' 
+							else if( partitum$parent_inline %||% FALSE ) 'parent'
+							else 'tag', ']')
+			
+			# add full tag S4method to parent
+			s4tag <- s4tag_data
+			add_tag(parent_rd, new_tag("S4method", setNames(list(s4tag), parent_id)))
+			
+			# merge all tags but: 
+			# - tags included in the S4method tag
+			# - rdID not to have duplicates in the name lookup.
+			# - inline which is specific to the original rd_file 
+			# - usage tag is included only if the method was not labelled as to be 
+			# automatically merged (usage does not differ from generic signature)
+			skip_tags <- c(names(s4tag$introduction), 'inline', 'rdID'
+							, if( partitum$src_inline ) 'usage')
+			tags <- tags[ !names(tags) %in% skip_tags ]
+			add_tag(parent_rd, tags)
+						
+		}else{ # not @inline
+			s4tag <- s4tag_data # copy full description
+			# only add shorten S4method tag (no details)
+			s4tag$introduction$details <- NULL
+			# link-out to method own Rd file
+			s4tag$links[[rd_proc$rdID]] <-  
+					str_c("See \\code{\\link{", rd_proc$rdID, "}} for more details.")
+			# add
+			add_tag(parent_rd, new_tag("S4method", setNames(list(s4tag), parent_id)))
+		}
+	} else if( inline_doc ){ # should not happen
+		
+		roxygen_warning("Missing parent generic documentation for @inline method "
+				, rd_proc$rdID
+				, srcref=partitum$srcref)
+		
+	}
+	
+	# substitute introduction with S4method tag for merged methods 
+	if( merge_doc ){ 
+		
+		primary_rd <- topics[[rd_proc$filename]]
+		lmessage("Adding S4method tag for ", rd_proc$rdID, " in ", rd_proc$filename)
+		# add full tag S4method to parent
+		s4tag <- s4tag_data
+		add_tag(rd_proc$rd, new_tag("S4method", setNames(list(s4tag), partitum$generic)))
+		# remove tags used in S4method
+		sapply(names(s4tag$introduction), function(x) rm(list=x, envir=rd_proc$rd[[1]]))
+		
+	}
 }
 
 # Process title, description and details. 
@@ -826,6 +887,10 @@ process.docType <- function(partitum) {
       tags <- c(tags, new_tag("usage", partitum$src_name))
     }
     tags <- c(tags, new_tag("keyword", "datasets"))
+  } else if (doctype == "class") {
+	  tags <- c(tags, new_tag("docType", "class"))
+  } else if( doctype == 'method' ){
+	  tags <- c(tags, new_tag("docType", "methods"))
   }
   
   tags

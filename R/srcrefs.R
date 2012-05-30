@@ -30,10 +30,18 @@ parse_class <- function(call, env) {
   class <- getClass(name, where = env)
 
   # class?classRepresentation
+  # Default @name should be CLASSNAME-class and not CLASSNAME, as it can clash 
+  # with a function with te same name (e.g. a constructor function), which 
+  # must have this @name.
+  # This is achieved via $src_topic which takes precedence over $src_name for default 
+  # @name ($src_name is used in several places as the R access name for the class)
+  # Access via ?CLASSNAME is ensured by appropriate default @alias.
+  topic <- topic_name(class)
   list(
     src_type = "class",
-    src_name = name,
-    src_alias = c(name, str_c(name, "-class")),
+    src_name = name, 
+    src_alias = c(name, topic),
+	src_topic = topic,
     extends = showExtends(class@contains, printTo = FALSE),
     slots = class@slots
   )
@@ -44,6 +52,7 @@ parse_generic <- function(call, env) {
   f <- getGeneric(name, where = env)
   
   list(
+	src_s4 = TRUE,
     src_type = "function",
     src_name = topic_name(f),
     src_alias = c(name, str_c(name, "-methods")),
@@ -51,27 +60,110 @@ parse_generic <- function(call, env) {
   )
 }
 
-parse_method <- function(call, env) {
-  name <- as.character(call$f)
-  f <- getMethod(name, eval(call$signature), where = env)
+parse_method <- function(call, env, replace=FALSE) {
 
+  name <- as.character(call$f)
+  sig <- eval(call$signature)
+
+  # handle replacement methods
+  if( replace ){
+	  name <- str_c(name, '<-')
+	  sig <- eval(call[[3]])
+  }
+  
+  f <- getMethod(name, sig, where = env)
   pkg <- attr(f@generic, "package")
   if (pkg == "roxygen_test") {
-    inherit <- f@generic
+	# inherit from the generic defined within the package
+	# which is uniquely identified by its topic_name
+    inherit <- topic_name(getGeneric(f@generic, where = env))
   } else {
     inherit <- str_c(pkg, "::", f@generic)
   }
 
+  args <- allFormals(f)
+  gargs <- formals(args(f))
   # class?MethodDefinition
   list(
+	src_s4 = TRUE,
     src_type = "method",
     src_name = topic_name(f),
     src_alias = topic_name(f),
     generic = f@generic,
-    formals = formals(f@.Data),
-    signature = as.character(f@defined),
+    formals = args,
+	# describe within generic if the method has no extra arguments
+	src_inline = identical(args[names(args) != '...'], gargs[names(gargs) != '...']),
+    signature = method_signature(f),
     inheritParams = inherit
+	, keywords = 'methods'
   )
+}
+
+#' Extracting Local Function Definition
+#' 
+#' Extracts local function from wrapper functions of the following type, typically 
+#' used in S4 methods:
+#' \samp{
+#' function(a, b, ...){
+#' 	.local <- function(a, b, c, d, ...){
+#'
+#' 	}
+#'	.local(a, b, ...)
+#' }
+#' }
+#'
+#' @param f definition of the wrapper function
+#' 
+#' @return a function
+#' @keyword internal
+extractLocalFun <- function(f){
+	bf <- body(f)
+	
+	txt <- as.character(bf)[2]
+	# in R-2.14.2 -- at least, as.character does not return the complete body
+	# so some text manipulation is necessary 
+	if( !grepl("\\{", txt) ){
+		sf <- capture.output(print(bf))
+		w <- tail(grep("^\\s*\\.local\\(", sf), 1L)
+		txt <- paste(sf[-w], collapse="\n")
+	}
+	expr <- parse(text=txt)
+	e <- new.env()
+	eval(expr, e)
+} 
+
+# Extract all formals including from S4 methods
+#
+# Works for methods that are created (setMethod) as a wrapper function to an 
+# internal function named .local
+#
+allFormals <- function(f){
+	
+	# look inside method for S4 methods
+	if( is(f, 'MethodDefinition') ){
+		
+		# check if the method is defined as a wrapper function
+		f <- f@.Data
+		lf <- try(codetools::getAssignedVar(body(f)), silent=TRUE)
+		if( !identical(lf, '.local') ) return( formals(args(f)) )
+		# extract arguments from local function
+		lfun <- extractLocalFun(f)
+		res <- formals(lfun)
+		# set default values from the generic, only for arguments that have no 
+		# default values in the method
+		generic_args <- formals(f)
+		meth_no_default <- sapply(res, is.symbol) 
+		gen_no_default <- sapply(generic_args, is.symbol)
+		generic_args <- generic_args[ !gen_no_default ]
+		generic_args <- generic_args[ names(generic_args) %in% names(res[meth_no_default]) ]
+		if( length(generic_args) ){
+			res[names(generic_args)] <- generic_args
+		}
+		# return complete list of arguments
+		res
+		
+	}else if( is.function(f) ) formals(f)
+	
 }
 
 register.srcref.parser('<-', parse_assignment)
@@ -79,13 +171,46 @@ register.srcref.parser('=', parse_assignment)
 register.srcref.parser('setClass', parse_class)
 register.srcref.parser('setGeneric', parse_generic)
 register.srcref.parser('setMethod', parse_method)
-# register.srcref.parser('setReplaceMethod', parse_method)
+register.srcref.parser('setReplaceMethod', function(...) parse_method(..., replace=TRUE))
+
+# Computes S4 Method Signatures
+# 
+# This function corrects the issue with generic defined within the package, for which
+# the function getMethod does not detail arguments that are not specified in the 
+# signature as objects of implicit class 'ANY'.
+# Arguments '...' are also correctly _not_ taken into account for the signature
+#
+method_signature <- function(x){
+	# check for the case where not all arguments get tagged as class 'ANY'
+	sig <- as.character(x@defined)
+	if( is.function(x@.Data) && length(args <- formalArgs(x@.Data)) != length(sig) ){
+		
+		# remove possible argument '...'
+		args <- args[args != '...']
+		l <- length(args) - length(sig)
+		
+		# append correct number of 'ANY', except if all arguments except the 
+		# first one are 'ANY'
+		if( l == length(args) - 1L )
+			args <- args[1L]
+		else if( l > 0L ){
+			sig <- c(sig, rep('ANY', l))
+		}else if( l < 0L )
+			warning("roxygen::topic_name - Unexpectedly unable to infer signature for method "
+					, x@generic, ",", sig, call.=FALSE, immediate.=TRUE)
+		names(sig) <- args 
+	}
+	sig
+}
 
 setGeneric("topic_name", function(x) {
   standardGeneric("topic_name")
 })
+setMethod("topic_name", signature(x = "classRepresentation"), function(x) {
+  str_c(x@className, "-class")
+})
 setMethod("topic_name", signature(x = "MethodDefinition"), function(x) {
-  str_c(str_c(c(x@generic, x@defined), collapse = ","), "-method")
+  str_c(str_c(c(x@generic, method_signature(x)), collapse = ","), "-method")
 })
 setMethod("topic_name", signature(x = "standardGeneric"), function(x) {
   x@generic
@@ -93,4 +218,3 @@ setMethod("topic_name", signature(x = "standardGeneric"), function(x) {
 setMethod("topic_name", signature(x = "nonstandardGenericFunction"), function(x) {
   x@generic
 })
-

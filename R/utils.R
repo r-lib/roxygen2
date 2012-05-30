@@ -17,6 +17,7 @@ usage <- function(args) {
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
     text <- str_replace_all(text, fixed("%"), "\\%")
     text <- str_replace_all(text, fixed(" "), "\u{A0}")
+	text <- str_replace_all(text, fixed("\\"), "\\\\")
     Encoding(text) <- "UTF-8"    
     
     str_c("\u{A0}=\u{A0}", paste(text, collapse = "\n"))
@@ -80,14 +81,24 @@ nice_name <- function(x) {
 
 
 roxygen_stop <- function(..., srcref = NULL) {
-  stop(..., srcref_location(srcref), call. = FALSE)
+  stop(..., ' ', srcref_location(srcref), call. = FALSE)
 }
 
 roxygen_warning <- function(..., srcref = NULL) {
-  warning(..., srcref_location(srcref), call. = FALSE)
+  warning(..., ' ', srcref_location(srcref), call. = FALSE)
 }
 
-srcref_location <- function(srcref = NULL) {
+srcref_location <- function(srcref = NULL, header=TRUE) {
   if (is.null(srcref)) return()
-  str_c(" in block ", basename(srcref$filename), ":", srcref$lloc[1])
+  
+  # handle multiple srcrefs
+  if( length(srcref) == 1L )
+	  srcref <- srcref[[1L]]
+  srcref <- 
+  if( !is.null(srcref$filename) ){
+	  str_c(if( header ) "in block ", basename(srcref$filename), ":", srcref$lloc[1])
+  }
+  else{
+	  str_c(if( header ) "in blocks ", str_c(sapply(srcref, srcref_location, header=FALSE), collapse=', '))
+  }
 }

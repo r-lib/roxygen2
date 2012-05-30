@@ -15,13 +15,20 @@ new_cache <- function() {
     cache <<- new.env(parent = emptyenv())
   }
   
+  get <- function(keys){
+	  hash <- suppressWarnings(digest(keys))
+	  if (exists(hash, cache, inherits = FALSE)) {
+		  return(cache[[hash]])
+	  }
+  }
   
-  list(compute = compute, reset = reset)
+  list(compute = compute, reset = reset, get = get)
 }
 
 parse_cache <- new_cache()
 rd_proc_cache <- new_cache()
 rd_out_cache <- new_cache()
+rd_lookup_cache <- new_cache()
 
 #' Clear all roxygen caches.
 #'

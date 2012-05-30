@@ -22,13 +22,30 @@ rd2rd <- function(x) {
 
 # rd_arguments(get_rd("mean"))
 rd_arguments <- function(rd) {
-  arguments <- get_tags(rd, "\\arguments")[[1]]
-  items <- get_tags(arguments, "\\item")
+
+  # exit early if rd is empty
+  if( length(rd) == 0L ) return()
+
+  arguments <- get_tags(rd, "\\arguments")
+  # exit early if no \arguments tag was found
+  if( length(arguments) == 0L ) return( list() )
+  items <- get_tags(arguments[[1]], "\\item")
   
   values <- lapply(items, function(x) rd2rd(x[[2]]))
   params <- vapply(items, function(x) rd2rd(x[[1]]), character(1))
   
-  setNames(values, params)
+  # set names, substituting \dots commands by '...'
+  params <- setNames(values, sub("\\dots", "...", params, fixed=TRUE))
+  # split compound argument lines, e.g. "x, object: an object that ..."
+  res <- params
+  sapply(names(params), function(x){
+	 if( !grepl("[,]", x) ) return()
+	 args <- str_trim(strsplit(x, ',', fixed=TRUE)[[1]])
+	 res <<- c(res, setNames(as.list(rep(res[[x]], length(args))), args))
+	 res[[x]] <<- NULL
+  })
+  # return result
+  res
 }
 
 rd_title <- function(rd) {

@@ -5,11 +5,13 @@
 # tags, merge just combines all values, and format selects from these to 
 # display the tags in the appropriate way. 
 #
-new_tag <- function(tag, values) {
+new_tag <- function(tag, values, rdID=NULL) {
   if (is.null(values)) return()
   
   subc <- str_c(tag, "_tag")
-  list(structure(list(tag = tag, values = values), class = c(subc, "rd_tag")))
+  list(structure(list(tag = tag, values = values
+  	, rdID = rdID)
+  	, class = c(subc, "rd_tag")))
 }
 
 is.rd_tag <- function(x) inherits(x, "rd_tag")
@@ -17,6 +19,7 @@ is.rd_tag <- function(x) inherits(x, "rd_tag")
 #' @S3method print rd_tag
 print.rd_tag <- function(x, ...) {
   cat(format(x), "\n")
+  cat("rdID(s):", toString(x$rdID), "\n")
 }
 
 # Translate a tag and values into an Rd expression; multiple values get their
@@ -38,7 +41,7 @@ format.rd_tag <- function(x, ...) stop("Unimplemented format")
 #' @S3method merge rd_tag
 merge.rd_tag <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))  
-  new_tag(x$tag, c(x$values, y$values))
+  new_tag(x$tag, c(x$values, y$values), c(x$rdID, y$rdID))
 }
 
 # Tags that repeat multiple times --------------------------------------------
@@ -110,6 +113,9 @@ format_null <- function(x, ...) NULL
 format.family_tag <- format_null
 format.inheritParams_tag <- format_null
 format.formals_tag <- format_null
+format.srcref_tag <- format_null
+format.rdID_tag <- format_null
+format.inline_tag <- format_null
 
 # Tags with special errors or other semantics --------------------------------
 
@@ -127,10 +133,7 @@ format.arguments_tag <- function(x, ...) {
 format.slot_tag <- function(x, ...) {
   names <- names(x$values)
   items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
-  str_c("\\section{Slots}\n\n",
-    "\\itemize{\n", 
-    str_wrap(items, width = 60, exdent = 2, indent = 2),
-    "\n}\n")
+  format(process.section("section", str_c("Slots:\\describe{\n\n", items, "\n\n}\n"))[[1]])
 }
 
 
@@ -149,4 +152,34 @@ format.section_tag <- function(x, ...) {
 format.examples_tag <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n")
   rd_tag(x$tag, values, space = TRUE)  
+}
+
+#' @S3method format S4method_tag
+format.S4method_tag <- function(x, ...) {
+	
+	.local <- function(x, fname){
+		value <- sapply(x$values, function(x){
+			# skip empty descriptions
+			if( length(x$introduction) == 0L ) return(NA)
+			desc <- str_c(c(unlist(x$introduction), unlist(x$links)), collapse="\n\n")
+			str_c("\n\\item{",fname,"}{\\code{signature("
+					, str_c(names(x$signature), ' = "', x$signature, '"', collapse=", ")
+					,")}: ",desc,"\n}")
+		})
+		value <- str_c(value[!is.na(value)], collapse="\n")
+		# return NA if all are NA
+		if( nchar(value) == 0L ) return(NA)
+		value
+	}
+	
+	# look for multiple generics
+	f <- sort(unique(names(x$values)))
+	res <- sapply(f, function(fname){
+			x$values <- x$values[names(x$values) == fname]
+			.local(x, fname)
+	})
+	
+	res <- str_c(res[!is.na(res)], collapse="\n\n")
+	if( nchar(res) == 0L ) return()
+	format(process.section("section", str_c("Methods:\\describe{\n", res, "\n\n}\n"))[[1]])
 }

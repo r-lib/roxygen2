@@ -29,6 +29,8 @@ rd_tag <- function(tag, ..., space = FALSE) {
   }
   # Turn non-breaking spaces back into regular spaces
   values <- str_replace_all(values, fixed("\u{A0}"), " ")
+  values <- str_replace_all(values, fixed("\u{201c}"), "\"")
+  values <- str_replace_all(values, fixed("\u{201d}"), "\"")
   str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")                         
 }
 

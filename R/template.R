@@ -28,7 +28,7 @@ process_templates <- function(partitum, base_path) {
   var_tags <- partitum[names(partitum) == "templateVar"]
   vars <- lapply(var_tags, "[[", "description")
   vars <- lapply(vars, type.convert, as.is = TRUE)
-  
+  names(vars) <- sapply(var_tags, "[[", "name")
   results <- lapply(paths, template_eval, vars = list2env(vars))
   
   # Insert templates back in the location where they came from

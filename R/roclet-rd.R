@@ -191,7 +191,7 @@ rd_roclet <- function() {
 roc_process.had <- function(roclet, partita, base_path) {
   # Remove srcrefs with no attached roxygen comments
   partita <- Filter(function(x) length(x) > 1, partita)
-  templates <- dir(file.path(base_path, "max-roxygen"), full = TRUE)
+  templates <- dir(file.path(base_path, "man-roxygen"), full = TRUE)
   template_hash <- digest(lapply(templates, readLines))
   
   topics <- list()

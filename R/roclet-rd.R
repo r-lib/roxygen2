@@ -507,6 +507,10 @@ process.usage <- function(partitum) {
     return(new_tag("usage", partitum$usage))
   }
 
+  # look for tag @S3method and use it if @method is not provided
+  if( !is.null(partitum$S3method) && is.null(partitum$method) )
+	  partitum$method <- strsplit(partitum$S3method, ' ')[[1]]
+
   # Only function usages are generated here
   type <- partitum$docType %||% partitum$src_type
   if (!identical(type, "function") && !identical(type, "method")) {

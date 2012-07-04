@@ -59,9 +59,23 @@
   to insert them into the documentation.}
 
   \item{\code{@return}}{Used to document the object
-  returned by the function. For lists, use the
-  \code{\\item{name a}{description a}} describe each
-  component of the list}
+  returned by the function.  For lists, use the
+  \code{@returnItem} tag or \code{\\item{name
+  a}{description a}} to describe each component of the
+  list.}
+
+  \item{\code{@returnList}}{Produces generic text for a
+  list as returned object, typically used in combination
+  with \code{@returnItem} tags for each component of the
+  list.}
+
+  \item{\code{@returnClass class}}{Produces generic text
+  for a returned object with the specified class, typically
+  used in combination with \code{@returnItem} tags for each
+  component of the object.}
+
+  \item{\code{@returnItem name description}}{Describe each
+  component of the returned object.}
 
   \item{\code{@author authors...}}{A free text string
   describing the authors of the function.  This is

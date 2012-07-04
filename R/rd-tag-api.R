@@ -99,7 +99,6 @@ format.references_tag <- format_collapse
 format.seealso_tag <- format_collapse
 format.source_tag <- format_collapse
 format.usage_tag <- function(x, ...) format_collapse(x, ..., exdent = 4)
-format.value_tag <- format_collapse
 
 
 # Tags that don't have output ------------------------------------------------
@@ -114,13 +113,42 @@ format.formals_tag <- format_null
 # Tags with special errors or other semantics --------------------------------
 
 #' @S3method format arguments_tag
-format.arguments_tag <- function(x, ...) {
+get_items <- function(x, check = FALSE) {
   names <- names(x$values)
-  dups <- duplicated(names)
-  
-  items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
+  if (check) {
+    # check for duplicated and throw warning if there are any
+    dups <- duplicated(names)
+    if (any(dups)) {
+      warning("Duplicated parameters: ", str_c(names[dups], collapse = ","), 
+        call. = FALSE)
+    }
+  }
+  str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
+}
+format.arguments_tag <- function(x, ...) {
+  items <- get_items(x)
   rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2),
     space = TRUE)
+}
+format.value_tag <- function(x, ...) {
+  # general description of return value
+  names <- names(x$values)
+  if(is.null(names)) {
+    # no itemization
+    str <- x$values
+  } else {
+    # extract general description first
+    general <- names == ""
+    str <- x$values[general]
+    # additional list components
+    x$values <- x$values[!general]
+    if (length(x$values) > 0) {
+      items <- get_items(x, check = TRUE)
+      str <- str_c(c(str, items), collapse = "\n\n")
+    }
+  }
+  # return tag
+  rd_tag(x$tag, str_wrap(str, width = 60, exdent = 2, indent = 2), space = TRUE)
 }
 
 #' @S3method format section_tag

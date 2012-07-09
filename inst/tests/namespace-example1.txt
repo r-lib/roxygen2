@@ -1,0 +1,8 @@
+export(blah)
+exportMethods(blahmethod)
+import(ggplot2)
+importClassesFrom(Biobase,eSet)
+importMethodsFrom(Biobase,"protocolData<-")
+importFrom(devtools,reload)
+importMethodsFrom(affy,exprs)
+S3method(subset,eSet)

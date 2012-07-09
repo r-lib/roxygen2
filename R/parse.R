@@ -55,3 +55,42 @@ parse.text <- function(text) {
   on.exit(unlink(file))
   parse.files(file)
 }
+
+
+#' convert package dependency list to vector
+#'
+#' Parse the package dependencies in a DESCRIPTION file (from in the
+#' Depends, Imports or Suggests fields), from a comma and possibly newline
+#' separated, possibly versioned (>= X.Y.Z) character(1) vector, and
+#' return a character vector of package names, 1 per element. 
+#' The return values are unversioned, names are versioned. see examples.
+#' 
+#' @param pkgs a character(1) of package names. see \code{read.description(...)$Depends}
+#'  and examples
+#' @param exclude.R logical: if \code{TRUE}, then don't return the \R dependency
+#'  often found in the Depends field.
+#' 
+#' @return a character vector of package names, named by either the package name,
+#'  or of the versioned package name, depedning on the input. see datapoint 2 in
+#'  the examples
+#' 
+#' @author Mark Cowley, 2012-07-09
+#' @noRd
+#' 
+#' @examples
+#' # pkgs <- paste(c(desc$Depends, desc$Imports), collapse = ", ")
+#' pkgs <- "digest, stringr (>= 0.5),\ntools,\nbrew"
+#' roxygen2:::parse.dependencies(pkgs)
+#' #   digest  stringr (>= 0.5)    tools    brew 
+#' # "digest"         "stringr"  "tools"  "brew" 
+parse.dependencies <- function(pkgs, exclude.R=TRUE) {
+  if (pkgs != "") {
+    pkgs <- strsplit(pkgs, ",")[[1]]
+    pkgs <- gsub("^\\s+|\\s+$", "", pkgs)
+    pkg.ver <- pkgs
+    pkgs <- gsub("\\s*\\(.*?\\)", "", pkgs)
+    names(pkgs) <- pkg.ver
+      if( exclude.R ) pkgs <- pkgs[pkgs != "R"]
+  }
+  return( pkgs )
+}

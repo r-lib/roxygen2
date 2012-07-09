@@ -1,0 +1,5 @@
+export(blah)
+exportMethods(blahmethod)
+import(stringr)
+import(tools)
+import(brew)

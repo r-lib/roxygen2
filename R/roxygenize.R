@@ -5,6 +5,8 @@
 #' the documentation for the individual roclets, \code{\link{rd_roclet}},
 #' \code{\link{namespace_roclet}} and \code{\link{collate_roclet}}, for 
 #' documentation on how to use each one.
+#' The Imports directive in the DESCRIPTION file is checked for consistency
+#' with the NAMESPACE file.
 #'
 #' @param package.dir the package's top directory
 #' @param roxygen.dir where to create roxygen output; defaults to
@@ -53,22 +55,39 @@ roxygenize <- function(package.dir,
     r_files <- c(collate_exists, setdiff(r_files, collate_exists))
     # load the dependencies
     pkgs <- paste(c(desc$Depends, desc$Imports), collapse = ", ")
-    if (pkgs != "") {
-      pkgs <- gsub("\\s*\\(.*?\\)", "", pkgs)
-      pkgs <- strsplit(pkgs, ",")[[1]]
-      pkgs <- gsub("^\\s+|\\s+$", "", pkgs)
-      lapply(pkgs[pkgs != "R"], require, character.only = TRUE)
-    }
+    pkgs <- unname(parse.dependencies(pkgs, exclude.R=TRUE))
+    lapply(pkgs, require, character.only = TRUE)
   }
   
   parsed <- parse.files(r_files)
 
-  roclets <- str_c(roclets, "_roclet", sep = "")
-  for (roclet in roclets) {
-    roc <- match.fun(roclet)()
-    results <- roc_process(roc, parsed, roxygen.dir)
-    roc_output(roc, results, roxygen.dir)
+  if( length(roclets) > 0 ) {
+    roclets <- str_c(roclets, "_roclet", sep = "")
+    for (roclet in roclets) {
+      roc <- match.fun(roclet)()
+      results <- roc_process(roc, parsed, roxygen.dir)
+      roc_output(roc, results, roxygen.dir)
+    }
   }
+
+  # update the Imports directive, based on the Imports within NAMESPACE
+  NAMESPACE <- file.path(package.dir, "NAMESPACE")
+  if ( file.exists(NAMESPACE) && file.exists(DESCRIPTION) ) {
+    ns.import.pkgs <- namespace.imports(NAMESPACE) # unversioned package names
+    if( length(ns.import.pkgs) > 0 ) {
+      desc <- read.description(DESCRIPTION)
+      desc.import.pkgs <- parse.dependencies(desc$Imports, exclude.R=TRUE) # possibly versioned package names
+      if( !identical(sort(ns.import.pkgs), unname(sort(desc.import.pkgs))) ) {
+        old <- names(desc.import.pkgs)[desc.import.pkgs %in% ns.import.pkgs] # remove any packages not mentioned in NAMESPACE
+        new <- c(old, setdiff(ns.import.pkgs, desc.import.pkgs))
+        new <- sort(new)
+        desc$Imports <- paste(new, collapse=", ")
+        write.description(desc, DESCRIPTION)
+        message('Updating Imports directive in ', DESCRIPTION, "\n")
+      }
+    }
+  }
+
 }
 
 #' @rdname roxygenize
@@ -103,3 +122,4 @@ copy.dir <- function(source,
     file.copy(source.file, target.file, overwrite=overwrite)
   }
 }
+

@@ -40,6 +40,7 @@
   the individual roclets, \code{\link{rd_roclet}},
   \code{\link{namespace_roclet}} and
   \code{\link{collate_roclet}}, for documentation on how to
-  use each one.
+  use each one. The Imports directive in the DESCRIPTION
+  file is checked for consistency with the NAMESPACE file.
 }
 

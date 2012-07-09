@@ -22,6 +22,7 @@ Suggests:
 Collate:
     'cache.R'
     'description.R'
+    'namespace.R'
     'parse-preref.R'
     'parse-registry.R'
     'parse-srcref.R'
@@ -36,6 +37,7 @@ Collate:
     'roxygen.R'
     'roxygenize.R'
     'template.R'
+    'temppackage.R'
     'topo-sort.R'
     'util-locale.R'
     'utils.R'

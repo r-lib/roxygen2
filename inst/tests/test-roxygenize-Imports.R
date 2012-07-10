@@ -1,12 +1,10 @@
 context("Update Imports directives within DESCRIPTION")
-Sys.setlocale(locale="en_AU") # makes the sort match my sort order for these tests.
 
 test_that("namespace.imports works as expected", {
   nf <- "namespace-example1.txt"
   expect_true(file.exists(nf))
   imp <- namespace.imports(nf)
-  # cat(imp, Sys.getlocale())
-  exp <- c("affy", "Biobase", "devtools", "ggplot2")
+  exp <- c("Biobase", "affy", "devtools", "ggplot2")
   expect_equal(imp, exp)
 })
 
@@ -20,7 +18,7 @@ test_that("Imports updates as expected", {
   pkg <- temppackage(df, nf)
 
   ns.imports <- namespace.imports(file.path(pkg, "NAMESPACE"))
-  exp <- c("affy", "Biobase", "devtools", "ggplot2")
+  exp <- c("Biobase", "affy", "devtools", "ggplot2")
   expect_equal(ns.imports, exp)
 
   desc <- read.description(file.path(pkg, "DESCRIPTION"))
@@ -34,8 +32,8 @@ test_that("Imports updates as expected", {
   # Imports in DESCRIPTION should have been updated
   desc <- read.description(file.path(pkg, "DESCRIPTION"))
   desc.imports <- parse.dependencies(desc$Imports, exclude.R=TRUE)
-  exp.desc.imports<- structure(c("affy", "Biobase", "devtools", "ggplot2"), .Names = c("affy", 
-  "Biobase", "devtools", "ggplot2"))
+  exp.desc.imports <- structure(c("Biobase", "affy", "devtools", "ggplot2"), .Names = c("Biobase", 
+	"affy", "devtools", "ggplot2"))
   expect_equal(desc.imports, exp.desc.imports)
 })
 

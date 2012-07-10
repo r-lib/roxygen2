@@ -77,10 +77,10 @@ roxygenize <- function(package.dir,
     if( length(ns.import.pkgs) > 0 ) {
       desc <- read.description(DESCRIPTION)
       desc.import.pkgs <- parse.dependencies(desc$Imports, exclude.R=TRUE) # possibly versioned package names
-      if( !identical(sort(ns.import.pkgs), unname(sort(desc.import.pkgs))) ) {
+      if( !identical(with_locale("C", sort(ns.import.pkgs)), unname(with_locale("C", sort(desc.import.pkgs)))) ) {
         old <- names(desc.import.pkgs)[desc.import.pkgs %in% ns.import.pkgs] # remove any packages not mentioned in NAMESPACE
         new <- c(old, setdiff(ns.import.pkgs, desc.import.pkgs))
-        new <- sort(new)
+        new <- with_locale("C", sort(new))
         desc$Imports <- paste(new, collapse=", ")
         write.description(desc, DESCRIPTION)
         message('Updating Imports directive in ', DESCRIPTION, "\n")

@@ -23,7 +23,7 @@ namespace.imports <- function(file) {
 
     ns.import.pkgs <- sub("import.*\\(", "", sub(",.*", "", ns))
     ns.import.pkgs <- sub("\\)", "", ns.import.pkgs)
-    ns.import.pkgs <- sort( unique(ns.import.pkgs) )
+    ns.import.pkgs <- with_locale("C", sort(unique(ns.import.pkgs)))
   }
   else {
     ns.import.pkgs <- character()

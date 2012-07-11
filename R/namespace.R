@@ -11,10 +11,21 @@ read.namespace <- function(file) {
 #' character(0) if none were found
 #' @author Mark Cowley, 2012-07-09
 #' @noRd
-namespace.imports <- function(file) {
+namespace.file.imports <- function(file) {
   ns <- read.namespace(file)
-  ns <- grep("^import", ns, value=TRUE)
-  if( length(ns) > 0 ) {
+  namespace.imports(ns)
+}
+
+#' grab the packages to be Imported from the namespace_roclet.
+#'
+#' @param ns a character vector of values from running namespace_roclet.
+#' @return a \code{character} \code{vector} of pacakge imports, or a 
+#' character(0) if none were found
+#' @author Mark Cowley, 2012-07-09
+#' @noRd
+namespace.imports <- function(ns) {
+  ns <- grep("^import", ns, value = TRUE)
+  if (length(ns) > 0) {
     # 4 examples
     # import(ggplot2)
     # importFrom(filehash,dbInsert)

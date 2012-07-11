@@ -83,14 +83,16 @@ parse.text <- function(text) {
 #' roxygen2:::parse.dependencies(pkgs)
 #' #   digest  stringr (>= 0.5)    tools    brew 
 #' # "digest"         "stringr"  "tools"  "brew" 
-parse.dependencies <- function(pkgs, exclude.R=TRUE) {
+parse.dependencies <- function(pkgs, exclude.R = TRUE) {
   if (pkgs != "") {
     pkgs <- strsplit(pkgs, ",")[[1]]
     pkgs <- gsub("^\\s+|\\s+$", "", pkgs)
     pkg.ver <- pkgs
     pkgs <- gsub("\\s*\\(.*?\\)", "", pkgs)
     names(pkgs) <- pkg.ver
-      if( exclude.R ) pkgs <- pkgs[pkgs != "R"]
+    if (exclude.R) {
+      pkgs <- pkgs[pkgs != "R"]
+    }
   }
   return( pkgs )
 }

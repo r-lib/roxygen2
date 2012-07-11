@@ -61,7 +61,7 @@ roxygenize <- function(package.dir,
   
   parsed <- parse.files(r_files)
 
-  if( length(roclets) > 0 ) {
+  if (length(roclets) > 0) {
     roclets <- str_c(roclets, "_roclet", sep = "")
     for (roclet in roclets) {
       roc <- match.fun(roclet)()
@@ -72,12 +72,12 @@ roxygenize <- function(package.dir,
 
   # update the Imports directive, based on the Imports within NAMESPACE
   NAMESPACE <- file.path(package.dir, "NAMESPACE")
-  if ( file.exists(NAMESPACE) && file.exists(DESCRIPTION) ) {
-    ns.import.pkgs <- namespace.imports(NAMESPACE) # unversioned package names
-    if( length(ns.import.pkgs) > 0 ) {
+  if (file.exists(NAMESPACE) && file.exists(DESCRIPTION)) {
+    ns.import.pkgs <- namespace.file.imports(NAMESPACE) # unversioned package names
+    if (length(ns.import.pkgs) > 0) {
       desc <- read.description(DESCRIPTION)
       desc.import.pkgs <- parse.dependencies(desc$Imports, exclude.R=TRUE) # possibly versioned package names
-      if( !identical(with_locale("C", sort(ns.import.pkgs)), unname(with_locale("C", sort(desc.import.pkgs)))) ) {
+      if (!identical(with_locale("C", sort(ns.import.pkgs)), unname(with_locale("C", sort(desc.import.pkgs))))) {
         old <- names(desc.import.pkgs)[desc.import.pkgs %in% ns.import.pkgs] # remove any packages not mentioned in NAMESPACE
         new <- c(old, setdiff(ns.import.pkgs, desc.import.pkgs))
         new <- with_locale("C", sort(new))

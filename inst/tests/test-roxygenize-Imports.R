@@ -93,3 +93,29 @@ test_that("Imports deletions occur as expected", {
   "tools"))
   expect_equal(desc.imports, exp.desc.imports)
 })
+
+
+test_that("Add Imports: to DESCRIPTION works ok", {
+  df <- "description-example2.txt"
+  nf <- "namespace-example1.txt"
+  expect_true(file.exists(df))
+  expect_true(file.exists(nf))
+  
+  pkg <- temp_package(df, nf)
+
+  ns.imports <- namespace.file.imports(file.path(pkg, "NAMESPACE"))
+  exp <- c("Biobase", "affy", "devtools", "ggplot2")
+  expect_equal(ns.imports, exp)
+
+  desc <- read.description(df)
+  desc.imports <- parse.dependencies(desc$Imports, exclude.R = TRUE)
+  expect_true(is.null(desc.imports))
+
+  expect_message(roxygenize(pkg, roclet = character()), "Updating Imports directive in.*")
+
+  # Imports in DESCRIPTION should have been updated
+  desc <- read.description(file.path(pkg, "DESCRIPTION"))
+  desc.imports <- parse.dependencies(desc$Imports, exclude.R = TRUE)
+  exp.desc.imports <- structure(c("Biobase", "affy", "devtools", "ggplot2"), .Names = c("Biobase", "affy", "devtools", "ggplot2"))
+  expect_equal(desc.imports, exp.desc.imports)
+})

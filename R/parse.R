@@ -84,7 +84,7 @@ parse.text <- function(text) {
 #' #   digest  stringr (>= 0.5)    tools    brew 
 #' # "digest"         "stringr"  "tools"  "brew" 
 parse.dependencies <- function(pkgs, exclude.R = TRUE) {
-  if (pkgs != "") {
+  if (!identical(pkgs, NULL) && !identical(pkgs, "")) {
     pkgs <- strsplit(pkgs, ",")[[1]]
     pkgs <- gsub("^\\s+|\\s+$", "", pkgs)
     pkg.ver <- pkgs

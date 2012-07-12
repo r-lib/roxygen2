@@ -11,7 +11,8 @@ Maintainer: Hadley Wickham <hadley@rice.edu>
 Depends:
     R (>= 2.14),
     stats,
-    methods
+    methods,
+    utils
 Imports:
     stringr (>= 0.5),
     tools,
@@ -22,6 +23,7 @@ Suggests:
 Collate:
     'cache.R'
     'description.R'
+    'namespace.R'
     'parse-preref.R'
     'parse-registry.R'
     'parse-srcref.R'
@@ -39,3 +41,4 @@ Collate:
     'topo-sort.R'
     'util-locale.R'
     'utils.R'
+    'temp_package.R'

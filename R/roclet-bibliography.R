@@ -33,21 +33,36 @@ extract.cite <- function(key, str, full=FALSE){
 #	if( grepl("cite", str))
 #		print(str)	
 	# check for the presence of \cite commands
-	p <- "(^|[^\\])(\\\\cite\\{([^} ]*)\\})"  
+	p <- "(^|[^\\])(\\\\cite\\{([^#} ]*)\\})"  
 	cite <- str_match_all(str, p)
 	#print(cite)
-	if( length(cite[[1]]) > 0L ){
+	.local <- function(cite){
+		if( length(cite) == 0L ) return(NA)
 		#print(cite)
 		if( !full ){
-			cite <- unlist(lapply(cite[[1]][,4], parse.cite, key='cite'))
-			as.list(setNames(unlist(cite), rep('cite', length(cite))))
+			unlist(lapply(cite[,4], parse.cite, key='cite'))			
 		}else{
 			mapply(function(s, cmd){
 				list(keys=unlist(parse.cite(s, key='cite'))
 					, cmd=cmd, skeys=s)
-			}, cite[[1]][,4], cite[[1]][,3], SIMPLIFY=FALSE)
+			}, cite[,4], cite[,3], SIMPLIFY=FALSE)
 		}
 	}
+	
+	keys <- lapply(cite, .local)
+	keys <- keys[!is.na(keys)]
+	if( length(keys) == 0L ) return(NULL)
+	
+	if( !full ){
+		keys <- unique(unlist(keys))
+		keys <- as.list(setNames(keys, rep('cite', length(keys))))
+	}else{
+		# reduce or wrap if only one key
+		if( is.null(keys[[1]]$skeys) )
+			keys <- unlist(keys, recursive=FALSE)
+	}
+	
+	keys
 }
 # parser for @cite tags: separate BibTeX keys
 register.preref.parser('cite', parse.cite)
@@ -182,6 +197,19 @@ pkgBibfile <- local({
 	}
 })
 
+vignetteFiles <- function(pkg, pattern="\\.Rnw$", recursive=TRUE, ignore.case=TRUE, full.names=TRUE, ...){
+	
+	# lookup vignette path
+	if( !file_test('-d', path <- file.path(pkg, 'vignettes')) ){
+		if( !file_test('-d', path <- file.path(pkg, 'inst/doc')) ){
+			return(NULL)
+		}
+	}
+	# list vignettes
+	list.files(path, pattern=pattern, recursive=recursive, ignore.case=ignore.case, full.names=full.names, ...)
+	
+}
+
 #' @S3method roc_process bibliography
 roc_process.bibliography <- function(roclet, partita, base_path) {
 	# Remove srcrefs with no attached roxygen comments
@@ -201,20 +229,35 @@ roc_process.bibliography <- function(roclet, partita, base_path) {
 		bibfiles <- c(normalizePath(std_bibfile), bibfiles)
 	#str(bibfiles)
 	
-	# lookup for the bibentries
-	refs <- emptybib()
+	# init vector of bib keys
+	bibkeys <- NULL
+	
+	# parse vignettes
+	rnws <- vignetteFiles(base_path, full.names=TRUE)
+	if( length(rnws) > 0L ){
+		lapply(rnws, function(f){
+			l <- readLines(f)
+			bibkeys <<- c(bibkeys, extract.cite('vignette', l))
+		})
+	}
+	
+	# lookup for the bibentries in partita
 	any_cite <- FALSE
 	for (partitum in partita) {
 		# get all citation keys
 		bkeys <- unlist(partitum[names(partitum) == "cite"])
-		bkeys <- unique(bkeys)
-		# lookup keys in cached bibfiles
 		if( !is.null(bkeys) ){
 			any_cite <- TRUE
-			refs <- c(refs, lookupBibentry(bkeys, bibfiles, partitum, has_reffile))
+			bibkeys <- c(bibkeys, bkeys)
 		}
 	}
-	#str(refs)
+	refs <- emptybib()
+	
+	# lookup keys in cached bibfiles
+	if( !is.null(bibkeys) ){
+		bibkeys <- unique(bibkeys)
+		refs <- lookupBibentry(bibkeys, bibfiles, partitum, has_reffile)
+	}
 	
 	# warn about REFERENCES.bib
 	if( !any_cite && has_reffile )
@@ -283,7 +326,10 @@ lookupBibentry <- function(keys, bibfiles, partitum, skip=TRUE){
 			f <- bibfiles[i]
 			hash <- c(f, tools::md5sum(f))
 			# load/compute bib databases in cache
-			bib_db <- rd_proc_cache$compute(hash,.loadBibfile(f))
+			bib_db <- rd_proc_cache$compute(hash,{
+				if( i>1L ) message("Missing entry for citation key '", k, "'")
+				.loadBibfile(f)
+			})
 			bibitem <- getBibEntry(k, bib_db)
 			if( length(bibitem) > 0L ){
 				#message("OK")
@@ -358,7 +404,7 @@ format_cite <- function(str, ...){
 			ncmd <- gsub(ci$skeys, e, ci$cmd, fixed=TRUE)
 			ncmd <- gsub("\\", "\\\\", ncmd, fixed=TRUE)
 			#print(ncmd)
-			pa <- str_replace_all(ci$cmd, "([\\{}])", "\\\\\\1")
+			pa <- str_replace_all(ci$cmd, "([\\{}-])", "\\\\\\1")
 			#print(pa)
 			str <- gsub(str_c("(^|[^\\])", pa), str_c("\\1", ncmd), str)
 			#message("#str out=", str)

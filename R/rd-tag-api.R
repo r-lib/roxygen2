@@ -16,7 +16,7 @@ is.rd_tag <- function(x) inherits(x, "rd_tag")
 
 #' @S3method print rd_tag
 print.rd_tag <- function(x, ...) {
-  cat(format(x), "\n")
+  cat(format(x), "\n", sep='')
 }
 
 # Translate a tag and values into an Rd expression; multiple values get their
@@ -29,6 +29,8 @@ rd_tag <- function(tag, ..., space = FALSE) {
   }
   # Turn non-breaking spaces back into regular spaces
   values <- str_replace_all(values, fixed("\u{A0}"), " ")
+  values <- str_replace_all(values, fixed("\u{201c}"), "\"")
+  values <- str_replace_all(values, fixed("\u{201d}"), "\"")
   str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")                         
 }
 
@@ -77,6 +79,8 @@ format.encoding_tag <- format_first
 
 format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   values <- str_c(x$values, collapse = "\n\n")
+  # substitute citation keys
+  values <- format_cite(values)
   rd_tag(x$tag, str_wrap(values, width = 60, indent = indent, 
     exdent = exdent), space = TRUE)
 } 
@@ -95,7 +99,33 @@ format.concept_tag <- format_collapse
 format.description_tag <- format_collapse
 format.details_tag <- format_collapse
 format.note_tag <- format_collapse
-format.references_tag <- format_collapse
+
+format.references_tag <- function(x, ...){	
+	# detect citations from full references
+	refs <- x$values		
+	info <- str_match(refs, "^@cite:([^:]+):([0-9]+)-([0-9]+):(.*)")
+	keys <- info[,5]
+	ikeys <- which(!is.na(keys))	
+	if( length(ikeys) > 0  ){
+		keys <- keys[ikeys]
+		res <- lookupBibentry(keys)		
+		# check for unfound keys
+		nf <- which(res == "")
+		if( length(nf) > 0 ){
+			# extract srcref info
+			info <- info[ikeys[1],]
+			srcref <- list(filename=info[2], lloc=c(info[3],0,info[4],0))
+			roxygen_warning("Bibtex entrie(s) not found: ", paste(keys[nf], collapse=', '), srcref=srcref)
+			res[nf] <- str_c("\\cite{??", keys[nf], "??}")
+			#res[-nf] <- res[-nf]
+		}
+		x$values <- res
+	}
+	x$values <- unlist(x$values)
+	#print(x$values)
+	# collapse all references
+	format_collapse(x)
+}
 format.seealso_tag <- format_collapse
 format.source_tag <- format_collapse
 format.usage_tag <- function(x, ...) format_collapse(x, ..., exdent = 4)
@@ -129,6 +159,9 @@ format.section_tag <- function(x, ...) {
 
   contents <- vapply(x$values, "[[", "content", FUN.VALUE = character(1))
   contents <- str_wrap(str_trim(contents), width = 60, exdent = 2, indent = 2)
+  
+  # substitute citation keys
+  contents <- format_cite(contents)
   
   setions <- str_c("\\section{", names, "}{\n", contents, "\n}\n", 
     collapse = "\n")

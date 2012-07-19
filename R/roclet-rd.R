@@ -36,7 +36,6 @@ register.preref.parsers(parse.name,
 register.preref.parsers(parse.default,
                         'noRd')
 
-
 register.srcref.parsers(function(call, env) {
   assignee <- as.character(call[[2]])
   
@@ -363,6 +362,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'source'))
   add_tag(rd, process_had_tag(partitum, 'seealso'))
   add_tag(rd, process_had_tag(partitum, "references"))
+  add_tag(rd, process.cite(partitum, base_path))
   add_tag(rd, process_had_tag(partitum, 'concept'))
   add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
       new_tag("value", param)

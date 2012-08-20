@@ -4,19 +4,15 @@ License: GPL (>= 2)
 Description: A Doxygen-like in-source documentation system
     for Rd, collation, and NAMESPACE.
 Title: In-source documentation for R
-Author: Hadley Wickham <hadley@rice.edu>,
-    Peter Danenberg <pcd@roxygen.org>,
-    Manuel Eugster <Manuel.Eugster@stat.uni-muenchen.de>
+Author: Hadley Wickham <hadley@rice.edu>, Peter Danenberg
+    <pcd@roxygen.org>, Manuel Eugster
+    <Manuel.Eugster@stat.uni-muenchen.de>
 Maintainer: Hadley Wickham <hadley@rice.edu>
-Depends:
-    R (>= 2.14),
-    stats,
-    methods
 Imports:
-    stringr (>= 0.5),
-    tools,
+    stringr,
     brew,
-    digest
+    digest,
+    tools
 Suggests:
     testthat
 Collate:
@@ -39,3 +35,5 @@ Collate:
     'topo-sort.R'
     'util-locale.R'
     'utils.R'
+    'roclet-depends.R'
+    'roclet-index.R'

@@ -22,13 +22,15 @@ roc_process.testthat <- function(roclet, partita, base_path) {
     tests = mapply(testthat_testthat,names(partitum),partitum,base_path)
     tests = tests[str_length(tests)>0]
     if (length(tests)>0) {
-      writeLines(str_c("Should put test: ",tests,"\n into file: ",filename))
-      othertests = ifelse(is.null(results[[filename]]),
-        str_c("## tests generated with roxygen2 from ",basename(partitum$srcref$filename)),
-        results[[filename]])
+      # Add a nice little header
+      othertests = if(is.null(results[[filename]])) {
+        str_c("## tests generated with roxygen2 from ",basename(partitum$srcref$filename))
+      }else {
+        results[[filename]]
+      }
 
-      results[[filename]] = str_c(othertests,"\n",
-          do.call(paste,c(tests,list(sep="\n"))))
+      # append them into a vector; writeLines will format them with a newline
+      results[[filename]] = c(othertests,tests)
     }
   }
   results

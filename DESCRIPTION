@@ -32,6 +32,7 @@ Collate:
     'roclet-collate.R'
     'roclet-namespace.R'
     'roclet-rd.R'
+    'roclet-testthat.R'
     'roclet.R'
     'roxygen.R'
     'roxygenize.R'

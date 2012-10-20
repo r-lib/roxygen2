@@ -193,10 +193,12 @@ words <- function(x) {
   quote_if_needed(str_split(str_trim(x), "\\s+")[[1]])
 }
 is.syntactic <- function(x) make.names(x) == x
-has.quotes <- function(x) str_detect(x, "'|\"")
+has.quotes <- function(x) str_detect(x, "^('|\").*\\1$")
 quote_if_needed <- function(x) {
+  old <- x
   needs_quotes <- !has.quotes(x) & !is.syntactic(x)
-  x[needs_quotes] <- str_c('"', x[needs_quotes], '"')
+  x[needs_quotes] <- str_c('"', str_replace_all(x[needs_quotes], '(["\\])', "\\\\\\1"), '"')
+  print(cbind(old, new=x))
   x
 }
 

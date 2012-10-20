@@ -14,12 +14,16 @@ test_that("export escapes quotes name if needed", {
 
 test_that("export escapes tricky names", {
   out <- roc_proc_text(roc, "#' @export\n`%||%` <- function(){}")
-  expect_equal(out, 'export("%||%")'
+  expect_equal(out, 'export("%||%")')
   out <- roc_proc_text(roc, "#' @export\n`%'%` <- function(){}")
-  expect_equal(out, 'export("%\'%") <- function(){}')
+  expect_equal(out, 'export("%\'%")')
   out <- roc_proc_text(roc, "#' @export\n`%\"%` <- function(){}")
-  expect_equal(out, 'export("%\\"%") <- function(){}')
-}
+  expect_equal(out, 'export("%\\"%")')
+  out <- roc_proc_text(roc, "#' @export\n`%\"%` <- function(){}")
+  expect_equal(out, 'export("%\\"%")')
+  out <- roc_proc_text(roc, "#' @export\n`%\\\\%` <- function(){}")
+  expect_equal(out, 'export("%\\\\%")')
+})
 
 test_that("export parameter overrides default", {
   out <- roc_proc_text(roc, "#' @export b\na <- function(){}")

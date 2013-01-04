@@ -24,11 +24,11 @@ test_that("usage correct for functions with no arguments", {
   expect_equal(get_tag(out, "usage")$values, "f()")
 })
 
-test_that("% is escaped in usage", {
+test_that("% and \\ are escaped in usage", {
   out <- roc_proc_text(roc, "
     #' Title.
-    a <- function(a='%') {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, "a(a\u{A0}=\u{A0}\"\\%\")")
+    a <- function(a='%\\\\') {}")[[1]]
+  expect_equal(get_tag(out, "usage")$values, 'a(a\u{A0}=\u{A0}"\\%\\\\\\\\")')
 })
 
 test_that("long usages protected from incorrect breakage", {

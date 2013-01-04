@@ -15,7 +15,7 @@ usage <- function(args) {
   arg_to_text <- function(arg) {
     if (is.missing.arg(arg)) return("")
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
-    text <- str_replace_all(text, fixed("%"), "\\%")
+    text <- str_replace_all(text, "([%\\])", "\\\\\\1")
     text <- str_replace_all(text, fixed(" "), "\u{A0}")
     Encoding(text) <- "UTF-8"    
     

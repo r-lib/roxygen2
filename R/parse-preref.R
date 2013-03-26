@@ -2,8 +2,8 @@
 parse.preref <- function(lines) {
   # Extract srcrefs
   srcrefs <- attr(lines, 'srcref')
-  srcrefs$lloc[1] <- srcrefs$lloc[1] + 1 
-  
+  srcrefs$lloc[1] <- srcrefs$lloc[1] + 1
+
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""),
     "right")
@@ -20,11 +20,11 @@ parse.preref <- function(lines) {
   elements <- str_replace_all(elements, fixed("@@"), "@")
 
   parsed.introduction <- parse.introduction(elements[[1]])
-  parsed.elements <- unlist(lapply(elements[-1], parse.element, 
+  parsed.elements <- unlist(lapply(elements[-1], parse.element,
     srcref = srcrefs), recursive = FALSE)
-  
+
   c(parsed.introduction, parsed.elements)
-} 
+}
 
 # Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '\\s*#+\' ?'
@@ -37,20 +37,20 @@ LINE.DELIMITER <- '\\s*#+\' ?'
 #   and lloc
 prerefs <- function(srcfile, srcrefs) {
   if (length(srcrefs) == 0) return(list())
-    
+
   src_start <- vapply(srcrefs, "[[", integer(1), 1) - 1
   src_end <- vapply(srcrefs, "[[", integer(1), 3) + 1
-  
+
   comments_start <- c(1, src_end[-length(src_end)])
   comments_end <- src_start
-  
+
   src <- readLines(srcfile$filename, warn = FALSE)
-  
+
   extract <- function(start, end) {
     srcref <- list(filename = srcfile$filename, lloc = c(start, 0 , end, 0))
     structure(src[start:end], srcref = srcref)
   }
-  
+
   Map(extract, comments_start, comments_end)
 }
 
@@ -60,11 +60,11 @@ prerefs <- function(srcfile, srcrefs) {
 # @return A list containing the parsed constituents
 parse.element <- function(element, srcref) {
   pieces <- str_split_fixed(element, "[[:space:]]+", 2)
-  
+
   tag <- pieces[, 1]
   rest <- pieces[, 2]
-  
-  tag_parser <- preref.parsers[[tag]] %||% parse.unknown 
+
+  tag_parser <- preref.parsers[[tag]] %||% parse.unknown
   tag_parser(tag, rest, srcref)
 }
 
@@ -122,7 +122,7 @@ parse.value <- function(key, rest, srcref) {
   else
     parse.default(key, rest)
 }
-  
+
 #' Parse an element containing a mandatory name
 #' and description (such as \code{@@param}).
 #'
@@ -133,7 +133,7 @@ parse.value <- function(key, rest, srcref) {
 #' @export
 parse.name.description <- function(key, rest, srcref) {
   pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
-  
+
   name <- pieces[, 1]
   rest <- str_trim(pieces[, 2])
 
@@ -157,13 +157,13 @@ parse.name.description <- function(key, rest, srcref) {
 #' @export
 parse.name <- function(key, name, srcref) {
   name <- str_trim(name)
-  
+
   if (is.null.string(name)) {
     roxygen_stop(key, ' requires a name', srcref = srcref)
   } else if (str_count(name, "\\s+") > 1) {
     roxygen_warning(key, ' ignoring extra arguments', srcref = srcref)
   }
-    
+
   parse.default(key, word(name, 1))
 }
 

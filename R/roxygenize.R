@@ -3,7 +3,7 @@
 #' This is the workhorse function that uses roclets, the built-in document
 #' tranformation functions, to build all documentation for a package.  See
 #' the documentation for the individual roclets, \code{\link{rd_roclet}},
-#' \code{\link{namespace_roclet}} and \code{\link{collate_roclet}}, for 
+#' \code{\link{namespace_roclet}} and \code{\link{collate_roclet}}, for
 #' documentation on how to use each one.
 #'
 #' @param package.dir the package's top directory
@@ -38,7 +38,7 @@ roxygenize <- function(package.dir,
   roxygen.dir <- normalizePath(roxygen.dir)
   r_files <- dir(file.path(roxygen.dir, "R"), "[.Rr]$", full.names = TRUE)
 
-  # If description present, use Collate to order the files 
+  # If description present, use Collate to order the files
   # (but still include them all, and silently remove missing)
   DESCRIPTION <- file.path(package.dir, "DESCRIPTION")
   if (file.exists(DESCRIPTION)) {
@@ -47,7 +47,7 @@ roxygenize <- function(package.dir,
     con <- textConnection(raw_collate)
     on.exit(close(con))
     collate <- scan(con, "character", sep = " ", quiet = TRUE)
-    
+
     collate_path <- file.path(roxygen.dir, "R", collate)
     collate_exists <- Filter(file.exists, collate_path)
     r_files <- c(collate_exists, setdiff(r_files, collate_exists))
@@ -60,7 +60,7 @@ roxygenize <- function(package.dir,
       lapply(pkgs[pkgs != "R"], require, character.only = TRUE)
     }
   }
-  
+
   parsed <- parse.files(r_files)
 
   roclets <- str_c(roclets, "_roclet", sep = "")

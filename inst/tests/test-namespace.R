@@ -31,7 +31,7 @@ test_that("export detects method name", {
   out <- roc_proc_text(roc, "
     #' @export\n
     setMethod('max', 'a', function(x, ...) x[1])")
-  expect_equal(out, 'exportMethods(max)')  
+  expect_equal(out, 'exportMethods(max)')
 })
 
 test_that("export method escapes if needed", {
@@ -39,7 +39,7 @@ test_that("export method escapes if needed", {
     setGeneric('x<-', function(x, value) standardGeneric('x<-'))
     #' @export\n
     setMethod('x<-', 'a', function(x, value) value)")
-  expect_equal(out, 'exportMethods("x<-")')  
+  expect_equal(out, 'exportMethods("x<-")')
 })
 
 
@@ -47,7 +47,7 @@ test_that("exportMethod overrides default method name", {
   out <- roc_proc_text(roc, "
     #' @exportMethod c
     setMethod('max', 'a', function(x, ...) x[1])")
-  expect_equal(out, 'exportMethods(c)')  
+  expect_equal(out, 'exportMethods(c)')
 })
 
 test_that("other namespace tags produce correct output", {
@@ -55,19 +55,19 @@ test_that("other namespace tags produce correct output", {
     #' @exportPattern test
     #' @S3method test test
     #' @import test
-    #' @importFrom test test1 test2 
+    #' @importFrom test test1 test2
     #' @importClassesFrom test test1 test2
     #' @importMethodsFrom test test1 test2
     NULL")
 
   expect_equal(sort(out), sort(c(
-    "exportPattern(test)", 
+    "exportPattern(test)",
     "S3method(test,test)",
-    "import(test)", 
-    "importFrom(test,test1)", 
+    "import(test)",
+    "importFrom(test,test1)",
     "importFrom(test,test2)",
-    "importClassesFrom(test,test1)", 
-    "importClassesFrom(test,test2)", 
+    "importClassesFrom(test,test1)",
+    "importClassesFrom(test,test2)",
     "importMethodsFrom(test,test1)",
     "importMethodsFrom(test,test2)"
   )))
@@ -79,7 +79,7 @@ test_that("useDynLib imports only selected functions", {
     #' @useDynLib test a
     #' @useDynLib test a b
     NULL")
-  
+
     expect_equal(sort(out), sort(
       c("useDynLib(test)", "useDynLib(test,a)", "useDynLib(test,b)")))
 })

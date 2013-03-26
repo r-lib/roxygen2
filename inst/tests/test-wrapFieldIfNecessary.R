@@ -9,7 +9,7 @@ test_that("Can properly simulate formatted output", {
     triple.author.formatted <- c("Author: Alan Turing <alan@turing.fake>,",
                                  "    Alonzo Church <alonzo@church.fake>,",
                                  "    Charles Babbage <charles@babbage.fake>")
-    
+
     expect_equal(simulate_formatted_text("Author", single.author.raw), single.author.formatted)
     expect_equal(simulate_formatted_text("Author", double.author.raw), double.author.formatted)
     expect_equal(simulate_formatted_text("Author", triple.author.raw), triple.author.formatted)
@@ -19,11 +19,11 @@ test_that("Can properly simulate formatted output", {
 test_that("DESCRIPTION fields get wrapped if a line length exceeds the wrapping threshold", {
     desc <- read.description("description-example.txt")
     expect_equal(
-      wrap_field_if_necessary("Description", desc$Description, wrap.threshold = 80), 
+      wrap_field_if_necessary("Description", desc$Description, wrap.threshold = 80),
       str_wrap(str_c("Description", ": ", desc$Description), exdent = 4, width = 80)
     )
     expect_equal(
-      wrap_field_if_necessary("Description", desc$Description, wrap.threshold = 60), 
+      wrap_field_if_necessary("Description", desc$Description, wrap.threshold = 60),
       str_wrap(str_c("Description", ": ", desc$Description), exdent = 4, width = 60)
     )
     expect_equal(

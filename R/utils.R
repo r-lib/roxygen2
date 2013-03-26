@@ -3,7 +3,7 @@
 }
 
 # Given argument list, produce usage string for it.
-# 
+#
 # Adapted from \code{\link{prompt}}.
 #
 # @param f function, or name of function, as string
@@ -17,13 +17,13 @@ usage <- function(args) {
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
     text <- str_replace_all(text, fixed("%"), "\\%")
     text <- str_replace_all(text, fixed(" "), "\u{A0}")
-    Encoding(text) <- "UTF-8"    
-    
+    Encoding(text) <- "UTF-8"
+
     str_c("\u{A0}=\u{A0}", paste(text, collapse = "\n"))
   }
 
   arg_values <- vapply(args, arg_to_text, character(1))
-  
+
   paste(names(args), arg_values, collapse = ", ", sep = "")
 }
 

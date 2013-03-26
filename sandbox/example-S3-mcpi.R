@@ -22,8 +22,8 @@ mcpiX <- function(trials) {
                    ncol=3,
                    dimnames=list(NULL, c('x','y','hit')))
   hits <- 0
-  
-  for ( i in 1:trials ) {   
+
+  for ( i in 1:trials ) {
     xy <- runif(2, min=, max=1)
 
     hit <- (xy[1]*xy[1] + xy[2]*xy[2] <= 1)
@@ -36,7 +36,7 @@ mcpiX <- function(trials) {
   res <- list(pi=pi,
               throws=throws)
   class(res) <- 'mcpi'
-              
+
   return(res)
 }
 

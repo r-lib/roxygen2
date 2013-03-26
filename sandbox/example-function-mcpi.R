@@ -17,7 +17,7 @@ mcpi <- function(trials, verbose=FALSE) {
   for ( i in 1:trials ) {
     if ( verbose )
       cat('.')
-    
+
     xy <- runif(2, min=, max=1)         #' Simulate the throwing, sample (x,y)
 
     if ( xy[1]*xy[1] + xy[2]*xy[2] <= 1 )
@@ -28,7 +28,7 @@ mcpi <- function(trials, verbose=FALSE) {
 
   if ( verbose )
     cat('done\n')
-  
+
   return(pi)
 }
 

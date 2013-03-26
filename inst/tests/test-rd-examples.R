@@ -7,7 +7,7 @@ test_that("@example loads from specified files", {
     #' @example Rd-example-1.R
     #' @example Rd-example-2.R
     NULL")[[1]]
-  
+
   examples <- get_tag(out, "examples")$values
   expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
   expect_match(examples, fixed("example <- 'example2'"), all = FALSE)
@@ -18,7 +18,7 @@ test_that("@examples captures examples", {
     #' @name a
     #' @examples a <- 2
     NULL")[[1]]
-  
+
   examples <- get_tag(out, "examples")$values
   expect_match(examples, fixed("a <- 2"), all = FALSE)
 })
@@ -40,7 +40,7 @@ test_that("@example does not introduce extra empty lines", {
     #' @name a
     #' @example Rd-example-3.R
     NULL")[[1]]
-  
+
   examples <- get_tag(out, "examples")$values
   expect_identical(length(examples), 2L)
 })
@@ -63,5 +63,5 @@ test_that("% in @example escaped", {
     NULL")[[1]]
 
   examples <- get_tag(out, "examples")$values
-  expect_equal(examples, "x \\%*\\% y")  
+  expect_equal(examples, "x \\%*\\% y")
 })

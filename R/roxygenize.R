@@ -88,7 +88,7 @@ copy.dir <- function(source,
   if (unlink.target)
     unlink(target, recursive=TRUE)
   files <- list.files(source,
-                      full.name=TRUE,
+                      full.names=TRUE,
                       recursive=TRUE,
                       all.files=TRUE)
   for (source.file in files) {

@@ -509,7 +509,10 @@ process.examples <- function(partitum, base_path) {
     paths <- file.path(base_path, str_trim(paths))
     examples <- unlist(lapply(paths, readLines))
     examples <- gsub("([%\\])", "\\\\\\1", examples)
-
+    
+    #undo escape for dontrun tag
+    examples <- gsub("\\\\dontrun", "\\dontrun", examples, fixed=TRUE)
+    
     out <- c(out, new_tag("examples", examples))
   }
   out

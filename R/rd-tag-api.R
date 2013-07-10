@@ -79,7 +79,7 @@ format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   values <- str_c(x$values, collapse = "\n\n")
   # This regular expression matches all consecutive lines
   # delimited by \r\n -- these lines form a preformatted block.
-  hard.wrap.regex <- '\n(?:[^\n]*\n)(?:\r[^\n]*\n)+'
+  hard.wrap.regex <- '(?:^|\n)(?:[^\n]*\n)(?:\r[^\n]*(?:$|\n))+'
 
   # The split-match combination sorts the input precisely
   # into an interleaving sequence of soft- and hard-wrapped parts,
@@ -95,13 +95,18 @@ format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   # Here the actual wrapping occurs. Hard-wrapped parts remain
   # unchanged (short of stripping the artificial \r delimiters)...
   hard.wrapped <- str_replace_all(hard.wrap.parts, fixed('\r'), '')
+  hard.wrapped <- str_replace(hard.wrapped, ('^\n'), '\n\n')
   # ...and soft-wrapped parts are wrapped as usual
   wrapped <- str_wrap(soft.wrap.parts, width = 60, indent = indent,
                       exdent = exdent)
 
   # Join the interleaving sequence soft-hard-soft-...-soft
-  # by appending an empty "hard" part
-  formatted <- str_join(wrapped, c(hard.wrapped, ""),
+  # by appending an empty "hard" part or by removing a last empty "soft" part
+  if (tail(wrapped, 1) == "")
+    wrapped <- head(wrapped, -1)
+  else
+    hard.wrapped <- c(hard.wrapped, "")
+  formatted <- str_join(wrapped, hard.wrapped,
                         collapse = "\n")
   rd_tag(x$tag, formatted, space = TRUE)
 }

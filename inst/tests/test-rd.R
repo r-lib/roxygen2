@@ -179,6 +179,31 @@ test_that("no ending punctuation does not produce ellipsis", {
   expect_equal(get_tag(out, "title")$values, "Whether a number is odd")
 })
 
+test_that("preformatted paragraphs", {
+  HEAD <- "
+    #' title
+    #'
+    #' description"
+  W <- "
+    #'
+    #' R
+    #' R"
+  P <- "
+    #'
+    #''P
+    #''P
+    #''P"
+  FUNCTION <- "
+    is.odd <- function(a) {}"
+  out1 <- roc_proc_text(roc, paste0(HEAD, W, P, W, FUNCTION))[[1]]
+  out2 <- roc_proc_text(roc, paste0(HEAD, P, W, FUNCTION))[[1]]
+  out3 <- roc_proc_text(roc, paste0(HEAD, W, P, FUNCTION))[[1]]
+  out4 <- roc_proc_text(roc, paste0(HEAD, P, FUNCTION))[[1]]
+  expect_equal(format(get_tag(out1, "details")), "\\details{\n  R R\n\nP\nP\nP\n\n  R R\n}\n")
+  expect_equal(format(get_tag(out2, "details")), "\\details{\nP\nP\nP\n\n  R R\n}\n")
+  expect_equal(format(get_tag(out3, "details")), "\\details{\n  R R\n\nP\nP\nP\n}\n")
+  expect_equal(format(get_tag(out4, "details")), "\\details{\nP\nP\nP\n}\n")
+})
 
 # Keywords and aliases -------------------------------------------------------
 

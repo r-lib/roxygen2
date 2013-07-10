@@ -77,8 +77,33 @@ format.encoding_tag <- format_first
 
 format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   values <- str_c(x$values, collapse = "\n\n")
-  rd_tag(x$tag, str_wrap(values, width = 60, indent = indent,
-    exdent = exdent), space = TRUE)
+  # This regular expression matches all consecutive lines
+  # delimited by \r\n -- these lines form a preformatted block.
+  hard.wrap.regex <- '\n(?:[^\n]*\n)(?:\r[^\n]*\n)+'
+
+  # The split-match combination sorts the input precisely
+  # into an interleaving sequence of soft- and hard-wrapped parts,
+  # with a soft-wrapped part at the beginning *and* at the end.
+  # The "no hard-wrapped parts" is a corner case.
+  soft.wrap.parts <- str_split(values, hard.wrap.regex)[[1]]
+  if (length(soft.wrap.parts) > 1)
+    hard.wrap.parts <- str_match_all(values, hard.wrap.regex)[[1]][,1]
+  else
+    hard.wrap.parts <- character(0)
+  stopifnot(length(hard.wrap.parts) + 1 == length(soft.wrap.parts))
+
+  # Here the actual wrapping occurs. Hard-wrapped parts remain
+  # unchanged (short of stripping the artificial \r delimiters)...
+  hard.wrapped <- str_replace_all(hard.wrap.parts, fixed('\r'), '')
+  # ...and soft-wrapped parts are wrapped as usual
+  wrapped <- str_wrap(soft.wrap.parts, width = 60, indent = indent,
+                      exdent = exdent)
+
+  # Join the interleaving sequence soft-hard-soft-...-soft
+  # by appending an empty "hard" part
+  formatted <- str_join(wrapped, c(hard.wrapped, ""),
+                        collapse = "\n")
+  rd_tag(x$tag, formatted, space = TRUE)
 }
 #' @S3method format author_tag
 #' @S3method format concept_tag

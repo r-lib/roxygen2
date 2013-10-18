@@ -2,3 +2,5 @@ sandbox
 patches
 doc
 man-roxygen
+^.*\.Rproj$
+^\.Rproj\.user$

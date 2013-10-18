@@ -65,7 +65,15 @@ register.srcref.parser('setClass', function(call, env) {
 })
 
 register.srcref.parser('setGeneric', function(call, env) {
-  list(S4generic = as.character(call$name))
+  name <- as.character(call$name)
+  f <- getGeneric(name, where = env)
+  
+  list(
+    fun = TRUE,
+    assignee = name,
+    S4generic = name, 
+    formals = formals(f)
+  )
 })
 
 register.srcref.parser('setMethod', function(call, env) {

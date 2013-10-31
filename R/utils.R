@@ -50,7 +50,7 @@ subs <- matrix(ncol = 2, byrow = T, c(
   ')', 'close-paren',
   '*', 'star',
   '+', 'plus',
-  ',', 'comma',
+  ',', '-',
   '/', 'slash',
   ':', 'colon',
   ';', 'semi-colon',

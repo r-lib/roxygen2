@@ -39,3 +39,4 @@ Collate:
     'topo-sort.R'
     'util-locale.R'
     'utils.R'
+    'usage.R'

@@ -77,9 +77,15 @@ register.srcref.parser('setGeneric', function(call, env) {
 })
 
 register.srcref.parser('setMethod', function(call, env) {
+  name <- as.character(call$f)
+  val <- getMethod(name, eval(call$signature), where = env)
+  
   list(
-    S4method = as.character(call$f),
-    signature = as.character(call$signature))
+    fun = TRUE,
+    type = "s4method",
+    S4method = name, # for namespace roclet
+    value = val
+  )
 })
 
 #' Roclet: make Rd files.
@@ -428,6 +434,11 @@ process.usage <- function(partitum) {
     return(new_tag("usage", NULL))
   }
 
+  if (!is.null(partitum$type) && partitum$type == "s4method") {
+    usage <- usage_s4_method(partitum$value)
+    return(new_tag("usage", usage))
+  }
+  
   fun_name <- if (!is.null(partitum$method)) {
     rd_tag('method', partitum$method[[1]], partitum$method[[2]])
   } else {

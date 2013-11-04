@@ -28,7 +28,9 @@ register.preref.parsers(parse.value,
 
 register.preref.parsers(parse.name.description,
                         'param',
-                        'method')
+                        'method',
+						'newcommand',
+						'renewcommand')
 
 register.preref.parsers(parse.name,
                         'docType')
@@ -331,6 +333,8 @@ roclet_rd_one <- function(partitum, base_path) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
     }))
   add_tag(rd, process_had_tag(partitum, 'section', process.section))
+  add_tag(rd, process.name_description(partitum, 'newcommand'))
+  add_tag(rd, process.name_description(partitum, 'renewcommand'))
   add_tag(rd, process.examples(partitum, base_path))
 
   list(rd = rd, filename = filename)
@@ -519,3 +523,13 @@ process_had_tag <- function(partitum, tag, f = new_tag) {
 # warning("All roxygen elements must have name: ",
 #   partitum$srcref$filename, ":", partitum$srcref$lloc[1], ":",
 #   partitum$srcref$lloc[2], call. = FALSE)
+
+process.name_description <- function(partitum, tag) {
+	tags <- partitum[names(partitum) == tag]
+	if (length(tags) == 0) return()	
+	
+	desc <- str_trim(sapply(tags, "[[", "description"))
+	names(desc) <- sapply(tags, "[[", "name")
+	
+	new_tag(tag, desc)
+}

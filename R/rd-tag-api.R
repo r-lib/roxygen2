@@ -139,3 +139,16 @@ format.examples_tag <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n")
   rd_tag(x$tag, values, space = TRUE)
 }
+
+
+#' @S3method format newcommand_tag
+format.newcommand_tag <- function(x, ...){
+	cmds <- sapply(x$values, function(cmd){
+		# check for arguments
+		if( grepl("^((\\[[0-9]+\\])|(\\{))", cmd) ) cmd
+		else str_c("{", cmd, "}")
+	})
+	str_c("\\", x$tag, "{\\", str_trim(names(x$values)), "}", cmds, collapse="\n")
+}
+#' @S3method format renewcommand_tag
+format.renewcommand_tag <- format.newcommand_tag

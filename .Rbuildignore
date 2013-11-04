@@ -4,3 +4,4 @@ doc
 man-roxygen
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$

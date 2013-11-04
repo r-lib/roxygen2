@@ -10,6 +10,8 @@
 * Always use C locale when sorting `NAMESPACE` file or tags in `.Rd` files.
   This ensures a consistent ordering across systems.  (Fixes #127)
 
+* Backslashes in function arguments in the Usage section will be escaped now
+
 roxygen2 2.2.2
 --------------
 

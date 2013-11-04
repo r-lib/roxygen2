@@ -10,6 +10,9 @@
 * Always use C locale when sorting `NAMESPACE` file or tags in `.Rd` files.
   This ensures a consistent ordering across systems.  (Fixes #127)
 
+* Text formatted with new comment type #'' will not be word-wrapped.
+  (Fixes #80)
+
 roxygen2 2.2.2
 --------------
 

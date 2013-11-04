@@ -5,8 +5,17 @@ parse.preref <- function(lines) {
   srcrefs$lloc[1] <- srcrefs$lloc[1] + 1
 
   delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
-  trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""),
-    "right")
+
+  # This is to distinguish between paragraphs to be wrapped
+  # (regular #' comment) and paragraphs to be kept unchanged
+  # (new #'' comment). For the latter, a \r is inserted
+  # just after each newline, so that the preformatted paragraphs
+  # can be later distinguished by searching for \r\n .
+  hard.wrapped.lines <- str_replace(delimited.lines,
+                                    LINE.DELIMITER.NOWRAP, "\r")
+  soft.wrapped.lines <- str_replace(hard.wrapped.lines,
+                                    LINE.DELIMITER, "")
+  trimmed.lines <- str_trim(soft.wrapped.lines, "right")
 
   if (length(trimmed.lines) == 0) return(list())
 
@@ -28,6 +37,7 @@ parse.preref <- function(lines) {
 
 # Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '\\s*#+\' ?'
+LINE.DELIMITER.NOWRAP <- '\\s*#+\'\''
 
 # Comment blocks (possibly null) that precede a file's expressions.
 #

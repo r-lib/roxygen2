@@ -12,6 +12,9 @@
 
 * Backslashes in function arguments in the Usage section will be escaped now
 
+* Templates with extension .r are supported on case-sensitive file systems.
+  (Fixes #115)
+
 roxygen2 2.2.2
 --------------
 

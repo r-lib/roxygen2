@@ -12,10 +12,15 @@ register.srcref.parsers(function(call, env) {
   out$fun <- is.function(value)
   
   if (out$fun) {
+    out$type <- "function"
     out$formals <- formals(value)
+    out$object <- object("function", assignee, value)
   } else if (inherits(value, "refObjectGenerator")) {
-    # Reference class
+    out$type <- "rcclass"
+    out$object <- object("rcclass", assignee, value)
   } else {
+    out$type <- "data"
+    out$object <- object("data", assignee, value)
     if (is.null(out$docType)) out$docType <- "data"
     out$str <- str_c(capture.output(str(value, max.level = 1)),
       collapse = "\n")
@@ -23,11 +28,13 @@ register.srcref.parsers(function(call, env) {
   out
 }, '<-', '=')
 
-
 register.srcref.parser('setClass', function(call, env) {
+  name <- as.character(call$Class)
+  value <- getClass(name)
   list(
-    S4class = as.character(call$Class),
-    type = "s4class"
+    S4class = name,
+    type = "s4class",
+    object = object("s4class", name, value)
   )
 })
 
@@ -40,7 +47,8 @@ register.srcref.parser('setGeneric', function(call, env) {
     assignee = name,
     S4generic = name, 
     formals = formals(f),
-    type = "s4generic"
+    type = "s4generic",
+    object = object("s4generic", name, value)
   )
 })
 
@@ -52,6 +60,9 @@ register.srcref.parser('setMethod', function(call, env) {
     fun = TRUE,
     type = "s4method",
     S4method = name, # for namespace roclet
-    value = val
+    value = val,
+    object = ojbect("s4method", name, value)
   )
+  
 })
+

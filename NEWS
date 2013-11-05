@@ -1,3 +1,6 @@
+roxygen2 2.2.2.99 
+-----------------
+
 * Correctly generate usage for S4 generics.
 
 * `inst` directory not automatically created.  (Fixes #53)

@@ -7,22 +7,24 @@ parse.srcref <- function(ref, env) {
   # Get code from source and parse to extract first call
   lines <- getSrcLines(srcfile, ref[[1]], ref[[3]])
   call <- parse(text = lines)[[1]]
-  
-  if (!is.call(call)) {
-    return(c(srcref, list(value = deparse(call))))
-  }
+  if (!is.call(call)) return(srcref)
 
-  # Dispatch to registered srcref parsers based on call
+  call <- standardise_call(call, env)
   name <- as.character(call[[1]])
   if (length(name) > 1) return(srcref)
   
-  parser_name <- paste0("parser_", name)
-  if (!exists(parser_name)) return(srcref)
+  # Dispatch to registered srcref parsers based on function name
+  parser <- find_parser(name)
+  if (is.null(parser)) return(srcref)
   
-  parser <- match.fun(parser_name)
-  
-  call <- standardise_call(call, env)
   c(srcref, parser(call, env))
+}
+
+find_parser <- function(name) {
+  parser_name <- paste0("parser_", name)
+  if (!exists(parser_name)) return(NULL)
+  
+  match.fun(parser_name)
 }
 
 standardise_call <- function(call, env = parent.frame()) {

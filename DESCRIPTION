@@ -40,6 +40,5 @@ Collate:
     'util-locale.R'
     'utils.R'
     'usage.R'
-    'parsers.r'
     'topic-name.R'
     'object.R'

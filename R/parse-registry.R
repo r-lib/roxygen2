@@ -1,8 +1,6 @@
 if (!exists("preref.parsers")) {
   # Preref parser table
   preref.parsers <- new.env(parent=emptyenv())
-  # Srcref parser table
-  srcref.parsers <- new.env(parent=emptyenv())
 }
 
 #' Register parsers.
@@ -18,12 +16,6 @@ register.preref.parser <- function(key, parser) {
   preref.parsers[[key]] <- parser
 }
 
-#' @export
-#' @rdname register-parser
-register.srcref.parser <- function(key, parser) {
-  srcref.parsers[[key]] <- parser
-}
-
 #' Register many parsers at once.
 #'
 #' @param parser the parser to register
@@ -35,13 +27,5 @@ register.srcref.parser <- function(key, parser) {
 register.preref.parsers <- function(parser, ...) {
   for (key in c(...)) {
     register.preref.parser(key, parser)
-  }
-}
-
-#' @export
-#' @rdname register-parsers
-register.srcref.parsers <- function(parser, ...) {
-  for (key in c(...)) {
-    register.srcref.parser(key, parser)
   }
 }

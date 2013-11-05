@@ -1,4 +1,3 @@
-
 # Parse a srcref
 parse.srcref <- function(ref, env) {
   srcfile <- attributes(ref)$srcfile
@@ -16,14 +15,86 @@ parse.srcref <- function(ref, env) {
   # Dispatch to registered srcref parsers based on call
   name <- as.character(call[[1]])
   if (length(name) > 1) return(srcref)
-  parser <- srcref.parsers[[name]]
-  if (is.null(parser)) return(srcref)
+  
+  parser_name <- paste0("parser_", name)
+  if (!exists(parser_name)) return(srcref)
+  
+  parser <- match.fun(parser_name)
+  
+  call <- standardise_call(call, env)
+  c(srcref, parser(call, env))
+}
+
+standardise_call <- function(call, env = parent.frame()) {
+  stopifnot(is.call(call))
   
   f <- eval(call[[1]], env)
-  # If not a primitive function, use match.call so argument handlers
-  # can use argument names
-  if (!is.primitive(f)) {
-    call <- match.call(eval(call[[1]], env), call)
+  if (is.primitive(f)) return(call)
+  
+  match.call(f, call)
+}
+
+`parser_=` <- function(call, env) {
+  assignee <- as.character(call[[2]])
+  
+  # If it doesn't exist (any more), don't document it.
+  if (!exists(assignee, env)) return()
+  value <- get(assignee, env)
+  
+  out <- list(assignee = as.character(assignee))
+  out$fun <- is.function(value)
+  
+  if (out$fun) {
+    out$type <- "function"
+    out$formals <- formals(value)
+    out$object <- object("function", assignee, value)
+  } else if (inherits(value, "refObjectGenerator")) {
+    out$type <- "rcclass"
+    out$object <- object("rcclass", assignee, value)
+  } else {
+    out$type <- "data"
+    out$object <- object("data", assignee, value)
+    if (is.null(out$docType)) out$docType <- "data"
+    out$str <- str_c(capture.output(str(value, max.level = 1)),
+      collapse = "\n")
   }
-  c(srcref, parser(call, env))
+  out
+}
+`parser_<-` <- `parser_=`
+
+parser_setClass <- function(call, env) {
+  name <- as.character(call$Class)
+  value <- getClass(name)
+  list(
+    S4class = name,
+    type = "s4class",
+    object = object("s4class", name, value)
+  )
+}
+
+parser_setGeneric <- function(call, env) {
+  name <- as.character(call$name)
+  value <- getGeneric(name, where = env)
+  
+  list(
+    fun = TRUE,
+    assignee = name,
+    S4generic = name, 
+    formals = formals(value),
+    type = "s4generic",
+    object = object("s4generic", name, value)
+  )
+}
+
+parser_setMethod <- function(call, env) {
+  name <- as.character(call$f)
+  value <- getMethod(name, eval(call$signature), where = env)
+  
+  list(
+    fun = TRUE,
+    type = "s4method",
+    S4method = name, # for namespace roclet
+    value = value,
+    object = object("s4method", name, value)
+  )  
 }

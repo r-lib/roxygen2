@@ -1,11 +1,8 @@
 \name{register.preref.parsers}
 \alias{register.preref.parsers}
-\alias{register.srcref.parsers}
 \title{Register many parsers at once.}
 \usage{
   register.preref.parsers(parser, ...)
-
-  register.srcref.parsers(parser, ...)
 }
 \arguments{
   \item{parser}{the parser to register}

@@ -39,6 +39,9 @@ standardise_call <- function(call, env = parent.frame()) {
 `parser_=` <- function(call, env) {
   assignee <- as.character(call[[2]])
   
+  # If it's a compound assignment like x[[2]] <- ignore it
+  if (length(assignee) > 1)  return()
+  
   # If it doesn't exist (any more), don't document it.
   if (!exists(assignee, env)) return()
   value <- get(assignee, env)
@@ -47,9 +50,18 @@ standardise_call <- function(call, env = parent.frame()) {
   out$fun <- is.function(value)
   
   if (out$fun) {
+    value <- add_s3_metadata(value, assignee, env)
+    if (is.s3generic(value)) {
+      objtype <- "s3generic"
+    } else if (is.s3method(value)) {
+      objtype <- "s3method"
+    } else if (is.function(value)) {
+      objtype <- "function"
+    }
+    
     out$type <- "function"
     out$formals <- formals(value)
-    out$object <- object("function", assignee, value)
+    out$object <- object("objtype", assignee, value)
   } else if (inherits(value, "refObjectGenerator")) {
     out$type <- "rcclass"
     out$object <- object("rcclass", assignee, value)

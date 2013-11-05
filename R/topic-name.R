@@ -13,11 +13,12 @@ topic_name.s4class <- function(x) {
 
 #' @S3method topic_name rcclass
 topic_name.rcclass <- function(x) {
-  browser()
-  str_c(x$def@className, "-ref-class")
+  str_c(x$value@className, "-ref-class")
 }
 
 #' @S3method topic_name default
 topic_name.default <- function(x) {
-  if (length(x$name) == 1) x$name
+  if (length(x$name) != 1) return()
+  
+  x$name
 }

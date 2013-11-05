@@ -40,13 +40,13 @@ register.srcref.parser('setClass', function(call, env) {
 
 register.srcref.parser('setGeneric', function(call, env) {
   name <- as.character(call$name)
-  f <- getGeneric(name, where = env)
+  value <- getGeneric(name, where = env)
   
   list(
     fun = TRUE,
     assignee = name,
     S4generic = name, 
-    formals = formals(f),
+    formals = formals(value),
     type = "s4generic",
     object = object("s4generic", name, value)
   )
@@ -54,14 +54,14 @@ register.srcref.parser('setGeneric', function(call, env) {
 
 register.srcref.parser('setMethod', function(call, env) {
   name <- as.character(call$f)
-  val <- getMethod(name, eval(call$signature), where = env)
+  value <- getMethod(name, eval(call$signature), where = env)
   
   list(
     fun = TRUE,
     type = "s4method",
     S4method = name, # for namespace roclet
-    value = val,
-    object = ojbect("s4method", name, value)
+    value = value,
+    object = object("s4method", name, value)
   )
   
 })

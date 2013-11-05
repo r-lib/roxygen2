@@ -293,14 +293,12 @@ roclet_rd_one <- function(partitum, base_path) {
   if (any(names(partitum) == "noRd")) return()
 
   # Figure out topic name
-  class(partitum) <- partitum$type
-  name <- partitum$name %||% topic_name(partitum) %||% 
+  name <- partitum$name %||% topic_name(partitum$object) %||% 
     roxygen_stop("Missing name", srcref = partitum$srcref)
 
   # Work out file name and initialise Rd object
   filename <- str_c(partitum$merge %||% partitum$rdname %||% nice_name(name),
     ".Rd")
-
 
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))

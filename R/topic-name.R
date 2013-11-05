@@ -19,5 +19,5 @@ topic_name.rcclass <- function(x) {
 
 #' @S3method topic_name default
 topic_name.default <- function(x) {
-  if (length(x$assignee) == 1) x$assignee
+  if (length(x$name) == 1) x$name
 }

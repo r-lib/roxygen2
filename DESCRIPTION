@@ -16,7 +16,9 @@ Imports:
     stringr (>= 0.5),
     tools,
     brew,
-    digest
+    digest,
+    memoise,
+    codetools
 Suggests:
     testthat
 Collate:
@@ -42,3 +44,4 @@ Collate:
     'usage.R'
     'topic-name.R'
     'object.R'
+    's3.R'

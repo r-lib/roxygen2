@@ -24,7 +24,7 @@ and description (such as \code{@param}).}
   Other preref parsing functions:
   \code{\link{parse.default}}, \code{\link{parse.name}},
   \code{\link{parse.toggle}}, \code{\link{parse.unknown}},
-  \code{\link{parse.value}}
+  \code{\link{parse.value}}, \code{\link{parse.words}}
 }
 \keyword{internal}
 

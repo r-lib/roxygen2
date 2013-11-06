@@ -61,7 +61,7 @@ standardise_call <- function(call, env = parent.frame()) {
     
     out$type <- "function"
     out$formals <- formals(value)
-    out$object <- object("objtype", assignee, value)
+    out$object <- object(objtype, assignee, value)
   } else if (inherits(value, "refObjectGenerator")) {
     out$type <- "rcclass"
     out$object <- object("rcclass", assignee, value)

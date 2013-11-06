@@ -123,6 +123,18 @@ parse.value <- function(key, rest, srcref) {
     parse.default(key, rest)
 }
 
+#' Parse an element with a least one word
+#'
+#' @inheritParams parse.default
+#' @return A list containing the key and value
+#' @family preref parsing functions
+#' @keywords internal
+#' @export
+parse.words <- function(key, rest, srcref) {
+  value <- str_trim(str_split(rest, fixed(" "))[[1]])
+  setNames(list(value), key)
+}
+
 #' Parse an element containing a mandatory name
 #' and description (such as \code{@@param}).
 #'

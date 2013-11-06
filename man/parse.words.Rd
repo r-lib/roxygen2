@@ -1,8 +1,8 @@
-\name{parse.toggle}
-\alias{parse.toggle}
-\title{Turn a binary element on; parameters are ignored.}
+\name{parse.words}
+\alias{parse.words}
+\title{Parse an element with a least one word}
 \usage{
-  parse.toggle(key, rest, srcref)
+  parse.words(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}
@@ -13,17 +13,17 @@
   line number}
 }
 \value{
-  A list with the key and \code{TRUE}
+  A list containing the key and value
 }
 \description{
-  Turn a binary element on; parameters are ignored.
+  Parse an element with a least one word
 }
 \seealso{
   Other preref parsing functions:
   \code{\link{parse.default}}, \code{\link{parse.name}},
   \code{\link{parse.name.description}},
-  \code{\link{parse.unknown}}, \code{\link{parse.value}},
-  \code{\link{parse.words}}
+  \code{\link{parse.toggle}}, \code{\link{parse.unknown}},
+  \code{\link{parse.value}}
 }
 \keyword{internal}
 

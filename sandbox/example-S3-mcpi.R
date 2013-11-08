@@ -45,7 +45,7 @@ mcpiX <- function(trials) {
 #' @param x The 'mcpi' object
 #' @param ... Ignored
 #' @return NULL
-#' @S3method print mcpi
+#' @export
 print.mcpi <- function(x, ...) {
   cat('Approximated PI value (using', nrow(x$throws), 'throws) =', x$pi, '\n')
 }
@@ -55,7 +55,7 @@ print.mcpi <- function(x, ...) {
 #' @param x The 'mcpi' object
 #' @return NULL
 #' @importFrom pgirmess polycircle
-#' @S3method plot mcpi
+#' @export
 plot.mcpi <- function(x, ...) {
   plot(x$throws[,1:2], col=x$throws[,3]+1,
        xlim=c(0,1), ylim=c(0,1), pch=19,
@@ -76,7 +76,7 @@ mcbase <- function(x, ...) {
 #'
 #' @param x The 'mcpi' object
 #' @return The throws
-#' @S3method mcbase mcpi
+#' @export
 mcbase.mcpi <- function(x, ...) {
   return(x$throws)
 }

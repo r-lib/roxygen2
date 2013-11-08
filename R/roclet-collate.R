@@ -30,7 +30,7 @@ collate_roclet <- function() {
   new_roclet(list(), "collate")
 }
 
-#' @S3method roc_process collate
+#' @export
 roc_process.collate <- function(roclet, partita, base_path) {
   topo <- topo_sort()
 
@@ -49,7 +49,7 @@ roc_process.collate <- function(roclet, partita, base_path) {
   unique(basename(topo$sort()))
 }
 
-#' @S3method roc_output collate
+#' @export
 roc_output.collate <- function(roclet, results, base_path) {
   DESCRIPTION <- file.path(base_path, "DESCRIPTION")
   old <- read.description(DESCRIPTION)

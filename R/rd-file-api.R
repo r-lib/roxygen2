@@ -5,18 +5,17 @@ new_rd_file <- function() {
 }
 is.rd_file <- function(x) inherits(x, "rd_file")
 
-#' @S3method print rd_file
+#' @export
 print.rd_file <- function(x, ...) {
   cat("Rd file with tags ", str_c(names(x), collapse = ", "), "\n", sep = "")
 }
 
-#' @S3method names rd_file
+#' @export
 names.rd_file <- function(x) {
   vapply(as.list(x[[1]]), "[[", "tag", FUN.VALUE = character(1))
 }
 
-
-#' @S3method format rd_file
+#' @export
 format.rd_file <- function(x, ...) {
   tags <- as.list(x[[1]])
   order <- c("docType", "encoding", "name", "alias", "title", "format",
@@ -30,7 +29,7 @@ format.rd_file <- function(x, ...) {
   str_c(unlist(formatted), collapse = "")
 }
 
-#' @S3method merge rd_file
+#' @export
 merge.rd_file <- function(x, y, ...) {
   rd <- new_rd_file()
   for(tag_x in as.list(x[[1]])) {
@@ -42,7 +41,7 @@ merge.rd_file <- function(x, y, ...) {
   rd
 }
 
-#' @S3method length rd_file
+#' @export
 length.rd_file <- function(x) {
   length(x[[1]])
 }

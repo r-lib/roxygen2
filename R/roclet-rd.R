@@ -184,7 +184,7 @@ rd_roclet <- function() {
   new_roclet(list(), "had")
 }
 
-#' @S3method roc_process had
+#' @export
 #' @importFrom digest digest
 roc_process.had <- function(roclet, partita, base_path) {
   # Remove srcrefs with no attached roxygen comments
@@ -334,7 +334,7 @@ roclet_rd_one <- function(partitum, base_path) {
   list(rd = rd, filename = filename)
 }
 
-#' @S3method roc_output had
+#' @export
 #' @importFrom tools checkRd
 roc_output.had <- function(roclet, results, base_path) {
   man <- normalizePath(file.path(base_path, "man"))

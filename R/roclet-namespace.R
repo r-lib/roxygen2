@@ -96,7 +96,7 @@ namespace_roclet <- function() {
   new_roclet(list, "namespace")
 }
 
-#' @S3method roc_process namespace
+#' @export
 roc_process.namespace <- function(roclet, partita, base_path) {
   ns <- unlist(lapply(partita, ns_process_partitum))
   with_locale("C", sort(unique(ns)))
@@ -114,7 +114,7 @@ ns_process_tag <- function(tag_name, partitum) {
   lapply(tags, f, part = partitum)
 }
 
-#' @S3method roc_output namespace
+#' @export
 roc_output.namespace <- function(roclet, results, base_path) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   
@@ -134,13 +134,21 @@ ns_export <- function(tag, part) {
   default_export(part$object)
 }
 default_export <- function(x) UseMethod("default_export")
+#' @export
 default_export.s4class   <- function(x) export_class(x$name)
+#' @export
 default_export.s4generic <- function(x) export(x$name)
+#' @export
 default_export.s4method  <- function(x) export_s4_method(x$name)
+#' @export
 default_export.s3generic <- function(x) export(x$name)
+#' @export
 default_export.s3method  <- function(x) export_s3_method(attr(x$value, "s3method"))
+#' @export
 default_export.function  <- function(x) export(x$name)
+#' @export
 default_export.data      <- function(x) export(x$name)
+#' @export
 default_export.rcclass   <- function(x) {
   c(export(x$name), export_class(x$name))
 }

@@ -14,7 +14,7 @@ new_tag <- function(tag, values) {
 
 is.rd_tag <- function(x) inherits(x, "rd_tag")
 
-#' @S3method print rd_tag
+#' @export
 print.rd_tag <- function(x, ...) {
   cat(format(x), "\n")
 }
@@ -32,10 +32,10 @@ rd_tag <- function(tag, ..., space = FALSE) {
   str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")
 }
 
-#' @S3method format rd_tag
+#' @export
 format.rd_tag <- function(x, ...) stop("Unimplemented format")
 
-#' @S3method merge rd_tag
+#' @export
 merge.rd_tag <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
   new_tag(x$tag, c(x$values, y$values))
@@ -43,13 +43,13 @@ merge.rd_tag <- function(x, y, ...) {
 
 # Tags that repeat multiple times --------------------------------------------
 
-#' @S3method format keyword_tag
-#' @S3method format alias_tag
 format_rd <- function(x, ...) {
   vapply(with_locale("C", sort(unique(x$values))), rd_tag, tag = x$tag,
     FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
+#' @export
 format.keyword_tag <- format_rd
+#' @export
 format.alias_tag <- function(x, ...) {
   x$values <- str_replace_all(x$values, fixed("%"), "\\%")
   format_rd(x, ...)
@@ -59,18 +59,18 @@ format.alias_tag <- function(x, ...) {
 format_first <- function(x, ...) {
   rd_tag(x$tag, x$values[1])
 }
-#' @S3method format name_tag
-#' @S3method format title_tag
-#' @S3method format docType_tag
-#' @S3method format format_tag
-#' @S3method format encoding_tag
+#' @export
 format.name_tag <- function(x, ...) {
   x$values <- str_replace_all(x$values, fixed("%"), "\\%")
   format_first(x, ...)
 }
+#' @export
 format.title_tag <- format_first
+#' @export
 format.docType_tag <- format_first
+#' @export
 format.format_tag <- format_first
+#' @export
 format.encoding_tag <- format_first
 
 # Tags collapse their values into a single string ----------------------------
@@ -80,40 +80,41 @@ format_collapse <- function(x, ..., indent = 2, exdent = 2) {
   rd_tag(x$tag, str_wrap(values, width = 60, indent = indent,
     exdent = exdent), space = TRUE)
 }
-#' @S3method format author_tag
-#' @S3method format concept_tag
-#' @S3method format description_tag
-#' @S3method format details_tag
-#' @S3method format note_tag
-#' @S3method format references_tag
-#' @S3method format seealso_tag
-#' @S3method format source_tag
-#' @S3method format usage_tag
-#' @S3method format value_tag
+#' @export
 format.author_tag <- format_collapse
+#' @export
 format.concept_tag <- format_collapse
+#' @export
 format.description_tag <- format_collapse
+#' @export
 format.details_tag <- format_collapse
+#' @export
 format.note_tag <- format_collapse
+#' @export
 format.references_tag <- format_collapse
+#' @export
 format.seealso_tag <- format_collapse
+#' @export
 format.source_tag <- format_collapse
+#' @export
 format.usage_tag <- function(x, ...) format_collapse(x, ..., exdent = 4)
+#' @export
 format.value_tag <- format_collapse
-
 
 # Tags that don't have output ------------------------------------------------
 
 format_null <- function(x, ...) NULL
 
-#' @S3method format family_tag
+#' @export
 format.family_tag <- format_null
+#' @export
 format.inheritParams_tag <- format_null
+#' @export
 format.formals_tag <- format_null
 
 # Tags with special errors or other semantics --------------------------------
 
-#' @S3method format arguments_tag
+#' @export
 format.arguments_tag <- function(x, ...) {
   names <- names(x$values)
   dups <- duplicated(names)
@@ -123,7 +124,7 @@ format.arguments_tag <- function(x, ...) {
     space = TRUE)
 }
 
-#' @S3method format section_tag
+#' @export
 format.section_tag <- function(x, ...) {
   names <- vapply(x$values, "[[", "name", FUN.VALUE = character(1))
 
@@ -134,7 +135,7 @@ format.section_tag <- function(x, ...) {
     collapse = "\n")
 }
 
-#' @S3method format examples_tag
+#' @export
 format.examples_tag <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n")
   rd_tag(x$tag, values, space = TRUE)

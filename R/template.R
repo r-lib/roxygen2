@@ -2,13 +2,14 @@ register.preref.parsers(parse.value, "template")
 register.preref.parsers(parse.name.description, "templateVar")
 
 template_find <- function(base_path, template_name) {
-  path <- file.path(base_path, "man-roxygen", str_c(template_name, ".R"))
+  path <- file.path(base_path, "man-roxygen", str_c(template_name, ".", c("R", "r")))
+  path_exists <- file.exists(path)
 
-  if (!file.exists(path)) {
+  if (!any(path_exists)) {
     stop("Can not find template ", template_name, call. = FALSE)
   }
 
-  path
+  path[path_exists][1]
 }
 
 #' @importFrom brew brew

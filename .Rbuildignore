@@ -1,6 +1,7 @@
 sandbox
 patches
 doc
-man-roxygen
+^/man-roxygen$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$

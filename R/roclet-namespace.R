@@ -155,7 +155,20 @@ ns_import            <- function(tag, part) one_per_line("import", tag)
 ns_importFrom        <- function(tag, part) repeat_first("importFrom", tag)
 ns_importClassesFrom <- function(tag, part) repeat_first("importClassesFrom", tag)
 ns_importMethodsFrom <- function(tag, part) repeat_first("importMethodsFrom", tag)
-ns_useDynLib         <- function(tag, part) fun_args("useDynLib", tag)
+ns_useDynLib         <- function(tag, part) {
+  if (length(tag) == 1) {
+    return(paste0("useDynLib(", quote_if_needed(tag), ")"))
+  }
+  
+  if (any(grepl(",", tag))) {
+    # If there's a comma in list, don't quote output. This makes it possible
+    # for roxygen2 to support other NAMESPACE forms not otherwise mapped
+    args <- paste0(x, collapse = ", ")
+    paste0("useDynLib(", args, ")")
+  } else {
+    repeat_first("useDynLib", tag)  
+  }
+}
 
 # Functions used by both default_export and ns_* functions
 export           <- function(x) one_per_line("export", x)

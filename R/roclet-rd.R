@@ -310,7 +310,7 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
     new_tag('alias', str_split(str_trim(param), "\\s+")[[1]])
   }))
-  add_tag(rd, process.usage(partitum))
+  add_tag(rd, usage_tag(partitum))
   add_tag(rd, process.arguments(partitum))
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
@@ -365,37 +365,6 @@ roc_output.had <- function(roclet, results, base_path) {
 
   paths <- file.path(man, names(results))
   mapply(write_out, paths, contents)
-}
-
-
-# Prefer explicit \code{@@usage} to a \code{@@formals} list.
-process.usage <- function(partitum) {
-  if (!is.null(partitum$usage)) {
-    return(new_tag("usage", partitum$usage))
-  }
-
-  if (is.null(partitum$fun) || !partitum$fun) {
-    return(new_tag("usage", NULL))
-  }
-
-  if (!is.null(partitum$type) && partitum$type == "s4method") {
-    usage <- usage_s4_method(partitum$value)
-    return(new_tag("usage", usage))
-  }
-  
-  fun_name <- if (!is.null(partitum$method)) {
-    rd_tag('method', partitum$method[[1]], partitum$method[[2]])
-  } else {
-    partitum$assignee
-  }
-  args <- usage(partitum$formals)
-
-  if (str_detect(fun_name, fixed("<-"))) {
-    fun_name <- str_replace(fun_name, fixed("<-"), "")
-    new_tag("usage", str_c(fun_name, "(", args, ") <- value"))
-  } else {
-    new_tag("usage", str_c(fun_name, "(", args, ")"))
-  }
 }
 
 # Process title, description and details.
@@ -497,9 +466,6 @@ process.docType <- function(partitum) {
   } else if (doctype == "data") {
     if (is.null(partitum$format)) {
       tags <- c(tags, new_tag("format", partitum$str))
-    }
-    if (is.null(partitum$usage)) {
-      tags <- c(tags, new_tag("usage", partitum$assignee))
     }
     tags <- c(tags, new_tag("keyword", "datasets"))
   }

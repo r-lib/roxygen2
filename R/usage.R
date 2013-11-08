@@ -1,11 +1,67 @@
-usage_s4_method <- function(x) {
-  signature <- str_c(as.character(x@defined), collapse = ",")
-  formals <- formals(x@.Data)  
-  
-  str_c("\\S4method{", x@generic, "}{", signature, "}(",
-    args_string(usage_args(formals)), ")")
+# Prefer explicit \code{@@usage} to a \code{@@formals} list.
+usage_tag <- function(partitum) {
+  usage <- partitum$usage %||% default_usage(partitum$object)
+  new_tag("usage", usage)
 }
 
+default_usage <- function(x) {
+  UseMethod("default_usage")
+}
+
+#' @export
+default_usage.NULL <- function(x) NULL
+
+#' @export
+default_usage.data <- function(x) x$name
+
+#' @export
+default_usage.function <- function(x) {
+  function_usage(x$name, formals(x$value), identity)
+}
+
+#' @export
+default_usage.s3method <- function(x) {
+  s3method <- function(name) {
+    browser()
+    class <- attr(x$value)
+    paste0("\\S3method{", name, "}{", signature, "}")
+  }
+  function_usage(x$name, formals(x$value), s3method)
+}
+
+#' @export
+default_usage.s4method <- function(x) {
+  s4method <- function(name) {
+    signature <- str_c(as.character(x$value@defined), collapse = ",")
+    paste0("\\S4method{", name, "}{", signature, "}")
+  }
+  function_usage(x$name, formals(x$value), s4method)
+}
+
+# Usage:
+# replacement, infix, regular
+# function, s3 method, s4 method, data
+
+function_usage <- function(name, formals, format_name = identity) {
+  arglist <- args_string(usage_args(formals))
+  if (is_replacement_fun(name)) {
+    name <- str_replace(name, fixed("<-"), "")
+    str_c(format_name(name), "(", arglist, ") <- value")
+  } else if (is_infix_fun(name)) {
+    arg_names <- names(formals)
+    str_c(arg_names[1], " ", format_name(name), " ", arg_names[2])
+  } else {
+    str_c(format_name(name), "(", arglist, ")")
+  }
+  
+}
+
+is_replacement_fun <- function(name) {
+  str_detect(name, fixed("<-"))
+}
+is_infix_fun <- function(name) {
+  str_detect(name, "^%.*%$")
+}
 
 # Given argument list, produce usage specification for it.
 #
@@ -35,4 +91,3 @@ args_string <- function(x) {
   
   str_c(names(x), sep, x, collapse = ", ")
 }
-

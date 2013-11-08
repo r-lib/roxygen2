@@ -13,5 +13,7 @@ test_that("template_find finds files with .r and .R extension, and fails to find
   expect_equal(template_find(my.tempdir, "reg.ex"), my.regex)
   expect_error(template_find(my.tempdir, "reggex"))
   expect_error(template_find(my.tempdir, "nada"))
-  expect_equal(template_find(my.tempdir, "lcase"), my.lcase)
+  
+  # On case-insentive file systems, will find upper case version first
+  expect_equal(tolower(template_find(my.tempdir, "lcase")), tolower(my.lcase))
 })

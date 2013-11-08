@@ -22,6 +22,11 @@ test_that("export detects S4 class", {
   expect_equal(out, 'exportClasses(a)')
 })
 
+test_that("export detects S3 method", {
+  out <- roc_proc_text(roc, "#' @export\nmean.foo <- function(x) 'foo'")
+  expect_equal(out, 'S3method(mean,foo)')
+})
+
 test_that("exportClass overrides default class name", {
   out <- roc_proc_text(roc, "#' @exportClass b\nsetClass('a')")
   expect_equal(out, 'exportClasses(b)')

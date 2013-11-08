@@ -138,9 +138,7 @@ default_export.s4class   <- function(x) export_class(x$name)
 default_export.s4generic <- function(x) export(x$name)
 default_export.s4method  <- function(x) export_s4_method(x$name)
 default_export.s3generic <- function(x) export(x$name)
-default_export.s3method  <- function(x) {
-  browser()
-}
+default_export.s3method  <- function(x) export_s3_method(attr(x$value, "s3method"))
 default_export.function  <- function(x) export(x$name)
 default_export.data      <- function(x) export(x$name)
 default_export.rcclass   <- function(x) {

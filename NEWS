@@ -1,6 +1,10 @@
 roxygen2 2.2.2.99 
 -----------------
 
+* `@export` now identifies S3 methods and correct generates the correct 
+  `S3method` NAMESPACE directive. This means that you should no longer need
+   to use `@S3method`.
+
 * `@useDynLib` now works with more possible specifications - if you include a
   comma in the tag value, the output will be passed as is. This means that
   `@useDynLib mypackage, .registration = TRUE` will now generate

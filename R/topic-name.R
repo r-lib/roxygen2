@@ -8,7 +8,7 @@ topic_name.s4method <- function(x) {
 
 #' @export
 topic_name.s4class <- function(x) {
-  str_c(x$S4class, "-class")
+  str_c(x$value@className, "-class")
 }
 
 #' @export

@@ -83,3 +83,11 @@ test_that("useDynLib imports only selected functions", {
     expect_equal(sort(out), sort(
       c("useDynLib(test)", "useDynLib(test,a)", "useDynLib(test,b)")))
 })
+
+test_that("useDynLib doesn't quote if comma present", {
+  out <- roc_proc_text(roc, "
+    #' @useDynLib test, .registration = TRUE
+    NULL")
+  
+  expect_equal(sort(out), "useDynLib(test, .registration = TRUE)")
+})

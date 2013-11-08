@@ -163,7 +163,7 @@ ns_useDynLib         <- function(tag, part) {
   if (any(grepl(",", tag))) {
     # If there's a comma in list, don't quote output. This makes it possible
     # for roxygen2 to support other NAMESPACE forms not otherwise mapped
-    args <- paste0(x, collapse = ", ")
+    args <- paste0(tag, collapse = " ")
     paste0("useDynLib(", args, ")")
   } else {
     repeat_first("useDynLib", tag)  

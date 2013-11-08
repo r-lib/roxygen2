@@ -1,6 +1,11 @@
 roxygen2 2.2.2.99 
 -----------------
 
+* `@useDynLib` now works with more possible specifications - if you include a
+  comma in the tag value, the output will be passed as is. This means that
+  `@useDynLib mypackage, .registration = TRUE` will now generate
+  `useDynLib(mypackage, .registration = TRUE)` in the NAMESPACE. (#124)
+
 * S4 classes and methods, and RC classes, are given better default topics, 
   and the file names corresponding to those topics are shorter. This means
   that you should not need to be specify a custom `@alias` for S4 classes,

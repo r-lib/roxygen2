@@ -11,9 +11,9 @@ test_that("usage captured from formals", {
 test_that("usage correct for modification functions", {
   out <- roc_proc_text(roc, "
     #' Title.
-    `foo<-` <- function(a=1) {}")[[1]]
+    `foo<-` <- function(x, value) {}")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, "foo(a\u{A0}=\u{A0}1) <- value")
+  expect_equal(get_tag(out, "usage")$values, "foo(x) <- value")
 })
 
 test_that("usage correct for functions with no arguments", {
@@ -23,6 +23,46 @@ test_that("usage correct for functions with no arguments", {
 
   expect_equal(get_tag(out, "usage")$values, "f()")
 })
+
+test_that("default usage correct for S3 methods", {
+  out <- roc_proc_text(roc, "
+    #' Regular
+    mean.foo <- function(x) 'foo'
+
+    #' Infix
+    '+.foo' <- function(x, b) 'foo'
+
+    #' Modify
+    '[<-.foo' <- function(x, value) 'foo'
+  ")
+  
+  expect_equal(get_tag(out[[1]], "usage")$values, "\\S3method{mean}{foo}(x)")
+  expect_equal(get_tag(out[[2]], "usage")$values, "\\S3method{+}{foo}(x, b)")
+  expect_equal(get_tag(out[[3]], "usage")$values, "\\S3method{[}{foo}(x) <- value")
+})
+
+test_that("default usage correct for S4 methods", {
+  setClass("foo")
+  on.exit(removeClass("foo"))
+  out <- roc_proc_text(roc, "
+    #' Regular
+    setMethod('sum', 'foo', function(x, ..., na.rm = FALSE) 'foo')
+
+    #' Infix
+    setMethod('+', 'foo', function(e1, e2) 'foo')
+
+    #' Modify
+    setMethod('[<-', 'foo', function(x, i, j, ..., value) 'foo')
+  ")
+  
+  expect_equal(get_tag(out[[1]], "usage")$values, 
+    "\\S4method{sum}{foo}(x, ..., na.rm\u{A0}=\u{A0}FALSE)")
+  expect_equal(get_tag(out[[2]], "usage")$values, 
+    "\\S4method{+}{foo,ANY}(e1, e2)")
+  expect_equal(get_tag(out[[3]], "usage")$values, 
+    "\\S4method{[}{foo}(x, i, j, ...) <- value")
+})
+
 
 test_that("% and \\ are escaped in usage", {
   out <- roc_proc_text(roc, "

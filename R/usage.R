@@ -21,12 +21,11 @@ default_usage.function <- function(x) {
 
 #' @export
 default_usage.s3method <- function(x) {
+  method <- attr(x$value, "s3method")
   s3method <- function(name) {
-    browser()
-    class <- attr(x$value)
-    paste0("\\S3method{", name, "}{", signature, "}")
+    paste0("\\S3method{", name, "}{", method[2], "}")
   }
-  function_usage(x$name, formals(x$value), s3method)
+  function_usage(method[1], formals(x$value), s3method)
 }
 
 #' @export
@@ -46,8 +45,11 @@ function_usage <- function(name, formals, format_name = identity) {
   arglist <- args_string(usage_args(formals))
   if (is_replacement_fun(name)) {
     name <- str_replace(name, fixed("<-"), "")
+    formals$value <- NULL
+    
+    arglist <- args_string(usage_args(formals))
     str_c(format_name(name), "(", arglist, ") <- value")
-  } else if (is_infix_fun(name)) {
+  } else if (is_infix_fun(name) && identical(format_name, identity)) {
     arg_names <- names(formals)
     str_c(arg_names[1], " ", format_name(name), " ", arg_names[2])
   } else {

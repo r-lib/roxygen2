@@ -50,7 +50,10 @@ function_usage <- function(name, formals, format_name = identity) {
     arglist <- args_string(usage_args(formals))
     str_c(format_name(name), "(", arglist, ") <- value")
   } else if (is_infix_fun(name) && identical(format_name, identity)) {
+    # If infix, and regular function, munge format
     arg_names <- names(formals)
+    name <- str_replace_all(name, fixed("%"), "\\%")
+    
     str_c(arg_names[1], " ", format_name(name), " ", arg_names[2])
   } else {
     str_c(format_name(name), "(", arglist, ")")

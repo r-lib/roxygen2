@@ -24,6 +24,14 @@ test_that("usage correct for functions with no arguments", {
   expect_equal(get_tag(out, "usage")$values, "f()")
 })
 
+test_that("default usage correct for infix functions", {
+  out <- roc_proc_text(roc, "
+    #' Infix fun
+    '%.%' <- function(a, b) 1")[[1]]
+
+  expect_equal(get_tag(out, "usage")$values, "a \\%.\\% b")  
+})
+
 test_that("default usage correct for S3 methods", {
   out <- roc_proc_text(roc, "
     #' Regular

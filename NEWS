@@ -1,5 +1,5 @@
-roxygen2 2.2.2.99 
------------------
+roxygen2 3.0.0
+--------------
 
 * The default usage definitions should be much better, generating the correct
   usage for data sets (#122), S3 methods (without additional `@method` tag),

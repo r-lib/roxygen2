@@ -2,7 +2,7 @@
 \alias{object}
 \title{Constructors for S3 object to represent R object.}
 \usage{
-  object(subclass, name, value, ...)
+object(subclass, name, value, ...)
 }
 \arguments{
   \item{subclass}{This is an abstract class so this must be

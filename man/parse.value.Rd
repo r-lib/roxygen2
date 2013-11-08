@@ -2,7 +2,7 @@
 \alias{parse.value}
 \title{Parse an element with a mandatory value.}
 \usage{
-  parse.value(key, rest, srcref)
+parse.value(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}

@@ -2,7 +2,7 @@
 \alias{parse.files}
 \title{Parse many files at once.}
 \usage{
-  parse.files(paths)
+parse.files(paths)
 }
 \arguments{
   \item{\dots}{files to be parsed}

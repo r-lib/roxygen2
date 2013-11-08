@@ -3,7 +3,7 @@
 \title{Process roclet on string and capture results.
 Useful for testing.}
 \usage{
-  roc_proc_text(roclet, input)
+roc_proc_text(roclet, input)
 }
 \arguments{
   \item{roclet}{to use for processing}

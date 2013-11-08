@@ -3,7 +3,7 @@
 \title{Parse an element containing a mandatory name
 and description (such as \code{@param}).}
 \usage{
-  parse.name.description(key, rest, srcref)
+parse.name.description(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}

@@ -2,7 +2,7 @@
 \alias{parse.text}
 \title{Text-parsing hack using tempfiles for more facility.}
 \usage{
-  parse.text(text)
+parse.text(text)
 }
 \arguments{
   \item{text}{stringr containing text to be parsed}

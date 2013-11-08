@@ -10,7 +10,7 @@
 \alias{namespace_roclet}
 \title{Roclet: make NAMESPACE.}
 \usage{
-  namespace_roclet()
+namespace_roclet()
 }
 \description{
   This roclet automates the production of a

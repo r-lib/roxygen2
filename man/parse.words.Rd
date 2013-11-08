@@ -2,7 +2,7 @@
 \alias{parse.words}
 \title{Parse an element with a least one word}
 \usage{
-  parse.words(key, rest, srcref)
+parse.words(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}

@@ -2,7 +2,7 @@
 \alias{rd_roclet}
 \title{Roclet: make Rd files.}
 \usage{
-  rd_roclet()
+rd_roclet()
 }
 \description{
   This roclet is the workhorse of \pkg{roxygen}, producing

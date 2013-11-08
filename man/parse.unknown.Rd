@@ -2,7 +2,7 @@
 \alias{parse.unknown}
 \title{Parse an unknown tag.}
 \usage{
-  parse.unknown(key, rest, srcref)
+parse.unknown(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}

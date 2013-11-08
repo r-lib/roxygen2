@@ -2,7 +2,7 @@
 \alias{clear_caches}
 \title{Clear all roxygen caches.}
 \usage{
-  clear_caches()
+clear_caches()
 }
 \description{
   In order to speed up execution time, roxygen caches a

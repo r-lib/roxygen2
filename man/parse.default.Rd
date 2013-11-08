@@ -2,7 +2,7 @@
 \alias{parse.default}
 \title{Default parser which simply emits the key and expression.}
 \usage{
-  parse.default(key, rest, srcref)
+parse.default(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}

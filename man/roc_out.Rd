@@ -2,7 +2,7 @@
 \alias{roc_out}
 \title{Process roclet and output results.}
 \usage{
-  roc_out(roclet, input, base_path)
+roc_out(roclet, input, base_path)
 }
 \arguments{
   \item{roclet}{to use for processing}

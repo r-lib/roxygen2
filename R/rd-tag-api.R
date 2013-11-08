@@ -97,7 +97,9 @@ format.seealso_tag <- format_collapse
 #' @export
 format.source_tag <- format_collapse
 #' @export
-format.usage_tag <- function(x, ...) format_collapse(x, ..., exdent = 4)
+format.usage_tag <- function(x, ...) {
+  format_collapse(x, ..., exdent = 2, indent = 0)
+}
 #' @export
 format.value_tag <- format_collapse
 

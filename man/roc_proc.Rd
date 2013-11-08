@@ -2,7 +2,7 @@
 \alias{roc_proc}
 \title{Process roclet and capture results.}
 \usage{
-  roc_proc(roclet, paths, base_path)
+roc_proc(roclet, paths, base_path)
 }
 \arguments{
   \item{roclet}{to use for processing}

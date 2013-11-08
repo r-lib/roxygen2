@@ -2,7 +2,7 @@
 \alias{collate_roclet}
 \title{Roclet: make Collate field in DESCRIPTION.}
 \usage{
-  collate_roclet()
+collate_roclet()
 }
 \value{
   Rd roclet

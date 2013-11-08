@@ -2,7 +2,7 @@
 \alias{parse.toggle}
 \title{Turn a binary element on; parameters are ignored.}
 \usage{
-  parse.toggle(key, rest, srcref)
+parse.toggle(key, rest, srcref)
 }
 \arguments{
   \item{key}{the parsing key}

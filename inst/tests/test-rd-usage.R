@@ -131,7 +131,7 @@ test_that("quoted topics have usage statements", {
     "f(a\u{A0}=\u{A0}1, b\u{A0}=\u{A0}2, c\u{A0}=\u{A0}a\u{A0}+\u{A0}b)")
 
   expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\n  f(a = 1, b = 2, c = a + b)\n}\n"
+    "\\usage{\nf(a = 1, b = 2, c = a + b)\n}\n"
   )
 
 })

@@ -12,6 +12,9 @@
 #' @export
 #' @keywords internal
 object <- function(subclass, name, value, ...) {
+  
+  if (is.function(value)) environment(value) <- emptyenv()
+  
   structure(list(
     name = name, 
     value = value, 

@@ -1,3 +1,3 @@
-#' @include collate/pants.R
-#' @include collate/shirt.R
+#' @include pants.R
+#' @include shirt.R
 NULL

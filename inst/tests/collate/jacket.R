@@ -1,3 +1,3 @@
-#' @include collate/tie.R
-#' @include collate/belt.R
+#' @include tie.R
+#' @include belt.R
 NULL

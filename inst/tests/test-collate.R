@@ -1,7 +1,7 @@
 context("Collation")
 
 test_that("collation as expected", {
-  results <- roc_proc(collate_roclet(), dir("collate", full = TRUE), ".")
+  results <- generate_collate("collate")
   names <- str_replace(basename(results), "\\..*$", "")
 
   before <- function(a, b) {

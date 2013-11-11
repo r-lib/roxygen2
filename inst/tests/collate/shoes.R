@@ -1,4 +1,4 @@
-#' @include collate/socks.R
-#' @include collate/undershorts.R
-#' @include collate/pants.R
+#' @include socks.R
+#' @include undershorts.R
+#' @include pants.R
 NULL

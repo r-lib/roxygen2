@@ -1,2 +1,2 @@
-#' @include collate/shirt.R
+#' @include shirt.R
 NULL

@@ -45,7 +45,7 @@ standardise_call <- function(call, env = parent.frame()) {
   # If it doesn't exist (any more), don't document it.
   if (!exists(assignee, env)) return()
   value <- get(assignee, env)
-  
+
   out <- list(assignee = as.character(assignee))
   out$fun <- is.function(value)
   

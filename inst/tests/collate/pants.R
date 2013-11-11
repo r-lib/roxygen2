@@ -1,2 +1,2 @@
-#' @include collate/undershorts.R
+#' @include undershorts.R
 NULL

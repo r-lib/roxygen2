@@ -1,5 +1,7 @@
 # roxygen2
 
+[![Build Status](https://travis-ci.org/klutometis/roxygen.png)](https://travis-ci.org/klutometis/roxygen)
+
 > all' hileth', Hephaiste; didou d'areten te kai olbon.*
 > --Homer, 7th century BCE
 

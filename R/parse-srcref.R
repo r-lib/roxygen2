@@ -22,6 +22,8 @@ parse.srcref <- function(ref, env) {
 }
 
 find_parser <- function(name) {
+  if (name %in% c("=", "<-", "<<-")) name <- "assignment"
+  
   parser_name <- paste0("parser_", name)
   if (!exists(parser_name)) return(NULL)
   
@@ -37,7 +39,7 @@ standardise_call <- function(call, env = parent.frame()) {
   match.call(f, call)
 }
 
-`parser_=` <- function(call, env) {
+parser_assignment <- function(call, env) {
   assignee <- as.character(call[[2]])
   
   # If it's a compound assignment like x[[2]] <- ignore it
@@ -64,7 +66,6 @@ standardise_call <- function(call, env = parent.frame()) {
     object("data", assignee, value)
   }
 }
-`parser_<-` <- `parser_=`
 
 parser_setClass <- function(call, env) {
   name <- as.character(call$Class)

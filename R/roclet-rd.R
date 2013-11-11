@@ -351,28 +351,8 @@ roc_output.had <- function(roclet, results, base_path) {
     rd_out_cache$compute(x, format(x))
   })
 
-  write_out <- function(filename, contents) {
-    if (the_same(filename, contents)) return()
-
-    name <- basename(filename)
-    if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
-      cat("Skipping invalid filename: ", name, "\n")
-    } else {
-      cat(sprintf('Writing %s\n', name))
-      writeLines(contents, filename)
-      try(checkRd(filename))
-    }
-
-  }
-  the_same <- function(path, new) {
-    if (!file.exists(path)) return(FALSE)
-
-    old <- str_c(readLines(path), collapse = "\n")
-    return(identical(old, new))
-  }
-
   paths <- file.path(man, names(results))
-  mapply(write_out, paths, contents)
+  mapply(write_if_different, paths, contents)
 }
 
 # Process title, description and details.

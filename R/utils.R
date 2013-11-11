@@ -65,3 +65,32 @@ srcref_location <- function(srcref = NULL) {
   if (is.null(srcref)) return()
   str_c(" in block ", basename(srcref$filename), ":", srcref$lloc[1])
 }
+
+write_if_different <- function(path, contents) {
+  if (!file.exists(dirname(path))) {
+    dir.create(dirname(path), showWarnings = FALSE)
+  }
+  
+  if (same_contents(path, contents)) return(FALSE)
+  
+  name <- basename(path)
+  if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
+    cat("Skipping invalid path: ", name, "\n")
+    FALSE
+  } else {
+    cat(sprintf('Writing %s\n', name))
+    writeLines(contents, path)
+    TRUE
+  }
+}
+
+same_contents <- function(path, contents) {
+  if (!file.exists(path)) return(FALSE)
+  
+  contents <- str_c(str_c(contents, collapse = "\n"), "\n")
+  
+  text_hash <- digest(contents, serialize = FALSE)
+  file_hash <- digest(file = path)
+  
+  identical(text_hash, file_hash)
+}

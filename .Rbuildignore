@@ -1,6 +1,5 @@
-sandbox
-patches
-doc
+^/sandbox$
+^/doc$
 ^/man-roxygen$
 ^.*\.Rproj$
 ^\.Rproj\.user$

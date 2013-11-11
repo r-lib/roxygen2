@@ -11,8 +11,8 @@ parse.files <- function(paths) {
   # access them.
   env <- new.env(parent = parent.env(globalenv()))
   env_hash <- suppressWarnings(digest(env))
-  
   setPackageName("roxygen_devtest", env)
+  
   lapply(paths, sys.source, chdir = TRUE, envir = env)
   
   parsed <- lapply(paths, parse.file, env = env, env_hash = env_hash)

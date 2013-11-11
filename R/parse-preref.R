@@ -20,8 +20,7 @@ parse.preref <- function(lines) {
   elements <- str_replace_all(elements, fixed("@@"), "@")
 
   parsed.introduction <- parse.introduction(elements[[1]])
-  parsed.elements <- unlist(lapply(elements[-1], parse.element,
-    srcref = srcrefs), recursive = FALSE)
+  parsed.elements <- parse_elements(elements[-1], srcrefs)
 
   c(parsed.introduction, parsed.elements)
 }
@@ -54,18 +53,15 @@ prerefs <- function(srcfile, srcrefs) {
   Map(extract, comments_start, comments_end)
 }
 
-# Parse a raw string containing key and expressions.
-#
-# @param element the string containing key and expressions
-# @return A list containing the parsed constituents
-parse.element <- function(element, srcref) {
-  pieces <- str_split_fixed(element, "[[:space:]]+", 2)
-
-  tag <- pieces[, 1]
-  rest <- pieces[, 2]
-
-  tag_parser <- preref.parsers[[tag]] %||% parse.unknown
-  tag_parser(tag, rest, srcref)
+parse_elements <- function(elements, srcref) {
+  pieces <- str_split_fixed(elements, "[[:space:]]+", 2)
+  
+  parse_element <- function(tag, value) {
+    tag_parser <- preref.parsers[[tag]] %||% parse.unknown
+    tag_parser(tag, value, srcref)
+  }
+  
+  Map(parse_element, pieces[, 1], pieces[, 2])
 }
 
 # Parse introduction: the premier part of a roxygen block
@@ -91,8 +87,9 @@ parse.introduction <- function(expression) {
 #' @keywords internal
 #' @family preref parsing functions
 #' @export
-parse.default <- function(key, rest, srcref)
-  as.list(structure(str_trim(rest), names=key))
+parse.default <- function(key, rest, srcref) {
+  str_trim(rest)
+}
 
 #' Parse an unknown tag.
 #'
@@ -106,7 +103,7 @@ parse.default <- function(key, rest, srcref)
 #' @export
 parse.unknown <- function(key, rest, srcref) {
   roxygen_warning(key, ' is an unknown key', srcref = srcref)
-  parse.default(key, rest)
+  rest
 }
 
 #' Parse an element with a mandatory value.
@@ -117,10 +114,9 @@ parse.unknown <- function(key, rest, srcref) {
 #' @keywords internal
 #' @export
 parse.value <- function(key, rest, srcref) {
-  if (is.null.string(rest))
-    roxygen_stop(key, ' requires a value', srcref = srcref)
-  else
-    parse.default(key, rest)
+  if (is.null.string(rest)) roxygen_stop(key, ' requires a value', srcref = srcref)
+  
+  str_trim(rest)
 }
 
 #' Parse an element with a least one word
@@ -131,8 +127,7 @@ parse.value <- function(key, rest, srcref) {
 #' @keywords internal
 #' @export
 parse.words <- function(key, rest, srcref) {
-  value <- str_trim(str_split(rest, fixed(" "))[[1]])
-  setNames(list(value), key)
+  str_trim(str_split(rest, fixed(" "))[[1]])
 }
 
 #' Parse an element containing a mandatory name
@@ -149,12 +144,11 @@ parse.name.description <- function(key, rest, srcref) {
   name <- pieces[, 1]
   rest <- str_trim(pieces[, 2])
 
-  if (is.null.string(name))
+  if (is.null.string(name)) {
     roxygen_stop(key, ' requires a name and description', srcref = srcref)
-  else
-    as.list(structure(list(list(name=name,
-                                description=rest)),
-                      names=key))
+  }
+  
+  list(name = name, description = rest)
 }
 
 #' Parse an element containing a single name and only a name.
@@ -175,8 +169,8 @@ parse.name <- function(key, name, srcref) {
   } else if (str_count(name, "\\s+") > 1) {
     roxygen_warning(key, ' ignoring extra arguments', srcref = srcref)
   }
-
-  parse.default(key, word(name, 1))
+  
+  word(name, 1)
 }
 
 #' Turn a binary element on; parameters are ignored.
@@ -186,5 +180,6 @@ parse.name <- function(key, name, srcref) {
 #' @family preref parsing functions
 #' @keywords internal
 #' @export
-parse.toggle <- function(key, rest, srcref)
-  as.list(structure(TRUE, names=key))
+parse.toggle <- function(key, rest, srcref) {
+  TRUE
+}

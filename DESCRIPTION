@@ -1,13 +1,15 @@
 Package: roxygen2
-Version: 3.0.0
-License: GPL (>= 2)
+Title: In-source documentation for R
 Description: A Doxygen-like in-source documentation system
     for Rd, collation, and NAMESPACE.
-Title: In-source documentation for R
-Author: Hadley Wickham <hadley@rice.edu>,
-    Peter Danenberg <pcd@roxygen.org>,
-    Manuel Eugster <Manuel.Eugster@stat.uni-muenchen.de>
-Maintainer: Hadley Wickham <hadley@rice.edu>
+Version: 3.0.0
+License: GPL (>= 2)
+Authors@R: c(
+    person("Hadley", "Wickham", email = "h.wickham@gmail.com",
+    role = c("aut", "cre")),
+    person("Peter", "Danenberg", email = "pcd@roxygen.org", role = "aut"),
+    person("Manuel", "Eugster", role = "aut")
+    )
 Depends:
     R (>= 2.14)
 Imports:

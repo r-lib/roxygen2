@@ -44,7 +44,7 @@ merge.rd_tag <- function(x, y, ...) {
 # Tags that repeat multiple times --------------------------------------------
 
 format_rd <- function(x, ...) {
-  vapply(with_locale("C", sort(unique(x$values))), rd_tag, tag = x$tag,
+  vapply(sort_c(unique(x$values)), rd_tag, tag = x$tag,
     FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 #' @export

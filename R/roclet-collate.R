@@ -26,40 +26,56 @@ register.preref.parsers(parse.value, 'include')
 #'   roc_out(roclet, dir('example'), "example")
 #' }
 #' @export
-collate_roclet <- function() {
-  new_roclet(list(), "collate")
+
+update_collate <- function(base_path) {
+  collate <- generate_collate(file.path(base_path, "R"))
+  if (!is.null(collate)) {
+    collate <- paste0("'", collate, "'", collapse = " ")
+  }
+
+  desc_path <- file.path(base_path, "DESCRIPTION")
+  old <- read.description(desc_path)
+
+  new <- old
+  new$Collate <- collate
+  write.description(new, desc_path)
+
+  if (!identical(old, read.description(desc_path))) {
+    cat('Updating collate directive in ', desc_path, "\n")
+  }
 }
 
-#' @export
-roc_process.collate <- function(roclet, partita, base_path) {
-  topo <- topo_sort()
+generate_collate <- function(base_path) {
+  paths <- sort_c(dir(base_path, "[.Rr]$", full.names = TRUE))
+  includes <- lapply(paths, find_includes)
+  names(includes) <- paths
 
-  for (partitum in partita) {
-    file <- base_path(partitum$srcref$filename, base_path)
+  n <- sum(vapply(includes, length, integer(1)))
+  if (n == 0) return()
+
+  topo <- topo_sort()
+  for (path in paths) {
+    file <- base_path(path, base_path)
     vertex <- topo$add(file)
 
-    includes <- partitum[names(partitum) == "include"]
-    if (length(includes) > 0) {
-      for (include in includes) {
-        topo$add_ancestor(vertex, include)
-      }
+    for (include in includes[[path]]) {
+      topo$add_ancestor(vertex, include)
     }
   }
 
-  unique(basename(topo$sort()))
+  unique(topo$sort())
 }
 
-#' @export
-roc_output.collate <- function(roclet, results, base_path) {
-  DESCRIPTION <- file.path(base_path, "DESCRIPTION")
-  old <- read.description(DESCRIPTION)
-  new <- old
-  new$Collate <- str_c("'", results, "'", collapse = " ")
-  write.description(new, DESCRIPTION)
+find_includes <- function(path) {
+  lines <- readLines(path, warn = FALSE)
+  re <- regexec("^\\s*#+' @include (.*)$", lines)
+  matches <- regmatches(lines, re)
+  matches <- Filter(function(x) length(x) == 2, matches)
+  
+  if (length(matches) == 0) return()
 
-  if (!identical(old, read.description(DESCRIPTION))) {
-    cat('Updating collate directive in ', DESCRIPTION, "\n")
-  }
+  includes <- vapply(matches, "[[", 2, FUN.VALUE = character(1))
+  sort_c(unlist(strsplit(includes, " ", fixed = TRUE)))
 }
 
 base_path <- function(path, base) {
@@ -68,4 +84,3 @@ base_path <- function(path, base) {
 
   str_replace(path, fixed(str_c(base, "/")), "")
 }
-

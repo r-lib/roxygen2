@@ -188,7 +188,7 @@ roclet <- rd_roclet()
 \dontrun{roc_out(roclet, "example.R", ".")}
 }
 \seealso{
-  Other roclets: \code{\link{collate_roclet}},
-  \code{\link{namespace_roclet}}
+  Other roclets: \code{\link{namespace_roclet}},
+  \code{\link{update_collate}}
 }
 

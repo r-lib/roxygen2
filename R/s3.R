@@ -38,7 +38,7 @@ is.s3method <- function(x) inherits(x, "s3method")
 is.s3generic <- function(x) inherits(x, "s3generic")
 is.s3 <- function(x) inherits(x, c("s3method", "s3generic"))
 
-find_generic <- memoise(function(name, env = parent.frame()) {
+find_generic <- function(name, env = parent.frame()) {
   pieces <- str_split(name, fixed("."))[[1]]
   n <- length(pieces)
   
@@ -52,7 +52,7 @@ find_generic <- memoise(function(name, env = parent.frame()) {
     if (is_s3_generic(generic, env)) return(c(generic, class))
   }
   NULL
-})
+}
 
 all_s3_methods <- memoise(function(env = parent.frame()) {
   names <- ls(envir = env)

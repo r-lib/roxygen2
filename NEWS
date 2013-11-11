@@ -1,6 +1,17 @@
 roxygen2 3.0.0
 --------------
 
+* `roxygenise()` now works more like `devtools::document()`, only ever working
+  in the current directory. The arguments `roxygen.dir`, `overwrite`, 
+  `copy.package` and `unlink.target` have been deprecated due to potential
+  data loss problems.
+
+* The collate roclet is no longer a roclet: it processes R files using custom
+  code (only statically, not dynamically) and is designed to be executed before
+  the code is sourced.  Run `update_collate()` to update the Collate directive
+  based on `@include` tags - if there are none present, a collate directive 
+  will not be generated.
+
 * The default usage definitions should be much better, generating the correct
   usage for data sets (#122), S3 methods (without additional `@method` tag),
   S4 generics, S4 methods, and for replacement (#119) and infix functions. 

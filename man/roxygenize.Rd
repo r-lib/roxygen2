@@ -3,12 +3,12 @@
 \alias{roxygenize}
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{
-roxygenize(package.dir, roxygen.dir = package.dir,
+roxygenize(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir,
   overwrite = TRUE, unlink.target = FALSE,
   roclets = c("collate", "namespace", "rd"))
 
-roxygenise(package.dir, roxygen.dir = package.dir,
+roxygenise(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir,
   overwrite = TRUE, unlink.target = FALSE,
   roclets = c("collate", "namespace", "rd"))
@@ -16,16 +16,7 @@ roxygenise(package.dir, roxygen.dir = package.dir,
 \arguments{
   \item{package.dir}{the package's top directory}
 
-  \item{roxygen.dir}{where to create roxygen output;
-  defaults to \file{package.dir}.}
-
-  \item{copy.package}{copies the package over before
-  adding/manipulating files.}
-
-  \item{overwrite}{overwrite target files?}
-
-  \item{unlink.target}{unlink target directory before
-  processing files?}
+  \item{roxygen.dir,copy.package,overwrite,unlink.target}{deprecated}
 
   \item{roclets}{character vector of roclet names to apply
   to package}

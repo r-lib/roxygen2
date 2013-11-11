@@ -99,7 +99,7 @@ namespace_roclet <- function() {
 #' @export
 roc_process.namespace <- function(roclet, partita, base_path) {
   ns <- unlist(lapply(partita, ns_process_partitum))
-  with_locale("C", sort(unique(ns)))
+  sort_c(unique(ns))
 }
 
 ns_process_partitum <- function(partitum) {

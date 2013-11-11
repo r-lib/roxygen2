@@ -8,16 +8,13 @@
 #'   "rcclass", or "data".
 #' @param name Name of the object being documented
 #' @param value The object itself. 
-#' @param ... Any other components you'd like to store in the class
 #' @export
 #' @keywords internal
-object <- function(subclass, name, value, ...) {
+object <- function(subclass, name, value) {
   
   structure(list(
     name = name, 
-    value = value, 
-    ...
-  ), 
+    value = value), 
   class = c(subclass, "object"))
 }
 

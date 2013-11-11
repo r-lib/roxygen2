@@ -19,10 +19,11 @@ parse.preref <- function(lines) {
   ## Compress the escaped delimeters.
   elements <- str_replace_all(elements, fixed("@@"), "@")
 
-  parsed.introduction <- parse.introduction(elements[[1]])
-  parsed.elements <- parse_elements(elements[-1], srcrefs)
-
-  c(parsed.introduction, parsed.elements)
+  parsed <- parse_elements(elements[-1], srcrefs)
+  if (elements[[1]] != "") {
+    parsed$introduction <- str_trim(elements[[1]])
+  } 
+  parsed
 }
 
 # Sequence that distinguishes roxygen comment from normal comment.
@@ -62,17 +63,6 @@ parse_elements <- function(elements, srcref) {
   }
   
   Map(parse_element, pieces[, 1], pieces[, 2])
-}
-
-# Parse introduction: the premier part of a roxygen block
-# containing description and option details separated by
-# a blank roxygen line.
-#
-# @param expression the description to be parsed
-# @return A list containing the parsed description
-parse.introduction <- function(expression) {
-  if (is.null.string(expression)) return(NULL)
-  list(introduction = str_trim(expression))
 }
 
 #' Parsers.

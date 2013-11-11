@@ -1,6 +1,6 @@
-^/sandbox$
-^/doc$
-^/man-roxygen$
+^sandbox$
+^doc$
+^man-roxygen$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$

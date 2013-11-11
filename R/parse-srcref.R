@@ -67,6 +67,7 @@ parser_assignment <- function(call, env) {
   }
 }
 
+#' @importFrom methods getClass
 parser_setClass <- function(call, env) {
   name <- as.character(call$Class)
   value <- getClass(name)
@@ -74,6 +75,7 @@ parser_setClass <- function(call, env) {
   object("s4class", name, value)
 }
 
+#' @importFrom methods getGeneric
 parser_setGeneric <- function(call, env) {
   name <- as.character(call$name)
   value <- getGeneric(name, where = env)
@@ -81,6 +83,7 @@ parser_setGeneric <- function(call, env) {
   object("s4generic", name, value)
 }
 
+#' @importFrom methods getMethod
 parser_setMethod <- function(call, env) {
   name <- as.character(call$f)
   value <- getMethod(name, eval(call$signature), where = env)

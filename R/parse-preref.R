@@ -75,69 +75,53 @@ parse.introduction <- function(expression) {
   list(introduction = str_trim(expression))
 }
 
-#' Default parser which simply emits the key and expression.
-#'
-#' Used for elements with optional values (like \code{@@export})
-#' where roclets can do more sophisticated things with \code{NULL}.
-#'
+#' Parsers.
+#' 
+#' These function implement parsing different tag types.
+#' 
 #' @param key the parsing key
 #' @param rest the expression to be parsed
 #' @param srcref srcref providing location of file name and line number
-#' @return A list containing the key and expression (possibly null)
 #' @keywords internal
-#' @family preref parsing functions
+#' @name parsers
+NULL
+
+#' @details \code{parse.default}: emit value unchanged.
 #' @export
+#' @rdname parsers
 parse.default <- function(key, rest, srcref) {
   str_trim(rest)
 }
 
-#' Parse an unknown tag.
-#'
-#' Resorts to the default parser but with a warning about the
-#' unknown tag.
-#'
-#' @inheritParams parse.default
-#' @return A list containing the key and expression (possibly null)
-#' @family preref parsing functions
-#' @keywords internal
+#' @details \code{parse.default}: warns about unknown tag.
 #' @export
+#' @rdname parsers
 parse.unknown <- function(key, rest, srcref) {
   roxygen_warning(key, ' is an unknown key', srcref = srcref)
-  rest
+  str_trim(rest)
 }
 
-#' Parse an element with a mandatory value.
-#'
-#' @inheritParams parse.default
-#' @return A list containing the key and value
-#' @family preref parsing functions
-#' @keywords internal
+#' @details \code{parse.value}: fail if empty
 #' @export
+#' @rdname parsers
 parse.value <- function(key, rest, srcref) {
-  if (is.null.string(rest)) roxygen_stop(key, ' requires a value', srcref = srcref)
+  if (is.null.string(rest)) {
+    roxygen_stop(key, ' requires a value', srcref = srcref)
+  }
   
   str_trim(rest)
 }
 
-#' Parse an element with a least one word
-#'
-#' @inheritParams parse.default
-#' @return A list containing the key and value
-#' @family preref parsing functions
-#' @keywords internal
+#' @details \code{parse.words}: parse values into words separated by space
 #' @export
+#' @rdname parsers
 parse.words <- function(key, rest, srcref) {
   str_trim(str_split(rest, fixed(" "))[[1]])
 }
 
-#' Parse an element containing a mandatory name
-#' and description (such as \code{@@param}).
-#'
-#' @inheritParams parse.default
-#' @return A list containing the key, name and description
-#' @family preref parsing functions
-#' @keywords internal
+#' @details \code{parse.description}: parse mandatory name and description
 #' @export
+#' @rdname parsers
 parse.name.description <- function(key, rest, srcref) {
   pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
 
@@ -151,16 +135,9 @@ parse.name.description <- function(key, rest, srcref) {
   list(name = name, description = rest)
 }
 
-#' Parse an element containing a single name and only a name.
-#'
-#' Extra material will be ignored and a warning issued.
-#'
-#' @inheritParams parse.default
-#' @param name the name to be parsed
-#' @return A list containing key and name
-#' @family preref parsing functions
-#' @keywords internal
+#' @details \code{parse.name}: one and only one word
 #' @export
+#' @rdname parsers
 parse.name <- function(key, name, srcref) {
   name <- str_trim(name)
 
@@ -173,13 +150,9 @@ parse.name <- function(key, name, srcref) {
   word(name, 1)
 }
 
-#' Turn a binary element on; parameters are ignored.
-#'
-#' @inheritParams parse.default
-#' @return A list with the key and \code{TRUE}
-#' @family preref parsing functions
-#' @keywords internal
+#' @details \code{parse.toggle}: turn binary element on
 #' @export
+#' @rdname parsers
 parse.toggle <- function(key, rest, srcref) {
   TRUE
 }

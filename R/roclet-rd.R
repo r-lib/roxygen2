@@ -460,7 +460,7 @@ process.section <- function(key, value) {
 }
 
 process.docType <- function(partitum) {
-  doctype <- partitum$docType
+  doctype <- partitum$docType %||% default_doctype(partitum$object)
 
   if (is.null(doctype)) return()
   tags <- list(new_tag("docType", doctype))
@@ -472,7 +472,8 @@ process.docType <- function(partitum) {
     }
   } else if (doctype == "data") {
     if (is.null(partitum$format)) {
-      tags <- c(tags, new_tag("format", partitum$str))
+      str <- capture.output(str(partitum$object$value))
+      tags <- c(tags, new_tag("format", str))
     }
     tags <- c(tags, new_tag("keyword", "datasets"))
   }

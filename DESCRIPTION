@@ -23,6 +23,7 @@ Suggests:
 Collate:
     'cache.R'
     'description.R'
+    'doctype.R'
     'object.R'
     'parse-preref.R'
     'parse-registry.R'

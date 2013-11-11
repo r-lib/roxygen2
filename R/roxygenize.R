@@ -10,7 +10,6 @@
 #' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
 #' @param roclets character vector of roclet names to apply to package
 #' @return \code{NULL}
-#' @rdname roxygenize
 #' @export
 roxygenize <- function(package.dir = ".",
                        roxygen.dir=package.dir,

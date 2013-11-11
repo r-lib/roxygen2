@@ -20,3 +20,14 @@ object <- function(subclass, name, value, ...) {
   ), 
   class = c(subclass, "object"))
 }
+
+hash_object <- function(x) {
+  if (is.null(x)) return(x)
+  
+  # If a function, hash based on source
+  if (is.function(x$value)) {
+    x$value <- deparse(body(x$value))
+  }
+  
+  digest(x)
+}

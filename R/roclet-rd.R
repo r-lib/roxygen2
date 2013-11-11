@@ -194,7 +194,7 @@ roc_process.had <- function(roclet, partita, base_path) {
 
   topics <- list()
   for (partitum in partita) {
-    key <- c(template_hash, digest(partitum))
+    key <- c(template_hash, hash_partitum(partitum))
     new <- rd_proc_cache$compute(key, roclet_rd_one(partitum, base_path))
     if (is.null(new)) next;
     # Clone output so cached object isn't modified
@@ -277,6 +277,11 @@ roc_process.had <- function(roclet, partita, base_path) {
 
 
   topics
+}
+
+hash_partitum <- function(partitum) {
+  partitum$object <- hash_object(partitum$object)
+  digest(partitum)
 }
 
 roclet_rd_one <- function(partitum, base_path) {

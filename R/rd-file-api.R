@@ -36,14 +36,10 @@ format.rd_file <- function(x, ...) {
 
 #' @export
 merge.rd_file <- function(x, y, ...) {
-  rd <- new_rd_file()
-  for(tag_x in as.list(x[[1]])) {
-    add_tag(rd, tag_x)
-  }
   for(tag_y in as.list(y[[1]])) {
-    add_tag(rd, tag_y)
+    add_tag(x, tag_y)
   }
-  rd
+  x
 }
 
 #' @export

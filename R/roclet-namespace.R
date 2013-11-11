@@ -108,7 +108,7 @@ ns_process_partitum <- function(partitum) {
 }
 
 ns_process_tag <- function(tag_name, partitum) {
-  f <- match.fun(paste0("ns_", tag_name))
+  f <- get(paste0("ns_", tag_name), mode = "function")
   tags <- partitum[names(partitum) == tag_name]
   
   lapply(tags, f, part = partitum)

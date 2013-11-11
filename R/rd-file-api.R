@@ -1,9 +1,14 @@
 # A v. simple api for dealing with lists of tags in a rd file
 
 new_rd_file <- function() {
-  structure(list(environment()), class = "rd_file")
+  env <- new.env(parent = emptyenv())
+  structure(list(env), class = "rd_file")
 }
 is.rd_file <- function(x) inherits(x, "rd_file")
+
+copy_env <- function(x) {
+  list2env(as.list(x), parent = emptyenv())
+}
 
 #' @export
 print.rd_file <- function(x, ...) {

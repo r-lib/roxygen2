@@ -55,8 +55,6 @@ When you `roxygenise` your package these comments will be automatically transfor
     library(roxygen2)
     roxygenize('<package>')
 
-By default, `roxygen2` will create files in the package `man` directory, although if you're worried you can override the defaults to copy the complete package to a new directory and create the files there.
-
 # Roclets
 
 `roxygen2` comes with three roclets, three tools for parsing your source code and producing files useful for documenting your package:

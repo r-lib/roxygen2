@@ -1,5 +1,7 @@
 S3method(default_doctype,data)
 S3method(default_doctype,default)
+S3method(default_doctype,s4class)
+S3method(default_doctype,s4method)
 S3method(default_export,"function")
 S3method(default_export,data)
 S3method(default_export,rcclass)

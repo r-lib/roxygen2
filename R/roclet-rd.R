@@ -293,7 +293,7 @@ roclet_rd_one <- function(partitum, base_path) {
   if (any(names(partitum) == "noRd")) return()
 
   # Figure out topic name
-  name <- partitum$name %||% topic_name(partitum$object) %||% 
+  name <- partitum$name %||% default_topic_name(partitum$object) %||% 
     roxygen_stop("Missing name", srcref = partitum$srcref)
 
   # Work out file name and initialise Rd object

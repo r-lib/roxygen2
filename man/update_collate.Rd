@@ -1,19 +1,28 @@
 \name{update_collate}
 \alias{update_collate}
-\title{Roclet: make Collate field in DESCRIPTION.}
+\title{Update Collate field in DESCRIPTION.}
 \usage{
 update_collate(base_path)
 }
-\value{
-  Rd roclet
+\arguments{
+  \item{base_path}{Path to package directory}
 }
 \description{
   Topologically sort R files and record in Collate field.
+  The topological sort is based on the \code{@include} tag,
+  which should specify the filenames (space separated) that
+  should be loaded before the current file - these are
+  typically necessary if you're using S4 or RC classes
+  (because super classes must be defined before
+  subclasses).  If there are no \code{@include} tags
+  Collate will be left blank, indicating that the order of
+  loading does not matter.
 }
 \details{
-  Each \code{@include} tag should specify the filename of
-  one intrapackage dependency; multiple \code{@include}
-  tags may be given.
+  This is not a roclet because roclets need the values of
+  objects in a package, and those values can not be
+  generated unless you've sourced the files, and you can't
+  source the files unless you know the correct order.
 }
 \examples{
 #' `example-a.R', `example-b.R' and `example-c.R' reside
@@ -23,14 +32,8 @@ update_collate(base_path)
 #' @include example-c.R
 NULL
 
-roclet <- collate_roclet()
 \dontrun{
-  roc_proc(roclet, dir('example'))
-  roc_out(roclet, dir('example'), "example")
+  update_collate("my_package")
 }
-}
-\seealso{
-  Other roclets: \code{\link{namespace_roclet}},
-  \code{\link{rd_roclet}}
 }
 

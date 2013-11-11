@@ -31,8 +31,7 @@
 }
 \seealso{
   See \code{\link{namespace_roclet}},
-  \code{\link{collate_roclet}}, for an overview of roxygen
-  tags.
+  \code{\link{rd_roclet}}, for an overview of roxygen tags.
 }
 \keyword{package}
 

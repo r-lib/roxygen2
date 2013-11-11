@@ -3,8 +3,8 @@
 #' This is the workhorse function that uses roclets, the built-in document
 #' tranformation functions, to build all documentation for a package.  See
 #' the documentation for the individual roclets, \code{\link{rd_roclet}},
-#' \code{\link{namespace_roclet}} and \code{\link{collate_roclet}}, for
-#' documentation on how to use each one.
+#' \code{\link{namespace_roclet}}, and for \code{\link{update_collate}},
+#' for more details.
 #'
 #' @param package.dir the package's top directory
 #' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated

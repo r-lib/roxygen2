@@ -27,7 +27,6 @@
 #' @keywords package
 #' @examples
 #' \dontrun{roxygenize('pkg')}
-#' @seealso See \code{\link{namespace_roclet}}, 
-#' \code{\link{collate_roclet}}, 
+#' @seealso See \code{\link{namespace_roclet}}, \code{\link{rd_roclet}}, 
 #' for an overview of roxygen tags.
 NULL

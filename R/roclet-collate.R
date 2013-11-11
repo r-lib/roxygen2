@@ -3,15 +3,21 @@ NULL
 
 register.preref.parsers(parse.value, 'include')
 
-#' Roclet: make Collate field in DESCRIPTION.
+#' Update Collate field in DESCRIPTION.
 #'
-#' Topologically sort R files and record in Collate field.
+#' Topologically sort R files and record in Collate field. The topological 
+#' sort is based on the \code{@@include} tag, which should specify the filenames 
+#' (space separated) that should be loaded before the current file - these are
+#' typically necessary if you're using S4 or RC classes (because super classes
+#' must be defined before subclasses).  If there are no \code{@@include} tags
+#' Collate will be left blank, indicating that the order of loading does not
+#' matter.
 #'
-#' Each \code{@@include} tag should specify the filename of one intrapackage
-#' dependency; multiple \code{@@include} tags may be given.
+#' This is not a roclet because roclets need the values of objects in a package,
+#' and those values can not be generated unless you've sourced the files,
+#' and you can't source the files unless you know the correct order.
 #'
-#' @family roclets
-#' @return Rd roclet
+#' @param base_path Path to package directory
 #' @examples
 #' #' `example-a.R', `example-b.R' and `example-c.R' reside
 #' #' in the `example' directory, with dependencies
@@ -20,13 +26,10 @@ register.preref.parsers(parse.value, 'include')
 #' #' @@include example-c.R
 #' NULL
 #'
-#' roclet <- collate_roclet()
 #' \dontrun{
-#'   roc_proc(roclet, dir('example'))
-#'   roc_out(roclet, dir('example'), "example")
+#'   update_collate("my_package")
 #' }
 #' @export
-
 update_collate <- function(base_path) {
   collate <- generate_collate(file.path(base_path, "R"))
   if (!is.null(collate)) {

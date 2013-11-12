@@ -26,8 +26,22 @@ is_s3_generic <- function(name, env = parent.frame()) {
     return(name %in% known_generics)
   }
   
-  uses <- findGlobals(f, merge = FALSE)$functions
-  any(uses == "UseMethod")
+  calls_use_method(body(f))
+}
+
+calls_use_method <- function(x) {
+  # Base cases
+  if (missing(x)) return(FALSE)
+  if (!is.call(x)) return(FALSE)
+  
+  if (identical(x[[1]], quote(UseMethod))) return(TRUE)
+  if (length(x) == 1) return(FALSE)
+  # Recursive case: arguments to call
+  for (arg in as.list(x[-1])) {
+    if (calls_use_method(arg)) return(TRUE)
+  }
+  
+  FALSE
 }
 
 is_s3_method <- function(name, env = parent.frame()) {

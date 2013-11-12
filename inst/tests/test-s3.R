@@ -5,7 +5,7 @@ test_that("primitive generics detected", {
   expect_true(is_s3_method("[.data.frame"))
   
   expect_true(is_s3_generic("mean"))
-  expect_true(is_s3_method("[.default"))
+  expect_true(is_s3_method("mean.default"))
   
   expect_true(is_s3_generic("c"))
   expect_true(is_s3_method("c.Date"))
@@ -27,6 +27,15 @@ test_that("user defined generics & methods detected", {
   
   expect_true(is_s3_generic("my_method"))
   expect_true(is_s3_method("my_method.character"))
+})
+
+test_that("user defined generics detected even if use non-standard", {
+  my_method <- function(x) {
+    x <- 1
+    if (x > 2) UseMethod("mymethod")
+  }
+  
+  expect_true(is_s3_generic("my_method"))
 })
 
 test_that("user defined functions override primitives", {

@@ -93,14 +93,34 @@ test_that("\ is escaped in usage", {
 
 test_that("long usages protected from incorrect breakage", {
   out <- roc_proc_text(roc, "
-      #' Function long usage
-      f <- function(a = '                             a',
-                    b = '                             b',
-                    c = '                             c',
-                    d = '                             ') 1")[[1]]
+    #' Function long usage
+    f <- function(a = '                                    a',
+                  b = '                                    b',
+                  c = '                                    c',
+                  d = '                                    d') 1")[[1]]
 
   usage <- format(get_tag(out, "usage"))
   expect_equal(str_count(usage, "\n"), 6)
+})
+
+test_that("argument vectors split on whitespace", {
+  out <- roc_proc_text(roc, "
+    #' Function long usage
+    f <- function(a = c('abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef',
+                  'abcdef', 'abcdef', 'abcdef'))  1")[[1]]
+  
+  usage <- get_tag(out, "usage")[[2]]
+  expect_equal(str_count(usage, "\n"), 1)
+})
+
+test_that("\\method not split inappropriately", {
+  out <- roc_proc_text(roc, "
+    #' Function long usage
+    mean.reallyratherquitelongclassname <- 
+      function(reallyquitelongargument = 'reallyratherquitelongvalue') 1
+  ")[[1]]
+  usage <- format(get_tag(out, "usage"))
+  expect_match(usage, fixed("{mean}{reallyratherquitelongclassname}"))
 })
 
 test_that("@usage overrides default", {
@@ -128,7 +148,7 @@ test_that("quoted topics have usage statements", {
     \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
 
   expect_equal(get_tag(out, "usage")$values,
-    "f(a\u{A0}=\u{A0}1, b\u{A0}=\u{A0}2, c\u{A0}=\u{A0}a\u{A0}+\u{A0}b)")
+    "f(a\u{A0}=\u{A0}1, b\u{A0}=\u{A0}2, c\u{A0}=\u{A0}a + b)")
 
   expect_equal(format(get_tag(out, "usage")),
     "\\usage{\nf(a = 1, b = 2, c = a + b)\n}\n"

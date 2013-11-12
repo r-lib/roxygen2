@@ -6,7 +6,9 @@ usage_tag <- function(partitum) {
 
 wrap_string <- function(x) {
   if (is.null(x)) return(x)
-  wrapString(x)
+  y <- wrapString(x)
+  Encoding(y) <- Encoding(x)
+  y
 }
 
 default_usage <- function(x) {

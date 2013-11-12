@@ -1,6 +1,6 @@
 # Parse a preref
 parse.preref <- function(lines) {
-  # Extract srcrefs
+  # Extract srcrefs (needed for error messages)
   srcrefs <- attr(lines, 'srcref')
   srcrefs$lloc[1] <- srcrefs$lloc[1] + 1
 
@@ -22,7 +22,7 @@ parse.preref <- function(lines) {
   parsed <- parse_elements(elements[-1], srcrefs)
   if (elements[[1]] != "") {
     parsed$introduction <- str_trim(elements[[1]])
-  } 
+  }
   parsed
 }
 

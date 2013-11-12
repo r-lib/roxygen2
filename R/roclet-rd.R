@@ -468,7 +468,3 @@ process_had_tag <- function(partitum, tag, f = new_tag) {
 
   unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)
 }
-
-# warning("All roxygen elements must have name: ",
-#   partitum$srcref$filename, ":", partitum$srcref$lloc[1], ":",
-#   partitum$srcref$lloc[2], call. = FALSE)

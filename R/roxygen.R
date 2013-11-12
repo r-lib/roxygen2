@@ -15,6 +15,7 @@
 #' Maintainer: Hadley Wickham \email{h.wickham@@gmail.com}
 #' @name roxygen
 #' @docType package
+#' @useDynLib roxygen2
 #' @examples
 #' \dontrun{roxygenize('pkg')}
 #' @seealso See \code{\link{namespace_roclet}}, \code{\link{rd_roclet}}, 

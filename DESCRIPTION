@@ -22,7 +22,9 @@ Imports:
     methods
 Suggests:
     testthat
+LinkingTo: Rcpp
 Collate:
+    'RcppExports.R'
     'cache.R'
     'description.R'
     'doctype.R'

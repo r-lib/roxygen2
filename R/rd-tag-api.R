@@ -97,10 +97,6 @@ format.seealso_tag <- format_collapse
 #' @export
 format.source_tag <- format_collapse
 #' @export
-format.usage_tag <- function(x, ...) {
-  format_collapse(x, ..., exdent = 2, indent = 0)
-}
-#' @export
 format.value_tag <- format_collapse
 
 # Tags that don't have output ------------------------------------------------
@@ -115,6 +111,11 @@ format.inheritParams_tag <- format_null
 format.formals_tag <- format_null
 
 # Tags with special errors or other semantics --------------------------------
+
+#' @export
+format.usage_tag <- function(x, ...) {
+  rd_tag(x$tag, paste0(x$values, collapse = "\n\n"), space = TRUE)
+}
 
 #' @export
 format.arguments_tag <- function(x, ...) {

@@ -1,7 +1,12 @@
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 usage_tag <- function(partitum) {
-  usage <- partitum$usage %||% default_usage(partitum$object)
+  usage <- partitum$usage %||% wrap_string(default_usage(partitum$object))
   new_tag("usage", usage)
+}
+
+wrap_string <- function(x) {
+  if (is.null(x)) return(x)
+  wrapString(x)
 }
 
 default_usage <- function(x) {
@@ -83,7 +88,6 @@ usage_args <- function(args) {
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
     text <- str_replace_all(text, fixed("\\"), "\\\\")
     text <- str_replace_all(text, fixed("%"), "\\%")
-    text <- str_replace_all(text, fixed(" "), "\u{A0}")
     Encoding(text) <- "UTF-8"
     
     text

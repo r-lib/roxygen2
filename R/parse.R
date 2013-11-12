@@ -31,19 +31,22 @@ parse.file <- function(file, env, env_hash) {
   lines <- readLines(file, warn = FALSE)
   hash <- c(env_hash, lines)
   
-  parse_cache$compute(hash, {
-    src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
-    pre_refs <- prerefs(srcfile, src_refs)
+  if (parse_cache$has_key(hash)) {
+    return(parse_cache$get_key(hash))
+  }
+  
+  src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
+  pre_refs <- prerefs(srcfile, src_refs)
 
-    if (length(src_refs) == 0) return(list())
+  if (length(src_refs) == 0) return(list())
 
-    src_parsed <- lapply(src_refs, parse.srcref, env = env)
-    pre_parsed <- lapply(pre_refs, parse.preref)
+  src_parsed <- lapply(src_refs, parse.srcref, env = env)
+  pre_parsed <- lapply(pre_refs, parse.preref)
 
-    stopifnot(length(src_parsed) == length(pre_parsed))
+  stopifnot(length(src_parsed) == length(pre_parsed))
 
-    mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)    
-  })
+  partita <- mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)    
+  parse_cache$set_key(hash, partita)
 }
 
 #' Text-parsing hack using tempfiles for more facility.

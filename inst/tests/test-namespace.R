@@ -29,6 +29,14 @@ test_that("export parameter overrides default", {
   expect_equal(out, 'export(b)')
 })
 
+test_that("multiple export parameters generate multiple exports", {
+  out <- roc_proc_text(roc, "
+    #' @export a b
+    a <- function(){}")
+  expect_equal(out, c('export(a)', 'export(b)'))
+})
+
+
 test_that("export detects S4 class", {
   out <- roc_proc_text(roc, "#' @export\nsetClass('a')")
   expect_equal(out, 'exportClasses(a)')
@@ -50,6 +58,8 @@ test_that("export detects method name", {
     setMethod('max', 'a', function(x, ...) x[1])")
   expect_equal(out, 'exportMethods(max)')
 })
+
+
 
 test_that("export method escapes if needed", {
   out <- roc_proc_text(roc, "

@@ -1,8 +1,7 @@
 #' @include parse-registry.R
 NULL
 
-register.preref.parsers(parse.default, 'export')
-register.preref.parsers(parse.words, 'exportClass', 'exportMethod',
+register.preref.parsers(parse.words, 'export', 'exportClass', 'exportMethod',
   'exportPattern', 'S3method', 'import', 'importFrom', 'importClassesFrom',
   'importMethodsFrom', 'useDynLib')
 

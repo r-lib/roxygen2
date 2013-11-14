@@ -6,7 +6,7 @@
 # @param string the string to check
 # @return TRUE if the string contains words, otherwise FALSE
 is.null.string <- function(string) {
-  str_length(str_trim(string)) == 0
+  length(string) == 1 && str_length(str_trim(string)) == 0
 }
 
 subs <- matrix(ncol = 2, byrow = T, c(

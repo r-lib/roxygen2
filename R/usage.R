@@ -8,6 +8,8 @@ wrap_string <- function(x) {
   if (is.null(x)) return(x)
   y <- wrapString(x)
   Encoding(y) <- Encoding(x)
+  
+  y <- str_replace_all(y, "\u{A0}", " ")
   y
 }
 

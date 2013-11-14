@@ -5,7 +5,7 @@ test_that("usage captured from formals", {
   out <- roc_proc_text(roc, "
     #' Title.
     a <- function(a=1) {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, "a(a\u{A0}=\u{A0}1)")
+  expect_equal(get_tag(out, "usage")$values, "a(a = 1)")
 })
 
 test_that("usage correct for modification functions", {
@@ -64,7 +64,7 @@ test_that("default usage correct for S4 methods", {
   ")
   
   expect_equal(get_tag(out[[1]], "usage")$values, 
-    "\\S4method{sum}{foo}(x, ..., na.rm\u{A0}=\u{A0}FALSE)")
+    "\\S4method{sum}{foo}(x, ..., na.rm = FALSE)")
   expect_equal(get_tag(out[[2]], "usage")$values, 
     "\\S4method{+}{foo,ANY}(e1, e2)")
   expect_equal(get_tag(out[[3]], "usage")$values, 
@@ -76,7 +76,7 @@ test_that("% and \\ are escaped in usage", {
   out <- roc_proc_text(roc, "
     #' Title.
     a <- function(a='%\\\\') {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, 'a(a\u{A0}=\u{A0}"\\%\\\\\\\\")')
+  expect_equal(get_tag(out, "usage")$values, 'a(a = "\\%\\\\\\\\")')
 })
 
 test_that("\ is escaped in usage", {
@@ -87,7 +87,7 @@ test_that("\ is escaped in usage", {
   # cat(input)
   out <- roc_proc_text(roc, input)[[1]]
   
-  expected <- "f(a\u{A0}=\u{A0}\"\\\\\\\\\")"
+  expected <- "f(a = \"\\\\\\\\\")"
   expect_equal(get_tag(out, "usage")$values, expected)
 })
 
@@ -148,7 +148,7 @@ test_that("quoted topics have usage statements", {
     \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
 
   expect_equal(get_tag(out, "usage")$values,
-    "f(a\u{A0}=\u{A0}1, b\u{A0}=\u{A0}2, c\u{A0}=\u{A0}a + b)")
+    "f(a = 1, b = 2, c = a + b)")
 
   expect_equal(format(get_tag(out, "usage")),
     "\\usage{\nf(a = 1, b = 2, c = a + b)\n}\n"

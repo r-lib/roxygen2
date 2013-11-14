@@ -29,7 +29,7 @@ default_usage.function <- function(x) {
 }
 
 #' @export
-default_usage.s3generic <- function(x) default_usage.function
+default_usage.s3generic <- default_usage.function
 
 #' @export
 default_usage.s3method <- function(x) {

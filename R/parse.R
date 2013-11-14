@@ -23,16 +23,16 @@ parse_file <- function(file, env, env_hash = attr(env, "hash")) {
   refs <- getSrcref(parsed)
   comment_refs <- comments(refs)
   
-  extract <- function(i) {
-    preref <- parse.preref(as.character(comment_refs[[i]]))
+  extract <- function(call, ref, comment_ref) {
+    preref <- parse.preref(as.character(comment_ref))
     if (is.null(preref)) return()
 
-    preref$object <- object_from_call(parsed[[i]], env)    
-    preref$srcref <- list(filename = file, lloc = as.vector(refs[[i]]))
+    preref$object <- object_from_call(call, env)    
+    preref$srcref <- list(filename = file, lloc = as.vector(ref))
     preref
   }
 
-  lapply(seq_along(parsed), extract)
+  Map(extract, parsed, refs, comment_refs)
 }
 
 # For each src ref, find the comment block preceeding it

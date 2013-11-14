@@ -33,7 +33,7 @@ roxygen2 3.0.0
 
 * S4 classes and methods, and RC classes, are given better default topics, 
   and the file names corresponding to those topics are shorter. This means
-  that you should not need to be specify a custom `@alias` for S4 classes,
+  that you should never need to specify a custom `@alias` for S4 classes,
   generics or methods, or RC classes.
 
 * `inst` directory not created by default (#56).

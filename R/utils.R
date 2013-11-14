@@ -94,3 +94,7 @@ same_contents <- function(path, contents) {
   
   identical(text_hash, file_hash)
 }
+
+r_files <- function(path) {
+  dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE)
+}

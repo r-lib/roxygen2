@@ -87,7 +87,24 @@ test_that("@param documents arguments", {
 })
 
 test_that("multiple @inheritParam tags gathers all params", {
-  out <- roc_process(roc, parse.files("Rd-params.R"), base_path = ".")
+  out <- roc_proc_text(roc, "
+    #' A.
+    #'
+    #' @param x X
+    a <- function(x) {}
+    
+    
+    #' B
+    #'
+    #' @param y Y
+    b <- function(y) {}
+    
+    #' C
+    #' 
+    #' @inheritParams a
+    #' @inheritParams b
+    c <- function(x, y) {}
+  ")
 
   params <- get_tag(out[["c.Rd"]], "arguments")$values
   expect_equal(length(params), 2)
@@ -262,7 +279,19 @@ test_that("`$` not to be parsed as assignee in foo$bar(a = 1)", {
 })
 
 test_that("deleted objects not documented", {
-  out <- roc_process(roc, parse.files("Rd-closure.R"), base_path = ".")
+  out <- roc_proc_text(roc, "
+    f <- function(){
+      .a <- 0
+      function(x = 1){
+        .a <<- .a + x
+        .a
+      }
+    }
+    
+    #' Addition function.
+    f2 <- f()
+    rm(f)
+  ")
   expect_equal(names(out), "f2.Rd")
 })
 

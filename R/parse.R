@@ -1,31 +1,24 @@
-#' Parse many files at once.
-#'
-#' @param \dots files to be parsed
-#' @return List containing parsed directives
-#' @seealso \code{\link{parse.file}}
-#' @keywords internal
-#' @export
-#' @importFrom digest digest
-parse.files <- function(paths) {
-  # Source all files into their own environment so that parsing code can
-  # access them.
-  env <- new.env(parent = parent.env(globalenv()))
-  env_hash <- suppressWarnings(digest(env))
-  setPackageName("roxygen_devtest", env)
+parse_package <- function(base_path, load_code) {
+  env <- load_code(base_path)
+  parsed <- lapply(r_files(base_path), parse_file, env = env)
   
-  lapply(paths, sys.source, chdir = TRUE, envir = env)
-  
-  parsed <- lapply(paths, parse.file, env = env, env_hash = env_hash)
   unlist(parsed, recursive = FALSE)
 }
 
-#' Parse a source file containing roxygen directives.
-#'
-#' @param file string naming file to be parsed
-#' @return List containing parsed directives
-#' @keywords internal
-#' @export
-parse.file <- function(file, env, env_hash) {
+parse_text <- function(text) {
+  file <- tempfile()
+  writeLines(text, file)
+  on.exit(unlink(file))
+
+  env <- new.env(parent = parent.env(globalenv()))
+  attr(env, "hash") <- suppressWarnings(digest(env))
+  setPackageName("roxygen_devtest", env)
+  
+  sys.source(file, envir = env)
+  parse_file(file, env)
+}
+
+parse_file <- function(file, env, env_hash = attr(env, "hash")) {
   srcfile <- srcfile(file)
   
   lines <- readLines(file, warn = FALSE)
@@ -49,15 +42,3 @@ parse.file <- function(file, env, env_hash) {
   parse_cache$set_key(hash, partita)
 }
 
-#' Text-parsing hack using tempfiles for more facility.
-#'
-#' @param text stringr containing text to be parsed
-#' @return The parse tree
-#' @keywords internal
-#' @export
-parse.text <- function(text) {
-  file <- tempfile()
-  writeLines(text, file)
-  on.exit(unlink(file))
-  parse.files(file)
-}

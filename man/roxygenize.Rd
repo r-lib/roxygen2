@@ -5,11 +5,13 @@
 \usage{
 roxygenize(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = c("collate", "namespace", "rd"))
+  unlink.target = FALSE, roclets = c("collate", "namespace", "rd"),
+  load_code = source_package)
 
 roxygenise(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = c("collate", "namespace", "rd"))
+  unlink.target = FALSE, roclets = c("collate", "namespace", "rd"),
+  load_code = source_package)
 }
 \arguments{
   \item{package.dir}{the package's top directory}
@@ -18,6 +20,11 @@ roxygenise(package.dir = ".", roxygen.dir = package.dir,
 
   \item{roclets}{character vector of roclet names to apply
   to package}
+
+  \item{load_code}{A function used to load all the R code
+  in the package directory. It is called with the path to
+  the package, and it should return an environment
+  containing all the sourced code.}
 }
 \value{
   \code{NULL}

@@ -9,6 +9,9 @@
 #' @param package.dir the package's top directory
 #' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
 #' @param roclets character vector of roclet names to apply to package
+#' @param load_code A function used to load all the R code in the package
+#'   directory. It is called with the path to the package, and it should return
+#'   an environment containing all the sourced code.
 #' @return \code{NULL}
 #' @export
 roxygenize <- function(package.dir = ".",
@@ -16,13 +19,13 @@ roxygenize <- function(package.dir = ".",
                        copy.package=package.dir != roxygen.dir,
                        overwrite=TRUE,
                        unlink.target=FALSE,
-                       roclets=c("collate", "namespace", "rd")) {
+                       roclets=c("collate", "namespace", "rd"),
+                       load_code = source_package) {
   if (copy.package) {
     stop("Non-inplace roxygen no longer supported")
   }
 
   base_path <- normalizePath(package.dir)
-  
   man_path <- file.path(base_path, "man")
   dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
 
@@ -33,8 +36,7 @@ roxygenize <- function(package.dir = ".",
     roclets <- setdiff(roclets, "collate")
   }
 
-  r_files <- dir(file.path(base_path, "R"), "[.Rr]$", full.names = TRUE)
-  parsed <- parse.files(r_files)
+  parsed <- parse_package(base_path, load_code)
 
   roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {

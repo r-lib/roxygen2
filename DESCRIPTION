@@ -43,6 +43,7 @@ Collate:
     'roxygen.R'
     'roxygenize.R'
     's3.R'
+    'source.R'
     'template.R'
     'topic-name.R'
     'topo-sort.R'

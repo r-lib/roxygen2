@@ -25,5 +25,5 @@ hash_object <- function(x) {
     x$value <- deparse(body(x$value))
   }
   
-  digest(x)
+  suppressWarnings(digest(x))
 }

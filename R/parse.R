@@ -20,6 +20,8 @@ parse_text <- function(text) {
 
 parse_file <- function(file, env, env_hash = attr(env, "hash")) {
   parsed <- parse(file = file, keep.source = TRUE)
+  if (length(parsed) == 0) return()
+  
   refs <- getSrcref(parsed)
   comment_refs <- comments(refs)
   

@@ -16,7 +16,7 @@ source_package <- function(path) {
   old_dir <- setwd(r_path)
   on.exit(setwd(old_dir))
   
-  env <- new.env(parent = parent.env(globalenv()))
+  env <- new.env(parent = globalenv())
   attr(env, "hash") <- suppressWarnings(digest(env))
   setPackageName("roxygen_devtest", env)
   

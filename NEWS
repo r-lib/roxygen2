@@ -1,6 +1,8 @@
 roxygen2 3.0.0
 --------------
 
+* `@slot` tag allows you to document the slots of a S4 class.
+
 * Infix functions now escaped correctly in NAMESPACE. (Thanks to Peter 
   Meilstrup, #111)
 

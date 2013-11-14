@@ -138,6 +138,16 @@ format.section_tag <- function(x, ...) {
     collapse = "\n")
 }
 
+#' @S3method format slot_tag
+format.slot_tag <- function(x, ...) {
+  names <- names(x$values)
+  items <- str_c("\\item{\\code{", names, "}}{", x$values, "}", collapse = "\n\n")
+  str_c("\\section{Slots}\n\n",
+    "\\itemize{\n", 
+    items,
+    "\n}\n")
+}
+
 #' @export
 format.examples_tag <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n")

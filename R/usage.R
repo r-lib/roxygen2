@@ -46,6 +46,9 @@ default_usage.s4method <- function(x) {
   function_usage(x$name, formals(x$value), s4method)
 }
 
+#' @export
+default_usage.s4class <- function(x) NULL
+
 # Usage:
 # replacement, infix, regular
 # function, s3 method, s4 method, data

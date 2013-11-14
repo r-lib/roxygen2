@@ -28,6 +28,7 @@ register.preref.parsers(parse.value,
 
 register.preref.parsers(parse.name.description,
                         'param',
+                        'slot',
                         'method')
 
 register.preref.parsers(parse.name,
@@ -172,6 +173,9 @@ register.preref.parsers(parse.default,
 #'    of the object.}
 #'
 #'  \item{\code{@@source text}}{The original source of the data.}
+#'
+#'  \item{\code{@@slot name description}}{Describe the slots of an S4 class
+#'    in a standard way. Slots will be listed in their own section.}
 #'
 #'}
 #' @family roclets
@@ -320,6 +324,7 @@ roclet_rd_one <- function(partitum, base_path) {
   }))
   add_tag(rd, usage_tag(partitum))
   add_tag(rd, process.arguments(partitum))
+  add_tag(rd, process.slot(partitum))
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
@@ -411,6 +416,16 @@ process.arguments <- function(partitum) {
   names(desc) <- sapply(params, "[[", "name")
 
   new_tag("arguments", desc)
+}
+
+process.slot <- function(partitum) {
+  params <- partitum[names(partitum) == "slot"]
+  if (length(params) == 0) return() 
+
+  desc <- str_trim(sapply(params, "[[", "description"))
+  names(desc) <- sapply(params, "[[", "name")
+  
+  new_tag("slot", desc)
 }
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate

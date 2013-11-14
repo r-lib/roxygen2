@@ -180,6 +180,10 @@ rd_roclet()
   \item{\code{@source text}}{The original source of the
   data.}
 
+  \item{\code{@slot name description}}{Describe the slots
+  of an S4 class in a standard way. Slots will be listed in
+  their own section.}
+
   }
 }
 \examples{

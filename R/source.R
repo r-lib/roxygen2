@@ -8,6 +8,7 @@
 #' @param path Path to a package
 #' @return an environment, in to which all R files in the directory were
 #'   sourced.
+#' @importFrom methods setPackageName
 #' @keywords internal
 source_package <- function(path) {
   r_path <- file.path(path, "R")

@@ -11,7 +11,6 @@
 #' @param name name of function.
 #' @param env environment to search in.
 #' @export
-#' @importFrom memoise memoise
 #' @importFrom codetools findGlobals
 is_s3_generic <- function(name, env = parent.frame()) {
   if (name == "") return(FALSE)
@@ -67,15 +66,6 @@ find_generic <- function(name, env = parent.frame()) {
   }
   NULL
 }
-
-all_s3_methods <- memoise(function(env = parent.frame()) {
-  names <- ls(envir = env)
-  results <- compact(lapply(names, find_generic, env = env))
-  if (length(results) == 0) return()
-  
-  t(simplify2array(results))
-})
-
 
 add_s3_metadata <- function(val, name, env) {
   if (!is.function(val)) return(val)

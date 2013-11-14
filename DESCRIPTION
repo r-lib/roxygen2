@@ -17,7 +17,6 @@ Imports:
     tools,
     brew,
     digest,
-    memoise,
     codetools,
     methods
 Suggests:
@@ -25,7 +24,6 @@ Suggests:
 LinkingTo: Rcpp
 Collate:
     'RcppExports.R'
-    'cache.R'
     'description.R'
     'doctype.R'
     'object.R'

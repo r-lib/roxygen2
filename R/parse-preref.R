@@ -8,7 +8,7 @@ parse.preref <- function(lines) {
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""),
     "right")
 
-  if (length(trimmed.lines) == 0) return(list())
+  if (length(trimmed.lines) == 0) return(NULL)
 
   joined.lines <- str_c(trimmed.lines, collapse = '\n')
   ## Thanks to Fegis at #regex on Freenode for the
@@ -28,31 +28,6 @@ parse.preref <- function(lines) {
 
 # Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '\\s*#+\' ?'
-
-# Comment blocks (possibly null) that precede a file's expressions.
-#
-# @param srcfile result of running \code{srcfile} on an interesting file
-# @param srcrefs the resultant srcrefs
-# @return A list of prerefs that resemble srcrefs in form, i.e. with srcfile
-#   and lloc
-prerefs <- function(srcfile, srcrefs) {
-  if (length(srcrefs) == 0) return(list())
-
-  src_start <- vapply(srcrefs, "[[", integer(1), 1) - 1
-  src_end <- vapply(srcrefs, "[[", integer(1), 3) + 1
-
-  comments_start <- c(1, src_end[-length(src_end)])
-  comments_end <- src_start
-
-  src <- readLines(srcfile$filename, warn = FALSE)
-
-  extract <- function(start, end) {
-    srcref <- list(filename = srcfile$filename, lloc = c(start, 0 , end, 0))
-    structure(src[start:end], srcref = srcref)
-  }
-
-  Map(extract, comments_start, comments_end)
-}
 
 parse_elements <- function(elements, srcref) {
   pieces <- str_split_fixed(elements, "[[:space:]]+", 2)

@@ -19,26 +19,54 @@ parse_text <- function(text) {
 }
 
 parse_file <- function(file, env, env_hash = attr(env, "hash")) {
-  srcfile <- srcfile(file)
+  parsed <- parse(file = file, keep.source = TRUE)
+  refs <- getSrcref(parsed)
+  comment_refs <- comments(refs)
   
-  lines <- readLines(file, warn = FALSE)
-  hash <- c(env_hash, lines)
-  
-  if (parse_cache$has_key(hash)) {
-    return(parse_cache$get_key(hash))
+  extract <- function(i) {
+    preref <- parse.preref(as.character(comment_refs[[i]]))
+    if (is.null(preref)) return()
+
+    preref$object <- object_from_call(parsed[[i]], env)    
+    preref$srcref <- list(filename = file, lloc = as.vector(refs[[i]]))
+    preref
   }
-  
-  src_refs <- attributes(parse(srcfile$filename, srcfile = srcfile))$srcref
-  pre_refs <- prerefs(srcfile, src_refs)
 
-  if (length(src_refs) == 0) return(list())
-
-  src_parsed <- lapply(src_refs, parse.srcref, env = env)
-  pre_parsed <- lapply(pre_refs, parse.preref)
-
-  stopifnot(length(src_parsed) == length(pre_parsed))
-
-  partita <- mapply(c, src_parsed, pre_parsed, SIMPLIFY = FALSE)    
-  parse_cache$set_key(hash, partita)
+  lapply(seq_along(parsed), extract)
 }
 
+# For each src ref, find the comment block preceeding it
+comments <- function(refs) {
+  srcfile <- attr(refs[[1]], "srcfile")
+  
+  # first_line, first_byte, last_line, last_byte
+  com <- vector("list", length(refs))
+  for(i in seq_along(refs)) {
+    # Comments begin after last line of last block, and continue to
+    # first line of this block
+    if (i == 1) {
+      first_byte <- 1
+      first_line <- 1
+    } else {
+      first_byte <- refs[[i - 1]][4] + 1
+      first_line <- refs[[i - 1]][3]
+    }
+    
+    last_line <- refs[[i]][1]
+    last_byte <- refs[[i]][2] - 1
+    if (last_byte == 0) {
+      if (last_line == 1) {
+        last_byte <- 1
+        last_line <- 1
+      } else {
+        last_line <- last_line - 1
+        last_byte <- 1e3
+      }
+    }
+    
+    lloc <- c(first_line, first_byte, last_line, last_byte)
+    com[[i]] <- srcref(srcfile, lloc)
+  }
+  
+  com
+}

@@ -1,14 +1,6 @@
-# Parse a srcref
-parse.srcref <- function(ref, env) {
-  srcfile <- attributes(ref)$srcfile
-  srcref <- list(srcref = 
-    list(filename = srcfile$filename, lloc = as.vector(ref)))
-
-  # Get code from source and parse to extract first call
-  lines <- getSrcLines(srcfile, ref[[1]], ref[[3]])
-  call <- parse(text = lines)[[1]]
-  if (!is.call(call)) return(srcref)
-
+object_from_call <- function(call, env) {
+  if (is.null(call)) return()
+  
   call <- standardise_call(call, env)
   name <- as.character(call[[1]])
   if (length(name) > 1) return(srcref)
@@ -17,8 +9,7 @@ parse.srcref <- function(ref, env) {
   parser <- find_parser(name)
   if (is.null(parser)) return(srcref)
   
-  srcref$object <- parser(call, env)
-  srcref
+  parser(call, env)
 }
 
 find_parser <- function(name) {

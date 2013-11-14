@@ -40,7 +40,7 @@ roxygenize <- function(package.dir = ".",
 
   roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {
-    roc <- match.fun(roclet)()
+    roc <- get(roclet, mode = "function")()
     results <- roc_process(roc, parsed, base_path)
     roc_output(roc, results, base_path)
   }

@@ -27,7 +27,7 @@ find_parser <- function(name) {
   parser_name <- paste0("parser_", name)
   if (!exists(parser_name)) return(NULL)
   
-  match.fun(parser_name)
+  get(parser_name, mode = "function")
 }
 
 standardise_call <- function(call, env = parent.frame()) {

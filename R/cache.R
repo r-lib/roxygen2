@@ -39,7 +39,6 @@ new_cache <- function() {
 }
 
 parse_cache <- new_cache()
-rd_proc_cache <- new_cache()
 
 #' Clear all roxygen caches.
 #'
@@ -50,5 +49,4 @@ rd_proc_cache <- new_cache()
 #' @export
 clear_caches <- function() {
   parse_cache$reset()
-  rd_proc_cache$reset()
 }

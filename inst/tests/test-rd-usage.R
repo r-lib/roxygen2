@@ -44,9 +44,9 @@ test_that("default usage correct for S3 methods", {
     '[<-.foo' <- function(x, value) 'foo'
   ")
   
-  expect_equal(get_tag(out[[1]], "usage")$values, "\\S3method{mean}{foo}(x)")
-  expect_equal(get_tag(out[[2]], "usage")$values, "\\S3method{+}{foo}(x, b)")
-  expect_equal(get_tag(out[[3]], "usage")$values, "\\S3method{[}{foo}(x) <- value")
+  expect_equal(get_tag(out[[1]], "usage")$values, "\\method{mean}{foo}(x)")
+  expect_equal(get_tag(out[[2]], "usage")$values, "\\method{+}{foo}(x, b)")
+  expect_equal(get_tag(out[[3]], "usage")$values, "\\method{[}{foo}(x) <- value")
 })
 
 test_that("default usage correct for S4 methods", {

@@ -81,7 +81,7 @@ parse.value <- function(key, rest, srcref) {
 #' @export
 #' @rdname parsers
 parse.words <- function(key, rest, srcref) {
-  str_trim(str_split(rest, fixed(" "))[[1]])
+  str_split(str_trim(rest), "\\s+")[[1]]
 }
 
 #' @details \code{parse.description}: parse mandatory name and description

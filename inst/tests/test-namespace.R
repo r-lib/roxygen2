@@ -90,6 +90,18 @@ test_that("other namespace tags produce correct output", {
   )))
 })
 
+test_that("multiline importFrom parsed correctly", {
+  out <- roc_proc_text(roc, "
+    #' @importFrom test test1
+    #'   test2
+    NULL
+  ")
+  expect_equal(sort(out), sort(c(
+    "importFrom(test,test1)",
+    "importFrom(test,test2)"
+  )))
+})
+
 test_that("useDynLib imports only selected functions", {
   out <- roc_proc_text(roc, "
     #' @useDynLib test

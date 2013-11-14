@@ -352,9 +352,7 @@ roclet_rd_one <- function(partitum, base_path) {
 roc_output.had <- function(roclet, results, base_path) {
   man <- normalizePath(file.path(base_path, "man"))
 
-  contents <- vapply(results, FUN.VALUE = character(1), function(x) {
-    rd_out_cache$compute(x, format(x))
-  })
+  contents <- vapply(results, format, FUN.VALUE = character(1))
 
   paths <- file.path(man, names(results))
   mapply(write_if_different, paths, contents)

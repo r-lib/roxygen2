@@ -41,6 +41,9 @@ default_usage.s3method <- function(x) {
 }
 
 #' @export
+default_usage.s4generic <- default_usage.function
+
+#' @export
 default_usage.s4method <- function(x) {
   s4method <- function(name) {
     signature <- str_c(as.character(x$value@defined), collapse = ",")

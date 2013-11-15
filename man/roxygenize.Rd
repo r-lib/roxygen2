@@ -27,14 +27,14 @@ roxygenise(package.dir = ".", roxygen.dir = package.dir,
   containing all the sourced code.}
 }
 \value{
-  \code{NULL}
+\code{NULL}
 }
 \description{
-  This is the workhorse function that uses roclets, the
-  built-in document tranformation functions, to build all
-  documentation for a package.  See the documentation for
-  the individual roclets, \code{\link{rd_roclet}},
-  \code{\link{namespace_roclet}}, and for
-  \code{\link{update_collate}}, for more details.
+This is the workhorse function that uses roclets, the
+built-in document tranformation functions, to build all
+documentation for a package.  See the documentation for the
+individual roclets, \code{\link{rd_roclet}},
+\code{\link{namespace_roclet}}, and for
+\code{\link{update_collate}}, for more details.
 }
 

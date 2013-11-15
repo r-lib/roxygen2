@@ -5,7 +5,7 @@
 new_roclet(obj, subclass = NULL)
 }
 \description{
-  Build new roclet object.
+Build new roclet object.
 }
 \keyword{internal}
 

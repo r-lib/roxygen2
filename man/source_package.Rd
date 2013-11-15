@@ -8,15 +8,15 @@ source_package(path)
   \item{path}{Path to a package}
 }
 \value{
-  an environment, in to which all R files in the directory
-  were sourced.
+an environment, in to which all R files in the directory
+were sourced.
 }
 \description{
-  This is a simple attempt to load code in a package used
-  by \code{\link{roxygenize}}. It will work with simple
-  packages, but fail if there are compiled files, data
-  files, etc. In that case, it's better to use
-  \code{\link[devtools]{document}()}.
+This is a simple attempt to load code in a package used by
+\code{\link{roxygenize}}. It will work with simple
+packages, but fail if there are compiled files, data files,
+etc. In that case, it's better to use
+\code{\link[devtools]{document}()}.
 }
 \keyword{internal}
 

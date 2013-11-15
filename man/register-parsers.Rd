@@ -10,10 +10,10 @@ register.preref.parsers(parser, ...)
   \item{\dots}{the keys upon which to register}
 }
 \value{
-  \code{NULL}
+\code{NULL}
 }
 \description{
-  Register many parsers at once.
+Register many parsers at once.
 }
 \keyword{internal}
 

@@ -11,8 +11,8 @@ roc_proc_text(roclet, input, options = list())
   \item{input}{source string}
 }
 \description{
-  Process roclet on string and capture results. Useful for
-  testing.
+Process roclet on string and capture results. Useful for
+testing.
 }
 \keyword{internal}
 

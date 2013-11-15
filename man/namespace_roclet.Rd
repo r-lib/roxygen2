@@ -13,10 +13,10 @@
 namespace_roclet()
 }
 \description{
-  This roclet automates the production of a
-  \file{NAMESPACE} file, see \cite{Writing R Extensions}
-  (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
-  for details.
+This roclet automates the production of a \file{NAMESPACE}
+file, see \cite{Writing R Extensions}
+(\url{http://cran.r-project.org/doc/manuals/R-exts.pdf})
+for details.
 }
 \section{Tags}{
   There are four tags for exporting objects from the
@@ -102,6 +102,6 @@ roclet <- namespace_roclet()
 \dontrun{roc_out(roclet, "example.R", ".")}
 }
 \seealso{
-  Other roclets: \code{\link{rd_roclet}}
+Other roclets: \code{\link{rd_roclet}}
 }
 

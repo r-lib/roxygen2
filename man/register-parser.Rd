@@ -11,10 +11,10 @@ register.preref.parser(key, parser)
   taking \code{key} and \code{expression}}
 }
 \value{
-  \code{NULL}
+\code{NULL}
 }
 \description{
-  Register parsers.
+Register parsers.
 }
 \keyword{internal}
 

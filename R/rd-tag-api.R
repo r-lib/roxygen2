@@ -75,7 +75,7 @@ format.encoding_tag <- format_first
 
 # Tags collapse their values into a single string ----------------------------
 
-format_collapse <- function(x, ..., indent = 2, exdent = 2, wrap = TRUE) {
+format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
   values <- str_c(x$values, collapse = "\n\n")
   if (wrap) {
     values <- str_wrap(values, width = 60, indent = indent, exdent = exdent)

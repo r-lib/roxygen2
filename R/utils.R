@@ -10,45 +10,53 @@ is.null.string <- function(string) {
 }
 
 subs <- matrix(ncol = 2, byrow = T, c(
-  '[]', 'sub',
+  # Common special function names
+  '[<-', 'subset',
+  '[', 'sub',
   '<-', 'set',
+  
+  # Infix verbs
   '!', 'not',
+  '&', 'and',
+  '|', 'or',
+  '*', 'times',
+  '+', 'plus',
+  '^', 'pow',
+  
+  # Others
   '"', 'quote',
   '#', 'hash',
   '$', 'cash',
   '%', 'grapes',
-  '&', 'and',
-  '|', 'or',
   "'", 'single-quote',
   '(', 'open-paren',
   ')', 'close-paren',
-  '*', 'star',
-  '+', 'plus',
-  ',', '-',
-  '/', 'slash',
   ':', 'colon',
   ';', 'semi-colon',
   '<', 'less-than',
+  '==', 'equals',
   '=', 'equals',
   '>', 'greater-than',
-  '?', 'p',
+  '?', 'help',
   '@', 'at',
-  '[', 'open-brace',
-  '\\', 'backslash',
   ']', 'close-brace',
-  '^', 'hat',
+  '\\', 'backslash',
+  '/', 'slash',
   '`', 'tick',
   '{', 'open-curly',
   '}', 'close',
   '~', 'twiddle'
 ))
-subs[, 2] <- str_c("-", subs[, 2])
+subs[, 2] <- str_c("-", subs[, 2], "-")
 
 nice_name <- function(x) {
   for(i in seq_len(nrow(subs))) {
     x <- str_replace_all(x, fixed(subs[i, 1]), subs[i, 2])
   }
-  x <- str_replace(x, "-+", "-")
+  # Clean up any remaining
+  x <- str_replace_all(x, "[^A-Za-z0-9_.-]+", "-")
+  x <- str_replace_all(x, "-+", "-")
+  x <- str_replace_all(x, "^-|-$", "")
   x
 }
 

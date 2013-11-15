@@ -30,18 +30,6 @@ test_that("names escaped, not quoted", {
   expect_equal(format(get_tag(out, "name")), "\\name{\\%a\\%}\n")
 })
 
-test_that("filename doesn't contain invalid characters", {
-  out <- roc_proc_text(roc, "
-    #' Title.
-    #' @name a<-
-    NULL
-
-    #' Title.
-    #' @name a[]
-    NULL")
-  expect_equal(names(out), c("a-set.Rd", "a-sub.Rd"))
-})
-
 test_that("quoted names captured from assignment", {
   out <- roc_proc_text(roc, "
     #' Title.

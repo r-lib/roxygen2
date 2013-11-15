@@ -56,14 +56,14 @@ test_that("indentation in examples preserved", {
   expect_match(examples, fixed("a <-\n    2"), all = FALSE)
 })
 
-test_that("% in @example escaped", {
+test_that("% and \\ in @example escaped", {
   out <- roc_proc_text(roc, "
     #' @name a
     #' @example Rd-example-4.R
     NULL")[[1]]
 
   examples <- get_tag(out, "examples")$values
-  expect_equal(examples, "x \\%*\\% y")
+  expect_equal(examples, "x \\%*\\% y # \\\\x")
 })
 
 test_that("\\dontrun in @example unescaped", {

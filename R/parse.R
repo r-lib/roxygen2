@@ -4,14 +4,22 @@ parse_package <- function(base_path, load_code) {
   
   list(
     blocks = unlist(parsed, recursive = FALSE),
-    options = load_options(env)
+    options = load_options(base_path)
   )
 }
 
-load_options <- function(env) {
-  list(
-    wrap = env$roxygen_wrap %||% TRUE
-  )
+load_options <- function(base_path) {
+  desc_path <- file.path(base_path, "DESCRIPTION")
+  desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
+  
+  if (is.na(desc_opts)) {
+    opts <- list()
+  } else {
+    opts <- eval(parse(text = desc_opts))
+  }
+  
+  defaults <- list(wrap = TRUE)
+  modifyList(defaults, opts)
 }
 
 parse_text <- function(text) {

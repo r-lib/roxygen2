@@ -155,3 +155,12 @@ test_that("quoted topics have usage statements", {
   )
 
 })
+
+test_that("non-syntactic names are quoted", {
+  
+  out <- roc_proc_text(roc, "
+    #' Title.
+    'a b' <- function(x) x")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, '"a b"(x)')
+})

@@ -74,6 +74,11 @@ function_usage <- function(name, formals, format_name = identity) {
     
     str_c(arg_names[1], " ", format_name(name), " ", arg_names[2])
   } else {
+    # Quote non-syntactic names if no special formatting
+    if (identical(format_name, identity)) {
+      name <- quote_if_needed(name)  
+    }
+    
     str_c(format_name(name), "(", arglist, ")")
   }
   

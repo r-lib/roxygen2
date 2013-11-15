@@ -31,7 +31,8 @@ parse_file <- function(file, env, env_hash = attr(env, "hash")) {
 
     preref$object <- object_from_call(call, env)    
     preref$srcref <- list(filename = file, lloc = as.vector(ref))
-    preref
+
+    add_defaults(preref)
   }
 
   Map(extract, parsed, refs, comment_refs)

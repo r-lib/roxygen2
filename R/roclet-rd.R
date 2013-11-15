@@ -190,7 +190,7 @@ rd_roclet <- function() {
 
 #' @export
 #' @importFrom digest digest
-roc_process.had <- function(roclet, partita, base_path) {
+roc_process.had <- function(roclet, partita, base_path, options = list()) {
   # Remove srcrefs with no attached roxygen comments
   partita <- Filter(function(x) length(x) > 1, partita)
 
@@ -343,10 +343,11 @@ roclet_rd_one <- function(partitum, base_path) {
 
 #' @export
 #' @importFrom tools checkRd
-roc_output.had <- function(roclet, results, base_path) {
+roc_output.had <- function(roclet, results, base_path, options = list()) {
   man <- normalizePath(file.path(base_path, "man"))
 
-  contents <- vapply(results, format, FUN.VALUE = character(1))
+  contents <- vapply(results, format, wrap = options$wrap, 
+    FUN.VALUE = character(1))
 
   paths <- file.path(man, names(results))
   mapply(write_if_different, paths, contents)

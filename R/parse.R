@@ -2,7 +2,16 @@ parse_package <- function(base_path, load_code) {
   env <- load_code(base_path)
   parsed <- lapply(r_files(base_path), parse_file, env = env)
   
-  unlist(parsed, recursive = FALSE)
+  list(
+    blocks = unlist(parsed, recursive = FALSE),
+    options = load_options(env)
+  )
+}
+
+load_options <- function(env) {
+  list(
+    wrap = env$roxygen_wrap %||% TRUE
+  )
 }
 
 parse_text <- function(text) {

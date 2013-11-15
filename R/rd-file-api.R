@@ -30,7 +30,7 @@ format.rd_file <- function(x, ...) {
 
   tags <- tags[intersect(order, names(tags))]
 
-  formatted <- lapply(tags, "format")
+  formatted <- lapply(tags, "format", ...)
   str_c(unlist(formatted), collapse = "")
 }
 

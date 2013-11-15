@@ -41,8 +41,8 @@ roxygenize <- function(package.dir = ".",
   roclets <- str_c(roclets, "_roclet", sep = "")
   for (roclet in roclets) {
     roc <- get(roclet, mode = "function")()
-    results <- roc_process(roc, parsed, base_path)
-    roc_output(roc, results, base_path)
+    results <- roc_process(roc, parsed$blocks, base_path, options = parsed$options)
+    roc_output(roc, results, base_path, options = parsed$options)
   }
   
   invisible()

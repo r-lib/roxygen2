@@ -34,16 +34,21 @@ object_defaults.s4class <- function(x) {
 
 #' @export
 object_defaults.s4method <- function(x) {
-  pkg <- attr(x$value@generic, "package")
-  if (pkg == "roxygen_devtest") {
-    # Needed for testing
-    inherit_from <- x$value@generic
-  } else {
-    inherit_from <- str_c(pkg, "::", x$value@generic)  
-  }
+  generic <- x$value@generic
+  pkg <- attr(generic, "package")
   
   list(
     docType = "methods",
-    inheritParams = inherit_from
+    inheritParams = inherit_from(generic, pkg)
   )
+}
+
+inherit_from <- function(generic, pkg) {
+  if (pkg == "roxygen_devtest") return(generic)
+
+  # Check that Rd file available
+  rd <- get_rd(generic, pkg)
+  if (is.null(rd)) return(NULL)
+
+  str_c(pkg, "::", generic)
 }

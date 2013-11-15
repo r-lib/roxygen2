@@ -1,6 +1,8 @@
 roxygen2 3.0.0
 --------------
 
+* S4 methods will automatically inherit the parameters from their generic.
+
 * `@slot` tag allows you to document the slots of a S4 class.
 
 * Infix functions now escaped correctly in NAMESPACE. (Thanks to Peter 

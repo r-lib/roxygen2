@@ -34,7 +34,16 @@ object_defaults.s4class <- function(x) {
 
 #' @export
 object_defaults.s4method <- function(x) {
+  pkg <- attr(x$value@generic, "package")
+  if (pkg == "roxygen_devtest") {
+    # Needed for testing
+    inherit_from <- x$value@generic
+  } else {
+    inherit_from <- str_c(pkg, "::", x$value@generic)  
+  }
+  
   list(
-    docType = "methods"
+    docType = "methods",
+    inheritParams = inherit_from
   )
 }

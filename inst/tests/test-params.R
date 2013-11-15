@@ -48,3 +48,19 @@ test_that("multiple @inheritParam inherits from existing topics", {
   expect_equal(length(params), 2)
   expect_equal(sort(names(params)), c("trim", "x"))
 })
+
+test_that("methods inherit from generics by default", {
+  out <- roc_proc_text(roc, "
+    #' Blah.
+    #' 
+    #' @param object blah blah blah
+    setGeneric('blah', function(object){
+      standardGeneric('blah')
+    })
+    
+    #' Title.
+    setMethod('blah', 'numeric', function(object){ show(NA) })
+    ")[[2]]
+  
+  expect_equal(names(get_tag(out, "arguments")$values), c("object"))
+})

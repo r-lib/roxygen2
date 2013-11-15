@@ -65,3 +65,13 @@ test_that("% in @example escaped", {
   examples <- get_tag(out, "examples")$values
   expect_equal(examples, "x \\%*\\% y")
 })
+
+test_that("\\dontrun in @example unescaped", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-5.R
+    NULL")[[1]]
+  
+  examples <- get_tag(out, "examples")$values
+  expect_equal(examples, "\\dontrun{x <- 1}")
+})

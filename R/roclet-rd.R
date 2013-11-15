@@ -423,11 +423,14 @@ process.slot <- function(partitum) {
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
 process.examples <- function(partitum, base_path) {
+  escape_examples <- function(x) {
+    x1 <- gsub("([%\\])", "\\\\\\1", x)
+    gsub("\\\\dont", "\\dont", x1)
+  }
+  
   out <- list()
   if (!is.null(partitum$examples)) {
-    ex <- partitum$examples
-    ex <- gsub("([%\\])", "\\\\\\1", ex)
-    ex <- gsub("\\\\dont", "\\dont", ex)
+    ex <- escape_examples(partitum$examples)
     out <- c(out, new_tag("examples", ex))
   }
 
@@ -435,12 +438,13 @@ process.examples <- function(partitum, base_path) {
   if (length(paths) > 0) {
     paths <- file.path(base_path, str_trim(paths))
     examples <- unlist(lapply(paths, readLines))
-    examples <- gsub("([%\\])", "\\\\\\1", examples)
+    examples <- escape_examples(examples)
 
     out <- c(out, new_tag("examples", examples))
   }
   out
 }
+
 process.section <- function(key, value) {
   pieces <- str_split_fixed(value, ":", n = 2)[1, ]
 

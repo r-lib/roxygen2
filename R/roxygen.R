@@ -21,3 +21,5 @@
 #' @seealso See \code{\link{namespace_roclet}}, \code{\link{rd_roclet}}, 
 #' for an overview of roxygen tags.
 NULL
+
+roxygen_wrap <- FALSE

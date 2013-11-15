@@ -1,4 +1,5 @@
-context("Params")
+context("Param")
+roc <- rd_roclet()
 
 test_that("@param documents arguments", {
   out <- roc_proc_text(roc, "

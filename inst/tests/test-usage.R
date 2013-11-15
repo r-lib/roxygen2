@@ -1,4 +1,4 @@
-context("Rd - usage")
+context("Usage")
 roc <- rd_roclet()
 
 test_that("usage captured from formals", {

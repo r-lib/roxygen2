@@ -1,4 +1,4 @@
-context("Rd - examples")
+context("Examples")
 roc <- rd_roclet()
 
 test_that("@example loads from specified files", {

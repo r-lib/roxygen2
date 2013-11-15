@@ -1,4 +1,4 @@
-context("Rd - docTypes")
+context("docType")
 roc <- rd_roclet()
 
 # Package --------------------------------------------------------------------

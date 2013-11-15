@@ -1,6 +1,9 @@
 roxygen2 3.0.0
 --------------
 
+* You can now turn off Rd re-wrapping by adding `Roxygen: list(wrap = FALSE)`
+  to your `DESCRIPTION`.
+
 * S4 methods will automatically inherit the parameters from their generic.
 
 * `@slot` tag allows you to document the slots of a S4 class.

@@ -142,10 +142,10 @@ format.section_tag <- function(x, ...) {
 format.slot_tag <- function(x, ...) {
   names <- names(x$values)
   items <- str_c("\\item{\\code{", names, "}}{", x$values, "}", collapse = "\n\n")
-  str_c("\\section{Slots}\n\n",
-    "\\itemize{\n", 
+  str_c("\\section{Slots}{\n\n",
+    "\\describe{\n", 
     items,
-    "\n}\n")
+    "\n}}\n")
 }
 
 #' @export

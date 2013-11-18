@@ -10,13 +10,11 @@ is_s3_generic(name, env = parent.frame())
   \item{env}{environment to search in.}
 }
 \description{
-  \code{is_s3_generic} compares name to
-  \code{.knownS3Generics} and \code{.S3PrimitiveGenerics},
-  then uses \code{\link[codetools]{findGlobals}} to see if
-  the functionion calls \code{\link{UseMethod}}.
+\code{is_s3_generic} compares name to \code{.knownS3Generics} and
+\code{.S3PrimitiveGenerics}, then uses \code{\link[codetools]{findGlobals}}
+to see if the functionion calls \code{\link{UseMethod}}.
 
-  \code{is_s3_method} builds names of all possible generics
-  for that function and then checks if any of them actually
-  is a generic.
+\code{is_s3_method} builds names of all possible generics for that function
+and then checks if any of them actually is a generic.
 }
 

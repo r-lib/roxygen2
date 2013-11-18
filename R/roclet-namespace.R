@@ -96,7 +96,7 @@ namespace_roclet <- function() {
 }
 
 #' @export
-roc_process.namespace <- function(roclet, partita, base_path) {
+roc_process.namespace <- function(roclet, partita, base_path, options = list()) {
   ns <- unlist(lapply(partita, ns_process_partitum))
   sort_c(unique(ns))
 }
@@ -114,7 +114,7 @@ ns_process_tag <- function(tag_name, partitum) {
 }
 
 #' @export
-roc_output.namespace <- function(roclet, results, base_path) {
+roc_output.namespace <- function(roclet, results, base_path, options = list()) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   
   old <- if (file.exists(NAMESPACE)) readLines(NAMESPACE) else ""

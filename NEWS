@@ -1,6 +1,16 @@
 roxygen2 3.0.0
 --------------
 
+* Roxygen now has support for package specific options through the `Roxygen`
+  field in the `DESCRIPTION`. The value of the field should be R code that
+  results in a list. Currently only `wrap` and `roclet` values are supported.
+
+* You can now turn off Rd re-wrapping by adding `Roxygen: list(wrap = FALSE)`
+  to your `DESCRIPTION`.
+
+* You can now change the default roclets by specifying 
+  `Roxygen: list(roclets = c("collate", "rd"))` in your `DESCRIPTION`
+
 * S4 methods will automatically inherit the parameters from their generic.
 
 * `@slot` tag allows you to document the slots of a S4 class.

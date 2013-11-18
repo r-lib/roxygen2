@@ -75,10 +75,12 @@ format.encoding_tag <- format_first
 
 # Tags collapse their values into a single string ----------------------------
 
-format_collapse <- function(x, ..., indent = 2, exdent = 2) {
+format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
   values <- str_c(x$values, collapse = "\n\n")
-  rd_tag(x$tag, str_wrap(values, width = 60, indent = indent,
-    exdent = exdent), space = TRUE)
+  if (wrap) {
+    values <- str_wrap(values, width = 60, indent = indent, exdent = exdent)
+  }
+  rd_tag(x$tag, values, space = TRUE)
 }
 #' @export
 format.author_tag <- format_collapse

@@ -5,6 +5,7 @@ parse_package <- function(base_path, load_code) {
   unlist(parsed, recursive = FALSE)
 }
 
+
 parse_text <- function(text) {
   file <- tempfile()
   writeLines(text, file)

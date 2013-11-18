@@ -32,24 +32,22 @@ parse.toggle(key, rest, srcref)
   line number}
 }
 \description{
-  These function implement parsing different tag types.
+These function implement parsing different tag types.
 }
 \details{
-  \code{parse.default}: emit value unchanged.
+\code{parse.default}: emit value unchanged.
 
-  \code{parse.default}: warns about unknown tag.
+\code{parse.default}: warns about unknown tag.
 
-  \code{parse.value}: fail if empty
+\code{parse.value}: fail if empty
 
-  \code{parse.words}: parse values into words separated by
-  space
+\code{parse.words}: parse values into words separated by space
 
-  \code{parse.description}: parse mandatory name and
-  description
+\code{parse.description}: parse mandatory name and description
 
-  \code{parse.name}: one and only one word
+\code{parse.name}: one and only one word
 
-  \code{parse.toggle}: turn binary element on
+\code{parse.toggle}: turn binary element on
 }
 \keyword{internal}
 

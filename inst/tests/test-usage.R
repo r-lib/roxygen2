@@ -120,7 +120,7 @@ test_that("\\method not split inappropriately", {
       function(reallyquitelongargument = 'reallyratherquitelongvalue') 1
   ")[[1]]
   usage <- format(get_tag(out, "usage"))
-  expect_match(usage, fixed("{mean}{reallyratherquitelongclassname}"))
+  expect_match(usage, "\\{mean\\}\\{reallyratherquitelongclassname\\}")
 })
 
 test_that("@usage overrides default", {

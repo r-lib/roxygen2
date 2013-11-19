@@ -20,7 +20,7 @@ object_defaults.default <- function(x) list()
 object_defaults.data <- function(x) {
   list(
     docType = "data",
-    format = capture.output(str(x$value)),
+    format = paste0(capture.output(str(x$value)), collapse = "\n"),
     keywords = "datasets"
   )
 }

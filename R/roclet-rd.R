@@ -204,16 +204,6 @@ roc_process.had <- function(roclet, partita, base_path, options = list()) {
   }
 
   # Second parse through to process @family
-  invert <- function(x) {
-    if (length(x) == 0) return()
-    unstack(rev(stack(x)))
-  }
-  get_values <- function(topics, tag) {
-    tags <- lapply(topics, get_tag, tag)
-    tags <- Filter(Negate(is.null), tags)
-    lapply(tags, "[[", "values")
-  }
-
   family_lookup <- invert(get_values(topics, "family"))
   name_lookup <- get_values(topics, "name")
 
@@ -236,47 +226,20 @@ roc_process.had <- function(roclet, partita, base_path, options = list()) {
     }
   }
 
-  # And to process @inheritParams
-
-  # Currently no topological sort, so @inheritParams will only traverse
-  # one-level - you can't inherit params that have been inherited from
-  # another function (and you can't currently use multiple inherit tags)
-  inherits <- get_values(topics, "inheritParams")
-
-  for(topic_name in names(inherits)) {
-    topic <- topics[[topic_name]]
-
-    for(inheritor in inherits[[topic_name]]) {
-      if (grepl("::", inheritor, fixed = TRUE)) {
-        # Reference to another package
-        pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
-        params <- rd_arguments(get_rd(pieces[2], pieces[1]))
-
-      } else {
-        # Reference within this package
-        rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))
-
-        if (length(rd_name) != 1) {
-          warning("@inheritParams: can't find topic ", inheritor,
-            call. = FALSE, immediate. = TRUE)
-          next
-        }
-        params <- get_tag(topics[[rd_name]], "arguments")$values
-      }
-      params <- unlist(params)
-
-      missing_params <- setdiff(get_tag(topic, "formals")$values,
-        names(get_tag(topic, "arguments")$values))
-      matching_params <- intersect(missing_params, names(params))
-
-      add_tag(topic, new_tag("arguments", params[matching_params]))
-    }
-
-  }
-
-
-  topics
+  # Final parse to process @inheritParams
+  process_inherit_params(topics)
 }
+
+invert <- function(x) {
+  if (length(x) == 0) return()
+  unstack(rev(stack(x)))
+}
+get_values <- function(topics, tag) {
+  tags <- lapply(topics, get_tag, tag)
+  tags <- Filter(Negate(is.null), tags)
+  lapply(tags, "[[", "values")
+}
+
 
 hash_partitum <- function(partitum) {
   partitum$object <- hash_object(partitum$object)

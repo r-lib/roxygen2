@@ -50,6 +50,25 @@ test_that("multiple @inheritParam inherits from existing topics", {
   expect_equal(sort(names(params)), c("trim", "x"))
 })
 
+test_that("@inheritParam understands compound docs", {
+  out <- roc_proc_text(roc, "
+    #' Title
+    #' 
+    #' @param x x
+    #' @param y x
+    x <- function(x, y) {}
+  
+    #' Title
+    #' 
+    #' @inheritParams x
+    #' @param x y
+    #' @param y y
+    y <- function(x, y) {}")[[2]]
+  params <- get_tag(out, "arguments")$values
+  expect_equal(params, c(x = "y", y = "y"))
+})
+
+
 test_that("methods inherit from generics by default", {
   out <- roc_proc_text(roc, "
     #' Blah.

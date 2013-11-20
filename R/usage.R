@@ -10,6 +10,7 @@ wrap_string <- function(x) {
   Encoding(y) <- Encoding(x)
   
   y <- str_replace_all(y, "\u{A0}", " ")
+  class(y) <- class(x)
   y
 }
 
@@ -35,7 +36,7 @@ default_usage.s3generic <- default_usage.function
 default_usage.s3method <- function(x) {
   method <- attr(x$value, "s3method")
   s3method <- function(name) {
-    paste0("\\method{", name, "}{", method[2], "}")
+    build_rd("\\method{", name, "}{", method[2], "}")
   }
   function_usage(method[1], formals(x$value), s3method)
 }
@@ -47,7 +48,7 @@ default_usage.s4generic <- default_usage.function
 default_usage.s4method <- function(x) {
   s4method <- function(name) {
     signature <- str_c(as.character(x$value@defined), collapse = ",")
-    paste0("\\S4method{", name, "}{", signature, "}")
+    build_rd("\\S4method{", name, "}{", signature, "}")
   }
   function_usage(x$name, formals(x$value), s4method)
 }
@@ -66,20 +67,19 @@ function_usage <- function(name, formals, format_name = identity) {
     formals$value <- NULL
     
     arglist <- args_string(usage_args(formals))
-    str_c(format_name(name), "(", arglist, ") <- value")
+    build_rd(format_name(name), "(", arglist, ") <- value")
   } else if (is_infix_fun(name) && identical(format_name, identity)) {
     # If infix, and regular function, munge format
     arg_names <- names(formals)
-    name <- str_replace_all(name, fixed("%"), "\\%")
     
-    str_c(arg_names[1], " ", format_name(name), " ", arg_names[2])
+    build_rd(arg_names[1], " ", format_name(name), " ", arg_names[2])
   } else {
     # Quote non-syntactic names if no special formatting
     if (identical(format_name, identity)) {
-      name <- quote_if_needed(name)  
+      name <- quote_if_needed(name) 
     }
     
-    str_c(format_name(name), "(", arglist, ")")
+    build_rd(format_name(name), "(", arglist, ")")
   }
   
 }

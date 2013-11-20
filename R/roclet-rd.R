@@ -387,10 +387,6 @@ process.slot <- function(partitum) {
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
 process.examples <- function(partitum, base_path) {
-  escape_examples <- function(x) {
-    gsub("\\\\dont", "\\dont", escape_rd(x))
-  }
-  
   out <- list()
   if (!is.null(partitum$examples)) {
     ex <- escape_examples(partitum$examples)

@@ -63,7 +63,7 @@ test_that("% and \\ in @example escaped", {
     NULL")[[1]]
 
   examples <- get_tag(out, "examples")$values
-  expect_equal(examples, "x \\%*\\% y # \\\\x")
+  expect_equal(examples, rd("x \\%*\\% y # \\\\x"))
 })
 
 test_that("\\dontrun in @example unescaped", {
@@ -73,5 +73,5 @@ test_that("\\dontrun in @example unescaped", {
     NULL")[[1]]
   
   examples <- get_tag(out, "examples")$values
-  expect_equal(examples, "\\dontrun{x <- 1}")
+  expect_equal(examples, rd("\\dontrun{x <- 1}"))
 })

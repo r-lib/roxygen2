@@ -33,6 +33,7 @@ Collate:
     'parse-preref.R'
     'parse-registry.R'
     'parse.R'
+    'rd-escape.R'
     'rd-file-api.R'
     'rd-parse.R'
     'rd-tag-api.R'

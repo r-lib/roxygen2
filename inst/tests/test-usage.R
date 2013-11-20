@@ -5,7 +5,7 @@ test_that("usage captured from formals", {
   out <- roc_proc_text(roc, "
     #' Title.
     a <- function(a=1) {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, "a(a = 1)")
+  expect_equal(get_tag(out, "usage")$values, rd("a(a = 1)"))
 })
 
 test_that("usage correct for modification functions", {
@@ -13,7 +13,7 @@ test_that("usage correct for modification functions", {
     #' Title.
     `foo<-` <- function(x, value) {}")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, "foo(x) <- value")
+  expect_equal(get_tag(out, "usage")$values, rd("foo(x) <- value"))
 })
 
 test_that("usage correct for functions with no arguments", {
@@ -21,7 +21,7 @@ test_that("usage correct for functions with no arguments", {
       #' Function without parameters
       f <- function() 1")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, "f()")
+  expect_equal(get_tag(out, "usage")$values, rd("f()"))
 })
 
 test_that("default usage correct for infix functions", {
@@ -29,7 +29,7 @@ test_that("default usage correct for infix functions", {
     #' Infix fun
     '%.%' <- function(a, b) 1")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, "a \\%.\\% b")  
+  expect_equal(get_tag(out, "usage")$values, rd("a \\%.\\% b"))
 })
 
 test_that("default usage correct for S3 methods", {
@@ -44,9 +44,30 @@ test_that("default usage correct for S3 methods", {
     '[<-.foo' <- function(x, value) 'foo'
   ")
   
-  expect_equal(get_tag(out[[1]], "usage")$values, "\\method{mean}{foo}(x)")
-  expect_equal(get_tag(out[[2]], "usage")$values, "\\method{+}{foo}(x, b)")
-  expect_equal(get_tag(out[[3]], "usage")$values, "\\method{[}{foo}(x) <- value")
+  expect_equal(get_tag(out[[1]], "usage")$values, rd("\\method{mean}{foo}(x)"))
+  expect_equal(get_tag(out[[2]], "usage")$values, rd("\\method{+}{foo}(x, b)"))
+  expect_equal(get_tag(out[[3]], "usage")$values, rd("\\method{[}{foo}(x) <- value"))
+})
+
+test_that("usage escaping preserved when combined", {
+  out <- roc_proc_text(roc, "
+    #' Foo
+    foo <- function(x = '%') x
+    
+    #' @rdname foo
+    bar <- function(y = '%') y
+  ")[[1]]
+  
+  expect_is(get_tag(out, "usage")$values, "rd")
+})
+
+test_that("default usage not double escaped", {
+  out <- roc_proc_text(roc, "
+    #' Regular
+    mean.foo <- function(x) 'foo'
+  ")[[1]]
+  
+  expect_equal(format(get_tag(out, "usage")), rd("\\\method{mean}{foo}(x)"))
 })
 
 test_that("default usage correct for S4 methods", {
@@ -64,11 +85,11 @@ test_that("default usage correct for S4 methods", {
   ")
   
   expect_equal(get_tag(out[[1]], "usage")$values, 
-    "\\S4method{sum}{foo}(x, ..., na.rm = FALSE)")
+    rd("\\S4method{sum}{foo}(x, ..., na.rm = FALSE)"))
   expect_equal(get_tag(out[[2]], "usage")$values, 
-    "\\S4method{+}{foo,ANY}(e1, e2)")
+    rd("\\S4method{+}{foo,ANY}(e1, e2)"))
   expect_equal(get_tag(out[[3]], "usage")$values, 
-    "\\S4method{[}{foo}(x, i, j, ...) <- value")
+    rd("\\S4method{[}{foo}(x, i, j, ...) <- value"))
 })
 
 
@@ -76,7 +97,7 @@ test_that("% and \\ are escaped in usage", {
   out <- roc_proc_text(roc, "
     #' Title.
     a <- function(a='%\\\\') {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, 'a(a = "%\\\\")')
+  expect_equal(get_tag(out, "usage")$values, escape('a(a = "%\\\\")'))
   expect_match(format(get_tag(out, "usage")), 'a(a = "\\%\\\\\\\\")', fixed = TRUE)
 })
 
@@ -147,7 +168,7 @@ test_that("quoted topics have usage statements", {
     \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
 
   expect_equal(get_tag(out, "usage")$values,
-    "f(a = 1, b = 2, c = a + b)")
+    rd("f(a = 1, b = 2, c = a + b)"))
 
   expect_equal(format(get_tag(out, "usage")),
     "\\usage{\nf(a = 1, b = 2, c = a + b)\n}\n"
@@ -161,5 +182,5 @@ test_that("non-syntactic names are quoted", {
     #' Title.
     'a b' <- function(x) x")[[1]]
   
-  expect_equal(get_tag(out, "usage")$values, '"a b"(x)')
+  expect_equal(get_tag(out, "usage")$values, rd('"a b"(x)'))
 })

@@ -7,7 +7,7 @@ test_that("format defaults to output from str", {
     x <- list(a = 1, b = 2)")[[1]]
   
   expect_equal(get_tag(out, "format")$values, 
-    "List of 2\n $ a: num 1\n $ b: num 2"
+   rd("List of 2\n $ a: num 1\n $ b: num 2")
   )
 })
 

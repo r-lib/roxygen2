@@ -76,19 +76,18 @@ test_that("% and \\ are escaped in usage", {
   out <- roc_proc_text(roc, "
     #' Title.
     a <- function(a='%\\\\') {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, 'a(a = "\\%\\\\\\\\")')
+  expect_equal(get_tag(out, "usage")$values, 'a(a = "%\\\\")')
+  expect_match(format(get_tag(out, "usage")), 'a(a = "\\%\\\\\\\\")', fixed = TRUE)
 })
 
-test_that("\ is escaped in usage", {
-  input <- "
+test_that("% and \\ escaped in manual usage", {
+  out <- roc_proc_text(roc, "
     #' Title.
-    f <- function(a='\\\\') {}
-  "
-  # cat(input)
-  out <- roc_proc_text(roc, input)[[1]]
-  
-  expected <- "f(a = \"\\\\\\\\\")"
-  expect_equal(get_tag(out, "usage")$values, expected)
+    #' @usage a(a = \"%\\\\\")
+    a <- function(a) {}
+  ")[[1]]
+  expect_equal(get_tag(out, "usage")$values, 'a(a = "%\\\\")')
+  expect_match(format(get_tag(out, "usage")), 'a(a = "\\%\\\\\\\\")', fixed = TRUE)
 })
 
 test_that("long usages protected from incorrect breakage", {

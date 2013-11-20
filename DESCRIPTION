@@ -20,7 +20,7 @@ Imports:
     codetools,
     methods
 Suggests:
-    testthat
+    testthat (>= 0.7.1.99)
 LinkingTo: Rcpp
 Roxygen: list(wrap = FALSE)
 Collate:

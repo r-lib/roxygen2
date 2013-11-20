@@ -116,7 +116,7 @@ format.formals_tag <- format_null
 
 #' @export
 format.usage_tag <- function(x, ...) {
-  rd_tag(x$tag, paste0(x$values, collapse = "\n\n"), space = TRUE)
+  rd_tag(x$tag, paste0(escape_rd(x$values), collapse = "\n\n"), space = TRUE)
 }
 
 #' @export

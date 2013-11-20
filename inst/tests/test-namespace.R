@@ -59,8 +59,6 @@ test_that("export detects method name", {
   expect_equal(out, 'exportMethods(max)')
 })
 
-
-
 test_that("export method escapes if needed", {
   out <- roc_proc_text(roc, "
     setGeneric('x<-', function(x, value) standardGeneric('x<-'))
@@ -69,6 +67,16 @@ test_that("export method escapes if needed", {
   expect_equal(out, 'exportMethods("x<-")')
 })
 
+test_that("export uses name if no object present", {
+  out <- roc_proc_text(roc, "
+    #' Title
+    #' 
+    #' @export
+    #' @name x
+    NULL
+  ")
+  expect_equal(out, 'export(x)')
+})
 
 test_that("exportMethod overrides default method name", {
   out <- roc_proc_text(roc, "

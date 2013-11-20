@@ -130,27 +130,23 @@ ns_export <- function(tag, part) {
   if (!is.null.string(tag)) return(export(tag))
   # FIXME: check for empty exports (i.e. no name)
   
-  default_export(part$object)
+  default_export(part$object, part)
 }
-default_export <- function(x) UseMethod("default_export")
+default_export <- function(x, block) UseMethod("default_export")
 #' @export
-default_export.s4class   <- function(x) export_class(x$name)
+default_export.s4class   <- function(x, block) export_class(x$name)
 #' @export
-default_export.s4generic <- function(x) export(x$name)
+default_export.s4method  <- function(x, block) export_s4_method(x$name)
 #' @export
-default_export.s4method  <- function(x) export_s4_method(x$name)
+default_export.s3method  <- function(x, block) export_s3_method(attr(x$value, "s3method"))
 #' @export
-default_export.s3generic <- function(x) export(x$name)
-#' @export
-default_export.s3method  <- function(x) export_s3_method(attr(x$value, "s3method"))
-#' @export
-default_export.function  <- function(x) export(x$name)
-#' @export
-default_export.data      <- function(x) export(x$name)
-#' @export
-default_export.rcclass   <- function(x) {
+default_export.rcclass   <- function(x, block) {
   c(export(x$name), export_class(x$name))
 }
+#' @export
+default_export.default   <- function(x, block) export(x$name)
+#' @export
+default_export.NULL      <- function(x, block) export(block$name)
 
 ns_S3method          <- function(tag, part) export_s3_method(tag)
 ns_exportClass       <- function(tag, part) export_class(tag)

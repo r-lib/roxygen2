@@ -67,8 +67,13 @@ find_generic <- function(name, env = parent.frame()) {
   NULL
 }
 
-add_s3_metadata <- function(val, name, env) {
+# @param override Either NULL to use default, or a character vector of length 2
+add_s3_metadata <- function(val, name, env, override = NULL) {
   if (!is.function(val)) return(val)
+  
+  if (!is.null(override)) {
+    return(s3_method(val, override, env))
+  }
   
   if (is_s3_generic(name, env)) {
     class(val) <- "s3generic"
@@ -78,11 +83,17 @@ add_s3_metadata <- function(val, name, env) {
   method <- find_generic(name, env)
   if (is.null(method)) return(val)
   
-  class(val) <- "s3method"
-  attr(val, "s3method") <- method
-  attr(val, "s3env") <- env
+  s3_method(val, method, env)
+}
+
+s3_method <- function(f, method, env) {
+  stopifnot(length(method) == 2, is.character(method))
+
+  class(f) <- "s3method"
+  attr(f, "s3method") <- method
+  attr(f, "s3env") <- env
   
-  val
+  f
 }
 
 s3_method_info <- function(x) {

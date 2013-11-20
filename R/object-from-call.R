@@ -1,4 +1,4 @@
-object_from_call <- function(call, env) {
+object_from_call <- function(call, env, block) {
   if (is.null(call)) return()
   
   call <- standardise_call(call, env)
@@ -9,7 +9,7 @@ object_from_call <- function(call, env) {
   parser <- find_parser(name)
   if (is.null(parser)) return(srcref)
   
-  parser(call, env)
+  parser(call, env, block)
 }
 
 find_parser <- function(name) {
@@ -30,7 +30,7 @@ standardise_call <- function(call, env = parent.frame()) {
   match.call(f, call)
 }
 
-parser_assignment <- function(call, env) {
+parser_assignment <- function(call, env, block) {
   assignee <- as.character(call[[2]])
   
   # If it's a compound assignment like x[[2]] <- ignore it
@@ -41,7 +41,8 @@ parser_assignment <- function(call, env) {
   value <- get(assignee, env)
   
   if (is.function(value)) {
-    value <- add_s3_metadata(value, assignee, env)
+    method <- unlist(block$method, use.names = FALSE)
+    value <- add_s3_metadata(value, assignee, env, method)
     if (is.s3generic(value)) {
       objtype <- "s3generic"
     } else if (is.s3method(value)) {
@@ -59,7 +60,7 @@ parser_assignment <- function(call, env) {
 }
 
 #' @importFrom methods getClass
-parser_setClass <- function(call, env) {
+parser_setClass <- function(call, env, block) {
   name <- as.character(call$Class)
   value <- getClass(name)
 
@@ -67,7 +68,7 @@ parser_setClass <- function(call, env) {
 }
 
 #' @importFrom methods getGeneric
-parser_setGeneric <- function(call, env) {
+parser_setGeneric <- function(call, env, block) {
   name <- as.character(call$name)
   value <- getGeneric(name, where = env)
   
@@ -75,7 +76,7 @@ parser_setGeneric <- function(call, env) {
 }
 
 #' @importFrom methods getMethod
-parser_setMethod <- function(call, env) {
+parser_setMethod <- function(call, env, block) {
   name <- as.character(call$f)
   value <- getMethod(name, eval(call$signature), where = env)
   

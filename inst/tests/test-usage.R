@@ -61,15 +61,6 @@ test_that("usage escaping preserved when combined", {
   expect_is(get_tag(out, "usage")$values, "rd")
 })
 
-test_that("default usage not double escaped", {
-  out <- roc_proc_text(roc, "
-    #' Regular
-    mean.foo <- function(x) 'foo'
-  ")[[1]]
-  
-  expect_equal(format(get_tag(out, "usage")), rd("\\\method{mean}{foo}(x)"))
-})
-
 test_that("default usage correct for S4 methods", {
   setClass("foo", where = environment())
   on.exit(removeClass("foo"))

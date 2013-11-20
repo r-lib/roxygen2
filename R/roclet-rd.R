@@ -388,9 +388,7 @@ process.slot <- function(partitum) {
 # the files pointed to by each \code{@@example}.
 process.examples <- function(partitum, base_path) {
   escape_examples <- function(x) {
-    x1 <- gsub("\\", "\\\\", x, fixed = TRUE)
-    x2 <- gsub("%", "\\%", x1, fixed = TRUE)
-    gsub("\\\\dont", "\\dont", x2)
+    gsub("\\\\dont", "\\dont", escape_rd(x))
   }
   
   out <- list()

@@ -106,3 +106,8 @@ same_contents <- function(path, contents) {
 r_files <- function(path) {
   dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE)
 }
+
+escape_rd <- function(x) {
+  x1 <- gsub("\\", "\\\\", x, fixed = TRUE)
+  gsub("%", "\\%", x1, fixed = TRUE)
+}

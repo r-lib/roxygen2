@@ -18,9 +18,9 @@ roxygenise(package.dir = ".", roxygen.dir = package.dir,
 
   \item{roclets}{character vector of roclet names to apply
   to package.  This defaults to \code{NULL}, which will use
-  the roclets list in the \code{Roxygen} DESCRIPTION field.
-  If none are specified, defaults to \code{c("collate",
-  "namespace", "rd")}.}
+  the \code{roclets} fields in the list provided in the
+  \code{Roxygen} DESCRIPTION field. If none are specified,
+  defaults to \code{c("collate", "namespace", "rd")}.}
 
   \item{load_code}{A function used to load all the R code
   in the package directory. It is called with the path to

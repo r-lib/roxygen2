@@ -5,18 +5,16 @@
 > all' hileth', Hephaiste; didou d'areten te kai olbon.*
 > --Homer, 7th century BCE
 
-
 # Why use roxygen2?
 
-The premise of `roxygen2` is simple: describe your functions in comments next to where their definitions and `roxygen2` will process your source code and comments to produce R compatible Rd files.  Here's a simple example from the `stringr` package:
+The premise of `roxygen2` is simple: describe your functions in comments next to their definitions and `roxygen2` will process your source code and comments to produce Rd files in the `man/` directory.  Here's a simple example from the `stringr` package:
 
 ```R
 #' The length of a string (in characters).
 #'
 #' @param string input character vector
 #' @return numeric vector giving number of characters in each element of the 
-#'   character vector.  Missing string have missing length.
-#' @keywords character
+#'   character vector.  Missing strings have missing length.
 #' @seealso \code{\link{nchar}} which this function wraps
 #' @export
 #' @examples
@@ -42,15 +40,16 @@ When you `roxygenise` your package these comments will be automatically transfor
   \item{string}{input character vector}
 }
 \description{
-  The length of a string (in characters).
+The length of a string (in characters).
 }
 \seealso{\code{\link{nchar}} which this function wraps}
-\value{numeric vector giving number of characters in each element of the
-character vector.  Missing string have missing length.}
-\keyword{character}
+\value{
+  numeric vector giving number of characters in each element of the
+  character vector.  Missings string have missing length.
+}
 \examples{
-  str_length(letters)
-  str_length(c("i", "like", "programming", NA))
+str_length(letters)
+str_length(c("i", "like", "programming", NA))
 }
 ```
 
@@ -60,23 +59,30 @@ To get the current released version from CRAN:
 
 ```R
 install.packages("roxygen2")
-library(roxygen2)
-roxygenise()
 ```
 
 To get the current development version from github:
 
 ```R
-install.packages("devtools")
-devtools::install_github("devtools")
-devtools::install_github("roxygen", "klutometis")
-library(roxygen2)
-roxygenise()
+# install.packages("devtools")
+devtools::install_github("roxygen/klutometis")
 ```
+
+# Running
+
+Roxygen does a live analysis of your source code: it loads all the code in your package, so it can create documentation using values in an R environment, not just source code. However, simulating package loading is rather tricky to do in general, so there are two ways to do it with roxygen:
+
+* `roxygen::roxygenise()` just sources all files in the `R/` directory
+
+* `devtools::document()` sources all files in the `R/` directory, compiles 
+  source code in the `src/` directory, loads data in the `data/` directory
+  and generally does an accurate job of simulating package loading.
+  
+If you have a simple package, you can use `roxygenise()`, but for anything more complicated, I recommend that you use `document()`.
 
 # Roclets
 
-`roxygen2` comes with three roclets, three tools for parsing your source code and producing files useful for documenting your package:
+`roxygen2` comes with three roclets, tools for parsing your source code and producing files useful for documenting your package:
 
 * `collate_roclet`: allows you to add `@include` directives to ensure that
   files are loaded in the order they are needed
@@ -88,7 +94,7 @@ roxygenise()
 * `rd_roclet`: produces Rd files by inspecting both function definitions and
   roxygen2 comments in the source code.
 
-By default, `roxygenise` will run all three, but you can choose which ones to run using the `roclet` parameter.
+By default, `roxygenise` will run all three, but you can choose which ones to run using the `roclet` parameter, or field `Roxygen` in your `DESCRIPTION`.
 
 -----------
 * Hail, Hephaistos! Grant skill and weal.

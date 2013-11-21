@@ -9,9 +9,9 @@
 #' @param package.dir the package's top directory
 #' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
 #' @param roclets character vector of roclet names to apply to package. 
-#'   This defaults to \code{NULL}, which will use the roclets list in 
-#'   the \code{Roxygen} DESCRIPTION field. If none are specified, defaults
-#'   to \code{c("collate", "namespace", "rd")}.
+#'   This defaults to \code{NULL}, which will use the \code{roclets} fields in 
+#'   the list provided in the \code{Roxygen} DESCRIPTION field. If none are 
+#'   specified, defaults to \code{c("collate", "namespace", "rd")}.
 #' @param load_code A function used to load all the R code in the package
 #'   directory. It is called with the path to the package, and it should return
 #'   an environment containing all the sourced code.

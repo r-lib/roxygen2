@@ -97,7 +97,7 @@ namespace_roclet <- function() {
 
 #' @export
 roc_process.namespace <- function(roclet, partita, base_path, options = list()) {
-  ns <- unlist(lapply(partita, ns_process_partitum))
+  ns <- unlist(lapply(partita, ns_process_partitum)) %||% character()
   sort_c(unique(ns))
 }
 

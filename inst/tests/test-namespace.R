@@ -138,3 +138,12 @@ test_that("useDynLib doesn't quote if comma present", {
   
   expect_equal(sort(out), "useDynLib(test, .registration = TRUE)")
 })
+
+test_that("empty NAMESPACE generates zero-length vector", {
+  base_path <- normalizePath("empty")
+  parsed <- parse_package(base_path, source_package)
+  
+  roc <- get("namespace_roclet", mode = "function")()
+  results <- roc_process(roc, parsed, base_path)
+  expect_equal(results, character())
+})

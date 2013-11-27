@@ -30,6 +30,15 @@ escape_examples <- function(x) {
   gsub("\\\\dont", "\\dont", escape(x))
 }
 
+escape_preformatted <- function(x) {
+  x1 <- gsub("\\", "\\\\", x, fixed = TRUE)
+  x2 <- gsub("{", "\\{", x1, fixed = TRUE)
+  x3 <- gsub("}", "\\}", x2, fixed = TRUE)
+
+  rd(x3)
+}
+
+
 # Works like paste, but automatically escapes all input variables,
 # but not literal strings
 build_rd <- function(..., collapse = NULL, sep = "") {

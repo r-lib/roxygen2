@@ -7,9 +7,21 @@ test_that("format defaults to output from str", {
     x <- list(a = 1, b = 2)")[[1]]
   
   expect_equal(get_tag(out, "format")$values, 
-   rd("\\preformatted{\nList of 2\n $ a: num 1\n $ b: num 2\n}")
+   rd("\\preformatted{List of 2\n $ a: num 1\n $ b: num 2\n}")
   )
 })
+
+test_that("default format escapes { and }", {
+  out <- roc_proc_text(roc, "
+    #' Title
+    x <- list('{}')"
+  )[[1]]
+  
+  expect_equal(get_tag(out, "format")$values, 
+    rd("\\preformatted{List of 1\n $ : chr \"\\{\\}\"\n}")
+  )
+})
+
 
 test_that("@format overrides defaults", {
   out <- roc_proc_text(roc, "

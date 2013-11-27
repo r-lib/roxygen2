@@ -31,7 +31,7 @@ escape_examples <- function(x) {
 }
 
 escape_preformatted <- function(x) {
-  x1 <- gsub("\\", "\\\\", x, fixed = TRUE)
+  x1 <- escape(x)
   x2 <- gsub("{", "\\{", x1, fixed = TRUE)
   x3 <- gsub("}", "\\}", x2, fixed = TRUE)
 

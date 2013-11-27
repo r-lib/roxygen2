@@ -99,7 +99,7 @@ test_that("@usage overrides default", {
   out <- roc_proc_text(roc, "
     #' @usage a(a=2)
     a <- function(a=1) {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, "a(a=2)")
+  expect_equal(get_tag(out, "usage")$values, rd("a(a=2)"))
 })
 
 test_that("@usage overrides default for @docType data", {
@@ -111,7 +111,7 @@ test_that("@usage overrides default for @docType data", {
     #' @usage data(abc)
     NULL")[[1]]
   
-  expect_equal(get_tag(out, "usage")$values, "data(abc)")
+  expect_equal(get_tag(out, "usage")$values, rd("data(abc)"))
 })
 
 test_that("quoted topics have usage statements", {
@@ -159,14 +159,14 @@ test_that("% and \\ are escaped in usage", {
   expect_match(format(get_tag(out, "usage")), 'a(a = "\\%\\\\\\\\")', fixed = TRUE)
 })
 
-test_that("% and \\ escaped in manual usage", {
+test_that("% and \\ not escaped in manual usage", {
   out <- roc_proc_text(roc, "
     #' Title.
-    #' @usage a(a = \"%\\\\\")
+    #' @usage %\\
     a <- function(a) {}
   ")[[1]]
-  expect_equal(get_tag(out, "usage")$values, 'a(a = "%\\\\")')
-  expect_match(format(get_tag(out, "usage")), 'a(a = "\\%\\\\\\\\")', fixed = TRUE)
+  expect_equal(get_tag(out, "usage")$values, rd('%\\'))
+  expect_equal(format(get_tag(out, "usage")), '\\usage{\n%\\\n}\n')
 })
 
 test_that("non-syntactic names are quoted", {

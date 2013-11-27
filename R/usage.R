@@ -1,6 +1,12 @@
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 usage_tag <- function(partitum) {
-  usage <- partitum$usage %||% wrap_string(default_usage(partitum$object))
+  if (is.null(partitum$usage)) {
+    usage <- wrap_string(default_usage(partitum$object))
+  } else {
+    # Treat user input as already escaped, otherwise they have no way
+    # to enter \S4method etc.
+    usage <- rd(partitum$usage)
+  }
   new_tag("usage", usage)
 }
 

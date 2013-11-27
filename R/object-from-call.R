@@ -79,6 +79,11 @@ parser_setGeneric <- function(call, env, block) {
 parser_setMethod <- function(call, env, block) {
   name <- as.character(call$f)
   value <- getMethod(name, eval(call$signature), where = env)
+  # When a generic has ... and a method adds new arguments, the S4 method
+  # wraps the definition inside another function which has the same arguments
+  # as the generic. We replace it with the real definition so that formals etc
+  # are correct.
+  value@.Data <- eval(call$definition, env)
   
   object("s4method", name, value)
 }

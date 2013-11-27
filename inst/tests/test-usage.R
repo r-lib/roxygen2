@@ -1,6 +1,8 @@
 context("Usage")
 roc <- rd_roclet()
 
+# default usage ----------------------------------------------------------------
+
 test_that("usage captured from formals", {
   out <- roc_proc_text(roc, "
     #' Title.
@@ -49,26 +51,6 @@ test_that("default usage correct for S3 methods", {
   expect_equal(get_tag(out[[3]], "usage")$values, rd("\\method{[}{foo}(x) <- value"))
 })
 
-test_that("usage escaping preserved when combined", {
-  out <- roc_proc_text(roc, "
-    #' Foo
-    foo <- function(x = '%') x
-    
-    #' @rdname foo
-    bar <- function(y = '%') y
-  ")[[1]]
-  
-  expect_is(get_tag(out, "usage")$values, "rd")
-})
-
-test_that("default usage not double escaped", {
-  out <- roc_proc_text(roc, "
-    #' Regular
-    mean.foo <- function(x) 'foo'
-  ")[[1]]
-  
-  expect_match(format(get_tag(out, "usage")), "\\method{mean}{foo}(x)", fixed = TRUE)
-})
 
 test_that("default usage correct for S4 methods", {
   setClass("foo", where = environment())
@@ -92,6 +74,63 @@ test_that("default usage correct for S4 methods", {
     rd("\\S4method{[}{foo}(x, i, j, ...) <- value"))
 })
 
+# @usage -----------------------------------------------------------------------
+
+test_that("@usage overrides default", {
+  out <- roc_proc_text(roc, "
+    #' @usage a(a=2)
+    a <- function(a=1) {}")[[1]]
+  expect_equal(get_tag(out, "usage")$values, "a(a=2)")
+})
+
+test_that("@usage overrides default for @docType data", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    #'
+    #' @name abc
+    #' @docType data
+    #' @usage data(abc)
+    NULL")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, "data(abc)")
+})
+
+test_that("quoted topics have usage statements", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values,
+    rd("f(a = 1, b = 2, c = a + b)"))
+  
+  expect_equal(format(get_tag(out, "usage")),
+    "\\usage{\nf(a = 1, b = 2, c = a + b)\n}\n"
+  )
+  
+})
+
+# Escaping --------------------------------------------------------------------
+
+test_that("usage escaping preserved when combined", {
+  out <- roc_proc_text(roc, "
+    #' Foo
+    foo <- function(x = '%') x
+    
+    #' @rdname foo
+    bar <- function(y = '%') y
+  ")[[1]]
+  
+  expect_is(get_tag(out, "usage")$values, "rd")
+})
+
+test_that("default usage not double escaped", {
+  out <- roc_proc_text(roc, "
+    #' Regular
+    mean.foo <- function(x) 'foo'
+  ")[[1]]
+  
+  expect_match(format(get_tag(out, "usage")), "\\method{mean}{foo}(x)", fixed = TRUE)
+})
 
 test_that("% and \\ are escaped in usage", {
   out <- roc_proc_text(roc, "
@@ -110,6 +149,18 @@ test_that("% and \\ escaped in manual usage", {
   expect_equal(get_tag(out, "usage")$values, 'a(a = "%\\\\")')
   expect_match(format(get_tag(out, "usage")), 'a(a = "\\%\\\\\\\\")', fixed = TRUE)
 })
+
+test_that("non-syntactic names are quoted", {
+  
+  out <- roc_proc_text(roc, "
+    #' Title.
+    'a b' <- function(x) x")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, rd('"a b"(x)'))
+})
+
+
+# Wrapping --------------------------------------------------------------------
 
 test_that("long usages protected from incorrect breakage", {
   out <- roc_proc_text(roc, "
@@ -143,44 +194,3 @@ test_that("\\method not split inappropriately", {
   expect_match(usage, "\\{mean\\}\\{reallyratherquitelongclassname\\}")
 })
 
-test_that("@usage overrides default", {
-  out <- roc_proc_text(roc, "
-    #' @usage a(a=2)
-    a <- function(a=1) {}")[[1]]
-    expect_equal(get_tag(out, "usage")$values, "a(a=2)")
-})
-
-test_that("@usage overrides default for @docType data", {
-  out <- roc_proc_text(roc, "
-    #' Title.
-    #'
-    #' @name abc
-    #' @docType data
-    #' @usage data(abc)
-    NULL")[[1]]
-
-  expect_equal(get_tag(out, "usage")$values, "data(abc)")
-})
-
-test_that("quoted topics have usage statements", {
-  out <- roc_proc_text(roc, "
-    #' Title.
-    \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
-
-  expect_equal(get_tag(out, "usage")$values,
-    rd("f(a = 1, b = 2, c = a + b)"))
-
-  expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\nf(a = 1, b = 2, c = a + b)\n}\n"
-  )
-
-})
-
-test_that("non-syntactic names are quoted", {
-  
-  out <- roc_proc_text(roc, "
-    #' Title.
-    'a b' <- function(x) x")[[1]]
-  
-  expect_equal(get_tag(out, "usage")$values, rd('"a b"(x)'))
-})

@@ -427,7 +427,7 @@ process.docType <- function(partitum) {
 }
 
 process_had_tag <- function(partitum, tag, f = new_tag) {
-  matches <- partitum[names(partitum) == tag]
+  matches <- partitum[names(partitum) == tag]  
   if (length(matches) == 0) return()
 
   unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)

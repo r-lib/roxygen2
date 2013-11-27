@@ -7,6 +7,8 @@
 #
 new_tag <- function(tag, values) {
   if (is.null(values)) return()
+  # NULL is special sentinel value that suppresses output of that tag
+  if (identical(values, "NULL")) return()
 
   subc <- str_c(tag, "_tag")
   list(structure(list(tag = tag, values = values), class = c(subc, "rd_tag")))

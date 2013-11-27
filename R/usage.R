@@ -2,6 +2,8 @@
 usage_tag <- function(partitum) {
   if (is.null(partitum$usage)) {
     usage <- wrap_string(default_usage(partitum$object))
+  } else if (partitum$usage == "NULL") { 
+    usage <- NULL
   } else {
     # Treat user input as already escaped, otherwise they have no way
     # to enter \S4method etc.

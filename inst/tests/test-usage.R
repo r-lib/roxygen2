@@ -114,6 +114,14 @@ test_that("@usage overrides default for @docType data", {
   expect_equal(get_tag(out, "usage")$values, rd("data(abc)"))
 })
 
+test_that("@usage NULL suppresses default usage", {
+  out <- roc_proc_text(roc, "
+    #' @usage NULL
+    a <- function(a=1) {}")[[1]]
+  
+  expect_equal(get_tag(out, "usage")$values, NULL)  
+})
+
 test_that("quoted topics have usage statements", {
   out <- roc_proc_text(roc, "
     #' Title.

@@ -143,7 +143,7 @@ test_that("empty NAMESPACE generates zero-length vector", {
   base_path <- normalizePath("empty")
   parsed <- parse_package(base_path, source_package)
   
-  roc <- get("namespace_roclet", mode = "function")()
+  roc <- namespace_roclet()
   results <- roc_process(roc, parsed, base_path)
   expect_equal(results, character())
 })

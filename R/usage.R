@@ -64,6 +64,10 @@ default_usage.s4method <- function(x) {
 #' @export
 default_usage.s4class <- function(x) NULL
 
+#' @export
+default_usage.rcclass <- function(x) NULL
+
+
 # Usage:
 # replacement, infix, regular
 # function, s3 method, s4 method, data

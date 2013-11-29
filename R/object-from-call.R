@@ -40,7 +40,9 @@ parser_assignment <- function(call, env, block) {
   if (!exists(assignee, env)) return()
   value <- get(assignee, env)
   
-  if (is.function(value)) {
+  if (inherits(value, "refObjectGenerator")) {
+    object("rcclass", assignee, value)
+  } else if (is.function(value)) {
     method <- unlist(block$method, use.names = FALSE)
     value <- add_s3_metadata(value, assignee, env, method)
     if (is.s3generic(value)) {
@@ -52,8 +54,6 @@ parser_assignment <- function(call, env, block) {
     }
     
     object(objtype, assignee, value)
-  } else if (inherits(value, "refObjectGenerator")) {
-    object("rcclass", assignee, value)
   } else {
     object("data", assignee, value)
   }

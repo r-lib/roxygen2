@@ -36,6 +36,14 @@ object_defaults.s4class <- function(x) {
 }
 
 #' @export
+object_defaults.rcclass <- function(x) {
+  list(
+    docType = "class"
+  )
+}
+
+
+#' @export
 object_defaults.s4method <- function(x) {
   generic <- x$value@generic
   pkg <- attr(generic, "package")

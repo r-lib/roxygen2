@@ -45,10 +45,10 @@ test_that("@docType data automatically added to data objects", {
 
 # Reference classes ----------------------------------------------------------
 
-test_that("@docType data automatically added to data objects", {
+test_that("@docType class automatically added to reference class objects", {
   out <- roc_proc_text(roc, "
     #' Title.
     a <- setRefClass('a')")[[1]]
   
-  expect_equal(get_tag(out, "docType")$values, NULL)  
+  expect_equal(get_tag(out, "class")$values, NULL)  
 })

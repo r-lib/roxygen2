@@ -1,4 +1,5 @@
 context("Template")
+roc <- rd_roclet()
 
 test_that("template_find finds files with .r and .R extension, and fails to find missing files", {
   my.tempdir <- "."
@@ -16,4 +17,16 @@ test_that("template_find finds files with .r and .R extension, and fails to find
   
   # On case-insentive file systems, will find upper case version first
   expect_equal(tolower(template_find(my.tempdir, "lcase")), tolower(my.lcase))
+})
+
+test_that("templates replace variables with their values", {
+  out <- roc_proc_text(roc, "
+    #' @template values
+    #' @templateVar x a
+    #' @templateVar y b
+    #' @templateVar z c
+    x <- 10")[[1]]
+  
+  expect_equal(get_tag(out, "title")$values, "a")
+  expect_equal(get_tag(out, "arguments")$values, c(b = "c"))
 })

@@ -60,7 +60,7 @@ roxygen2 3.0.0
   This ensures a consistent ordering across systems (#127).  
 
 * Templates with extension .r are supported on case-sensitive file systems
-  (#115).
+  (#115). Template variables now actually work (#160, thanks to @bronaugh).
 
 roxygen2 2.2.2
 --------------

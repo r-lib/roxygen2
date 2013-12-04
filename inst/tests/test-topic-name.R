@@ -70,11 +70,11 @@ test_that("@name overides default", {
   expect_equal(get_tag(out, "alias")$values, "b")
 })
 
-test_that("refclass topicname has ref-class prefix", {
+test_that("refclass topicname has class prefix", {
   setRefClass("X1", where = environment())
   on.exit(removeClass("X1"))
   obj <- object("rcclass", "X1", getRefClass("X1"))
-  expect_equal(default_topic_name(obj), "X1-ref-class")
+  expect_equal(default_topic_name(obj), "X1-class")
 })
 
 test_that("class topicname has class prefix", {

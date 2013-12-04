@@ -13,7 +13,7 @@ default_topic_name.s4class <- function(x) {
 
 #' @export
 default_topic_name.rcclass <- function(x) {
-  str_c(x$value@className, "-ref-class")
+  str_c(x$value@className, "-class")
 }
 
 #' @export

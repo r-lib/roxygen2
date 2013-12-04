@@ -16,4 +16,3 @@ alias_tag <- function(partitum, name) {
   
   new_tag("alias", aliases)
 }
-  

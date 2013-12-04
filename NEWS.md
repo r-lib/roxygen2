@@ -1,21 +1,42 @@
 # roxygen2 3.0.0
 
-* Roxygen now has support for package specific options through the `Roxygen`
-  field in the `DESCRIPTION`. The value of the field should be R code that
-  results in a list. Currently only `wrap` and `roclet` values are supported.
+Roxygen2 now fully supports S4 and RC (reference classes) - you should no 
+longer need to manually add `@alias` or `@usage` tags for S4 classes, methods 
+and generics, or for RC classes.
 
-* You can now turn off Rd re-wrapping by adding `Roxygen: list(wrap = FALSE)`
-  to your `DESCRIPTION`.
+* The default usage definitions are much better, generating the correct
+  usage for data sets (#122), S3 methods (without additional `@method` tag),
+  S4 generics, S4 methods, and for replacement (#119) and infix functions. 
+  Backslashes in function arguments in are correctly escaped. Usage statements
+  also use a more sophisticated line wrapping algorithm so that they should
+  cause fewer problems with the R CMD check line limit. (#89, #125).
 
-* You can now change the default roclets by specifying 
-  `Roxygen: list(roclets = c("collate", "rd"))` in your `DESCRIPTION`
+* S4 classes and methods, and RC classes, are given better default topics, 
+  and the file names corresponding to those topics are shorter.
 
 * S4 methods will automatically inherit the parameters from their generic.
 
-* `@slot` tag allows you to document the slots of a S4 class.
+* `@slot name description` allows you to document the slots of a S4 class.
 
-* Infix functions now escaped correctly in NAMESPACE. (Thanks to Peter 
-  Meilstrup, #111)
+S3 support has also been improved: roxygen2 now figures out whether a function
+is a S3 method or generic. (In the rare cases it does so incorrectly, use
+`@method` to manually describe the generic and class associated with a method).
+This means you can remove existing uses of `@method`, and can replace 
+`@S3method` with `@export`.
+
+Roxygen now has support for package specific options through the `Roxygen`
+field in the `DESCRIPTION`. The value of the field should be R code that
+results in a list. Currently only `wrap` and `roclet` values are supported:
+
+* Turn off Rd re-wrapping with adding `Roxygen: list(wrap = FALSE)`
+
+* Change the default roclets by specifying 
+  `Roxygen: list(roclets = c("collate", "rd"))`
+
+Roxygen 3.0 also includes a number of minor fixes and improvements:
+
+* Infix functions are now escaped correctly in NAMESPACE. (Thanks to 
+  @crowding, #111)
 
 * `roxygenise()` now works more like `devtools::document()`, only ever working
   in the current directory. The arguments `roxygen.dir`, `overwrite`, 
@@ -28,26 +49,10 @@
   based on `@include` tags - if there are none present, a collate directive 
   will not be generated.
 
-* The default usage definitions should be much better, generating the correct
-  usage for data sets (#122), S3 methods (without additional `@method` tag),
-  S4 generics, S4 methods, and for replacement (#119) and infix functions. 
-  Backslashes in function arguments in are correctly escaped. Usage statements
-  also use a more sophisticated line wrapping algorithm so that they should
-  cause fewer problems with the R CMD check line limit. (#89, #125).
-
-* `@export` now identifies S3 methods and correct generates the correct 
-  `S3method` NAMESPACE directive. This means that you should no longer need
-  to use `@S3method`.
-
 * `@useDynLib` now works with more possible specifications - if you include a
   comma in the tag value, the output will be passed as is. This means that
   `@useDynLib mypackage, .registration = TRUE` will now generate
   `useDynLib(mypackage, .registration = TRUE)` in the NAMESPACE. (#124)
-
-* S4 classes and methods, and RC classes, are given better default topics, 
-  and the file names corresponding to those topics are shorter. This means
-  that you should never need to specify a custom `@alias` for S4 classes,
-  generics or methods, or RC classes.
 
 * `inst` directory not created by default (#56).
 
@@ -61,7 +66,7 @@
 * Templates with extension .r are supported on case-sensitive file systems
   (#115). Template variables now actually work (#160, thanks to @bronaugh).
 
-* You can suppress default aliases, format and usage by using `@aliases NULL`,
+* Suppress default aliases, format and usage with `@aliases NULL`,
   `@format NULL` and `@usage NULL`.
 
 # roxygen2 2.2.2

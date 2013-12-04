@@ -1,6 +1,6 @@
 process_family <- function(topics) {
   family_lookup <- invert(get_values(topics, "family"))
-  name_lookup <- get_values(topics, "name")
+  alias_lookup <- get_values(topics, "alias")
   
   for(family in names(family_lookup)) {
     related <- family_lookup[[family]]
@@ -11,10 +11,11 @@ process_family <- function(topics) {
       
       if (length(others) < 1) next;
       
-      other_topics <- sort(unlist(name_lookup[others], use.names = FALSE))
+      by_file <- vapply(alias_lookup[others], function(x) {
+        paste0("\\code{\\link{", sort(x), "}}", collapse = ", ")
+      }, FUN.VALUE = character(1))
+      links <- paste(sort(by_file), collapse ="; ")
       
-      links <- paste("\\code{\\link{", other_topics, "}}",
-        collapse =", ", sep = "")
       seealso <- paste("Other ", family, ": ", sep = "")
       out <- strwrap(links, initial = seealso, width = 60, exdent = 2)
       

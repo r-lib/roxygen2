@@ -142,8 +142,8 @@
 * Objects that no longer exist are not documented (Fixes #42)
 
 * Errors now display file name and line number of roxygen block to help you
-  find the problem. Thanks to code contributions from Renaud Gaujoux. (Fixes
-  #13)
+  find the problem. Thanks to code contributions from Renaud Gaujoux. 
+  (Fixes #13)
 
 * Documentation with no untagged text but with `@title`, `@description` and
   `@details` tags now produces correct output.

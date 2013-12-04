@@ -1,5 +1,4 @@
-roxygen2 3.0.0
---------------
+# roxygen2 3.0.0
 
 * Roxygen now has support for package specific options through the `Roxygen`
   field in the `DESCRIPTION`. The value of the field should be R code that
@@ -65,24 +64,21 @@ roxygen2 3.0.0
 * You can suppress default aliases, format and usage by using `@aliases NULL`,
   `@format NULL` and `@usage NULL`.
 
-roxygen2 2.2.2
---------------
+# roxygen2 2.2.2
 
 * Correctly use keyword `datasets` not `dataset` (Fixes #60)
 
 * Reference classes no longer given incorrect docType (data).
 
-roxygen2 2.2.1
---------------
+# roxygen2 2.2.1
 
 * Use unicode escapes in test files so tests pass on all platforms.
 
 * Work around bug in `gsub` in C locale by manually specifying `Encoding()`. 
 
-roxygen2 2.2
-------------
+# roxygen2 2.2
 
-NEW FEATURES
+## New features
 
 * Package docType will automatically add package alias, if needed. (Fixes #4)
 
@@ -93,8 +89,7 @@ NEW FEATURES
 * New `@encoding` tag for manually setting non-ASCII encodings when needed.
   (Fixes #7)
 
-
-BUG FIXES
+## Bug fixes
 
 * `write.description()` now tries much harder to respect 
   users' original DESCRIPTION field formatting instead of forcibly 
@@ -153,16 +148,15 @@ BUG FIXES
 * Documentation with no untagged text but with `@title`, `@description` and
   `@details` tags now produces correct output.
 
-roxygen2 2.1
-------------
+# roxygen2 2.1
 
-NEW FEATURES
+## New features
 
 * package dependencies loaded automatically
 
 * added support for the `@source` tag
 
-BUG FIXES
+## Bug fixes
 
 * `NAMESPACE` file no longer needs to exist
 
@@ -179,20 +173,18 @@ BUG FIXES
 * A special thanks goes to Yihui Xie who contributed all of the fixes and
   improvements (bar one) in this version!
 
+# roxygen2 2.0
 
-roxygen2 2.0
-------------
-
-MAJOR CHANGES
+## Major changes
 
 * now works with run-time details to give more accurate output. This requires
   that the source code that roxygen is documenting be loaded prior to
   documentation. roxygen will attempt to do so, but you need to ensure
   required packages are loaded.
 
-  Run-time data fixes some long standing bugs where roxygen couldn't correctly
-  figure out function usage. We are not aware of any cases where you still
-  need to use the `@usage` tag.
+    Run-time data fixes some long standing bugs where roxygen couldn't correctly
+    figure out function usage. We are not aware of any cases where you still
+    need to use the `@usage` tag.
 
 * written in idiomatic R, and uses S3 instead of a homegrown class system.
 
@@ -219,14 +211,14 @@ MAJOR CHANGES
   in the details. Any component can be overridden with `@title`,
   `@description` and `@details` as appropriate.
 
-MINOR CHANGES
+## Minor changes
 
 * `@name` is always output as an alias, even if `@aliases` are used.
 
 * `@export` correctly uses `@method` to generate `@S3method` namespace
   directive
 
-NEW TAGS
+## New tags
 
 * `@rdname filename` sets the output filename (without extension). Use for
   functions non-alphanumeric functions (e.g. `[<-`) or if you want to document

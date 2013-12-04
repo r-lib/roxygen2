@@ -156,7 +156,8 @@ test_that("default usage not double escaped", {
     mean.foo <- function(x) 'foo'
   ")[[1]]
   
-  expect_match(format(get_tag(out, "usage")), "\\method{mean}{foo}(x)", fixed = TRUE)
+  expect_equal(format(get_tag(out, "usage")), 
+    "\\usage{\n\\method{mean}{foo}(x)\n}\n")
 })
 
 test_that("% and \\ are escaped in usage", {
@@ -164,7 +165,8 @@ test_that("% and \\ are escaped in usage", {
     #' Title.
     a <- function(a='%\\\\') {}")[[1]]
   expect_equal(get_tag(out, "usage")$values, escape('a(a = "%\\\\")'))
-  expect_match(format(get_tag(out, "usage")), 'a(a = "\\%\\\\\\\\")', fixed = TRUE)
+  expect_equal(format(get_tag(out, "usage")), 
+    "\\usage{\na(a = \"\\%\\\\\\\\\")\n}\n")
 })
 
 test_that("% and \\ not escaped in manual usage", {

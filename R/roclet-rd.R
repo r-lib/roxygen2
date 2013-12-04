@@ -204,28 +204,7 @@ roc_process.had <- function(roclet, partita, base_path, options = list()) {
   }
 
   # Second parse through to process @family
-  family_lookup <- invert(get_values(topics, "family"))
-  name_lookup <- get_values(topics, "name")
-
-  for(family in names(family_lookup)) {
-    related <- family_lookup[[family]]
-
-    for(topic_name in related) {
-      topic <- topics[[topic_name]]
-      others <- setdiff(related, topic_name)
-
-      if (length(others) < 1) next;
-
-      other_topics <- sort(unlist(name_lookup[others], use.names = FALSE))
-
-      links <- paste("\\code{\\link{", other_topics, "}}",
-        collapse =", ", sep = "")
-      seealso <- paste("Other ", family, ": ", links, sep = "")
-
-      add_tag(topic, new_tag("seealso", seealso))
-    }
-  }
-
+  topics <- process_family(topics)
   # Final parse to process @inheritParams
   process_inherit_params(topics)
 }

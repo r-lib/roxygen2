@@ -26,6 +26,7 @@ Roxygen: list(wrap = FALSE)
 Collate:
     'RcppExports.R'
     'description.R'
+    'family.R'
     'inherit-params.R'
     'object-defaults.R'
     'object-from-call.R'

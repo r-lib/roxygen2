@@ -62,6 +62,9 @@ roxygen2 3.0.0
 * Templates with extension .r are supported on case-sensitive file systems
   (#115). Template variables now actually work (#160, thanks to @bronaugh).
 
+* You can suppress default aliases, format and usage by using `@aliases NULL`,
+  `@format NULL` and `@usage NULL`.
+
 roxygen2 2.2.2
 --------------
 

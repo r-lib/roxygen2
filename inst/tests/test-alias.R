@@ -25,3 +25,13 @@ test_that("aliases escaped, not quoted", {
   expect_equal(alias1, c("\\alias{\\%a\\%}\n", "\\alias{a}\n"))
   expect_equal(alias2, c("\\alias{\\%a\\%}\n", "\\alias{a}\n"))
 })
+
+test_that("can use NULL to suppress default aliases", {
+  out <- roc_proc_text(roc, "
+    #' @aliases NULL
+    #' @name a
+    NULL")[[1]]
+  
+  expect_equal(get_tag(out, "alias")$values, character())
+})
+

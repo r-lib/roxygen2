@@ -248,16 +248,13 @@ roclet_rd_one <- function(partitum, base_path) {
 
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
-  add_tag(rd, new_tag("alias", name))
+  add_tag(rd, alias_tag(partitum, name))
   
   formals <- formals(partitum$object$value)
   add_tag(rd, new_tag("formals", names(formals)))
 
   add_tag(rd, process_description(partitum, base_path))
 
-  add_tag(rd, process_had_tag(partitum, 'aliases', function(tag, param) {
-    new_tag('alias', str_split(str_trim(param), "\\s+")[[1]])
-  }))
   add_tag(rd, usage_tag(partitum))
   add_tag(rd, process.arguments(partitum))
   add_tag(rd, process.slot(partitum))

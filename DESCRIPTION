@@ -25,6 +25,7 @@ LinkingTo: Rcpp
 Roxygen: list(wrap = FALSE)
 Collate:
     'RcppExports.R'
+    'alias.R'
     'description.R'
     'family.R'
     'inherit-params.R'

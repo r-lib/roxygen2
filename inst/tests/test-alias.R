@@ -11,7 +11,6 @@ test_that("aliases split into pieces", {
   expect_match(get_tag(out, "alias")$values, fixed("b"), all = FALSE)
 })
 
-
 test_that("aliases escaped, not quoted", {
   out1 <- roc_proc_text(roc, "
     #' @aliases a

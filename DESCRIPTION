@@ -21,7 +21,7 @@ Imports:
     methods
 Suggests:
     testthat (>= 0.7.1.99)
-LinkingTo: Rcpp
+LinkingTo: Rcpp (>= 0.10.6)
 Roxygen: list(wrap = FALSE)
 Collate:
     'RcppExports.R'

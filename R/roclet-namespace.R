@@ -140,9 +140,7 @@ default_export.s4method  <- function(x, block) export_s4_method(x$name)
 #' @export
 default_export.s3method  <- function(x, block) export_s3_method(attr(x$value, "s3method"))
 #' @export
-default_export.rcclass   <- function(x, block) {
-  c(export(x$name), export_class(x$name))
-}
+default_export.rcclass   <- function(x, block) export_class(x$name)
 #' @export
 default_export.default   <- function(x, block) export(x$name)
 #' @export

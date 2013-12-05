@@ -78,6 +78,17 @@ test_that("export uses name if no object present", {
   expect_equal(out, 'export(x)')
 })
 
+
+test_that("default export uses exportClass for RC objects", {
+  out <- roc_proc_text(roc, "
+    #' Title
+    #' 
+    #' @export
+    x <- setRefClass('X')
+  ")
+  expect_equal(out, 'exportClasses(X)')
+})
+
 test_that("exportMethod overrides default method name", {
   out <- roc_proc_text(roc, "
     #' @exportMethod c

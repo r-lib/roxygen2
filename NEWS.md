@@ -11,10 +11,11 @@ and generics, or for RC classes.
   also use a more sophisticated line wrapping algorithm so that they should
   cause fewer problems with the R CMD check line limit. (#89, #125).
 
-* S4 classes and methods, and RC classes, are given better default topics, 
+* S4 classes, S4 methods, and RC classes are given better default topics, 
   and the file names corresponding to those topics are shorter.
 
-* S4 methods will automatically inherit the parameters from their generic.
+* S4 methods will automatically inherit parameter documentation from their 
+  generic.
 
 * `@slot name description` allows you to document the slots of a S4 class.
 
@@ -35,10 +36,10 @@ results in a list. Currently only `wrap` and `roclet` values are supported:
 
 Roxygen 3.0 also includes a number of minor fixes and improvements:
 
-* Infix functions are now escaped correctly in NAMESPACE. (Thanks to 
+* Infix functions are now escaped correctly in the `NAMESPACE`. (Thanks to 
   @crowding, #111)
 
-* `roxygenise()` now works more like `devtools::document()`, only ever working
+* `roxygenise()` now works more like `devtools::document()` and only ever works
   in the current directory. The arguments `roxygen.dir`, `overwrite`, 
   `copy.package` and `unlink.target` have been deprecated due to potential
   data loss problems.
@@ -63,7 +64,7 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 * Always use C locale when sorting `NAMESPACE` file or tags in `.Rd` files.
   This ensures a consistent ordering across systems (#127).  
 
-* Templates with extension .r are supported on case-sensitive file systems
+* Templates with extension `.r` are supported on case-sensitive file systems
   (#115). Template variables now actually work (#160, thanks to @bronaugh).
 
 * Suppress default aliases, format and usage with `@aliases NULL`,

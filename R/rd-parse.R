@@ -3,7 +3,7 @@ get_rd <- function(topic, package = NULL) {
   top <- eval(help_call)
   if (length(top) == 0) return(NULL)
   
-  utils:::.getHelpFile(top)
+  internal_f(utils, .getHelpFile)(top)
 }
 
 # get_rd should parse Rd into a rd_file so I don't need to maintain
@@ -16,7 +16,8 @@ get_tags <- function(rd, tag) {
 }
 
 rd2rd <- function(x) {
-  paste(unlist(tools:::as.character.Rd(x)), collapse = "")
+  chr <- internal_f(tools, as.character.Rd)(x)
+  paste(unlist(chr), collapse = "")
 }
 
 # rd_arguments(get_rd("mean"))

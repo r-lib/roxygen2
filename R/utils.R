@@ -1,3 +1,13 @@
+internal_f <- function(p, f) {
+  p <- as.character(substitute(p))
+  f <- as.character(substitute(f))
+  
+  stopifnot(is.character(p), length(p) == 1)
+  stopifnot(is.character(f), length(f) == 1)
+  
+  get(f, envir = asNamespace(p))
+}
+
 "%||%" <- function(a, b) {
   if (!is.null(a)) a else b
 }

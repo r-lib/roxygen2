@@ -59,3 +59,16 @@ test_that("deleted objects not documented", {
 })
 
 
+test_that("documenting unknown function requires name", {
+  expect_error(roc_proc_text(rd_roclet(), "
+    #' Virtual Class To Enforce Max Slot Lenght
+    #' 
+    #' @export
+    setClass('A')
+    
+    #' Validity function.
+    setValidity('A', function(object) TRUE)  
+    "),
+    "Missing name"
+  )
+})

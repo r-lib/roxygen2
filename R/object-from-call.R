@@ -3,11 +3,12 @@ object_from_call <- function(call, env, block) {
   
   call <- standardise_call(call, env)
   name <- as.character(call[[1]])
-  if (length(name) > 1) return(srcref)
+  
+  if (length(name) > 1) return(NULL)
   
   # Dispatch to registered srcref parsers based on function name
   parser <- find_parser(name)
-  if (is.null(parser)) return(srcref)
+  if (is.null(parser)) return(NULL)
   
   parser(call, env, block)
 }

@@ -21,7 +21,7 @@ is_s3_generic <- function(name, env = parent.frame()) {
   
   if (is.primitive(f)) {
     known_generics <- c(names(.knownS3Generics),
-      internal_f(tools, .get_internal_S3_generics)())
+      internal_f("tools", ".get_internal_S3_generics")())
     return(name %in% known_generics)
   }
   

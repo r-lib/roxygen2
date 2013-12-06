@@ -1,7 +1,4 @@
 internal_f <- function(p, f) {
-  p <- as.character(substitute(p))
-  f <- as.character(substitute(f))
-  
   stopifnot(is.character(p), length(p) == 1)
   stopifnot(is.character(f), length(f) == 1)
   

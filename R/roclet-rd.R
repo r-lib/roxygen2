@@ -196,7 +196,15 @@ roc_process.had <- function(roclet, partita, base_path, options = list()) {
 
   topics <- list()
   for (partitum in partita) {
-    new <- roclet_rd_one(partitum, base_path)
+    withCallingHandlers({
+      new <- roclet_rd_one(partitum, base_path)
+    }, error = function(e) {
+      loc <- srcref_location(partitum$srcref)
+      msg <- paste0("Roclet processing error", loc, "\n", e$message)
+      call <- sys.call(-2)
+      stop(simpleError(msg, call))
+    })
+    
     if (is.null(new)) next
     
     old <- topics[[new$filename]]

@@ -116,6 +116,7 @@ usage_args <- function(args) {
   arg_to_text <- function(arg) {
     if (is.missing.arg(arg)) return("")
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
+    text <- paste0(text, collapse = "\n")
     Encoding(text) <- "UTF-8"
     
     text

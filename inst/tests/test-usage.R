@@ -91,8 +91,17 @@ test_that("default usage correct for S4 methods with different args to generic",
   expect_equal(get_tag(out[[2]], "usage")$value, 
     rd("\\S4method{testfun}{matrix}(x, add = FALSE, ...)"))
 })
-  
-  
+
+
+test_that("argument containing function is generates correct usage", {
+  out <- roc_proc_text(roc, "
+    #' Title.
+    a <- function(a= function(x) {1}) {}")[[1]]
+  expect_equal(get_tag(out, "usage")$values, rd("a(a = function(x) {     1 })"))
+})
+
+
+
 # @usage -----------------------------------------------------------------------
 
 test_that("@usage overrides default", {

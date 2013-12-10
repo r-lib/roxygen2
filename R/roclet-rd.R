@@ -258,8 +258,10 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, new_tag("name", name))
   add_tag(rd, alias_tag(partitum, name))
   
-  formals <- formals(partitum$object$value)
-  add_tag(rd, new_tag("formals", names(formals)))
+  if (is.function(partitum$object$value)) {
+    formals <- formals(partitum$object$value)
+    add_tag(rd, new_tag("formals", names(formals)))    
+  }
 
   add_tag(rd, process_description(partitum, base_path))
 

@@ -84,3 +84,12 @@ test_that("methods inherit from generics by default", {
   
   expect_equal(names(get_tag(out, "arguments")$values), c("object"))
 })
+
+test_that("data objects don't get params", {
+  out <- roc_proc_text(roc, "
+    #' @rdname xy
+    x <- 'x'
+  ")[[1]]
+  expect_equal(get_tag(out, "arguments"), NULL)
+  
+})

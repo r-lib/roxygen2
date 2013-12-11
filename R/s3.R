@@ -18,6 +18,7 @@ is_s3_generic <- function(name, env = parent.frame()) {
   
   f <- get(name, envir = env)
   if (!is.function(f)) return(FALSE)
+  if (inherits(f, "groupGenericFunction")) return(TRUE)
   
   if (is.primitive(f)) {
     known_generics <- c(names(.knownS3Generics),

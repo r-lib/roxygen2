@@ -29,6 +29,15 @@ test_that("user defined generics & methods detected", {
   expect_true(is_s3_method("my_method.character"))
 })
 
+
+test_that("methods for group generics detected", {
+  Ops.myclass <- function(x) x
+  
+  expect_false(is_s3_generic("Ops.myclass"))
+  expect_true(is_s3_method("Ops.myclass"))
+})
+
+
 test_that("user defined generics detected even if use non-standard", {
   my_method <- function(x) {
     x <- 1

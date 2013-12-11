@@ -1,5 +1,7 @@
 # roxygen2 3.0.0.99
 
+* `is_s3_generic()` now recognises group generics (#166)
+
 * Don't try and add parameters for data objects (#165)
 
 # roxygen2 3.0.0

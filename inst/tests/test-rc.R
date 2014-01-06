@@ -16,6 +16,11 @@ test_that("first string in function is docstring", {
   expect_equal(docstring(function() {"a"; 1}), "a")
 })
 
+test_that("trim_docstring handles indentation correct", {
+  expect_equal(trim_docstring("a\n  b\n  c"), "a\nb\nc")
+  expect_equal(trim_docstring("a\nb\nc"), "a\nb\nc")
+})
+
 # Method documentation ---------------------------------------------------------
 
 

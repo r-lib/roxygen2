@@ -29,6 +29,31 @@ docstring <- function(f) {
   b <- body(f)
   if (!identical(b[[1]], quote(`{`)) || length(b) <= 2) return(NULL)
   
-  b[[2]]
+  trim_docstring(b[[2]])
 }
 
+# Implementation converted from 
+# http://www.python.org/dev/peps/pep-0257/#handling-docstring-indentation
+trim_docstring <- function(docstring) {
+  if (docstring == "") return(NULL)
+  
+  # Convert tabs to spaces (using four spaces for tabs)
+  # and split into a vector of lines:
+  lines <- strsplit(gsub("\t", "    ", docstring), "\n")[[1]]
+  
+  # Determine minimum indentation (first line doesn't count):
+  stripped <- gsub("^ +", "", lines)
+  indent <- min(nchar(lines[-1]) - nchar(stripped[-1]))
+  
+  # Remove indentation (first line is special):
+  trimmed <- c(
+    gsub("^ +| + $", "", lines[1]), 
+    substr(lines[-1], indent + 1, 1000L)  
+  )
+  
+  # Return a single string:
+  string <- paste0(trimmed, collapse = "\n")
+  
+  # Strip off trailing and leading blank lines:
+  gsub("^\n+|\n+$", "", string)
+}

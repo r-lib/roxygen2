@@ -29,7 +29,10 @@ docstring <- function(f) {
   b <- body(f)
   if (!identical(b[[1]], quote(`{`)) || length(b) <= 2) return(NULL)
   
-  trim_docstring(b[[2]])
+  first <- b[[2]]
+  if (!is.character(first)) return(NULL)
+  
+  trim_docstring(first)
 }
 
 # Implementation converted from 

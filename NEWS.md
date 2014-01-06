@@ -6,6 +6,33 @@
 
 * Sort output of families using C locale. (#171)
 
+## Documentation for reference classes
+
+It's now possible to document reference classes, using the "docstring" 
+convention described in `?setRefClass`. If you want to provide a short
+paragraph description of what a method does, make the first component of the
+message a string containing the description, e.g.:
+
+```R
+setRefClass("A", methods = list(
+  f = function(a, b) {
+    "Take numbers \code{a} and \code{b} and add them together"
+    a + b
+  }
+))
+```
+
+Unlike the documentation for R functions, the documentation for methods can
+be quite succinct. 
+
+Roxygen adopts the convention that documented methods are public, and will
+be listed in the man page for the object. Undocumented methods are private and
+will not be shown in the documentation. The methods for all superclasses are
+also listed, so that you don't need to flip through multiple pages of 
+documentation to understand what you can do with an object. All documented
+methods will be placed in a bulleted list in a section titled "Methods", the
+method usage will be automatically prepended to the docstring.
+
 # roxygen2 3.0.0
 
 Roxygen2 now fully supports S4 and RC (reference classes) - you should no 

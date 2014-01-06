@@ -16,7 +16,7 @@ test_that("first string in function is docstring", {
   expect_equal(docstring(function() {"a"; 1}), "a")
 })
 
-test_that("trim_docstring handles indentation correct", {
+test_that("trim_docstring handles indentation correctly", {
   expect_equal(trim_docstring("a\n  b\n  c"), "a\nb\nc")
   expect_equal(trim_docstring("a\nb\nc"), "a\nb\nc")
 })
@@ -60,7 +60,7 @@ test_that("RC methods included included in own section", {
     ))
   ")[[1]]
   
-  method <- get_tag(out, "section")$values[[1]]
-  expect_equal(method$name, "Methods")
-  expect_match(method$content, "This function has a docstring")
+  methods <- get_tag(out, "rcmethods")$values
+  expect_equal(names(methods), "f")
+  expect_match(methods[[1]], "This function has a docstring")
 })

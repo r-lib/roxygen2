@@ -156,3 +156,13 @@ format.examples_tag <- function(x, ...) {
   values <- str_c(x$values, collapse = "\n")
   rd_tag(x$tag, values, space = TRUE)
 }
+
+#' @export
+format.rcmethods_tag <- function(x, ...) {
+  paste0(
+    "\\section{Methods}\n", 
+    "\\itemize{\n", 
+    paste0("\\item ", x$values, collapse = "\n\n"),
+    "\n}\n"
+  )
+}

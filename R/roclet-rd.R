@@ -367,13 +367,7 @@ process_methods <- function(block) {
   }
 
   descs <- unlist(lapply(methods, method_desc))
-  contents <- paste0(
-    "\\itemize{\n", 
-    paste0("\\item ", descs, collapse = "\n\n"),
-    "\n}\n"
-  )
-  
-  new_tag("section", list(list(name = "Methods", content = contents)))
+  new_tag("rcmethods", descs)
 }
 
 

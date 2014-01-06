@@ -40,6 +40,7 @@ trim_docstring <- function(docstring) {
   # Convert tabs to spaces (using four spaces for tabs)
   # and split into a vector of lines:
   lines <- strsplit(gsub("\t", "    ", docstring), "\n")[[1]]
+  if (length(lines) == 1) return(strip(lines))
   
   # Determine minimum indentation (first line doesn't count):
   stripped <- gsub("^ +", "", lines)
@@ -47,7 +48,7 @@ trim_docstring <- function(docstring) {
   
   # Remove indentation (first line is special):
   trimmed <- c(
-    gsub("^ +| + $", "", lines[1]), 
+    strip(lines[1]),
     substr(lines[-1], indent + 1, 1000L)  
   )
   
@@ -57,3 +58,5 @@ trim_docstring <- function(docstring) {
   # Strip off trailing and leading blank lines:
   gsub("^\n+|\n+$", "", string)
 }
+
+strip <- function(x) gsub("^ +| + $", "", x) 

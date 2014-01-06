@@ -6,8 +6,8 @@ rc_methods <- function(obj) {
   }
   
   base_methods <- getRefClass("envRefClass")$methods()
-  method_names <- setdiff(ls(env = obj@refMethods), base_methods)
-  methods <- mget(method_names, env = obj@refMethods)
+  method_names <- setdiff(ls(envir = obj@refMethods), base_methods)
+  methods <- mget(method_names, envir = obj@refMethods)
   
   object_from_method <- function(f) {
     object("rcmethod", f@name, f)

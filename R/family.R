@@ -12,9 +12,9 @@ process_family <- function(topics) {
       if (length(others) < 1) next;
       
       by_file <- vapply(alias_lookup[others], function(x) {
-        paste0("\\code{\\link{", sort(x), "}}", collapse = ", ")
+        paste0("\\code{\\link{", sort_c(x), "}}", collapse = ", ")
       }, FUN.VALUE = character(1))
-      links <- paste(sort(by_file), collapse ="; ")
+      links <- paste(sort_c(by_file), collapse ="; ")
       
       seealso <- paste("Other ", family, ": ", sep = "")
       out <- strwrap(links, initial = seealso, width = 60, exdent = 2)

@@ -8,14 +8,16 @@
 #'   "rcclass", or "data".
 #' @param name Name of the object being documented
 #' @param value The object itself. 
+#' @param ... optional additional fields used by subclasses
 #' @param alias Used for \code{\link{setClass}} and \code{\link{setRefClass}}
 #'   to capture the name of the created object.
 #' @export
 #' @keywords internal
-object <- function(subclass, name, value, alias = NULL) {
+object <- function(subclass, name, value, ..., alias = NULL) {
   structure(list(
     name = name, 
     value = value,
+    ...,
     alias = alias), 
   class = c(subclass, "object"))
 }

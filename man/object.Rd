@@ -2,7 +2,7 @@
 \alias{object}
 \title{Constructors for S3 object to represent R object.}
 \usage{
-object(subclass, name, value, alias = NULL)
+object(subclass, name, value, ..., alias = NULL)
 }
 \arguments{
   \item{subclass}{This is an abstract class so this must be
@@ -13,6 +13,8 @@ object(subclass, name, value, alias = NULL)
   \item{name}{Name of the object being documented}
 
   \item{value}{The object itself.}
+
+  \item{...}{optional additional fields used by subclasses}
 
   \item{alias}{Used for \code{\link{setClass}} and
   \code{\link{setRefClass}} to capture the name of the

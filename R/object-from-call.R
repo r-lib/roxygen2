@@ -43,7 +43,8 @@ parser_assignment <- function(call, env, block) {
   
   if (inherits(value, "refObjectGenerator")) {
     class <- as.character(value@className)
-    object("rcclass", class, getRefClass(class), alias = assignee)
+    object("rcclass", class, getRefClass(class), methods = rc_methods(value), 
+      alias = assignee)
   } else if (inherits(value, "classGeneratorFunction")) {
     class <- as.character(value@className)
     object("s4class", class, getClass(class), alias = assignee)
@@ -77,7 +78,7 @@ parser_setRefClass <- function(call, env, block) {
   name <- as.character(call$Class)
   value <- getRefClass(name)
   
-  object("rcclass", name, value)
+  object("rcclass", name, value, methods = rc_methods(value))
 }
 
 #' @importFrom methods getGeneric

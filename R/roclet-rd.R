@@ -264,7 +264,8 @@ roclet_rd_one <- function(partitum, base_path) {
   }
 
   add_tag(rd, process_description(partitum, base_path))
-
+  add_tag(rd, process_methods(partitum))
+  
   add_tag(rd, usage_tag(partitum))
   add_tag(rd, process.arguments(partitum))
   add_tag(rd, process.slot(partitum))
@@ -349,6 +350,32 @@ process_description <- function(partitum, base_path) {
     new_tag("description", description),
     new_tag("details", details))
 }
+
+
+process_methods <- function(block) {
+  obj <- block$object
+  if (!inherits(obj, "rcclass")) return()
+  
+  methods <- obj$methods
+  if (is.null(obj$methods)) return()
+  
+  method_desc <- function(obj) {
+    desc <- docstring(obj$value@.Data)
+    if (is.null(desc)) return()
+    
+    paste0("\\code{", function_usage(obj$name, formals(obj$value@.Data)),  "}: ", desc)
+  }
+
+  descs <- unlist(lapply(methods, method_desc))
+  contents <- paste0(
+    "\\itemize{\n", 
+    paste0("\\item ", descs, collapse = "\n\n"),
+    "\n}\n"
+  )
+  
+  new_tag("section", list(list(name = "Methods", content = contents)))
+}
+
 
 process.arguments <- function(partitum) {
   params <- partitum[names(partitum) == "param"]

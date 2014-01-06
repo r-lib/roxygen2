@@ -10,7 +10,7 @@ rc_methods <- function(obj) {
   methods <- mget(method_names, env = obj@refMethods)
   
   object_from_method <- function(f) {
-    object("rcmethod", f, f@name)
+    object("rcmethod", f@name, f)
   }
   lapply(methods, object_from_method)
 }
@@ -31,3 +31,4 @@ docstring <- function(f) {
   
   b[[2]]
 }
+

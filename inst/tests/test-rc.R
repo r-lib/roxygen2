@@ -43,3 +43,19 @@ test_that("rc_methods lists all methods", {
   expect_equal(length(rc_methods(A)), 2)
   expect_equal(length(rc_methods(B)), 4)
 })
+
+test_that("RC methods included included in own section", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Class A
+    setRefClass('A', methods = list(
+      f = function() {
+      'This function has a docstring'
+      1
+      }
+    ))
+  ")[[1]]
+  
+  method <- get_tag(out, "section")$values[[1]]
+  expect_equal(method$name, "Methods")
+  expect_match(method$content, "This function has a docstring")
+})

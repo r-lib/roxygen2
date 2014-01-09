@@ -23,6 +23,7 @@ test_that("trim_docstring handles indentation correctly", {
 
 # Method documentation ---------------------------------------------------------
 
+env <- new.env()
 
 A <- setRefClass("A", methods = list(
   f = function() {
@@ -32,7 +33,7 @@ A <- setRefClass("A", methods = list(
   g = function() {
     "This function doesn't"
   }
-))
+), where = env)
 
 B <- setRefClass("B", contains = "A", methods = list(
   f1 = function() {
@@ -42,7 +43,7 @@ B <- setRefClass("B", contains = "A", methods = list(
   g1 = function() {
     "This function doesn't"
   }
-))
+), where = env)
 
 test_that("rc_methods lists all methods", {
   expect_equal(length(rc_methods(A)), 2)

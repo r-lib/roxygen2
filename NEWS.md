@@ -10,6 +10,8 @@
 
 * Sort output of families using C locale. (#171)
 
+* `@family` now escapes function names in references. (#172)
+
 ## Documentation for reference classes
 
 It's now possible to document reference classes, using the "docstring" 

@@ -11,8 +11,9 @@ process_family <- function(topics) {
       
       if (length(others) < 1) next;
       
+      
       by_file <- vapply(alias_lookup[others], function(x) {
-        paste0("\\code{\\link{", sort_c(x), "}}", collapse = ", ")
+        paste0("\\code{\\link{", sort_c(escape(x)), "}}", collapse = ", ")
       }, FUN.VALUE = character(1))
       links <- paste(sort_c(by_file), collapse ="; ")
       

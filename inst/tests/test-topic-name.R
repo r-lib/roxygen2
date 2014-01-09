@@ -71,15 +71,17 @@ test_that("@name overides default", {
 })
 
 test_that("refclass topicname has class prefix", {
-  setRefClass("X1", where = environment())
-  on.exit(removeClass("X1"))
-  obj <- object("rcclass", "X1", getRefClass("X1"))
+  env <- new.env()
+  setRefClass("X1", where = env)
+  on.exit(removeClass("X1", where = env))
+  obj <- object("rcclass", "X1", getRefClass("X1", where = env))
   expect_equal(default_topic_name(obj), "X1-class")
 })
 
 test_that("class topicname has class prefix", {
-  setClass("Y1", where = environment())
-  on.exit(removeClass("Y1"))
-  obj <- object("s4class", "Y1", getClass("Y1", where = environment()))
+  env <- new.env()
+  setClass("Y1", where = env)
+  on.exit(removeClass("Y1", where = env))
+  obj <- object("s4class", "Y1", getClass("Y1", where = env))
   expect_equal(default_topic_name(obj), "Y1-class")
 })

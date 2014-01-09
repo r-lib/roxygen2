@@ -52,8 +52,8 @@ test_that("rc_methods lists all methods", {
 
 test_that("RC methods included included in own section", {
   out <- roc_proc_text(rd_roclet(), "
-    #' Class A
-    setRefClass('A', methods = list(
+    #' Class ABC
+    setRefClass('ABC', methods = list(
       f = function() {
       'This function has a docstring'
       1
@@ -65,3 +65,6 @@ test_that("RC methods included included in own section", {
   expect_equal(names(methods), "f")
   expect_match(methods[[1]], "This function has a docstring")
 })
+
+removeClass("B", where = env)
+removeClass("A", where = env)

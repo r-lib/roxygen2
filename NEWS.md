@@ -1,5 +1,9 @@
 # roxygen2 3.0.0.99
 
+* `roxygenise()` now invisible returns a list of all files generated
+  by individual roclets. This is useful for tools that want to figure
+  out if there are extra files in the `man/` directory.
+
 * `is_s3_generic()` now recognises group generics (#166)
 
 * Don't try and add parameters for data objects (#165)

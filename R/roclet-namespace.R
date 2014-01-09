@@ -123,6 +123,8 @@ roc_output.namespace <- function(roclet, results, base_path, options = list()) {
     cat("Updating namespace directives\n")
     writeLines(results, NAMESPACE)
   }
+  
+  NAMESPACE
 }
 
 # Functions that take complete partitum and return NAMESPACE lines

@@ -45,13 +45,12 @@ roxygenize <- function(package.dir = ".",
   parsed <- parse_package(base_path, load_code)
 
   roclets <- str_c(roclets, "_roclet", sep = "")
-  for (roclet in roclets) {
+  roc_out <- function(roclet) {
     roc <- get(roclet, mode = "function")()
     results <- roc_process(roc, parsed, base_path, options = options)
-    roc_output(roc, results, base_path, options = options)
+    roc_output(roc, results, base_path, options = options)    
   }
-  
-  invisible()
+  invisible(unlist(lapply(roclets, roc_out)))
 }
 
 #' @rdname roxygenize

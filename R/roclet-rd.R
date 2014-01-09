@@ -301,6 +301,8 @@ roc_output.had <- function(roclet, results, base_path, options = list()) {
 
   paths <- file.path(man, names(results))
   mapply(write_if_different, paths, contents)
+  
+  paths
 }
 
 # Process title, description and details.

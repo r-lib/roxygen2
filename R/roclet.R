@@ -26,6 +26,7 @@ roc_proc_text <- function(roclet, input, options = list()) {
 
 # Internal methods for processing and output
 
+# Methods should return character vector describing all modified files.
 roc_output <- function(roclet, results, base_path, options = list()) {
   UseMethod("roc_output", roclet)
 }

@@ -84,7 +84,7 @@ see \cite{Writing R Extensions}
   Only unique directives are saved to the \file{NAMESPACE}
   file, so you can repeat them as needed to maintain a
   close link between the functions where they are needed
-  and the namespace file..
+  and the namespace file.
 }
 \examples{
 #' An example file, example.R, which imports

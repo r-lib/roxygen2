@@ -72,7 +72,7 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 #'
 #' Only unique directives are saved to the \file{NAMESPACE} file, so you can
 #' repeat them as needed to maintain a close link between the functions where
-#' they are needed and the namespace file..
+#' they are needed and the namespace file.
 #'
 #' @family roclets
 #' @examples

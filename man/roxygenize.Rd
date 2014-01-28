@@ -5,11 +5,13 @@
 \usage{
 roxygenize(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = NULL, load_code = source_package)
+  unlink.target = FALSE, roclets = c("collate", "namespace", "rd"),
+  wrap = FALSE, load_code = source_package)
 
 roxygenise(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = NULL, load_code = source_package)
+  unlink.target = FALSE, roclets = c("collate", "namespace", "rd"),
+  wrap = FALSE, load_code = source_package)
 }
 \arguments{
   \item{package.dir}{the package's top directory}
@@ -17,10 +19,9 @@ roxygenise(package.dir = ".", roxygen.dir = package.dir,
   \item{roxygen.dir,copy.package,overwrite,unlink.target}{deprecated}
 
   \item{roclets}{character vector of roclet names to apply
-  to package.  This defaults to \code{NULL}, which will use
-  the \code{roclets} fields in the list provided in the
-  \code{Roxygen} DESCRIPTION field. If none are specified,
-  defaults to \code{c("collate", "namespace", "rd")}.}
+  to package}
+
+  \item{wrap}{whether to re-wrap the text in Rd}
 
   \item{load_code}{A function used to load all the R code
   in the package directory. It is called with the path to
@@ -32,9 +33,15 @@ roxygenise(package.dir = ".", roxygen.dir = package.dir,
 }
 \description{
 This is the workhorse function that uses roclets, the built-in document
-tranformation functions, to build all documentation for a package.  See
-the documentation for the individual roclets, \code{\link{rd_roclet}},
-\code{\link{namespace_roclet}}, and for \code{\link{update_collate}},
-for more details.
+tranformation functions, to build all documentation for a package. See the
+documentation for the individual roclets, \code{\link{rd_roclet}},
+\code{\link{namespace_roclet}}, and for \code{\link{update_collate}}, for
+more details.
+}
+\details{
+For the arguments \code{roclets} and \code{wrap}, we can specify their values
+in the \file{DESCRIPTION} file of a package using the \code{Roxygen} field.
+For example, \option{Roxygen: list(wrap = TRUE, roclets = c("rd"))}. This
+will overwrite the values passed to \code{roxygenize()}.
 }
 

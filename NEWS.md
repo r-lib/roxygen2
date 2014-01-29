@@ -1,5 +1,7 @@
 # roxygen2 3.0.0.99
 
+* Fixes for Rcpp 0.11.0 compatibility
+
 * `roxygenise()` now invisible returns a list of all files generated
   by individual roclets. This is useful for tools that want to figure
   out if there are extra files in the `man/` directory.
@@ -14,7 +16,7 @@
 
 ## Documentation for reference classes
 
-It's now possible to document reference classes, using the "docstring" 
+It's now possible to document reference classes, using the "docstring"
 convention described in `?setRefClass`. If you want to provide a short
 paragraph description of what a method does, make the first component of the
 message a string containing the description, e.g.:
@@ -29,33 +31,33 @@ setRefClass("A", methods = list(
 ```
 
 Unlike the documentation for R functions, the documentation for methods can
-be quite succinct. 
+be quite succinct.
 
 Roxygen adopts the convention that documented methods are public, and will
 be listed in the man page for the object. Undocumented methods are private and
 will not be shown in the documentation. The methods for all superclasses are
-also listed, so that you don't need to flip through multiple pages of 
+also listed, so that you don't need to flip through multiple pages of
 documentation to understand what you can do with an object. All documented
 methods will be placed in a bulleted list in a section titled "Methods", the
 method usage will be automatically prepended to the docstring.
 
 # roxygen2 3.0.0
 
-Roxygen2 now fully supports S4 and RC (reference classes) - you should no 
-longer need to manually add `@alias` or `@usage` tags for S4 classes, methods 
+Roxygen2 now fully supports S4 and RC (reference classes) - you should no
+longer need to manually add `@alias` or `@usage` tags for S4 classes, methods
 and generics, or for RC classes.
 
 * The default usage definitions are much better, generating the correct
   usage for data sets (#122), S3 methods (without additional `@method` tag),
-  S4 generics, S4 methods, and for replacement (#119) and infix functions. 
+  S4 generics, S4 methods, and for replacement (#119) and infix functions.
   Backslashes in function arguments in are correctly escaped. Usage statements
   also use a more sophisticated line wrapping algorithm so that they should
   cause fewer problems with the R CMD check line limit. (#89, #125).
 
-* S4 classes, S4 methods, and RC classes are given better default topics, 
+* S4 classes, S4 methods, and RC classes are given better default topics,
   and the file names corresponding to those topics are shorter.
 
-* S4 methods will automatically inherit parameter documentation from their 
+* S4 methods will automatically inherit parameter documentation from their
   generic.
 
 * `@slot name description` allows you to document the slots of a S4 class.
@@ -63,7 +65,7 @@ and generics, or for RC classes.
 S3 support has also been improved: roxygen2 now figures out whether a function
 is a S3 method or generic. (In the rare cases it does so incorrectly, use
 `@method` to manually describe the generic and class associated with a method).
-This means you can remove existing uses of `@method`, and can replace 
+This means you can remove existing uses of `@method`, and can replace
 `@S3method` with `@export`.
 
 Roxygen now has support for package specific options through the `Roxygen`
@@ -72,23 +74,23 @@ results in a list. Currently only `wrap` and `roclet` values are supported:
 
 * Turn off Rd re-wrapping with adding `Roxygen: list(wrap = FALSE)`
 
-* Change the default roclets by specifying 
+* Change the default roclets by specifying
   `Roxygen: list(roclets = c("collate", "rd"))`
 
 Roxygen 3.0 also includes a number of minor fixes and improvements:
 
-* Infix functions are now escaped correctly in the `NAMESPACE`. (Thanks to 
+* Infix functions are now escaped correctly in the `NAMESPACE`. (Thanks to
   @crowding, #111)
 
 * `roxygenise()` now works more like `devtools::document()` and only ever works
-  in the current directory. The arguments `roxygen.dir`, `overwrite`, 
+  in the current directory. The arguments `roxygen.dir`, `overwrite`,
   `copy.package` and `unlink.target` have been deprecated due to potential
   data loss problems.
 
 * The collate roclet is no longer a roclet: it processes R files using custom
   code (only statically, not dynamically) and is designed to be executed before
   the code is sourced.  Run `update_collate()` to update the Collate directive
-  based on `@include` tags - if there are none present, a collate directive 
+  based on `@include` tags - if there are none present, a collate directive
   will not be generated.
 
 * `@useDynLib` now works with more possible specifications - if you include a
@@ -99,11 +101,11 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 * `inst` directory not created by default (#56).
 
 * Explicitly depend on `utils` and `methods` packages to make roxygen
-  compatible with `Rscript` (#72). Import `digest` package instead of 
+  compatible with `Rscript` (#72). Import `digest` package instead of
   depending on it.
 
 * Always use C locale when sorting `NAMESPACE` file or tags in `.Rd` files.
-  This ensures a consistent ordering across systems (#127).  
+  This ensures a consistent ordering across systems (#127).
 
 * Templates with extension `.r` are supported on case-sensitive file systems
   (#115). Template variables now actually work (#160, thanks to @bronaugh).
@@ -121,7 +123,7 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 
 * Use unicode escapes in test files so tests pass on all platforms.
 
-* Work around bug in `gsub` in C locale by manually specifying `Encoding()`. 
+* Work around bug in `gsub` in C locale by manually specifying `Encoding()`.
 
 # roxygen2 2.2
 
@@ -138,15 +140,15 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 
 ## Bug fixes
 
-* `write.description()` now tries much harder to respect 
-  users' original DESCRIPTION field formatting instead of forcibly 
+* `write.description()` now tries much harder to respect
+  users' original DESCRIPTION field formatting instead of forcibly
   re-wrapping certain fields at 60 characters.
 
 * `@details` and `@description` now work correctly
 
-* `@useDynLib` now works correctly: 
+* `@useDynLib` now works correctly:
 
-       @useDynLib packageName routine1 routine2 
+       @useDynLib packageName routine1 routine2
 
    produces
 
@@ -158,7 +160,7 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 
 * All namespace import directives now behave in the same way as the export
   directives, producing multiple single directives instead one multiple
-  directive: `@importClassesFrom pkg a b` now produces 
+  directive: `@importClassesFrom pkg a b` now produces
   `importClassesFrom(pkg, a)` and `importClassesFrom(pkg, b)`
 
 * In example files included with `@example` you can now use infix operators
@@ -189,7 +191,7 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 * Objects that no longer exist are not documented (Fixes #42)
 
 * Errors now display file name and line number of roxygen block to help you
-  find the problem. Thanks to code contributions from Renaud Gaujoux. 
+  find the problem. Thanks to code contributions from Renaud Gaujoux.
   (Fixes #13)
 
 * Documentation with no untagged text but with `@title`, `@description` and
@@ -287,6 +289,6 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
   any other installed package (`package:function`). Currently only supports
   single inheritance (i.e. you can't inherit from a function that inherits
   from another function), but you can have multiple @inheritParams tags.
-  
-* `@format` has been implemented; it existed in the roxygen package but was 
+
+* `@format` has been implemented; it existed in the roxygen package but was
   actually ignored

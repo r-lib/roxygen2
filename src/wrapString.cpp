@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+//' @importFrom Rcpp evalCpp
 // [[Rcpp::export]]
 std::vector<std::string> splitByWhitespace(std::string string) {
   int n = string.length();

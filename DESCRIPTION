@@ -18,7 +18,8 @@ Imports:
     brew,
     digest,
     codetools,
-    methods
+    methods,
+    Rcpp
 Suggests:
     testthat
 LinkingTo: Rcpp (>= 0.10.6)

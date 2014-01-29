@@ -1,19 +1,5 @@
 # roxygen2 3.0.0.99
 
-* Fixes for Rcpp 0.11.0 compatibility
-
-* `roxygenise()` now invisible returns a list of all files generated
-  by individual roclets. This is useful for tools that want to figure
-  out if there are extra files in the `man/` directory.
-
-* `is_s3_generic()` now recognises group generics (#166)
-
-* Don't try and add parameters for data objects (#165)
-
-* Sort output of families using C locale. (#171)
-
-* `@family` now escapes function names in references. (#172)
-
 ## Documentation for reference classes
 
 It's now possible to document reference classes, using the "docstring"
@@ -40,6 +26,22 @@ also listed, so that you don't need to flip through multiple pages of
 documentation to understand what you can do with an object. All documented
 methods will be placed in a bulleted list in a section titled "Methods", the
 method usage will be automatically prepended to the docstring.
+
+## Minor fixes and improvements
+
+* Fixes for Rcpp 0.11.0 compatibility.
+
+* `roxygenise()` now invisible returns a list of all files generated
+  by individual roclets. This is useful for tools that want to figure
+  out if there are extra files in the `man/` directory.
+
+* `is_s3_generic()` now recognises group generics (#166).
+
+* Don't try and add parameters for data objects (#165).
+
+* Sort output of families using C locale (#171).
+
+* `@family` now escapes function names in references (#172).
 
 # roxygen2 3.0.0
 

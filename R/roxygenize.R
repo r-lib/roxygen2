@@ -1,17 +1,19 @@
 #' Process a package with the Rd, namespace and collate roclets.
 #'
 #' This is the workhorse function that uses roclets, the built-in document
-#' tranformation functions, to build all documentation for a package.  See
-#' the documentation for the individual roclets, \code{\link{rd_roclet}},
-#' \code{\link{namespace_roclet}}, and for \code{\link{update_collate}},
-#' for more details.
+#' tranformation functions, to build all documentation for a package. See the
+#' documentation for the individual roclets, \code{\link{rd_roclet}},
+#' \code{\link{namespace_roclet}}, and for \code{\link{update_collate}}, for
+#' more details.
 #'
+#' For the arguments \code{roclets} and \code{wrap}, we can specify their values
+#' in the \file{DESCRIPTION} file of a package using the \code{Roxygen} field.
+#' For example, \option{Roxygen: list(wrap = TRUE, roclets = c("rd"))}. This
+#' will overwrite the values passed to \code{roxygenize()}.
 #' @param package.dir the package's top directory
 #' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
-#' @param roclets character vector of roclet names to apply to package. 
-#'   This defaults to \code{NULL}, which will use the \code{roclets} fields in 
-#'   the list provided in the \code{Roxygen} DESCRIPTION field. If none are 
-#'   specified, defaults to \code{c("collate", "namespace", "rd")}.
+#' @param roclets character vector of roclet names to apply to package
+#' @param wrap whether to re-wrap the text in Rd
 #' @param load_code A function used to load all the R code in the package
 #'   directory. It is called with the path to the package, and it should return
 #'   an environment containing all the sourced code.
@@ -22,7 +24,8 @@ roxygenize <- function(package.dir = ".",
                        copy.package=package.dir != roxygen.dir,
                        overwrite=TRUE,
                        unlink.target=FALSE,
-                       roclets = NULL,
+                       roclets = c("collate", "namespace", "rd"),
+                       wrap = FALSE,
                        load_code = source_package) {
   if (copy.package) {
     stop("Non-inplace roxygen no longer supported")
@@ -31,9 +34,10 @@ roxygenize <- function(package.dir = ".",
   base_path <- normalizePath(package.dir)
   man_path <- file.path(base_path, "man")
   dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
-  
-  options <- load_options(base_path)
-  roclets <- roclets %||% options$roclets
+
+  defaults <- list(wrap = wrap, roclets = roclets)
+  options <- modifyList(defaults, load_options(base_path))
+  roclets <- options$roclets
 
   # Special case collate: it doesn't need to execute code, and must be run
   # first to ensure that code can be executed
@@ -60,16 +64,6 @@ roxygenise <- roxygenize
 load_options <- function(base_path) {
   desc_path <- file.path(base_path, "DESCRIPTION")
   desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
-  
-  if (is.na(desc_opts)) {
-    opts <- list()
-  } else {
-    opts <- eval(parse(text = desc_opts))
-  }
-  
-  defaults <- list(
-    wrap = TRUE,
-    roclets = c("collate", "namespace", "rd")
-  )
-  modifyList(defaults, opts)
+
+  if (is.na(desc_opts)) list() else eval(parse(text = desc_opts))
 }

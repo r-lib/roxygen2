@@ -1,5 +1,8 @@
 # roxygen2 3.1.0.99
 
+* Roxygen2 now adds a comment to all generated files so that you know
+  they've been generated, and should not be hand edited.
+
 * Usage statements in generated roxygen statements non-longer contain
   non-ASCII characters and will be wrapped if long. (#180)
 

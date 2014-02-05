@@ -8,9 +8,9 @@
 #'
 #' @param package.dir the package's top directory
 #' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
-#' @param roclets character vector of roclet names to apply to package. 
-#'   This defaults to \code{NULL}, which will use the \code{roclets} fields in 
-#'   the list provided in the \code{Roxygen} DESCRIPTION field. If none are 
+#' @param roclets character vector of roclet names to apply to package.
+#'   This defaults to \code{NULL}, which will use the \code{roclets} fields in
+#'   the list provided in the \code{Roxygen} DESCRIPTION field. If none are
 #'   specified, defaults to \code{c("collate", "namespace", "rd")}.
 #' @param load_code A function used to load all the R code in the package
 #'   directory. It is called with the path to the package, and it should return
@@ -27,11 +27,12 @@ roxygenize <- function(package.dir = ".",
   if (copy.package) {
     stop("Non-inplace roxygen no longer supported")
   }
+  first_time_check(package.dir)
 
   base_path <- normalizePath(package.dir)
   man_path <- file.path(base_path, "man")
   dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
-  
+
   options <- load_options(base_path)
   roclets <- roclets %||% options$roclets
 
@@ -48,7 +49,7 @@ roxygenize <- function(package.dir = ".",
   roc_out <- function(roclet) {
     roc <- get(roclet, mode = "function")()
     results <- roc_process(roc, parsed, base_path, options = options)
-    roc_output(roc, results, base_path, options = options)    
+    roc_output(roc, results, base_path, options = options)
   }
   invisible(unlist(lapply(roclets, roc_out)))
 }
@@ -60,13 +61,13 @@ roxygenise <- roxygenize
 load_options <- function(base_path) {
   desc_path <- file.path(base_path, "DESCRIPTION")
   desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
-  
+
   if (is.na(desc_opts)) {
     opts <- list()
   } else {
     opts <- eval(parse(text = desc_opts))
   }
-  
+
   defaults <- list(
     wrap = TRUE,
     roclets = c("collate", "namespace", "rd")

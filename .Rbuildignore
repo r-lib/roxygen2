@@ -1,5 +1,3 @@
-^sandbox$
-^doc$
 ^man-roxygen$
 ^.*\.Rproj$
 ^\.Rproj\.user$

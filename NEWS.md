@@ -1,5 +1,7 @@
 # roxygen2 3.1.0.99
 
+* New `@field` tag for documenting the fields on a reference class. (#181)
+
 # roxygen2 3.1.0
 
 ## Documentation for reference classes

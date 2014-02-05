@@ -29,6 +29,7 @@ register.preref.parsers(parse.value,
 register.preref.parsers(parse.name.description,
                         'param',
                         'slot',
+                        'field',
                         'method')
 
 register.preref.parsers(parse.name,
@@ -204,9 +205,9 @@ roc_process.had <- function(roclet, partita, base_path, options = list()) {
       call <- sys.call(-2)
       stop(simpleError(msg, call))
     })
-    
+
     if (is.null(new)) next
-    
+
     old <- topics[[new$filename]]
     topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
   }
@@ -247,7 +248,7 @@ roclet_rd_one <- function(partitum, base_path) {
   if (any(names(partitum) == "noRd")) return()
 
   # Figure out topic name
-  name <- partitum$name %||% default_topic_name(partitum$object) %||% 
+  name <- partitum$name %||% default_topic_name(partitum$object) %||%
     roxygen_stop("Missing name", srcref = partitum$srcref)
 
   # Work out file name and initialise Rd object
@@ -257,18 +258,19 @@ roclet_rd_one <- function(partitum, base_path) {
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
   add_tag(rd, alias_tag(partitum, name))
-  
+
   if (is.function(partitum$object$value)) {
     formals <- formals(partitum$object$value)
-    add_tag(rd, new_tag("formals", names(formals)))    
+    add_tag(rd, new_tag("formals", names(formals)))
   }
 
   add_tag(rd, process_description(partitum, base_path))
   add_tag(rd, process_methods(partitum))
-  
+
   add_tag(rd, usage_tag(partitum))
-  add_tag(rd, process.arguments(partitum))
-  add_tag(rd, process.slot(partitum))
+  add_tag(rd, process_param(partitum))
+  add_tag(rd, process_slot(partitum))
+  add_tag(rd, process_field(partitum))
   add_tag(rd, process.docType(partitum))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
@@ -296,12 +298,12 @@ roclet_rd_one <- function(partitum, base_path) {
 roc_output.had <- function(roclet, results, base_path, options = list()) {
   man <- normalizePath(file.path(base_path, "man"))
 
-  contents <- vapply(results, format, wrap = options$wrap, 
+  contents <- vapply(results, format, wrap = options$wrap,
     FUN.VALUE = character(1))
 
   paths <- file.path(man, names(results))
   mapply(write_if_different, paths, contents)
-  
+
   paths
 }
 
@@ -357,14 +359,14 @@ process_description <- function(partitum, base_path) {
 process_methods <- function(block) {
   obj <- block$object
   if (!inherits(obj, "rcclass")) return()
-  
+
   methods <- obj$methods
   if (is.null(obj$methods)) return()
-  
+
   method_desc <- function(obj) {
     desc <- docstring(obj$value@.Data)
     if (is.null(desc)) return()
-    
+
     paste0("\\code{", function_usage(obj$name, formals(obj$value@.Data)),  "}: ", desc)
   }
 
@@ -372,26 +374,6 @@ process_methods <- function(block) {
   new_tag("rcmethods", descs)
 }
 
-
-process.arguments <- function(partitum) {
-  params <- partitum[names(partitum) == "param"]
-  if (length(params) == 0) return()
-
-  desc <- str_trim(sapply(params, "[[", "description"))
-  names(desc) <- sapply(params, "[[", "name")
-
-  new_tag("arguments", desc)
-}
-
-process.slot <- function(partitum) {
-  params <- partitum[names(partitum) == "slot"]
-  if (length(params) == 0) return() 
-
-  desc <- str_trim(sapply(params, "[[", "description"))
-  names(desc) <- sapply(params, "[[", "name")
-  
-  new_tag("slot", desc)
-}
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
@@ -436,8 +418,32 @@ process.docType <- function(partitum) {
 }
 
 process_had_tag <- function(partitum, tag, f = new_tag) {
-  matches <- partitum[names(partitum) == tag]  
+  matches <- partitum[names(partitum) == tag]
   if (length(matches) == 0) return()
 
   unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)
+}
+
+# Name + description tags ------------------------------------------------------
+
+process_param <- function(block) {
+  process_def_tag(block, "param")
+}
+
+process_slot <- function(block) {
+  process_def_tag(block, "slot")
+}
+
+process_field <- function(block) {
+  process_def_tag(block, "field")
+}
+
+process_def_tag <- function(block, tag) {
+  tags <- block[names(block) == tag]
+  if (length(tags) == 0) return()
+
+  desc <- str_trim(sapply(tags, "[[", "description"))
+  names(desc) <- sapply(tags, "[[", "name")
+
+  new_tag(tag, desc)
 }

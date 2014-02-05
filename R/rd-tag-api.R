@@ -121,7 +121,7 @@ format.usage_tag <- function(x, ...) {
 }
 
 #' @export
-format.arguments_tag <- function(x, ...) {
+format.param_tag <- function(x, ...) {
   names <- names(x$values)
   dups <- duplicated(names)
 
@@ -143,13 +143,24 @@ format.section_tag <- function(x, ...) {
 
 #' @export
 format.slot_tag <- function(x, ...) {
-  names <- names(x$values)
-  items <- str_c("\\item{\\code{", names, "}}{", x$values, "}", collapse = "\n\n")
-  str_c("\\section{Slots}{\n\n",
-    "\\describe{\n", 
-    items,
-    "\n}}\n")
+  describe_section("Slots", names(x$values), x$values)
 }
+
+#' @export
+format.field_tag <- function(x, ...) {
+  describe_section("Fields", names(x$values), x$values)
+}
+
+describe_section <- function(name, dt, dd) {
+  items <- paste0("\\item{\\code{", dt, "}}{", dd, "}", collapse = "\n\n")
+  paste0("\\section{", name, "}{\n\n",
+    "\\describe{\n",
+    items,
+    "\n}}\n"
+  )
+}
+
+
 
 #' @export
 format.examples_tag <- function(x, ...) {
@@ -160,8 +171,8 @@ format.examples_tag <- function(x, ...) {
 #' @export
 format.rcmethods_tag <- function(x, ...) {
   paste0(
-    "\\section{Methods}{\n", 
-    "\\itemize{\n", 
+    "\\section{Methods}{\n",
+    "\\itemize{\n",
     paste0("\\item ", x$values, collapse = "\n\n"),
     "\n}}\n"
   )

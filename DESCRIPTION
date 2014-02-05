@@ -21,7 +21,9 @@ Imports:
     methods,
     Rcpp
 Suggests:
-    testthat
+    testthat,
+    knitr
+VignetteBuilder: knitr
 LinkingTo: Rcpp (>= 0.10.6)
 Roxygen: list(wrap = FALSE)
 Collate:

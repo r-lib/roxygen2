@@ -14,113 +14,113 @@ knitr::opts_chunk$set(
 
 # Introduction to roxygen2
 
-Documentation is one of the most important aspects of good code. Without it, users won't know how to use your package, and are unlikely to do so. Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package.
+Documentation is one of the most important aspects of good code. Without it, users won't know how to use your package, and are unlikely to do so. Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package. The goal of roxygen2 is to make documenting your code as easy as possible. Roxygen uses inline comments, so that you code and documentation are co-located, and provides tools to reuse documentation across multiple functions.
 
-The standard way to write R documentation is to create `.Rd` files in the `man/` directory. These files describe each object (function, data set, class, generic or method) in your package, documenting how it works and giving the user examples of how to use it.  Rather than writing Rd files by hand, we're going to use the [roxygen2](http://roxygen.org/) package. With roxygen, you write the documentation in comments next to each function, and then run an R script to create the main files.
-
-This workflow has a number of advantages over writing `.Rd` files by hand:
+R provides a standard way of documenting packages. You create `.Rd` files in the `man/` directory. These files use a custom syntax, based loosely on latex. Roxygen2 provides a number of advantages over writing `.Rd` files by hand:
 
 * Code and documentation are adjacent so when you modify your code, it's easy
   to remember that you need to update the documentation.
 
-* Roxygen2 dynamically inspects the objects that are documenting, so it can
-  figure out a lot of information `.Rd` files need by itself.  For example, it
-  can automatically add links to super and subclasses.
+* Roxygen2 dynamically inspects the objects that it's documenting, so it
+  automatically add data that you'd otherwise have to include by hand.
 
-* It takes care of other files that are fiddly or downright painful to
-  maintain by hand: the [namespace](`NAMESPACE`), collate order in
-  description, and the demos index.
+* It abstracts over the differences in documenting S3 and S4 methods,
+  generics and classes so you need to learn fewer details.
 
-* Abstracts over the differences in documenting S3 and S4 methods, generics
-  and classes so that they behave basically the same.
+This vignette includes the following sections:
 
-**Note**: this chapter currently describes the use of the in-development [roxygen3](http://github.com/hadley/roxygen3) package. This will be merged back into roxygen2 in the near future.
+* The basic roxygen process
 
-This chapter will proceed as follows. First, we'll discuss the basic documentation process, what each step does, and how to see the output at every stage. Next we'll show you, at a high-level, how to document all the different types of R objects (functions, datasets, s3 methods, s4 methods, s4 classes, r5 classes, and packages). After that you'll learn how to format text within the documentation.
+* Common documentation tags
+
+* Documenting S3, S4 and R5 generics, methods and classes.
 
 ## Roxygen process
 
-There's a three step process to go from the R comments in the source files to Rd files to human readable documentation. The process starts with special comments starting with `#'` that indicate a comment is a roxygen comment:
+There are three steps in the transformation from roxygen comments in your source file to human readable documentation:
+
+1. You add roxygen comments to your source file.
+2. `roxygen2::roxygenise()` converts roxygen comments to `.Rd` files.
+3. R converts `.Rd` files to human readable documentation
+
+The process starts when you add specially formatted roxygen comments to your source file. Roxygen comments start with `#'` so you can continue to use regular comments for other purposes.
 
 ```{r}
-#' Order a data frame by its columns.
+#' Add together two numbers
 #'
-#' This function completes the subsetting, transforming and ordering triad
-#' with a function that works in a similar way to \code{\link{subset}} and
-#' \code{\link{transform}} but for reordering a data frame by its columns.
-#' This saves a lot of typing!
-#'
-#' @param df data frame to reorder
-#' @param ... expressions evaluated in the context of \code{df} and
-#'   then fed to \code{\link{order}}
-#' @keywords manip
-#' @export
+#' @param x A number
+#' @param y A number
+#' @return The sum of \code{x} and \code{y}
 #' @examples
-#' mtcars[with(mtcars, order(cyl, disp)), ]
-#' arrange(mtcars, cyl, disp)
-#' arrange(mtcars, cyl, desc(disp))
-arrange <- function(df, ...) {
-  ord <- eval(substitute(order(...)), df, parent.frame())
-  unrowname(df[ord, ])
+#' add(1, 1)
+#' add(10, 1)
+add <- function(x, y) {
+  x + y
 }
 ```
 
-To convert roxygen comments to the official `.Rd` files, we'll use `devtools::document()`. Like the other devtools functions you've seen so far, it takes a package directory as its first argument, and if you omit it, it will use the current working directory.
+Assuming your working directory is set to your package, you can roxygen comments to `.Rd` files with
 
-This produces an `.Rd` file in the `man/` directory:
+* `roxygen::roxygenise()`, or
+* `devtools::document()`, if you're already using devtools, or
+* `Ctrl + Shift + D`,  if you're using RStudio.
+
+For the example, above, this will generate `man/add.Rd` that looks like:
 
 ```
-\name{arrange}
-\alias{arrange}
-\title{Order a data frame by its columns.}
-\usage{arrange(df, ...)}
-\description{
-  This function completes the subsetting, transforming and
-  ordering triad with a function that works in a similar
-  way to \code{\link{subset}} and \code{\link{transform}}
-  but for reordering a data frame by its columns. This
-  saves a lot of typing!
+% Generated by roxygen2 (3.2.0): do not edit by hand
+\name{add}
+\alias{add}
+\title{Add together two numbers}
+\usage{
+add(x, y)
 }
-\keyword{manip}
 \arguments{
-  \item{df}{data frame to reorder}
-  \item{...}{expressions evaluated in the context of
-    \code{df} and then fed to \code{\link{order}}}
+  \item{x}{A number}
+
+  \item{y}{A number}
 }
-\examples{mtcars[with(mtcars, order(cyl, disp)), ]
-arrange(mtcars, cyl, disp)
-arrange(mtcars, cyl, desc(disp))}
+\value{
+The sum of \code{x} and \code{y}
+}
+\description{
+Add together two numbers
+}
+\examples{
+add(1, 1)
+add(10, 1)
+}
 ```
 
-Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Rd-format) manual. We'll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen.
+Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Rd-format) manual. Here we'll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.
 
-When you request documentation, R then converts this file into the display you're used to seeing.
+When you use `?x`, `help("x")` or `example("x")` R looks for an Rd file containing `\alias{x}`. It then parses the file, converts it into html and displays it.
 
-When you use `help` or `example` it looks for the Rd files in the _installed_ package. This isn't very useful for package development, because we want to retrieve the `.Rd` files from the _source_ package. `devtools` provides two functions to do this `dev_help` and `dev_example` - these behave similarly to `help` and `example`, but look in source packages you have loaded with `load_all`, rather than installed packages you've loaded with `library`.
+All of these functions look for an Rd file in _installed_ packages. This isn't very useful for package development, because you want to use the `.Rd` files in the _source_ package. `devtools` provides two helpful functions for this scenario: `dev_help()` and `dev_example()`. They behave similarly to `help()` and `example()` but look in source packages you've loaded with `load_all()`, not installed packages you've loaded with `library()`.
 
-## Common documentation tags
+## Basic documentation
 
-As you've seen roxygen comments have a special format. They start with `#'` and they include tags of the form `@tagname` that break the documentation up into pieces. The content of a tag extends from the tag name to the next tag, and they can span multiple lines.
+As you've seen,  roxygen comments have a special format. They start with `#'` and include tags that like `@tagname`. Tags break the documentation up into pieces, and the content of a tag extends from the end of tag name to the start of the next tag (or the end of the block). Because `@` has a special meaning in roxygen, you need to write `@@` to add a literal `@` to the documentation.
 
-If you want to put a literal `@` in the documentation, use `@@`.
-
-Each documentation block starts with a text description.  The first sentence/line becomes the title of the documentation.  That's what you see when you look at `help(package = mypackage)` and is shown at the top of the documentation for each package. It should be succinct. The second paragraph is the description: this is the first thing shown in the documentation and should briefly describe what the function does.  The third and subsequent paragraphs go into the details: this is a (often long) section that comes after the description of the parameters.  If you want to override the default behaviour, you can use the `@title`, `@description` and `@details` tags.
+Each documentation block starts with a text description. The first sentence becomes the title of the documentation. That's what you see when you look at `help(package = mypackage)` and is shown at the top of the documentation for each package. It should be succinct, written in sentence case, and end in a full stop. The second paragraph is the description: this is shown first in the documentation and should briefly describe what the function does. The third and subsequent paragraphs go into the details: this is a (often long) section that comes after the description of the parameters. It should provide any other important details of how the function operates.
 
 Here's an example showing what the documentation for `sum` might look like if it was written using roxygen:
 
 ```{r}
-#' Sum of Vector Elements
+#' Sum of vector elements.
 #'
 #' \code{sum} returns the sum of all the values present in its arguments.
 #'
 #' This is a generic function: methods can be defined for it directly
-#' or via the \code{Summary} group generic.  For this to work properly,
+#' or via the \code{\link{Summary}} group generic. For this to work properly,
 #' the arguments \code{...} should be unnamed, and dispatch is on the
 #' first argument.
 sum <- function(..., na.rm = TRUE) {}
 ```
 
-The following documentation is equivalent, but uses explicit tags.  This is not necessary unless you want to have a multiple paragraph description or title, or want to omit the description (in which case roxygen will replace with the title).
+(You'll learn what `\code{}` and `\link{}` mean a little later)
+
+The following documentation is equivalent, but uses explicit tags.  This is not necessary unless you want to have a multiple paragraph description or title, or want to omit the description (in which case roxygen will use the title for the description, since it's a required component of the `.Rd` file).
 
 ```{r}
 #' @title Sum of Vector Elements
@@ -130,21 +130,15 @@ The following documentation is equivalent, but uses explicit tags.  This is not 
 #'
 #' @details
 #' This is a generic function: methods can be defined for it directly
-#' or via the \code{Summary} group generic.  For this to work properly,
+#' or via the \code{\link{Summary}} group generic. For this to work properly,
 #' the arguments \code{...} should be unnamed, and dispatch is on the
 #' first argument.
 sum <- function(..., na.rm = TRUE) {}
 ```
 
-If you use explicit tags, you can put them in any order and still get the same output.
-
-You can also opt to document multiple functions in one `.Rd` file.  If you want to do so, use the `@rdname` tag to manully specify the name of the rd file (if you omit this it's done automatically in a way that every object gets its own documentation). You should be careful about documenting too many functions in one file because it gets confusing (which parameter belongs to which function?), but it can be useful if the functions are tightly connected.
-
-You can get documentation on a given tag with `?TagName`. For example, if you wanted to get help on the param tag, you'd do `?TagParam`. (Unfortunately you can't do `?@param` because of a technical limitation in Rd files.)
+The following sections describe the other most useful roxygen tags as they pertain to the different types of object you might want to document.
 
 ## Documenting functions
-
-When documenting a function, the first decision you need to make is whether you want to export it or not. Exporting is described more in [[namespaces]], but basically when you export a function you are saying it is ready for use and you are making a commitment to keep it around in a similar form for the near future. All exported functions need to be documented. You don't have to document internal functions, but it can be a good idea if they're particularly complicated.  Few users will read the documentation for internal functions, but it will be useful for you so when you come back to them in the future you don't need to struggle to recall what the inputs and outputs are.
 
 The following code shows the arrange function and its documentation from the
 plyr package.
@@ -176,9 +170,6 @@ The tags used here are:
 
 * `@param arg description` - a description for each function argument. This
   can span multiple lines (or even paragraphs) if necessary.
-
-* `@export` - a flag indicating that this function should be exported for use
-  by others. Described in more detail in [[namespaces]].
 
 * `@examples` - examples of the function in use. In my opinion, this is the
   most important part of the documentation - these are what most people will

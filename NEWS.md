@@ -1,5 +1,8 @@
 # roxygen2 3.1.0.99
 
+* Usage statements in generated roxygen statements non-longer contain
+  non-ASCII characters and will be wrapped if long. (#180)
+
 * New `@field` tag for documenting the fields on a reference class. (#181)
 
 # roxygen2 3.1.0

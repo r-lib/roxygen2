@@ -10,8 +10,8 @@ script: ./travis-tool.sh run_tests
 env:
   - global:
     - WARNINGS_ARE_ERRORS=1
-    -R_BUILD_ARGS="--no-manual"
-    -R_CHECK_ARGS="--no-manual --as-cran"
+    - R_BUILD_ARGS="--no-manual"
+    - R_CHECK_ARGS="--no-manual --as-cran"
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh

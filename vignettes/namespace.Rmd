@@ -3,6 +3,13 @@
 %\VignetteIndexEntry{Generating the NAMESPACE}
 -->
 
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  error = FALSE,
+  tidy = FALSE
+)
+```
 
 # S3
 

@@ -1,7 +1,7 @@
 # roxygen2 3.1.0.99
 
-* `@section` titles can now only take up a single line, to prevent the
-  common bug where you forget the `:`.
+* `@section` titles and `@export` tags can now only span a single line
+  to prevent common bugs.
 
 * Parsing is stricter: many issues that were previously warnings are
   now errors. All errors should now give you the line number of the

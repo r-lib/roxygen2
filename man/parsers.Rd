@@ -7,6 +7,7 @@
 \alias{parse.unknown}
 \alias{parse.value}
 \alias{parse.words}
+\alias{parse.words.line}
 \alias{parsers}
 \title{Parsers.}
 \usage{
@@ -17,6 +18,8 @@ parse.unknown(key, rest)
 parse.value(key, rest)
 
 parse.words(key, rest)
+
+parse.words.line(key, rest)
 
 parse.name.description(key, rest)
 
@@ -40,6 +43,9 @@ These function implement parsing different tag types.
 \code{parse.value}: fail if empty
 
 \code{parse.words}: parse values into words separated by space
+
+\code{parse.words.one}: parse values into words separated by space
+ (one line only)
 
 \code{parse.description}: parse mandatory name and description
 

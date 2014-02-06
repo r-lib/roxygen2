@@ -84,6 +84,21 @@ parse.words <- function(key, rest) {
   str_split(str_trim(rest), "\\s+")[[1]]
 }
 
+#' @details \code{parse.words.one}: parse values into words separated by space
+#'  (one line only)
+#' @export
+#' @rdname parsers
+parse.words.line <- function(key, rest) {
+  check_rd(key, rest)
+  rest <- str_trim(rest)
+  if (str_detect(rest, "\n")) {
+    stop("@", key, " may only span a single line", call. = FALSE)
+  }
+
+  str_split(rest, "\\s+")[[1]]
+}
+
+
 #' @details \code{parse.description}: parse mandatory name and description
 #' @export
 #' @rdname parsers

@@ -1,12 +1,14 @@
 #' @include parse-registry.R
 NULL
 
-register.preref.parsers(parse.words, 'export', 'exportClass', 'exportMethod',
+register.preref.parsers(parse.words, 'exportClass', 'exportMethod',
   'exportPattern', 'S3method', 'import', 'importFrom', 'importClassesFrom',
   'importMethodsFrom', 'useDynLib')
 
+register.preref.parsers(parse.words.line, 'export')
+
 ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
-  'S3method', 'import', 'importFrom', 'importClassesFrom', 
+  'S3method', 'import', 'importFrom', 'importClassesFrom',
   'importMethodsFrom', 'useDynLib')
 
 #' Roclet: make NAMESPACE.
@@ -109,21 +111,21 @@ ns_process_partitum <- function(partitum) {
 ns_process_tag <- function(tag_name, partitum) {
   f <- get(paste0("ns_", tag_name), mode = "function")
   tags <- partitum[names(partitum) == tag_name]
-  
+
   lapply(tags, f, part = partitum)
 }
 
 #' @export
 roc_output.namespace <- function(roclet, results, base_path, options = list()) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
-  
+
   old <- if (file.exists(NAMESPACE)) readLines(NAMESPACE) else ""
-  
+
   if (!identical(results, old)) {
     cat("Updating namespace directives\n")
     writeLines(results, NAMESPACE)
   }
-  
+
   NAMESPACE
 }
 
@@ -131,7 +133,7 @@ roc_output.namespace <- function(roclet, results, base_path, options = list()) {
 ns_export <- function(tag, part) {
   if (!is.null.string(tag)) return(export(tag))
   # FIXME: check for empty exports (i.e. no name)
-  
+
   default_export(part$object, part)
 }
 default_export <- function(x, block) UseMethod("default_export")
@@ -160,14 +162,14 @@ ns_useDynLib         <- function(tag, part) {
   if (length(tag) == 1) {
     return(paste0("useDynLib(", quote_if_needed(tag), ")"))
   }
-  
+
   if (any(grepl(",", tag))) {
     # If there's a comma in list, don't quote output. This makes it possible
     # for roxygen2 to support other NAMESPACE forms not otherwise mapped
     args <- paste0(tag, collapse = " ")
     paste0("useDynLib(", args, ")")
   } else {
-    repeat_first("useDynLib", tag)  
+    repeat_first("useDynLib", tag)
   }
 }
 
@@ -189,9 +191,9 @@ fun_args <- function(name, x) {
     # for roxygen2 to support other NAMESPACE forms not otherwise mapped
     args <- paste0(x, collapse = ", ")
   } else {
-    args <- paste0(quote_if_needed(x), collapse = ",")  
+    args <- paste0(quote_if_needed(x), collapse = ",")
   }
-  
+
   paste0(name, "(", args, ")")
 }
 

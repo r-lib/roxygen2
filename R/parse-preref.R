@@ -39,34 +39,15 @@ parse_elements <- function(elements) {
   Map(parse_element, pieces[, 1], pieces[, 2])
 }
 
-#' Parsers.
-#'
-#' These function implement parsing different tag types.
-#'
-#' @param key the parsing key
-#' @param rest the expression to be parsed
-#' @keywords internal
-#' @name parsers
-NULL
-
-#' @details \code{parse.default}: emit value unchanged.
-#' @export
-#' @rdname parsers
 parse.default <- function(key, rest) {
   check_rd(key, rest)
   str_trim(rest)
 }
 
-#' @details \code{parse.default}: throws errors about unknown tag.
-#' @export
-#' @rdname parsers
 parse.unknown <- function(key, rest) {
   stop("@", key, " is an unknown key")
 }
 
-#' @details \code{parse.value}: fail if empty
-#' @export
-#' @rdname parsers
 parse.value <- function(key, rest) {
   check_rd(key, rest)
   if (is.null.string(rest)) {
@@ -76,18 +57,11 @@ parse.value <- function(key, rest) {
   str_trim(rest)
 }
 
-#' @details \code{parse.words}: parse values into words separated by space
-#' @export
-#' @rdname parsers
 parse.words <- function(key, rest) {
   check_rd(key, rest)
   str_split(str_trim(rest), "\\s+")[[1]]
 }
 
-#' @details \code{parse.words.one}: parse values into words separated by space
-#'  (one line only)
-#' @export
-#' @rdname parsers
 parse.words.line <- function(key, rest) {
   check_rd(key, rest)
   rest <- str_trim(rest)
@@ -99,9 +73,6 @@ parse.words.line <- function(key, rest) {
 }
 
 
-#' @details \code{parse.description}: parse mandatory name and description
-#' @export
-#' @rdname parsers
 parse.name.description <- function(key, rest) {
   check_rd(key, rest)
   pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
@@ -116,9 +87,6 @@ parse.name.description <- function(key, rest) {
   list(name = name, description = rest)
 }
 
-#' @details \code{parse.name}: one and only one word
-#' @export
-#' @rdname parsers
 parse.name <- function(key, name) {
   check_rd(key, name)
   name <- str_trim(name)
@@ -132,9 +100,6 @@ parse.name <- function(key, name) {
   word(name, 1)
 }
 
-#' @details \code{parse.toggle}: turn binary element on
-#' @export
-#' @rdname parsers
 parse.toggle <- function(key, rest) {
   TRUE
 }

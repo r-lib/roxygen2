@@ -1,5 +1,7 @@
 # roxygen2 3.1.0.99
 
+* The internal parsers are no longer part of the public roxygen2 interface.
+
 * `@section` titles and `@export` tags can now only span a single line
   to prevent common bugs.
 

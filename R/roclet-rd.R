@@ -394,6 +394,11 @@ process.examples <- function(partitum, base_path) {
 process.section <- function(key, value) {
   pieces <- str_split_fixed(value, ":", n = 2)[1, ]
 
+  if (str_detect(pieces[1], "\n")) {
+    stop("Section title spans multiple lines: \n",
+      "@section ", value, call. = FALSE)
+  }
+
   new_tag("section", list(list(name = pieces[1], content = pieces[2])))
 }
 

@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 As you've seen, roxygen comments have a special format. They start with `#'` and include tags that like `@tag details`. Tags break the documentation up into pieces, and the content of a tag extends from the end of tag name to the start of the next tag (or the end of the block). Because `@` has a special meaning in roxygen, you need to write `@@` to add a literal `@` to the documentation.
 
-Each documentation block starts with a text description. The first sentence becomes the title of the documentation. That's what you see when you look at `help(package = mypackage)` and is shown at the top of the documentation for each package. It should be succinct, written in sentence case, and end in a full stop. The second paragraph is the description: this is shown first in the documentation and should briefly describe what the function does. The third and subsequent paragraphs go into the details: this is a (often long) section that comes after the description of the parameters. It should provide any other important details of how the function operates.
+Each documentation block starts with some text. The first sentence becomes the title of the documentation. That's what you see when you look at `help(package = mypackage)` and is shown at the top of each help file. It should fit on one line, be written in sentence case, and end in a full stop. The second paragraph is the description: this comes first in the documentation and should briefly describe what the function does. The third and subsequent paragraphs go into the details: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates.
 
 Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
 
@@ -31,14 +31,12 @@ Here's an example showing what the documentation for `sum()` might look like if 
 sum <- function(..., na.rm = TRUE) {}
 ```
 
-(You'll learn what `\code{}` and `\link{}` mean a little later)
+`\code{}` and `\link{}` are `.Rd` formatting commands. Learn more about them and other tools in [formatting](formatting.html). Also notice the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.
 
-Notice the wrapping of the roxygen block - you should wrap your comments in the same way that you wrap code, keeping them less than ~80 columns wide.
-
-The following documentation is equivalent, but uses explicit tags. This is not necessary unless you want to have a multiple paragraph description or title, or want to omit the description (in which case roxygen will use the title for the description, since it's a required component of the `.Rd` file).
+The following documentation is equivalent, but uses explicit tags. This is not necessary unless you want to have a multiple paragraph description or title, or want to omit the description (in which case roxygen will use the title for the description, since it's a required component of the `.Rd` file). None of these actions are recommended so you have to go out of your way to get them.
 
 ```{r}
-#' @title Sum of Vector Elements
+#' @title Sum of vector elements.
 #'
 #' @description
 #' \code{sum} returns the sum of all the values present in its arguments.
@@ -51,13 +49,24 @@ The following documentation is equivalent, but uses explicit tags. This is not n
 sum <- function(..., na.rm = TRUE) {}
 ```
 
-All objects must have a title, description and details. Objects can also have `@author`, in the form `Firstname Lastname <email@@address.com>`. You only need to use this if the function was written by a non-package author.
+All objects must have a title, description and details. Objects can also have `@author`, in the form `@author Firstname Lastname <email@@address.com>`. You only need to use this if the function was written by someone author than an author already listed in the DESCRIPTION.
 
-Other tags vary based on the type of object you're documenting The following sections describe the other most useful roxygen tags as they pertain to the different types of object you might want to document.
+There are two tags that make it easier for the user to navigate around your document. `@seealso` allows you to point to other useful resources, either on the web `\url{http://www.r-project.org}`, or to other document with `\code{\link{functioname}}`. If you have a family of related functions that all needed to be interlinked, you can use the `@family` tag to automatically add seealso's. The `@family` name should be plural.
+
+For sum, these components might look like:
+
+```{r}
+#' @family aggregate functions
+#' @seealso \code{\link{prod}} for products, \code{\link{cumsum}} for
+#'  cumulative sums, and \code{\link{colSums}}/\code{\link{rowSums}}
+#'  marginal sums over high-dimensional arrays.
+```
+
+You use other tags based on the type of object that you're documenting. The following sections describe the most commonly used tags for functions, S3, S4 and RC objects and data.
 
 ## Documenting functions
 
-The thing you'll document most often is the function. There are three tags that most functions will use:
+Functions are the mostly commonly documented objects. Most functions require three new tags:
 
 * `@param name description` describes the inputs to the function.
   The description should provide a succinct summary of the type of the
@@ -70,16 +79,16 @@ The thing you'll document most often is the function. There are three tags that 
   the names with commas (and no whitespace). For example, to document both
   `x` and `y`, you can say `@param x,y Numeric vectors`.
 
+* `@examples` provides examples of the function in use. This is a very
+  important part of the documentation. Many people look at the examples
+  before reading anything else in documentation.
+
 * `@return description` describes the output from the function. This is
   not always necessary, but is a good idea if you return different types
   of outputs depending on the input, or you're returning an S3, S4 or RC
   object.
 
-* `@examples` provides examples of the function in use. This is a very
-  important part of the documentation. Many people look at the examples
-  before reading anything else in documentation.
-
-Using these elements for the documentation of sum might yield something like this:
+Using these elements for the documentation of `sum()` might yield something like this:
 
 ```{r}
 #' Sum of vector elements.
@@ -95,33 +104,57 @@ Using these elements for the documentation of sum might yield something like thi
 #' @param na.rm A logical scalar. Should missing values (including NaN)
 #'   be removed?
 #' @value If all inputs are integer and logical, then the output
-#'   will be an integer. If integer overflow occurs, the output will be NA
-#'   with a warning. Otherwise it will be a length-one numeric or complex
-#'   vector.
+#'   will be an integer. If integer overflow
+#'   \url{http://en.wikipedia.org/wiki/Integer_overflow} occurs, the output
+#'   will be NA with a warning. Otherwise it will be a length-one numeric or
+#'   complex vector.
 #'
-#'   Zero-length vectors have sum 0 by definition.
+#'   Zero-length vectors have sum 0 by definition. See
+#'   \url{http://en.wikipedia.org/wiki/Empty_sum} for more details.
 #' @examples
 #' sum(1:10)
 #' sum(1:5, 6:10)
 #' sum(F, F, F, T, T)
+#'
+#' sum(.Machine$integer.max, 1L)
+#' sum(.Machine$integer.max, 1)
 sum <- function(..., na.rm = TRUE) {}
 ```
 
-I recommend indenting the second and subsequent lines of a tag so that when scanning the documentation it's easier to see where one tag ends and the next begins. Tags that always span multiple lines (like `@example`) should start on a new line.
-
-## Aliases and cross-references
-
-* `@seealso` - to provide pointers to other related topics
-
-* `@references` - references to scientific literature on this topic
-
-* `@aliases` - a list of additional topic names that will be mapped to this
-  documentation when the user looks them up from the command line.
-
-* `@family` - a family name. All functions that have the same family tag
-  will be linked in the documentation.
+Indent the second and subsequent lines of a tag so that when scanning the documentation it's easy to see where one tag ends and the next begins. Tags that always span multiple lines (like `@example`) should start on a new line and don't need to be indented.
 
 ## Documenting multiple functions in the same file
+
+It's possible to document multiple functions in the same file by using the `@rdname` tag. This overrides the default file name generated by roxygen and merges documentation for mulitple objects into one file. It's a technique best used with caution: documenting too many functions into one place leads to confusing documentation. It's best used when all functions have the same (or very similar) arguments.
+
+There are basically two ways to use it. First, you can combine documentation into an existing function
+
+```{r}
+#' This is the main function
+#'
+#' @param x,y,z numeric vectors.
+f <- function(x, y, z) {}
+
+#' @rdname f
+g <- function(x, y, z) {}
+```
+
+Or create a dummy documentation file:
+
+```{r}
+
+#' This is the main function
+#'
+#' @param x,y,z numeric vectors.
+#' @name my-object
+NULL
+
+#' @rdname my-object
+f <- function(x, y, z) {}
+
+#' @rdname my-object
+g <- function(x, y, z) {}
+```
 
 ## S3
 
@@ -135,9 +168,9 @@ S3 classes have no formal definition, so document the constructor function.
 
 ### S3 methods
 
-It is your choice whether or not to document S3 methods. You don't need to document methods for simple generics like `print()`. If your method is more complicated, you should document it.  In base R, you can find documentation for more complex methods like `predict.lm()`, `predict.glm()`, and `anova.glm()`.
+It is your choice whether or not to document S3 methods. You don't need to document methods for simple generics like `print()`. If your method is more complicated, you should document it so people know what the parameters do. In base R, you can find documentation for more complex methods like `predict.lm()`, `predict.glm()`, and `anova.glm()`.
 
-Older versions of roxygen required explicit `@method generic class` tags for all S3 methods. From 3.0.0 this is no longer the case and roxygen2 will generate automatically. If you are upgrading, make sure to remove these old tags. Automatic method detection will only fail if the generic and class are ambiguous. For example is `all.equal.data.frame()` the `equal.data.frame` method for `all`, or the `data.frame` method for `all.equal`?. If this happens, you can disambiguate with `@method all.equal data.frame`.
+Older versions of roxygen required explicit `@method generic class` tags for all S3 methods. From 3.0.0 this is no longer needed as and roxygen2 will figure it out automatically. If you are upgrading, make sure to remove these old tags. Automatic method detection will only fail if the generic and class are ambiguous. For example is `all.equal.data.frame()` the `equal.data.frame` method for `all`, or the `data.frame` method for `all.equal`?. If this happens, you can disambiguate with (e.g.) `@method all.equal data.frame`.
 
 ## S4
 
@@ -256,6 +289,7 @@ You can add arbitrary sections to the documentation with the `@section` tag. The
 ```
 
 To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
+
 ```{r}
 #' @section Warning:
 #' You must not call this function unless ...

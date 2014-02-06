@@ -12,14 +12,13 @@ parse_text <- function(text) {
   on.exit(unlink(file))
 
   env <- new.env(parent = parent.env(globalenv()))
-  attr(env, "hash") <- suppressWarnings(digest(env))
   setPackageName("roxygen_devtest", env)
 
   sys.source(file, envir = env)
   parse_file(file, env)
 }
 
-parse_file <- function(file, env, env_hash = attr(env, "hash")) {
+parse_file <- function(file, env) {
   parsed <- parse(file = file, keep.source = TRUE)
   if (length(parsed) == 0) return()
 

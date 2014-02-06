@@ -224,11 +224,6 @@ get_values <- function(topics, tag) {
 }
 
 
-hash_partitum <- function(partitum) {
-  partitum$object <- hash_object(partitum$object)
-  digest(partitum)
-}
-
 roclet_rd_one <- function(partitum, base_path) {
   rd <- new_rd_file()
 

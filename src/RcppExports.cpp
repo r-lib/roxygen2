@@ -5,6 +5,21 @@
 
 using namespace Rcpp;
 
+// rdComplete
+bool rdComplete(std::string string);
+RcppExport SEXP roxygen2_rdComplete(SEXP stringSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type string(stringSEXP );
+        bool __result = rdComplete(string);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // splitByWhitespace
 std::vector<std::string> splitByWhitespace(std::string string);
 RcppExport SEXP roxygen2_splitByWhitespace(SEXP stringSEXP) {

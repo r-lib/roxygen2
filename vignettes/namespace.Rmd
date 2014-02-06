@@ -1,0 +1,22 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Generating the NAMESPACE}
+-->
+
+
+# S3
+
+## S3 generics
+
+## S3 classes
+
+Export the constructor if you want the object to be constructable by users.
+
+## S3 methods
+
+You _must_ export every S3 method, even if the generic is not exported. Otherwise the S3 method table will not be generated correctly and your generics will not find the correct function.
+
+# S4
+
+## S3 classes
+

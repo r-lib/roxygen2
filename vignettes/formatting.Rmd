@@ -1,0 +1,96 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Text formatting}
+-->
+
+# Text formatting
+
+Within roxygen text, you use the usual R documentation formatting rules, as summarised below. A fuller description is available in the [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Sectioning) manual.
+
+## Lists
+
+* Ordered (numbered) lists:
+
+    ```{r}
+    #' \enumerate{
+    #'   \item First item
+    #' \item Second item
+    #' }
+    ```
+
+* Unordered (bulleted) lists
+
+    ```{r}
+    #' \itemize{
+    #'  \item First item
+    #'  \item Second item
+    #' }
+    ```
+
+* Definition (named) lists
+
+    ```{r}
+    #' \describe{
+    #'  \item{One}{First item}
+    #'  \item{Two}{Second item}
+    #' }
+    ```
+
+## Tables
+
+Tables are created with the tabular command, which has two arguments:
+
+* Column alignment: a letter for each column. `l` = left alignment, `c` = centre, `r` = right.
+
+* Table contents.  Columns separated by `\tab`, rows separated by `\cr`.
+
+The following function will turn an R data frame into the correct format.  It ignores column and row names, but should get you started.
+
+```{r}
+tabular <- function(df) {
+  stopifnot(is.data.frame(df))
+  align <- function(x) if (is.numeric(x)) "r" else "l"
+  col_align <- vapply(df, align, character(1))
+
+  contents <- do.call("paste", c(lapply(df, format),
+    list(sep = " \\tab ", collapse = "\\cr\n")))
+
+  mat <- matrix(unlist(lapply(df, format)), ncol = ncol(df))
+  paste("\\tabular{", paste(col_align, collapse = ""), "}{\n",
+    contents, "}\n", sep = "")
+}
+```
+
+## Mathematics
+
+`\eqn` for inline, `\deqn` for display.  Standard LaTeX (no extensions).
+
+## Character formatting
+
+* `\emph{text}`: emphasised text, usually displayed as _italics_
+
+* `\strong{text}`: strong text, usually displayed in __bold__
+
+* `\code{text}`, `\pkg{package_name}`, `\file{file_name}`
+
+## Links
+
+* External links: `\email{email_address}`, `\url{url}`, `\href{url}{text}`
+
+* `\link[package]{function}` - the first argument can be omitted if the link
+  is in the current package, or the base package.  Will usually be wrapped inside `\code`: `\code{\link{fun}}`
+
+## Sections
+
+Sections are indicated by the @section tag, followed by the title (which should be in sentence case) and a colon.
+
+Subsections are indicated by a LaTeX-style command; the first argument is the subsection title and the second argument contains the subsection content. The following example illustrates how to add an arbitrary section:
+
+```{r}
+#' @section Warning:
+#' You must not call this function unless ...
+#'
+#' \subsection{Exceptions}{
+#'    Apart from the following special cases...
+#' }
+```

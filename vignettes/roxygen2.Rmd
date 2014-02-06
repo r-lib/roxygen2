@@ -104,7 +104,7 @@ As you've seen,  roxygen comments have a special format. They start with `#'` an
 
 Each documentation block starts with a text description. The first sentence becomes the title of the documentation. That's what you see when you look at `help(package = mypackage)` and is shown at the top of the documentation for each package. It should be succinct, written in sentence case, and end in a full stop. The second paragraph is the description: this is shown first in the documentation and should briefly describe what the function does. The third and subsequent paragraphs go into the details: this is a (often long) section that comes after the description of the parameters. It should provide any other important details of how the function operates.
 
-Here's an example showing what the documentation for `sum` might look like if it was written using roxygen:
+Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
 
 ```{r}
 #' Sum of vector elements.
@@ -120,7 +120,9 @@ sum <- function(..., na.rm = TRUE) {}
 
 (You'll learn what `\code{}` and `\link{}` mean a little later)
 
-The following documentation is equivalent, but uses explicit tags.  This is not necessary unless you want to have a multiple paragraph description or title, or want to omit the description (in which case roxygen will use the title for the description, since it's a required component of the `.Rd` file).
+Notice the wrapping of the roxygen block - you should wrap your comments in the same way that you wrap code, keeping them less than ~80 columns wide.
+
+The following documentation is equivalent, but uses explicit tags. This is not necessary unless you want to have a multiple paragraph description or title, or want to omit the description (in which case roxygen will use the title for the description, since it's a required component of the `.Rd` file).
 
 ```{r}
 #' @title Sum of Vector Elements
@@ -136,54 +138,65 @@ The following documentation is equivalent, but uses explicit tags.  This is not 
 sum <- function(..., na.rm = TRUE) {}
 ```
 
-The following sections describe the other most useful roxygen tags as they pertain to the different types of object you might want to document.
+All objects must have a title, description and details. Objects can also have `@author`, in the form `Firstname Lastname <email@@address.com>`. You only need to use this if the function was written by a non-package author.
+
+Other tags vary based on the type of object you're documenting The following sections describe the other most useful roxygen tags as they pertain to the different types of object you might want to document.
 
 ## Documenting functions
 
-The following code shows the arrange function and its documentation from the
-plyr package.
+The thing you'll document most often is the function. There are three tags that most functions will use:
+
+* `@param name description` describes the inputs to the function.
+  The description should provide a succinct summary of the type of the
+  parameter (e.g. a string, a numeric vector), and if not obvious from
+  the name, what the parameter does. The description can span multiple
+  lines (or even paragraphs) if necessary. All parameters must be
+  documented.
+
+  It's possible to document multiple arguments at once by separating
+  the names with commas (and no whitespace). For example, to document both
+  `x` and `y`, you can say `@param x,y Numeric vectors`.
+
+* `@return description` describes the output from the function. This is
+  not always necessary, but is a good idea if you return different types
+  of outputs depending on the input, or you're returning an S3, S4 or RC
+  object.
+
+* `@examples` provides examples of the function in use. This is a very
+  important part of the documentation. Many people look at the examples
+  before reading anything else in documentation.
+
+Using these elements for the documentation of sum might yield something like this:
 
 ```{r}
-#' Order a data frame by its columns.
+#' Sum of vector elements.
 #'
-#' This function completes the subsetting, transforming and ordering triad
-#' with a function that works in a similar way to \code{\link{subset}} and
-#' \code{\link{transform}} but for reordering a data frame by its columns.
-#' This saves a lot of typing!
+#' \code{sum} returns the sum of all the values present in its arguments.
 #'
-#' @param df data frame to reorder
-#' @param ... expressions evaluated in the context of \code{df} and
-#'   then fed to \code{\link{order}}
-#' @keywords manip
-#' @export
+#' This is a generic function: methods can be defined for it directly
+#' or via the \code{\link{Summary}} group generic. For this to work properly,
+#' the arguments \code{...} should be unnamed, and dispatch is on the
+#' first argument.
+#'
+#' @param ... Numeric, complex, or logical vectors.
+#' @param na.rm A logical scalar. Should missing values (including NaN)
+#'   be removed?
+#' @value If all inputs are integer and logical, then the output
+#'   will be an integer. If integer overflow occurs, the output will be NA
+#'   with a warning. Otherwise it will be a length-one numeric or complex
+#'   vector.
+#'
+#'   Zero-length vectors have sum 0 by definition.
 #' @examples
-#' mtcars[with(mtcars, order(cyl, disp)), ]
-#' arrange(mtcars, cyl, disp)
-#' arrange(mtcars, cyl, desc(disp))
-arrange <- function(df, ...) {
-  ord <- eval(substitute(order(...)), df, parent.frame())
-  unrowname(df[ord, ])
-}
+#' sum(1:10)
+#' sum(1:5, 6:10)
+#' sum(F, F, F, T, T)
+sum <- function(..., na.rm = TRUE) {}
 ```
 
-The tags used here are:
+I recommend indenting the second and subsequent lines of a tag so that when scanning the documentation it's easier to see where one tag ends and the next begins. Tags that always span multiple lines (like `@example`) should start on a new line.
 
-* `@param arg description` - a description for each function argument. This
-  can span multiple lines (or even paragraphs) if necessary.
-
-* `@examples` - examples of the function in use. In my opinion, this is the
-  most important part of the documentation - these are what most people will
-  look at first to figure out how to use the function. I always put this last.
-
-Other tags that you might find useful are:
-
-* `@return` - the type of object that the function returns
-
-The following tags apply to all types of documentation
-
-* `@author`, in the form `Firstname Lastname <email@@address.com>`. Use this if
-  some of the functions are written by people other than the author of the
-  package.
+## Aliases and cross-references
 
 * `@seealso` - to provide pointers to other related topics
 
@@ -192,77 +205,101 @@ The following tags apply to all types of documentation
 * `@aliases` - a list of additional topic names that will be mapped to this
   documentation when the user looks them up from the command line.
 
-* `@family` - a family name. All functions that have the same family tag will be linked
-  in the documentation.
+* `@family` - a family name. All functions that have the same family tag
+  will be linked in the documentation.
 
-## Documenting methods and generics
+## Documenting multiple functions in the same file
 
-### S3
+## S3
 
-S3 generics are documented in the same way as functions - there is typically no reason for a user to know (or care) that a function is a generic. (Although you may want to mention it in the docs so that other developers know that they can extend it with their own methods).
+### S3 generics
 
-If you `@export` an S3 generic function, all its methods defined in your package will also get exported appropriately (using the `S3method()` namespace directive): they will be available when you call the generic, but users can not call the methods directly.  For example, the `wday` generic in `lubridate` is exported:
+Documenting S3 generics is straightforward: they are functions, so document them as such.
 
-```{r, eval = FALSE}
-library(lubridate)
-wday(Sys.Date(), label = TRUE)
-wday(1, label = TRUE)
+### S3 classes
+
+S3 classes have no formal definition, so document the constructor function.
+
+### S3 methods
+
+It is your choice whether or not to document S3 methods. You don't need to document methods for simple generics like `print()`. If your method is more complicated, you should document it.  In base R, you can find documentation for more complex methods like `predict.lm()`, `predict.glm()`, and `anova.glm()`.
+
+Older versions of roxygen required explicit `@method generic class` tags for all S3 methods. From 3.0.0 this is no longer the case and roxygen2 will generate automatically. If you are upgrading, make sure to remove these old tags. Automatic method detection will only fail if the generic and class are ambiguous. For example is `all.equal.data.frame()` the `equal.data.frame` method for `all`, or the `data.frame` method for `all.equal`?. If this happens, you can disambiguate with `@method all.equal data.frame`.
+
+## S4
+
+Older versions of roxyen2 required explicit `@usage`, `@alias` and `@docType` to correctly document S4 objects, but from version 3.0.0 on roxygen2 generates correct metadata automatically. If you're upgrading from a previous version, make sure to remove these old tags.
+
+### S4 generics
+
+S4 generics are also functions, so document them as such.
+
+### S4 classes
+
+To document an S4 class, add a roxygen block before `setClass()`. Use `@slot` to document the slots of the class. Here's a simple example:
+
+```{r}
+#' An S4 class to represent a bank account.
+#'
+#' @slot balance A length-one numeric vector
+Account <- setClass("Account",
+  slots = list(balance = "numeric")
+)
 ```
 
-But you can't call any of the methods directly:
+### S4 methods
 
-```{r, eval = FALSE}
-wday.default(Sys.Date(), label = TRUE)
-wday.numeric(1, label = TRUE)
+Unlike S3, all S4 methods must be documented. You can document them in three places:
 
-lubridate:::wday.default(Sys.Date(), label = TRUE)
-lubridate:::wday.numeric(1, label = TRUE)
+* In the class. Most appropriate if the corresponding generic uses single
+  dispatch and you created the class.
+
+* In the generic. Most appropriate if the generic uses multiple dispatch
+  and you control it.
+
+* In it's own file. Most appropriate if the method is complex. or the
+  either two options don't apply.
+
+Use `@rdname` to put the method documentation where you want it.
+
+## RC
+
+RC is different to S3 and S4 because it does not have generics and methods are associated with classes, not generics. RC also has a different convention for documenting methods: the doc string. This makes documenting RC classes a little simpler than S4 classes, generics and methods because you only need a single roxygen block per class.
+
+```{r}
+#' An S4 class to represent a bank account.
+#'
+#' @field balance A length-one numeric vector
+Account <- setRefClass("Account",
+  fields = list(balance = "numeric"),
+  methods = list(
+    withdraw <- function(x) {
+      "Withdraw money from account. Allows overdrafts"
+      balance <<- balance - x
+    }
+  )
+)
 ```
 
-This is good practice because it hides the internal implementation details of your functions.  Users should not rely on specific behaviour (for example, in this case we need to call `wday.default` for Date objects).  This makes it easier for you to change how the functions work in the future - for example, you could change from S3 to S4 dispatch.
-
-You only need to explicitly `@export` a method if it's for a generic defined in another package.  This is one of the easiest things to forget, and it creates subtle bugs that `R CMD check` doesn't report and are hard to track down.  Future versions of roxygen should hopefully make this easier.
-
-Most of the time you don't need to document S3 methods - particularly if they are for simple generics like `print`.  However, if your method is more complicated, you should document it.  In base R, you can find documentation for more complex methods like `predict.lm`, `predict.glm`, `anova.glm` and so on.
-
-### S4
-
-The same rules apply when documenting S4 generics and methods:
-
-* Document the generic like you would document any function.  Document
-  methods that are more complex or have significant differences in behaviours.
-
-* You don't need to export methods if they're for a generic you defined
-  (just export the generic). Export all methods for generics defined in
-  other packages.
-
-## R5 methods
-
-Document R5 methods with the standard docstring format.
-
-## Documenting classes
-
-### S3
-
-Since S3 classes have no formal structure, you should document the constructor function.
-
-### S4
-
-Typically you should document the `setClass` call, and if present, the constructor function.  Unless you want to separate out internal documentation for the class and the public interface (for the constructor), I recommend using `@rdname` to document both in the same file.  This will mean that `?classname` and `class?classname` go to the same place.
-
-Export the class if you want other developers to be able to write subclasses of your class.  Export the constructor if you want users to be able to use it.
-
-### R5
+Documented methods will be included in the "Methods" section of the class documentation, along with an automatically generated usage statement.
 
 ## Documenting datasets
 
-The following documentation excerpt comes from the diamonds dataset in ggplot2. We can't document the object directly (because it lives in the data directory), so we document `NULL` and provide the `@name` of the object we really want to document.
+Datasets are usually stored in `data/` and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you document `NULL`, and use `@name` to tell roxygen2 what you're really documenting.
+
+There are two new tags that are useful for documenting datasets:
+
+* `@format`, which gives an overview of the structure of the dataset. If you omit this, roxygen will automatically add something based on the first line of `str` output
+
+* `@source` where you got the data form, often a `\url{}`.
+
+To show how everything fits together, the example below is an exercept from the roxygen block using to document the diamonds dataset in ggplot2.
 
 ```{r}
 #' Prices of 50,000 round cut diamonds.
 #'
 #' A dataset containing the prices and other attributes of almost 54,000
-#'  diamonds. The variables are as follows:
+#' diamonds. The variables are as follows:
 #'
 #' \itemize{
 #'   \item price. price in US dollars (\$326--\$18,823)
@@ -270,63 +307,17 @@ The following documentation excerpt comes from the diamonds dataset in ggplot2. 
 #'   ...
 #' }
 #'
-#' @keywords datasets
 #' @format A data frame with 53940 rows and 10 variables
+#' @source \url{http://www.diamondse.info/}
 #' @name diamonds
 NULL
 ```
 
-There are a few new tags:
-
-* `@docType data`, which indicates that this is documentation for a dataset.
-
-* `@format`, which gives an overview of the structure of the dataset. If you omit this, roxygen will automatically add something based on the first line of `str` output
-
-* `@source` where you got the data form, often a `\url{}`.
-
 ## Documenting packages
 
-Every package should also have its own documentation page. I usually put this documentation in a file with the same name as the package.
+As well as documenting every exported object in the package, you should also document the package itself. Package documentation should describe the overall purpose of the package and point to the most important functions. Relatively few packages provide package documentation, but it's an extremely useful tool for users, because instead of just listing functions like `help(package = pkgname)` it organises them and shows the user where to get started.
 
-This documentation topic should contain an overview documentation topic that describes the overall purpose of the package, and points to the most important functions. This topic should have `@docType package` and be aliased to `package-pkgname` and `pkgname` (unless there is already a function by that name) so that you can get an overview of the package by doing `?pkgname` or `package?pkgname`.
-
-There are still relatively few packages that provide package documentation, but it's an extremely useful tool for users, because instead of just listing functions like `help(package = pkgname)` it organises them and shows the user where to get started.
-
-The example below shows the basic structure, as taken from the documentation for the `lubridate` package:
-
-```{r}
-#' Dates and times made easy with lubridate.
-#'
-#' Lubridate provides tools that make it easier to parse and
-#' manipulate dates. These tools are grouped below by common
-#' purpose. More information about each function can be found in
-#' its help documentation.
-#'
-#' Parsing dates
-#'
-#' Lubridate's parsing functions read strings into R as POSIXct
-#' date-time objects. Users should choose the function whose name
-#' models the order in which the year ('y'), month ('m') and day
-#' ('d') elements appear the string to be parsed:
-#' \code{\link{dmy}}, \code{\link{myd}}, \code{\link{ymd}},
-#' \code{\link{ydm}}, \code{\link{dym}}, \code{\link{mdy}},
-#' \code{\link{ymd_hms}}).
-#'
-#' ...
-#'
-#' @references Garrett Grolemund, Hadley Wickham (2011). Dates and Times
-#'   Made Easy with lubridate. Journal of Statistical Software, 40(3),
-#'   1-25. \url{http://www.jstatsoft.org/v40/i03/}.
-#' @import plyr stringr
-#' @docType package
-#' @name lubridate
-NULL
-```
-
-Important components are:
-
-* The general overview of the package: what it does, and what are the
-  important pieces.
+I usually put this documentation in a `.R` file with the same name as the package.
 
 * Like for data sets, there isn't a object that we can document directly so
   document `NULL` and use `@name` to say what we're actually documenting
@@ -337,94 +328,7 @@ Important components are:
 * `@references` point to any published material about the package that users
   might find help.
 
+* The topic will be automatically aliases to `package-pkgname` and `pkgname` (unless there is already a function of that name) so that you can find the package help with both `?pkgname` and `package?pkgname`.
+
 The package documentation should not contain a verbatim list of functions or copy of `DESCRIPTION`. This file is for human reading, so pick the most important elements of your package.
 
-## Text formatting
-
-Within roxygen text, you use the usual R documentation formatting rules, as summarised below. A fuller description is available in the [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Sectioning) manual.
-
-Sections are indicated by the @section tag, followed by the title (which should be in sentence case) and a colon.
-
-Subsections are indicated by a LaTeX-style command; the first argument is the subsection title and the second argument contains the subsection content. The following example illustrates how to add an arbitrary section:
-
-```{r}
-#' @section Warning:
-#' You must not call this function unless ...
-#'
-#' \subsection{Exceptions}{
-#'    Apart from the following special cases...
-#' }
-```
-
-The section ends when another tag is declared or when the roxygen2 block ends.
-
-### Lists
-
-* Ordered (numbered) lists:
-
-    ```{r}
-    #' \enumerate{
-    #'   \item First item
-    #' \item Second item
-    #' }
-    ```
-
-* Unordered (bulleted) lists
-
-    ```{r}
-    #' \itemize{
-    #'  \item First item
-    #'  \item Second item
-    #' }
-    ```
-
-* Definition (named) lists
-
-    ```{r}
-    #' \describe{
-    #'  \item{One}{First item}
-    #'  \item{Two}{Second item}
-    #' }
-    ```
-
-### Tables
-
-Tables are created with the tabular command, which has two arguments:
-
-* Column alignment: a letter for each column. `l` = left alignment, `c` = centre, `r` = right.
-
-* Table contents.  Columns separated by `\tab`, rows separated by `\cr`.
-
-The following function will turn an R data frame into the correct format.  It ignores column and row names, but should get you started.
-
-```{r}
-tabular <- function(df) {
-  stopifnot(is.data.frame(df))
-  align <- function(x) if (is.numeric(x)) "r" else "l"
-  col_align <- vapply(df, align, character(1))
-
-  contents <- do.call("paste", c(lapply(df, format),
-    list(sep = " \\tab ", collapse = "\\cr\n")))
-
-  mat <- matrix(unlist(lapply(df, format)), ncol = ncol(df))
-  paste("\\tabular{", paste(col_align, collapse = ""), "}{\n",
-    contents, "}\n", sep = "")
-}
-```
-
-### Mathematics
-
-`\eqn` for inline, `\deqn` for display.  Standard LaTeX (no extensions).
-
-### Character formatting
-
-* `\emph{text}`: emphasised text, usually displayed as _italics_
-
-* `\strong{text}`: strong text, usually displayed in __bold__
-
-* `\code{text}`, `\pkg{package_name}`, `\file{file_name}`
-
-* External links: `\email{email_address}`, `\url{url}`, `\href{url}{text}`
-
-* `\link[package]{function}` - the first argument can be omitted if the link
-  is in the current package, or the base package.  Will usually be wrapped inside `\code`: `\code{\link{fun}}`

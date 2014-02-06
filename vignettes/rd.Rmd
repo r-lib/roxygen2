@@ -245,3 +245,22 @@ I usually put this documentation in a `.R` file with the same name as the packag
 
 The package documentation should not contain a verbatim list of functions or copy of `DESCRIPTION`. This file is for human reading, so pick the most important elements of your package.
 
+
+## Sections
+
+You can add arbitrary sections to the documentation with the `@section` tag. The section title should be in sentence case and must be followed a colon. Titles may only take one line.
+
+```{r}
+#' @section Warning:
+#' Do not operate heavy machinery within 8 hours of using this function.
+```
+
+To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
+```{r}
+#' @section Warning:
+#' You must not call this function unless ...
+#'
+#' \subsection{Exceptions}{
+#'    Apart from the following special cases...
+#' }
+```

@@ -21,7 +21,7 @@ parse.preref <- function(lines) {
 
   parsed <- parse_elements(elements[-1], srcrefs)
   if (elements[[1]] != "") {
-    parsed$introduction <- str_trim(elements[[1]])
+    parsed$introduction <- check_rd(str_trim(elements[[1]]))
   }
   parsed
 }
@@ -31,19 +31,19 @@ LINE.DELIMITER <- '\\s*#+\' ?'
 
 parse_elements <- function(elements, srcref) {
   pieces <- str_split_fixed(elements, "[[:space:]]+", 2)
-  
+
   parse_element <- function(tag, value) {
     tag_parser <- preref.parsers[[tag]] %||% parse.unknown
     tag_parser(tag, value, srcref)
   }
-  
+
   Map(parse_element, pieces[, 1], pieces[, 2])
 }
 
 #' Parsers.
-#' 
+#'
 #' These function implement parsing different tag types.
-#' 
+#'
 #' @param key the parsing key
 #' @param rest the expression to be parsed
 #' @param srcref srcref providing location of file name and line number
@@ -55,7 +55,7 @@ NULL
 #' @export
 #' @rdname parsers
 parse.default <- function(key, rest, srcref) {
-  str_trim(rest)
+  check_rd(str_trim(rest))
 }
 
 #' @details \code{parse.default}: warns about unknown tag.
@@ -63,7 +63,7 @@ parse.default <- function(key, rest, srcref) {
 #' @rdname parsers
 parse.unknown <- function(key, rest, srcref) {
   roxygen_warning(key, ' is an unknown key', srcref = srcref)
-  str_trim(rest)
+  check_rd(str_trim(rest))
 }
 
 #' @details \code{parse.value}: fail if empty
@@ -73,15 +73,15 @@ parse.value <- function(key, rest, srcref) {
   if (is.null.string(rest)) {
     roxygen_stop(key, ' requires a value', srcref = srcref)
   }
-  
-  str_trim(rest)
+
+  check_rd(str_trim(rest))
 }
 
 #' @details \code{parse.words}: parse values into words separated by space
 #' @export
 #' @rdname parsers
 parse.words <- function(key, rest, srcref) {
-  str_split(str_trim(rest), "\\s+")[[1]]
+  str_split(check_rd(str_trim(rest)), "\\s+")[[1]]
 }
 
 #' @details \code{parse.description}: parse mandatory name and description
@@ -96,22 +96,22 @@ parse.name.description <- function(key, rest, srcref) {
   if (is.null.string(name)) {
     roxygen_stop(key, ' requires a name and description', srcref = srcref)
   }
-  
-  list(name = name, description = rest)
+
+  list(name = check_rd(name), description = check_rd(rest))
 }
 
 #' @details \code{parse.name}: one and only one word
 #' @export
 #' @rdname parsers
 parse.name <- function(key, name, srcref) {
-  name <- str_trim(name)
+  name <- check_rd(str_trim(name))
 
   if (is.null.string(name)) {
     roxygen_stop(key, ' requires a name', srcref = srcref)
   } else if (str_count(name, "\\s+") > 1) {
     roxygen_warning(key, ' ignoring extra arguments', srcref = srcref)
   }
-  
+
   word(name, 1)
 }
 
@@ -120,4 +120,11 @@ parse.name <- function(key, name, srcref) {
 #' @rdname parsers
 parse.toggle <- function(key, rest, srcref) {
   TRUE
+}
+
+check_rd <- function(x) {
+  if (!rdComplete(x)) {
+    stop("Incomplete rd in tag: ", x, call. = FALSE)
+  }
+  x
 }

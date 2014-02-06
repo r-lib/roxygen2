@@ -1,5 +1,7 @@
 context("rdComplete")
 
+# Test low-level behaviour ----------------------------------------------------
+
 test_that("braces must balance", {
   expect_true(rdComplete("{}"))
   expect_true(rdComplete("{{}}"))
@@ -29,4 +31,20 @@ test_that("newline ends comment", {
 
 test_that("escape disables comment", {
   expect_false(rdComplete("\\%{"))
+})
+
+
+# Test that incomplete Rd is caught in Rd blocks -------------------------------
+
+test_that("incomplete rd in tag raises error", {
+  expect_error(roc_proc_text(rd_roclet(), "
+    #' Title
+    #' @aliases title{
+    1"), "Incomplete rd")
+})
+
+test_that("incomplete rd in prequel raises error", {
+  expect_error(roc_proc_text(rd_roclet(), "
+    #' Title {
+    1"), "Incomplete rd")
 })

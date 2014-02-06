@@ -1,5 +1,9 @@
 # roxygen2 3.1.0.99
 
+* Parsing is stricter: many issues that were previously warnings are
+  now errors. All errors should now give you the line number of the
+  roxygen block associated with the error.
+
 * Every input is now checked to make sure that you have matching braces
   (e.g. every `{` has a matching `}`). This should prevent frustrating
   errors that require carefully reading of `.Rd` files. (#183)

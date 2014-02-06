@@ -67,18 +67,24 @@ nice_name <- function(x) {
   x
 }
 
+errors_with_srcref <- function(srcref, code) {
+  if (isTRUE(getOption("roxygen2.debug"))) return(force(code))
 
-roxygen_stop <- function(..., srcref = NULL) {
-  stop(..., srcref_location(srcref), call. = FALSE)
-}
+  loc <- srcref_location(srcref)
 
-roxygen_warning <- function(..., srcref = NULL) {
-  warning(..., srcref_location(srcref), call. = FALSE)
+  withCallingHandlers(
+    code,
+    error = function(e) {
+      msg <- paste0("Failure in roxygen block at ", loc, "\n", e$message)
+      stop(msg, call. = FALSE)
+    }
+  )
+
 }
 
 srcref_location <- function(srcref = NULL) {
   if (is.null(srcref)) return()
-  str_c(" in block ", basename(srcref$filename), ":", srcref$lloc[1])
+  str_c(basename(srcref$filename), ":", srcref$lloc[1])
 }
 
 write_if_different <- function(path, contents) {

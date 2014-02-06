@@ -10,27 +10,24 @@
 \alias{parsers}
 \title{Parsers.}
 \usage{
-parse.default(key, rest, srcref)
+parse.default(key, rest)
 
-parse.unknown(key, rest, srcref)
+parse.unknown(key, rest)
 
-parse.value(key, rest, srcref)
+parse.value(key, rest)
 
-parse.words(key, rest, srcref)
+parse.words(key, rest)
 
-parse.name.description(key, rest, srcref)
+parse.name.description(key, rest)
 
-parse.name(key, name, srcref)
+parse.name(key, name)
 
-parse.toggle(key, rest, srcref)
+parse.toggle(key, rest)
 }
 \arguments{
   \item{key}{the parsing key}
 
   \item{rest}{the expression to be parsed}
-
-  \item{srcref}{srcref providing location of file name and
-  line number}
 }
 \description{
 These function implement parsing different tag types.
@@ -38,7 +35,7 @@ These function implement parsing different tag types.
 \details{
 \code{parse.default}: emit value unchanged.
 
-\code{parse.default}: warns about unknown tag.
+\code{parse.default}: throws errors about unknown tag.
 
 \code{parse.value}: fail if empty
 

@@ -6,7 +6,7 @@ test_that("aliases split into pieces", {
     #' @aliases a b
     #' @name a
     NULL")[[1]]
-  
+
   expect_match(get_tag(out, "alias")$values, fixed("a"), all = FALSE)
   expect_match(get_tag(out, "alias")$values, fixed("b"), all = FALSE)
 })
@@ -31,7 +31,7 @@ test_that("can use NULL to suppress default aliases", {
     #' @aliases NULL
     #' @name a
     NULL")[[1]]
-  
+
   expect_equal(get_tag(out, "alias")$values, character())
 })
 
@@ -41,6 +41,6 @@ test_that("refclass gets -class alias", {
     #' Title
     B <- setRefClass('B')
   ")[[1]]
-  
+
   expect_equal(get_tag(out, "alias")$value, "B-class")
 })

@@ -197,13 +197,8 @@ roc_process.had <- function(roclet, partita, base_path, options = list()) {
 
   topics <- list()
   for (partitum in partita) {
-    withCallingHandlers({
+    errors_with_srcref(partitum$srcref, {
       new <- roclet_rd_one(partitum, base_path)
-    }, error = function(e) {
-      loc <- srcref_location(partitum$srcref)
-      msg <- paste0("Roclet processing error", loc, "\n", e$message)
-      call <- sys.call(-2)
-      stop(simpleError(msg, call))
     })
 
     if (is.null(new)) next
@@ -249,7 +244,7 @@ roclet_rd_one <- function(partitum, base_path) {
 
   # Figure out topic name
   name <- partitum$name %||% default_topic_name(partitum$object) %||%
-    roxygen_stop("Missing name", srcref = partitum$srcref)
+    stop("Missing name")
 
   # Work out file name and initialise Rd object
   filename <- str_c(partitum$merge %||% partitum$rdname %||% nice_name(name),

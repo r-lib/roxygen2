@@ -40,11 +40,11 @@ test_that("incomplete rd in tag raises error", {
   expect_error(roc_proc_text(rd_roclet(), "
     #' Title
     #' @aliases title{
-    1"), "Incomplete rd")
+    1"), "Mismatched braces")
 })
 
 test_that("incomplete rd in prequel raises error", {
   expect_error(roc_proc_text(rd_roclet(), "
     #' Title {
-    1"), "Incomplete rd")
+    1"), "Mismatched braces")
 })

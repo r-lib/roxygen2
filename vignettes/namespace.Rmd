@@ -11,19 +11,58 @@ knitr::opts_chunk$set(
 )
 ```
 
-# S3
+## Package namespace
 
-## S3 generics
+The package `NAMESPACE` is one of the most confusing parts of building a package. Roxygen2 aims to make it as easy as possible to build a package that is a well-behaved member of the R ecosystem.
 
-## S3 classes
+## Exports
 
-Export the constructor if you want the object to be constructable by users.
+If you're using roxygen2 to generate your namespace, the most important thing to understand is that by default roxygen2 doesn't export anything from your package. Anything that you want to make publically available, you must explicitly tag with `@export`.
 
-## S3 methods
+* Functions: all publicly avaiable functions should be tagged with `@export`
 
-You _must_ export every S3 method, even if the generic is not exported. Otherwise the S3 method table will not be generated correctly and your generics will not find the correct function.
+* Datasets: all datasets are publicly available. They exist outside of the
+  package namespace and must not be given `@export`.
 
-# S4
+* S3 classes: if you want others to be able to create instances of the class
+  `@export` the constructor function.
 
-## S3 classes
+* S3 generics: treat the generic like a function, and `@export` if you
+  want it to be usable outside the package
 
+* S3 methods: every S3 method _must_ be exported, even if the generic is not.
+  Otherwise the S3 method table will not be generated correctly and internal
+  generics will not find the correct method.
+
+* S4 classes: if you want others to be able to extend your class, `@export` it.
+  If you want others to create instances of your class, but not extend it,
+  `@export` the constructor function, but not the class.
+
+      ```R
+      # Can extend and create
+      #' @export
+      setClass("A")
+
+      # Can extend, but constructor not exported
+      #' @export
+      B <- setClass("B")
+
+      # Can create, but not extend
+      #' @export C
+      C <- setClass("C")
+
+      # Can create and extend
+      #' @export D
+      #' @exportClass D
+      D <- setClass("D")
+      ```
+
+* S4 generics: `@export` if you want the generic to be publicly usable.
+
+* S4 methods: you only need to `@export` methods for generics that you
+  did not define. But `@export`ing every method is a good idea as it
+  will not cause problems and prevents you from forgetting to export an
+  important method.
+
+* RC classes: the same principles apply as for S4 classes. `@export`
+  will only export the class.

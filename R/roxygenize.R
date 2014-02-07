@@ -15,6 +15,8 @@
 #' @param load_code A function used to load all the R code in the package
 #'   directory. It is called with the path to the package, and it should return
 #'   an environment containing all the sourced code.
+#' @param clean If \code{TRUE}, roxygen will delete all files previously
+#'   created by roxygen before running each roclet.
 #' @return \code{NULL}
 #' @export
 roxygenize <- function(package.dir = ".",
@@ -23,7 +25,8 @@ roxygenize <- function(package.dir = ".",
                        overwrite=TRUE,
                        unlink.target=FALSE,
                        roclets = NULL,
-                       load_code = source_package) {
+                       load_code = source_package,
+                       clean = FALSE) {
   if (copy.package) {
     stop("Non-inplace roxygen no longer supported")
   }
@@ -48,6 +51,10 @@ roxygenize <- function(package.dir = ".",
   roclets <- str_c(roclets, "_roclet", sep = "")
   roc_out <- function(roclet) {
     roc <- get(roclet, mode = "function")()
+
+    if (clean) {
+      clean(roc, base_path)
+    }
     results <- roc_process(roc, parsed, base_path, options = options)
     roc_output(roc, results, base_path, options = options)
   }

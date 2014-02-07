@@ -6,11 +6,13 @@
 \usage{
 roxygenize(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = NULL, load_code = source_package)
+  unlink.target = FALSE, roclets = NULL, load_code = source_package,
+  clean = FALSE)
 
 roxygenise(package.dir = ".", roxygen.dir = package.dir,
   copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = NULL, load_code = source_package)
+  unlink.target = FALSE, roclets = NULL, load_code = source_package,
+  clean = FALSE)
 }
 \arguments{
   \item{package.dir}{the package's top directory}
@@ -27,6 +29,10 @@ roxygenise(package.dir = ".", roxygen.dir = package.dir,
   in the package directory. It is called with the path to
   the package, and it should return an environment
   containing all the sourced code.}
+
+  \item{clean}{If \code{TRUE}, roxygen will delete all
+  files previously created by roxygen before running each
+  roclet.}
 }
 \value{
 \code{NULL}

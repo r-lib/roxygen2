@@ -297,6 +297,14 @@ roc_output.had <- function(roclet, results, base_path, options = list()) {
   paths
 }
 
+#' @export
+clean.had <- function(roclet, base_path) {
+  rd <- dir(file.path(base_path, "man"), full.names = TRUE)
+  made_by_me <- vapply(rd, made_by_roxygen, logical(1))
+
+  unlink(rd[made_by_me])
+}
+
 # Process title, description and details.
 #
 # Split the introductory matter into its description followed

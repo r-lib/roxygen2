@@ -67,9 +67,12 @@ load_options <- function(base_path) {
   } else {
     opts <- eval(parse(text = desc_opts))
   }
+  if (!("wrap" %in% names(opts)))
+    message("Using the default option wrap = FALSE ",
+            "since it was not specified in the Roxygen field in DESCRIPTION")
 
   defaults <- list(
-    wrap = TRUE,
+    wrap = FALSE,
     roclets = c("collate", "namespace", "rd")
   )
   modifyList(defaults, opts)

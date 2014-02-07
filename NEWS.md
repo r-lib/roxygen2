@@ -1,4 +1,4 @@
-# roxygen2 3.1.0.99
+# roxygen2 4.0.0
 
 * The internal parsers are no longer part of the public roxygen2 interface.
 

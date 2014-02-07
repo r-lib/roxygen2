@@ -303,6 +303,8 @@ Some notes:
 * Use `@references` point to published material about the package that
   users might find helpful.
 
+Package documentation is a good place to list all `options()` that a package understands and to document their behaviour. Put in a section called "Package options", as described below.
+
 ## Sections
 
 For any object, you can add arbitrary sections to the documentation with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed a colon. Titles may only take one line.

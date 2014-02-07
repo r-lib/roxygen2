@@ -27,6 +27,10 @@
 
 * New `@field` tag for documenting the fields on a reference class. (#181)
 
+* Roxygen2 no longer wraps the text in Rd files by default, i.e. the default
+  option is `wrap = FALSE` now. To override it, you have to specify a field
+  `Roxygen: list(wrap = TRUE)` in DESCRIPTION. (#178)
+
 # roxygen2 3.1.0
 
 ## Documentation for reference classes

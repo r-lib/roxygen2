@@ -1,6 +1,6 @@
 <!--
 %\VignetteEngine{knitr}
-%\VignetteIndexEntry{Generating the NAMESPACE}
+%\VignetteIndexEntry{Managing your NAMESPACE}
 -->
 
 ```{r, echo = FALSE, message = FALSE}

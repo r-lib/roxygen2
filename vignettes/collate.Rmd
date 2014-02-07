@@ -1,0 +1,25 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Controlling collation order}
+-->
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  error = FALSE,
+  tidy = FALSE
+)
+```
+
+# Collation order
+
+During the package build process, R combines all files together into one. By default, it combines then alphabetically. Unfortunately, however, not every alphabet puts letters in the same order, so you can't rely on alphabetic ordering to work on every computer.
+
+For most packages, the order in which functions are loaded doesn't matter. But if you're using S4, you'll need to make sure that classes are loaded before subclasses and generics are defined before methods. To do that, you add a roxygen block to the top of the file that uses the `@include` tag to indicate which files needed to be included before the current file.
+
+```{r}
+#' @include class-a.r
+setClass("B", contains = "A")
+```
+
+It's a good idea to do this whenever order is important and never rely on alphabetic ordering

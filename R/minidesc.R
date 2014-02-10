@@ -52,6 +52,14 @@ label_class <- function(obj) {
 
 # If documented in generic, gets labelled with class
 label_generic <- function(obj) {
+  if (inherits(obj, "s3method")) {
+    attr(obj$value, "s3method")[1]
+  } else if (inherits(obj, "s4method")) {
+    as.character(obj$value@generic)
+  } else {
+    stop("@minidesc generic must be used with an S3 or S4 method",
+      call = FALSE)
+  }
 
 }
 

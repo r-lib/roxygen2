@@ -35,7 +35,7 @@ register.preref.parsers(parse.name.description,
 register.preref.parsers(parse.name,
                         'docType')
 
-register.preref.parsers(parse.default,
+register.preref.parsers(parse.toggle,
                         'noRd')
 
 

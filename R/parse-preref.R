@@ -39,11 +39,6 @@ parse_elements <- function(elements) {
   Map(parse_element, pieces[, 1], pieces[, 2])
 }
 
-parse.default <- function(key, rest) {
-  check_rd(key, rest)
-  str_trim(rest)
-}
-
 parse.unknown <- function(key, rest) {
   stop("@", key, " is an unknown key")
 }

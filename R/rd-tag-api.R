@@ -188,3 +188,20 @@ format.rcmethods_tag <- function(x, ...) {
     "\n}}\n"
   )
 }
+
+#' @export
+format.minidesc_tag <- function(x, ...) {
+  title <- switch(x$values$type,
+    generic = "Methods (by class)",
+    class = "Methods (by generic)",
+    "function" = "Functions"
+  )
+
+  paste0(
+    "\\section{", title, "}{\n",
+    "\\itemize{\n",
+    paste0("\\item \\code{", x$values$label, "}: ", x$values$desc,
+      collapse = "\n\n"),
+    "\n}}\n"
+  )
+}

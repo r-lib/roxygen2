@@ -23,10 +23,11 @@ names.rd_file <- function(x) {
 #' @export
 format.rd_file <- function(x, ...) {
   tags <- as.list(x[[1]])
-  order <- c("docType", "encoding", "name", "alias", "title", "format",
-    "source", "usage", "param", "value", "description",
-    "details", "field", "slot", "rcmethods", "note", "section", "examples",
-    "author", "references", "seealso", "concept", "keyword")
+  order <- c("docType", "encoding", "name", "alias", "title",
+    "format", "source", "usage", "param", "value", "description",
+    "details", "minidesc", "field", "slot", "rcmethods", "note",
+    "section", "examples", "author", "references", "seealso",
+    "concept", "keyword")
 
   tags <- tags[intersect(order, names(tags))]
 

@@ -51,6 +51,7 @@ find_params <- function(inheritor, topics, name_lookup) {
     params <- get_tag(topics[[rd_name]], "param")$values
   }
   params <- unlist(params)
+  if (is.null(params)) return(NULL)
 
   param_names <- str_trim(names(params))
   param_names[param_names == "\\dots"] <- "..."

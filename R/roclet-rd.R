@@ -38,6 +38,7 @@ register.preref.parsers(parse.name,
 register.preref.parsers(parse.toggle,
                         'noRd')
 
+register.preref.parsers(parse.minidesc, 'minidesc')
 
 
 #' Roclet: make Rd files.
@@ -121,6 +122,7 @@ roclet_rd_one <- function(partitum, base_path) {
     add_tag(rd, new_tag("formals", names(formals)))
   }
 
+  add_tag(rd, process_minidesc(partitum))
   add_tag(rd, process_description(partitum, base_path))
   add_tag(rd, process_methods(partitum))
 

@@ -42,6 +42,17 @@ merge.rd_tag <- function(x, y, ...) {
   new_tag(x$tag, c(x$values, y$values))
 }
 
+#' @export
+merge.minidesc_tag <- function(x, y, ...) {
+  if (x$values$type != y$values$type) {
+    stop("Can't merge @minidesc of different types", call. = FALSE)
+  }
+
+  x$values$desc <- c(x$values$desc, y$values$desc)
+  x$values$label <- c(x$values$label, y$values$label)
+  list(x)
+}
+
 # Tags that repeat multiple times --------------------------------------------
 
 format_rd <- function(x, ...) {

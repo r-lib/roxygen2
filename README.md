@@ -13,7 +13,7 @@ The premise of `roxygen2` is simple: describe your functions in comments next to
 #' The length of a string (in characters).
 #'
 #' @param string input character vector
-#' @return numeric vector giving number of characters in each element of the 
+#' @return numeric vector giving number of characters in each element of the
 #'   character vector.  Missing strings have missing length.
 #' @seealso \code{\link{nchar}} which this function wraps
 #' @export
@@ -65,7 +65,7 @@ To get the current development version from github:
 
 ```R
 # install.packages("devtools")
-devtools::install_github("roxygen/klutometis")
+devtools::install_github("klutometis/roxygen")
 ```
 
 # Running
@@ -74,10 +74,10 @@ Roxygen does a live analysis of your source code: it loads all the code in your 
 
 * `roxygen::roxygenise()` just sources all files in the `R/` directory
 
-* `devtools::document()` sources all files in the `R/` directory, compiles 
+* `devtools::document()` sources all files in the `R/` directory, compiles
   source code in the `src/` directory, loads data in the `data/` directory
   and generally does an accurate job of simulating package loading.
-  
+
 If you have a simple package, you can use `roxygenise()`, but for anything more complicated, I recommend that you use `document()`.
 
 # Roclets

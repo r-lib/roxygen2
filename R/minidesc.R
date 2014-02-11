@@ -1,10 +1,10 @@
-parse.minidesc <- function(key, rest) {
+parse.describeIn <- function(key, rest) {
   check_rd(key, rest)
 
   pieces <- str_split_fixed(rest, " ", 2)
   type <- str_trim(pieces[[1]])
   if (!(type %in% c("generic", "class", "function"))) {
-    stop("@minidesc must be followed by generic, class or function",
+    stop("@describeIn must be followed by generic, class or function",
       call. = FALSE)
   }
   desc <- str_trim(pieces[[2]])
@@ -12,14 +12,14 @@ parse.minidesc <- function(key, rest) {
   list(type = type, desc = desc)
 }
 
-process_minidesc <- function(block) {
-  tags <- block[names(block) == "minidesc"]
+process_describeIn <- function(block) {
+  tags <- block[names(block) == "describeIn"]
   if (length(tags) == 0) return()
   if (length(tags) > 1) {
-    stop("May only use one @minidesc per block", call. = FALSE)
+    stop("May only use one @describeIn per block", call. = FALSE)
   }
   if (is.null(block$object)) {
-    stop("@minidesc must be used with an object", call. = FALSE)
+    stop("@describeIn must be used with an object", call. = FALSE)
   }
 
   tag <- tags[[1]]
@@ -45,7 +45,7 @@ label_class <- function(obj) {
       paste0(names(sig), " = ", sig, collapse = ",")
     }
   } else {
-    stop("@minidesc class must be used with an S3 or S4 method",
+    stop("@describeIn class must be used with an S3 or S4 method",
       call = FALSE)
   }
 }
@@ -57,7 +57,7 @@ label_generic <- function(obj) {
   } else if (inherits(obj, "s4method")) {
     as.character(obj$value@generic)
   } else {
-    stop("@minidesc generic must be used with an S3 or S4 method",
+    stop("@describeIn generic must be used with an S3 or S4 method",
       call = FALSE)
   }
 

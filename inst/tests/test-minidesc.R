@@ -1,72 +1,69 @@
-context("minidesc")
+context("describeIn")
 
-test_that("@minidesc generic captures s3 method class", {
+test_that("@describeIn generic captures s3 method class", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
     f <- function(x) UseMethod('f')
 
-    #' @rdname f
-    #' @minidesc generic Method for a
+    #' @describeIn f Method for a
     f.a <- function(x) 1
   ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$values$label, "a")
+  expect_equal(get_tag(out, "describeIn")$values$label, "a")
 })
 
-test_that("@minidesc generic captures s4 method class", {
+test_that("@describeIn generic captures s4 method class", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
     setGeneric('f', function(x) standardGeneric('f'))
 
-    #' @rdname f
-    #' @minidesc generic Method for a
+    #' @describeIn f Method for a
     setMethod(f, signature('a'), function(x) 1)
   ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$values$label, "a")
+  expect_equal(get_tag(out, "describeIn")$values$label, "a")
 })
 
-test_that("@minidesc class captures s3 generic name", {
+test_that("@describeIn class captures s3 generic name", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
     a <- function() structure(list(), class = 'a')
 
-    #' @rdname a
-    #' @minidesc class mean method
+    #' @describeIn a mean method
     mean.a <- function(x) 1
     ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$values$label, "mean")
+  expect_equal(get_tag(out, "describeIn")$values$label, "mean")
 })
 
-test_that("@minidesc class captures s4 generic name", {
+test_that("@describeIn class captures s4 generic name", {
   out <- roc_proc_text(rd_roclet(), "
+    setGeneric('mean')
+
     #' Title
     setClass('a')
 
-    #' @rdname a-class
-    #' @minidesc class mean method
+    #' @describeIn a mean method
     setMethod('mean', 'a', function(x) 1)
     ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$values$label, "mean")
+  expect_equal(get_tag(out, "describeIn")$values$label, "mean")
 })
 
 
-test_that("Multiple @minidesc generic combined into one", {
+test_that("Multiple @describeIn generic combined into one", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
     f <- function(x) UseMethod('f')
 
-    #' @rdname f
-    #' @minidesc generic A
+    #' @describeIn f A
     f.a <- function(x) 1
 
-    #' @rdname f
-    #' @minidesc generic B
+    #' @describeIn f B
     f.b <- function(x) 1
   ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$values$label, c("a", "b"))
-  expect_equal(get_tag(out, "minidesc")$values$desc, c("A", "B"))
+  expect_equal(get_tag(out, "describeIn")$values$type, "generic")
+  expect_equal(get_tag(out, "describeIn")$values$label, c("a", "b"))
+  expect_equal(get_tag(out, "describeIn")$values$desc, c("A", "B"))
 })

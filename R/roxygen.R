@@ -16,6 +16,7 @@
 #' @name roxygen
 #' @docType package
 #' @useDynLib roxygen2
+#' @importFrom Rcpp sourceCpp
 #' @examples
 #' \dontrun{roxygenize('pkg')}
 #' @seealso See \code{\link{namespace_roclet}}, \code{\link{rd_roclet}},

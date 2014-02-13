@@ -1,5 +1,7 @@
 # roxygen2 4.0.0
 
+* Bump version requirement of Rcpp to 0.11.0, and remove custom make files.
+
 * Non-syntactic argument names (like `_x`) are now correctly surrounded by
   back-ticks in the usage (#191)
 

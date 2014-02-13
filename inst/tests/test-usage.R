@@ -100,6 +100,12 @@ test_that("argument containing function is generates correct usage", {
   expect_equal(get_tag(out, "usage")$values, rd("a(a = function(x) {     1 })"))
 })
 
+test_that("backticks retained when needed", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title.
+    f <- function(`_x`) 1")[[1]]
+  expect_equal(get_tag(out, "usage")$values, "f(`_x`)")
+})
 
 
 # @usage -----------------------------------------------------------------------

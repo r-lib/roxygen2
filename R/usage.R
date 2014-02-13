@@ -2,7 +2,7 @@
 usage_tag <- function(partitum) {
   if (is.null(partitum$usage)) {
     usage <- wrap_string(default_usage(partitum$object))
-  } else if (partitum$usage == "NULL") { 
+  } else if (partitum$usage == "NULL") {
     usage <- NULL
   } else {
     # Treat user input as already escaped, otherwise they have no way
@@ -16,7 +16,7 @@ wrap_string <- function(x) {
   if (is.null(x)) return(x)
   y <- wrapString(x)
   Encoding(y) <- Encoding(x)
-  
+
   y <- str_replace_all(y, "\u{A0}", " ")
   class(y) <- class(x)
   y
@@ -77,23 +77,23 @@ function_usage <- function(name, formals, format_name = identity) {
   if (is_replacement_fun(name)) {
     name <- str_replace(name, fixed("<-"), "")
     formals$value <- NULL
-    
+
     arglist <- args_string(usage_args(formals))
     build_rd(format_name(name), "(", arglist, ") <- value")
   } else if (is_infix_fun(name) && identical(format_name, identity)) {
     # If infix, and regular function, munge format
     arg_names <- names(formals)
-    
+
     build_rd(arg_names[1], " ", format_name(name), " ", arg_names[2])
   } else {
     # Quote non-syntactic names if no special formatting
     if (identical(format_name, identity)) {
-      name <- quote_if_needed(name) 
+      name <- quote_if_needed(name)
     }
-    
+
     build_rd(format_name(name), "(", arglist, ")")
   }
-  
+
 }
 
 is_replacement_fun <- function(name) {
@@ -118,7 +118,7 @@ usage_args <- function(args) {
     text <- deparse(arg, backtick = TRUE, width.cutoff = 500L)
     text <- paste0(text, collapse = "\n")
     Encoding(text) <- "UTF-8"
-    
+
     text
   }
   vapply(args, arg_to_text, character(1))
@@ -127,6 +127,10 @@ usage_args <- function(args) {
 args_string <- function(x) {
   missing_arg <- x == ""
   sep <- ifelse(!missing_arg, "\u{A0}=\u{A0}", "")
-  
-  str_c(names(x), sep, x, collapse = ", ")
+
+  arg_names <- names(x)
+  needs_backtick <- !is.syntactic(arg_names)
+  arg_names[needs_backtick] <- paste0("`", arg_names[needs_backtick], "`")
+
+  str_c(arg_names, sep, x, collapse = ", ")
 }

@@ -1,5 +1,8 @@
 # roxygen2 4.0.0
 
+* Non-syntactic argument names (like `_x`) are now correctly surrounded by
+  back-ticks in the usage (#191)
+
 * The internal parsers are no longer part of the public roxygen2 interface.
 
 * `@section` titles and `@export` tags can now only span a single line

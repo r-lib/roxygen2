@@ -66,3 +66,38 @@ If you're using roxygen2 to generate your namespace, the most important thing to
 
 * RC classes: the same principles apply as for S4 classes. `@export`
   will only export the class.
+
+## Imports
+
+There are five tags for importing objects into the package:
+
+* `@import package` produces \code{import(package) directive
+  to import all functions from the given package.
+
+* `@importFrom package functiona functionb ...` produces
+   multiple `importFrom(package, function)` directives to import
+   selected functions from a package..
+
+* `@importClassesFrom package classa classb ...` produces
+  multiple `importClassesFrom(package, class) directives to import
+  selected classes from a package.}
+
+* `@importMethodsFrom package methoda methodb ...` produces
+  multiple `importMethodsFrom(package, method)` directives to import
+  selected methods from a package.}
+
+* `@useDynLib package` produces a `useDynLib(package)`
+  directive to import all compiled routines from the shared objects in
+  the specified package}
+
+* `@useDynLib package routinea routineb` produces multiple
+  `useDynLib(package,routine)` directions to import specified
+  compiled routines from a package.
+
+* Any `@useDynLib` specification containing a comma, e.g.
+  `@useDynLib mypackage, .registration = TRUE` will be inserted as is
+  into the the NAMESPACE, e.g. `useDynLib(mypackage, .registration = TRUE)`
+
+Only unique directives are saved to the \file{NAMESPACE} file, so you can
+repeat them as needed to maintain a close link between the functions where
+they are needed and the namespace file.

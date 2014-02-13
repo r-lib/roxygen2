@@ -180,7 +180,7 @@ We could use these new tags to improve our documentation of `sum()` as follows:
 #' @param ... Numeric, complex, or logical vectors.
 #' @param na.rm A logical scalar. Should missing values (including NaN)
 #'   be removed?
-#' @value If all inputs are integer and logical, then the output
+#' @return If all inputs are integer and logical, then the output
 #'   will be an integer. If integer overflow
 #'   \url{http://en.wikipedia.org/wiki/Integer_overflow} occurs, the output
 #'   will be NA with a warning. Otherwise it will be a length-one numeric or

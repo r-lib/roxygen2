@@ -122,6 +122,19 @@ For sum, these components might look like:
 #'  marginal sums over high-dimensional arrays.
 ```
 
+Three other tags make it easier for the user to find documentation:
+
+* `@aliases space separated aliases` to add additional aliases, through which the user can find the documentation with `?`.
+
+* `@concepts` to add extra keywords that will be found with `help.search()`
+
+* `@keywords keyword1 keyword2 ...` Keywords are optional, but if present,
+  must be taken from the predefined list replicated in the
+  [keywords vignette](keywords.html). Keywords are not terribly useful,
+  except for `@keywords internal`. The internal keyword flags the function
+  as developer only, removing it from the documentation index and disabling
+  some of automated tests.
+
 You use other tags based on the type of object that you're documenting. The following sections describe the most commonly used tags for functions, S3, S4 and RC objects and data.
 
 ## Documenting functions
@@ -138,6 +151,11 @@ Functions are the mostly commonly documented objects. Most functions use three t
   It's possible to document multiple arguments in one place by separating
   the names with commas (no spaces). For example, to document both
   `x` and `y`, you can say `@param x,y Numeric vectors.`.
+
+* `@example path/relative/to/packge/root`: Instead of including
+  examples directly in the documentation, you can include them as
+  separate files, and use the `@example` tag to insert them into
+  the documentation.
 
 * `@examples` provides executable R code showing how to use the function in
   practice. This is a very important part of the documentation because
@@ -206,10 +224,9 @@ Indent the second and subsequent lines of a tag so that when scanning the docume
 
 ## Inheriting parameters from other functions
 
-You can inherit parameter descriptions from other functions using `@inheritParams source_function`. This tag will bring in all documentation for parameters that are undocumented in the current function, but documented in the source function. The source can be a function in the current package, function, or another package using `package::function`.
+You can inherit parameter descriptions from other functions using `@inheritParams source_function`. This tag will bring in all documentation for parameters that are undocumented in the current function, but documented in the source function. The source can be a function in the current package, `@inheritParams function`, or another package using `@inheritParams package::function`.
 
 Note, however, that inheritance does not chain. In other words, the `source_function` must always be the function that defines the parameter using `@param`.
-
 
 ## Documenting multiple functions in the same file
 

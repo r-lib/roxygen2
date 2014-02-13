@@ -1,0 +1,18 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Rd keywords}
+-->
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  error = FALSE,
+  tidy = FALSE
+)
+```
+
+## Keywords
+
+```{r}
+cat(readLines(file.path(R.home(), "doc/KEYWORDS")), sep = "\n")
+```

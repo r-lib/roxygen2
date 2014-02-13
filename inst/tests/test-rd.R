@@ -50,7 +50,7 @@ test_that("deleted objects not documented", {
         .a
       }
     }
-    
+
     #' Addition function.
     f2 <- f()
     rm(f)
@@ -62,13 +62,19 @@ test_that("deleted objects not documented", {
 test_that("documenting unknown function requires name", {
   expect_error(roc_proc_text(rd_roclet(), "
     #' Virtual Class To Enforce Max Slot Lenght
-    #' 
+    #'
     #' @export
     setClass('A')
-    
+
     #' Validity function.
-    setValidity('A', function(object) TRUE)  
+    setValidity('A', function(object) TRUE)
     "),
     "Missing name"
   )
+})
+
+test_that("documenting NA gives useful error message (#194)", {
+  expect_error(roc_proc_text(rd_roclet(), "
+    #' Missing value
+    NA")[[1]], "Missing name")
 })

@@ -19,6 +19,8 @@
 #' @importFrom Rcpp sourceCpp
 #' @examples
 #' \dontrun{roxygenize('pkg')}
-#' @seealso See \code{\link{namespace_roclet}}, \code{\link{rd_roclet}},
-#' for an overview of roxygen tags.
+#' @seealso See \code{vignette("rd", package = "roxygen")} for an overview
+#'   of the package, \code{vignette("rd", package = "roxygen")} for generating
+#'   documenation, and \code{vignette("namespace", package = "roxygen")} for
+#'   generating the namespace specification.
 NULL

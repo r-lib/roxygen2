@@ -24,7 +24,9 @@ Manuel Eugster \email{Manuel.Eugster@stat.uni-muenchen.de}
 Maintainer: Hadley Wickham \email{h.wickham@gmail.com}
 }
 \seealso{
-See \code{\link{namespace_roclet}}, \code{\link{rd_roclet}},
-for an overview of roxygen tags.
+See \code{vignette("rd", package = "roxygen")} for an overview
+  of the package, \code{vignette("rd", package = "roxygen")} for generating
+  documenation, and \code{vignette("namespace", package = "roxygen")} for
+  generating the namespace specification.
 }
 

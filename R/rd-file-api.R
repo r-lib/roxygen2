@@ -12,7 +12,7 @@ copy_env <- function(x) {
 
 #' @export
 print.rd_file <- function(x, ...) {
-  cat("Rd file with tags ", str_c(names(x), collapse = ", "), "\n", sep = "")
+  cat("Rd file with tags ", paste0(names(x), collapse = ", "), "\n", sep = "")
 }
 
 #' @export

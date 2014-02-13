@@ -1,13 +1,13 @@
 # Combine a block with defaults generated from the object
 add_defaults <- function(block) {
   defaults <- object_defaults(block$object)
-  
+
   for (tag in names(defaults)) {
     if (tag %in% names(block)) next
-    
+
     block[[tag]] <- defaults[[tag]]
   }
-  
+
   block
 }
 
@@ -20,7 +20,7 @@ object_defaults.default <- function(x) list()
 object_defaults.data <- function(x) {
   str_out <- paste0(capture.output(str(x$value)), collapse = "\n")
   str_pre <- build_rd("\\preformatted{", escape_preformatted(str_out), "\n}")
-  
+
   list(
     docType = "data",
     format = str_pre,
@@ -47,7 +47,7 @@ object_defaults.rcclass <- function(x) {
 object_defaults.s4method <- function(x) {
   generic <- x$value@generic
   pkg <- attr(generic, "package")
-  
+
   list(
     docType = "methods",
     inheritParams = inherit_from(generic, pkg)
@@ -61,5 +61,5 @@ inherit_from <- function(generic, pkg) {
   rd <- get_rd(generic, pkg)
   if (is.null(rd)) return(NULL)
 
-  str_c(pkg, "::", generic)
+  paste0(pkg, "::", generic)
 }

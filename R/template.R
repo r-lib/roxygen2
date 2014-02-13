@@ -2,7 +2,7 @@ register.preref.parsers(parse.value, "template")
 register.preref.parsers(parse.name.description, "templateVar")
 
 template_find <- function(base_path, template_name) {
-  path <- file.path(base_path, "man-roxygen", str_c(template_name, ".", c("R", "r")))
+  path <- file.path(base_path, "man-roxygen", paste0(template_name, ".", c("R", "r")))
   path_exists <- file.exists(path)
 
   if (!any(path_exists)) {
@@ -32,7 +32,7 @@ process_templates <- function(partitum, base_path) {
   vars <- lapply(vars, type.convert, as.is = TRUE)
 
   results <- lapply(paths, template_eval, vars = list2env(vars))
-  
+
   # Insert templates back in the location where they came from
   partitum_pieces <- lapply(partitum, list)
   partitum_pieces[template_locs] <- lapply(results, parse.preref)

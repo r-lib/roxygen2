@@ -48,7 +48,7 @@ roxygenize <- function(package.dir = ".",
 
   parsed <- parse_package(base_path, load_code)
 
-  roclets <- str_c(roclets, "_roclet", sep = "")
+  roclets <- paste0(roclets, "_roclet", sep = "")
   roc_out <- function(roclet) {
     roc <- get(roclet, mode = "function")()
 

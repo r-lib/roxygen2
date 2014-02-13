@@ -105,7 +105,7 @@ roclet_rd_one <- function(partitum, base_path) {
     stop("Missing name")
 
   # Work out file name and initialise Rd object
-  filename <- str_c(partitum$merge %||% partitum$rdname %||% nice_name(name),
+  filename <- paste0(partitum$merge %||% partitum$rdname %||% nice_name(name),
     ".Rd")
 
   add_tag(rd, new_tag("encoding", partitum$encoding))
@@ -276,7 +276,7 @@ process.docType <- function(partitum) {
   if (doctype == "package") {
     name <- partitum$name
     if (!str_detect(name, "-package")) {
-      tags <- c(tags, new_tag("alias", str_c(name, "-package")))
+      tags <- c(tags, new_tag("alias", paste0(name, "-package")))
     }
   }
 

@@ -54,7 +54,7 @@ subs <- matrix(ncol = 2, byrow = T, c(
   '}', 'close',
   '~', 'twiddle'
 ))
-subs[, 2] <- str_c("-", subs[, 2], "-")
+subs[, 2] <- paste0("-", subs[, 2], "-")
 
 nice_name <- function(x) {
   for(i in seq_len(nrow(subs))) {
@@ -84,7 +84,7 @@ errors_with_srcref <- function(srcref, code) {
 
 srcref_location <- function(srcref = NULL) {
   if (is.null(srcref)) return()
-  str_c(basename(srcref$filename), ":", srcref$lloc[1])
+  paste0(basename(srcref$filename), ":", srcref$lloc[1])
 }
 
 write_if_different <- function(path, contents) {
@@ -138,7 +138,7 @@ made_by <- function(comment) {
 same_contents <- function(path, contents) {
   if (!file.exists(path)) return(FALSE)
 
-  contents <- str_c(str_c(contents, collapse = "\n"), "\n")
+  contents <- paste0(paste0(contents, collapse = "\n"), "\n")
 
   text_hash <- digest(contents, serialize = FALSE)
   file_hash <- digest(file = path)

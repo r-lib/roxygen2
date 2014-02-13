@@ -5,8 +5,8 @@ register.preref.parsers(parse.value, 'include')
 
 #' Update Collate field in DESCRIPTION.
 #'
-#' Topologically sort R files and record in Collate field. The topological 
-#' sort is based on the \code{@@include} tag, which should specify the filenames 
+#' Topologically sort R files and record in Collate field. The topological
+#' sort is based on the \code{@@include} tag, which should specify the filenames
 #' (space separated) that should be loaded before the current file - these are
 #' typically necessary if you're using S4 or RC classes (because super classes
 #' must be defined before subclasses).  If there are no \code{@@include} tags
@@ -74,7 +74,7 @@ find_includes <- function(path) {
   re <- regexec("^\\s*#+' @include (.*)$", lines)
   matches <- regmatches(lines, re)
   matches <- Filter(function(x) length(x) == 2, matches)
-  
+
   if (length(matches) == 0) return()
 
   includes <- vapply(matches, "[[", 2, FUN.VALUE = character(1))
@@ -85,5 +85,5 @@ base_path <- function(path, base) {
   path <- normalizePath(path, winslash = "/")
   base <- normalizePath(base, winslash = "/")
 
-  str_replace(path, fixed(str_c(base, "/")), "")
+  str_replace(path, fixed(paste0(base, "/")), "")
 }

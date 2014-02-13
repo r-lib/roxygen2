@@ -6,7 +6,7 @@ parse.preref <- function(lines) {
 
   if (length(trimmed.lines) == 0) return(NULL)
 
-  joined.lines <- str_c(trimmed.lines, collapse = '\n')
+  joined.lines <- paste0(trimmed.lines, collapse = '\n')
   ## Thanks to Fegis at #regex on Freenode for the
   ## lookahead/lookbehind hack; as he notes, however, "it's not
   ## proper escaping though... it will not split a@@@b."

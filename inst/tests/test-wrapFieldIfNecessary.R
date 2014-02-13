@@ -20,15 +20,15 @@ test_that("DESCRIPTION fields get wrapped if a line length exceeds the wrapping 
     desc <- read.description("description-example.txt")
     expect_equal(
       wrap_field_if_necessary("Description", desc$Description, wrap.threshold = 80),
-      str_wrap(str_c("Description", ": ", desc$Description), exdent = 4, width = 80)
+      str_wrap(paste0("Description", ": ", desc$Description), exdent = 4, width = 80)
     )
     expect_equal(
       wrap_field_if_necessary("Description", desc$Description, wrap.threshold = 60),
-      str_wrap(str_c("Description", ": ", desc$Description), exdent = 4, width = 60)
+      str_wrap(paste0("Description", ": ", desc$Description), exdent = 4, width = 60)
     )
     expect_equal(
       wrap_field_if_necessary("Author", desc$Author, wrap.threshold = 40),
-      str_wrap(str_c("Author", ": ", desc$Author), exdent = 4, width = 40)
+      str_wrap(paste0("Author", ": ", desc$Author), exdent = 4, width = 40)
     )
   }
 )
@@ -37,7 +37,7 @@ test_that("DESCRIPTION fields get wrapped if they are marked as individual_lines
     desc <- read.description("description-example.txt")
     expect_equal(
       wrap_field_if_necessary("Collate", desc$Collate, wrap.threshold = 0),
-      str_wrap(str_c("Collate", ": ", desc$Collate), exdent = 4, width = 0)
+      str_wrap(paste0("Collate", ": ", desc$Collate), exdent = 4, width = 0)
     )
   }
 )

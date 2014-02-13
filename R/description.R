@@ -37,7 +37,7 @@ wrap_field_if_necessary <- function(field, value, wrap.threshold) {
    longest.line <- max(str_length(text))
 
    if (longest.line > wrap.threshold) {
-     text <- str_wrap(str_c(field, ": ", value), exdent = 4, width = wrap.threshold)
+     text <- str_wrap(paste0(field, ": ", value), exdent = 4, width = wrap.threshold)
    }
 
    return(text)
@@ -45,8 +45,8 @@ wrap_field_if_necessary <- function(field, value, wrap.threshold) {
 
 # Simulate what was probably the user's intended field formatting
 simulate_formatted_text <- function(field, value) {
-  text     <- str_split(str_c(field, ": ", value), "\n")[[1]]
-  text[-1] <- str_c("    ", text[-1]) # indents all *but* the first line
+  text     <- str_split(paste0(field, ": ", value), "\n")[[1]]
+  text[-1] <- paste0("    ", text[-1]) # indents all *but* the first line
 
   return(text)
 }

@@ -10,7 +10,7 @@ new_tag <- function(tag, values) {
   # NULL is special sentinel value that suppresses output of that tag
   if (identical(values, "NULL")) return()
 
-  subc <- str_c(tag, "_tag")
+  subc <- paste0(tag, "_tag")
   list(structure(list(tag = tag, values = values), class = c(subc, "rd_tag")))
 }
 
@@ -25,12 +25,12 @@ print.rd_tag <- function(x, ...) {
 # own braces.
 rd_tag <- function(tag, ..., space = FALSE) {
   if (space) {
-    values <- str_c("\n", str_c(..., collapse = "\n"), "\n")
+    values <- paste0("\n", paste0(..., collapse = "\n"), "\n")
   } else {
     values <- str_trim(c(...))
   }
 
-  str_c("\\", tag, str_c("{", values, "}", collapse = ""), "\n")
+  paste0("\\", tag, paste0("{", values, "}", collapse = ""), "\n")
 }
 
 #' @export
@@ -77,7 +77,7 @@ format.encoding_tag <- format_first
 # Tags collapse their values into a single string ----------------------------
 
 format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
-  values <- str_c(x$values, collapse = "\n\n")
+  values <- paste0(x$values, collapse = "\n\n")
   if (wrap) {
     values <- str_wrap(values, width = 60, indent = indent, exdent = exdent)
   }
@@ -125,7 +125,7 @@ format.param_tag <- function(x, ...) {
   names <- names(x$values)
   dups <- duplicated(names)
 
-  items <- str_c("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
+  items <- paste0("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
   rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2),
     space = TRUE)
 }
@@ -137,7 +137,7 @@ format.section_tag <- function(x, ...) {
   contents <- vapply(x$values, "[[", "content", FUN.VALUE = character(1))
   contents <- str_wrap(str_trim(contents), width = 60, exdent = 2, indent = 2)
 
-  setions <- str_c("\\section{", names, "}{\n", contents, "\n}\n",
+  setions <- paste0("\\section{", names, "}{\n", contents, "\n}\n",
     collapse = "\n")
 }
 
@@ -164,7 +164,7 @@ describe_section <- function(name, dt, dd) {
 
 #' @export
 format.examples_tag <- function(x, ...) {
-  values <- str_c(x$values, collapse = "\n")
+  values <- paste0(x$values, collapse = "\n")
   rd_tag(x$tag, values, space = TRUE)
 }
 

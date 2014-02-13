@@ -18,21 +18,9 @@ This roclet automates the production of a \file{NAMESPACE} file,
 see \cite{Writing R Extensions}
 (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
 }
-\examples{
-#' An example file, example.R, which imports
-#' packages foo and bar
-#' @import foo bar
-NULL
-
-#' An exportable function
-#' @export
-fun <- function() {}
-
-roclet <- namespace_roclet()
-\dontrun{roc_proc(roclet, "example.R")}
-\dontrun{roc_out(roclet, "example.R", ".")}
-}
 \seealso{
+\code{vignette("namespace", package = "roxygen2")}
+
 Other roclets: \code{\link{rd_roclet}}
 }
 

@@ -50,10 +50,7 @@ register.preref.parsers(parse.toggle,
 #' problem.
 #'
 #' @family roclets
-#' @examples
-#' roclet <- rd_roclet()
-#' \dontrun{roc_proc(roclet, "example.R")}
-#' \dontrun{roc_out(roclet, "example.R", ".")}
+#' @seealso \code{vignette("rd", package = "roxygen2")}
 #' @export
 rd_roclet <- function() {
   new_roclet(list(), "had")

@@ -14,12 +14,9 @@ This roclet also automatically runs \code{\link[tools]{checkRd}} on all
 generated Rd files so that you know as early as possible if there's a
 problem.
 }
-\examples{
-roclet <- rd_roclet()
-\dontrun{roc_proc(roclet, "example.R")}
-\dontrun{roc_out(roclet, "example.R", ".")}
-}
 \seealso{
+\code{vignette("rd", package = "roxygen2")}
+
 Other roclets: \code{\link{S3method}},
   \code{\link{export}}, \code{\link{exportClass}},
   \code{\link{exportMethod}}, \code{\link{import}},

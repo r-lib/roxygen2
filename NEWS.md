@@ -1,6 +1,6 @@
 # roxygen2 4.0.0
 
-* Remove unneeded codetools dependency.
+* Remove unneeded codetools and tools dependencies.
 
 * Bump version requirement of Rcpp to 0.11.0, and remove custom make files.
 

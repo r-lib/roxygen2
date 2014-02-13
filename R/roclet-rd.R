@@ -45,10 +45,6 @@ register.preref.parsers(parse.toggle,
 #' This roclet is the workhorse of \pkg{roxygen}, producing the Rd files that
 #' document that functions in your package.
 #'
-#' This roclet also automatically runs \code{\link[tools]{checkRd}} on all
-#' generated Rd files so that you know as early as possible if there's a
-#' problem.
-#'
 #' @family roclets
 #' @seealso \code{vignette("rd", package = "roxygen2")}
 #' @export
@@ -151,7 +147,6 @@ roclet_rd_one <- function(partitum, base_path) {
 }
 
 #' @export
-#' @importFrom tools checkRd
 roc_output.had <- function(roclet, results, base_path, options = list()) {
   man <- normalizePath(file.path(base_path, "man"))
 

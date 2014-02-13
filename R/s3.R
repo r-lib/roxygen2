@@ -2,8 +2,8 @@
 #'
 #' @description
 #' \code{is_s3_generic} compares name to \code{.knownS3Generics} and
-#' \code{.S3PrimitiveGenerics}, then uses \code{\link[codetools]{findGlobals}}
-#' to see if the functionion calls \code{\link{UseMethod}}.
+#' \code{.S3PrimitiveGenerics}, then looks at the function body to see if it
+#' calls \code{\link{UseMethod}}.
 #'
 #' \code{is_s3_method} builds names of all possible generics for that function
 #' and then checks if any of them actually is a generic.
@@ -11,21 +11,20 @@
 #' @param name name of function.
 #' @param env environment to search in.
 #' @export
-#' @importFrom codetools findGlobals
 is_s3_generic <- function(name, env = parent.frame()) {
   if (name == "") return(FALSE)
   if (!exists(name, envir = env)) return(FALSE)
-  
+
   f <- get(name, envir = env)
   if (!is.function(f)) return(FALSE)
   if (inherits(f, "groupGenericFunction")) return(TRUE)
-  
+
   if (is.primitive(f)) {
     known_generics <- c(names(.knownS3Generics),
       internal_f("tools", ".get_internal_S3_generics")())
     return(name %in% known_generics)
   }
-  
+
   calls_use_method(body(f))
 }
 
@@ -33,14 +32,14 @@ calls_use_method <- function(x) {
   # Base cases
   if (missing(x)) return(FALSE)
   if (!is.call(x)) return(FALSE)
-  
+
   if (identical(x[[1]], quote(UseMethod))) return(TRUE)
   if (length(x) == 1) return(FALSE)
   # Recursive case: arguments to call
   for (arg in as.list(x[-1])) {
     if (calls_use_method(arg)) return(TRUE)
   }
-  
+
   FALSE
 }
 
@@ -55,14 +54,14 @@ is.s3 <- function(x) inherits(x, c("s3method", "s3generic"))
 find_generic <- function(name, env = parent.frame()) {
   pieces <- str_split(name, fixed("."))[[1]]
   n <- length(pieces)
-  
+
   # No . in name, so can't be method
   if (n == 1) return(NULL)
-  
+
   for(i in seq_len(n - 1)) {
     generic <- str_c(pieces[seq_len(i)], collapse = ".")
     class <- str_c(pieces[(i + 1):n], collapse = ".")
-    
+
     if (is_s3_generic(generic, env)) return(c(generic, class))
   }
   NULL
@@ -71,19 +70,19 @@ find_generic <- function(name, env = parent.frame()) {
 # @param override Either NULL to use default, or a character vector of length 2
 add_s3_metadata <- function(val, name, env, override = NULL) {
   if (!is.function(val)) return(val)
-  
+
   if (!is.null(override)) {
     return(s3_method(val, override, env))
   }
-  
+
   if (is_s3_generic(name, env)) {
     class(val) <- "s3generic"
     return(val)
   }
-  
+
   method <- find_generic(name, env)
   if (is.null(method)) return(val)
-  
+
   s3_method(val, method, env)
 }
 
@@ -93,7 +92,7 @@ s3_method <- function(f, method, env) {
   class(f) <- "s3method"
   attr(f, "s3method") <- method
   attr(f, "s3env") <- env
-  
+
   f
 }
 

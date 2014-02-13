@@ -1,5 +1,7 @@
 # roxygen2 4.0.0
 
+* Remove unneeded codetools dependency.
+
 * Bump version requirement of Rcpp to 0.11.0, and remove custom make files.
 
 * Non-syntactic argument names (like `_x`) are now correctly surrounded by

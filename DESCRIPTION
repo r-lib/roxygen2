@@ -18,7 +18,6 @@ Imports:
     tools,
     brew,
     digest,
-    codetools,
     methods,
     Rcpp
 Suggests:

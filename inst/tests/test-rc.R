@@ -23,7 +23,7 @@ test_that("trim_docstring handles indentation correctly", {
 
 # Method documentation ---------------------------------------------------------
 
-env <- new.env()
+env <- pkg_env()
 
 A <- setRefClass("A", methods = list(
   f = function() {

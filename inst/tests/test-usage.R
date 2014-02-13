@@ -53,8 +53,9 @@ test_that("default usage correct for S3 methods", {
 
 
 test_that("default usage correct for S4 methods", {
-  setClass("foo", where = environment())
-  on.exit(removeClass("foo"))
+  env <- pkg_env()
+  setClass("foo", where = env)
+  on.exit(removeClass("foo", where = env))
   out <- roc_proc_text(roc, "
     #' Regular
     setMethod('sum', 'foo', function(x, ..., na.rm = FALSE) 'foo')

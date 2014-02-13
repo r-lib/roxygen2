@@ -104,7 +104,7 @@ test_that("backticks retained when needed", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title.
     f <- function(`_x`) 1")[[1]]
-  expect_equal(get_tag(out, "usage")$values, "f(`_x`)")
+  expect_equal(as.character(get_tag(out, "usage")$values), "f(`_x`)")
 })
 
 

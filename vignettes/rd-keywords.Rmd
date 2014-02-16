@@ -1,5 +1,5 @@
 <!--
-%\VignetteEngine{knitr}
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Rd keywords}
 -->
 
@@ -14,5 +14,5 @@ knitr::opts_chunk$set(
 ## Keywords
 
 ```{r}
-cat(readLines(file.path(R.home(), "doc/KEYWORDS")), sep = "\n")
+cat(readLines(file.path(R.home("doc"), "KEYWORDS")), sep = "\n")
 ```

@@ -1,5 +1,7 @@
 # roxygen2 4.0.0
 
+* `@S3method` is deprecated - just use `@export` (#198).
+
 * Better error message if you try to document something other than NULL or
   a function call. (#194)
 
@@ -109,8 +111,7 @@ and generics, or for RC classes.
 
 S3 support has also been improved: roxygen2 now figures out whether a function
 is a S3 method or generic. (In the rare cases it does so incorrectly, use
-`@method` to manually describe the generic and class associated with a method).
-This means you can remove existing uses of `@method`, and can replace
+`@method` to manually describe the generic and class associated with a method). This means you can remove existing uses of `@method`, and can replace
 `@S3method` with `@export`.
 
 Roxygen now has support for package specific options through the `Roxygen`
@@ -309,7 +310,7 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 
 * `@name` is always output as an alias, even if `@aliases` are used.
 
-* `@export` correctly uses `@method` to generate `@S3method` namespace
+* `@export` correctly uses `@method` to generate `S3method` namespace
   directive
 
 ## New tags

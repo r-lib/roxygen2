@@ -70,7 +70,7 @@ test_that("export method escapes if needed", {
 test_that("export uses name if no object present", {
   out <- roc_proc_text(roc, "
     #' Title
-    #' 
+    #'
     #' @export
     #' @name x
     NULL
@@ -82,7 +82,7 @@ test_that("export uses name if no object present", {
 test_that("default export uses exportClass for RC objects", {
   out <- roc_proc_text(roc, "
     #' Title
-    #' 
+    #'
     #' @export
     x <- setRefClass('X')
   ")
@@ -99,7 +99,6 @@ test_that("exportMethod overrides default method name", {
 test_that("other namespace tags produce correct output", {
   out <- roc_proc_text(roc, "
     #' @exportPattern test
-    #' @S3method test test
     #' @import test
     #' @importFrom test test1 test2
     #' @importClassesFrom test test1 test2
@@ -108,7 +107,6 @@ test_that("other namespace tags produce correct output", {
 
   expect_equal(sort(out), sort(c(
     "exportPattern(test)",
-    "S3method(test,test)",
     "import(test)",
     "importFrom(test,test1)",
     "importFrom(test,test2)",
@@ -117,6 +115,12 @@ test_that("other namespace tags produce correct output", {
     "importMethodsFrom(test,test1)",
     "importMethodsFrom(test,test2)"
   )))
+})
+
+
+test_that("S3method is depecrated", {
+  expect_warning(roc_proc_text(roc, "#' @S3method test test\nNULL"),
+    "@S3method is deprecated")
 })
 
 test_that("multiline importFrom parsed correctly", {
@@ -146,14 +150,14 @@ test_that("useDynLib doesn't quote if comma present", {
   out <- roc_proc_text(roc, "
     #' @useDynLib test, .registration = TRUE
     NULL")
-  
+
   expect_equal(sort(out), "useDynLib(test, .registration = TRUE)")
 })
 
 test_that("empty NAMESPACE generates zero-length vector", {
   base_path <- normalizePath("empty")
   parsed <- parse_package(base_path, source_package)
-  
+
   roc <- namespace_roclet()
   results <- roc_process(roc, parsed, base_path)
   expect_equal(results, character())

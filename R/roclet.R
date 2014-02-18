@@ -31,7 +31,7 @@ roc_output <- function(roclet, results, base_path, options = list()) {
   UseMethod("roc_output", roclet)
 }
 
-roc_process <- function(roclet, partita, base_path, options = list()) {
+roc_process <- function(roclet, parsed, base_path, options = list()) {
   UseMethod("roc_process", roclet)
 }
 

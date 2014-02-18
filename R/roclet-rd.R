@@ -54,9 +54,13 @@ rd_roclet <- function() {
 
 #' @export
 #' @importFrom digest digest
-roc_process.had <- function(roclet, partita, base_path, options = list()) {
+roc_process.had <- function(roclet, parsed, base_path, options = list()) {
+  env <- parsed$env
+  partita <- parsed$blocks
+
   # Remove srcrefs with no attached roxygen comments
   partita <- Filter(function(x) length(x) > 1, partita)
+
 
   topics <- list()
   for (partitum in partita) {

@@ -1,10 +1,10 @@
 parse_package <- function(base_path, load_code) {
   env <- load_code(base_path)
   parsed <- lapply(r_files(base_path), parse_file, env = env)
+  blocks <- unlist(parsed, recursive = FALSE)
 
-  unlist(parsed, recursive = FALSE)
+  list(env = env, blocks = blocks)
 }
-
 
 parse_text <- function(text) {
   file <- tempfile()
@@ -15,7 +15,9 @@ parse_text <- function(text) {
   setPackageName("roxygen_devtest", env)
 
   sys.source(file, envir = env)
-  parse_file(file, env)
+  blocks <- parse_file(file, env)
+
+  list(env = env, blocks = blocks)
 }
 
 parse_file <- function(file, env) {

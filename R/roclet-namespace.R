@@ -27,7 +27,10 @@ namespace_roclet <- function() {
 }
 
 #' @export
-roc_process.namespace <- function(roclet, partita, base_path, options = list()) {
+roc_process.namespace <- function(roclet, parsed, base_path, options = list()) {
+  env <- parsed$env
+  partita <- parsed$blocks
+
   ns <- unlist(lapply(partita, ns_process_partitum)) %||% character()
   sort_c(unique(ns))
 }

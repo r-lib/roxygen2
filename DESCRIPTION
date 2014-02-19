@@ -50,6 +50,7 @@ Collate:
     'roxygen.R'
     'roxygenize.R'
     's3.R'
+    'safety.R'
     'source.R'
     'template.R'
     'topic-name.R'

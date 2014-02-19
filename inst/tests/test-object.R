@@ -70,11 +70,9 @@ test_that("s3 generics and methods labelled with metadata", {
 
 test_that("generators get function name as alias", {
   objA <- object(standardise_obj("A", A, env = env), "genA")
-  expect_equal(objA$name, "A")
   expect_equal(objA$alias, "genA")
 
   objB <- object(standardise_obj("B", B, env = env), "genB")
-  expect_equal(objB$name, "B")
   expect_equal(objB$alias, "genB")
 })
 

@@ -3,23 +3,14 @@
 \alias{object}
 \title{Constructors for S3 object to represent R objects.}
 \usage{
-object(value, name = NULL)
+object(value, alias = NULL)
 }
 \arguments{
-  \item{subclass}{This is an abstract class so this must be
-  provided.  Currently this is one of "function",
-  "s4generic", "s4class", "s4method", "rcclass", or
-  "data".}
-
-  \item{name}{Name of the object being documented}
-
   \item{value}{The object itself.}
 
-  \item{...}{optional additional fields used by subclasses}
-
-  \item{alias}{Used for \code{\link{setClass}} and
-  \code{\link{setRefClass}} to capture the name of the
-  created object.}
+  \item{alias}{Alias for object being documented, in case
+  you create a generator function with different name to
+  name}
 }
 \description{
 These objects are usually created by the parsers, but it is also

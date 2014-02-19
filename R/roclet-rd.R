@@ -231,7 +231,7 @@ process_methods <- function(block) {
     desc <- docstring(obj$value@.Data)
     if (is.null(desc)) return()
 
-    usage <- function_usage(obj$name, formals(obj$value@.Data))
+    usage <- function_usage(obj$value@name, formals(obj$value@.Data))
     paste0("\\code{", wrap_string(usage),  "}: ", desc)
   }
 

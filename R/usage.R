@@ -30,11 +30,11 @@ default_usage <- function(x) {
 default_usage.NULL <- function(x) NULL
 
 #' @export
-default_usage.data <- function(x) x$name
+default_usage.data <- function(x) x$alias
 
 #' @export
 default_usage.function <- function(x) {
-  function_usage(x$name, formals(x$value), identity)
+  function_usage(x$alias, formals(x$value), identity)
 }
 
 #' @export
@@ -50,7 +50,10 @@ default_usage.s3method <- function(x) {
 }
 
 #' @export
-default_usage.s4generic <- default_usage.function
+default_usage.s4generic <- function(x) {
+  function_usage(x$value@generic, formals(x$value), identity)
+}
+
 
 #' @export
 default_usage.s4method <- function(x) {
@@ -58,7 +61,7 @@ default_usage.s4method <- function(x) {
     signature <- paste0(as.character(x$value@defined), collapse = ",")
     build_rd("\\S4method{", name, "}{", signature, "}")
   }
-  function_usage(x$name, formals(x$value), s4method)
+  function_usage(x$value@generic, formals(x$value), s4method)
 }
 
 #' @export

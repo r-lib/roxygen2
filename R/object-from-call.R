@@ -69,7 +69,7 @@ parser_setGeneric <- function(call, env, block) {
   name <- as.character(call$name)
   value <- getGeneric(name, where = env)
 
-  object(value, name = name)
+  object(value)
 }
 
 #' @importFrom methods getMethod
@@ -78,5 +78,5 @@ parser_setMethod <- function(call, env, block) {
   value <- getMethod(name, eval(call$signature), where = env)
   value@.Data <- extract_method_fun(value@.Data)
 
-  object(value, name = name)
+  object(value)
 }

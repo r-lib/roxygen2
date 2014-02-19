@@ -84,15 +84,15 @@ ns_export <- function(tag, part) {
 }
 default_export <- function(x, block) UseMethod("default_export")
 #' @export
-default_export.s4class   <- function(x, block) export_class(x$name)
+default_export.s4class   <- function(x, block) export_class(x$value@className)
 #' @export
-default_export.s4method  <- function(x, block) export_s4_method(x$name)
+default_export.s4method  <- function(x, block) export_s4_method(x$value@generic)
 #' @export
 default_export.s3method  <- function(x, block) export_s3_method(attr(x$value, "s3method"))
 #' @export
-default_export.rcclass   <- function(x, block) export_class(x$name)
+default_export.rcclass   <- function(x, block) export_class(x$value@className)
 #' @export
-default_export.default   <- function(x, block) export(x$name)
+default_export.default   <- function(x, block) export(x$alias)
 #' @export
 default_export.NULL      <- function(x, block) export(block$name)
 

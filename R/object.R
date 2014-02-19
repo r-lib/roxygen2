@@ -3,31 +3,16 @@
 #' These objects are usually created by the parsers, but it is also
 #' useful to generate them by hand for testing.
 #'
-#' @param subclass This is an abstract class so this must be provided.
-#'   Currently this is one of "function", "s4generic", "s4class", "s4method",
-#'   "rcclass", or "data".
-#' @param alias Alias for object being documented, in case you create a
-#'   Name of the object being documented
 #' @param value The object itself.
-#' @param ... optional additional fields used by subclasses
-#' @param alias Used for \code{\link{setClass}} and \code{\link{setRefClass}}
-#'   to capture the name of the created object.
+#' @param alias Alias for object being documented, in case you create a
+#'   generator function with different name to name
 #' @export
 #' @keywords internal
-object <- function(value, name = NULL) {
+object <- function(value, alias = NULL) {
   type <- obj_type(value)
-
-  # S4/RC class with generator function
-  alias <- name
-  if (type %in% c("s4class", "rcclass")) {
-    name <- as.character(value@className)
-  } else if (type %in% "rcmethod") {
-    name <- value@name
-  }
 
   structure(
     list(
-      name = name,
       alias = alias,
       value = value,
       methods = if (type == "rcclass") rc_methods(value)
@@ -35,6 +20,15 @@ object <- function(value, name = NULL) {
     class = c(type, "object")
   )
 }
+default_name <- function(x) UseMethod("default_name")
+default_name.s4class <-   function(x) x$value@className
+default_name.s4generic <- function(x) x$value@generic
+default_name.s4method <-  function(x) x$value@generic
+default_name.rcclass <-   function(x) x$value@className
+default_name.rcmethod <-  function(x) x$value@name
+default_name.s3generic <- function(x) browser()
+default_name.s3method <-  function(x) attr(x$value, "s3method")
+default_name.default <-   function(x) NULL
 
 #' @export
 print.object <- function(x, ...) {

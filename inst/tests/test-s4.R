@@ -7,7 +7,7 @@ test_that("class captured from setClass", {
   ")$blocks[[1]]
 
   expect_is(out$object, "s4class")
-  expect_equal(out$object$name, "A")
+  expect_equal(out$object$alias, NULL)
 })
 
 test_that("class captured from assignment", {
@@ -17,7 +17,7 @@ test_that("class captured from assignment", {
   ")$blocks[[1]]
 
   expect_is(out$object, "s4class")
-  expect_equal(out$object$name, "B")
+  expect_equal(out$object$alias, "B")
 })
 
 test_that("class captured from setRefClass", {
@@ -27,7 +27,7 @@ test_that("class captured from setRefClass", {
   ")$blocks[[1]]
 
   expect_is(out$object, "rcclass")
-  expect_equal(out$object$name, "A")
+  expect_equal(out$object$alias, NULL)
 })
 
 test_that("class captured from assignment of setRefClass", {
@@ -37,5 +37,5 @@ test_that("class captured from assignment of setRefClass", {
   ")$blocks[[1]]
 
   expect_is(out$object, "rcclass")
-  expect_equal(out$object$name, "B")
+  expect_equal(out$object$alias, "B")
 })

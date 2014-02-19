@@ -1,18 +1,20 @@
 # Extract all methods from an RC definition, returning a list of "objects".
 rc_methods <- function(obj) {
-  stopifnot(is(obj, "refClass"))
-  if (is(obj, "refObjectGenerator")) {
-    obj <- obj$def
-  }
+  stopifnot(is(obj, "refClassRepresentation"))
 
   base_methods <- getRefClass("envRefClass")$methods()
   method_names <- setdiff(ls(envir = obj@refMethods), base_methods)
   methods <- mget(method_names, envir = obj@refMethods)
 
-  object_from_method <- function(f) {
-    object("rcmethod", f@name, f)
-  }
-  lapply(methods, object_from_method)
+  lapply(methods, object)
+}
+
+add_rc_metadata <- function(val, name, class) {
+  class(val) <- c("rcmethod", "function")
+  attr(val, "rcclass") <- class
+  attr(val, "rcmethod") <- name
+
+  val
 }
 
 get_method <- function(obj, method_name) {

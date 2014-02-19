@@ -76,7 +76,7 @@ add_s3_metadata <- function(val, name, env, override = NULL) {
   }
 
   if (is_s3_generic(name, env)) {
-    class(val) <- "s3generic"
+    class(val) <- c("s3generic", "function")
     return(val)
   }
 
@@ -89,7 +89,7 @@ add_s3_metadata <- function(val, name, env, override = NULL) {
 s3_method <- function(f, method, env) {
   stopifnot(length(method) == 2, is.character(method))
 
-  class(f) <- "s3method"
+  class(f) <- c("s3method", "function")
   attr(f, "s3method") <- method
   attr(f, "s3env") <- env
 

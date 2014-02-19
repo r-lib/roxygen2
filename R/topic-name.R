@@ -17,6 +17,11 @@ default_topic_name.rcclass <- function(x) {
 }
 
 #' @export
+default_topic_name.rcmethod <- function(x) {
+  x@name
+}
+
+#' @export
 default_topic_name.default <- function(x) {
   if (length(x$name) != 1) return()
 

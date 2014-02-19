@@ -45,9 +45,12 @@ B <- setRefClass("B", contains = "A", methods = list(
   }
 ), where = env)
 
+classA <- getClass("A", where = env)
+classB <- getClass("B", where = env)
+
 test_that("rc_methods lists all methods", {
-  expect_equal(length(rc_methods(A)), 2)
-  expect_equal(length(rc_methods(B)), 4)
+  expect_equal(length(rc_methods(classA)), 2)
+  expect_equal(length(rc_methods(classB)), 4)
 })
 
 test_that("RC methods included included in own section", {

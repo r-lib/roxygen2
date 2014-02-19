@@ -33,54 +33,35 @@ standardise_call <- function(call, env = parent.frame()) {
 }
 
 parser_assignment <- function(call, env, block) {
-  assignee <- as.character(call[[2]])
+  name <- as.character(call[[2]])
 
   # If it's a compound assignment like x[[2]] <- ignore it
-  if (length(assignee) > 1)  return()
+  if (length(name) > 1)  return()
 
   # If it doesn't exist (any more), don't document it.
-  if (!exists(assignee, env)) return()
-  value <- get(assignee, env)
+  if (!exists(name, env)) return()
 
-  if (inherits(value, "refObjectGenerator")) {
-    class <- as.character(value@className)
-    object("rcclass", class, getRefClass(class, where = env),
-      methods = rc_methods(value),
-      alias = assignee)
-  } else if (inherits(value, "classGeneratorFunction")) {
-    class <- as.character(value@className)
-    object("s4class", class, getClass(class, where = env), alias = assignee)
-  } else if (is.function(value)) {
-    method <- unlist(block$method, use.names = FALSE)
-    value <- add_s3_metadata(value, assignee, env, method)
-    if (is.s3generic(value)) {
-      objtype <- "s3generic"
-    } else if (is.s3method(value)) {
-      objtype <- "s3method"
-    } else if (is.function(value)) {
-      objtype <- "function"
-    }
+  value <- get(name, env)
+  value <- standardise_obj(name, value, env, block)
 
-    object(objtype, assignee, value)
-  } else {
-    object("data", assignee, value)
-  }
+  object(value, name)
 }
+
 
 #' @importFrom methods getClass
 parser_setClass <- function(call, env, block) {
   name <- as.character(call$Class)
   value <- getClass(name, where = env)
 
-  object("s4class", name, value)
+  object(value)
 }
 
 #' @importFrom methods getRefClass
 parser_setRefClass <- function(call, env, block) {
   name <- as.character(call$Class)
-  value <- getRefClass(name, where = env)
+  value <- getClass(name, where = env)
 
-  object("rcclass", name, value, methods = rc_methods(value))
+  object(value)
 }
 
 #' @importFrom methods getGeneric
@@ -88,18 +69,14 @@ parser_setGeneric <- function(call, env, block) {
   name <- as.character(call$name)
   value <- getGeneric(name, where = env)
 
-  object("s4generic", name, value)
+  object(value, name = name)
 }
 
 #' @importFrom methods getMethod
 parser_setMethod <- function(call, env, block) {
   name <- as.character(call$f)
   value <- getMethod(name, eval(call$signature), where = env)
-  # When a generic has ... and a method adds new arguments, the S4 method
-  # wraps the definition inside another function which has the same arguments
-  # as the generic. We replace it with the real definition so that formals etc
-  # are correct.
-  value@.Data <- eval(call$definition, env)
+  value@.Data <- extract_method_fun(value@.Data)
 
-  object("s4method", name, value)
+  object(value, name = name)
 }

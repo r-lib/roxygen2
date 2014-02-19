@@ -9,6 +9,11 @@ To upgrade to 4.0:
 
 ## Features & fixes
 
+* New `@describeIn` tag makes it easier to describe multiple function in
+  one file. This is especially useful if you want to document methods with
+  their generic, or with a common class, but it's also useful if you want
+  to document multiple related functions in one file. (#185)
+
 * `@S3method` is deprecated - just use `@export` (#198).
 
 * Better error message if you try to document something other than NULL or

@@ -1,5 +1,14 @@
 # roxygen2 4.0.0
 
+## Upgrading to 4.0
+
+To upgrade to 4.0:
+
+* delete all roxygen2 generated files including `NAMESPACE` and `man/*.Rd`
+* replace all `@S3method a b` with `@export`.
+
+## Features & fixes
+
 * `@S3method` is deprecated - just use `@export` (#198).
 
 * Better error message if you try to document something other than NULL or

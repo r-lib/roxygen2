@@ -9,7 +9,8 @@ test_that("@describeIn generic captures s3 method class", {
     f.a <- function(x) 1
   ")[[1]]
 
-  expect_equal(get_tag(out, "describeIn")$values$label, "a")
+  expect_equal(get_tag(out, "minidesc")$values$type, "generic")
+  expect_equal(get_tag(out, "minidesc")$values$label, "a")
 })
 
 test_that("@describeIn generic captures s4 method class", {
@@ -21,19 +22,19 @@ test_that("@describeIn generic captures s4 method class", {
     setMethod(f, signature('a'), function(x) 1)
   ")[[1]]
 
-  expect_equal(get_tag(out, "describeIn")$values$label, "a")
+  expect_equal(get_tag(out, "minidesc")$values$label, "a")
 })
 
 test_that("@describeIn class captures s3 generic name", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
-    a <- function() structure(list(), class = 'a')
+    boo <- function() structure(list(), class = 'boo')
 
-    #' @describeIn a mean method
-    mean.a <- function(x) 1
+    #' @describeIn boo mean method
+    mean.boo <- function(x) 1
     ")[[1]]
 
-  expect_equal(get_tag(out, "describeIn")$values$label, "mean")
+  expect_equal(get_tag(out, "minidesc")$values$label, "mean")
 })
 
 test_that("@describeIn class captures s4 generic name", {
@@ -47,7 +48,7 @@ test_that("@describeIn class captures s4 generic name", {
     setMethod('mean', 'a', function(x) 1)
     ")[[1]]
 
-  expect_equal(get_tag(out, "describeIn")$values$label, "mean")
+  expect_equal(get_tag(out, "minidesc")$values$label, "mean")
 })
 
 
@@ -63,7 +64,7 @@ test_that("Multiple @describeIn generic combined into one", {
     f.b <- function(x) 1
   ")[[1]]
 
-  expect_equal(get_tag(out, "describeIn")$values$type, "generic")
-  expect_equal(get_tag(out, "describeIn")$values$label, c("a", "b"))
-  expect_equal(get_tag(out, "describeIn")$values$desc, c("A", "B"))
+  expect_equal(get_tag(out, "minidesc")$values$type, "generic")
+  expect_equal(get_tag(out, "minidesc")$values$label, c("a", "b"))
+  expect_equal(get_tag(out, "minidesc")$values$desc, c("A", "B"))
 })

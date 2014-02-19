@@ -30,15 +30,14 @@ register.preref.parsers(parse.name.description,
                         'param',
                         'slot',
                         'field',
-                        'method')
+                        'method',
+                        'describeIn')
 
 register.preref.parsers(parse.name,
                         'docType')
 
 register.preref.parsers(parse.toggle,
                         'noRd')
-
-register.preref.parsers(parse.minidesc, 'minidesc')
 
 
 #' Roclet: make Rd files.
@@ -66,7 +65,7 @@ roc_process.had <- function(roclet, parsed, base_path, options = list()) {
   topics <- list()
   for (partitum in partita) {
     errors_with_srcref(partitum$srcref, {
-      new <- roclet_rd_one(partitum, base_path)
+      new <- roclet_rd_one(partitum, base_path, env)
     })
 
     if (is.null(new)) next
@@ -92,7 +91,7 @@ get_values <- function(topics, tag) {
 }
 
 
-roclet_rd_one <- function(partitum, base_path) {
+roclet_rd_one <- function(partitum, base_path, env) {
   rd <- new_rd_file()
 
   # Add in templates
@@ -100,18 +99,21 @@ roclet_rd_one <- function(partitum, base_path) {
 
   has_rd <- any(names(partitum) %in% c("description", "param", "return",
     "title", "example", "examples", "name", "rdname", "usage",
-    "details", "introduction"))
+    "details", "introduction", "describeIn"))
   if (!has_rd) return()
 
   if (any(names(partitum) == "noRd")) return()
 
-  # Figure out topic name
   name <- partitum$name %||% default_topic_name(partitum$object) %||%
     stop("Missing name")
 
+  # Process describeIn, which may affect file name
+  describe_in <- process_describeIn(partitum, env)
+  filename <- paste0(describe_in$rdname %||% partitum$rdname %||%
+    nice_name(name), ".Rd")
+  add_tag(rd, describe_in$tag)
+
   # Work out file name and initialise Rd object
-  filename <- paste0(partitum$merge %||% partitum$rdname %||% nice_name(name),
-    ".Rd")
 
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
@@ -122,7 +124,6 @@ roclet_rd_one <- function(partitum, base_path) {
     add_tag(rd, new_tag("formals", names(formals)))
   }
 
-  add_tag(rd, process_minidesc(partitum))
   add_tag(rd, process_description(partitum, base_path))
   add_tag(rd, process_methods(partitum))
 

@@ -1,20 +1,6 @@
-parse.describeIn <- function(key, rest) {
-  check_rd(key, rest)
-
-  pieces <- str_split_fixed(rest, " ", 2)
-  type <- str_trim(pieces[[1]])
-  if (!(type %in% c("generic", "class", "function"))) {
-    stop("@describeIn must be followed by generic, class or function",
-      call. = FALSE)
-  }
-  desc <- str_trim(pieces[[2]])
-
-  list(type = type, desc = desc)
-}
-
-process_describeIn <- function(block) {
+process_describeIn <- function(block, env) {
   tags <- block[names(block) == "describeIn"]
-  if (length(tags) == 0) return()
+  if (length(tags) == 0) return(list(rdname = NULL, tag = NULL))
   if (length(tags) > 1) {
     stop("May only use one @describeIn per block", call. = FALSE)
   }
@@ -22,47 +8,76 @@ process_describeIn <- function(block) {
     stop("@describeIn must be used with an object", call. = FALSE)
   }
 
-  tag <- tags[[1]]
-  tag$label <- switch(tag$type,
-    # If documented in generic, label with class
-    generic = label_class(block$object),
-    # If documented in class, gets label with generic
-    class = label_generic(block$object),
-    "function" = label_class(block$object)
+  if(any(names(block) == "name")) {
+    stop("@describeIn can not be used with @name", call. = FALSE)
+  }
+  if(any(names(block) == "rdname")) {
+    stop("@describeIn can not be used with @rdname", call. = FALSE)
+  }
+
+  describe_in <- tags[[1]]
+  dest <- find_object(describe_in$name, env)
+
+  label <- build_label(block$object, dest)
+
+  list(
+    rdname = default_topic_name(dest),
+    tag = new_tag("minidesc", list(
+      type = label$type,
+      label = label$label,
+      desc = describe_in$description
+    ))
   )
-
-  new_tag("minidesc", tag)
 }
 
-label_class <- function(obj) {
-  if (inherits(obj, "s3method")) {
-    attr(obj$value, "s3method")[2]
-  } else if (inherits(obj, "s4method")) {
-    sig <- obj$value@defined
+# Imperfect:
+# * will fail with S3 methods that need manual disambiguation (rare)
+# * can't use if @name overridden, but then you could just the use alias
+find_object <- function(name, env) {
+  if (isClass(name, where = env)) {
+    object(getClass(name, where = env))
+  } else if (exists(name, envir = env)) {
+    obj <- get(name, envir = env)
+    obj <- standardise_obj(name, obj, env = env)
+    object(obj, name)
+  } else {
+    object(NULL, name)
+  }
+}
+
+build_label <- function(src, dest) {
+  src_type <- class(src)[1]
+  dest_type <- class(dest)[1]
+
+  if (dest_type == "s4class" && src_type == "s4method") {
+    # Label S4 methods in class with their generic
+    type <- "class"
+    label <- as.character(src$value@generic)
+  } else if (dest_type == "s4generic" && src_type == "s4method") {
+    # Label S4 methods in generic with their signature
+    type <- "generic"
+    sig <- src$value@defined
     if (length(sig) == 1) {
-      as.character(sig)
+      label <- as.character(sig)
     } else {
-      paste0(names(sig), " = ", sig, collapse = ",")
+      label <- paste0(names(sig), " = ", sig, collapse = ",")
     }
+  } else if (dest_type == "function" && src_type == "s3method") {
+    # Assuming you document S3 methods in the class constructor
+    type <- "class"
+    label <- attr(src$value, "s3method")[1]
+  } else if (dest_type == "s3generic" && src_type == "s3method") {
+    # Label S3 methods in generic with their class
+    type <- "generic"
+    label <- attr(src$value, "s3method")[2]
+  } else if (dest_type == "function" && src_type == "function") {
+    # Multiple functions in one Rd labelled with function names
+    type <- "function"
+    label <- default_name(src)
   } else {
-    stop("@describeIn class must be used with an S3 or S4 method",
-      call = FALSE)
-  }
-}
-
-# If documented in generic, gets labelled with class
-label_generic <- function(obj) {
-  if (inherits(obj, "s3method")) {
-    attr(obj$value, "s3method")[1]
-  } else if (inherits(obj, "s4method")) {
-    as.character(obj$value@generic)
-  } else {
-    stop("@describeIn generic must be used with an S3 or S4 method",
-      call = FALSE)
+    stop("Don't know how to describe ", src_type, " in ", dest_type, ".",
+      call. = FALSE)
   }
 
-}
-
-label_function <- function(obj) {
-  obj$name
+  list(type = type, label = label)
 }

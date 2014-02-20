@@ -64,7 +64,7 @@ add(10, 1)
 }
 ```
 
-Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Rd-format) manual. Here we'll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.
+Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Rd-format) manual. I'll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.
 
 When you use `?x`, `help("x")` or `example("x")` R looks for an Rd file containing `\alias{x}`. It then parses the file, converts it into html and displays it.
 
@@ -72,7 +72,7 @@ All of these functions look for an Rd file in _installed_ packages. This isn't v
 
 ## Basic documentation
 
-Roxygen comments have a special format. They start with `#'` and include tags that like `@tag details`. Tags break the documentation up into pieces, and the content of a tag extends from the end of tag name to the start of the next tag (or the end of the block). Because `@` has a special meaning in roxygen, you need to write `@@` to add a literal `@` to the documentation.
+Roxygen comments start with `#'` and include tags like `@tag details`. Tags break the documentation up into pieces, and the content of a tag extends from the end of tag name to the start of the next tag (or the end of the block). Because `@` has a special meaning in roxygen, you need to write `@@` to add a literal `@` to the documentation.
 
 Each documentation block starts with some text. The first sentence becomes the title of the documentation. That's what you see when you look at `help(package = mypackage)` and is shown at the top of each help file. It should fit on one line, be written in sentence case, and end in a full stop. The second paragraph is the description: this comes first in the documentation and should briefly describe what the function does. The third and subsequent paragraphs go into the details: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates.
 
@@ -110,7 +110,7 @@ sum <- function(..., na.rm = TRUE) {}
 
 All objects must have a title and description. Details are optional.
 
-There are two tags that make it easier for the user to navigate around your document. `@seealso` allows you to point to other useful resources, either on the web `\url{http://www.r-project.org}`, or to other documentation with `\code{\link{functioname}}`. If you have a family of related functions that all needed to be interlinked, you can use the `@family` tag to automatically add the appropriate links to seealso. The `@family` name should be plural.
+There are two tags that make it easier for people to navigate around your documentation. `@seealso` allows you to point to other useful resources, either on the web `\url{http://www.r-project.org}`, or to other documentation with `\code{\link{functioname}}`. If you have a family of related functions that all needed to be interlinked, you can use the `@family` tag to automatically add the appropriate links to seealso. The `@family` name should be plural.
 
 For sum, these components might look like:
 
@@ -123,16 +123,17 @@ For sum, these components might look like:
 
 Three other tags make it easier for the user to find documentation:
 
-* `@aliases space separated aliases` to add additional aliases, through which the user can find the documentation with `?`.
+* `@aliases space separated aliases` to add additional aliases, through
+  which the user can find the documentation with `?`.
 
 * `@concepts` to add extra keywords that will be found with `help.search()`
 
-* `@keywords keyword1 keyword2 ...` Keywords are optional, but if present,
-  must be taken from the predefined list replicated in the
-  [keywords vignette](keywords.html). Keywords are not terribly useful,
+* `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are
+  optional, but if present, must be taken from the predefined list replicated
+  in the [keywords vignette](keywords.html). Keywords are not very useful,
   except for `@keywords internal`. The internal keyword flags the function
-  as developer only, removing it from the documentation index and disabling
-  some of automated tests.
+  as for developer use only, removing it from the documentation index and
+  disabling some of automated tests.
 
 You use other tags based on the type of object that you're documenting. The following sections describe the most commonly used tags for functions, S3, S4 and RC objects and data.
 
@@ -140,27 +141,22 @@ You use other tags based on the type of object that you're documenting. The foll
 
 Functions are the mostly commonly documented objects. Most functions use three tags:
 
-* `@param name description` describes the inputs to the function.
-  The description should provide a succinct summary of the type of the
-  parameter (e.g. a string, a numeric vector), and if not obvious from
-  the name, what the parameter does. The description can span multiple
-  lines (or even paragraphs) if necessary. All parameters must be
-  documented.
+*   `@param name description` describes the inputs to the function.
+    The description should provide a succinct summary of the type of the
+    parameter (e.g. a string, a numeric vector), and if not obvious from
+    the name, what the parameter does. The description should start with a
+    captial letter and end with a full stop. It can span multiple lines (or
+    even paragraphs) if necessary. All parameters must be documented.
 
-  It's possible to document multiple arguments in one place by separating
-  the names with commas (no spaces). For example, to document both
-  `x` and `y`, you can say `@param x,y Numeric vectors.`.
+    You can document multiple arguments in one place by separating
+    the names with commas (no spaces). For example, to document both
+    `x` and `y`, you can say `@param x,y Numeric vectors`.
 
-* `@example path/relative/to/packge/root`: Instead of including
-  examples directly in the documentation, you can include them as
-  separate files, and use the `@example` tag to insert them into
-  the documentation.
-
-* `@examples` provides executable R code showing how to use the function in
-  practice. This is a very important part of the documentation because
-  many people look at the examples before reading anything. Example code
-  must work without errors as it is run automatically as part of `R CMD
-  check`.
+*   `@examples` provides executable R code showing how to use the function in
+    practice. This is a very important part of the documentation because
+    many people look at the examples before reading anything. Example code
+    must work without errors as it is run automatically as part of `R CMD
+    check`.
 
     For the purpose of illustration, it's often useful to include code
     that causes an error. `\dontrun{}` allows you to include code in the
@@ -177,10 +173,14 @@ Functions are the mostly commonly documented objects. Most functions use three t
     `\dontshow{}`| x         |        | x
     `\donttest{}`| x         | x      | x
 
-* `@return description` describes the output from the function. This is
-  not always necessary, but is a good idea if you return different types
-  of outputs depending on the input, or you're returning an S3, S4 or RC
-  object.
+    Instead of including examples directly in the documentation, you can
+    put them in separate files and use `@example path/relative/to/packge/root`
+    to insert them into the documentation.
+
+*   `@return description` describes the output from the function. This is
+    not always necessary, but is a good idea if you return different types
+    of outputs depending on the input, or you're returning an S3, S4 or RC
+    object.
 
 We could use these new tags to improve our documentation of `sum()` as follows:
 
@@ -219,11 +219,11 @@ We could use these new tags to improve our documentation of `sum()` as follows:
 sum <- function(..., na.rm = TRUE) {}
 ```
 
-Indent the second and subsequent lines of a tag so that when scanning the documentation it's easy to see where one tag ends and the next begins. Tags that always span multiple lines (like `@example`) should start on a new line and don't need to be indented.
+Indent the second and subsequent lines of a tag so that when scanning the documentation so it's easy to see where one tag ends and the next begins. Tags that always span multiple lines (like `@example`) should start on a new line and don't need to be indented.
 
 ## Documenting classes, generics and methods
 
-Documenting classes, generics and methods are relatively straightforward, but there are some variations depending on which object system you're using. The following sections give the details for the S3, S4 and RC object systems.
+Documenting classes, generics and methods are relatively straightforward, but there are some variations based on the object system. The following sections give the details for the S3, S4 and RC object systems.
 
 ### S3
 
@@ -257,11 +257,11 @@ S4 __methods__ are a little more complicated. Unlike S3, all S4 methods must be 
 * In it's own file. Most appropriate if the method is complex. or the
   either two options don't apply.
 
-Use `@rdname` to put the method documentation where you want it.
+Use either `@rdname` or `@describeIn` to control where method documentation goes. See the next section for more details.
 
 ### RC
 
-RC is different to S3 and S4 because methods are associated with classes, not generics. RC also has a special convention for documenting methods: the doc string. This makes documenting RC simpler than S4 because you only need one  roxygen block per class.
+RC is different to S3 and S4 because methods are associated with classes, not generics. RC also has a special convention for documenting methods: the docstring. This makes documenting RC simpler than S4 because you only need one roxygen block per class.
 
 ```{r}
 #' An S4 class to represent a bank account.
@@ -284,7 +284,7 @@ Methods with doc strings will be included in the "Methods" section of the class 
 
 Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you document `NULL`, and use `@name` to tell roxygen2 what dataset you're really documenting.
 
-There are two new tags that are useful for documenting datasets:
+There are two additional tags that are useful for documenting datasets:
 
 * `@format`, which gives an overview of the structure of the dataset.
   If you omit this, roxygen will automatically add something based on the
@@ -321,7 +321,7 @@ Package documentation should describe the overall purpose of the package and poi
 Package documentation should be placed in `pkgname.R`. Here's an example:
 
 ```{r}
-#' Generate R documentation from inline comments
+#' Generate R documentation from inline comments.
 #'
 #' Roxygen2 allows you to write documentation in comment blocks co-located
 #' with code.
@@ -425,10 +425,9 @@ add <- function(x, y) x + y
 times <- function(x, y) x * y
 ```
 
-
 ## Sections
 
-For any object, you can add arbitrary sections to the documentation with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed a colon. Titles may only take one line.
+You can add arbitrary sections to the documentation for any object with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed a colon. Titles may only take one line.
 
 ```{r}
 #' @section Warning:

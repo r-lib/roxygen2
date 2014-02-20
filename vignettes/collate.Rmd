@@ -13,13 +13,13 @@ knitr::opts_chunk$set(
 
 # Collation order
 
-During the package build process, R combines all files together into one. By default, it combines then alphabetically. Unfortunately, however, not every alphabet puts letters in the same order, so you can't rely on alphabetic ordering to work on every computer.
+R loads files in alphabetical order. Unfortunately not every alphabet puts letters in the same order, so you can't rely on alphabetic ordering if you need one file loaded before another. The order in which files are loaded doesn't matte for most packages. But if you're using S4, you'll need to make sure that classes are loaded before subclasses and generics are defined before methods.
 
-For most packages, the order in which functions are loaded doesn't matter. But if you're using S4, you'll need to make sure that classes are loaded before subclasses and generics are defined before methods. To do that, you add a roxygen block to the top of the file that uses the `@include` tag to indicate which files needed to be included before the current file.
+Rather than relying on alphabetic ordering, roxygen2 provides an explicit way of saying that one file must be loaded before another: `@include`. The `@include` tag gives a space separated list of file names that should be loaded before the current file:
 
 ```{r, eval = FALSE}
 #' @include class-a.r
 setClass("B", contains = "A")
 ```
 
-It's a good idea to do this whenever order is important and never rely on alphabetic ordering
+If any `@include` tags are present in the package, roxygen2 will set the `Collate` field in the `DESCRIPTION`, which ensures that files are always loaded in the same order.

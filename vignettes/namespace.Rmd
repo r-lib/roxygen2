@@ -17,18 +17,22 @@ The package `NAMESPACE` is one of the most confusing parts of building a package
 
 ## Exports
 
-If you're using roxygen2 to generate your namespace, the most important thing to understand is that by default roxygen2 doesn't export anything from your package. Anything that you want to make publically available, you must explicitly tag with `@export`.
+For a function to be usable outside of your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publically available, you must explicitly tag it with `@export`.
 
-* Functions: all publicly avaiable functions should be tagged with `@export`
+Use the following guidelines to decide what to export:
+
+* Functions: export functions that you want to make available. Exported
+  functions must be documented, and you must be cautious when changing their
+  interface.
 
 * Datasets: all datasets are publicly available. They exist outside of the
-  package namespace and must not be given `@export`.
+  package namespace and should not be exported.
 
 * S3 classes: if you want others to be able to create instances of the class
   `@export` the constructor function.
 
-* S3 generics: treat the generic like a function, and `@export` if you
-  want it to be usable outside the package
+* S3 generics: the generic is a function so `@export` if you want it to
+  be usable outside the package
 
 * S3 methods: every S3 method _must_ be exported, even if the generic is not.
   Otherwise the S3 method table will not be generated correctly and internal
@@ -69,35 +73,24 @@ If you're using roxygen2 to generate your namespace, the most important thing to
 
 ## Imports
 
-There are five tags for importing objects into the package:
+The `NAMESPACE` also controls which functions from other packages are made available to you package. There are five tags for importing objects into the package:
 
-* `@import package` produces \code{import(package) directive
-  to import all functions from the given package.
+* `@import package` imports all functions, classes and methods from a package.
 
-* `@importFrom package functiona functionb ...` produces
-   multiple `importFrom(package, function)` directives to import
-   selected functions from a package..
+* `@importFrom package functiona functionb ...` imports selected functions.
 
-* `@importClassesFrom package classa classb ...` produces
-  multiple `importClassesFrom(package, class) directives to import
-  selected classes from a package.}
+* `@importClassesFrom package classa classb ...` imports selected S4 classes.
 
-* `@importMethodsFrom package methoda methodb ...` produces
-  multiple `importMethodsFrom(package, method)` directives to import
-  selected methods from a package.}
+* `@importMethodsFrom package methoda methodb ...` imports selected S4 methods.
 
-* `@useDynLib package` produces a `useDynLib(package)`
-  directive to import all compiled routines from the shared objects in
-  the specified package}
+* `@useDynLib package` imports all compiled functions.
 
-* `@useDynLib package routinea routineb` produces multiple
-  `useDynLib(package,routine)` directions to import specified
-  compiled routines from a package.
+* `@useDynLib package routinea routineb` imports selected compiled functions.
 
 * Any `@useDynLib` specification containing a comma, e.g.
   `@useDynLib mypackage, .registration = TRUE` will be inserted as is
   into the the NAMESPACE, e.g. `useDynLib(mypackage, .registration = TRUE)`
 
-Only unique directives are saved to the \file{NAMESPACE} file, so you can
+Only unique directives are saved to the `NAMESPACE` file, so you can
 repeat them as needed to maintain a close link between the functions where
 they are needed and the namespace file.

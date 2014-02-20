@@ -33,7 +33,7 @@ To other documentation:
 
 * `\code{\link[MASS]{stats}}`: function in another package
 
-* `\link[=dest]{name}` link to dest, but show name
+* `\link[=dest]{name}`: link to dest, but show name
 
 * `\linkS4class{abc}`: link to an S4 class
 
@@ -76,7 +76,7 @@ To the web:
 
 ## Mathematics
 
-You can use standard LaTeX (with no extensions) with:
+Standard LaTeX (with no extensions):
 
 * `\eqn{a + b}`: inline eqution
 
@@ -84,12 +84,12 @@ You can use standard LaTeX (with no extensions) with:
 
 ## Tables
 
-Tables are created with the tabular command, which has two arguments:
+Tables are created with `\tabular{}`. It has two arguments:
 
-1. A letter for each column giving the alignment: `l` = left, `r` = right,
-   `c` = centre.
+1. Column alignment, specified by letter for each column (`l` = left, `r` = right,
+   `c` = centre.)
 
-2. The contents of the table with columns should be by `\tab` and rows by `\cr`.
+2. Table contents, with columns separated by `\tab` and rows by `\cr`.
 
 The following function turns an R data frame into into the correct format. It ignores column and row names, but should get you started.
 

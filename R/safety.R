@@ -6,7 +6,7 @@
 #'
 #' @param path Package path to upgrade. Defaults to working directory.
 #' @export
-upgrade <- function(path = ".") {
+upgradeRoxygen <- function(path = ".") {
   desc <- file.path(path, "DESCRIPTION")
   if (!file.exists(desc)) {
     stop("Doesn't look like a package", call. = FALSE)

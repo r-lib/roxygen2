@@ -12,6 +12,10 @@ upgradeRoxygen <- function(path = ".") {
     stop("Doesn't look like a package", call. = FALSE)
   }
 
+  message("This will delete all files in man/. Backup any hand-created\n",
+    "files by hand before continuing. Ready?")
+  if (menu(c("Yes", "No")) != 1) return()
+
   # Delete all old Rd files
   man <- dir(file.path(path, "man"), full.names = TRUE)
   unlink(man)

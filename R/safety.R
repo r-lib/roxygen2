@@ -35,7 +35,7 @@ first_time_check <- function(path) {
   roxy <- vapply(rd, made_by_roxygen, logical(1))
   if (all(!roxy)) {
     stop("Looks like this is your first time using roxygen2 > 4.0.0.\n",
-      "Please run roxygen::roxygenUpgrade().",
+      "Please run roxygen2::upgradeRoxygen().",
       call. = FALSE)
   }
 }

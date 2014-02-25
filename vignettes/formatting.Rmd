@@ -29,7 +29,7 @@ Within roxygen tags, you use `.Rd` syntax to format text. This vignette shows yo
 
 To other documentation:
 
-* `\code{\link{function}}`: function in this pacakage
+* `\code{\link{function}}`: function in this package
 
 * `\code{\link[MASS]{stats}}`: function in another package
 

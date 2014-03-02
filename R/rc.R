@@ -2,8 +2,11 @@
 rc_methods <- function(obj) {
   stopifnot(is(obj, "refClassRepresentation"))
 
-  base_methods <- getRefClass("envRefClass")$methods()
-  method_names <- setdiff(ls(envir = obj@refMethods), base_methods)
+  parents <- obj@refSuperClasses
+  parent_methods <- unlist(lapply(parents, function(x) {
+    getRefClass(x)$methods()
+  }))
+  method_names <- setdiff(ls(envir = obj@refMethods), parent_methods)
   methods <- mget(method_names, envir = obj@refMethods)
 
   lapply(methods, object)

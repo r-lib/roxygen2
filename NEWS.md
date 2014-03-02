@@ -60,6 +60,9 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 * Usage statements in generated roxygen statements non-longer contain
   non-ASCII characters and will be wrapped if long (#180).
 
+* By default, reference classes now only document their own methods,
+  not their methods of parents (#)
+
 # roxygen2 3.1.0
 
 ## Documentation for reference classes

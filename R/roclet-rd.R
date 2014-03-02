@@ -117,7 +117,7 @@ roclet_rd_one <- function(partitum, base_path, env) {
 
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
-  add_tag(rd, alias_tag(partitum, name))
+  add_tag(rd, alias_tag(partitum, name, partitum$object$alias))
 
   if (is.function(partitum$object$value)) {
     formals <- formals(partitum$object$value)

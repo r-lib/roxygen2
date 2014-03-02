@@ -67,7 +67,7 @@ test_that("@name overides default", {
     a <- function() {}")[[1]]
 
   expect_equal(get_tag(out, "name")$values, "b")
-  expect_equal(get_tag(out, "alias")$values, "b")
+  expect_equal(sort(get_tag(out, "alias")$values), c("a", "b"))
 })
 
 test_that("refclass topicname has class prefix", {

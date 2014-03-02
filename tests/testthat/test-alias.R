@@ -36,10 +36,20 @@ test_that("can use NULL to suppress default aliases", {
 })
 
 
-test_that("refclass gets -class alias", {
+test_that("refclass with assignment gets both aliases", {
   out <- roc_proc_text(roc, "
     #' Title
     B <- setRefClass('B')
+  ")[[1]]
+
+  expect_equal(get_tag(out, "alias")$value, c("B-class", "B"))
+})
+
+
+test_that("refclass gets -class alias", {
+  out <- roc_proc_text(roc, "
+    #' Title
+    setRefClass('B')
   ")[[1]]
 
   expect_equal(get_tag(out, "alias")$value, "B-class")

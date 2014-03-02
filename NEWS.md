@@ -63,6 +63,11 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 * By default, reference classes now only document their own methods,
   not their methods of parents (#)
 
+* Default aliases always include the original name of the object, even if
+  overridden by `@name`. This also means that `A <- setClass("A")` will get
+  two aliases by default: `A` and `A-class` (#202). Use `@aliases NULL` to
+  suppress default alias.
+
 # roxygen2 3.1.0
 
 ## Documentation for reference classes

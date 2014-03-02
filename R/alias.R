@@ -1,4 +1,4 @@
-alias_tag <- function(partitum, name) {
+alias_tag <- function(partitum, name, alias) {
   parts <- partitum[names(partitum) == "aliases"]
 
   if (length(parts) == 0) {
@@ -8,9 +8,10 @@ alias_tag <- function(partitum, name) {
   }
 
   if (any(aliases == "NULL")) {
+    # Don't add default aliases
     aliases <- aliases[aliases != "NULL"]
   } else {
-    aliases <- c(name, aliases)
+    aliases <- unique(c(name, alias, aliases))
   }
 
   new_tag("alias", aliases)

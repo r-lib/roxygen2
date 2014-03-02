@@ -61,7 +61,7 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
   non-ASCII characters and will be wrapped if long (#180).
 
 * By default, reference classes now only document their own methods,
-  not their methods of parents (#)
+  not their methods of parents (#201).
 
 * Default aliases always include the original name of the object, even if
   overridden by `@name`. This also means that `A <- setClass("A")` will get

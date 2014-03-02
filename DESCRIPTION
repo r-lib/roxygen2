@@ -20,7 +20,7 @@ Imports:
     methods,
     Rcpp
 Suggests:
-    testthat,
+    testthat (>= 0.8.0),
     knitr
 VignetteBuilder: knitr
 LinkingTo: Rcpp (>= 0.11.0)

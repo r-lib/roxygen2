@@ -13,7 +13,7 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
   to document multiple related functions in one file (#185).
 
 * `@field` documents the fields on a reference class (#181). It works the
-  same way as `@slots` for S4 classes.
+  same way as `@slot` for S4 classes.
 
 * Roxygen2 now adds a comment to all generated files so that you know
   they've been generated, and should not be hand edited.

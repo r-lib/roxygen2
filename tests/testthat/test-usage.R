@@ -94,6 +94,20 @@ test_that("default usage correct for S4 methods with different args to generic",
 })
 
 
+test_that("non-syntactic S4 class names are escaped in usage", {
+  out <- roc_proc_text(rd_roclet(), "
+    setGeneric('rhs', function(x) standardGeneric('rhs'))
+
+    #' Title.
+    #'
+    #' @inheritParams NULL
+    setMethod('rhs', '<-', function(x) x[[3]])
+  ")[[1]]
+
+  expect_equal(get_tag(out, "usage")$value, rd('\\S4method{rhs}{`<-`}(x)'))
+})
+
+
 test_that("argument containing function is generates correct usage", {
   out <- roc_proc_text(roc, "
     #' Title.

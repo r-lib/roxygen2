@@ -4,6 +4,7 @@ process_inherit_params <- function(topics) {
   # one-level - you can't inherit params that have been inherited from
   # another function (and you can't currently use multiple inherit tags)
   inherit_index <- get_values(topics, "inheritParams")
+
   name_index <- get_values(topics, "name")
 
   for(topic_name in names(inherit_index)) {

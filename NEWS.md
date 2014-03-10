@@ -68,6 +68,9 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
   two aliases by default: `A` and `A-class` (#202). Use `@aliases NULL` to
   suppress default alias.
 
+* Non-syntactic class names (like `<-`) are now escaped in the usage
+  section of S4 methods (#205).
+
 # roxygen2 3.1.0
 
 ## Documentation for reference classes

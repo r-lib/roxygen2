@@ -58,8 +58,11 @@ default_usage.s4generic <- function(x) {
 #' @export
 default_usage.s4method <- function(x) {
   s4method <- function(name) {
-    signature <- paste0(as.character(x$value@defined), collapse = ",")
-    build_rd("\\S4method{", name, "}{", signature, "}")
+    classes <- as.character(x$value@defined)
+    needs_backtick <- !is.syntactic(classes)
+    classes[needs_backtick] <- paste0("`", classes[needs_backtick], "`")
+
+    build_rd("\\S4method{", name, "}{", paste0(classes, collapse = ","), "}")
   }
   function_usage(x$value@generic, formals(x$value), s4method)
 }

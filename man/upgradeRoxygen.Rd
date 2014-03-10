@@ -10,8 +10,8 @@ upgradeRoxygen(path = ".")
   directory.}
 }
 \description{
-This function deletes all files in \file{man/} and flags \file{NAMESPACE}
-as being safe to override. Run this once before you upgrade to roxygen2
-4.0.0 and NEVER AGAIN.
+This function flags all files in \file{man/} and \file{NAMESPACE}
+as being created by roxygen2. It is safe to run this function multiple
+times, but you shouldn't need to.
 }
 

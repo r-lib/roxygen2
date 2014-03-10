@@ -1,6 +1,6 @@
 # roxygen2 4.0.0
 
-Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you'll need to run `roxygen2::upgradeRoxygen()`. Make sure to backup any hand generated Rd files and restore after the upgrade.
+Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you'll need to run `roxygen2::upgradeRoxygen()`. That will flag all existing files as being created by roxygen2.
 
 ## New features
 

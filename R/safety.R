@@ -1,8 +1,8 @@
 #' Run this before upgrading to 4.0.0.
 #'
-#' This function deletes all files in \file{man/} and flags \file{NAMESPACE}
-#' as being safe to override. Run this once before you upgrade to roxygen2
-#' 4.0.0 and NEVER AGAIN.
+#' This function flags all files in \file{man/} and \file{NAMESPACE}
+#' as being created by roxygen2. It is safe to run this function multiple
+#' times, but you shouldn't need to.
 #'
 #' @param path Package path to upgrade. Defaults to working directory.
 #' @export
@@ -12,20 +12,18 @@ upgradeRoxygen <- function(path = ".") {
     stop("Doesn't look like a package", call. = FALSE)
   }
 
-  message("This will delete all files in man/. Backup any hand-created\n",
-    "files by hand before continuing. Ready?")
-  if (menu(c("Yes", "No")) != 1) return()
-
-  # Delete all old Rd files
+  # Flag Rd files as ok
   man <- dir(file.path(path, "man"), full.names = TRUE)
-  unlink(man)
+  lapply(man, add_made_by_roxygen, comment = "%")
 
   # Flag namespace as ok
   namespace <- file.path(path, "NAMESPACE")
   if (!file.exists(namespace)) return()
 
-  lines <- readLines(namespace)
-  writeLines(c(made_by("#"), lines), namespace)
+  add_made_by_roxygen(namespace, "#")
+
+  message("Upgrade complete. Please re-document.")
+  invisible(TRUE)
 }
 
 first_time_check <- function(path) {
@@ -45,6 +43,15 @@ made_by_roxygen <- function(path) {
 
   first <- readLines(path, n = 1)
   check_made_by(first)
+}
+
+add_made_by_roxygen <- function(path, comment) {
+  if (!file.exists(path)) stop("Can't find ", path, call. = FALSE)
+
+  lines <- readLines(path, warn = FALSE)
+  if (check_made_by(lines[1])) return()
+
+  writeLines(c(made_by(comment), lines), path)
 }
 
 check_made_by <- function(first) {

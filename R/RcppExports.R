@@ -5,7 +5,6 @@ rdComplete <- function(string) {
     .Call('roxygen2_rdComplete', PACKAGE = 'roxygen2', string)
 }
 
-#' @importFrom Rcpp evalCpp
 splitByWhitespace <- function(string) {
     .Call('roxygen2_splitByWhitespace', PACKAGE = 'roxygen2', string)
 }

@@ -53,7 +53,6 @@ rd_roclet <- function() {
 }
 
 #' @export
-#' @importFrom digest digest
 roc_process.had <- function(roclet, parsed, base_path, options = list()) {
   env <- parsed$env
   partita <- parsed$blocks

@@ -116,8 +116,8 @@ same_contents <- function(path, contents) {
 
   contents <- paste0(paste0(contents, collapse = "\n"), "\n")
 
-  text_hash <- digest(contents, serialize = FALSE)
-  file_hash <- digest(file = path)
+  text_hash <- digest::digest(contents, serialize = FALSE)
+  file_hash <- digest::digest(file = path)
 
   identical(text_hash, file_hash)
 }

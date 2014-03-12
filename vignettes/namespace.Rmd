@@ -73,15 +73,19 @@ Use the following guidelines to decide what to export:
 
 ## Imports
 
-The `NAMESPACE` also controls which functions from other packages are made available to you package. There are five tags for importing objects into the package:
+The `NAMESPACE` also controls which functions from other packages are made available to your package. Only unique directives are saved to the `NAMESPACE` file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.
 
-* `@import package` imports all functions, classes and methods from a package.
+If you are using just a few functions from another package, call them explicitly with `pkg::fun()`.  I no longer recommend using `@importFrom`.
 
-* `@importFrom package functiona functionb ...` imports selected functions.
+If you are using many functions from another package, use `@import package` to import them all and make available without using `::`.
 
-* `@importClassesFrom package classa classb ...` imports selected S4 classes.
+If you are using S4 you may also need:
 
-* `@importMethodsFrom package methoda methodb ...` imports selected S4 methods.
+* `@importClassesFrom package classa classb ...` to import selected S4 classes.
+
+* `@importMethodsFrom package methoda methodb ...` to import selected S4 methods.
+
+To import compiled code from another package, use `@useDynLib`
 
 * `@useDynLib package` imports all compiled functions.
 
@@ -91,6 +95,3 @@ The `NAMESPACE` also controls which functions from other packages are made avail
   `@useDynLib mypackage, .registration = TRUE` will be inserted as is
   into the the NAMESPACE, e.g. `useDynLib(mypackage, .registration = TRUE)`
 
-Only unique directives are saved to the `NAMESPACE` file, so you can
-repeat them as needed to maintain a close link between the functions where
-they are needed and the namespace file.

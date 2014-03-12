@@ -8,7 +8,6 @@
 #' @param path Path to a package
 #' @return an environment, in to which all R files in the directory were
 #'   sourced.
-#' @importFrom methods setPackageName
 #' @keywords internal
 source_package <- function(path) {
   r_path <- file.path(path, "R")
@@ -18,7 +17,7 @@ source_package <- function(path) {
   on.exit(setwd(old_dir))
 
   env <- new.env(parent = globalenv())
-  setPackageName("roxygen_devtest", env)
+  methods::setPackageName("roxygen_devtest", env)
 
   load_pkg_dependencies(path)
 

@@ -48,34 +48,30 @@ parser_assignment <- function(call, env, block) {
 }
 
 
-#' @importFrom methods getClass
 parser_setClass <- function(call, env, block) {
   name <- as.character(call$Class)
-  value <- getClass(name, where = env)
+  value <- methods::getClass(name, where = env)
 
   object(value)
 }
 
-#' @importFrom methods getRefClass
 parser_setRefClass <- function(call, env, block) {
   name <- as.character(call$Class)
-  value <- getClass(name, where = env)
+  value <- methods::getClass(name, where = env)
 
   object(value)
 }
 
-#' @importFrom methods getGeneric
 parser_setGeneric <- function(call, env, block) {
   name <- as.character(call$name)
-  value <- getGeneric(name, where = env)
+  value <- methods::getGeneric(name, where = env)
 
   object(value)
 }
 
-#' @importFrom methods getMethod
 parser_setMethod <- function(call, env, block) {
   name <- as.character(call$f)
-  value <- getMethod(name, eval(call$signature), where = env)
+  value <- methods::getMethod(name, eval(call$signature), where = env)
   value@.Data <- extract_method_fun(value@.Data)
 
   object(value)

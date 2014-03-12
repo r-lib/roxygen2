@@ -12,9 +12,8 @@ template_find <- function(base_path, template_name) {
   path[path_exists][1]
 }
 
-#' @importFrom brew brew
 template_eval <- function(template_path, vars) {
-  capture.output(brew(template_path, envir = vars))
+  capture.output(brew::brew(template_path, envir = vars))
 }
 
 process_templates <- function(partitum, base_path) {

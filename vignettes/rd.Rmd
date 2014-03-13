@@ -270,7 +270,7 @@ RC is different to S3 and S4 because methods are associated with classes, not ge
 Account <- setRefClass("Account",
   fields = list(balance = "numeric"),
   methods = list(
-    withdraw <- function(x) {
+    withdraw = function(x) {
       "Withdraw money from account. Allows overdrafts"
       balance <<- balance - x
     }

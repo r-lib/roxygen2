@@ -264,7 +264,7 @@ Use either `@rdname` or `@describeIn` to control where method documentation goes
 RC is different to S3 and S4 because methods are associated with classes, not generics. RC also has a special convention for documenting methods: the docstring. This makes documenting RC simpler than S4 because you only need one roxygen block per class.
 
 ```{r}
-#' An S4 class to represent a bank account.
+#' A Reference Class to represent a bank account.
 #'
 #' @field balance A length-one numeric vector
 Account <- setRefClass("Account",

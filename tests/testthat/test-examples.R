@@ -66,6 +66,16 @@ test_that("% and \\ in @example escaped", {
   expect_equal(examples, rd("x \\%*\\% y # \\\\x"))
 })
 
+test_that("\\dontrun in @example unescaped", {
+  out <- roc_proc_text(roc, "
+    #' @name a
+    #' @example Rd-example-5.R
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_equal(examples, rd("\\dontrun{x <- 1}"))
+})
+
 test_that("% in @examples escaped before matching braces test (#213)", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a

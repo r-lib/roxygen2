@@ -76,7 +76,9 @@ load_options <- function(base_path) {
   }
   if (!("wrap" %in% names(opts)))
     message("Using the default option wrap = FALSE ",
-            "since it was not specified in the Roxygen field in DESCRIPTION")
+            "since it was not specified in the Roxygen field in DESCRIPTION. ",
+            "To configure this explicitly, add the following line to the DESCRIPTION file: ",
+            "`Roxygen: list(wrap = FALSE)`")
 
   defaults <- list(
     wrap = FALSE,

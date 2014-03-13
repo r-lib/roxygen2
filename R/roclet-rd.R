@@ -13,7 +13,6 @@ register.preref.parsers(parse.value,
                         'note',
                         'seealso',
                         'example',
-                        'examples',
                         'keywords',
                         'return',
                         'author',
@@ -25,6 +24,9 @@ register.preref.parsers(parse.value,
                         'encoding',
                         'description',
                         'details')
+
+register.preref.parsers(parse.examples,
+                        "examples")
 
 register.preref.parsers(parse.name.description,
                         'param',
@@ -247,8 +249,7 @@ process_methods <- function(block) {
 process.examples <- function(partitum, base_path) {
   out <- list()
   if (!is.null(partitum$examples)) {
-    ex <- escape_examples(partitum$examples)
-    out <- c(out, new_tag("examples", ex))
+    out <- c(out, new_tag("examples", partitum$examples))
   }
 
   paths <- unlist(partitum[names(partitum) == "example"])

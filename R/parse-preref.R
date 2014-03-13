@@ -52,6 +52,19 @@ parse.value <- function(key, rest) {
   str_trim(rest)
 }
 
+# Examples need special parsing because escaping rules are different
+parse.examples <- function(key, rest) {
+  rest <- str_trim(rest)
+  if (rest == "") {
+    stop("@example requires a value", call. = FALSE)
+  }
+
+  rest <- escape_examples(rest)
+  check_rd("example", rest)
+
+  rest
+}
+
 parse.words <- function(key, rest) {
   check_rd(key, rest)
   str_split(str_trim(rest), "\\s+")[[1]]
@@ -98,6 +111,7 @@ parse.name <- function(key, name) {
 parse.toggle <- function(key, rest) {
   TRUE
 }
+
 
 check_rd <- function(key, text) {
   if (rdComplete(text)) return(TRUE)

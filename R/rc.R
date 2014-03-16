@@ -52,8 +52,7 @@ trim_docstring <- function(docstring) {
   if (length(lines) == 1) return(strip(lines))
 
   # Determine minimum indentation (first line doesn't count):
-  stripped <- gsub("^ +", "", lines)
-  indent <- min(nchar(lines[-1]) - nchar(stripped[-1]))
+  indent <- min(leadingSpaces(lines[-1]))
 
   # Remove indentation (first line is special):
   trimmed <- c(

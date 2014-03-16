@@ -19,6 +19,8 @@ test_that("first string in function is docstring", {
 test_that("trim_docstring handles indentation correctly", {
   expect_equal(trim_docstring("a\n  b\n  c"), "a\nb\nc")
   expect_equal(trim_docstring("a\nb\nc"), "a\nb\nc")
+  expect_equal(trim_docstring("a\n  b\n   c"), "a\nb\n c")
+  expect_equal(trim_docstring("   a\n  b\n   c"), "a\nb\n c")
 })
 
 # Method documentation ---------------------------------------------------------

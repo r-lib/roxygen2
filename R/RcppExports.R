@@ -5,6 +5,10 @@ rdComplete <- function(string) {
     .Call('roxygen2_rdComplete', PACKAGE = 'roxygen2', string)
 }
 
+leadingSpaces <- function(lines) {
+    .Call('roxygen2_leadingSpaces', PACKAGE = 'roxygen2', lines)
+}
+
 splitByWhitespace <- function(string) {
     .Call('roxygen2_splitByWhitespace', PACKAGE = 'roxygen2', string)
 }

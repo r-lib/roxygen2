@@ -20,6 +20,21 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// leadingSpaces
+IntegerVector leadingSpaces(CharacterVector lines);
+RcppExport SEXP roxygen2_leadingSpaces(SEXP linesSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< CharacterVector >::type lines(linesSEXP );
+        IntegerVector __result = leadingSpaces(lines);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // splitByWhitespace
 std::vector<std::string> splitByWhitespace(std::string string);
 RcppExport SEXP roxygen2_splitByWhitespace(SEXP stringSEXP) {

@@ -71,6 +71,8 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 * Non-syntactic class names (like `<-`) are now escaped in the usage
   section of S4 methods (#205).
 
+* Eliminated two more cases where wrapping occured even when `wrap = FALSE`.
+
 # roxygen2 3.1.0
 
 ## Documentation for reference classes

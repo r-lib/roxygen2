@@ -85,7 +85,7 @@ parse.name.description <- function(key, rest) {
   pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
 
   name <- pieces[, 1]
-  rest <- str_trim(pieces[, 2])
+  rest <- trim_docstring(pieces[, 2])
 
   if (is.null.string(name)) {
     stop("@", key, ' requires a name and description')

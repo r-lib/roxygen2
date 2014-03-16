@@ -12,7 +12,7 @@ roc_proc_text(roclet, input, options = list())
   \item{input}{source string}
 
   \item{options}{a list of options to control roxygen
-  behaviour.  Currently only \code{wrap} is recognised.}
+  behaviour. Currently only \code{wrap} is recognised.}
 }
 \description{
 Process roclet on string and capture results.

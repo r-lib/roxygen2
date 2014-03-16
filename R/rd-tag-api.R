@@ -132,21 +132,26 @@ format.usage_tag <- function(x, ...) {
 }
 
 #' @export
-format.param_tag <- function(x, ...) {
+format.param_tag <- function(x, ..., wrap = TRUE) {
   names <- names(x$values)
   dups <- duplicated(names)
 
   items <- paste0("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
-  rd_tag("arguments", str_wrap(items, width = 60, exdent = 2, indent = 2),
-    space = TRUE)
+  if (wrap) {
+    items <- str_wrap(items, width = 60, exdent = 2, indent = 2)
+  }
+
+  rd_tag("arguments", items, space = TRUE)
 }
 
 #' @export
-format.section_tag <- function(x, ...) {
+format.section_tag <- function(x, ..., wrap = TRUE) {
   names <- vapply(x$values, "[[", "name", FUN.VALUE = character(1))
 
   contents <- vapply(x$values, "[[", "content", FUN.VALUE = character(1))
-  contents <- str_wrap(str_trim(contents), width = 60, exdent = 2, indent = 2)
+  if (wrap) {
+    contents <- str_wrap(str_trim(contents), width = 60, exdent = 2, indent = 2)
+  }
 
   setions <- paste0("\\section{", names, "}{\n", contents, "\n}\n",
     collapse = "\n")

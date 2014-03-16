@@ -6,7 +6,7 @@
 update_collate(base_path)
 }
 \arguments{
-  \item{base_path}{Path to package directory}
+\item{base_path}{Path to package directory}
 }
 \description{
 Topologically sort R files and record in Collate field. The topological

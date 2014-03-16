@@ -6,9 +6,9 @@
 register.preref.parsers(parser, ...)
 }
 \arguments{
-  \item{parser}{the parser to register}
+\item{parser}{the parser to register}
 
-  \item{\dots}{the keys upon which to register}
+\item{\dots}{the keys upon which to register}
 }
 \value{
 \code{NULL}

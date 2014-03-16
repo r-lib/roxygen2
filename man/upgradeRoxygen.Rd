@@ -6,8 +6,7 @@
 upgradeRoxygen(path = ".")
 }
 \arguments{
-  \item{path}{Package path to upgrade. Defaults to working
-  directory.}
+\item{path}{Package path to upgrade. Defaults to working directory.}
 }
 \description{
 This function flags all files in \file{man/} and \file{NAMESPACE}

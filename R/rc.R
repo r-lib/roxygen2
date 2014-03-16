@@ -36,6 +36,7 @@ docstring <- function(f) {
 
   first <- b[[2]]
   if (!is.character(first)) return(NULL)
+  if (first == "") return(NULL)
 
   trim_docstring(first)
 }
@@ -43,7 +44,7 @@ docstring <- function(f) {
 # Implementation converted from
 # http://www.python.org/dev/peps/pep-0257/#handling-docstring-indentation
 trim_docstring <- function(docstring) {
-  if (docstring == "") return(NULL)
+  if (docstring == "") return("")
 
   # Convert tabs to spaces (using four spaces for tabs)
   # and split into a vector of lines:

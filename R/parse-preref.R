@@ -21,7 +21,6 @@ parse.preref <- function(lines) {
     check_rd(NULL, elements[[1]])
     parsed$introduction <- str_trim(elements[[1]])
   }
-
   parsed
 }
 

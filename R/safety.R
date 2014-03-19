@@ -9,7 +9,7 @@
 upgradeRoxygen <- function(path = ".") {
   desc <- file.path(path, "DESCRIPTION")
   if (!file.exists(desc)) {
-    stop("Doesn't look like a package", call. = FALSE)
+    stop("This directory doesn't look like it contains a package: Ensure upgradeRoxygen(path = 'folder/containing/your/DESCRIPTION'", call. = FALSE)
   }
 
   # Flag Rd files as ok
@@ -33,7 +33,7 @@ first_time_check <- function(path) {
   roxy <- vapply(rd, made_by_roxygen, logical(1))
   if (all(!roxy)) {
     stop("Looks like this is your first time using roxygen2 > 4.0.0.\n",
-      "Please run roxygen2::upgradeRoxygen().",
+      "Please run roxygen2::upgradeRoxygen('path/to/your/package/').",
       call. = FALSE)
   }
 }

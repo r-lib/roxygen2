@@ -9,7 +9,7 @@
 upgradeRoxygen <- function(path = ".") {
   desc <- file.path(path, "DESCRIPTION")
   if (!file.exists(desc)) {
-    stop("Doesn't look like a package", call. = FALSE)
+    stop("This directory doesn't look like a package: Set path = the folder containing your DESCRIPTION file", call. = FALSE)
   }
 
   # Flag Rd files as ok

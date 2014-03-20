@@ -131,6 +131,14 @@ test_that("multiline importFrom parsed correctly", {
   )))
 })
 
+test_that("poorly formed importFrom is skipped", {
+	out <- roc_proc_text(roc, "
+	  #' @importFrom test
+	  NULL
+	")
+	expect_equal(out, character(0))
+})
+
 test_that("useDynLib imports only selected functions", {
   out <- roc_proc_text(roc, "
     #' @useDynLib test

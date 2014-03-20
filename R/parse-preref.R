@@ -45,7 +45,9 @@ parse.unknown <- function(key, rest) {
 parse.value <- function(key, rest) {
   check_rd(key, rest)
   if (is.null.string(rest)) {
-    stop("@", key, ' requires a value')
+    stop("@", key, " requires a value. Somewhere in your roxygen there's a line\n",
+		" with ","@", key, " followed by nothing. You need to either include a value (hyphen is ok as a place-keeper)\n",
+		"or delete the key if it is unused")
   }
 
   str_trim(rest)

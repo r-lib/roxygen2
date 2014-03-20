@@ -131,9 +131,11 @@ Three other tags make it easier for the user to find documentation:
 * `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are
   optional, but if present, must be taken from the predefined list replicated
   in the [keywords vignette](rd-keywords.html). Keywords are not very useful,
-  except for `@keywords internal`. The internal keyword flags the function
-  as for developer use only, removing it from the documentation index and
-  disabling some of automated tests.
+  except for `@keywords internal`. Using the internal keyword removes the function
+  from the documentation index and disables some of its automated tests. 
+  A common use case is to both export a function (using `@export`) and marking it as 
+  internal. That way, advanced users can access a function that new users would be confused
+  about if they were to see it in the index.
 
 You use other tags based on the type of object that you're documenting. The following sections describe the most commonly used tags for functions, S3, S4 and RC objects and data.
 

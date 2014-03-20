@@ -43,6 +43,8 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 
 * `@S3method` is deprecated - just use `@export` (#198).
 
+* Namespace tags now throw parsing errors if you give them bad inputs (#220).
+
 * Better error message if you try to document something other than NULL,
   an assignment, a class, a generic or a method (#194).
 

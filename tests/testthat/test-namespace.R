@@ -117,6 +117,13 @@ test_that("other namespace tags produce correct output", {
   )))
 })
 
+test_that("poorly formed importFrom throws error", {
+  expect_error(roc_proc_text(namespace_roclet(), "
+    #' @importFrom test
+    NULL
+  "), "needs at least 2 words")
+})
+
 
 test_that("S3method is depecrated", {
   expect_warning(roc_proc_text(roc, "#' @S3method test test\nNULL"),

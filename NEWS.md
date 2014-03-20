@@ -7,7 +7,7 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 * Six vignettes provide a comprehensive overview of using roxygen2 in
   practice. Run `browseVignettes("roxygen2")` to access.
 
-* `@describeIn` makes it easier to describe multiple function in
+* `@describeIn` makes it easier to describe multiple functions in
   one file. This is especially useful if you want to document methods with
   their generic, or with a common class, but it's also useful if you want
   to document multiple related functions in one file (#185).

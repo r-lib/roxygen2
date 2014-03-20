@@ -169,7 +169,14 @@ ns_exportClass       <- function(tag, part) export_class(tag)
 ns_exportMethod      <- function(tag, part) export_s4_method(tag)
 ns_exportPattern     <- function(tag, part) one_per_line("exportPattern", tag)
 ns_import            <- function(tag, part) one_per_line("import", tag)
-ns_importFrom        <- function(tag, part) repeat_first("importFrom", tag)
+ns_importFrom        <- function(tag, part) { 
+	if (length(tag) == 1) {
+		warning("importFrom ", tag, " is poorly formed and skipped")
+		character(0)
+	} else{
+		repeat_first("importFrom", tag)
+	}
+}
 ns_importClassesFrom <- function(tag, part) repeat_first("importClassesFrom", tag)
 ns_importMethodsFrom <- function(tag, part) repeat_first("importMethodsFrom", tag)
 ns_useDynLib         <- function(tag, part) {

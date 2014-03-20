@@ -130,7 +130,7 @@ Three other tags make it easier for the user to find documentation:
 
 * `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are
   optional, but if present, must be taken from the predefined list replicated
-  in the [keywords vignette](keywords.html). Keywords are not very useful,
+  in the [keywords vignette](rd-keywords.html). Keywords are not very useful,
   except for `@keywords internal`. The internal keyword flags the function
   as for developer use only, removing it from the documentation index and
   disabling some of automated tests.

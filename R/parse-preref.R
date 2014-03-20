@@ -64,9 +64,20 @@ parse.examples <- function(key, rest) {
   rest
 }
 
-parse.words <- function(key, rest) {
-  check_rd(key, rest)
-  str_split(str_trim(rest), "\\s+")[[1]]
+words_parser <- function(min = 0, max = Inf) {
+  function(key, rest) {
+    check_rd(key, rest)
+
+    words <- str_split(str_trim(rest), "\\s+")[[1]]
+    if (length(words) < min) {
+      stop("@", key, " needs at least ", min, " words", call. = FALSE)
+    }
+    if (length(words) > max) {
+      stop("@", key, " can have at most ", max, " words", call. = FALSE)
+    }
+
+    words
+  }
 }
 
 parse.words.line <- function(key, rest) {

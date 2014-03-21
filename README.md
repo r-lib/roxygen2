@@ -72,7 +72,7 @@ devtools::install_github("klutometis/roxygen")
 
 Roxygen does a live analysis of your source code: it loads all the code in your package, so it can create documentation using values in an R environment, not just source code. However, simulating package loading is rather tricky to do in general, so there are two ways to do it with roxygen:
 
-* `roxygen::roxygenise()` just sources all files in the `R/` directory
+* `roxygen2::roxygenise()` just sources all files in the `R/` directory
 
 * `devtools::document()` sources all files in the `R/` directory, compiles
   source code in the `src/` directory, loads data in the `data/` directory

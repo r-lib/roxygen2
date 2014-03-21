@@ -1,5 +1,14 @@
 object_from_call <- function(call, env, block) {
   if (is.null(call)) return()
+
+  # Special case: you can refer to other objects as strings
+  if (is.character(call)) {
+    value <- get(call, env)
+    value <- standardise_obj(call, value, env, block)
+
+    return(object(value, call))
+  }
+
   if (!is.call(call)) return()
 
   call <- standardise_call(call, env)

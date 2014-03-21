@@ -15,6 +15,17 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 * `@field` documents the fields on a reference class (#181). It works the
   same way as `@slot` for S4 classes.
 
+* You can now document objects defined elsewhere (like datasets) by
+  documenting their name as a string (#221). For example, to document an
+  dataset called `mydata`, you can do:
+
+    ```R
+    #' Mydata set
+    #'
+    #' Some data I collected about myself
+    "mydata"
+    ```
+
 * Roxygen2 now adds a comment to all generated files so that you know
   they've been generated, and should not be hand edited.
 

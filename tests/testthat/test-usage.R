@@ -231,7 +231,7 @@ test_that("Special vars removed in rc methods usage", {
   ")[[1]]
 
   methods <- get_tag(out, "rcmethods")$values
-  expect_equal(methods[[1]], "\\code{draw(x = 1)}: 2")
+  expect_equal(methods, list("draw(x = 1)" = "2"))
 })
 
 # Wrapping --------------------------------------------------------------------

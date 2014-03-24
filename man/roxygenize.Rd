@@ -11,9 +11,10 @@ roxygenise(package.dir = ".", roclets = NULL, load_code = source_package,
   clean = FALSE)
 }
 \arguments{
-\item{package.dir}{the package's top directory}
+\item{package.dir}{Location of package top level directory. Default is
+working directory.}
 
-\item{roclets}{character vector of roclet names to apply to package.
+\item{roclets}{Character vector of roclet names to use with package.
 This defaults to \code{NULL}, which will use the \code{roclets} fields in
 the list provided in the \code{Roxygen} DESCRIPTION field. If none are
 specified, defaults to \code{c("collate", "namespace", "rd")}.}

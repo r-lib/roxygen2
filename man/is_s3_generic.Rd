@@ -6,9 +6,9 @@
 is_s3_generic(name, env = parent.frame())
 }
 \arguments{
-\item{name}{name of function.}
+\item{name}{Name of function.}
 
-\item{env}{environment to search in.}
+\item{env}{Base environment in which to look for function defintion.}
 }
 \description{
 \code{is_s3_generic} compares name to \code{.knownS3Generics} and

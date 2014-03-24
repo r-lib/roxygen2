@@ -6,10 +6,10 @@
 source_package(path)
 }
 \arguments{
-\item{path}{Path to a package}
+\item{path}{Path to a package.}
 }
 \value{
-an environment, in to which all R files in the directory were
+An environment, into which all R files in the directory were
   sourced.
 }
 \description{

@@ -5,7 +5,7 @@
 #'
 #' @param value The object itself.
 #' @param alias Alias for object being documented, in case you create a
-#'   generator function with different name to name
+#'   generator function with different name.
 #' @export
 #' @keywords internal
 object <- function(value, alias = NULL) {

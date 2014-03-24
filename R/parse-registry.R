@@ -5,9 +5,9 @@ if (!exists("preref.parsers")) {
 
 #' Register parsers.
 #'
-#' @param key the key upon which to register
-#' @param parser the parser callback to register;
-#' a function taking \code{key} and \code{expression}
+#' @param key,... Tag name(s).
+#' @param parser Parser callback to register, a function with arguments
+#'   \code{key} and \code{expression}.
 #' @return \code{NULL}
 #' @export
 #' @keywords internal
@@ -16,14 +16,8 @@ register.preref.parser <- function(key, parser) {
   preref.parsers[[key]] <- parser
 }
 
-#' Register many parsers at once.
-#'
-#' @param parser the parser to register
-#' @param \dots the keys upon which to register
-#' @return \code{NULL}
 #' @export
-#' @keywords internal
-#' @rdname register-parsers
+#' @rdname register-parser
 register.preref.parsers <- function(parser, ...) {
   for (key in c(...)) {
     register.preref.parser(key, parser)

@@ -5,8 +5,8 @@
 #' there are compiled files, data files, etc. In that case, it's better to
 #' use \code{\link[devtools]{document}()}.
 #'
-#' @param path Path to a package
-#' @return an environment, in to which all R files in the directory were
+#' @param path Path to a package.
+#' @return An environment, into which all R files in the directory were
 #'   sourced.
 #' @keywords internal
 source_package <- function(path) {

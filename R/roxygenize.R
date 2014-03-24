@@ -14,8 +14,9 @@
 #' complicated packages, I recommend using \code{devtools::document} which
 #' does a much better job at simulating package install and load.
 #'
-#' @param package.dir the package's top directory
-#' @param roclets character vector of roclet names to apply to package.
+#' @param package.dir Location of package top level directory. Default is
+#'   working directory.
+#' @param roclets Character vector of roclet names to use with package.
 #'   This defaults to \code{NULL}, which will use the \code{roclets} fields in
 #'   the list provided in the \code{Roxygen} DESCRIPTION field. If none are
 #'   specified, defaults to \code{c("collate", "namespace", "rd")}.

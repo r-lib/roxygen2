@@ -9,7 +9,7 @@ object(value, alias = NULL)
 \item{value}{The object itself.}
 
 \item{alias}{Alias for object being documented, in case you create a
-generator function with different name to name}
+generator function with different name.}
 }
 \description{
 These objects are usually created by the parsers, but it is also

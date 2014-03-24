@@ -9,11 +9,12 @@ new_roclet <- function(obj, subclass = NULL) {
 is.roclet <- function(x) inherits(x, "roclet")
 
 #' Process roclet on string and capture results.
+#'
 #' Useful for testing.
 #'
-#' @param roclet to use for processing
-#' @param input source string
-#' @param options a list of options to control roxygen behaviour.
+#' @param roclet Name of roclet to use for processing.
+#' @param input Source string
+#' @param options A list of options to control roxygen behaviour.
 #'   Currently only \code{wrap} is recognised.
 #' @export
 #' @keywords internal

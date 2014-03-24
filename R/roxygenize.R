@@ -6,6 +6,14 @@
 #' \code{\link{namespace_roclet}}, and for \code{\link{update_collate}},
 #' for more details.
 #'
+#' Note that roxygen2 is a dynamic documentation system: it works using
+#' by inspecting loaded objects in the package. This means that you must
+#' be able to load the package in order to document it.
+#' \code{\link{source_package}} provides a simple simulation of package
+#' loading that works if you only have R files in your package. For more
+#' complicated packages, I recommend using \code{devtools::document} which
+#' does a much better job at simulating package install and load.
+#'
 #' @param package.dir the package's top directory
 #' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
 #' @param roclets character vector of roclet names to apply to package.

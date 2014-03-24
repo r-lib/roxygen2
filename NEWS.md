@@ -61,6 +61,9 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 
 ## Bug fixes and minor improvements
 
+* Deprecated arguments to `roxygenise()` (`roxygen.dir`, `copy.package`,
+  `overwrite`, `unlink.target`) removed.
+
 * Remove unneeded codetools and tools dependencies.
 
 * Bump required Rcpp version to 0.11.0, and remove custom makefiles.

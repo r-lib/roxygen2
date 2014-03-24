@@ -15,7 +15,6 @@
 #' does a much better job at simulating package install and load.
 #'
 #' @param package.dir the package's top directory
-#' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
 #' @param roclets character vector of roclet names to apply to package.
 #'   This defaults to \code{NULL}, which will use the \code{roclets} fields in
 #'   the list provided in the \code{Roxygen} DESCRIPTION field. If none are
@@ -28,16 +27,9 @@
 #' @return \code{NULL}
 #' @export
 roxygenize <- function(package.dir = ".",
-                       roxygen.dir=package.dir,
-                       copy.package=package.dir != roxygen.dir,
-                       overwrite=TRUE,
-                       unlink.target=FALSE,
                        roclets = NULL,
                        load_code = source_package,
                        clean = FALSE) {
-  if (copy.package) {
-    stop("Non-inplace roxygen no longer supported")
-  }
   first_time_check(package.dir)
 
   base_path <- normalizePath(package.dir)

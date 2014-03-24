@@ -4,20 +4,14 @@
 \alias{roxygenize}
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{
-roxygenize(package.dir = ".", roxygen.dir = package.dir,
-  copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = NULL, load_code = source_package,
+roxygenize(package.dir = ".", roclets = NULL, load_code = source_package,
   clean = FALSE)
 
-roxygenise(package.dir = ".", roxygen.dir = package.dir,
-  copy.package = package.dir != roxygen.dir, overwrite = TRUE,
-  unlink.target = FALSE, roclets = NULL, load_code = source_package,
+roxygenise(package.dir = ".", roclets = NULL, load_code = source_package,
   clean = FALSE)
 }
 \arguments{
 \item{package.dir}{the package's top directory}
-
-\item{roxygen.dir,copy.package,overwrite,unlink.target}{deprecated}
 
 \item{roclets}{character vector of roclet names to apply to package.
 This defaults to \code{NULL}, which will use the \code{roclets} fields in

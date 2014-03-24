@@ -18,12 +18,12 @@ Imports:
     brew,
     digest,
     methods,
-    Rcpp
+    Rcpp (>= 0.11.0)
 Suggests:
     testthat (>= 0.8.0),
     knitr
 VignetteBuilder: knitr
-LinkingTo: Rcpp (>= 0.11.0)
+LinkingTo: Rcpp
 Roxygen: list(wrap = FALSE)
 Collate:
     'RcppExports.R'

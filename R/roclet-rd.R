@@ -231,16 +231,17 @@ process_methods <- function(block) {
   methods <- obj$methods
   if (is.null(obj$methods)) return()
 
-  method_desc <- function(obj) {
-    desc <- docstring(obj$value@.Data)
-    if (is.null(desc)) return()
+  desc <- lapply(methods, function(x) docstring(x$value@.Data))
+  usage <- vapply(methods, function(x) {
+    usage <- function_usage(x$value@name, formals(x$value@.Data))
+    as.character(wrap_string(usage))
+  }, character(1))
 
-    usage <- function_usage(obj$value@name, formals(obj$value@.Data))
-    paste0("\\code{", wrap_string(usage),  "}: ", desc)
-  }
+  has_docs <- !vapply(desc, is.null, logical(1))
+  desc <- desc[has_docs]
+  usage <- usage[has_docs]
 
-  descs <- unlist(lapply(methods, method_desc))
-  new_tag("rcmethods", descs)
+  new_tag("rcmethods", setNames(desc, usage))
 }
 
 

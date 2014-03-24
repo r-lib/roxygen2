@@ -186,12 +186,7 @@ format.examples_tag <- function(x, ...) {
 
 #' @export
 format.rcmethods_tag <- function(x, ...) {
-  paste0(
-    "\\section{Methods}{\n",
-    "\\itemize{\n",
-    paste0("\\item ", x$values, collapse = "\n\n"),
-    "\n}}\n"
-  )
+  describe_section("Methods", names(x$values), x$values)
 }
 
 #' @export

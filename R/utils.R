@@ -75,7 +75,7 @@ errors_with_srcref <- function(srcref, code) {
   withCallingHandlers(
     code,
     error = function(e) {
-      msg <- paste0("Failure in roxygen block at ", loc, "\n", e$message)
+      msg <- paste0("Failure in roxygen block beginning ", loc, "\n", e$message)
       stop(msg, call. = FALSE)
     }
   )

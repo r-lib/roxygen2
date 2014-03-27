@@ -3,7 +3,7 @@ object_from_call <- function(call, env, block) {
 
   # Special case: you can refer to other objects as strings
   if (is.character(call)) {
-    value <- get(call, env)
+    value <- find_data(call, env)
     value <- standardise_obj(call, value, env, block)
 
     return(object(value, call))
@@ -21,6 +21,29 @@ object_from_call <- function(call, env, block) {
   if (is.null(parser)) return(NULL)
 
   parser(call, env, block)
+}
+
+find_data <- function(name, env) {
+  ns <- env_namespace(env)
+  if (is.null(ns)) {
+    get(name, envir = env)
+  } else {
+    getExportedValue(name, ns = ns)
+  }
+}
+
+# Find namespace associated with environment
+env_namespace <- function(env) {
+  env_name <- attr(env, "name")
+  if (is.null(env_name)) return(NULL)
+  if (!grepl(":", env_name)) return(NULL)
+
+  ns_name <- gsub("package:", "", env_name)
+  ns <- NULL
+  try(ns <- asNamespace(ns_name), silent = TRUE)
+  if (is.null(ns)) return(NULL)
+
+  ns
 }
 
 find_parser <- function(name) {

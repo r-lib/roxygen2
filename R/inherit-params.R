@@ -37,9 +37,11 @@ find_params <- function(inheritor, topics, name_lookup) {
 
   if (has_colons) {
     # Reference to another package
-    pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
-    params <- rd_arguments(get_rd(pieces[2], pieces[1]))
+    parsed <- parse(text = inheritor)[[1]]
+    pkg <- as.character(parsed[[2]])
+    fun <- as.character(parsed[[3]])
 
+    params <- rd_arguments(get_rd(fun, pkg))
   } else {
     # Reference within this package
     rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))

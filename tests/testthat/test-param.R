@@ -93,3 +93,8 @@ test_that("data objects don't get params", {
   expect_equal(get_tag(out, "param"), NULL)
 
 })
+
+test_that("find_params parses input", {
+  params <- find_params("utils::`?`", NULL, NULL)
+  expect_equal(names(params), c("topic", "type"))
+})

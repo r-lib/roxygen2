@@ -63,6 +63,9 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 
 ## Bug fixes and minor improvements
 
+* Better parsing of non-syntactic function names in other packages when
+  used in `@inheritParams` (#236).
+
 * Deprecated arguments to `roxygenise()` (`roxygen.dir`, `copy.package`,
   `overwrite`, `unlink.target`) removed.
 

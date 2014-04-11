@@ -61,5 +61,9 @@ inherit_from <- function(generic, pkg) {
   rd <- get_rd(generic, pkg)
   if (is.null(rd)) return(NULL)
 
+  if (!is.syntactic(generic)) {
+    generic <- paste0("`", generic, "`")
+  }
+
   paste0(pkg, "::", generic)
 }

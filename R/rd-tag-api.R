@@ -168,6 +168,8 @@ format.field_tag <- function(x, ...) {
 }
 
 describe_section <- function(name, dt, dd) {
+  if (length(dt) == 0) return("")
+
   items <- paste0("\\item{\\code{", dt, "}}{", dd, "}", collapse = "\n\n")
   paste0("\\section{", name, "}{\n\n",
     "\\describe{\n",

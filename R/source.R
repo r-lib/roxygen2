@@ -27,6 +27,18 @@ source_package <- function(path) {
   env
 }
 
+# Assume that the package has already been loaded by other means
+# (e.g. build and reload)
+loaded_package <- function(path) {
+  desc <- file.path(path, "DESCRIPTION")
+  stopifnot(file.exists(desc))
+
+  package <- read.dcf(desc, fields = "Package")[[1, 1]]
+  asNamespace(package)
+}
+
+
+
 load_pkg_dependencies <- function(path) {
   desc <- read_pkg_description(path)
 

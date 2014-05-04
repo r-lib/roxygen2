@@ -18,6 +18,7 @@ Other roclets: \code{\link{S3method}},
   \code{\link{importClassesFrom}},
   \code{\link{importFrom}},
   \code{\link{importMethodsFrom}},
-  \code{\link{namespace_roclet}}
+  \code{\link{namespace_roclet}}; \code{\link{md2rd}},
+  \code{\link{md2rd_roclet}}
 }
 

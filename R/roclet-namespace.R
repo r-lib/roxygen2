@@ -60,11 +60,12 @@ ns_process_tag <- function(tag_name, partitum) {
 }
 
 #' @export
-roc_output.namespace <- function(roclet, results, base_path, options = list()) {
+roc_output.namespace <- function(roclet, results, base_path, options = list(),
+                                 check = TRUE) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   results <- c(made_by("#"), results)
 
-  write_if_different(NAMESPACE, results)
+  write_if_different(NAMESPACE, results, check = check)
 
   NAMESPACE
 }

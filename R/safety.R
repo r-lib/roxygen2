@@ -1,43 +1,13 @@
-#' Run this before upgrading to 4.0.0.
-#'
-#' This function flags all files in \file{man/} and \file{NAMESPACE}
-#' as being created by roxygen2. It is safe to run this function multiple
-#' times, but you shouldn't need to.
-#'
-#' @param path Package path to upgrade. Defaults to working directory.
-#' @export
-upgradeRoxygen <- function(path = ".") {
-  desc <- file.path(path, "DESCRIPTION")
-  if (!file.exists(desc)) {
-    stop("'", path, "' doesn't look like a package.\n",
-      "You probably need upgradeRoxygen('path/to/your/package')",
-      call. = FALSE)
-  }
+first_time <- function(path) {
+  generated <- dir(file.path(path, "man"), full.names = TRUE)
 
-  # Flag Rd files as ok
-  man <- dir(file.path(path, "man"), full.names = TRUE)
-  lapply(man, add_made_by_roxygen, comment = "%")
-
-  # Flag namespace as ok
   namespace <- file.path(path, "NAMESPACE")
-  if (!file.exists(namespace)) return()
-
-  add_made_by_roxygen(namespace, "#")
-
-  message("Upgrade complete. Please re-document.")
-  invisible(TRUE)
-}
-
-first_time_check <- function(path) {
-  rd <- dir(file.path(path, "man"), full.names = TRUE)
-  if (length(rd) == 0) return()
-
-  roxy <- vapply(rd, made_by_roxygen, logical(1))
-  if (all(!roxy)) {
-    stop("Looks like this is your first time using roxygen2 > 4.0.0.\n",
-      "Please run roxygen2::upgradeRoxygen('", path, "').",
-      call. = FALSE)
+  if (file.exists(namespace)) {
+    generated <- c(generated, namespace)
   }
+
+  roxy <- vapply(generated, made_by_roxygen, logical(1))
+  all(!roxy)
 }
 
 made_by_roxygen <- function(path) {

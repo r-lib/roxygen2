@@ -31,7 +31,11 @@ roxygenize <- function(package.dir = ".",
                        roclets = NULL,
                        load_code = source_package,
                        clean = FALSE) {
-  first_time_check(package.dir)
+
+  is_first <- first_time(package.dir)
+  if (is_first) {
+    message("First time using roxygen2 4.0. Upgrading automatically...")
+  }
 
   base_path <- normalizePath(package.dir)
   man_path <- file.path(base_path, "man")
@@ -57,7 +61,7 @@ roxygenize <- function(package.dir = ".",
       clean(roc, base_path)
     }
     results <- roc_process(roc, parsed, base_path, options = options)
-    roc_output(roc, results, base_path, options = options)
+    roc_output(roc, results, base_path, options = options, check = !is_first)
   }
   invisible(unlist(lapply(roclets, roc_out)))
 }

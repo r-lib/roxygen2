@@ -3,6 +3,8 @@
 * Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the 
   right thing the first time it is run.
 
+* Exporting a S4 generic works (#246).
+
 # roxygen2 4.0.0
 
 Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you'll need to run `roxygen2::upgradeRoxygen()`. That will flag all existing files as being created by roxygen2.

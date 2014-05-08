@@ -42,6 +42,15 @@ test_that("export detects S4 class", {
   expect_equal(out, 'exportClasses(a)')
 })
 
+test_that("export detects S4 generic", {
+  out <- roc_proc_text(roc, "
+    #' @export
+    setGeneric('foo', function(x) standardGeneric('foo'))
+  ")
+  expect_equal(out, 'export(foo)')
+})
+
+
 test_that("export detects S3 method", {
   out <- roc_proc_text(roc, "#' @export\nmean.foo <- function(x) 'foo'")
   expect_equal(out, 'S3method(mean,foo)')

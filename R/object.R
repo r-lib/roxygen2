@@ -80,6 +80,7 @@ extract_method_fun <- function(x) {
   if (!identical(method_body[[1]], quote(`{`))) return(fun)
 
   first_line <- method_body[[2]]
+  if (!is.call(first_line)) return(fun)
   if (!identical(first_line[[1]], quote(`<-`))) return(fun)
   if (!identical(first_line[[2]], quote(`.local`))) return(fun)
 

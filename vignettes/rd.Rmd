@@ -131,8 +131,9 @@ Three other tags make it easier for the user to find documentation:
 * `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are
   optional, but if present, must be taken from the predefined list replicated
   in the [keywords vignette](rdkeywords.html). Keywords are not very useful,
-  except for `@keywords internal`. Using the internal keyword removes the function
-  from the documentation index and disables some of its automated tests.
+  except for `@keywords internal`. Using the internal keyword removes all functions
+  in the associated `.Rd` file from the documentation index and disables some of
+  their automated tests.
   A common use case is to both export a function (using `@export`) and marking it as
   internal. That way, advanced users can access a function that new users would be confused
   about if they were to see it in the index.

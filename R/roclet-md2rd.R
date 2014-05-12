@@ -5,15 +5,18 @@ NULL
 #' 
 #' Supports a limited subset of Markdown syntax in Roxygen comments, see Details.
 #' 
-#' Supported Markdown mark-up: \itemize{ \item itemized lists (lines starting
-#' with a star followed by a blank, subsequent lines for the same item starting
+#' Supported Markdown syntax: \itemize{ \item itemized lists (lines starting 
+#' with a star followed by a blank, subsequent lines for the same item starting 
 #' with 4 spaces) \item enumerated lists (first item starting with 1 followed by
-#' a period, subsequent items starting with numbers+period or star, or 4 spaces
-#' to continue same item)\item \code{code}-formatting with backticks
-#' (\code{`<code>`}) \item strong/bold (\code{**<bold>**}) \item 
+#' a period, subsequent items starting with numbers+period or star, or 4 spaces 
+#' to continue same item after a linebreak)\item \code{code}-formatting with 
+#' backticks (\code{`<code>`}) \item strong/bold (\code{**<bold>**}) \item 
 #' italic/emphasized text (\code{*<emph>*}) \item links to other function docs 
-#' (\code{![<function>](<some_package>)} or \code{![function]}) \item inline
-#' math (\code{$<math>$}) \item displayed equations (\code{$$<math>$$})}.
+#' (\code{![<function>](<some_package>)} or \code{![function]}) \item inline 
+#' math (\code{$<math>$}) \item displayed equations (\code{$$<math>$$})}. Note 
+#' that nested lists are not supported, and neither are linebreaks within math
+#' environments or code snippets.
+#' 
 #' @seealso \code{tests/test-md2rd.R} for syntax examples.
 #' 
 #' @family roclets
@@ -29,14 +32,14 @@ md2rd <- function(md){
   # look for star star (no star, no blank) (..., no star)  (no blank, star star)
   rd <- str_replace_all(md, 
                         pattern = 
-                          "(\\*\\*)([^\\*[:blank:]][^\\*]+[^[:blank:]])(\\*\\*)", 
+                          "(\\*\\*)([^\\*[:blank:]][^\\*\n]+[^[:blank:]])(\\*\\*)", 
                         replacement = "\\\\bold{\\2}")
   
   # italics:
   # look for star (no star, no blank) (..., no star)  (no blank, star)
   rd <- str_replace_all(rd, 
                         pattern = 
-                          "(\\*)([^\\*[:blank:]][^\\*]+[^[:blank:]])(\\*)",
+                          "(\\*)([^\\*[:blank:]][^\\*\n]+[^[:blank:]])(\\*)",
                         replacement = "\\\\emph{\\2}")
   
   #displayed math:

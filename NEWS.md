@@ -1,4 +1,4 @@
-# roxygen2 4.0.0.99
+# roxygen2 4.0.1
 
 * Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the 
   right thing the first time it is run.

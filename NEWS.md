@@ -1,3 +1,5 @@
+# roxygen2 4.0.1.99
+
 # roxygen2 4.0.1
 
 * Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the 

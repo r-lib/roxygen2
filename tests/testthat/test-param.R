@@ -212,3 +212,24 @@ test_that("argument order for multiple usage statements", {
 
   expect_equal(get_tag(out[["a.Rd"]], "param")$values, c(x="X", y="Y", z="Z", w="W"))
 })
+
+test_that("argument order for @rdfile", {
+  out <- roc_proc_text(roc, "
+                       #' A
+                       #'
+                       #' @param x X
+                       #' @param y Y
+                       #' @rdname rd
+                       a <- function(x, y) {
+                       }
+
+                       #' B
+                       #'
+                       #' @export
+                       #' @rdname rd
+                       b <- function(y, ...) {
+                       }
+                       ")
+
+  expect_equal(get_tag(out[["rd.Rd"]], "param")$values, c(x="X", y="Y"))
+})

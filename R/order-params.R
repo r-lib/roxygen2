@@ -6,6 +6,10 @@ fix_params_order <- function(topics) {
     # Check what's needed...
     needed <- get_tag(topic, "formals")$values
 
+    # (Workaround for dupes that can occur but perhaps shouldn't,
+    #  cf. https://github.com/klutometis/roxygen/commit/83d125dce50a072534988787d49ffe206d19b232#commitcomment-6742169)
+    needed <- unique(needed)
+
     # ...and what's documented (here we look only at the first parameter
     # in a multi-parameter documentation)
     documented <- get_documented_params(topic, only_first = TRUE)

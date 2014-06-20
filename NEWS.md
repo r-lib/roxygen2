@@ -1,5 +1,8 @@
 # roxygen2 4.0.1.99
 
+* Parameter documentation is ordered according to the order of the formals, if
+  possible (#63).
+
 # roxygen2 4.0.1
 
 * Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the 

@@ -35,6 +35,7 @@ Collate:
     'object-defaults.R'
     'object-from-call.R'
     'object.R'
+    'order-params.R'
     'parse-preref.R'
     'parse-registry.R'
     'parse.R'

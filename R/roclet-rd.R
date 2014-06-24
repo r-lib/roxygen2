@@ -79,6 +79,8 @@ roc_process.had <- function(roclet, parsed, base_path, options = list()) {
   topics <- process_family(topics)
   # Final parse to process @inheritParams
   process_inherit_params(topics)
+  # Postprocessing to reset ordering of parameter documentation
+  fix_params_order(topics)
 }
 
 invert <- function(x) {

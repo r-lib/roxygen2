@@ -1,7 +1,7 @@
 # roxygen2 4.0.1.99
 
 * Parameter documentation is ordered according to the order of the formals, if
-  possible (#63).
+  possible (@krlmlr, #63).
 
 # roxygen2 4.0.1
 

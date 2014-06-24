@@ -34,10 +34,10 @@ get_documented_params <- function(topic, only_first = FALSE) {
   documented <- names(get_tag(topic, "param")$values)
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
-    if (only_first)
-      documented <- vapply(documented, `[[`, character(1), 1L)
+    documented <- if (only_first)
+      vapply(documented, `[[`, character(1), 1L)
     else
-      documented <- unlist(documented)
+      unlist(documented)
   }
 
   documented

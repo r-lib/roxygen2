@@ -43,6 +43,8 @@ calls_use_method <- function(x) {
   FALSE
 }
 
+#' @rdname is_s3_generic
+#' @export
 is_s3_method <- function(name, env = parent.frame()) {
   !is.null(find_generic(name, env))
 }

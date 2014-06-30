@@ -3,6 +3,8 @@
 * Parameter documentation is ordered according to the order of the formals, if
   possible (@krlmlr, #63).
 
+* Export `is_s3_method`.
+
 # roxygen2 4.0.1
 
 * Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the 

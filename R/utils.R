@@ -132,9 +132,11 @@ dots <- function(...) {
 
 #' Generate a template params list
 #'
-#' This function generates a template params list for roxygne
+#' This function generates a template params list for roxygen
+#' Add more functionality to get probably values, title, description etc 
 #' @param x name of the function for which you want a param template
-get_template_params <- function(x){
+#; @export
+generate_template <- function(x){
   cat(paste("#' @param",names(formals(x)), collapse="\n"))
 }
 

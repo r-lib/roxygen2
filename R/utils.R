@@ -129,3 +129,13 @@ r_files <- function(path) {
 dots <- function(...) {
   eval(substitute(alist(...)))
 }
+
+#' Generate a template params list
+#'
+#' This function generates a template params list for roxygne
+#' @param x name of the function for which you want a param template
+get_template_params <- function(x){
+  cat(paste("#' @param",names(formals(x)), collapse="\n"))
+}
+
+

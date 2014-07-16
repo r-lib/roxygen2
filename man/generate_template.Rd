@@ -3,13 +3,19 @@
 \alias{generate_template}
 \title{Generate a template params list}
 \usage{
-generate_template(x)
+generate_template(x, verbose = getOption("verbose"))
 }
 \arguments{
 \item{x}{name of the function for which you want a param template}
+
+\item{verbose}{whether to print the template. Takes default from \code{getOption("verbose")}}
 }
 \description{
 This function generates a template params list for roxygen
-Add more functionality to get probably values, title, description etc
+Add more functionality to get probably values etc
+example section is experimental and needs more work
+}
+\examples{
+out <- generate_template(x = "plot", verbose = TRUE)
 }
 

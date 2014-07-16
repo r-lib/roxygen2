@@ -130,14 +130,27 @@ dots <- function(...) {
   eval(substitute(alist(...)))
 }
 
-#' Generate a template params list
-#'
-#' This function generates a template params list for roxygen
-#' Add more functionality to get probably values, title, description etc 
+#' @title Generate a template params list
+#' @description This function generates a template params list for roxygen
+#' Add more functionality to get probably values etc
+#' example section is experimental and needs more work
 #' @param x name of the function for which you want a param template
-#; @export
-generate_template <- function(x){
-  cat(paste("#' @param",names(formals(x)), collapse="\n"))
+#' @param verbose whether to print the template. Takes default from \code{getOption("verbose")}
+#' @export
+#' @examples 
+#' out <- generate_template(x = "plot", verbose = TRUE)
+generate_template <- function(x, verbose = getOption("verbose")){
+  arg_names = names(formals(x))
+  arg_vals = as.character(formals(x))
+  arg_str = paste(arg_names, ifelse(arg_vals == "", arg_names, arg_vals), sep = " = ", collapse = ", ")
+  head <- sprintf("#' @title %s\n#' @description %s", x, x)
+  params <- paste("#' @param", arg_names, collapse = "\n")
+  export <- sprintf("#' @export")
+  ## -------- example section is experimental and needs more work
+  examples <- sprintf("#' @examples\n#' %s(%s)", x, arg_str )
+  template <- paste(head, params, export, examples, sep = "\n")
+  if(verbose) cat(template)
+  return(template)
 }
 
 

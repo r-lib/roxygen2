@@ -131,13 +131,12 @@ dots <- function(...) {
 }
 
 #' @title Generate a template params list
-#' @description This function generates a template params list for roxygen
-#' Add more functionality to get probably values etc
-#' example section is experimental and needs more work
+#' @description This function generates a template of \code{roxygen} documentation for a function. \cr
+#' Also, the \code{example} section of the output is experimental and needs more work \cr
 #' @param x name of the function for which you want a param template
 #' @param verbose whether to print the template. Takes default from \code{getOption("verbose")}
 #' @export
-#' @examples 
+#' @examples
 #' out <- generate_template(x = "plot", verbose = TRUE)
 generate_template <- function(x, verbose = getOption("verbose")){
   arg_names = names(formals(x))

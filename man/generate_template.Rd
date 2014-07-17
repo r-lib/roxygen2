@@ -11,9 +11,8 @@ generate_template(x, verbose = getOption("verbose"))
 \item{verbose}{whether to print the template. Takes default from \code{getOption("verbose")}}
 }
 \description{
-This function generates a template params list for roxygen
-Add more functionality to get probably values etc
-example section is experimental and needs more work
+This function generates a template of \code{roxygen} documentation for a function. \cr
+Also, the \code{example} section of the output is experimental and needs more work \cr
 }
 \examples{
 out <- generate_template(x = "plot", verbose = TRUE)

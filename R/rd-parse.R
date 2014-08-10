@@ -2,12 +2,13 @@ get_rd <- function(topic, package = NULL) {
   help_call <- substitute(help(t, p), list(t = topic, p = package))
   top <- tryCatch(eval(help_call),
                   error = function(e) {
-                    if (grepl('Could not find'),conditionMessage(e)) {
+                    if (grepl('Could not find',conditionMessage(e))) {
                       return(character(0))
                     } else {
                       return(e)
                     }
                   }
+  )
   if (length(top) == 0) return(NULL)
 
   internal_f("utils", ".getHelpFile")(top)

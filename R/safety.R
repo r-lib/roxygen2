@@ -1,5 +1,6 @@
 first_time <- function(path) {
   generated <- dir(file.path(path, "man"), full.names = TRUE)
+  generated <- generated[!file.info(generated)$isdir]
 
   namespace <- file.path(path, "NAMESPACE")
   if (file.exists(namespace)) {

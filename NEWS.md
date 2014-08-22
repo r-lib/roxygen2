@@ -5,6 +5,8 @@
 
 * Export `is_s3_method`.
 
+* Roxygen no longer fails when run in non-UTF-8 locales on windows.
+
 # roxygen2 4.0.1
 
 * Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the 

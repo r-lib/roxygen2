@@ -4,3 +4,5 @@
 ^\.travis\.yml$
 ^\NEWS\.md$
 ^cran-comments\.md$
+^roxygen.pro$
+^roxygen.pro.user$

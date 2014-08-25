@@ -35,6 +35,36 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// preparse_block
+List preparse_block(std::string x);
+RcppExport SEXP roxygen2_preparse_block(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type x(xSEXP );
+        List __result = preparse_block(x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// preparse_file
+List preparse_file(std::string filePath);
+RcppExport SEXP roxygen2_preparse_file(SEXP filePathSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type filePath(filePathSEXP );
+        List __result = preparse_file(filePath);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // splitByWhitespace
 std::vector<std::string> splitByWhitespace(std::string string);
 RcppExport SEXP roxygen2_splitByWhitespace(SEXP stringSEXP) {

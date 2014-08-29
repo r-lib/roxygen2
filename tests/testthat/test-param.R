@@ -69,22 +69,6 @@ test_that("@inheritParam understands compound docs", {
 })
 
 
-test_that("methods inherit from generics by default", {
-  out <- roc_proc_text(roc, "
-    #' Blah.
-    #'
-    #' @param object blah blah blah
-    setGeneric('blah', function(object){
-      standardGeneric('blah')
-    })
-
-    #' Title.
-    setMethod('blah', 'numeric', function(object){ show(NA) })
-    ")[[2]]
-
-  expect_equal(names(get_tag(out, "param")$values), c("object"))
-})
-
 test_that("data objects don't get params", {
   out <- roc_proc_text(roc, "
     #' @rdname xy

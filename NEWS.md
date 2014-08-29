@@ -1,4 +1,4 @@
-# roxygen2 4.0.1.99
+# roxygen2 4.0.2
 
 * If you don't use `@exports` or other namespace directives, your namespace
   file will not be touched (#276).
@@ -14,7 +14,7 @@
 * Parameter documentation is ordered according to the order of the formals, if
   possible (@krlmlr, #63).
 
-* Export `is_s3_method`.
+* Export `is_s3_method()`.
 
 * Roxygen no longer fails when run in non-UTF-8 locales on windows.
 

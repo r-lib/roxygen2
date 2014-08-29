@@ -23,7 +23,7 @@ wrap_string.character <- function(x) {
   y
 }
 wrap_string.rd <- function(x) {
-  escape(wrap_string.character(unescape(x)))
+  escape(wrap_string(unescape(x)))
 }
 
 default_usage <- function(x) {

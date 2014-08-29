@@ -29,6 +29,7 @@ escape.character <- function(x) {
 }
 
 unescape <- function(x) {
+  class(x) <- NULL
   x1 <- gsub("\\\\", "\\", x, fixed = TRUE, useBytes = TRUE)
   x2 <- gsub("\\%", "%", x1, fixed = TRUE, useBytes = TRUE)
   x2

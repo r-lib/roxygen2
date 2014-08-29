@@ -1,5 +1,8 @@
 # roxygen2 4.0.1.99
 
+* If you don't use `@exports` or other namespace directives, your namespace
+  file will not be touched (#276).
+
 * Methods no longer automatically attempt to inherit parameters from 
   their generic. It's too fraught with difficulty (#261).
 

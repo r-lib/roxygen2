@@ -126,7 +126,7 @@ Three other tags make it easier for the user to find documentation:
 * `@aliases space separated aliases` to add additional aliases, through
   which the user can find the documentation with `?`.
 
-* `@concepts` to add extra keywords that will be found with `help.search()`
+* `@concept` to add extra keywords that will be found with `help.search()`
 
 * `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are
   optional, but if present, must be taken from the predefined list replicated

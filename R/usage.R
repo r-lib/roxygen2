@@ -12,14 +12,18 @@ usage_tag <- function(partitum) {
   new_tag("usage", usage)
 }
 
-wrap_string <- function(x) {
-  if (is.null(x)) return(x)
+wrap_string <- function(x) UseMethod("wrap_string")
+wrap_string.NULL <- function(x) return(x)
+wrap_string.character <- function(x) {
   y <- wrapString(x)
   Encoding(y) <- Encoding(x)
 
   y <- str_replace_all(y, "\u{A0}", " ")
   class(y) <- class(x)
   y
+}
+wrap_string.rd <- function(x) {
+  escape(wrap_string.character(unescape(x)))
 }
 
 default_usage <- function(x) {

@@ -1,5 +1,8 @@
 # roxygen2 4.0.1.99
 
+* Default usage strings are better wrapped if you have an argument that
+  contains an escape character (#265).
+
 * Parameter documentation is ordered according to the order of the formals, if
   possible (@krlmlr, #63).
 

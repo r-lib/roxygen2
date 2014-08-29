@@ -28,6 +28,12 @@ escape.character <- function(x) {
   rd(x2)
 }
 
+unescape <- function(x) {
+  x1 <- gsub("\\\\", "\\", x, fixed = TRUE, useBytes = TRUE)
+  x2 <- gsub("\\%", "%", x1, fixed = TRUE, useBytes = TRUE)
+  x2
+}
+
 # Works like escape, but unescapes special rd example commands
 escape_examples <- function(x) {
   gsub("\\\\dont", "\\dont", escape(x))

@@ -51,6 +51,5 @@ test_that("setMethod equivalent to setReplaceMethod", {
     setReplaceMethod('foo', 'numeric', function(x, value) value * 10)
     ")$blocks
 
-  expect_is(out$object, "rcclass")
-  expect_equal(out$object$alias, "B")
+  expect_equal(out[[2]]$object, out[[3]]$object)
 })

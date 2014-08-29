@@ -29,7 +29,7 @@ cat.description <- function(field, value, file='', encoding=NULL) {
     }
   } else {
     width <- if (individual_lines) 0 else 80
-    out <- roxygen2:::wrap_field_if_necessary(field, value, wrap.threshold = width)
+    out <- wrap_field_if_necessary(field, value, wrap.threshold = width)
   }
   
   if (is.null(encoding)){

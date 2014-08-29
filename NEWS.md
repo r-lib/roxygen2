@@ -1,5 +1,7 @@
 # roxygen2 4.0.1.99
 
+* Roxygen now understands what to do with `setReplaceMethod()` (#266).
+
 * Default usage strings are better wrapped if you have an argument that
   contains an escape character (#265).
 

@@ -294,6 +294,6 @@ test_that("breaking works after escapes (#265)", {
       xxxxxxxxxxxxxxxxxx6,
       xxxxxxxxxxxxxxxxxx7
   ){}")[[1]]
-  usage <- get_tag(out, "usage")
-  expect_equal(str_count(usage, "\n"), 4)
+  usage <- format(get_tag(out, "usage"))
+  expect_equal(str_count(usage, "\n"), 5)
 }

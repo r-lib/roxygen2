@@ -1,5 +1,8 @@
 # roxygen2 4.0.1.99
 
+* Methods no longer automatically attempt to inherit parameters from 
+  their generic. It's too fraught with difficulty (#261).
+
 * Roxygen now understands what to do with `setReplaceMethod()` (#266).
 
 * Default usage strings are better wrapped if you have an argument that

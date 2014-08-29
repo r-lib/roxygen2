@@ -8,9 +8,6 @@
 
 * Roxygen now understands what to do with `setReplaceMethod()` (#266).
 
-* Default usage strings are better wrapped if you have an argument that
-  contains an escape character (#265).
-
 * Parameter documentation is ordered according to the order of the formals, if
   possible (@krlmlr, #63).
 

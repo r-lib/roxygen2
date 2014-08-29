@@ -9,26 +9,34 @@ read.description <- function(file) {
 # Write parsed DESCRIPTION back out to disk
 write.description <- function(desc, file = "") {
   unlink(file)
-  mapply(cat.description, names(desc), desc, MoreArgs = list(file = file))
+  mapply(cat.description, names(desc), desc, MoreArgs = list(file = file, encoding=desc$Encoding))
   invisible()
 }
 
 # Print the field-value pair to a given file or standard out.
-cat.description <- function(field, value, file='') {
+cat.description <- function(field, value, file='', encoding=NULL) {
   comma_sep <- any(field %in% c("Suggests", "Depends", "Extends", "Imports"))
   individual_lines <- field %in% c("Collate")
-
+  
   if (comma_sep) {
     value <- strsplit(value, ",\\s+")[[1]]
-    value <- gsub("^\\s+|\\s+$", "", value)
-    value_string <- paste("    ", value, collapse = ",\n", sep = "")
-    out <- paste(field, ":\n", value_string, sep = "")
+    if (length(value)==0) {
+      out <- paste0(field, ":")} 
+    else {
+      value <- gsub("^\\s+|\\s+$", "", value)
+      value_string <- paste("    ", value, collapse = ",\n", sep = "")
+      out <- paste(field, ":\n", value_string, sep = "")
+    }
   } else {
     width <- if (individual_lines) 0 else 80
-    out <- wrap_field_if_necessary(field, value, wrap.threshold = width)
+    out <- roxygen2:::wrap_field_if_necessary(field, value, wrap.threshold = width)
   }
-
-  cat(out, sep='\n', file=file, append=TRUE)
+  
+  if (is.null(encoding)){
+    cat(out, sep='\n', file=file, append=TRUE)
+  } else {
+    cat(out, sep='\n', file=file(file, "a", encoding=encoding), append=TRUE)
+  }
 }
 
 # Determine whether a given field is too long and should be text-wrapped

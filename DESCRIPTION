@@ -24,7 +24,6 @@ Suggests:
     knitr
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-Roxygen: list(wrap = FALSE)
 Collate:
     'RcppExports.R'
     'alias.R'

@@ -1,3 +1,5 @@
+# roxygen2 4.0.2.9000
+
 # roxygen2 4.0.2
 
 * If you don't use `@exports` or other namespace directives, your namespace

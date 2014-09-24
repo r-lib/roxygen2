@@ -1,5 +1,9 @@
 # roxygen2 4.0.2.9000
 
+* Protect a `dir()` with `sort_c()` - If you'd noticed an inconsistency in
+  ordering between `devtools::document()` and `devtools::check()` this
+  was the cause of that.
+
 # roxygen2 4.0.2
 
 * If you don't use `@exports` or other namespace directives, your namespace

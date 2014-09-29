@@ -4,6 +4,8 @@
   ordering between `devtools::document()` and `devtools::check()` this
   was the cause of that.
 
+* Don't wrap `Authors@R` field in `DESCRIPTION` (@krlmlr, 284).
+
 # roxygen2 4.0.2
 
 * If you don't use `@exports` or other namespace directives, your namespace

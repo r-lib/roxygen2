@@ -16,7 +16,6 @@ write.description <- function(desc, file = "") {
 # Print the field-value pair to a given file or standard out.
 cat.description <- function(field, value, file='') {
   comma_sep <- any(field %in% c("Suggests", "Depends", "Extends", "Imports"))
-  individual_lines <- field %in% c("Collate")
 
   if (comma_sep) {
     value <- strsplit(value, ",\\s+")[[1]]
@@ -24,7 +23,15 @@ cat.description <- function(field, value, file='') {
     value_string <- paste("    ", value, collapse = ",\n", sep = "")
     out <- paste(field, ":\n", value_string, sep = "")
   } else {
-    width <- if (individual_lines) 0 else 80
+    width <- 80
+    if (field %in% c("Collate")) {
+      # Individual lines
+      width <- 0
+    } else if (field %in% c("Authors@R")) {
+      # No wrapping
+      width <- Inf
+    }
+
     out <- wrap_field_if_necessary(field, value, wrap.threshold = width)
   }
 

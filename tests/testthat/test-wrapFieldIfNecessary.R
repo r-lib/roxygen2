@@ -55,5 +55,11 @@ test_that("DESCRIPTION fields DO NOT get wrapped if no line exceeds the wrapping
   }
 )
 
-
-
+test_that("Infinity threshold turns off wrapping", {
+  poem <- paste(sample(letters, 1000, TRUE), collapse = "")
+  expect_equal(
+    wrap_field_if_necessary("LongPoem", poem, wrap.threshold = Inf),
+    paste("LongPoem:", poem)
+  )
+}
+)

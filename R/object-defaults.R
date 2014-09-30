@@ -54,7 +54,7 @@ object_defaults.s4method <- function(x) {
 }
 
 inherit_from <- function(generic, pkg) {
-  if (pkg == "roxygen_devtest") return(generic)
+  if (pkg %==% "roxygen_devtest") return(generic)
 
   # Check that Rd file available
   rd <- get_rd(generic, pkg)

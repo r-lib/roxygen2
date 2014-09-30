@@ -62,7 +62,7 @@ ns_process_tag <- function(tag_name, partitum) {
 #' @export
 roc_output.namespace <- function(roclet, results, base_path, options = list(),
                                  check = TRUE) {
-  if (length(results) == 0) return()
+  if (length(results) %==% 0L) return()
 
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   results <- c(made_by("#"), results)
@@ -116,7 +116,7 @@ ns_importFrom        <- function(tag, part) repeat_first("importFrom", tag)
 ns_importClassesFrom <- function(tag, part) repeat_first("importClassesFrom", tag)
 ns_importMethodsFrom <- function(tag, part) repeat_first("importMethodsFrom", tag)
 ns_useDynLib         <- function(tag, part) {
-  if (length(tag) == 1) {
+  if (length(tag) %==% 1L) {
     return(paste0("useDynLib(", quote_if_needed(tag), ")"))
   }
 

@@ -4,7 +4,7 @@ parse.preref <- function(lines) {
   trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""),
     "right")
 
-  if (length(trimmed.lines) == 0) return(NULL)
+  if (length(trimmed.lines) %==% 0L) return(NULL)
 
   joined.lines <- paste0(trimmed.lines, collapse = '\n')
   ## Thanks to Fegis at #regex on Freenode for the
@@ -54,7 +54,7 @@ parse.value <- function(key, rest) {
 # Examples need special parsing because escaping rules are different
 parse.examples <- function(key, rest) {
   rest <- str_trim(rest)
-  if (rest == "") {
+  if (rest %==% "") {
     stop("@example requires a value", call. = FALSE)
   }
 

@@ -22,7 +22,7 @@ parse_text <- function(text) {
 
 parse_file <- function(file, env) {
   parsed <- parse(file = file, keep.source = TRUE)
-  if (length(parsed) == 0) return()
+  if (length(parsed) %==% 0L) return()
 
   refs <- getSrcref(parsed)
   comment_refs <- comments(refs)
@@ -52,7 +52,7 @@ comments <- function(refs) {
   for(i in seq_along(refs)) {
     # Comments begin after last line of last block, and continue to
     # first line of this block
-    if (i == 1) {
+    if (i %==% 1L) {
       first_byte <- 1
       first_line <- 1
     } else {
@@ -62,8 +62,8 @@ comments <- function(refs) {
 
     last_line <- refs[[i]][1]
     last_byte <- refs[[i]][2] - 1
-    if (last_byte == 0) {
-      if (last_line == 1) {
+    if (last_byte %==% 0L) {
+      if (last_line %==% 1L) {
         last_byte <- 1
         last_line <- 1
       } else {

@@ -43,7 +43,7 @@ load_pkg_dependencies <- function(path) {
   desc <- read_pkg_description(path)
 
   pkgs <- paste(c(desc$Depends, desc$Imports), collapse = ", ")
-  if (pkgs == "") return()
+  if (pkgs %==% "") return()
 
   pkgs <- str_replace_all(pkgs, "\\(.*?\\)", "")
   pkgs <- str_split(pkgs, ",")[[1]]

@@ -130,4 +130,4 @@ dots <- function(...) {
   eval(substitute(alist(...)))
 }
 
-`%==%` <- identical
+`%==%` <- function(x, y) identical(x, y)

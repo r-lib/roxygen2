@@ -5,7 +5,8 @@
   was the cause of that.
 
 * Don't wrap `Authors@R` field in `DESCRIPTION` (@krlmlr, 284).
-* `@describeIn` with plain functions now correctly includes the function name. (@jimhester, #285).
+* `@describeIn` with plain functions now correctly includes the function name
+  and can be applied to data documentation. (@jimhester, #285, #288).
 
 # roxygen2 4.0.2
 

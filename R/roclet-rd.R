@@ -116,8 +116,10 @@ roclet_rd_one <- function(partitum, base_path, env) {
     nice_name(name), ".Rd")
   add_tag(rd, describe_in$tag)
 
-  # Work out file name and initialise Rd object
+  # Add source reference as comment
+  add_tag(rd, new_tag("srcref", partitum$srcref$filename))
 
+  # Work out file name and initialise Rd object
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
   add_tag(rd, alias_tag(partitum, name, partitum$object$alias))

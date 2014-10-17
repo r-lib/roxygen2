@@ -1,6 +1,31 @@
 parse_package <- function(base_path, load_code) {
   env <- load_code(base_path)
-  parsed <- lapply(r_files(base_path), parse_file, env = env)
+  #Read and parse the code in the collated order
+  #   so that the documentation blocks are  parsed in the same order
+  #     as the (collated order) R code
+  #       so that any inherited param documentation is in the 'right' order.
+  #   package_files (from source.R) almost does what is needed
+  #     except that it does not provide the full names of the collated files.
+  #   The following is a proof of concept 'solution'
+  #     which needs to take care not to break calls to roxygenise
+  #       initiated from places other than devtools and
+  #       with base_path not = the current working directory.
+  #     It could be made (lots) more elegant.
+  #
+  #   PS roxygenise should probably check / insist that the collate order
+  #     in the DESCRIPTION file is up to date, eg :
+  #       by running update_collate(base_path) or
+  #       by insisting roclet 'collate' has been run
+  #         (which is pretty much the same thing).
+  #
+  collated_files <- package_files(base_path)
+  R_path <- paste(base_path,'R',sep='/')
+  R_path_pattern <- str_replace_all(R_path,fixed('\\'),'\\\\')
+  no_R_path <- !grepl(fixed(R_path_pattern),collated_files)
+  collated_files[no_R_path] <- paste(R_path,collated_files[no_R_path],sep='/')
+  #collated_files[no_R_path] <- normalizePath(collated_files[no_R_path],winslash='/')
+  collated_files <- unique(collated_files)
+  parsed <- lapply(collated_files, parse_file, env = env)
   blocks <- unlist(parsed, recursive = FALSE)
 
   list(env = env, blocks = blocks)

@@ -1,8 +1,16 @@
 get_rd <- function(topic, package = NULL) {
   help_call <- substitute(help(t, p), list(t = topic, p = package))
-  top <- eval(help_call)
+  top <- tryCatch(eval(help_call),
+                  error = function(e) {
+                    if (grepl('Could not find',conditionMessage(e))) {
+                      return(character(0))
+                    } else {
+                      return(e)
+                    }
+                  }
+  )
   if (length(top) == 0) return(NULL)
-  
+
   internal_f("utils", ".getHelpFile")(top)
 }
 
@@ -24,10 +32,10 @@ rd2rd <- function(x) {
 rd_arguments <- function(rd) {
   arguments <- get_tags(rd, "\\arguments")[[1]]
   items <- get_tags(arguments, "\\item")
-  
+
   values <- lapply(items, function(x) rd2rd(x[[2]]))
   params <- vapply(items, function(x) rd2rd(x[[1]]), character(1))
-  
+
   setNames(values, params)
 }
 

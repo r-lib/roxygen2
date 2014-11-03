@@ -3,7 +3,7 @@
 \alias{generate_template}
 \title{Generate a template params list}
 \usage{
-generate_template(x, verbose = getOption("verbose"))
+generate_template(x, verbose = TRUE)
 }
 \arguments{
 \item{x}{name of the function for which you want a param template}

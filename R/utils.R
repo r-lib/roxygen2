@@ -138,7 +138,7 @@ dots <- function(...) {
 #' @export
 #' @examples
 #' out <- generate_template(x = "plot", verbose = TRUE)
-generate_template <- function(x, verbose = getOption("verbose")){
+generate_template <- function(x, verbose = TRUE){
   arg_names = names(formals(x))
   arg_vals = as.character(formals(x))
   arg_str = paste(arg_names, ifelse(arg_vals == "", arg_names, arg_vals), sep = " = ", collapse = ", ")
@@ -149,7 +149,7 @@ generate_template <- function(x, verbose = getOption("verbose")){
   examples <- sprintf("#' @examples\n#' %s(%s)", x, arg_str )
   template <- paste(head, params, export, examples, sep = "\n")
   if(verbose) cat(template)
-  return(template)
+  invisible(template)
 }
 
 

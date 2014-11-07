@@ -3,13 +3,13 @@ Title: In-source documentation for R
 Description: A Doxygen-like in-source documentation system
     for Rd, collation, and NAMESPACE.
 URL: https://github.com/klutometis/roxygen
-Version: 4.0.1.99
+Version: 4.0.2.9000
 License: GPL (>= 2)
 Authors@R: c(
-    person("Hadley", "Wickham", email = "h.wickham@gmail.com",
-    role = c("aut", "cre")),
-    person("Peter", "Danenberg", email = "pcd@roxygen.org", role = "aut"),
-    person("Manuel", "Eugster", role = "aut")
+    person("Hadley", "Wickham",, "h.wickham@gmail.com", c("aut", "cre", "cph")),
+    person("Peter", "Danenberg",, "pcd@roxygen.org", c("aut", "cph")),
+    person("Manuel", "Eugster", role = c("aut", "cph")),
+    person("RStudio", role = "cph")
     )
 Depends:
     R (>= 3.0.2)
@@ -24,7 +24,6 @@ Suggests:
     knitr
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-Roxygen: list(wrap = FALSE)
 Collate:
     'RcppExports.R'
     'alias.R'

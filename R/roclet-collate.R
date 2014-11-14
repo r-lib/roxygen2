@@ -34,7 +34,7 @@ update_collate <- function(base_path) {
   collate <- generate_collate(file.path(base_path, "R"))
   if (!is.null(collate)) {
     collate <- paste0("'", collate, "'", collapse = " ")
-  }
+  } else return()
 
   desc_path <- file.path(base_path, "DESCRIPTION")
   old <- read.description(desc_path)

@@ -10,8 +10,10 @@ register.preref.parsers(parse.value, 'include')
 #' (space separated) that should be loaded before the current file - these are
 #' typically necessary if you're using S4 or RC classes (because super classes
 #' must be defined before subclasses).  If there are no \code{@@include} tags
-#' Collate will be left blank, indicating that the order of loading does not
-#' matter.
+#' Collate will be left as is. Blank (ie Collate field absent) indicates that the
+#' order of loading does not matter.  Any manually entered filenames in the
+#' Collate field will be left untouched, unless there are \code{@@include} tags
+#' in the R files in which case they will be overwritten.
 #'
 #' This is not a roclet because roclets need the values of objects in a package,
 #' and those values can not be generated unless you've sourced the files,
@@ -34,7 +36,8 @@ update_collate <- function(base_path) {
   collate <- generate_collate(file.path(base_path, "R"))
   if (!is.null(collate)) {
     collate <- paste0("'", collate, "'", collapse = " ")
-  } else return()
+  }
+  else return()
 
   desc_path <- file.path(base_path, "DESCRIPTION")
   old <- read.description(desc_path)

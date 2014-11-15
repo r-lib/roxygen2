@@ -108,3 +108,11 @@ parser_setMethod <- function(call, env, block) {
 
   object(value)
 }
+
+parser_setReplaceMethod <- function(call, env, block) {
+  name <- paste0(as.character(call$f), "<-")
+  value <- methods::getMethod(name, eval(call[[3]]), where = env)
+  value@.Data <- extract_method_fun(value@.Data)
+
+  object(value)
+}

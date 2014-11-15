@@ -51,7 +51,6 @@ test_that("@describeIn class captures s4 generic name", {
   expect_equal(get_tag(out, "minidesc")$values$label, "mean")
 })
 
-
 test_that("Multiple @describeIn generic combined into one", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -67,4 +66,29 @@ test_that("Multiple @describeIn generic combined into one", {
   expect_equal(get_tag(out, "minidesc")$values$type, "generic")
   expect_equal(get_tag(out, "minidesc")$values$label, c("a", "b"))
   expect_equal(get_tag(out, "minidesc")$values$desc, c("A", "B"))
+})
+
+test_that("@describeIn class captures function name", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    f <- function(x) 1
+
+    #' @describeIn f A
+    f2 <- function(x) 1
+    ")[[1]]
+
+  expect_equal(get_tag(out, "minidesc")$values$label, "f2")
+})
+
+test_that("@describeIn class captures function name with data", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #' @name f
+    NULL
+
+    #' @describeIn f A
+    f2 <- function(x) 1
+    ")[[1]]
+
+  expect_equal(get_tag(out, "minidesc")$values$label, "f2")
 })

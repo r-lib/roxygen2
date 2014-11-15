@@ -268,3 +268,15 @@ test_that("\\method not split inappropriately", {
   expect_match(usage, "\\{mean\\}\\{reallyratherquitelongclassname\\}")
 })
 
+test_that("long usages protected from incorrect breakage", {
+  out <- roc_proc_text(roc, "
+    #' Function long usage
+    f <- function(a = '                                    a',
+    b = '                                    b',
+    c = '                                    c',
+    d = '                                    d') 1")[[1]]
+
+  usage <- format(get_tag(out, "usage"))
+  expect_equal(str_count(usage, "\n"), 6)
+})
+

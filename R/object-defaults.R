@@ -49,8 +49,7 @@ object_defaults.s4method <- function(x) {
   pkg <- attr(generic, "package")
 
   list(
-    docType = "methods",
-    inheritParams = inherit_from(generic, pkg)
+    docType = "methods"
   )
 }
 

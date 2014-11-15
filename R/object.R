@@ -28,6 +28,7 @@ default_name.rcclass <-   function(x) x$value@className
 default_name.rcmethod <-  function(x) x$value@name
 default_name.s3generic <- function(x) browser()
 default_name.s3method <-  function(x) attr(x$value, "s3method")
+default_name.function <-   function(x) x$alias
 default_name.default <-   function(x) NULL
 
 #' @export

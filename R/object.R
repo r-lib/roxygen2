@@ -57,7 +57,6 @@ standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
   }
 }
 
-#' @import methods
 is_generator <- function(x) {
   methods::is(x, "refObjectGenerator") || methods::is(x, "classGeneratorFunction")
 }

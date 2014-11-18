@@ -57,8 +57,9 @@ standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
   }
 }
 
+#' @import methods
 is_generator <- function(x) {
-  is(x, "refObjectGenerator") || is(x, "classGeneratorFunction")
+  methods::is(x, "refObjectGenerator") || methods::is(x, "classGeneratorFunction")
 }
 
 # When a generic has ... and a method adds new arguments, the S4 method

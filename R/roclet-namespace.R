@@ -156,7 +156,7 @@ fun_args <- function(name, x) {
 
 quote_if_needed <- function(x) {
   needs_quotes <- !has.quotes(x) & !is.syntactic(x)
-  x[needs_quotes] <- paste0('"', str_replace_all(x[needs_quotes], '(["\\])', "\\\\\\1"), '"')
+  x[needs_quotes] <- paste0('"', str_replace_all(x[needs_quotes], '(["\\\\])', "\\\\\\1"), '"')
   x
 }
 is.syntactic <- function(x) make.names(x) == x

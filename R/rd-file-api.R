@@ -23,7 +23,7 @@ names.rd_file <- function(x) {
 #' @export
 format.rd_file <- function(x, ...) {
   tags <- as.list(x[[1]])
-  order <- c("docType", "encoding", "name", "alias", "title",
+  order <- c("srcref", "docType", "encoding", "name", "alias", "title",
     "format", "source", "usage", "param", "value", "description",
     "details", "minidesc", "field", "slot", "rcmethods", "note",
     "section", "examples", "author", "references", "seealso",
@@ -53,17 +53,17 @@ get_tag <- function(file, tagname) {
   file[[1]][[tagname]]
 }
 
-add_tag <- function(file, tag) {
+add_tag <- function(file, tag, overwrite = FALSE) {
   if (is.null(tag)) return()
   stopifnot(is.rd_file(file))
 
   if (!is.rd_tag(tag) && is.list(tag)) {
-    return(lapply(tag, add_tag, file = file))
+    return(lapply(tag, add_tag, file = file, overwrite = overwrite))
   }
   stopifnot(is.rd_tag(tag))
 
   existing <- file[[1]][[tag$tag]]
-  if (is.null(existing)) {
+  if (is.null(existing) || overwrite) {
     file[[1]][[tag$tag]] <- tag
   } else {
     file[[1]][[tag$tag]] <- merge(existing, tag)[[1]]

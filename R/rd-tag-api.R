@@ -53,6 +53,15 @@ merge.minidesc_tag <- function(x, y, ...) {
   list(x)
 }
 
+# Comment tags -----------------------------------------------------------------------
+
+#' @export
+format.srcref_tag <- function(x, ...) {
+  filename <- unique(x$values)
+  filename <- file.path(basename(dirname(filename)), basename(filename), fsep = "/")
+  sprintf("%% Please edit documentation in %s\n", paste(filename, collapse = ", "))
+}
+
 # Tags that repeat multiple times --------------------------------------------
 
 format_rd <- function(x, ...) {
@@ -168,6 +177,8 @@ format.field_tag <- function(x, ...) {
 }
 
 describe_section <- function(name, dt, dd) {
+  if (length(dt) == 0) return("")
+
   items <- paste0("\\item{\\code{", dt, "}}{", dd, "}", collapse = "\n\n")
   paste0("\\section{", name, "}{\n\n",
     "\\describe{\n",
@@ -186,12 +197,7 @@ format.examples_tag <- function(x, ...) {
 
 #' @export
 format.rcmethods_tag <- function(x, ...) {
-  paste0(
-    "\\section{Methods}{\n",
-    "\\itemize{\n",
-    paste0("\\item ", x$values, collapse = "\n\n"),
-    "\n}}\n"
-  )
+  describe_section("Methods", names(x$values), x$values)
 }
 
 #' @export

@@ -8,8 +8,8 @@
 #' \code{is_s3_method} builds names of all possible generics for that function
 #' and then checks if any of them actually is a generic.
 #'
-#' @param name name of function.
-#' @param env environment to search in.
+#' @param name Name of function.
+#' @param env Base environment in which to look for function defintion.
 #' @export
 is_s3_generic <- function(name, env = parent.frame()) {
   if (name == "") return(FALSE)
@@ -43,6 +43,8 @@ calls_use_method <- function(x) {
   FALSE
 }
 
+#' @rdname is_s3_generic
+#' @export
 is_s3_method <- function(name, env = parent.frame()) {
   !is.null(find_generic(name, env))
 }

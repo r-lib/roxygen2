@@ -10,9 +10,7 @@ process_inherit_params <- function(topics) {
   for(topic_name in names(inherit_index)) {
     topic <- topics[[topic_name]]
 
-    documented <- names(get_tag(topic, "param")$values)
-    if (length(documented) > 0)
-      documented <- unlist(strsplit(documented, ","))
+    documented <- get_documented_params(topic)
 
     needed <- get_tag(topic, "formals")$values
     missing <- setdiff(needed, documented)
@@ -32,14 +30,30 @@ process_inherit_params <- function(topics) {
   topics
 }
 
+get_documented_params <- function(topic, only_first = FALSE) {
+  documented <- names(get_tag(topic, "param")$values)
+  if (length(documented) > 0) {
+    documented <- strsplit(documented, ",")
+    if (only_first)
+      documented <- vapply(documented, `[[`, character(1), 1L)
+    else
+      documented <- unlist(documented)
+  }
+
+  documented
+}
+
+
 find_params <- function(inheritor, topics, name_lookup) {
   has_colons <- grepl("::", inheritor, fixed = TRUE)
 
   if (has_colons) {
     # Reference to another package
-    pieces <- strsplit(inheritor, "::", fixed = TRUE)[[1]]
-    params <- rd_arguments(get_rd(pieces[2], pieces[1]))
+    parsed <- parse(text = inheritor)[[1]]
+    pkg <- as.character(parsed[[2]])
+    fun <- as.character(parsed[[3]])
 
+    params <- rd_arguments(get_rd(fun, pkg))
   } else {
     # Reference within this package
     rd_name <- names(Filter(function(x) inheritor %in% x, name_lookup))

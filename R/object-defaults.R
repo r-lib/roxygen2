@@ -49,8 +49,7 @@ object_defaults.s4method <- function(x) {
   pkg <- attr(generic, "package")
 
   list(
-    docType = "methods",
-    inheritParams = inherit_from(generic, pkg)
+    docType = "methods"
   )
 }
 
@@ -60,6 +59,10 @@ inherit_from <- function(generic, pkg) {
   # Check that Rd file available
   rd <- get_rd(generic, pkg)
   if (is.null(rd)) return(NULL)
+
+  if (!is.syntactic(generic)) {
+    generic <- paste0("`", generic, "`")
+  }
 
   paste0(pkg, "::", generic)
 }

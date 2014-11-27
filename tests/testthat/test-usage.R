@@ -231,7 +231,7 @@ test_that("Special vars removed in rc methods usage", {
   ")[[1]]
 
   methods <- get_tag(out, "rcmethods")$values
-  expect_equal(methods[[1]], "\\code{draw(x = 1)}: 2")
+  expect_equal(methods, list("draw(x = 1)" = "2"))
 })
 
 # Wrapping --------------------------------------------------------------------
@@ -266,5 +266,17 @@ test_that("\\method not split inappropriately", {
   ")[[1]]
   usage <- format(get_tag(out, "usage"))
   expect_match(usage, "\\{mean\\}\\{reallyratherquitelongclassname\\}")
+})
+
+test_that("long usages protected from incorrect breakage", {
+  out <- roc_proc_text(roc, "
+    #' Function long usage
+    f <- function(a = '                                    a',
+    b = '                                    b',
+    c = '                                    c',
+    d = '                                    d') 1")[[1]]
+
+  usage <- format(get_tag(out, "usage"))
+  expect_equal(str_count(usage, "\n"), 6)
 })
 

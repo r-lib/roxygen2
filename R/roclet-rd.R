@@ -79,6 +79,8 @@ roc_process.had <- function(roclet, parsed, base_path, options = list()) {
   topics <- process_family(topics)
   # Final parse to process @inheritParams
   process_inherit_params(topics)
+  # Postprocessing to reset ordering of parameter documentation
+  fix_params_order(topics)
 }
 
 invert <- function(x) {
@@ -114,8 +116,10 @@ roclet_rd_one <- function(partitum, base_path, env) {
     nice_name(name), ".Rd")
   add_tag(rd, describe_in$tag)
 
-  # Work out file name and initialise Rd object
+  # Add source reference as comment
+  add_tag(rd, new_tag("srcref", partitum$srcref$filename))
 
+  # Work out file name and initialise Rd object
   add_tag(rd, new_tag("encoding", partitum$encoding))
   add_tag(rd, new_tag("name", name))
   add_tag(rd, alias_tag(partitum, name, partitum$object$alias))
@@ -155,14 +159,27 @@ roclet_rd_one <- function(partitum, base_path, env) {
 }
 
 #' @export
-roc_output.had <- function(roclet, results, base_path, options = list()) {
+roc_output.had <- function(roclet, results, base_path, options = list(),
+                           check = TRUE) {
   man <- normalizePath(file.path(base_path, "man"))
 
   contents <- vapply(results, format, wrap = options$wrap,
     FUN.VALUE = character(1))
 
   paths <- file.path(man, names(results))
-  mapply(write_if_different, paths, contents)
+  mapply(write_if_different, paths, contents, MoreArgs = list(check = check))
+
+  if (check) {
+    # Automatically delete any files in man directory that were generated
+    # by roxygen in the past, but weren't generated in this sweep.
+
+    old_paths <- setdiff(dir(man, full.names = TRUE), paths)
+    old_roxygen <- Filter(made_by_roxygen, old_paths)
+    if (length(old_roxygen) > 0) {
+      cat(paste0("Deleting ", basename(old_roxygen), collapse = "\n"), "\n", sep = "")
+      unlink(old_roxygen)
+    }
+  }
 
   paths
 }
@@ -231,16 +248,17 @@ process_methods <- function(block) {
   methods <- obj$methods
   if (is.null(obj$methods)) return()
 
-  method_desc <- function(obj) {
-    desc <- docstring(obj$value@.Data)
-    if (is.null(desc)) return()
+  desc <- lapply(methods, function(x) docstring(x$value@.Data))
+  usage <- vapply(methods, function(x) {
+    usage <- function_usage(x$value@name, formals(x$value@.Data))
+    as.character(wrap_string(usage))
+  }, character(1))
 
-    usage <- function_usage(obj$value@name, formals(obj$value@.Data))
-    paste0("\\code{", wrap_string(usage),  "}: ", desc)
-  }
+  has_docs <- !vapply(desc, is.null, logical(1))
+  desc <- desc[has_docs]
+  usage <- usage[has_docs]
 
-  descs <- unlist(lapply(methods, method_desc))
-  new_tag("rcmethods", descs)
+  new_tag("rcmethods", setNames(desc, usage))
 }
 
 

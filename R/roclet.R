@@ -9,11 +9,12 @@ new_roclet <- function(obj, subclass = NULL) {
 is.roclet <- function(x) inherits(x, "roclet")
 
 #' Process roclet on string and capture results.
+#'
 #' Useful for testing.
 #'
-#' @param roclet to use for processing
-#' @param input source string
-#' @param options a list of options to control roxygen behaviour.
+#' @param roclet Name of roclet to use for processing.
+#' @param input Source string
+#' @param options A list of options to control roxygen behaviour.
 #'   Currently only \code{wrap} is recognised.
 #' @export
 #' @keywords internal
@@ -27,7 +28,8 @@ roc_proc_text <- function(roclet, input, options = list()) {
 # Internal methods for processing and output
 
 # Methods should return character vector describing all modified files.
-roc_output <- function(roclet, results, base_path, options = list()) {
+roc_output <- function(roclet, results, base_path, options = list(),
+                       check = TRUE) {
   UseMethod("roc_output", roclet)
 }
 

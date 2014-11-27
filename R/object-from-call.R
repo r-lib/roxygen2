@@ -1,5 +1,14 @@
 object_from_call <- function(call, env, block) {
   if (is.null(call)) return()
+
+  # Special case: you can refer to other objects as strings
+  if (is.character(call)) {
+    value <- find_data(call, env)
+    value <- standardise_obj(call, value, env, block)
+
+    return(object(value, call))
+  }
+
   if (!is.call(call)) return()
 
   call <- standardise_call(call, env)
@@ -12,6 +21,29 @@ object_from_call <- function(call, env, block) {
   if (is.null(parser)) return(NULL)
 
   parser(call, env, block)
+}
+
+find_data <- function(name, env) {
+  ns <- env_namespace(env)
+  if (is.null(ns)) {
+    get(name, envir = env)
+  } else {
+    getExportedValue(name, ns = ns)
+  }
+}
+
+# Find namespace associated with environment
+env_namespace <- function(env) {
+  env_name <- attr(env, "name")
+  if (is.null(env_name)) return(NULL)
+  if (!grepl(":", env_name)) return(NULL)
+
+  ns_name <- gsub("package:", "", env_name)
+  ns <- NULL
+  try(ns <- asNamespace(ns_name), silent = TRUE)
+  if (is.null(ns)) return(NULL)
+
+  ns
 }
 
 find_parser <- function(name) {
@@ -72,6 +104,14 @@ parser_setGeneric <- function(call, env, block) {
 parser_setMethod <- function(call, env, block) {
   name <- as.character(call$f)
   value <- methods::getMethod(name, eval(call$signature), where = env)
+  value@.Data <- extract_method_fun(value@.Data)
+
+  object(value)
+}
+
+parser_setReplaceMethod <- function(call, env, block) {
+  name <- paste0(as.character(call$f), "<-")
+  value <- methods::getMethod(name, eval(call[[3]]), where = env)
   value@.Data <- extract_method_fun(value@.Data)
 
   object(value)

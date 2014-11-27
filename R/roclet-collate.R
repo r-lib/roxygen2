@@ -17,7 +17,7 @@ register.preref.parsers(parse.value, 'include')
 #' and those values can not be generated unless you've sourced the files,
 #' and you can't source the files unless you know the correct order.
 #'
-#' @param base_path Path to package directory
+#' @param base_path Path to package directory.
 #' @examples
 #' #' `example-a.R', `example-b.R' and `example-c.R' reside
 #' #' in the `example' directory, with dependencies

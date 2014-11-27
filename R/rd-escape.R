@@ -19,9 +19,12 @@ escape <- function(x) UseMethod("escape")
 escape.rd <- function(x) x
 #' @export
 escape.character <- function(x) {
-  x1 <- gsub("\\", "\\\\", x, fixed = TRUE)
-  x2 <- gsub("%", "\\%", x1, fixed = TRUE)
-  
+  # wrap_string uses \u{A0}, the unicode non-breaking space, which
+  # is not necessarily valid in windows locales. useBytes is a quick
+  # hack to fix the problem.
+  x1 <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
+  x2 <- gsub("%", "\\%", x1, fixed = TRUE, useBytes = TRUE)
+
   rd(x2)
 }
 
@@ -44,13 +47,13 @@ escape_preformatted <- function(x) {
 build_rd <- function(..., collapse = NULL, sep = "") {
   args <- dots(...)
   env <- parent.frame()
-  
+
   escaped <- lapply(args, function(arg) {
     if (is.character(arg)) return(arg)
-    
+
     escape(eval(arg, env))
   })
-  
+
   string <- do.call("paste", c(escaped, list(collapse = collapse, sep = sep)))
   rd(string)
 }

@@ -39,3 +39,17 @@ test_that("class captured from assignment of setRefClass", {
   expect_is(out$object, "rcclass")
   expect_equal(out$object$alias, "B")
 })
+
+
+test_that("setMethod equivalent to setReplaceMethod", {
+  out <- parse_text("
+    setGeneric('foo<-', function(x, value) standardGeneric('foo<-'))
+
+    #' setMethod
+    setMethod('foo<-', 'numeric', function(x, value) value * 10)
+    #' setReplace
+    setReplaceMethod('foo', 'numeric', function(x, value) value * 10)
+    ")$blocks
+
+  expect_equal(out[[2]]$object, out[[3]]$object)
+})

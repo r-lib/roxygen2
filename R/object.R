@@ -5,7 +5,7 @@
 #'
 #' @param value The object itself.
 #' @param alias Alias for object being documented, in case you create a
-#'   generator function with different name to name
+#'   generator function with different name.
 #' @export
 #' @keywords internal
 object <- function(value, alias = NULL) {
@@ -28,6 +28,7 @@ default_name.rcclass <-   function(x) x$value@className
 default_name.rcmethod <-  function(x) x$value@name
 default_name.s3generic <- function(x) browser()
 default_name.s3method <-  function(x) attr(x$value, "s3method")
+default_name.function <-   function(x) x$alias
 default_name.default <-   function(x) NULL
 
 #' @export
@@ -57,7 +58,7 @@ standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
 }
 
 is_generator <- function(x) {
-  is(x, "refObjectGenerator") || is(x, "classGeneratorFunction")
+  methods::is(x, "refObjectGenerator") || methods::is(x, "classGeneratorFunction")
 }
 
 # When a generic has ... and a method adds new arguments, the S4 method
@@ -80,6 +81,7 @@ extract_method_fun <- function(x) {
   if (!identical(method_body[[1]], quote(`{`))) return(fun)
 
   first_line <- method_body[[2]]
+  if (!is.call(first_line)) return(fun)
   if (!identical(first_line[[1]], quote(`<-`))) return(fun)
   if (!identical(first_line[[2]], quote(`.local`))) return(fun)
 

@@ -6,9 +6,17 @@
 #' \code{\link{namespace_roclet}}, and for \code{\link{update_collate}},
 #' for more details.
 #'
-#' @param package.dir the package's top directory
-#' @param roxygen.dir,copy.package,overwrite,unlink.target deprecated
-#' @param roclets character vector of roclet names to apply to package.
+#' Note that roxygen2 is a dynamic documentation system: it works using
+#' by inspecting loaded objects in the package. This means that you must
+#' be able to load the package in order to document it.
+#' \code{\link{source_package}} provides a simple simulation of package
+#' loading that works if you only have R files in your package. For more
+#' complicated packages, I recommend using \code{devtools::document} which
+#' does a much better job at simulating package install and load.
+#'
+#' @param package.dir Location of package top level directory. Default is
+#'   working directory.
+#' @param roclets Character vector of roclet names to use with package.
 #'   This defaults to \code{NULL}, which will use the \code{roclets} fields in
 #'   the list provided in the \code{Roxygen} DESCRIPTION field. If none are
 #'   specified, defaults to \code{c("collate", "namespace", "rd")}.
@@ -20,17 +28,14 @@
 #' @return \code{NULL}
 #' @export
 roxygenize <- function(package.dir = ".",
-                       roxygen.dir=package.dir,
-                       copy.package=package.dir != roxygen.dir,
-                       overwrite=TRUE,
-                       unlink.target=FALSE,
                        roclets = NULL,
                        load_code = source_package,
                        clean = FALSE) {
-  if (copy.package) {
-    stop("Non-inplace roxygen no longer supported")
+
+  is_first <- first_time(package.dir)
+  if (is_first) {
+    message("First time using roxygen2 4.0. Upgrading automatically...")
   }
-  first_time_check(package.dir)
 
   base_path <- normalizePath(package.dir)
   man_path <- file.path(base_path, "man")
@@ -56,7 +61,7 @@ roxygenize <- function(package.dir = ".",
       clean(roc, base_path)
     }
     results <- roc_process(roc, parsed, base_path, options = options)
-    roc_output(roc, results, base_path, options = options)
+    roc_output(roc, results, base_path, options = options, check = !is_first)
   }
   invisible(unlist(lapply(roclets, roc_out)))
 }
@@ -74,11 +79,6 @@ load_options <- function(base_path) {
   } else {
     opts <- eval(parse(text = desc_opts))
   }
-  if (!("wrap" %in% names(opts)))
-    message("Using the default option wrap = FALSE ",
-            "since it was not specified in the Roxygen field in DESCRIPTION. ",
-            "To configure this explicitly, add the following line to the DESCRIPTION file: ",
-            "`Roxygen: list(wrap = FALSE)`")
 
   defaults <- list(
     wrap = FALSE,

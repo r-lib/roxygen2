@@ -28,6 +28,7 @@ default_name.rcclass <-   function(x) x$value@className
 default_name.rcmethod <-  function(x) x$value@name
 default_name.s3generic <- function(x) browser()
 default_name.s3method <-  function(x) attr(x$value, "s3method")
+default_name.function <-   function(x) x$alias
 default_name.default <-   function(x) NULL
 
 #' @export
@@ -57,7 +58,7 @@ standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
 }
 
 is_generator <- function(x) {
-  is(x, "refObjectGenerator") || is(x, "classGeneratorFunction")
+  methods::is(x, "refObjectGenerator") || methods::is(x, "classGeneratorFunction")
 }
 
 # When a generic has ... and a method adds new arguments, the S4 method

@@ -1,4 +1,4 @@
-# roxygen2 4.0.2.9000
+# roxygen2 4.1.0
 
 * If there are no `@include` tags, roxygen2 leaves the collate field alone.
   This makes it easier to convert an existing project that uses a predefined

@@ -14,11 +14,14 @@ Topologically sort R files and record in Collate field. The topological
 sort is based on the \code{@include} tag, which should specify the filenames
 (space separated) that should be loaded before the current file - these are
 typically necessary if you're using S4 or RC classes (because super classes
-must be defined before subclasses).  If there are no \code{@include} tags
-Collate will be left blank, indicating that the order of loading does not
-matter.
+must be defined before subclasses).
 }
 \details{
+If there are no \code{@include} tags, roxygen2 will leave collate as is.
+This makes it easier to use roxygen2 with an existing collate directive,
+but if you remove all your \code{@include} tags, you'll need to also
+manually delete the collate field.
+
 This is not a roclet because roclets need the values of objects in a package,
 and those values can not be generated unless you've sourced the files,
 and you can't source the files unless you know the correct order.

@@ -9,9 +9,12 @@ register.preref.parsers(parse.value, 'include')
 #' sort is based on the \code{@@include} tag, which should specify the filenames
 #' (space separated) that should be loaded before the current file - these are
 #' typically necessary if you're using S4 or RC classes (because super classes
-#' must be defined before subclasses).  If there are no \code{@@include} tags
-#' Collate will be left blank, indicating that the order of loading does not
-#' matter.
+#' must be defined before subclasses).
+#'
+#' If there are no \code{@@include} tags, roxygen2 will leave collate as is.
+#' This makes it easier to use roxygen2 with an existing collate directive,
+#' but if you remove all your \code{@@include} tags, you'll need to also
+#' manually delete the collate field.
 #'
 #' This is not a roclet because roclets need the values of objects in a package,
 #' and those values can not be generated unless you've sourced the files,
@@ -32,15 +35,13 @@ register.preref.parsers(parse.value, 'include')
 #' @export
 update_collate <- function(base_path) {
   collate <- generate_collate(file.path(base_path, "R"))
-  if (!is.null(collate)) {
-    collate <- paste0("'", collate, "'", collapse = " ")
-  }
+  if (is.null(collate)) return()
 
   desc_path <- file.path(base_path, "DESCRIPTION")
   old <- read.description(desc_path)
 
   new <- old
-  new$Collate <- collate
+  new$Collate <- paste0("'", collate, "'", collapse = " ")
   write.description(new, desc_path)
 
   if (!identical(old, read.description(desc_path))) {

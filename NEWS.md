@@ -1,5 +1,10 @@
 # roxygen2 4.0.2.9000
 
+* If there are no `@include` tags, roxygen2 leaves the collate field alone.
+  This makes it easier to convert an existing project that uses a predefined
+  collate, but if you start with `@include` and later remove them, you'll
+  need to also remove the collate field (#302, #303).
+
 * Protect a `dir()` with `sort_c()` - If you'd noticed an inconsistency in
   ordering between `devtools::document()` and `devtools::check()` this
   was the cause of that.

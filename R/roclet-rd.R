@@ -174,6 +174,7 @@ roc_output.had <- function(roclet, results, base_path, options = list(),
     # by roxygen in the past, but weren't generated in this sweep.
 
     old_paths <- setdiff(dir(man, full.names = TRUE), paths)
+    old_paths <- old_paths[!file.info(old_paths)$isdir]
     old_roxygen <- Filter(made_by_roxygen, old_paths)
     if (length(old_roxygen) > 0) {
       cat(paste0("Deleting ", basename(old_roxygen), collapse = "\n"), "\n", sep = "")
@@ -187,6 +188,7 @@ roc_output.had <- function(roclet, results, base_path, options = list(),
 #' @export
 clean.had <- function(roclet, base_path) {
   rd <- dir(file.path(base_path, "man"), full.names = TRUE)
+  rd <- rd[!file.info(rd)$isdir]
   made_by_me <- vapply(rd, made_by_roxygen, logical(1))
 
   unlink(rd[made_by_me])

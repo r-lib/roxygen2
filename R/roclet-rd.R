@@ -3,6 +3,7 @@
 NULL
 
 register.preref.parsers(parse.value,
+                        'backref',
                         'name',
                         'rdname',
                         'aliases',
@@ -117,7 +118,10 @@ roclet_rd_one <- function(partitum, base_path, env) {
   add_tag(rd, describe_in$tag)
 
   # Add source reference as comment
-  add_tag(rd, new_tag("srcref", partitum$srcref$filename))
+  if (!is.null(partitum$backref))
+    add_tag(rd, process_had_tag(partitum, 'backref'))
+  else
+    add_tag(rd, new_tag("backref", partitum$srcref$filename))
 
   # Work out file name and initialise Rd object
   add_tag(rd, new_tag("encoding", partitum$encoding))

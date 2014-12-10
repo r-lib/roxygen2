@@ -56,7 +56,7 @@ merge.minidesc_tag <- function(x, y, ...) {
 # Comment tags -----------------------------------------------------------------------
 
 #' @export
-format.srcref_tag <- function(x, ...) {
+format.backref_tag <- function(x, ...) {
   filename <- unique(x$values)
   filename <- file.path(basename(dirname(filename)), basename(filename), fsep = "/")
   sprintf("%% Please edit documentation in %s\n", paste(filename, collapse = ", "))

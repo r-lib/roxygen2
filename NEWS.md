@@ -14,6 +14,10 @@
   several .R files, as may happen when working wIth S4 classes, generic 
   functions and methods (#323, #324).
 
+* Sections with identical title (as created by `@section`) are now merged in
+  parse order, just like `@description` and `@details`.  This is
+  especially useful in conjunction with the `@rdname` tag. (@krlmlr, #300).
+
 * Parser callbacks registered with `register.preref.parser` are now called
   for fields parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370)

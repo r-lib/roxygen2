@@ -455,7 +455,7 @@ To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
 ```
 
 Sections with identical titles will be merged.
-This is especially useful in conjunction with the `@rdfile` tag:
+This is especially useful in conjunction with the `@rdname` tag:
 
 ```{r}
 #' Basic arithmetic

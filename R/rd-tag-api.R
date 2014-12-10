@@ -53,6 +53,23 @@ merge.minidesc_tag <- function(x, y, ...) {
   list(x)
 }
 
+#' @export
+merge.section_tag <- function(x, y, ...) {
+  x_names <- sapply(x$values, `[[`, "name")
+  y_names <- sapply(y$values, `[[`, "name")
+  xy_names <- unique(c(x_names, y_names))
+  x_contents <- setNames(lapply(x$values, `[[`, "content"), x_names)
+  y_contents <- setNames(lapply(y$values, `[[`, "content"), y_names)
+  values <- lapply(
+    xy_names,
+    function (name) {
+      content <- paste(x_contents[[name]], y_contents[[name]], sep = "\n\n")
+      list(name = name, content = content)
+    }
+  )
+  new_tag("section", values)
+}
+
 # Comment tags -----------------------------------------------------------------------
 
 #' @export

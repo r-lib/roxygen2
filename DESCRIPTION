@@ -1,5 +1,5 @@
 Package: roxygen2
-Title: In-source documentation for R
+Title: In-source Documentation for R
 Description: A Doxygen-like in-source documentation system
     for Rd, collation, and NAMESPACE.
 URL: https://github.com/klutometis/roxygen

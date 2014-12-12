@@ -1,16 +1,19 @@
-The following notes were generated across my local OS X install, ubuntu running on travis-ci and win builder. Response to NOTEs across three platforms below.
+## Test environments
+* local OS X install, R 3.1.2
+* ubuntu 12.04 (on travis-ci), R 3.1.2
+* win-builder (devel and release)
+
+## R CMD check results
+There were no ERRORs or WARNINGs. 
+
+There was 1 NOTE:
 
 * checking CRAN incoming feasibility ... NOTE
   Possibly mis-spelled words in DESCRIPTION:
   Doxygen (3:16), NAMESPACE (4:28)
-  
+
   These are not spelling mistakes.
 
-I also checked all downstream dependencies (even thought roxygen2 is a build-time, not run-time depency), https://github.com/wch/checkresults/blob/master/roxygen2/r-release/00check-summary.txt. Two packages failed R CMD check:
-
-* nscancor: looks like a dependency mispecifiation issue, not related to 
-  roxygen2
-  
-* scholar: looks like an intermittent HTTP failure, not related to roxygen.
-
-Roxygen2 is used at package build time and should not have any run-time dependencies.
+## Downstream dependencies
+I have also run R CMD check on reverse dependencies of httr 
+(https://github.com/hadley/roxygen2/blob/master/revdep/summary.md). I did not check packages that only suggest roxygen2, as it's generally a build-time, rather a run-time dependency.

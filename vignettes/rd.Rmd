@@ -453,3 +453,24 @@ To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
 #'    Apart from the following special cases...
 #' }
 ```
+
+## Back references
+
+The original source location is added as a comment
+to the second line of each generated `.Rd` file in the following form:
+
+```
+% Please edit documentation in ...
+```
+
+`roxygen2` tries to capture all locations from which the documentation is assembled.
+For code that *generates* R code with Roxygen comments (e.g., the `Rcpp` package),
+the `@backref` tag is provided.
+This allows specifying the "true" source of the documentation,
+and will substitute the default list of source files.
+Use one tag per source file:
+
+```{r}
+#' @backref src/file.cpp
+#' @backref src/file.h
+```

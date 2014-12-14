@@ -223,9 +223,10 @@ private:
     int end = findNextTagOrEnd(start);
 
     // Move backwards over newlines and whitespace to trim
-    while (content_[end - 1] == ' ' ||
-           content_[end - 1] == '\t' ||
-           content_[end - 1] == '\n')
+    while (end > start &&
+           (content_[end - 1] == ' ' ||
+            content_[end - 1] == '\t' ||
+            content_[end - 1] == '\n'))
       --end;
 
     // If we moved back to the start, just return empty string

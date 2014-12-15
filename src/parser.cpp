@@ -16,8 +16,8 @@ public:
   }
 
   BlockParser(std::string const& input,
-                     std::string const& filePath,
-                     int row)
+              std::string const& filePath,
+              int row)
   {
     stripRoxygenDelimitersAndStore(input);
     filePath_ = filePath;
@@ -174,6 +174,7 @@ private:
       start = end + 1;
       end = start;
     }
+
     n_ = content_.length();
     LOG("Content after strip:\n");
     LOG(content_);
@@ -181,8 +182,8 @@ private:
 
   int findNextTagOrEnd(int index)
   {
-
-    do {
+    while (index < n_ - 2)
+    {
       if (content_[index] == '\n')
       {
         if (content_[index + 1] == '@')
@@ -190,15 +191,16 @@ private:
           break;
         }
       }
-    } while (++index < n_ - 1);
+      ++index;
+    }
 
     return index + 1;
   }
 
   int findNextTagOrEnd(int index, int* row)
   {
-
-    do {
+    while (index < n_ - 2)
+    {
       if (content_[index] == '\n')
       {
         ++*row;
@@ -207,7 +209,8 @@ private:
           break;
         }
       }
-    } while (++index < n_ - 1);
+      ++index;
+    }
 
     return index + 1;
   }
@@ -220,13 +223,14 @@ private:
     int end = findNextTagOrEnd(start);
 
     // Move backwards over newlines and whitespace to trim
-    while (content_[end - 1] == ' ' ||
-           content_[end - 1] == '\t' ||
-           content_[end - 1] == '\n')
+    while (end > start &&
+           (content_[end - 1] == ' ' ||
+            content_[end - 1] == '\t' ||
+            content_[end - 1] == '\n'))
       --end;
 
-    // If we moved back to / before start, just return empty string
-    if (end <= start)
+    // If we moved back to the start, just return empty string
+    if (end == start)
     {
       return std::string();
     }
@@ -309,11 +313,11 @@ public:
         if (thisBlockString.length() > 0)
         {
           allBlocks.push_back(
-                BlockParser(
-                  thisBlockString,
-                  filePath,
-                  blockStartRow
-                ).parse()
+            BlockParser(
+              thisBlockString,
+              filePath,
+              blockStartRow
+            ).parse()
           );
         }
 

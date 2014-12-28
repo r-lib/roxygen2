@@ -129,3 +129,27 @@ r_files <- function(path) {
 dots <- function(...) {
   eval(substitute(alist(...)))
 }
+
+#' @title Generate a template params list
+#' @description This function generates a template of \code{roxygen} documentation for a function. \cr
+#' Also, the \code{example} section of the output is experimental and needs more work \cr
+#' @param x name of the function for which you want a param template
+#' @param verbose whether to print the template. Takes default from \code{getOption("verbose")}
+#' @export
+#' @examples
+#' out <- generate_template(x = "plot", verbose = TRUE)
+generate_template <- function(x, verbose = TRUE){
+  arg_names = names(formals(x))
+  arg_vals = as.character(formals(x))
+  arg_str = paste(arg_names, ifelse(arg_vals == "", arg_names, arg_vals), sep = " = ", collapse = ", ")
+  head <- sprintf("#' @title %s\n#' @description %s", x, x)
+  params <- paste("#' @param", arg_names, collapse = "\n")
+  export <- sprintf("#' @export")
+  ## -------- example section is experimental and needs more work
+  examples <- sprintf("#' @examples\n#' %s(%s)", x, arg_str )
+  template <- paste(head, params, export, examples, sep = "\n")
+  if(verbose) cat(template)
+  invisible(template)
+}
+
+

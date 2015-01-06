@@ -46,6 +46,7 @@ Collate:
     'roclet-collate.R'
     'roclet-namespace.R'
     'roclet-rd.R'
+    'roclet-vignette.R'
     'roclet.R'
     'roxygen.R'
     'roxygenize.R'

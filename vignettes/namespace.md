@@ -1,0 +1,93 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Managing your NAMESPACE}
+-->
+
+
+
+# Package namespace
+
+The package `NAMESPACE` is one of the most confusing parts of building a package. Roxygen2 aims to make it as easy as possible to build a package that is a well-behaved member of the R ecosystem. This is a little frustrating at first, but soon becomes second-nature.
+
+## Exports
+
+For a function to be usable outside of your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publically available, you must explicitly tag it with `@export`.
+
+Use the following guidelines to decide what to export:
+
+* Functions: export functions that you want to make available. Exported
+  functions must be documented, and you must be cautious when changing their
+  interface.
+
+* Datasets: all datasets are publicly available. They exist outside of the
+  package namespace and should not be exported.
+
+* S3 classes: if you want others to be able to create instances of the class
+  `@export` the constructor function.
+
+* S3 generics: the generic is a function so `@export` if you want it to
+  be usable outside the package
+
+* S3 methods: every S3 method _must_ be exported, even if the generic is not.
+  Otherwise the S3 method table will not be generated correctly and internal
+  generics will not find the correct method.
+
+* S4 classes: if you want others to be able to extend your class, `@export` it.
+  If you want others to create instances of your class, but not extend it,
+  `@export` the constructor function, but not the class.
+
+      ```R
+      # Can extend and create
+      #' @export
+      setClass("A")
+
+      # Can extend, but constructor not exported
+      #' @export
+      B <- setClass("B")
+
+      # Can create, but not extend
+      #' @export C
+      C <- setClass("C")
+
+      # Can create and extend
+      #' @export D
+      #' @exportClass D
+      D <- setClass("D")
+      ```
+
+* S4 generics: `@export` if you want the generic to be publicly usable.
+
+* S4 methods: you only need to `@export` methods for generics that you
+  did not define. But `@export`ing every method is a good idea as it
+  will not cause problems and prevents you from forgetting to export an
+  important method.
+
+* RC classes: the same principles apply as for S4 classes. `@export`
+  will only export the class.
+
+## Imports
+
+The `NAMESPACE` also controls which functions from other packages are made available to your package. Only unique directives are saved to the `NAMESPACE` file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.
+
+If you are using just a few functions from another package, the recommended option is to note the package name in the `Imports:` field of the `DESCRIPTION` file and call the function(s) explicitly using `::`, e.g., `pkg::fun()`.  Alternatively, though no longer recommended due to its poorer readability, use `@importFrom`, e.g., `@importFrom pgk fun`, and call the function(s) without `::`.
+
+If you are using many functions from another package, use `@import package` to import them all and make available without using `::`.
+
+If you want to add a new method to an S3 generic, import it with `@importFrom pkg generic`.
+
+If you are using S4 you may also need:
+
+* `@importClassesFrom package classa classb ...` to import selected S4 classes.
+
+* `@importMethodsFrom package methoda methodb ...` to import selected S4 methods.
+
+To import compiled code from another package, use `@useDynLib`
+
+* `@useDynLib package` imports all compiled functions.
+
+* `@useDynLib package routinea routineb` imports selected compiled functions.
+
+* Any `@useDynLib` specification containing a comma, e.g.
+  `@useDynLib mypackage, .registration = TRUE` will be inserted as is
+  into the the NAMESPACE, e.g. `useDynLib(mypackage, .registration = TRUE)`
+

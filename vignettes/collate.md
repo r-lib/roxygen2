@@ -1,0 +1,20 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Controlling collation order}
+-->
+
+
+
+# Collation order
+
+R loads files in alphabetical order. Unfortunately not every alphabet puts letters in the same order, so you can't rely on alphabetic ordering if you need one file loaded before another. The order in which files are loaded doesn't matter for most packages. But if you're using S4, you'll need to make sure that classes are loaded before subclasses and generics are defined before methods.
+
+Rather than relying on alphabetic ordering, roxygen2 provides an explicit way of saying that one file must be loaded before another: `@include`. The `@include` tag gives a space separated list of file names that should be loaded before the current file:
+
+
+```r
+#' @include class-a.r
+setClass("B", contains = "A")
+```
+
+If any `@include` tags are present in the package, roxygen2 will set the `Collate` field in the `DESCRIPTION`, which ensures that files are always loaded in the same order.

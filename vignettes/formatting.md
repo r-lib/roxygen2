@@ -1,0 +1,122 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Text formatting}
+-->
+
+
+
+# Text formatting reference sheet
+
+Within roxygen tags, you use `.Rd` syntax to format text. This vignette shows you examples of the most important commands. The full details are described in [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Marking-text).
+
+Note that `\` and `%` are special characters. To insert literals, escape with a backslash: `\\`, `\%`.
+
+## Character formatting
+
+* `\emph{italics}`
+
+* `\strong{bold}`
+
+* `\code{r_function_call(with = "arguments")}`, `\code{NULL}`, `\code{TRUE}`
+
+* `\pkg{package_name}`
+
+## Links
+
+To other documentation:
+
+* `\code{\link{function}}`: function in this package
+
+* `\code{\link[MASS]{stats}}`: function in another package
+
+* `\link[=dest]{name}`: link to dest, but show name
+
+* `\linkS4class{abc}`: link to an S4 class
+
+To the web:
+
+* `\url{http://rstudio.com}`
+
+* `\href{http://rstudio.com}{Rstudio}`
+
+* `\email{hadley@@rstudio.com}` (note the doubled `@`)
+
+## Lists
+
+* Ordered (numbered) lists:
+
+    
+    ```r
+    #' \enumerate{
+    #'   \item First item
+    #'   \item Second item
+    #' }
+    ```
+
+* Unordered (bulleted) lists
+
+    
+    ```r
+    #' \itemize{
+    #'   \item First item
+    #'   \item Second item
+    #' }
+    ```
+
+* Definition (named) lists
+
+    
+    ```r
+    #' \describe{
+    #'   \item{One}{First item}
+    #'   \item{Two}{Second item}
+    #' }
+    ```
+
+## Mathematics
+
+Standard LaTeX (with no extensions):
+
+* `\eqn{a + b}`: inline eqution
+
+* `\deqn{a + b}`: display (block) equation
+
+## Tables
+
+Tables are created with `\tabular{}`. It has two arguments:
+
+1. Column alignment, specified by letter for each column (`l` = left, `r` = right,
+   `c` = centre.)
+
+2. Table contents, with columns separated by `\tab` and rows by `\cr`.
+
+The following function turns an R data frame into into the correct format. It ignores column and row names, but should get you started.
+
+
+```r
+tabular <- function(df, ...) {
+  stopifnot(is.data.frame(df))
+
+  align <- function(x) if (is.numeric(x)) "r" else "l"
+  col_align <- vapply(df, align, character(1))
+
+  cols <- lapply(df, format, ...)
+  contents <- do.call("paste",
+    c(cols, list(sep = " \\tab ", collapse = "\\cr\n  ")))
+
+  paste("\\tabular{", paste(col_align, collapse = ""), "}{\n  ",
+    contents, "\n}\n", sep = "")
+}
+
+cat(tabular(mtcars[1:5, 1:5]))
+```
+
+```
+#> \tabular{rrrrr}{
+#>   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr
+#>   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr
+#>   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr
+#>   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr
+#>   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15
+#> }
+```

@@ -1,5 +1,8 @@
 # roxygen2 4.1.0.9000
 
+* New "vignette" roclet. This vignette automatically rebuilds all out of date
+  vignettes (#314).
+
 * An off-by-one error in the C++ Roxygen preparser was fixed.
 
 * The new `@backref` tag makes it possible to override the sourceref for 

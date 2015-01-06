@@ -1,8 +1,31 @@
-# Re-build all out of date vignettes
-# tools::buildVignettes(dir = ".") rebuilds all vignettes - need to rebuild
-# only those that have changed
-#
-# Respect makefile if present
+#' Re-build outdated vignettes.
+#'
+#' This rebuilds outdated vignettes with \code{\link[tools]{buildVignette}()}.
+#' By default, it will rebuild all vignettes if the source file is newer than
+#' the output pdf or html. (This means it will automatically re-build the
+#' vignette if you change the vignette source, but \emph{not} when you
+#' change the R code). If you want finer control, add a Makefile to
+#' \code{vignettes/} and roxygen2 will use that instead.
+#'
+#' To prevent RStudio from re-building the vignettes again when checking
+#' your package, add \code{--no-build-vignettes} to the "Build Source Package"
+#' field in your project options.
+#'
+#' @export
+vignette_roclet <- function() {
+  new_roclet(list, "vignette")
+}
+
+#' @export
+roc_process.vignette <- function(roclet, parsed, base_path, options = list()) {
+}
+
+#' @export
+roc_output.vignette <- function(roclet, results, base_path, options = list(),
+                                check = TRUE) {
+
+  vign_update_all(base_path)
+}
 
 # Determine if a vignette is out-of-date; i.e. it has no related files, or
 # any of the related files are older than the vignette.
@@ -29,25 +52,25 @@ vign_update <- function(vign) {
 }
 
 vign_update_all <- function(pkg_path) {
-  message("Updating vignettes")
-  # If has makefile use that
-  # make <- Sys.getenv("MAKE", "make"), setwd, system(make)
-  # any(grepl("^clean:", readLines("Makefile", warn = FALSE)))) system(paste(make, "clean"))
+  vig_path <- file.path(pkg_path, "vignettes")
+  if (!file.exists(vig_path)) return()
 
-  vigs <- tools::pkgVignettes(dir = pkg_path)
-  invisible(vapply(vigs$docs, vign_update, logical(1)))
+  if (file.exists(file.path(vig_path, "Makefile"))) {
+    message("Updating vignettes with make")
+
+    make <- Sys.getenv("MAKE", "make")
+    old <- setwd(vig_path)
+    on.exit(setwd(old), add = TRUE)
+
+    system(make)
+  } else {
+    message("Updating vignettes")
+
+    vigs <- tools::pkgVignettes(dir = pkg_path)
+    invisible(vapply(vigs$docs, vign_update, logical(1)))
+  }
 }
 
 mtime <- function(x) {
   max(file.info(x)$mtime)
-}
-
-vignette_roclet <- function() {
-  new_roclet(list, "vignette")
-}
-
-#' @export
-roc_process.vignette <- function(roclet, parsed, base_path, options = list()) {
-  ns <- unlist(lapply(partita, ns_process_partitum)) %||% character()
-  sort_c(unique(ns))
 }

@@ -1,5 +1,9 @@
 # roxygen2 4.1.0.9000
 
+* The collate roclet falls back to `base::strwrap()` when generating the
+  collate field. This makes roxygen2 compatible with the next version of
+  stringr.
+
 * New "vignette" roclet. This vignette automatically rebuilds all out of date
   vignettes (#314).
 

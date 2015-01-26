@@ -26,7 +26,7 @@ cat.description <- function(field, value, file='') {
     width <- 80
     if (field %in% c("Collate")) {
       # Individual lines
-      width <- 0
+      width <- 0L
     } else if (field %in% c("Authors@R")) {
       # No wrapping
       width <- Inf
@@ -39,15 +39,25 @@ cat.description <- function(field, value, file='') {
 }
 
 # Determine whether a given field is too long and should be text-wrapped
-wrap_field_if_necessary <- function(field, value, wrap.threshold) {
-   text <- simulate_formatted_text(field, value)
-   longest.line <- max(str_length(text))
+wrap_field_if_necessary <- function(field, value, wrap.threshold = 80L) {
 
-   if (longest.line > wrap.threshold) {
-     text <- str_wrap(paste0(field, ": ", value), exdent = 4, width = wrap.threshold)
-   }
+  if (identical(wrap.threshold, 0L)) {
+    text <- paste0(field, ": ", value)
+    # 0 is a special case: this is only used for collate where we want
+    # one file name per line. stringr::str_wrap does paragraph wrapping
+    # which is not what we want
+    return(paste(strwrap(text, exdent = 4, width = 0), collapse = "\n"))
+  }
 
-   return(text)
+  text <- simulate_formatted_text(field, value)
+  longest.line <- max(str_length(text))
+
+  if (longest.line > wrap.threshold) {
+    text <- paste0(field, ": ", value)
+    text <- str_wrap(text, exdent = 4, width = wrap.threshold)
+  }
+
+  return(text)
 }
 
 # Simulate what was probably the user's intended field formatting

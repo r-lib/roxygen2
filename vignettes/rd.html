@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Generating Rd files</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Generating Rd files}
+-->
+
+<h1>Generating Rd files</h1>
+
+<h2>Roxygen process</h2>
+
+<p>There are three steps in the transformation from roxygen comments in your source file to human readable documentation:</p>
+
+<ol>
+<li>You add roxygen comments to your source file.</li>
+<li><code>roxygen2::roxygenise()</code> converts roxygen comments to <code>.Rd</code> files.</li>
+<li>R converts <code>.Rd</code> files to human readable documentation</li>
+</ol>
+
+<p>The process starts when you add specially formatted roxygen comments to your source file. Roxygen comments start with <code>#&#39;</code> so you can continue to use regular comments for other purposes.</p>
+
+<pre><code class="r">#&#39; Add together two numbers
+#&#39;
+#&#39; @param x A number
+#&#39; @param y A number
+#&#39; @return The sum of \code{x} and \code{y}
+#&#39; @examples
+#&#39; add(1, 1)
+#&#39; add(10, 1)
+add &lt;- function(x, y) {
+  x + y
+}
+</code></pre>
+
+<p>For the example, above, this will generate <code>man/add.Rd</code> that looks like:</p>
+
+<pre><code>% Generated by roxygen2 (3.2.0): do not edit by hand
+\name{add}
+\alias{add}
+\title{Add together two numbers}
+\usage{
+add(x, y)
+}
+\arguments{
+  \item{x}{A number}
+
+  \item{y}{A number}
+}
+\value{
+The sum of \code{x} and \code{y}
+}
+\description{
+Add together two numbers
+}
+\examples{
+add(1, 1)
+add(10, 1)
+}
+</code></pre>
+
+<p>Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the <a href="http://cran.r-project.org/doc/manuals/R-exts.html#Rd-format">R extensions</a> manual. I&#39;ll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.</p>
+
+<p>When you use <code>?x</code>, <code>help(&quot;x&quot;)</code> or <code>example(&quot;x&quot;)</code> R looks for an Rd file containing <code>\alias{x}</code>. It then parses the file, converts it into html and displays it.</p>
+
+<p>All of these functions look for an Rd file in <em>installed</em> packages. This isn&#39;t very useful for package development, because you want to use the <code>.Rd</code> files in the <em>source</em> package. <code>devtools</code> provides two helpful functions for this scenario: <code>dev_help()</code> and <code>dev_example()</code>. They behave similarly to <code>help()</code> and <code>example()</code> but look in source packages you&#39;ve loaded with <code>load_all()</code>, not installed packages you&#39;ve loaded with <code>library()</code>.</p>
+
+<h2>Basic documentation</h2>
+
+<p>Roxygen comments start with <code>#&#39;</code> and include tags like <code>@tag details</code>. Tags break the documentation up into pieces, and the content of a tag extends from the end of tag name to the start of the next tag (or the end of the block). Because <code>@</code> has a special meaning in roxygen, you need to write <code>@@</code> to add a literal <code>@</code> to the documentation.</p>
+
+<p>Each documentation block starts with some text. The first sentence becomes the title of the documentation. That&#39;s what you see when you look at <code>help(package = mypackage)</code> and is shown at the top of each help file. It should fit on one line, be written in sentence case, and end in a full stop. The second paragraph is the description: this comes first in the documentation and should briefly describe what the function does. The third and subsequent paragraphs go into the details: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates.</p>
+
+<p>Here&#39;s an example showing what the documentation for <code>sum()</code> might look like if it had been written with roxygen:</p>
+
+<pre><code class="r">#&#39; Sum of vector elements.
+#&#39;
+#&#39; \code{sum} returns the sum of all the values present in its arguments.
+#&#39;
+#&#39; This is a generic function: methods can be defined for it directly
+#&#39; or via the \code{\link{Summary}} group generic. For this to work properly,
+#&#39; the arguments \code{...} should be unnamed, and dispatch is on the
+#&#39; first argument.
+sum &lt;- function(..., na.rm = TRUE) {}
+</code></pre>
+
+<p><code>\code{}</code> and <code>\link{}</code> are <code>.Rd</code> formatting commands which you&#39;ll learn more about in <a href="formatting.html">formatting</a>. Also notice the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.</p>
+
+<p>The following documentation produces the same help file as above, but uses explicit tags. You only need explicit tags if you want to the title or description to span multiple paragraphs (a bad idea), or want to omit the description (in which case roxygen will use the title for the description, since it&#39;s a required documentation component).</p>
+
+<pre><code class="r">#&#39; @title Sum of vector elements.
+#&#39;
+#&#39; @description
+#&#39; \code{sum} returns the sum of all the values present in its arguments.
+#&#39;
+#&#39; @details
+#&#39; This is a generic function: methods can be defined for it directly
+#&#39; or via the \code{\link{Summary}} group generic. For this to work properly,
+#&#39; the arguments \code{...} should be unnamed, and dispatch is on the
+#&#39; first argument.
+sum &lt;- function(..., na.rm = TRUE) {}
+</code></pre>
+
+<p>All objects must have a title and description. Details are optional.</p>
+
+<h3>Enhancing navigation.</h3>
+
+<p>There are two tags that make it easier for people to navigate around your documentation: <code>@seealso</code> and <code>@family</code>. </p>
+
+<p><code>@seealso</code> allows you to point to other useful resources, either on the web <code>\url{http://www.r-project.org}</code>, or to other documentation with <code>\code{\link{functioname}}</code>. </p>
+
+<p>If you have a family of related functions, you can use the <code>@family &lt;family&gt;</code> tag to automatically add appropriate lists and interlinks to the <code>@seealso</code> section. Because it will appear as &ldquo;Other <family>:&rdquo;, the <code>@family</code> name should be plural (i.e., &ldquo;model building helpers&rdquo; not &ldquo;model building helper&rdquo;). You can make a function a member of multiple families by repeating the @family tag for each additional family. These will then get seaprate headings in the <strong>seealso</strong> section.</p>
+
+<p>For sum, these components might look like:</p>
+
+<pre><code class="r">#&#39; @family aggregate functions
+#&#39; @seealso \code{\link{prod}} for products, \code{\link{cumsum}} for
+#&#39;  cumulative sums, and \code{\link{colSums}}/\code{\link{rowSums}}
+#&#39;  marginal sums over high-dimensional arrays.
+</code></pre>
+
+<p>Three other tags make it easier for the user to find documentation:</p>
+
+<ul>
+<li><p><code>@aliases space separated aliases</code> to add additional aliases, through
+which the user can find the documentation with <code>?</code>.</p></li>
+<li><p><code>@concept</code> to add extra keywords that will be found with <code>help.search()</code></p></li>
+<li><p><code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are
+optional, but if present, must be taken from the predefined list replicated
+in the <a href="rdkeywords.html">keywords vignette</a>. Keywords are not very useful,
+except for <code>@keywords internal</code>. Using the internal keyword removes all functions
+in the associated <code>.Rd</code> file from the documentation index and disables some of
+their automated tests.
+A common use case is to both export a function (using <code>@export</code>) and marking it as
+internal. That way, advanced users can access a function that new users would be confused
+about if they were to see it in the index.</p></li>
+</ul>
+
+<p>You use other tags based on the type of object that you&#39;re documenting. The following sections describe the most commonly used tags for functions, S3, S4 and RC objects and data.</p>
+
+<h2>Documenting functions</h2>
+
+<p>Functions are the mostly commonly documented objects. Most functions use three tags:</p>
+
+<ul>
+<li><p><code>@param name description</code> describes the inputs to the function.
+The description should provide a succinct summary of the type of the
+parameter (e.g. a string, a numeric vector), and if not obvious from
+the name, what the parameter does. The description should start with a
+capital letter and end with a full stop. It can span multiple lines (or
+even paragraphs) if necessary. All parameters must be documented.</p>
+
+<p>You can document multiple arguments in one place by separating
+the names with commas (no spaces). For example, to document both
+<code>x</code> and <code>y</code>, you can say <code>@param x,y Numeric vectors</code>.</p></li>
+<li><p><code>@examples</code> provides executable R code showing how to use the function in
+practice. This is a very important part of the documentation because
+many people look at the examples before reading anything. Example code
+must work without errors as it is run automatically as part of <code>R CMD
+check</code>.</p>
+
+<p>However for the purpose of illustration, it&#39;s often useful to include code
+that causes an error. <code>\dontrun{}</code> allows you to include code in the
+example that is never used. There are two other special commands.
+<code>\dontshow{}</code> is run, but not shown in the help page: this can
+be useful for informal tests. <code>\donttest{}</code> is run in examples,
+but not run automatically in <code>R CMD check</code>. This is useful if you
+have examples that take a long time to run. The options are summarised
+below.</p>
+
+<table><thead>
+<tr>
+<th>Command</th>
+<th>example</th>
+<th>help</th>
+<th>R CMD check</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>\dontrun{}</code></td>
+<td></td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\dontshow{}</code></td>
+<td>x</td>
+<td></td>
+<td>x</td>
+</tr>
+<tr>
+<td><code>\donttest{}</code></td>
+<td>x</td>
+<td>x</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>Instead of including examples directly in the documentation, you can
+put them in separate files and use <code>@example path/relative/to/packge/root</code>
+to insert them into the documentation.</p></li>
+<li><p><code>@return description</code> describes the output from the function. This is
+not always necessary, but is a good idea if you return different types
+of outputs depending on the input, or you&#39;re returning an S3, S4 or RC
+object.</p></li>
+</ul>
+
+<p>We could use these new tags to improve our documentation of <code>sum()</code> as follows:</p>
+
+<pre><code class="r">#&#39; Sum of vector elements.
+#&#39;
+#&#39; \code{sum} returns the sum of all the values present in its arguments.
+#&#39;
+#&#39; This is a generic function: methods can be defined for it directly
+#&#39; or via the \code{\link{Summary}} group generic. For this to work properly,
+#&#39; the arguments \code{...} should be unnamed, and dispatch is on the
+#&#39; first argument.
+#&#39;
+#&#39; @param ... Numeric, complex, or logical vectors.
+#&#39; @param na.rm A logical scalar. Should missing values (including NaN)
+#&#39;   be removed?
+#&#39; @return If all inputs are integer and logical, then the output
+#&#39;   will be an integer. If integer overflow
+#&#39;   \url{http://en.wikipedia.org/wiki/Integer_overflow} occurs, the output
+#&#39;   will be NA with a warning. Otherwise it will be a length-one numeric or
+#&#39;   complex vector.
+#&#39;
+#&#39;   Zero-length vectors have sum 0 by definition. See
+#&#39;   \url{http://en.wikipedia.org/wiki/Empty_sum} for more details.
+#&#39; @examples
+#&#39; sum(1:10)
+#&#39; sum(1:5, 6:10)
+#&#39; sum(F, F, F, T, T)
+#&#39;
+#&#39; sum(.Machine$integer.max, 1L)
+#&#39; sum(.Machine$integer.max, 1)
+#&#39;
+#&#39; \dontrun{
+#&#39; sum(&quot;a&quot;)
+#&#39; }
+sum &lt;- function(..., na.rm = TRUE) {}
+</code></pre>
+
+<p>Indent the second and subsequent lines of a tag so that when scanning the documentation so it&#39;s easy to see where one tag ends and the next begins. Tags that always span multiple lines (like <code>@example</code>) should start on a new line and don&#39;t need to be indented.</p>
+
+<h2>Documenting classes, generics and methods</h2>
+
+<p>Documenting classes, generics and methods are relatively straightforward, but there are some variations based on the object system. The following sections give the details for the S3, S4 and RC object systems.</p>
+
+<h3>S3</h3>
+
+<p>S3 <strong>generics</strong> are regular functions, so document them as such. S3 <strong>classes</strong> have no formal definition, so document the constructor function. It is your choice whether or not to document S3 <strong>methods</strong>. You don&#39;t need to document methods for simple generics like <code>print()</code>. If your method is more complicated, you should document it so people know what the parameters do. In base R, you can find documentation for more complex methods like <code>predict.lm()</code>, <code>predict.glm()</code>, and <code>anova.glm()</code>.</p>
+
+<p>Older versions of roxygen required explicit <code>@method generic class</code> tags for all S3 methods. From 3.0.0 this is no longer needed as and roxygen2 will figure it out automatically. If you are upgrading, make sure to remove these old tags. Automatic method detection will only fail if the generic and class are ambiguous. For example is <code>all.equal.data.frame()</code> the <code>equal.data.frame</code> method for <code>all</code>, or the <code>data.frame</code> method for <code>all.equal</code>?. If this happens, you can disambiguate with (e.g.) <code>@method all.equal data.frame</code>.</p>
+
+<h3>S4</h3>
+
+<p>Older versions of roxyen2 required explicit <code>@usage</code>, <code>@alias</code> and <code>@docType</code> to correctly document S4 objects, but from version 3.0.0 on roxygen2 generates correct metadata automatically. If you&#39;re upgrading from a previous version, make sure to remove these old tags.</p>
+
+<p>S4 <strong>generics</strong> are also functions, so document them as such. Document <strong>S4 classes</strong> by adding a roxygen block before <code>setClass()</code>. Use <code>@slot</code> to document the slots of the class. Here&#39;s a simple example:</p>
+
+<pre><code class="r">#&#39; An S4 class to represent a bank account.
+#&#39;
+#&#39; @slot balance A length-one numeric vector
+Account &lt;- setClass(&quot;Account&quot;,
+  slots = list(balance = &quot;numeric&quot;)
+)
+</code></pre>
+
+<p>S4 <strong>methods</strong> are a little more complicated. Unlike S3, all S4 methods must be documented. You can document them in three places:</p>
+
+<ul>
+<li><p>In the class. Most appropriate if the corresponding generic uses single
+dispatch and you created the class.</p></li>
+<li><p>In the generic. Most appropriate if the generic uses multiple dispatch
+and you control it.</p></li>
+<li><p>In its own file. Most appropriate if the method is complex. or the
+either two options don&#39;t apply.</p></li>
+</ul>
+
+<p>Use either <code>@rdname</code> or <code>@describeIn</code> to control where method documentation goes. See the next section for more details.</p>
+
+<h3>RC</h3>
+
+<p>RC is different to S3 and S4 because methods are associated with classes, not generics. RC also has a special convention for documenting methods: the docstring. This makes documenting RC simpler than S4 because you only need one roxygen block per class.</p>
+
+<pre><code class="r">#&#39; A Reference Class to represent a bank account.
+#&#39;
+#&#39; @field balance A length-one numeric vector
+Account &lt;- setRefClass(&quot;Account&quot;,
+  fields = list(balance = &quot;numeric&quot;),
+  methods = list(
+    withdraw = function(x) {
+      &quot;Withdraw money from account. Allows overdrafts&quot;
+      balance &lt;&lt;- balance - x
+    }
+  )
+)
+</code></pre>
+
+<p>Methods with doc strings will be included in the &ldquo;Methods&rdquo; section of the class documentation. Each documented method will be listed with an automatically generated usage statement and its doc string.</p>
+
+<h2>Documenting datasets</h2>
+
+<p>Datasets are usually stored as <code>.rdata</code> files in <code>data/</code> and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you document <code>NULL</code>, and use <code>@name</code> to tell roxygen2 what dataset you&#39;re really documenting.</p>
+
+<p>There are two additional tags that are useful for documenting datasets:</p>
+
+<ul>
+<li><p><code>@format</code>, which gives an overview of the structure of the dataset.
+If you omit this, roxygen will automatically add something based on the
+first line of <code>str()</code> output</p></li>
+<li><p><code>@source</code> where you got the data form, often a <code>\url{}</code>.</p></li>
+</ul>
+
+<p>To show how everything fits together, the example below is an excerpt from the roxygen block used to document the diamonds dataset in ggplot2.</p>
+
+<pre><code class="r">#&#39; Prices of 50,000 round cut diamonds.
+#&#39;
+#&#39; A dataset containing the prices and other attributes of almost 54,000
+#&#39; diamonds. The variables are as follows:
+#&#39;
+#&#39; \itemize{
+#&#39;   \item price. price in US dollars (\$326--\$18,823)
+#&#39;   \item carat. weight of the diamond (0.2--5.01)
+#&#39;   ...
+#&#39; }
+#&#39;
+#&#39; @format A data frame with 53940 rows and 10 variables
+#&#39; @source \url{http://www.diamondse.info/}
+#&#39; @name diamonds
+NULL
+</code></pre>
+
+<h2>Documenting packages</h2>
+
+<p>As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages provide package documentation, but it&#39;s an extremely useful tool for users, because instead of just listing functions like <code>help(package = pkgname)</code> it organises them and shows the user where to get started.</p>
+
+<p>Package documentation should describe the overall purpose of the package and point to the most important functions. It should not contain a verbatim list of functions or copy of <code>DESCRIPTION</code>. This file is for human reading, so pick the most important elements of your package.</p>
+
+<p>Package documentation should be placed in <code>pkgname.R</code>. Here&#39;s an example:</p>
+
+<pre><code class="r">#&#39; Generate R documentation from inline comments.
+#&#39;
+#&#39; Roxygen2 allows you to write documentation in comment blocks co-located
+#&#39; with code.
+#&#39;
+#&#39; The only function you&#39;re likely to need from \pkg{roxygen2} is
+#&#39; \code{\link{roxygenize}}. Otherwise refer to the vignettes to see
+#&#39; how to format the documentation.
+#&#39;
+#&#39; @docType package
+#&#39; @name roxygen2
+NULL
+</code></pre>
+
+<p>Some notes:</p>
+
+<ul>
+<li><p>Like for datasets, there isn&#39;t a object that we can document directly so
+document <code>NULL</code> and use <code>@name</code> to say what we&#39;re actually documenting</p></li>
+<li><p><code>@docType package</code> indicates that the documentation is for the package.
+This will automatically add the corect aliases so that both <code>?pkgname</code>
+and <code>package?pkgname</code> will find the package help. If there&#39;s already
+a function called <code>pkgname()</code>, use <code>@name roxygen2-package</code>.</p></li>
+<li><p>Use <code>@references</code> point to published material about the package that
+users might find helpful.</p></li>
+</ul>
+
+<p>Package documentation is a good place to list all <code>options()</code> that a package understands and to document their behaviour. Put in a section called &ldquo;Package options&rdquo;, as described below.</p>
+
+<h2>Do repeat yourself</h2>
+
+<p>There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It&#39;s frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides three ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:</p>
+
+<ul>
+<li>create reusable with templates with <code>@template</code> and <code>@templateVar</code></li>
+<li>reuse parameter documentation with <code>@inheritParams</code></li>
+<li>document multiple functions in the same place with <code>@describeIn</code> or <code>@rdname</code></li>
+</ul>
+
+<h3>Roxygen templates</h3>
+
+<p>Roxygen templates are R files containing only roxygen comments that live in the <code>man-roxygen</code> directory. Use <code>@template file-name</code> (without extension) to insert the contents of a template into the current documentation.</p>
+
+<p>You can make templates more flexible by using template variables defined with <code>@templateVar name value</code>. Template files are run with brew, so you can retrieve values (or execute any other arbitrary R code) with <code>&lt;%= name %&gt;</code>.</p>
+
+<p>Note that templates are parsed a little differently to regular blocks, so you&#39;ll need to explicitly set the title, description and details with <code>@title</code>, <code>@description</code> and <code>@details</code>.</p>
+
+<h3>Inheriting parameters from other functions</h3>
+
+<p>You can inherit parameter descriptions from other functions using <code>@inheritParams source_function</code>. This tag will bring in all documentation for parameters that are undocumented in the current function, but documented in the source function. The source can be a function in the current package, <code>@inheritParams function</code>, or another package using <code>@inheritParams package::function</code>.</p>
+
+<p>Note, however, that inheritance does not chain. In other words, the <code>source_function</code> must always be the function that defines the parameter using <code>@param</code>.</p>
+
+<h3>Documenting multiple functions in the same file</h3>
+
+<p>You can document multiple functions in the same file by using either <code>@rdname</code> or <code>@describeIn</code> tag. It&#39;s a technique best used with caution: documenting too many functions into one place leads to confusing documentation. It&#39;s best used when all functions have the same (or very similar) arguments.</p>
+
+<p><code>@describeIn</code> is designed for the most common cases:</p>
+
+<ul>
+<li>documenting methods in a generic</li>
+<li>documenting methods in a class</li>
+<li>documenting functions with the same (or similar arguments)</li>
+</ul>
+
+<p>It generates a new section, named either &ldquo;Methods (by class)&rdquo;, &ldquo;Methods (by generic)&rdquo; or &ldquo;Functions&rdquo;. The section contains a bulleted list describing each function, labelled so that you know what function or method it&#39;s talking about. Here&#39;s an example, documenting an imaginary new generic:</p>
+
+<pre><code class="r">#&#39; Foo bar generic
+#&#39;
+#&#39; @param x Object to foo.
+foobar &lt;- function(x) UseMethod(&quot;x&quot;)
+
+#&#39; @describeIn foobar Difference between the mean and the median
+foobar.numeric &lt;- function(x) abs(mean(x) - median(x))
+
+#&#39; @describeIn foobar First and last values pasted together in a string.
+foobar.character &lt;- function(x) paste0(x[1], &quot;-&quot;, x[length(x)])
+</code></pre>
+
+<p>An alternative to <code>@describeIn</code> is <code>@rdname</code>.  It overrides the default file name generated by roxygen and merges documentation for multiple objects into one file. This gives you complete freedom to combine documentation however you see fit. There are two ways to use <code>@rdname</code>. You can add documentation to an existing function:</p>
+
+<pre><code class="r">#&#39; Basic arithmetic
+#&#39;
+#&#39; @param x,y numeric vectors.
+add &lt;- function(x, y) x + y
+
+#&#39; @rdname add
+times &lt;- function(x, y) x * y
+</code></pre>
+
+<p>Or, you can create a dummy documentation file by documenting <code>NULL</code> and setting an informative <code>@name</code>.</p>
+
+<pre><code class="r">#&#39; Basic arithmetic
+#&#39;
+#&#39; @param x,y numeric vectors.
+#&#39; @name arith
+NULL
+
+#&#39; @rdname arith
+add &lt;- function(x, y) x + y
+
+#&#39; @rdname arith
+times &lt;- function(x, y) x * y
+</code></pre>
+
+<h2>Sections</h2>
+
+<p>You can add arbitrary sections to the documentation for any object with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed a colon. Titles may only take one line.</p>
+
+<pre><code class="r">#&#39; @section Warning:
+#&#39; Do not operate heavy machinery within 8 hours of using this function.
+</code></pre>
+
+<p>To add a subsection, you must use the <code>Rd</code> <code>\subsection{}</code> command, as follows:</p>
+
+<pre><code class="r">#&#39; @section Warning:
+#&#39; You must not call this function unless ...
+#&#39;
+#&#39; \subsection{Exceptions}{
+#&#39;    Apart from the following special cases...
+#&#39; }
+</code></pre>
+
+<h2>Back references</h2>
+
+<p>The original source location is added as a comment
+to the second line of each generated <code>.Rd</code> file in the following form:</p>
+
+<pre><code>% Please edit documentation in ...
+</code></pre>
+
+<p><code>roxygen2</code> tries to capture all locations from which the documentation is assembled.
+For code that <em>generates</em> R code with Roxygen comments (e.g., the <code>Rcpp</code> package),
+the <code>@backref</code> tag is provided.
+This allows specifying the &ldquo;true&rdquo; source of the documentation,
+and will substitute the default list of source files.
+Use one tag per source file:</p>
+
+<pre><code class="r">#&#39; @backref src/file.cpp
+#&#39; @backref src/file.h
+</code></pre>
+
+</body>
+
+</html>

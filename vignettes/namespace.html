@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Package namespace</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Managing your NAMESPACE}
+-->
+
+<h1>Package namespace</h1>
+
+<p>The package <code>NAMESPACE</code> is one of the most confusing parts of building a package. Roxygen2 aims to make it as easy as possible to build a package that is a well-behaved member of the R ecosystem. This is a little frustrating at first, but soon becomes second-nature.</p>
+
+<h2>Exports</h2>
+
+<p>For a function to be usable outside of your package, you must <strong>export</strong> it. By default roxygen2 doesn&#39;t export anything from your package. If you want an object to be publically available, you must explicitly tag it with <code>@export</code>.</p>
+
+<p>Use the following guidelines to decide what to export:</p>
+
+<ul>
+<li><p>Functions: export functions that you want to make available. Exported
+functions must be documented, and you must be cautious when changing their
+interface.</p></li>
+<li><p>Datasets: all datasets are publicly available. They exist outside of the
+package namespace and should not be exported.</p></li>
+<li><p>S3 classes: if you want others to be able to create instances of the class
+<code>@export</code> the constructor function.</p></li>
+<li><p>S3 generics: the generic is a function so <code>@export</code> if you want it to
+be usable outside the package</p></li>
+<li><p>S3 methods: every S3 method <em>must</em> be exported, even if the generic is not.
+Otherwise the S3 method table will not be generated correctly and internal
+generics will not find the correct method.</p></li>
+<li><p>S4 classes: if you want others to be able to extend your class, <code>@export</code> it.
+If you want others to create instances of your class, but not extend it,
+<code>@export</code> the constructor function, but not the class.</p>
+
+<pre><code class="R">  # Can extend and create
+  #&#39; @export
+  setClass(&quot;A&quot;)
+
+  # Can extend, but constructor not exported
+  #&#39; @export
+  B &lt;- setClass(&quot;B&quot;)
+
+  # Can create, but not extend
+  #&#39; @export C
+  C &lt;- setClass(&quot;C&quot;)
+
+  # Can create and extend
+  #&#39; @export D
+  #&#39; @exportClass D
+  D &lt;- setClass(&quot;D&quot;)
+</code></pre></li>
+<li><p>S4 generics: <code>@export</code> if you want the generic to be publicly usable.</p></li>
+<li><p>S4 methods: you only need to <code>@export</code> methods for generics that you
+did not define. But <code>@export</code>ing every method is a good idea as it
+will not cause problems and prevents you from forgetting to export an
+important method.</p></li>
+<li><p>RC classes: the same principles apply as for S4 classes. <code>@export</code>
+will only export the class.</p></li>
+</ul>
+
+<h2>Imports</h2>
+
+<p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package. Only unique directives are saved to the <code>NAMESPACE</code> file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.</p>
+
+<p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>.  Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code>::</code>.</p>
+
+<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make available without using <code>::</code>.</p>
+
+<p>If you want to add a new method to an S3 generic, import it with <code>@importFrom pkg generic</code>.</p>
+
+<p>If you are using S4 you may also need:</p>
+
+<ul>
+<li><p><code>@importClassesFrom package classa classb ...</code> to import selected S4 classes.</p></li>
+<li><p><code>@importMethodsFrom package methoda methodb ...</code> to import selected S4 methods.</p></li>
+</ul>
+
+<p>To import compiled code from another package, use <code>@useDynLib</code></p>
+
+<ul>
+<li><p><code>@useDynLib package</code> imports all compiled functions.</p></li>
+<li><p><code>@useDynLib package routinea routineb</code> imports selected compiled functions.</p></li>
+<li><p>Any <code>@useDynLib</code> specification containing a comma, e.g.
+<code>@useDynLib mypackage, .registration = TRUE</code> will be inserted as is
+into the the NAMESPACE, e.g. <code>useDynLib(mypackage, .registration = TRUE)</code></p></li>
+</ul>
+
+</body>
+
+</html>

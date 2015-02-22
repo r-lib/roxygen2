@@ -1,6 +1,6 @@
 parse_package <- function(base_path, load_code) {
   env <- load_code(base_path)
-  parsed <- lapply(r_files(base_path), parse_file, env = env)
+  parsed <- lapply(package_files(base_path), parse_file, env = env)
   blocks <- unlist(parsed, recursive = FALSE)
 
   list(env = env, blocks = blocks)

@@ -41,14 +41,7 @@ update_collate <- function(base_path) {
   old <- read.description(desc_path)
 
   new <- old
-  new$Collate <- paste0("'", collate, "'", collapse = " ")
-
-  # Write new out and read it in again to get exactly the same formatting
-  # as old, so the comparison works
-  desc_tmp <- tempfile()
-  on.exit(unlink(desc_tmp))
-  write.description(new, desc_tmp)
-  new <- read.description(desc_tmp)
+  new$Collate <- paste0("'", collate, "'", collapse = "\n")
 
   if (!identical(old, new)) {
     cat('Updating collate directive in ', desc_path, "\n")

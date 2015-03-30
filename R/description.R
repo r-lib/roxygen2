@@ -27,12 +27,14 @@ cat.description <- function(field, value, file='') {
     if (field %in% c("Collate")) {
       # Individual lines
       width <- 0L
+      out <- wrap_field_if_necessary(field, value, wrap.threshold = width)
     } else if (field %in% c("Authors@R")) {
-      # No wrapping
-      width <- Inf
+      # No processing
+      out <- paste0(field, ": ", value)
+    } else {
+      out <- wrap_field_if_necessary(field, value, wrap.threshold = width)
     }
 
-    out <- wrap_field_if_necessary(field, value, wrap.threshold = width)
   }
 
   cat(out, sep='\n', file=file, append=TRUE)

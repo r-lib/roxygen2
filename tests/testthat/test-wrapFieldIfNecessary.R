@@ -67,15 +67,15 @@ test_that("Infinity threshold turns off wrapping", {
 test_that("Whitespace in Authors@R field of DESCRIPTION is preserved", {
     desc_2 <- read.description("description-example_2.txt")
     authors_at_R_raw <- "Authors@R: c(
-    person('Alan Turing', role = c('auth', 'cre', 'cph'),
-           email = 'alan@turing.fake',
-           comment = c('As this is a fake package, as you may have guessed, authorship'
-                       'information should not be taken seriously either.'),
-    person('Alonzo Church', role = 'ctb',
-            email = 'alonzo@church.fake'),
-    person('Grace Murray Hopper', role = 'auth',
-            email = 'grace@murray-hopper.fake'))"
+    person(\"Alan Turing\", role = c(\"auth\", \"cre\", \"cph\"),
+           email = \"alan@turing.fake\",
+           comment = c(\"As this is a fake package, as you may have guessed, authorship\"
+                       \"information should not be taken seriously either.\"),
+    person(\"Alonzo Church\", role = \"ctb\",
+            email = \"alonzo@church.fake\"),
+    person(\"Grace Murray Hopper\", role = \"auth\",
+            email = \"grace@murray-hopper.fake\"))"
     authors_at_R_formatted <- capture.output(cat.description("Authors@R", desc_2[["Authors@R"]], file = ''))
-    expect_equal(paste(authors_at_R_formatted, collapse = "\n"), authors_at_R_formatted)
+    expect_equal(authors_at_R_raw, paste(authors_at_R_formatted, collapse = "\n"))
   }
 )

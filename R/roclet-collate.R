@@ -72,7 +72,7 @@ generate_collate <- function(base_path) {
 
 find_includes <- function(path) {
   lines <- readLines(path, warn = FALSE)
-  re <- regexec("^\\s*#+' @include (.*)$", lines)
+  re <- regexec("^\\s*#+' ?@include (.*)$", lines)
   matches <- regmatches(lines, re)
   matches <- Filter(function(x) length(x) == 2, matches)
 

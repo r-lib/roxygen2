@@ -94,9 +94,9 @@ If you have a simple package, you can use `roxygenise()`, but for anything more 
   export with the `@export` tag
 
 * `rd_roclet`: produces Rd files by inspecting both function definitions and
-  roxygen2 comments in the source code.
+  roxygen2 comments in the source code
 
-* `vignette_roclet`: builds vignettes using `devtools::build_vignettes()`.
+* `vignette_roclet`: builds vignettes using `tools::buildVignette()`.
 
 By default, `roxygenise` will run the first three, but you can choose which ones to run using the `roclet` parameter, or field `Roxygen` in your `DESCRIPTION`:
 

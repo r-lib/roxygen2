@@ -116,6 +116,10 @@ same_contents <- function(path, contents) {
 
   contents <- paste0(paste0(contents, collapse = "\n"), "\n")
 
+  # Replace contents of first line by original file
+  first_line_file <- readLines(path, 1L)
+  contents <- gsub("^[^\n]*(\n.*$)", sprintf("%s\\1", first_line_file), contents)
+
   text_hash <- digest::digest(contents, serialize = FALSE)
   file_hash <- digest::digest(file = path)
 

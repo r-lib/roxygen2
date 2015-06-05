@@ -1,7 +1,9 @@
-# roxygen2 4.1.0.9000
+# roxygen2 4.1.1.9000
+
+# roxygen2 4.1.1
 
 * Formatting of the `Authors@R` field in the DESCRIPTION file is now retained 
-(@jranke, #330).
+  (@jranke, #330).
 
 * The collate roclet falls back to `base::strwrap()` when generating the
   collate field. This makes roxygen2 compatible with the next version of

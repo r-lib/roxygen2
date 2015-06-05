@@ -19,6 +19,7 @@ before_install:
   - ./travis-tool.sh bootstrap
 install:
   - ./travis-tool.sh install_deps
+  - sudo Rscript -e "library(stringi); stri_install_icudt()"
 # Configuration options below this line are suggested options.
 notifications:
   email:

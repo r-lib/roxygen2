@@ -20,3 +20,9 @@ notifications:
   email:
     on_success: change
     on_failure: change
+
+# One can also restrict the branches to test, see
+#   http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build
+branches:
+  except:
+    - /-expt$/

@@ -10,8 +10,11 @@ env:
     - R_BUILD_ARGS='--no-manual'
     - R_CHECK_ARGS='--no-manual --as-cran'
 
+r_github_packages:
+  - Rexamine/stringi
+
 install:
-  - sudo Rscript -e "library(stringi); stri_install_icudt()"
+  - Rscript -e "library(stringi); stri_install_icudt()"
 
 notifications:
   email:

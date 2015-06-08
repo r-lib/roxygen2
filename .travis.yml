@@ -1,5 +1,4 @@
 # Sample .travis.yml for R projects.
-#
 # See README.md for instructions.
 
 language: r

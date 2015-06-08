@@ -13,7 +13,7 @@ env:
 r_github_packages:
   - Rexamine/stringi
 
-install:
+after_success:
   - Rscript -e "library(stringi); stri_install_icudt()"
 
 notifications:

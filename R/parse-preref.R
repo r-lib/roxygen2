@@ -78,7 +78,7 @@ process_description <- function(intro, other_pieces) {
     description <- c("description", title[2] %||% piece("title"))
   }
 
-  # Every thing else = details, combined with @details.
+  # Every thing else = details, combined with @details, in parse_elements
   if (length(paragraphs) == 0 || paragraphs == "") paragraphs <- NULL
   if (length(paragraphs) > 0) {
     details <- c("details", paste(paragraphs, collapse = "\n\n"))

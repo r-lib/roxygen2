@@ -57,6 +57,7 @@ package_files <- function(path) {
   all <- r_files(path)
   collate <- scan(text = desc$Collate %||% "", what = "", sep = " ",
     quiet = TRUE)
+  collate <- file.path(path, "R", collate)
 
   c(collate, setdiff(all, collate))
 }

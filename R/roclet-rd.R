@@ -85,7 +85,7 @@ roc_process.had <- function(roclet, parsed, base_path, options = list()) {
 }
 
 invert <- function(x) {
-  if (length(x) == 0) return()
+  if (length(x) %==% 0L) return()
   unstack(rev(stack(x)))
 }
 get_values <- function(topics, tag) {
@@ -257,7 +257,7 @@ process.docType <- function(partitum) {
   if (is.null(doctype)) return()
   tags <- list(new_tag("docType", doctype))
 
-  if (doctype == "package") {
+  if (doctype %==% "package") {
     name <- partitum$name
     if (!str_detect(name, "-package")) {
       tags <- c(tags, new_tag("alias", paste0(name, "-package")))
@@ -269,7 +269,7 @@ process.docType <- function(partitum) {
 
 process_had_tag <- function(partitum, tag, f = new_tag) {
   matches <- partitum[names(partitum) == tag]
-  if (length(matches) == 0) return()
+  if (length(matches) %==% 0L) return()
 
   unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)
 }
@@ -290,7 +290,7 @@ process_field <- function(block) {
 
 process_def_tag <- function(block, tag) {
   tags <- block[names(block) == tag]
-  if (length(tags) == 0) return()
+  if (length(tags) %==% 0L) return()
 
   desc <- str_trim(sapply(tags, "[[", "description"))
   names(desc) <- sapply(tags, "[[", "name")

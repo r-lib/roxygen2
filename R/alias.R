@@ -1,7 +1,7 @@
 alias_tag <- function(partitum, name, alias) {
   parts <- partitum[names(partitum) == "aliases"]
 
-  if (length(parts) == 0) {
+  if (length(parts) %==% 0L) {
     aliases <- character()
   } else {
     aliases <- str_split(str_trim(unlist(parts, use.names = FALSE)), "\\s+")[[1]]

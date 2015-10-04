@@ -19,7 +19,7 @@ template_eval <- function(template_path, vars) {
 process_templates <- function(partitum, base_path) {
   template_locs <- names(partitum) == "template"
   template_tags <- partitum[template_locs]
-  if (length(template_tags) == 0) return(partitum)
+  if (length(template_tags) %==% 0L) return(partitum)
 
   templates <- unlist(template_tags, use.names = FALSE)
   paths <- vapply(templates, template_find, base_path = base_path,

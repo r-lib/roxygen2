@@ -1,7 +1,7 @@
 get_rd <- function(topic, package = NULL) {
   help_call <- substitute(help(t, p), list(t = topic, p = package))
   top <- eval(help_call)
-  if (length(top) == 0) return(NULL)
+  if (length(top) %==% 0L) return(NULL)
   
   internal_f("utils", ".getHelpFile")(top)
 }
@@ -12,7 +12,7 @@ get_rd <- function(topic, package = NULL) {
 get_tags <- function(rd, tag) {
   rd_tag <- function(x) attr(x, "Rd_tag")
 
-  Filter(function(x) rd_tag(x) == tag, rd)
+  Filter(function(x) rd_tag(x) %==% tag, rd)
 }
 
 rd2rd <- function(x) {

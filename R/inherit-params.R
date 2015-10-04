@@ -14,13 +14,13 @@ process_inherit_params <- function(topics) {
 
     needed <- get_tag(topic, "formals")$values
     missing <- setdiff(needed, documented)
-    if (length(missing) == 0) next
+    if (length(missing) %==% 0L) next
 
     for(inheritor in inherit_index[[topic_name]]) {
       inherited <- find_params(inheritor, topics, name_index)
 
       to_add <- intersect(missing, names(inherited))
-      if (length(to_add) == 0) next
+      if (length(to_add) %==% 0L) next
       missing <- setdiff(missing, names(inherited))
 
       add_tag(topic, new_tag("param", inherited[to_add]))

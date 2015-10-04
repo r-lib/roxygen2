@@ -55,7 +55,7 @@ generate_collate <- function(base_path) {
   names(includes) <- paths
 
   n <- sum(vapply(includes, length, integer(1)))
-  if (n == 0) return()
+  if (n %==% 0L) return()
 
   topo <- topo_sort()
   for (path in paths) {
@@ -74,9 +74,9 @@ find_includes <- function(path) {
   lines <- readLines(path, warn = FALSE)
   re <- regexec("^\\s*#+' @include (.*)$", lines)
   matches <- regmatches(lines, re)
-  matches <- Filter(function(x) length(x) == 2, matches)
+  matches <- Filter(function(x) length(x) %==% 2L, matches)
 
-  if (length(matches) == 0) return()
+  if (length(matches) %==% 0L) return()
 
   includes <- vapply(matches, "[[", 2, FUN.VALUE = character(1))
   includes <- str_trim(includes)

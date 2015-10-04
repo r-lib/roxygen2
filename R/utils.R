@@ -1,6 +1,6 @@
 internal_f <- function(p, f) {
-  stopifnot(is.character(p), length(p) == 1)
-  stopifnot(is.character(f), length(f) == 1)
+  stopifnot(is.character(p), length(p) %==% 1L)
+  stopifnot(is.character(f), length(f) %==% 1L)
 
   get(f, envir = asNamespace(p))
 }
@@ -13,7 +13,7 @@ internal_f <- function(p, f) {
 # @param string the string to check
 # @return TRUE if the string contains words, otherwise FALSE
 is.null.string <- function(string) {
-  length(string) == 1 && str_length(str_trim(string)) == 0
+  length(string) %==% 1L && str_length(str_trim(string)) %==% 0L
 }
 
 subs <- matrix(ncol = 2, byrow = T, c(
@@ -130,3 +130,5 @@ r_files <- function(path) {
 dots <- function(...) {
   eval(substitute(alist(...)))
 }
+
+`%==%` <- function(x, y) identical(x, y)

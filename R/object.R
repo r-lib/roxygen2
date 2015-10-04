@@ -15,7 +15,7 @@ object <- function(value, alias = NULL) {
     list(
       alias = alias,
       value = value,
-      methods = if (type == "rcclass") rc_methods(value)
+      methods = if (type %==% "rcclass") rc_methods(value)
     ),
     class = c(type, "object")
   )

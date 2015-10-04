@@ -23,6 +23,6 @@ default_topic_name.rcmethod <- function(x) {
 
 #' @export
 default_topic_name.default <- function(x) {
-  if (length(x$alias) == 1) return(x$alias)
+  if (length(x$alias) %==% 1L) return(x$alias)
   default_name(x)
 }

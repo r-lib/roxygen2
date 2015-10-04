@@ -12,7 +12,7 @@
 #' @param env Base environment in which to look for function defintion.
 #' @export
 is_s3_generic <- function(name, env = parent.frame()) {
-  if (name == "") return(FALSE)
+  if (name %==% "") return(FALSE)
   if (!exists(name, envir = env)) return(FALSE)
 
   f <- get(name, envir = env)
@@ -34,7 +34,7 @@ calls_use_method <- function(x) {
   if (!is.call(x)) return(FALSE)
 
   if (identical(x[[1]], quote(UseMethod))) return(TRUE)
-  if (length(x) == 1) return(FALSE)
+  if (length(x) %==% 1L) return(FALSE)
   # Recursive case: arguments to call
   for (arg in as.list(x[-1])) {
     if (calls_use_method(arg)) return(TRUE)
@@ -58,7 +58,7 @@ find_generic <- function(name, env = parent.frame()) {
   n <- length(pieces)
 
   # No . in name, so can't be method
-  if (n == 1) return(NULL)
+  if (n %==% 1L) return(NULL)
 
   for(i in seq_len(n - 1)) {
     generic <- paste0(pieces[seq_len(i)], collapse = ".")
@@ -89,7 +89,7 @@ add_s3_metadata <- function(val, name, env, override = NULL) {
 }
 
 s3_method <- function(f, method, env) {
-  stopifnot(length(method) == 2, is.character(method))
+  stopifnot(length(method) %==% 2L, is.character(method))
 
   class(f) <- c("s3method", "function")
   attr(f, "s3method") <- method

@@ -1,6 +1,6 @@
 process_describeIn <- function(block, env) {
   tags <- block[names(block) == "describeIn"]
-  if (length(tags) == 0) return(list(rdname = NULL, tag = NULL))
+  if (length(tags) %==% 0L) return(list(rdname = NULL, tag = NULL))
   if (length(tags) > 1) {
     stop("May only use one @describeIn per block", call. = FALSE)
   }
@@ -49,28 +49,28 @@ build_label <- function(src, dest) {
   src_type <- class(src)[1]
   dest_type <- class(dest)[1]
 
-  if (dest_type == "s4class" && src_type == "s4method") {
+  if (dest_type %==% "s4class" && src_type %==% "s4method") {
     # Label S4 methods in class with their generic
     type <- "class"
     label <- as.character(src$value@generic)
-  } else if (dest_type == "s4generic" && src_type == "s4method") {
+  } else if (dest_type %==% "s4generic" && src_type %==% "s4method") {
     # Label S4 methods in generic with their signature
     type <- "generic"
     sig <- src$value@defined
-    if (length(sig) == 1) {
+    if (length(sig) %==% 1L) {
       label <- as.character(sig)
     } else {
       label <- paste0(names(sig), " = ", sig, collapse = ",")
     }
-  } else if (dest_type == "function" && src_type == "s3method") {
+  } else if (dest_type %==% "function" && src_type %==% "s3method") {
     # Assuming you document S3 methods in the class constructor
     type <- "class"
     label <- attr(src$value, "s3method")[1]
-  } else if (dest_type == "s3generic" && src_type == "s3method") {
+  } else if (dest_type %==% "s3generic" && src_type %==% "s3method") {
     # Label S3 methods in generic with their class
     type <- "generic"
     label <- attr(src$value, "s3method")[2]
-  } else if (dest_type %in% c("function", "data") && src_type == "function") {
+  } else if (dest_type %in% c("function", "data") && src_type %==% "function") {
     # Multiple functions in one Rd labelled with function names
     type <- "function"
     label <- default_name(src)

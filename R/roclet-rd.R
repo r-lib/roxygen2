@@ -133,7 +133,6 @@ roclet_rd_one <- function(partitum, base_path, env) {
     add_tag(rd, new_tag("formals", names(formals)))
   }
 
-  add_tag(rd, process_description(partitum, base_path))
   add_tag(rd, process_methods(partitum))
 
   add_tag(rd, usage_tag(partitum))
@@ -141,6 +140,9 @@ roclet_rd_one <- function(partitum, base_path, env) {
   add_tag(rd, process_slot(partitum))
   add_tag(rd, process_field(partitum))
   add_tag(rd, process.docType(partitum))
+  add_tag(rd, process_had_tag(partitum, 'title'))
+  add_tag(rd, process_had_tag(partitum, 'description'))
+  add_tag(rd, process_had_tag(partitum, 'details'))
   add_tag(rd, process_had_tag(partitum, 'note'))
   add_tag(rd, process_had_tag(partitum, 'family'))
   add_tag(rd, process_had_tag(partitum, 'inheritParams'))
@@ -197,55 +199,6 @@ clean.had <- function(roclet, base_path) {
 
   unlink(rd[made_by_me])
 }
-
-# Process title, description and details.
-#
-# Split the introductory matter into its description followed
-# by details (separated by a blank line).
-process_description <- function(partitum, base_path) {
-  intro <- partitum$introduction
-
-  if (!is.null(intro)) {
-    paragraphs <- str_trim(str_split(intro, fixed('\n\n'))[[1]])
-  } else {
-    paragraphs <- NULL
-  }
-
-  # 1st paragraph = title (unless has @title)
-  if (!is.null(partitum$title)) {
-    title <- partitum$title
-  } else if (length(paragraphs) > 0) {
-    title <- paragraphs[1]
-    paragraphs <- paragraphs[-1]
-  } else {
-    title <- NULL
-  }
-
-
-  # 2nd paragraph = description (unless has @description)
-  if (!is.null(partitum$description)) {
-    description <- partitum$description
-  } else if (length(paragraphs) > 0) {
-    description <- paragraphs[1]
-    paragraphs <- paragraphs[-1]
-  } else {
-    # Description is required, so if missing description, repeat title.
-    description <- title
-  }
-
-  # Every thing else = details, combined with @details.
-  details <- c(paragraphs, partitum$details)
-  if (length(details) > 0) {
-    details <- paste(details, collapse = "\n\n")
-  } else {
-    details <- NULL
-  }
-
-  c(new_tag("title", title),
-    new_tag("description", description),
-    new_tag("details", details))
-}
-
 
 process_methods <- function(block) {
   obj <- block$object

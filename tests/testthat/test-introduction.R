@@ -71,3 +71,21 @@ test_that("no ending punctuation does not produce ellipsis", {
   expect_equal(get_tag(out, "title")$values, "Whether a number is odd")
 })
 
+test_that("details are merged if needed", {
+  out <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description
+    #'
+    #' Details1
+    #'
+    #' Details2
+    #'
+    #' @details Details3
+    #'
+    #' Details4
+    foo <- function(x) {}")[[1]]
+
+  expect_equal(get_tag(out, "details")$values,
+               "Details1\n\nDetails2\n\nDetails3\n\nDetails4")
+})

@@ -86,7 +86,7 @@ roc_process.had <- function(roclet, parsed, base_path, options = list()) {
 
 invert <- function(x) {
   if (length(x) == 0) return()
-  unstack(rev(stack(x)))
+  utils::unstack(rev(utils::stack(x)))
 }
 get_values <- function(topics, tag) {
   tags <- lapply(topics, get_tag, tag)

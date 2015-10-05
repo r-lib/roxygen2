@@ -143,7 +143,9 @@ format.usage_tag <- function(x, ...) {
 #' @export
 format.param_tag <- function(x, ..., wrap = TRUE) {
   names <- names(x$values)
-  dups <- duplicated(names)
+
+  # add space to multiple arguments so they can wrap
+  names <- gsub(",", ", ", names)
 
   items <- paste0("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
   if (wrap) {

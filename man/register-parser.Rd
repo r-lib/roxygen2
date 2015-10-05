@@ -10,7 +10,7 @@ register.preref.parser(key, parser)
 register.preref.parsers(parser, ...)
 }
 \arguments{
-\item{key,...}{Tag name(s).}
+\item{key, ...}{Tag name(s).}
 
 \item{parser}{Parser callback to register, a function with arguments
 \code{key} and \code{expression}.}

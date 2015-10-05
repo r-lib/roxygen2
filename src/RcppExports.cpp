@@ -9,91 +9,67 @@ using namespace Rcpp;
 bool rdComplete(std::string string);
 RcppExport SEXP roxygen2_rdComplete(SEXP stringSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< std::string >::type string(stringSEXP );
-        bool __result = rdComplete(string);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type string(stringSEXP);
+    __result = Rcpp::wrap(rdComplete(string));
+    return __result;
 END_RCPP
 }
 // leadingSpaces
 IntegerVector leadingSpaces(CharacterVector lines);
 RcppExport SEXP roxygen2_leadingSpaces(SEXP linesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< CharacterVector >::type lines(linesSEXP );
-        IntegerVector __result = leadingSpaces(lines);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< CharacterVector >::type lines(linesSEXP);
+    __result = Rcpp::wrap(leadingSpaces(lines));
+    return __result;
 END_RCPP
 }
 // preparse_block
 List preparse_block(std::string x);
 RcppExport SEXP roxygen2_preparse_block(SEXP xSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< std::string >::type x(xSEXP );
-        List __result = preparse_block(x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    __result = Rcpp::wrap(preparse_block(x));
+    return __result;
 END_RCPP
 }
 // preparse_file
 List preparse_file(std::string filePath);
 RcppExport SEXP roxygen2_preparse_file(SEXP filePathSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< std::string >::type filePath(filePathSEXP );
-        List __result = preparse_file(filePath);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type filePath(filePathSEXP);
+    __result = Rcpp::wrap(preparse_file(filePath));
+    return __result;
 END_RCPP
 }
 // splitByWhitespace
 std::vector<std::string> splitByWhitespace(std::string string);
 RcppExport SEXP roxygen2_splitByWhitespace(SEXP stringSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< std::string >::type string(stringSEXP );
-        std::vector<std::string> __result = splitByWhitespace(string);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type string(stringSEXP);
+    __result = Rcpp::wrap(splitByWhitespace(string));
+    return __result;
 END_RCPP
 }
 // wrapString
-std::string wrapString(std::string string, int width = 80, int indent = 2);
+std::string wrapString(std::string string, int width, int indent);
 RcppExport SEXP roxygen2_wrapString(SEXP stringSEXP, SEXP widthSEXP, SEXP indentSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< std::string >::type string(stringSEXP );
-        Rcpp::traits::input_parameter< int >::type width(widthSEXP );
-        Rcpp::traits::input_parameter< int >::type indent(indentSEXP );
-        std::string __result = wrapString(string, width, indent);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type string(stringSEXP);
+    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
+    Rcpp::traits::input_parameter< int >::type indent(indentSEXP);
+    __result = Rcpp::wrap(wrapString(string, width, indent));
+    return __result;
 END_RCPP
 }

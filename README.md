@@ -1,6 +1,7 @@
 # roxygen2
 
 [![Build Status](https://travis-ci.org/klutometis/roxygen.png)](https://travis-ci.org/klutometis/roxygen)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/roxygen2)](http://cran.r-project.org/package=roxygen2)
 
 > all' hileth', Hephaiste; didou d'areten te kai olbon.*
 > --Homer, 7th century BCE

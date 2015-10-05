@@ -79,6 +79,7 @@ find_includes <- function(path) {
   if (length(matches) == 0) return()
 
   includes <- vapply(matches, "[[", 2, FUN.VALUE = character(1))
+  includes <- str_trim(includes)
   sort_c(unlist(strsplit(includes, " ", fixed = TRUE)))
 }
 

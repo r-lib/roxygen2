@@ -1,4 +1,13 @@
-# roxygen2 4.1.0.9000
+# roxygen2 4.1.1.9000
+
+* Parser callbacks registered with `register.preref.parser` are now called
+  for fields parsed from the "introduction" (the text before the first tag)
+  (@gaborcsardi, #370)
+
+# roxygen2 4.1.1
+
+* Formatting of the `Authors@R` field in the DESCRIPTION file is now retained 
+  (@jranke, #330).
 
 * roxygen2 now parses the source code files in the order specified in the
   `Collate:` entry in the DESCRIPTION file. This improves the ordering of the

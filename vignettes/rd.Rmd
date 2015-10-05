@@ -436,7 +436,7 @@ times <- function(x, y) x * y
 
 ## Sections
 
-You can add arbitrary sections to the documentation for any object with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed a colon. Titles may only take one line.
+You can add arbitrary sections to the documentation for any object with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed by a colon. Titles may only take one line.
 
 ```{r}
 #' @section Warning:

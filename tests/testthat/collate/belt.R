@@ -1,3 +1,3 @@
-#' @include pants.R
+#' @include pants.R 
 #' @include shirt.R
 NULL

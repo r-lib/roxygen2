@@ -15,20 +15,24 @@ parse.preref <- function(lines) {
   ## Compress the escaped delimeters.
   elements <- str_replace_all(elements, fixed("@@"), "@")
 
-  parsed <- parse_elements(elements[-1])
-
-  if (elements[[1]] != "") {
-    check_rd(NULL, elements[[1]])
-    parsed$introduction <- str_trim(elements[[1]])
-  }
-  parsed
+  parse_elements(elements)
 }
 
 # Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '\\s*#+\' ?'
 
 parse_elements <- function(elements) {
-  pieces <- str_split_fixed(elements, "[[:space:]]+", 2)
+
+  pieces <- str_split_fixed(elements[-1], "[[:space:]]+", 2)
+  desc <- process_description(str_trim(elements[1]), pieces)
+  pieces <- rbind(desc, pieces, deparse.level = 0)
+
+  ## Merge multiple @details tags, one might have come from the intro
+  didx <- which(pieces[,1] == "details")
+  if (length(didx) > 1) {
+    pieces[didx[1], 2] <- paste(pieces[didx, 2], collapse = "\n\n")
+    pieces <- pieces[- didx[-1], , drop = FALSE]
+  }
 
   parse_element <- function(tag, value) {
     tag_parser <- preref.parsers[[tag]] %||% parse.unknown
@@ -36,6 +40,53 @@ parse_elements <- function(elements) {
   }
 
   Map(parse_element, pieces[, 1], pieces[, 2])
+}
+
+# Process title, description and details.
+#
+# Split the introductory matter into its description followed
+# by details (separated by a blank line).
+process_description <- function(intro, other_pieces) {
+
+  if (length(intro) == 0 || intro == "") return(NULL)
+
+  paragraphs <- str_trim(str_split(intro, fixed('\n\n'))[[1]])
+
+  piece <- function(p) {
+    pc <- paste(other_pieces[other_pieces[,1] == p, 2], collapse = "\n")
+    if (length(pc) > 0 && !identical(pc, "")) pc else NULL
+  }
+
+  # 1st paragraph = title (unless has @title)
+  if (!is.null(piece("title"))) {
+    title <- NULL
+  } else if (length(paragraphs) > 0) {
+    title <- c("title", paragraphs[1])
+    paragraphs <- paragraphs[-1]
+  } else {
+    title <- c("title", "")
+  }
+
+  # 2nd paragraph = description (unless has @description)
+  if (!is.null(piece("description"))) {
+    description <- NULL
+  } else if (length(paragraphs) > 0) {
+    description <- c("description", paragraphs[1])
+    paragraphs <- paragraphs[-1]
+  } else {
+    # Description is required, so if missing description, repeat title.
+    description <- c("description", title[2] %||% piece("title"))
+  }
+
+  # Every thing else = details, combined with @details, in parse_elements
+  if (length(paragraphs) == 0 || paragraphs == "") paragraphs <- NULL
+  if (length(paragraphs) > 0) {
+    details <- c("details", paste(paragraphs, collapse = "\n\n"))
+  } else {
+    details <- NULL
+  }
+
+  rbind(title, description, details, deparse.level = 0)
 }
 
 parse.unknown <- function(key, rest) {

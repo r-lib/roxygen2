@@ -1,5 +1,11 @@
 # roxygen2 4.1.1.9000
 
+* roxygen2 now parses the source code files in the order specified in the
+  `Collate:` entry in the DESCRIPTION file. This improves the ordering of the
+  generated documentation when using `@describeIn` and/or `@rdname` split across
+  several .R files, as may happen when working wIth S4 classes, generic 
+  functions and methods (#323, #324).
+
 * Parser callbacks registered with `register.preref.parser` are now called
   for fields parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370)
@@ -8,12 +14,6 @@
 
 * Formatting of the `Authors@R` field in the DESCRIPTION file is now retained 
   (@jranke, #330).
-
-* roxygen2 now parses the source code files in the order specified in the
-  `Collate:` entry in the DESCRIPTION file. This improves the ordering of the
-  generated documentation when using `@describeIn` and/or `@rdname` split across
-  several .R files, as may happen when working wIth S4 classes, generic 
-  functions and methods (#323, #324).
 
 * The collate roclet falls back to `base::strwrap()` when generating the
   collate field. This makes roxygen2 compatible with the next version of

@@ -18,6 +18,9 @@
   for fields parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370)
 
+* Empty `NAMESPACE` file is written if it is maintained by `roxygen2`
+  (@krlmlr, #348).
+
 # roxygen2 4.1.1
 
 * Formatting of the `Authors@R` field in the DESCRIPTION file is now retained 

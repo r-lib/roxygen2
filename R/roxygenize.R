@@ -88,5 +88,12 @@ load_options <- function(base_path) {
     wrap = FALSE,
     roclets = c("collate", "namespace", "rd")
   )
+
+  unknown_opts <- setdiff(names(opts), names(defaults))
+  if (length(unknown_opts) > 0) {
+    warning("Unknown Roxygen options ", paste(unknown_opts, collapse = ", "),
+            ".\nSupported options: ", paste(names(defaults), collapse = ", "))
+  }
+
   modifyList(defaults, opts)
 }

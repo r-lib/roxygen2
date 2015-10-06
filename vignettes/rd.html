@@ -530,6 +530,7 @@ first line of <code>str()</code> output</p></li>
 #&#39; @source \url{http://www.diamondse.info/}
 #&#39; @name diamonds
 NULL
+#&gt; NULL
 </code></pre>
 
 <h2>Documenting packages</h2>
@@ -552,6 +553,7 @@ NULL
 #&#39; @docType package
 #&#39; @name roxygen2
 NULL
+#&gt; NULL
 </code></pre>
 
 <p>Some notes:</p>
@@ -637,6 +639,7 @@ times &lt;- function(x, y) x * y
 #&#39; @param x,y numeric vectors.
 #&#39; @name arith
 NULL
+#&gt; NULL
 
 #&#39; @rdname arith
 add &lt;- function(x, y) x + y
@@ -647,7 +650,7 @@ times &lt;- function(x, y) x * y
 
 <h2>Sections</h2>
 
-<p>You can add arbitrary sections to the documentation for any object with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed a colon. Titles may only take one line.</p>
+<p>You can add arbitrary sections to the documentation for any object with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed by a colon. Titles may only take one line.</p>
 
 <pre><code class="r">#&#39; @section Warning:
 #&#39; Do not operate heavy machinery within 8 hours of using this function.
@@ -661,6 +664,22 @@ times &lt;- function(x, y) x * y
 #&#39; \subsection{Exceptions}{
 #&#39;    Apart from the following special cases...
 #&#39; }
+</code></pre>
+
+<p>Sections with identical titles will be merged.
+This is especially useful in conjunction with the <code>@rdname</code> tag:</p>
+
+<pre><code class="r">#&#39; Basic arithmetic
+#&#39;
+#&#39; @param x,y numeric vectors.
+#&#39; @section Neutral elements:
+#&#39;   Addition: 0.
+add &lt;- function(x, y) x + y
+
+#&#39; @rdname add
+#&#39; @section Neutral elements:
+#&#39;   Multiplication: 1.
+times &lt;- function(x, y) x * y
 </code></pre>
 
 <h2>Back references</h2>

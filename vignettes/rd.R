@@ -1,8 +1,9 @@
-## ----, echo = FALSE, message = FALSE-------------------------------------
+## ---- echo = FALSE, message = FALSE--------------------------------------
 knitr::opts_chunk$set(
   comment = "#>",
   error = FALSE,
-  tidy = FALSE
+  tidy = FALSE,
+  collapse = TRUE
 )
 
 ## ------------------------------------------------------------------------
@@ -180,6 +181,19 @@ times <- function(x, y) x * y
 #' \subsection{Exceptions}{
 #'    Apart from the following special cases...
 #' }
+
+## ------------------------------------------------------------------------
+#' Basic arithmetic
+#'
+#' @param x,y numeric vectors.
+#' @section Neutral elements:
+#'   Addition: 0.
+add <- function(x, y) x + y
+
+#' @rdname add
+#' @section Neutral elements:
+#'   Multiplication: 1.
+times <- function(x, y) x * y
 
 ## ------------------------------------------------------------------------
 #' @backref src/file.cpp

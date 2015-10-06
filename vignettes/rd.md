@@ -321,6 +321,7 @@ To show how everything fits together, the example below is an excerpt from the r
 #' @source \url{http://www.diamondse.info/}
 #' @name diamonds
 NULL
+#> NULL
 ```
 
 ## Documenting packages
@@ -345,6 +346,7 @@ Package documentation should be placed in `pkgname.R`. Here's an example:
 #' @docType package
 #' @name roxygen2
 NULL
+#> NULL
 ```
 
 Some notes:
@@ -432,6 +434,7 @@ Or, you can create a dummy documentation file by documenting `NULL` and setting 
 #' @param x,y numeric vectors.
 #' @name arith
 NULL
+#> NULL
 
 #' @rdname arith
 add <- function(x, y) x + y
@@ -442,7 +445,7 @@ times <- function(x, y) x * y
 
 ## Sections
 
-You can add arbitrary sections to the documentation for any object with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed a colon. Titles may only take one line.
+You can add arbitrary sections to the documentation for any object with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed by a colon. Titles may only take one line.
 
 
 ```r
@@ -461,6 +464,25 @@ To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
 #'    Apart from the following special cases...
 #' }
 ```
+
+Sections with identical titles will be merged.
+This is especially useful in conjunction with the `@rdname` tag:
+
+
+```r
+#' Basic arithmetic
+#'
+#' @param x,y numeric vectors.
+#' @section Neutral elements:
+#'   Addition: 0.
+add <- function(x, y) x + y
+
+#' @rdname add
+#' @section Neutral elements:
+#'   Multiplication: 1.
+times <- function(x, y) x * y
+```
+
 
 ## Back references
 

@@ -51,6 +51,9 @@ roxygenize <- function(package.dir = ".",
     roclets <- setdiff(roclets, "collate")
   }
 
+  if (length(roclets) == 0)
+    return(invisible())
+
   parsed <- parse_package(base_path, load_code)
 
   roclets <- paste0(roclets, "_roclet", sep = "")

@@ -41,11 +41,11 @@ update_collate <- function(base_path) {
   old <- read.description(desc_path)
 
   new <- old
-  new$Collate <- paste0("'", collate, "'", collapse = " ")
-  write.description(new, desc_path)
+  new$Collate <- paste0("'", collate, "'", collapse = "\n")
 
-  if (!identical(old, read.description(desc_path))) {
+  if (!identical(old, new)) {
     cat('Updating collate directive in ', desc_path, "\n")
+    write.description(new, desc_path)
   }
 }
 
@@ -79,6 +79,7 @@ find_includes <- function(path) {
   if (length(matches) == 0) return()
 
   includes <- vapply(matches, "[[", 2, FUN.VALUE = character(1))
+  includes <- str_trim(includes)
   sort_c(unlist(strsplit(includes, " ", fixed = TRUE)))
 }
 

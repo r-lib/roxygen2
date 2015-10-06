@@ -12,6 +12,15 @@ test_that("@param documents arguments", {
   expect_equivalent(args["z"], "a terminal letter")
 })
 
+test_that("grouped args get spaces", {
+  out <- roc_proc_text(rd_roclet(), "
+  #' @param a,z Two arguments an incipit letter
+  a <- function(a=1, z=2) {}")[[1]]
+
+  args <- get_tag(out, "param")
+  expect_match(format(args), "a, z")
+})
+
 test_that("multiple @inheritParam tags gathers all params", {
   out <- roc_proc_text(roc, "
     #' A.

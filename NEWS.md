@@ -18,6 +18,8 @@
   for fields parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370)
 
+* Space before `@include` is not necessary anymore (@krlmlr, #342).
+
 # roxygen2 4.1.1
 
 * Formatting of the `Authors@R` field in the DESCRIPTION file is now retained 

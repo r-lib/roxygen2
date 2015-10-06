@@ -81,7 +81,10 @@ doxygen_init <- function(pkg_path,doxy_file){
 
 #' Makes doxygen documentation
 #' @description Roclet making documentation from  
-#'    doxygen instructions in src/
+#'    doxygen instructions in src/, note that a doxygen configuration file 
+#'    inst/doxygen/Doxyfile is created. You can edit it if you wish but it would be 
+#'    removed by a call to the call method of this roclet.
+#'    
 #' @details The function \code{roc_output.doxygen} verifies the existence of a doxygen structure, if
 #'    needed create it 
 #'    and run doxygen. doxygen should be previously installed 
@@ -111,8 +114,8 @@ clean.doxygen <- function(roclet, results, base_path, options = list(),
 
 
 }
-#' @description The workhorse of the doxygen roclet, making if necessary a doxygen structure 
-#'      and 
+#' @description The workhorse of the doxygen roclet, making if necessary a doxygen configuration file
+#'      and launching doxygen on it
 #' @param pkg_path The root of the package to be treated
 #' @param doxygen A boolean: should doxygen be ran on documents in src?
 #'     the default is TRUE if a src folder exist and FALSE if not 

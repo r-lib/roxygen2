@@ -1,5 +1,8 @@
 # roxygen2 4.1.1.9000
 
+* Roxygen now records its version in a single place: the `RoxygenNote`
+  field in the `DESCRIPTION` (#338).
+
 * `\usage{}` is correctly generated for functions with string arguments 
   containing `"\""` (#265).
 

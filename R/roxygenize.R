@@ -40,6 +40,7 @@ roxygenize <- function(package.dir = ".",
   base_path <- normalizePath(package.dir)
   man_path <- file.path(base_path, "man")
   dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
+  update_roxygen_version(base_path)
 
   options <- load_options(base_path)
   roclets <- roclets %||% options$roclets

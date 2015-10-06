@@ -55,8 +55,8 @@ merge.minidesc_tag <- function(x, y, ...) {
 
 #' @export
 merge.section_tag <- function(x, y, ...) {
-  x_names <- sapply(x$values, `[[`, "name")
-  y_names <- sapply(y$values, `[[`, "name")
+  x_names <- vapply(x$values, `[[`, "name", FUN.VALUE = character(1L))
+  y_names <- vapply(y$values, `[[`, "name", FUN.VALUE = character(1L))
   xy_names <- unique(c(x_names, y_names))
   xy_both_names <- intersect(x_names, y_names)
   x_contents <- setNames(lapply(x$values, `[[`, "content"), x_names)

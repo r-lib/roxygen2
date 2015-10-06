@@ -82,7 +82,7 @@ load_options <- function(base_path) {
 
   defaults <- list(
     wrap = FALSE,
-    roclets = c("collate", "namespace", "rd")
+    roclets = c("collate", "namespace", "rd", "doxygen")
   )
   modifyList(defaults, opts)
 }

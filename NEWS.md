@@ -1,5 +1,8 @@
 # roxygen2 4.1.1.9000
 
+* `\usage{}` is correctly generated for functions with string arguments 
+  containing `"\""` (#265).
+
 * If you document multiple arguments with one `@param`, (e.g. `@param a,b,c`)
   each parameter will get a space after it so it can be wrapped in the 
   generated Rd file (#373).

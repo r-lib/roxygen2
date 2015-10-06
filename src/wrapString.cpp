@@ -3,45 +3,38 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 std::vector<std::string> splitByWhitespace(std::string string) {
-  int n = string.length();
   std::vector<std::string> out;
 
   std::string acc = "";
   char in_string = '\0';
-  bool in_escape = false;
+  int in_escape = 0;
 
-  for(int i = 0; i < n; ++i) {
-    char cur = string[i];
+  std::string::const_iterator cur = string.begin(), end = string.end();
 
+  while(cur != end) {
     if (in_string != '\0') {
-      acc += cur;
+      acc += *cur;
 
       if (in_escape) {
-        in_escape = false;
-        continue;
-      }
-      if (cur == '\\') {
-        in_escape = true;
-        continue;
-      }
-      if (cur != in_string) {
-        continue;
+        in_escape--;
+      } else if (*cur == '\\' && cur + 1 != end && *(cur + 1) == '\\') {
+        in_escape = 2;
+      } else if (*cur == in_string) {
+        // String terminates
+        in_string = '\0';
       }
 
-      // String terminates
-      in_string = '\0';
-      continue;
-    }
-
-    if (cur == ' ' || cur == '\t' || cur == '\n') {
+    } else if (*cur == ' ' || *cur == '\t' || *cur == '\n') {
       out.push_back(acc);
       acc = "";
-    } else if (cur == '"' || cur == '\'') {
-      in_string = cur;
-      acc += cur;
+    } else if (*cur == '"' || *cur == '\'') {
+      in_string = *cur;
+      acc += *cur;
     } else {
-      acc += cur;
+      acc += *cur;
     }
+
+    cur++;
   }
 
   out.push_back(acc);

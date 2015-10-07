@@ -175,7 +175,7 @@ parse.toggle <- function(key, rest) {
 
 
 check_rd <- function(key, text) {
-  if (rdComplete(text)) return(TRUE)
+  if (rdComplete(text, key == "examples")) return(TRUE)
 
   text <- str_trim(text)
   if (!is.null(key)) {

@@ -34,6 +34,15 @@ test_that("escape disables comment", {
 })
 
 
+test_that("strings must be closed", {
+  expect_false(rdComplete("'"))
+  expect_false(rdComplete('"'))
+})
+
+test_that("braces in strings don't need to match", {
+  expect_true(rdComplete("'{{'"))
+})
+
 # Test that incomplete Rd is caught in Rd blocks -------------------------------
 
 test_that("incomplete rd in tag raises error", {

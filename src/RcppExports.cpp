@@ -6,13 +6,14 @@
 using namespace Rcpp;
 
 // rdComplete
-bool rdComplete(std::string string);
-RcppExport SEXP roxygen2_rdComplete(SEXP stringSEXP) {
+bool rdComplete(std::string string, bool is_code);
+RcppExport SEXP roxygen2_rdComplete(SEXP stringSEXP, SEXP is_codeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type string(stringSEXP);
-    __result = Rcpp::wrap(rdComplete(string));
+    Rcpp::traits::input_parameter< bool >::type is_code(is_codeSEXP);
+    __result = Rcpp::wrap(rdComplete(string, is_code));
     return __result;
 END_RCPP
 }

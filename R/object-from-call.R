@@ -24,6 +24,10 @@ object_from_call <- function(call, env, block) {
 }
 
 find_data <- function(name, env) {
+  if (identical(name, "_PACKAGE")) {
+    return(structure(NULL, class = "package"))
+  }
+
   ns <- env_namespace(env)
   if (is.null(ns)) {
     get(name, envir = env)

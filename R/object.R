@@ -113,4 +113,6 @@ obj_type.refMethodDef <- function(x) "rcmethod"
 #' @export
 obj_type.function <- function(x) "function"
 #' @export
+obj_type.package <- function(x) "package"
+#' @export
 obj_type.default <- function(x) "data"

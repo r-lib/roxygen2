@@ -3,6 +3,9 @@
 * Roxygen no longer complains about non-matching braces inside strings
   in examples (#329).
 
+* `@family` now cross-links each manual page only once, instread of linking
+  to all aliases (#283, #367)
+
 * Roxygen now records its version in a single place: the `RoxygenNote`
   field in the `DESCRIPTION` (#338).
 

@@ -34,13 +34,8 @@ find_data <- function(name, env) {
 
 # Find namespace associated with environment
 env_namespace <- function(env) {
-  env_name <- attr(env, "name")
-  if (is.null(env_name)) return(NULL)
-  if (!grepl(":", env_name)) return(NULL)
-
-  ns_name <- gsub("package:", "", env_name)
   ns <- NULL
-  try(ns <- asNamespace(ns_name), silent = TRUE)
+  try(ns <- asNamespace(env), silent = TRUE)
   if (is.null(ns)) return(NULL)
 
   ns

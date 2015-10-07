@@ -22,7 +22,7 @@ see \cite{Writing R Extensions}
 \seealso{
 \code{vignette("namespace", package = "roxygen2")}
 
-Other roclets: \code{\link{rd_roclet}};
+Other roclets: \code{\link{rd_roclet}},
   \code{\link{vignette_roclet}}
 }
 

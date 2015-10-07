@@ -13,13 +13,7 @@ document that functions in your package.
 \seealso{
 \code{vignette("rd", package = "roxygen2")}
 
-Other roclets: \code{\link{S3method}},
-  \code{\link{export}}, \code{\link{exportClass}},
-  \code{\link{exportMethod}}, \code{\link{import}},
-  \code{\link{importClassesFrom}},
-  \code{\link{importFrom}},
-  \code{\link{importMethodsFrom}},
-  \code{\link{namespace_roclet}};
+Other roclets: \code{\link{namespace_roclet}},
   \code{\link{vignette_roclet}}
 }
 

@@ -20,12 +20,7 @@ your package, add \code{--no-build-vignettes} to the "Build Source Package"
 field in your project options.
 }
 \seealso{
-Other roclets: \code{\link{S3method}},
-  \code{\link{export}}, \code{\link{exportClass}},
-  \code{\link{exportMethod}}, \code{\link{import}},
-  \code{\link{importClassesFrom}},
-  \code{\link{importFrom}},
-  \code{\link{importMethodsFrom}},
-  \code{\link{namespace_roclet}}; \code{\link{rd_roclet}}
+Other roclets: \code{\link{namespace_roclet}},
+  \code{\link{rd_roclet}}
 }
 

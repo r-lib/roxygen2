@@ -18,11 +18,6 @@ test_that("collation as expected", {
   expect_equal(results, expected)
 })
 
-temp_copy_pkg <- function(pkg) {
-  file.copy(normalizePath(pkg), tempdir(), recursive = TRUE)
-  normalizePath(file.path(tempdir(), pkg))
-}
-
 test_that("Collate field unchanged when no @includes", {
   test_pkg <- temp_copy_pkg('testCollateNoIncludes')
   on.exit(unlink(test_pkg, recursive = TRUE))

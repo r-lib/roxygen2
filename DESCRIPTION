@@ -21,7 +21,8 @@ Imports:
     Rcpp (>= 0.11.0)
 Suggests:
     testthat (>= 0.8.0),
-    knitr
+    knitr,
+    devtools
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 Collate:

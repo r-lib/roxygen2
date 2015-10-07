@@ -24,10 +24,12 @@ rd2rd <- function(x) {
 rd_arguments <- function(rd) {
   arguments <- get_tags(rd, "\\arguments")[[1]]
   items <- get_tags(arguments, "\\item")
-  
+
   values <- lapply(items, function(x) rd2rd(x[[2]]))
+  # Everything else seems to be escaped already, apart from comments
+  values <- lapply(values, function(x) gsub("%", "\\%", x, fixed = TRUE))
+
   params <- vapply(items, function(x) rd2rd(x[[1]]), character(1))
-  
+
   setNames(values, params)
 }
-

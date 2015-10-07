@@ -1,5 +1,7 @@
 # roxygen2 4.1.1.9000
 
+* `@inheritParams foo::bar` ensures that `%` remains escaped (#313). 
+
 * Roxygen no longer complains about non-matching braces inside strings
   in examples (#329).
 

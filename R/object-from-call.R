@@ -24,11 +24,15 @@ object_from_call <- function(call, env, block) {
 }
 
 find_data <- function(name, env) {
+  ns <- env_namespace(env)
+
   if (identical(name, "_PACKAGE")) {
-    return(structure(NULL, class = "package"))
+    return(structure(
+      list(pkg_name = packageName(env),
+           base_path = getNamespaceInfo(ns, "path")),
+      class = "package"))
   }
 
-  ns <- env_namespace(env)
   if (is.null(ns)) {
     get(name, envir = env)
   } else {

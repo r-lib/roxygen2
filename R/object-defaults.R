@@ -29,6 +29,19 @@ object_defaults.data <- function(x) {
 }
 
 #' @export
+object_defaults.package <- function(x) {
+  desc <- read.description(file.path(x$value$base_path, "DESCRIPTION"))
+
+  pkg_name <- x$value$pkg_name
+  list(
+    docType = "package",
+    title = as.character(desc$Title),
+    description = as.character(desc$Description),
+    name = pkg_name
+  )
+}
+
+#' @export
 object_defaults.s4class <- function(x) {
   list(
     docType = "class"

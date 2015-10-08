@@ -37,6 +37,7 @@ object_defaults.package <- function(x) {
     docType = "package",
     title = as.character(desc$Title),
     description = as.character(desc$Description),
+    aliases = c("NULL", paste0(pkg_name, "-package")), # See #202
     name = pkg_name
   )
 }

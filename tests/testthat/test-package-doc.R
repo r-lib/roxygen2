@@ -4,7 +4,7 @@ test_that("can create package documentation", {
   with_mock(
     `base::getNamespaceInfo` = function(...)
       NULL,
-    read.description = function(...)
+    `roxygen2::read.description` = function(...)
       list(Title = "Package Title", Description = "Package description."),
     out <- roc_proc_text(rd_roclet(), "
     #' @details Details.

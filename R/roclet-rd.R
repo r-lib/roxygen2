@@ -260,11 +260,15 @@ process.docType <- function(partitum) {
   if (doctype == "package") {
     name <- partitum$name
     if (!str_detect(name, "-package")) {
-      tags <- c(tags, new_tag("alias", paste0(name, "-package")))
+      tags <- c(tags, new_tag("alias", package_suffix(name)))
     }
   }
 
   tags
+}
+
+package_suffix <- function(name) {
+  paste0(name, "-package")
 }
 
 process_had_tag <- function(partitum, tag, f = new_tag) {

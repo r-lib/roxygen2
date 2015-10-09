@@ -74,7 +74,12 @@ roxygenize <- function(package.dir = ".",
 #' @export
 roxygenise <- roxygenize
 
-load_options <- function(base_path) {
+#' Load options from DESCRIPTION.
+#'
+#' @param base_path Path to package.
+#' @export
+#' @keywords internal
+load_options <- function(base_path = ".") {
   desc_path <- file.path(base_path, "DESCRIPTION")
   desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
 

@@ -1,5 +1,8 @@
 # roxygen2 4.1.1.9000
 
+* `load_options()` is now exported so `devtools::document()` doesn't have to
+  run `update_collate()` twice (#395).
+
 * I have completely rewritten the block parser in C++ (#295). This gives a nice 
   performance boost and gives:
 

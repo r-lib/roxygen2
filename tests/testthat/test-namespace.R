@@ -127,7 +127,7 @@ test_that("other namespace tags produce correct output", {
 })
 
 test_that("poorly formed importFrom throws error", {
-  expect_error(roc_proc_text(namespace_roclet(), "
+  expect_warning(roc_proc_text(namespace_roclet(), "
     #' @importFrom test
     NULL
   "), "needs at least 2 words")

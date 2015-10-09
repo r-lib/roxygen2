@@ -2,15 +2,16 @@
 using namespace Rcpp;
 
 class RoxygenLine {
+  std::string line_;
   const char* begin_;
   const char* end_;
   const char* cur_;
 
 public:
 
-  RoxygenLine(std::string line) {
-    begin_ = cur_ = line.data();
-    end_ = begin_ + line.size();
+  RoxygenLine(const std::string& line) : line_(line) {
+    begin_ = cur_ = line_.data();
+    end_ = begin_ + line_.size();
   }
 
   bool consumeChar(char c) {
@@ -21,11 +22,16 @@ public:
     return true;
   }
 
-  bool consumeWhitespace() {
-    while (cur_ != end_ && std::isspace(*cur_))
+  int consumeWhitespace(int max = -1) {
+    int i = 0;
+    while (cur_ != end_ && std::isspace(*cur_)) {
       cur_++;
+      i++;
+      if (max > 0 && i >= max)
+        break;
+    }
 
-    return true;
+    return i;
   }
 
   bool consumeRoxygenComment() {
@@ -37,7 +43,7 @@ public:
     if (!consumeChar('\''))
       return false;
 
-    consumeWhitespace();
+    consumeWhitespace(1);
 
     return true;
   }
@@ -46,7 +52,7 @@ public:
     if (!consumeChar('@'))
       return false;
 
-    while(cur_ != end_ && std::isalpha(*cur_)) {
+    while(cur_ != end_ && std::isalnum(*cur_) ) {
       pOut->push_back(*cur_);
       cur_++;
     }
@@ -55,9 +61,6 @@ public:
   }
 
   bool consumeText(std::string* pOut) {
-    if (cur_ == end_)
-      return false;
-
     while (cur_ != end_) {
       if (isEscapedAt()) {
         pOut->push_back('@');
@@ -86,8 +89,17 @@ public:
 
 };
 
+std::string stripTrailingNewline(std::string x) {
+  if (x[x.size() - 1] == '\n') {
+    x.resize(x.size() - 1);
+  }
+
+  return x;
+}
+
 // [[Rcpp::export]]
-List parse_block(CharacterVector lines, int offset = 0) {
+List tokenise_preref(CharacterVector lines, std::string file = "",
+                     int offset = 0) {
   std::vector<std::string> tags, vals;
   std::vector<int> rows;
 
@@ -102,6 +114,8 @@ List parse_block(CharacterVector lines, int offset = 0) {
 
     std::string tag;
     if (line.consumeTag(&tag)) {
+      line.consumeWhitespace(1);
+
       if (curVal != "" || curTag != "") {
         rows.push_back(curRow);
         tags.push_back(curTag);
@@ -109,11 +123,10 @@ List parse_block(CharacterVector lines, int offset = 0) {
       }
 
       curRow = i + offset;
-      curTag = tag;
-      curVal = "";
+      curTag.assign(tag);
+      curVal.assign("");
     }
 
-    line.consumeWhitespace();
     line.consumeText(&curVal);
     curVal.push_back('\n');
   }
@@ -130,9 +143,10 @@ List parse_block(CharacterVector lines, int offset = 0) {
 
   for (int i = 0; i < n; ++i) {
     out[i] = List::create(
-      _["row"] = rows[i],
+      _["file"] = file,
+      _["line"] = rows[i] + 1,
       _["tag"] = tags[i],
-      _["val"] = vals[i]
+      _["val"] = stripTrailingNewline(vals[i])
     );
     out[i].attr("class") = "roxygen_tag";
   }

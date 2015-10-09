@@ -49,6 +49,7 @@ Collate:
     'roclet-rd.R'
     'roclet-vignette.R'
     'roclet.R'
+    'roxygen-tag.R'
     'roxygen.R'
     'roxygenize.R'
     's3.R'

@@ -38,7 +38,7 @@ test_that("@section-s with identical titles are merged", {
 
   expect_equal(
     get_tag(out, "section")$values,
-    list(structure(list(name = "Haz dox", content = " Here.\n\n\n  Got news.")),
+    list(structure(list(name = "Haz dox", content = " Here.\n\n\n\n  Got news.")),
          structure(list(name = "TL", content = " DR.")),
          structure(list(name = "RT", content = " FM."))))
 })
@@ -64,7 +64,7 @@ test_that("@section-s with different titles are kept as they are", {
 
   expect_equal(
     get_tag(out, "section")$values,
-    list(structure(list(name = "Haz dox", content = " Here.")),
+    list(structure(list(name = "Haz dox", content = " Here.\n")),
          structure(list(name = "TL", content = " DR.")),
          structure(list(name = "OBTW", content = "\n  Got news.")),
          structure(list(name = "MKAY", content = " kthxbye"))))

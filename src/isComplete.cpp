@@ -5,7 +5,7 @@ using namespace Rcpp;
 // and } have special meaning in almost all parts of an Rd file. In code,
 // strings must also match
 // [[Rcpp::export]]
-bool rdComplete(std::string string, bool is_code = true) {
+bool rdComplete(std::string string, bool is_code = false) {
   int n = string.length();
 
   char in_string = '\0';

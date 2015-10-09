@@ -1,5 +1,17 @@
 # roxygen2 4.1.1.9000
 
+* I have completely rewritten the block parser in C++ (#295). This gives a nice 
+  performance boost and gives:
+
+  * Better error messages: you now get the exact the line number of the 
+    tag, not just the start of the block.
+    
+  * The parser has been simplified a little: tag now must always start
+    on a new line. This is recommended practice anyway, and it means
+    that escaping inline `@` (with `@@`) is now optional. (#235)
+    
+  * Unknown tags now emit a warning, rather than an error.
+
 * `@inheritParams foo::bar` ensures that `%` remains escaped (#313). 
 
 * Roxygen no longer complains about non-matching braces inside strings

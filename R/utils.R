@@ -130,3 +130,8 @@ r_files <- function(path) {
 dots <- function(...) {
   eval(substitute(alist(...)))
 }
+
+compact <- function(x) {
+  null <- vapply(x, is.null, logical(1))
+  x[!null]
+}

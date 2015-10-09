@@ -18,6 +18,7 @@ for a convenient way of converting Rd files to roxygen comments.
 \dontrun{roxygenize('pkg')}
 }
 \author{
+
 Hadley Wickham \email{h.wickham@gmail.com},
 Peter Danenberg \email{pcd@roxygen.org},
 Manuel Eugster \email{Manuel.Eugster@stat.uni-muenchen.de}

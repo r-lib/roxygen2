@@ -1,193 +1,175 @@
-# Parse a preref
-parse.preref <- function(lines) {
-  delimited.lines <- lines[str_detect(lines, LINE.DELIMITER)]
-  trimmed.lines <- str_trim(str_replace(delimited.lines, LINE.DELIMITER, ""),
-    "right")
+parse_preref <- function(x, file, offset = x[[1]]) {
+  tags <- tokenise_preref(as.character(x), file = basename(file), offset = offset)
+  if (length(tags) == 0)
+    return()
 
-  if (length(trimmed.lines) == 0) return(NULL)
+  tags <- parse_description(tags)
+  tags <- compact(lapply(tags, parse_tag))
 
-  joined.lines <- paste0(trimmed.lines, collapse = '\n')
-  ## Thanks to Fegis at #regex on Freenode for the
-  ## lookahead/lookbehind hack; as he notes, however, "it's not
-  ## proper escaping though... it will not split a@@@b."
-  elements <- strsplit(joined.lines, '(?<!@)@(?!@)', perl = TRUE)[[1]]
-
-  ## Compress the escaped delimeters.
-  elements <- str_replace_all(elements, fixed("@@"), "@")
-
-  parse_elements(elements)
+  # Convert to existing named list format - this isn't ideal, but
+  # it's what roxygen already uses
+  vals <- lapply(tags, `[[`, "val")
+  names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1))
+  setNames(vals, names)
 }
 
-#' @export
-print.roxygen_tag <- function(x, ...) {
-  cat("[", x$row, ", ", x$col, "] @", x$tag, " ", encodeString(x$val), "\n",
-    sep = "")
-}
-
-# Sequence that distinguishes roxygen comment from normal comment.
-LINE.DELIMITER <- '\\s*#+\' ?'
-
-parse_elements <- function(elements) {
-
-  pieces <- str_split_fixed(elements[-1], "[[:space:]]+", 2)
-  desc <- process_description(str_trim(elements[1]), pieces)
-  pieces <- rbind(desc, pieces, deparse.level = 0)
-
-  ## Merge multiple @details tags, one might have come from the intro
-  didx <- which(pieces[,1] == "details")
-  if (length(didx) > 1) {
-    pieces[didx[1], 2] <- paste(pieces[didx, 2], collapse = "\n\n")
-    pieces <- pieces[- didx[-1], , drop = FALSE]
+parse_description <- function(tags) {
+  if (length(tags) == 0) {
+    return(tags)
   }
 
-  parse_element <- function(tag, value) {
-    tag_parser <- preref.parsers[[tag]] %||% parse.unknown
-    tag_parser(tag, value)
+  tag_names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1))
+  if (tag_names[1] != "") {
+    return(tags)
   }
 
-  Map(parse_element, pieces[, 1], pieces[, 2])
-}
+  intro <- tags[[1]]
+  tags <- tags[-1]
+  tag_names <- tag_names[-1]
 
-# Process title, description and details.
-#
-# Split the introductory matter into its description followed
-# by details (separated by a blank line).
-process_description <- function(intro, other_pieces) {
-
-  if (length(intro) == 0 || intro == "") return(NULL)
-
-  paragraphs <- str_trim(str_split(intro, fixed('\n\n'))[[1]])
-
-  piece <- function(p) {
-    pc <- paste(other_pieces[other_pieces[,1] == p, 2], collapse = "\n")
-    if (length(pc) > 0 && !identical(pc, "")) pc else NULL
-  }
+  paragraphs <- str_trim(str_split(intro$val, fixed('\n\n'))[[1]])
 
   # 1st paragraph = title (unless has @title)
-  if (!is.null(piece("title"))) {
+  if ("title" %in% tag_names) {
     title <- NULL
   } else if (length(paragraphs) > 0) {
-    title <- c("title", paragraphs[1])
+    title <- roxygen_tag("title", paragraphs[1], intro$file, intro$line)
     paragraphs <- paragraphs[-1]
   } else {
-    title <- c("title", "")
+    title <- roxygen_tag("title", "", intro$file, intro$line)
   }
 
   # 2nd paragraph = description (unless has @description)
-  if (!is.null(piece("description"))) {
+  if ("description" %in% tag_names) {
     description <- NULL
   } else if (length(paragraphs) > 0) {
-    description <- c("description", paragraphs[1])
+    description <- roxygen_tag("description", paragraphs[1], intro$file, intro$line)
     paragraphs <- paragraphs[-1]
   } else {
     # Description is required, so if missing description, repeat title.
-    description <- c("description", title[2] %||% piece("title"))
+    description <- roxygen_tag("description", title$val, intro$file, intro$line)
   }
 
-  # Every thing else = details, combined with @details, in parse_elements
-  if (length(paragraphs) == 0 || paragraphs == "") paragraphs <- NULL
+  # Every thing else = details, combined with @details
   if (length(paragraphs) > 0) {
-    details <- c("details", paste(paragraphs, collapse = "\n\n"))
+    details_para <- paste(paragraphs, collapse = "\n\n")
+
+    # Find explicit @details tags
+    didx <- which(tag_names == "details")
+    if (length(didx) > 0) {
+      explicit_details <- vapply(tags[didx], `[[`, "val",
+        FUN.VALUE = character(1))
+      tags <- tags[-didx]
+      details_para <- paste(c(details_para, explicit_details), collapse = "\n\n")
+    }
+
+    details <- roxygen_tag("details", details_para, intro$file, intro$line)
   } else {
     details <- NULL
   }
 
-  rbind(title, description, details, deparse.level = 0)
+  c(compact(list(title, description, details)), tags)
 }
 
-parse.unknown <- function(key, rest) {
-  stop("@", key, " is an unknown key")
-}
+parse_tag <- function(x) {
+  stopifnot(is.roxygen_tag(x))
 
-parse.value <- function(key, rest) {
-  check_rd(key, rest)
-  if (is.null.string(rest)) {
-    stop("@", key, ' requires a value')
+  if ((!x$tag %in% names(preref.parsers))) {
+    return(tag_warning(x, "unknown tag"))
   }
 
-  str_trim(rest)
+  preref.parsers[[x$tag]](x)
+}
+
+# Individual tag parsers --------------------------------------------------
+
+parse.value <- function(x) {
+  if (x$val == "") {
+    tag_warning(x, "requires a value")
+  } else if (!rdComplete(x$val)) {
+    tag_warning(x, "mismatched braces")
+  } else {
+    x
+  }
 }
 
 # Examples need special parsing because escaping rules are different
-parse.examples <- function(key, rest) {
-  rest <- str_trim(rest)
-  if (rest == "") {
-    stop("@example requires a value", call. = FALSE)
+parse.examples <- function(x) {
+  if (x$val == "") {
+    return(tag_warning(x, "requires a value"))
   }
 
-  rest <- escape_examples(rest)
-  check_rd("example", rest)
-
-  rest
+  x$val <- escape_examples(gsub("^\n", "", x$val))
+  if (!rdComplete(x$val, TRUE)) {
+    tag_warning(x, "mismatched braces")
+  } else {
+    x
+  }
 }
 
 words_parser <- function(min = 0, max = Inf) {
-  function(key, rest) {
-    check_rd(key, rest)
+  function(x) {
+    if (!rdComplete(x$val)) {
+      return(tag_warning(x, "mismatched braces"))
+    }
 
-    words <- str_split(str_trim(rest), "\\s+")[[1]]
+    words <- str_split(x$val, "\\s+")[[1]]
     if (length(words) < min) {
-      stop("@", key, " needs at least ", min, " words", call. = FALSE)
+      tag_warning(x,  " needs at least ", min, " words")
+    } else if (length(words) > max) {
+      tag_warning(x,  " can have at most ", max, " words")
     }
-    if (length(words) > max) {
-      stop("@", key, " can have at most ", max, " words", call. = FALSE)
-    }
 
-    words
+    x$val <- words
+    x
   }
 }
 
-parse.words.line <- function(key, rest) {
-  check_rd(key, rest)
-  rest <- str_trim(rest)
-  if (str_detect(rest, "\n")) {
-    stop("@", key, " may only span a single line", call. = FALSE)
-  }
-
-  str_split(rest, "\\s+")[[1]]
-}
-
-
-parse.name.description <- function(key, rest) {
-  check_rd(key, rest)
-  pieces <- str_split_fixed(rest, "[[:space:]]+", 2)
-
-  name <- pieces[, 1]
-  rest <- trim_docstring(pieces[, 2])
-
-  if (is.null.string(name)) {
-    stop("@", key, ' requires a name and description')
-  }
-
-  list(name = name, description = rest)
-}
-
-parse.name <- function(key, name) {
-  check_rd(key, name)
-  name <- str_trim(name)
-
-  if (is.null.string(name)) {
-    stop("@", key, ' requires a name')
-  } else if (str_count(name, "\\s+") > 1) {
-    stop("@", key, ' should only have a single argument')
-  }
-
-  word(name, 1)
-}
-
-parse.toggle <- function(key, rest) {
-  TRUE
-}
-
-
-check_rd <- function(key, text) {
-  if (rdComplete(text, key == "examples")) return(TRUE)
-
-  text <- str_trim(text)
-  if (!is.null(key)) {
-    stop("Mismatched braces: \"@", key, " ", text, "\"", call. = FALSE)
+parse.words.line <- function(x) {
+  if (str_detect(x$val, "\n")) {
+    tag_warning(x, "may only span a single line")
+  } else if (!rdComplete(x$val)) {
+    tag_warning(x, "mismatching braces")
   } else {
-    stop("Mismatched braces: \"", text, "\"", call. = FALSE)
+    x$val <- str_split(x$val, "\\s+")[[1]]
+    x
   }
+}
 
+parse.name.description <- function(x) {
+  if (x$val == "") {
+    tag_warning(x, "requires a value")
+  } else if (!str_detect(x$val, "[[:space:]]+")) {
+    tag_warning(x, "requires name and description")
+  } else if (!rdComplete(x$val)) {
+    tag_warning(x, "mismatched braces")
+  } else {
+    pieces <- str_split_fixed(x$val, "[[:space:]]+", 2)
+
+    x$val <- list(
+      name = pieces[, 1],
+      description = trim_docstring(pieces[, 2])
+    )
+    x
+  }
+}
+
+parse.name <- function(x) {
+  if (x$val == "") {
+    tag_warning("requires a name")
+  } else if (!rdComplete(x$val)) {
+    tag_warning("mismatched braces")
+  } else if (str_count(x$val, "\\s+") > 1) {
+    tag_warning("should have only a single argument")
+  } else {
+    x
+  }
+}
+
+parse.toggle <- function(x) {
+  if (x$val != "") {
+    tag_warning("has no parameters")
+  } else {
+    x
+  }
 }

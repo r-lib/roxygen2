@@ -15,6 +15,7 @@ Depends:
     R (>= 3.0.2)
 Imports:
     stringr (>= 0.5),
+    stringi,
     brew,
     digest,
     methods,

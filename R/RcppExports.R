@@ -9,12 +9,8 @@ leadingSpaces <- function(lines) {
     .Call('roxygen2_leadingSpaces', PACKAGE = 'roxygen2', lines)
 }
 
-preparse_block <- function(x) {
-    .Call('roxygen2_preparse_block', PACKAGE = 'roxygen2', x)
-}
-
-preparse_file <- function(filePath) {
-    .Call('roxygen2_preparse_file', PACKAGE = 'roxygen2', filePath)
+parse_block <- function(lines, offset = 0L) {
+    .Call('roxygen2_parse_block', PACKAGE = 'roxygen2', lines, offset)
 }
 
 splitByWhitespace <- function(string) {

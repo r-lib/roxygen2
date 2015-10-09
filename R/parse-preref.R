@@ -18,6 +18,12 @@ parse.preref <- function(lines) {
   parse_elements(elements)
 }
 
+#' @export
+print.roxygen_tag <- function(x, ...) {
+  cat("[", x$row, ", ", x$col, "] @", x$tag, " ", encodeString(x$val), "\n",
+    sep = "")
+}
+
 # Sequence that distinguishes roxygen comment from normal comment.
 LINE.DELIMITER <- '\\s*#+\' ?'
 

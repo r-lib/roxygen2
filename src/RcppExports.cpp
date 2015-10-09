@@ -28,25 +28,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// preparse_block
-List preparse_block(std::string x);
-RcppExport SEXP roxygen2_preparse_block(SEXP xSEXP) {
+// parse_block
+List parse_block(CharacterVector lines, int offset);
+RcppExport SEXP roxygen2_parse_block(SEXP linesSEXP, SEXP offsetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(preparse_block(x));
-    return __result;
-END_RCPP
-}
-// preparse_file
-List preparse_file(std::string filePath);
-RcppExport SEXP roxygen2_preparse_file(SEXP filePathSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type filePath(filePathSEXP);
-    __result = Rcpp::wrap(preparse_file(filePath));
+    Rcpp::traits::input_parameter< CharacterVector >::type lines(linesSEXP);
+    Rcpp::traits::input_parameter< int >::type offset(offsetSEXP);
+    __result = Rcpp::wrap(parse_block(lines, offset));
     return __result;
 END_RCPP
 }

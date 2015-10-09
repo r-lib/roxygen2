@@ -13,10 +13,6 @@ public:
     end_ = begin_ + line.size();
   }
 
-  size_t position() {
-    return cur_ - begin_;
-  }
-
   bool consumeChar(char c) {
     if (cur_ == end_ || *cur_ != c)
       return false;
@@ -93,9 +89,9 @@ public:
 // [[Rcpp::export]]
 List parse_block(CharacterVector lines, int offset = 0) {
   std::vector<std::string> tags, vals;
-  std::vector<int> rows, cols;
+  std::vector<int> rows;
 
-  int curRow = 0, curCol = 0;
+  int curRow = 0;
   std::string curTag(""), curVal("");
 
   for (int i = 0; i < lines.size(); ++i) {
@@ -106,24 +102,24 @@ List parse_block(CharacterVector lines, int offset = 0) {
 
     std::string tag;
     if (line.consumeTag(&tag)) {
-      rows.push_back(curRow);
-      cols.push_back(curCol);
-      tags.push_back(curTag);
-      vals.push_back(curVal);
+      if (curVal != "" || curTag != "") {
+        rows.push_back(curRow);
+        tags.push_back(curTag);
+        vals.push_back(curVal);
+      }
 
       curRow = i + offset;
-      curCol = line.position();
       curTag = tag;
       curVal = "";
     }
 
     line.consumeWhitespace();
     line.consumeText(&curVal);
+    curVal.push_back('\n');
   }
 
-  if (curTag != "") {
+  if (curVal != "" || curTag != "") {
     rows.push_back(curRow);
-    cols.push_back(curCol);
     tags.push_back(curTag);
     vals.push_back(curVal);
   }
@@ -135,7 +131,6 @@ List parse_block(CharacterVector lines, int offset = 0) {
   for (int i = 0; i < n; ++i) {
     out[i] = List::create(
       _["row"] = rows[i],
-      _["col"] = cols[i],
       _["tag"] = tags[i],
       _["val"] = vals[i]
     );

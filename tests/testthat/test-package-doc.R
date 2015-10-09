@@ -5,7 +5,9 @@ test_that("can create package documentation", {
     `base::getNamespaceInfo` = function(...)
       NULL,
     `roxygen2::read.description` = function(...)
-      list(Title = "Package Title", Description = "Package description."),
+      list(Package = "roxygen_devtest",
+           Title = "Package Title",
+           Description = "Package description."),
     out <- roc_proc_text(rd_roclet(), "
     #' @details Details.
     '_PACKAGE'")[[1]]

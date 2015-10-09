@@ -24,20 +24,30 @@ object_from_call <- function(call, env, block) {
 }
 
 find_data <- function(name, env) {
-  ns <- env_namespace(env)
-
   if (identical(name, "_PACKAGE")) {
-    return(structure(
-      list(pkg_name = packageName(env),
-           base_path = getNamespaceInfo(ns, "path")),
-      class = "package"))
+    return(find_data_for_package(env))
   }
 
+  ns <- env_namespace(env)
   if (is.null(ns)) {
     get(name, envir = env)
   } else {
     getExportedValue(name, ns = ns)
   }
+}
+
+find_data_for_package <- function(env) {
+  ns <- env_namespace(env)
+  base_path <- getNamespaceInfo(ns, "path")
+  desc <- read.description(file.path(base_path, "DESCRIPTION"))
+
+  if (!identical(desc$Package, packageName(env))) {
+    warning("Inconsistent package names: ",
+            desc$Package, " vs. ", packageName(env),
+            call. = FALSE)
+  }
+
+  structure(list(desc = desc), class = "package")
 }
 
 # Find namespace associated with environment

@@ -30,17 +30,15 @@ object_defaults.data <- function(x) {
 
 #' @export
 object_defaults.package <- function(x) {
-  desc <- read.description(file.path(x$value$base_path, "DESCRIPTION"))
-
-  pkg_name <- x$value$pkg_name
+  desc <- x$value$desc
   list(
     docType = "package",
     title = as.character(desc$Title),
     description = as.character(desc$Description),
     # "NULL" prevents addition of default aliases, see also #202
-    aliases = c("NULL", package_suffix(pkg_name)),
-    rdname = package_suffix(pkg_name),
-    name = pkg_name
+    aliases = c("NULL", package_suffix(desc$Package)),
+    rdname = package_suffix(desc$Package),
+    name = desc$Package
   )
 }
 

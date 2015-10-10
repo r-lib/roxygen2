@@ -27,6 +27,9 @@ default_usage <- function(x) {
 }
 
 #' @export
+default_usage.default <- function(x) NULL
+
+#' @export
 default_usage.NULL <- function(x) NULL
 
 #' @export

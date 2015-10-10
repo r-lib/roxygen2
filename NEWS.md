@@ -47,6 +47,10 @@
   parse order, just like `@description` and `@details`.  This is
   especially useful in conjunction with the `@rdname` tag. (@krlmlr, #300).
 
+* Package documentation draws title and description from the `DESCRIPTON` file
+  if using the string `"_PACKAGE"` as documented object. Example source file:
+  `#' @details Details.<newline>"_PACKAGE"` (@krlmlr, #349).
+
 * Parser callbacks registered with `register.preref.parser` are now called
   for fields parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370)

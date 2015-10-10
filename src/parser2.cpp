@@ -39,6 +39,7 @@ public:
 
     if (!consumeChar('#'))
       return false;
+    while (consumeChar('#'));
 
     if (!consumeChar('\''))
       return false;

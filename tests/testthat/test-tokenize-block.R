@@ -45,6 +45,13 @@ test_that("leading whitespace is ignored", {
   expect_equal(tokenise_preref("   #' abc"), ref)
 })
 
+test_that("need one or more #", {
+  ref <- tokenise_preref("#' abc")
+
+  expect_equal(tokenise_preref("##' abc"), ref)
+  expect_equal(tokenise_preref("###' abc"), ref)
+})
+
 test_that("@@ becomes @", {
   expect_equal(tokenise_preref("#' @tag @@")[[1]]$val, "@")
 })

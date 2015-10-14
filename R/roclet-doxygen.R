@@ -41,29 +41,24 @@ replace_tag <- function(file_strings, tag, new_val) {
 #' doxygen_init()
 #' }
 #' @keywords internal
-doxygen_init <- function(pkg_path, doxy_file) {
+doxygen_init <- function(doxy_file){
     dox_dir <- dirname(doxy_file)
     doxy_file_name <- basename(doxy_file)
 
-    initFolder <- getwd()
-    if (pkg_path != ".") {
-        setwd(pkg_path)
-    }
-    rootFileYes <- length(grep("DESCRIPTION", dir())) > 0
     # prepare the doxygen folder
     if (!file.exists(dox_dir)) {
         dir.create(dox_dir, recursive = TRUE)
     }
-    setwd(dox_dir)
 
-    # prepare the doxygen configuration file
-    system(paste0("doxygen -g ", doxy_file_name))
-    doxy_file <- readLines(doxy_file_name)
-    doxy_file <- replace_tag(doxy_file, "EXTRACT_ALL", "YES")
-    doxy_file <- replace_tag(doxy_file, "INPUT", "src/")
-    doxy_file <- replace_tag(doxy_file, "OUTPUT_DIRECTORY", dox_dir)
-    cat(doxy_file, file = doxy_file_name, sep = "\n")
-    setwd(initFolder)
+    # prepare the configuration file for doxygen
+    system(paste0("doxygen -g ", doxy_file))
+
+    config <- readLines(doxy_file)
+    config <- replace_tag(config, "EXTRACT_ALL", "YES")
+    config <- replace_tag(config, "INPUT", "src/")
+    config <- replace_tag(config, "OUTPUT_DIRECTORY", dox_dir)
+    cat(config, file = doxy_file, sep = "\n")
+
     return(NULL)
 }
 
@@ -114,7 +109,7 @@ doxygen_update_all <- function(pkg_path = ".", compiled_sources = NULL) {
 
     if (compiled_sources) {
         if (!file.exists(doxy_file)) {
-            doxygen_init(pkg_path = ".", doxy_file = doxy_file)
+            doxygen_init(doxy_file = doxy_file)
         }
         system(paste0("doxygen ", doxy_file))
     }

@@ -24,6 +24,23 @@ replace_tag <- function(file_strings, tag, new_val) {
     file_strings[i_line] <- line
     return(file_strings)
 }
+
+# prepare a folder for doxygen if doxygen is installed
+prepare_folder <- function(dox_dir,test_command="doxygen -v"){
+    # check that doxygen in installed
+    version_doxygen <-try(system(test_command,intern=TRUE,ignore.stderr=TRUE),silent=TRUE)
+    if(class(version_doxygen)=="try-error"){
+        stop(paste("doxygen doesn't seem installed:",test_command,"returned an error."))
+        return(FALSE)
+    }
+
+    # prepare the folder for doxygen config file
+    if (!file.exists(dox_dir)) {
+        dir.create(dox_dir, recursive = TRUE)
+    }
+
+    return(TRUE)
+}
 #' Prepares the R package structure for use with doxygen
 #' @description Makes a configuration file in inst/doxygen
 #'     and set a few options:
@@ -45,10 +62,10 @@ doxygen_init <- function(doxy_file){
     dox_dir <- dirname(doxy_file)
     doxy_file_name <- basename(doxy_file)
 
-    # prepare the doxygen folder
-    if (!file.exists(dox_dir)) {
-        dir.create(dox_dir, recursive = TRUE)
-    }
+    
+    # checks that doxygen is installed
+    
+    prepare_folder(dox_dir)
 
     # prepare the configuration file for doxygen
     system(paste0("doxygen -g ", doxy_file))

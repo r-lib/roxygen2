@@ -1,5 +1,5 @@
 # @title Replace a value for a given tag
-# @description On a configuration file as a list of strings in memory
+# @description On a configuration file as a list of strings in memory:
 #    scan each line, detect if the given tag is present and
 #    and change the corresponding value.
 #    If no line has this tag, add a line with the tag and the value at the end.
@@ -43,7 +43,7 @@ prepare_folder <- function(dox_dir,test_command="doxygen -v"){
 }
 #' Prepares the R package structure for use with doxygen
 #' @description Makes a configuration file in inst/doxygen
-#'     and set a few options:
+#'     and sets a few options:
 #'     \itemize{
 #'        \item{EXTRACT <- ALL = YES}
 #'        \item{INPUT = src/}
@@ -61,10 +61,9 @@ prepare_folder <- function(dox_dir,test_command="doxygen -v"){
 doxygen_init <- function(doxy_file){
     dox_dir <- dirname(doxy_file)
     doxy_file_name <- basename(doxy_file)
-
     
     # checks that doxygen is installed
-    
+    # and prepare folder tree if needed
     prepare_folder(dox_dir)
 
     # prepare the configuration file for doxygen
@@ -82,12 +81,11 @@ doxygen_init <- function(doxy_file){
 #' Makes doxygen documentation
 #' @description Roclet making documentation from
 #'    doxygen instructions in src/, note that a doxygen configuration file
-#'    inst/doxygen/Doxyfile is created. You can edit it if you wish but it would be
-#'    removed by a call to the call method of this roclet.
-#'
+#'    inst/doxygen/Doxyfile is created. You can edit it but edits would be lost
+#'    if you call this function again or call to the clean method of this roclet. 
 #' @details The function \code{roc_output.doxygen} verifies the existence of a doxygen structure, if
-#'    needed create it
-#'    and run doxygen. doxygen should be previously installed
+#'    needed it creates it and run doxygen. 
+#'    doxygen should be previously installed
 #'    and accessible in the command line of the system as `doxygen`
 #' @examples
 #' \dontrun{
@@ -110,21 +108,23 @@ clean.doxygen <- function(roclet, results, base_path, options = list(), check = 
     doxygen_path <- file.path(base_path, "inst", "doxygen")
     unlink(doxygen_path,recursive=TRUE)
 }
+
 # @description The workhorse of the doxygen roclet, making if necessary a doxygen configuration file
 #      and launching doxygen on it
 # @param pkg_path The root of the package to be treated
-# @param doxygen A boolean: should doxygen be ran on documents in src?
-#     the default is TRUE if a src folder exist and FALSE if not
+# @param compiled_code Is there compiled code, hence should doxygen be ran. If NULL, doxygen will    
+#        run only if a "src" folder exists. 
 # @keywords internal
-doxygen_update_all <- function(pkg_path = ".", compiled_sources = NULL) {
+doxygen_update_all <- function(pkg_path = ".", compiled_code = NULL) {
     doxygen_path <- file.path(pkg_path, "inst", "doxygen")
     doxy_file <- file.path(doxygen_path, "Doxyfile")
 
-    if (is.null(compiled_sources)) {
-        compiled_sources <- file.exists(file.path(pkg_path, "src"))
+    # do not run doxygen if no sources folder, unless specified
+    if (is.null(compiled_code)) {
+        compiled_code <- file.exists(file.path(pkg_path, "src"))
     }
 
-    if (compiled_sources) {
+    if (compiled_code) {
         if (!file.exists(doxy_file)) {
             doxygen_init(doxy_file = doxy_file)
         }

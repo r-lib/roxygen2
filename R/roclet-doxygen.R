@@ -99,11 +99,11 @@ doxygen_roclet <- function() {
 }
 #' @export
 roc_process.doxygen <- function(roclet, parsed, base_path, options = list()) {
+    doxygen_update_all(base_path)
 }
 
 #' @export
 roc_output.doxygen <- function(roclet, results, base_path, options = list(), check = TRUE) {
-    doxygen_update_all(base_path)
 }
 #' @export
 clean.doxygen <- function(roclet, results, base_path, options = list(), check = TRUE) {

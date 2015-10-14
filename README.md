@@ -84,7 +84,7 @@ If you have a simple package, you can use `roxygenise()`, but for anything more 
 
 # Roclets
 
-`roxygen2` comes with three roclets, tools for parsing your source code and producing files useful for documenting your package:
+`roxygen2` comes with four roclets, tools for parsing your source code and producing files useful for documenting your package:
 
 * `collate_roclet`: allows you to add `@include` directives to ensure that
   files are loaded in the order they are needed
@@ -94,9 +94,15 @@ If you have a simple package, you can use `roxygenise()`, but for anything more 
   export with the `@export` tag
 
 * `rd_roclet`: produces Rd files by inspecting both function definitions and
-  roxygen2 comments in the source code.
+  roxygen2 comments in the source code
 
-By default, `roxygenise` will run all three, but you can choose which ones to run using the `roclet` parameter, or field `Roxygen` in your `DESCRIPTION`.
+* `vignette_roclet`: builds vignettes using `tools::buildVignette()`.
+
+By default, `roxygenise` will run the first three, but you can choose which ones to run using the `roclet` parameter, or field `Roxygen` in your `DESCRIPTION`:
+
+```
+Roxygen: list(roclets = c("rd", "collate"))
+```
 
 -----------
 * Hail, Hephaistos! Grant skill and weal.

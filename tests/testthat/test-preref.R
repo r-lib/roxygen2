@@ -42,7 +42,10 @@ check <- function(out) {
   )
 }
 
-preref_test <- function(key, rest) toupper(rest)
+preref_test <- function(x) {
+  x$val <- toupper(x$val)
+  x
+}
 
 test_that("preref parsers are called for tags from intro", {
 

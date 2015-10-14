@@ -3,7 +3,7 @@ Title: In-Source Documentation for R
 Description: A 'Doxygen'-like in-source documentation system
     for Rd, collation, and 'NAMESPACE' files.
 URL: https://github.com/klutometis/roxygen
-Version: 4.1.1.9000
+Version: 4.1.1.9001
 License: GPL (>= 2)
 Authors@R: c(
     person("Hadley", "Wickham",, "h.wickham@gmail.com", c("aut", "cre", "cph")),
@@ -15,13 +15,15 @@ Depends:
     R (>= 3.0.2)
 Imports:
     stringr (>= 0.5),
+    stringi,
     brew,
     digest,
     methods,
     Rcpp (>= 0.11.0)
 Suggests:
     testthat (>= 0.8.0),
-    knitr
+    knitr,
+    devtools
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 Collate:
@@ -48,6 +50,7 @@ Collate:
     'roclet-rd.R'
     'roclet-vignette.R'
     'roclet.R'
+    'roxygen-tag.R'
     'roxygen.R'
     'roxygenize.R'
     's3.R'
@@ -59,3 +62,4 @@ Collate:
     'usage.R'
     'util-locale.R'
     'utils.R'
+RoxygenNote: 4.1.1.9001

@@ -34,7 +34,7 @@ process_templates <- function(partitum, base_path) {
 
   # Insert templates back in the location where they came from
   partitum_pieces <- lapply(partitum, list)
-  partitum_pieces[template_locs] <- lapply(results, parse.preref)
+  partitum_pieces[template_locs] <- lapply(results, parse_preref, file = "TEMPLATE", offset = 0L)
   names(partitum_pieces)[template_locs] <- ""
 
   unlist(partitum_pieces, recursive = FALSE)

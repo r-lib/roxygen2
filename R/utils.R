@@ -57,9 +57,9 @@ subs <- matrix(ncol = 2, byrow = T, c(
 subs[, 2] <- paste0("-", subs[, 2], "-")
 
 nice_name <- function(x) {
-  for(i in seq_len(nrow(subs))) {
-    x <- str_replace_all(x, fixed(subs[i, 1]), subs[i, 2])
-  }
+  x <- stringi::stri_replace_all_fixed(x, subs[, 1], subs[, 2],
+    vectorize_all = FALSE)
+
   # Clean up any remaining
   x <- str_replace_all(x, "[^A-Za-z0-9_.-]+", "-")
   x <- str_replace_all(x, "-+", "-")
@@ -129,4 +129,9 @@ r_files <- function(path) {
 
 dots <- function(...) {
   eval(substitute(alist(...)))
+}
+
+compact <- function(x) {
+  null <- vapply(x, is.null, logical(1))
+  x[!null]
 }

@@ -1,5 +1,34 @@
 # roxygen2 4.1.1.9000
 
+* `load_options()` is now exported so `devtools::document()` doesn't have to
+  run `update_collate()` twice (#395).
+
+* I have completely rewritten the block parser in C++ (#295). This gives a nice 
+  performance boost and gives:
+
+  * Better error messages: you now get the exact the line number of the 
+    tag, not just the start of the block.
+    
+  * The parser has been simplified a little: tag now must always start
+    on a new line. This is recommended practice anyway, and it means
+    that escaping inline `@` (with `@@`) is now optional. (#235)
+    
+  * Unknown tags now emit a warning, rather than an error.
+
+* `@inheritParams foo::bar` ensures that `%` remains escaped (#313). 
+
+* Roxygen no longer complains about non-matching braces inside strings
+  in examples (#329).
+
+* `@family` now cross-links each manual page only once, instread of linking
+  to all aliases (@gaborcsardi, #283, #367)
+
+* Roxygen now records its version in a single place: the `RoxygenNote`
+  field in the `DESCRIPTION` (#338).
+
+* `\usage{}` is correctly generated for functions with string arguments 
+  containing `"\""` (#265).
+
 * If you document multiple arguments with one `@param`, (e.g. `@param a,b,c`)
   each parameter will get a space after it so it can be wrapped in the 
   generated Rd file (#373).
@@ -14,9 +43,24 @@
   several .R files, as may happen when working wIth S4 classes, generic 
   functions and methods (#323, #324).
 
+* Sections with identical title (as created by `@section`) are now merged in
+  parse order, just like `@description` and `@details`.  This is
+  especially useful in conjunction with the `@rdname` tag. (@krlmlr, #300).
+
+* Package documentation draws title and description from the `DESCRIPTON` file
+  if using the string `"_PACKAGE"` as documented object. Example source file:
+  `#' @details Details.<newline>"_PACKAGE"` (@krlmlr, #349).
+
 * Parser callbacks registered with `register.preref.parser` are now called
   for fields parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370)
+
+* Empty `NAMESPACE` file is written if it is maintained by `roxygen2`
+  (@krlmlr, #348).
+
+* Space before `@include` is not necessary anymore (@krlmlr, #342).
+
+* Data that is not lazy-loaded can be documented again (@krlmlr, #390).
 
 # roxygen2 4.1.1
 

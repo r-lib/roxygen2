@@ -7,7 +7,8 @@
 knitr::opts_chunk$set(
   comment = "#>",
   error = FALSE,
-  tidy = FALSE
+  tidy = FALSE,
+  collapse = TRUE
 )
 ```
 
@@ -453,6 +454,24 @@ To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
 #'    Apart from the following special cases...
 #' }
 ```
+
+Sections with identical titles will be merged.
+This is especially useful in conjunction with the `@rdname` tag:
+
+```{r}
+#' Basic arithmetic
+#'
+#' @param x,y numeric vectors.
+#' @section Neutral elements:
+#'   Addition: 0.
+add <- function(x, y) x + y
+
+#' @rdname add
+#' @section Neutral elements:
+#'   Multiplication: 1.
+times <- function(x, y) x * y
+```
+
 
 ## Back references
 

@@ -24,6 +24,10 @@ object_from_call <- function(call, env, block) {
 }
 
 find_data <- function(name, env) {
+  if (identical(name, "_PACKAGE")) {
+    return(find_data_for_package(env))
+  }
+
   ns <- env_namespace(env)
   if (is.null(ns)) {
     get(name, envir = env)
@@ -32,15 +36,24 @@ find_data <- function(name, env) {
   }
 }
 
+find_data_for_package <- function(env) {
+  ns <- env_namespace(env)
+  base_path <- getNamespaceInfo(ns, "path")
+  desc <- read.description(file.path(base_path, "DESCRIPTION"))
+
+  if (!identical(desc$Package, packageName(env))) {
+    warning("Inconsistent package names: ",
+            desc$Package, " vs. ", packageName(env),
+            call. = FALSE)
+  }
+
+  structure(list(desc = desc), class = "package")
+}
+
 # Find namespace associated with environment
 env_namespace <- function(env) {
-  env_name <- attr(env, "name")
-  if (is.null(env_name)) return(NULL)
-  if (!grepl(":", env_name)) return(NULL)
-
-  ns_name <- gsub("package:", "", env_name)
   ns <- NULL
-  try(ns <- asNamespace(ns_name), silent = TRUE)
+  try(ns <- asNamespace(env), silent = TRUE)
   if (is.null(ns)) return(NULL)
 
   ns

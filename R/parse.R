@@ -28,16 +28,12 @@ parse_file <- function(file, env) {
   comment_refs <- comments(refs)
 
   extract <- function(call, ref, comment_ref) {
-    comment_ref2 <- list(filename = file, lloc = as.vector(comment_ref))
+    preref <- parse_preref(comment_ref, file)
+    if (length(preref) == 0) return()
 
-    errors_with_srcref(comment_ref2, {
-      preref <- parse.preref(as.character(comment_ref))
-      if (is.null(preref)) return()
-
-      preref$object <- object_from_call(call, env, preref)
-      preref$srcref <- list(filename = file, lloc = as.vector(ref))
-      add_defaults(preref)
-    })
+    preref$object <- object_from_call(call, env, preref)
+    preref$srcref <- list(filename = file, lloc = as.vector(ref))
+    add_defaults(preref)
   }
 
   Map(extract, parsed, refs, comment_refs)

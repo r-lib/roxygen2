@@ -6,13 +6,14 @@
 using namespace Rcpp;
 
 // rdComplete
-bool rdComplete(std::string string);
-RcppExport SEXP roxygen2_rdComplete(SEXP stringSEXP) {
+bool rdComplete(std::string string, bool is_code);
+RcppExport SEXP roxygen2_rdComplete(SEXP stringSEXP, SEXP is_codeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type string(stringSEXP);
-    __result = Rcpp::wrap(rdComplete(string));
+    Rcpp::traits::input_parameter< bool >::type is_code(is_codeSEXP);
+    __result = Rcpp::wrap(rdComplete(string, is_code));
     return __result;
 END_RCPP
 }
@@ -27,25 +28,16 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// preparse_block
-List preparse_block(std::string x);
-RcppExport SEXP roxygen2_preparse_block(SEXP xSEXP) {
+// tokenise_preref
+List tokenise_preref(CharacterVector lines, std::string file, int offset);
+RcppExport SEXP roxygen2_tokenise_preref(SEXP linesSEXP, SEXP fileSEXP, SEXP offsetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(preparse_block(x));
-    return __result;
-END_RCPP
-}
-// preparse_file
-List preparse_file(std::string filePath);
-RcppExport SEXP roxygen2_preparse_file(SEXP filePathSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type filePath(filePathSEXP);
-    __result = Rcpp::wrap(preparse_file(filePath));
+    Rcpp::traits::input_parameter< CharacterVector >::type lines(linesSEXP);
+    Rcpp::traits::input_parameter< std::string >::type file(fileSEXP);
+    Rcpp::traits::input_parameter< int >::type offset(offsetSEXP);
+    __result = Rcpp::wrap(tokenise_preref(lines, file, offset));
     return __result;
 END_RCPP
 }

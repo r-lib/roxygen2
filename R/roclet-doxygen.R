@@ -4,25 +4,25 @@
 #    and change the corresponding value.
 #    If no line has this tag, add a line with the tag and the value at the end.
 #    If several lines match the tag, returns a warning.
-# @param fileStrings A vector with each string containing a line of the file
+# @param file_strings A vector with each string containing a line of the file
 # @param tag The tag to be searched for
-# @param newVal The new value for the tag
+# @param new_val The new value for the tag
 # @return The vector of strings with the new value
 # @keywords internal
-replace_tag <- function(fileStrings, tag, newVal) {
-    iLine <- grep(paste0("^", tag, "\\>"), fileStrings)
-    nLines <- length(iLine)
-    if (nLines == 0) {
-        line <- paste0(tag, "\t= ", newVal)
-        iLine <- length(fileStrings) + 1
-    } else if (nLines > 0) {
-        line <- gsub("=.*", paste0("= ", newVal), fileStrings[iLine])
-        if (nLines > 1) {
-            warning(paste0("File has", nLines, "for key", tag, "check it up manually"))
+replace_tag <- function(file_strings, tag, new_val) {
+    i_line <- grep(paste0("^", tag, "\\>"), file_strings)
+    n_lines <- length(i_line)
+    if (n_lines == 0) {
+        line <- paste0(tag, "\t= ", new_val)
+        i_line <- length(file_strings) + 1
+    } else if (n_lines > 0) {
+        line <- gsub("=.*", paste0("= ", new_val), file_strings[i_line])
+        if (n_lines > 1) {
+            warning(paste0("File has", n_lines, "for key", tag, "check it up manually"))
     }
     }
-    fileStrings[iLine] <- line
-    return(fileStrings)
+    file_strings[i_line] <- line
+    return(file_strings)
 }
 #' Prepares the R package structure for use with doxygen
 #' @description Makes a configuration file in inst/doxygen

@@ -13,3 +13,6 @@ test_that("doxygen_init creates the configuration file with INPUT folder and cle
           clean.doxygen(base_path=".")
           expect_true(! file.exists(doxy_file))
 })
+test_that("prepare_folder returns an error if needed",{
+          expect_error(prepare_folder(".","aezrezarzerazer"))
+})

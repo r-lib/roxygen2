@@ -110,12 +110,12 @@ clean.doxygen <- function(roclet, results, base_path, options = list(), check = 
     doxygen_path <- file.path(base_path, "inst", "doxygen")
     unlink(doxygen_path,recursive=TRUE)
 }
-#' @description The workhorse of the doxygen roclet, making if necessary a doxygen configuration file
-#'      and launching doxygen on it
-#' @param pkg_path The root of the package to be treated
-#' @param doxygen A boolean: should doxygen be ran on documents in src?
-#'     the default is TRUE if a src folder exist and FALSE if not
-#' @keywords internal
+# @description The workhorse of the doxygen roclet, making if necessary a doxygen configuration file
+#      and launching doxygen on it
+# @param pkg_path The root of the package to be treated
+# @param doxygen A boolean: should doxygen be ran on documents in src?
+#     the default is TRUE if a src folder exist and FALSE if not
+# @keywords internal
 doxygen_update_all <- function(pkg_path = ".", compiled_sources = NULL) {
     doxygen_path <- file.path(pkg_path, "inst", "doxygen")
     doxy_file <- file.path(doxygen_path, "Doxyfile")

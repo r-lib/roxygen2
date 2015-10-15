@@ -158,7 +158,7 @@ rm_doxygen_from_roclets <- function(base_path="."){
 #' \dontrun{
 #' use_doxygen()
 #' }
-#' @keywords internal
+#' @export
 use_doxygen <- function(pkg="."){
     doxygen_path <- file.path(pkg, "inst", "doxygen")
     doxy_file <- file.path(doxygen_path, "Doxyfile")

@@ -65,25 +65,29 @@ prepare_folder <- function(dox_dir){
 #' @return NULL
 #' @examples
 #' \dontrun{
-#' doxygen_init()
+#' use_doxygen()
 #' }
 #' @keywords internal
-doxygen_init <- function(doxy_file){
+use_doxygen <- function(doxy_file){
     dox_dir <- dirname(doxy_file)
     doxy_file_name <- basename(doxy_file)
     
     # checks that doxygen is installed
-    # and prepare folder tree if needed
-    prepare_folder(dox_dir)
+    doxygen_ok <- check_doxygen()
 
-    # prepare the configuration file for doxygen
-    system(paste0("doxygen -g ", doxy_file))
+    # prepare folder tree if needed
+    if(doxygen_ok){
+        prepare_folder(dox_dir)
 
-    config <- readLines(doxy_file)
-    config <- replace_tag(config, "EXTRACT_ALL", "YES")
-    config <- replace_tag(config, "INPUT", "src/")
-    config <- replace_tag(config, "OUTPUT_DIRECTORY", dox_dir)
-    cat(config, file = doxy_file, sep = "\n")
+        # prepare the configuration file for doxygen
+        system(paste0("doxygen -g ", shQuote(normalizePath(doxy_file))))
+
+        config <- readLines(doxy_file)
+        config <- replace_tag(config, "EXTRACT_ALL", "YES")
+        config <- replace_tag(config, "INPUT", "src/")
+        config <- replace_tag(config, "OUTPUT_DIRECTORY", dox_dir)
+        cat(config, file = doxy_file, sep = "\n")
+    }
 
     return(NULL)
 }
@@ -136,8 +140,8 @@ doxygen_update_all <- function(pkg_path = ".", compiled_code = NULL) {
 
     if (compiled_code) {
         if (!file.exists(doxy_file)) {
-            doxygen_init(doxy_file = doxy_file)
+            use_doxygen(doxy_file = doxy_file)
         }
-        system(paste0("doxygen ", doxy_file))
+        doxygen(doxy_file=doxy_file)
     }
 }

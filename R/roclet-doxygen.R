@@ -38,7 +38,7 @@ check_doxygen <- function(test_command="doxygen -v"){
 doxygen <- function(doxy_file){
     doxygen_ok <- check_doxygen()
     if(doxygen_ok){
-        system(paste0("doxygen ", shQuote(normalizePath(doxy_file))))
+        try(system(paste0("doxygen ", shQuote(normalizePath(doxy_file)))))
     }
 }
 

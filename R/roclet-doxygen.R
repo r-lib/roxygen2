@@ -104,6 +104,11 @@ doxygen_init <- function(doxy_file){
 change_roclet_list <- function(base_path=".",roclet,add){
     # get the current options in DESCRIPTION
     desc_path <- file.path(base_path, "DESCRIPTION")
+    if(! file.exists(desc_path)){
+        cat("No '",desc_path,"' file. Is this a package?\n",sep="")
+        return(FALSE)
+    }
+
     desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
     
     if (is.na(desc_opts)) {
@@ -205,7 +210,7 @@ roc_output.doxygen <- function(roclet, results, base_path, options = list(), che
 clean.doxygen <- function(roclet, results, base_path, options = list(), check = TRUE) {
     doxygen_path <- file.path(base_path, "inst", "doxygen")
     unlink(doxygen_path,recursive=TRUE)
-    rm_doxygen_from_roclets()
+    rm_doxygen_from_roclets(base_path)
 }
 
 # @description The workhorse of the doxygen roclet, making if necessary a doxygen configuration file

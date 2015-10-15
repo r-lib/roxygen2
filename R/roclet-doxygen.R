@@ -95,15 +95,79 @@ doxygen_init <- function(doxy_file){
 
     return(doxygen_ok)
 }
-
-        config <- readLines(doxy_file)
-        config <- replace_tag(config, "EXTRACT_ALL", "YES")
-        config <- replace_tag(config, "INPUT", "src/")
-        config <- replace_tag(config, "OUTPUT_DIRECTORY", dox_dir)
-        cat(config, file = doxy_file, sep = "\n")
+change_roclet_list <- function(base_path=".",roclet,add){
+    # get the current options in DESCRIPTION
+    desc_path <- file.path(base_path, "DESCRIPTION")
+    desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
+    
+    if (is.na(desc_opts)) {
+        opts <- list()
+    } else {
+        opts <- eval(parse(text = desc_opts))
     }
 
-    return(NULL)
+    # we not only need doxygen bet also current default roclet declared in the options
+    optsCurrent <- load_options()
+    if(add){
+        opts$roclets <- union(optsCurrent$roclets, roclet)
+    }else{
+        opts$roclets <- setdiff(optsCurrent$roclets, roclet)
+    }
+    # Note: load_options also loading DESCRIPTION, no need to do the union with opts$roclets
+
+    # write back just what is needed
+    newString <- paste0(capture.output(dput(opts,file="")),collapse="")
+
+    config <- readLines(desc_path)
+    config <- replace_tag(config,"Roxygen",newString,sep=": ")
+    cat(config, file = desc_path, sep = "\n")
+
+    # load options again to make sure any check/warning is raised right away
+    load_options()
+}
+#' @title Add/remove doxygen to default roclet
+#' @description Add/remove the doxygen roclet from the list of 
+#'     roclets ran by default for this package.
+#'     This is done by modifying the options of the Roxygen package 
+#'     in the DESCRIPTION file
+#' @param base_path Folder of the package 
+#' @return The new value of Roxygen options
+#' @examples
+#' \dontrun{
+#' add_doxygen_to_roclets()
+#' }
+#' @export
+add_doxygen_to_roclets <- function(base_path="."){
+    change_roclet_list(base_path,"doxygen",add=TRUE)
+}
+#' @name add_doxygen_to_roclets
+#' @export
+rm_doxygen_from_roclets <- function(base_path="."){
+    change_roclet_list(base_path,"doxygen",add=FALSE)
+}
+
+#' Prepare the package so that it uses doxygen
+#' @description Calls doxygen_init with default directory and add 
+#'      doxygen to the list of roclets to be used by default for this package
+#' @param pkg The package folder
+#' @note Please note this implies the installation of doxygen on the system,
+#'       accessible on the command line by `doxygen`
+#' @return NULL
+#' @examples
+#' \dontrun{
+#' use_doxygen()
+#' }
+#' @keywords internal
+use_doxygen <- function(pkg="."){
+    doxygen_path <- file.path(pkg, "inst", "doxygen")
+    doxy_file <- file.path(doxygen_path, "Doxyfile")
+
+    doxygen_ok <- doxygen_init(doxy_file)
+    if(doxygen_ok){
+        doxygen_ok <- add_doxygen_to_roclets()
+    }
+
+    return(doxygen_ok)
 }
 
 #' Makes doxygen documentation
@@ -127,7 +191,6 @@ doxygen_roclet <- function() {
 roc_process.doxygen <- function(roclet, parsed, base_path, options = list()) {
     doxygen_update_all(base_path)
 }
-
 #' @export
 roc_output.doxygen <- function(roclet, results, base_path, options = list(), check = TRUE) {
 }

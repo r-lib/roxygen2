@@ -24,16 +24,20 @@ replace_tag <- function(file_strings, tag, new_val) {
     file_strings[i_line] <- line
     return(file_strings)
 }
-
-# prepare a folder for doxygen if doxygen is installed
-prepare_folder <- function(dox_dir,test_command="doxygen -v"){
-    # check that doxygen in installed
+# check if doxygen is functional
+check_doxygen <- function(test_command="doxygen -v"){
     version_doxygen <-try(system(test_command,intern=TRUE,ignore.stderr=TRUE),silent=TRUE)
     if(class(version_doxygen)=="try-error"){
-        stop(paste("doxygen doesn't seem installed:",test_command,"returned an error."))
+        warning(paste("doxygen doesn't seem installed:",test_command,"returned an error."))
         return(FALSE)
+    }else{
+        return(TRUE)
+    }
+}
     }
 
+# prepare a folder for doxygen if doxygen is installed
+prepare_folder <- function(dox_dir){
     # prepare the folder for doxygen config file
     if (!file.exists(dox_dir)) {
         dir.create(dox_dir, recursive = TRUE)

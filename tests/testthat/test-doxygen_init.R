@@ -5,9 +5,11 @@ test_that("use_doxygen creates the configuration file with INPUT folder and clea
           
           # make and test
           use_doxygen(doxy_file)
-          config <- readLines(doxy_file)
-          expect_equal(length(grep("INPUT .* src/",config)),1)
-          expect_true(file.exists(doxy_file))
+          if(check_doxygen()){
+              config <- readLines(doxy_file)
+              expect_equal(length(grep("INPUT .* src/",config)),1)
+              expect_true(file.exists(doxy_file))
+          }
 
           # clean up after and test clean 
           clean.doxygen(base_path=".")

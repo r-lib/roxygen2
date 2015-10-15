@@ -80,7 +80,7 @@ use_doxygen <- function(doxy_file){
         prepare_folder(dox_dir)
 
         # prepare the configuration file for doxygen
-        system(paste0("doxygen -g ", shQuote(normalizePath(doxy_file))))
+        system(paste0("doxygen -g ", shQuote(doxy_file)))
 
         config <- readLines(doxy_file)
         config <- replace_tag(config, "EXTRACT_ALL", "YES")

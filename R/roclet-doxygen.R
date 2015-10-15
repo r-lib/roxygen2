@@ -95,6 +95,7 @@ doxygen_init <- function(doxy_file){
 
     return(doxygen_ok)
 }
+# the workhorse function for add_doxygen_to_roclets and rm_doxygen_from_roclets
 change_roclet_list <- function(base_path=".",roclet,add){
     # get the current options in DESCRIPTION
     desc_path <- file.path(base_path, "DESCRIPTION")
@@ -123,7 +124,7 @@ change_roclet_list <- function(base_path=".",roclet,add){
     cat(config, file = desc_path, sep = "\n")
 
     # load options again to make sure any check/warning is raised right away
-    load_options()
+    return(load_options())
 }
 #' @title Add/remove doxygen to default roclet
 #' @description Add/remove the doxygen roclet from the list of 

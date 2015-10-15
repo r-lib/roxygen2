@@ -9,14 +9,14 @@
 # @param new_val The new value for the tag
 # @return The vector of strings with the new value
 # @keywords internal
-replace_tag <- function(file_strings, tag, new_val) {
+replace_tag <- function(file_strings, tag, new_val,sep="\t= ") {
     i_line <- grep(paste0("^", tag, "\\>"), file_strings)
     n_lines <- length(i_line)
     if (n_lines == 0) {
-        line <- paste0(tag, "\t= ", new_val)
+        line <- paste0(tag, sep, new_val)
         i_line <- length(file_strings) + 1
     } else if (n_lines > 0) {
-        line <- gsub("=.*", paste0("= ", new_val), file_strings[i_line])
+        line <- gsub(paste0(sep,".*"), paste0(sep, new_val), file_strings[i_line])
         if (n_lines > 1) {
             warning(paste0("File has", n_lines, "for key", tag, "check it up manually"))
     }

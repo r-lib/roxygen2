@@ -62,13 +62,13 @@ prepare_folder <- function(dox_dir){
 #' @param rootFolder The root of the R package
 #' @note Please note this implies the installation of doxygen on the system,
 #'       accessible on the command line by `doxygen`
-#' @return NULL
+#' @return A boolean: did everything go smoothly? 
 #' @examples
 #' \dontrun{
-#' use_doxygen()
+#' doxygen_init()
 #' }
 #' @keywords internal
-use_doxygen <- function(doxy_file){
+doxygen_init <- function(doxy_file){
     dox_dir <- dirname(doxy_file)
     doxy_file_name <- basename(doxy_file)
     
@@ -80,7 +80,21 @@ use_doxygen <- function(doxy_file){
         prepare_folder(dox_dir)
 
         # prepare the configuration file for doxygen
-        system(paste0("doxygen -g ", shQuote(doxy_file)))
+        generation <- try(system(paste0("doxygen -g ", shQuote(doxy_file))))
+
+        if(class(generation) != "try-error"){
+            config <- readLines(doxy_file)
+            config <- replace_tag(config, "EXTRACT_ALL", "YES")
+            config <- replace_tag(config, "INPUT", "src/")
+            config <- replace_tag(config, "OUTPUT_DIRECTORY", dox_dir)
+            cat(config, file = doxy_file, sep = "\n")
+        }else{
+            doxygen_ok <- FALSE
+        }
+    }
+
+    return(doxygen_ok)
+}
 
         config <- readLines(doxy_file)
         config <- replace_tag(config, "EXTRACT_ALL", "YES")
@@ -140,7 +154,7 @@ doxygen_update_all <- function(pkg_path = ".", compiled_code = NULL) {
 
     if (compiled_code) {
         if (!file.exists(doxy_file)) {
-            use_doxygen(doxy_file = doxy_file)
+            doxygen_init(doxy_file = doxy_file)
         }
         doxygen(doxy_file=doxy_file)
     }

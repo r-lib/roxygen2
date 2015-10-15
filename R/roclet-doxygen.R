@@ -202,6 +202,7 @@ roc_output.doxygen <- function(roclet, results, base_path, options = list(), che
 clean.doxygen <- function(roclet, results, base_path, options = list(), check = TRUE) {
     doxygen_path <- file.path(base_path, "inst", "doxygen")
     unlink(doxygen_path,recursive=TRUE)
+    rm_doxygen_from_roclets()
 }
 
 # @description The workhorse of the doxygen roclet, making if necessary a doxygen configuration file

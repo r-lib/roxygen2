@@ -4,7 +4,7 @@ test_that("doxygen_init creates the configuration file with INPUT folder and cle
           clean.doxygen(base_path=".")
           
           # make doxygen structure and test
-          doxygen_ok <- doxygen_init(doxy_file)
+          suppressWarnings(doxygen_ok <- doxygen_init(doxy_file))
           if(doxygen_ok){
               config <- readLines(doxy_file)
               expect_equal(length(grep("INPUT .* src/",config)),1)

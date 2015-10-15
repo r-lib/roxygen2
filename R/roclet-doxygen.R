@@ -124,7 +124,7 @@ change_roclet_list <- function(base_path=".",roclet,add){
     cat(config, file = desc_path, sep = "\n")
 
     # load options again to make sure any check/warning is raised right away
-    return(load_options())
+    return(invisible(load_options()))
 }
 #' @title Add/remove doxygen to default roclet
 #' @description Add/remove the doxygen roclet from the list of 

@@ -34,7 +34,13 @@ check_doxygen <- function(test_command="doxygen -v"){
         return(TRUE)
     }
 }
+# launch doxygen documentation
+doxygen <- function(doxy_file){
+    doxygen_ok <- check_doxygen()
+    if(doxygen_ok){
+        system(paste0("doxygen ", shQuote(normalizePath(doxy_file))))
     }
+}
 
 # prepare a folder for doxygen if doxygen is installed
 prepare_folder <- function(dox_dir){

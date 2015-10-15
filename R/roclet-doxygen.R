@@ -38,7 +38,9 @@ check_doxygen <- function(test_command="doxygen -v"){
 doxygen <- function(doxy_file){
     doxygen_ok <- check_doxygen()
     if(doxygen_ok){
+        cat("Running doxygen... ")
         try(system(paste0("doxygen ", shQuote(normalizePath(doxy_file)))))
+        cat("done.\n")
     }
 }
 
@@ -89,6 +91,7 @@ doxygen_init <- function(doxy_file){
             config <- replace_tag(config, "EXTRACT_ALL", "YES")
             config <- replace_tag(config, "INPUT", "src/")
             config <- replace_tag(config, "OUTPUT_DIRECTORY", dox_dir)
+            config <- replace_tag(config, "QUIET", "YES")
             cat(config, file = doxy_file, sep = "\n")
         }else{
             doxygen_ok <- FALSE

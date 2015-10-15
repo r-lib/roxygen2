@@ -165,7 +165,7 @@ use_doxygen <- function(pkg="."){
 
     doxygen_ok <- doxygen_init(doxy_file)
     if(doxygen_ok){
-        doxygen_ok <- add_doxygen_to_roclets()
+        add_doxygen_to_roclets()
     }
 
     return(doxygen_ok)

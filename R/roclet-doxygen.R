@@ -80,9 +80,11 @@ doxygen_init <- function(doxy_file){
         prepare_folder(dox_dir)
 
         # prepare the configuration file for doxygen
-        generation <- try(system(paste0("doxygen -g ", shQuote(doxy_file))))
+        generation <- try(system(paste0("doxygen -g ", shQuote(doxy_file)),intern=TRUE))
 
         if(class(generation) != "try-error"){
+            cat("Doxygen configuration file: ",doxy_file,"\n",
+               "Doxygen outputs are in: ", dox_dir,"\n",sep="") 
             config <- readLines(doxy_file)
             config <- replace_tag(config, "EXTRACT_ALL", "YES")
             config <- replace_tag(config, "INPUT", "src/")
@@ -165,10 +167,11 @@ use_doxygen <- function(pkg="."){
 
     doxygen_ok <- doxygen_init(doxy_file)
     if(doxygen_ok){
+        cat("Everything seems ok\n")
         add_doxygen_to_roclets()
     }
 
-    return(doxygen_ok)
+    return(invisible(doxygen_ok))
 }
 
 #' Makes doxygen documentation

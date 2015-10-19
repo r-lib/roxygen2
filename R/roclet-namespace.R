@@ -80,10 +80,12 @@ clean.namespace <- function(roclet, base_path) {
 
 # Functions that take complete partitum and return NAMESPACE lines
 ns_export <- function(tag, part) {
-  if (!is.null.string(tag)) return(export(tag))
-  # FIXME: check for empty exports (i.e. no name)
-
-  default_export(part$object, part)
+  if (identical(tag, "")) {
+    # FIXME: check for empty exports (i.e. no name)
+    default_export(part$object, part)
+  } else {
+    export(tag)
+  }
 }
 default_export <- function(x, block) UseMethod("default_export")
 #' @export

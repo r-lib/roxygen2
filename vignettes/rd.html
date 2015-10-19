@@ -502,7 +502,7 @@ Account &lt;- setRefClass(&quot;Account&quot;,
 
 <h2>Documenting datasets</h2>
 
-<p>Datasets are usually stored as <code>.rdata</code> files in <code>data/</code> and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you document <code>NULL</code>, and use <code>@name</code> to tell roxygen2 what dataset you&#39;re really documenting.</p>
+<p>Datasets are usually stored as <code>.rdata</code> files in <code>data/</code> and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you quote the dataset&#39;s name.</p>
 
 <p>There are two additional tags that are useful for documenting datasets:</p>
 
@@ -528,16 +528,15 @@ first line of <code>str()</code> output</p></li>
 #&#39;
 #&#39; @format A data frame with 53940 rows and 10 variables
 #&#39; @source \url{http://www.diamondse.info/}
-#&#39; @name diamonds
-NULL
-#&gt; NULL
+&quot;diamonds&quot;
+#&gt; [1] &quot;diamonds&quot;
 </code></pre>
 
 <h2>Documenting packages</h2>
 
 <p>As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages provide package documentation, but it&#39;s an extremely useful tool for users, because instead of just listing functions like <code>help(package = pkgname)</code> it organises them and shows the user where to get started.</p>
 
-<p>Package documentation should describe the overall purpose of the package and point to the most important functions. It should not contain a verbatim list of functions or copy of <code>DESCRIPTION</code>. This file is for human reading, so pick the most important elements of your package.</p>
+<p>Package documentation should describe the overall purpose of the package and point to the most important functions. It should not contain a verbatim list of functions or copy of <code>DESCRIPTION</code> (although title and description are inherited from <code>DESCRIPTION</code> by default to help you get started). This file is for human reading, so pick the most important elements of your package.</p>
 
 <p>Package documentation should be placed in <code>pkgname.R</code>. Here&#39;s an example:</p>
 
@@ -549,22 +548,18 @@ NULL
 #&#39; The only function you&#39;re likely to need from \pkg{roxygen2} is
 #&#39; \code{\link{roxygenize}}. Otherwise refer to the vignettes to see
 #&#39; how to format the documentation.
-#&#39;
-#&#39; @docType package
-#&#39; @name roxygen2
-NULL
-#&gt; NULL
+&quot;_PACKAGE&quot;
+#&gt; [1] &quot;_PACKAGE&quot;
 </code></pre>
 
 <p>Some notes:</p>
 
 <ul>
-<li><p>Like for datasets, there isn&#39;t a object that we can document directly so
-document <code>NULL</code> and use <code>@name</code> to say what we&#39;re actually documenting</p></li>
-<li><p><code>@docType package</code> indicates that the documentation is for the package.
+<li><p>Like for datasets, there isn&#39;t a object that we can document directly. Use
+<code>&quot;_PACKAGE&quot;</code> to indicate that you are creating the package&#39;s documentation.
 This will automatically add the corect aliases so that both <code>?pkgname</code>
-and <code>package?pkgname</code> will find the package help. If there&#39;s already
-a function called <code>pkgname()</code>, use <code>@name roxygen2-package</code>.</p></li>
+and <code>package?pkgname</code> will find the package help. This also works if there&#39;s
+already a function called <code>pkgname()</code>.</p></li>
 <li><p>Use <code>@references</code> point to published material about the package that
 users might find helpful.</p></li>
 </ul>

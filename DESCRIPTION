@@ -46,6 +46,7 @@ Collate:
     'rd-parse.R'
     'rd-tag-api.R'
     'roclet-collate.R'
+    'roclet-doxygen.R'
     'roclet-namespace.R'
     'roclet-rd.R'
     'roclet-vignette.R'

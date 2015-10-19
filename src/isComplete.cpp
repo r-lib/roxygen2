@@ -3,7 +3,7 @@ using namespace Rcpp;
 
 // From http://developer.r-project.org/parseRd.pdf:  The characters \, %, {,
 // and } have special meaning in almost all parts of an Rd file. In code,
-// strings must also match
+// strings must also match, except in comments.
 // [[Rcpp::export]]
 bool rdComplete(std::string string, bool is_code = false) {
   int n = string.length();
@@ -39,6 +39,7 @@ bool rdComplete(std::string string, bool is_code = false) {
     case '{':  braces++; break;
     case '}':  braces--; break;
     case '\\': in_escape = true; break;
+    case '#':  in_comment = true;
     case '%':  in_comment = true; break;
     case '\'': if (is_code) in_string = '\''; break;
     case '"':  if (is_code) in_string = '"'; break;

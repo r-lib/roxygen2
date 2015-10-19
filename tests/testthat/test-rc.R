@@ -27,7 +27,7 @@ test_that("trim_docstring handles indentation correctly", {
 
 env <- pkg_env()
 
-A <- setRefClass("A", methods = list(
+A1 <- setRefClass("A1", methods = list(
   f = function() {
     "This function has a docstring"
     1
@@ -37,7 +37,7 @@ A <- setRefClass("A", methods = list(
   }
 ), where = env)
 
-B <- setRefClass("B", contains = "A", methods = list(
+B1 <- setRefClass("B1", contains = "A1", methods = list(
   f1 = function() {
     "This function has a docstring"
     1
@@ -47,8 +47,8 @@ B <- setRefClass("B", contains = "A", methods = list(
   }
 ), where = env)
 
-classA <- getClass("A", where = env)
-classB <- getClass("B", where = env)
+classA <- getClass("A1", where = env)
+classB <- getClass("B1", where = env)
 
 test_that("rc_methods only lists methods belong to class (not parents)", {
   expect_equal(length(rc_methods(classA)), 2)
@@ -71,5 +71,5 @@ test_that("RC methods included included in own section", {
   expect_match(methods[[1]], "This function has a docstring")
 })
 
-removeClass("B", where = env)
-removeClass("A", where = env)
+removeClass("B1", where = env)
+removeClass("A1", where = env)

@@ -2,46 +2,38 @@
 #' @import stringr
 NULL
 
-register.preref.parsers(parse.value,
-                        'backref',
-                        'name',
-                        'rdname',
-                        'aliases',
-                        'title',
-                        'usage',
-                        'references',
-                        'concept',
-                        'note',
-                        'seealso',
-                        'example',
-                        'keywords',
-                        'return',
-                        'author',
-                        'section',
-                        'family',
-                        'inheritParams',
-                        'format',
-                        'source',
-                        'encoding',
-                        'description',
-                        'details')
-
-register.preref.parsers(parse.examples,
-                        "examples")
-
-register.preref.parsers(parse.name.description,
-                        'param',
-                        'slot',
-                        'field',
-                        'method',
-                        'describeIn')
-
-register.preref.parsers(parse.name,
-                        'docType')
-
-register.preref.parsers(parse.toggle,
-                        'noRd')
-
+register_tags(
+  aliases = parse.value,
+  author = parse.value,
+  backref = parse.value,
+  concept = parse.value,
+  describeIn = parse.name.description,
+  description = parse.value,
+  details = parse.value,
+  docType = parse.name,
+  encoding = parse.value,
+  example = parse.value,
+  examples = parse.examples,
+  family = parse.value,
+  field = parse.name.description,
+  format = parse.value,
+  inheritParams = parse.value,
+  keywords = parse.value,
+  method = parse.name.description,
+  name = parse.value,
+  noRd = parse.toggle,
+  note = parse.value,
+  param = parse.name.description,
+  rdname = parse.value,
+  references = parse.value,
+  return = parse.value,
+  section = parse.value,
+  seealso = parse.value,
+  slot = parse.name.description,
+  source = parse.value,
+  title = parse.value,
+  usage = parse.value
+)
 
 #' Roclet: make Rd files.
 #'

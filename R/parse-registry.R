@@ -23,3 +23,8 @@ register.preref.parsers <- function(parser, ...) {
     register.preref.parser(key, parser)
   }
 }
+
+register_tags <- function(...) {
+  parsers <- list(...)
+  Map(register.preref.parser, names(parsers), parsers)
+}

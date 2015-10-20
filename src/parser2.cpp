@@ -160,7 +160,7 @@ List tokenise_preref(CharacterVector lines, std::string file = "",
 CharacterVector find_includes(std::string path) {
   std::vector<std::string> includes;
 
-  std::ifstream file(path);
+  std::ifstream file(path.c_str());
   if (!file.good())
     stop("Failed to open %s", path);
 

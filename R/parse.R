@@ -46,8 +46,8 @@ comments <- function(refs) {
   # first_line, first_byte, last_line, last_byte
   com <- vector("list", length(refs))
   for(i in seq_along(refs)) {
-    # Comments begin after last line of last block, and continue to
-    # first line of this block
+    # Comments begin after last line of last block, and this block is included
+    # so that it can be parsed for additional comments
     if (i == 1) {
       first_byte <- 1
       first_line <- 1
@@ -56,17 +56,8 @@ comments <- function(refs) {
       first_line <- refs[[i - 1]][3]
     }
 
-    last_line <- refs[[i]][1]
-    last_byte <- refs[[i]][2] - 1
-    if (last_byte == 0) {
-      if (last_line == 1) {
-        last_byte <- 1
-        last_line <- 1
-      } else {
-        last_line <- last_line - 1
-        last_byte <- 1e3
-      }
-    }
+    last_line <- refs[[i]][3]
+    last_byte <- refs[[i]][4]
 
     lloc <- c(first_line, first_byte, last_line, last_byte)
     com[[i]] <- srcref(srcfile, lloc)

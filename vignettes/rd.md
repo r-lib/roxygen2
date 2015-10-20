@@ -292,7 +292,7 @@ Methods with doc strings will be included in the "Methods" section of the class 
 
 ## Documenting datasets
 
-Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you document `NULL`, and use `@name` to tell roxygen2 what dataset you're really documenting.
+Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you quote the dataset's name.
 
 There are two additional tags that are useful for documenting datasets:
 
@@ -319,16 +319,15 @@ To show how everything fits together, the example below is an excerpt from the r
 #'
 #' @format A data frame with 53940 rows and 10 variables
 #' @source \url{http://www.diamondse.info/}
-#' @name diamonds
-NULL
-#> NULL
+"diamonds"
+#> [1] "diamonds"
 ```
 
 ## Documenting packages
 
 As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages provide package documentation, but it's an extremely useful tool for users, because instead of just listing functions like `help(package = pkgname)` it organises them and shows the user where to get started.
 
-Package documentation should describe the overall purpose of the package and point to the most important functions. It should not contain a verbatim list of functions or copy of `DESCRIPTION`. This file is for human reading, so pick the most important elements of your package.
+Package documentation should describe the overall purpose of the package and point to the most important functions. It should not contain a verbatim list of functions or copy of `DESCRIPTION` (although title and description are inherited from `DESCRIPTION` by default to help you get started). This file is for human reading, so pick the most important elements of your package.
 
 Package documentation should be placed in `pkgname.R`. Here's an example:
 
@@ -342,22 +341,17 @@ Package documentation should be placed in `pkgname.R`. Here's an example:
 #' The only function you're likely to need from \pkg{roxygen2} is
 #' \code{\link{roxygenize}}. Otherwise refer to the vignettes to see
 #' how to format the documentation.
-#'
-#' @docType package
-#' @name roxygen2
-NULL
-#> NULL
+"_PACKAGE"
+#> [1] "_PACKAGE"
 ```
 
 Some notes:
 
-* Like for datasets, there isn't a object that we can document directly so
-  document `NULL` and use `@name` to say what we're actually documenting
-
-* `@docType package` indicates that the documentation is for the package.
+* Like for datasets, there isn't a object that we can document directly. Use
+  `"_PACKAGE"` to indicate that you are creating the package's documentation.
   This will automatically add the corect aliases so that both `?pkgname`
-  and `package?pkgname` will find the package help. If there's already
-  a function called `pkgname()`, use `@name roxygen2-package`.
+  and `package?pkgname` will find the package help. This also works if there's
+  already a function called `pkgname()`.
 
 * Use `@references` point to published material about the package that
   users might find helpful.

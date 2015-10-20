@@ -119,8 +119,7 @@ Account <- setRefClass("Account",
 #'
 #' @format A data frame with 53940 rows and 10 variables
 #' @source \url{http://www.diamondse.info/}
-#' @name diamonds
-NULL
+"diamonds"
 
 ## ------------------------------------------------------------------------
 #' Generate R documentation from inline comments.
@@ -131,10 +130,7 @@ NULL
 #' The only function you're likely to need from \pkg{roxygen2} is
 #' \code{\link{roxygenize}}. Otherwise refer to the vignettes to see
 #' how to format the documentation.
-#'
-#' @docType package
-#' @name roxygen2
-NULL
+"_PACKAGE"
 
 ## ------------------------------------------------------------------------
 #' Foo bar generic

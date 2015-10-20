@@ -32,9 +32,8 @@ object_defaults.package <- function(x) {
     title = as.character(desc$Title),
     description = as.character(desc$Description),
     # "NULL" prevents addition of default aliases, see also #202
-    aliases = c("NULL", package_suffix(desc$Package)),
-    rdname = package_suffix(desc$Package),
-    name = desc$Package
+    aliases = paste("NULL", desc$Package, package_suffix(desc$Package)),
+    name = package_suffix(desc$Package)
   )
 }
 

@@ -131,7 +131,7 @@ roclet_rd_one <- function(partitum, base_path, env) {
   add_tag(rd, process_param(partitum))
   add_tag(rd, process_slot(partitum))
   add_tag(rd, process_field(partitum))
-  add_tag(rd, process.docType(partitum))
+  add_tag(rd, process_doc_type(partitum))
   add_tag(rd, process_tag(partitum, 'title'))
   add_tag(rd, process_tag(partitum, 'description'))
   add_tag(rd, process_tag(partitum, 'details'))
@@ -150,8 +150,8 @@ roclet_rd_one <- function(partitum, base_path, env) {
   add_tag(rd, process_tag(partitum, 'keywords', function(tag, param, all, rd) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
     }))
-  add_tag(rd, process_tag(partitum, 'section', process.section))
-  add_tag(rd, process.examples(partitum, base_path))
+  add_tag(rd, process_tag(partitum, 'section', process_section))
+  add_tag(rd, process_examples(partitum, base_path))
 
   list(rd = rd, filename = filename)
 }
@@ -192,6 +192,9 @@ clean.rd_roclet <- function(roclet, base_path) {
   unlink(rd[made_by_me])
 }
 
+
+# Tag processing functions ------------------------------------------------
+
 process_methods <- function(block) {
   obj <- block$object
   if (!inherits(obj, "rcclass")) return()
@@ -215,7 +218,7 @@ process_methods <- function(block) {
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
-process.examples <- function(partitum, base_path) {
+process_examples <- function(partitum, base_path) {
   out <- list()
   if (!is.null(partitum$examples)) {
     out <- c(out, new_tag("examples", partitum$examples))
@@ -232,7 +235,7 @@ process.examples <- function(partitum, base_path) {
   out
 }
 
-process.section <- function(key, value) {
+process_section <- function(key, value) {
   pieces <- str_split_fixed(value, ":", n = 2)[1, ]
 
   if (str_detect(pieces[1], "\n")) {
@@ -243,7 +246,7 @@ process.section <- function(key, value) {
   new_tag("section", list(list(name = pieces[1], content = pieces[2])))
 }
 
-process.docType <- function(partitum) {
+process_doc_type <- function(partitum) {
   doctype <- partitum$docType
 
   if (is.null(doctype)) return()

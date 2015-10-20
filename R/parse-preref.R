@@ -83,6 +83,19 @@ parse.value <- function(x) {
   }
 }
 
+parse.code <- function(x) {
+  if (x$val == "") {
+    tag_warning(x, "requires a value")
+  } else {
+    tryCatch({
+      x$val <- parse(text = x$val)
+      x
+    }, error = function(e) {
+      tag_warning(x, "code failed to parse.\n", e$message)
+    })
+  }
+}
+
 # Examples need special parsing because escaping rules are different
 parse.examples <- function(x) {
   if (x$val == "") {

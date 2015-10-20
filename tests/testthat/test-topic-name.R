@@ -1,8 +1,7 @@
 context("Topic name")
-roc <- rd_roclet()
 
 test_that("name captured from assignment", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a <- function() {} ")[[1]]
 
@@ -12,7 +11,7 @@ test_that("name captured from assignment", {
 })
 
 test_that("name also captured from assignment by =", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a = function() {} ")[[1]]
 
@@ -23,7 +22,7 @@ test_that("name also captured from assignment by =", {
 
 
 test_that("`$` not to be parsed as assignee in foo$bar(a = 1)", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' foo object
     foo <- list(bar = function(a) a)
     foo$bar(a = 1)")[[1]]
@@ -33,27 +32,27 @@ test_that("`$` not to be parsed as assignee in foo$bar(a = 1)", {
 
 
 test_that("names escaped, not quoted", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     '%a%' <- function(x, y) x + y")[[1]]
   expect_equal(format(get_tag(out, "name")), "\\name{\\%a\\%}\n")
 })
 
 test_that("quoted names captured from assignment", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     \"myfunction\" <- function(...) {}")[[1]]
 
   expect_equal(get_tag(out, "name")$values, "myfunction")
   expect_equal(get_tag(out, "alias")$values, "myfunction")
 
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     `myfunction` <- function(...) {}")[[1]]
   expect_equal(get_tag(out, "name")$values, "myfunction")
   expect_equal(get_tag(out, "alias")$values, "myfunction")
 
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     \"my function\" <- function(...) {}")[[1]]
 
@@ -62,7 +61,7 @@ test_that("quoted names captured from assignment", {
 })
 
 test_that("@name overides default", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' @name b
     a <- function() {}")[[1]]
 

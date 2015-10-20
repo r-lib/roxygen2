@@ -1,8 +1,7 @@
 context("Merging")
-roc <- rd_roclet()
 
 test_that("@description and @details are merged", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Foo
     #'
     #' This.
@@ -21,7 +20,7 @@ test_that("@description and @details are merged", {
 })
 
 test_that("@section-s with identical titles are merged", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Foo
     #'
     #' @section Haz dox: Here.
@@ -44,7 +43,7 @@ test_that("@section-s with identical titles are merged", {
 })
 
 test_that("@section-s with different titles are kept as they are", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Foo
     #'
     #' @section Haz dox: Here.

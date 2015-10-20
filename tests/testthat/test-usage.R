@@ -1,17 +1,16 @@
 context("Usage")
-roc <- rd_roclet()
 
 # default usage ----------------------------------------------------------------
 
 test_that("usage captured from formals", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a <- function(a=1) {}")[[1]]
   expect_equal(get_tag(out, "usage")$values, rd("a(a = 1)"))
 })
 
 test_that("usage correct for modification functions", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     `foo<-` <- function(x, value) {}")[[1]]
 
@@ -19,7 +18,7 @@ test_that("usage correct for modification functions", {
 })
 
 test_that("usage correct for functions with no arguments", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
       #' Function without parameters
       f <- function() 1")[[1]]
 
@@ -27,7 +26,7 @@ test_that("usage correct for functions with no arguments", {
 })
 
 test_that("default usage correct for infix functions", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Infix fun
     '%.%' <- function(a, b) 1")[[1]]
 
@@ -35,7 +34,7 @@ test_that("default usage correct for infix functions", {
 })
 
 test_that("default usage correct for S3 methods", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Regular
     mean.foo <- function(x) 'foo'
 
@@ -56,7 +55,7 @@ test_that("default usage correct for S4 methods", {
   env <- pkg_env()
   setClass("foo", where = env)
   on.exit(removeClass("foo", where = env))
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Regular
     setMethod('sum', 'foo', function(x, ..., na.rm = FALSE) 'foo')
 
@@ -76,7 +75,7 @@ test_that("default usage correct for S4 methods", {
 })
 
 test_that("default usage correct for S4 methods with different args to generic", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Generic
     #'
     #' @param x x
@@ -109,7 +108,7 @@ test_that("non-syntactic S4 class names are escaped in usage", {
 
 
 test_that("argument containing function is generates correct usage", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a <- function(a= function(x) {1}) {}")[[1]]
   expect_equal(get_tag(out, "usage")$values, rd("a(a = function(x) {     1 })"))
@@ -126,14 +125,14 @@ test_that("backticks retained when needed", {
 # @usage -----------------------------------------------------------------------
 
 test_that("@usage overrides default", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' @usage a(a=2)
     a <- function(a=1) {}")[[1]]
   expect_equal(get_tag(out, "usage")$values, rd("a(a=2)"))
 })
 
 test_that("@usage overrides default for @docType data", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     #'
     #' @name abc
@@ -145,7 +144,7 @@ test_that("@usage overrides default for @docType data", {
 })
 
 test_that("@usage NULL suppresses default usage", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' @usage NULL
     a <- function(a=1) {}")[[1]]
 
@@ -153,7 +152,7 @@ test_that("@usage NULL suppresses default usage", {
 })
 
 test_that("quoted topics have usage statements", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
 
@@ -169,7 +168,7 @@ test_that("quoted topics have usage statements", {
 # Escaping --------------------------------------------------------------------
 
 test_that("usage escaping preserved when combined", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Foo
     foo <- function(x = '%') x
 
@@ -181,7 +180,7 @@ test_that("usage escaping preserved when combined", {
 })
 
 test_that("default usage not double escaped", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Regular
     mean.foo <- function(x) 'foo'
   ")[[1]]
@@ -191,7 +190,7 @@ test_that("default usage not double escaped", {
 })
 
 test_that("% and \\ are escaped in usage", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a <- function(a='%\\\\') {}")[[1]]
   expect_equal(get_tag(out, "usage")$values, escape('a(a = "%\\\\")'))
@@ -200,7 +199,7 @@ test_that("% and \\ are escaped in usage", {
 })
 
 test_that("% and \\ not escaped in manual usage", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     #' @usage %\\
     a <- function(a) {}
@@ -211,7 +210,7 @@ test_that("% and \\ not escaped in manual usage", {
 
 test_that("non-syntactic names are quoted", {
 
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     'a b' <- function(x) x")[[1]]
 
@@ -237,7 +236,7 @@ test_that("Special vars removed in rc methods usage", {
 # Wrapping --------------------------------------------------------------------
 
 test_that("long usages protected from incorrect breakage", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Function long usage
     f <- function(a = '                                    a',
                   b = '                                    b',
@@ -249,7 +248,7 @@ test_that("long usages protected from incorrect breakage", {
 })
 
 test_that("argument vectors split on whitespace", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Function long usage
     f <- function(a = c('abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef',
                   'abcdef', 'abcdef', 'abcdef'))  1")[[1]]
@@ -259,7 +258,7 @@ test_that("argument vectors split on whitespace", {
 })
 
 test_that("\\method not split inappropriately", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Function long usage
     mean.reallyratherquitelongclassname <-
       function(reallyquitelongargument = 'reallyratherquitelongvalue') 1
@@ -269,7 +268,7 @@ test_that("\\method not split inappropriately", {
 })
 
 test_that("long usages protected from incorrect breakage", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Function long usage
     f <- function(a = '                                    a',
     b = '                                    b',

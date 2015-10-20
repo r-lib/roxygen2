@@ -1,8 +1,7 @@
 context("Introduction")
-roc <- rd_roclet()
 
 test_that("title and description taken from first line if only one", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' description
     #' @name a
     NULL")[[1]]
@@ -11,7 +10,7 @@ test_that("title and description taken from first line if only one", {
 })
 
 test_that("title, description and details extracted correctly", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' title
     #'
     #' description
@@ -24,7 +23,7 @@ test_that("title, description and details extracted correctly", {
 })
 
 test_that("title taken from first paragraph", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Description with sentence.
     #'
     #' That continueth.
@@ -36,7 +35,7 @@ test_that("title taken from first paragraph", {
 })
 
 test_that("@title overrides default title", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Would be title
     #' @title Overridden title
     #' @name a
@@ -46,7 +45,7 @@ test_that("@title overrides default title", {
 })
 
 test_that("docs parsed correctly if no blank text", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' @title My title
     #' @description My description
     #' @param x value
@@ -57,7 +56,7 @@ test_that("docs parsed correctly if no blank text", {
 })
 
 test_that("question mark ends sentence", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Is a number odd?
     is.odd <- function(a) {}")[[1]]
   expect_equal(get_tag(out, "title")$values, "Is a number odd?")
@@ -65,14 +64,14 @@ test_that("question mark ends sentence", {
 })
 
 test_that("no ending punctuation does not produce ellipsis", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Whether a number is odd
     is.odd <- function(a) {}")[[1]]
   expect_equal(get_tag(out, "title")$values, "Whether a number is odd")
 })
 
 test_that("details are merged if needed", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description

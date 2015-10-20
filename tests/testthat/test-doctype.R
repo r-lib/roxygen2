@@ -1,10 +1,9 @@
 context("docType")
-roc <- rd_roclet()
 
 # Package --------------------------------------------------------------------
 
 test_that("@docType package automatically adds package alias when needed", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @docType package
     NULL
@@ -24,7 +23,7 @@ test_that("@docType package automatically adds package alias when needed", {
 # Data --------------------------------------------------------------------
 
 test_that("@docType data automatically adds sensible defaults", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     #'
     #' @docType data
@@ -35,7 +34,7 @@ test_that("@docType data automatically adds sensible defaults", {
 })
 
 test_that("@docType data automatically added to data objects", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a <- data.frame(a = 1:10)")[[1]]
 
@@ -57,7 +56,7 @@ test_that("@docType data automatically added to data objects created elsewhere",
 # Reference classes ----------------------------------------------------------
 
 test_that("@docType class automatically added to reference class objects", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a <- setRefClass('a')")[[1]]
 

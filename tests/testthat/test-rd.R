@@ -1,18 +1,17 @@
 context("Rd")
-roc <- rd_roclet()
 
 test_that("empty file gives empty list", {
-  out <- roc_proc_text(roc, "")
+  out <- roc_proc_text(rd_roclet(), "")
   expect_identical(out, list())
 })
 
 test_that("NULL gives empty list", {
-  out <- roc_proc_text(roc, "NULL")
+  out <- roc_proc_text(rd_roclet(), "NULL")
   expect_identical(out, list())
 })
 
 test_that("generic keys produce expected output", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' @references test
     #' @note test
     #' @author test
@@ -30,7 +29,7 @@ test_that("generic keys produce expected output", {
 })
 
 test_that("@noRd inhibits documentation", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     #' Would be title
     #' @title Overridden title
     #' @name a
@@ -42,7 +41,7 @@ test_that("@noRd inhibits documentation", {
 
 
 test_that("deleted objects not documented", {
-  out <- roc_proc_text(roc, "
+  out <- roc_proc_text(rd_roclet(), "
     f <- function(){
       .a <- 0
       function(x = 1){

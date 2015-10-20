@@ -1,4 +1,4 @@
-#' @include parse-registry.R
+#' @include tag-registry.R
 #' @import stringr
 NULL
 

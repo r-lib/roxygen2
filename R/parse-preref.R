@@ -71,16 +71,6 @@ parse_description <- function(tags) {
   c(compact(list(title, description, details)), tags)
 }
 
-parse_tag <- function(x) {
-  stopifnot(is.roxygen_tag(x))
-
-  if ((!x$tag %in% names(preref.parsers))) {
-    return(tag_warning(x, "unknown tag"))
-  }
-
-  preref.parsers[[x$tag]](x)
-}
-
 # Individual tag parsers --------------------------------------------------
 
 parse.value <- function(x) {

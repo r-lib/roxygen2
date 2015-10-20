@@ -1,23 +1,18 @@
-#' @include parse-registry.R
+#' @include tag-registry.R
 NULL
 
-register.preref.parsers(words_parser(1),
-  'exportClass',
-  'exportMethod',
-  'exportPattern',
-  'import',
-  'useDynLib')
-
-register.preref.parsers(words_parser(2),
-  'importFrom',
-  'importClassesFrom',
-  'importMethodsFrom')
-
-register.preref.parsers(words_parser(2, 2),
-  'S3method')
-
-register.preref.parsers(parse.words.line,
-  'export')
+register_tags(
+  export = parse.words.line,
+  exportClass = words_parser(1),
+  exportMethod = words_parser(1),
+  exportPattern = words_parser(1),
+  import = words_parser(1),
+  importClassesFrom = words_parser(2),
+  importFrom = words_parser(2),
+  importMethodsFrom = words_parser(2),
+  S3method = words_parser(2, 2),
+  useDynLib = words_parser(1)
+)
 
 ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
   'S3method', 'import', 'importFrom', 'importClassesFrom',

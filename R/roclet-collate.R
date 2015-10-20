@@ -1,7 +1,10 @@
-#' @include parse-registry.R
+#' @include tag-registry.R
 NULL
 
-register.preref.parsers(parse.value, 'include')
+# Needed to silence unknown tag warnings
+register_tags(
+  include = parse.value
+)
 
 #' Update Collate field in DESCRIPTION.
 #'

@@ -1,20 +1,18 @@
 context("preref parsers")
 
 set_preref <- function() {
-  register.preref.parsers(
-    preref_test,
-    "title",
-    "description",
-    "details"
+  register_tags(
+    title = preref_test,
+    description = preref_test,
+    details = preref_test
   )
 }
 
 restore_preref <- function() {
-  register.preref.parsers(
-    parse.value,
-    "title",
-    "description",
-    "details"
+  register_tags(
+    title = parse.value,
+    description = parse.value,
+    details = parse.value
   )
 }
 

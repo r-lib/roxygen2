@@ -80,3 +80,7 @@ test_that("refclasses get rc_methods listing", {
   objA <- object(standardise_obj("A", A, env = env), "genA")
   expect_equal(names(objA$methods), "f")
 })
+
+removeClass("A", where = env)
+removeClass("B", where = env)
+removeClass("C", where = env)

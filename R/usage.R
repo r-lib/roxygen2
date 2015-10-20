@@ -1,5 +1,5 @@
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
-usage_tag <- function(partitum) {
+process_usage <- function(partitum) {
   if (is.null(partitum$usage)) {
     usage <- wrap_string(default_usage(partitum$object))
   } else if (partitum$usage == "NULL") {

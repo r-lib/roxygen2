@@ -1,26 +1,22 @@
-#' @include parse-registry.R
+#' @include tag-registry.R
 NULL
 
-register.preref.parsers(words_parser(1),
-  'exportClass',
-  'exportMethod',
-  'exportPattern',
-  'import',
-  'useDynLib')
-
-register.preref.parsers(words_parser(2),
-  'importFrom',
-  'importClassesFrom',
-  'importMethodsFrom')
-
-register.preref.parsers(words_parser(2, 2),
-  'S3method')
-
-register.preref.parsers(parse.words.line,
-  'export')
+register_tags(
+  export = parse.words.line,
+  exportClass = words_parser(1),
+  exportMethod = words_parser(1),
+  exportPattern = words_parser(1),
+  import = words_parser(1),
+  importClassesFrom = words_parser(2),
+  importFrom = words_parser(2),
+  importMethodsFrom = words_parser(2),
+  rawNamespace = parse.code,
+  S3method = words_parser(2, 2),
+  useDynLib = words_parser(1)
+)
 
 ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
-  'S3method', 'import', 'importFrom', 'importClassesFrom',
+  'rawNamespace', 'S3method', 'import', 'importFrom', 'importClassesFrom',
   'importMethodsFrom', 'useDynLib')
 
 #' Roclet: make NAMESPACE.
@@ -40,16 +36,13 @@ namespace_roclet <- function() {
 
 #' @export
 roc_process.namespace <- function(roclet, parsed, base_path, options = list()) {
-  env <- parsed$env
-  partita <- parsed$blocks
-
-  ns <- unlist(lapply(partita, ns_process_partitum)) %||% character()
+  ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
   sort_c(unique(ns))
 }
 
-ns_process_partitum <- function(partitum) {
-  tags <- intersect(names(partitum), ns_tags)
-  unlist(lapply(tags, ns_process_tag, partitum = partitum))
+block_to_ns <- function(block) {
+  tags <- intersect(names(block), ns_tags)
+  lapply(tags, ns_process_tag, partitum = block)
 }
 
 ns_process_tag <- function(tag_name, partitum) {
@@ -80,10 +73,12 @@ clean.namespace <- function(roclet, base_path) {
 
 # Functions that take complete partitum and return NAMESPACE lines
 ns_export <- function(tag, part) {
-  if (!is.null.string(tag)) return(export(tag))
-  # FIXME: check for empty exports (i.e. no name)
-
-  default_export(part$object, part)
+  if (identical(tag, "")) {
+    # FIXME: check for empty exports (i.e. no name)
+    default_export(part$object, part)
+  } else {
+    export(tag)
+  }
 }
 default_export <- function(x, block) UseMethod("default_export")
 #' @export
@@ -127,6 +122,7 @@ ns_useDynLib         <- function(tag, part) {
     repeat_first("useDynLib", tag)
   }
 }
+ns_rawNamespace       <- function(tag, part) tag
 
 # Functions used by both default_export and ns_* functions
 export           <- function(x) one_per_line("export", x)

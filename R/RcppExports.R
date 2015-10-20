@@ -13,6 +13,10 @@ tokenise_preref <- function(lines, file = "", offset = 0L) {
     .Call('roxygen2_tokenise_preref', PACKAGE = 'roxygen2', lines, file, offset)
 }
 
+find_includes <- function(path) {
+    .Call('roxygen2_find_includes', PACKAGE = 'roxygen2', path)
+}
+
 splitByWhitespace <- function(string) {
     .Call('roxygen2_splitByWhitespace', PACKAGE = 'roxygen2', string)
 }

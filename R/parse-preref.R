@@ -71,16 +71,6 @@ parse_description <- function(tags) {
   c(compact(list(title, description, details)), tags)
 }
 
-parse_tag <- function(x) {
-  stopifnot(is.roxygen_tag(x))
-
-  if ((!x$tag %in% names(preref.parsers))) {
-    return(tag_warning(x, "unknown tag"))
-  }
-
-  preref.parsers[[x$tag]](x)
-}
-
 # Individual tag parsers --------------------------------------------------
 
 parse.value <- function(x) {
@@ -90,6 +80,19 @@ parse.value <- function(x) {
     tag_warning(x, "mismatched braces")
   } else {
     x
+  }
+}
+
+parse.code <- function(x) {
+  if (x$val == "") {
+    tag_warning(x, "requires a value")
+  } else {
+    tryCatch({
+      parse(text = x$val)
+      x
+    }, error = function(e) {
+      tag_warning(x, "code failed to parse.\n", e$message)
+    })
   }
 }
 

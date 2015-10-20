@@ -33,7 +33,6 @@ test_that("escape disables comment", {
   expect_false(rdComplete("\\%{"))
 })
 
-
 test_that("strings must be closed in code", {
   expect_false(rdComplete("'", TRUE))
   expect_false(rdComplete('"', TRUE))
@@ -42,6 +41,11 @@ test_that("strings must be closed in code", {
 test_that("braces in strings don't need to match in code", {
   expect_true(rdComplete("'{{'", TRUE))
 })
+
+test_that("strings in code comments don't need to be closed", {
+  expect_true(rdComplete("# '", TRUE))
+})
+
 
 # Test that incomplete Rd is caught in Rd blocks -------------------------------
 
@@ -57,3 +61,4 @@ test_that("incomplete rd in prequel raises error", {
     #' Title {
     x <- 1"), "mismatched braces")
 })
+

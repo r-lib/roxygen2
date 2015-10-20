@@ -1,5 +1,7 @@
-register.preref.parsers(parse.value, "template")
-register.preref.parsers(parse.name.description, "templateVar")
+register_tags(
+  template = parse.value,
+  templateVar = parse.name.description
+)
 
 template_find <- function(base_path, template_name) {
   path <- file.path(base_path, "man-roxygen", paste0(template_name, ".", c("R", "r")))

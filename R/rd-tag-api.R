@@ -241,3 +241,8 @@ format.minidesc_tag <- function(x, ...) {
     "\n}}\n"
   )
 }
+
+#' @export
+format.rawRd_tag <- function(x, ...) {
+  paste(x$values, collapse = "\n")
+}

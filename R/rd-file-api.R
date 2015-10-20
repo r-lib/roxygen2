@@ -27,7 +27,7 @@ format.rd_file <- function(x, ...) {
     "format", "source", "usage", "param", "value", "description",
     "details", "minidesc", "field", "slot", "rcmethods", "note",
     "section", "examples", "author", "references", "seealso",
-    "concept", "keyword")
+    "concept", "keyword", "rawRd")
 
   tags <- tags[intersect(order, names(tags))]
 
@@ -38,6 +38,11 @@ format.rd_file <- function(x, ...) {
 
 #' @export
 merge.rd_file <- function(x, y, ...) {
+  if (is.null(x))
+    return(y)
+  if (is.null(y))
+    return(x)
+
   for(tag_y in as.list(y[[1]])) {
     add_tag(x, tag_y)
   }

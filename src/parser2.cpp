@@ -1,5 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include <fstream>
+#include <sstream>
 
 class RoxygenLine {
   std::string line_;
@@ -152,4 +154,41 @@ List tokenise_preref(CharacterVector lines, std::string file = "",
     out[i].attr("class") = "roxygen_tag";
   }
   return out;
+}
+
+// [[Rcpp::export]]
+CharacterVector find_includes(std::string path) {
+  std::vector<std::string> includes;
+
+  std::ifstream file(path.c_str());
+  if (!file.good())
+    stop("Failed to open %s", path);
+
+  std::string rawline;
+  while (std::getline(file, rawline)) {
+    RoxygenLine line(rawline);
+    if (!line.consumeRoxygenComment())
+      continue;
+
+    std::string tag, value;
+    if (!line.consumeTag(&tag))
+      continue;
+    if (tag != "include")
+      continue;
+
+    line.consumeWhitespace(1);
+
+    // Split value by whitespace
+    // http://stackoverflow.com/questions/236129/split-a-string-in-c
+    line.consumeText(&value);
+
+    std::istringstream words(value);
+    copy(
+      std::istream_iterator<std::string>(words),
+      std::istream_iterator<std::string>(),
+      back_inserter(includes)
+    );
+  }
+
+  return wrap(includes);
 }

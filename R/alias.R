@@ -1,4 +1,4 @@
-alias_tag <- function(partitum, name, alias) {
+process_alias <- function(partitum, name, alias) {
   parts <- partitum[names(partitum) == "aliases"]
 
   if (length(parts) == 0) {

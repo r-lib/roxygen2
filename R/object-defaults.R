@@ -18,12 +18,8 @@ object_defaults.default <- function(x) list()
 
 #' @export
 object_defaults.data <- function(x) {
-  str_out <- paste0(capture.output(str(x$value)), collapse = "\n")
-  str_pre <- build_rd("\\preformatted{", escape_preformatted(str_out), "\n}")
-
   list(
     docType = "data",
-    format = str_pre,
     keywords = "datasets"
   )
 }

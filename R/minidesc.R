@@ -1,4 +1,4 @@
-process_describeIn <- function(block, env) {
+process_describe_in <- function(block, env) {
   tags <- block[names(block) == "describeIn"]
   if (length(tags) == 0) return(list(rdname = NULL, tag = NULL))
   if (length(tags) > 1) {

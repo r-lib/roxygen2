@@ -27,7 +27,7 @@ format.rd_file <- function(x, ...) {
     "format", "source", "usage", "param", "value", "description",
     "details", "minidesc", "field", "slot", "rcmethods", "note",
     "section", "examples", "author", "references", "seealso",
-    "concept", "keyword")
+    "concept", "keyword", "rawRd")
 
   tags <- tags[intersect(order, names(tags))]
 

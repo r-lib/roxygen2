@@ -1,5 +1,8 @@
 # roxygen2 4.1.1.9000
 
+* New tag `@rawRd` allows you to insert raw (unescaped) Rd code (#385).
+
+
 * `register.preref.parser()` and `register.preref.parsers()`  have been 
   deprecated - please use `register_tags()` instead.
 

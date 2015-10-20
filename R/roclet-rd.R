@@ -25,6 +25,7 @@ register_tags(
   note = parse.value,
   param = parse.name.description,
   rdname = parse.value,
+  rawRd = parse.value,
   references = parse.value,
   return = parse.value,
   section = parse.value,
@@ -111,6 +112,7 @@ block_to_rd <- function(block, base_path, env) {
   add_tag(rd, process_slot(block))
   add_tag(rd, process_field(block))
   add_tag(rd, process_doc_type(block))
+  add_tag(rd, process_tag(block, "rawRd"))
   add_tag(rd, process_tag(block, "title"))
   add_tag(rd, process_tag(block, "description"))
   add_tag(rd, process_tag(block, "details"))

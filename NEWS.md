@@ -18,6 +18,10 @@
     
   * Unknown tags now emit a warning, rather than an error.
 
+* The special `@include` parser has also been rewritten in C++, giving
+  a performance boost for larger packages (#401). This is particularly 
+  important because it's also called from `devtools::load_all()`.
+
 * `@inheritParams foo::bar` ensures that `%` remains escaped (#313). 
 
 * Roxygen no longer complains about non-matching braces inside strings

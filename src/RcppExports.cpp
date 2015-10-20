@@ -41,6 +41,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// find_includes
+CharacterVector find_includes(std::string path);
+RcppExport SEXP roxygen2_find_includes(SEXP pathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type path(pathSEXP);
+    __result = Rcpp::wrap(find_includes(path));
+    return __result;
+END_RCPP
+}
 // splitByWhitespace
 std::vector<std::string> splitByWhitespace(std::string string);
 RcppExport SEXP roxygen2_splitByWhitespace(SEXP stringSEXP) {

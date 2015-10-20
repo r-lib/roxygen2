@@ -70,19 +70,6 @@ generate_collate <- function(base_path) {
   unique(topo$sort())
 }
 
-find_includes <- function(path) {
-  lines <- readLines(path, warn = FALSE)
-  re <- regexec("^\\s*#+' ?@include (.*)$", lines)
-  matches <- regmatches(lines, re)
-  matches <- Filter(function(x) length(x) == 2, matches)
-
-  if (length(matches) == 0) return()
-
-  includes <- vapply(matches, "[[", 2, FUN.VALUE = character(1))
-  includes <- str_trim(includes)
-  sort_c(unlist(strsplit(includes, " ", fixed = TRUE)))
-}
-
 base_path <- function(path, base) {
   path <- normalizePath(path, winslash = "/")
   base <- normalizePath(base, winslash = "/")

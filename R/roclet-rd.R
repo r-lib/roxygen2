@@ -49,109 +49,93 @@ rd_roclet <- function() {
 
 #' @export
 roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
-  env <- parsed$env
-  partita <- parsed$blocks
-
-  # Remove srcrefs with no attached roxygen comments
-  partita <- Filter(function(x) length(x) > 1, partita)
-
+  # Look at all blocks with roxygen comments
+  blocks <- Filter(function(x) length(x) > 1, parsed$blocks)
 
   topics <- list()
-  for (partitum in partita) {
-    errors_with_srcref(partitum$srcref, {
-      new <- roclet_rd_one(partitum, base_path, env)
-    })
-
+  for (block in blocks) {
+    new <- block_to_rd(block, base_path, parsed$env)
     if (is.null(new)) next
 
     old <- topics[[new$filename]]
-    topics[[new$filename]] <- if (is.null(old)) new$rd else merge(old, new$rd)
+    topics[[new$filename]] <- merge.rd_file(old, new$rd)
   }
 
-  # Second parse through to process @family
   topics <- process_family(topics)
-  # Final parse to process @inheritParams
-  process_inherit_params(topics)
-  # Postprocessing to reset ordering of parameter documentation
+  topics <- process_inherit_params(topics)
   fix_params_order(topics)
 }
 
-invert <- function(x) {
-  if (length(x) == 0) return()
-  utils::unstack(rev(utils::stack(x)))
-}
-get_values <- function(topics, tag) {
-  tags <- lapply(topics, get_tag, tag)
-  tags <- Filter(Negate(is.null), tags)
-  lapply(tags, "[[", "values")
-}
+block_to_rd <- function(block, base_path, env) {
+  # Must start by processing templates
+  block <- process_templates(block, base_path)
 
+  # Does this block get an Rd file?
+  if (any(names(block) == "noRd")) {
+    return()
+  }
 
-roclet_rd_one <- function(partitum, base_path, env) {
+  key_tags <- c("description", "param", "return", "title", "example",
+    "examples", "name", "rdname", "usage", "details", "introduction",
+    "describeIn")
+  if (!any(names(block) %in% key_tags)) {
+    return()
+  }
+
   rd <- new_rd_file()
 
-  # Add in templates
-  partitum <- process_templates(partitum, base_path)
-
-  has_rd <- any(names(partitum) %in% c("description", "param", "return",
-    "title", "example", "examples", "name", "rdname", "usage",
-    "details", "introduction", "describeIn"))
-  if (!has_rd) return()
-
-  if (any(names(partitum) == "noRd")) return()
-
-  name <- partitum$name %||% default_topic_name(partitum$object) %||%
-    stop("Missing name")
-
-  # Process describeIn, which may affect file name
-  describe_in <- process_describeIn(partitum, env)
-  filename <- paste0(describe_in$rdname %||% partitum$rdname %||%
-    nice_name(name), ".Rd")
-  add_tag(rd, describe_in$tag)
-
-  # Add source reference as comment
-  if (!is.null(partitum$backref))
-    add_tag(rd, process_tag(partitum, "backref"))
-  else
-    add_tag(rd, new_tag("backref", partitum$srcref$filename))
-
-  # Work out file name and initialise Rd object
-  add_tag(rd, new_tag("encoding", partitum$encoding))
+  # Determine name
+  name <- block$name %||% default_topic_name(block$object) %||%
+    stop("Missing name", call. = FALSE)
   add_tag(rd, new_tag("name", name))
-  add_tag(rd, alias_tag(partitum, name, partitum$object$alias))
 
-  if (is.function(partitum$object$value)) {
-    formals <- formals(partitum$object$value)
+  # Add backreference to source
+  if (!is.null(block$backref)) {
+    add_tag(rd, process_tag(block, "backref"))
+  } else {
+    add_tag(rd, new_tag("backref", block$srcref$filename))
+  }
+
+  if (is.function(block$object$value)) {
+    formals <- formals(block$object$value)
     add_tag(rd, new_tag("formals", names(formals)))
   }
 
-  add_tag(rd, process_methods(partitum))
+  # Note that order of operations here doesn't matter: always reordered
+  # by format.rd_file
+  add_tag(rd, new_tag("encoding", block$encoding))
+  add_tag(rd, process_alias(block, name, block$object$alias))
+  add_tag(rd, process_methods(block))
+  add_tag(rd, process_usage(block))
+  add_tag(rd, process_param(block))
+  add_tag(rd, process_slot(block))
+  add_tag(rd, process_field(block))
+  add_tag(rd, process_doc_type(block))
+  add_tag(rd, process_tag(block, "title"))
+  add_tag(rd, process_tag(block, "description"))
+  add_tag(rd, process_tag(block, "details"))
+  add_tag(rd, process_tag(block, "note"))
+  add_tag(rd, process_tag(block, "family"))
+  add_tag(rd, process_tag(block, "inheritParams"))
+  add_tag(rd, process_tag(block, "author"))
+  add_tag(rd, process_tag(block, "format"))
+  add_tag(rd, process_tag(block, "source"))
+  add_tag(rd, process_tag(block, "seealso"))
+  add_tag(rd, process_tag(block, "references"))
+  add_tag(rd, process_tag(block, "concept"))
+  add_tag(rd, process_tag(block, "return", function(tag, param) {
+    new_tag("value", param)
+  }))
+  add_tag(rd, process_tag(block, "keywords", function(tag, param) {
+    new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
+  }))
+  add_tag(rd, process_tag(block, "section", process_section))
+  add_tag(rd, process_examples(block, base_path))
 
-  add_tag(rd, usage_tag(partitum))
-  add_tag(rd, process_param(partitum))
-  add_tag(rd, process_slot(partitum))
-  add_tag(rd, process_field(partitum))
-  add_tag(rd, process_doc_type(partitum))
-  add_tag(rd, process_tag(partitum, "title"))
-  add_tag(rd, process_tag(partitum, "description"))
-  add_tag(rd, process_tag(partitum, "details"))
-  add_tag(rd, process_tag(partitum, "note"))
-  add_tag(rd, process_tag(partitum, "family"))
-  add_tag(rd, process_tag(partitum, "inheritParams"))
-  add_tag(rd, process_tag(partitum, "author"))
-  add_tag(rd, process_tag(partitum, "format"))
-  add_tag(rd, process_tag(partitum, "source"))
-  add_tag(rd, process_tag(partitum, "seealso"))
-  add_tag(rd, process_tag(partitum, "references"))
-  add_tag(rd, process_tag(partitum, "concept"))
-  add_tag(rd, process_tag(partitum, "return", function(tag, param) {
-      new_tag("value", param)
-    }))
-  add_tag(rd, process_tag(partitum, "keywords", function(tag, param, all, rd) {
-      new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
-    }))
-  add_tag(rd, process_tag(partitum, "section", process_section))
-  add_tag(rd, process_examples(partitum, base_path))
+  describe_in <- process_describe_in(block, env)
+  add_tag(rd, describe_in$tag)
+  filename <- paste0(describe_in$rdname %||% block$rdname %||%
+    nice_name(name), ".Rd")
 
   list(rd = rd, filename = filename)
 }
@@ -169,7 +153,7 @@ roc_output.rd_roclet <- function(roclet, results, base_path, options = list(),
 
   if (check) {
     # Automatically delete any files in man directory that were generated
-    # by roxygen in the past, but weren"t generated in this sweep.
+    # by roxygen in the past, but weren't generated in this sweep.
 
     old_paths <- setdiff(dir(man, full.names = TRUE), paths)
     old_paths <- old_paths[!file.info(old_paths)$isdir]
@@ -218,13 +202,13 @@ process_methods <- function(block) {
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
-process_examples <- function(partitum, base_path) {
+process_examples <- function(block, base_path) {
   out <- list()
-  if (!is.null(partitum$examples)) {
-    out <- c(out, new_tag("examples", partitum$examples))
+  if (!is.null(block$examples)) {
+    out <- c(out, new_tag("examples", block$examples))
   }
 
-  paths <- unlist(partitum[names(partitum) == "example"])
+  paths <- unlist(block[names(block) == "example"])
   if (length(paths) > 0) {
     paths <- file.path(base_path, str_trim(paths))
     examples <- unlist(lapply(paths, readLines))
@@ -246,16 +230,16 @@ process_section <- function(key, value) {
   new_tag("section", list(list(name = pieces[1], content = pieces[2])))
 }
 
-process_doc_type <- function(partitum) {
-  doctype <- partitum$docType
+process_doc_type <- function(block) {
+  doctype <- block$docType
 
   if (is.null(doctype)) return()
   tags <- list(new_tag("docType", doctype))
 
   if (doctype == "package") {
-    name <- partitum$name
+    name <- block$name
     if (!str_detect(name, "-package")) {
-      tags <- c(tags, new_tag("alias", package_suffix(name)))
+      tags <- c(tags, list(new_tag("alias", package_suffix(name))))
     }
   }
 
@@ -266,8 +250,8 @@ package_suffix <- function(name) {
   paste0(name, "-package")
 }
 
-process_tag <- function(partitum, tag, f = new_tag) {
-  matches <- partitum[names(partitum) == tag]
+process_tag <- function(block, tag, f = new_tag) {
+  matches <- block[names(block) == tag]
   if (length(matches) == 0) return()
 
   unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)

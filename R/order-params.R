@@ -1,3 +1,4 @@
+# Postprocessing to reset ordering of parameter documentation
 fix_params_order <- function(topics) {
   for(topic_name in names(topics)) {
     topic <- topics[[topic_name]]

@@ -38,6 +38,11 @@ format.rd_file <- function(x, ...) {
 
 #' @export
 merge.rd_file <- function(x, y, ...) {
+  if (is.null(x))
+    return(y)
+  if (is.null(y))
+    return(x)
+
   for(tag_y in as.list(y[[1]])) {
     add_tag(x, tag_y)
   }

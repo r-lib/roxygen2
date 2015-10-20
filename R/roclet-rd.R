@@ -44,11 +44,11 @@ register_tags(
 #' @seealso \code{vignette("rd", package = "roxygen2")}
 #' @export
 rd_roclet <- function() {
-  new_roclet(list(), "had")
+  new_roclet(list(), "rd_roclet")
 }
 
 #' @export
-roc_process.had <- function(roclet, parsed, base_path, options = list()) {
+roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
   env <- parsed$env
   partita <- parsed$blocks
 
@@ -111,7 +111,7 @@ roclet_rd_one <- function(partitum, base_path, env) {
 
   # Add source reference as comment
   if (!is.null(partitum$backref))
-    add_tag(rd, process_had_tag(partitum, 'backref'))
+    add_tag(rd, process_tag(partitum, 'backref'))
   else
     add_tag(rd, new_tag("backref", partitum$srcref$filename))
 
@@ -132,32 +132,32 @@ roclet_rd_one <- function(partitum, base_path, env) {
   add_tag(rd, process_slot(partitum))
   add_tag(rd, process_field(partitum))
   add_tag(rd, process.docType(partitum))
-  add_tag(rd, process_had_tag(partitum, 'title'))
-  add_tag(rd, process_had_tag(partitum, 'description'))
-  add_tag(rd, process_had_tag(partitum, 'details'))
-  add_tag(rd, process_had_tag(partitum, 'note'))
-  add_tag(rd, process_had_tag(partitum, 'family'))
-  add_tag(rd, process_had_tag(partitum, 'inheritParams'))
-  add_tag(rd, process_had_tag(partitum, 'author'))
-  add_tag(rd, process_had_tag(partitum, 'format'))
-  add_tag(rd, process_had_tag(partitum, 'source'))
-  add_tag(rd, process_had_tag(partitum, 'seealso'))
-  add_tag(rd, process_had_tag(partitum, "references"))
-  add_tag(rd, process_had_tag(partitum, 'concept'))
-  add_tag(rd, process_had_tag(partitum, 'return', function(tag, param) {
+  add_tag(rd, process_tag(partitum, 'title'))
+  add_tag(rd, process_tag(partitum, 'description'))
+  add_tag(rd, process_tag(partitum, 'details'))
+  add_tag(rd, process_tag(partitum, 'note'))
+  add_tag(rd, process_tag(partitum, 'family'))
+  add_tag(rd, process_tag(partitum, 'inheritParams'))
+  add_tag(rd, process_tag(partitum, 'author'))
+  add_tag(rd, process_tag(partitum, 'format'))
+  add_tag(rd, process_tag(partitum, 'source'))
+  add_tag(rd, process_tag(partitum, 'seealso'))
+  add_tag(rd, process_tag(partitum, "references"))
+  add_tag(rd, process_tag(partitum, 'concept'))
+  add_tag(rd, process_tag(partitum, 'return', function(tag, param) {
       new_tag("value", param)
     }))
-  add_tag(rd, process_had_tag(partitum, 'keywords', function(tag, param, all, rd) {
+  add_tag(rd, process_tag(partitum, 'keywords', function(tag, param, all, rd) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
     }))
-  add_tag(rd, process_had_tag(partitum, 'section', process.section))
+  add_tag(rd, process_tag(partitum, 'section', process.section))
   add_tag(rd, process.examples(partitum, base_path))
 
   list(rd = rd, filename = filename)
 }
 
 #' @export
-roc_output.had <- function(roclet, results, base_path, options = list(),
+roc_output.rd_roclet <- function(roclet, results, base_path, options = list(),
                            check = TRUE) {
   man <- normalizePath(file.path(base_path, "man"))
 
@@ -184,7 +184,7 @@ roc_output.had <- function(roclet, results, base_path, options = list(),
 }
 
 #' @export
-clean.had <- function(roclet, base_path) {
+clean.rd_roclet <- function(roclet, base_path) {
   rd <- dir(file.path(base_path, "man"), full.names = TRUE)
   rd <- rd[!file.info(rd)$isdir]
   made_by_me <- vapply(rd, made_by_roxygen, logical(1))
@@ -263,7 +263,7 @@ package_suffix <- function(name) {
   paste0(name, "-package")
 }
 
-process_had_tag <- function(partitum, tag, f = new_tag) {
+process_tag <- function(partitum, tag, f = new_tag) {
   matches <- partitum[names(partitum) == tag]
   if (length(matches) == 0) return()
 

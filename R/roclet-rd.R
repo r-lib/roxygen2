@@ -111,7 +111,7 @@ roclet_rd_one <- function(partitum, base_path, env) {
 
   # Add source reference as comment
   if (!is.null(partitum$backref))
-    add_tag(rd, process_tag(partitum, 'backref'))
+    add_tag(rd, process_tag(partitum, "backref"))
   else
     add_tag(rd, new_tag("backref", partitum$srcref$filename))
 
@@ -132,25 +132,25 @@ roclet_rd_one <- function(partitum, base_path, env) {
   add_tag(rd, process_slot(partitum))
   add_tag(rd, process_field(partitum))
   add_tag(rd, process_doc_type(partitum))
-  add_tag(rd, process_tag(partitum, 'title'))
-  add_tag(rd, process_tag(partitum, 'description'))
-  add_tag(rd, process_tag(partitum, 'details'))
-  add_tag(rd, process_tag(partitum, 'note'))
-  add_tag(rd, process_tag(partitum, 'family'))
-  add_tag(rd, process_tag(partitum, 'inheritParams'))
-  add_tag(rd, process_tag(partitum, 'author'))
-  add_tag(rd, process_tag(partitum, 'format'))
-  add_tag(rd, process_tag(partitum, 'source'))
-  add_tag(rd, process_tag(partitum, 'seealso'))
+  add_tag(rd, process_tag(partitum, "title"))
+  add_tag(rd, process_tag(partitum, "description"))
+  add_tag(rd, process_tag(partitum, "details"))
+  add_tag(rd, process_tag(partitum, "note"))
+  add_tag(rd, process_tag(partitum, "family"))
+  add_tag(rd, process_tag(partitum, "inheritParams"))
+  add_tag(rd, process_tag(partitum, "author"))
+  add_tag(rd, process_tag(partitum, "format"))
+  add_tag(rd, process_tag(partitum, "source"))
+  add_tag(rd, process_tag(partitum, "seealso"))
   add_tag(rd, process_tag(partitum, "references"))
-  add_tag(rd, process_tag(partitum, 'concept'))
-  add_tag(rd, process_tag(partitum, 'return', function(tag, param) {
+  add_tag(rd, process_tag(partitum, "concept"))
+  add_tag(rd, process_tag(partitum, "return", function(tag, param) {
       new_tag("value", param)
     }))
-  add_tag(rd, process_tag(partitum, 'keywords', function(tag, param, all, rd) {
+  add_tag(rd, process_tag(partitum, "keywords", function(tag, param, all, rd) {
       new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
     }))
-  add_tag(rd, process_tag(partitum, 'section', process_section))
+  add_tag(rd, process_tag(partitum, "section", process_section))
   add_tag(rd, process_examples(partitum, base_path))
 
   list(rd = rd, filename = filename)
@@ -169,7 +169,7 @@ roc_output.rd_roclet <- function(roclet, results, base_path, options = list(),
 
   if (check) {
     # Automatically delete any files in man directory that were generated
-    # by roxygen in the past, but weren't generated in this sweep.
+    # by roxygen in the past, but weren"t generated in this sweep.
 
     old_paths <- setdiff(dir(man, full.names = TRUE), paths)
     old_paths <- old_paths[!file.info(old_paths)$isdir]

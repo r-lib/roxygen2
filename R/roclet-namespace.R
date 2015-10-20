@@ -35,16 +35,13 @@ namespace_roclet <- function() {
 
 #' @export
 roc_process.namespace <- function(roclet, parsed, base_path, options = list()) {
-  env <- parsed$env
-  partita <- parsed$blocks
-
-  ns <- unlist(lapply(partita, ns_process_partitum)) %||% character()
+  ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
   sort_c(unique(ns))
 }
 
-ns_process_partitum <- function(partitum) {
-  tags <- intersect(names(partitum), ns_tags)
-  unlist(lapply(tags, ns_process_tag, partitum = partitum))
+block_to_ns <- function(block) {
+  tags <- intersect(names(block), ns_tags)
+  lapply(tags, ns_process_tag, partitum = block)
 }
 
 ns_process_tag <- function(tag_name, partitum) {

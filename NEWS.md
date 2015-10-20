@@ -6,6 +6,11 @@
   output. `@rawNamespace` allows you to insert literal text in your namespace:
   this can be useful for conditional imports (#385). 
 
+* The contents of documented functions are now also parsed for tags. This allows,
+  e.g., documenting a parameter's type close to where this type is checked,
+  or documenting implementation details close to the source, and simplifies
+  future extensions such as the documentation of R6 classes (#397, @krlmlr).
+
 * `register.preref.parser()` and `register.preref.parsers()`  have been 
   deprecated - please use `register_tags()` instead.
 

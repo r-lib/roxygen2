@@ -88,7 +88,7 @@ parse.code <- function(x) {
     tag_warning(x, "requires a value")
   } else {
     tryCatch({
-      x$val <- parse(text = x$val)
+      parse(text = x$val)
       x
     }, error = function(e) {
       tag_warning(x, "code failed to parse.\n", e$message)

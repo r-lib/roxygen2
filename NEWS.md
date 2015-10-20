@@ -3,7 +3,8 @@
 * New tag `@rawRd` allows you to insert raw (unescaped) Rd code. `@evalRd()` is 
   similar, but instead of literal Rd, you give it R code that produces literal 
   Rd code when run. This should make it easier to experiment with new types of 
-  output (#385). 
+  output. `@rawNamespace` allows you to insert literal text in your namespace:
+  this can be useful for conditional imports (#385). 
 
 * `register.preref.parser()` and `register.preref.parsers()`  have been 
   deprecated - please use `register_tags()` instead.

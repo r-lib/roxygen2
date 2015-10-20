@@ -30,3 +30,22 @@ test_that("rawRd inserted unchanged", {
   args <- get_tag(out, "rawRd")$values
   expect_equal(args, "20")
 })
+
+test_that("rawNamespace must be valid code", {
+  expect_warning(
+    roc_proc_text(namespace_roclet(), "
+      #' @rawNamespace if() {
+      #' @name a
+      NULL"),
+    "code failed to parse"
+  )
+})
+
+test_that("rawNamespace inserted unchanged", {
+  out <- roc_proc_text(namespace_roclet(), "
+    #' @rawNamespace xyz
+    #'   abc
+    NULL")
+
+  expect_equal(out, "xyz\n  abc")
+})

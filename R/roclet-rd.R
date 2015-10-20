@@ -115,7 +115,8 @@ block_to_rd <- function(block, base_path, env) {
   add_tag(rd, process_doc_type(block))
   add_tag(rd, process_tag(block, "rawRd"))
   add_tag(rd, process_tag(block, "evalRd", function(tag, param) {
-    out <- eval(param, envir = env)
+    expr <- parse(text = param)
+    out <- eval(expr, envir = env)
     new_tag("rawRd", as.character(out))
   }))
   add_tag(rd, process_tag(block, "title"))

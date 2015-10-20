@@ -10,12 +10,13 @@ register_tags(
   importClassesFrom = words_parser(2),
   importFrom = words_parser(2),
   importMethodsFrom = words_parser(2),
+  rawNamespace = parse.code,
   S3method = words_parser(2, 2),
   useDynLib = words_parser(1)
 )
 
 ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
-  'S3method', 'import', 'importFrom', 'importClassesFrom',
+  'rawNamespace', 'S3method', 'import', 'importFrom', 'importClassesFrom',
   'importMethodsFrom', 'useDynLib')
 
 #' Roclet: make NAMESPACE.
@@ -121,6 +122,7 @@ ns_useDynLib         <- function(tag, part) {
     repeat_first("useDynLib", tag)
   }
 }
+ns_rawNamespace       <- function(tag, part) tag
 
 # Functions used by both default_export and ns_* functions
 export           <- function(x) one_per_line("export", x)

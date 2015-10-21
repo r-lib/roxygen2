@@ -12,7 +12,7 @@ parse_text <- function(text) {
   on.exit(unlink(file))
 
   env <- new.env(parent = parent.env(globalenv()))
-  setPackageName("roxygen_devtest", env)
+  methods::setPackageName("roxygen_devtest", env)
 
   sys.source(file, envir = env)
   blocks <- parse_file(file, env)

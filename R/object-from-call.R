@@ -41,9 +41,9 @@ find_data_for_package <- function(env) {
   base_path <- getNamespaceInfo(ns, "path")
   desc <- read.description(file.path(base_path, "DESCRIPTION"))
 
-  if (!identical(desc$Package, packageName(env))) {
+  if (!identical(desc$Package, utils::packageName(env))) {
     warning("Inconsistent package names: ",
-            desc$Package, " vs. ", packageName(env),
+            desc$Package, " vs. ", utils::packageName(env),
             call. = FALSE)
   }
 

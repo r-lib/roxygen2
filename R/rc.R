@@ -1,10 +1,10 @@
 # Extract all methods from an RC definition, returning a list of "objects".
 rc_methods <- function(obj) {
-  stopifnot(is(obj, "refClassRepresentation"))
+  stopifnot(methods::is(obj, "refClassRepresentation"))
 
   parents <- obj@refSuperClasses
   parent_methods <- unlist(lapply(parents, function(x) {
-    getRefClass(x)$methods()
+    methods::getRefClass(x)$methods()
   }))
   method_names <- setdiff(ls(envir = obj@refMethods), parent_methods)
   methods <- mget(method_names, envir = obj@refMethods)

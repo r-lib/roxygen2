@@ -15,7 +15,7 @@ template_find <- function(base_path, template_name) {
 }
 
 template_eval <- function(template_path, vars) {
-  capture.output(brew::brew(template_path, envir = vars))
+  utils::capture.output(brew::brew(template_path, envir = vars))
 }
 
 process_templates <- function(partitum, base_path) {
@@ -30,7 +30,7 @@ process_templates <- function(partitum, base_path) {
   var_tags <- partitum[names(partitum) == "templateVar"]
   vars <- lapply(var_tags, "[[", "description")
   names(vars) <- vapply(var_tags, "[[", "name", FUN.VALUE = character(1))
-  vars <- lapply(vars, type.convert, as.is = TRUE)
+  vars <- lapply(vars, utils::type.convert, as.is = TRUE)
 
   results <- lapply(paths, template_eval, vars = list2env(vars))
 

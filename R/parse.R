@@ -24,7 +24,7 @@ parse_file <- function(file, env) {
   parsed <- parse(file = file, keep.source = TRUE)
   if (length(parsed) == 0) return()
 
-  refs <- getSrcref(parsed)
+  refs <- utils::getSrcref(parsed)
   comment_refs <- comments(refs)
 
   extract <- function(call, ref, comment_ref) {

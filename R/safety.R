@@ -41,7 +41,7 @@ update_roxygen_version <- function(base_path) {
   old <- read.description(desc_path)
 
   new <- old
-  new$RoxygenNote <- as.character(packageVersion("roxygen2"))
+  new$RoxygenNote <- as.character(utils::packageVersion("roxygen2"))
 
   if (!identical(old, new)) {
     cat('Updating roxygen version in ', desc_path, "\n")

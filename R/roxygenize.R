@@ -27,6 +27,7 @@
 #'   created by roxygen before running each roclet.
 #' @return \code{NULL}
 #' @export
+#' @importFrom stats setNames
 roxygenize <- function(package.dir = ".",
                        roclets = NULL,
                        load_code = source_package,
@@ -100,5 +101,5 @@ load_options <- function(base_path = ".") {
             ".\nSupported options: ", paste(names(defaults), collapse = ", "))
   }
 
-  modifyList(defaults, opts)
+  utils::modifyList(defaults, opts)
 }

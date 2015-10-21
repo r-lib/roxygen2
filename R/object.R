@@ -41,7 +41,7 @@ print.object <- function(x, ...) {
 standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
   if (is_generator(value)) {
     # S4 and RC generators need to be converted to their classes
-    getClass(as.character(value@className), where = env)
+    methods::getClass(as.character(value@className), where = env)
   } else if (inherits(value, "MethodDefinition")) {
     # S4 methods need munging to get real function def
     value@.Data <- extract_method_fun(value@.Data)

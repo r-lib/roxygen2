@@ -117,7 +117,7 @@ words_parser <- function(min = 0, max = Inf) {
       return(tag_warning(x, "mismatched braces"))
     }
 
-    words <- str_split(x$val, "\\s+")[[1]]
+    words <- str_split(str_trim(x$val), "\\s+")[[1]]
     if (length(words) < min) {
       tag_warning(x,  " needs at least ", min, " words")
     } else if (length(words) > max) {
@@ -135,7 +135,7 @@ parse.words.line <- function(x) {
   } else if (!rdComplete(x$val)) {
     tag_warning(x, "mismatching braces")
   } else {
-    x$val <- str_split(x$val, "\\s+")[[1]]
+    x$val <- str_split(str_trim(x$val), "\\s+")[[1]]
     x
   }
 }
@@ -148,7 +148,7 @@ parse.name.description <- function(x) {
   } else if (!rdComplete(x$val)) {
     tag_warning(x, "mismatched braces")
   } else {
-    pieces <- str_split_fixed(x$val, "[[:space:]]+", 2)
+    pieces <- str_split_fixed(str_trim(x$val), "[[:space:]]+", 2)
 
     x$val <- list(
       name = pieces[, 1],

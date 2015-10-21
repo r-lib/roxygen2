@@ -129,3 +129,10 @@ parser_setReplaceMethod <- function(call, env, block) {
 
   object(value)
 }
+
+`parser_::` <- function(call, env, block) {
+  pkg <- as.character(call[[2]])
+  fun <- as.character(call[[3]])
+
+  object(list(pkg = pkg, fun = fun), alias = fun, type = "import")
+}

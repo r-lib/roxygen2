@@ -8,9 +8,7 @@
 #'   generator function with different name.
 #' @export
 #' @keywords internal
-object <- function(value, alias = NULL) {
-  type <- obj_type(value)
-
+object <- function(value, alias = NULL, type = obj_type(value)) {
   structure(
     list(
       alias = alias,

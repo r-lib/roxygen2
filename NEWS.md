@@ -1,5 +1,17 @@
 # roxygen2 4.1.1.9000
 
+*   You can now easily import and re-export functions from another package 
+    with:
+
+    ```R
+    #' @export
+    magrittr::`%>%`
+    ```
+    
+    All imported-and-re-exported functions will be documented in the same
+    file, containing a brief descrption and links to the original 
+    documentation (#376).
+
 * New tag `@rawRd` allows you to insert raw (unescaped) Rd code. `@evalRd()` is 
   similar, but instead of literal Rd, you give it R code that produces literal 
   Rd code when run. This should make it easier to experiment with new types of 

@@ -4,7 +4,7 @@
 \alias{object}
 \title{Constructors for S3 object to represent R objects.}
 \usage{
-object(value, alias = NULL)
+object(value, alias = NULL, type = obj_type(value))
 }
 \arguments{
 \item{value}{The object itself.}

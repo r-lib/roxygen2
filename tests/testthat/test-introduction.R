@@ -88,3 +88,21 @@ test_that("details are merged if needed", {
   expect_equal(get_tag(out, "details")$values,
                "Details1\n\nDetails2\n\nDetails3\n\nDetails4")
 })
+
+test_that("whitespace is not detected as details", {
+  expect_silent(
+    out <- roc_proc_text(
+      rd_roclet(), "
+        #' Title
+        #'
+        #'
+        #' Description
+        #'
+        #'
+        #'
+        foo <- function(x) {}"
+    )[[1]]
+  )
+
+  expect_null(get_tag(out, "details"))
+})

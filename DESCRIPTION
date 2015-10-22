@@ -30,6 +30,7 @@ LinkingTo: Rcpp
 Collate:
     'RcppExports.R'
     'alias.R'
+    'default-data-format.R'
     'description.R'
     'family.R'
     'inherit-params.R'

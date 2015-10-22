@@ -1,11 +1,11 @@
 #' Default format for data
 #'
 #' This function is called to generate the default "Format" section for each
-#' data object.  The default implementation will print the class and dimension
+#' data object.  The default implementation will return the class and dimension
 #' information.
 #'
 #' @param x A data object
-#' @return An object of class \code{rd}, or \code{NULL}.
+#' @return A \code{character} value with valid \code{Rd} syntax, or \code{NULL}.
 #'
 #' @export
 default_data_format <- function(x) {

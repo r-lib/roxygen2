@@ -34,6 +34,9 @@ test_that("allow empty line after @template", {
   out <- roc_proc_text(rd_roclet(), "
     #' @template values
     #'
+    #' @templateVar x a
+    #' @templateVar y b
+    #' @templateVar z c
     x <- 10")[[1]]
 
   expect_equal(get_tag(out, "title")$values, "a")

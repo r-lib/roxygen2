@@ -5,10 +5,12 @@ context("docType")
 test_that("@docType package automatically adds package alias when needed", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #'
     #' @docType package
     NULL
 
     #' @name a-package
+    #'
     #' @docType package
     NULL")
 
@@ -59,6 +61,7 @@ test_that("@docType data automatically added to data objects created elsewhere",
 test_that("@docType class automatically added to reference class objects", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title.
+    #'
     a <- setRefClass('a')")[[1]]
 
   expect_equal(get_tag(out, "class")$values, NULL)

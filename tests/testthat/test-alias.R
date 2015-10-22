@@ -3,6 +3,7 @@ context("Alias")
 test_that("aliases split into pieces", {
   out <- roc_proc_text(rd_roclet(), "
     #' @aliases a b
+    #'
     #' @name a
     NULL")[[1]]
 

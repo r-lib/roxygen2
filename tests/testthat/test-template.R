@@ -29,3 +29,12 @@ test_that("templates replace variables with their values", {
   expect_equal(get_tag(out, "title")$values, "a")
   expect_equal(get_tag(out, "param")$values, c(b = "c"))
 })
+
+test_that("allow empty line after @template", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' @template values
+    #'
+    x <- 10")[[1]]
+
+  expect_equal(get_tag(out, "title")$values, "a")
+})

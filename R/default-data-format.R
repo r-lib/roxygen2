@@ -14,17 +14,21 @@ default_data_format <- function(x) {
 
 #' @export
 default_data_format.default <- function(x) {
+  paste0("An object of class ", format_classes(x), " ", format_dim(x), ".")
+}
+
+format_classes <- function(x) {
   classes <- paste0("\\code{", class(x), "}")
-  base_classes <- paste0(classes[[1L]])
+
+  base_classes <- NULL
   if (length(classes) > 1L) {
     base_classes <- paste0(
-      base_classes,
       " (inherits from ",
       paste(classes[-1L], collapse = ", "),
       ")")
   }
 
-  build_rd("An object of class ", rd(base_classes), " ", format_dim(x), ".")
+  paste0(classes[[1L]], base_classes)
 }
 
 format_dim <- function(x) {

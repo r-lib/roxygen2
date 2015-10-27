@@ -18,8 +18,11 @@ object_defaults.default <- function(x) list()
 
 #' @export
 object_defaults.data <- function(x) {
+  str_out <- rd(default_data_format(x$value))
+
   list(
     docType = "data",
+    format = str_out,
     keywords = "datasets"
   )
 }

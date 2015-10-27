@@ -25,6 +25,10 @@ test_that("brackets in comments are ignored", {
   expect_true(rdComplete("% }"))
 })
 
+test_that("R comments don't close latex-like tags", {
+  expect_true(rdComplete("A comment \\code{#}."))
+})
+
 test_that("newline ends comment", {
   expect_false(rdComplete("%\n{"))
 })
@@ -38,6 +42,11 @@ test_that("strings must be closed in code", {
   expect_false(rdComplete('"', TRUE))
 })
 
+test_that("strings respect escapes", {
+  expect_false(rdComplete("'\\'", TRUE)) # '\'
+  expect_true(rdComplete("'\\''", TRUE)) # '\''
+})
+
 test_that("braces in strings don't need to match in code", {
   expect_true(rdComplete("'{{'", TRUE))
 })
@@ -45,6 +54,13 @@ test_that("braces in strings don't need to match in code", {
 test_that("strings in code comments don't need to be closed", {
   expect_true(rdComplete("# '", TRUE))
 })
+
+test_that("braces in code must match", {
+  expect_false(rdComplete("# {", TRUE))
+  expect_true(rdComplete("# {}", TRUE))
+})
+
+
 
 
 # Test that incomplete Rd is caught in Rd blocks -------------------------------

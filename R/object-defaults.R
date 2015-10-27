@@ -30,16 +30,11 @@ object_defaults.data <- function(x) {
 #' @export
 object_defaults.import <- function(x) {
   list(
+    docType = "import",
     name = "reexports",
     keywords = "internal",
-    title = "Re-exported functions",
-    description = paste0(
-      "These functions have been imported from other packages, and reimported ",
-      "by this package so that you can use them without having to attach ",
-      "another package. See the original documentation, linked to below, for ",
-      "more details"
-    ),
-    seealso = paste0("\\code{\\link[", x$value$pkg, "]{", escape(x$value$fun), "}}, ")
+    title = "Objects exported from other packages",
+    reexport = list(pkg = x$value$pkg, fun = x$value$fun)
   )
 }
 

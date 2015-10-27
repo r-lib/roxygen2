@@ -76,6 +76,16 @@ merge.section_tag <- function(x, y, ...) {
   new_tag("section", values)
 }
 
+#' @export
+merge.reexport_tag <- function(x, y, ...) {
+  values <- list(
+    pkg = c(x$values$pkg, y$values$pkg),
+    fun = c(x$values$fun, y$values$fun)
+  )
+  new_tag("reexport", values)
+}
+
+
 # Comment tags -----------------------------------------------------------------------
 
 #' @export
@@ -245,4 +255,26 @@ format.minidesc_tag <- function(x, ...) {
 #' @export
 format.rawRd_tag <- function(x, ...) {
   paste(x$values, collapse = "\n")
+}
+
+
+#' @export
+format.reexport_tag <- function(x, ...) {
+  pkgs <- split(x$values$fun, x$values$pkg)
+  pkg_links <- Map(pkg = names(pkgs), funs = pkgs, function(pkg, funs) {
+    links <- paste0("\\code{\\link[", pkg, "]{", escape(funs), "}}",
+      collapse = ", ")
+    paste0("\\item{", pkg, "}{", links, "}")
+  })
+
+  paste0(
+    "\\description{\n",
+    "These objects are imported from other packages. Follow the links\n",
+    "below to see their documentation.\n",
+    "\n",
+    "\\describe{\n",
+    paste0("  ", unlist(pkg_links), collapse = "\n\n"),
+    "\n}}\n"
+  )
+
 }

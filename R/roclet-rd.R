@@ -131,6 +131,7 @@ block_to_rd <- function(block, base_path, env) {
   add_tag(rd, process_tag(block, "seealso"))
   add_tag(rd, process_tag(block, "references"))
   add_tag(rd, process_tag(block, "concept"))
+  add_tag(rd, process_tag(block, "reexport"))
   add_tag(rd, process_tag(block, "return", function(tag, param) {
     new_tag("value", param)
   }))

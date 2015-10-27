@@ -10,16 +10,13 @@ A 'Doxygen'-like in-source documentation system
 for Rd, collation, and 'NAMESPACE' files.
 }
 \details{
-
 If you have existing Rd files, check out the \code{Rd2roxygen} package
 for a convenient way of converting Rd files to roxygen comments.
-
 }
 \examples{
 \dontrun{roxygenize('pkg')}
 }
 \author{
-
 Hadley Wickham \email{h.wickham@gmail.com},
 Peter Danenberg \email{pcd@roxygen.org},
 Manuel Eugster \email{Manuel.Eugster@stat.uni-muenchen.de}

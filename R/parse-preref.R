@@ -80,6 +80,7 @@ parse.value <- function(x) {
   } else if (!rdComplete(x$val)) {
     tag_warning(x, "mismatched braces")
   } else {
+    x$val <- str_trim(x$val)
     x
   }
 }
@@ -166,6 +167,7 @@ parse.name <- function(x) {
   } else if (str_count(x$val, "\\s+") > 1) {
     tag_warning("should have only a single argument")
   } else {
+    x$val <- str_trim(x$val)
     x
   }
 }

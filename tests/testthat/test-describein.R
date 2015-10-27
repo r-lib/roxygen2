@@ -6,6 +6,7 @@ test_that("@describeIn generic captures s3 method class", {
     f <- function(x) UseMethod('f')
 
     #' @describeIn f Method for a
+    #'
     f.a <- function(x) 1
   ")[[1]]
 
@@ -31,6 +32,7 @@ test_that("@describeIn class captures s3 generic name", {
     boo <- function() structure(list(), class = 'boo')
 
     #' @describeIn boo mean method
+    #'
     mean.boo <- function(x) 1
     ")[[1]]
 
@@ -60,6 +62,7 @@ test_that("Multiple @describeIn generic combined into one", {
     f.a <- function(x) 1
 
     #' @describeIn f B
+    #'
     f.b <- function(x) 1
   ")[[1]]
 

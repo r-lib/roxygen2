@@ -3,7 +3,9 @@ context("Examples")
 test_that("@example loads from specified files", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #'
     #' @example Rd-example-1.R
+    #'
     #' @example Rd-example-2.R
     NULL")[[1]]
 
@@ -15,7 +17,9 @@ test_that("@example loads from specified files", {
 test_that("@examples captures examples", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #'
     #' @examples a <- 2
+    #'
     NULL")[[1]]
 
   examples <- get_tag(out, "examples")$values

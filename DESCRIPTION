@@ -19,8 +19,7 @@ Imports:
     brew,
     digest,
     methods,
-    Rcpp (>= 0.11.0),
-    magrittr
+    Rcpp (>= 0.11.0)
 Suggests:
     testthat (>= 0.8.0),
     knitr,

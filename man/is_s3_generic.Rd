@@ -15,13 +15,11 @@ is_s3_method(name, env = parent.frame())
 \item{env}{Base environment in which to look for function defintion.}
 }
 \description{
-
 \code{is_s3_generic} compares name to \code{.knownS3Generics} and
 \code{.S3PrimitiveGenerics}, then looks at the function body to see if it
 calls \code{\link{UseMethod}}.
 
 \code{is_s3_method} builds names of all possible generics for that function
 and then checks if any of them actually is a generic.
-
 }
 

@@ -11,7 +11,6 @@ default_data_format(x)
 }
 \value{
 A \code{character} value with valid \code{Rd} syntax, or \code{NULL}.
-
 }
 \description{
 This function is called to generate the default "Format" section for each

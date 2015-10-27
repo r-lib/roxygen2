@@ -74,6 +74,10 @@ parse_description <- function(tags) {
 
 # Individual tag parsers --------------------------------------------------
 
+# TODO: move into own file tag-parsers.R
+# TODO: consistent naming scheme `parse.value` -> `tag_value`
+# TODO: separate tag info and value into two arguments?
+
 parse.value <- function(x) {
   if (x$val == "") {
     tag_warning(x, "requires a value")

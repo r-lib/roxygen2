@@ -23,7 +23,7 @@ process_templates <- function(partitum, base_path) {
   template_tags <- partitum[template_locs]
   if (length(template_tags) == 0) return(partitum)
 
-  templates <- unlist(template_tags, use.names = FALSE)
+  templates <- str_trim(unlist(template_tags, use.names = FALSE))
   paths <- vapply(templates, template_find, base_path = base_path,
     FUN.VALUE = character(1), USE.NAMES = FALSE)
 

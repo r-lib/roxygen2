@@ -1,9 +1,5 @@
-## ----, echo = FALSE, message = FALSE-------------------------------------
-knitr::opts_chunk$set(
-  comment = "#>",
-  error = FALSE,
-  tidy = FALSE
-)
+## ---- include = FALSE----------------------------------------------------
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 ## ------------------------------------------------------------------------
 cat(readLines(file.path(R.home("doc"), "KEYWORDS")), sep = "\n")

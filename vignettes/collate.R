@@ -1,11 +1,7 @@
-## ----, echo = FALSE, message = FALSE-------------------------------------
-knitr::opts_chunk$set(
-  comment = "#>",
-  error = FALSE,
-  tidy = FALSE
-)
+## ---- include = FALSE----------------------------------------------------
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
-## ----, eval = FALSE------------------------------------------------------
+## ---- eval = FALSE-------------------------------------------------------
 #  #' @include class-a.r
 #  setClass("B", contains = "A")
 

@@ -1,10 +1,5 @@
-## ---- echo = FALSE, message = FALSE--------------------------------------
-knitr::opts_chunk$set(
-  comment = "#>",
-  error = FALSE,
-  tidy = FALSE,
-  collapse = TRUE
-)
+## ---- include = FALSE----------------------------------------------------
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 ## ------------------------------------------------------------------------
 #' Add together two numbers

@@ -1,6 +1,10 @@
-# roxygen2 4.1.1.9000
+# roxygen2 5.0.0
 
 ## New features
+
+* Roxygen now records its version in a single place: the `RoxygenNote`
+  field in the `DESCRIPTION` (#338). This will be the last time an roxygen2
+  upgrade changes every file in `man/`.
 
 *   You can now easily re-export functions that you've imported from another 
     package:
@@ -30,10 +34,6 @@
   `@evalRd()` is similar, but instead of literal Rd, you give it R code that 
   produces literal Rd code when run. This should make it easier to experiment 
   with new types of output (#385). 
-
-* Roxygen now records its version in a single place: the `RoxygenNote`
-  field in the `DESCRIPTION` (#338). This will be the last time an roxygen2
-  upgrade changes every file in `man/`.
 
 * Roxygen2 now parses the source code files in the order specified in the
   `Collate` field in `DESCRIPTION`. This improves the ordering of the generated 

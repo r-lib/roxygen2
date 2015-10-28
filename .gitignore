@@ -5,3 +5,4 @@
 ## Qt Creator
 *.pro
 *.pro.user
+inst/doc

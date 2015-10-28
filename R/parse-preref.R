@@ -82,7 +82,7 @@ parse.value <- function(x) {
   if (x$val == "") {
     tag_warning(x, "requires a value")
   } else if (!rdComplete(x$val)) {
-    tag_warning(x, "mismatched braces")
+    tag_warning(x, "mismatched braces or quotes")
   } else {
     x$val <- str_trim(x$val)
     x
@@ -110,7 +110,7 @@ parse.examples <- function(x) {
 
   x$val <- escape_examples(gsub("^\n", "", x$val))
   if (!rdComplete(x$val, TRUE)) {
-    tag_warning(x, "mismatched braces")
+    tag_warning(x, "mismatched braces or quotes")
   } else {
     x
   }
@@ -119,7 +119,7 @@ parse.examples <- function(x) {
 words_parser <- function(min = 0, max = Inf) {
   function(x) {
     if (!rdComplete(x$val)) {
-      return(tag_warning(x, "mismatched braces"))
+      return(tag_warning(x, "mismatched braces or quotes"))
     }
 
     words <- str_split(str_trim(x$val), "\\s+")[[1]]
@@ -138,7 +138,7 @@ parse.words.line <- function(x) {
   if (str_detect(x$val, "\n")) {
     tag_warning(x, "may only span a single line")
   } else if (!rdComplete(x$val)) {
-    tag_warning(x, "mismatching braces")
+    tag_warning(x, "mismatched braces or quotes")
   } else {
     x$val <- str_split(str_trim(x$val), "\\s+")[[1]]
     x
@@ -151,7 +151,7 @@ parse.name.description <- function(x) {
   } else if (!str_detect(x$val, "[[:space:]]+")) {
     tag_warning(x, "requires name and description")
   } else if (!rdComplete(x$val)) {
-    tag_warning(x, "mismatched braces")
+    tag_warning(x, "mismatched braces or quotes")
   } else {
     pieces <- str_split_fixed(str_trim(x$val), "[[:space:]]+", 2)
 
@@ -167,7 +167,7 @@ parse.name <- function(x) {
   if (x$val == "") {
     tag_warning("requires a name")
   } else if (!rdComplete(x$val)) {
-    tag_warning("mismatched braces")
+    tag_warning("mismatched braces or quotes")
   } else if (str_count(x$val, "\\s+") > 1) {
     tag_warning("should have only a single argument")
   } else {

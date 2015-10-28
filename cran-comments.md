@@ -4,7 +4,9 @@
 * win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTEs. 
+There were no ERRORs or WARNINGs. There was 1 NOTE:
+
+* I've changed my maintainer address to hadley@rstudio.com
 
 ## Downstream dependencies
 

@@ -135,12 +135,14 @@ words_parser <- function(min = 0, max = Inf) {
 }
 
 parse.words.line <- function(x) {
+  x$val <- str_trim(x$val)
+
   if (str_detect(x$val, "\n")) {
     tag_warning(x, "may only span a single line")
   } else if (!rdComplete(x$val)) {
     tag_warning(x, "mismatched braces or quotes")
   } else {
-    x$val <- str_split(str_trim(x$val), "\\s+")[[1]]
+    x$val <- str_split(x$val, "\\s+")[[1]]
     x
   }
 }

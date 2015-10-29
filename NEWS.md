@@ -1,5 +1,7 @@
 # roxygen2 5.0.0.9000
 
+* `@export` again allows trailing new line (#415).
+
 # roxygen2 5.0.0
 
 ## New features

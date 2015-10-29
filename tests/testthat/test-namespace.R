@@ -1,5 +1,7 @@
 context("Namespace")
 
+# @export -----------------------------------------------------------------
+
 test_that("export detects object name", {
   out <- roc_proc_text(namespace_roclet(), "#' @export\na <- function(){}")
   expect_equal(out, 'export(a)')
@@ -33,6 +35,14 @@ test_that("multiple export parameters generate multiple exports", {
     #' @export a b
     a <- function(){}")
   expect_equal(out, c('export(a)', 'export(b)'))
+})
+
+test_that("export trimmed before line test", {
+  out <- roc_proc_text(namespace_roclet(), "
+    #' @export
+    #'
+    a <- function(){}")
+  expect_equal(out, 'export(a)')
 })
 
 
@@ -85,6 +95,8 @@ test_that("export uses name if no object present", {
   ")
   expect_equal(out, 'export(x)')
 })
+
+
 
 
 test_that("default export uses exportClass for RC objects", {

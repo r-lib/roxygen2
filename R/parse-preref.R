@@ -180,7 +180,7 @@ parse.name <- function(x) {
 
 parse.toggle <- function(x) {
   if (x$val != "") {
-    tag_warning("has no parameters")
+    tag_warning(x, "has no parameters")
   } else {
     x
   }

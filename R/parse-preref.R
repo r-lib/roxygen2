@@ -179,8 +179,10 @@ parse.name <- function(x) {
 }
 
 parse.toggle <- function(x) {
+  x$val <- str_trim(x$val)
+  
   if (x$val != "") {
-    tag_warning("has no parameters")
+    tag_warning(x, "has no parameters")
   } else {
     x
   }

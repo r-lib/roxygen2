@@ -1,6 +1,7 @@
 # roxygen2 5.0.0.9000
 
 * `@export` again allows trailing new line (#415).
+* Fixed bug in `@noRd`, where usage would cause error (#418).
 
 # roxygen2 5.0.0
 

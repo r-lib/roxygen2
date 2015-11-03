@@ -3,7 +3,7 @@ tags <- new.env(parent = emptyenv())
 parse_tag <- function(x) {
   stopifnot(is.roxygen_tag(x))
 
-  if (!(x$tag %in% names(tags))) {
+  if (!(x$tag %in% ls(tags))) {
     return(tag_warning(x, "unknown tag"))
   }
 

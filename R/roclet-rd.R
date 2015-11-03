@@ -88,7 +88,7 @@ block_to_rd <- function(block, base_path, env) {
 
   # Determine name
   name <- block$name %||% default_topic_name(block$object) %||%
-    stop("Missing name", call. = FALSE)
+    stop("Missing name at ", srcref_location(block$srcref), call. = FALSE)
   add_tag(rd, new_tag("name", name))
 
   # Add backreference to source

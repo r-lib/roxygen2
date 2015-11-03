@@ -1,6 +1,10 @@
 # roxygen2 5.0.0.9000
 
+* Use `ls()`, not `names()` to list elements of environment: fixes R 3.1.0
+  incompatibility (#422, @kevinushey).
+
 * `@export` again allows trailing new line (#415).
+
 * Fixed bug in `@noRd`, where usage would cause error (#418).
 
 # roxygen2 5.0.0

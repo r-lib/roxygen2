@@ -35,7 +35,7 @@ roxygenize <- function(package.dir = ".",
 
   is_first <- first_time(package.dir)
   if (is_first) {
-    message("First time using roxygen2 4.0. Upgrading automatically...")
+    message("First time using roxygen2. Upgrading automatically...")
   }
 
   base_path <- normalizePath(package.dir)

@@ -74,6 +74,16 @@ parse_description <- function(tags) {
 
 # Individual tag parsers --------------------------------------------------
 
+parse.value.markdown <- function(x) {
+  x$val <- full_markdown(x$val)
+  parse.value(x)
+}
+
+parse.value.restricted.markdown <- function(x) {
+  x$val <- restricted_markdown(x$val)
+  parse.value(x)
+}
+
 # TODO: move into own file tag-parsers.R
 # TODO: consistent naming scheme `parse.value` -> `tag_value`
 # TODO: separate tag info and value into two arguments?
@@ -148,6 +158,8 @@ parse.words.line <- function(x) {
 }
 
 parse.name.description <- function(x) {
+  x$val <- full_markdown(x$val)
+  
   if (x$val == "") {
     tag_warning(x, "requires a value")
   } else if (!str_detect(x$val, "[[:space:]]+")) {

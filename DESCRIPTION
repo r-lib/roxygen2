@@ -21,7 +21,9 @@ Imports:
     methods,
     Rcpp (>= 0.11.0),
     R6,
-    desc
+    desc,
+    commonmark,
+    xml2
 Suggests:
     testthat (>= 0.8.0),
     knitr,
@@ -37,6 +39,7 @@ Collate:
     'default-data-format.R'
     'family.R'
     'inherit-params.R'
+    'markdown.R'
     'minidesc.R'
     'object-defaults.R'
     'object-from-call.R'

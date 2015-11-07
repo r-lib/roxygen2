@@ -185,7 +185,77 @@ test_that("strong (bold) text works", {
 })
 
 test_that("links work", {
-  ## TODO
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [](::function).
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\code{\\link{function}}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [](pkg::function).
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\code{\\link[pkg]{function}}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [name](::=dest).
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\link[=dest]{name}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [name](pkg::bar).
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\link[pkg:bar]{name}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [terms](::=terms.object).
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\link[=terms.object]{terms}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [abc](::=abc-class).
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\link[=abc-class]{abc}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
 })
 
 test_that("markdown links are converted", {

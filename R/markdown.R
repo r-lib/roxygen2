@@ -4,7 +4,10 @@ restricted_markdown <- function(rest) {
 }
 
 full_markdown <- function(rest) {
-  markdown(rest, markdown_tags)
+  rest <- escape_leading_whitespace(rest)
+  rest <- markdown(rest, markdown_tags)
+  rest <- unescape_leading_whitespace(rest)
+  rest
 }
 
 #' @importFrom commonmark markdown_xml
@@ -208,4 +211,37 @@ parse_manual_link <- function(xml) {
   )
 
   list(pkg = pkg, func = func)
+}
+
+## If the string contains \preformatted, then
+## we prefix all leading whitespace with a random string.
+## This is needed because the commonmark parser eats up
+## all leading whitespace and we want to keep the whitespace
+## within \preformatted{}. We actually keep leading whitespace
+## everywhere, but that is OK, it is ignored in Rd.
+
+md_leading_ws_string <- "c72663012cdc3c9e55cb3f4e1b4a4df9"
+
+escape_leading_whitespace <- function(text) {
+  if (grepl("\\preformatted", text)) {
+    text <- gsub(
+      pattern = "(?m)^(\\s+)",
+      replacement = paste0(md_leading_ws_string, "\\1"),
+      x = text,
+      perl = TRUE
+    )
+  }
+  text
+}
+
+unescape_leading_whitespace <- function(text) {
+  if (grepl(md_leading_ws_string, text)) {
+    text <- gsub(
+      pattern = md_leading_ws_string,
+      replacement = "",
+      x = text,
+      fixed = TRUE
+    )
+  }
+  text
 }

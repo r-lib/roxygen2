@@ -2,6 +2,10 @@
 
 # roxygen2 5.0.1
 
+* Most fields can now be written using Markdown markup instead of the
+  traditional Rd language. See the 'markdown' vignette for details
+  (#364), by @gaborcsardi
+
 * Use `ls()`, not `names()` to list elements of environment: fixes R 3.1.0
   incompatibility (#422, @kevinushey).
 
@@ -121,11 +125,6 @@
 * Parser callbacks registered with `register_tags()` are now called for fields 
   parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370).
-* Most fields can now be written using Markdown markup instead of the
-  traditional Rd language. See the 'markdown' vignette for details
-  (#364), by @gaborcsardi
-
-# roxygen2 4.1.1.9000
 
 # roxygen2 4.1.1
 

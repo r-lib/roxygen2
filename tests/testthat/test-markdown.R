@@ -24,8 +24,8 @@ test_that("code blocks work", {
     #' Details with a code block:
     #' ```r
     #' x <- 1:10 %>%
-    #' multiply_by(10) %>%
-    #' add(42)
+    #'   multiply_by(10) %>%
+    #'   add(42)
     #' ```
     #' Normal text again.
     foo <- function() {}")[[1]]
@@ -35,8 +35,8 @@ test_that("code blocks work", {
     #' Description
     #'
     #' Details with a code block:\\preformatted{x <- 1:10 %>%
-    #' multiply_by(10) %>%
-    #' add(42)
+    #'   multiply_by(10) %>%
+    #'   add(42)
     #' }
     #'
     #' Normal text again.

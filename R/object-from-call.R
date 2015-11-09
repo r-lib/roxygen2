@@ -38,8 +38,8 @@ find_data <- function(name, env) {
 
 find_data_for_package <- function(env) {
   ns <- env_namespace(env)
-  base_path <- getNamespaceInfo(ns, "path")
-  desc <- read.description(file.path(base_path, "DESCRIPTION"))
+  desc <- read.description(file.path(
+    getNamespaceInfo(ns, "path"), "DESCRIPTION"))
 
   if (!identical(desc$Package, utils::packageName(env))) {
     warning("Inconsistent package names: ",

@@ -2,8 +2,6 @@ context("Package documentation")
 
 test_that("can create package documentation", {
   with_mock(
-    `base::getNamespaceInfo` = function(...)
-      NULL,
     `roxygen2::read.description` = function(...)
       list(Package = "roxygen_devtest",
            Title = "Package Title",

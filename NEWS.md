@@ -22,6 +22,9 @@
 
 * Multiple `@examples` sections are merged (#472, @krlmlr).
 
+* The new `_PACKAGE` sentinel now also works from `roxygenise()`; before
+  it only worked from `devtools::document()` (#439, @krlmlr).
+
 # roxygen2 5.0.1
 
 * Use `ls()`, not `names()` to list elements of environment: fixes R 3.1.0

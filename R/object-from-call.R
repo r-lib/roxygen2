@@ -1,9 +1,9 @@
-object_from_call <- function(call, env, block) {
+object_from_call <- function(call, env, block, file) {
   if (is.null(call)) return()
 
   # Special case: you can refer to other objects as strings
   if (is.character(call)) {
-    value <- find_data(call, env)
+    value <- find_data(call, env, file)
     value <- standardise_obj(call, value, env, block)
 
     return(object(value, call))
@@ -23,9 +23,9 @@ object_from_call <- function(call, env, block) {
   parser(call, env, block)
 }
 
-find_data <- function(name, env) {
+find_data <- function(name, env, file) {
   if (identical(name, "_PACKAGE")) {
-    return(find_data_for_package(env))
+    return(find_data_for_package(env, file))
   }
 
   ns <- env_namespace(env)
@@ -36,10 +36,9 @@ find_data <- function(name, env) {
   }
 }
 
-find_data_for_package <- function(env) {
-  ns <- env_namespace(env)
-  desc <- read.description(file.path(
-    getNamespaceInfo(ns, "path"), "DESCRIPTION"))
+find_data_for_package <- function(env, file) {
+  pkg_path <- dirname(dirname(file))
+  desc <- read.description(file.path(pkg_path, "DESCRIPTION"))
 
   if (!identical(desc$Package, utils::packageName(env))) {
     warning("Inconsistent package names: ",

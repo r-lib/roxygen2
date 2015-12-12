@@ -31,7 +31,7 @@ parse_file <- function(file, env) {
     preref <- parse_preref(comment_ref, file)
     if (length(preref) == 0) return()
 
-    preref$object <- object_from_call(call, env, preref)
+    preref$object <- object_from_call(call, env, preref, file)
     preref$srcref <- list(filename = file, lloc = as.vector(ref))
     add_defaults(preref)
   }

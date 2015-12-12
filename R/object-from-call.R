@@ -40,12 +40,6 @@ find_data_for_package <- function(env, file) {
   pkg_path <- dirname(dirname(file))
   desc <- read.description(file.path(pkg_path, "DESCRIPTION"))
 
-  if (!identical(desc$Package, utils::packageName(env))) {
-    warning("Inconsistent package names: ",
-            desc$Package, " vs. ", utils::packageName(env),
-            call. = FALSE)
-  }
-
   structure(list(desc = desc), class = "package")
 }
 

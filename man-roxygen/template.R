@@ -22,6 +22,6 @@
 #' \item Templates are not parsed recursively, so you can not include templates
 #' from within other templates. 
 #' 
-#' \item Templates must be composed of complete tags - becuase all roxygen tags
+#' \item Templates must be composed of complete tags - because all roxygen tags
 #' are current block tags, they can not be used for inline insertions.
 #' }

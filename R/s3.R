@@ -32,8 +32,7 @@ calls_use_method <- function(x) {
   # Base cases
   if (missing(x)) return(FALSE)
   if (!is.call(x)) return(FALSE)
-
-  if (identical(x[[1]], quote(UseMethod))) return(TRUE)
+  if (identical(x[[1]], quote(UseMethod)) && length(x) == 2) return(TRUE)
   if (length(x) == 1) return(FALSE)
   # Recursive case: arguments to call
   for (arg in as.list(x[-1])) {

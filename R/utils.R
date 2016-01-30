@@ -123,8 +123,37 @@ same_contents <- function(path, contents) {
   identical(text_hash, file_hash)
 }
 
-r_files <- function(path) {
+all_r_files <- function(path) {
   sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
+}
+
+r_files <- function(path) {
+    rbuildignore <- file.path(path, ".Rbuildignore")
+    rfiles <- all_r_files(path)
+    if (file.exists(rbuildignore)) {
+        rbuildignore_patterns <- readLines(rbuildignore, warn = FALSE)
+        ## We need to apply the regular expressions from .Rbuildignore
+        ## on the top-level directory, so we need to remove everything
+        ## leading up to the path. `normalizePath` ensures that the
+        ## path is properly expanded.
+        relative_rfiles <- sub(normalizePath(path), "", normalizePath(rfiles))
+        ## If user adds trailing / when specifying path, we need to remove it.
+        relative_rfiles <- sub(paste0("^(", .Platform$file.sep, "|/)*"), "",
+                               relative_rfiles)
+        ## Figure out if any of the regular expressions matches files
+        ## in R/ Use perl=TRUE as R-exts manual says that patterns
+        ## should be perl-like regular expressions
+        idx_rfiles_to_ignore <- unique(unlist(lapply(rbuildignore_patterns,
+                                                     function(x) {
+            grep(x, relative_rfiles, perl = TRUE)
+        })))
+        if (length(idx_rfiles_to_ignore))
+            rfiles[-relative_rfiles_to_ignore]
+        else
+            rfiles
+    } else {
+        rfiles
+    }
 }
 
 dots <- function(...) {

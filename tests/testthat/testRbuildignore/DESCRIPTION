@@ -1,0 +1,7 @@
+Package: testRbuildignore
+Title: Tools to make developing R code easier
+License: GPL-2
+Description:
+Author: Francois <francois.michonneau@gmail.com>
+Maintainer: Francois <francois.michonneau@gmail.com>
+Version: 0.1

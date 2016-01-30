@@ -99,6 +99,8 @@
   (as long as UTF-8 encoded or specified Encoding in DESCRIPTION)
   (#532, @shrektan).
 
+* Roxygen ignore files that are listed in `.Rbuildignore` (#446, @fmichonneau)
+
 ## Extension
 
 * Deprecated `register.preref.parser()` and `register.preref.parsers()`

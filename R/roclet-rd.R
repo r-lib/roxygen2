@@ -178,7 +178,7 @@ roc_output.rd_roclet <- function(roclet, results, base_path, options = list(),
 
 #' @export
 clean.rd_roclet <- function(roclet, base_path) {
-  rd <- dir(file.path(base_path, "man"), full.names = TRUE)
+  rd <- tools::list_files_with_type(file.path(base_path, "man"), "docs")
   rd <- rd[!file.info(rd)$isdir]
   made_by_me <- vapply(rd, made_by_roxygen, logical(1))
 

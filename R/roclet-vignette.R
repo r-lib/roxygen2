@@ -32,11 +32,9 @@ roc_output.vignette <- function(roclet, results, base_path, options = list(),
 # any of the related files are older than the vignette.
 vign_outdated <- function(vign) {
   vign <- normalizePath(vign, mustWork = TRUE)
-  name <- tools::file_path_sans_ext(basename(vign))
 
   # Currently, the final product of a vignette can only be pdf or html
-  related <- dir(dirname(vign), pattern = paste0(name, "\\.(pdf|html)$"),
-    full.names = TRUE)
+  related <- tools::list_files_with_type(dirname(vign), "vignette")
   related <- setdiff(related, vign)
 
   length(related) == 0 || mtime(vign) > mtime(related)

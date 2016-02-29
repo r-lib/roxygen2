@@ -124,7 +124,7 @@ same_contents <- function(path, contents) {
 }
 
 r_files <- function(path) {
-  sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
+  sort_c(tools::list_files_with_type(path, "code"))
 }
 
 dots <- function(...) {

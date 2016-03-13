@@ -383,3 +383,20 @@ test_that("markdown is parsed in all fields where it is supported", {
   expect_equal(get_tag(out1, "field"), get_tag(out2, "field"))
   expect_equal(get_tag(out1, "method"), get_tag(out2, "method"))
 })
+
+
+test_that("markdown emphasis is ok", {
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description with some *keywords* included.
+    #' So far so good. \\preformatted{ *these are not
+    #'   emphasised*. Or are they?
+    #' }
+    foo <- function() {}")[[1]]
+  desc1 <- "Description with some \\emph{keywords} included.
+So far so good. \\preformatted{ *these are not
+emphasised*. Or are they?
+}"
+  expect_equal(get_tag(out1, "description")[[2]], desc1)
+})

@@ -14,9 +14,11 @@ full_markdown <- function(rest) {
 #' @importFrom xml2 read_xml
 
 markdown <- function(text, markdown_tags) {
-  md <- markdown_xml(text, hardbreaks = TRUE)
+  esc_text <- escape_rd_for_md(text)
+  md <- markdown_xml(esc_text, hardbreaks = TRUE)
   xml <- read_xml(md)
-  str_trim(markdown_rparse(xml, markdown_tags))
+  rd_text <- str_trim(markdown_rparse(xml, markdown_tags))
+  unescape_rd_for_md(rd_text, esc_text)
 }
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr

@@ -396,7 +396,7 @@ test_that("markdown emphasis is ok", {
     foo <- function() {}")[[1]]
   desc1 <- "Description with some \\emph{keywords} included.
 So far so good. \\preformatted{ *these are not
-emphasised*. Or are they?
+  emphasised*. Or are they?
 }"
   expect_equal(get_tag(out1, "description")[[2]], desc1)
 })

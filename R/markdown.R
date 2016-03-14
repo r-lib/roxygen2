@@ -1,4 +1,11 @@
 
+markdown_on <- function(value = NULL) {
+  if (! is.null(value)) {
+    assign("markdown-support", isTRUE(value), envir = tags)
+  }
+  return(isTRUE(tags$`markdown-support`))
+}
+
 restricted_markdown <- function(rest) {
   markdown(rest, markdown_tags_restricted)
 }
@@ -14,6 +21,7 @@ full_markdown <- function(rest) {
 #' @importFrom xml2 read_xml
 
 markdown <- function(text, markdown_tags) {
+  if (!markdown_on()) return(text)
   esc_text <- escape_rd_for_md(text)
   md <- markdown_xml(esc_text, hardbreaks = TRUE)
   xml <- read_xml(md)

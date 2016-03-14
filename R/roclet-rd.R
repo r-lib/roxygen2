@@ -22,6 +22,7 @@ register_tags(
   keywords = parse.value,
   method = parse.name.description,
   name = parse.value,
+  noMd = parse.toggle,
   noRd = parse.toggle,
   note = parse.value.markdown,
   param = parse.name.description,

@@ -11,7 +11,7 @@ source_package(path)
 }
 \value{
 An environment, into which all R files in the directory were
-sourced.
+  sourced.
 }
 \description{
 This is a simple attempt to load code in a package used by

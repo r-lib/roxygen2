@@ -146,7 +146,7 @@ markdown_tags <- list(
     list("\\code{", xml_contents(xml), "}")
   },
 
-  inline_html = function(xml) {
+  html_inline = function(xml) {
     ## Will just ignore this for now.
     xml_contents(xml)
   },

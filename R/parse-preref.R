@@ -160,8 +160,12 @@ parse.words.line <- function(x) {
   }
 }
 
-parse.name.description <- function(x) {
-  x$val <- full_markdown(x$val)
+parse.name.description.nomarkdown <- function(x) {
+  parse.name.description(x, markdown = FALSE)
+}
+
+parse.name.description <- function(x, markdown = TRUE) {
+  if (markdown) x$val <- full_markdown(x$val)
   
   if (x$val == "") {
     tag_warning(x, "requires a value")

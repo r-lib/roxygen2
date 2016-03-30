@@ -20,7 +20,7 @@ register_tags(
   format = parse.value.markdown,
   inheritParams = parse.value,
   keywords = parse.value,
-  method = parse.name.description,
+  method = parse.name.description.nomarkdown,
   name = parse.value,
   noMd = parse.toggle,
   noRd = parse.toggle,

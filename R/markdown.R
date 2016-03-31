@@ -95,7 +95,9 @@ markdown_tags <- list(
     ## A single item within a list. We remove the first paragraph
     ## tag, to avoid an empty line at the beginning of the first item.
     cnts <- xml_children(xml)
-    if (xml_name(cnts[[1]]) == "paragraph") {
+    if (length(cnts) == 0) {
+      cnts <- ""
+    } else if (xml_name(cnts[[1]]) == "paragraph") {
       cnts <- list(xml_contents(cnts[[1]]), cnts[-1])
     }
     list("\n\\item ", cnts)

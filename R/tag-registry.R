@@ -19,7 +19,7 @@ parse_tag <- function(x) {
 #' @rdname register-parser
 #' @usage NULL
 register.preref.parser <- function(key, parser) {
-  warning("Deprecaated: please use register_tag instead", call. = FALSE)
+  warning("Deprecated: please use register_tag instead", call. = FALSE)
   tags[[key]] <- parser
 }
 
@@ -27,7 +27,7 @@ register.preref.parser <- function(key, parser) {
 #' @rdname register-parser
 #' @usage NULL
 register.preref.parsers <- function(parser, ...) {
-  warning("Deprecaated: please use register_tag instead", call. = FALSE)
+  warning("Deprecated: please use register_tag instead", call. = FALSE)
   for (key in c(...)) {
     register.preref.parser(key, parser)
   }

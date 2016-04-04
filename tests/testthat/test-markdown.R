@@ -435,3 +435,40 @@ test_that("@noMd works at the block level", {
     c(bar = "Yes, bar! With \\code{markdown} this time!")
   )
 })
+
+test_that("% and $ and _ are not unescaped", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description. It has some \\% and \\$ and also \\_.
+    #'
+    #' @param foo Item with \\% characters: \\%. And also \\$ and \\_.
+    #' @noMd
+    foo <- function(foo) {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description. It has some \\% and \\$ and also \\_.
+    #'
+    #' @param foo Item with \\% characters: \\%. And also \\$ and \\_.
+    foo <- function(foo) {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equal(get_tag(out1, "param"), get_tag(out2, "param"))
+})
+
+test_that("Escaping is kept", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description. It has \\rd \\commands.
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description. It has \\rd \\commands.
+    #' @noMd
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+})

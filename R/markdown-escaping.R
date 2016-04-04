@@ -35,7 +35,8 @@
 
 escape_rd_for_md <- function(text) {
   rd_tags <- find_fragile_rd_tags(text, escaped_for_md)
-  protect_rd_tags(text, rd_tags)
+  protected <- protect_rd_tags(text, rd_tags)
+  double_escape_md(protected)
 }
 
 escaped_for_md <- paste0("\\", c(
@@ -234,4 +235,17 @@ make_random_string <- function(length = 32) {
     sample(c(LETTERS, letters, 0:9), length, replace = TRUE),
     collapse = ""
   )
+}
+
+#' Escape \\% and \\$ and \\_ once more, because commonmark
+#' removes the escaping. We do this everywhere currently.
+#'
+#' @param text Input text.
+#' @return Double-escaped text.
+
+double_escape_md <- function(text) {
+  text <- gsub("\\%", "\\\\%", text, fixed = TRUE)
+  text <- gsub("\\_", "\\\\_", text, fixed = TRUE)
+  text <- gsub("\\$", "\\\\$", text, fixed = TRUE)
+  text
 }

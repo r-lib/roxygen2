@@ -190,22 +190,61 @@ clean.rd_roclet <- function(roclet, base_path) {
 
 process_methods <- function(block) {
   obj <- block$object
-  if (!inherits(obj, "rcclass")) return()
+  if (!inherits(obj, "rcclass") && !inherits(obj, "r6class")) return()
 
-  methods <- obj$methods
-  if (is.null(obj$methods)) return()
 
-  desc <- lapply(methods, function(x) docstring(x$value@.Data))
-  usage <- vapply(methods, function(x) {
-    usage <- function_usage(x$value@name, formals(x$value@.Data))
-    as.character(wrap_string(usage))
-  }, character(1))
+  if(inherits(obj, "rcclass")) {
+      methods <- obj$methods
+      if (is.null(obj$methods)) return()
+      
+      desc <- lapply(methods, function(x) docstring(x$value@.Data))
+      usage <- vapply(methods, function(x) {
+          usage <- function_usage(x$value@name, formals(x$value@.Data))
+          as.character(wrap_string(usage))
+      }, character(1))
+      
+      has_docs <- !vapply(desc, is.null, logical(1))
+      desc <- desc[has_docs]
+      usage <- usage[has_docs]
+  
+      return(new_tag("rcmethods", setNames(desc, usage)))
+  }
+  else if(inherits(obj, "r6class")) {
+      methods <- obj$methods
+      if (is.null(obj$methods)) return()
+      
+      desc <- lapply(methods, function(x) docblock(x$value))
+      usage <- vapply(methods, function(x) {
+          usage <- function_usage(attr(x$value, "r6method"), formals(x$value))
+          as.character(wrap_string(usage))
+      }, character(1))
 
-  has_docs <- !vapply(desc, is.null, logical(1))
-  desc <- desc[has_docs]
-  usage <- usage[has_docs]
+      is_active <- vapply(methods, function(x) {attr(x$value, "r6is_active")}, logical(1))
+      
+      has_docs <- !vapply(desc, is.null, logical(1))
+      ## if any doesn't have documentation, add a note to that effect into the documentation
+      if(any(!has_docs)) {
+              desc[!has_docs] <- "NO DOCUMENTATION AVAILABLE"
+      }
 
-  new_tag("rcmethods", setNames(desc, usage))
+      ## want to change it a little: The item name will just be the name of the function
+      ## then we insert a custom usage block
+      ## the consist of preformatted text
+      ## and then the description
+      usage_method_names <- vapply(methods, function(x) {attr(x$value, "r6method")}, character(1))
+      desc <- paste0("\n\n\\strong{Usage:}\n\\preformatted{", usage, "}\n", desc)
+      ## for active methods, add a NOTE at the beginning
+      if(any(is_active)) {
+          desc[is_active] <- paste0("Active method", desc[is_active])
+      }
+      
+      usage <- usage_method_names
+      
+      return(new_tag("r6methods", setNames(desc, usage)))
+  }
+  else {
+      stop("should not have reached this")
+  }
 }
 
 

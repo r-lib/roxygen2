@@ -25,7 +25,7 @@ format.rd_file <- function(x, ...) {
   tags <- as.list(x[[1]])
   order <- c("backref", "docType", "encoding", "name", "alias", "title",
     "format", "source", "usage", "param", "value", "description",
-    "details", "minidesc", "reexport", "field", "slot", "rcmethods", "note",
+    "details", "minidesc", "reexport", "field", "slot", "rcmethods", "note", "r6methods",
     "section", "examples", "author", "references", "seealso",
     "concept", "keyword", "rawRd")
 

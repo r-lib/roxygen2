@@ -222,8 +222,6 @@ describe_section <- function(name, dt, dd) {
   )
 }
 
-
-
 #' @export
 format.examples_tag <- function(x, ...) {
   values <- paste0(x$values, collapse = "\n")
@@ -232,6 +230,11 @@ format.examples_tag <- function(x, ...) {
 
 #' @export
 format.rcmethods_tag <- function(x, ...) {
+  describe_section("Methods", names(x$values), x$values)
+}
+
+#' @export
+format.r6methods_tag <- function(x, ...) {
   describe_section("Methods", names(x$values), x$values)
 }
 

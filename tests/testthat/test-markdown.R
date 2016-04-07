@@ -1,6 +1,18 @@
 context("Markdown markup")
 roc <- rd_roclet()
 
+test_that("markdown is off by default", {
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description with some `code` included. `More code.`
+    foo <- function() {}")[[1]]
+  expect_equal(
+    get_tag(out1, "description")$values,
+    "Description with some `code` included. `More code.`"
+  )
+})
+
 test_that("backticks are converted to \\code", {
   out1 <- roc_proc_text(roc, "
     #' Title

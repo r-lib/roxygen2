@@ -431,47 +431,6 @@ So far so good. \\preformatted{ *these are not
   expect_equal(get_tag(out1, "description")[[2]], desc1)
 })
 
-
-test_that("@noMd works", {
-
-  skip("we'll have @noMd in a later version")
-
-  out1 <- roc_proc_text(roc, "
-    #' Title
-    #'
-    #' Description with some `code` included. `More code.`
-    #' @noMd
-    foo <- function() {}")[[1]]
-  expect_equal(
-    get_tag(out1, "description")[[2]],
-    "Description with some `code` included. `More code.`"
-  )
-})
-
-test_that("@noMd works at the block level", {
-
-  skip("we'll have @noMd in a later version")
-
-  out1 <- roc_proc_text(roc, "
-    #' Title
-    #'
-    #' Description with some `code` included. `More code.`
-    #' @noMd
-    foo <- function() {}
-
-    #' @param bar Yes, bar! With `markdown` this time!
-    #' @rdname foo
-    bar <- function() {}")[[1]]
-  expect_equal(
-    get_tag(out1, "description")[[2]],
-    "Description with some `code` included. `More code.`"
-  )
-  expect_equal(
-    get_tag(out1, "param")[[2]],
-    c(bar = "Yes, bar! With \\code{markdown} this time!")
-  )
-})
-
 test_that("% and $ and _ are not unescaped", {
 
   out1 <- roc_proc_text(roc, "

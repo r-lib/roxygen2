@@ -6,6 +6,7 @@ test_that("backticks are converted to \\code", {
     #' Title
     #'
     #' Description with some `code` included. `More code.`
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -28,6 +29,7 @@ test_that("code blocks work", {
     #'   add(42)
     #' ```
     #' Normal text again.
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -56,6 +58,7 @@ test_that("itemized lists work", {
     #' * item 1
     #' * item 2
     #' * item 3
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -89,6 +92,7 @@ test_that("numbered lists work", {
     #' 1. item 1
     #' 1. item 2
     #' 1. item 3
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -126,6 +130,7 @@ test_that("nested lists are OK", {
     #'    * sublist
     #'    * within
     #' * item 3
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -150,6 +155,7 @@ test_that("nested lists are OK", {
     #'    }
     #' \\item item 3
     #' }
+    #' @md
     foo <- function() {}")[[1]]
   expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
   expect_equal(get_tag(out1, "details"), get_tag(out2, "details"))
@@ -161,6 +167,7 @@ test_that("emphasis works", {
     #' Title
     #'
     #' Description with some _emphasis_ included. _More emph._
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -175,6 +182,7 @@ test_that("strong (bold) text works", {
     #' Title
     #'
     #' Description with some **bold** included. **More bold.**
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -189,6 +197,7 @@ test_that("links work", {
     #' Title
     #'
     #' Description, see [](::function).
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -201,6 +210,7 @@ test_that("links work", {
     #' Title
     #'
     #' Description, see [](pkg::function).
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -213,6 +223,7 @@ test_that("links work", {
     #' Title
     #'
     #' Description, see [name](::=dest).
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -225,6 +236,7 @@ test_that("links work", {
     #' Title
     #'
     #' Description, see [name](pkg::bar).
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -237,6 +249,7 @@ test_that("links work", {
     #' Title
     #'
     #' Description, see [terms](::=terms.object).
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -249,6 +262,7 @@ test_that("links work", {
     #' Title
     #'
     #' Description, see [abc](::=abc-class).
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -264,6 +278,7 @@ test_that("markdown links are converted", {
     #'
     #' Description, see [http://acme.com]() for details.
     #' And here is a named link: [igraph](http://igraph.org).
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -281,6 +296,7 @@ test_that("images are recognized", {
     #' Description
     #'
     #' Details with a plot: ![](example.jpg \"Plot title\")
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -328,6 +344,7 @@ test_that("markdown is parsed in all fields where it is supported", {
     #' @field field Field **with bold**
     #'
     #' @method method Method **with bold**
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' @title Title \\strong{with bold}
@@ -351,7 +368,7 @@ test_that("markdown is parsed in all fields where it is supported", {
     #' @author Author \\strong{with bold}
     #'
     #' @section Foobar:
-    #' With some **bold text**.
+    #' With some \\strong{bold text}.
     #'
     #' @format Format \\strong{with bold}
     #'
@@ -393,6 +410,7 @@ test_that("markdown emphasis is ok", {
     #' So far so good. \\preformatted{ *these are not
     #'   emphasised*. Or are they?
     #' }
+    #' @md
     foo <- function() {}")[[1]]
   desc1 <- "Description with some \\emph{keywords} included.
 So far so good. \\preformatted{ *these are not
@@ -403,6 +421,9 @@ So far so good. \\preformatted{ *these are not
 
 
 test_that("@noMd works", {
+
+  skip("we'll have @noMd in a later version")
+
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -416,6 +437,9 @@ test_that("@noMd works", {
 })
 
 test_that("@noMd works at the block level", {
+
+  skip("we'll have @noMd in a later version")
+
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -444,7 +468,6 @@ test_that("% and $ and _ are not unescaped", {
     #' Description. It has some \\% and \\$ and also \\_.
     #'
     #' @param foo Item with \\% characters: \\%. And also \\$ and \\_.
-    #' @noMd
     foo <- function(foo) {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
@@ -452,6 +475,7 @@ test_that("% and $ and _ are not unescaped", {
     #' Description. It has some \\% and \\$ and also \\_.
     #'
     #' @param foo Item with \\% characters: \\%. And also \\$ and \\_.
+    #' @md
     foo <- function(foo) {}")[[1]]
   expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
   expect_equal(get_tag(out1, "param"), get_tag(out2, "param"))
@@ -463,12 +487,12 @@ test_that("Escaping is kept", {
     #' Title
     #'
     #' Description. It has \\rd \\commands.
+    #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
     #' Title
     #'
     #' Description. It has \\rd \\commands.
-    #' @noMd
     foo <- function() {}")[[1]]
   expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
 })

@@ -3,8 +3,8 @@ parse_preref <- function(x, file, offset = x[[1]]) {
   if (length(tags) == 0)
     return()
 
-  ## Switch markdown on/off if noMd absent/present
-  markdown_on(! "noMd" %in% vapply(tags, "[[", "", "tag"))
+  ## Switch markdown on/off if md absent/present
+  markdown_on("md" %in% vapply(tags, "[[", "", "tag"))
 
   tags <- parse_description(tags)
   tags <- compact(lapply(tags, parse_tag))

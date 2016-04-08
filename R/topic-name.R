@@ -16,10 +16,22 @@ default_topic_name.rcclass <- function(x) {
   paste0(x$value@className, "-class")
 }
 
+
+#' @export
+default_topic_name.r6class <- function(x) {
+  paste0(x$value$classname, "-class")
+}
+
 #' @export
 default_topic_name.rcmethod <- function(x) {
   x@name
 }
+
+#' @export
+default_topic_name.r6method <- function(x) {
+  attr(x, "r6method")
+}
+
 
 #' @export
 default_topic_name.default <- function(x) {

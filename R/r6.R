@@ -49,7 +49,7 @@ docblock <- function(f) {
 
   ## now get all the elements that are character vectors until there are no more
   element_is_character <- unlist(lapply(b, is.character))
-  if(!all(element_is_character)) {
+  if(!all(element_is_character[-1])) {
       last_block_line <- min(which(!element_is_character[-1]))
   }
   else {

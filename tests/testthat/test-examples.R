@@ -89,3 +89,16 @@ test_that("% in @examples escaped before matching braces test (#213)", {
   examples <- get_tag(out, "examples")$values
   expect_equal(examples, rd("{a \\%\\% b}"))
 })
+
+test_that("multiple examples (#470)", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' @name a
+    #' @examples
+    #' TRUE
+    #' @examples
+    #' FALSE
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_equal(examples, rd(c("TRUE", "FALSE")))
+})

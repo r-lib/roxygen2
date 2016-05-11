@@ -214,7 +214,7 @@ process_methods <- function(block) {
 process_examples <- function(block, base_path) {
   out <- list()
   if (!is.null(block$examples)) {
-    out <- c(out, new_tag("examples", block$examples))
+    out <- c(out, process_tag(block, "examples"))
   }
 
   paths <- unlist(block[names(block) == "example"])

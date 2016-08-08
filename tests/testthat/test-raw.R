@@ -7,7 +7,7 @@ test_that("rawRd inserted unchanged", {
     NULL")[[1]]
 
   lines <- strsplit(format(out), "\n")[[1]]
-  expect_equal(lines[[5]], "#this is a comment")
+  expect_equal(lines[[6]], "#this is a comment")
 })
 
 test_that("evalRd must be valid code", {

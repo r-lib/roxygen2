@@ -1,5 +1,7 @@
 # roxygen2 5.0.1.9000
 
+* Multiple `@examples` sections are merged (#472, @krlmlr).
+
 # roxygen2 5.0.1
 
 * Use `ls()`, not `names()` to list elements of environment: fixes R 3.1.0

@@ -60,6 +60,18 @@ test_that("multiple @inheritParam inherits from existing topics", {
   expect_equal(sort(names(params)), c("trim", "x"))
 })
 
+
+test_that("@inheritParam can cope with multivariable argument definitions", {
+  out <- roc_proc_text(rd_roclet(), "
+                       #' My merge
+                       #'
+                       #' @inheritParams base::merge
+                       mymerge <- function(x, y) {}")[[1]]
+  params <- get_tag(out, "param")$values
+  expect_equal(length(params), 2)
+  expect_equal(sort(names(params)), c("x", "y"))
+})
+
 test_that("@inheritParam understands compound docs", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title

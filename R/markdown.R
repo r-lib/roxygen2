@@ -28,6 +28,7 @@ markdown <- function(text, markdown_tags) {
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr
 #'   xml_children
+#' @importFrom methods is
 
 markdown_rparse <- function(xml, markdown_tags) {
 
@@ -249,6 +250,8 @@ parse_link <- function(destination, contents) {
 contains_once <- function(x, pattern, ...) {
   length(strsplit(x = x, split = pattern, ...)[[1]]) == 2
 }
+
+#' @importFrom methods is
 
 is_empty_xml <- function(x) {
   is(x, "xml_nodeset") && length(x) == 0

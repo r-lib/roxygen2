@@ -106,3 +106,23 @@ test_that("whitespace is not detected as details", {
 
   expect_null(get_tag(out, "details"))
 })
+
+
+test_that("@description and @details are merged", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Foo
+    #'
+    #' This.
+    #'
+    #' OBTW.
+    foo <- function(x = '%') x
+
+    #' @rdname foo
+    #' @description And that.
+    #' @details ORLY?
+    bar <- function(y = '%') y
+  ")[[1]]
+
+  expect_equal(get_tag(out, "description")$values, c("This.", "And that."))
+  expect_equal(get_tag(out, "details")$values, c("OBTW.", "ORLY?"))
+})

@@ -95,3 +95,14 @@ test_that("@describeIn class captures function name with data", {
 
   expect_equal(get_tag(out, "minidesc")$values$label, "f2")
 })
+
+test_that("function names are escaped", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' foo
+    foo <- 100
+
+    #' @describeIn foo shortcut for foo
+    `%foo%` <- function(x, y) foo(x, y)
+    ")[[1]]
+  expect_match(format(get_tag(out, "minidesc")), "\\\\%foo\\\\%")
+})

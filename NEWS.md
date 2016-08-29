@@ -1,5 +1,7 @@
 # roxygen2 5.0.1.9000
 
+* Specail characters in `@describeIn` function names are escaped (#450).
+
 * Ensure that `functions` with S3 class are still treated as functions (#455).
 
 * Roxygen will no longer write out topics that don't have a name or title,

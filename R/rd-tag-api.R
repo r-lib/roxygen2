@@ -246,7 +246,7 @@ format.minidesc_tag <- function(x, ...) {
   paste0(
     "\\section{", title, "}{\n",
     "\\itemize{\n",
-    paste0("\\item \\code{", x$values$label, "}: ", x$values$desc,
+    paste0("\\item \\code{", escape(x$values$label), "}: ", x$values$desc,
       collapse = "\n\n"),
     "\n}}\n"
   )

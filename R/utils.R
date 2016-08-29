@@ -145,3 +145,10 @@ block_warning <- function(block, ...) {
   NULL
 }
 
+# Parse DESCRIPTION into convenient format
+read.description <- function(file) {
+  dcf <- read.dcf(file, keep.white = "Authors@R")
+
+  dcf_list <- setNames(as.list(dcf[1, ]), colnames(dcf))
+  lapply(dcf_list, str_trim)
+}

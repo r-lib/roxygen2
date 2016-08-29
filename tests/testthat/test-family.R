@@ -63,3 +63,24 @@ test_that("family links to name only, not all aliases", {
   expect_equal(str_count(seealso, fixed("\\code{\\link")), 1)
 
 })
+
+test_that("families listed in same order as input", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' foo
+    #' @family a
+    foo <- function() {}
+
+    #' foo
+    #' @family b
+    #' @family a
+    bar <- function() {}
+
+    #' foo
+    #' @family b
+    baz <- function() {}
+  ")[[2]]
+
+  seealso <- get_tag(out, "seealso")$values
+  expect_match(seealso[1], "^Other b")
+  expect_match(seealso[2], "^Other a")
+})

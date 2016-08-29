@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* `@family` see also are added in the same order they appear, not 
+  alphabetically (#315).
+
 * Special characters in `@describeIn` function names are escaped (#450).
 
 * Ensure that `functions` with S3 class are still treated as functions (#455).

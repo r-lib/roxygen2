@@ -2,19 +2,21 @@ process_family <- function(topics) {
   family_lookup <- invert(get_values(topics, "family"))
   alias_lookup <- get_values(topics, "alias")
 
-  for(family in names(family_lookup)) {
-    related <- family_lookup[[family]]
+  for (topic_name in names(topics)) {
+    topic <- topics[[topic_name]]
+    families <- get_tag(topic, "family")$values
 
-    for(topic_name in related) {
-      topic <- topics[[topic_name]]
+    for (family in families) {
+      related <- family_lookup[[family]]
+
       others <- setdiff(related, topic_name)
-
-      if (length(others) < 1) next;
+      if (length(others) < 1)
+        next
 
       by_file <- vapply(alias_lookup[others], function(x) {
         paste0("\\code{\\link{", escape(x[1]), "}}")
       }, FUN.VALUE = character(1))
-      links <- paste(sort_c(by_file), collapse =", ")
+      links <- paste(sort_c(by_file), collapse = ", ")
 
       seealso <- paste("Other ", family, ": ", sep = "")
       out <- strwrap(links, initial = seealso, width = 60, exdent = 2)

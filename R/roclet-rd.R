@@ -220,6 +220,18 @@ process_examples <- function(block, base_path) {
   paths <- unlist(block[names(block) == "example"])
   if (length(paths) > 0) {
     paths <- file.path(base_path, str_trim(paths))
+
+    # Check that haven't accidentally used example instead of examples
+    nl <- str_count(paths, "\n")
+    if (any(nl) > 0) {
+      warning(
+        srcref_location(block$srcref), ": ",
+        "@example spans multiple lines. Do you want @examples?",
+        call. = FALSE
+      )
+      return(NULL)
+    }
+
     examples <- unlist(lapply(paths, readLines))
     examples <- escape_examples(examples)
 

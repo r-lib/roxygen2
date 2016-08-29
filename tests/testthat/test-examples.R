@@ -48,6 +48,21 @@ test_that("@example does not introduce extra empty lines", {
   expect_identical(length(examples), 2L)
 })
 
+test_that("@example gives warning if used instead of @examples", {
+  expect_warning(
+    out <- roc_proc_text(rd_roclet(), "
+      #' @name a
+      #' @example
+      #' a <- 1
+      #' a + b
+      NULL")[[1]],
+    "@example spans multiple lines"
+  )
+
+  expect_null(get_tag(out, "examples")$values, NULL)
+})
+
+
 test_that("indentation in examples preserved", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a

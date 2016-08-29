@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* Give nice warning message if you accidentally use `@example` instead of 
+  `@examples` (#494).
+
 * Fixed an issue where `.`s were sometimes added between words within
   a `@family` tag (#477, @kevinushey).
 

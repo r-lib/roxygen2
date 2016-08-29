@@ -56,16 +56,13 @@ roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
 
   topics <- list()
   for (block in blocks) {
-    new <- block_to_rd(block, base_path, parsed$env)
-    if (is.null(new)) next
+    rd <- block_to_rd(block, base_path, parsed$env)
+    if (is.null(rd)) next
 
-    filename <- new$filename
-    rd <- new$rd
-
-    if (filename %in% names(topics)) {
-      topics[[filename]]$add(rd)
+    if (rd$filename %in% names(topics)) {
+      topics[[rd$filename]]$add(rd)
     } else {
-      topics[[filename]] <- rd
+      topics[[rd$filename]] <- rd
     }
   }
 
@@ -160,10 +157,11 @@ block_to_rd <- function(block, base_path, env) {
 
   describe_in <- process_describe_in(block, env)
   rd$add(describe_in$tag)
-  filename <- paste0(describe_in$rdname %||% block$rdname %||%
+
+  rd$filename <- paste0(describe_in$rdname %||% block$rdname %||%
     nice_name(name), ".Rd")
 
-  list(rd = rd, filename = filename)
+  rd
 }
 
 #' @export

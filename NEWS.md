@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* The default alias for S4 method now re-addeds trailing ANY signatures
+  that are sometimes dropped (#460).
+
 * Changes to DESCRIPTION (i.e. `Collate:` and `RoxygenNote`) now use
   the desc package. This will minimise spurious changes (#430).
 

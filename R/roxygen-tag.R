@@ -32,6 +32,6 @@ make_tag_message <- function(x, message) {
 }
 
 tag_warning <- function(x, ...) {
-  warning(make_tag_message(x, paste0(...)), call. = FALSE)
+  warning(make_tag_message(x, paste0(...)), call. = FALSE, immediate. = TRUE)
   NULL
 }

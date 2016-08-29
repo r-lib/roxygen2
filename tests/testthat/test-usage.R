@@ -296,3 +296,15 @@ test_that("breaking works after escapes (#265)", {
   usage <- format(get_tag(out, "usage"))
   expect_equal(str_count(usage, "\n"), 5)
 })
+
+test_that("replacement funs get non-breaking spaces", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Function long usage
+    `long_replacement_fun<-` <- function(x,
+        a = 'aaaaaaaaaaaaaaaa',
+        b = 'aaaaaaaaaaaaaaaa',
+        value) {}
+  ")[[1]]
+  usage <- format(get_tag(out, "usage"))
+  expect_match(usage, " <- ")
+})

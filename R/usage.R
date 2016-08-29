@@ -88,7 +88,7 @@ function_usage <- function(name, formals, format_name = identity) {
     formals$value <- NULL
 
     arglist <- args_string(usage_args(formals))
-    build_rd(format_name(name), "(", arglist, ") <- value")
+    build_rd(format_name(name), "(", arglist, ")\u{A0}<-\u{A0}value")
   } else if (is_infix_fun(name) && identical(format_name, identity)) {
     # If infix, and regular function, munge format
     arg_names <- names(formals)

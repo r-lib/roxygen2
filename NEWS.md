@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* The usage of replacement functions uses non-breaking spaces so that `<-`
+  will never get put on its own line (#484).
+
 * Give nice warning message if you accidentally use `@example` instead of 
   `@examples` (#494).
 

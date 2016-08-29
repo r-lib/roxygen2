@@ -149,7 +149,7 @@ block_to_rd <- function(block, base_path, env) {
   add_tag(rd, process_tag(block, "keywords", function(tag, param) {
     new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
   }))
-  add_tag(rd, process_tag(block, "section", process_section))
+  add_tag(rd, process_tag(block, "section", process_section, block))
   add_tag(rd, process_examples(block, base_path))
 
   describe_in <- process_describe_in(block, env)
@@ -249,13 +249,14 @@ process_examples <- function(block, base_path) {
   out
 }
 
-process_section <- function(key, value) {
+process_section <- function(key, value, block) {
   pieces <- str_split_fixed(value, ":", n = 2)[1, ]
 
-  if (str_detect(pieces[1], "\n")) {
+  title <- str_split(pieces[1], "\n")[[1]]
+  if (length(title) > 1) {
     return(block_warning(
       block,
-      "Section title spans multiple lines: \n", "@section ", value
+      "Section title spans multiple lines: \n", "@section ", title[1]
     ))
   }
 
@@ -282,11 +283,11 @@ package_suffix <- function(name) {
   paste0(name, "-package")
 }
 
-process_tag <- function(block, tag, f = new_tag) {
+process_tag <- function(block, tag, f = new_tag, ...) {
   matches <- block[names(block) == tag]
   if (length(matches) == 0) return()
 
-  unlist(lapply(matches, function(p) f(tag, p)), recursive = FALSE)
+  unlist(lapply(matches, function(p) f(tag, p, ...)), recursive = FALSE)
 }
 
 # Name + description tags ------------------------------------------------------

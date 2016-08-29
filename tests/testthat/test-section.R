@@ -1,5 +1,19 @@
 context("Section")
 
+test_that("warn if forgotton colom", {
+  expect_warning(
+    roc_proc_text(rd_roclet(), "
+      #' Foo
+      #'
+      #' @section Haz dox
+      #' Here.
+      #' There
+      foo <- function(x = '%') x
+    "),
+    "Section title spans multiple lines"
+  )
+})
+
 
 test_that("@section-s with identical titles are merged", {
   out <- roc_proc_text(rd_roclet(), "

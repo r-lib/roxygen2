@@ -24,7 +24,8 @@ Suggests:
     testthat (>= 0.8.0),
     knitr,
     devtools,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 Collate:
@@ -64,4 +65,4 @@ Collate:
     'usage.R'
     'util-locale.R'
     'utils.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000

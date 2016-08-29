@@ -72,7 +72,7 @@ find_params <- function(inheritor, topics, name_lookup) {
   param_names[param_names == "\\dots"] <- "..."
 
   # Split up compound names on , (swallowing spaces) duplicating their contents
-  individual_names <- strsplit(param_names, ",[ ]*")
+  individual_names <- strsplit(param_names, ",\\s*")
   reps <- vapply(individual_names, length, integer(1))
 
   setNames(rep.int(params, reps), unlist(individual_names))

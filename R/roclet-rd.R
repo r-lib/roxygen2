@@ -49,7 +49,7 @@ rd_roclet <- function() {
   new_roclet(list(), "rd_roclet")
 }
 
-#' @rdname blah
+#' @export
 roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
   # Look at all blocks with roxygen comments
   blocks <- Filter(function(x) length(x) > 1, parsed$blocks)

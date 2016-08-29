@@ -109,8 +109,12 @@ obj_type.refClassRepresentation <- function(x) "rcclass"
 obj_type.refMethodDef <- function(x) "rcmethod"
 
 #' @export
-obj_type.function <- function(x) "function"
-#' @export
 obj_type.package <- function(x) "package"
 #' @export
-obj_type.default <- function(x) "data"
+obj_type.default <- function(x) {
+  if (is.function(x)) {
+    "function"
+  } else {
+    "data"
+  }
+}

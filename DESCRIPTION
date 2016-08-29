@@ -11,17 +11,18 @@ Authors@R: c(
     person("Manuel", "Eugster", role = c("aut", "cph")),
     person("RStudio", role = "cph")
     )
-Depends:
+Depends: 
     R (>= 3.0.2)
-Imports:
+Imports: 
     stringr (>= 0.5),
     stringi,
     brew,
     digest,
     methods,
     Rcpp (>= 0.11.0),
-    R6
-Suggests:
+    R6,
+    desc
+Suggests: 
     testthat (>= 0.8.0),
     knitr,
     devtools,
@@ -29,7 +30,7 @@ Suggests:
     covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-Collate:
+Collate: 
     'RcppExports.R'
     'RdTopic.R'
     'alias.R'

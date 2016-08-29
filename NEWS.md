@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* Changes to DESCRIPTION (i.e. `Collate:` and `RoxygenNote`) now use
+  the desc package. This will minimise spurious changes (#430).
+
 * `@family` see also are added in the same order they appear, not 
   alphabetically (#315).
 

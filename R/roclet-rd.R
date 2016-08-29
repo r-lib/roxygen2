@@ -49,7 +49,7 @@ rd_roclet <- function() {
   new_roclet(list(), "rd_roclet")
 }
 
-#' @export
+#' @rdname blah
 roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
   # Look at all blocks with roxygen comments
   blocks <- Filter(function(x) length(x) > 1, parsed$blocks)
@@ -61,6 +61,15 @@ roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
 
     old <- topics[[new$filename]]
     topics[[new$filename]] <- merge.rd_file(old, new$rd)
+  }
+
+  # Drop any topics that don't have a title
+  for (topic in names(topics)) {
+    has_name_title <- c("title", "name") %in% names(topics[[topic]])
+    if (!all(has_name_title)) {
+      warning(topic, " is missing name/title. Skipping", call. = FALSE)
+      topics[[topic]] <- NULL
+    }
   }
 
   topics <- process_family(topics)

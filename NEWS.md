@@ -1,5 +1,9 @@
 # roxygen2 5.0.1.9000
 
+* Roxygen will no longer write out topics that don't have a name or title,
+  and will instead generate a warning. This makes it easier to detect if
+  you've accidentally used `@rdname` with an incorrect value (#474).
+
 * The usage of replacement functions uses non-breaking spaces so that `<-`
   will never get put on its own line (#484).
 

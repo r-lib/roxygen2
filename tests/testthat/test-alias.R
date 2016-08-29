@@ -3,7 +3,7 @@ context("Alias")
 test_that("aliases split into pieces", {
   out <- roc_proc_text(rd_roclet(), "
     #' @aliases a b
-    #'
+    #' @title a
     #' @name a
     NULL")[[1]]
 
@@ -14,10 +14,12 @@ test_that("aliases split into pieces", {
 test_that("aliases escaped, not quoted", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' @aliases a
+    #' @title a
     #' @name %a%
     NULL")[[1]]
   out2 <- roc_proc_text(rd_roclet(), "
     #' @aliases %a%
+    #' @title a
     #' @name a
     NULL")[[1]]
   alias1 <- format(get_tag(out1, "alias"))
@@ -29,6 +31,7 @@ test_that("aliases escaped, not quoted", {
 test_that("can use NULL to suppress default aliases", {
   out <- roc_proc_text(rd_roclet(), "
     #' @aliases NULL
+    #' @title a
     #' @name a
     NULL")[[1]]
 

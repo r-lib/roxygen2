@@ -62,6 +62,7 @@ test_that("quoted names captured from assignment", {
 
 test_that("@name overides default", {
   out <- roc_proc_text(rd_roclet(), "
+    #' A
     #' @name b
     a <- function() {}")[[1]]
 

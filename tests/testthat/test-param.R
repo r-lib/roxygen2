@@ -2,6 +2,7 @@ context("Param")
 
 test_that("@param documents arguments", {
   out <- roc_proc_text(rd_roclet(), "
+    #' A
     #' @param a an incipit letter
     #' @param z a terminal letter
     a <- function(a=1, z=2) {}")[[1]]
@@ -13,6 +14,7 @@ test_that("@param documents arguments", {
 
 test_that("grouped args get spaces", {
   out <- roc_proc_text(rd_roclet(), "
+  #' A
   #' @param a,z Two arguments an incipit letter
   a <- function(a=1, z=2) {}")[[1]]
 
@@ -79,6 +81,7 @@ test_that("@inheritParam understands compound docs", {
 
 test_that("data objects don't get params", {
   out <- roc_proc_text(rd_roclet(), "
+    #' x
     #' @rdname xy
     x <- 'x'
   ")[[1]]

@@ -2,6 +2,7 @@ context("srcref")
 test_that("Source reference is included as comment", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @docType package
     NULL")
 
@@ -12,6 +13,7 @@ test_that("Source reference is included as comment", {
 test_that("Explicit @backref is included as comment", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @backref back/ref.file
     #' @backref root.file
     #' @docType package

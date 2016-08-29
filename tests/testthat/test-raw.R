@@ -4,10 +4,11 @@ test_that("rawRd inserted unchanged", {
   out <- roc_proc_text(rd_roclet(), "
     #' @rawRd #this is a comment
     #' @name a
+    #' @title a
     NULL")[[1]]
 
   lines <- strsplit(format(out), "\n")[[1]]
-  expect_equal(lines[[5]], "#this is a comment")
+  expect_equal(lines[[6]], "#this is a comment")
 })
 
 test_that("evalRd must be valid code", {
@@ -15,6 +16,7 @@ test_that("evalRd must be valid code", {
     roc_proc_text(rd_roclet(), "
       #' @evalRd a +
       #' @name a
+      #' @title a
       NULL"),
     "code failed to parse"
   )
@@ -25,6 +27,7 @@ test_that("rawRd inserted unchanged", {
     z <- 10
     #' @evalRd z * 2
     #' @name a
+    #' @title a
     NULL")[[1]]
 
   args <- get_tag(out, "rawRd")$values

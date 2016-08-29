@@ -12,6 +12,7 @@ test_that("NULL gives empty list", {
 
 test_that("generic keys produce expected output", {
   out <- roc_proc_text(rd_roclet(), "
+    #' @title a
     #' @references test
     #' @note test
     #' @author test

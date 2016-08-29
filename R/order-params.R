@@ -5,7 +5,7 @@ fix_params_order <- function(topics) {
 
     # Compute correct ordering of parameter documentation
     # Check what's needed...
-    needed <- get_tag(topic, "formals")$values
+    needed <- topic$get_tag("formals")$values
 
     # (Workaround for dupes that can occur but perhaps shouldn't,
     #  cf. https://github.com/klutometis/roxygen/commit/83d125dce50a072534988787d49ffe206d19b232#commitcomment-6742169)
@@ -26,8 +26,8 @@ fix_params_order <- function(topics) {
     required_order <- c(required_order, setdiff(documented_indexes, required_order))
 
     # Overwrite all param tags to fix order
-    add_tag(topic, new_tag("param", get_tag(topic, "param")$values[required_order]),
-            overwrite = TRUE)
+    param <- topic$get_tag("param")$values[required_order]
+    topic$add_tags(new_tag("param", param), overwrite = TRUE)
   }
 
   topics

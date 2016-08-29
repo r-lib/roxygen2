@@ -19,7 +19,8 @@ Imports:
     brew,
     digest,
     methods,
-    Rcpp (>= 0.11.0)
+    Rcpp (>= 0.11.0),
+    R6
 Suggests:
     testthat (>= 0.8.0),
     knitr,
@@ -30,6 +31,7 @@ VignetteBuilder: knitr
 LinkingTo: Rcpp
 Collate:
     'RcppExports.R'
+    'RdTopic.R'
     'alias.R'
     'default-data-format.R'
     'description.R'
@@ -44,7 +46,6 @@ Collate:
     'parse.R'
     'rc.R'
     'rd-escape.R'
-    'rd-file-api.R'
     'rd-parse.R'
     'rd-tag-api.R'
     'tag-registry.R'

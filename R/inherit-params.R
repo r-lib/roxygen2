@@ -7,7 +7,7 @@ process_inherit_params <- function(topics) {
 
   name_index <- get_values(topics, "name")
 
-  for(topic_name in names(inherit_index)) {
+  for (topic_name in names(inherit_index)) {
     topic <- topics[[topic_name]]
 
     documented <- get_documented_params(topic)
@@ -16,14 +16,14 @@ process_inherit_params <- function(topics) {
     missing <- setdiff(needed, documented)
     if (length(missing) == 0) next
 
-    for(inheritor in inherit_index[[topic_name]]) {
+    for (inheritor in inherit_index[[topic_name]]) {
       inherited <- find_params(inheritor, topics, name_index)
 
       to_add <- intersect(missing, names(inherited))
       if (length(to_add) == 0) next
       missing <- setdiff(missing, names(inherited))
 
-      add_tag(topic, new_tag("param", inherited[to_add]))
+      topic$add_tags(new_tag("param", inherited[to_add]))
     }
   }
 
@@ -31,7 +31,7 @@ process_inherit_params <- function(topics) {
 }
 
 get_documented_params <- function(topic, only_first = FALSE) {
-  documented <- names(get_tag(topic, "param")$values)
+  documented <- names(topic$get_tag("param")$values)
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
     if (only_first)

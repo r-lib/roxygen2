@@ -59,13 +59,19 @@ roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
     new <- block_to_rd(block, base_path, parsed$env)
     if (is.null(new)) next
 
-    old <- topics[[new$filename]]
-    topics[[new$filename]] <- merge.rd_file(old, new$rd)
+    filename <- new$filename
+    rd <- new$rd
+
+    if (filename %in% names(topics)) {
+      topics[[filename]]$add_file(rd)
+    } else {
+      topics[[filename]] <- rd
+    }
   }
 
   # Drop any topics that don't have a title
   for (topic in names(topics)) {
-    has_name_title <- c("title", "name") %in% names(topics[[topic]])
+    has_name_title <- topics[[topic]]$has_tag(c("title", "name"))
     if (!all(has_name_title)) {
       warning(topic, " is missing name/title. Skipping", call. = FALSE)
       topics[[topic]] <- NULL
@@ -93,67 +99,67 @@ block_to_rd <- function(block, base_path, env) {
     return()
   }
 
-  rd <- new_rd_file()
+  rd <- RdTopic$new()
 
   # Determine name
   name <- block$name %||% default_topic_name(block$object)
   if (is.null(name)) {
     return(block_warning(block, "Missing name"))
   }
-  add_tag(rd, new_tag("name", name))
+  rd$add_tags(new_tag("name", name))
 
   # Add backreference to source
   if (!is.null(block$backref)) {
-    add_tag(rd, process_tag(block, "backref"))
+    rd$add_tags(process_tag(block, "backref"))
   } else {
-    add_tag(rd, new_tag("backref", block$srcref$filename))
+    rd$add_tags(new_tag("backref", block$srcref$filename))
   }
 
   if (is.function(block$object$value)) {
     formals <- formals(block$object$value)
-    add_tag(rd, new_tag("formals", names(formals)))
+    rd$add_tags(new_tag("formals", names(formals)))
   }
 
   # Note that order of operations here doesn't matter: always reordered
   # by format.rd_file
-  add_tag(rd, new_tag("encoding", block$encoding))
-  add_tag(rd, process_alias(block, name, block$object$alias))
-  add_tag(rd, process_methods(block))
-  add_tag(rd, process_usage(block))
-  add_tag(rd, process_param(block))
-  add_tag(rd, process_slot(block))
-  add_tag(rd, process_field(block))
-  add_tag(rd, process_doc_type(block))
-  add_tag(rd, process_tag(block, "rawRd"))
-  add_tag(rd, process_tag(block, "evalRd", function(tag, param) {
+  rd$add_tags(new_tag("encoding", block$encoding))
+  rd$add_tags(process_alias(block, name, block$object$alias))
+  rd$add_tags(process_methods(block))
+  rd$add_tags(process_usage(block))
+  rd$add_tags(process_param(block))
+  rd$add_tags(process_slot(block))
+  rd$add_tags(process_field(block))
+  rd$add_tags(process_doc_type(block))
+  rd$add_tags(process_tag(block, "rawRd"))
+  rd$add_tags(process_tag(block, "evalRd", function(tag, param) {
     expr <- parse(text = param)
     out <- eval(expr, envir = env)
     new_tag("rawRd", as.character(out))
   }))
-  add_tag(rd, process_tag(block, "title"))
-  add_tag(rd, process_tag(block, "description"))
-  add_tag(rd, process_tag(block, "details"))
-  add_tag(rd, process_tag(block, "note"))
-  add_tag(rd, process_tag(block, "family"))
-  add_tag(rd, process_tag(block, "inheritParams"))
-  add_tag(rd, process_tag(block, "author"))
-  add_tag(rd, process_tag(block, "format"))
-  add_tag(rd, process_tag(block, "source"))
-  add_tag(rd, process_tag(block, "seealso"))
-  add_tag(rd, process_tag(block, "references"))
-  add_tag(rd, process_tag(block, "concept"))
-  add_tag(rd, process_tag(block, "reexport"))
-  add_tag(rd, process_tag(block, "return", function(tag, param) {
+  rd$add_tags(process_tag(block, "title"))
+  rd$add_tags(process_tag(block, "description"))
+  rd$add_tags(process_tag(block, "details"))
+  rd$add_tags(process_tag(block, "note"))
+  rd$add_tags(process_tag(block, "family"))
+  rd$add_tags(process_tag(block, "inheritParams"))
+  rd$add_tags(process_tag(block, "author"))
+  rd$add_tags(process_tag(block, "format"))
+  rd$add_tags(process_tag(block, "source"))
+  rd$add_tags(process_tag(block, "seealso"))
+  rd$add_tags(process_tag(block, "references"))
+  rd$add_tags(process_tag(block, "concept"))
+  rd$add_tags(process_tag(block, "reexport"))
+  rd$add_tags(process_tag(block, "return", function(tag, param) {
     new_tag("value", param)
   }))
-  add_tag(rd, process_tag(block, "keywords", function(tag, param) {
+  rd$add_tags(process_tag(block, "keywords", function(tag, param) {
     new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
   }))
-  add_tag(rd, process_tag(block, "section", process_section, block))
-  add_tag(rd, process_examples(block, base_path))
+  rd$add_tags(process_tag(block, "section", process_section, block))
+  rd$add_tags(process_examples(block, base_path))
 
   describe_in <- process_describe_in(block, env)
-  add_tag(rd, describe_in$tag)
+  rd$add_tags(describe_in$tag)
   filename <- paste0(describe_in$rdname %||% block$rdname %||%
     nice_name(name), ".Rd")
 
@@ -267,12 +273,12 @@ process_doc_type <- function(block) {
   doctype <- block$docType
 
   if (is.null(doctype)) return()
-  tags <- list(new_tag("docType", doctype))
+  tags <- new_tag("docType", doctype)
 
   if (doctype == "package") {
     name <- block$name
     if (!str_detect(name, "-package")) {
-      tags <- c(tags, list(new_tag("alias", package_suffix(name))))
+      tags <- c(tags, new_tag("alias", package_suffix(name)))
     }
   }
 

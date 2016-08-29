@@ -4,7 +4,7 @@ process_family <- function(topics) {
 
   for (topic_name in names(topics)) {
     topic <- topics[[topic_name]]
-    families <- get_tag(topic, "family")$values
+    families <- topic$get_tag("family")$values
 
     for (family in families) {
       related <- family_lookup[[family]]
@@ -21,7 +21,7 @@ process_family <- function(topics) {
       seealso <- paste("Other ", family, ": ", sep = "")
       out <- strwrap(links, initial = seealso, width = 60, exdent = 2)
 
-      add_tag(topic, new_tag("seealso", paste(out, collapse = "\n")))
+      topic$add_tags(new_tag("seealso", paste(out, collapse = "\n")))
     }
   }
 
@@ -35,7 +35,7 @@ invert <- function(x) {
 }
 
 get_values <- function(topics, tag) {
-  tags <- lapply(topics, get_tag, tag)
+  tags <- lapply(topics, function(rd) rd$get_tag(tag))
   tags <- Filter(Negate(is.null), tags)
   lapply(tags, "[[", "values")
 }

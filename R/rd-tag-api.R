@@ -34,7 +34,9 @@ rd_tag <- function(tag, ..., space = FALSE) {
 }
 
 #' @export
-format.rd_tag <- function(x, ...) stop("Unimplemented format")
+format.rd_tag <- function(x, ...) {
+  paste0("[ ", x$tag, " TAG ]\n")
+}
 
 #' @export
 merge.rd_tag <- function(x, y, ...) {

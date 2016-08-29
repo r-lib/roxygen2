@@ -3,6 +3,9 @@
 * The default alias for S4 method now re-addeds trailing ANY signatures
   that are sometimes dropped (#460).
 
+* Non-primitive, internal S3 generics (e.g. 'rbind', 'cbind') are now properly
+  detected as S3 generics. (#488, @kevinushey)
+
 * Changes to DESCRIPTION (i.e. `Collate:` and `RoxygenNote`) now use
   the desc package. This will minimise spurious changes (#430).
 

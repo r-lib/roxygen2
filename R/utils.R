@@ -135,3 +135,13 @@ compact <- function(x) {
   null <- vapply(x, is.null, logical(1))
   x[!null]
 }
+
+block_warning <- function(block, ...) {
+  warning(
+    srcref_location(block$srcref), ": ", ...,
+    call. = FALSE,
+    immediate. = TRUE
+  )
+  NULL
+}
+

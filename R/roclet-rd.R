@@ -96,8 +96,10 @@ block_to_rd <- function(block, base_path, env) {
   rd <- new_rd_file()
 
   # Determine name
-  name <- block$name %||% default_topic_name(block$object) %||%
-    stop("Missing name at ", srcref_location(block$srcref), call. = FALSE)
+  name <- block$name %||% default_topic_name(block$object)
+  if (is.null(name)) {
+    return(block_warning(block, "Missing name"))
+  }
   add_tag(rd, new_tag("name", name))
 
   # Add backreference to source
@@ -233,12 +235,10 @@ process_examples <- function(block, base_path) {
     # Check that haven't accidentally used example instead of examples
     nl <- str_count(paths, "\n")
     if (any(nl) > 0) {
-      warning(
-        srcref_location(block$srcref), ": ",
-        "@example spans multiple lines. Do you want @examples?",
-        call. = FALSE
-      )
-      return(NULL)
+      return(block_warning(
+        block,
+        "@example spans multiple lines. Do you want @examples?"
+      ))
     }
 
     examples <- unlist(lapply(paths, readLines))
@@ -253,8 +253,10 @@ process_section <- function(key, value) {
   pieces <- str_split_fixed(value, ":", n = 2)[1, ]
 
   if (str_detect(pieces[1], "\n")) {
-    stop("Section title spans multiple lines: \n",
-      "@section ", value, call. = FALSE)
+    return(block_warning(
+      block,
+      "Section title spans multiple lines: \n", "@section ", value
+    ))
   }
 
   new_tag("section", list(list(name = pieces[1], content = pieces[2])))

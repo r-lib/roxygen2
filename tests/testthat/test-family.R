@@ -21,6 +21,7 @@ test_that("long families are wrapped", {
   ")[[1]]
 
   seealso <- get_tag(out, "seealso")$values
+  expect_true(grepl("^Other Long family name:", seealso))
   expect_equal(str_count(seealso, "\n"), 2)
 
 })
@@ -37,6 +38,7 @@ test_that("special names escaped in family tag", {
   ")[[1]]
 
   seealso <- get_tag(out, "seealso")$values
+  expect_true(grepl("^Other Long family name:", seealso))
   expect_match(seealso, "\\\\%\\+\\\\%")
 
 })
@@ -57,6 +59,7 @@ test_that("family links to name only, not all aliases", {
   ")[[1]]
 
   seealso <- get_tag(out, "seealso")$values
+  expect_true(grepl("^Other many aliases:", seealso))
   expect_equal(str_count(seealso, fixed("\\code{\\link")), 1)
 
 })

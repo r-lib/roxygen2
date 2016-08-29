@@ -28,7 +28,8 @@ process_family <- function(topics) {
 
 invert <- function(x) {
   if (length(x) == 0) return()
-  utils::unstack(rev(utils::stack(x)))
+  stacked <- utils::stack(x)
+  tapply(as.character(stacked$ind), stacked$values, list)
 }
 
 get_values <- function(topics, tag) {

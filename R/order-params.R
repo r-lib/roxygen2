@@ -27,7 +27,7 @@ fix_params_order <- function(topics) {
 
     # Overwrite all param tags to fix order
     param <- topic$get_tag("param")$values[required_order]
-    topic$add_tags(new_tag("param", param), overwrite = TRUE)
+    topic$add(new_tag("param", param), overwrite = TRUE)
   }
 
   topics

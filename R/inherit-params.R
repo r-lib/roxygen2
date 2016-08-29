@@ -23,7 +23,7 @@ process_inherit_params <- function(topics) {
       if (length(to_add) == 0) next
       missing <- setdiff(missing, names(inherited))
 
-      topic$add_tags(new_tag("param", inherited[to_add]))
+      topic$add(new_tag("param", inherited[to_add]))
     }
   }
 

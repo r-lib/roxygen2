@@ -29,14 +29,13 @@ RdTopic <- R6::R6Class("RdTopic", public = list(
   # Ensures that each type of name (as given by its name), only appears
   # once in self$tags
   add_tag = function(tag, overwrite = FALSE) {
-    stopifnot(is.rd_tag(tag))
     if (is.null(tag))
       return()
 
+    stopifnot(is.rd_tag(tag))
     tag_name <- tag$tag
     if (self$has_tag(tag_name) && !overwrite) {
-      # Currently merge returns a list of tags
-      tag <- merge(self$get_tag(tag_name), tag)[[1]]
+      tag <- merge(self$get_tag(tag_name), tag)
     }
 
     self$tags[[tag_name]] <- tag
@@ -44,19 +43,24 @@ RdTopic <- R6::R6Class("RdTopic", public = list(
     invisible()
   },
 
-  add_tags = function(tags, overwrite = FALSE) {
-    for (tag in tags) {
-      self$add_tag(tag, overwrite = overwrite)
+  add = function(x, overwrite = FALSE) {
+    if (inherits(x, "RdTopic")) {
+      self$add(x$tags, overwrite = overwrite)
+    } else if (inherits(x, "rd_tag")) {
+      self$add_tag(x, overwrite = overwrite)
+    } else if (is.list(x)) {
+      for (tag in x) {
+        self$add_tag(tag, overwrite = overwrite)
+      }
+    } else if (is.null(x)) {
+      # skip
+    } else {
+      stop("Don't know how to add object of type ", class(x)[1])
     }
-  },
-
-  add_file = function(y, overwrite = FALSE) {
-    if (is.null(y))
-      return()
-
-    self$add_tags(y$tags, overwrite = overwrite)
     invisible()
   }
+
+
 ))
 
 move_names_to_front <- function(x, to_front) {

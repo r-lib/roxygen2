@@ -11,7 +11,7 @@ new_tag <- function(tag, values) {
   if (identical(values, "NULL")) return()
 
   subc <- paste0(tag, "_tag")
-  list(structure(list(tag = tag, values = values), class = c(subc, "rd_tag")))
+  structure(list(tag = tag, values = values), class = c(subc, "rd_tag"))
 }
 
 is.rd_tag <- function(x) inherits(x, "rd_tag")
@@ -52,7 +52,7 @@ merge.minidesc_tag <- function(x, y, ...) {
 
   x$values$desc <- c(x$values$desc, y$values$desc)
   x$values$label <- c(x$values$label, y$values$label)
-  list(x)
+  x
 }
 
 #' @export

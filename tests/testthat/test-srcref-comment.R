@@ -6,7 +6,7 @@ test_that("Source reference is included as comment", {
     NULL")
 
   backref <- format(get_tag(out[[1]], "backref"))
-  expect_match(backref, "^% Please edit documentation in:\n%")
+  expect_match(backref, "^% Please edit documentation in ")
 })
 
 test_that("Explicit @backref is included as comment", {
@@ -18,5 +18,5 @@ test_that("Explicit @backref is included as comment", {
     NULL")
 
   backref <- format(get_tag(out[[1]], "backref"))
-  expect_match(backref, "^% Please edit documentation in:\n% back/ref[.]file,\n% [.]/root[.]file\n")
+  expect_match(backref, "^% Please edit documentation in back/ref[.]file, [.]/root[.]file")
 })

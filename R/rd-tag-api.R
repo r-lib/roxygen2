@@ -92,7 +92,9 @@ merge.reexport_tag <- function(x, y, ...) {
 format.backref_tag <- function(x, ...) {
   filename <- unique(x$values)
   filename <- file.path(basename(dirname(filename)), basename(filename), fsep = "/")
-  sprintf("%% Please edit documentation in:\n%% %s\n", paste(filename, collapse = ",\n% "))
+out <- strwrap(sprintf("Please edit documentation in %s",
+                  paste(filename, collapse = ", ")), width = 80, prefix = "% ")
+paste0(paste(out, collapse = "\n"), "\n")
 }
 
 # Tags that repeat multiple times --------------------------------------------

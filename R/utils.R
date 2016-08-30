@@ -9,13 +9,6 @@ internal_f <- function(p, f) {
   if (!is.null(a)) a else b
 }
 
-# Does the string contain no matter, but very well [:space:]?
-# @param string the string to check
-# @return TRUE if the string contains words, otherwise FALSE
-is.null.string <- function(string) {
-  length(string) == 1 && str_length(str_trim(string)) == 0
-}
-
 subs <- matrix(ncol = 2, byrow = T, c(
   # Common special function names
   '[<-', 'subset',
@@ -67,26 +60,6 @@ nice_name <- function(x) {
   x
 }
 
-errors_with_srcref <- function(srcref, code) {
-  if (isTRUE(getOption("roxygen2.debug"))) return(force(code))
-
-  loc <- srcref_location(srcref)
-
-  withCallingHandlers(
-    code,
-    error = function(e) {
-      msg <- paste0("Failure in roxygen block beginning ", loc, "\n", e$message)
-      stop(msg, call. = FALSE)
-    }
-  )
-
-}
-
-srcref_location <- function(srcref = NULL) {
-  if (is.null(srcref)) return()
-  paste0(basename(srcref$filename), ":", srcref$lloc[1])
-}
-
 write_if_different <- function(path, contents, check = TRUE) {
   if (!file.exists(dirname(path))) {
     dir.create(dirname(path), showWarnings = FALSE)
@@ -127,10 +100,6 @@ r_files <- function(path) {
   sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
 }
 
-dots <- function(...) {
-  eval(substitute(alist(...)))
-}
-
 compact <- function(x) {
   null <- vapply(x, is.null, logical(1))
   x[!null]
@@ -143,6 +112,11 @@ block_warning <- function(block, ...) {
     immediate. = TRUE
   )
   NULL
+}
+
+srcref_location <- function(srcref = NULL) {
+  if (is.null(srcref)) return()
+  paste0(basename(srcref$filename), ":", srcref$lloc[1])
 }
 
 # Parse DESCRIPTION into convenient format

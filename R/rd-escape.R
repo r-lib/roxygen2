@@ -41,7 +41,6 @@ escape_preformatted <- function(x) {
   rd(x3)
 }
 
-
 # Works like paste, but automatically escapes all input variables,
 # but not literal strings
 build_rd <- function(..., collapse = NULL, sep = "") {
@@ -57,3 +56,8 @@ build_rd <- function(..., collapse = NULL, sep = "") {
   string <- do.call("paste", c(escaped, list(collapse = collapse, sep = sep)))
   rd(string)
 }
+
+dots <- function(...) {
+  eval(substitute(alist(...)))
+}
+

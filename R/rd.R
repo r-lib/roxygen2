@@ -119,10 +119,9 @@ block_to_rd <- function(block, base_path, env) {
   topic_add_usage(rd, block)
   topic_add_value(rd, block)
 
-  describe_in <- process_describe_in(block, env)
-  rd$add(describe_in$tag)
+  describe_rdname <- topic_add_describe_in(rd, block, env)
 
-  filename <- describe_in$rdname %||% block$rdname %||% nice_name(name)
+  filename <- describe_rdname %||% block$rdname %||% nice_name(name)
   rd$filename <- paste0(filename, ".Rd")
 
   rd

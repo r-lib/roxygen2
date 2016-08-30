@@ -1,28 +1,34 @@
-process_describe_in <- function(block, env) {
-  tags <- block[names(block) == "describeIn"]
-  if (length(tags) == 0) return(list(rdname = NULL, tag = NULL))
+topic_add_describe_in <- function(topic, block, env) {
+  tags <- block_tags(block, "describeIn")
+  if (length(tags) == 0)
+    return(NULL)
+
   if (length(tags) > 1) {
-    stop("May only use one @describeIn per block", call. = FALSE)
+    block_warning(block, "May only use one @describeIn per block")
+    return()
   }
   if (is.null(block$object)) {
-    stop("@describeIn must be used with an object", call. = FALSE)
+    block_warning(block, "@describeIn must be used with an object")
+    return()
   }
   if (any(names(block) == "name")) {
-    stop("@describeIn can not be used with @name", call. = FALSE)
+    block_warning(block, "@describeIn can not be used with @name")
+    return()
   }
   if (any(names(block) == "rdname")) {
-    stop("@describeIn can not be used with @rdname", call. = FALSE)
+    block_warning(block, "@describeIn can not be used with @rdname")
+    return()
   }
 
-  describe_in <- tags[[1]]
-  dest <- find_object(describe_in$name, env)
-
+  dest <- find_object(tags$describeIn$name, env)
   label <- build_label(block$object, dest)
 
-  list(
-    rdname = object_topic(dest),
-    tag = roxy_field_minidesc(label$type, label$label, describe_in$description)
-  )
+  topic$add(roxy_field_minidesc(
+    label$type,
+    label$label,
+    tags$describeIn$description
+  ))
+  object_topic(dest)
 }
 
 # Imperfect:

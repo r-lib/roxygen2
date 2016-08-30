@@ -112,7 +112,6 @@ block_to_rd <- function(block, base_path, env) {
     rd$add(roxy_field("formals", names(formals)))
   }
 
-  rd$add(roxy_field("encoding", block$encoding))
   topic_add_simple_tags(rd, block)
   topic_add_backref(rd, block)
 
@@ -202,9 +201,9 @@ topic_add_backref <- function(topic, block) {
 # Simple tags can be converted directly to fields
 topic_add_simple_tags <- function(topic, block) {
   simple_tags <- c(
-    "author", "concept", "description", "details", "family", "format",
-    "inheritParams", "note", "rawRd", "reexport", "references", "seealso",
-    "source", "title"
+    "author", "concept", "description", "details", "encoding", "family",
+    "format", "inheritParams", "note", "rawRd", "reexport", "references",
+    "seealso", "source", "title"
   )
 
   is_simple <- names(block) %in% simple_tags

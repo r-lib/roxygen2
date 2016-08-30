@@ -10,9 +10,9 @@ set_preref <- function() {
 
 restore_preref <- function() {
   register_tags(
-    title = parse.value,
-    description = parse.value,
-    details = parse.value
+    title = tag_value,
+    description = tag_value,
+    details = tag_value
   )
 }
 

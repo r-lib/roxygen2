@@ -1,6 +1,6 @@
 register_tags(
-  template = parse.value,
-  templateVar = parse.name.description
+  template = tag_value,
+  templateVar = tag_name_description
 )
 
 template_find <- function(base_path, template_name) {

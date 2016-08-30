@@ -355,7 +355,6 @@ test_that("markdown is parsed in all fields where it is supported", {
     #'
     #' @field field Field **with bold**
     #'
-    #' @method method Method **with bold**
     #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
@@ -391,8 +390,6 @@ test_that("markdown is parsed in all fields where it is supported", {
     #' @slot slot Slot \\strong{with bold}
     #'
     #' @field field Field \\strong{with bold}
-    #'
-    #' @method method Method \\strong{with bold}
     foo <- function() {}")[[1]]
   expect_equal(get_tag(out1, "title"), get_tag(out2, "title"))
   expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
@@ -410,7 +407,6 @@ test_that("markdown is parsed in all fields where it is supported", {
   expect_equal(get_tag(out1, "param"), get_tag(out2, "param"))
   expect_equal(get_tag(out1, "slot"), get_tag(out2, "slot"))
   expect_equal(get_tag(out1, "field"), get_tag(out2, "field"))
-  expect_equal(get_tag(out1, "method"), get_tag(out2, "method"))
 })
 
 

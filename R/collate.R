@@ -3,7 +3,7 @@ NULL
 
 # Needed to silence unknown tag warnings
 register_tags(
-  include = parse.value
+  include = tag_value
 )
 
 #' Update Collate field in DESCRIPTION.

@@ -2,17 +2,17 @@
 NULL
 
 register_tags(
-  export = parse.words.line,
-  exportClass = words_parser(1),
-  exportMethod = words_parser(1),
-  exportPattern = words_parser(1),
-  import = words_parser(1),
-  importClassesFrom = words_parser(2),
-  importFrom = words_parser(2),
-  importMethodsFrom = words_parser(2),
-  rawNamespace = parse.code,
-  S3method = words_parser(2, 2),
-  useDynLib = words_parser(1)
+  export = tag_words_line,
+  exportClass = tag_words(1),
+  exportMethod = tag_words(1),
+  exportPattern = tag_words(1),
+  import = tag_words(1),
+  importClassesFrom = tag_words(2),
+  importFrom = tag_words(2),
+  importMethodsFrom = tag_words(2),
+  rawNamespace = tag_code,
+  S3method = tag_words(2, 2),
+  useDynLib = tag_words(1)
 )
 
 ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',

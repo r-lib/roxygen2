@@ -69,8 +69,7 @@ roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
 
   # Drop any topics that don't have a title
   for (topic in names(topics)) {
-    has_name_title <- topics[[topic]]$has_field(c("title", "name"))
-    if (!all(has_name_title)) {
+    if (!topics[[topic]]$is_valid()) {
       warning(topic, " is missing name/title. Skipping", call. = FALSE)
       topics[[topic]] <- NULL
     }

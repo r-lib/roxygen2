@@ -19,6 +19,11 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     )
   },
 
+  is_valid = function() {
+    # Needs both title and name fields to generate valid Rd
+    all(self$has_field(c("title", "name")))
+  },
+
   has_field = function(field_name) {
     field_name %in% names(self$fields)
   },

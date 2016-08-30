@@ -22,7 +22,18 @@ test_that("evalRd must be valid code", {
   )
 })
 
-test_that("rawRd inserted unchanged", {
+test_that("error-ful evalRd generates warning", {
+  expect_warning(
+    roc_proc_text(rd_roclet(), "
+      #' @evalRd stop('!')
+      #' @name a
+      #' @title a
+      NULL"),
+    "@evalRd failed with error"
+  )
+})
+
+test_that("evalRd inserted unchanged", {
   out <- roc_proc_text(rd_roclet(), "
     z <- 10
     #' @evalRd z * 2

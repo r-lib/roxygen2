@@ -102,6 +102,7 @@ block_to_rd <- function(block, base_path, env) {
 
   topic_add_backref(rd, block)
   topic_add_doc_type(rd, block)
+  topic_add_eval_rd(rd, block, env)
   topic_add_examples(rd, block, base_path)
   topic_add_fields(rd, block)
   topic_add_methods(rd, block)
@@ -110,11 +111,6 @@ block_to_rd <- function(block, base_path, env) {
   topic_add_slots(rd, block)
   topic_add_usage(rd, block)
 
-  rd$add(process_tag(block, "evalRd", function(tag, param) {
-    expr <- parse(text = param)
-    out <- eval(expr, envir = env)
-    roxy_field("rawRd", as.character(out))
-  }))
   rd$add(process_tag(block, "return", function(tag, param) {
     roxy_field("value", param)
   }))
@@ -314,6 +310,20 @@ topic_add_examples <- function(topic, block, base_path) {
     examples <- escape_examples(code)
 
     topic$add_field(roxy_field("examples", examples))
+  }
+}
+
+topic_add_eval_rd <- function(topic, block, env) {
+  tags <- block_tags(block, "evalRd")
+
+  for (tag in tags) {
+    tryCatch({
+      expr <- parse(text = tag)
+      out <- eval(expr, envir = env)
+      topic$add_field(roxy_field("rawRd", as.character(out)))
+    }, error = function(e) {
+      block_warning(block, "@evalRd failed with error: ", e$message)
+    })
   }
 }
 

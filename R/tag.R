@@ -1,7 +1,4 @@
-
-# roxygen_tag datastructure -----------------------------------------------
-
-roxygen_tag <- function(tag, val, file = "", line = 0) {
+roxy_tag <- function(tag, val, file = "", line = 0) {
   structure(
     list(
       file = file,
@@ -9,14 +6,14 @@ roxygen_tag <- function(tag, val, file = "", line = 0) {
       tag = tag,
       val = val
     ),
-    class = "roxygen_tag"
+    class = "roxy_tag"
   )
 }
 
-is.roxygen_tag <- function(x) inherits(x, "roxygen_tag")
+is.roxy_tag <- function(x) inherits(x, "roxy_tag")
 
 #' @export
-print.roxygen_tag <- function(x, ...) {
+print.roxy_tag <- function(x, ...) {
   cat("[", x$file, ":", x$line, "] @", x$tag, " ", encodeString(x$val), "\n",
     sep = "")
 }

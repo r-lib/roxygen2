@@ -1,6 +1,6 @@
 parse_package <- function(base_path, load_code) {
   env <- load_code(base_path)
-  parsed <- lapply(package_files(base_path), parse_file, env = env)
+  parsed <- lapply(package_files(base_path), parse_blocks, env = env)
   blocks <- unlist(parsed, recursive = FALSE)
 
   list(env = env, blocks = blocks)
@@ -15,12 +15,12 @@ parse_text <- function(text) {
   methods::setPackageName("roxygen_devtest", env)
 
   sys.source(file, envir = env)
-  blocks <- parse_file(file, env)
+  blocks <- parse_blocks(file, env)
 
   list(env = env, blocks = blocks)
 }
 
-parse_file <- function(file, env) {
+parse_blocks <- function(file, env) {
   parsed <- parse(file = file, keep.source = TRUE)
   if (length(parsed) == 0) return()
 
@@ -37,33 +37,6 @@ parse_file <- function(file, env) {
   }
 
   Map(extract, parsed, refs, comment_refs)
-}
-
-# For each src ref, find the comment block preceeding it
-comments <- function(refs) {
-  srcfile <- attr(refs[[1]], "srcfile")
-
-  # first_line, first_byte, last_line, last_byte
-  com <- vector("list", length(refs))
-  for(i in seq_along(refs)) {
-    # Comments begin after last line of last block, and this block is included
-    # so that it can be parsed for additional comments
-    if (i == 1) {
-      first_byte <- 1
-      first_line <- 1
-    } else {
-      first_byte <- refs[[i - 1]][4] + 1
-      first_line <- refs[[i - 1]][3]
-    }
-
-    last_line <- refs[[i]][3]
-    last_byte <- refs[[i]][4]
-
-    lloc <- c(first_line, first_byte, last_line, last_byte)
-    com[[i]] <- srcref(srcfile, lloc)
-  }
-
-  com
 }
 
 parse_block <- function(x, file, offset = x[[1]]) {
@@ -105,21 +78,21 @@ parse_description <- function(tags) {
   if ("title" %in% tag_names) {
     title <- NULL
   } else if (length(paragraphs) > 0) {
-    title <- roxygen_tag("title", paragraphs[1], intro$file, intro$line)
+    title <- roxy_tag("title", paragraphs[1], intro$file, intro$line)
     paragraphs <- paragraphs[-1]
   } else {
-    title <- roxygen_tag("title", "", intro$file, intro$line)
+    title <- roxy_tag("title", "", intro$file, intro$line)
   }
 
   # 2nd paragraph = description (unless has @description)
   if ("description" %in% tag_names) {
     description <- NULL
   } else if (length(paragraphs) > 0) {
-    description <- roxygen_tag("description", paragraphs[1], intro$file, intro$line)
+    description <- roxy_tag("description", paragraphs[1], intro$file, intro$line)
     paragraphs <- paragraphs[-1]
   } else {
     # Description is required, so if missing description, repeat title.
-    description <- roxygen_tag("description", title$val, intro$file, intro$line)
+    description <- roxy_tag("description", title$val, intro$file, intro$line)
   }
 
   # Every thing else = details, combined with @details
@@ -135,7 +108,7 @@ parse_description <- function(tags) {
       details_para <- paste(c(details_para, explicit_details), collapse = "\n\n")
     }
 
-    details <- roxygen_tag("details", details_para, intro$file, intro$line)
+    details <- roxy_tag("details", details_para, intro$file, intro$line)
   } else {
     details <- NULL
   }
@@ -143,3 +116,30 @@ parse_description <- function(tags) {
   c(compact(list(title, description, details)), tags)
 }
 
+
+# For each src ref, find the comment block preceeding it
+comments <- function(refs) {
+  srcfile <- attr(refs[[1]], "srcfile")
+
+  # first_line, first_byte, last_line, last_byte
+  com <- vector("list", length(refs))
+  for(i in seq_along(refs)) {
+    # Comments begin after last line of last block, and this block is included
+    # so that it can be parsed for additional comments
+    if (i == 1) {
+      first_byte <- 1
+      first_line <- 1
+    } else {
+      first_byte <- refs[[i - 1]][4] + 1
+      first_line <- refs[[i - 1]][3]
+    }
+
+    last_line <- refs[[i]][3]
+    last_byte <- refs[[i]][4]
+
+    lloc <- c(first_line, first_byte, last_line, last_byte)
+    com[[i]] <- srcref(srcfile, lloc)
+  }
+
+  com
+}

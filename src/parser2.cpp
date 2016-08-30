@@ -151,7 +151,7 @@ List tokenise_block(CharacterVector lines, std::string file = "",
       _["tag"] = tags[i],
       _["val"] = stripTrailingNewline(vals[i])
     );
-    out[i].attr("class") = "roxygen_tag";
+    out[i].attr("class") = "roxy_tag";
   }
   return out;
 }

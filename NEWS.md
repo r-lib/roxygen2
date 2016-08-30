@@ -1,5 +1,7 @@
 # roxygen2 5.0.1.9000
 
+* `default_data_format()` has been renamed to `object_format()`.
+
 * The default alias for S4 method now re-addeds trailing ANY signatures
   that are sometimes dropped (#460).
 

@@ -188,7 +188,7 @@ topic_add_backref <- function(topic, block) {
   backrefs <- block_tags(block, "backref") %||% block$srcref$filename
 
   for (backref in backrefs) {
-    topic$add(roxy_field("backref", backref))
+    topic$add_simple_field("backref", backref)
   }
 }
 
@@ -205,7 +205,7 @@ topic_add_simple_tags <- function(topic, block) {
   tag_names <- names(block)[is_simple]
 
   for (i in seq_along(tag_values)) {
-    topic$add_field(roxy_field(tag_names[[i]], tag_values[[i]]))
+    topic$add_simple_field(tag_names[[i]], tag_values[[i]])
   }
 }
 
@@ -213,7 +213,7 @@ topic_add_params <- function(topic, block) {
   # Used in process_inherit_params()
   if (is.function(block$object$value)) {
     formals <- formals(block$object$value)
-    topic$add(roxy_field("formals", names(formals)))
+    topic$add_simple_field("formals", names(formals))
   }
 
   process_def_tag(topic, block, "param")
@@ -235,8 +235,8 @@ topic_add_name_aliases <- function(topic, block, name) {
     aliases <- unique(c(name, block$object$alias, aliases))
   }
 
-  topic$add_field(roxy_field("name", name))
-  topic$add_field(roxy_field("alias", aliases))
+  topic$add_simple_field("name", name)
+  topic$add_simple_field("alias", aliases)
 }
 
 
@@ -257,14 +257,14 @@ topic_add_methods <- function(topic, block) {
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 
-  topic$add(roxy_field("rcmethods", setNames(desc, usage)))
+  topic$add_simple_field("rcmethods", setNames(desc, usage))
 }
 
 topic_add_value <- function(topic, block) {
   tags <- block_tags(block, "return")
 
   for (tag in tags) {
-    topic$add_field(roxy_field("value", tag))
+    topic$add_simple_field("value", tag)
   }
 }
 
@@ -272,7 +272,7 @@ topic_add_keyword <- function(topic, block) {
   tags <- block_tags(block, "keywords")
   keywords <- unlist(str_split(str_trim(tags), "\\s+"))
 
-  topic$add_field(roxy_field("keyword", keywords))
+  topic$add_simple_field("keyword", keywords)
 }
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
@@ -286,7 +286,7 @@ topic_add_usage <- function(topic, block) {
     # to enter \S4method etc.
     usage <- rd(block$usage)
   }
-  topic$add_field(roxy_field("usage", usage))
+  topic$add_simple_field("usage", usage)
 }
 
 topic_add_slots <- function(topic, block) {
@@ -302,7 +302,7 @@ topic_add_fields <- function(topic, block) {
 topic_add_examples <- function(topic, block, base_path) {
   examples <- block_tags(block, "examples")
   for (example in examples) {
-    topic$add_field(roxy_field("examples", example))
+    topic$add_simple_field("examples", example)
   }
 
   paths <- str_trim(unlist(block_tags(block, "example")))
@@ -317,14 +317,14 @@ topic_add_examples <- function(topic, block, base_path) {
     }
 
     if (!file.exists(path)) {
-      block_warning("@example ", path, " doesn't exist")
+      block_warning(block, "@example ", path, " doesn't exist")
       next
     }
 
     code <- readLines(path)
     examples <- escape_examples(code)
 
-    topic$add_field(roxy_field("examples", examples))
+    topic$add_simple_field("examples", examples)
   }
 }
 
@@ -335,7 +335,7 @@ topic_add_eval_rd <- function(topic, block, env) {
     tryCatch({
       expr <- parse(text = tag)
       out <- eval(expr, envir = env)
-      topic$add_field(roxy_field("rawRd", as.character(out)))
+      topic$add_simple_field("rawRd", as.character(out))
     }, error = function(e) {
       block_warning(block, "@evalRd failed with error: ", e$message)
     })
@@ -364,12 +364,12 @@ topic_add_doc_type <- function(topic, block) {
   doctype <- block$docType
   if (is.null(doctype)) return()
 
-  topic$add_field(roxy_field("docType", doctype))
+  topic$add_simple_field("docType", doctype)
 
   if (doctype == "package") {
     name <- block$name
     if (!str_detect(name, "-package")) {
-      topic$add_field(roxy_field("alias", package_suffix(name)))
+      topic$add_simple_field("alias", package_suffix(name))
     }
   }
 
@@ -396,5 +396,5 @@ process_def_tag <- function(topic, block, tag) {
   desc <- str_trim(sapply(tags, "[[", "description"))
   names(desc) <- sapply(tags, "[[", "name")
 
-  topic$add_field(roxy_field(tag, desc))
+  topic$add_simple_field(tag, desc)
 }

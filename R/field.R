@@ -1,14 +1,14 @@
-roxy_field <- function(field, values) {
+roxy_field_simple <- function(field, values) {
   if (is.null(values) || identical(values, "NULL")) {
     # NULL is special sentinel value that suppresses output of that field
     return()
   }
 
-  new_roxy_field(field, values = values)
+  roxy_field(field, values = values)
 }
 
 # Low level constructor that doesn't impose any structure on the values
-new_roxy_field <- function(field, ...) {
+roxy_field <- function(field, ...) {
 
   structure(
     list(
@@ -34,7 +34,7 @@ format.roxy_field <- function(x, ...) {
 #' @export
 merge.roxy_field <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field(x$field, c(x$values, y$values))
+  roxy_field_simple(x$field, c(x$values, y$values))
 }
 
 
@@ -185,7 +185,7 @@ roxy_field_minidesc <- function(type, label, desc) {
   stopifnot(is.character(type), is.character(label), is.character(desc))
   stopifnot(length(desc) == length(label))
 
-  new_roxy_field("minidesc", type = type, desc = desc, label = label)
+  roxy_field("minidesc", type = type, desc = desc, label = label)
 }
 
 #' @export
@@ -222,7 +222,7 @@ roxy_field_reexport <- function(pkg, fun) {
   stopifnot(is.character(pkg), is.character(fun))
   stopifnot(length(pkg) == length(fun))
 
-  new_roxy_field("reexport", pkg = pkg, fun = fun)
+  roxy_field("reexport", pkg = pkg, fun = fun)
 }
 
 #' @export
@@ -258,7 +258,7 @@ roxy_field_section <- function(title, content) {
   stopifnot(is.character(title), is.character(content))
   stopifnot(length(title) == length(content))
 
-  new_roxy_field("section", title = title, content = content)
+  roxy_field("section", title = title, content = content)
 }
 
 #' @export

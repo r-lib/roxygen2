@@ -49,6 +49,11 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     invisible()
   },
 
+  add_simple_field = function(name, values, overwrite = FALSE) {
+    self$add_field(roxy_field_simple(name, values), overwrite = overwrite)
+    invisible()
+  },
+
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$fields, overwrite = overwrite)

@@ -260,7 +260,7 @@ topic_add_value <- function(topic, block) {
   tags <- block_tags(block, "return")
 
   for (tag in tags) {
-    topic$add_field(roxy_field("value", topic))
+    topic$add_field(roxy_field("value", tag))
   }
 }
 

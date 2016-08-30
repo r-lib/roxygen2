@@ -13,8 +13,8 @@ leadingSpaces <- function(lines) {
     .Call('roxygen2_leadingSpaces', PACKAGE = 'roxygen2', lines)
 }
 
-tokenise_preref <- function(lines, file = "", offset = 0L) {
-    .Call('roxygen2_tokenise_preref', PACKAGE = 'roxygen2', lines, file, offset)
+tokenise_block <- function(lines, file = "", offset = 0L) {
+    .Call('roxygen2_tokenise_block', PACKAGE = 'roxygen2', lines, file, offset)
 }
 
 find_includes <- function(path) {

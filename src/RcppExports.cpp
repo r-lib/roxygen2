@@ -40,16 +40,16 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// tokenise_preref
-List tokenise_preref(CharacterVector lines, std::string file, int offset);
-RcppExport SEXP roxygen2_tokenise_preref(SEXP linesSEXP, SEXP fileSEXP, SEXP offsetSEXP) {
+// tokenise_block
+List tokenise_block(CharacterVector lines, std::string file, int offset);
+RcppExport SEXP roxygen2_tokenise_block(SEXP linesSEXP, SEXP fileSEXP, SEXP offsetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< CharacterVector >::type lines(linesSEXP);
     Rcpp::traits::input_parameter< std::string >::type file(fileSEXP);
     Rcpp::traits::input_parameter< int >::type offset(offsetSEXP);
-    __result = Rcpp::wrap(tokenise_preref(lines, file, offset));
+    __result = Rcpp::wrap(tokenise_block(lines, file, offset));
     return __result;
 END_RCPP
 }

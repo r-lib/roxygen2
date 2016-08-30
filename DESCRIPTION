@@ -11,9 +11,9 @@ Authors@R: c(
     person("Manuel", "Eugster", role = c("aut", "cph")),
     person("RStudio", role = "cph")
     )
-Depends:
+Depends: 
     R (>= 3.0.2)
-Imports:
+Imports: 
     stringr (>= 0.5),
     stringi,
     brew,
@@ -24,7 +24,7 @@ Imports:
     desc,
     commonmark,
     xml2
-Suggests:
+Suggests: 
     testthat (>= 0.8.0),
     knitr,
     devtools,
@@ -32,8 +32,7 @@ Suggests:
     covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-Collate:
-    'RcppExports.R'
+Collate:     'RcppExports.R'
     'RdTopic.R'
     'tag-parsers.R'
     'tag-registry.R'
@@ -48,7 +47,6 @@ Collate:
     'object-rc.R'
     'object-s3.R'
     'object.R'
-    'parse-preref.R'
     'parse.R'
     'rd-alias.R'
     'rd-describe-in.R'

@@ -1,14 +1,14 @@
-context("preref parsers")
+context("block parsers")
 
-set_preref <- function() {
+set_block <- function() {
   register_tags(
-    title = preref_test,
-    description = preref_test,
-    details = preref_test
+    title = block_test,
+    description = block_test,
+    details = block_test
   )
 }
 
-restore_preref <- function() {
+restore_block <- function() {
   register_tags(
     title = tag_value,
     description = tag_value,
@@ -40,15 +40,15 @@ check <- function(out) {
   )
 }
 
-preref_test <- function(x) {
+block_test <- function(x) {
   x$val <- toupper(x$val)
   x
 }
 
-test_that("preref parsers are called for tags from intro", {
+test_that("block parsers are called for tags from intro", {
 
-  on.exit(restore_preref())
-  set_preref()
+  on.exit(restore_block())
+  set_block()
 
   out <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -63,10 +63,10 @@ test_that("preref parsers are called for tags from intro", {
 })
 
 
-test_that("preref parsers from intro & @title", {
+test_that("block parsers from intro & @title", {
 
-  on.exit(restore_preref())
-  set_preref()
+  on.exit(restore_block())
+  set_block()
 
   out <- roc_proc_text(rd_roclet(), "
     #' Description
@@ -81,10 +81,10 @@ test_that("preref parsers from intro & @title", {
 })
 
 
-test_that("preref parsers from intro & @description", {
+test_that("block parsers from intro & @description", {
 
-  on.exit(restore_preref())
-  set_preref()
+  on.exit(restore_block())
+  set_block()
 
   out <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -99,10 +99,10 @@ test_that("preref parsers from intro & @description", {
 })
 
 
-test_that("preref parsers from intro & @details", {
+test_that("block parsers from intro & @details", {
 
-  on.exit(restore_preref())
-  set_preref()
+  on.exit(restore_block())
+  set_block()
 
   out <- roc_proc_text(rd_roclet(), "
     #' Title

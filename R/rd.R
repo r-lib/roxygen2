@@ -100,7 +100,7 @@ block_to_rd <- function(block, base_path, env) {
   rd <- RdTopic$new()
 
   # Determine name
-  name <- block$name %||% default_topic_name(block$object)
+  name <- block$name %||% object_topic(block$object)
   if (is.null(name)) {
     return(block_warning(block, "Missing name"))
   }

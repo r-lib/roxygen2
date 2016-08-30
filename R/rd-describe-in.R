@@ -21,7 +21,7 @@ process_describe_in <- function(block, env) {
   label <- build_label(block$object, dest)
 
   list(
-    rdname = default_topic_name(dest),
+    rdname = object_topic(dest),
     tag = new_tag("minidesc", list(
       type = label$type,
       label = label$label,
@@ -73,7 +73,7 @@ build_label <- function(src, dest) {
   } else if (dest_type %in% c("function", "data") && src_type == "function") {
     # Multiple functions in one Rd labelled with function names
     type <- "function"
-    label <- default_name(src)
+    label <- object_name(src)
   } else {
     stop("Don't know how to describe ", src_type, " in ", dest_type, ".",
       call. = FALSE)

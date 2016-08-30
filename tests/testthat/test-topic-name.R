@@ -75,7 +75,7 @@ test_that("refclass topicname has class prefix", {
   setRefClass("X1", where = env)
   on.exit(removeClass("X1", where = env))
   obj <- object(getClass("X1", where = env))
-  expect_equal(default_topic_name(obj), "X1-class")
+  expect_equal(object_topic(obj), "X1-class")
 })
 
 test_that("class topicname has class prefix", {
@@ -83,5 +83,5 @@ test_that("class topicname has class prefix", {
   setClass("Y1", where = env)
   on.exit(removeClass("Y1", where = env))
   obj <- object(getClass("Y1", where = env))
-  expect_equal(default_topic_name(obj), "Y1-class")
+  expect_equal(object_topic(obj), "Y1-class")
 })

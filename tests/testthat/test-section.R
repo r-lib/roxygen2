@@ -32,35 +32,29 @@ test_that("@section-s with identical titles are merged", {
   ")[[1]]
 
   expect_equal(
-    get_tag(out, "section")$values,
-    list(structure(list(name = "Haz dox", content = " Here.\n\n\n  Got news.")),
-         structure(list(name = "TL", content = " DR.")),
-         structure(list(name = "RT", content = " FM."))))
+    out$get_field("section"),
+    roxy_field_section(
+      c("Haz dox", "TL", "RT"),
+      c(" Here.\n\n\n  Got news.", " DR.", " FM.")
+    )
+  )
 })
 
 test_that("@section-s with different titles are kept as they are", {
   out <- roc_proc_text(rd_roclet(), "
     #' Foo
     #'
-    #' @section Haz dox: Here.
-    #'
-    #' @section TL: DR.
-    foo <- function(x = '%') x
+    #' @section A: 1
+    #' @section B: 2
+    foo <- function(x) x
 
     #' @rdname foo
-    #' @section OBTW:
-    #'   Got news.
-    bar <- function(y = '%') y
-
-    #' @rdname foo
-    #' @section MKAY: kthxbye
-    baz <- function(y = '%') y
+    #' @section C: 3
+    bar <- function(x) x
   ")[[1]]
 
   expect_equal(
-    get_tag(out, "section")$values,
-    list(structure(list(name = "Haz dox", content = " Here.")),
-         structure(list(name = "TL", content = " DR.")),
-         structure(list(name = "OBTW", content = "\n  Got news.")),
-         structure(list(name = "MKAY", content = " kthxbye"))))
+    out$get_field("section"),
+    roxy_field_section(LETTERS[1:3], c(" 1", " 2", " 3"))
+  )
 })

@@ -352,7 +352,7 @@ topic_add_sections <- function(topic, block) {
       ))
     }
 
-    topic$add_field(roxy_field("section", list(list(name = pieces[1], content = pieces[2]))))
+    topic$add_field(roxy_field_section(pieces[1], pieces[2]))
   }
 }
 

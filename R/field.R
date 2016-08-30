@@ -4,10 +4,16 @@ roxy_field <- function(field, values) {
     return()
   }
 
+  new_roxy_field(field, values = values)
+}
+
+# Low level constructor that doesn't impose any structure on the values
+new_roxy_field <- function(field, ...) {
+
   structure(
     list(
       field = field,
-      values = values
+      ...
     ),
     class = c(paste0("roxy_field_", field), "roxy_field")
   )
@@ -42,28 +48,6 @@ merge.roxy_field_minidesc <- function(x, y, ...) {
   x
 }
 
-#' @export
-merge.roxy_field_section <- function(x, y, ...) {
-  x_names <- vapply(x$values, `[[`, "name", FUN.VALUE = character(1L))
-  y_names <- vapply(y$values, `[[`, "name", FUN.VALUE = character(1L))
-  xy_names <- unique(c(x_names, y_names))
-  xy_both_names <- intersect(x_names, y_names)
-  x_contents <- setNames(lapply(x$values, `[[`, "content"), x_names)
-  y_contents <- setNames(lapply(y$values, `[[`, "content"), y_names)
-  values <- lapply(
-    xy_names,
-    function (name) {
-      if (name %in% xy_both_names) {
-        content <- paste(x_contents[[name]], y_contents[[name]], sep = "\n\n")
-      } else {
-        content <- x_contents[[name]] %||% y_contents[[name]]
-      }
-
-      list(name = name, content = content)
-    }
-  )
-  roxy_field("section", values)
-}
 
 #' @export
 merge.roxy_field_reexport <- function(x, y, ...) {
@@ -178,19 +162,6 @@ format.roxy_field_param <- function(x, ..., wrap = TRUE) {
 }
 
 #' @export
-format.roxy_field_section <- function(x, ..., wrap = TRUE) {
-  names <- vapply(x$values, "[[", "name", FUN.VALUE = character(1))
-
-  contents <- vapply(x$values, "[[", "content", FUN.VALUE = character(1))
-  if (wrap) {
-    contents <- str_wrap(str_trim(contents), width = 60, exdent = 2, indent = 2)
-  }
-
-  setions <- paste0("\\section{", names, "}{\n", contents, "\n}\n",
-    collapse = "\n")
-}
-
-#' @export
 format.roxy_field_slot <- function(x, ...) {
   describe_section("Slots", names(x$values), x$values)
 }
@@ -266,4 +237,39 @@ format.roxy_field_reexport <- function(x, ...) {
     "\n}}\n"
   )
 
+}
+
+
+# Sections ----------------------------------------------------------------
+
+roxy_field_section <- function(title, content) {
+  stopifnot(is.character(title), is.character(content))
+  stopifnot(length(title) == length(content))
+
+  new_roxy_field("section", title = title, content = content)
+}
+
+#' @export
+format.roxy_field_section <- function(x, ..., wrap = TRUE) {
+  if (wrap) {
+    content <- str_wrap(str_trim(x$content), width = 60, exdent = 2, indent = 2)
+  } else {
+    content <- x$content
+  }
+
+  paste0("\\section{", x$title, "}{\n", content, "\n}\n", collapse = "\n")
+}
+
+#' @export
+merge.roxy_field_section <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+
+  title <- c(x$title, y$title)
+  content <- c(x$content, y$content)
+
+  dedup <- tapply(content, title, paste, collapse = "\n\n")
+  # tapply orders alphabetically, so reorder to match original order
+  dedup <- dedup[unique(title)]
+
+  roxy_field_section(names(dedup), as.vector(dedup))
 }

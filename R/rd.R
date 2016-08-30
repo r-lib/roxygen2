@@ -101,10 +101,10 @@ block_to_rd <- function(block, base_path, env) {
 
   topic_add_backref(rd, block)
   topic_add_name_aliases(rd, block, name)
+  topic_add_methods(rd, block)
   topic_add_params(rd, block)
   topic_add_simple_tags(rd, block)
 
-  rd$add(process_methods(block))
   rd$add(process_usage(block))
   rd$add(process_slot(block))
   rd$add(process_field(block))
@@ -244,7 +244,7 @@ topic_add_name_aliases <- function(topic, block, name) {
 }
 
 
-process_methods <- function(block) {
+topic_add_methods <- function(topic, block) {
   obj <- block$object
   if (!inherits(obj, "rcclass")) return()
 
@@ -261,7 +261,7 @@ process_methods <- function(block) {
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 
-  roxy_field("rcmethods", setNames(desc, usage))
+  topic$add(roxy_field("rcmethods", setNames(desc, usage)))
 }
 
 

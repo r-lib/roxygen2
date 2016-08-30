@@ -1,3 +1,6 @@
+#' @include parse-preref.R
+NULL
+
 tags <- new.env(parent = emptyenv())
 
 parse_tag <- function(x) {

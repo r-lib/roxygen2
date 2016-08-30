@@ -126,3 +126,14 @@ read.description <- function(file) {
   dcf_list <- setNames(as.list(dcf[1, ]), colnames(dcf))
   lapply(dcf_list, str_trim)
 }
+
+
+wrap_string <- function(x) UseMethod("wrap_string")
+wrap_string.NULL <- function(x) return(x)
+wrap_string.default <- function(x) {
+  y <- wrapString(x)
+  y <- gsub("\u{A0}", " ", y, useBytes = TRUE)
+  Encoding(y) <- "UTF-8"
+  class(y) <- class(x)
+  y
+}

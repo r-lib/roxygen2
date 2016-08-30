@@ -104,8 +104,8 @@ block_to_rd <- function(block, base_path, env) {
   topic_add_methods(rd, block)
   topic_add_params(rd, block)
   topic_add_simple_tags(rd, block)
+  topic_add_usage(rd, block)
 
-  rd$add(process_usage(block))
   rd$add(process_slot(block))
   rd$add(process_field(block))
   rd$add(process_doc_type(block))
@@ -262,6 +262,20 @@ topic_add_methods <- function(topic, block) {
   usage <- usage[has_docs]
 
   topic$add(roxy_field("rcmethods", setNames(desc, usage)))
+}
+
+# Prefer explicit \code{@@usage} to a \code{@@formals} list.
+topic_add_usage <- function(topic, block) {
+  if (is.null(block$usage)) {
+    usage <- wrap_string(object_usage(block$object))
+  } else if (block$usage == "NULL") {
+    usage <- NULL
+  } else {
+    # Treat user input as already escaped, otherwise they have no way
+    # to enter \S4method etc.
+    usage <- rd(block$usage)
+  }
+  topic$add_field(roxy_field("usage", usage))
 }
 
 

@@ -106,21 +106,16 @@ block_to_rd <- function(block, base_path, env) {
   }
   rd$add(roxy_field("name", name))
 
+  # Note that order of operations here doesn't matter: fields are
+  # ordered by RoxyFile$format()
 
-  if (is.function(block$object$value)) {
-    formals <- formals(block$object$value)
-    rd$add(roxy_field("formals", names(formals)))
-  }
-
-  topic_add_simple_tags(rd, block)
   topic_add_backref(rd, block)
+  topic_add_params(rd, block)
+  topic_add_simple_tags(rd, block)
 
-  # Note that order of operations here doesn't matter: always reordered
-  # by format.rd_file
   rd$add(process_alias(block, name, block$object$alias))
   rd$add(process_methods(block))
   rd$add(process_usage(block))
-  rd$add(process_param(block))
   rd$add(process_slot(block))
   rd$add(process_field(block))
   rd$add(process_doc_type(block))
@@ -215,6 +210,16 @@ topic_add_simple_tags <- function(topic, block) {
   }
 }
 
+topic_add_params <- function(topic, block) {
+  # Used in process_inherit_params()
+  if (is.function(block$object$value)) {
+    formals <- formals(block$object$value)
+    topic$add(roxy_field("formals", names(formals)))
+  }
+
+  topic$add(process_def_tag(block, "param"))
+}
+
 process_methods <- function(block) {
   obj <- block$object
   if (!inherits(obj, "rcclass")) return()
@@ -307,10 +312,6 @@ process_tag <- function(block, tag, f = roxy_field, ...) {
 }
 
 # Name + description tags ------------------------------------------------------
-
-process_param <- function(block) {
-  process_def_tag(block, "param")
-}
 
 process_slot <- function(block) {
   process_def_tag(block, "slot")

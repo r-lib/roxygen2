@@ -49,7 +49,6 @@ Collate:
     'object-s3.R'
     'object.R'
     'parse.R'
-    'rd-alias.R'
     'rd-describe-in.R'
     'rd-escape.R'
     'rd-family.R'

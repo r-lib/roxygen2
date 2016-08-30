@@ -104,16 +104,15 @@ block_to_rd <- function(block, base_path, env) {
   if (is.null(name)) {
     return(block_warning(block, "Missing name"))
   }
-  rd$add(roxy_field("name", name))
 
   # Note that order of operations here doesn't matter: fields are
   # ordered by RoxyFile$format()
 
   topic_add_backref(rd, block)
+  topic_add_name_aliases(rd, block, name)
   topic_add_params(rd, block)
   topic_add_simple_tags(rd, block)
 
-  rd$add(process_alias(block, name, block$object$alias))
   rd$add(process_methods(block))
   rd$add(process_usage(block))
   rd$add(process_slot(block))
@@ -219,6 +218,27 @@ topic_add_params <- function(topic, block) {
 
   topic$add(process_def_tag(block, "param"))
 }
+
+topic_add_name_aliases <- function(topic, block, name) {
+  tags <- block_tags(block, "aliases")
+
+  if (length(tags) == 0) {
+    aliases <- character()
+  } else {
+    aliases <- str_split(str_trim(unlist(tags, use.names = FALSE)), "\\s+")[[1]]
+  }
+
+  if (any(aliases == "NULL")) {
+    # Don't add default aliases
+    aliases <- aliases[aliases != "NULL"]
+  } else {
+    aliases <- unique(c(name, block$object$alias, aliases))
+  }
+
+  topic$add_field(roxy_field("name", name))
+  topic$add_field(roxy_field("alias", aliases))
+}
+
 
 process_methods <- function(block) {
   obj <- block$object

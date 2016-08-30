@@ -105,19 +105,14 @@ block_to_rd <- function(block, base_path, env) {
   topic_add_eval_rd(rd, block, env)
   topic_add_examples(rd, block, base_path)
   topic_add_fields(rd, block)
+  topic_add_keyword(rd, block)
   topic_add_methods(rd, block)
   topic_add_params(rd, block)
   topic_add_simple_tags(rd, block)
+  topic_add_sections(rd, block)
   topic_add_slots(rd, block)
   topic_add_usage(rd, block)
-
-  rd$add(process_tag(block, "return", function(tag, param) {
-    roxy_field("value", param)
-  }))
-  rd$add(process_tag(block, "keywords", function(tag, param) {
-    roxy_field("keyword", str_split(str_trim(param), "\\s+")[[1]])
-  }))
-  rd$add(process_tag(block, "section", process_section, block))
+  topic_add_value(rd, block)
 
   describe_in <- process_describe_in(block, env)
   rd$add(describe_in$tag)
@@ -260,6 +255,21 @@ topic_add_methods <- function(topic, block) {
   topic$add(roxy_field("rcmethods", setNames(desc, usage)))
 }
 
+topic_add_value <- function(topic, block) {
+  tags <- block_tags(block, "return")
+
+  for (tag in tags) {
+    topic$add_field(roxy_field("value", topic))
+  }
+}
+
+topic_add_keyword <- function(topic, block) {
+  tags <- block_tags(block, "keywords")
+  keywords <- unlist(str_split(str_trim(tags), "\\s+"))
+
+  topic$add_field(roxy_field("keyword", keywords))
+}
+
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block) {
   if (is.null(block$usage)) {
@@ -327,18 +337,22 @@ topic_add_eval_rd <- function(topic, block, env) {
   }
 }
 
-process_section <- function(key, value, block) {
-  pieces <- str_split_fixed(value, ":", n = 2)[1, ]
+topic_add_sections <- function(topic, block) {
+  sections <- block_tags(block, "section")
 
-  title <- str_split(pieces[1], "\n")[[1]]
-  if (length(title) > 1) {
-    return(block_warning(
-      block,
-      "Section title spans multiple lines: \n", "@section ", title[1]
-    ))
+  for (section in sections) {
+    pieces <- str_split(section, ":", n = 2)[[1]]
+
+    title <- str_split(pieces[1], "\n")[[1]]
+    if (length(title) > 1) {
+      return(block_warning(
+        block,
+        "Section title spans multiple lines: \n", "@section ", title[1]
+      ))
+    }
+
+    topic$add_field(roxy_field("section", list(list(name = pieces[1], content = pieces[2]))))
   }
-
-  roxy_field("section", list(list(name = pieces[1], content = pieces[2])))
 }
 
 topic_add_doc_type <- function(topic, block) {

@@ -52,13 +52,15 @@ rd_roclet <- function() {
 
 #' @export
 roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
-  # Look at all blocks with roxygen comments
-  blocks <- Filter(function(x) length(x) > 1, parsed$blocks)
-
+  # Convert each block into a topic, indexed by filename
   topics <- list()
-  for (block in blocks) {
+  for (block in parsed$blocks) {
+    if (length(block) == 0)
+      next
+
     rd <- block_to_rd(block, base_path, parsed$env)
-    if (is.null(rd)) next
+    if (is.null(rd))
+      next
 
     if (rd$filename %in% names(topics)) {
       topics[[rd$filename]]$add(rd)

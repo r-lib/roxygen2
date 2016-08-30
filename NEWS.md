@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* Deprecated `register.preref.parser()` and `register.preref.parsers()`
+  have been removed.
+
 * `default_data_format()` has been renamed to `object_format()`.
 
 * The default alias for S4 method now re-addeds trailing ANY signatures

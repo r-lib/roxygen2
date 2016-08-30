@@ -97,7 +97,7 @@ block_to_rd <- function(block, base_path, env) {
     return()
   }
 
-  rd <- RdTopic$new()
+  rd <- RoxyTopic$new()
 
   # Determine name
   name <- block$name %||% object_topic(block$object)

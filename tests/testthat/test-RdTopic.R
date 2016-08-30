@@ -1,7 +1,7 @@
-context("RdTopic")
+context("RoxyTopic")
 
 test_that("adding tags merges with existing", {
-  rd <- RdTopic$new()
+  rd <- RoxyTopic$new()
 
   rd$add(new_tag("x", 1))
   rd$add(new_tag("x", 2))
@@ -10,7 +10,7 @@ test_that("adding tags merges with existing", {
 })
 
 test_that("unless overwrite = TRUE", {
-  rd <- RdTopic$new()
+  rd <- RoxyTopic$new()
 
   rd$add(new_tag("x", 1))
   rd$add(new_tag("x", 2), overwrite = TRUE)
@@ -19,8 +19,8 @@ test_that("unless overwrite = TRUE", {
 })
 
 test_that("can add a complete file", {
-  rd1 <- RdTopic$new()
-  rd2 <- RdTopic$new()
+  rd1 <- RoxyTopic$new()
+  rd2 <- RoxyTopic$new()
 
   rd1$add(new_tag("x", 1))
   rd2$add(new_tag("x", 2))

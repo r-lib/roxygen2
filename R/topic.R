@@ -1,5 +1,5 @@
-# An RdTopic is an ordered collection of unique rd_tags
-RdTopic <- R6::R6Class("RdTopic", public = list(
+# An RoxyTopic is an ordered collection of unique rd_tags
+RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   tags = list(),
   filename = "",
 
@@ -45,7 +45,7 @@ RdTopic <- R6::R6Class("RdTopic", public = list(
   },
 
   add = function(x, overwrite = FALSE) {
-    if (inherits(x, "RdTopic")) {
+    if (inherits(x, "RoxyTopic")) {
       self$add(x$tags, overwrite = overwrite)
     } else if (inherits(x, "rd_tag")) {
       self$add_tag(x, overwrite = overwrite)

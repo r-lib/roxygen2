@@ -85,28 +85,19 @@ block_to_rd <- function(block, base_path, env) {
   # Must start by processing templates
   block <- process_templates(block, base_path)
 
-  # Does this block get an Rd file?
-  if (any(names(block) == "noRd")) {
+  if (!needs_doc(block)) {
     return()
   }
 
-  key_tags <- c("description", "param", "return", "title", "example",
-    "examples", "name", "rdname", "usage", "details", "introduction",
-    "describeIn")
-  if (!any(names(block) %in% key_tags)) {
-    return()
-  }
-
-  rd <- RoxyTopic$new()
-
-  # Determine name
   name <- block$name %||% object_topic(block$object)
   if (is.null(name)) {
-    return(block_warning(block, "Missing name"))
+    block_warning(block, "Missing name")
+    return()
   }
 
   # Note that order of operations here doesn't matter: fields are
   # ordered by RoxyFile$format()
+  rd <- RoxyTopic$new()
 
   topic_add_backref(rd, block)
   topic_add_name_aliases(rd, block, name)
@@ -180,6 +171,19 @@ clean.rd_roclet <- function(roclet, base_path) {
 
 block_tags <- function(x, tag) {
   x[names(x) %in% tag]
+}
+
+needs_doc <- function(block) {
+  # Does this block get an Rd file?
+  if (any(names(block) == "noRd")) {
+    return(FALSE)
+  }
+
+  key_tags <- c("description", "param", "return", "title", "example",
+    "examples", "name", "rdname", "usage", "details", "introduction",
+    "describeIn")
+
+  any(names(block) %in% key_tags)
 }
 
 # Tag processing functions ------------------------------------------------

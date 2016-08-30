@@ -1,29 +1,28 @@
-# Translate a tag and expressions into an Rd expression;
-# multiple expressions take their own braces.
-#
-# Tags have two methods: \code{merge} and \code{format}.  Currently for all
-# tags, merge just combines all values, and format selects from these to
-# display the tags in the appropriate way.
-#
-new_tag <- function(tag, values) {
-  if (is.null(values)) return()
-  # NULL is special sentinel value that suppresses output of that tag
-  if (identical(values, "NULL")) return()
+roxy_field <- function(tag, values) {
+  if (is.null(values) || identical(values, "NULL")) {
+    # NULL is special sentinel value that suppresses output of that tag
+    return()
+  }
 
-  subc <- paste0(tag, "_tag")
-  structure(list(tag = tag, values = values), class = c(subc, "rd_tag"))
+  structure(
+    list(
+      tag = tag,
+      values = values
+    ),
+    class = c(paste0("roxy_field_", tag), "roxy_field")
+  )
 }
 
-is.rd_tag <- function(x) inherits(x, "rd_tag")
+is_roxy_field <- function(x) inherits(x, "roxy_field")
 
 #' @export
-print.rd_tag <- function(x, ...) {
+print.roxy_field <- function(x, ...) {
   cat(format(x), "\n")
 }
 
-# Translate a tag and values into an Rd expression; multiple values get their
-# own braces.
-rd_tag <- function(tag, ..., space = FALSE) {
+# Translate a tag and values into an Rd macro.
+# Multiple values get their own braces.
+rd_macro <- function(tag, ..., space = FALSE) {
   if (space) {
     values <- paste0("\n", paste0(..., collapse = "\n"), "\n")
   } else {
@@ -34,18 +33,18 @@ rd_tag <- function(tag, ..., space = FALSE) {
 }
 
 #' @export
-format.rd_tag <- function(x, ...) {
+format.roxy_field <- function(x, ...) {
   paste0("[ ", x$tag, " TAG ]\n")
 }
 
 #' @export
-merge.rd_tag <- function(x, y, ...) {
+merge.roxy_field <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  new_tag(x$tag, c(x$values, y$values))
+  roxy_field(x$tag, c(x$values, y$values))
 }
 
 #' @export
-merge.minidesc_tag <- function(x, y, ...) {
+merge.roxy_field_minidesc <- function(x, y, ...) {
   if (x$values$type != y$values$type) {
     stop("Can't merge @minidesc of different types", call. = FALSE)
   }
@@ -56,7 +55,7 @@ merge.minidesc_tag <- function(x, y, ...) {
 }
 
 #' @export
-merge.section_tag <- function(x, y, ...) {
+merge.roxy_field_section <- function(x, y, ...) {
   x_names <- vapply(x$values, `[[`, "name", FUN.VALUE = character(1L))
   y_names <- vapply(y$values, `[[`, "name", FUN.VALUE = character(1L))
   xy_names <- unique(c(x_names, y_names))
@@ -75,23 +74,23 @@ merge.section_tag <- function(x, y, ...) {
       list(name = name, content = content)
     }
   )
-  new_tag("section", values)
+  roxy_field("section", values)
 }
 
 #' @export
-merge.reexport_tag <- function(x, y, ...) {
+merge.roxy_field_reexport <- function(x, y, ...) {
   values <- list(
     pkg = c(x$values$pkg, y$values$pkg),
     fun = c(x$values$fun, y$values$fun)
   )
-  new_tag("reexport", values)
+  roxy_field("reexport", values)
 }
 
 
 # Comment tags -----------------------------------------------------------------------
 
 #' @export
-format.backref_tag <- function(x, ...) {
+format.roxy_field_backref <- function(x, ...) {
   filename <- unique(x$values)
   filename <- file.path(basename(dirname(filename)), basename(filename), fsep = "/")
   sprintf("%% Please edit documentation in %s\n", paste(filename, collapse = ", "))
@@ -100,34 +99,34 @@ format.backref_tag <- function(x, ...) {
 # Tags that repeat multiple times --------------------------------------------
 
 format_rd <- function(x, ...) {
-  vapply(sort_c(unique(x$values)), rd_tag, tag = x$tag,
+  vapply(sort_c(unique(x$values)), rd_macro, tag = x$tag,
     FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 #' @export
-format.keyword_tag <- format_rd
+format.roxy_field_keyword <- format_rd
 #' @export
-format.alias_tag <- function(x, ...) {
+format.roxy_field_alias <- function(x, ...) {
   x$values <- str_replace_all(x$values, fixed("%"), "\\%")
   format_rd(x, ...)
 }
 
 # Tags that keep the first occurence -----------------------------------------
 format_first <- function(x, ...) {
-  rd_tag(x$tag, x$values[1])
+  rd_macro(x$tag, x$values[1])
 }
 #' @export
-format.name_tag <- function(x, ...) {
+format.roxy_field_name <- function(x, ...) {
   x$values <- str_replace_all(x$values, fixed("%"), "\\%")
   format_first(x, ...)
 }
 #' @export
-format.title_tag <- format_first
+format.roxy_field_title <- format_first
 #' @export
-format.docType_tag <- format_first
+format.roxy_field_docType <- format_first
 #' @export
-format.format_tag <- format_first
+format.roxy_field_format <- format_first
 #' @export
-format.encoding_tag <- format_first
+format.roxy_field_encoding <- format_first
 
 # Tags collapse their values into a single string ----------------------------
 
@@ -136,47 +135,47 @@ format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
   if (wrap) {
     values <- str_wrap(values, width = 60, indent = indent, exdent = exdent)
   }
-  rd_tag(x$tag, values, space = TRUE)
+  rd_macro(x$tag, values, space = TRUE)
 }
 #' @export
-format.author_tag <- format_collapse
+format.roxy_field_author <- format_collapse
 #' @export
-format.concept_tag <- format_collapse
+format.roxy_field_concept <- format_collapse
 #' @export
-format.description_tag <- format_collapse
+format.roxy_field_description <- format_collapse
 #' @export
-format.details_tag <- format_collapse
+format.roxy_field_details <- format_collapse
 #' @export
-format.note_tag <- format_collapse
+format.roxy_field_note <- format_collapse
 #' @export
-format.references_tag <- format_collapse
+format.roxy_field_references <- format_collapse
 #' @export
-format.seealso_tag <- format_collapse
+format.roxy_field_seealso <- format_collapse
 #' @export
-format.source_tag <- format_collapse
+format.roxy_field_source <- format_collapse
 #' @export
-format.value_tag <- format_collapse
+format.roxy_field_value <- format_collapse
 
 # Tags that don't have output ------------------------------------------------
 
 format_null <- function(x, ...) NULL
 
 #' @export
-format.family_tag <- format_null
+format.roxy_field_family <- format_null
 #' @export
-format.inheritParams_tag <- format_null
+format.roxy_field_inheritParams <- format_null
 #' @export
-format.formals_tag <- format_null
+format.roxy_field_formals <- format_null
 
 # Tags with special errors or other semantics --------------------------------
 
 #' @export
-format.usage_tag <- function(x, ...) {
-  rd_tag(x$tag, build_rd(x$values, collapse = "\n\n"), space = TRUE)
+format.roxy_field_usage <- function(x, ...) {
+  rd_macro(x$tag, build_rd(x$values, collapse = "\n\n"), space = TRUE)
 }
 
 #' @export
-format.param_tag <- function(x, ..., wrap = TRUE) {
+format.roxy_field_param <- function(x, ..., wrap = TRUE) {
   names <- names(x$values)
 
   # add space to multiple arguments so they can wrap
@@ -187,11 +186,11 @@ format.param_tag <- function(x, ..., wrap = TRUE) {
     items <- str_wrap(items, width = 60, exdent = 2, indent = 2)
   }
 
-  rd_tag("arguments", items, space = TRUE)
+  rd_macro("arguments", items, space = TRUE)
 }
 
 #' @export
-format.section_tag <- function(x, ..., wrap = TRUE) {
+format.roxy_field_section <- function(x, ..., wrap = TRUE) {
   names <- vapply(x$values, "[[", "name", FUN.VALUE = character(1))
 
   contents <- vapply(x$values, "[[", "content", FUN.VALUE = character(1))
@@ -204,12 +203,12 @@ format.section_tag <- function(x, ..., wrap = TRUE) {
 }
 
 #' @export
-format.slot_tag <- function(x, ...) {
+format.roxy_field_slot <- function(x, ...) {
   describe_section("Slots", names(x$values), x$values)
 }
 
 #' @export
-format.field_tag <- function(x, ...) {
+format.roxy_field_field <- function(x, ...) {
   describe_section("Fields", names(x$values), x$values)
 }
 
@@ -227,18 +226,18 @@ describe_section <- function(name, dt, dd) {
 
 
 #' @export
-format.examples_tag <- function(x, ...) {
+format.roxy_field_examples <- function(x, ...) {
   values <- paste0(x$values, collapse = "\n")
-  rd_tag(x$tag, values, space = TRUE)
+  rd_macro(x$tag, values, space = TRUE)
 }
 
 #' @export
-format.rcmethods_tag <- function(x, ...) {
+format.roxy_field_rcmethods <- function(x, ...) {
   describe_section("Methods", names(x$values), x$values)
 }
 
 #' @export
-format.minidesc_tag <- function(x, ...) {
+format.roxy_field_minidesc <- function(x, ...) {
   title <- switch(x$values$type,
     generic = "Methods (by class)",
     class = "Methods (by generic)",
@@ -255,13 +254,13 @@ format.minidesc_tag <- function(x, ...) {
 }
 
 #' @export
-format.rawRd_tag <- function(x, ...) {
+format.roxy_field_rawRd <- function(x, ...) {
   paste(x$values, collapse = "\n")
 }
 
 
 #' @export
-format.reexport_tag <- function(x, ...) {
+format.roxy_field_reexport <- function(x, ...) {
   pkgs <- split(x$values$fun, x$values$pkg)
   pkg_links <- Map(pkg = names(pkgs), funs = pkgs, function(pkg, funs) {
     links <- paste0("\\code{\\link[", pkg, "]{", escape(funs), "}}",

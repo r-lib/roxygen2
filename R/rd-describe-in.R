@@ -22,7 +22,7 @@ process_describe_in <- function(block, env) {
 
   list(
     rdname = object_topic(dest),
-    tag = new_tag("minidesc", list(
+    tag = roxy_field("minidesc", list(
       type = label$type,
       label = label$label,
       desc = describe_in$description

@@ -21,21 +21,21 @@ check <- function(out) {
     get_tag(out, "title"),
     structure(
       list(tag = "title", values = "TITLE"),
-      class = c("title_tag", "rd_tag")
+      class = c("roxy_field_title", "roxy_field")
     )
   )
   expect_equal(
     get_tag(out, "description"),
     structure(
       list(tag = "description", values = "DESCRIPTION"),
-      class = c("description_tag", "rd_tag")
+      class = c("roxy_field_description", "roxy_field")
     )
   )
   expect_equal(
     get_tag(out, "details"),
     structure(
       list(tag = "details", values = "DETAILS"),
-      class = c("details_tag", "rd_tag")
+      class = c("roxy_field_details", "roxy_field")
     )
   )
 }

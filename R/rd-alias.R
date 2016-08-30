@@ -14,5 +14,5 @@ process_alias <- function(partitum, name, alias) {
     aliases <- unique(c(name, alias, aliases))
   }
 
-  new_tag("alias", aliases)
+  roxy_field("alias", aliases)
 }

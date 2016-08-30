@@ -21,7 +21,7 @@ process_family <- function(topics) {
       seealso <- paste("Other ", family, ": ", sep = "")
       out <- strwrap(links, initial = seealso, width = 60, exdent = 2)
 
-      topic$add(new_tag("seealso", paste(out, collapse = "\n")))
+      topic$add(roxy_field("seealso", paste(out, collapse = "\n")))
     }
   }
 

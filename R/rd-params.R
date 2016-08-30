@@ -23,7 +23,7 @@ process_inherit_params <- function(topics) {
       if (length(to_add) == 0) next
       missing <- setdiff(missing, names(inherited))
 
-      topic$add(new_tag("param", inherited[to_add]))
+      topic$add(roxy_field("param", inherited[to_add]))
     }
   }
 
@@ -107,7 +107,7 @@ fix_params_order <- function(topics) {
 
     # Overwrite all param tags to fix order
     param <- topic$get_tag("param")$values[required_order]
-    topic$add(new_tag("param", param), overwrite = TRUE)
+    topic$add(roxy_field("param", param), overwrite = TRUE)
   }
 
   topics

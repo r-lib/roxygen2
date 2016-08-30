@@ -9,7 +9,7 @@ process_usage <- function(partitum) {
     # to enter \S4method etc.
     usage <- rd(partitum$usage)
   }
-  new_tag("usage", usage)
+  roxy_field("usage", usage)
 }
 
 wrap_string <- function(x) UseMethod("wrap_string")

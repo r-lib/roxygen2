@@ -104,23 +104,23 @@ block_to_rd <- function(block, base_path, env) {
   if (is.null(name)) {
     return(block_warning(block, "Missing name"))
   }
-  rd$add(new_tag("name", name))
+  rd$add(roxy_field("name", name))
 
   # Add backreference to source
   if (!is.null(block$backref)) {
     rd$add(process_tag(block, "backref"))
   } else {
-    rd$add(new_tag("backref", block$srcref$filename))
+    rd$add(roxy_field("backref", block$srcref$filename))
   }
 
   if (is.function(block$object$value)) {
     formals <- formals(block$object$value)
-    rd$add(new_tag("formals", names(formals)))
+    rd$add(roxy_field("formals", names(formals)))
   }
 
   # Note that order of operations here doesn't matter: always reordered
   # by format.rd_file
-  rd$add(new_tag("encoding", block$encoding))
+  rd$add(roxy_field("encoding", block$encoding))
   rd$add(process_alias(block, name, block$object$alias))
   rd$add(process_methods(block))
   rd$add(process_usage(block))
@@ -132,7 +132,7 @@ block_to_rd <- function(block, base_path, env) {
   rd$add(process_tag(block, "evalRd", function(tag, param) {
     expr <- parse(text = param)
     out <- eval(expr, envir = env)
-    new_tag("rawRd", as.character(out))
+    roxy_field("rawRd", as.character(out))
   }))
   rd$add(process_tag(block, "title"))
   rd$add(process_tag(block, "description"))
@@ -148,10 +148,10 @@ block_to_rd <- function(block, base_path, env) {
   rd$add(process_tag(block, "concept"))
   rd$add(process_tag(block, "reexport"))
   rd$add(process_tag(block, "return", function(tag, param) {
-    new_tag("value", param)
+    roxy_field("value", param)
   }))
   rd$add(process_tag(block, "keywords", function(tag, param) {
-    new_tag("keyword", str_split(str_trim(param), "\\s+")[[1]])
+    roxy_field("keyword", str_split(str_trim(param), "\\s+")[[1]])
   }))
   rd$add(process_tag(block, "section", process_section, block))
   rd$add(process_examples(block, base_path))
@@ -221,7 +221,7 @@ process_methods <- function(block) {
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 
-  new_tag("rcmethods", setNames(desc, usage))
+  roxy_field("rcmethods", setNames(desc, usage))
 }
 
 
@@ -249,7 +249,7 @@ process_examples <- function(block, base_path) {
     examples <- unlist(lapply(paths, readLines))
     examples <- escape_examples(examples)
 
-    out <- c(out, list(new_tag("examples", examples)))
+    out <- c(out, list(roxy_field("examples", examples)))
   }
   out
 }
@@ -265,19 +265,19 @@ process_section <- function(key, value, block) {
     ))
   }
 
-  new_tag("section", list(list(name = pieces[1], content = pieces[2])))
+  roxy_field("section", list(list(name = pieces[1], content = pieces[2])))
 }
 
 process_doc_type <- function(block) {
   doctype <- block$docType
 
   if (is.null(doctype)) return()
-  tags <- list(new_tag("docType", doctype))
+  tags <- list(roxy_field("docType", doctype))
 
   if (doctype == "package") {
     name <- block$name
     if (!str_detect(name, "-package")) {
-      tags <- c(tags, list(new_tag("alias", package_suffix(name))))
+      tags <- c(tags, list(roxy_field("alias", package_suffix(name))))
     }
   }
 
@@ -288,7 +288,7 @@ package_suffix <- function(name) {
   paste0(name, "-package")
 }
 
-process_tag <- function(block, tag, f = new_tag, ...) {
+process_tag <- function(block, tag, f = roxy_field, ...) {
   matches <- block[names(block) == tag]
   if (length(matches) == 0) return()
 
@@ -316,5 +316,5 @@ process_def_tag <- function(block, tag) {
   desc <- str_trim(sapply(tags, "[[", "description"))
   names(desc) <- sapply(tags, "[[", "name")
 
-  new_tag(tag, desc)
+  roxy_field(tag, desc)
 }

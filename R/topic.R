@@ -1,4 +1,4 @@
-# An RoxyTopic is an ordered collection of unique rd_tags
+# An RoxyTopic is an ordered collection of unique roxy_fields
 RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   tags = list(),
   filename = "",
@@ -33,7 +33,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     if (is.null(tag))
       return()
 
-    stopifnot(is.rd_tag(tag))
+    stopifnot(is_roxy_field(tag))
     tag_name <- tag$tag
     if (self$has_tag(tag_name) && !overwrite) {
       tag <- merge(self$get_tag(tag_name), tag)
@@ -47,7 +47,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$tags, overwrite = overwrite)
-    } else if (inherits(x, "rd_tag")) {
+    } else if (inherits(x, "roxy_field")) {
       self$add_tag(x, overwrite = overwrite)
     } else if (is.list(x)) {
       for (tag in x) {

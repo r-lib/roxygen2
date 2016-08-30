@@ -7,7 +7,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     # This has to happen here to get a better order when combining topics
     order <- c("backref", "docType", "encoding", "name", "alias", "title",
       "format", "source", "usage", "param", "value", "description",
-      "details", "minidesc", "reexport", "field", "slot", "rcmethods", "note",
+      "details", "minidesc", "field", "slot", "rcmethods", "note",
       "section", "examples", "author", "references", "seealso",
       "concept", "keyword", "rawRd")
     fields <- move_names_to_front(self$fields, order)

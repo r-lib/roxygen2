@@ -49,16 +49,6 @@ merge.roxy_field_minidesc <- function(x, y, ...) {
 }
 
 
-#' @export
-merge.roxy_field_reexport <- function(x, y, ...) {
-  values <- list(
-    pkg = c(x$values$pkg, y$values$pkg),
-    fun = c(x$values$fun, y$values$fun)
-  )
-  roxy_field("reexport", values)
-}
-
-
 # Comment fields -----------------------------------------------------------------------
 
 #' @export
@@ -218,9 +208,25 @@ format.roxy_field_rawRd <- function(x, ...) {
 }
 
 
+# Re-export ----------------------------------------------------------------
+
+
+roxy_field_reexport <- function(pkg, fun) {
+  stopifnot(is.character(pkg), is.character(fun))
+  stopifnot(length(pkg) == length(fun))
+
+  new_roxy_field("reexport", pkg = pkg, fun = fun)
+}
+
+#' @export
+merge.roxy_field_reexport <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  roxy_field_reexport(c(x$pkg, y$pkg), c(x$fun, y$fun))
+}
+
 #' @export
 format.roxy_field_reexport <- function(x, ...) {
-  pkgs <- split(x$values$fun, x$values$pkg)
+  pkgs <- split(x$fun, x$pkg)
   pkg_links <- Map(pkg = names(pkgs), funs = pkgs, function(pkg, funs) {
     links <- paste0("\\code{\\link[", pkg, "]{", escape(funs), "}}",
       collapse = ", ")
@@ -236,7 +242,6 @@ format.roxy_field_reexport <- function(x, ...) {
     paste0("  ", unlist(pkg_links), collapse = "\n\n"),
     "\n}}\n"
   )
-
 }
 
 

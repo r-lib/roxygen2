@@ -101,6 +101,10 @@ block_to_rd <- function(block, base_path, env) {
   rd <- RoxyTopic$new()
   topic_add_name_aliases(rd, block, name)
 
+  # Some fields added directly by roxygen internals
+  fields <- Filter(is_roxy_field, block)
+  rd$add(fields)
+
   topic_add_backref(rd, block)
   topic_add_doc_type(rd, block)
   topic_add_eval_rd(rd, block, env)
@@ -192,7 +196,7 @@ topic_add_backref <- function(topic, block) {
 topic_add_simple_tags <- function(topic, block) {
   simple_tags <- c(
     "author", "concept", "description", "details", "encoding", "family",
-    "format", "inheritParams", "note", "rawRd", "reexport", "references",
+    "format", "inheritParams", "note", "rawRd", "references",
     "seealso", "source", "title"
   )
 

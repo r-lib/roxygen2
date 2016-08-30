@@ -34,7 +34,7 @@ object_defaults.import <- function(x) {
     name = "reexports",
     keywords = "internal",
     title = "Objects exported from other packages",
-    reexport = list(pkg = x$value$pkg, fun = x$value$fun)
+    .reexport = roxy_field_reexport(x$value$pkg, x$value$fun)
   )
 }
 

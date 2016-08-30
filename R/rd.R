@@ -98,17 +98,18 @@ block_to_rd <- function(block, base_path, env) {
   # Note that order of operations here doesn't matter: fields are
   # ordered by RoxyFile$format()
   rd <- RoxyTopic$new()
+  topic_add_name_aliases(rd, block, name)
 
   topic_add_backref(rd, block)
-  topic_add_name_aliases(rd, block, name)
+  topic_add_doc_type(rd, block)
+  topic_add_examples(rd, block, base_path)
+  topic_add_fields(rd, block)
   topic_add_methods(rd, block)
   topic_add_params(rd, block)
   topic_add_simple_tags(rd, block)
+  topic_add_slots(rd, block)
   topic_add_usage(rd, block)
 
-  rd$add(process_slot(block))
-  rd$add(process_field(block))
-  rd$add(process_doc_type(block))
   rd$add(process_tag(block, "evalRd", function(tag, param) {
     expr <- parse(text = param)
     out <- eval(expr, envir = env)
@@ -121,13 +122,12 @@ block_to_rd <- function(block, base_path, env) {
     roxy_field("keyword", str_split(str_trim(param), "\\s+")[[1]])
   }))
   rd$add(process_tag(block, "section", process_section, block))
-  rd$add(process_examples(block, base_path))
 
   describe_in <- process_describe_in(block, env)
   rd$add(describe_in$tag)
 
-  rd$filename <- paste0(describe_in$rdname %||% block$rdname %||%
-    nice_name(name), ".Rd")
+  filename <- describe_in$rdname %||% block$rdname %||% nice_name(name)
+  rd$filename <- paste0(filename, ".Rd")
 
   rd
 }
@@ -220,7 +220,7 @@ topic_add_params <- function(topic, block) {
     topic$add(roxy_field("formals", names(formals)))
   }
 
-  topic$add(process_def_tag(block, "param"))
+  process_def_tag(topic, block, "param")
 }
 
 topic_add_name_aliases <- function(topic, block, name) {
@@ -278,34 +278,43 @@ topic_add_usage <- function(topic, block) {
   topic$add_field(roxy_field("usage", usage))
 }
 
+topic_add_slots <- function(topic, block) {
+  process_def_tag(topic, block, "slot")
+}
+
+topic_add_fields <- function(topic, block) {
+  process_def_tag(topic, block, "field")
+}
 
 # If \code{@@examples} is provided, use that; otherwise, concatenate
 # the files pointed to by each \code{@@example}.
-process_examples <- function(block, base_path) {
-  out <- list()
-  if (!is.null(block$examples)) {
-    out <- c(out, process_tag(block, "examples"))
+topic_add_examples <- function(topic, block, base_path) {
+  examples <- block_tags(block, "examples")
+  for (example in examples) {
+    topic$add_field(roxy_field("examples", example))
   }
 
-  paths <- unlist(block[names(block) == "example"])
-  if (length(paths) > 0) {
-    paths <- file.path(base_path, str_trim(paths))
+  paths <- str_trim(unlist(block_tags(block, "example")))
+  paths <- file.path(base_path, paths)
 
+  for (path in paths) {
     # Check that haven't accidentally used example instead of examples
-    nl <- str_count(paths, "\n")
+    nl <- str_count(path, "\n")
     if (any(nl) > 0) {
-      return(block_warning(
-        block,
-        "@example spans multiple lines. Do you want @examples?"
-      ))
+      block_warning(block, "@example spans multiple lines. Do you want @examples?")
+      next
     }
 
-    examples <- unlist(lapply(paths, readLines))
-    examples <- escape_examples(examples)
+    if (!file.exists(path)) {
+      block_warning("@example ", path, " doesn't exist")
+      next
+    }
 
-    out <- c(out, list(roxy_field("examples", examples)))
+    code <- readLines(path)
+    examples <- escape_examples(code)
+
+    topic$add_field(roxy_field("examples", examples))
   }
-  out
 }
 
 process_section <- function(key, value, block) {
@@ -322,20 +331,19 @@ process_section <- function(key, value, block) {
   roxy_field("section", list(list(name = pieces[1], content = pieces[2])))
 }
 
-process_doc_type <- function(block) {
+topic_add_doc_type <- function(topic, block) {
   doctype <- block$docType
-
   if (is.null(doctype)) return()
-  tags <- list(roxy_field("docType", doctype))
+
+  topic$add_field(roxy_field("docType", doctype))
 
   if (doctype == "package") {
     name <- block$name
     if (!str_detect(name, "-package")) {
-      tags <- c(tags, list(roxy_field("alias", package_suffix(name))))
+      topic$add_field(roxy_field("alias", package_suffix(name)))
     }
   }
 
-  tags
 }
 
 package_suffix <- function(name) {
@@ -351,20 +359,13 @@ process_tag <- function(block, tag, f = roxy_field, ...) {
 
 # Name + description tags ------------------------------------------------------
 
-process_slot <- function(block) {
-  process_def_tag(block, "slot")
-}
 
-process_field <- function(block) {
-  process_def_tag(block, "field")
-}
-
-process_def_tag <- function(block, tag) {
+process_def_tag <- function(topic, block, tag) {
   tags <- block[names(block) == tag]
   if (length(tags) == 0) return()
 
   desc <- str_trim(sapply(tags, "[[", "description"))
   names(desc) <- sapply(tags, "[[", "name")
 
-  roxy_field(tag, desc)
+  topic$add_field(roxy_field(tag, desc))
 }

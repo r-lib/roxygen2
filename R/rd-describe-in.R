@@ -7,11 +7,10 @@ process_describe_in <- function(block, env) {
   if (is.null(block$object)) {
     stop("@describeIn must be used with an object", call. = FALSE)
   }
-
-  if(any(names(block) == "name")) {
+  if (any(names(block) == "name")) {
     stop("@describeIn can not be used with @name", call. = FALSE)
   }
-  if(any(names(block) == "rdname")) {
+  if (any(names(block) == "rdname")) {
     stop("@describeIn can not be used with @rdname", call. = FALSE)
   }
 
@@ -22,11 +21,7 @@ process_describe_in <- function(block, env) {
 
   list(
     rdname = object_topic(dest),
-    tag = roxy_field("minidesc", list(
-      type = label$type,
-      label = label$label,
-      desc = describe_in$description
-    ))
+    tag = roxy_field_minidesc(label$type, label$label, describe_in$description)
   )
 }
 

@@ -118,9 +118,11 @@ block_to_rd <- function(block, base_path, env) {
     rd$add(roxy_field("formals", names(formals)))
   }
 
+  rd$add(roxy_field("encoding", block$encoding))
+  topic_add_simple_tags(rd, block)
+
   # Note that order of operations here doesn't matter: always reordered
   # by format.rd_file
-  rd$add(roxy_field("encoding", block$encoding))
   rd$add(process_alias(block, name, block$object$alias))
   rd$add(process_methods(block))
   rd$add(process_usage(block))
@@ -128,25 +130,11 @@ block_to_rd <- function(block, base_path, env) {
   rd$add(process_slot(block))
   rd$add(process_field(block))
   rd$add(process_doc_type(block))
-  rd$add(process_tag(block, "rawRd"))
   rd$add(process_tag(block, "evalRd", function(tag, param) {
     expr <- parse(text = param)
     out <- eval(expr, envir = env)
     roxy_field("rawRd", as.character(out))
   }))
-  rd$add(process_tag(block, "title"))
-  rd$add(process_tag(block, "description"))
-  rd$add(process_tag(block, "details"))
-  rd$add(process_tag(block, "note"))
-  rd$add(process_tag(block, "family"))
-  rd$add(process_tag(block, "inheritParams"))
-  rd$add(process_tag(block, "author"))
-  rd$add(process_tag(block, "format"))
-  rd$add(process_tag(block, "source"))
-  rd$add(process_tag(block, "seealso"))
-  rd$add(process_tag(block, "references"))
-  rd$add(process_tag(block, "concept"))
-  rd$add(process_tag(block, "reexport"))
   rd$add(process_tag(block, "return", function(tag, param) {
     roxy_field("value", param)
   }))
@@ -203,6 +191,23 @@ clean.rd_roclet <- function(roclet, base_path) {
 
 
 # Tag processing functions ------------------------------------------------
+
+# Simple tags can be converted directly to fields
+topic_add_simple_tags <- function(topic, block) {
+  simple_tags <- c(
+    "author", "concept", "description", "details", "family", "format",
+    "inheritParams", "note", "rawRd", "reexport", "references", "seealso",
+    "source", "title"
+  )
+
+  is_simple <- names(block) %in% simple_tags
+  tag_values <- block[is_simple]
+  tag_names <- names(block)[is_simple]
+
+  for (i in seq_along(tag_values)) {
+    topic$add_field(roxy_field(tag_names[[i]], tag_values[[i]]))
+  }
+}
 
 process_methods <- function(block) {
   obj <- block$object

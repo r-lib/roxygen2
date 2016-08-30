@@ -54,7 +54,7 @@ load_pkg_dependencies <- function(path) {
 package_files <- function(path) {
   desc <- read_pkg_description(path)
 
-  all <- normalizePath(r_files(path))
+  all <- normalizePath(r_files(file.path(path, "R")))
   collate <- scan(text = desc$Collate %||% "", what = "", sep = " ",
     quiet = TRUE)
 

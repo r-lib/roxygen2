@@ -106,12 +106,6 @@ block_to_rd <- function(block, base_path, env) {
   }
   rd$add(roxy_field("name", name))
 
-  # Add backreference to source
-  if (!is.null(block$backref)) {
-    rd$add(process_tag(block, "backref"))
-  } else {
-    rd$add(roxy_field("backref", block$srcref$filename))
-  }
 
   if (is.function(block$object$value)) {
     formals <- formals(block$object$value)
@@ -120,6 +114,7 @@ block_to_rd <- function(block, base_path, env) {
 
   rd$add(roxy_field("encoding", block$encoding))
   topic_add_simple_tags(rd, block)
+  topic_add_backref(rd, block)
 
   # Note that order of operations here doesn't matter: always reordered
   # by format.rd_file
@@ -190,7 +185,19 @@ clean.rd_roclet <- function(roclet, base_path) {
 }
 
 
+block_tags <- function(x, tag) {
+  x[names(x) %in% tag]
+}
+
 # Tag processing functions ------------------------------------------------
+
+topic_add_backref <- function(topic, block) {
+  backrefs <- block_tags(block, "backref") %||% block$srcref$filename
+
+  for (backref in backrefs) {
+    topic$add(roxy_field("backref", backref))
+  }
+}
 
 # Simple tags can be converted directly to fields
 topic_add_simple_tags <- function(topic, block) {

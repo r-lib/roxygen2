@@ -6,7 +6,7 @@ internal_f <- function(p, f) {
 }
 
 "%||%" <- function(a, b) {
-  if (!is.null(a)) a else b
+  if (length(a) > 0) a else b
 }
 
 subs <- matrix(ncol = 2, byrow = T, c(

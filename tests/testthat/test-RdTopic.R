@@ -6,7 +6,7 @@ test_that("adding tags merges with existing", {
   rd$add(roxy_field("x", 1))
   rd$add(roxy_field("x", 2))
 
-  expect_equal(rd$get_tag("x")$values, c(1, 2))
+  expect_equal(rd$get_field("x")$values, c(1, 2))
 })
 
 test_that("unless overwrite = TRUE", {
@@ -15,7 +15,7 @@ test_that("unless overwrite = TRUE", {
   rd$add(roxy_field("x", 1))
   rd$add(roxy_field("x", 2), overwrite = TRUE)
 
-  expect_equal(rd$get_tag("x")$values, 2)
+  expect_equal(rd$get_field("x")$values, 2)
 })
 
 test_that("can add a complete file", {
@@ -26,5 +26,5 @@ test_that("can add a complete file", {
   rd2$add(roxy_field("x", 2))
   rd2$add(rd1)
 
-  expect_equal(rd2$get_tag("x")$values, c(2, 1))
+  expect_equal(rd2$get_field("x")$values, c(2, 1))
 })

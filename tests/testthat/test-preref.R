@@ -19,24 +19,15 @@ restore_block <- function() {
 check <- function(out) {
   expect_equal(
     get_tag(out, "title"),
-    structure(
-      list(tag = "title", values = "TITLE"),
-      class = c("roxy_field_title", "roxy_field")
-    )
+    roxy_field("title", "TITLE")
   )
   expect_equal(
     get_tag(out, "description"),
-    structure(
-      list(tag = "description", values = "DESCRIPTION"),
-      class = c("roxy_field_description", "roxy_field")
-    )
+    roxy_field("description", "DESCRIPTION")
   )
   expect_equal(
     get_tag(out, "details"),
-    structure(
-      list(tag = "details", values = "DETAILS"),
-      class = c("roxy_field_details", "roxy_field")
-    )
+    roxy_field("details", "DETAILS")
   )
 }
 

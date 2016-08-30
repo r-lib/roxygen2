@@ -2,7 +2,7 @@ process_inherit_params <- function(topics) {
 
   # Currently no topological sort, so @inheritParams will only traverse
   # one-level - you can't inherit params that have been inherited from
-  # another function (and you can't currently use multiple inherit tags)
+  # another function (and you can't currently use multiple inherit fields)
   inherit_index <- get_values(topics, "inheritParams")
 
   name_index <- get_values(topics, "name")
@@ -12,7 +12,7 @@ process_inherit_params <- function(topics) {
 
     documented <- get_documented_params(topic)
 
-    needed <- get_tag(topic, "formals")$values
+    needed <- topic$get_field("formals")$values
     missing <- setdiff(needed, documented)
     if (length(missing) == 0) next
 
@@ -31,7 +31,7 @@ process_inherit_params <- function(topics) {
 }
 
 get_documented_params <- function(topic, only_first = FALSE) {
-  documented <- names(topic$get_tag("param")$values)
+  documented <- names(topic$get_field("param")$values)
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
     if (only_first)
@@ -63,7 +63,7 @@ find_params <- function(inheritor, topics, name_lookup) {
         call. = FALSE, immediate. = TRUE)
       return()
     }
-    params <- get_tag(topics[[rd_name]], "param")$values
+    params <- topics[[rd_name]]$get_field("param")$values
   }
   params <- unlist(params)
   if (is.null(params)) return(NULL)
@@ -85,7 +85,7 @@ fix_params_order <- function(topics) {
 
     # Compute correct ordering of parameter documentation
     # Check what's needed...
-    needed <- topic$get_tag("formals")$values
+    needed <- topic$get_field("formals")$values
 
     # (Workaround for dupes that can occur but perhaps shouldn't,
     #  cf. https://github.com/klutometis/roxygen/commit/83d125dce50a072534988787d49ffe206d19b232#commitcomment-6742169)
@@ -105,8 +105,8 @@ fix_params_order <- function(topics) {
     required_order <- required_order[!is.na(required_order)]
     required_order <- c(required_order, setdiff(documented_indexes, required_order))
 
-    # Overwrite all param tags to fix order
-    param <- topic$get_tag("param")$values[required_order]
+    # Overwrite all param fields to fix order
+    param <- topic$get_field("param")$values[required_order]
     topic$add(roxy_field("param", param), overwrite = TRUE)
   }
 

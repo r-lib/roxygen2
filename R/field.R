@@ -1,15 +1,15 @@
-roxy_field <- function(tag, values) {
+roxy_field <- function(field, values) {
   if (is.null(values) || identical(values, "NULL")) {
-    # NULL is special sentinel value that suppresses output of that tag
+    # NULL is special sentinel value that suppresses output of that field
     return()
   }
 
   structure(
     list(
-      tag = tag,
+      field = field,
       values = values
     ),
-    class = c(paste0("roxy_field_", tag), "roxy_field")
+    class = c(paste0("roxy_field_", field), "roxy_field")
   )
 }
 
@@ -20,27 +20,27 @@ print.roxy_field <- function(x, ...) {
   cat(format(x), "\n")
 }
 
-# Translate a tag and values into an Rd macro.
+# Translate a field and values into an Rd macro.
 # Multiple values get their own braces.
-rd_macro <- function(tag, ..., space = FALSE) {
+rd_macro <- function(field, ..., space = FALSE) {
   if (space) {
     values <- paste0("\n", paste0(..., collapse = "\n"), "\n")
   } else {
     values <- str_trim(c(...))
   }
 
-  paste0("\\", tag, paste0("{", values, "}", collapse = ""), "\n")
+  paste0("\\", field, paste0("{", values, "}", collapse = ""), "\n")
 }
 
 #' @export
 format.roxy_field <- function(x, ...) {
-  paste0("[ ", x$tag, " TAG ]\n")
+  paste0("[ ", x$field, " FIELD ]\n")
 }
 
 #' @export
 merge.roxy_field <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field(x$tag, c(x$values, y$values))
+  roxy_field(x$field, c(x$values, y$values))
 }
 
 #' @export
@@ -87,7 +87,7 @@ merge.roxy_field_reexport <- function(x, y, ...) {
 }
 
 
-# Comment tags -----------------------------------------------------------------------
+# Comment fields -----------------------------------------------------------------------
 
 #' @export
 format.roxy_field_backref <- function(x, ...) {
@@ -96,10 +96,10 @@ format.roxy_field_backref <- function(x, ...) {
   sprintf("%% Please edit documentation in %s\n", paste(filename, collapse = ", "))
 }
 
-# Tags that repeat multiple times --------------------------------------------
+# Fields that repeat multiple times --------------------------------------------
 
 format_rd <- function(x, ...) {
-  vapply(sort_c(unique(x$values)), rd_macro, tag = x$tag,
+  vapply(sort_c(unique(x$values)), rd_macro, field = x$field,
     FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 #' @export
@@ -110,9 +110,9 @@ format.roxy_field_alias <- function(x, ...) {
   format_rd(x, ...)
 }
 
-# Tags that keep the first occurence -----------------------------------------
+# Fields that keep the first occurence -----------------------------------------
 format_first <- function(x, ...) {
-  rd_macro(x$tag, x$values[1])
+  rd_macro(x$field, x$values[1])
 }
 #' @export
 format.roxy_field_name <- function(x, ...) {
@@ -128,14 +128,14 @@ format.roxy_field_format <- format_first
 #' @export
 format.roxy_field_encoding <- format_first
 
-# Tags collapse their values into a single string ----------------------------
+# Fields collapse their values into a single string ----------------------------
 
 format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
   values <- paste0(x$values, collapse = "\n\n")
   if (wrap) {
     values <- str_wrap(values, width = 60, indent = indent, exdent = exdent)
   }
-  rd_macro(x$tag, values, space = TRUE)
+  rd_macro(x$field, values, space = TRUE)
 }
 #' @export
 format.roxy_field_author <- format_collapse
@@ -156,7 +156,7 @@ format.roxy_field_source <- format_collapse
 #' @export
 format.roxy_field_value <- format_collapse
 
-# Tags that don't have output ------------------------------------------------
+# Fields that don't have output ------------------------------------------------
 
 format_null <- function(x, ...) NULL
 
@@ -167,11 +167,11 @@ format.roxy_field_inheritParams <- format_null
 #' @export
 format.roxy_field_formals <- format_null
 
-# Tags with special errors or other semantics --------------------------------
+# Fields with special errors or other semantics --------------------------------
 
 #' @export
 format.roxy_field_usage <- function(x, ...) {
-  rd_macro(x$tag, build_rd(x$values, collapse = "\n\n"), space = TRUE)
+  rd_macro(x$field, build_rd(x$values, collapse = "\n\n"), space = TRUE)
 }
 
 #' @export
@@ -228,7 +228,7 @@ describe_section <- function(name, dt, dd) {
 #' @export
 format.roxy_field_examples <- function(x, ...) {
   values <- paste0(x$values, collapse = "\n")
-  rd_macro(x$tag, values, space = TRUE)
+  rd_macro(x$field, values, space = TRUE)
 }
 
 #' @export

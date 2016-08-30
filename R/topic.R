@@ -1,6 +1,6 @@
 # An RoxyTopic is an ordered collection of unique roxy_fields
 RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
-  tags = list(),
+  fields = list(),
   filename = "",
 
   format = function(...) {
@@ -10,48 +10,48 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
       "details", "minidesc", "reexport", "field", "slot", "rcmethods", "note",
       "section", "examples", "author", "references", "seealso",
       "concept", "keyword", "rawRd")
-    tags <- move_names_to_front(self$tags, order)
+    fields <- move_names_to_front(self$fields, order)
 
-    formatted <- lapply(tags, format, ...)
+    formatted <- lapply(fields, format, ...)
     paste0(
       made_by("%"),
       paste0(unlist(formatted), collapse = "")
     )
   },
 
-  has_tag = function(tag_name) {
-    tag_name %in% names(self$tags)
+  has_field = function(field_name) {
+    field_name %in% names(self$fields)
   },
 
-  get_tag = function(tag_name) {
-    self$tags[[tag_name]]
+  get_field = function(field_name) {
+    self$fields[[field_name]]
   },
 
   # Ensures that each type of name (as given by its name), only appears
-  # once in self$tags
-  add_tag = function(tag, overwrite = FALSE) {
-    if (is.null(tag))
+  # once in self$fields
+  add_field = function(field, overwrite = FALSE) {
+    if (is.null(field))
       return()
 
-    stopifnot(is_roxy_field(tag))
-    tag_name <- tag$tag
-    if (self$has_tag(tag_name) && !overwrite) {
-      tag <- merge(self$get_tag(tag_name), tag)
+    stopifnot(is_roxy_field(field))
+    field_name <- field$field
+    if (self$has_field(field_name) && !overwrite) {
+      field <- merge(self$get_field(field_name), field)
     }
 
-    self$tags[[tag_name]] <- tag
+    self$fields[[field_name]] <- field
 
     invisible()
   },
 
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
-      self$add(x$tags, overwrite = overwrite)
+      self$add(x$fields, overwrite = overwrite)
     } else if (inherits(x, "roxy_field")) {
-      self$add_tag(x, overwrite = overwrite)
+      self$add_field(x, overwrite = overwrite)
     } else if (is.list(x)) {
-      for (tag in x) {
-        self$add_tag(tag, overwrite = overwrite)
+      for (field in x) {
+        self$add_field(field, overwrite = overwrite)
       }
     } else if (is.null(x)) {
       # skip
@@ -69,4 +69,4 @@ move_names_to_front <- function(x, to_front) {
   x[union(intersect(to_front, nms), nms)]
 }
 
-get_tag <- function(topic, tag_name) topic$get_tag(tag_name)
+get_tag <- function(topic, field_name) topic$get_field(field_name)

@@ -4,7 +4,7 @@ process_family <- function(topics) {
 
   for (topic_name in names(topics)) {
     topic <- topics[[topic_name]]
-    families <- topic$get_tag("family")$values
+    families <- topic$get_field("family")$values
 
     for (family in families) {
       related <- family_lookup[[family]]
@@ -34,8 +34,8 @@ invert <- function(x) {
   tapply(as.character(stacked$ind), stacked$values, list)
 }
 
-get_values <- function(topics, tag) {
-  tags <- lapply(topics, function(rd) rd$get_tag(tag))
-  tags <- Filter(Negate(is.null), tags)
-  lapply(tags, "[[", "values")
+get_values <- function(topics, field) {
+  fields <- lapply(topics, function(rd) rd$get_field(field))
+  fields <- Filter(Negate(is.null), fields)
+  lapply(fields, "[[", "values")
 }

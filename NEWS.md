@@ -1,5 +1,9 @@
 # roxygen2 5.0.1.9000
 
+* New `roclet_find()` provides a more flexible way to specify roclets:
+  as roclet name (e.g. "rd_roclet"), in an package ("foo::roclet_bar"),
+  or with options ("foo::roclet_bar(baz = TRUE)").
+
 * Ability to set the `wrap` option in DESCRIPTION has been eliminated.
   This was rarely used and hasn't been documented for a long time. It's 
   likely I'll add back some more generic way of setting roxygen options

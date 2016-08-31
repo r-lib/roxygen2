@@ -4,15 +4,12 @@
 \alias{roc_proc_text}
 \title{Process roclet on string and capture results.}
 \usage{
-roc_proc_text(roclet, input, options = list(), registry = default_tags())
+roc_proc_text(roclet, input, registry = default_tags())
 }
 \arguments{
 \item{roclet}{Name of roclet to use for processing.}
 
 \item{input}{Source string}
-
-\item{options}{A list of options to control roxygen behaviour.
-Currently only \code{wrap} is recognised.}
 
 \item{registry}{Named list of tag parsers}
 }

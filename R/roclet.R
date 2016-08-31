@@ -38,9 +38,44 @@ roclet_clean <- function(x, base_path) {
   UseMethod("roclet_clean")
 }
 
+#' Create a roclet from a string.
+#'
+#' This provides a flexible way of specifying a roclet in a string.
+#'
+#' @param x Arbitrary R code evaluated in roxygen2 package.
+#' @export
+#' @examples
+#' # rd, namespace, and vignette work for backward compatibility
+#' roclet_find("rd")
+#'
+#' # But generally you should specify the name of a function that
+#' # returns a roclet
+#' roclet_find("rd_roclet")
+#'
+#' # If it lives in another package, you'll need to use ::
+#' roclet_find("roxygen2::rd_roclet")
+#'
+#' # If it takes parameters (which no roclet does currently), you'll need
+#' # to call the function
+#' roclet_find("roxygen2::rd_roclet()")
 roclet_find <- function(x) {
-  roclet <- paste0(x, "_roclet", sep = "")
-  get(roclet, mode = "function")()
+  env <- new.env(parent = getNamespace("roxygen2"))
+  env$rd <- rd_roclet
+  env$namespace <- namespace_roclet
+  env$vignette <- vignette_roclet
+
+  expr <- parse(text = x)
+  res <- eval(expr, env)
+
+  if (is.function(res)) {
+    res <- res()
+  }
+
+  if (!is.roclet(res)) {
+    stop("Must return a roclet", call. = FALSE)
+  }
+
+  res
 }
 
 is.roclet <- function(x) inherits(x, "roclet")

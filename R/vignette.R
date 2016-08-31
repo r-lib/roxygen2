@@ -18,7 +18,7 @@ vignette_roclet <- function() {
 }
 
 #' @export
-roclet_process.roclet_vignette <- function(x, parsed, base_path, options = list()) {
+roclet_process.roclet_vignette <- function(x, parsed, base_path) {
 }
 
 #' @export
@@ -27,8 +27,7 @@ roclet_tags.roclet_vignette <- function(x) {
 }
 
 #' @export
-roclet_output.roclet_vignette <- function(x, results, base_path, options = list(),
-                                          check = TRUE) {
+roclet_output.roclet_vignette <- function(x, results, base_path, check = TRUE) {
   vign_update_all(base_path)
 }
 

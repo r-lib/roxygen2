@@ -18,7 +18,7 @@ namespace_roclet <- function() {
 }
 
 #' @export
-roclet_process.roclet_namespace <- function(x, parsed, base_path, options = list()) {
+roclet_process.roclet_namespace <- function(x, parsed, base_path) {
   ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
   sort_c(unique(ns))
 }
@@ -53,8 +53,7 @@ ns_process_tag <- function(tag_name, partitum) {
 }
 
 #' @export
-roclet_output.roclet_namespace <- function(x, results, base_path, options = list(),
-                                           check = TRUE) {
+roclet_output.roclet_namespace <- function(x, results, base_path, check = TRUE) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   results <- c(made_by("#"), results)
 

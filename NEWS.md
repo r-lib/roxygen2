@@ -1,5 +1,10 @@
 # roxygen2 5.0.1.9000
 
+* Ability to set the `wrap` option in DESCRIPTION has been eliminated.
+  This was rarely used and hasn't been documented for a long time. It's 
+  likely I'll add back some more generic way of setting roxygen options
+  in the future.
+
 * `default_data_format()` has been renamed to `object_format()`.
 
 * The default alias for S4 method now re-addeds trailing ANY signatures

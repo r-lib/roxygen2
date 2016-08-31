@@ -16,8 +16,7 @@ roclet <- function(subclass, ...) {
 
 #' @export
 #' @rdname roclet
-roclet_output <- function(x, results, base_path, options = list(),
-                          check = TRUE) {
+roclet_output <- function(x, results, base_path, check = TRUE) {
   UseMethod("roclet_output", x)
 }
 
@@ -29,7 +28,7 @@ roclet_tags <- function(x) {
 
 #' @export
 #' @rdname roclet
-roclet_process <- function(x, parsed, base_path, options = list()) {
+roclet_process <- function(x, parsed, base_path) {
   UseMethod("roclet_process")
 }
 
@@ -52,16 +51,14 @@ is.roclet <- function(x) inherits(x, "roclet")
 #'
 #' @param roclet Name of roclet to use for processing.
 #' @param input Source string
-#' @param options A list of options to control roxygen behaviour.
-#'   Currently only \code{wrap} is recognised.
 #' @param registry Named list of tag parsers
 #' @export
 #' @keywords internal
-roc_proc_text <- function(roclet, input, options = list(), registry = default_tags()) {
+roc_proc_text <- function(roclet, input, registry = default_tags()) {
   stopifnot(is.roclet(roclet))
 
   parsed <- parse_text(input, registry = registry)
-  roclet_process(roclet, parsed, base_path = ".", options = options)
+  roclet_process(roclet, parsed, base_path = ".")
 }
 
 default_tags <- function() {

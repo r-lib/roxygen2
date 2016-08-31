@@ -10,11 +10,11 @@
 \usage{
 roclet(subclass, ...)
 
-roclet_output(x, results, base_path, options = list(), check = TRUE)
+roclet_output(x, results, base_path, check = TRUE)
 
 roclet_tags(x)
 
-roclet_process(x, parsed, base_path, options = list())
+roclet_process(x, parsed, base_path)
 
 roclet_clean(x, base_path)
 }

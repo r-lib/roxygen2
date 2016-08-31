@@ -55,7 +55,7 @@ roclet_tags.roclet_rd <- function(x) {
 }
 
 #' @export
-roclet_process.roclet_rd <- function(x, parsed, base_path, options = list()) {
+roclet_process.roclet_rd <- function(x, parsed, base_path) {
   # Convert each block into a topic, indexed by filename
   topics <- list()
   for (block in parsed$blocks) {
@@ -132,12 +132,10 @@ block_to_rd <- function(block, base_path, env) {
 }
 
 #' @export
-roclet_output.roclet_rd <- function(x, results, base_path,
-                                    options = list(), check = TRUE) {
+roclet_output.roclet_rd <- function(x, results, base_path, check = TRUE) {
   man <- normalizePath(file.path(base_path, "man"))
 
-  contents <- vapply(results, format, wrap = options$wrap,
-    FUN.VALUE = character(1))
+  contents <- vapply(results, format, wrap = FALSE, FUN.VALUE = character(1))
 
   paths <- file.path(man, names(results))
   mapply(write_if_different, paths, contents, MoreArgs = list(check = check))

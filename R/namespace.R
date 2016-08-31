@@ -14,17 +14,17 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 #' @aliases export exportClass exportMethod S3method import importFrom
 #'   importClassesFrom importMethodsFrom
 namespace_roclet <- function() {
-  new_roclet(list, "namespace")
+  roclet("namespace")
 }
 
 #' @export
-roc_process.namespace <- function(roclet, parsed, base_path, options = list()) {
+roclet_process.roclet_namespace <- function(x, parsed, base_path, options = list()) {
   ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
   sort_c(unique(ns))
 }
 
 #' @export
-roc_tags.namespace <- function(roclet) {
+roclet_tags.roclet_namespace <- function(x) {
   list(
     export = tag_words_line,
     exportClass = tag_words(1),
@@ -53,8 +53,8 @@ ns_process_tag <- function(tag_name, partitum) {
 }
 
 #' @export
-roc_output.namespace <- function(roclet, results, base_path, options = list(),
-                                 check = TRUE) {
+roclet_output.roclet_namespace <- function(x, results, base_path, options = list(),
+                                           check = TRUE) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   results <- c(made_by("#"), results)
 
@@ -64,7 +64,7 @@ roc_output.namespace <- function(roclet, results, base_path, options = list(),
 }
 
 #' @export
-roc_clean.namespace <- function(roclet, base_path) {
+roclet_clean.roclet_namespace <- function(x, base_path) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   if (made_by_roxygen(NAMESPACE)) {
     unlink(NAMESPACE)

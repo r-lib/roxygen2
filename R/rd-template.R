@@ -32,7 +32,7 @@ process_templates <- function(partitum, base_path) {
   # Insert templates back in the location where they came from
   partitum_pieces <- lapply(partitum, list)
   partitum_pieces[template_locs] <- lapply(results, parse_block,
-    file = "TEMPLATE", registry = roc_tags.rd_roclet(list()), offset = 0L)
+    file = "TEMPLATE", registry = roclet_tags.roclet_rd(list()), offset = 0L)
   names(partitum_pieces)[template_locs] <- ""
 
   unlist(partitum_pieces, recursive = FALSE)

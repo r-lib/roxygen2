@@ -10,11 +10,11 @@ NULL
 #' @seealso \code{vignette("rd", package = "roxygen2")}
 #' @export
 rd_roclet <- function() {
-  new_roclet(list(), "rd_roclet")
+  roclet("rd")
 }
 
 #' @export
-roc_tags.rd_roclet <- function(roclet) {
+roclet_tags.roclet_rd <- function(x) {
   list(
     aliases = tag_value,
     author = tag_markdown,
@@ -55,7 +55,7 @@ roc_tags.rd_roclet <- function(roclet) {
 }
 
 #' @export
-roc_process.rd_roclet <- function(roclet, parsed, base_path, options = list()) {
+roclet_process.roclet_rd <- function(x, parsed, base_path, options = list()) {
   # Convert each block into a topic, indexed by filename
   topics <- list()
   for (block in parsed$blocks) {
@@ -132,8 +132,8 @@ block_to_rd <- function(block, base_path, env) {
 }
 
 #' @export
-roc_output.rd_roclet <- function(roclet, results, base_path, options = list(),
-                           check = TRUE) {
+roclet_output.roclet_rd <- function(x, results, base_path,
+                                    options = list(), check = TRUE) {
   man <- normalizePath(file.path(base_path, "man"))
 
   contents <- vapply(results, format, wrap = options$wrap,
@@ -159,7 +159,7 @@ roc_output.rd_roclet <- function(roclet, results, base_path, options = list(),
 }
 
 #' @export
-roc_clean.rd_roclet <- function(roclet, base_path) {
+roclet_clean.roclet_rd <- function(x, base_path) {
   rd <- dir(file.path(base_path, "man"), full.names = TRUE)
   rd <- rd[!file.info(rd)$isdir]
   made_by_me <- vapply(rd, made_by_roxygen, logical(1))

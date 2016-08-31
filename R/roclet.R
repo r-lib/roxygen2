@@ -1,9 +1,47 @@
-#' Build new roclet object.
+#' Build a new roclet.
 #'
-#' @export
+#' To create a new roclet, you will need to create a constructor function
+#' that wraps \code{roclet}, and then implement methods for
+#' \code{roclet_tags}, \code{roclet_process}, \code{roclet_output}, and
+#' \code{roclet_clean}.
+#'
 #' @keywords internal
-new_roclet <- function(obj, subclass = NULL) {
-  structure(obj, class = c(subclass, 'roclet'))
+#' @name roclet
+
+#' @export
+#' @rdname roclet
+roclet <- function(subclass, ...) {
+  structure(list(...), class = c(paste0("roclet_", subclass), "roclet"))
+}
+
+#' @export
+#' @rdname roclet
+roclet_output <- function(x, results, base_path, options = list(),
+                          check = TRUE) {
+  UseMethod("roclet_output", x)
+}
+
+#' @export
+#' @rdname roclet
+roclet_tags <- function(x) {
+  UseMethod("roclet_tags")
+}
+
+#' @export
+#' @rdname roclet
+roclet_process <- function(x, parsed, base_path, options = list()) {
+  UseMethod("roclet_process")
+}
+
+#' @export
+#' @rdname roclet
+roclet_clean <- function(x, base_path) {
+  UseMethod("roclet_clean")
+}
+
+roclet_find <- function(x) {
+  roclet <- paste0(x, "_roclet", sep = "")
+  get(roclet, mode = "function")()
 }
 
 is.roclet <- function(x) inherits(x, "roclet")
@@ -23,33 +61,12 @@ roc_proc_text <- function(roclet, input, options = list(), registry = default_ta
   stopifnot(is.roclet(roclet))
 
   parsed <- parse_text(input, registry = registry)
-  roc_process(roclet, parsed, base_path = ".", options = options)
+  roclet_process(roclet, parsed, base_path = ".", options = options)
 }
 
 default_tags <- function() {
   c(
-    roc_tags.namespace(list()),
-    roc_tags.rd_roclet(list())
+    roclet_tags.roclet_namespace(list()),
+    roclet_tags.roclet_rd(list())
   )
-}
-
-# Internal methods for processing and output
-
-# Methods should return character vector describing all modified files.
-roc_output <- function(roclet, results, base_path, options = list(),
-                       check = TRUE) {
-  UseMethod("roc_output", roclet)
-}
-
-roc_tags <- function(roclet) {
-  UseMethod("roc_tags")
-}
-
-roc_process <- function(roclet, parsed, base_path, options = list()) {
-  UseMethod("roc_process", roclet)
-}
-
-# Given a roclet, removes all files created by that roclet
-roc_clean <- function(roclet, base_path) {
-  UseMethod("roc_clean")
 }

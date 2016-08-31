@@ -14,22 +14,21 @@
 #' @family roclets
 #' @export
 vignette_roclet <- function() {
-  new_roclet(list(), "vignette")
+  roclet("vignette")
 }
 
 #' @export
-roc_process.vignette <- function(roclet, parsed, base_path, options = list()) {
+roclet_process.roclet_vignette <- function(x, parsed, base_path, options = list()) {
 }
 
 #' @export
-roc_tags.vignette <- function(roclet) {
+roclet_tags.roclet_vignette <- function(x) {
   list()
 }
 
 #' @export
-roc_output.vignette <- function(roclet, results, base_path, options = list(),
-                                check = TRUE) {
-
+roclet_output.roclet_vignette <- function(x, results, base_path, options = list(),
+                                          check = TRUE) {
   vign_update_all(base_path)
 }
 

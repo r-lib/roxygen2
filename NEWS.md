@@ -40,7 +40,13 @@
 
 * Deprecated `register.preref.parser()` and `register.preref.parsers()`
   have been removed. `register_tags()` has also been removed in favour of
-  a new `roc_tags()` generic.
+  a new `roclet_tags()` generic.
+  
+* `roclet()` (the constructor), `roclet_tags()`, `roclet_process()`
+  `roclet_output()`, `roc_clean()` and now exported making it possible
+  to create roclets in other packages. 
+
+* `new_roclet()` is no longer exported - use `roclet()` instead.
 
 # roxygen2 5.0.1
 

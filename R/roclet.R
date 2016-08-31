@@ -16,7 +16,7 @@ roclet <- function(subclass, ...) {
 
 #' @export
 #' @rdname roclet
-roclet_output <- function(x, results, base_path, check = TRUE) {
+roclet_output <- function(x, results, base_path, ...) {
   UseMethod("roclet_output", x)
 }
 

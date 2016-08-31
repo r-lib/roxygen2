@@ -132,15 +132,17 @@ block_to_rd <- function(block, base_path, env) {
 }
 
 #' @export
-roclet_output.roclet_rd <- function(x, results, base_path, check = TRUE) {
+roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE) {
   man <- normalizePath(file.path(base_path, "man"))
 
   contents <- vapply(results, format, wrap = FALSE, FUN.VALUE = character(1))
-
   paths <- file.path(man, names(results))
-  mapply(write_if_different, paths, contents, MoreArgs = list(check = check))
 
-  if (check) {
+  # Always check for roxygen2 header before overwriting NAMESPACE (#436),
+  # even when running for the first time
+  mapply(write_if_different, paths, contents, MoreArgs = list(check = TRUE))
+
+  if (!is_first) {
     # Automatically delete any files in man directory that were generated
     # by roxygen in the past, but weren't generated in this sweep.
 

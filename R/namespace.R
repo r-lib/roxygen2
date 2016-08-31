@@ -53,11 +53,13 @@ ns_process_tag <- function(tag_name, partitum) {
 }
 
 #' @export
-roclet_output.roclet_namespace <- function(x, results, base_path, check = TRUE) {
+roclet_output.roclet_namespace <- function(x, results, base_path, ...) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   results <- c(made_by("#"), results)
 
-  write_if_different(NAMESPACE, results, check = check)
+  # Always check for roxygen2 header before overwriting NAMESPACE (#436),
+  # even when running for the first time
+  write_if_different(NAMESPACE, results, check = TRUE)
 
   NAMESPACE
 }

@@ -49,7 +49,7 @@ roclet_tags.roclet_rd <- function(x) {
     source = tag_markdown,
     template = tag_value,
     templateVar = tag_name_description,
-    title = tag_markdown_title,
+    title = tag_markdown_restricted,
     usage = tag_value
   )
 }

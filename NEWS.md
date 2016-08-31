@@ -57,6 +57,8 @@
 
 * `new_roclet()` is no longer exported - use `roclet()` instead.
 
+* Exported `roxy_tag()`, `roxy_tag_warning()` and 
+
 # roxygen2 5.0.1
 
 * Most fields can now be written using Markdown markup instead of the

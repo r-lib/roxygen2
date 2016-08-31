@@ -27,7 +27,7 @@ roclet_tags.roclet_vignette <- function(x) {
 }
 
 #' @export
-roclet_output.roclet_vignette <- function(x, results, base_path, check = TRUE) {
+roclet_output.roclet_vignette <- function(x, results, base_path, ...) {
   vign_update_all(base_path)
 }
 

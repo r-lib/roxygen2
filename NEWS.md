@@ -3,6 +3,9 @@
 * Back references are now wrapped over multiple lines, if long
   (#493, @LiNk-NY).
 
+* Never overwrite manually created `NAMESPACE` or documentation files, even if
+  using `roxygen2` for the first time (@krlmlr, #436).
+
 * New `roclet_find()` provides a more flexible way to specify roclets:
   as roclet name (e.g. "rd_roclet"), in an package ("foo::roclet_bar"),
   or with options ("foo::roclet_bar(baz = TRUE)").

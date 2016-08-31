@@ -19,49 +19,52 @@ Imports:
     brew,
     digest,
     methods,
-    Rcpp (>= 0.11.0)
+    Rcpp (>= 0.11.0),
+    R6,
+    desc,
+    commonmark,
+    xml2
 Suggests:
     testthat (>= 0.8.0),
     knitr,
     devtools,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-Collate:
-    'RcppExports.R'
-    'alias.R'
-    'default-data-format.R'
-    'description.R'
-    'family.R'
-    'inherit-params.R'
-    'minidesc.R'
-    'object-defaults.R'
-    'object-from-call.R'
-    'object.R'
-    'order-params.R'
-    'parse-preref.R'
-    'parse.R'
-    'rc.R'
-    'rd-escape.R'
-    'rd-file-api.R'
-    'rd-parse.R'
-    'rd-tag-api.R'
+Collate:     'RcppExports.R'
+    'tag-parsers.R'
     'tag-registry.R'
-    'roclet-collate.R'
-    'roclet-namespace.R'
-    'roclet-rd.R'
-    'roclet-vignette.R'
+    'collate.R'
+    'field.R'
+    'markdown-escaping.R'
+    'markdown.R'
+    'namespace.R'
+    'object-defaults.R'
+    'object-format.R'
+    'object-from-call.R'
+    'object-name.R'
+    'object-rc.R'
+    'object-s3.R'
+    'object-usage.R'
+    'object.R'
+    'parse.R'
+    'rd-describe-in.R'
+    'rd-escape.R'
+    'rd-family.R'
+    'rd-params.R'
+    'rd-parse.R'
+    'rd-template.R'
+    'rd.R'
     'roclet.R'
-    'roxygen-tag.R'
     'roxygen.R'
     'roxygenize.R'
-    's3.R'
     'safety.R'
     'source.R'
-    'template.R'
-    'topic-name.R'
+    'tag.R'
+    'topic.R'
     'topo-sort.R'
-    'usage.R'
     'util-locale.R'
     'utils.R'
+    'vignette.R'
 RoxygenNote: 5.0.1.9000

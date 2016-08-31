@@ -1,7 +1,10 @@
+#' @include tag-parsers.R
+NULL
+
 tags <- new.env(parent = emptyenv())
 
 parse_tag <- function(x) {
-  stopifnot(is.roxygen_tag(x))
+  stopifnot(is.roxy_tag(x))
 
   if (!(x$tag %in% ls(tags))) {
     return(tag_warning(x, "unknown tag"))
@@ -12,29 +15,11 @@ parse_tag <- function(x) {
 
 #' Register tag parsers.
 #'
+#' Use this if you're building your own roclet that uses new tags.
+#'
 #' @param ... List of name-parser pairs
-#' @return \code{NULL}
 #' @export
 #' @keywords internal
-#' @rdname register-parser
-#' @usage NULL
-register.preref.parser <- function(key, parser) {
-  warning("Deprecaated: please use register_tag instead", call. = FALSE)
-  tags[[key]] <- parser
-}
-
-#' @export
-#' @rdname register-parser
-#' @usage NULL
-register.preref.parsers <- function(parser, ...) {
-  warning("Deprecaated: please use register_tag instead", call. = FALSE)
-  for (key in c(...)) {
-    register.preref.parser(key, parser)
-  }
-}
-
-#' @export
-#' @rdname register-parser
 register_tags <- function(...) {
   list2env(list(...), tags)
 }

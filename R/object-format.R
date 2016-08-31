@@ -8,12 +8,12 @@
 #' @return A \code{character} value with valid \code{Rd} syntax, or \code{NULL}.
 #'
 #' @export
-default_data_format <- function(x) {
-  UseMethod("default_data_format")
+object_format <- function(x) {
+  UseMethod("object_format")
 }
 
 #' @export
-default_data_format.default <- function(x) {
+object_format.default <- function(x) {
   paste0("An object of class ", format_classes(x), " ", format_dim(x), ".")
 }
 

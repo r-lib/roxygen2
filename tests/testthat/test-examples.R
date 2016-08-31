@@ -3,9 +3,9 @@ context("Examples")
 test_that("@example loads from specified files", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #'
     #' @example Rd-example-1.R
-    #'
     #' @example Rd-example-2.R
     NULL")[[1]]
 
@@ -17,6 +17,7 @@ test_that("@example loads from specified files", {
 test_that("@examples captures examples", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #'
     #' @examples a <- 2
     #'
@@ -29,6 +30,7 @@ test_that("@examples captures examples", {
 test_that("@examples and @example combine", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @example Rd-example-1.R
     #' @examples a <- 2
     NULL")[[1]]
@@ -41,6 +43,7 @@ test_that("@examples and @example combine", {
 test_that("@example does not introduce extra empty lines", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @example Rd-example-3.R
     NULL")[[1]]
 
@@ -48,9 +51,26 @@ test_that("@example does not introduce extra empty lines", {
   expect_identical(length(examples), 2L)
 })
 
+test_that("@example gives warning if used instead of @examples", {
+  expect_warning(
+    out <- roc_proc_text(rd_roclet(), "
+      #' @name a
+      #' @title a
+      #' @example
+      #' a <- 1
+      #' a + b
+      NULL")[[1]],
+    "@example spans multiple lines"
+  )
+
+  expect_null(get_tag(out, "examples")$values, NULL)
+})
+
+
 test_that("indentation in examples preserved", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @examples a <-
     #'     2
     NULL")[[1]]
@@ -62,6 +82,7 @@ test_that("indentation in examples preserved", {
 test_that("% and \\ in @example escaped", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @example Rd-example-4.R
     NULL")[[1]]
 
@@ -72,6 +93,7 @@ test_that("% and \\ in @example escaped", {
 test_that("\\dontrun in @example unescaped", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @example Rd-example-5.R
     NULL")[[1]]
 
@@ -82,10 +104,25 @@ test_that("\\dontrun in @example unescaped", {
 test_that("% in @examples escaped before matching braces test (#213)", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
+    #' @title a
     #' @examples
     #' {a %% b}
     NULL")[[1]]
 
   examples <- get_tag(out, "examples")$values
   expect_equal(examples, rd("{a \\%\\% b}"))
+})
+
+test_that("multiple examples (#470)", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' @name a
+    #' @title a
+    #' @examples
+    #' TRUE
+    #' @examples
+    #' FALSE
+    NULL")[[1]]
+
+  examples <- get_tag(out, "examples")$values
+  expect_equal(examples, rd(c("TRUE", "FALSE")))
 })

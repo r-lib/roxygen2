@@ -126,6 +126,7 @@ test_that("backticks retained when needed", {
 
 test_that("@usage overrides default", {
   out <- roc_proc_text(rd_roclet(), "
+    #' A
     #' @usage a(a=2)
     a <- function(a=1) {}")[[1]]
   expect_equal(get_tag(out, "usage")$values, rd("a(a=2)"))
@@ -145,6 +146,7 @@ test_that("@usage overrides default for @docType data", {
 
 test_that("@usage NULL suppresses default usage", {
   out <- roc_proc_text(rd_roclet(), "
+    #' A
     #' @usage NULL
     a <- function(a=1) {}")[[1]]
 
@@ -295,4 +297,16 @@ test_that("breaking works after escapes (#265)", {
   ){}")[[1]]
   usage <- format(get_tag(out, "usage"))
   expect_equal(str_count(usage, "\n"), 5)
+})
+
+test_that("replacement funs get non-breaking spaces", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Function long usage
+    `long_replacement_fun<-` <- function(x,
+        a = 'aaaaaaaaaaaaaaaa',
+        b = 'aaaaaaaaaaaaaaaa',
+        value) {}
+  ")[[1]]
+  usage <- format(get_tag(out, "usage"))
+  expect_match(usage, " <- ")
 })

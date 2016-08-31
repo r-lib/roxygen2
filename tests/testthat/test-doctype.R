@@ -5,12 +5,12 @@ context("docType")
 test_that("@docType package automatically adds package alias when needed", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
-    #'
+    #' @title a
     #' @docType package
     NULL
 
     #' @name a-package
-    #'
+    #' @title a
     #' @docType package
     NULL")
 

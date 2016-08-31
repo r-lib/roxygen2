@@ -1,5 +1,50 @@
 # roxygen2 5.0.1.9000
 
+* Deprecated `register.preref.parser()` and `register.preref.parsers()`
+  have been removed.
+
+* `default_data_format()` has been renamed to `object_format()`.
+
+* The default alias for S4 method now re-addeds trailing ANY signatures
+  that are sometimes dropped (#460).
+
+* Non-primitive, internal S3 generics (e.g. 'rbind', 'cbind') are now properly
+  detected as S3 generics. (#488, @kevinushey)
+
+* Changes to DESCRIPTION (i.e. `Collate:` and `RoxygenNote`) now use
+  the desc package. This will minimise spurious changes (#430).
+
+* `@family` see also are added in the same order they appear, not 
+  alphabetically (#315).
+
+* Special characters in `@describeIn` function names are escaped (#450).
+
+* Ensure that `functions` with S3 class are still treated as functions (#455).
+
+* Roxygen will no longer write out topics that don't have a name or title,
+  and will instead generate a warning. This makes it easier to detect if
+  you've accidentally used `@rdname` with an incorrect value (#474).
+
+* The usage of replacement functions uses non-breaking spaces so that `<-`
+  will never get put on its own line (#484).
+
+* Give nice warning message if you accidentally use `@example` instead of 
+  `@examples` (#494).
+
+* Fixed an issue where `.`s were sometimes added between words within
+  a `@family` tag (#477, @kevinushey).
+
+* Multiple `@examples` sections are merged (#472, @krlmlr).
+
+* The new `_PACKAGE` sentinel now also works from `roxygenise()`; before
+  it only worked from `devtools::document()` (#439, @krlmlr).
+
+# roxygen2 5.0.1
+
+* Most fields can now be written using Markdown markup instead of the
+  traditional Rd language. See the 'markdown' vignette for details
+  (#364, #431), by @gaborcsardi
+
 # roxygen2 5.0.1
 
 * Use `ls()`, not `names()` to list elements of environment: fixes R 3.1.0

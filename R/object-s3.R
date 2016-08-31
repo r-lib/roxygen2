@@ -19,6 +19,10 @@ is_s3_generic <- function(name, env = parent.frame()) {
   if (!is.function(f)) return(FALSE)
   if (inherits(f, "groupGenericFunction")) return(TRUE)
 
+  ns_name <- tryCatch(getNamespaceName(environment(f)), error = function(e) "")
+  if (identical(unname(.knownS3Generics[name]), ns_name))
+    return(TRUE)
+
   if (is.primitive(f)) {
     known_generics <- c(names(.knownS3Generics),
       internal_f("tools", ".get_internal_S3_generics")())

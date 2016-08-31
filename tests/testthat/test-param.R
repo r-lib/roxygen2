@@ -2,6 +2,7 @@ context("Param")
 
 test_that("@param documents arguments", {
   out <- roc_proc_text(rd_roclet(), "
+    #' A
     #' @param a an incipit letter
     #' @param z a terminal letter
     a <- function(a=1, z=2) {}")[[1]]
@@ -13,6 +14,7 @@ test_that("@param documents arguments", {
 
 test_that("grouped args get spaces", {
   out <- roc_proc_text(rd_roclet(), "
+  #' A
   #' @param a,z Two arguments an incipit letter
   a <- function(a=1, z=2) {}")[[1]]
 
@@ -58,6 +60,18 @@ test_that("multiple @inheritParam inherits from existing topics", {
   expect_equal(sort(names(params)), c("trim", "x"))
 })
 
+
+test_that("@inheritParam can cope with multivariable argument definitions", {
+  out <- roc_proc_text(rd_roclet(), "
+                       #' My merge
+                       #'
+                       #' @inheritParams base::merge
+                       mymerge <- function(x, y) {}")[[1]]
+  params <- get_tag(out, "param")$values
+  expect_equal(length(params), 2)
+  expect_equal(sort(names(params)), c("x", "y"))
+})
+
 test_that("@inheritParam understands compound docs", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -79,6 +93,7 @@ test_that("@inheritParam understands compound docs", {
 
 test_that("data objects don't get params", {
   out <- roc_proc_text(rd_roclet(), "
+    #' x
     #' @rdname xy
     x <- 'x'
   ")[[1]]

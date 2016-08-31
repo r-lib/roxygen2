@@ -6,14 +6,7 @@ internal_f <- function(p, f) {
 }
 
 "%||%" <- function(a, b) {
-  if (!is.null(a)) a else b
-}
-
-# Does the string contain no matter, but very well [:space:]?
-# @param string the string to check
-# @return TRUE if the string contains words, otherwise FALSE
-is.null.string <- function(string) {
-  length(string) == 1 && str_length(str_trim(string)) == 0
+  if (length(a) > 0) a else b
 }
 
 subs <- matrix(ncol = 2, byrow = T, c(
@@ -67,26 +60,6 @@ nice_name <- function(x) {
   x
 }
 
-errors_with_srcref <- function(srcref, code) {
-  if (isTRUE(getOption("roxygen2.debug"))) return(force(code))
-
-  loc <- srcref_location(srcref)
-
-  withCallingHandlers(
-    code,
-    error = function(e) {
-      msg <- paste0("Failure in roxygen block beginning ", loc, "\n", e$message)
-      stop(msg, call. = FALSE)
-    }
-  )
-
-}
-
-srcref_location <- function(srcref = NULL) {
-  if (is.null(srcref)) return()
-  paste0(basename(srcref$filename), ":", srcref$lloc[1])
-}
-
 write_if_different <- function(path, contents, check = TRUE) {
   if (!file.exists(dirname(path))) {
     dir.create(dirname(path), showWarnings = FALSE)
@@ -127,11 +100,40 @@ r_files <- function(path) {
   sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
 }
 
-dots <- function(...) {
-  eval(substitute(alist(...)))
-}
-
 compact <- function(x) {
   null <- vapply(x, is.null, logical(1))
   x[!null]
+}
+
+block_warning <- function(block, ...) {
+  warning(
+    srcref_location(block$srcref), ": ", ...,
+    call. = FALSE,
+    immediate. = TRUE
+  )
+  NULL
+}
+
+srcref_location <- function(srcref = NULL) {
+  if (is.null(srcref)) return()
+  paste0(basename(srcref$filename), ":", srcref$lloc[1])
+}
+
+# Parse DESCRIPTION into convenient format
+read.description <- function(file) {
+  dcf <- read.dcf(file, keep.white = "Authors@R")
+
+  dcf_list <- setNames(as.list(dcf[1, ]), colnames(dcf))
+  lapply(dcf_list, str_trim)
+}
+
+
+wrap_string <- function(x) UseMethod("wrap_string")
+wrap_string.NULL <- function(x) return(x)
+wrap_string.default <- function(x) {
+  y <- wrapString(x)
+  y <- gsub("\u{A0}", " ", y, useBytes = TRUE)
+  Encoding(y) <- "UTF-8"
+  class(y) <- class(x)
+  y
 }

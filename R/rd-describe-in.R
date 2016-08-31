@@ -1,33 +1,34 @@
-process_describe_in <- function(block, env) {
-  tags <- block[names(block) == "describeIn"]
-  if (length(tags) == 0) return(list(rdname = NULL, tag = NULL))
+topic_add_describe_in <- function(topic, block, env) {
+  tags <- block_tags(block, "describeIn")
+  if (length(tags) == 0)
+    return(NULL)
+
   if (length(tags) > 1) {
-    stop("May only use one @describeIn per block", call. = FALSE)
+    block_warning(block, "May only use one @describeIn per block")
+    return()
   }
   if (is.null(block$object)) {
-    stop("@describeIn must be used with an object", call. = FALSE)
+    block_warning(block, "@describeIn must be used with an object")
+    return()
+  }
+  if (any(names(block) == "name")) {
+    block_warning(block, "@describeIn can not be used with @name")
+    return()
+  }
+  if (any(names(block) == "rdname")) {
+    block_warning(block, "@describeIn can not be used with @rdname")
+    return()
   }
 
-  if(any(names(block) == "name")) {
-    stop("@describeIn can not be used with @name", call. = FALSE)
-  }
-  if(any(names(block) == "rdname")) {
-    stop("@describeIn can not be used with @rdname", call. = FALSE)
-  }
-
-  describe_in <- tags[[1]]
-  dest <- find_object(describe_in$name, env)
-
+  dest <- find_object(tags$describeIn$name, env)
   label <- build_label(block$object, dest)
 
-  list(
-    rdname = default_topic_name(dest),
-    tag = new_tag("minidesc", list(
-      type = label$type,
-      label = label$label,
-      desc = describe_in$description
-    ))
-  )
+  topic$add(roxy_field_minidesc(
+    label$type,
+    label$label,
+    tags$describeIn$description
+  ))
+  object_topic(dest)
 }
 
 # Imperfect:
@@ -73,7 +74,7 @@ build_label <- function(src, dest) {
   } else if (dest_type %in% c("function", "data") && src_type == "function") {
     # Multiple functions in one Rd labelled with function names
     type <- "function"
-    label <- default_name(src)
+    label <- object_name(src)
   } else {
     stop("Don't know how to describe ", src_type, " in ", dest_type, ".",
       call. = FALSE)

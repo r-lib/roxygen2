@@ -2,12 +2,9 @@ get_rd <- function(topic, package = NULL) {
   help_call <- substitute(help(t, p), list(t = topic, p = package))
   top <- eval(help_call)
   if (length(top) == 0) return(NULL)
-  
+
   internal_f("utils", ".getHelpFile")(top)
 }
-
-# get_rd should parse Rd into a rd_file so I don't need to maintain
-# two parallel apis
 
 get_tags <- function(rd, tag) {
   rd_tag <- function(x) attr(x, "Rd_tag")

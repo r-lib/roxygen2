@@ -1,50 +1,20 @@
-# Prefer explicit \code{@@usage} to a \code{@@formals} list.
-process_usage <- function(partitum) {
-  if (is.null(partitum$usage)) {
-    usage <- wrap_string(default_usage(partitum$object))
-  } else if (partitum$usage == "NULL") {
-    usage <- NULL
-  } else {
-    # Treat user input as already escaped, otherwise they have no way
-    # to enter \S4method etc.
-    usage <- rd(partitum$usage)
-  }
-  new_tag("usage", usage)
+object_usage <- function(x) {
+  UseMethod("object_usage")
 }
 
-wrap_string <- function(x) UseMethod("wrap_string")
-wrap_string.NULL <- function(x) return(x)
-wrap_string.default <- function(x) {
-  y <- wrapString(x)
-  y <- gsub("\u{A0}", " ", y, useBytes = TRUE)
-  Encoding(y) <- "UTF-8"
-  class(y) <- class(x)
-  y
-}
+object_usage.default <- function(x) NULL
 
-default_usage <- function(x) {
-  UseMethod("default_usage")
-}
+object_usage.NULL <- function(x) NULL
 
-#' @export
-default_usage.default <- function(x) NULL
+object_usage.data <- function(x) x$alias
 
-#' @export
-default_usage.NULL <- function(x) NULL
-
-#' @export
-default_usage.data <- function(x) x$alias
-
-#' @export
-default_usage.function <- function(x) {
+object_usage.function <- function(x) {
   function_usage(x$alias, formals(x$value), identity)
 }
 
-#' @export
-default_usage.s3generic <- default_usage.function
+object_usage.s3generic <- object_usage.function
 
-#' @export
-default_usage.s3method <- function(x) {
+object_usage.s3method <- function(x) {
   method <- attr(x$value, "s3method")
   s3method <- function(name) {
     build_rd("\\method{", name, "}{", method[2], "}")
@@ -52,14 +22,11 @@ default_usage.s3method <- function(x) {
   function_usage(method[1], formals(x$value), s3method)
 }
 
-#' @export
-default_usage.s4generic <- function(x) {
+object_usage.s4generic <- function(x) {
   function_usage(x$value@generic, formals(x$value), identity)
 }
 
-
-#' @export
-default_usage.s4method <- function(x) {
+object_usage.s4method <- function(x) {
   s4method <- function(name) {
     classes <- as.character(x$value@defined)
     needs_backtick <- !is.syntactic(classes)
@@ -70,12 +37,12 @@ default_usage.s4method <- function(x) {
   function_usage(x$value@generic, formals(x$value), s4method)
 }
 
-#' @export
-default_usage.s4class <- function(x) NULL
+object_usage.s4class <- function(x) NULL
 
-#' @export
-default_usage.rcclass <- function(x) NULL
+object_usage.rcclass <- function(x) NULL
 
+
+# Function usage ----------------------------------------------------------
 
 # Usage:
 # replacement, infix, regular
@@ -88,7 +55,7 @@ function_usage <- function(name, formals, format_name = identity) {
     formals$value <- NULL
 
     arglist <- args_string(usage_args(formals))
-    build_rd(format_name(name), "(", arglist, ") <- value")
+    build_rd(format_name(name), "(", arglist, ")\u{A0}<-\u{A0}value")
   } else if (is_infix_fun(name) && identical(format_name, identity)) {
     # If infix, and regular function, munge format
     arg_names <- names(formals)
@@ -102,7 +69,6 @@ function_usage <- function(name, formals, format_name = identity) {
 
     build_rd(format_name(name), "(", arglist, ")")
   }
-
 }
 
 is_replacement_fun <- function(name) {
@@ -112,12 +78,6 @@ is_infix_fun <- function(name) {
   str_detect(name, "^%.*%$")
 }
 
-# Given argument list, produce usage specification for it.
-#
-# Adapted from \code{\link{prompt}}.
-#
-# @param f function, or name of function, as string
-# @return a string
 usage_args <- function(args) {
   is.missing.arg <- function(arg) {
     is.symbol(arg) && deparse(arg) == ""

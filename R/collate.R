@@ -3,7 +3,7 @@ NULL
 
 # Needed to silence unknown tag warnings
 register_tags(
-  include = parse.value
+  include = tag_value
 )
 
 #' Update Collate field in DESCRIPTION.
@@ -37,19 +37,18 @@ register_tags(
 #' }
 #' @export
 update_collate <- function(base_path) {
-  collate <- generate_collate(file.path(base_path, "R"))
-  if (is.null(collate)) return()
+  new <- generate_collate(file.path(base_path, "R"))
+  if (is.null(new)) return()
 
   desc_path <- file.path(base_path, "DESCRIPTION")
-  old <- read.description(desc_path)
-
-  new <- old
-  new$Collate <- paste0("'", collate, "'", collapse = "\n")
+  old <- desc::desc_get_collate(file = desc_path)
 
   if (!identical(old, new)) {
     cat('Updating collate directive in ', desc_path, "\n")
-    write.description(new, desc_path)
+    desc::desc_set_collate(new, file = desc_path)
   }
+
+  invisible()
 }
 
 generate_collate <- function(base_path) {

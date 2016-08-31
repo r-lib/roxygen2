@@ -41,7 +41,6 @@ escape_preformatted <- function(x) {
   rd(x3)
 }
 
-
 # Works like paste, but automatically escapes all input variables,
 # but not literal strings
 build_rd <- function(..., collapse = NULL, sep = "") {
@@ -56,4 +55,20 @@ build_rd <- function(..., collapse = NULL, sep = "") {
 
   string <- do.call("paste", c(escaped, list(collapse = collapse, sep = sep)))
   rd(string)
+}
+
+dots <- function(...) {
+  eval(substitute(alist(...)))
+}
+
+# Translate a field and values into an Rd macro.
+# Multiple values get their own braces.
+rd_macro <- function(field, ..., space = FALSE) {
+  if (space) {
+    values <- paste0("\n", paste0(..., collapse = "\n"), "\n")
+  } else {
+    values <- str_trim(c(...))
+  }
+
+  paste0("\\", field, paste0("{", values, "}", collapse = ""), "\n")
 }

@@ -1,6 +1,6 @@
 register_tags(
-  template = parse.value,
-  templateVar = parse.name.description
+  template = tag_value,
+  templateVar = tag_name_description
 )
 
 template_find <- function(base_path, template_name) {
@@ -36,7 +36,7 @@ process_templates <- function(partitum, base_path) {
 
   # Insert templates back in the location where they came from
   partitum_pieces <- lapply(partitum, list)
-  partitum_pieces[template_locs] <- lapply(results, parse_preref, file = "TEMPLATE", offset = 0L)
+  partitum_pieces[template_locs] <- lapply(results, parse_block, file = "TEMPLATE", offset = 0L)
   names(partitum_pieces)[template_locs] <- ""
 
   unlist(partitum_pieces, recursive = FALSE)

@@ -1,3 +1,5 @@
+# Output ------------------------------------------------------------------
+
 # A simple object to represent rd escaped text.
 rd <- function(x) {
   structure(x, class = "rd")
@@ -5,7 +7,7 @@ rd <- function(x) {
 
 #' @export
 c.rd <- function(...) {
-  rd(unlist(lapply(list(...), escape), use.names = FALSE))
+  rd(NextMethod())
 }
 
 #' @export
@@ -15,9 +17,7 @@ print.rd <- function(x, ...) {
 }
 
 escape <- function(x) UseMethod("escape")
-#' @export
 escape.rd <- function(x) x
-#' @export
 escape.character <- function(x) {
   # wrap_string uses \u{A0}, the unicode non-breaking space, which
   # is not necessarily valid in windows locales. useBytes is a quick
@@ -31,14 +31,6 @@ escape.character <- function(x) {
 # Works like escape, but unescapes special rd example commands
 escape_examples <- function(x) {
   gsub("\\\\dont", "\\dont", escape(x))
-}
-
-escape_preformatted <- function(x) {
-  x1 <- escape(x)
-  x2 <- gsub("{", "\\{", x1, fixed = TRUE)
-  x3 <- gsub("}", "\\}", x2, fixed = TRUE)
-
-  rd(x3)
 }
 
 # Works like paste, but automatically escapes all input variables,
@@ -72,3 +64,38 @@ rd_macro <- function(field, ..., space = FALSE) {
 
   paste0("\\", field, paste0("{", values, "}", collapse = ""), "\n")
 }
+
+
+# Input -------------------------------------------------------------------
+
+get_rd <- function(topic, package = NULL) {
+  help_call <- substitute(help(t, p), list(t = topic, p = package))
+  top <- eval(help_call)
+  if (length(top) == 0) return(NULL)
+
+  internal_f("utils", ".getHelpFile")(top)
+}
+
+# rd_arguments(get_rd("mean"))
+rd_arguments <- function(rd) {
+  arguments <- get_tags(rd, "\\arguments")[[1]]
+  items <- get_tags(arguments, "\\item")
+
+  values <- vapply(items, function(x) rd2text(x[[2]]), character(1))
+  params <- vapply(items, function(x) rd2text(x[[1]]), character(1))
+
+  setNames(values, params)
+}
+
+get_tags <- function(rd, tag) {
+  Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)
+}
+
+rd2text <- function(x) {
+  chr <- as.character(structure(x, class = "Rd"))
+  str <- paste(chr, collapse = "")
+
+  # re-escape comments
+  gsub("%", "\\%", str, fixed = TRUE)
+}
+

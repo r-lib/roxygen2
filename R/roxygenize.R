@@ -56,19 +56,27 @@ roxygenize <- function(package.dir = ".",
   if (length(roclets) == 0)
     return(invisible())
 
-  parsed <- parse_package(base_path, load_code)
+  roclets <- lapply(roclets, find_roclet)
 
-  roclets <- paste0(roclets, "_roclet", sep = "")
-  roc_out <- function(roclet) {
-    roc <- get(roclet, mode = "function")()
+  # Generate registry of all roclet tags
+  tags <- c(lapply(roclets, roc_tags), list(list(include = tag_value)))
+  registry <- unlist(tags, recursive = FALSE)
 
+  parsed <- parse_package(base_path, load_code, registry)
+
+  roc_out <- function(roc) {
     if (clean) {
-      clean(roc, base_path)
+      roc_clean(roc, base_path)
     }
     results <- roc_process(roc, parsed, base_path, options = options)
     roc_output(roc, results, base_path, options = options, check = !is_first)
   }
   invisible(unlist(lapply(roclets, roc_out)))
+}
+
+find_roclet <- function(x) {
+  roclet<- paste0(x, "_roclet", sep = "")
+  get(roclet, mode = "function")()
 }
 
 #' @rdname roxygenize

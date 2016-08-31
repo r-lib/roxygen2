@@ -1,8 +1,5 @@
 # roxygen2 5.0.1.9000
 
-* Deprecated `register.preref.parser()` and `register.preref.parsers()`
-  have been removed.
-
 * `default_data_format()` has been renamed to `object_format()`.
 
 * The default alias for S4 method now re-addeds trailing ANY signatures
@@ -38,6 +35,12 @@
 
 * The new `_PACKAGE` sentinel now also works from `roxygenise()`; before
   it only worked from `devtools::document()` (#439, @krlmlr).
+
+## Extension
+
+* Deprecated `register.preref.parser()` and `register.preref.parsers()`
+  have been removed. `register_tags()` has also been removed in favour of
+  a new `roc_tags()` generic.
 
 # roxygen2 5.0.1
 

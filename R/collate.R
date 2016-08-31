@@ -1,11 +1,3 @@
-#' @include tag-registry.R
-NULL
-
-# Needed to silence unknown tag warnings
-register_tags(
-  include = tag_value
-)
-
 #' Update Collate field in DESCRIPTION.
 #'
 #' Topologically sort R files and record in Collate field. The topological

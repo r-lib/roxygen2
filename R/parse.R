@@ -1,12 +1,14 @@
-parse_package <- function(base_path, load_code) {
+parse_package <- function(base_path, load_code, registry) {
   env <- load_code(base_path)
-  parsed <- lapply(package_files(base_path), parse_blocks, env = env)
+
+  files <- package_files(base_path)
+  parsed <- lapply(files, parse_blocks, env = env, registry = registry)
   blocks <- unlist(parsed, recursive = FALSE)
 
   list(env = env, blocks = blocks)
 }
 
-parse_text <- function(text) {
+parse_text <- function(text, registry = default_tags()) {
   file <- tempfile()
   writeLines(text, file)
   on.exit(unlink(file))
@@ -15,12 +17,12 @@ parse_text <- function(text) {
   methods::setPackageName("roxygen_devtest", env)
 
   sys.source(file, envir = env)
-  blocks <- parse_blocks(file, env)
+  blocks <- parse_blocks(file, env, registry = registry)
 
   list(env = env, blocks = blocks)
 }
 
-parse_blocks <- function(file, env) {
+parse_blocks <- function(file, env, registry) {
   parsed <- parse(file = file, keep.source = TRUE)
   if (length(parsed) == 0) return()
 
@@ -28,7 +30,7 @@ parse_blocks <- function(file, env) {
   comment_refs <- comments(refs)
 
   extract <- function(call, ref, comment_ref) {
-    block <- parse_block(comment_ref, file)
+    block <- parse_block(comment_ref, file, registry)
     if (length(block) == 0) return()
 
     block$object <- object_from_call(call, env, block, file)
@@ -39,7 +41,7 @@ parse_blocks <- function(file, env) {
   Map(extract, parsed, refs, comment_refs)
 }
 
-parse_block <- function(x, file, offset = x[[1]]) {
+parse_block <- function(x, file, registry, offset = x[[1]]) {
   tags <- tokenise_block(as.character(x), file = basename(file), offset = offset)
   if (length(tags) == 0)
     return()
@@ -48,13 +50,23 @@ parse_block <- function(x, file, offset = x[[1]]) {
   markdown_on("md" %in% vapply(tags, "[[", "", "tag"))
 
   tags <- parse_description(tags)
-  tags <- compact(lapply(tags, parse_tag))
+  tags <- compact(lapply(tags, parse_tag, registry = registry))
 
   # Convert to existing named list format - this isn't ideal, but
   # it's what roxygen already uses
   vals <- lapply(tags, `[[`, "val")
   names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1))
   setNames(vals, names)
+}
+
+parse_tag <- function(x, registry) {
+  stopifnot(is.roxy_tag(x))
+
+  if (!(x$tag %in% ls(registry))) {
+    return(tag_warning(x, "unknown tag"))
+  }
+
+  registry[[x$tag]](x)
 }
 
 parse_description <- function(tags) {

@@ -1,20 +1,3 @@
-#' @include tag-registry.R
-NULL
-
-register_tags(
-  export = tag_words_line,
-  exportClass = tag_words(1),
-  exportMethod = tag_words(1),
-  exportPattern = tag_words(1),
-  import = tag_words(1),
-  importClassesFrom = tag_words(2),
-  importFrom = tag_words(2),
-  importMethodsFrom = tag_words(2),
-  rawNamespace = tag_code,
-  S3method = tag_words(2, 2),
-  useDynLib = tag_words(1)
-)
-
 ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
   'rawNamespace', 'S3method', 'import', 'importFrom', 'importClassesFrom',
   'importMethodsFrom', 'useDynLib')
@@ -38,6 +21,23 @@ namespace_roclet <- function() {
 roc_process.namespace <- function(roclet, parsed, base_path, options = list()) {
   ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
   sort_c(unique(ns))
+}
+
+#' @export
+roc_tags.namespace <- function(roclet) {
+  list(
+    export = tag_words_line,
+    exportClass = tag_words(1),
+    exportMethod = tag_words(1),
+    exportPattern = tag_words(1),
+    import = tag_words(1),
+    importClassesFrom = tag_words(2),
+    importFrom = tag_words(2),
+    importMethodsFrom = tag_words(2),
+    rawNamespace = tag_code,
+    S3method = tag_words(2, 2),
+    useDynLib = tag_words(1)
+  )
 }
 
 block_to_ns <- function(block) {
@@ -64,7 +64,7 @@ roc_output.namespace <- function(roclet, results, base_path, options = list(),
 }
 
 #' @export
-clean.namespace <- function(roclet, base_path) {
+roc_clean.namespace <- function(roclet, base_path) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   if (made_by_roxygen(NAMESPACE)) {
     unlink(NAMESPACE)

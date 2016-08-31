@@ -1,8 +1,3 @@
-register_tags(
-  template = tag_value,
-  templateVar = tag_name_description
-)
-
 template_find <- function(base_path, template_name) {
   path <- file.path(base_path, "man-roxygen", paste0(template_name, ".", c("R", "r")))
   path_exists <- file.exists(path)
@@ -36,7 +31,8 @@ process_templates <- function(partitum, base_path) {
 
   # Insert templates back in the location where they came from
   partitum_pieces <- lapply(partitum, list)
-  partitum_pieces[template_locs] <- lapply(results, parse_block, file = "TEMPLATE", offset = 0L)
+  partitum_pieces[template_locs] <- lapply(results, parse_block,
+    file = "TEMPLATE", registry = roc_tags.rd_roclet(list()), offset = 0L)
   names(partitum_pieces)[template_locs] <- ""
 
   unlist(partitum_pieces, recursive = FALSE)

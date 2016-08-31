@@ -1,9 +1,12 @@
+# Hacky global switch - will be eliminated when we turn md on for
+# all
 
+markdown_env <- new.env(parent = emptyenv())
 markdown_on <- function(value = NULL) {
-  if (! is.null(value)) {
-    assign("markdown-support", isTRUE(value), envir = tags)
+  if (!is.null(value)) {
+    assign("markdown-support", isTRUE(value), envir = markdown_env)
   }
-  return(isTRUE(tags$`markdown-support`))
+  return(isTRUE(markdown_env$`markdown-support`))
 }
 
 restricted_markdown <- function(rest) {

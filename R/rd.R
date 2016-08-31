@@ -1,42 +1,5 @@
-#' @include tag-registry.R
 #' @import stringr
 NULL
-
-register_tags(
-  aliases = tag_value,
-  author = tag_markdown,
-  backref = tag_value,
-  concept = tag_markdown,
-  describeIn = tag_name_description,
-  description = tag_markdown,
-  details = tag_markdown,
-  docType = tag_name,
-  encoding = tag_value,
-  evalRd = tag_code,
-  example = tag_value,
-  examples = tag_examples,
-  family = tag_value,
-  field = tag_name_description,
-  format = tag_markdown,
-  inheritParams = tag_value,
-  keywords = tag_value,
-  method = tag_words(2, 2),
-  name = tag_value,
-  md = tag_toggle,
-  noRd = tag_toggle,
-  note = tag_markdown,
-  param = tag_name_description,
-  rdname = tag_value,
-  rawRd = tag_value,
-  references = tag_markdown,
-  return = tag_markdown,
-  section = tag_markdown,
-  seealso = tag_markdown,
-  slot = tag_name_description,
-  source = tag_markdown,
-  title = tag_markdown_title,
-  usage = tag_value
-)
 
 #' Roclet: make Rd files.
 #'
@@ -48,6 +11,47 @@ register_tags(
 #' @export
 rd_roclet <- function() {
   new_roclet(list(), "rd_roclet")
+}
+
+#' @export
+roc_tags.rd_roclet <- function(roclet) {
+  list(
+    aliases = tag_value,
+    author = tag_markdown,
+    backref = tag_value,
+    concept = tag_markdown,
+    describeIn = tag_name_description,
+    description = tag_markdown,
+    details = tag_markdown,
+    docType = tag_name,
+    encoding = tag_value,
+    evalRd = tag_code,
+    example = tag_value,
+    examples = tag_examples,
+    family = tag_value,
+    field = tag_name_description,
+    format = tag_markdown,
+    inheritParams = tag_value,
+    keywords = tag_value,
+    method = tag_words(2, 2),
+    name = tag_value,
+    md = tag_toggle,
+    noRd = tag_toggle,
+    note = tag_markdown,
+    param = tag_name_description,
+    rdname = tag_value,
+    rawRd = tag_value,
+    references = tag_markdown,
+    return = tag_markdown,
+    section = tag_markdown,
+    seealso = tag_markdown,
+    slot = tag_name_description,
+    source = tag_markdown,
+    template = tag_value,
+    templateVar = tag_name_description,
+    title = tag_markdown_title,
+    usage = tag_value
+  )
 }
 
 #' @export
@@ -155,7 +159,7 @@ roc_output.rd_roclet <- function(roclet, results, base_path, options = list(),
 }
 
 #' @export
-clean.rd_roclet <- function(roclet, base_path) {
+roc_clean.rd_roclet <- function(roclet, base_path) {
   rd <- dir(file.path(base_path, "man"), full.names = TRUE)
   rd <- rd[!file.info(rd)$isdir]
   made_by_me <- vapply(rd, made_by_roxygen, logical(1))

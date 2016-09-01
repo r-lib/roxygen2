@@ -1,4 +1,4 @@
-context("Template")
+context("Rd: template")
 
 test_that("template_find finds files with .r and .R extension, and fails to find missing files", {
   my.tempdir <- "."

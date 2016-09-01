@@ -1,4 +1,4 @@
-context("Introduction")
+context("Rd: introduction")
 
 test_that("title and description taken from first line if only one", {
   out <- roc_proc_text(rd_roclet(), "

@@ -1,4 +1,4 @@
-context("Format")
+context("object_format")
 
 test_that("format defaults for list", {
   out <- roc_proc_text(rd_roclet(), "

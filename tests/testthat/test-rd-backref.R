@@ -1,4 +1,4 @@
-context("srcref")
+context("Rd: backref")
 test_that("Source reference is included as comment", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a

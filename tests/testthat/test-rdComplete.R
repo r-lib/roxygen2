@@ -1,4 +1,4 @@
-context("rdComplete")
+context("rdComplete()")
 
 # Test low-level behaviour ----------------------------------------------------
 

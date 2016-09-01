@@ -1,4 +1,4 @@
-context("File names")
+context("nice_name()")
 
 test_that("nice_name leaves ok chars unchanged", {
   expect_equal(nice_name("abc"), "abc")

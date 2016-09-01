@@ -1,4 +1,4 @@
-context("Markdown markup")
+context("Rd: markdown markup")
 roc <- rd_roclet()
 
 test_that("markdown is off by default", {

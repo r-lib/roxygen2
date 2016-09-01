@@ -1,4 +1,4 @@
-context("Rd-inherit")
+context("Rd: inherit")
 
 # tag parsing -------------------------------------------------------------
 

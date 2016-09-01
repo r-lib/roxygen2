@@ -1,4 +1,4 @@
-context("Topic name")
+context("Rd: name")
 
 test_that("name captured from assignment", {
   out <- roc_proc_text(rd_roclet(), "

@@ -1,9 +1,9 @@
-context("S4")
+context("Object: S4")
 
 test_that("class captured from setClass", {
   out <- parse_text("
     #' Title
-    setClass('A')
+    setClass('A1')
   ")$blocks[[1]]
 
   expect_is(out$object, "s4class")
@@ -13,7 +13,7 @@ test_that("class captured from setClass", {
 test_that("class captured from assignment", {
   out <- parse_text("
     #' Title
-    B <- setClass('B')
+    B <- setClass('B1')
   ")$blocks[[1]]
 
   expect_is(out$object, "s4class")
@@ -23,7 +23,7 @@ test_that("class captured from assignment", {
 test_that("class captured from setRefClass", {
   out <- parse_text("
     #' Title
-    setRefClass('A')
+    setRefClass('A1')
   ")$blocks[[1]]
 
   expect_is(out$object, "rcclass")
@@ -33,7 +33,7 @@ test_that("class captured from setRefClass", {
 test_that("class captured from assignment of setRefClass", {
   out <- parse_text("
     #' Title
-    B <- setRefClass('B')
+    B <- setRefClass('B1')
   ")$blocks[[1]]
 
   expect_is(out$object, "rcclass")

@@ -1,4 +1,4 @@
-context("Field")
+context("Rd: field")
 
 test_that("@fields creates a new section and lists fields", {
   out <- roc_proc_text(rd_roclet(), "

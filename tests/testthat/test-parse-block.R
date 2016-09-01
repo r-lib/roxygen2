@@ -1,4 +1,4 @@
-context("tokenize_block")
+context("Parse: block")
 
 test_that("parses into tag and value", {
   x <- tokenise_block("#' @xyz abc")

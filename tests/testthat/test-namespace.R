@@ -188,3 +188,27 @@ test_that("empty NAMESPACE generates zero-length vector", {
   results <- roclet_process(namespace_roclet(), parsed, base_path)
   expect_equal(results, character())
 })
+
+
+# Raw ---------------------------------------------------------------------
+
+
+test_that("rawNamespace must be valid code", {
+  expect_warning(
+    roc_proc_text(namespace_roclet(), "
+      #' @rawNamespace if() {
+      #' @name a
+      NULL"),
+    "code failed to parse"
+  )
+})
+
+test_that("rawNamespace inserted unchanged", {
+  out <- roc_proc_text(namespace_roclet(), "
+    #' @rawNamespace xyz
+    #'   abc
+    NULL")
+
+  expect_equal(out, "xyz\n  abc")
+})
+

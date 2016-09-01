@@ -1,4 +1,4 @@
-context("Package documentation")
+context("Rd: package")
 
 test_that("can create package documentation", {
   with_mock(

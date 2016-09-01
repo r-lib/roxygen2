@@ -1,4 +1,4 @@
-context("S3 methods/generics")
+context("Object: S3 methods/generics")
 
 test_that("primitive generics detected", {
   expect_true(is_s3_generic("["))

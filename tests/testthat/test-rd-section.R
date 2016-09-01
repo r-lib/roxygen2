@@ -1,4 +1,4 @@
-context("Section")
+context("Rd: section")
 
 test_that("warn if forgotton colom", {
   expect_warning(

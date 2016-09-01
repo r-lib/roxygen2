@@ -1,5 +1,4 @@
-
-context("Markdown escaping")
+context("Rd: markdown escaping")
 
 tag_df <- function(tag, start, end, argend = NULL) {
   df <- data.frame(
@@ -58,19 +57,19 @@ test_that("find_all_rd_tags", {
       do.call(tag_df, case[-1]),
       info = case[[1]]
     )
-  } 
- 
+  }
+
 })
 
 test_that("find_fragile_rd_tags", {
 
   fragile <- c("\\frag", "\\frag1", "\\frag2")
-  
+
   cases <- list(
     list("This is \\frag{here}, \\this{arg} not", "\\frag"),
     list("Embedded \\frag{ into \\frag1{arg} plus }", "\\frag"),
     list(
-      "blah \\cmd{ \\frag{arg} \\frag{arg} } \\frag2 blah", 
+      "blah \\cmd{ \\frag{arg} \\frag{arg} } \\frag2 blah",
       c("\\frag", "\\frag", "\\frag2")
     )
   )
@@ -82,7 +81,7 @@ test_that("find_fragile_rd_tags", {
       info = case[[1]]
     )
   }
-  
+
 })
 
 

@@ -1,4 +1,4 @@
-context("Slot")
+context("Rd: slot")
 
 test_that("@slot creates a new section and lists slots", {
   out <- roc_proc_text(rd_roclet(), "

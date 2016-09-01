@@ -1,4 +1,4 @@
-context("Alias")
+context("Rd: alias")
 
 test_that("aliases split into pieces", {
   out <- roc_proc_text(rd_roclet(), "

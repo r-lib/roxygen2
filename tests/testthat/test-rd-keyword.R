@@ -1,4 +1,4 @@
-context("Keyword")
+context("Rd: keyword")
 
 test_that("keywords split into pieces", {
   out <- roc_proc_text(rd_roclet(), "

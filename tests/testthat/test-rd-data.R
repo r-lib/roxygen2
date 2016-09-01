@@ -1,4 +1,4 @@
-context("data")
+context("Rd: data")
 
 test_that("can document eager data", {
   test_pkg <- temp_copy_pkg('testEagerData')

@@ -1,58 +1,64 @@
-topo_sort <- R6::R6Class("topo_sort",
-  private = list(
-    make.vertex = function(file) {
-      vertex <- new.env(parent = emptyenv())
-      vertex$file <- file
-      vertex$discovered <- FALSE
-      vertex$ancestors <- NULL
-      vertex
-    },
+topo_sort <- R6::R6Class("topo_sort", public = list(
+  vertices = list(),
 
-    member = function(ancestor, ancestors) {
-      for (vertex in ancestors)
-        if (identical(ancestor, vertex))
-          return(TRUE)
-      FALSE
+  add = function(file) {
+    if (is.null(self$vertices[[file]])) {
+      self$vertices[[file]] <- vertex$new(file)
     }
-  ),
-  public = list(
-    vertices = list(),
+    self$vertices[[file]]
+  },
 
-    add = function(file) {
-      if (is.null(self$vertices[[file]])) {
-        self$vertices[[file]] <- private$make.vertex(file)
-      }
-      self$vertices[[file]]
-    },
+  add_ancestor = function(predecessor_name, ancestor_name) {
+    predecessor <- self$add(predecessor_name)
+    ancestor <- self$add(ancestor_name)
 
-    add_ancestor = function(predecessor, ancestor_name) {
-      ancestor <- self$add(ancestor_name)
+    predecessor$add_ancestor(ancestor)
+  },
 
-      if (!private$member(ancestor, predecessor$ancestors)) {
-        predecessor$ancestors <- append(ancestor, predecessor$ancestors)
-      }
-      invisible()
-    },
+  sort = function() {
+    sorted <- NULL
 
-    sort = function() {
-      sorted <- NULL
-
-      visit <- function(predecessor) {
-        predecessor$discovered <- TRUE
-        for (ancestor in predecessor$ancestors) {
-          if (!ancestor$discovered) {
-            visit(ancestor)
-          }
-        }
-        sorted <<- append(sorted, predecessor)
-      }
-
-      for (vertex in self$vertices) {
-        if (!vertex$discovered) {
-          visit(vertex)
+    visit <- function(predecessor) {
+      predecessor$discovered <- TRUE
+      for (ancestor in predecessor$ancestors) {
+        if (!ancestor$discovered) {
+          visit(ancestor)
         }
       }
-      vapply(sorted, function(x) x$file, character(1))
+      sorted <<- append(sorted, predecessor)
     }
-  )
-)
+
+    for (vertex in self$vertices) {
+      if (!vertex$discovered) {
+        visit(vertex)
+      }
+    }
+    vapply(sorted, function(x) x$file, character(1))
+  }
+))
+
+vertex <- R6::R6Class("Vertex", public = list(
+  file = NA_character_,
+  discovered = FALSE,
+  ancestors = list(),
+
+  initialize = function(file) {
+    self$file <- file
+  },
+
+  has_ancestor = function(ancestor) {
+    for (vertex in self$ancestors) {
+      if (identical(ancestor, vertex)) {
+        return(TRUE)
+      }
+    }
+    FALSE
+  },
+
+  add_ancestor = function(ancestor) {
+    if (!self$has_ancestor(ancestor)) {
+      self$ancestors <- append(ancestor, self$ancestors)
+    }
+  }
+
+))

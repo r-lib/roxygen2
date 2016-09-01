@@ -54,14 +54,14 @@ generate_collate <- function(base_path) {
   topo <- topo_sort$new()
   for (path in paths) {
     file <- base_path(path, base_path)
-    vertex <- topo$add(file)
 
+    topo$add(file)
     for (include in includes[[path]]) {
-      topo$add_ancestor(vertex, include)
+      topo$add_ancestor(file, include)
     }
   }
 
-  unique(topo$sort())
+  topo$sort()
 }
 
 base_path <- function(path, base) {

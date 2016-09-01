@@ -13,16 +13,16 @@ template_eval <- function(template_path, vars) {
   utils::capture.output(brew::brew(template_path, envir = vars))
 }
 
-process_templates <- function(partitum, base_path) {
-  template_locs <- names(partitum) == "template"
-  template_tags <- partitum[template_locs]
-  if (length(template_tags) == 0) return(partitum)
+process_templates <- function(block, base_path) {
+  template_locs <- names(block) == "template"
+  template_tags <- block[template_locs]
+  if (length(template_tags) == 0) return(block)
 
   templates <- unlist(template_tags, use.names = FALSE)
   paths <- vapply(templates, template_find, base_path = base_path,
     FUN.VALUE = character(1), USE.NAMES = FALSE)
 
-  var_tags <- partitum[names(partitum) == "templateVar"]
+  var_tags <- block[names(block) == "templateVar"]
   vars <- lapply(var_tags, "[[", "description")
   names(vars) <- vapply(var_tags, "[[", "name", FUN.VALUE = character(1))
   vars <- lapply(vars, utils::type.convert, as.is = TRUE)
@@ -30,10 +30,10 @@ process_templates <- function(partitum, base_path) {
   results <- lapply(paths, template_eval, vars = list2env(vars))
 
   # Insert templates back in the location where they came from
-  partitum_pieces <- lapply(partitum, list)
-  partitum_pieces[template_locs] <- lapply(results, parse_block,
+  block_pieces <- lapply(block, list)
+  block_pieces[template_locs] <- lapply(results, parse_block,
     file = "TEMPLATE", registry = roclet_tags.roclet_rd(list()), offset = 0L)
-  names(partitum_pieces)[template_locs] <- ""
+  names(block_pieces)[template_locs] <- ""
 
-  unlist(partitum_pieces, recursive = FALSE)
+  unlist(block_pieces, recursive = FALSE)
 }

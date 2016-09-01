@@ -42,14 +42,14 @@ roclet_tags.roclet_namespace <- function(x) {
 
 block_to_ns <- function(block) {
   tags <- intersect(names(block), ns_tags)
-  lapply(tags, ns_process_tag, partitum = block)
+  lapply(tags, ns_process_tag, block = block)
 }
 
-ns_process_tag <- function(tag_name, partitum) {
+ns_process_tag <- function(tag_name, block) {
   f <- get(paste0("ns_", tag_name), mode = "function")
-  tags <- partitum[names(partitum) == tag_name]
+  tags <- block[names(block) == tag_name]
 
-  lapply(tags, f, part = partitum)
+  lapply(tags, f, block = block)
 }
 
 #' @export
@@ -70,11 +70,11 @@ roclet_clean.roclet_namespace <- function(x, base_path) {
   }
 }
 
-# Functions that take complete partitum and return NAMESPACE lines
-ns_export <- function(tag, part) {
+# Functions that take complete block and return NAMESPACE lines
+ns_export <- function(tag, block) {
   if (identical(tag, "")) {
     # FIXME: check for empty exports (i.e. no name)
-    default_export(part$object, part)
+    default_export(block$object, block)
   } else {
     export(tag)
   }
@@ -95,18 +95,18 @@ default_export.default   <- function(x, block) export(x$alias)
 #' @export
 default_export.NULL      <- function(x, block) export(block$name)
 
-ns_S3method          <- function(tag, part) {
-  block_warning(part, "@S3method is deprecated. Please use @export instead")
+ns_S3method          <- function(tag, block) {
+  block_warning(block, "@S3method is deprecated. Please use @export instead")
   export_s3_method(tag)
 }
-ns_exportClass       <- function(tag, part) export_class(tag)
-ns_exportMethod      <- function(tag, part) export_s4_method(tag)
-ns_exportPattern     <- function(tag, part) one_per_line("exportPattern", tag)
-ns_import            <- function(tag, part) one_per_line("import", tag)
-ns_importFrom        <- function(tag, part) repeat_first("importFrom", tag)
-ns_importClassesFrom <- function(tag, part) repeat_first("importClassesFrom", tag)
-ns_importMethodsFrom <- function(tag, part) repeat_first("importMethodsFrom", tag)
-ns_useDynLib         <- function(tag, part) {
+ns_exportClass       <- function(tag, block) export_class(tag)
+ns_exportMethod      <- function(tag, block) export_s4_method(tag)
+ns_exportPattern     <- function(tag, block) one_per_line("exportPattern", tag)
+ns_import            <- function(tag, block) one_per_line("import", tag)
+ns_importFrom        <- function(tag, block) repeat_first("importFrom", tag)
+ns_importClassesFrom <- function(tag, block) repeat_first("importClassesFrom", tag)
+ns_importMethodsFrom <- function(tag, block) repeat_first("importMethodsFrom", tag)
+ns_useDynLib         <- function(tag, block) {
   if (length(tag) == 1) {
     return(paste0("useDynLib(", quote_if_needed(tag), ")"))
   }
@@ -120,7 +120,7 @@ ns_useDynLib         <- function(tag, part) {
     repeat_first("useDynLib", tag)
   }
 }
-ns_rawNamespace       <- function(tag, part) tag
+ns_rawNamespace       <- function(tag, block) tag
 
 # Functions used by both default_export and ns_* functions
 export           <- function(x) one_per_line("export", x)

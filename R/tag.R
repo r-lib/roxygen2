@@ -182,6 +182,7 @@ tag_examples <- function(x) {
     x
   }
 }
+
 #' @export
 #' @rdname roxy_tag
 tag_markdown <- function(x) {

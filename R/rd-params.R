@@ -1,8 +1,6 @@
 # Postprocessing to reset ordering of parameter documentation
-fix_params_order <- function(topics) {
-  for (topic_name in names(topics)) {
-    topic <- topics[[topic_name]]
-
+topics_fix_params_order <- function(topics) {
+  for (topic in topics$topics) {
     # Compute correct ordering of parameter documentation
     # Check what's needed...
     needed <- topic$get_field("formals")$values
@@ -30,5 +28,5 @@ fix_params_order <- function(topics) {
     topic$add_simple_field("param", param, overwrite = TRUE)
   }
 
-  topics
+  invisible()
 }

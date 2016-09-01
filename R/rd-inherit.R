@@ -1,15 +1,14 @@
 
-process_inherit_params <- function(topics) {
+topics_process_inherit_params <- function(topics) {
 
   # Currently no topological sort, so @inheritParams will only traverse
   # one-level - you can't inherit params that have been inherited from
   # another function (and you can't currently use multiple inherit fields)
-  inherit_index <- get_values(topics, "inheritParams")
+  inherits <- topics$simple_values("inheritParams")
+  names <- topics$simple_values("name")
 
-  name_index <- get_values(topics, "name")
-
-  for (topic_name in names(inherit_index)) {
-    topic <- topics[[topic_name]]
+  for (topic_name in names(inherits)) {
+    topic <- topics$get(topic_name)
 
     documented <- get_documented_params(topic)
 
@@ -17,8 +16,8 @@ process_inherit_params <- function(topics) {
     missing <- setdiff(needed, documented)
     if (length(missing) == 0) next
 
-    for (inheritor in inherit_index[[topic_name]]) {
-      inherited <- find_params(inheritor, topics, name_index)
+    for (inheritor in inherits[[topic_name]]) {
+      inherited <- find_params(inheritor, topics, names)
 
       to_add <- intersect(missing, names(inherited))
       if (length(to_add) == 0) next
@@ -28,22 +27,9 @@ process_inherit_params <- function(topics) {
     }
   }
 
-  topics
+  invisible()
 }
 
-topo_sort_topics <- function(topics, by) {
-
-  topo <- TopoSort$new()
-  for (path in paths) {
-    file <- base_path(path, base_path)
-
-    topo$add(file)
-    for (include in includes[[path]]) {
-      topo$add_ancestor(file, include)
-    }
-  }
-
-}
 
 get_documented_params <- function(topic, only_first = FALSE) {
   documented <- names(topic$get_field("param")$values)
@@ -78,7 +64,7 @@ find_params <- function(inheritor, topics, name_lookup) {
         call. = FALSE, immediate. = TRUE)
       return()
     }
-    params <- topics[[rd_name]]$get_field("param")$values
+    params <- topics$get(rd_name)$get_field("param")$values
   }
   params <- unlist(params)
   if (is.null(params)) return(NULL)

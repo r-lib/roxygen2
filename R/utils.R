@@ -137,3 +137,9 @@ wrap_string.default <- function(x) {
   class(y) <- class(x)
   y
 }
+
+invert <- function(x) {
+  if (length(x) == 0) return()
+  stacked <- utils::stack(x)
+  tapply(as.character(stacked$ind), stacked$values, list)
+}

@@ -96,8 +96,7 @@ default_export.default   <- function(x, block) export(x$alias)
 default_export.NULL      <- function(x, block) export(block$name)
 
 ns_S3method          <- function(tag, part) {
-  warning("@S3method is deprecated. Please use @export instead",
-    call. = FALSE)
+  block_warning(part, "@S3method is deprecated. Please use @export instead")
   export_s3_method(tag)
 }
 ns_exportClass       <- function(tag, part) export_class(tag)

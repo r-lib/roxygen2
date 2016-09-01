@@ -63,7 +63,7 @@ parse_tag <- function(x, registry) {
   stopifnot(is.roxy_tag(x))
 
   if (!(x$tag %in% ls(registry))) {
-    return(tag_warning(x, "unknown tag"))
+    return(roxy_tag_warning(x, "unknown tag"))
   }
 
   registry[[x$tag]](x)

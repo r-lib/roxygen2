@@ -21,7 +21,9 @@ topic_add_describe_in <- function(topic, block, env) {
   }
 
   dest <- find_object(tags$describeIn$name, env)
-  label <- build_label(block$object, dest)
+  label <- build_label(block$object, dest, block)
+  if (is.null(label))
+    return()
 
   topic$add(roxy_field_minidesc(
     label$type,
@@ -46,7 +48,7 @@ find_object <- function(name, env) {
   }
 }
 
-build_label <- function(src, dest) {
+build_label <- function(src, dest, block) {
   src_type <- class(src)[1]
   dest_type <- class(dest)[1]
 
@@ -76,8 +78,8 @@ build_label <- function(src, dest) {
     type <- "function"
     label <- object_name(src)
   } else {
-    stop("Don't know how to describe ", src_type, " in ", dest_type, ".",
-      call. = FALSE)
+    block_warning(block, "Don't know how to describe ", src_type, " in ", dest_type)
+    return(NULL)
   }
 
   list(type = type, label = label)

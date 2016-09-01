@@ -43,7 +43,7 @@ update_roxygen_version <- function(base_path) {
   old <- desc::desc_get("RoxygenNote", file = desc_path)[[1]]
 
   if (!identical(old, new)) {
-    cat('Updating roxygen version in ', desc_path, "\n")
+    message("Updating roxygen version in ", desc_path)
     desc::desc_set(RoxygenNote = new, file = desc_path)
   }
 }

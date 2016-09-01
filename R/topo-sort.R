@@ -1,11 +1,11 @@
-topo_sort <- R6::R6Class("topo_sort", public = list(
+TopoSort <- R6::R6Class("TopoSort", public = list(
   vertices = list(),
 
   add = function(name) {
     if (is.null(self$vertices[[name]])) {
-      self$vertices[[name]] <- vertex$new(name)
+      self$vertices[[name]] <- Vertex$new(name)
     }
-    self$vertices[[name]]
+    invisible(self$vertices[[name]])
   },
 
   add_ancestor = function(predecessor_name, ancestor_name) {
@@ -16,7 +16,7 @@ topo_sort <- R6::R6Class("topo_sort", public = list(
   },
 
   sort = function() {
-    sorted <- NULL
+    sorted <- list()
 
     visit <- function(predecessor) {
       predecessor$discovered <- TRUE
@@ -37,7 +37,7 @@ topo_sort <- R6::R6Class("topo_sort", public = list(
   }
 ))
 
-vertex <- R6::R6Class("Vertex", public = list(
+Vertex <- R6::R6Class("Vertex", public = list(
   name = NA_character_,
   discovered = FALSE,
   ancestors = list(),

@@ -51,7 +51,7 @@ generate_collate <- function(base_path) {
   n <- sum(vapply(includes, length, integer(1)))
   if (n == 0) return()
 
-  topo <- topo_sort$new()
+  topo <- TopoSort$new()
   for (path in paths) {
     file <- base_path(path, base_path)
 

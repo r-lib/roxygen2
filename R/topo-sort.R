@@ -1,59 +1,58 @@
-topo_sort <- function() {
-  vertices <- NULL
+topo_sort <- R6::R6Class("topo_sort",
+  private = list(
+    make.vertex = function(file) {
+      vertex <- new.env(parent = emptyenv())
+      vertex$file <- file
+      vertex$discovered <- FALSE
+      vertex$ancestors <- NULL
+      vertex
+    },
 
-  make.vertex <- function(file) {
-    vertex <- new.env(parent = emptyenv())
-    vertex$file <- file
-    vertex$discovered <- FALSE
-    vertex$ancestors <- NULL
-    vertex
-  }
-
-  maybe.append.vertex <- function(file) {
-    if (is.null(vertices[[file]])) {
-      vertices[[file]] <<- make.vertex(file)
+    member = function(ancestor, ancestors) {
+      for (vertex in ancestors)
+        if (identical(ancestor, vertex))
+          return(TRUE)
+      FALSE
     }
-    vertices[[file]]
-  }
+  ),
+  public = list(
+    vertices = list(),
 
-  member <- function(ancestor, ancestors) {
-    for (vertex in ancestors)
-      if (identical(ancestor, vertex))
-        TRUE
-    FALSE
-  }
-  
-  maybe.append.ancestor <- function(predecessor, ancestor_name) {
-    ancestor <- maybe.append.vertex(ancestor_name)
-    
-    if (!member(ancestor, predecessor$ancestors)) {
-      predecessor$ancestors <- append(ancestor, predecessor$ancestors)
-    }
-  }
+    add = function(file) {
+      if (is.null(self$vertices[[file]])) {
+        self$vertices[[file]] <- private$make.vertex(file)
+      }
+      self$vertices[[file]]
+    },
 
+    add_ancestor = function(predecessor, ancestor_name) {
+      ancestor <- self$add(ancestor_name)
 
-  topological.sort <- function() {
-    sorted <- NULL
-    visit <- function(predecessor) {
-      predecessor$discovered <- TRUE
-      for (ancestor in predecessor$ancestors) {
-        if (!ancestor$discovered) {
-          visit(ancestor)
+      if (!private$member(ancestor, predecessor$ancestors)) {
+        predecessor$ancestors <- append(ancestor, predecessor$ancestors)
+      }
+      invisible()
+    },
+
+    sort = function() {
+      sorted <- NULL
+
+      visit <- function(predecessor) {
+        predecessor$discovered <- TRUE
+        for (ancestor in predecessor$ancestors) {
+          if (!ancestor$discovered) {
+            visit(ancestor)
+          }
+        }
+        sorted <<- append(sorted, predecessor)
+      }
+
+      for (vertex in self$vertices) {
+        if (!vertex$discovered) {
+          visit(vertex)
         }
       }
-      sorted <<- append(sorted, predecessor)
+      vapply(sorted, function(x) x$file, character(1))
     }
-    
-    for (vertex in vertices) {
-      if (!vertex$discovered) {
-        visit(vertex)        
-      }
-    }
-    vapply(sorted, function(x) x$file, character(1))
-  }
-  
-  list(add = maybe.append.vertex, 
-     add_ancestor = maybe.append.ancestor, 
-     sort = topological.sort
   )
-}
+)

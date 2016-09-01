@@ -1,3 +1,4 @@
+
 process_inherit_params <- function(topics) {
 
   # Currently no topological sort, so @inheritParams will only traverse
@@ -28,6 +29,20 @@ process_inherit_params <- function(topics) {
   }
 
   topics
+}
+
+topo_sort_topics <- function(topics, by) {
+
+  topo <- TopoSort$new()
+  for (path in paths) {
+    file <- base_path(path, base_path)
+
+    topo$add(file)
+    for (include in includes[[path]]) {
+      topo$add_ancestor(file, include)
+    }
+  }
+
 }
 
 get_documented_params <- function(topic, only_first = FALSE) {

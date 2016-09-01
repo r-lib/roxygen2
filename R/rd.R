@@ -58,29 +58,18 @@ roclet_tags.roclet_rd <- function(x) {
 #' @export
 roclet_process.roclet_rd <- function(x, parsed, base_path) {
   # Convert each block into a topic, indexed by filename
-  topics <- list()
+  topics <- RoxyTopics$new()
+
   for (block in parsed$blocks) {
     if (length(block) == 0)
       next
 
     rd <- block_to_rd(block, base_path, parsed$env)
-    if (is.null(rd))
-      next
-
-    if (rd$filename %in% names(topics)) {
-      topics[[rd$filename]]$add(rd)
-    } else {
-      topics[[rd$filename]] <- rd
-    }
+    topics$add(rd)
   }
+  topics$drop_invalid()
 
-  # Drop any topics that don't have a title
-  for (topic in names(topics)) {
-    if (!topics[[topic]]$is_valid()) {
-      warning(topic, " is missing name/title. Skipping", call. = FALSE)
-      topics[[topic]] <- NULL
-    }
-  }
+  topics <- topics$topics
 
   topics <- process_family(topics)
   topics <- process_inherit_params(topics)

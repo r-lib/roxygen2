@@ -31,6 +31,7 @@ roclet_tags.roclet_rd <- function(x) {
     family = tag_value,
     field = tag_name_description,
     format = tag_markdown,
+    inherit = tag_inherit,
     inheritParams = tag_value,
     keywords = tag_value,
     method = tag_words(2, 2),

@@ -71,6 +71,38 @@ tag_value <- function(x) {
 
 #' @export
 #' @rdname roxy_tag
+tag_inherit <- function(x) {
+  if (x$val == "") {
+    roxy_tag_warning(x, "requires a value")
+  } else if (!rdComplete(x$val)) {
+    roxy_tag_warning(x, "mismatched braces or quotes")
+  } else {
+    pieces <- str_split(str_trim(x$val), "\\s+")[[1]]
+    inherit <- pieces[-1]
+
+    all <- c("params", "slots", "return")
+    if (length(inherit) == 0) {
+      inherit <- all
+    } else {
+      unknown <- setdiff(inherit, all)
+      if (length(unknown) > 0) {
+        types <- paste0(unknown, collapse = ", ")
+        roxy_tag_warning(x, "Unknown inherit type: ", types)
+        inherit <- intersect(inherit, all)
+      }
+    }
+
+    x$val <- list(
+      source = pieces[1],
+      inherit = inherit
+    )
+
+    x
+  }
+}
+
+#' @export
+#' @rdname roxy_tag
 tag_name <- function(x) {
   if (x$val == "") {
     roxy_tag_warning("requires a name")

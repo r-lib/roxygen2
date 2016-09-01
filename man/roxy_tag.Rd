@@ -5,6 +5,7 @@
 \alias{roxy_tag_warning}
 \alias{tag_code}
 \alias{tag_examples}
+\alias{tag_inherit}
 \alias{tag_markdown}
 \alias{tag_markdown_restricted}
 \alias{tag_name}
@@ -20,6 +21,8 @@ roxy_tag(tag, val, file = "", line = 0)
 roxy_tag_warning(x, ...)
 
 tag_value(x)
+
+tag_inherit(x)
 
 tag_name(x)
 

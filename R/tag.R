@@ -1,16 +1,17 @@
 #' Parsing tags.
 #'
-#' \code{roxy_tag} constructs a tag object, and \code{roxy_tag_warning} makes
+#' `roxy_tag` constructs a tag object, and `roxy_tag_warning` makes
 #' an informative warning using the location information stored in the tag.
 #' The remainder of the tag functions parse the tag value, convert a string
 #' into a richer R object, or providing informative warnings and returning
 #' valid if the value is invalid.
 #'
-#' One exception to the rule is \code{tag_words}: you call it with
-#' arguments giving the \code{min} and \code{max} words, and it will
+#' One exception to the rule is `tag_words`: you call it with
+#' arguments giving the `min` and `max` words, and it will
 #' generate a tag parser for you.
 #'
 #' @keywords internal
+#' @md
 #' @export
 #' @param tag Tag name
 #' @param val Tag value. When read from the file, this will be a string,

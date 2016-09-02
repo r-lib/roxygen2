@@ -69,7 +69,7 @@ roxygenize <- function(package.dir = ".",
       roclet_clean(roc, base_path)
     }
     results <- roclet_process(roc, parsed, base_path)
-    roclet_output(roc, results, base_path, check = !is_first)
+    roclet_output(roc, results, base_path, is_first = is_first)
   }
   invisible(unlist(lapply(roclets, roc_out)))
 }

@@ -49,6 +49,27 @@ test_that("multiple @inheritParam tags gathers all params", {
   expect_equal(params[["y"]], "Y")
 })
 
+test_that("@inheritParams can inherit from inherited params", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' C
+    #'
+    #' @inheritParams b
+    c <- function(x) {}
+
+    #' B
+    #'
+    #' @inheritParams a
+    b <- function(x) {}
+
+    #' A.
+    #'
+    #' @param x X
+    a <- function(x) {}
+    ")
+
+  expect_equal(out[["c.Rd"]]$get_field("param")$values, c(x = "X"))
+})
+
 test_that("multiple @inheritParam inherits from existing topics", {
   out <- roc_proc_text(rd_roclet(), "
     #' My mean

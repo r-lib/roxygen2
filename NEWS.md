@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* `@inheritParams` now works recursively, so that you can inherit parameters
+  from a function that inherited its paramters from somewhere else. 
+
 * Back references are now wrapped over multiple lines, if long
   (#493, @LiNk-NY).
 

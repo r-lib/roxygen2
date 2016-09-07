@@ -1,9 +1,11 @@
 
 topics_process_inherit_params <- function(topics) {
 
-  # Currently no topological sort, so @inheritParams will only traverse
-  # one-level - you can't inherit params that have been inherited from
-  # another function (and you can't currently use multiple inherit fields)
+  topics$topo_sort(function(x) {
+    names <- x$get_field("inheritParams")$values
+    vapply(names, topics$find_filename, character(1))
+  })
+
   inherits <- topics$simple_values("inheritParams")
   names <- topics$simple_values("name")
 

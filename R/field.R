@@ -44,7 +44,10 @@ merge.roxy_field <- function(x, y, ...) {
 format.roxy_field_backref <- function(x, ...) {
   filename <- unique(x$values)
   filename <- file.path(basename(dirname(filename)), basename(filename), fsep = "/")
-  sprintf("%% Please edit documentation in %s\n", paste(filename, collapse = ", "))
+  out <- stringi::stri_wrap(sprintf("Please edit documentation in %s\n",
+                           paste(filename, collapse = ", ")), prefix = "% ",
+                   width = 80, whitespace_only = TRUE)
+  paste0(paste(out, collapse = "\n"), "\n")
 }
 
 # Fields that repeat multiple times --------------------------------------------

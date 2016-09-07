@@ -10,7 +10,7 @@
 \usage{
 roclet(subclass, ...)
 
-roclet_output(x, results, base_path, check = TRUE)
+roclet_output(x, results, base_path, ...)
 
 roclet_tags(x)
 

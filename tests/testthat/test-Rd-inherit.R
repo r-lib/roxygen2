@@ -21,3 +21,13 @@ test_that("no options gives default values", {
 
   expect_equal(block$inherit$inherit, c("params", "slots", "return"))
 })
+
+test_that("some options overrides defaults", {
+  parsed <- parse_text("
+    #' @inherit fun return
+    NULL
+  ")
+  block <- parsed$blocks[[1]]
+
+  expect_equal(block$inherit$inherit, "return")
+})

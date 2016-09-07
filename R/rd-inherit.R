@@ -1,12 +1,14 @@
 
 topics_process_inherit_params <- function(topics) {
 
-  topics$topo_sort(function(x) {
+  inherits_topo <- topics$topo_order(function(x) {
     names <- x$get_field("inheritParams")$values
     vapply(names, topics$find_filename, character(1))
   })
 
   inherits <- topics$simple_values("inheritParams")
+  inherits <- inherits[intersect(inherits_topo, names(inherits))]
+
   names <- topics$simple_values("name")
 
   for (topic_name in names(inherits)) {

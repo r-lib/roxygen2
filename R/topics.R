@@ -34,7 +34,7 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
     self$topics[[filename]]
   },
 
-  #' Given a topic, find its file name.
+  # Given a topic, find its file name.
   find_filename = function(name) {
     for (i in seq_along(self$topics)) {
       if (name %in% self$topics[[i]]$get_field("name")$values) {
@@ -48,21 +48,21 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
   #
   # @param deps A function. Is passed a topic, and should return a character
   #   vector giving the file names that it depends on.
-  topo_sort = function(deps) {
+  topo_order = function(dependencies) {
     topo <- TopoSort$new()
 
     for (i in seq_along(self$topics)) {
       name <- names(self$topics)[[i]]
-      topo$add(name)
+      deps <- dependencies(self$topics[[i]])
+      deps <- deps[!is.na(deps)]
 
-      for (dep in deps(self$topics[[i]])) {
-        if (!is.na(dep))
-          topo$add_ancestor(name, dep)
+      topo$add(name)
+      for (dep in deps) {
+        topo$add_ancestor(name, dep)
       }
     }
 
-    self$topics <- self$topics[topo$sort()]
-    invisible()
+    topo$sort()
   },
 
   # Extract values for simple fields

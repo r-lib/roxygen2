@@ -76,17 +76,6 @@ get_rd <- function(topic, package = NULL) {
   internal_f("utils", ".getHelpFile")(top)
 }
 
-# rd_arguments(get_rd("mean"))
-rd_arguments <- function(rd) {
-  arguments <- get_tags(rd, "\\arguments")[[1]]
-  items <- get_tags(arguments, "\\item")
-
-  values <- vapply(items, function(x) rd2text(x[[2]]), character(1))
-  params <- vapply(items, function(x) rd2text(x[[1]]), character(1))
-
-  setNames(values, params)
-}
-
 get_tags <- function(rd, tag) {
   Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)
 }

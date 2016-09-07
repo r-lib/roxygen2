@@ -34,7 +34,7 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
     self$topics[[filename]]
   },
 
-  # Given a topic, find its file name.
+  # Given a topic name, find its file name.
   find_filename = function(name) {
     for (i in seq_along(self$topics)) {
       if (name %in% self$topics[[i]]$get_field("name")$values) {

@@ -143,3 +143,7 @@ invert <- function(x) {
   stacked <- utils::stack(x)
   tapply(as.character(stacked$ind), stacked$values, list)
 }
+
+has_colons <- function(x) {
+   grepl("::", x, fixed = TRUE)
+}

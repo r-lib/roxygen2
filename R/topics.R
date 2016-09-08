@@ -46,19 +46,20 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
 
   # Topologically sort the topics.
   #
-  # @param deps A function. Is passed a topic, and should return a character
-  #   vector giving the file names that it depends on.
+  # @param deps A function. Is passed RoxyTopic, and should return a character
+  #   vector of topic names
   topo_order = function(dependencies) {
     topo <- TopoSort$new()
 
     for (i in seq_along(self$topics)) {
       name <- names(self$topics)[[i]]
-      deps <- dependencies(self$topics[[i]])
-      deps <- deps[!is.na(deps)]
-
       topo$add(name)
-      for (dep in deps) {
-        topo$add_ancestor(name, dep)
+
+      dep_topics <- dependencies(self$topics[[i]])
+      for (dep_topic in dep_topics) {
+        dep_rd <- self$find_filename(dep_topic)
+        if (!is.na(dep_rd))
+          topo$add_ancestor(name, dep_rd)
       }
     }
 

@@ -1,13 +1,14 @@
 #' Determine if a function is an S3 generic or S3 method.
 #'
 #' @description
-#' \code{is_s3_generic} compares name to \code{.knownS3Generics} and
-#' \code{.S3PrimitiveGenerics}, then looks at the function body to see if it
-#' calls \code{\link{UseMethod}}.
+#' `is_s3_generic` compares name to `.knownS3Generics` and
+#' `.S3PrimitiveGenerics`, then looks at the function body to see if it
+#' calls [](::UseMethod).
 #'
-#' \code{is_s3_method} builds names of all possible generics for that function
+#' `is_s3_method` builds names of all possible generics for that function
 #' and then checks if any of them actually is a generic.
 #'
+#' @md
 #' @param name Name of function.
 #' @param env Base environment in which to look for function defintion.
 #' @export

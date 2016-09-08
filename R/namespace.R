@@ -4,13 +4,14 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 
 #' Roclet: make NAMESPACE.
 #'
-#' This roclet automates the production of a \file{NAMESPACE} file,
-#' see \cite{Writing R Extensions}
-#' (\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
+#' This roclet automates the production of a `NAMESPACE` file,
+#' see Writing R Extensions.
+#' (<http://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
 #'
 #' @family roclets
+#' @md
 #' @export
-#' @seealso \code{vignette("namespace", package = "roxygen2")}
+#' @seealso `vignette("namespace", package = "roxygen2")`
 #' @aliases export exportClass exportMethod S3method import importFrom
 #'   importClassesFrom importMethodsFrom
 namespace_roclet <- function() {

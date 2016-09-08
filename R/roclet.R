@@ -1,12 +1,13 @@
 #' Build a new roclet.
 #'
 #' To create a new roclet, you will need to create a constructor function
-#' that wraps \code{roclet}, and then implement methods for
-#' \code{roclet_tags}, \code{roclet_process}, \code{roclet_output}, and
-#' \code{roclet_clean}.
+#' that wraps `roclet`, and then implement methods for
+#' `roclet_tags`, `roclet_process`, `roclet_output`, and `roclet_clean`.
 #'
 #' @keywords internal
 #' @name roclet
+#' @md
+NULL
 
 #' @export
 #' @rdname roclet

@@ -1,4 +1,3 @@
-
 #' Escape Rd markup, to avoid interpreting it as markdown
 #'
 #' This is needed, if we want to stay compatible with
@@ -9,27 +8,25 @@
 #' is done, the original text is put back in place of the
 #' placeholders.
 #'
-#' The list of protected Rd tags is in \code{escaped_for_md}.
+#' The list of protected Rd tags is in `escaped_for_md`.
 #'
-#' Some Rd macros are treated specially: \itemize{
-#' \item For \code{if}, markdown is only allowed in the
-#'   second argument.
-#' \item For \code{ifelse} markdown is allowed in the
-#'   second and third arguments.
-#' }
+#' Some Rd macros are treated specially:
 #'
-#' See also \code{roclet-rd.R} for the list of tags that
+#' * For `if`, markdown is only allowed in the second argument.
+#' * For `ifelse` markdown is allowed in the second and third arguments.
+#'
+#' See also `roclet-rd.R` for the list of tags that
 #' uses the markdown-enabled parser. Some tags, e.g.
-#' \code{@aliases}, \code{@backref}, etc. only use the
+#' `@aliases`, `@backref`, etc. only use the
 #' standard Roxygen parser.
 #'
+#' @md
 #' @param text Input text. Potentially contains Rd and/or
 #'   markdown markup.
-#' @return For \code{escape_rd_for_md}:
+#' @return For `escape_rd_for_md`:
 #'   A \dQuote{safe} version of the input text, where
 #'   each fragile Rd tag is replaced by a placeholder. The
 #'   original text is added as an attribute for each placeholder.
-#'
 #' @rdname markdown-internals
 #' @keywords internal
 
@@ -50,19 +47,15 @@ escaped_for_md <- paste0("\\", c(
   "testonly", "url", "var", "verb"
 ))
 
-#' The pair of \code{\link{escape_rd_for_md}}.
-#'
 #' It puts back the protected fragile Rd commands into
 #' the text after the markdown parsing.
 #'
 #' @param rd_text The markdown parsed and interpreted text.
 #' @param esc_text The original escaped text from
-#'   \code{\link{escape_rd_for_md}}.
-#' @return For \code{unescape_rd_for_md}: Rd text.
-#'
+#'   [](::escape_rd_for_md).
+#' @return For `unescape_rd_for_md`: Rd text.
+#' @md
 #' @rdname markdown-internals
-#' @keywords internal
-
 unescape_rd_for_md <- function(rd_text, esc_text) {
   id <- attr(esc_text, "roxygen-markdown-subst")$id
   tags <- attr(esc_text, "roxygen-markdown-subst")$tags

@@ -7,7 +7,7 @@
 vignette_roclet()
 }
 \description{
-This rebuilds outdated vignettes with \code{\link[tools]{buildVignette}()}.
+This rebuilds outdated vignettes with \code{\link[tools]{buildVignette}}.
 By default, it will rebuild all vignettes if the source file is newer than
 the output pdf or html. (This means it will automatically re-build the
 vignette if you change the vignette source, but \emph{not} when you

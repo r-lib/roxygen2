@@ -20,9 +20,9 @@ markdown markup.}
 }
 \value{
 For \code{escape_rd_for_md}:
-  A \dQuote{safe} version of the input text, where
-  each fragile Rd tag is replaced by a placeholder. The
-  original text is added as an attribute for each placeholder.
+A \dQuote{safe} version of the input text, where
+each fragile Rd tag is replaced by a placeholder. The
+original text is added as an attribute for each placeholder.
 
 For \code{unescape_rd_for_md}: Rd text.
 }
@@ -41,11 +41,10 @@ the text after the markdown parsing.
 \details{
 The list of protected Rd tags is in \code{escaped_for_md}.
 
-Some Rd macros are treated specially: \itemize{
-\item For \code{if}, markdown is only allowed in the
-  second argument.
-\item For \code{ifelse} markdown is allowed in the
-  second and third arguments.
+Some Rd macros are treated specially:
+\itemize{
+\item For \code{if}, markdown is only allowed in the second argument.
+\item For \code{ifelse} markdown is allowed in the second and third arguments.
 }
 
 See also \code{roclet-rd.R} for the list of tags that

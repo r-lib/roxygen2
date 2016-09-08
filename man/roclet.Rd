@@ -21,8 +21,7 @@ roclet_clean(x, base_path)
 \description{
 To create a new roclet, you will need to create a constructor function
 that wraps \code{roclet}, and then implement methods for
-\code{roclet_tags}, \code{roclet_process}, \code{roclet_output}, and
-\code{roclet_clean}.
+\code{roclet_tags}, \code{roclet_process}, \code{roclet_output}, and \code{roclet_clean}.
 }
 \keyword{internal}
 

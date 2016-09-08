@@ -1,16 +1,17 @@
 #' Re-build outdated vignettes.
 #'
-#' This rebuilds outdated vignettes with \code{\link[tools]{buildVignette}()}.
+#' This rebuilds outdated vignettes with [](tools::buildVignette).
 #' By default, it will rebuild all vignettes if the source file is newer than
 #' the output pdf or html. (This means it will automatically re-build the
-#' vignette if you change the vignette source, but \emph{not} when you
+#' vignette if you change the vignette source, but _not_ when you
 #' change the R code). If you want finer control, add a Makefile to
-#' \code{vignettes/} and roxygen2 will use that instead.
+#' `vignettes/` and roxygen2 will use that instead.
 #'
 #' To prevent RStudio from re-building the vignettes again when checking
-#' your package, add \code{--no-build-vignettes} to the "Build Source Package"
+#' your package, add `--no-build-vignettes` to the "Build Source Package"
 #' field in your project options.
 #'
+#' @md
 #' @family roclets
 #' @export
 vignette_roclet <- function() {

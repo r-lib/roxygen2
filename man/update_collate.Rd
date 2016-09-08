@@ -12,7 +12,7 @@ update_collate(base_path)
 \description{
 Topologically sort R files and record in Collate field. The topological
 sort is based on the \code{@include} tag, which should specify the filenames
-(space separated) that should be loaded before the current file - these are
+(space separated) that should be loaded before the current file. These are
 typically necessary if you're using S4 or RC classes (because super classes
 must be defined before subclasses).
 }

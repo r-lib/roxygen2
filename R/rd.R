@@ -69,8 +69,7 @@ roclet_process.roclet_rd <- function(x, parsed, base_path) {
   }
   topics$drop_invalid()
   topics_process_family(topics)
-  topics_process_inherit_params(topics)
-  topics_process_inherit_return(topics)
+  topics_process_inherit(topics)
   topics_fix_params_order(topics)
 
   topics$topics

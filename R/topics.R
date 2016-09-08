@@ -66,6 +66,17 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
     topo$sort()
   },
 
+  # Call fun in topological order defined by dep.
+  topo_apply = function(dep, fun) {
+    topics_topo <- self$topo_order(dep)
+    for (topic_name in topics_topo) {
+      topic <- self$get(topic_name)
+      fun(topic, self)
+    }
+
+    invisible()
+  },
+
   # Extract values for simple fields
   simple_values = function(field) {
     fields <- lapply(self$topics, function(rd) rd$get_field(field))

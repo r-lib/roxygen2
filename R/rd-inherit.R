@@ -1,11 +1,10 @@
 topics_process_inherit <- function(topics) {
   inherits <- function(type) {
-    function(x) {
-     x$inherits_from(type)
-    }
+    function(x) x$inherits_from(type)
   }
 
-  topics$topo_apply(inherits("return"), inherit_return)
+  topics$topo_apply(inherits("return"), inherit_field,
+    roxy_name = "return", rd_name = "value")
   topics$topo_apply(inherits("params"), inherit_params)
 
   invisible()
@@ -87,49 +86,46 @@ topic_params.RoxyTopic <- function(x) {
   x$get_field("param")$values
 }
 
-# Inherit parameters -----------------------------------------------------------
+# Inherit from single field ----------------------------------------------------
 
-inherit_return <- function(topic, topics) {
-  # Already has returns, so don't override
-  if (topic$has_field("return"))
+inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
+  # Already has the field, so don't need to inherit
+  if (topic$has_field(rd_name))
     return()
 
-  # Try each in turn
-  for (inherit_from in topic$inherits_from("return")) {
-    inheritee <- find_return(inherit_from, topics)
+  # Otherwise, try each try function listed in inherits
+  for (inherit_from in topic$inherits_from(roxy_name)) {
+    inherit_topic <- find_topic(inherit_from, topics)
+
+    if (is.null(inherit_topic)) {
+      warning(
+        "Failed to find topic '", name, "'",
+        call. = FALSE,
+        immediate. = TRUE
+      )
+      next
+    }
+
+    inheritee <- find_field(inherit_topic, rd_name)
     if (is.null(inheritee))
       next
 
-    topic$add_simple_field("value", inheritee)
+    topic$add_simple_field(rd_name, inheritee)
     return()
   }
 }
 
+find_field <- function(topic, field_name) {
+  if (inherits(topic, "Rd")) {
+    value <- get_tags(topic, paste0("\\", field_name))[[1]]
+    attr(value, "Rd_tag") <- NULL
 
-find_return <- function(name, topics) {
-  topic <- find_topic(name, topics)
-  if (is.null(topic)) {
-    warning(
-      "Failed to find topic '", name, "'",
-      call. = FALSE,
-      immediate. = TRUE
-    )
-    return()
+    str_trim(rd2text(value))
+  } else {
+    topic$get_field(field_name)$values
   }
-
-  topic_return(topic)
 }
 
-topic_return <- function(x) UseMethod("topic_return")
-topic_return.Rd <- function(x) {
-  value <- get_tags(x, "\\value")[[1]]
-  attr(value, "Rd_tag") <- NULL
-
-  str_trim(rd2text(value))
-}
-topic_return.RoxyTopic <- function(x) {
-  x$get_field("value")$values
-}
 
 # Find info in Rd or topic ------------------------------------------------
 

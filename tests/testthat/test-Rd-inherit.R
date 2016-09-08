@@ -42,7 +42,6 @@ test_that("can inherit return values from roxygen topic", {
     #' @return ABC
     a <- function(x) {}
 
-
     #' B
     #'
     #' @inherit a

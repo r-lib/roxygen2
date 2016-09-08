@@ -67,11 +67,11 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
   },
 
   # Call fun in topological order defined by dep.
-  topo_apply = function(dep, fun) {
+  topo_apply = function(dep, fun, ...) {
     topics_topo <- self$topo_order(dep)
     for (topic_name in topics_topo) {
       topic <- self$get(topic_name)
-      fun(topic, self)
+      fun(topic, self, ...)
     }
 
     invisible()

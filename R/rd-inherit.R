@@ -5,6 +5,9 @@ topics_process_inherit <- function(topics) {
 
   topics$topo_apply(inherits("return"), inherit_field,
     roxy_name = "return", rd_name = "value")
+  topics$topo_apply(inherits("description"), inherit_field, "description")
+  topics$topo_apply(inherits("details"), inherit_field, "details")
+
   topics$topo_apply(inherits("params"), inherit_params)
 
   invisible()
@@ -117,7 +120,11 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
 
 find_field <- function(topic, field_name) {
   if (inherits(topic, "Rd")) {
-    value <- get_tags(topic, paste0("\\", field_name))[[1]]
+    tag <- get_tags(topic, paste0("\\", field_name))
+    if (length(tag) == 0)
+      return()
+
+    value <- tag[[1]]
     attr(value, "Rd_tag") <- NULL
 
     str_trim(rd2text(value))

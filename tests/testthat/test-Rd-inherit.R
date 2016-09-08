@@ -19,7 +19,10 @@ test_that("no options gives default values", {
   ")
   block <- parsed$blocks[[1]]
 
-  expect_equal(block$inherit$fields, c("params", "slots", "return"))
+  expect_equal(
+    block$inherit$fields,
+    c("params", "slots", "return", "description", "details")
+  )
 })
 
 test_that("some options overrides defaults", {
@@ -87,8 +90,29 @@ test_that("can inherit return value from external function", {
 })
 
 
-# Inherit parameters ------------------------------------------------------
 
+# Inherit description and details -----------------------------------------
+
+test_that("can inherit return values from roxygen topic", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #' B
+    #' @details C
+    #'
+    #' @return ABC
+    a <- function(x) {}
+
+    #' B
+    #'
+    #' @inherit a details
+    b <- function(y) {}
+  ")[[2]]
+
+  expect_equal(out$get_field("description")$values, "B")
+  expect_equal(out$get_field("details")$values, "C")
+})
+
+# Inherit parameters ------------------------------------------------------
 
 test_that("multiple @inheritParam tags gathers all params", {
   out <- roc_proc_text(rd_roclet(), "

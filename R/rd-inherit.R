@@ -1,10 +1,10 @@
 topics_process_inherit_return <- function(topics) {
 
-  inherits_topo <- topics$topo_order(function(x) {
+  topics_topo <- topics$topo_order(function(x) {
     x$inherits_from("return")
   })
 
-  for (topic_name in inherits_topo) {
+  for (topic_name in topics_topo) {
     topic <- topics$get(topic_name)
     inherit_return(topic, topics)
   }
@@ -12,14 +12,12 @@ topics_process_inherit_return <- function(topics) {
   invisible()
 }
 
-
 topics_process_inherit_params <- function(topics) {
-
-  inherits_topo <- topics$topo_order(function(x) {
-    x$get_field("inheritParams")$values
+  topics_topo <- topics$topo_order(function(x) {
+    x$inherits_from("params")
   })
 
-  for (topic_name in inherits_topo) {
+  for (topic_name in topics_topo) {
     topic <- topics$get(topic_name)
     inherit_params(topic, topics)
   }
@@ -38,7 +36,7 @@ inherit_params <- function(topic, topics) {
     return()
   }
 
-  for (inheritor in topic$get_field("inheritParams")$values) {
+  for (inheritor in topic$inherits_from("params")) {
     inherited <- find_params(inheritor, topics)
 
     to_add <- intersect(missing, names(inherited))

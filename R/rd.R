@@ -190,7 +190,7 @@ topic_add_backref <- function(topic, block) {
 topic_add_simple_tags <- function(topic, block) {
   simple_tags <- c(
     "author", "concept", "description", "details", "encoding", "family",
-    "format", "inheritParams", "note", "rawRd", "references",
+    "format", "note", "rawRd", "references",
     "seealso", "source", "title"
   )
 
@@ -256,9 +256,14 @@ topic_add_methods <- function(topic, block) {
 
 topic_add_inherit <- function(topic, block) {
   tags <- block_tags(block, "inherit")
-
   for (tag in tags) {
     field <- roxy_field_inherit(tag$source, list(tag$fields))
+    topic$add_field(field)
+  }
+
+  tags <- block_tags(block, "inheritParams")
+  for (tag in tags) {
+    field <- roxy_field_inherit(tag, list("params"))
     topic$add_field(field)
   }
 }

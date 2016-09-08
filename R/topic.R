@@ -40,7 +40,12 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     inherit <- self$get_field("inherit")
 
     inherits_field <- vapply(inherit$fields, function(x) type %in% x, logical(1))
-    inherit$source[inherits_field]
+    sources <- inherit$source[inherits_field]
+
+    if ("NULL" %in% sources)
+      return(character())
+
+    sources
   },
 
   # Ensures that each type of name (as given by its name), only appears

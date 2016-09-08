@@ -123,8 +123,6 @@ format_null <- function(x, ...) NULL
 #' @export
 format.roxy_field_family <- format_null
 #' @export
-format.roxy_field_inheritParams <- format_null
-#' @export
 format.roxy_field_formals <- format_null
 
 # Fields with special errors or other semantics --------------------------------

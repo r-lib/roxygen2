@@ -32,6 +32,17 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     self$fields[[field_name]]
   },
 
+  inherits_from = function(type) {
+    if (!self$has_field("inherit")) {
+      return(character())
+    }
+
+    inherit <- self$get_field("inherit")
+
+    inherits_field <- vapply(inherit$fields, function(x) type %in% x, logical(1))
+    inherit$source[inherits_field]
+  },
+
   # Ensures that each type of name (as given by its name), only appears
   # once in self$fields
   add_field = function(field, overwrite = FALSE) {

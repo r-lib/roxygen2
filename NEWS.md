@@ -1,5 +1,10 @@
 # roxygen2 5.0.1.9000
 
+* New `@inherit` generalises `@inheritParams`, and allows to you inherit from
+  parameters, return value, and slots. The default `@inherit my_fun` will
+  inherit all, or you can select specific tags to inherit with 
+  `@inherit my_fun return params` (#384).
+
 * `@inheritParams` now works recursively, so that you can inherit parameters
   from a function that inherited its paramters from somewhere else. 
 

@@ -70,6 +70,7 @@ roclet_process.roclet_rd <- function(x, parsed, base_path) {
   topics$drop_invalid()
   topics_process_family(topics)
   topics_process_inherit_params(topics)
+  topics_process_inherit_return(topics)
   topics_fix_params_order(topics)
 
   topics$topics
@@ -103,6 +104,7 @@ block_to_rd <- function(block, base_path, env) {
   topic_add_eval_rd(rd, block, env)
   topic_add_examples(rd, block, base_path)
   topic_add_fields(rd, block)
+  topic_add_inherit(rd, block)
   topic_add_keyword(rd, block)
   topic_add_methods(rd, block)
   topic_add_params(rd, block)
@@ -251,6 +253,16 @@ topic_add_methods <- function(topic, block) {
 
   topic$add_simple_field("rcmethods", setNames(desc, usage))
 }
+
+topic_add_inherit <- function(topic, block) {
+  tags <- block_tags(block, "inherit")
+
+  for (tag in tags) {
+    field <- roxy_field_inherit(tag$source, list(tag$fields))
+    topic$add_field(field)
+  }
+}
+
 
 topic_add_value <- function(topic, block) {
   tags <- block_tags(block, "return")

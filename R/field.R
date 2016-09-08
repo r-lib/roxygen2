@@ -260,6 +260,37 @@ format.roxy_field_reexport <- function(x, ...) {
   )
 }
 
+# Inherit ----------------------------------------------------------------
+
+# For each unique source, list which fields it inherits from
+roxy_field_inherit <- function(source, fields) {
+  stopifnot(is.character(source), is.list(fields))
+  stopifnot(!anyDuplicated(source))
+  stopifnot(length(source) == length(fields))
+
+  roxy_field("inherit", source = source, fields = fields)
+}
+
+#' @export
+format.roxy_field_inherit <- format_null
+
+#' @export
+merge.roxy_field_inherit <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+
+  source <- c(x$source, y$source)
+  fields <- c(x$fields, y$fields)
+
+  # Ensure sources are unique by combining fields
+  r_union <- function(x) Reduce(union, x)
+  dedup <- tapply(fields, source, r_union, simplify = FALSE)
+  # tapply orders alphabetically, so reorder to match original order
+  dedup <- dedup[unique(source)]
+
+
+  roxy_field_inherit(names(dedup), dedup)
+}
+
 
 # Sections ----------------------------------------------------------------
 

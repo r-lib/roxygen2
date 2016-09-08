@@ -78,23 +78,23 @@ tag_inherit <- function(x) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else {
     pieces <- str_split(str_trim(x$val), "\\s+")[[1]]
-    inherit <- pieces[-1]
+    fields <- pieces[-1]
 
     all <- c("params", "slots", "return")
-    if (length(inherit) == 0) {
-      inherit <- all
+    if (length(fields) == 0) {
+      fields <- all
     } else {
-      unknown <- setdiff(inherit, all)
+      unknown <- setdiff(fields, all)
       if (length(unknown) > 0) {
         types <- paste0(unknown, collapse = ", ")
         roxy_tag_warning(x, "Unknown inherit type: ", types)
-        inherit <- intersect(inherit, all)
+        fields <- intersect(fields, all)
       }
     }
 
     x$val <- list(
       source = pieces[1],
-      inherit = inherit
+      fields = fields
     )
 
     x

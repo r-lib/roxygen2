@@ -290,6 +290,7 @@ test_that("markdown links are converted", {
     #'
     #' Description, see [http://acme.com]() for details.
     #' And here is a named link: [igraph](http://igraph.org).
+    #' Here is another kind of link: <https://log.r-hub.io>.
     #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
@@ -297,6 +298,7 @@ test_that("markdown links are converted", {
     #'
     #' Description, see \\url{http://acme.com} for details.
     #' And here is a named link: \\href{http://igraph.org}{igraph}.
+    #' Here is another kind of link: \\url{https://log.r-hub.io}.
     foo <- function() {}")[[1]]
   expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
 })

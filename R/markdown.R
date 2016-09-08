@@ -173,10 +173,10 @@ markdown_tags <- list(
 
     if (!is.null(link)) {
       link
-    } else if (dest == "") {
-      list("\\url{", xml_contents(xml), "}")
+    } else if (dest == "" || dest == xml_text(xml)) {
+      list("\\url{", xml_text(xml), "}")
     } else {
-      list("\\href{", dest, "}{", xml_contents(xml), "}")
+      list("\\href{", dest, "}{", xml_text(xml), "}")
     }
   },
 

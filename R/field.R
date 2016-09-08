@@ -47,12 +47,13 @@ format.roxy_field_backref <- function(x, ...) {
 
   lines <- stringi::stri_wrap(
     paste0("Please edit documentation in ", paste(filename, collapse = ", ")),
-    prefix = "% ",
+    initial = "% ",
+    prefix = "%   ",
     width = 80,
     whitespace_only = TRUE
   )
 
-  paste0(paste0(lines, collapse = ""), "\n")
+  paste0(paste0(lines, collapse = "\n"), "\n")
 }
 
 # Fields that repeat multiple times --------------------------------------------

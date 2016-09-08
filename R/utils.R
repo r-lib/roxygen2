@@ -147,3 +147,18 @@ invert <- function(x) {
 has_colons <- function(x) {
    grepl("::", x, fixed = TRUE)
 }
+
+# Collapse the values associated with duplicated keys
+collapse <- function(key, value, fun, ...) {
+  stopifnot(is.character(key))
+  stopifnot(length(key) == length(value))
+
+  dedup <- tapply(value, key, fun, ..., simplify = FALSE)
+  # tapply orders alphabetically, so reorder to match original order
+  dedup <- dedup[unique(key)]
+
+  list(
+    key = names(dedup),
+    value = unname(dedup)
+  )
+}

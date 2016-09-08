@@ -276,17 +276,13 @@ format.roxy_field_inherit <- format_null
 merge.roxy_field_inherit <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
 
-  source <- c(x$source, y$source)
-  fields <- c(x$fields, y$fields)
+  dedup <- collapse(
+    c(x$source, y$source),
+    c(x$fields, y$fields),
+    function(x) Reduce(union, x)
+  )
 
-  # Ensure sources are unique by combining fields
-  r_union <- function(x) Reduce(union, x)
-  dedup <- tapply(fields, source, r_union, simplify = FALSE)
-  # tapply orders alphabetically, so reorder to match original order
-  dedup <- dedup[unique(source)]
-
-
-  roxy_field_inherit(names(dedup), dedup)
+  roxy_field_inherit(dedup$key, dedup$value)
 }
 
 
@@ -314,12 +310,10 @@ format.roxy_field_section <- function(x, ..., wrap = TRUE) {
 merge.roxy_field_section <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
 
-  title <- c(x$title, y$title)
-  content <- c(x$content, y$content)
-
-  dedup <- tapply(content, title, paste, collapse = "\n\n")
-  # tapply orders alphabetically, so reorder to match original order
-  dedup <- dedup[unique(title)]
-
-  roxy_field_section(names(dedup), as.vector(dedup))
+  dedup <- collapse(
+    c(x$title, y$title),
+    c(x$content, y$content),
+    paste, collapse = "\n\n"
+  )
+  roxy_field_section(dedup$key, unlist(dedup$value))
 }

@@ -127,10 +127,9 @@ all_r_files <- function(path) {
   sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
 }
 
-r_files <- function(path) {
+ignore_files <- function(path, rfiles) {
     rbuildignore <- file.path(path, ".Rbuildignore")
-    rfiles <- all_r_files(path)
-    if (file.exists(rbuildignore)) {
+     if (file.exists(rbuildignore)) {
         rbuildignore_patterns <- readLines(rbuildignore, warn = FALSE)
         ## We need to apply the regular expressions from .Rbuildignore
         ## on the top-level directory, so we need to remove everything
@@ -145,15 +144,20 @@ r_files <- function(path) {
         ## should be perl-like regular expressions
         idx_rfiles_to_ignore <- unique(unlist(lapply(rbuildignore_patterns,
                                                      function(x) {
-            grep(x, relative_rfiles, perl = TRUE)
+             grep(x, relative_rfiles, perl = TRUE)
         })))
         if (length(idx_rfiles_to_ignore))
-            rfiles[-relative_rfiles_to_ignore]
+            rfiles[-idx_rfiles_to_ignore]
         else
             rfiles
     } else {
         rfiles
     }
+}
+
+r_files <- function(path) {
+    rfiles <- all_r_files(path)
+    ignore_files(path, rfiles)
 }
 
 dots <- function(...) {

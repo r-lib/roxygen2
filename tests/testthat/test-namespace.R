@@ -183,9 +183,32 @@ test_that("useDynLib doesn't quote if comma present", {
 
 test_that("empty NAMESPACE generates zero-length vector", {
   base_path <- normalizePath("empty")
-  parsed <- parse_package(base_path, source_package)
+  parsed <- parse_package(base_path, source_package, registry = list())
 
-  roc <- namespace_roclet()
-  results <- roc_process(namespace_roclet(), parsed, base_path)
+  results <- roclet_process(namespace_roclet(), parsed, base_path)
   expect_equal(results, character())
 })
+
+
+# Raw ---------------------------------------------------------------------
+
+
+test_that("rawNamespace must be valid code", {
+  expect_warning(
+    roc_proc_text(namespace_roclet(), "
+      #' @rawNamespace if() {
+      #' @name a
+      NULL"),
+    "code failed to parse"
+  )
+})
+
+test_that("rawNamespace inserted unchanged", {
+  out <- roc_proc_text(namespace_roclet(), "
+    #' @rawNamespace xyz
+    #'   abc
+    NULL")
+
+  expect_equal(out, "xyz\n  abc")
+})
+

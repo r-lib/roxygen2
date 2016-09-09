@@ -1,9 +1,82 @@
-#' Build new roclet object.
+#' Build a new roclet.
 #'
-#' @export
+#' To create a new roclet, you will need to create a constructor function
+#' that wraps `roclet`, and then implement methods for
+#' `roclet_tags`, `roclet_process`, `roclet_output`, and `roclet_clean`.
+#'
 #' @keywords internal
-new_roclet <- function(obj, subclass = NULL) {
-  structure(obj, class = c(subclass, 'roclet'))
+#' @name roclet
+#' @md
+NULL
+
+#' @export
+#' @rdname roclet
+roclet <- function(subclass, ...) {
+  structure(list(...), class = c(paste0("roclet_", subclass), "roclet"))
+}
+
+#' @export
+#' @rdname roclet
+roclet_output <- function(x, results, base_path, ...) {
+  UseMethod("roclet_output", x)
+}
+
+#' @export
+#' @rdname roclet
+roclet_tags <- function(x) {
+  UseMethod("roclet_tags")
+}
+
+#' @export
+#' @rdname roclet
+roclet_process <- function(x, parsed, base_path) {
+  UseMethod("roclet_process")
+}
+
+#' @export
+#' @rdname roclet
+roclet_clean <- function(x, base_path) {
+  UseMethod("roclet_clean")
+}
+
+#' Create a roclet from a string.
+#'
+#' This provides a flexible way of specifying a roclet in a string.
+#'
+#' @param x Arbitrary R code evaluated in roxygen2 package.
+#' @export
+#' @examples
+#' # rd, namespace, and vignette work for backward compatibility
+#' roclet_find("rd")
+#'
+#' # But generally you should specify the name of a function that
+#' # returns a roclet
+#' roclet_find("rd_roclet")
+#'
+#' # If it lives in another package, you'll need to use ::
+#' roclet_find("roxygen2::rd_roclet")
+#'
+#' # If it takes parameters (which no roclet does currently), you'll need
+#' # to call the function
+#' roclet_find("roxygen2::rd_roclet()")
+roclet_find <- function(x) {
+  env <- new.env(parent = getNamespace("roxygen2"))
+  env$rd <- rd_roclet
+  env$namespace <- namespace_roclet
+  env$vignette <- vignette_roclet
+
+  expr <- parse(text = x)
+  res <- eval(expr, env)
+
+  if (is.function(res)) {
+    res <- res()
+  }
+
+  if (!is.roclet(res)) {
+    stop("Must return a roclet", call. = FALSE)
+  }
+
+  res
 }
 
 is.roclet <- function(x) inherits(x, "roclet")
@@ -14,30 +87,19 @@ is.roclet <- function(x) inherits(x, "roclet")
 #'
 #' @param roclet Name of roclet to use for processing.
 #' @param input Source string
-#' @param options A list of options to control roxygen behaviour.
-#'   Currently only \code{wrap} is recognised.
+#' @param registry Named list of tag parsers
 #' @export
 #' @keywords internal
-roc_proc_text <- function(roclet, input, options = list()) {
+roc_proc_text <- function(roclet, input, registry = default_tags()) {
   stopifnot(is.roclet(roclet))
 
-  parsed <- parse_text(input)
-  roc_process(roclet, parsed, base_path = ".", options = options)
+  parsed <- parse_text(input, registry = registry)
+  roclet_process(roclet, parsed, base_path = ".")
 }
 
-# Internal methods for processing and output
-
-# Methods should return character vector describing all modified files.
-roc_output <- function(roclet, results, base_path, options = list(),
-                       check = TRUE) {
-  UseMethod("roc_output", roclet)
-}
-
-roc_process <- function(roclet, parsed, base_path, options = list()) {
-  UseMethod("roc_process", roclet)
-}
-
-# Given a roclet, removes all files created by that roclet
-clean <- function(roclet, base_path) {
-  UseMethod("clean")
+default_tags <- function() {
+  c(
+    roclet_tags.roclet_namespace(list()),
+    roclet_tags.roclet_rd(list())
+  )
 }

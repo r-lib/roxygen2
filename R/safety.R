@@ -38,13 +38,12 @@ made_by <- function(comment) {
 
 update_roxygen_version <- function(base_path) {
   desc_path <- file.path(base_path, "DESCRIPTION")
-  old <- read.description(desc_path)
 
-  new <- old
-  new$RoxygenNote <- as.character(utils::packageVersion("roxygen2"))
+  new <- as.character(utils::packageVersion("roxygen2"))
+  old <- desc::desc_get("RoxygenNote", file = desc_path)[[1]]
 
   if (!identical(old, new)) {
-    cat('Updating roxygen version in ', desc_path, "\n")
-    write.description(new, desc_path)
+    message("Updating roxygen version in ", desc_path)
+    desc::desc_set(RoxygenNote = new, file = desc_path)
   }
 }

@@ -12,6 +12,7 @@ test_that("NULL gives empty list", {
 
 test_that("generic keys produce expected output", {
   out <- roc_proc_text(rd_roclet(), "
+    #' @title a
     #' @references test
     #' @note test
     #' @author test
@@ -59,21 +60,26 @@ test_that("deleted objects not documented", {
 
 
 test_that("documenting unknown function requires name", {
-  expect_error(roc_proc_text(rd_roclet(), "
-    #' Virtual Class To Enforce Max Slot Lenght
-    #'
-    #' @export
-    setClass('A')
+  expect_warning(
+    roc_proc_text(rd_roclet(), "
+      #' Virtual Class To Enforce Max Slot Lenght
+      #'
+      #' @export
+      setClass('A')
 
-    #' Validity function.
-    setValidity('A', function(object) TRUE)
-    "),
+      #' Validity function.
+      setValidity('A', function(object) TRUE)"
+    ),
     "Missing name"
   )
 })
 
 test_that("documenting NA gives useful error message (#194)", {
-  expect_error(roc_proc_text(rd_roclet(), "
-    #' Missing value
-    NA")[[1]], "Missing name")
+  expect_warning(
+    roc_proc_text(rd_roclet(), "
+      #' Missing value
+      NA"
+      ),
+    "Missing name"
+  )
 })

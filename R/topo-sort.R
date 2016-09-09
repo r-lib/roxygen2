@@ -1,39 +1,23 @@
-topo_sort <- function() {
-  vertices <- NULL
+TopoSort <- R6::R6Class("TopoSort", public = list(
+  vertices = list(),
 
-  make.vertex <- function(file) {
-    vertex <- new.env(parent = emptyenv())
-    vertex$file <- file
-    vertex$discovered <- FALSE
-    vertex$ancestors <- NULL
-    vertex
-  }
-
-  maybe.append.vertex <- function(file) {
-    if (is.null(vertices[[file]])) {
-      vertices[[file]] <<- make.vertex(file)
+  add = function(name) {
+    if (is.null(self$vertices[[name]])) {
+      self$vertices[[name]] <- Vertex$new(name)
     }
-    vertices[[file]]
-  }
+    invisible(self$vertices[[name]])
+  },
 
-  member <- function(ancestor, ancestors) {
-    for (vertex in ancestors)
-      if (identical(ancestor, vertex))
-        TRUE
-    FALSE
-  }
-  
-  maybe.append.ancestor <- function(predecessor, ancestor_name) {
-    ancestor <- maybe.append.vertex(ancestor_name)
-    
-    if (!member(ancestor, predecessor$ancestors)) {
-      predecessor$ancestors <- append(ancestor, predecessor$ancestors)
-    }
-  }
+  add_ancestor = function(predecessor_name, ancestor_name) {
+    predecessor <- self$add(predecessor_name)
+    ancestor <- self$add(ancestor_name)
 
+    predecessor$add_ancestor(ancestor)
+  },
 
-  topological.sort <- function() {
-    sorted <- NULL
+  sort = function() {
+    sorted <- list()
+
     visit <- function(predecessor) {
       predecessor$discovered <- TRUE
       for (ancestor in predecessor$ancestors) {
@@ -43,17 +27,38 @@ topo_sort <- function() {
       }
       sorted <<- append(sorted, predecessor)
     }
-    
-    for (vertex in vertices) {
+
+    for (vertex in self$vertices) {
       if (!vertex$discovered) {
-        visit(vertex)        
+        visit(vertex)
       }
     }
-    vapply(sorted, function(x) x$file, character(1))
+    vapply(sorted, function(x) x$name, character(1))
   }
-  
-  list(add = maybe.append.vertex, 
-     add_ancestor = maybe.append.ancestor, 
-     sort = topological.sort
-  )
-}
+))
+
+Vertex <- R6::R6Class("Vertex", public = list(
+  name = NA_character_,
+  discovered = FALSE,
+  ancestors = list(),
+
+  initialize = function(name) {
+    self$name <- name
+  },
+
+  has_ancestor = function(ancestor) {
+    for (vertex in self$ancestors) {
+      if (identical(ancestor, vertex)) {
+        return(TRUE)
+      }
+    }
+    FALSE
+  },
+
+  add_ancestor = function(ancestor) {
+    if (!self$has_ancestor(ancestor)) {
+      self$ancestors <- append(ancestor, self$ancestors)
+    }
+  }
+
+))

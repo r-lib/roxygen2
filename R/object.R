@@ -18,16 +18,6 @@ object <- function(value, alias = NULL, type = obj_type(value)) {
     class = c(type, "object")
   )
 }
-default_name <- function(x) UseMethod("default_name")
-default_name.s4class <-   function(x) x$value@className
-default_name.s4generic <- function(x) x$value@generic
-default_name.s4method <-  function(x) x$value@generic
-default_name.rcclass <-   function(x) x$value@className
-default_name.rcmethod <-  function(x) x$value@name
-default_name.s3generic <- function(x) browser()
-default_name.s3method <-  function(x) attr(x$value, "s3method")
-default_name.function <-   function(x) x$alias
-default_name.default <-   function(x) NULL
 
 #' @export
 print.object <- function(x, ...) {
@@ -109,8 +99,12 @@ obj_type.refClassRepresentation <- function(x) "rcclass"
 obj_type.refMethodDef <- function(x) "rcmethod"
 
 #' @export
-obj_type.function <- function(x) "function"
-#' @export
 obj_type.package <- function(x) "package"
 #' @export
-obj_type.default <- function(x) "data"
+obj_type.default <- function(x) {
+  if (is.function(x)) {
+    "function"
+  } else {
+    "data"
+  }
+}

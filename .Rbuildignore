@@ -7,3 +7,4 @@
 ^roxygen.pro$
 ^roxygen.pro.user$
 ^revdep$
+^codecov\.yml$

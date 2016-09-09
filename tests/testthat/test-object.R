@@ -41,6 +41,11 @@ test_that("obj_type correctly classifies objects", {
   expect_equal(obj_type(classA), "rcclass")
 })
 
+test_that("functions with class are still functions", {
+  foo <- structure(function() TRUE, class = "foo")
+  expect_equal(obj_type(foo), "function")
+})
+
 # Object standardisation -------------------------------------------------------
 
 test_that("generators standardised to classes", {

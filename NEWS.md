@@ -1,5 +1,84 @@
 # roxygen2 5.0.1.9000
 
+* New `@inherit` generalises `@inheritParams`, and allows to you inherit from
+  parameters, return, description, details, and slots. The default 
+  `@inherit my_fun` will inherit all, or you can select specific tags to 
+  inherit with `@inherit my_fun return params` (#384).
+
+* `@inheritParams` now works recursively, so that you can inherit parameters
+  from a function that inherited its paramters from somewhere else. 
+
+* Back references are now wrapped over multiple lines, if long
+  (#493, @LiNk-NY).
+
+* Never overwrite manually created `NAMESPACE` or documentation files, even if
+  using `roxygen2` for the first time (@krlmlr, #436).
+
+* New `roclet_find()` provides a more flexible way to specify roclets:
+  as roclet name (e.g. "rd_roclet"), in an package ("foo::roclet_bar"),
+  or with options ("foo::roclet_bar(baz = TRUE)").
+
+* Ability to set the `wrap` option in DESCRIPTION has been eliminated.
+  This was rarely used and hasn't been documented for a long time. It's 
+  likely I'll add back some more generic way of setting roxygen options
+  in the future.
+
+* `default_data_format()` has been renamed to `object_format()`.
+
+* The default alias for S4 method now re-addeds trailing ANY signatures
+  that are sometimes dropped (#460).
+
+* Non-primitive, internal S3 generics (e.g. 'rbind', 'cbind') are now properly
+  detected as S3 generics. (#488, @kevinushey)
+
+* Changes to DESCRIPTION (i.e. `Collate:` and `RoxygenNote`) now use
+  the desc package. This will minimise spurious changes (#430).
+
+* `@family` see also are added in the same order they appear, not 
+  alphabetically (#315).
+
+* Special characters in `@describeIn` function names are escaped (#450).
+
+* Ensure that `functions` with S3 class are still treated as functions (#455).
+
+* Roxygen will no longer write out topics that don't have a name or title,
+  and will instead generate a warning. This makes it easier to detect if
+  you've accidentally used `@rdname` with an incorrect value (#474).
+
+* The usage of replacement functions uses non-breaking spaces so that `<-`
+  will never get put on its own line (#484).
+
+* Give nice warning message if you accidentally use `@example` instead of 
+  `@examples` (#494).
+
+* Fixed an issue where `.`s were sometimes added between words within
+  a `@family` tag (#477, @kevinushey).
+
+* Multiple `@examples` sections are merged (#472, @krlmlr).
+
+* The new `_PACKAGE` sentinel now also works from `roxygenise()`; before
+  it only worked from `devtools::document()` (#439, @krlmlr).
+
+## Extension
+
+* Deprecated `register.preref.parser()` and `register.preref.parsers()`
+  have been removed. `register_tags()` has also been removed in favour of
+  a new `roclet_tags()` generic.
+  
+* `roclet()` (the constructor), `roclet_tags()`, `roclet_process()`
+  `roclet_output()`, `roc_clean()` and now exported making it possible
+  to create roclets in other packages. 
+
+* `new_roclet()` is no longer exported - use `roclet()` instead.
+
+* Exported `roxy_tag()`, `roxy_tag_warning()` and 
+
+# roxygen2 5.0.1
+
+* Most fields can now be written using Markdown markup instead of the
+  traditional Rd language. See the 'markdown' vignette for details
+  (#364, #431), by @gaborcsardi
+
 # roxygen2 5.0.1
 
 * Use `ls()`, not `names()` to list elements of environment: fixes R 3.1.0

@@ -96,13 +96,15 @@ same_contents <- function(path, contents) {
   identical(text_hash, file_hash)
 }
 
-all_r_files <- function(path) {
+r_files <- function(path) {
   sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
 }
 
 ignore_files <- function(path, rfiles) {
     rbuildignore <- file.path(path, ".Rbuildignore")
-     if (file.exists(rbuildignore)) {
+    if (!file.exists(rbuildignore)) {
+        rfiles
+    } else {
         rbuildignore_patterns <- readLines(rbuildignore, warn = FALSE)
         ## We need to apply the regular expressions from .Rbuildignore
         ## on the top-level directory, so we need to remove everything
@@ -115,22 +117,10 @@ ignore_files <- function(path, rfiles) {
         ## Figure out if any of the regular expressions matches files
         ## in R/ Use perl=TRUE as R-exts manual says that patterns
         ## should be perl-like regular expressions
-        idx_rfiles_to_ignore <- unique(unlist(lapply(rbuildignore_patterns,
-                                                     function(x) {
-             grep(x, relative_rfiles, perl = TRUE)
-        })))
-        if (length(idx_rfiles_to_ignore))
-            rfiles[-idx_rfiles_to_ignore]
-        else
-            rfiles
-    } else {
-        rfiles
+        idx_rfiles_to_ignore <- Reduce("|", lapply(rbuildignore_patterns,
+                                       grepl, relative_rfiles, perl = TRUE))
+        rfiles[!idx_rfiles_to_ignore]
     }
-}
-
-r_files <- function(path) {
-    rfiles <- all_r_files(path)
-    ignore_files(path, rfiles)
 }
 
 dots <- function(...) {

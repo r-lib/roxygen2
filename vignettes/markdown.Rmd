@@ -26,15 +26,15 @@ Here is an example roxygen chunk that uses markdown.
 ```r
 #' Use roxygen to document a package.
 #'
-#' This function is a wrapper for the [](roxygen2::roxygenize) function from 
+#' This function is a wrapper for the [roxygen2::roxygenize()] function from
 #' the `roxygen2` package. See the documentation and vignettes of
 #' that package to learn how to use roxygen.
 #'
 #' @param pkg package description, can be path or package name.  See
-#'   [](::as.package) for more information
+#'   [as.package()] for more information
 #' @param clean,reload Deprecated.
 #' @inheritParams roxygen2::roxygenise
-#' @seealso [](roxygen2::roxygenize), `browseVignettes("roxygen2")`
+#' @seealso [roxygen2::roxygenize()], `browseVignettes("roxygen2")`
 #' @export
 #' @md
 ```
@@ -109,7 +109,7 @@ Regular Markdown lists are recognized and converted to `\enumerate{}` or `\itemi
 #' * A 6- or 8-digit hexa color string, e.g. `#ff0000` means
 #'   red. Transparency (alpha channel) values are ignored.
 #' * A one-column matrix with three rows for the red, green
-#'   and blue channels, as returned by [](grDevices::col2rgb)
+#'   and blue channels, as returned by [grDevices::col2rgb()]
 ```
 
 Nested lists are also supported.
@@ -131,26 +131,30 @@ URLs are also automatically converted to hyperlinks:
 #' The main R web site is at https://r-project.org.
 ```
 
-Markdown notation can be used to create links to other manual pages. There are four kinds of links:
+Markdown notation can be used to create links to other manual pages. There are six kinds of links:
 
-```r
-#' 1. Link to another manual page in the same package: [](::my_function).
-#' 2. Link to a manual page from another package: [](devtools::document).
-#'
-#' 3. You can change the link text: Look at [this function](::=my_function).
-#' 4. Also look at [this function in `devtools`](devtools::document).
-#'
-#' It is possible to make text links verbatim, [`like this`](::=my_function).
-#' Even if they refer to another package,
-#' [`like this`](maxygen::macument).
-#' With quotes: [`"like this"`](maxygen::macument).
-```
+1. Link to another function in the same package: `[func()]`. These
+   links will be typeset as code, and they are equavalent to
+   `\code{\link[=func]{func()}`.
+2. Link to a (non-function) object, class, data set, etc. in the same
+   same package: `[object]`. These links that *not* typeset as code,
+   so if you want them as code, enclose them in backticks (inside the
+   brackets).
+3. Link to a function from another package: `[pkg::func()]`. These links
+   will be typeset as code.
+4. Link to a (non-function) object in another package: `[pkg::object]`.
+   These links will not be typeset as code.
+5. Link to an object in the same package, with a different link text:
+   `[link text][object]`. Here `object` can be a function, but the link
+   text is not typeset as code.
+6. Link to an object in another package, with different link text:
+   `[link text][pkg:object]`. This is not typeset as code.
 
 S3/S4 classes can be linked the same way:
 
 ```r
-#' * [terms](::=terms.object) becomes \link[=terms.object]{terms}
-#' * [abc](::=abc-class) becomes \link[=abc-class]{abc}
+#' * [terms][terms.object] becomes \link[=terms.object]{terms}
+#' * [abc][abc-class] becomes \link[=abc-class]{abc}
 ```
 
 ## Images

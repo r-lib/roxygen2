@@ -1,6 +1,6 @@
 #' Re-build outdated vignettes.
 #'
-#' This rebuilds outdated vignettes with [](tools::buildVignette).
+#' This rebuilds outdated vignettes with [tools::buildVignette].
 #' By default, it will rebuild all vignettes if the source file is newer than
 #' the output pdf or html. (This means it will automatically re-build the
 #' vignette if you change the vignette source, but _not_ when you

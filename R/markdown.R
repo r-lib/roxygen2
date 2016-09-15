@@ -23,7 +23,8 @@ full_markdown <- function(rest) {
 markdown <- function(text, markdown_tags) {
   if (!markdown_on()) return(text)
   esc_text <- escape_rd_for_md(text)
-  md <- markdown_xml(esc_text, hardbreaks = TRUE)
+  esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
+  md <- markdown_xml(esc_text_linkrefs, hardbreaks = TRUE)
   xml <- read_xml(md)
   rd_text <- str_trim(markdown_rparse(xml, markdown_tags))
   unescape_rd_for_md(rd_text, esc_text)
@@ -194,56 +195,136 @@ ws_to_empty <- function(x) {
   sub("^\\s*$", "", x)
 }
 
-## Parse a MarkDown link, to see if we should create an Rd link
-##
-## * [](::function) becomes \code{\link{function}}
-## * [](pkg::function) becomes \code{\link[pkg]{function}}
-## * [name](::=dest) becomes \link[=dest]{name}
-## * [name](pkg::bar) becomes \link[pkg:bar]{name}
-##
-## S3/S4 classes are also supported
-## * [terms](::=terms.object) becomes \link[=terms.object]{terms}
-## * [abc](::=abc-class) becomes \link[=abc-class]{abc}
-##
-## These actually do not require any special treatment from the
-## parser, they are included in the four cases above.
+#' Add link reference definitions for functions to a markdown text.
+#'
+#' We find the `[text][ref]` and the `[ref]` forms. There must be no
+#' spaces between the closing and opening bracket in the `[text][ref]`
+#' form.
+#'
+#' These are the link references we add:
+#' ```
+#'                                                        CODE
+#' MARKDOWN          REFERENCE LINK             LINK TEXT | RD
+#' --------          --------------             --------- - --
+#' [fun()]           [fun()]: R:fun()           fun()     T \\link[=fun]{fun()}
+#' [obj]             [obj]: R:obj               obj       F \\link{obj}
+#' [pkg::fun()]       [pkg::fun()]: R:pkg::fun()  pkg::fun() T \\link[pkg:fun]{pkg::fun()}
+#' [pkg::obj]         [pkg::obj]: R:pkg::obj      pkg::obj   F \\link[pkg:obj]{pkg::obj}
+#' [text][fun()]     [fun()]: R:fun()           text      F \\link[=fun]{text}
+#' [text][obj]       [obj]: R:obj               text      F \\link[=obj]{text}
+#' [text][pkg::fun()] [pkg::fun()]: R:pkg::fun()  text      F \\link[pkg:fun]{text}
+#' [text][pkg::obj]   [pkg::obj]: R:pkg::obj      text      F \\link[pkg:obj]{text}
+#' ```
+#'
+#' These are explicitly tested in `test-rd-markdown-links.R`
+#'
+#' We add in a special `R:` marker to the URL. This way we don't
+#' pick up other links, that were specified via `<url>` or
+#' `[text](link)`. In the parsed XML tree these look the same as
+#' our `[link]` and `[text][link]` links.
+#'
+#' @param text Input markdown text.
+#' @return The input text and all dummy reference link definitions
+#'   appended.
+#'
+#' @noRd
+
+add_linkrefs_to_md <- function(text) {
+
+  refs <- str_match_all(
+    text,
+    regex("(?<=[^]]|^)\\[([^]]+)\\](?:\\[([^]]+)\\])?(?=[^\\[]|$)")
+  )[[1]]
+
+  if (length(refs) == 0) return(text)
+
+  ## For the [fun] form the link text is the same as the destination.
+  refs[, 3] <- ifelse(refs[,3] == "", refs[, 2], refs[,3])
+
+  ref_text <- paste0("[", refs[, 3], "]: ", "R:", refs[, 3])
+
+  paste0(
+    text,
+    "\n\n",
+    paste(ref_text, collapse = "\n"),
+    "\n"
+  )
+}
+
+#' Parse a MarkDown link, to see if we should create an Rd link
+#'
+#' See the table above.
+#'
+#' @param destination string constant, the "url" of the link
+#' @param contents An XML node, containing the contents of the link.
+#'
+#' @md
+#' @noRd
+#' @importFrom xml2 xml_name
 
 parse_link <- function(destination, contents) {
 
-  ## destination must contain :: exactly once, otherwise it is not an Rd link
-  if (!contains_once(destination, "::", fixed = TRUE)) return(NULL)
+  ## Not a [] or [][] type link, remove prefix if it is
+  orig_destination <- destination
+  if (! grepl("^R:", destination)) return(NULL)
+  destination <- sub("^R:", "", destination)
 
   ## if contents is a `code tag`, then we need to move this outside
-  ## of the link, Rd does not like \link{\code{}}, only \code{\link{}}
-  pre <- post <- ""
-  if (length(contents) == 3 &&
-      xml_name(contents[[1]]) == "text" &&
-      xml_name(contents[[2]]) == "code" &&
-      xml_name(contents[[3]]) == "text") {
-    pre <- paste0(ws_to_empty(xml_text(contents[[1]])), "\\code{")
-    post <- paste0("}", ws_to_empty(xml_text(contents[[3]])))
-    contents <- xml_contents(contents[[2]])
+  is_code <- FALSE
+  if (length(contents) == 1 && xml_name(contents) == "code") {
+    is_code <- TRUE
+    contents <- xml_contents(contents)
+    destination <- sub("`$", "", sub("^`", "", destination))
   }
 
-  split_contents <- strsplit(destination, "::", fixed = TRUE)[[1]]
-  pkg <- split_contents[1]
-  func <- split_contents[2]
+  ## If the supplied link text is the same as the reference text,
+  ## then we assume that the link text was automatically generated and
+  ## it was not specified explicitly. In this case `()` links are
+  ## turned to `\\code{}`.
+  ## We also assume link text if we see a non-text XML tag in contents.
+  has_link_text <- paste(xml_text(contents), collapse = "") != destination ||
+    any(xml_name(contents) != "text")
 
-  if (is_empty_xml(contents) && pkg == "") {
-    ## [](::function) -> \code{\link{function}}
-    paste0("\\code{\\link{", func, "}}")
+  ## if (is_code) then we'll need \\code
+  ## `pkg` is package or NA
+  ## `fun` is fun() or obj (fun is with parens)
+  ## `is_fun` is TRUE for fun(), FALSE for obj
+  ## `obj` is fun or obj (fun is without parens)
 
-  } else if (is_empty_xml(contents)) {
-    ## [](pkg::function) -> \code{\link[pkg]{function}}
-    paste0("\\code{\\link[", pkg, "]{", func, "}}")
+  is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
+  pkg <- str_match(destination, "^(.*)::")[1,2]
+  fun <- tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
+  is_fun <- grepl("[(][)]$", fun)
+  obj <- sub("[(][)]$", "", fun)
 
-  } else if (pkg == "") {
-    ## [name](::=dest) -> \link[=dest]{name}
-    list(pre, paste0("\\link[", func, "]{"), contents, "}", post)
+  ## To understand this, look at the RD column of the table above
+  if (!has_link_text) {
+    paste0(
+      if (is_code) "\\code{",
+      "\\link",
+      if (is_fun || ! is.na(pkg)) "[",
+      if (is_fun && is.na(pkg)) "=",
+      if (! is.na(pkg)) paste0(pkg, ":"),
+      if (is_fun || ! is.na(pkg)) paste0(obj, "]"),
+      "{",
+      if (!is.na(pkg)) paste0(pkg, "::"),
+      fun,
+      "}",
+      if (is_code) "}"
+    )
 
   } else {
-    ## [name](pkg::bar) -> \link[pkg:bar]{name}
-    list(pre, paste0("\\link[", pkg, ":", func, "]{"), contents, "}", post)
+    list(
+      paste0(
+        if (is_code) "\\code{",
+        "\\link[",
+        if (is.na(pkg)) "=" else paste0(pkg, ":"),
+        obj,
+        "]{"
+      ),
+      contents,
+      "}"
+    )
   }
 }
 
@@ -259,3 +340,22 @@ contains_once <- function(x, pattern, ...) {
 is_empty_xml <- function(x) {
   is(x, "xml_nodeset") && length(x) == 0
 }
+
+#' Dummy page to test roxygen's markdown formatting
+#'
+#' Links are very tricky, so I'll put in some links here:
+#' Link to a function: [roxygenize()].
+#' Link to an object: [roxygenize] (we just treat it like an object here.
+#'
+#' Link to another package, function: [devtools::document()].
+#' Link to another package, non-function: [devtools::document].
+#'
+#' Link with link text:  [this great function][roxygenize()] or
+#' [that great function][roxygenize].
+#'
+#' In another package: [and this one][devtools::document].
+#'
+#' @md
+#' @name markdown-test
+#' @keywords internal
+NULL

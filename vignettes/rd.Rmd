@@ -20,7 +20,7 @@ There are three steps in the transformation from roxygen comments in your source
 
 1. You add roxygen comments to your source file.
 2. `roxygen2::roxygenise()` converts roxygen comments to `.Rd` files.
-3. R converts `.Rd` files to human readable documentation
+3. R converts `.Rd` files to human readable documentation.
 
 The process starts when you add specially formatted roxygen comments to your source file. Roxygen comments start with `#'` so you can continue to use regular comments for other purposes.
 

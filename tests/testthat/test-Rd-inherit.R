@@ -93,24 +93,63 @@ test_that("can inherit return value from external function", {
 
 # Inherit description and details -----------------------------------------
 
-test_that("can inherit return values from roxygen topic", {
+test_that("can inherit description from roxygen topic", {
   out <- roc_proc_text(rd_roclet(), "
     #' A.
+    #'
     #' B
-    #' @details C
     #'
     #' @return ABC
     a <- function(x) {}
 
+    #' @title C
+    #' @inherit a description
+    b <- function(y) {}
+  ")[[2]]
+
+  expect_equal(out$get_field("description")$values, "B")
+})
+
+test_that("won't inherit description if already set through title", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #'
     #' B
+    #'
+    #' @return ABC
+    a <- function(x) {}
+
+    #' C
+    #' @inherit a description
+    b <- function(y) {}
+  ")[[2]]
+
+  expect_equal(out$get_field("description")$values, "C")
+})
+
+test_that("can inherit details from roxygen topic", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #'
+    #' B
+    #'
+    #' C
+    #'
+    #' @return ABC
+    a <- function(x) {}
+
+    #' D
+    #'
+    #' E
     #'
     #' @inherit a details
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("description")$values, "B")
+  expect_equal(out$get_field("description")$values, "E")
   expect_equal(out$get_field("details")$values, "C")
 })
+
 
 # Inherit parameters ------------------------------------------------------
 

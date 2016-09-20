@@ -80,7 +80,8 @@ tag_inherit <- function(x) {
     pieces <- str_split(str_trim(x$val), "\\s+")[[1]]
     fields <- pieces[-1]
 
-    all <- c("params", "return", "description", "details", "seealso", "sections")
+    all <- c("params", "return", "description", "details", "seealso",
+      "sections", "references")
     if (length(fields) == 0) {
       fields <- all
     } else {

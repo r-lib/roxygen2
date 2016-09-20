@@ -9,6 +9,8 @@ topics_process_inherit <- function(topics) {
   topics$topo_apply(inherits("details"), inherit_field, "details")
   topics$topo_apply(inherits("seealso"), inherit_field, "seealso")
 
+  topics$topo_apply(inherits("sections"), inherit_sections)
+
   topics$topo_apply(inherits("params"), inherit_params)
 
   invisible()
@@ -84,6 +86,43 @@ topic_params.Rd <- function(x) {
 topic_params.RoxyTopic <- function(x) {
   x$get_field("param")$values
 }
+
+
+# Inherit sections --------------------------------------------------------
+
+inherit_sections <- function(topic, topics) {
+  current_secs <- topic$get_field("section")$title
+
+  for (inheritor in topic$inherits_from("sections")) {
+    inheritor <- check_topic(inheritor, topics)
+    if (is.null(inheritor)) {
+      return()
+    }
+
+    sections <- find_sections(inheritor)
+    needed <- !(sections$title %in% current_secs)
+    if (!any(needed))
+      next
+
+    topic$add_field(
+      roxy_field_section(sections$title[needed], sections$content[needed])
+    )
+  }
+}
+
+find_sections <- function(topic) {
+  if (inherits(topic, "Rd")) {
+    tag <- get_tags(topic, "\\section")
+
+    titles <- vapply(lapply(tag, `[[`, 1), rd2text, character(1))
+    contents <- vapply(lapply(tag, `[[`, 2), rd2text, character(1))
+
+    roxy_field_section(titles, contents)
+  } else {
+    topic$get_field("section")
+  }
+}
+
 
 # Inherit from single field ----------------------------------------------------
 

@@ -1,7 +1,7 @@
 # roxygen2 5.0.1.9000
 
-* New `@inherit` generalises `@inheritParams`, and allows to you inherit from
-  parameters, return, description, details, and seealso. The default 
+* New `@inherit` generalises `@inheritParams`, and allows to you inherit
+  parameters, return, description, details, sections, and seealso. The default 
   `@inherit my_fun` will inherit all, or you can select specific tags to 
   inherit with `@inherit my_fun return params` (#384).
 

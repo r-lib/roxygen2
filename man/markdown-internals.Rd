@@ -16,7 +16,7 @@ markdown markup.}
 \item{rd_text}{The markdown parsed and interpreted text.}
 
 \item{esc_text}{The original escaped text from
-\code{\link{escape_rd_for_md}}.}
+\code{\link[=escape_rd_for_md]{escape_rd_for_md()}}.}
 }
 \value{
 For \code{escape_rd_for_md}:

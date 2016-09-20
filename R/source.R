@@ -1,9 +1,9 @@
 #' Source all files in a package.
 #'
 #' This is a simple attempt to load code in a package used by
-#' [](::roxygenize). It will work with simple packages, but fail if
+#' [roxygenize]. It will work with simple packages, but fail if
 #' there are compiled files, data files, etc. In that case, it's better to
-#' use [](devtools::document).
+#' use [devtools::document].
 #'
 #' @param path Path to a package.
 #' @return An environment, into which all R files in the directory were

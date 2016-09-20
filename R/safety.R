@@ -39,11 +39,14 @@ made_by <- function(comment) {
 update_roxygen_version <- function(base_path) {
   desc_path <- file.path(base_path, "DESCRIPTION")
 
-  new <- as.character(utils::packageVersion("roxygen2"))
-  old <- desc::desc_get("RoxygenNote", file = desc_path)[[1]]
+  cur <- as.character(utils::packageVersion("roxygen2"))
+  prev <- desc::desc_get("RoxygenNote", file = desc_path)[[1]]
 
-  if (!identical(old, new)) {
+  if (!is.na(cur) && !is.na(prev) && package_version(cur) < package_version(prev)) {
+    warning("Version of roxygen2 last used with this package is ", prev, ". ",
+      " You only have version ", cur, call. = FALSE)
+  } else if (!identical(cur, prev)) {
     message("Updating roxygen version in ", desc_path)
-    desc::desc_set(RoxygenNote = new, file = desc_path)
+    desc::desc_set(RoxygenNote = cur, file = desc_path)
   }
 }

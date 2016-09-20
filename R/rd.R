@@ -33,6 +33,7 @@ roclet_tags.roclet_rd <- function(x) {
     format = tag_markdown,
     inherit = tag_inherit,
     inheritParams = tag_value,
+    inheritSection = tag_name_description,
     keywords = tag_value,
     method = tag_words(2, 2),
     name = tag_value,
@@ -265,6 +266,13 @@ topic_add_inherit <- function(topic, block) {
     field <- roxy_field_inherit(tag, list("params"))
     topic$add_field(field)
   }
+
+  tags <- block_tags(block, "inheritSection")
+  for (tag in tags) {
+    field <- roxy_field_inherit_section(tag$name, tag$description)
+    topic$add_field(field)
+  }
+
 }
 
 

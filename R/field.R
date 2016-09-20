@@ -286,6 +286,23 @@ merge.roxy_field_inherit <- function(x, y, ...) {
 }
 
 
+roxy_field_inherit_section <- function(source, title) {
+  stopifnot(is.character(source), is.character(title))
+  stopifnot(length(source) == length(title))
+
+  roxy_field("inherit_section", source = source, title = title)
+}
+
+#' @export
+format.roxy_field_inherit_section <- format_null
+
+#' @export
+merge.roxy_field_inherit_section <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  roxy_field_inherit_section(c(x$source, y$source), c(x$title, y$title))
+}
+
+
 # Sections ----------------------------------------------------------------
 
 roxy_field_section <- function(title, content) {

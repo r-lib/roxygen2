@@ -48,6 +48,14 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     sources
   },
 
+  inherits_section_from = function() {
+    if (!self$has_field("inherit_section")) {
+      return(character())
+    }
+
+    self$get_field("inherit_section")$source
+  },
+
   # Ensures that each type of name (as given by its name), only appears
   # once in self$fields
   add_field = function(field, overwrite = FALSE) {

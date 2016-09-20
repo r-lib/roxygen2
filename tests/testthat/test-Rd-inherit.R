@@ -92,7 +92,6 @@ test_that("can inherit return value from external function", {
 
 # Inherit seealso ---------------------------------------------------------
 
-
 test_that("can inherit return values from roxygen topic", {
   out <- roc_proc_text(rd_roclet(), "
     #' A.
@@ -190,6 +189,25 @@ test_that("inherits missing sections", {
   expect_equal(section$title, c("A", "B"))
   expect_equal(section$content, c("2", "1"))
 })
+
+test_that("can inherit single section", {
+    out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #' @section A:1
+    #' @section B:1
+    a <- function(x) {}
+
+    #' D
+    #'
+    #' @inheritSection a B
+    b <- function(y) {}
+  ")[[2]]
+
+  section <- out$get_field("section")
+  expect_equal(section$title, "B")
+  expect_equal(section$content, "1")
+})
+
 
 test_that("can find section in existing docs", {
   out <- find_sections(find_topic("base::attach"))

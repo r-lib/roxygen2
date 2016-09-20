@@ -9,6 +9,8 @@ topics_process_inherit <- function(topics) {
   topics$topo_apply(inherits("details"), inherit_field, "details")
   topics$topo_apply(inherits("seealso"), inherit_field, "seealso")
 
+  # First inherit individual sections, then all sections.
+  topics$topo_apply(function(x) x$inherits_section_from(), inherit_section)
   topics$topo_apply(inherits("sections"), inherit_sections)
 
   topics$topo_apply(inherits("params"), inherit_params)
@@ -106,6 +108,30 @@ inherit_sections <- function(topic, topics) {
 
     topic$add_field(
       roxy_field_section(sections$title[needed], sections$content[needed])
+    )
+  }
+}
+
+inherit_section <- function(topic, topics) {
+  sections <- topic$get_field("inherit_section")
+  sources <- sections$source
+  titles <- sections$title
+
+  for (i in seq_along(sources)) {
+    inheritor <- check_topic(sources[[i]], topics)
+    if (is.null(inheritor)) {
+      return()
+    }
+
+    new_section <- find_sections(inheritor)
+    selected <- new_section$title %in% titles[[i]]
+
+    if (sum(selected) != 1) {
+      warning("Can't find section '", titles[[i]], "'", call. = FALSE)
+    }
+
+    topic$add_field(
+      roxy_field_section(new_section$title[selected], new_section$content[selected])
     )
   }
 }

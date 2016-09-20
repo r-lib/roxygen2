@@ -21,7 +21,7 @@ test_that("no options gives default values", {
 
   expect_equal(
     block$inherit$fields,
-    c("params", "slots", "return", "description", "details", "seealso")
+    c("params", "return", "description", "details", "seealso")
   )
 })
 

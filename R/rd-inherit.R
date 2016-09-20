@@ -52,13 +52,8 @@ get_documented_params <- function(topic, only_first = FALSE) {
 }
 
 find_params <- function(name, topics) {
-  topic <- find_topic(name, topics)
+  topic <- check_topic(name, topics)
   if (is.null(topic)) {
-    warning(
-      "Failed to find topic '", name, "'",
-      call. = FALSE,
-      immediate. = TRUE
-    )
     return()
   }
 
@@ -99,14 +94,8 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
 
   # Otherwise, try each try function listed in inherits
   for (inherit_from in topic$inherits_from(roxy_name)) {
-    inherit_topic <- find_topic(inherit_from, topics)
-
+    inherit_topic <- check_topic(inherit_from, topics)
     if (is.null(inherit_topic)) {
-      warning(
-        "Failed to find topic '", name, "'",
-        call. = FALSE,
-        immediate. = TRUE
-      )
       next
     }
 
@@ -153,4 +142,17 @@ find_topic <- function(name, topics) {
     rd_name <- topics$find_filename(name)
     topics$get(rd_name)
   }
+}
+
+check_topic <- function(name, topic) {
+  topic <- find_topic(name, topic)
+  if (is.null(topic)) {
+    warning(
+      "Failed to find topic '", name, "'",
+      call. = FALSE,
+      immediate. = TRUE
+    )
+  }
+
+  topic
 }

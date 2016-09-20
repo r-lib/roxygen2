@@ -21,7 +21,7 @@ test_that("no options gives default values", {
 
   expect_equal(
     block$inherit$fields,
-    c("params", "slots", "return", "description", "details")
+    c("params", "slots", "return", "description", "details", "seealso")
   )
 })
 
@@ -90,6 +90,24 @@ test_that("can inherit return value from external function", {
 })
 
 
+# Inherit seealso ---------------------------------------------------------
+
+
+test_that("can inherit return values from roxygen topic", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #'
+    #' @seealso ABC
+    a <- function(x) {}
+
+    #' B
+    #'
+    #' @inherit a
+    b <- function(y) {}
+  ")[[2]]
+
+  expect_equal(out$get_field("seealso")$values, "ABC")
+})
 
 # Inherit description and details -----------------------------------------
 

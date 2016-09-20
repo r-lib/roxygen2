@@ -293,7 +293,7 @@ parse_link <- function(destination, contents) {
 
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
-  fun <- tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
+  fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
 

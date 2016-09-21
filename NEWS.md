@@ -1,5 +1,7 @@
 # roxygen2 5.0.1.9000
 
+* You can now document `setClassUnion()`s (#514).
+
 * New `@inheritDocParams` allows you to automatically generate parameter 
   documentation for `...` for the common case where you pass `...` on to 
   another function (#512). Because you often override some arguments, it 

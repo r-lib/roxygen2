@@ -93,6 +93,13 @@ parser_setClass <- function(call, env, block) {
   object(value)
 }
 
+parser_setClassUnion <- function(call, env, block) {
+  name <- as.character(call$name)
+  value <- methods::getClass(name, where = env)
+
+  object(value)
+}
+
 parser_setRefClass <- function(call, env, block) {
   name <- as.character(call$Class)
   value <- methods::getClass(name, where = env)

@@ -13,7 +13,7 @@ template_eval <- function(template_path, vars) {
   utils::capture.output(brew::brew(template_path, envir = vars))
 }
 
-process_templates <- function(block, base_path) {
+process_templates <- function(block, base_path, global_options = list()) {
   template_locs <- names(block) == "template"
   template_tags <- block[template_locs]
   if (length(template_tags) == 0) return(block)
@@ -32,7 +32,8 @@ process_templates <- function(block, base_path) {
   # Insert templates back in the location where they came from
   block_pieces <- lapply(block, list)
   block_pieces[template_locs] <- lapply(results, parse_block,
-    file = "TEMPLATE", registry = roclet_tags.roclet_rd(list()), offset = 0L)
+    file = "TEMPLATE", registry = roclet_tags.roclet_rd(list()), offset = 0L,
+    global_options = global_options)
   names(block_pieces)[template_locs] <- ""
 
   unlist(block_pieces, recursive = FALSE)

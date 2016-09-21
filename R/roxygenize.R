@@ -62,7 +62,7 @@ roxygenize <- function(package.dir = ".",
   tags <- c(lapply(roclets, roclet_tags), list(list(include = tag_value)))
   registry <- unlist(tags, recursive = FALSE)
 
-  parsed <- parse_package(base_path, load_code, registry)
+  parsed <- parse_package(base_path, load_code, registry, options)
 
   roc_out <- function(roc) {
     if (clean) {
@@ -95,7 +95,8 @@ load_options <- function(base_path = ".") {
 
   defaults <- list(
     wrap = FALSE,
-    roclets = c("collate", "namespace", "rd")
+    roclets = c("collate", "namespace", "rd"),
+    markdown = markdown_global_default
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))

@@ -1,5 +1,10 @@
-# Hacky global switch - will be eliminated when we turn md on for
-# all
+
+## If not specified in DESCRIPTION
+markdown_global_default <- FALSE
+
+## Hacky global switch - this uses the fact that blocks are parsed
+## one after the another, and that we set markdown on/off before each
+## block
 
 markdown_env <- new.env(parent = emptyenv())
 markdown_on <- function(value = NULL) {

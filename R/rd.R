@@ -39,6 +39,7 @@ roclet_tags.roclet_rd <- function(x) {
     method = tag_words(2, 2),
     name = tag_value,
     md = tag_toggle,
+    noMd = tag_toggle,
     noRd = tag_toggle,
     note = tag_markdown,
     param = tag_name_description,
@@ -58,7 +59,8 @@ roclet_tags.roclet_rd <- function(x) {
 }
 
 #' @export
-roclet_process.roclet_rd <- function(x, parsed, base_path) {
+roclet_process.roclet_rd <- function(x, parsed, base_path,
+                                     global_options = list()) {
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 
@@ -66,7 +68,7 @@ roclet_process.roclet_rd <- function(x, parsed, base_path) {
     if (length(block) == 0)
       next
 
-    rd <- block_to_rd(block, base_path, parsed$env)
+    rd <- block_to_rd(block, base_path, parsed$env, global_options)
     topics$add(rd)
   }
   topics$drop_invalid()
@@ -77,9 +79,9 @@ roclet_process.roclet_rd <- function(x, parsed, base_path) {
   topics$topics
 }
 
-block_to_rd <- function(block, base_path, env) {
+block_to_rd <- function(block, base_path, env, global_options = list()) {
   # Must start by processing templates
-  block <- process_templates(block, base_path)
+  block <- process_templates(block, base_path, global_options)
 
   if (!needs_doc(block)) {
     return()

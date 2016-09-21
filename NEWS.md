@@ -94,7 +94,7 @@
 
 * Most fields can now be written using Markdown markup instead of the
   traditional Rd language. See the 'markdown' vignette for details
-  (#364, #431), by @gaborcsardi
+  (#364, #431, #499, #506, #507), by @gaborcsardi
 
 # roxygen2 5.0.1
 

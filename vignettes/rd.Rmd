@@ -370,11 +370,22 @@ You can make templates more flexible by using template variables defined with `@
 
 Note that templates are parsed a little differently to regular blocks, so you'll need to explicitly set the title, description and details with `@title`, `@description` and `@details`.
 
-### Inheriting parameters from other functions
+### Inheriting documentation from other topics
 
-You can inherit parameter descriptions from other functions using `@inheritParams source_function`. This tag will bring in all documentation for parameters that are undocumented in the current function, but documented in the source function. The source can be a function in the current package, `@inheritParams function`, or another package using `@inheritParams package::function`.
+You can inherit documentation from other functions in a few ways:
 
-Note, however, that inheritance does not chain. In other words, the `source_function` must always be the function that defines the parameter using `@param`.
+* `@inherit source_function` will inherit parameters, return, references,
+  description, details, sections, and seealso from `source_function()`.
+  
+* `@inherit source_function return details` will inherit selected components 
+  from `source_function()`
+
+* `@inheritSection source_function Section title` will inherit the single 
+  section called "Section title" from `source_function()`.
+  
+All of these work recursively so you can inherit documentation from a function that has inherited it from elsewhere.
+
+You can also inherit documentation from functions provided by another package by using `pkg::source_function`.
 
 ### Documenting multiple functions in the same file
 

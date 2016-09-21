@@ -12,7 +12,7 @@
 
 <meta name="author" content="Hadley Wickham" />
 
-<meta name="date" content="2016-09-20" />
+<meta name="date" content="2016-09-21" />
 
 <title>Generating Rd files</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Generating Rd files</h1>
 <h4 class="author"><em>Hadley Wickham</em></h4>
-<h4 class="date"><em>2016-09-20</em></h4>
+<h4 class="date"><em>2016-09-21</em></h4>
 
 
 
@@ -349,10 +349,16 @@ Account &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span 
 <p>You can make templates more flexible by using template variables defined with <code>@templateVar name value</code>. Template files are run with brew, so you can retrieve values (or execute any other arbitrary R code) with <code>&lt;%= name %&gt;</code>.</p>
 <p>Note that templates are parsed a little differently to regular blocks, so you’ll need to explicitly set the title, description and details with <code>@title</code>, <code>@description</code> and <code>@details</code>.</p>
 </div>
-<div id="inheriting-parameters-from-other-functions" class="section level3">
-<h3>Inheriting parameters from other functions</h3>
-<p>You can inherit parameter descriptions from other functions using <code>@inheritParams source_function</code>. This tag will bring in all documentation for parameters that are undocumented in the current function, but documented in the source function. The source can be a function in the current package, <code>@inheritParams function</code>, or another package using <code>@inheritParams package::function</code>.</p>
-<p>Note, however, that inheritance does not chain. In other words, the <code>source_function</code> must always be the function that defines the parameter using <code>@param</code>.</p>
+<div id="inheriting-documentation-from-other-topics" class="section level3">
+<h3>Inheriting documentation from other topics</h3>
+<p>You can inherit documentation from other functions in a few ways:</p>
+<ul>
+<li><p><code>@inherit source_function</code> will inherit parameters, return, references, description, details, sections, and seealso from <code>source_function()</code>.</p></li>
+<li><p><code>@inherit source_function return details</code> will inherit selected components from <code>source_function()</code></p></li>
+<li><p><code>@inheritSection source_function Section title</code> will inherit the single section called “Section title” from <code>source_function()</code>.</p></li>
+</ul>
+<p>All of these work recursively so you can inherit documentation from a function that has inherited it from elsewhere.</p>
+<p>You can also inherit documentation from functions provided by another package by using <code>pkg::source_function</code>.</p>
 </div>
 <div id="documenting-multiple-functions-in-the-same-file" class="section level3">
 <h3>Documenting multiple functions in the same file</h3>

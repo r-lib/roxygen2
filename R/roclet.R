@@ -6,7 +6,6 @@
 #'
 #' @keywords internal
 #' @name roclet
-#' @md
 NULL
 
 #' @export

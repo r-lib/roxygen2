@@ -263,7 +263,6 @@ add_linkrefs_to_md <- function(text) {
 #' @param destination string constant, the "url" of the link
 #' @param contents An XML node, containing the contents of the link.
 #'
-#' @md
 #' @noRd
 #' @importFrom xml2 xml_name
 
@@ -360,7 +359,6 @@ is_empty_xml <- function(x) {
 #'
 #' In another package: [and this one][devtools::document].
 #'
-#' @md
 #' @name markdown-test
 #' @keywords internal
 NULL

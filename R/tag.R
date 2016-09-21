@@ -10,7 +10,6 @@
 #' tag parsing generator functions.
 #'
 #' @keywords internal
-#' @md
 #' @export
 #' @param tag Tag name
 #' @param val Tag value. When read from the file, this will be a string,

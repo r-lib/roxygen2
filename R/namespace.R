@@ -9,7 +9,6 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 #' (<http://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
 #'
 #' @family roclets
-#' @md
 #' @export
 #' @seealso `vignette("namespace", package = "roxygen2")`
 #' @aliases export exportClass exportMethod S3method import importFrom

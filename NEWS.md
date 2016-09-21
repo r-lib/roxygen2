@@ -92,8 +92,6 @@
 
 * Exported `roxy_tag()`, `roxy_tag_warning()` and 
 
-# roxygen2 5.0.1
-
 * Most fields can now be written using Markdown markup instead of the
   traditional Rd language. See the 'markdown' vignette for details
   (#364, #431), by @gaborcsardi

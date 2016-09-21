@@ -53,6 +53,7 @@ get_documented_params <- function(topic, only_first = FALSE) {
       documented <- unlist(documented)
   }
 
+  documented[documented == "\\dots"] <- "..."
   documented
 }
 

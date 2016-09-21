@@ -387,3 +387,26 @@ test_that("argument order with @inheritParam", {
   expect_equal(get_tag(out[["c1.Rd"]], "param")$values, c(x="C", y="Y"))
   expect_equal(get_tag(out[["c2.Rd"]], "param")$values, c(x="C", y="Y"))
 })
+
+
+test_that("inherit params ... named \\dots", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Foo
+    #'
+    #' @param x x
+    #' @param \\dots foo
+    foo <- function(x, ...) {}
+
+    #' Bar
+    #'
+    #' @inheritParams foo
+    #' @param \\dots bar
+    bar <- function(x=1, ...) {}
+  ")[[2]]
+
+  expect_equal(
+    out$get_field("param")$values,
+    c(x = "x", "\\dots" = "bar")
+  )
+
+})

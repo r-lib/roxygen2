@@ -9,7 +9,8 @@
   a single section from another topic (#513).
 
 * `@inheritParams` now works recursively, so that you can inherit parameters
-  from a function that inherited its paramters from somewhere else. 
+  from a function that inherited its paramters from somewhere else.  It
+  also better handles `\dots` as an alias for `...` (#504).
 
 * Back references are now wrapped over multiple lines, if long
   (#493, @LiNk-NY).

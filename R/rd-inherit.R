@@ -1,4 +1,4 @@
-topics_process_inherit <- function(topics) {
+topics_process_inherit <- function(topics, env) {
   inherits <- function(type) {
     function(x) x$inherits_from(type)
   }
@@ -15,6 +15,8 @@ topics_process_inherit <- function(topics) {
   topics$topo_apply(inherits("sections"), inherit_sections)
 
   topics$topo_apply(inherits("params"), inherit_params)
+  # Can't inherit ... into ... so can do in any order
+  topics$apply(inherit_dot_params, env = env)
 
   invisible()
 }
@@ -42,6 +44,39 @@ inherit_params <- function(topic, topics) {
     missing <- setdiff(missing, to_add)
   }
 }
+
+inherit_dot_params <- function(topic, topics, env) {
+  inheritors <- topic$get_field("inherit_dot_params")
+  if (is.null(inheritors))
+    return()
+
+  # Need to find formals for each source
+  funs <- lapply(inheritors$source, function(x) eval(parse(text = x), envir = env))
+  args <- Map(select_args_text, funs, inheritors$args)
+
+  # Then pull out the ones we need
+  docs <- lapply(inheritors$source, find_params, topics = topics)
+  arg_matches <- function(args, docs) {
+    doc_args <- str_split(names(docs), ", ?")
+    match <- vapply(doc_args, function(x) x %in% args, logical(1))
+    docs[match]
+  }
+  docs_selected <- unlist(Map(arg_matches, args, docs))
+
+  # Build the arg string
+  from <- paste0("\\code{", inheritors$source, "}", collapse = ", ")
+  args <- paste0("  \\item{", names(docs_selected), "}{", docs_selected, "}",
+    collapse = "\n")
+
+  rd <- paste0(
+    "Arguments passed on to ", from, "\n",
+    "\\describe{\n",
+    args, "\n",
+    "}"
+  )
+  topic$add_simple_field("param", c("..." = rd))
+}
+
 
 get_documented_params <- function(topic, only_first = FALSE) {
   documented <- names(topic$get_field("param")$values)

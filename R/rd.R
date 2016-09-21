@@ -33,6 +33,7 @@ roclet_tags.roclet_rd <- function(x) {
     format = tag_markdown,
     inherit = tag_inherit,
     inheritParams = tag_value,
+    inheritDotParams = tag_two_part("source", "args", required = FALSE),
     inheritSection = tag_name_description,
     keywords = tag_value,
     method = tag_words(2, 2),
@@ -70,7 +71,7 @@ roclet_process.roclet_rd <- function(x, parsed, base_path) {
   }
   topics$drop_invalid()
   topics_process_family(topics)
-  topics_process_inherit(topics)
+  topics_process_inherit(topics, parsed$env)
   topics_fix_params_order(topics)
 
   topics$topics
@@ -273,6 +274,11 @@ topic_add_inherit <- function(topic, block) {
     topic$add_field(field)
   }
 
+  tags <- block_tags(block, "inheritDotParams")
+  for (tag in tags) {
+    field <- roxy_field_inherit_dot_params(tag$source, tag$args)
+    topic$add_field(field)
+  }
 }
 
 

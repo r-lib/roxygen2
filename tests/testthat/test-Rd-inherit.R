@@ -410,3 +410,25 @@ test_that("inherit params ... named \\dots", {
   )
 
 })
+
+# inheritDotParams --------------------------------------------------------
+
+test_that("can inherit all from single function", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Foo
+    #'
+    #' @param x x
+    #' @param y y
+    foo <- function(x, y) {}
+
+    #' Bar
+    #'
+    #' @inheritDotParams foo
+    bar <- function(...) {}
+  ")[[2]]
+
+  params <- out$get_field("param")$values
+  expect_named(params, "...")
+  expect_match(params, "Arguments passed on to \\code{foo}", fixed = TRUE)
+  expect_match(params, "\\item{x}{x}", fixed = TRUE)
+})

@@ -303,6 +303,22 @@ merge.roxy_field_inherit_section <- function(x, y, ...) {
 }
 
 
+roxy_field_inherit_dot_params <- function(source, args) {
+  stopifnot(is.character(source), is.character(args))
+  stopifnot(length(source) == length(args))
+
+  roxy_field("inherit_dot_params", source = source, args = args)
+}
+
+#' @export
+format.roxy_field_inherit_dot_params <- format_null
+
+#' @export
+merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  roxy_field_inherit_section(c(x$source, y$source), c(x$args, y$args))
+}
+
 # Sections ----------------------------------------------------------------
 
 roxy_field_section <- function(title, content) {

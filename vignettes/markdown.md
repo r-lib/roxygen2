@@ -1,7 +1,7 @@
 ---
 title: "Write R Documentation in Markdown"
 author: "Gábor Csárdi"
-date: "2016-09-18"
+date: "2016-09-22"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Write R Documentation in Markdown}
@@ -17,7 +17,17 @@ Starting from version 6.0.0, roxygen supports markdown markup within most roxyge
 
 # Turning on markdown support
 
-Currently you have to turn on markdown formatting manually for each roxygen chunk. You can do this by using the `@md` tag anywhere in the chunk. In the future roxygen will provide a global switch that turns on markdown formatting for the whole package. (And also a `@noMd` to turn it off, optionally.)
+There are two ways to turn on markdown support for a package: globally, at the package level, and locally at the block level.
+
+To turn on markdown for the whole package, insert this entry into the `DESCRIPTION` file of the package:
+```
+Roxygen: list(markdown = TRUE)
+```
+The position of the entry in the file does not matter. After this, all Roxygen documentation will be parsed as markdown.
+
+Alternatively, you can use the `@md` tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in markdown.
+
+There is also a new `@noMd` tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.
 
 Here is an example roxygen chunk that uses markdown.
 
@@ -166,7 +176,7 @@ The parser recognizes the markdown notation for embedded images. The image files
 
 # Roxygen and Rd tags *not* parsed as markdown
 
-Some of the roxygen tags are not parsed as markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without markdown support: `@aliases`, `@backref`, `@docType`, `@encoding`, `@evalRd`, `@example`, `@examples`, `@family`, `@inheritParams`, `@keywords`, `@method` `@name`, `@md`, `@noRd`, `@rdname`, `@rawRd`, `@usage`.
+Some of the roxygen tags are not parsed as markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without markdown support: `@aliases`, `@backref`, `@docType`, `@encoding`, `@evalRd`, `@example`, `@examples`, `@family`, `@inheritParams`, `@keywords`, `@method` `@name`, `@md`, `@noMd`, `@noRd`, `@rdname`, `@rawRd`, `@usage`.
 
 When mixing `Rd` and markdown notation, most `Rd` tags may contain markdown markup, the ones that can *not* are: `\acronym`, `\code`, `\command`, `\CRANpkg`, `\deqn`, `\doi`, `\dontrun`, `\dontshow`, `\donttest`, `\email`, `\env`, `\eqn`, `\figure`, `\file`, `\if`, `\ifelse`, `\kbd`, `\link`, `\linkS4class`, `\method`, `\newcommand`, `\option`, `\out`, `\packageAuthor`, `\packageDescription`, `\packageDESCRIPTION`, `\packageIndices`, `\packageMaintainer`, `\packageTitle`, `\pkg`, `\PR`, `\preformatted`, `\renewcommand`, `\S3method`, `\S4method`, `\samp`, `\special`, `\testonly`, `\url`, `\var`, `\verb`.
 

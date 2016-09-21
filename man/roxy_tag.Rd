@@ -11,6 +11,7 @@
 \alias{tag_name}
 \alias{tag_name_description}
 \alias{tag_toggle}
+\alias{tag_two_part}
 \alias{tag_value}
 \alias{tag_words}
 \alias{tag_words_line}
@@ -25,6 +26,8 @@ tag_value(x)
 tag_inherit(x)
 
 tag_name(x)
+
+tag_two_part(first, second, required = TRUE)
 
 tag_name_description(x)
 
@@ -50,6 +53,13 @@ but after parsing can be a more complicated structure (typically
 a character vector, but sometimes a list).}
 
 \item{file, line}{Location of the tag}
+
+\item{first, second}{Name of first and second parts of two part tags}
+
+\item{required}{Is the second part required (TRUE) or can it be blank
+(FALSE)?}
+
+\item{min, max}{Minimum and maximum number of words}
 }
 \description{
 \code{roxy_tag} constructs a tag object, and \code{roxy_tag_warning} makes
@@ -59,9 +69,8 @@ into a richer R object, or providing informative warnings and returning
 valid if the value is invalid.
 }
 \details{
-One exception to the rule is \code{tag_words}: you call it with
-arguments giving the \code{min} and \code{max} words, and it will
-generate a tag parser for you.
+Two exceptions to the rule are \code{tag_words} and \code{tag_two_part}, which are
+tag parsing generator functions.
 }
 \keyword{internal}
 

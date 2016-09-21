@@ -6,9 +6,8 @@
 #' into a richer R object, or providing informative warnings and returning
 #' valid if the value is invalid.
 #'
-#' One exception to the rule is `tag_words`: you call it with
-#' arguments giving the `min` and `max` words, and it will
-#' generate a tag parser for you.
+#' Two exceptions to the rule are `tag_words` and `tag_two_part`, which are
+#' tag parsing generator functions.
 #'
 #' @keywords internal
 #' @md
@@ -119,28 +118,40 @@ tag_name <- function(x) {
 
 #' @export
 #' @rdname roxy_tag
-tag_name_description <- function(x) {
-  x$val <- full_markdown(x$val)
+#' @param first,second Name of first and second parts of two part tags
+#' @param required Is the second part required (TRUE) or can it be blank
+#'   (FALSE)?
+tag_two_part <- function(first, second, required = TRUE) {
 
-  if (x$val == "") {
-    roxy_tag_warning(x, "requires a value")
-  } else if (!str_detect(x$val, "[[:space:]]+")) {
-    roxy_tag_warning(x, "requires name and description")
-  } else if (!rdComplete(x$val)) {
-    roxy_tag_warning(x, "mismatched braces or quotes")
-  } else {
-    pieces <- str_split_fixed(str_trim(x$val), "[[:space:]]+", 2)
+  function(x) {
+    x$val <- full_markdown(x$val)
 
-    x$val <- list(
-      name = pieces[, 1],
-      description = trim_docstring(pieces[, 2])
-    )
-    x
+    if (x$val == "") {
+      roxy_tag_warning(x, "requires a value")
+    } else if (required && !str_detect(x$val, "[[:space:]]+")) {
+      roxy_tag_warning(x, "requires ", first, " and ", second)
+    } else if (!rdComplete(x$val)) {
+      roxy_tag_warning(x, "mismatched braces or quotes")
+    } else {
+      pieces <- str_split_fixed(str_trim(x$val), "[[:space:]]+", 2)
+
+      x$val <- list(
+        pieces[, 1],
+        trim_docstring(pieces[, 2])
+      )
+      names(x$val) <- c(first, second)
+      x
+    }
   }
 }
 
 #' @export
 #' @rdname roxy_tag
+tag_name_description <- tag_two_part("name", "description")
+
+#' @export
+#' @rdname roxy_tag
+#' @param min,max Minimum and maximum number of words
 tag_words <- function(min = 0, max = Inf) {
   function(x) {
     if (!rdComplete(x$val)) {

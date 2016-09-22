@@ -9,7 +9,6 @@
 #' @return An environment, into which all R files in the directory were
 #'   sourced.
 #' @keywords internal
-#' @md
 source_package <- function(path) {
   r_path <- file.path(path, "R")
   if (!file.exists(r_path)) stop("Can't find R/ directory", call. = FALSE)

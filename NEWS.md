@@ -92,11 +92,12 @@
 
 * Exported `roxy_tag()`, `roxy_tag_warning()` and 
 
-# roxygen2 5.0.1
-
 * Most fields can now be written using Markdown markup instead of the
-  traditional Rd language. See the 'markdown' vignette for details
-  (#364, #431), by @gaborcsardi
+  traditional Rd language. You can turn on Markdown globally by adding
+  `Roxygen: list(markdown = TRUE)` to `DESCRIPTION`. The `@md` / `@noMd`
+  tags turn Markdown parsing on / off for the given block. See the
+  'markdown' vignette for more details (#364, #431, #499, #506, #507),
+  by @gaborcsardi
 
 # roxygen2 5.0.1
 

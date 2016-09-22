@@ -32,4 +32,5 @@ Suggests:
     covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 5.0.1.9000

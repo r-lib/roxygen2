@@ -2,7 +2,7 @@
 % Please edit documentation in R/markdown-escaping.R
 \name{double_escape_md}
 \alias{double_escape_md}
-\title{Escape \\% and \\$ and \\_ once more, because commonmark
+\title{Escape \% and \$ and \_ once more, because commonmark
 removes the escaping. We do this everywhere currently.}
 \usage{
 double_escape_md(text)
@@ -14,7 +14,7 @@ double_escape_md(text)
 Double-escaped text.
 }
 \description{
-Escape \\% and \\$ and \\_ once more, because commonmark
+Escape \% and \$ and \_ once more, because commonmark
 removes the escaping. We do this everywhere currently.
 }
 

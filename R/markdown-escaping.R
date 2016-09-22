@@ -20,7 +20,6 @@
 #' `@aliases`, `@backref`, etc. only use the
 #' standard Roxygen parser.
 #'
-#' @md
 #' @param text Input text. Potentially contains Rd and/or
 #'   markdown markup.
 #' @return For `escape_rd_for_md`:
@@ -54,7 +53,6 @@ escaped_for_md <- paste0("\\", c(
 #' @param esc_text The original escaped text from
 #'   [escape_rd_for_md()].
 #' @return For `unescape_rd_for_md`: Rd text.
-#' @md
 #' @rdname markdown-internals
 unescape_rd_for_md <- function(rd_text, esc_text) {
   id <- attr(esc_text, "roxygen-markdown-subst")$id

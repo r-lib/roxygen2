@@ -11,7 +11,6 @@
 #' your package, add `--no-build-vignettes` to the "Build Source Package"
 #' field in your project options.
 #'
-#' @md
 #' @family roclets
 #' @export
 vignette_roclet <- function() {
@@ -19,7 +18,8 @@ vignette_roclet <- function() {
 }
 
 #' @export
-roclet_process.roclet_vignette <- function(x, parsed, base_path) {
+roclet_process.roclet_vignette <- function(x, parsed, base_path,
+                                           global_options = list()) {
 }
 
 #' @export

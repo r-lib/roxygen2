@@ -16,7 +16,6 @@
 #' and you can't source the files unless you know the correct order.
 #'
 #' @param base_path Path to package directory.
-#' @md
 #' @examples
 #' #' `example-a.R', `example-b.R' and `example-c.R' reside
 #' #' in the `example' directory, with dependencies

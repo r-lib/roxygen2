@@ -9,7 +9,6 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 #' (<http://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
 #'
 #' @family roclets
-#' @md
 #' @export
 #' @seealso `vignette("namespace", package = "roxygen2")`
 #' @aliases export exportClass exportMethod S3method import importFrom
@@ -19,7 +18,8 @@ namespace_roclet <- function() {
 }
 
 #' @export
-roclet_process.roclet_namespace <- function(x, parsed, base_path) {
+roclet_process.roclet_namespace <- function(x, parsed, base_path,
+                                            global_options = list()) {
   ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
   sort_c(unique(ns))
 }

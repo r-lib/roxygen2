@@ -1,5 +1,10 @@
-# Hacky global switch - will be eliminated when we turn md on for
-# all
+
+## If not specified in DESCRIPTION
+markdown_global_default <- FALSE
+
+## Hacky global switch - this uses the fact that blocks are parsed
+## one after the another, and that we set markdown on/off before each
+## block
 
 markdown_env <- new.env(parent = emptyenv())
 markdown_on <- function(value = NULL) {
@@ -258,7 +263,6 @@ add_linkrefs_to_md <- function(text) {
 #' @param destination string constant, the "url" of the link
 #' @param contents An XML node, containing the contents of the link.
 #'
-#' @md
 #' @noRd
 #' @importFrom xml2 xml_name
 
@@ -355,7 +359,6 @@ is_empty_xml <- function(x) {
 #'
 #' In another package: [and this one][devtools::document].
 #'
-#' @md
 #' @name markdown-test
 #' @keywords internal
 NULL

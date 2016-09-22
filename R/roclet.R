@@ -6,7 +6,6 @@
 #'
 #' @keywords internal
 #' @name roclet
-#' @md
 NULL
 
 #' @export
@@ -29,7 +28,7 @@ roclet_tags <- function(x) {
 
 #' @export
 #' @rdname roclet
-roclet_process <- function(x, parsed, base_path) {
+roclet_process <- function(x, parsed, base_path, global_options = list()) {
   UseMethod("roclet_process")
 }
 
@@ -88,13 +87,15 @@ is.roclet <- function(x) inherits(x, "roclet")
 #' @param roclet Name of roclet to use for processing.
 #' @param input Source string
 #' @param registry Named list of tag parsers
+#' @param global_options List of global options
 #' @export
 #' @keywords internal
-roc_proc_text <- function(roclet, input, registry = default_tags()) {
+roc_proc_text <- function(roclet, input, registry = default_tags(),
+                          global_options = list()) {
   stopifnot(is.roclet(roclet))
 
-  parsed <- parse_text(input, registry = registry)
-  roclet_process(roclet, parsed, base_path = ".")
+  parsed <- parse_text(input, registry = registry, global_options)
+  roclet_process(roclet, parsed, base_path = ".", global_options)
 }
 
 default_tags <- function() {

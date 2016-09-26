@@ -102,30 +102,27 @@ r_files <- function(path) {
 
 ignore_files <- function(rfiles, path) {
     rbuildignore <- file.path(path, ".Rbuildignore")
-    if (!file.exists(rbuildignore)) {
-        rfiles
-    } else {
-        rbuildignore_patterns <- readLines(rbuildignore, warn = FALSE)
-        ## We need to apply the regular expressions from .Rbuildignore
-        ## on the top-level directory, so we need to remove everything
-        ## leading up to the path. `normalizePath` ensures that the
-        ## path is properly expanded.
-        relative_rfiles <- sub(normalizePath(path), "", normalizePath(rfiles))
-        ## If user adds trailing / when specifying path, we need to remove it.
-        relative_rfiles <- sub(paste0("^(", .Platform$file.sep, "|/)*"), "",
-                               relative_rfiles)
-        ## Figure out if any of the regular expressions matches files
-        ## in R/ Use perl=TRUE as R-exts manual says that patterns
-        ## should be perl-like regular expressions
-        idx_rfiles_to_ignore <- Reduce("|", lapply(rbuildignore_patterns,
-                                       grepl, relative_rfiles, perl = TRUE))
-        rfiles[!idx_rfiles_to_ignore]
-    }
+    if (!file.exists(rbuildignore))
+        return(rfiles)
+
+    rbuildignore_patterns <- readLines(rbuildignore, warn = FALSE)
+    ## We need to apply the regular expressions from .Rbuildignore
+    ## on the top-level directory, so we need to remove everything
+    ## leading up to the path. `normalizePath` ensures that the
+    ## path is properly expanded.
+    relative_rfiles <- sub(normalizePath(path), "", normalizePath(rfiles))
+    ## If user adds trailing / when specifying path, we need to remove it.
+    relative_rfiles <- sub(paste0("^(", .Platform$file.sep, "|/)*"), "",
+                           relative_rfiles)
+    ## Figure out if any of the regular expressions matches files
+    ## in R/ Use perl=TRUE as R-exts manual says that patterns
+    ## should be perl-like regular expressions
+    idx_rfiles_to_ignore <- lapply(rbuildignore_patterns,
+                                   grepl, relative_rfiles, perl = TRUE)
+    idx_rfiles_to_ignore <- Reduce("|", idx_rfiles_to_ignore)
+    rfiles[!idx_rfiles_to_ignore]
 }
 
-dots <- function(...) {
-  eval(substitute(alist(...)))
-}
 
 compact <- function(x) {
   null <- vapply(x, is.null, logical(1))

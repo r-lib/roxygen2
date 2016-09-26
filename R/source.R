@@ -63,7 +63,7 @@ package_files <- function(path) {
   collate <- normalizePath(file.path(path, 'R', collate))
 
   rfiles <- c(collate, setdiff(all, collate))
-  ignore_files(path, rfiles)
+  ignore_files(rfiles, path)
 }
 
 read_pkg_description <- function(path) {

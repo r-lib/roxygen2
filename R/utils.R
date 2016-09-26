@@ -100,7 +100,7 @@ r_files <- function(path) {
   sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
 }
 
-ignore_files <- function(path, rfiles) {
+ignore_files <- function(rfiles, path) {
     rbuildignore <- file.path(path, ".Rbuildignore")
     if (!file.exists(rbuildignore)) {
         rfiles

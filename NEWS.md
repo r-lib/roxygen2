@@ -8,9 +8,9 @@
   comes with a flexible specification for argument selection:
   
     * `@inheritDotParams foo` takes all parameters from `foo()`
-    * `@inheritDocParams a b e:h` takes parameters `a`, `b`, and all 
+    * `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all 
        parameters between `e` and `h`
-    * `@inheritDocParams -x -y` takes all parameters except for `x` and `y`.
+    * `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
     
     The documentation generated is similar to the style used in `?plot`
     and will eventually be incorporated in to RStudio's autocomplete.

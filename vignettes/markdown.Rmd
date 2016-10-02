@@ -209,13 +209,13 @@ The following `sed` scripts (run in your package root) convert all `\code{\link{
 
 ```bash
 # \code{\link{fun}}
-sed -r -i"" 's/[\\]code[{][\\]link[{]([^}]+)[}][}]/[\1()]/g' R/*
+sed -r -i.bak 's/[\\]code[{][\\]link[{]([^}]+)[}][}]/[\1()]/g' R/*
 
 # \code{\link[pkg]{fun}}
-sed -r -i"" 's/[\\]code[{][\\]link[[]([^]]+)[]][{]([^}]+)[}][}]/[\1::\2()]/g' R/*
+sed -r -i.bak 's/[\\]code[{][\\]link[[]([^]]+)[]][{]([^}]+)[}][}]/[\1::\2()]/g' R/*
 
 # \code{text}
-sed -r -i"" 's/[\\]code[{]([^{}]+)[}]/`\1`/g' R/*
+sed -r -i.bak 's/[\\]code[{]([^{}]+)[}]/`\1`/g' R/*
 ```
 
 ## Other items

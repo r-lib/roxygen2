@@ -136,3 +136,22 @@ parser_setReplaceMethod <- function(call, env, block) {
 
   object(list(pkg = pkg, fun = fun), alias = fun, type = "import")
 }
+
+parser_setMethodS3 <- function(call, env, block) {
+  # R.methodsS3::setMethodS3(name, class, ...)
+  method <- as.character(call[[2]])
+  class <- as.character(call[[3]])
+  name <- paste(method, class, sep=".")
+  value <- get(name, env)
+  value <- standardise_obj(name, value, env, block)
+  object(value, name)
+
+}
+
+parser_setConstructorS3 <- function(call, env, block) {
+  # R.oo::setConstructorS3(name, ...)
+  name <- as.character(call[[2]])
+  value <- get(name, env)
+  value <- standardise_obj(name, value, env, block)
+  object(value, name)
+}

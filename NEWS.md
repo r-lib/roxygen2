@@ -1,7 +1,7 @@
 # roxygen2 5.0.1.9000
 
 * S3 method declarations via setMethodS3() of R.methodS3 and function
-  declarations via setConstructorS3() of R.oo are not supported (#525).
+  declarations via setConstructorS3() of R.oo are now supported (#525).
 
 * You can now document `setClassUnion()`s (#514).
 

@@ -1,5 +1,9 @@
 # roxygen2 5.0.1.9000
 
+* S3 method declarations via setMethodS3() of R.methodS3 and function
+  declarations via setConstructorS3() of R.oo are now supported
+  (@HenrikBengtsson, #525).
+
 * You can now document `setClassUnion()`s (#514).
 
 * New `@inheritDocParams` allows you to automatically generate parameter 

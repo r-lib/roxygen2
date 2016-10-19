@@ -4,29 +4,45 @@
 \name{roxygen2-package}
 \alias{roxygen2}
 \alias{roxygen2-package}
-\title{In-Source Documentation for R}
+\title{roxygen2: In-Line Documentation for R}
 \description{
-A 'Doxygen'-like in-source documentation system
-for Rd, collation, and 'NAMESPACE' files.
+Generate your Rd documentation, 'NAMESPACE' file, and collation
+field using specially formatted comments. Writing documentation in-line
+with code makes it easier to keep your documentation up-to-date as your
+requirements change. Roxygen2 is inspired by the 'Doxygen' system for C++.
 }
 \details{
-If you have existing Rd files, check out the \code{Rd2roxygen} package
-for a convenient way of converting Rd files to roxygen comments.
-}
-\examples{
-\dontrun{roxygenize('pkg')}
-}
-\author{
-Hadley Wickham \email{h.wickham@gmail.com},
-Peter Danenberg \email{pcd@roxygen.org},
-Manuel Eugster \email{Manuel.Eugster@stat.uni-muenchen.de}
-
-Maintainer: Hadley Wickham \email{h.wickham@gmail.com}
-}
-\seealso{
 See \code{vignette("roxygen2", package = "roxygen2")} for an overview
 of the package, \code{vignette("rd", package = "roxygen2")} for generating
 documentation, and \code{vignette("namespace", package = "roxygen2")} for
 generating the namespace specification.
+
+If you have existing Rd files, check out the \code{Rd2roxygen} package
+for a convenient way of converting Rd files to roxygen comments.
+}
+\author{
+\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (Copyright holder)
+
+Other authors:
+\itemize{
+  \item Peter Danenberg \email{pcd@roxygen.org} (Copyright holder)
+  \item Manuel Eugster (Copyright holder)
+}
+
+Other contributers:
+\itemize{
+  \item RStudio (Copyright holder)
+}
+
+}
+\seealso{
+Useful links:
+
+\itemize{
+\item \url{https://github.com/klutometis/roxygen}
+\item Report bugs at \url{https://github.com/klutometis/roxygen/issues}
+
+}
+
 }
 

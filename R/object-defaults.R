@@ -41,13 +41,16 @@ object_defaults.import <- function(x) {
 #' @export
 object_defaults.package <- function(x) {
   desc <- x$value$desc
+
   list(
     docType = "package",
-    title = as.character(desc$Title),
-    description = as.character(desc$Description),
+    name = package_suffix(desc$Package),
     # "NULL" prevents addition of default aliases, see also #202
     aliases = paste("NULL", desc$Package, package_suffix(desc$Package)),
-    name = package_suffix(desc$Package)
+    title = paste0(desc$Package, ": ", desc$Title),
+    description = as.character(desc$Description),
+    seealso = package_seealso(desc),
+    author = package_authors(desc)
   )
 }
 

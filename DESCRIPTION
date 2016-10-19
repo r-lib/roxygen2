@@ -1,8 +1,9 @@
 Package: roxygen2
-Title: In-Source Documentation for R
-Description: A 'Doxygen'-like in-source documentation system
-    for Rd, collation, and 'NAMESPACE' files.
-URL: https://github.com/klutometis/roxygen
+Title: In-Line Documentation for R
+Description: Generate your Rd documentation, 'NAMESPACE' file, and collation 
+    field using specially formatted comments. Writing documentation in-line
+    with code makes it easier to keep your documentation up-to-date as your
+    requirements change. Roxygen2 is inspired by the 'Doxygen' system for C++.
 Version: 5.0.1.9000
 License: GPL (>= 2)
 Authors@R: c(
@@ -34,3 +35,5 @@ VignetteBuilder: knitr
 LinkingTo: Rcpp
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 5.0.1.9000
+URL: https://github.com/klutometis/roxygen
+BugReports: https://github.com/klutometis/roxygen/issues

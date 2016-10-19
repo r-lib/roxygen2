@@ -1,0 +1,95 @@
+package_seealso <- function(desc) {
+  if (!is.null(desc$URL)) {
+    links <- paste0("\\url{", strsplit(desc$URL, ",\\s+"), "}")
+  } else {
+    links <- character()
+  }
+  if (!is.null(desc$BugReports)) {
+    links <- c(links, paste0("Report bugs at \\url{", desc$BugReports, "}\n"))
+  }
+
+  paste0(
+    "Useful links:\n",
+    "\n",
+    "\\itemize{\n",
+    paste0("\\item ", links, "\n", collapse = ""),
+    "}\n"
+  )
+}
+
+package_authors <- function(desc) {
+  authors <- tryCatch(eval(parse(text = desc$`Authors@R`)),
+    error = function(e) {
+      warning(e)
+      NULL
+    }
+  )
+  if (is.null(authors))
+    return()
+
+  desc <- vapply(unclass(authors), author_desc, character(1))
+  type <- vapply(unclass(authors), author_type, character(1))
+
+  by_type <- split(desc, type)
+
+  paste0(
+    "\\strong{Maintainer}: ", by_type$cre[[1]], "\n\n",
+    itemize("Other authors:", by_type$aut), "\n",
+    itemize("Other contributers:", by_type$other)
+  )
+}
+
+itemize <- function(header, x) {
+  if (length(x) == 0)
+    return()
+
+  paste0(
+    header, "\n",
+    "\\itemize{\n",
+    paste0("  \\item ", x, "\n", collapse = ""),
+    "}\n"
+  )
+}
+
+author_desc <- function(x) {
+  desc <- x$given
+
+  if (!is.null(x$family)) {
+    desc <- paste0(desc, " ", x$family)
+  }
+
+  if (!is.null(x$email)) {
+    desc <- paste0(desc, " \\email{", x$email, "}")
+  }
+
+  extra_roles <- setdiff(x$role, c("cre", "aut"))
+  if (length(extra_roles) > 0) {
+    desc <- paste0(
+      desc, " (", paste0(role_lookup[extra_roles], collapse = ", "), ")"
+    )
+  }
+
+  desc
+}
+
+author_type <- function(x) {
+  if ("cre" %in% x$role) {
+    "cre"
+  } else if ("aut" %in% x$role) {
+    "aut"
+  } else {
+    "other"
+  }
+}
+
+role_lookup <- c(
+  "aut" = "Author",
+  "com" = "Compiler",
+  "ctb" = "Contributor",
+  "cph" = "Copyright holder",
+  "cre" = "Maintainer",
+  "ctr" = "Contractor",
+  "dtc" = "Data contributor",
+  "ths" = "Thesis advisor",
+  "trl" = "Translator"
+)

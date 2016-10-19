@@ -23,13 +23,13 @@ for a convenient way of converting Rd files to roxygen comments.
 \author{
 \strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (Copyright holder)
 
-Other authors:
+Authors:
 \itemize{
   \item Peter Danenberg \email{pcd@roxygen.org} (Copyright holder)
   \item Manuel Eugster (Copyright holder)
 }
 
-Other contributers:
+Other contributors:
 \itemize{
   \item RStudio (Copyright holder)
 }
@@ -37,11 +37,9 @@ Other contributers:
 }
 \seealso{
 Useful links:
-
 \itemize{
-\item \url{https://github.com/klutometis/roxygen}
-\item Report bugs at \url{https://github.com/klutometis/roxygen/issues}
-
+  \item \url{https://github.com/klutometis/roxygen}
+  \item Report bugs at \url{https://github.com/klutometis/roxygen/issues}
 }
 
 }

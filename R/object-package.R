@@ -1,20 +1,14 @@
 package_seealso <- function(desc) {
   if (!is.null(desc$URL)) {
-    links <- paste0("\\url{", strsplit(desc$URL, ",\\s+"), "}")
+    links <- paste0("\\url{", strsplit(desc$URL, ",\\s+")[[1]], "}")
   } else {
     links <- character()
   }
   if (!is.null(desc$BugReports)) {
-    links <- c(links, paste0("Report bugs at \\url{", desc$BugReports, "}\n"))
+    links <- c(links, paste0("Report bugs at \\url{", desc$BugReports, "}"))
   }
 
-  paste0(
-    "Useful links:\n",
-    "\n",
-    "\\itemize{\n",
-    paste0("\\item ", links, "\n", collapse = ""),
-    "}\n"
-  )
+  itemize("Useful links:", links)
 }
 
 package_authors <- function(desc) {
@@ -29,25 +23,15 @@ package_authors <- function(desc) {
 
   desc <- vapply(unclass(authors), author_desc, character(1))
   type <- vapply(unclass(authors), author_type, character(1))
-
   by_type <- split(desc, type)
 
-  paste0(
-    "\\strong{Maintainer}: ", by_type$cre[[1]], "\n\n",
-    itemize("Other authors:", by_type$aut), "\n",
-    itemize("Other contributers:", by_type$other)
-  )
-}
-
-itemize <- function(header, x) {
-  if (length(x) == 0)
-    return()
-
-  paste0(
-    header, "\n",
-    "\\itemize{\n",
-    paste0("  \\item ", x, "\n", collapse = ""),
-    "}\n"
+  paste(
+    c(
+      paste0("\\strong{Maintainer}: ", by_type$cre[[1]], "\n"),
+      itemize("Authors:", by_type$aut),
+      itemize("Other contributors:", by_type$other)
+    ),
+    collapse = "\n"
   )
 }
 
@@ -93,3 +77,15 @@ role_lookup <- c(
   "ths" = "Thesis advisor",
   "trl" = "Translator"
 )
+
+itemize <- function(header, x) {
+  if (length(x) == 0)
+    return()
+
+  paste0(
+    header, "\n",
+    "\\itemize{\n",
+    paste0("  \\item ", x, "\n", collapse = ""),
+    "}\n"
+  )
+}

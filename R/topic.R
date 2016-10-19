@@ -8,7 +8,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     order <- c("backref", "docType", "encoding", "name", "alias", "title",
       "format", "source", "usage", "param", "value", "description",
       "details", "minidesc", "field", "slot", "rcmethods", "note",
-      "section", "examples", "author", "references", "seealso",
+      "section", "examples", "references", "seealso", "author",
       "concept", "keyword", "rawRd")
     fields <- move_names_to_front(self$fields, order)
 

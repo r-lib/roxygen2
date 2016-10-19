@@ -20,6 +20,14 @@ generating the namespace specification.
 If you have existing Rd files, check out the \code{Rd2roxygen} package
 for a convenient way of converting Rd files to roxygen comments.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/klutometis/roxygen}
+  \item Report bugs at \url{https://github.com/klutometis/roxygen/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (Copyright holder)
 
@@ -32,14 +40,6 @@ Authors:
 Other contributors:
 \itemize{
   \item RStudio (Copyright holder)
-}
-
-}
-\seealso{
-Useful links:
-\itemize{
-  \item \url{https://github.com/klutometis/roxygen}
-  \item Report bugs at \url{https://github.com/klutometis/roxygen/issues}
 }
 
 }

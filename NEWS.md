@@ -1,5 +1,7 @@
 # roxygen2 5.0.1.9000
 
+* `@author` is now rendered after `@seealso`.
+
 * `"_PACKAGE"` documentation now generates a default `@seealso` combining
   the `URL` and `BugReport` fields, and a default `@author` field generated
   from the `Authors@R` field (#527).

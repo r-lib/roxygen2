@@ -58,8 +58,12 @@ format.roxy_field_backref <- function(x, ...) {
 
 # Fields that repeat multiple times --------------------------------------------
 
-format_rd <- function(x, ...) {
-  vapply(sort_c(unique(x$values)), rd_macro, field = x$field,
+format_rd <- function(x, ..., sort = TRUE) {
+  if (sort) {
+    x$values <- sort_c(unique(x$values))
+  }
+
+  vapply(x$values, rd_macro, field = x$field,
     FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 #' @export
@@ -67,7 +71,7 @@ format.roxy_field_keyword <- format_rd
 #' @export
 format.roxy_field_alias <- function(x, ...) {
   x$values <- str_replace_all(x$values, fixed("%"), "\\%")
-  format_rd(x, ...)
+  format_rd(x, ..., sort = FALSE)
 }
 
 # Fields that keep the first occurence -----------------------------------------

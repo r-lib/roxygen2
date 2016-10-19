@@ -2,10 +2,11 @@
 % Please edit documentation in R/roclet.R
 \name{roclet}
 \alias{roclet}
-\alias{roclet_clean}
+\alias{roclet}
 \alias{roclet_output}
-\alias{roclet_process}
 \alias{roclet_tags}
+\alias{roclet_process}
+\alias{roclet_clean}
 \title{Build a new roclet.}
 \usage{
 roclet(subclass, ...)

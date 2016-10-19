@@ -13,19 +13,19 @@ test_that("aliases split into pieces", {
 
 test_that("aliases escaped, not quoted", {
   out1 <- roc_proc_text(rd_roclet(), "
+    #' @name %a%
     #' @aliases a
     #' @title a
-    #' @name %a%
     NULL")[[1]]
   out2 <- roc_proc_text(rd_roclet(), "
+    #' @name a
     #' @aliases %a%
     #' @title a
-    #' @name a
     NULL")[[1]]
   alias1 <- format(get_tag(out1, "alias"))
   alias2 <- format(get_tag(out2, "alias"))
   expect_equal(alias1, c("\\alias{\\%a\\%}\n", "\\alias{a}\n"))
-  expect_equal(alias2, c("\\alias{\\%a\\%}\n", "\\alias{a}\n"))
+  expect_equal(alias2, c("\\alias{a}\n", "\\alias{\\%a\\%}\n"))
 })
 
 test_that("can use NULL to suppress default aliases", {

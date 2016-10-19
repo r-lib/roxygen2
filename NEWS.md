@@ -1,5 +1,8 @@
 # roxygen2 5.0.1.9000
 
+* `@aliases` are no longer sorted in alphabetical order, but will instead
+  match the order of the usage. This gives you more control in pkgdown.
+
 * `@author` is now rendered after `@seealso`.
 
 * `"_PACKAGE"` documentation now generates a default `@seealso` combining

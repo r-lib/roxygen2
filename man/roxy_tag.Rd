@@ -3,18 +3,18 @@
 \name{roxy_tag}
 \alias{roxy_tag}
 \alias{roxy_tag_warning}
-\alias{tag_code}
-\alias{tag_examples}
-\alias{tag_inherit}
-\alias{tag_markdown}
-\alias{tag_markdown_restricted}
-\alias{tag_name}
-\alias{tag_name_description}
-\alias{tag_toggle}
-\alias{tag_two_part}
 \alias{tag_value}
+\alias{tag_inherit}
+\alias{tag_name}
+\alias{tag_two_part}
+\alias{tag_name_description}
 \alias{tag_words}
 \alias{tag_words_line}
+\alias{tag_toggle}
+\alias{tag_code}
+\alias{tag_examples}
+\alias{tag_markdown}
+\alias{tag_markdown_restricted}
 \title{Parsing tags.}
 \usage{
 roxy_tag(tag, val, file = "", line = 0)

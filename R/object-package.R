@@ -46,10 +46,14 @@ author_desc <- function(x) {
     desc <- paste0(desc, " \\email{", x$email, "}")
   }
 
+  if (!is.null(x$comment)) {
+    desc <- paste0(desc, " (", x$comment, ")")
+  }
+
   extra_roles <- setdiff(x$role, c("cre", "aut"))
   if (length(extra_roles) > 0) {
     desc <- paste0(
-      desc, " (", paste0(role_lookup[extra_roles], collapse = ", "), ")"
+      desc, " [", paste0(role_lookup[extra_roles], collapse = ", "), "]"
     )
   }
 
@@ -67,15 +71,15 @@ author_type <- function(x) {
 }
 
 role_lookup <- c(
-  "aut" = "Author",
-  "com" = "Compiler",
-  "ctb" = "Contributor",
-  "cph" = "Copyright holder",
-  "cre" = "Maintainer",
-  "ctr" = "Contractor",
-  "dtc" = "Data contributor",
-  "ths" = "Thesis advisor",
-  "trl" = "Translator"
+  "aut" = "author",
+  "com" = "compiler",
+  "ctb" = "contributor",
+  "cph" = "copyright holder",
+  "cre" = "maintainer",
+  "ctr" = "contractor",
+  "dtc" = "data contributor",
+  "ths" = "thesis advisor",
+  "trl" = "translator"
 )
 
 itemize <- function(header, x) {

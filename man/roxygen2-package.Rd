@@ -29,17 +29,17 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (Copyright holder)
+\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} [copyright holder]
 
 Authors:
 \itemize{
-  \item Peter Danenberg \email{pcd@roxygen.org} (Copyright holder)
-  \item Manuel Eugster (Copyright holder)
+  \item Peter Danenberg \email{pcd@roxygen.org} [copyright holder]
+  \item Manuel Eugster [copyright holder]
 }
 
 Other contributors:
 \itemize{
-  \item RStudio (Copyright holder)
+  \item RStudio [copyright holder]
 }
 
 }

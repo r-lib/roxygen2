@@ -228,11 +228,15 @@ ws_to_empty <- function(x) {
 #' `[text](link)`. In the parsed XML tree these look the same as
 #' our `[link]` and `[text][link]` links.
 #'
+#' In the link references, we need to URL encode the reference,
+#' otherwise commonmark does not use it (see issue #518).
+#'
 #' @param text Input markdown text.
 #' @return The input text and all dummy reference link definitions
 #'   appended.
 #'
 #' @noRd
+#' @importFrom utils URLencode URLdecode
 
 add_linkrefs_to_md <- function(text) {
 
@@ -246,7 +250,8 @@ add_linkrefs_to_md <- function(text) {
   ## For the [fun] form the link text is the same as the destination.
   refs[, 3] <- ifelse(refs[,3] == "", refs[, 2], refs[,3])
 
-  ref_text <- paste0("[", refs[, 3], "]: ", "R:", refs[, 3])
+  refs3encoded <- vapply(refs[,3], URLencode, "")
+  ref_text <- paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
 
   paste0(
     text,
@@ -269,9 +274,8 @@ add_linkrefs_to_md <- function(text) {
 parse_link <- function(destination, contents) {
 
   ## Not a [] or [][] type link, remove prefix if it is
-  orig_destination <- destination
   if (! grepl("^R:", destination)) return(NULL)
-  destination <- sub("^R:", "", destination)
+  destination <- sub("^R:", "", URLdecode(destination))
 
   ## if contents is a `code tag`, then we need to move this outside
   is_code <- FALSE

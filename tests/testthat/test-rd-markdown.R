@@ -385,3 +385,27 @@ test_that("Escaping is kept", {
     foo <- function() {}")[[1]]
   expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
 })
+
+test_that("Do not pick up `` in arguments \\item #519", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @param `_arg1` should not be code. But `this should`.
+    #' @param `_arg2` should not be code, either. `But this.`
+    #'
+    #' @md
+    foo <- function(`_arg1`, `_arg2`) {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @param `_arg1` should not be code. But \\code{this should}.
+    #' @param `_arg2` should not be code, either. \\code{But this.}
+    #'
+    foo <- function(`_arg1`, `_arg2`) {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+})

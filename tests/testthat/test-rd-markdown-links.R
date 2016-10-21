@@ -225,3 +225,40 @@ test_that("non-code link in backticks works", {
     foo <- function() {}")[[1]]
   expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
 })
+
+test_that("[] is not picked up in code", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' @param connect_args `[named list]`\\cr Connection arguments
+    #' Description, see `[foobar]`.
+    #' Also `[this_too]`.
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' @param connect_args \\code{[named list]}\\cr Connection arguments
+    #' Description, see \\code{[foobar]}.
+    #' Also \\code{[this_too]}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equal(get_tag(out1, "param"), get_tag(out2, "param"))
+})
+
+test_that("[]() links are still fine", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [some thing](http://www.someurl.com).
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\href{http://www.someurl.com}{some thing}.
+    foo <- function() {}")[[1]]
+  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+})

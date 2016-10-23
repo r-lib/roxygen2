@@ -189,6 +189,14 @@ test_that("empty NAMESPACE generates zero-length vector", {
   expect_equal(results, character())
 })
 
+test_that("exportNames parses object names", {
+  out <- roc_proc_text(namespace_roclet(), "
+    #' @exportNames c(letters[1:3], '_x', '%>%')
+    NULL")
+
+  expect_equal(out, "export(a,b,c,\"_x\",\"%>%\")")
+})
+
 
 # Raw ---------------------------------------------------------------------
 

@@ -105,7 +105,10 @@ ns_S3method          <- function(tag, block) {
 }
 ns_exportClass       <- function(tag, block) export_class(tag)
 ns_exportMethod      <- function(tag, block) export_s4_method(tag)
-ns_exportNames       <- function(tag, block) fun_args("export", tag)
+ns_exportNames       <- function(tag, block) {
+  nms <- eval(parse(text = tag))
+  fun_args("export", nms)
+}
 ns_exportPattern     <- function(tag, block) one_per_line("exportPattern", tag)
 ns_import            <- function(tag, block) one_per_line("import", tag)
 ns_importFrom        <- function(tag, block) repeat_first("importFrom", tag)

@@ -218,6 +218,15 @@ sed -r -i.bak 's/[\\]code[{][\\]link[[]([^]]+)[]][{]([^}]+)[}][}]/[\1::\2()]/g' 
 sed -r -i.bak 's/[\\]code[{]([^{}]+)[}]/`\1`/g' R/*
 ```
 
+## Enabling markdown support
+
+Use R and the the `desc` package if you're too lazy to open `DESCRIPTION` in your text editor:
+
+```r
+desc::desc_set(Roxygen = "list(markdown = TRUE)")
+```
+
+
 ## Other items
 
 Please convert manually with your text editor. Pull request to [this vignette](https://github.com/klutometis/roxygen/blob/master/vignettes/markdown.Rmd) with better instructions are welcome.

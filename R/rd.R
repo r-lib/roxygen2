@@ -71,9 +71,9 @@ roclet_process.roclet_rd <- function(x, parsed, base_path,
     rd <- block_to_rd(block, base_path, parsed$env, global_options)
     topics$add(rd)
   }
-  topics$drop_invalid()
   topics_process_family(topics)
   topics_process_inherit(topics, parsed$env)
+  topics$drop_invalid()
   topics_fix_params_order(topics)
 
   topics$topics

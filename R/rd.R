@@ -174,7 +174,7 @@ needs_doc <- function(block) {
 
   key_tags <- c("description", "param", "return", "title", "example",
     "examples", "name", "rdname", "usage", "details", "introduction",
-    "describeIn")
+    "inherit", "describeIn")
 
   any(names(block) %in% key_tags)
 }

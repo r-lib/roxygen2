@@ -21,10 +21,15 @@ source_package <- function(path) {
 
   load_pkg_dependencies(path)
 
+  desc <- read_pkg_description(path)
   paths <- package_files(path)
-  lapply(paths, sys.source, envir = env, keep.source = FALSE)
+  lapply(paths, sys_source, envir = env, fileEncoding = desc$Encoding %||% "UTF-8")
 
   env
+}
+
+sys_source <- function(file, envir = baseenv(), fileEncoding = "UTF-8") {
+  source(file, encoding = fileEncoding, keep.source = FALSE, local = envir)
 }
 
 # Assume that the package has already been loaded by other means

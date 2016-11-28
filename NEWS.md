@@ -29,9 +29,11 @@
     and will eventually be incorporated in to RStudio's autocomplete.
 
 * New `@inherit` generalises `@inheritParams`, and allows to you inherit
-  parameters, return, references, description, details, sections, and seealso. 
-  The default `@inherit my_fun` will inherit all, or you can select specific 
-  tags to inherit with `@inherit my_fun return params` (#384).
+  parameters, return, references, title, description, details, sections, and
+  seealso.  The default `@inherit my_fun` will inherit all, you can document
+  an object entirely by specifying only the `@inherit` tag.  Alternatively, 
+  you can select specific tags to inherit with `@inherit my_fun return params`
+  (#384).
 
 * New `@inheritSection fun title` allows you to inherit the contents of 
   a single section from another topic (#513).

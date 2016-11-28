@@ -5,6 +5,7 @@ topics_process_inherit <- function(topics, env) {
 
   topics$topo_apply(inherits("return"), inherit_field,
     roxy_name = "return", rd_name = "value")
+  topics$topo_apply(inherits("title"), inherit_field, "title")
   topics$topo_apply(inherits("description"), inherit_field, "description")
   topics$topo_apply(inherits("details"), inherit_field, "details")
   topics$topo_apply(inherits("seealso"), inherit_field, "seealso")

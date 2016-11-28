@@ -22,7 +22,7 @@ test_that("no options gives default values", {
   expect_equal(
     block$inherit$fields,
     c(
-      "params", "return", "description", "details", "seealso", "sections",
+      "params", "return", "title", "description", "details", "seealso", "sections",
       "references"
     )
   )
@@ -431,4 +431,29 @@ test_that("can inherit all from single function", {
   expect_named(params, "...")
   expect_match(params, "Arguments passed on to \\code{foo}", fixed = TRUE)
   expect_match(params, "\\item{x}{x}", fixed = TRUE)
+})
+
+# inherit everything ------------------------------------------------------
+
+test_that("can inherit all from single function", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Foo
+    #'
+    #' Description
+    #'
+    #' Details
+    #'
+    #' @param x x
+    #' @param y y
+    foo <- function(x, y) {}
+
+    #' @inherit foo
+    bar <- function(x, y) {}
+  ")[[2]]
+
+  params <- out$get_field("param")$values
+  expect_named(params, c("x", "y"))
+  expect_equal(out$get_field("title")$values, "Foo")
+  expect_equal(out$get_field("description")$values, "Description")
+  expect_equal(out$get_field("details")$values, "Details")
 })

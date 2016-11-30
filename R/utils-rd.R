@@ -160,17 +160,9 @@ as_character_Rd <- function(x) {
       result <- c()
     }
     else {
-      if (deparse) {
-        dep <- deparseRdElement(as.character(x), c(state,
-                                                   tags[tag], inEqn, as.integer(quoteBraces)))
-        result <- dep[[1L]]
-        state <<- dep[[2L]][1L:2L]
-      }
-      else {
-        if (inherits(x, "Rd"))
-          class(x) <- setdiff(class(x), "Rd")
-        result <- as.character(x)
-      }
+      if (inherits(x, "Rd"))
+        class(x) <- setdiff(class(x), "Rd")
+      result <- as.character(x)
       if (needBraces) {
         if (grepl("^[[:alpha:]]", result))
           result <- c("{}", result)

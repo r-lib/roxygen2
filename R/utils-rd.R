@@ -90,8 +90,8 @@ rd2text <- function(x) {
 
 as_character_Rd <- function(x) {
   ZEROARG <- c("\\cr", "\\dots", "\\ldots", "\\R", "\\tab")
-  TWOARG <- c("\\section", "\\item", "\\enc", "\\method", "\\S3method",
-              "\\S4method", "\\tabular")
+  TWOARG <- c("\\section", "\\subsection", "\\item", "\\enc", "\\method",
+              "\\S3method", "\\S4method", "\\tabular")
   USERMACROS <- c("USERMACRO", "\\newcommand", "\\renewcommand")
   EQN <- c("\\deqn", "\\eqn", "\\figure")
   modes <- c(RLIKE = 1L, LATEXLIKE = 2L, VERBATIM = 3L, INOPTION = 4L,

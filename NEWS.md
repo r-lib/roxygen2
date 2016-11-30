@@ -93,6 +93,8 @@
 * The new `_PACKAGE` sentinel now also works from `roxygenise()`; before
   it only worked from `devtools::document()` (#439, @krlmlr).
 
+* Roxygen ignore files that are listed in `.Rbuildignore` (#446, @fmichonneau)
+
 ## Extension
 
 * Deprecated `register.preref.parser()` and `register.preref.parsers()`

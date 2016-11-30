@@ -7,7 +7,7 @@ NULL
 #' document that functions in your package.
 #'
 #' @family roclets
-#' @seealso \code{vignette("rd", package = "roxygen2")}
+#' @seealso `vignette("rd", package = "roxygen2")`
 #' @export
 rd_roclet <- function() {
   roclet("rd")

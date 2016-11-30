@@ -64,7 +64,7 @@ test_that("short and sweet links work", {
     #' Description, see \\code{\\link[=function]{function()}}.
     #' And also \\link{object}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 
   out1 <- roc_proc_text(roc, "
     #' Title
@@ -77,7 +77,7 @@ test_that("short and sweet links work", {
     #'
     #' See \\code{\\link[pkg:function]{pkg::function()}}, \\link[pkg:object]{pkg::object}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 
   out1 <- roc_proc_text(roc, "
     #' Title
@@ -90,7 +90,7 @@ test_that("short and sweet links work", {
     #'
     #' Description, see \\link[=dest]{name}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 
   out1 <- roc_proc_text(roc, "
     #' Title
@@ -103,7 +103,7 @@ test_that("short and sweet links work", {
     #'
     #' Description, see \\link[pkg:bar]{name words}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 
   out1 <- roc_proc_text(roc, "
     #' Title
@@ -116,7 +116,7 @@ test_that("short and sweet links work", {
     #'
     #' Description, see \\link[=terms.object]{terms}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 
   out1 <- roc_proc_text(roc, "
     #' Title
@@ -129,9 +129,11 @@ test_that("short and sweet links work", {
     #'
     #' Description, see \\link[=abc-class]{abc}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 
   out1 <- roc_proc_text(roc, "
+    #' Title.
+    #'
     #' In another package: [and this one][devtools::document].
     #' [name words][devtools::document].
     #'
@@ -139,12 +141,14 @@ test_that("short and sweet links work", {
     #' @name markdown-test
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
+    #' Title.
+    #'
     #' In another package: \\link[devtools:document]{and this one}.
     #' \\link[devtools:document]{name words}.
     #'
-    #' @md
     #' @name markdown-test
     foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("a weird markdown link bug is fixed", {
@@ -186,8 +190,7 @@ test_that("a weird markdown link bug is fixed", {
     #' @name markdown-test
     #' @keywords internal
     NULL")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
-  expect_equal(get_tag(out1, "details"), get_tag(out2, "details"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("another markdown link bug is fixed", {
@@ -196,6 +199,8 @@ test_that("another markdown link bug is fixed", {
     #' Title
     #'
     #' Description, see [escape_rd_for_md()].
+    #'
+    #' And also [object].
     #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(roc, "
@@ -205,7 +210,7 @@ test_that("another markdown link bug is fixed", {
     #'
     #' And also \\link{object}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("non-code link in backticks works", {
@@ -223,7 +228,7 @@ test_that("non-code link in backticks works", {
     #' Description, see \\code{\\link{foobar}}.
     #' Also \\code{\\link{this_too}}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("[] is not picked up in code", {
@@ -243,8 +248,7 @@ test_that("[] is not picked up in code", {
     #' Description, see \\code{[foobar]}.
     #' Also \\code{[this_too]}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
-  expect_equal(get_tag(out1, "param"), get_tag(out2, "param"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("[]() links are still fine", {
@@ -260,5 +264,5 @@ test_that("[]() links are still fine", {
     #'
     #' Description, see \\href{http://www.someurl.com}{some thing}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })

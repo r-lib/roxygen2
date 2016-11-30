@@ -25,7 +25,7 @@ test_that("backticks are converted to \\code", {
     #'
     #' Description with some \\code{code} included. \\code{More code.}
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("code blocks work", {
@@ -55,7 +55,7 @@ test_that("code blocks work", {
     #'
     #' Normal text again.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "details"), get_tag(out2, "details"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("itemized lists work", {
@@ -88,8 +88,7 @@ test_that("itemized lists work", {
     #' \\item item 3
     #' }
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
-  expect_equal(get_tag(out1, "details"), get_tag(out2, "details"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("numbered lists work", {
@@ -122,8 +121,7 @@ test_that("numbered lists work", {
     #' \\item item 3
     #' }
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
-  expect_equal(get_tag(out1, "details"), get_tag(out2, "details"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("nested lists are OK", {
@@ -169,9 +167,7 @@ test_that("nested lists are OK", {
     #' }
     #' @md
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
-  expect_equal(get_tag(out1, "details"), get_tag(out2, "details"))
-
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("emphasis works", {
@@ -186,7 +182,7 @@ test_that("emphasis works", {
     #'
     #' Description with some \\emph{emphasis} included. \\emph{More emph.}
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("strong (bold) text works", {
@@ -201,7 +197,7 @@ test_that("strong (bold) text works", {
     #'
     #' Description with some \\strong{bold} included. \\strong{More bold.}
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("markdown links are converted", {
@@ -220,7 +216,7 @@ test_that("markdown links are converted", {
     #' And here is a named link: \\href{http://igraph.org}{igraph}.
     #' Here is another kind of link: \\url{https://log.r-hub.io}.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("images are recognized", {
@@ -239,7 +235,7 @@ test_that("images are recognized", {
     #'
     #' Details with a plot: \\figure{example.jpg}{Plot title}
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("markdown is parsed in all fields where it is supported", {
@@ -257,8 +253,6 @@ test_that("markdown is parsed in all fields where it is supported", {
     #' @note Note **with bold**
     #'
     #' @seealso See also **with bold**
-    #'
-    #' @keywords Keywords **with bold**
     #'
     #' @return Return **with bold**
     #'
@@ -294,8 +288,6 @@ test_that("markdown is parsed in all fields where it is supported", {
     #'
     #' @seealso See also \\strong{with bold}
     #'
-    #' @keywords Keywords \\strong{with bold}
-    #'
     #' @return Return \\strong{with bold}
     #'
     #' @author Author \\strong{with bold}
@@ -313,22 +305,7 @@ test_that("markdown is parsed in all fields where it is supported", {
     #'
     #' @field field Field \\strong{with bold}
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "title"), get_tag(out2, "title"))
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
-  expect_equal(get_tag(out1, "details"), get_tag(out2, "details"))
-  expect_equal(get_tag(out1, "references"), get_tag(out2, "references"))
-  expect_equal(get_tag(out1, "concept"), get_tag(out2, "concept"))
-  expect_equal(get_tag(out1, "note"), get_tag(out2, "note"))
-  expect_equal(get_tag(out1, "seealso"), get_tag(out2, "seealso"))
-  expect_equal(get_tag(out1, "keywords"), get_tag(out2, "keywords"))
-  expect_equal(get_tag(out1, "return"), get_tag(out2, "return"))
-  expect_equal(get_tag(out1, "author"), get_tag(out2, "author"))
-  expect_equal(get_tag(out1, "section"), get_tag(out2, "section"))
-  expect_equal(get_tag(out1, "format"), get_tag(out2, "format"))
-  expect_equal(get_tag(out1, "source"), get_tag(out2, "source"))
-  expect_equal(get_tag(out1, "param"), get_tag(out2, "param"))
-  expect_equal(get_tag(out1, "slot"), get_tag(out2, "slot"))
-  expect_equal(get_tag(out1, "field"), get_tag(out2, "field"))
+  expect_equivalent_rd(out1, out2)
 })
 
 
@@ -366,8 +343,7 @@ test_that("% and $ and _ are not unescaped", {
     #' @param foo Item with \\% characters: \\%. And also \\$ and \\_.
     #' @md
     foo <- function(foo) {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
-  expect_equal(get_tag(out1, "param"), get_tag(out2, "param"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("Escaping is kept", {
@@ -383,7 +359,7 @@ test_that("Escaping is kept", {
     #'
     #' Description. It has \\rd \\commands.
     foo <- function() {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })
 
 test_that("Do not pick up `` in arguments \\item #519", {
@@ -407,5 +383,5 @@ test_that("Do not pick up `` in arguments \\item #519", {
     #' @param `_arg2` should not be code, either. \\code{But this.}
     #'
     foo <- function(`_arg1`, `_arg2`) {}")[[1]]
-  expect_equal(get_tag(out1, "description"), get_tag(out2, "description"))
+  expect_equivalent_rd(out1, out2)
 })

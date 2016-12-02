@@ -1,9 +1,10 @@
 parse_package <- function(base_path, load_code, registry, global_options = list()) {
   env <- load_code(base_path)
+  desc <- read_pkg_description(base_path)
 
   files <- package_files(base_path)
   parsed <- lapply(files, parse_blocks, env = env, registry = registry,
-                   global_options = global_options)
+                   global_options = global_options, fileEncoding = desc$Encoding %||% "UTF-8")
   blocks <- unlist(parsed, recursive = FALSE)
 
   list(env = env, blocks = blocks)
@@ -24,8 +25,11 @@ parse_text <- function(text, registry = default_tags(), global_options = list())
   list(env = env, blocks = blocks)
 }
 
-parse_blocks <- function(file, env, registry, global_options = list()) {
-  parsed <- parse(file = file, keep.source = TRUE)
+parse_blocks <- function(file, env, registry, global_options = list(), fileEncoding = "UTF-8") {
+
+  con <- file(file, encoding = fileEncoding)
+  on.exit(close(con), add = TRUE)
+  parsed <- parse(con, keep.source = TRUE, srcfile = srcfile(file, encoding = fileEncoding))
   if (length(parsed) == 0) return()
 
   refs <- utils::getSrcref(parsed)

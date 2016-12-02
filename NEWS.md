@@ -93,6 +93,10 @@
 * The new `_PACKAGE` sentinel now also works from `roxygenise()`; before
   it only worked from `devtools::document()` (#439, @krlmlr).
 
+* `roxygen2::roxygenise()` now parse nonASCII documentation correctly 
+  (as long as UTF-8 encoded or specified Encoding in DESCRIPTION)
+  (#532, @shrektan).
+
 ## Extension
 
 * Deprecated `register.preref.parser()` and `register.preref.parsers()`

@@ -80,7 +80,9 @@ write_if_different <- function(path, contents, check = TRUE) {
     FALSE
   } else {
     cat(sprintf('Writing %s\n', name))
-    writeLines(contents, path)
+    con <- file(path, encoding = "UTF-8")
+    on.exit(close(con), add = TRUE)
+    writeLines(contents, con)
     TRUE
   }
 }

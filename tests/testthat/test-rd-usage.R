@@ -162,7 +162,7 @@ test_that("quoted topics have usage statements", {
     rd("f(a = 1, b = 2, c = a + b)"))
 
   expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\nf(a = 1, b = 2, c = a + b)\n}\n"
+    "\\usage{\nf(a = 1, b = 2, c = a + b)\n}"
   )
 
 })
@@ -188,7 +188,7 @@ test_that("default usage not double escaped", {
   ")[[1]]
 
   expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\n\\method{mean}{foo}(x)\n}\n")
+    "\\usage{\n\\method{mean}{foo}(x)\n}")
 })
 
 test_that("% and \\ are escaped in usage", {
@@ -197,7 +197,7 @@ test_that("% and \\ are escaped in usage", {
     a <- function(a='%\\\\') {}")[[1]]
   expect_equal(get_tag(out, "usage")$values, escape('a(a = "%\\\\")'))
   expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\na(a = \"\\%\\\\\\\\\")\n}\n")
+    "\\usage{\na(a = \"\\%\\\\\\\\\")\n}")
 })
 
 test_that("% and \\ not escaped in manual usage", {
@@ -207,7 +207,7 @@ test_that("% and \\ not escaped in manual usage", {
     a <- function(a) {}
   ")[[1]]
   expect_equal(get_tag(out, "usage")$values, rd('%\\'))
-  expect_equal(format(get_tag(out, "usage")), '\\usage{\n%\\\n}\n')
+  expect_equal(format(get_tag(out, "usage")), '\\usage{\n%\\\n}')
 })
 
 test_that("non-syntactic names are quoted", {
@@ -246,7 +246,7 @@ test_that("long usages protected from incorrect breakage", {
                   d = '                                    d') 1")[[1]]
 
   usage <- format(get_tag(out, "usage"))
-  expect_equal(str_count(usage, "\n"), 6)
+  expect_equal(str_count(usage, "\n"), 5)
 })
 
 test_that("argument vectors split on whitespace", {
@@ -278,7 +278,7 @@ test_that("long usages protected from incorrect breakage", {
     d = '                                    d') 1")[[1]]
 
   usage <- format(get_tag(out, "usage"))
-  expect_equal(str_count(usage, "\n"), 6)
+  expect_equal(str_count(usage, "\n"), 5)
 })
 
 test_that("breaking works after escapes (#265)", {
@@ -296,7 +296,7 @@ test_that("breaking works after escapes (#265)", {
       xxxxxxxxxxxxxxxxxx7
   ){}")[[1]]
   usage <- format(get_tag(out, "usage"))
-  expect_equal(str_count(usage, "\n"), 5)
+  expect_equal(str_count(usage, "\n"), 4)
 })
 
 test_that("replacement funs get non-breaking spaces", {

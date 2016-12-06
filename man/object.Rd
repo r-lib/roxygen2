@@ -17,4 +17,3 @@ These objects are usually created by the parsers, but it is also
 useful to generate them by hand for testing.
 }
 \keyword{internal}
-

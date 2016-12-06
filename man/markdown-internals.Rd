@@ -53,4 +53,3 @@ uses the markdown-enabled parser. Some tags, e.g.
 standard Roxygen parser.
 }
 \keyword{internal}
-

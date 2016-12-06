@@ -46,4 +46,3 @@ loading that works if you only have R files in your package. For more
 complicated packages, I recommend using \code{devtools::document} which
 does a much better job at simulating package install and load.
 }
-

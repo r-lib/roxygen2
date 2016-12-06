@@ -1,5 +1,7 @@
 # roxygen2 5.0.1.9000
 
+* Extra newlines are no longer added at the end of .Rd files (#542, @jimhester).
+
 * `@aliases` are no longer sorted in alphabetical order, but will instead
   match the order of the usage. This gives you more control in pkgdown.
 

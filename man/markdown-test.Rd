@@ -18,4 +18,3 @@ Link with link text:  \link[=roxygenize]{this great function} or
 In another package: \link[devtools:document]{and this one}.
 }
 \keyword{internal}
-

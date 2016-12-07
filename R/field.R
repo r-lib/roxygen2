@@ -53,7 +53,7 @@ format.roxy_field_backref <- function(x, ...) {
     whitespace_only = TRUE
   )
 
-  paste0(paste0(lines, collapse = "\n"), "\n")
+  paste0(paste0(lines, collapse = "\n"))
 }
 
 # Fields that repeat multiple times --------------------------------------------

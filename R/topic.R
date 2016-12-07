@@ -15,7 +15,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     formatted <- lapply(fields, format, ...)
     paste0(
       made_by("%"),
-      paste0(unlist(formatted), collapse = "")
+      paste0(unlist(formatted), collapse = "\n")
     )
   },
 

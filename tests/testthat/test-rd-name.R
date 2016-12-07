@@ -35,7 +35,7 @@ test_that("names escaped, not quoted", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
     '%a%' <- function(x, y) x + y")[[1]]
-  expect_equal(format(get_tag(out, "name")), "\\name{\\%a\\%}\n")
+  expect_equal(format(get_tag(out, "name")), "\\name{\\%a\\%}")
 })
 
 test_that("quoted names captured from assignment", {

@@ -17,4 +17,3 @@ Double-escaped text.
 Escape \% and \$ and \_ once more, because commonmark
 removes the escaping. We do this everywhere currently.
 }
-

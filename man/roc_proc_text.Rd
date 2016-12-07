@@ -20,4 +20,3 @@ roc_proc_text(roclet, input, registry = default_tags(),
 Useful for testing.
 }
 \keyword{internal}
-

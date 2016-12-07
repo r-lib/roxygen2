@@ -16,4 +16,3 @@ document that functions in your package.
 Other roclets: \code{\link{namespace_roclet}},
   \code{\link{vignette_roclet}}
 }
-

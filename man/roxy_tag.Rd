@@ -73,4 +73,3 @@ Two exceptions to the rule are \code{tag_words} and \code{tag_two_part}, which a
 tag parsing generator functions.
 }
 \keyword{internal}
-

@@ -25,4 +25,3 @@ that wraps \code{roclet}, and then implement methods for
 \code{roclet_tags}, \code{roclet_process}, \code{roclet_output}, and \code{roclet_clean}.
 }
 \keyword{internal}
-

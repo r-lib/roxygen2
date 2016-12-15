@@ -73,8 +73,8 @@ unescape_rd_for_md <- function(rd_text, esc_text) {
 #' @param text Input text, character scalar.
 #' @param fragile Character vector of fragile tags to find.
 #' @return Data frame of fragile tags, with columns:
-#'   \code{tag}, \code{start}, \code{end}, \code{argend},
-#'   \code{text}.
+#'   `tag`, `start`, `end`, `argend`,
+#'   `text`.
 #'
 #' @noRd
 
@@ -137,8 +137,8 @@ find_all_rd_tags <- function(text) {
 #' problems.
 #'
 #' @param text Input text, scalar.
-#' @return Data frame, with columns: \code{tag}, \code{start},
-#'   \code{end}.
+#' @return Data frame, with columns: `tag`, `start`,
+#'   `end`.
 #'
 #' @noRd
 
@@ -157,7 +157,7 @@ find_all_tag_names <- function(text) {
 #'
 #' @param text The text, character scalar.
 #' @param rd_tags Fragile Rd tags, in a data frame,
-#'   as returned by \code{find_fragile_rd_tags}.
+#'   as returned by `find_fragile_rd_tags`.
 #' @return Text, after the substitution. The original
 #'   text is added as an attribute.
 #'
@@ -180,8 +180,8 @@ protect_rd_tags <- function(text, rd_tags) {
 #' overlap. Gives an error otherwise.
 #'
 #' @param str String scalar.
-#' @param repl Data frame with columns: \code{start}, \code{end},
-#'   \code{argend}, \code{text}.
+#' @param repl Data frame with columns: `start`, `end`,
+#'   `argend`, `text`.
 #' @param id Placeholder string.
 #' @return Input string with the replacements performed.
 #'   Note that all replacements are performed in parallel,

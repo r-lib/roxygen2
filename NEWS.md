@@ -1,5 +1,7 @@
 # roxygen2 5.0.1.9000
 
+* Extra newlines are no longer added at the end of .Rd files (#542, @jimhester).
+
 * `@aliases` are no longer sorted in alphabetical order, but will instead
   match the order of the usage. This gives you more control in pkgdown.
 
@@ -29,9 +31,11 @@
     and will eventually be incorporated in to RStudio's autocomplete.
 
 * New `@inherit` generalises `@inheritParams`, and allows to you inherit
-  parameters, return, references, description, details, sections, and seealso. 
-  The default `@inherit my_fun` will inherit all, or you can select specific 
-  tags to inherit with `@inherit my_fun return params` (#384).
+  parameters, return, references, title, description, details, sections, and
+  seealso.  The default `@inherit my_fun` will inherit all, you can document
+  an object entirely by specifying only the `@inherit` tag.  Alternatively, 
+  you can select specific tags to inherit with `@inherit my_fun return params`
+  (#384).
 
 * New `@inheritSection fun title` allows you to inherit the contents of 
   a single section from another topic (#513).
@@ -90,6 +94,10 @@
 
 * The new `_PACKAGE` sentinel now also works from `roxygenise()`; before
   it only worked from `devtools::document()` (#439, @krlmlr).
+
+* `roxygen2::roxygenise()` now parse nonASCII documentation correctly 
+  (as long as UTF-8 encoded or specified Encoding in DESCRIPTION)
+  (#532, @shrektan).
 
 ## Extension
 

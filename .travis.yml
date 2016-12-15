@@ -1,6 +1,11 @@
 language: r
-sudo: required
-warnings_are_errors: true
+sudo: false
+cache: packages
+
+r:
+ - oldrel
+ - release
+ - devel
 
 after_success:
   - Rscript -e 'covr::codecov()'

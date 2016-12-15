@@ -78,7 +78,7 @@ tag_inherit <- function(x) {
     pieces <- str_split(str_trim(x$val), "\\s+")[[1]]
     fields <- pieces[-1]
 
-    all <- c("params", "return", "description", "details", "seealso",
+    all <- c("params", "return", "title", "description", "details", "seealso",
       "sections", "references")
     if (length(fields) == 0) {
       fields <- all
@@ -122,9 +122,16 @@ tag_name <- function(x) {
 #'   (FALSE)?
 tag_two_part <- function(first, second, required = TRUE) {
 
-  function(x) {
-    x$val <- full_markdown(x$val)
+  ## For now we parse only the second part as markdown, because
+  ## * for all current use cases, coming from tag_name_description
+  ##   (describeIn, field, inheritSection, param, slot, templateVar),
+  ##   this is the right thing to do, and
+  ## * if the two-part tag generally consists of a name and a
+  ##   description, then this is a sensible default.
+  ## In the future we might need extra arguments to this function to
+  ## override this behavior
 
+  function(x) {
     if (x$val == "") {
       roxy_tag_warning(x, "requires a value")
     } else if (required && !str_detect(x$val, "[[:space:]]+")) {
@@ -136,7 +143,7 @@ tag_two_part <- function(first, second, required = TRUE) {
 
       x$val <- list(
         pieces[, 1],
-        trim_docstring(pieces[, 2])
+        trim_docstring(full_markdown(pieces[, 2]))
       )
       names(x$val) <- c(first, second)
       x
@@ -240,4 +247,3 @@ tag_markdown_restricted <- function(x) {
   x$val <- restricted_markdown(x$val)
   tag_value(x)
 }
-

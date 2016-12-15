@@ -20,4 +20,3 @@ there are compiled files, data files, etc. In that case, it's better to
 use \link[devtools:document]{devtools::document}.
 }
 \keyword{internal}
-

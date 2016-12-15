@@ -38,4 +38,3 @@ NULL
   update_collate("my_package")
 }
 }
-

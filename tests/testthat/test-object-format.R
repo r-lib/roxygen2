@@ -81,5 +81,5 @@ test_that("@format not escaped", {
     x <- list(a = 1, b = 2)")[[1]]
 
   expect_equal(get_tag(out, "format")$values, "%")
-  expect_equal(format(get_tag(out, "format")), "\\format{%}\n")
+  expect_equal(format(get_tag(out, "format")), "\\format{%}")
 })

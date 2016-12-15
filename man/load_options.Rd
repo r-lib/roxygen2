@@ -13,4 +13,3 @@ load_options(base_path = ".")
 Load options from DESCRIPTION.
 }
 \keyword{internal}
-

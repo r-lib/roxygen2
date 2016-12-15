@@ -117,7 +117,7 @@ There are two tags that make it easier for people to navigate around your docume
 
 `@seealso` allows you to point to other useful resources, either on the web `\url{http://www.r-project.org}`, or to other documentation with `\code{\link{functioname}}`. 
 
-If you have a family of related functions, you can use the `@family <family>` tag to automatically add appropriate lists and interlinks to the `@seealso` section. Because it will appear as "Other <family>:", the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can make a function a member of multiple families by repeating the @family tag for each additional family. These will then get seaprate headings in the __seealso__ section.
+If you have a family of related functions, you can use the `@family <family>` tag to automatically add appropriate lists and interlinks to the `@seealso` section. Because it will appear as "Other <family>:", the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can make a function a member of multiple families by repeating the @family tag for each additional family. These will then get separate headings in the __seealso__ section.
 
 For sum, these components might look like:
 

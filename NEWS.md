@@ -106,6 +106,9 @@
 * Roxygen now parses nonASCII documentation correctly (as long as UTF-8 
   encoded or specified Encoding in DESCRIPTION) (#532, @shrektan),
   and ignores files listed in `.Rbuildignore` (#446, @fmichonneau).
+  
+* Objects with names starting with a dot are now by default documented in 
+  files with prefix 'dot-'.  
 
 ## Extending roxygen2
 

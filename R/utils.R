@@ -103,26 +103,19 @@ r_files <- function(path) {
 }
 
 ignore_files <- function(rfiles, path) {
-    rbuildignore <- file.path(path, ".Rbuildignore")
-    if (!file.exists(rbuildignore))
-        return(rfiles)
+  rbuildignore <- file.path(path, ".Rbuildignore")
+  if (!file.exists(rbuildignore))
+    return(rfiles)
 
-    rbuildignore_patterns <- readLines(rbuildignore, warn = FALSE)
-    ## We need to apply the regular expressions from .Rbuildignore
-    ## on the top-level directory, so we need to remove everything
-    ## leading up to the path. `normalizePath` ensures that the
-    ## path is properly expanded.
-    relative_rfiles <- sub(normalizePath(path), "", normalizePath(rfiles))
-    ## If user adds trailing / when specifying path, we need to remove it.
-    relative_rfiles <- sub(paste0("^(", .Platform$file.sep, "|/)*"), "",
-                           relative_rfiles)
-    ## Figure out if any of the regular expressions matches files
-    ## in R/ Use perl=TRUE as R-exts manual says that patterns
-    ## should be perl-like regular expressions
-    idx_rfiles_to_ignore <- lapply(rbuildignore_patterns,
-                                   grepl, relative_rfiles, perl = TRUE)
-    idx_rfiles_to_ignore <- Reduce("|", idx_rfiles_to_ignore)
-    rfiles[!idx_rfiles_to_ignore]
+  # Strip leading directory and /
+  rfiles <- sub(normalizePath(path), "", normalizePath(rfiles), fixed = TRUE)
+  rfiles <- sub("^/*", "", rfiles)
+
+  # Remove any files that match any perl-compatible regexp
+  patterns <- readLines(rbuildignore, warn = FALSE)
+  matches <- lapply(patterns, grepl, rfiles, perl = TRUE)
+  matches <- Reduce("|", matches)
+  rfiles[!matches]
 }
 
 

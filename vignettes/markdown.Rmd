@@ -167,6 +167,8 @@ S3/S4 classes can be linked the same way:
 #' * [abc][abc-class] becomes \link[=abc-class]{abc}
 ```
 
+Or a shorthand notation can be used: `[abc-class]` is converted to `\linkS4class{abc}` and `[pkg::abc-class]` is converted to `\link[pkg:abc-class]{pkg::abc}`.
+
 ## Images
 
 The parser recognizes the markdown notation for embedded images. The image files must in the  `man/figures` directory:

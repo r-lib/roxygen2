@@ -1,7 +1,7 @@
 ---
 title: "Write R Documentation in Markdown"
 author: "Gábor Csárdi"
-date: "2016-09-22"
+date: "2016-12-31"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Write R Documentation in Markdown}
@@ -164,6 +164,8 @@ S3/S4 classes can be linked the same way:
 #' * [terms][terms.object] becomes \link[=terms.object]{terms}
 #' * [abc][abc-class] becomes \link[=abc-class]{abc}
 ```
+
+Or a shorthand notation can be used: `[abc-class]` is converted to `\linkS4class{abc}` and `[pkg::abc-class]` is converted to `\link[pkg:abc-class]{pkg::abc}`.
 
 ## Images
 

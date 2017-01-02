@@ -10,7 +10,9 @@ test_that("proper link references are added", {
     c("foo [pkg::func()] bar",       "[pkg::func()]: R:pkg::func()"),
     c("foo [pkg::obj] bar",          "[pkg::obj]: R:pkg::obj"),
     c("foo [text][pkg::func()] bar", "[pkg::func()]: R:pkg::func()"),
-    c("foo [text][pkg::obj] bar",    "[pkg::obj]: R:pkg::obj")
+    c("foo [text][pkg::obj] bar",    "[pkg::obj]: R:pkg::obj"),
+    c("foo [linktos4-class] bar",    "[linktos4-class]: R:linktos4-class"),
+    c("foo [pkg::s4-class] bar",     "[pkg::s4-class]: R:pkg::s4-class")
   )
 
   for (i in seq_along(cases)) {
@@ -39,7 +41,11 @@ test_that("commonmark picks up the various link references", {
     c("foo [text][pkg::func()] bar",
       "<link destination=\"R:pkg::func\\(\\)\" title=\"\">\\s*<text>text</text>"),
     c("foo [text][pkg::obj] bar",
-      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text>text</text>")
+      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text>text</text>"),
+    c("foo [linktos4-class] bar",
+      "<link destination=\"R:linktos4-class\" title=\"\">\\s*<text>linktos4-class</text>"),
+    c("foo [pkg::s4-class] bar",
+      "<link destination=\"R:pkg::s4-class\" title=\"\">\\s*<text>pkg::s4-class</text>")
   )
 
   for (i in seq_along(cases)) {
@@ -265,4 +271,34 @@ test_that("[]() links are still fine", {
     #' Description, see \\href{http://www.someurl.com}{some thing}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
+})
+
+test_that("links to S4 classes are OK", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [linktos4-class] as well.
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\linkS4class{linktos4} as well.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [pkg::linktos4-class] as well.
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\link[pkg:linktos4-class]{pkg::linktos4} as well.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+
 })

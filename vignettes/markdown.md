@@ -1,7 +1,7 @@
 ---
 title: "Write R Documentation in Markdown"
 author: "Gábor Csárdi"
-date: "2016-12-31"
+date: "2017-01-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Write R Documentation in Markdown}
@@ -200,3 +200,7 @@ The Commonmark parser does not require an empty line before lists, and this migh
 #' You can see more about this topic in the book cited below, on page
 #' 42. Clearly, the numbered list that starts here is not intentional.
 ```
+
+## Links to operators
+
+Links to operators or objects that contain special characters, do not work currently. E.g. to link to the `%>%` operator in the `magrittr` package, instead of `[magrittr::%>%]`, you will need to use the `Rd` notation: `\code{\link[magrittr]{\%>\%}}`.

@@ -107,9 +107,9 @@ ignore_files <- function(rfiles, path) {
   if (!file.exists(rbuildignore))
     return(rfiles)
 
-  # Strip leading directory and /
+  # Strip leading directory and slashes
   rfiles <- sub(normalizePath(path), "", normalizePath(rfiles), fixed = TRUE)
-  rfiles <- sub("^/*", "", rfiles)
+  rfiles <- sub("^[/\\]*", "", rfiles)
 
   # Remove any files that match any perl-compatible regexp
   patterns <- readLines(rbuildignore, warn = FALSE)

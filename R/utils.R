@@ -108,12 +108,12 @@ ignore_files <- function(rfiles, path) {
     return(rfiles)
 
   # Strip leading directory and slashes
-  rfiles <- sub(normalizePath(path), "", normalizePath(rfiles), fixed = TRUE)
-  rfiles <- sub("^[/\\]*", "", rfiles)
+  rfiles_relative <- sub(normalizePath(path), "", normalizePath(rfiles), fixed = TRUE)
+  rfiles_relative <- sub("^[/]*", "", rfiles_relative)
 
   # Remove any files that match any perl-compatible regexp
   patterns <- readLines(rbuildignore, warn = FALSE)
-  matches <- lapply(patterns, grepl, rfiles, perl = TRUE)
+  matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
   matches <- Reduce("|", matches)
   rfiles[!matches]
 }

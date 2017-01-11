@@ -12,7 +12,7 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 #' @export
 #' @seealso `vignette("namespace", package = "roxygen2")`
 #' @aliases export exportClass exportMethod S3method import importFrom
-#'   importClassesFrom importMethodsFrom
+#'   importClassesFrom importMethodsFrom rawNamespace useDynLib
 namespace_roclet <- function() {
   roclet("namespace")
 }

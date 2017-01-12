@@ -10,6 +10,8 @@
 \alias{importFrom}
 \alias{importClassesFrom}
 \alias{importMethodsFrom}
+\alias{rawNamespace}
+\alias{useDynLib}
 \title{Roclet: make NAMESPACE.}
 \usage{
 namespace_roclet()

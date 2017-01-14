@@ -17,4 +17,3 @@ This function is called to generate the default "Format" section for each
 data object.  The default implementation will return the class and dimension
 information.
 }
-

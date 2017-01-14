@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gábor Csárdi" />
 
-<meta name="date" content="2016-09-22" />
+<meta name="date" content="2017-01-03" />
 
 <title>Write R Documentation in Markdown</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Write R Documentation in Markdown</h1>
 <h4 class="author"><em>Gábor Csárdi</em></h4>
-<h4 class="date"><em>2016-09-22</em></h4>
+<h4 class="date"><em>2017-01-03</em></h4>
 
 
 
@@ -174,6 +174,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>S3/S4 classes can be linked the same way:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' * [terms][terms.object] becomes \link[=terms.object]{terms}</span>
 <span class="co">#' * [abc][abc-class] becomes \link[=abc-class]{abc}</span></code></pre></div>
+<p>Or a shorthand notation can be used: <code>[abc-class]</code> is converted to <code>\linkS4class{abc}</code> and <code>[pkg::abc-class]</code> is converted to <code>\link[pkg:abc-class]{pkg::abc}</code>.</p>
 </div>
 <div id="images" class="section level2">
 <h2>Images</h2>
@@ -202,6 +203,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The Commonmark parser does not require an empty line before lists, and this might lead to unintended lists if a line starts with a number followed by a dot, or with an asterisk followed by whitespace:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' You can see more about this topic in the book cited below, on page</span>
 <span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></code></pre></div>
+</div>
+<div id="links-to-operators" class="section level2">
+<h2>Links to operators</h2>
+<p>Links to operators or objects that contain special characters, do not work currently. E.g. to link to the <code>%&gt;%</code> operator in the <code>magrittr</code> package, instead of <code>[magrittr::%&gt;%]</code>, you will need to use the <code>Rd</code> notation: <code>\code{\link[magrittr]{\%&gt;\%}}</code>.</p>
 </div>
 </div>
 

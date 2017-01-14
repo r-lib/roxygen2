@@ -208,20 +208,22 @@ ws_to_empty <- function(x) {
 #'
 #' These are the link references we add:
 #' ```
-#'                                                        CODE
-#' MARKDOWN          REFERENCE LINK             LINK TEXT | RD
-#' --------          --------------             --------- - --
-#' [fun()]           [fun()]: R:fun()           fun()     T \\link[=fun]{fun()}
-#' [obj]             [obj]: R:obj               obj       F \\link{obj}
-#' [pkg::fun()]       [pkg::fun()]: R:pkg::fun()  pkg::fun() T \\link[pkg:fun]{pkg::fun()}
-#' [pkg::obj]         [pkg::obj]: R:pkg::obj      pkg::obj   F \\link[pkg:obj]{pkg::obj}
-#' [text][fun()]     [fun()]: R:fun()           text      F \\link[=fun]{text}
-#' [text][obj]       [obj]: R:obj               text      F \\link[=obj]{text}
-#' [text][pkg::fun()] [pkg::fun()]: R:pkg::fun()  text      F \\link[pkg:fun]{text}
-#' [text][pkg::obj]   [pkg::obj]: R:pkg::obj      text      F \\link[pkg:obj]{text}
+#' MARKDOWN           LINK TEXT  CODE RD
+#' --------           ---------  ---- --
+#' [fun()]            fun()       T   \\link[=fun]{fun()}
+#' [obj]              obj         F   \\link{obj}
+#' [pkg::fun()]       pkg::fun()  T   \\link[pkg:fun]{pkg::fun()}
+#' [pkg::obj]         pkg::obj    F   \\link[pkg:obj]{pkg::obj}
+#' [text][fun()]      text        F   \\link[=fun]{text}
+#' [text][obj]        text        F   \\link[=obj]{text}
+#' [text][pkg::fun()] text        F   \\link[pkg:fun]{text}
+#' [text][pkg::obj]   text        F   \\link[pkg:obj]{text}
+#' [s4-class]         s4          F   \\linkS4class{s4}
+#' [pkg::s4-class]    pkg::s4     F   \\link[pkg:s4-class]{pkg::s4}
 #' ```
 #'
-#' These are explicitly tested in `test-rd-markdown-links.R`
+#' The reference links will always look like `R:ref` for `[ref]` and
+#' `[text][ref]`. These are explicitly tested in `test-rd-markdown-links.R`.
 #'
 #' We add in a special `R:` marker to the URL. This way we don't
 #' pick up other links, that were specified via `<url>` or
@@ -298,25 +300,29 @@ parse_link <- function(destination, contents) {
   ## `fun` is fun() or obj (fun is with parens)
   ## `is_fun` is TRUE for fun(), FALSE for obj
   ## `obj` is fun or obj (fun is without parens)
+  ## `s4` is TRUE if we link to an S4 class (i.e. have -class suffix)
+  ## `noclass` is fun with -class removed
 
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
+  s4 <- str_detect(destination, "-class$")
+  noclass <- str_match(fun, "^(.*)-class$")[1,2]
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {
     paste0(
       if (is_code) "\\code{",
-      "\\link",
+      if (s4 && is.na(pkg)) "\\linkS4class" else "\\link",
       if (is_fun || ! is.na(pkg)) "[",
       if (is_fun && is.na(pkg)) "=",
       if (! is.na(pkg)) paste0(pkg, ":"),
       if (is_fun || ! is.na(pkg)) paste0(obj, "]"),
       "{",
       if (!is.na(pkg)) paste0(pkg, "::"),
-      fun,
+      if (s4) noclass else fun,
       "}",
       if (is_code) "}"
     )

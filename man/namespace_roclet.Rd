@@ -10,6 +10,8 @@
 \alias{importFrom}
 \alias{importClassesFrom}
 \alias{importMethodsFrom}
+\alias{rawNamespace}
+\alias{useDynLib}
 \title{Roclet: make NAMESPACE.}
 \usage{
 namespace_roclet()
@@ -25,4 +27,3 @@ see Writing R Extensions.
 Other roclets: \code{\link{rd_roclet}},
   \code{\link{vignette_roclet}}
 }
-

@@ -80,7 +80,9 @@ write_if_different <- function(path, contents, check = TRUE) {
     FALSE
   } else {
     cat(sprintf('Writing %s\n', name))
-    writeLines(contents, path)
+    con <- file(path, encoding = "UTF-8")
+    on.exit(close(con), add = TRUE)
+    writeLines(contents, con)
     TRUE
   }
 }
@@ -99,6 +101,23 @@ same_contents <- function(path, contents) {
 r_files <- function(path) {
   sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
 }
+
+ignore_files <- function(rfiles, path) {
+  rbuildignore <- file.path(path, ".Rbuildignore")
+  if (!file.exists(rbuildignore))
+    return(rfiles)
+
+  # Strip leading directory and slashes
+  rfiles_relative <- sub(normalizePath(path), "", normalizePath(rfiles), fixed = TRUE)
+  rfiles_relative <- sub("^[/]*", "", rfiles_relative)
+
+  # Remove any files that match any perl-compatible regexp
+  patterns <- readLines(rbuildignore, warn = FALSE)
+  matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
+  matches <- Reduce("|", matches)
+  rfiles[!matches]
+}
+
 
 compact <- function(x) {
   null <- vapply(x, is.null, logical(1))

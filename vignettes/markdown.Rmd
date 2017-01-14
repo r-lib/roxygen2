@@ -167,6 +167,8 @@ S3/S4 classes can be linked the same way:
 #' * [abc][abc-class] becomes \link[=abc-class]{abc}
 ```
 
+Or a shorthand notation can be used: `[abc-class]` is converted to `\linkS4class{abc}` and `[pkg::abc-class]` is converted to `\link[pkg:abc-class]{pkg::abc}`.
+
 ## Images
 
 The parser recognizes the markdown notation for embedded images. The image files must in the  `man/figures` directory:
@@ -200,3 +202,7 @@ The Commonmark parser does not require an empty line before lists, and this migh
 #' You can see more about this topic in the book cited below, on page
 #' 42. Clearly, the numbered list that starts here is not intentional.
 ```
+
+## Links to operators
+
+Links to operators or objects that contain special characters, do not work currently. E.g. to link to the `%>%` operator in the `magrittr` package, instead of `[magrittr::%>%]`, you will need to use the `Rd` notation: `\code{\link[magrittr]{\%>\%}}`.

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Hadley Wickham" />
 
-<meta name="date" content="2016-09-21" />
+<meta name="date" content="2017-01-20" />
 
 <title>Generating Rd files</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Generating Rd files</h1>
 <h4 class="author"><em>Hadley Wickham</em></h4>
-<h4 class="date"><em>2016-09-21</em></h4>
+<h4 class="date"><em>2017-01-20</em></h4>
 
 
 
@@ -153,7 +153,7 @@ sum &lt;-<span class="st"> </span>function(..., <span class="dt">na.rm =</span> 
 <h3>Enhancing navigation.</h3>
 <p>There are two tags that make it easier for people to navigate around your documentation: <code>@seealso</code> and <code>@family</code>.</p>
 <p><code>@seealso</code> allows you to point to other useful resources, either on the web <code>\url{http://www.r-project.org}</code>, or to other documentation with <code>\code{\link{functioname}}</code>.</p>
-<p>If you have a family of related functions, you can use the <code>@family &lt;family&gt;</code> tag to automatically add appropriate lists and interlinks to the <code>@seealso</code> section. Because it will appear as “Other <family>:”, the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can make a function a member of multiple families by repeating the <span class="citation">@family</span> tag for each additional family. These will then get seaprate headings in the <strong>seealso</strong> section.</p>
+<p>If you have a family of related functions, you can use the <code>@family &lt;family&gt;</code> tag to automatically add appropriate lists and interlinks to the <code>@seealso</code> section. Because it will appear as “Other <family>:”, the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can make a function a member of multiple families by repeating the <span class="citation">@family</span> tag for each additional family. These will then get separate headings in the <strong>seealso</strong> section.</p>
 <p>For sum, these components might look like:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @family aggregate functions</span>
 <span class="co">#' @seealso \code{\link{prod}} for products, \code{\link{cumsum}} for</span>
@@ -330,7 +330,7 @@ Account &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span 
 <span class="co">#&gt; [1] &quot;_PACKAGE&quot;</span></code></pre></div>
 <p>Some notes:</p>
 <ul>
-<li><p>Like for datasets, there isn’t a object that we can document directly. Use <code>&quot;_PACKAGE&quot;</code> to indicate that you are creating the package’s documentation. This will automatically add the corect aliases so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. This also works if there’s already a function called <code>pkgname()</code>.</p></li>
+<li><p>Like for datasets, there isn’t a object that we can document directly. Use <code>&quot;_PACKAGE&quot;</code> to indicate that you are creating the package’s documentation. This will automatically add the correct aliases so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. This also works if there’s already a function called <code>pkgname()</code>.</p></li>
 <li><p>Use <code>@references</code> point to published material about the package that users might find helpful.</p></li>
 </ul>
 <p>Package documentation is a good place to list all <code>options()</code> that a package understands and to document their behaviour. Put in a section called “Package options”, as described below.</p>

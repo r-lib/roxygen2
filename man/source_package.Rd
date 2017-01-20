@@ -15,8 +15,8 @@ sourced.
 }
 \description{
 This is a simple attempt to load code in a package used by
-\link{roxygenize}. It will work with simple packages, but fail if
+[roxygenize]. It will work with simple packages, but fail if
 there are compiled files, data files, etc. In that case, it's better to
-use \link[devtools:document]{devtools::document}.
+use [devtools::document].
 }
 \keyword{internal}

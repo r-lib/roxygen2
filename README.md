@@ -9,7 +9,7 @@
 
 # Why use roxygen2?
 
-The premise of `roxygen2` is simple: describe your functions in comments next to their definitions and `roxygen2` will process your source code and comments to produce Rd files in the `man/` directory.  Here's a simple example from the `stringr` package:
+The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to produce Rd files in the `man/` directory.  Here's a simple example from the `stringr` package:
 
 ```R
 #' The length of a string (in characters).
@@ -31,7 +31,7 @@ str_length <- function(string) {
 }
 ```
 
-When you `roxygenise` your package these comments will be automatically transformed to the Rd file you need to pass `R CMD check`:
+When you `roxygenise()` (or `devtools::document()`) your package these comments will be automatically transformed to the Rd file you need to pass `R CMD check`:
 
 ```
 \name{str_length}

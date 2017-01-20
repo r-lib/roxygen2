@@ -5,16 +5,16 @@
 \title{Dummy page to test roxygen's markdown formatting}
 \description{
 Links are very tricky, so I'll put in some links here:
-Link to a function: [roxygenize()].
+Link to a function: \code{\link[=roxygenize]{roxygenize()}}.
 Link to an object: [roxygenize] (we just treat it like an object here.
 }
 \details{
-Link to another package, function: [devtools::document()].
-Link to another package, non-function: \link[devtools:document]{devtools::document}.
+Link to another package, function: \code{\link[devtools:document]{devtools::document()}}.
+Link to another package, non-function: [devtools::document].
 
-Link with link text:  \link[=roxygenize]{this great function} or
-\link[=roxygenize]{that great function}.
+Link with link text:  [this great function][roxygenize()] or
+[that great function][roxygenize].
 
-In another package: \link[devtools:document]{and this one}.
+In another package: [and this one][devtools::document].
 }
 \keyword{internal}

@@ -33,7 +33,7 @@ created by roxygen before running each roclet.}
 \description{
 This is the workhorse function that uses roclets, the built-in document
 tranformation functions, to build all documentation for a package.  See
-the documentation for the individual roclets, [rd_roclet()],
+the documentation for the individual roclets, \code{\link[=rd_roclet]{rd_roclet()}},
 [namespace_roclet()], and for [update_collate()],
 for more details.
 }
@@ -41,7 +41,7 @@ for more details.
 Note that roxygen2 is a dynamic documentation system: it works using
 by inspecting loaded objects in the package. This means that you must
 be able to load the package in order to document it.
-[source_package()] provides a simple simulation of package
+\code{\link[=source_package]{source_package()}} provides a simple simulation of package
 loading that works if you only have R files in your package. For more
 complicated packages, I recommend using \code{devtools::document} which
 does a much better job at simulating package install and load.

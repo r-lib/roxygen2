@@ -8,10 +8,10 @@ There were no ERRORs, WARNINGs or NOTEs.
 
 ## Downstream dependencies
 
-* I have run R CMD check on all five reverse dependencies of roxygen2 
-  (https://github.com/klutometis/roxygen/tree/master/revdep). 
+I have run R CMD check on all 7 reverse dependencies of roxygen2 
+I did not check packages that only suggest roxygen2, as it's generally a 
+build-time, rather a run-time dependency.
 
-  I did not check packages that only suggest roxygen2, as it's generally a 
-  build-time, rather a run-time dependency.
+Results summary at https://github.com/klutometis/roxygen/tree/master/revdep
 
-* There were no errors.
+I failed to install aoos and redland, but otherwise there were no new problems.

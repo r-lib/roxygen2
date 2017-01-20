@@ -5,8 +5,8 @@
 * Most fields can now be written using Markdown markup instead of the
   traditional Rd language. You can turn on Markdown globally by adding
   `Roxygen: list(markdown = TRUE)` to `DESCRIPTION`. The `@md` / `@noMd`
-  tags turn Markdown parsing on / off for the given block. See the
-  'markdown' vignette for more details (#364, #431, #499, #506, #507),
+  tags turn Markdown parsing on / off for the given block. See
+  `vignette("markdown")` for more details (#364, #431, #499, #506, #507),
   by @gaborcsardi
 
 ## Improved inheritance
@@ -40,7 +40,7 @@
 
 ## Minor improvements and bug fixes
 
-## Tags
+### Tags
 
 * `@aliases` are no longer sorted alphabetically, but instead match the 
   order of their usage. This gives you more control in pkgdown.

@@ -51,7 +51,7 @@ escaped_for_md <- paste0("\\", c(
 #'
 #' @param rd_text The markdown parsed and interpreted text.
 #' @param esc_text The original escaped text from
-#'   [escape_rd_for_md()].
+#'   `escape_rd_for_md()`.
 #' @return For `unescape_rd_for_md`: Rd text.
 #' @rdname markdown-internals
 unescape_rd_for_md <- function(rd_text, esc_text) {

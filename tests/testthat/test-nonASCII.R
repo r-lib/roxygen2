@@ -2,12 +2,15 @@ context("nonASCII")
 
 test_that("can generate nonASCII document", {
   test_pkg <- temp_copy_pkg('testNonASCII')
-  on.exit(unlink(test_pkg, recursive = TRUE))
+  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
 
-  expect_output(roxygenize(test_pkg), "printChineseMsg[.]Rd")
+  expect_output(devtools::document(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
   expect_true(file.exists(file.path(test_pkg, "man", "printChineseMsg.Rd")))
 
-  cnChar <- readLines(file.path(test_pkg, "man", "printChineseMsg.Rd"), encoding = "UTF-8")
+  con <- file(file.path(test_pkg, "man", "printChineseMsg.Rd"), encoding = "UTF-8")
+  on.exit(close(con), add = TRUE)
+
+  cnChar <- readLines(con)
 
   # Because the parse in testthat::test don't specify encoding to UTF-8 as well,
   # so we have to use unicode escapes.

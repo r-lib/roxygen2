@@ -29,7 +29,8 @@ parse_blocks <- function(file, env, registry, global_options = list(), fileEncod
 
   con <- file(file, encoding = fileEncoding)
   on.exit(close(con), add = TRUE)
-  parsed <- parse(con, keep.source = TRUE, srcfile = srcfile(file, encoding = fileEncoding))
+  lines <- readLines(con, warn = FALSE, encoding = "UTF-8")
+  parsed <- parse(text = lines, keep.source = TRUE, srcfile = srcfilecopy(file, lines, isFile = TRUE))
   if (length(parsed) == 0) return()
 
   refs <- utils::getSrcref(parsed)

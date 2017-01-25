@@ -7,7 +7,7 @@ test_that("can generate nonASCII document", {
   expect_output(roxygenise(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
   expect_true(file.exists(file.path(test_pkg, "man", "printChineseMsg.Rd")))
 
-  cnChar <- readLines(file.path(test_pkg, "man", "printChineseMsg.Rd"))
+  cnChar <- read_lines_enc(file.path(test_pkg, "man", "printChineseMsg.Rd"))
 
   # Because the parse in testthat::test don't specify encoding to UTF-8 as well,
   # so we have to use unicode escapes.

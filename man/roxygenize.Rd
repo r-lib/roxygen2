@@ -34,7 +34,7 @@ created by roxygen before running each roclet.}
 This is the workhorse function that uses roclets, the built-in document
 tranformation functions, to build all documentation for a package.  See
 the documentation for the individual roclets, \code{\link[=rd_roclet]{rd_roclet()}},
-[namespace_roclet()], and for [update_collate()],
+\code{\link[=namespace_roclet]{namespace_roclet()}}, and for \code{\link[=update_collate]{update_collate()}},
 for more details.
 }
 \details{

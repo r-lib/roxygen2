@@ -8,3 +8,4 @@
 ^roxygen.pro.user$
 ^revdep$
 ^codecov\.yml$
+^appveyor\.yml$

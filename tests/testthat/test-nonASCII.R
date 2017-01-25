@@ -4,7 +4,7 @@ test_that("can generate nonASCII document", {
   test_pkg <- temp_copy_pkg('testNonASCII')
   on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
 
-  expect_output(devtools::document(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
+  expect_output(roxygenise(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
   expect_true(file.exists(file.path(test_pkg, "man", "printChineseMsg.Rd")))
 
   con <- file(file.path(test_pkg, "man", "printChineseMsg.Rd"), encoding = "UTF-8")

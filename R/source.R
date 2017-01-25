@@ -29,7 +29,11 @@ source_package <- function(path) {
 }
 
 sys_source <- function(file, envir = baseenv(), fileEncoding = "UTF-8") {
-  source(file, encoding = fileEncoding, keep.source = FALSE, local = envir)
+  exprs <- parse(text = read_lines_enc(file, file_encoding = fileEncoding))
+  for (expr in exprs) {
+    eval(expr, envir = envir)
+  }
+  invisible()
 }
 
 # Assume that the package has already been loaded by other means

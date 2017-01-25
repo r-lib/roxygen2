@@ -27,9 +27,7 @@ parse_text <- function(text, registry = default_tags(), global_options = list())
 
 parse_blocks <- function(file, env, registry, global_options = list(), fileEncoding = "UTF-8") {
 
-  con <- file(file, encoding = fileEncoding)
-  on.exit(close(con), add = TRUE)
-  lines <- readLines(con, warn = FALSE, encoding = "UTF-8")
+  lines <- read_lines_enc(file, file_encoding = fileEncoding)
   parsed <- parse(text = lines, keep.source = TRUE, srcfile = srcfilecopy(file, lines, isFile = TRUE))
   if (length(parsed) == 0) return()
 

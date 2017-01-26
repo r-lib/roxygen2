@@ -1,6 +1,7 @@
 # roxygen2
 
 [![Build Status](https://travis-ci.org/klutometis/roxygen.png)](https://travis-ci.org/klutometis/roxygen)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/klutometis/roxygen?branch=master&svg=true)](https://ci.appveyor.com/project/klutometis/roxygen)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/roxygen2)](http://cran.r-project.org/package=roxygen2)
 [![Coverage Status](https://img.shields.io/codecov/c/github/klutometis/roxygen/master.svg)](https://codecov.io/github/klutometis/roxygen?branch=master)
 

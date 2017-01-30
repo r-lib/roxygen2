@@ -33,6 +33,14 @@ test_that("default usage correct for infix functions", {
   expect_equal(get_tag(out, "usage")$values, rd("a \\%.\\% b"))
 })
 
+test_that("default usage correct of infix functions containing \"<-\"", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Infix fun containing <-
+    '%<-%' <- function(a, b) 1")[[1]]
+
+  expect_equal(get_tag(out, "usage")$values, rd("a \\%<-\\% b"))
+})
+
 test_that("default usage correct for S3 methods", {
   out <- roc_proc_text(rd_roclet(), "
     #' Regular

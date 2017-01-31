@@ -50,7 +50,7 @@ object_usage.rcclass <- function(x) NULL
 
 function_usage <- function(name, formals, format_name = identity) {
   arglist <- args_string(usage_args(formals))
-  if (is_replacement_fun(name)) {
+  if (is_replacement_fun(name) && !is_infix_fun(name)) {
     name <- str_replace(name, fixed("<-"), "")
     formals$value <- NULL
 

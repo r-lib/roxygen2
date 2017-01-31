@@ -113,7 +113,8 @@ ignore_files <- function(rfiles, path) {
   rfiles_relative <- sub("^[/]*", "", rfiles_relative)
 
   # Remove any files that match any perl-compatible regexp
-  patterns <- scan(rbuildignore, what = "", sep = "\n", blank.lines.skip = TRUE, quiet = TRUE)
+  patterns <- readLines(rbuildignore, warn = FALSE)
+  patterns <- patterns[patterns != ""]
   matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
   matches <- Reduce("|", matches)
   rfiles[!matches]

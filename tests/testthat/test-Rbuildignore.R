@@ -7,6 +7,6 @@ test_that("roxygen ignores files with matching pattern in .Rbuildignore", {
   expect_equal(basename(package_files(test_pkg)), c("a.R", "ignore_me.R"))
 
   #writeLines("^R/ignore_me.R$", file.path(test_pkg, ".Rbuildignore"))
-  writeChar("^R/ignore_me.R$\n", file.path(test_pkg, ".Rbuildignore"), eos = NULL)
+  writeChar("^R/ignore_me.R$\n\n.nonexistentfile", file.path(test_pkg, ".Rbuildignore"), eos = NULL)
   expect_equal(basename(package_files(test_pkg)), "a.R")
 })

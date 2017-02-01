@@ -117,7 +117,7 @@ Add together two numbers
 add(1, 1)
 add(10, 1)
 }</code></pre>
-<p>Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the <a href="http://cran.r-project.org/doc/manuals/R-exts.html#Rd-format">R extensions</a> manual. I’ll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.</p>
+<p>Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Rd-format">R extensions</a> manual. I’ll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.</p>
 <p>When you use <code>?x</code>, <code>help(&quot;x&quot;)</code> or <code>example(&quot;x&quot;)</code> R looks for an Rd file containing <code>\alias{x}</code>. It then parses the file, converts it into html and displays it.</p>
 <p>All of these functions look for an Rd file in <em>installed</em> packages. This isn’t very useful for package development, because you want to use the <code>.Rd</code> files in the <em>source</em> package. <code>devtools</code> provides two helpful functions for this scenario: <code>dev_help()</code> and <code>dev_example()</code>. They behave similarly to <code>help()</code> and <code>example()</code> but look in source packages you’ve loaded with <code>load_all()</code>, not installed packages you’ve loaded with <code>library()</code>.</p>
 </div>

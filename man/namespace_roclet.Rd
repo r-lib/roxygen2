@@ -19,7 +19,7 @@ namespace_roclet()
 \description{
 This roclet automates the production of a \code{NAMESPACE} file,
 see Writing R Extensions.
-(\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
+(\url{https://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
 }
 \seealso{
 \code{vignette("namespace", package = "roxygen2")}

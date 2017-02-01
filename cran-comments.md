@@ -14,4 +14,4 @@ build-time, rather a run-time dependency.
 
 Results summary at https://github.com/klutometis/roxygen/tree/master/revdep
 
-I failed to install aoos and redland, but otherwise there were no new problems.
+I failed to install redland, but otherwise there were no new problems.

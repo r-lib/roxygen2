@@ -1,4 +1,9 @@
-# roxygen2 5.0.1.9000
+# roxygen2 6.0.0.9000
+
+* Automatically generating a usage section for an infix function containing "<-"
+  no longer removes "<-" from the function name (#554).
+
+# roxygen2 6.0.0
 
 ## Markdown
 
@@ -106,9 +111,6 @@
 * Roxygen now parses nonASCII documentation correctly (as long as UTF-8 
   encoded or specified Encoding in DESCRIPTION) (#532, @shrektan),
   and ignores files listed in `.Rbuildignore` (#446, @fmichonneau).
-  
-* Automatically generating a usage section for an infix function containing "<-"
-  no longer removes "<-" from the function name (#554).
 
 ## Extending roxygen2
 

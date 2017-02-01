@@ -4,7 +4,7 @@
   no longer removes "<-" from the function name (#554).
 
 * Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 
-  files being ignored. (#572, @jakob-r)
+  files to be ignored. (#572, @jakob-r)
 
 # roxygen2 6.0.0
 

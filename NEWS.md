@@ -19,7 +19,7 @@
 
 ## Improved inheritance
 
-* New `@inheritDocParams` allows you to automatically generate parameter 
+* New `@inheritDotParams` allows you to automatically generate parameter 
   documentation for `...` for the common case where you pass `...` on to 
   another function (#512). Because you often override some arguments, it 
   comes with a flexible specification for argument selection:

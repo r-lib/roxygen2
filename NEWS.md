@@ -3,6 +3,9 @@
 * Automatically generating a usage section for an infix function containing "<-"
   no longer removes "<-" from the function name (#554).
 
+* Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 
+  files to be ignored. (#572, @jakob-r)
+
 # roxygen2 6.0.0
 
 ## Markdown

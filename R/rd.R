@@ -327,8 +327,9 @@ topic_add_examples <- function(topic, block, base_path) {
   examples <- block_tags(block, "examples")
   
   # add alias as example section title 
-  if (length(examples)) {
-    examples[1L] <- sprintf("## %s\n%s\n", block$object$alias, examples[1L])
+  if (length(examples) && topic$has_field('examples') ) {
+    title <- block$name %||% object_topic(block$object)
+    if( length(title) ) examples[1L] <- sprintf("#----------\n# %s\n#----------\n%s\n", title, str_trim(examples[1L]))
   }
   for (example in examples) {
     topic$add_simple_field("examples", example)

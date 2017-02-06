@@ -1,3 +1,7 @@
+This is a patch release to fix a major bug that affects a small percentage of users
+
+---
+
 ## Test environments
 * local OS X install, R 3.2.3
 * ubuntu 12.04 (on travis-ci), R 3.2.3

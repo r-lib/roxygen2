@@ -1,10 +1,10 @@
-# roxygen2 6.0.0.9000
-
-* Automatically generating a usage section for an infix function containing "<-"
-  no longer removes "<-" from the function name (#554).
+# roxygen2 6.0.1
 
 * Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 
   files to be ignored. (#572, @jakob-r)
+
+* Automatically generating a usage section for an infix function containing "<-"
+  no longer removes "<-" from the function name (#554).
 
 # roxygen2 6.0.0
 

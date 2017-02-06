@@ -3,6 +3,9 @@
 * Automatically generating a usage section for an infix function containing "<-"
   no longer removes "<-" from the function name (#554).
 
+* Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 
+  files to be ignored. (#572, @jakob-r)
+
 # roxygen2 6.0.0
 
 ## Markdown
@@ -16,7 +19,7 @@
 
 ## Improved inheritance
 
-* New `@inheritDocParams` allows you to automatically generate parameter 
+* New `@inheritDotParams` allows you to automatically generate parameter 
   documentation for `...` for the common case where you pass `...` on to 
   another function (#512). Because you often override some arguments, it 
   comes with a flexible specification for argument selection:

@@ -25,7 +25,8 @@ Imports:
     desc,
     commonmark,
     xml2,
-    utils
+    utils,
+    bibtex
 Suggests:
     testthat (>= 0.8.0),
     knitr,

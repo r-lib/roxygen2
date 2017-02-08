@@ -54,7 +54,9 @@ roclet_tags.roclet_rd <- function(x) {
     template = tag_value,
     templateVar = tag_name_description,
     title = tag_markdown_restricted,
-    usage = tag_value
+    usage = tag_value,
+    cite = tag_cite,
+    bibliography = tag_bibliography
   )
 }
 
@@ -63,7 +65,9 @@ roclet_process.roclet_rd <- function(x, parsed, base_path,
                                      global_options = list()) {
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
-
+  # set base_path in bibliography handler
+  RoxyBibObject(base_path = base_path)
+  
   for (block in parsed$blocks) {
     if (length(block) == 0)
       next
@@ -82,6 +86,8 @@ roclet_process.roclet_rd <- function(x, parsed, base_path,
 block_to_rd <- function(block, base_path, env, global_options = list()) {
   # Must start by processing templates
   block <- process_templates(block, base_path, global_options)
+  # process \cite tags
+  block <- process_cite(block, base_path, env, global_options)
 
   if (!needs_doc(block)) {
     return()
@@ -148,6 +154,9 @@ roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE
       unlink(old_roxygen)
     }
   }
+  
+  # update REFERENCES file
+  RoxyBibObject()$update_bibfile(file.path(base_path, 'inst/REFERENCES.bib'))
 
   paths
 }
@@ -158,6 +167,9 @@ roclet_clean.roclet_rd <- function(x, base_path) {
   rd <- rd[!file.info(rd)$isdir]
   made_by_me <- vapply(rd, made_by_roxygen, logical(1))
 
+  # reset bibliography handler
+  RoxyBibObject(reset = TRUE)
+  
   unlink(rd[made_by_me])
 }
 

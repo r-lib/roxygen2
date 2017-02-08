@@ -350,7 +350,7 @@ Some notes:
   already a function called `pkgname()`.
 
 * Use `@references` point to published material about the package that
-  users might find helpful.
+  users might find helpful. See also section _Bibliography_.
 
 Package documentation is a good place to list all `options()` that a package understands and to document their behaviour. Put in a section called "Package options", as described below.
 
@@ -498,3 +498,25 @@ Use one tag per source file:
 #' @backref src/file.cpp
 #' @backref src/file.h
 ```
+
+## Bibliography support
+
+References to published material can be documented in man pages, by
+manually copy the relevant citations in tags `@references`.
+However, citing articles can be automated using Bibtex files, tags
+`@bibliography` and `@cite`, and command `\cite`:
+ 
+  * Use tag `@bibliography` anywhere in your code to point roxygen to a local
+    Bibtex file, which is typically your personal Bibtex library that contains
+    citations for all the material you ever read.
+    You can have multiple `@bibliography` tags.
+  * A `@cite bibkey` in a block is equivalent to having a tag
+    `@references full citation of Bibtex entry for key bibkey`.
+  * Commands `\cite{bibkey}` found in any block introductions, tags
+    `@description`, `@details`, `@section` (content) or `@param` (description),
+    are substituted by strings like `Doe et al. (2000)` and include associated 
+    `@references` tags with the full citation.
+
+By default, parsed Bibtex entries will be looked in file `inst/REFERENCES.bib`,
+and if not found in the files declared with tags `@bibliography`. 
+At the end, the file `REFERENCES.bib` is updated with those new entries.

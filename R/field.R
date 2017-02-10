@@ -59,8 +59,9 @@ format.roxy_field_backref <- function(x, ...) {
 # Fields that repeat multiple times --------------------------------------------
 
 format_rd <- function(x, ..., sort = TRUE) {
+  x$values <- unique(x$values)
   if (sort) {
-    x$values <- sort_c(unique(x$values))
+    x$values <- sort_c(x$values)
   }
 
   vapply(x$values, rd_macro, field = x$field,

@@ -229,8 +229,9 @@ topic_add_name_aliases <- function(topic, block, name) {
     # Don't add default aliases
     aliases <- aliases[aliases != "NULL"]
   } else {
-    aliases <- unique(c(name, block$object$alias, aliases))
+    aliases <- c(name, block$object$alias, aliases)
   }
+  aliases <- unique(aliases)
 
   topic$add_simple_field("name", name)
   topic$add_simple_field("alias", aliases)

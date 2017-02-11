@@ -389,7 +389,7 @@ You can also inherit documentation from functions provided by another package by
 
 ### Documenting multiple functions in the same file
 
-You can document multiple functions in the same file by using either `@rdname` or `@describeIn` tag. It's a technique best used with caution: documenting too many functions into one place leads to confusing documentation. It's best used when all functions have the same (or very similar) arguments.
+You can document multiple functions in the same file by using either `@rdname` or `@describeIn` tag. It’s a technique best used with caution: documenting too many functions in one place leads to confusion. Use it when all functions have the same (or very similar) arguments.
 
 `@describeIn` is designed for the most common cases:
 

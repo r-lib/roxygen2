@@ -292,7 +292,7 @@ Methods with doc strings will be included in the "Methods" section of the class 
 
 ## Documenting datasets
 
-Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need document them slightly differently: instead of documenting the data directly, you quote the dataset's name.
+Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset's name.
 
 There are two additional tags that are useful for documenting datasets:
 
@@ -323,9 +323,9 @@ To show how everything fits together, the example below is an excerpt from the r
 
 ## Documenting packages
 
-As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages provide package documentation, but it's an extremely useful tool for users, because instead of just listing functions like `help(package = pkgname)` it organises them and shows the user where to get started.
+As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages do this, but it's an extremely useful because instead of just listing functions like `help(package = pkgname)` it organises them and shows the user where to get started.
 
-Package documentation should describe the overall purpose of the package and point to the most important functions. It should not contain a verbatim list of functions or copy of `DESCRIPTION` (although title and description are inherited from `DESCRIPTION` by default to help you get started). This file is for human reading, so pick the most important elements of your package.
+Package documentation should describe the overall purpose of the package and point out the most important functions. It should not contain a verbatim list of functions or a copy of `DESCRIPTION` (although, to help you get started, the title and description are inherited from `DESCRIPTION` by default). This file is for human reading, so pick the most important elements of your package.
 
 Package documentation should be placed in `pkgname.R`. Here's an example:
 
@@ -358,13 +358,13 @@ Package documentation is a good place to list all `options()` that a package und
 
 There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides three ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
-* create reusable with templates with `@template` and `@templateVar`
+* create reusable templates with `@template` and `@templateVar`
 * reuse parameter documentation with `@inheritParams`
 * document multiple functions in the same place with `@describeIn` or `@rdname`
 
 ### Roxygen templates
 
-Roxygen templates are R files containing only roxygen comments that live in the `man-roxygen` directory. Use `@template file-name` (without extension) to insert the contents of a template into the current documentation.
+Roxygen templates are R files that contain only roxygen comments and that live in the `man-roxygen` directory. Use `@template file-name` (without extension) to insert the contents of a template into the current documentation.
 
 You can make templates more flexible by using template variables defined with `@templateVar name value`. Template files are run with brew, so you can retrieve values (or execute any other arbitrary R code) with `<%= name %>`.
 

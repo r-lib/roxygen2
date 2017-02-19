@@ -65,7 +65,7 @@ add(10, 1)
 }
 ```
 
-Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Rd-format) manual. I'll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.
+Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Rd-format) manual. I'll avoid discussing Rd files as much as possible, focussing instead on what you need to know about roxygen2.
 
 When you use `?x`, `help("x")` or `example("x")` R looks for an Rd file containing `\alias{x}`. It then parses the file, converts it into html and displays it.
 
@@ -345,7 +345,7 @@ Some notes:
 
 * Like for datasets, there isn't a object that we can document directly. Use
   `"_PACKAGE"` to indicate that you are creating the package's documentation.
-  This will automatically add the corect aliases so that both `?pkgname`
+  This will automatically add the correct aliases so that both `?pkgname`
   and `package?pkgname` will find the package help. This also works if there's
   already a function called `pkgname()`.
 

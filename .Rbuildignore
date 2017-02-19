@@ -2,9 +2,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
-^\NEWS\.md$
 ^cran-comments\.md$
 ^roxygen.pro$
 ^roxygen.pro.user$
 ^revdep$
 ^codecov\.yml$
+^appveyor\.yml$

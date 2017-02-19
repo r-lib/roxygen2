@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
-Within roxygen tags, you use `.Rd` syntax to format text. This vignette shows you examples of the most important commands. The full details are described in [R extensions](http://cran.r-project.org/doc/manuals/R-exts.html#Marking-text).
+Within roxygen tags, you use `.Rd` syntax to format text. This vignette shows you examples of the most important commands. The full details are described in [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text).
 
 Note that `\` and `%` are special characters. To insert literals, escape with a backslash: `\\`, `\%`.
 

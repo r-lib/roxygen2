@@ -80,9 +80,7 @@ write_if_different <- function(path, contents, check = TRUE) {
     FALSE
   } else {
     cat(sprintf('Writing %s\n', name))
-    con <- file(path, encoding = "UTF-8")
-    on.exit(close(con), add = TRUE)
-    writeLines(contents, con)
+    writeLines(contents, path, useBytes = TRUE)
     TRUE
   }
 }
@@ -91,6 +89,9 @@ same_contents <- function(path, contents) {
   if (!file.exists(path)) return(FALSE)
 
   contents <- paste0(paste0(contents, collapse = "\n"), "\n")
+  if (.Platform$OS.type == "windows") {
+    contents <- gsub("\n", "\r\n", contents, fixed = TRUE)
+  }
 
   text_hash <- digest::digest(contents, serialize = FALSE)
   file_hash <- digest::digest(file = path)
@@ -108,11 +109,12 @@ ignore_files <- function(rfiles, path) {
     return(rfiles)
 
   # Strip leading directory and slashes
-  rfiles_relative <- sub(normalizePath(path), "", normalizePath(rfiles), fixed = TRUE)
+  rfiles_relative <- sub(normalizePath(path, winslash = "/"), "", normalizePath(rfiles, winslash = "/"), fixed = TRUE)
   rfiles_relative <- sub("^[/]*", "", rfiles_relative)
 
   # Remove any files that match any perl-compatible regexp
   patterns <- readLines(rbuildignore, warn = FALSE)
+  patterns <- patterns[patterns != ""]
   matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
   matches <- Reduce("|", matches)
   rfiles[!matches]

@@ -9,4 +9,6 @@
 #'
 #' @useDynLib roxygen2
 #' @importFrom Rcpp sourceCpp
+#' @importFrom R6 R6Class
 "_PACKAGE"
+

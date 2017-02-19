@@ -4,36 +4,36 @@
 
 |setting  |value                        |
 |:--------|:----------------------------|
-|version  |R version 3.3.1 (2016-06-21) |
+|version  |R version 3.3.2 (2016-10-31) |
 |system   |x86_64, darwin13.4.0         |
 |ui       |RStudio (1.0.136)            |
 |language |(EN)                         |
 |collate  |en_US.UTF-8                  |
 |tz       |America/Chicago              |
-|date     |2017-01-02                   |
+|date     |2017-01-30                   |
 
 ## Packages
 
-|package    |*  |version    |date       |source                        |
-|:----------|:--|:----------|:----------|:-----------------------------|
-|brew       |   |1.0-6      |2011-04-13 |cran (@1.0-6)                 |
-|commonmark |   |1.1        |2016-12-13 |cran (@1.1)                   |
-|covr       |   |2.2.1      |2016-08-10 |cran (@2.2.1)                 |
-|desc       |   |1.0.1.9000 |2017-01-02 |Github (r-pkgs/desc@f9a3de3)  |
-|devtools   |*  |1.12.0     |2016-06-24 |cran (@1.12.0)                |
-|digest     |   |0.6.10     |2016-08-02 |cran (@0.6.10)                |
-|knitr      |   |1.15.6     |2016-12-29 |Github (yihui/knitr@849f2d0)  |
-|R6         |   |2.2.0      |2016-10-05 |cran (@2.2.0)                 |
-|Rcpp       |   |0.12.8     |2016-11-17 |cran (@0.12.8)                |
-|rmarkdown  |   |1.3        |2016-12-21 |cran (@1.3)                   |
-|roxygen2   |*  |5.1.0      |2017-01-02 |local (klutometis/roxygen@NA) |
-|stringi    |   |1.1.2      |2016-10-01 |cran (@1.1.2)                 |
-|stringr    |   |1.1.0      |2016-08-19 |cran (@1.1.0)                 |
-|testthat   |*  |1.0.2      |2016-04-23 |cran (@1.0.2)                 |
-|xml2       |   |1.0.0      |2016-06-24 |cran (@1.0.0)                 |
+|package    |*  |version    |date       |source                         |
+|:----------|:--|:----------|:----------|:------------------------------|
+|brew       |   |1.0-6      |2011-04-13 |cran (@1.0-6)                  |
+|commonmark |   |1.1        |2016-12-13 |CRAN (R 3.3.2)                 |
+|covr       |   |2.2.2      |2017-01-05 |cran (@2.2.2)                  |
+|desc       |   |1.1.0      |2017-01-27 |cran (@1.1.0)                  |
+|devtools   |*  |1.12.0     |2016-06-24 |cran (@1.12.0)                 |
+|digest     |   |0.6.12     |2017-01-27 |cran (@0.6.12)                 |
+|knitr      |   |1.15.8     |2017-01-30 |Github (yihui/knitr@b936c1e)   |
+|R6         |   |2.2.0      |2016-10-05 |cran (@2.2.0)                  |
+|Rcpp       |   |0.12.9.1   |2017-01-30 |Github (RcppCore/Rcpp@5a99a86) |
+|rmarkdown  |   |1.3        |2016-12-21 |cran (@1.3)                    |
+|roxygen2   |   |5.0.1.9000 |2017-01-30 |local (klutometis/roxygen@NA)  |
+|stringi    |   |1.1.2      |2016-10-01 |cran (@1.1.2)                  |
+|stringr    |   |1.1.0      |2016-08-19 |local (tidyverse/stringr@NA)   |
+|testthat   |*  |1.0.2      |2016-04-23 |cran (@1.0.2)                  |
+|xml2       |   |1.1.1      |2017-01-24 |cran (@1.1.1)                  |
 
 # Check results
-2 packages with problems
+1 packages with problems
 
 ## redland (1.0.17-9)
 Maintainer: Matthew B. Jones <jones@nceas.ucsb.edu>  
@@ -45,34 +45,5 @@ Bug reports: https://github.com/ropensci/redland-bindings/issues
 checking whether package ‘redland’ can be installed ... ERROR
 Installation failed.
 See ‘/Users/hadley/Documents/devtools/roxygen/revdep/checks/redland.Rcheck/00install.out’ for details.
-```
-
-## zoon (0.5)
-Maintainer: Tom August <tomaug@ceh.ac.uk>
-
-1 error  | 1 warning  | 0 notes
-
-```
-checking tests ... ERROR
-Running the tests in ‘tests/test-all.R’ failed.
-Last 13 lines of output:
-  1: ZoonCitation("LogisticRegression") at testthat/testZoonCitation.R:14
-  2: ZoonModuleParse(ModuleURL)
-  3: lapply(names(rd), function(field, x) x[[1]][[field]]$values, rd)
-  4: FUN(X[[i]], ...)
-  
-  testthat results ================================================================
-  OK: 184 SKIPPED: 31 FAILED: 1
-  1. Error: Check returns list with all the names (@testZoonCitation.R#14) 
-  
-  Error: testthat unit tests failed
-  In addition: Warning message:
-  package 'sp' was built under R version 3.3.2 
-  Execution halted
-
-checking whether package ‘zoon’ can be installed ... WARNING
-Found the following significant warnings:
-  Warning: package ‘sp’ was built under R version 3.3.2
-See ‘/Users/hadley/Documents/devtools/roxygen/revdep/checks/zoon.Rcheck/00install.out’ for details.
 ```
 

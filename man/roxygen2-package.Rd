@@ -9,7 +9,7 @@
 Generate your Rd documentation, 'NAMESPACE' file, and collation
 field using specially formatted comments. Writing documentation in-line
 with code makes it easier to keep your documentation up-to-date as your
-requirements change. Roxygen2 is inspired by the 'Doxygen' system for C++.
+requirements change. 'Roxygen2' is inspired by the 'Doxygen' system for C++.
 }
 \details{
 See \code{vignette("roxygen2", package = "roxygen2")} for an overview

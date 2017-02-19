@@ -1,17 +1,27 @@
-# roxygen2 5.0.1.9000
+# roxygen2 6.0.1.9000
+
+# roxygen2 6.0.1
+
+* Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 
+  files to be ignored. (#572, @jakob-r)
+
+* Automatically generating a usage section for an infix function containing "<-"
+  no longer removes "<-" from the function name (#554).
+
+# roxygen2 6.0.0
 
 ## Markdown
 
 * Most fields can now be written using Markdown markup instead of the
   traditional Rd language. You can turn on Markdown globally by adding
   `Roxygen: list(markdown = TRUE)` to `DESCRIPTION`. The `@md` / `@noMd`
-  tags turn Markdown parsing on / off for the given block. See the
-  'markdown' vignette for more details (#364, #431, #499, #506, #507),
+  tags turn Markdown parsing on / off for the given block. See
+  `vignette("markdown")` for more details (#364, #431, #499, #506, #507),
   by @gaborcsardi
 
 ## Improved inheritance
 
-* New `@inheritDocParams` allows you to automatically generate parameter 
+* New `@inheritDotParams` allows you to automatically generate parameter 
   documentation for `...` for the common case where you pass `...` on to 
   another function (#512). Because you often override some arguments, it 
   comes with a flexible specification for argument selection:
@@ -40,7 +50,7 @@
 
 ## Minor improvements and bug fixes
 
-## Tags
+### Tags
 
 * `@aliases` are no longer sorted alphabetically, but instead match the 
   order of their usage. This gives you more control in pkgdown.

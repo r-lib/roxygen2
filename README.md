@@ -1,7 +1,8 @@
 # roxygen2
 
 [![Build Status](https://travis-ci.org/klutometis/roxygen.png)](https://travis-ci.org/klutometis/roxygen)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/roxygen2)](http://cran.r-project.org/package=roxygen2)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/klutometis/roxygen?branch=master&svg=true)](https://ci.appveyor.com/project/klutometis/roxygen)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/roxygen2)](https://cran.r-project.org/package=roxygen2)
 [![Coverage Status](https://img.shields.io/codecov/c/github/klutometis/roxygen/master.svg)](https://codecov.io/github/klutometis/roxygen?branch=master)
 
 > all' hileth', Hephaiste; didou d'areten te kai olbon.*
@@ -9,7 +10,7 @@
 
 # Why use roxygen2?
 
-The premise of `roxygen2` is simple: describe your functions in comments next to their definitions and `roxygen2` will process your source code and comments to produce Rd files in the `man/` directory.  Here's a simple example from the `stringr` package:
+The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to produce Rd files in the `man/` directory.  Here's a simple example from the `stringr` package:
 
 ```R
 #' The length of a string (in characters).
@@ -31,7 +32,7 @@ str_length <- function(string) {
 }
 ```
 
-When you `roxygenise` your package these comments will be automatically transformed to the Rd file you need to pass `R CMD check`:
+When you `roxygenise()` (or `devtools::document()`) your package these comments will be automatically transformed to the Rd file you need to pass `R CMD check`:
 
 ```
 \name{str_length}

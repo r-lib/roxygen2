@@ -6,7 +6,7 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 #'
 #' This roclet automates the production of a `NAMESPACE` file,
 #' see Writing R Extensions.
-#' (<http://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
+#' (<https://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
 #'
 #' @family roclets
 #' @export

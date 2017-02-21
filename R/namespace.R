@@ -1,5 +1,5 @@
-ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
-  'evalNamespace', 'rawNamespace', 'S3method', 'import', 'importFrom',
+ns_tags <- c('evalNamespace', 'export', 'exportClass', 'exportMethod',
+  'exportPattern', 'rawNamespace', 'S3method', 'import', 'importFrom',
   'importClassesFrom', 'importMethodsFrom', 'useDynLib')
 
 #' Roclet: make NAMESPACE.
@@ -11,8 +11,9 @@ ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
 #' @family roclets
 #' @export
 #' @seealso `vignette("namespace", package = "roxygen2")`
-#' @aliases export exportClass exportMethod S3method import importFrom
-#'   importClassesFrom importMethodsFrom rawNamespace useDynLib
+#' @aliases export exportClass exportMethod exportPattern
+#'   import importFrom importClassesFrom importMethodsFrom
+#'   evalNamespace rawNamespace S3method useDynLib
 namespace_roclet <- function() {
   roclet("namespace")
 }
@@ -20,13 +21,15 @@ namespace_roclet <- function() {
 #' @export
 roclet_process.roclet_namespace <- function(x, parsed, base_path,
                                             global_options = list()) {
-  ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
+  ns <- unlist(lapply(parsed$blocks, block_to_ns, env = parsed$env)) %||%
+    character()
   sort_c(unique(ns))
 }
 
 #' @export
 roclet_tags.roclet_namespace <- function(x) {
   list(
+    evalNamespace = tag_code,
     export = tag_words_line,
     exportClass = tag_words(1),
     exportMethod = tag_words(1),
@@ -35,20 +38,23 @@ roclet_tags.roclet_namespace <- function(x) {
     importClassesFrom = tag_words(2),
     importFrom = tag_words(2),
     importMethodsFrom = tag_words(2),
-    evalNamespace = tag_code,
     rawNamespace = tag_code,
     S3method = tag_words(2, 2),
     useDynLib = tag_words(1)
   )
 }
 
-block_to_ns <- function(block) {
+block_to_ns <- function(block, env) {
   tags <- intersect(names(block), ns_tags)
-  lapply(tags, ns_process_tag, block = block)
+  lapply(tags, ns_process_tag, block = block, env = env)
 }
 
-ns_process_tag <- function(tag_name, block) {
-  f <- get(paste0("ns_", tag_name), mode = "function")
+ns_process_tag <- function(tag_name, block, env) {
+  f <- if (tag_name == "evalNamespace") {
+    function(tag, block) ns_evalNamespace(tag, block, env)
+  } else {
+    get(paste0("ns_", tag_name), mode = "function")
+  }
   tags <- block[names(block) == tag_name]
 
   lapply(tags, f, block = block)
@@ -124,8 +130,21 @@ ns_useDynLib         <- function(tag, block) {
     repeat_first("useDynLib", tag)
   }
 }
-ns_rawNamespace      <- function(tag, block) tag
-ns_evalNamespace     <- function(tag, block) {}  # Define this!
+ns_rawNamespace  <- function(tag, block) tag
+ns_evalNamespace <- function(tag, block, env) {
+  tryCatch({
+    expr <- parse(text = tag)
+    out <- eval(expr, envir = env)
+
+    if (!is.character(out) || length(out) != 1L || is.na(out)) {
+      stop("code didn't return a string: ", out, call. = FALSE)
+    }
+
+    out
+  }, error = function(e) {
+    block_warning(block, "@evalNamespace failed with error: ", e$message)
+  })
+}
 
 # Functions used by both default_export and ns_* functions
 export           <- function(x) one_per_line("export", x)

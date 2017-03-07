@@ -1,5 +1,8 @@
 # roxygen2 6.0.0.9000
 
+* Added roxygen option "namespace_unsorted" for packages for which
+import/export order matters (#601, @renozao)
+
 * Automatically generating a usage section for an infix function containing "<-"
   no longer removes "<-" from the function name (#554).
 

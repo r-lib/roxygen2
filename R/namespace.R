@@ -21,7 +21,8 @@ namespace_roclet <- function() {
 roclet_process.roclet_namespace <- function(x, parsed, base_path,
                                             global_options = list()) {
   ns <- unlist(lapply(parsed$blocks, block_to_ns)) %||% character()
-  sort_c(unique(ns))
+  if( !isTRUE(global_options$namespace_unsorted) ) ns <- sort_c(unique(ns))
+  unique(ns)
 }
 
 #' @export

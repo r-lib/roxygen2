@@ -328,10 +328,10 @@ topic_add_examples <- function(topic, block, base_path) {
   for (example in examples) {
     topic$add_simple_field("examples", example)
   }
-  
+
   paths <- str_trim(unlist(block_tags(block, "example")))
   paths <- file.path(base_path, paths)
-  
+
   for (path in paths) {
     # Check that haven't accidentally used example instead of examples
     nl <- str_count(path, "\n")

@@ -175,8 +175,6 @@ describe_section <- function(name, dt, dd) {
 #' @export
 format.roxy_field_examples <- function(x, ...) {
   values <- paste0(x$values, collapse = "\n")
-  # flag to identify R CMD check runs
-  values <- paste0("\\dontshow{\noptions(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag\n}\n\n", values)
   rd_macro(x$field, values, space = TRUE)
 }
 

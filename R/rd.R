@@ -325,16 +325,6 @@ topic_add_fields <- function(topic, block) {
 # the files pointed to by each \code{@@example}.
 topic_add_examples <- function(topic, block, base_path) {
   examples <- block_tags(block, "examples")
-  
-  # add alias as example section title 
-  if (length(examples) && topic$has_field('examples') ) {
-    title <- block$name %||% object_topic(block$object)
-    if( length(title) ) examples[1L] <- sprintf("#----------\n# %s\n#----------\n%s\n", title, str_trim(examples[1L]))
-  }
-  for (example in examples) {
-    topic$add_simple_field("examples", example)
-  }
-
   paths <- str_trim(unlist(block_tags(block, "example")))
   paths <- file.path(base_path, paths)
 

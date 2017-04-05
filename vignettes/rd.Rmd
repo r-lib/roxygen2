@@ -243,7 +243,7 @@ Older versions of roxygen required explicit `@method generic class` tags for all
 
 ### S4
 
-Older versions of roxyen2 required explicit `@usage`, `@alias` and `@docType` to correctly document S4 objects, but from version 3.0.0 on roxygen2 generates correct metadata automatically. If you're upgrading from a previous version, make sure to remove these old tags.
+Older versions of roxygen2 required explicit `@usage`, `@alias` and `@docType` to correctly document S4 objects, but from version 3.0.0 on roxygen2 generates correct metadata automatically. If you're upgrading from a previous version, make sure to remove these old tags.
 
 S4 __generics__ are also functions, so document them as such. Document __S4 classes__ by adding a roxygen block before `setClass()`. Use `@slot` to document the slots of the class. Here's a simple example:
 

@@ -325,7 +325,7 @@ parse_link <- function(destination, contents) {
       if (!is.na(pkg)) paste0(pkg, "::"),
       if (s4) noclass else fun,
       "}",
-      if (is_code) "}"
+      if (is_code) "}" else ""
     )
 
   } else {
@@ -338,7 +338,8 @@ parse_link <- function(destination, contents) {
         "]{"
       ),
       contents,
-      "}"
+      "}",
+      if (is_code) "}" else ""
     )
   }
 }

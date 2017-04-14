@@ -366,8 +366,8 @@ is_empty_xml <- function(x) {
 #' Link to another package, function: [devtools::document()].
 #' Link to another package, non-function: [devtools::document].
 #'
-#' Link with link text:  [this great function][roxygenize()] or
-#' [that great function][roxygenize].
+#' Link with link text: [this great function][roxygenize()],
+#' [`roxygenize`][roxygenize()], or [that great function][roxygenize].
 #'
 #' In another package: [and this one][devtools::document].
 #'

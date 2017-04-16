@@ -168,12 +168,12 @@ Functions are the mostly commonly documented objects. Most functions use three t
     must work without errors as it is run automatically as part of `R CMD
     check`.
 
-    However for the purpose of illustration, it's often useful to include code
+    For the purpose of illustration, it's often useful to include code
     that causes an error. `\dontrun{}` allows you to include code in the
-    example that is never used. There are two other special commands.
-    `\dontshow{}` is run, but not shown in the help page: this can
+    example that is never use. There are two other special commands
+    Code `\dontshow{}` is run, but not shown in the help page: this can
     be useful for informal tests. `\donttest{}` is run in examples,
-    but not run automatically in `R CMD check`. This is useful if you
+    but not run automatically but `R CMD check`. This is useful if you
     have examples that take a long time to run. The options are summarised
     below.
 
@@ -181,7 +181,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
     ------------ | --------- | ------ | -----------
     `\dontrun{}` |           | x      |
     `\dontshow{}`| x         |        | x
-    `\donttest{}`| x         | x      |
+    `\donttest{}`| x         | x      | x
 
     Instead of including examples directly in the documentation, you can
     put them in separate files and use `@example path/relative/to/packge/root`

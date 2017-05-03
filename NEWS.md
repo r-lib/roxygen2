@@ -1,7 +1,5 @@
 # roxygen2 6.0.1.9000
 
-## Minor features and bug fixes
-
 * Markdown code as link text is now properly rendered as code (#620, @egnha).
 
 # roxygen2 6.0.1

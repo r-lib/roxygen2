@@ -182,7 +182,7 @@ markdown_tags <- list(
     } else if (dest == "" || dest == xml_text(xml)) {
       list("\\url{", xml_text(xml), "}")
     } else {
-      list("\\href{", dest, "}{", xml_text(xml), "}")
+      list("\\href{", dest, "}{", xml_link_text(xml), "}")
     }
   },
 
@@ -198,6 +198,17 @@ markdown_tags_restricted <- markdown_tags
 
 ws_to_empty <- function(x) {
   sub("^\\s*$", "", x)
+}
+
+## Newlines in markdown get converted to softbreaks/linebreaks by
+## markdown_xml(), which then get interpreted as empty strings by
+## xml_text(). So we preserve newlines as spaces.
+
+xml_link_text <- function(xml) {
+  cnts <- xml_contents(xml)
+  text <- xml_text(cnts)
+  text[xml_name(cnts) %in% c("linebreak", "softbreak")] <- " "
+  text
 }
 
 #' Add link reference definitions for functions to a markdown text.

@@ -271,6 +271,36 @@ test_that("[]() links are still fine", {
     #' Description, see \\href{http://www.someurl.com}{some thing}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Link
+    #' text [broken
+    #' across lines](http://www.someurl.com) preserve
+    #' whitespace, even when
+    #' [broken across
+    #' several
+    #' lines](http://www.someurl.com),
+    #' or with varying
+    #' [amounts \
+    #'   of  \
+    #' interspersed   \
+    #'   whitespace](http://www.someurl.com).
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Link
+    #' text \\href{http://www.someurl.com}{broken across lines} preserve
+    #' whitespace, even when
+    #' \\href{http://www.someurl.com}{broken across several lines},
+    #' or with varying
+    #' \\href{http://www.someurl.com}{amounts of interspersed whitespace}.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+
 })
 
 test_that("links to S4 classes are OK", {

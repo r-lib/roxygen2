@@ -1,6 +1,6 @@
-ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportPattern',
-  'rawNamespace', 'S3method', 'import', 'importFrom', 'importClassesFrom',
-  'importMethodsFrom', 'useDynLib')
+ns_tags <- c('export', 'exportClass', 'exportMethod', 'exportNames',
+  'exportPattern', 'rawNamespace', 'S3method', 'import', 'importFrom',
+  'importClassesFrom', 'importMethodsFrom', 'useDynLib')
 
 #' Roclet: make NAMESPACE.
 #'
@@ -30,6 +30,7 @@ roclet_tags.roclet_namespace <- function(x) {
     export = tag_words_line,
     exportClass = tag_words(1),
     exportMethod = tag_words(1),
+    exportNames = tag_words(1),
     exportPattern = tag_words(1),
     import = tag_words(1),
     importClassesFrom = tag_words(2),
@@ -104,6 +105,10 @@ ns_S3method          <- function(tag, block) {
 }
 ns_exportClass       <- function(tag, block) export_class(tag)
 ns_exportMethod      <- function(tag, block) export_s4_method(tag)
+ns_exportNames       <- function(tag, block) {
+  nms <- eval(parse(text = tag))
+  fun_args("export", nms)
+}
 ns_exportPattern     <- function(tag, block) one_per_line("exportPattern", tag)
 ns_import            <- function(tag, block) one_per_line("import", tag)
 ns_importFrom        <- function(tag, block) repeat_first("importFrom", tag)
@@ -123,7 +128,7 @@ ns_useDynLib         <- function(tag, block) {
     repeat_first("useDynLib", tag)
   }
 }
-ns_rawNamespace       <- function(tag, block) tag
+ns_rawNamespace      <- function(tag, block) tag
 
 # Functions used by both default_export and ns_* functions
 export           <- function(x) one_per_line("export", x)

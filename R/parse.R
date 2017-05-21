@@ -10,6 +10,38 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
   list(env = env, blocks = blocks)
 }
 
+#' Parse roxygen2 comments in a piece of code.
+#'
+#' [parse_code()] takes a file or character vector, and an environment with R
+#' values, and parses the roxygen2 comments found in it.
+#'
+#' @param file Path of the file to process.
+#' @param env An environment containing the result of parsing and evaluating
+#'   the file.
+#' @param registry A roclet tag registry.
+#' @param wrap Logical; should roxygen2 output be wrapped? `FALSE` by default.
+#' @param markdown Logical value indicating whether to parse Markdown tags.
+#'   This can be overridden locally by the tags '@rd` and `@NoRd` inside a
+#'   Roxygen comment.
+#' @param file_encoding The file encoding. Default: `"UTF-8"`.
+#' @param text Instead of specifying `file`, users can also specify a character
+#' vector `text`, containing the R code.
+#' @return A list of roxygen2 blocks.
+#' @export
+parse_code <- function(file, env, registry = default_tags(), wrap = FALSE,
+                       markdown = markdown_global_default,
+                       file_encoding = "UTF-8", text) {
+  if (missing(file) && ! missing(text)) {
+    file <- tempfile()
+    writeLines(text, file)
+    on.exit(unlink(file))
+  }
+
+  options <- list(wrap = wrap, markdown = markdown)
+  parse_blocks(file, env, registry = registry, global_options = options,
+               fileEncoding = file_encoding)
+}
+
 parse_text <- function(text, registry = default_tags(), global_options = list()) {
   file <- tempfile()
   writeLines(text, file)

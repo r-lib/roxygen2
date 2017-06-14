@@ -88,3 +88,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"roxygen2_findEndOfTag", (DL_FUNC) &roxygen2_findEndOfTag, 2},
+    {"roxygen2_rdComplete", (DL_FUNC) &roxygen2_rdComplete, 2},
+    {"roxygen2_leadingSpaces", (DL_FUNC) &roxygen2_leadingSpaces, 1},
+    {"roxygen2_tokenise_block", (DL_FUNC) &roxygen2_tokenise_block, 3},
+    {"roxygen2_find_includes", (DL_FUNC) &roxygen2_find_includes, 1},
+    {"roxygen2_splitByWhitespace", (DL_FUNC) &roxygen2_splitByWhitespace, 1},
+    {"roxygen2_wrapString", (DL_FUNC) &roxygen2_wrapString, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_roxygen2(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

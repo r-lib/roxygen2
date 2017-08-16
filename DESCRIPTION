@@ -21,7 +21,7 @@ Imports:
     digest,
     methods,
     Rcpp (>= 0.11.0),
-    R6,
+    R6 (>= 2.1.2),
     desc,
     commonmark,
     xml2,

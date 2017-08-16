@@ -158,7 +158,7 @@ Markdown notation can be used to create links to other manual pages. There are s
    `[link text][object]`. Here `object` can be a function, but the link
    text is not typeset as code.
 6. Link to an object in another package, with different link text:
-   `[link text][pkg:object]`. This is not typeset as code.
+   `[link text][pkg::object]`. This is not typeset as code.
 
 S3/S4 classes can be linked the same way:
 

@@ -188,7 +188,7 @@ When mixing `Rd` and markdown notation, most `Rd` tags may contain markdown mark
 
 ## Mixing markdown and `Rd` markup
 
-Note that turning on markdown does *not* turn off the standard `Rd` syntax. We suggest that you use the regular `Rd` tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or currupted manuals.
+Note that turning on markdown does *not* turn off the standard `Rd` syntax. We suggest that you use the regular `Rd` tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.
 
 ## Leading whitespace
 

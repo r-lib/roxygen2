@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gábor Csárdi" />
 
-<meta name="date" content="2017-01-03" />
+<meta name="date" content="2017-08-16" />
 
 <title>Write R Documentation in Markdown</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Write R Documentation in Markdown</h1>
 <h4 class="author"><em>Gábor Csárdi</em></h4>
-<h4 class="date"><em>2017-01-03</em></h4>
+<h4 class="date"><em>2017-08-16</em></h4>
 
 
 
@@ -169,7 +169,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Link to a function from another package: <code>[pkg::func()]</code>. These links will be typeset as code.</li>
 <li>Link to a (non-function) object in another package: <code>[pkg::object]</code>. These links will not be typeset as code.</li>
 <li>Link to an object in the same package, with a different link text: <code>[link text][object]</code>. Here <code>object</code> can be a function, but the link text is not typeset as code.</li>
-<li>Link to an object in another package, with different link text: <code>[link text][pkg:object]</code>. This is not typeset as code.</li>
+<li>Link to an object in another package, with different link text: <code>[link text][pkg::object]</code>. This is not typeset as code.</li>
 </ol>
 <p>S3/S4 classes can be linked the same way:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' * [terms][terms.object] becomes \link[=terms.object]{terms}</span>
@@ -217,7 +217,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

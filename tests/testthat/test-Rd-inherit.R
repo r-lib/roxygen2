@@ -147,7 +147,7 @@ test_that("can inherit description from roxygen topic", {
   expect_equal(out$get_field("description")$values, "B")
 })
 
-test_that("won't inherit description if already set through title", {
+test_that("inherits description if omitted", {
   out <- roc_proc_text(rd_roclet(), "
     #' A.
     #'
@@ -161,7 +161,7 @@ test_that("won't inherit description if already set through title", {
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("description")$values, "C")
+  expect_equal(out$get_field("description")$values, "B")
 })
 
 test_that("can inherit details from roxygen topic", {

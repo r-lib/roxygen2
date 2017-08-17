@@ -120,14 +120,11 @@ parse_description <- function(tags) {
   }
 
   # 2nd paragraph = description (unless has @description)
-  if ("description" %in% tag_names) {
+  if ("description" %in% tag_names || length(paragraphs) == 0) {
     description <- NULL
   } else if (length(paragraphs) > 0) {
     description <- roxy_tag("description", paragraphs[1], intro$file, intro$line)
     paragraphs <- paragraphs[-1]
-  } else {
-    # Description is required, so if missing description, repeat title.
-    description <- roxy_tag("description", title$val, intro$file, intro$line)
   }
 
   # Every thing else = details, combined with @details

@@ -75,9 +75,22 @@ roclet_process.roclet_rd <- function(x, parsed, base_path,
   topics_process_inherit(topics, parsed$env)
   topics$drop_invalid()
   topics_fix_params_order(topics)
+  topics_add_default_description(topics)
 
   topics$topics
 }
+
+topics_add_default_description <- function(topics) {
+  for (topic in topics$topics) {
+    if (length(topic$get_field("description")) > 0)
+      next
+
+    topic$add_simple_field("description", topic$get_field("title")$values)
+  }
+
+  invisible()
+}
+
 
 block_to_rd <- function(block, base_path, env, global_options = list()) {
   # Must start by processing templates

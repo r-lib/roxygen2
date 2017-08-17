@@ -4,6 +4,8 @@
 #' documentation, and `vignette("namespace", package = "roxygen2")` for
 #' generating the namespace specification.
 #'
+#' ![](logo.png)
+#'
 #' If you have existing Rd files, check out the `Rd2roxygen` package
 #' for a convenient way of converting Rd files to roxygen comments.
 #'

@@ -2,16 +2,17 @@
 % Please edit documentation in R/namespace.R
 \name{namespace_roclet}
 \alias{namespace_roclet}
-\alias{evalNamespace}
 \alias{export}
 \alias{exportClass}
 \alias{exportMethod}
-\alias{S3method}
+\alias{exportPattern}
 \alias{import}
 \alias{importFrom}
 \alias{importClassesFrom}
 \alias{importMethodsFrom}
+\alias{evalNamespace}
 \alias{rawNamespace}
+\alias{S3method}
 \alias{useDynLib}
 \title{Roclet: make NAMESPACE.}
 \usage{

@@ -16,6 +16,8 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
 #' values, and parses the roxygen2 comments found in it.
 #'
 #' @param file Path of the file to process.
+#' @param text Instead of specifying `file`, users can also specify a character
+#'   vector `text`, containing the R code.
 #' @param env An environment containing the result of parsing and evaluating
 #'   the file.
 #' @param registry A roclet tag registry.
@@ -24,22 +26,31 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
 #'   This can be overridden locally by the tags '@rd` and `@NoRd` inside a
 #'   Roxygen comment.
 #' @param file_encoding The file encoding. Default: `"UTF-8"`.
-#' @param text Instead of specifying `file`, users can also specify a character
-#' vector `text`, containing the R code.
 #' @return A list of roxygen2 blocks.
 #' @export
-parse_code <- function(file, env, registry = default_tags(), wrap = FALSE,
-                       markdown = markdown_global_default,
-                       file_encoding = "UTF-8", text) {
-  if (missing(file) && ! missing(text)) {
+#' @keywords internal
+parse_code <- function(
+  file, text = NULL,
+  env,
+  registry = default_tags(),
+  wrap = FALSE,
+  markdown = markdown_global_default,
+  file_encoding = "UTF-8"
+) {
+  if (missing(file) && !is.null(text)) {
     file <- tempfile()
     writeLines(text, file)
     on.exit(unlink(file))
   }
 
   options <- list(wrap = wrap, markdown = markdown)
-  parse_blocks(file, env, registry = registry, global_options = options,
-               fileEncoding = file_encoding)
+  parse_blocks(
+    file,
+    env,
+    registry = registry,
+    global_options = options,
+    fileEncoding = file_encoding
+  )
 }
 
 parse_text <- function(text, registry = default_tags(), global_options = list()) {

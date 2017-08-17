@@ -6,6 +6,8 @@
 \alias{roxygen2-package}
 \title{roxygen2: In-Line Documentation for R}
 \description{
+\if{html}{\figure{logo.png}{options: align='right'}}
+
 Generate your Rd documentation, 'NAMESPACE' file, and collation
 field using specially formatted comments. Writing documentation in-line
 with code makes it easier to keep your documentation up-to-date as your
@@ -16,8 +18,6 @@ See \code{vignette("roxygen2", package = "roxygen2")} for an overview
 of the package, \code{vignette("rd", package = "roxygen2")} for generating
 documentation, and \code{vignette("namespace", package = "roxygen2")} for
 generating the namespace specification.
-
-\figure{logo.png}{}
 
 If you have existing Rd files, check out the \code{Rd2roxygen} package
 for a convenient way of converting Rd files to roxygen comments.

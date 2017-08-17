@@ -42,13 +42,20 @@ object_defaults.import <- function(x) {
 object_defaults.package <- function(x) {
   desc <- x$value$desc
 
+  description <- as.character(desc$Description)
+  logo_path <- file.path(x$value$path, "man", "figures", "logo.png")
+  if (file.exists(logo_path)) {
+    fig <- "\\if{html}{\\figure{logo.png}{options: align='right'}}"
+    description <- paste0(fig, "\n\n", description)
+  }
+
   list(
     docType = "package",
     name = package_suffix(desc$Package),
     # "NULL" prevents addition of default aliases, see also #202
     aliases = paste("NULL", desc$Package, package_suffix(desc$Package)),
     title = paste0(desc$Package, ": ", desc$Title),
-    description = as.character(desc$Description),
+    description = description,
     seealso = package_seealso(desc),
     author = package_authors(desc)
   )

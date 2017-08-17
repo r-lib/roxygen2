@@ -39,8 +39,8 @@ test_that("no options gives default values", {
   expect_equal(
     block$inherit$fields,
     c(
-      "params", "return", "title", "description", "details", "seealso", "sections",
-      "references"
+      "params", "return", "title", "description", "details", "seealso",
+      "sections", "references", "examples"
     )
   )
 })
@@ -462,6 +462,8 @@ test_that("can inherit all from single function", {
     #'
     #' @param x x
     #' @param y y
+    #' @examples
+    #' x <- 1
     foo <- function(x, y) {}
 
     #' @inherit foo
@@ -473,4 +475,5 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_field("title")$values, "Foo")
   expect_equal(out$get_field("description")$values, "Description")
   expect_equal(out$get_field("details")$values, "Details")
+  expect_equal(out$get_field("examples")$values, rd("x <- 1"))
 })

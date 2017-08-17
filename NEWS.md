@@ -1,5 +1,7 @@
 # roxygen2 6.0.1.9000
 
+* `@inherits` can now inherits examples (#588).
+
 * The default description (i.e. the title) is now added much later in the 
   process. That means that `@inherit description` now works when you have 
   specified a title for the inheritor (#629) and the default description

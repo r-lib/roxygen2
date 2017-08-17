@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* Roclets can now access global options as designed. This allows templates to
+  use markdown formatting if set globally (#594).
+
 * `@inherits` can now inherits examples (#588).
 
 * The default description (i.e. the title) is now added much later in the 

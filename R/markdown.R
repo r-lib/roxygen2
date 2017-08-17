@@ -182,7 +182,7 @@ markdown_tags <- list(
     } else if (dest == "" || dest == xml_text(xml)) {
       list("\\url{", xml_text(xml), "}")
     } else {
-      list("\\href{", dest, "}{", xml_link_text(xml), "}")
+      list("\\href{", dest, "}{", xml_href_text(xml), "}")
     }
   },
 
@@ -204,7 +204,7 @@ ws_to_empty <- function(x) {
 ## markdown_xml(), which then get interpreted as empty strings by
 ## xml_text(). So we preserve newlines as spaces.
 
-xml_link_text <- function(xml) {
+xml_href_text <- function(xml) {
   cnts <- xml_contents(xml)
   text <- xml_text(cnts)
   text[xml_name(cnts) %in% c("linebreak", "softbreak")] <- " "

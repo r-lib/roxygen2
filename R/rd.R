@@ -356,7 +356,7 @@ topic_add_examples <- function(topic, block, base_path) {
       next
     }
 
-    code <- readLines(path)
+    code <- read_lines(path)
     examples <- escape_examples(code)
 
     topic$add_simple_field("examples", examples)

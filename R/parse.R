@@ -4,7 +4,7 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
 
   files <- package_files(base_path)
   parsed <- lapply(files, parse_blocks, env = env, registry = registry,
-                   global_options = global_options, fileEncoding = desc$Encoding %||% "UTF-8")
+                   global_options = global_options)
   blocks <- unlist(parsed, recursive = FALSE)
 
   list(env = env, blocks = blocks)
@@ -54,7 +54,7 @@ parse_code <- function(file,
 
 parse_text <- function(text, registry = default_tags(), global_options = list()) {
   file <- tempfile()
-  writeLines(text, file)
+  write_lines(text, file)
   on.exit(unlink(file))
 
   env <- new.env(parent = parent.env(globalenv()))
@@ -67,9 +67,9 @@ parse_text <- function(text, registry = default_tags(), global_options = list())
   list(env = env, blocks = blocks)
 }
 
-parse_blocks <- function(file, env, registry, global_options = list(), fileEncoding = "UTF-8") {
+parse_blocks <- function(file, env, registry, global_options = list()) {
 
-  lines <- read_lines_enc(file, file_encoding = fileEncoding)
+  lines <- read_lines(file)
   parsed <- parse(text = lines, keep.source = TRUE, srcfile = srcfilecopy(file, lines, isFile = TRUE))
   if (length(parsed) == 0) return()
 

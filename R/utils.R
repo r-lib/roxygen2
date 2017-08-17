@@ -80,7 +80,7 @@ write_if_different <- function(path, contents, check = TRUE) {
     FALSE
   } else {
     cat(sprintf('Writing %s\n', name))
-    writeLines(contents, path, useBytes = TRUE)
+    write_lines(contents, path)
     TRUE
   }
 }
@@ -113,7 +113,7 @@ ignore_files <- function(rfiles, path) {
   rfiles_relative <- sub("^[/]*", "", rfiles_relative)
 
   # Remove any files that match any perl-compatible regexp
-  patterns <- readLines(rbuildignore, warn = FALSE)
+  patterns <- read_lines(rbuildignore)
   patterns <- patterns[patterns != ""]
   matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
   matches <- Reduce("|", matches)

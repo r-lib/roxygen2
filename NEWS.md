@@ -25,6 +25,10 @@
 * If a package logo exists (`man/figures/logo.png`) it will be automatically
   included in generated package docs (#609).
 
+* roxygen2 now always reads and writes using UTF-8 encoding. If used with a
+  package that does not have `Encoding: UTF-8` in the DESCRIPTION, you'll
+  now get a warning (#564, #592).
+
 * Usage for data objects now correctly generated, avoiding double escaping
   other components of usage (#562).
 

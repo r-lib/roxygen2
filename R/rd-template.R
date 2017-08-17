@@ -3,7 +3,7 @@ template_find <- function(base_path, template_name) {
   path_exists <- file.exists(path)
 
   if (!any(path_exists)) {
-    stop("Can not find template ", template_name, call. = FALSE)
+    stop("Can't find template '", template_name, "'", call. = FALSE)
   }
 
   path[path_exists][1]

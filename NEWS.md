@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* You can now autogenerate package documentation even if you don't have 
+  `Authors@R` (#606).
+
 * If a package logo exists (`man/figures/logo.png`) it will be automatically
   included in generated package docs (#609).
 

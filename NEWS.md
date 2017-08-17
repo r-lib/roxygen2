@@ -2,6 +2,9 @@
 
 * Markdown code as link text is now properly rendered as code (#620, @egnha).
 
+* Whitespace between words in Markdown link text is now preserved as single
+  space (#628, @egnha).
+
 # roxygen2 6.0.1
 
 * Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 

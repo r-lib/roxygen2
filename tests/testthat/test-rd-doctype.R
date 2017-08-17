@@ -31,7 +31,7 @@ test_that("@docType data automatically adds sensible defaults", {
     #' @docType data
     a <- data.frame(a = 1:10)")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, "a")
+  expect_equal(get_tag(out, "usage")$values, rd("a"))
   expect_equal(get_tag(out, "keyword")$values, "datasets")
   expect_equal(is.null(get_tag(out, "format")$values), FALSE)
 })
@@ -51,7 +51,7 @@ test_that("@docType data automatically added to data objects created elsewhere",
     'a'")[[1]]
 
   expect_equal(get_tag(out, "docType")$values, "data")
-  expect_equal(get_tag(out, "usage")$values, "a")
+  expect_equal(get_tag(out, "usage")$values, rd("a"))
   expect_equal(get_tag(out, "keyword")$values, "datasets")
 })
 

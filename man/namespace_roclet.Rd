@@ -2,6 +2,7 @@
 % Please edit documentation in R/namespace.R
 \name{namespace_roclet}
 \alias{namespace_roclet}
+\alias{evalNamespace}
 \alias{export}
 \alias{exportClass}
 \alias{exportMethod}

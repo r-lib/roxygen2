@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* `%` in inline code blocks in markdown is now automatically escaped
+  (#640).
+
 * Roclets can now access global options as designed. This allows templates to
   use markdown formatting if set globally (#594).
 

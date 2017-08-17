@@ -152,7 +152,7 @@ markdown_tags <- list(
   },
 
   code = function(xml) {
-    list("\\code{", xml_contents(xml), "}")
+    list("\\code{", gsub("%", "\\\\%", xml_contents(xml)), "}")
   },
 
   html_inline = function(xml) {

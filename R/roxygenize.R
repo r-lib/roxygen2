@@ -32,6 +32,11 @@ roxygenize <- function(package.dir = ".",
   base_path <- normalizePath(package.dir)
   is_first <- roxygen_setup(base_path)
 
+  encoding <- desc::desc_get("Encoding", file = base_path)[[1]]
+  if (!identical(encoding, "UTF-8")) {
+    warning("roxygen2 requires Encoding: UTF-8", call. = FALSE)
+  }
+
   options <- load_options(base_path)
   roclets <- roclets %||% options$roclets
 

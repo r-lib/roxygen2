@@ -30,13 +30,11 @@ parse_package <- function(path = ".",
                           registry = default_tags(),
                           global_options = list()
                           ) {
-  desc <- read_pkg_description(path)
 
   files <- package_files(path)
   list_of_blocks <- lapply(files, tokenize_file,
     registry = registry,
-    global_options = global_options,
-    file_encoding = desc$Encoding %||% "UTF-8"
+    global_options = global_options
   )
 
   blocks <- purrr::flatten(list_of_blocks)
@@ -83,7 +81,7 @@ parse_text <- function(text,
                        global_options = list()) {
 
   file <- tempfile()
-  writeLines(text, file)
+  write_lines(text, file)
   on.exit(unlink(file))
 
   parse_file(

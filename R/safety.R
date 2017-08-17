@@ -14,17 +14,17 @@ first_time <- function(path) {
 made_by_roxygen <- function(path) {
   if (!file.exists(path)) return(TRUE)
 
-  first <- readLines(path, n = 1)
+  first <- read_lines(path, n = 1)
   check_made_by(first)
 }
 
 add_made_by_roxygen <- function(path, comment) {
   if (!file.exists(path)) stop("Can't find ", path, call. = FALSE)
 
-  lines <- readLines(path, warn = FALSE)
+  lines <- read_lines(path)
   if (check_made_by(lines[1])) return()
 
-  writeLines(c(made_by(comment), lines), path)
+  write_lines(c(made_by(comment), lines), path)
 }
 
 check_made_by <- function(first) {

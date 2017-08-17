@@ -125,7 +125,7 @@ roc_proc_text <- function(roclet, input, registry = default_tags(),
   stopifnot(is.roclet(roclet))
 
   file <- tempfile()
-  writeLines(input, file)
+  write_lines(input, file)
   on.exit(unlink(file))
 
   env <- env_file(file)

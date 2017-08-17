@@ -1,0 +1,8 @@
+Package: testUtf8Escape
+Title: Check that utf8 escapes are round tripped ok
+License: GPL-2
+Description:
+Author: Hadley <hadley@rstudio.com>
+Maintainer: Hadley <hadley@rstudio.com>
+Encoding: UTF-8
+Version: 0.1

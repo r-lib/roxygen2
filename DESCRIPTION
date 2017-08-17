@@ -22,6 +22,7 @@ Imports:
     desc,
     digest,
     methods,
+    pkgload,
     R6 (>= 2.1.2),
     Rcpp (>= 0.11.0),
     stringi,
@@ -39,3 +40,5 @@ LinkingTo:
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1.9000
+Remotes: 
+    r-lib/pkgload

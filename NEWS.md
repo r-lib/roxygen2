@@ -7,6 +7,12 @@
 
 * Markdown code as link text is now properly rendered as code (#620, @egnha).
 
+* `roxygenise()` uses `pkgload::load_all()` instead of a home grown solution 
+  to simulate package loading (this is needed because roxygen2 uses run-time 
+  information to generate the documetation). This should reduce S4 related
+  problems and ensures that `devtools::document()` and `roxygenise()` always
+  have exactly the same behaviour (#568, #595).
+
 # roxygen2 6.0.1
 
 * Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 

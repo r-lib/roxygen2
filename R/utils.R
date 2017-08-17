@@ -116,15 +116,12 @@ ignore_files <- function(rfiles, path) {
   patterns <- readLines(rbuildignore, warn = FALSE)
   patterns <- patterns[patterns != ""]
   if (length(patterns) == 0L) {
-    rfiles
+    return(rfiles)
   }
-  else {
-    matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
-    matches <- Reduce("|", matches)
-    rfiles[!matches]
-  }
+  matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
+  matches <- Reduce("|", matches)
+  rfiles[!matches]
 }
-
 
 compact <- function(x) {
   null <- vapply(x, is.null, logical(1))

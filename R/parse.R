@@ -23,13 +23,14 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
 #' @param registry A roclet tag registry.
 #' @param wrap Logical; should roxygen2 output be wrapped? `FALSE` by default.
 #' @param markdown Logical value indicating whether to parse Markdown tags.
-#'   This can be overridden locally by the tags '@rd` and `@NoRd` inside a
+#'   This can be overridden locally by the tags '@md` and `@noMd` inside a
 #'   Roxygen comment.
 #' @param file_encoding The file encoding. Default: `"UTF-8"`.
 #' @return A list of roxygen2 blocks.
 #' @export
 #' @keywords internal
-parse_code <- function(file, text = NULL,
+parse_code <- function(file,
+                       text = NULL,
                        env,
                        registry = default_tags(),
                        wrap = FALSE,

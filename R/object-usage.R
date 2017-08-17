@@ -6,7 +6,7 @@ object_usage.default <- function(x) NULL
 
 object_usage.NULL <- function(x) NULL
 
-object_usage.data <- function(x) x$alias
+object_usage.data <- function(x) rd(x$alias)
 
 object_usage.function <- function(x) {
   function_usage(x$alias, formals(x$value), identity)

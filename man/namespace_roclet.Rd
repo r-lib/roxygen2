@@ -5,12 +5,14 @@
 \alias{export}
 \alias{exportClass}
 \alias{exportMethod}
-\alias{S3method}
+\alias{exportPattern}
 \alias{import}
 \alias{importFrom}
 \alias{importClassesFrom}
 \alias{importMethodsFrom}
+\alias{evalNamespace}
 \alias{rawNamespace}
+\alias{S3method}
 \alias{useDynLib}
 \title{Roclet: make NAMESPACE.}
 \usage{

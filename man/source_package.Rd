@@ -14,9 +14,6 @@ An environment, into which all R files in the directory were
 sourced.
 }
 \description{
-This is a simple attempt to load code in a package used by
-\link{roxygenize}. It will work with simple packages, but fail if
-there are compiled files, data files, etc. In that case, it's better to
-use \link[devtools:document]{devtools::document}.
+This is a wrapper around \link[pkgload:load_all]{pkgload::load_all}
 }
 \keyword{internal}

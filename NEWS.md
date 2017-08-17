@@ -10,6 +10,9 @@
 
 * Markdown code as link text is now properly rendered as code (#620, @egnha).
 
+* Whitespace between words in Markdown link text is now preserved as single
+  space (#628, @egnha).
+
 * `roxygenise()` uses `pkgload::load_all()` instead of a home grown solution 
   to simulate package loading (this is needed because roxygen2 uses run-time 
   information to generate the documetation). This should reduce S4 related

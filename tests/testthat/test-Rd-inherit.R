@@ -1,5 +1,22 @@
 context("Rd: inherit")
 
+
+# Rd parsing --------------------------------------------------------------
+
+test_that("can round-trip Rd", {
+  rd <- tools::parse_Rd(test_path("escapes.Rd"))
+
+  field <- find_field(rd, "description")
+  lines <- strsplit(field, "\n")[[1]]
+  expect_equal(
+    lines,
+    c(
+      "% Comment",   # Latex comments shouldn't be escaped
+      "\\code{\\\\}" # Backslashes in code should be
+    )
+  )
+})
+
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {

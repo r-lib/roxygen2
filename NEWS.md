@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* The mechanism for extracting inherited Rd does a better job of 
+  preserving escapes (#624)
+
 * You can now autogenerate package documentation even if you don't have 
   `Authors@R` (#606).
 

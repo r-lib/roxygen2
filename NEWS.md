@@ -1,5 +1,7 @@
 # roxygen2 6.0.1.9000
 
+* Markdown code as link text is now properly rendered as code (#620, @egnha).
+
 # roxygen2 6.0.1
 
 * Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 

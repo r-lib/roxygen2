@@ -12,8 +12,8 @@ Link to an object: \link{roxygenize} (we just treat it like an object here.
 Link to another package, function: \code{\link[devtools:document]{devtools::document()}}.
 Link to another package, non-function: \link[devtools:document]{devtools::document}.
 
-Link with link text:  \link[=roxygenize]{this great function} or
-\link[=roxygenize]{that great function}.
+Link with link text: \link[=roxygenize]{this great function},
+\code{\link[=roxygenize]{roxygenize}}, or \link[=roxygenize]{that great function}.
 
 In another package: \link[devtools:document]{and this one}.
 }

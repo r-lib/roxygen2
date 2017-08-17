@@ -7,7 +7,7 @@
 rd_roclet()
 }
 \description{
-This roclet is the workhorse of \pkg{roxygen}, producing the Rd files that
+This roclet is the workhorse of \code{roxygen}, producing the Rd files that
 document that functions in your package.
 }
 \seealso{

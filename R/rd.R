@@ -3,10 +3,8 @@ NULL
 
 #' Roclet: make Rd files.
 #'
-#' This roclet is the workhorse of \pkg{roxygen}, producing the Rd files that
-#' document that functions in your package.
-#'
 #' @family roclets
+#' @template rd
 #' @seealso `vignette("rd", package = "roxygen2")`
 #' @export
 rd_roclet <- function() {

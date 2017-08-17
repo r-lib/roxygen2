@@ -29,14 +29,12 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
 #' @return A list of roxygen2 blocks.
 #' @export
 #' @keywords internal
-parse_code <- function(
-  file, text = NULL,
-  env,
-  registry = default_tags(),
-  wrap = FALSE,
-  markdown = markdown_global_default,
-  file_encoding = "UTF-8"
-) {
+parse_code <- function(file, text = NULL,
+                       env,
+                       registry = default_tags(),
+                       wrap = FALSE,
+                       markdown = markdown_global_default,
+                       file_encoding = "UTF-8") {
   if (missing(file) && !is.null(text)) {
     file <- tempfile()
     writeLines(text, file)

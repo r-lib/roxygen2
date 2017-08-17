@@ -158,7 +158,7 @@ Markdown notation can be used to create links to other manual pages. There are s
    `[link text][object]`. Here `object` can be a function, but the link
    text is not typeset as code.
 6. Link to an object in another package, with different link text:
-   `[link text][pkg:object]`. This is not typeset as code.
+   `[link text][pkg::object]`. This is not typeset as code.
 
 S3/S4 classes can be linked the same way:
 
@@ -188,7 +188,7 @@ When mixing `Rd` and markdown notation, most `Rd` tags may contain markdown mark
 
 ## Mixing markdown and `Rd` markup
 
-Note that turning on markdown does *not* turn off the standard `Rd` syntax. We suggest that you use the regular `Rd` tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or currupted manuals.
+Note that turning on markdown does *not* turn off the standard `Rd` syntax. We suggest that you use the regular `Rd` tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.
 
 ## Leading whitespace
 

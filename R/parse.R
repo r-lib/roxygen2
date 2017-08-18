@@ -67,7 +67,10 @@ parse_text <- function(text, registry = default_tags(), global_options = list())
   list(env = env, blocks = blocks)
 }
 
-parse_blocks <- function(file, env, registry, global_options = list(), fileEncoding = "UTF-8") {
+parse_blocks <- function(file, env, registry = list(), global_options = list(), fileEncoding = "UTF-8") {
+
+  # Manaully add eval tag to registry - it's always active
+  registry$eval <- tag_code
 
   lines <- read_lines_enc(file, file_encoding = fileEncoding)
   parsed <- parse(text = lines, keep.source = TRUE, srcfile = srcfilecopy(file, lines, isFile = TRUE))
@@ -88,7 +91,8 @@ parse_blocks <- function(file, env, registry, global_options = list(), fileEncod
 
     block$object <- object_from_call(call, env, block, file)
     block$srcref <- list(filename = file, lloc = as.vector(ref))
-    add_defaults(block)
+    block <- block_evaluate(block, env, registry = registry)
+    block_add_defaults(block)
   }
 
   Map(extract, parsed, refs, comment_refs)
@@ -99,27 +103,13 @@ parse_block <- function(x, file, env, registry, offset = x[[1]], global_options 
   if (length(tags) == 0)
     return()
 
-  ## markdown on/off based on global flag and presense of @md & @nomd
-  ## we need to use markdown_global_default as well, because global_options
-  ## can be NULL, e.g. if called from parse_text()
-
-  names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1))
-  has_md <- "md" %in% names
-  has_nomd <- "noMd" %in% names
-
-  md <- global_options$markdown %||% markdown_global_default
-  if (has_md) md <- TRUE
-  if (has_nomd) md <- FALSE
-  markdown_on(md)
-
-  if (has_md && has_nomd) {
-    warning(
-      "Both @md and @noMd, no markdown parsing, in block at ",
-      file, ":", offset
-    )
-  }
+  markdown_activate(tags, file, offset, global_options)
 
   tags <- parse_description(tags)
+  parse_tags(tags, registry = registry)
+}
+
+parse_tags <- function(tags, registry) {
   tags <- compact(lapply(tags, parse_tag, registry = registry))
 
   # Convert to existing named list format - this isn't ideal, but
@@ -132,11 +122,47 @@ parse_block <- function(x, file, env, registry, offset = x[[1]], global_options 
 parse_tag <- function(x, registry) {
   stopifnot(is.roxy_tag(x))
 
-  if (!(x$tag %in% ls(registry))) {
-    return(roxy_tag_warning(x, "unknown tag"))
+  if (x$tag %in% ls(registry)) {
+    registry[[x$tag]](x)
+  } else {
+    roxy_tag_warning(x, "unknown tag")
   }
+}
 
-  registry[[x$tag]](x)
+block_evaluate <- function(block, env, registry) {
+  # @eval needs to return a character vector; one for each line
+  # should not start with #'
+
+  # Does not currently affect md/noMd status
+  # Will not be run in templates
+  # Not run recursively
+
+  is_eval <- names(block) == "eval"
+  eval <- block[is_eval]
+  if (length(eval) == 0)
+    return(block)
+
+  # Evaluate
+  results <- lapply(eval, block_eval,
+    block = block,
+    env = env,
+    tag_name = "@eval"
+  )
+  results <- lapply(results, function(x) paste0("#' ", x))
+
+  # Tokenise and parse
+  tokens <- lapply(results, tokenise_block,
+    file = block$srcref$filename,
+    offset = block$srcref$lloc[[1]]
+  )
+  tags <- lapply(tokens, parse_tags, registry = registry)
+
+  # Interpolate results back into original locations
+  out <- lapply(block, list)
+  out[is_eval] <- tags
+  names(out)[is_eval] <- ""
+
+  unlist(out, recursive = FALSE)
 }
 
 parse_description <- function(tags) {

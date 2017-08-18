@@ -5,10 +5,19 @@ NULL
 #'
 #' @family roclets
 #' @template rd
+#' @eval rd_roclet_description()
 #' @seealso `vignette("rd", package = "roxygen2")`
 #' @export
 rd_roclet <- function() {
   roclet("rd")
+}
+
+rd_roclet_description <- function() {
+  c(
+    "@description",
+    "Generally you will not call this function directly",
+    "but will instead use roxygenise() specifying the rd roclet"
+  )
 }
 
 #' @export

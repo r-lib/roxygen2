@@ -378,7 +378,7 @@ topic_add_eval_rd <- function(topic, block, env) {
   for (tag in tags) {
     out <- block_eval(tag, block, env, "@evalRd")
     if (!is.null(out)) {
-      topic$add_simple_field("rawRd", as.character(out))
+      topic$add_simple_field("rawRd", out)
     }
   }
 }

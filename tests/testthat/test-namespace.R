@@ -249,17 +249,6 @@ test_that("evalNamespace generates warning when code doesn't eval to string", {
     "@evalNamespace did not evaluate to a string"  # From block_eval
   )
 
-  # Not scalar
-  expect_warning(
-    roc_proc_text(namespace_roclet(), "
-      nms <- letters[1:3]
-      #' @evalNamespace paste('export(', nms, ')', sep = ',')
-      #' @name a
-      #' @title a
-      NULL"),
-    "@evalNamespace did not evaluate to a string"  # From block_eval
-  )
-
   # NA_character_ not allowed
   expect_warning(
     roc_proc_text(namespace_roclet(), "
@@ -268,7 +257,7 @@ test_that("evalNamespace generates warning when code doesn't eval to string", {
       #' @name a
       #' @title a
       NULL"),
-    "@evalNamespace did not evaluate to a string"  # From block_eval
+    "@evalNamespace result contained NA"  # From block_eval
   )
 })
 
@@ -289,4 +278,15 @@ test_that("evalNamespace code is inserted when its value is a string", {
 
   expect_equal(out1, "export(a,b,c)")
   expect_equal(out2, "export(a,b,c)")
+})
+
+test_that("evalNamspace can yield a vector", {
+  out <- roc_proc_text(namespace_roclet(), "
+    nms <- letters[1:2]
+    #' @evalNamespace paste0('export(', nms, ')')
+    #' @name a
+    #' @title a
+    NULL")
+
+  expect_equal(out, c("export(a)", "export(b)"))
 })

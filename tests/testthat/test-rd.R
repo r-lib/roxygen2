@@ -17,16 +17,28 @@ test_that("generic keys produce expected output", {
     #' @note test
     #' @author test
     #' @seealso test
-    #' @concept test
     #' @encoding test
     #' @name a
     NULL")[[1]]
   expect_equal(get_tag(out, "references")$values, "test")
   expect_equal(get_tag(out, "note")$values, "test")
   expect_equal(get_tag(out, "seealso")$values, "test")
-  expect_equal(get_tag(out, "concept")$values, "test")
   expect_equal(get_tag(out, "encoding")$values, "test")
   expect_equal(get_tag(out, "author")$values, "test")
+})
+
+test_that("one line per concept", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' @title a
+    #' @name a
+    #' @concept test1
+    #' @concept test2
+    NULL")[[1]]
+
+  field <- out$get_field("concept")
+
+  expect_equal(field$values, c("test1", "test2"))
+  expect_equal(format(field), c("\\concept{test1}", "\\concept{test2}"))
 })
 
 test_that("@noRd inhibits documentation", {

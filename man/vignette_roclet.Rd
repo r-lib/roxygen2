@@ -23,3 +23,4 @@ field in your project options.
 Other roclets: \code{\link{namespace_roclet}},
   \code{\link{rd_roclet}}
 }
+\concept{roclets}

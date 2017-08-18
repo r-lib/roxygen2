@@ -8,6 +8,7 @@ topics_process_family <- function(topics) {
 
     for (family in families) {
       related <- family_index[[family]]
+      topic$add_simple_field("concept", family)
 
       others <- setdiff(related, topic_name)
       if (length(others) < 1)

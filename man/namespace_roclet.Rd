@@ -29,3 +29,4 @@ see Writing R Extensions.
 Other roclets: \code{\link{rd_roclet}},
   \code{\link{vignette_roclet}}
 }
+\concept{roclets}

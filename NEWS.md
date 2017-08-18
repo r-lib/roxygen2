@@ -1,5 +1,9 @@
 # roxygen2 6.0.1.9000
 
+* `@concept` now generates one `\concept` per tag (#611).
+
+* `@family` automatically adds its value to concepts (#611).
+
 * Stricter regular expression ensures only files ending with `.R` or `.r` are
   parsed for roxygen comments (#625).
 

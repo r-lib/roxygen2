@@ -367,13 +367,10 @@ topic_add_eval_rd <- function(topic, block, env) {
   tags <- block_tags(block, "evalRd")
 
   for (tag in tags) {
-    tryCatch({
-      expr <- parse(text = tag)
-      out <- eval(expr, envir = env)
+    out <- block_eval(tag, block, env, "@evalRd")
+    if (!is.null(out)) {
       topic$add_simple_field("rawRd", as.character(out))
-    }, error = function(e) {
-      block_warning(block, "@evalRd failed with error: ", e$message)
-    })
+    }
   }
 }
 

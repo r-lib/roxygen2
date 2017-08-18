@@ -132,18 +132,7 @@ ns_useDynLib         <- function(tag, block) {
 }
 ns_rawNamespace  <- function(tag, block) tag
 ns_evalNamespace <- function(tag, block, env) {
-  tryCatch({
-    expr <- parse(text = tag)
-    out <- eval(expr, envir = env)
-
-    if (!is.character(out) || length(out) != 1L || is.na(out)) {
-      stop("code didn't return a string: ", out, call. = FALSE)
-    }
-
-    out
-  }, error = function(e) {
-    block_warning(block, "@evalNamespace failed with error: ", e$message)
-  })
+  block_eval(tag, block, env, "@evalNamespace")
 }
 
 # Functions used by both default_export and ns_* functions

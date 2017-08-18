@@ -36,7 +36,7 @@ test_that("error-ful evalRd generates warning", {
 test_that("evalRd inserted unchanged", {
   out <- roc_proc_text(rd_roclet(), "
     z <- 10
-    #' @evalRd z * 2
+    #' @evalRd as.character(z * 2)
     #' @name a
     #' @title a
     NULL")[[1]]

@@ -130,13 +130,6 @@ parse_tag <- function(x, registry) {
 }
 
 block_evaluate <- function(block, env, registry) {
-  # @eval needs to return a character vector; one for each line
-  # should not start with #'
-
-  # Does not currently affect md/noMd status
-  # Will not be run in templates
-  # Not run recursively
-
   is_eval <- names(block) == "eval"
   eval <- block[is_eval]
   if (length(eval) == 0)

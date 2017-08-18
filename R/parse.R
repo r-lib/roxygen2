@@ -77,8 +77,13 @@ parse_blocks <- function(file, env, registry, global_options = list(), fileEncod
   comment_refs <- comments(refs)
 
   extract <- function(call, ref, comment_ref) {
-    block <- parse_block(comment_ref, file, registry,
-                         global_options = global_options)
+    block <- parse_block(
+      comment_ref,
+      file = file,
+      env = env,
+      registry = registry,
+      global_options = global_options
+    )
     if (length(block) == 0) return()
 
     block$object <- object_from_call(call, env, block, file)
@@ -89,7 +94,7 @@ parse_blocks <- function(file, env, registry, global_options = list(), fileEncod
   Map(extract, parsed, refs, comment_refs)
 }
 
-parse_block <- function(x, file, registry, offset = x[[1]], global_options = list()) {
+parse_block <- function(x, file, env, registry, offset = x[[1]], global_options = list()) {
   tags <- tokenise_block(as.character(x), file = basename(file), offset = offset)
   if (length(tags) == 0)
     return()

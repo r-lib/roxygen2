@@ -131,8 +131,10 @@ block_eval <- function(tag, block, env, tag_name) {
     expr <- parse(text = tag)
     out <- eval(expr, envir = env)
 
-    if (!is.character(out) || length(out) != 1L || is.na(out)) {
+    if (!is.character(out)) {
       block_warning(block, tag_name, " did not evaluate to a string")
+    } else if (anyNA(out)) {
+      block_warning(block, tag_name, " result contained NA")
     } else {
       out
     }

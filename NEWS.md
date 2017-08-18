@@ -1,5 +1,14 @@
 # roxygen2 6.0.1.9000
 
+* `@eval foo()` evaluates `foo()` defined in the package namespace and inserts
+  the results into the current block (#645). The code should return a character 
+  vector with one entry for each line (and they should not start with `#'`).
+  
+    There are two small limitations to the current implementation:
+    
+    1. The generated roxygen will not affect the `@md`/`@noMd` status
+    2. `@evalRd` does not work inside templates.
+
 * `@concept` now generates one `\concept` per tag (#611).
 
 * `@family` automatically adds its value to concepts (#611).

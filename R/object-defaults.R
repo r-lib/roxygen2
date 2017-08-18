@@ -1,5 +1,5 @@
 # Combine a block with defaults generated from the object
-add_defaults <- function(block) {
+block_add_defaults <- function(block) {
   defaults <- object_defaults(block$object)
 
   for (tag in names(defaults)) {

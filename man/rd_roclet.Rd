@@ -9,6 +9,9 @@ rd_roclet()
 \description{
 This roclet is the workhorse of \code{roxygen}, producing the Rd files that
 document that functions in your package.
+
+Generally you will not call this function directly
+but will instead use roxygenise() specifying the rd roclet
 }
 \seealso{
 \code{vignette("rd", package = "roxygen2")}

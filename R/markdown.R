@@ -14,6 +14,28 @@ markdown_on <- function(value = NULL) {
   return(isTRUE(markdown_env$`markdown-support`))
 }
 
+markdown_activate <- function(tags, file, offset, global_options = list()) {
+  ## markdown on/off based on global flag and presense of @md & @nomd
+  ## we need to use markdown_global_default as well, because global_options
+  ## can be NULL, e.g. if called from parse_text()
+
+  names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1))
+  has_md <- "md" %in% names
+  has_nomd <- "noMd" %in% names
+  if (has_md && has_nomd) {
+    warning(
+      "Both @md and @noMd, no markdown parsing, in block at ",
+      file, ":", offset
+    )
+  }
+
+  md <- global_options$markdown %||% markdown_global_default
+  if (has_md) md <- TRUE
+  if (has_nomd) md <- FALSE
+
+  markdown_on(md)
+}
+
 restricted_markdown <- function(rest) {
   markdown(rest, markdown_tags_restricted)
 }

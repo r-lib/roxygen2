@@ -12,5 +12,5 @@ write_lines <- function(text, path) {
   con <- file(path, open = "w", encoding = "utf-8")
   on.exit(close(con))
 
-  base::writeLines(text, con)
+  base::writeLines(text, con, useBytes = TRUE)
 }

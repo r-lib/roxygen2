@@ -1,16 +1,3 @@
-# Combine a block with defaults generated from the object
-block_add_defaults <- function(block) {
-  defaults <- object_defaults(block$object)
-
-  for (tag in names(defaults)) {
-    if (tag %in% names(block)) next
-
-    block[[tag]] <- defaults[[tag]]
-  }
-
-  block
-}
-
 object_defaults <- function(x) UseMethod("object_defaults")
 
 #' @export

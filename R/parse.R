@@ -5,7 +5,8 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
   files <- package_files(base_path)
   parsed <- lapply(files, parse_blocks, env = env, registry = registry,
                    global_options = global_options, fileEncoding = desc$Encoding %||% "UTF-8")
-  blocks <- unlist(parsed, recursive = FALSE)
+
+  blocks <- compact(unlist(parsed, recursive = FALSE))
 
   list(env = env, blocks = blocks)
 }
@@ -80,19 +81,24 @@ parse_blocks <- function(file, env, registry = list(), global_options = list(), 
   comment_refs <- comments(refs)
 
   extract <- function(call, ref, comment_ref) {
-    block <- parse_block(
+    tags <- parse_block(
       comment_ref,
       file = file,
       env = env,
       registry = registry,
       global_options = global_options
     )
-    if (length(block) == 0) return()
+    if (length(tags) == 0) return()
 
-    block$object <- object_from_call(call, env, block, file)
-    block$srcref <- list(filename = file, lloc = as.vector(ref))
+    block <- roxy_block(tags,
+      filename = file,
+      location = as.vector(ref),
+      call = call
+    )
+
+    block <- block_find_object(block, env)
     block <- block_evaluate(block, env, registry = registry)
-    block_add_defaults(block)
+    block
   }
 
   Map(extract, parsed, refs, comment_refs)
@@ -127,41 +133,6 @@ parse_tag <- function(x, registry) {
   } else {
     roxy_tag_warning(x, "unknown tag")
   }
-}
-
-block_evaluate <- function(block, env, registry) {
-  is_eval <- names(block) == "eval"
-  eval <- block[is_eval]
-  if (length(eval) == 0)
-    return(block)
-
-  # Evaluate
-  results <- lapply(eval, block_eval,
-    block = block,
-    env = env,
-    tag_name = "@eval"
-  )
-  results <- lapply(results, function(x) {
-    if (is.null(x)) {
-      character()
-    } else {
-      paste0("#' ", x)
-    }
-  })
-
-  # Tokenise and parse
-  tokens <- lapply(results, tokenise_block,
-    file = block$srcref$filename,
-    offset = block$srcref$lloc[[1]]
-  )
-  tags <- lapply(tokens, parse_tags, registry = registry)
-
-  # Interpolate results back into original locations
-  out <- lapply(block, list)
-  out[is_eval] <- tags
-  names(out)[is_eval] <- ""
-
-  compact(unlist(out, recursive = FALSE))
 }
 
 parse_description <- function(tags) {

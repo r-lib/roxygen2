@@ -7,7 +7,7 @@ topic_add_describe_in <- function(topic, block, env) {
     block_warning(block, "May only use one @describeIn per block")
     return()
   }
-  if (is.null(block$object)) {
+  if (is.null(attr(block, "object"))) {
     block_warning(block, "@describeIn must be used with an object")
     return()
   }
@@ -21,7 +21,7 @@ topic_add_describe_in <- function(topic, block, env) {
   }
 
   dest <- find_object(tags$describeIn$name, env)
-  label <- build_label(block$object, dest, block)
+  label <- build_label(attr(block, "object"), dest, block)
   if (is.null(label))
     return()
 

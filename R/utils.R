@@ -143,19 +143,6 @@ block_eval <- function(tag, block, env, tag_name) {
   })
 }
 
-block_warning <- function(block, ...) {
-  warning(
-    srcref_location(block$srcref), ": ", ...,
-    call. = FALSE,
-    immediate. = TRUE
-  )
-  NULL
-}
-
-srcref_location <- function(srcref = NULL) {
-  if (is.null(srcref)) return()
-  paste0(basename(srcref$filename), ":", srcref$lloc[1])
-}
 
 # Parse DESCRIPTION into convenient format
 read.description <- function(file) {
@@ -199,4 +186,8 @@ collapse <- function(key, value, fun, ...) {
     key = names(dedup),
     value = unname(dedup)
   )
+}
+
+cat_line <- function(...) {
+  cat(..., "\n", sep = "")
 }

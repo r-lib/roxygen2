@@ -21,6 +21,7 @@ namespace_roclet <- function() {
 #' @export
 roclet_process.roclet_namespace <- function(x, parsed, base_path,
                                             global_options = list()) {
+
   ns <- unlist(lapply(parsed$blocks, block_to_ns, env = parsed$env)) %||%
     character()
   sort_c(unique(ns))
@@ -84,7 +85,7 @@ roclet_clean.roclet_namespace <- function(x, base_path) {
 ns_export <- function(tag, block) {
   if (identical(tag, "")) {
     # FIXME: check for empty exports (i.e. no name)
-    default_export(block$object, block)
+    default_export(attr(block, "object"), block)
   } else {
     export(tag)
   }

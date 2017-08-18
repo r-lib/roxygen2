@@ -6,8 +6,9 @@ test_that("class captured from setClass", {
     setClass('A1')
   ")$blocks[[1]]
 
-  expect_is(out$object, "s4class")
-  expect_equal(out$object$alias, NULL)
+  object <- attr(out, "object")
+  expect_is(object, "s4class")
+  expect_equal(object$alias, NULL)
 })
 
 test_that("class captured from assignment", {
@@ -16,8 +17,9 @@ test_that("class captured from assignment", {
     B <- setClass('B1')
   ")$blocks[[1]]
 
-  expect_is(out$object, "s4class")
-  expect_equal(out$object$alias, "B")
+  object <- attr(out, "object")
+  expect_is(object, "s4class")
+  expect_equal(object$alias, "B")
 })
 
 test_that("class captured from setClassUnion", {
@@ -26,8 +28,9 @@ test_that("class captured from setClassUnion", {
     setClassUnion('numberish', c('numeric', 'logical'))
   ")$blocks[[1]]
 
-  expect_is(out$object, "s4class")
-  expect_equal(out$object$alias, NULL)
+  object <- attr(out, "object")
+  expect_is(object, "s4class")
+  expect_equal(object$alias, NULL)
 })
 
 test_that("class captured from setRefClass", {
@@ -36,8 +39,9 @@ test_that("class captured from setRefClass", {
     setRefClass('A1')
   ")$blocks[[1]]
 
-  expect_is(out$object, "rcclass")
-  expect_equal(out$object$alias, NULL)
+  object <- attr(out, "object")
+  expect_is(object, "rcclass")
+  expect_equal(object$alias, NULL)
 })
 
 test_that("class captured from assignment of setRefClass", {
@@ -46,8 +50,9 @@ test_that("class captured from assignment of setRefClass", {
     B <- setRefClass('B1')
   ")$blocks[[1]]
 
-  expect_is(out$object, "rcclass")
-  expect_equal(out$object$alias, "B")
+  object <- attr(out, "object")
+  expect_is(object, "rcclass")
+  expect_equal(object$alias, "B")
 })
 
 test_that("setMethod equivalent to setReplaceMethod", {
@@ -60,5 +65,5 @@ test_that("setMethod equivalent to setReplaceMethod", {
     setReplaceMethod('foo', 'numeric', function(x, value) value * 10)
     ")$blocks
 
-  expect_equal(out[[2]]$object, out[[3]]$object)
+  expect_equal(attr(out[[2]], "object"), attr(out[[3]], "object"))
 })

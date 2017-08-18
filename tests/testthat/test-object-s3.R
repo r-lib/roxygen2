@@ -62,5 +62,5 @@ test_that("@method overrides auto-detection", {
     all.equal.data.frame <- function(...) 1
   ")$blocks[[1]]
 
-  expect_equal(s3_method_info(out$object$value), c("all.equal", "data.frame"))
+  expect_equal(s3_method_info(attr(out, "object")$value), c("all.equal", "data.frame"))
 })

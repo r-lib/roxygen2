@@ -72,9 +72,6 @@ roclet_process.roclet_rd <- function(x, parsed, base_path,
   topics <- RoxyTopics$new()
 
   for (block in parsed$blocks) {
-    if (length(block) == 0)
-      next
-
     rd <- block_to_rd(block, base_path, parsed$env, global_options)
     topics$add(rd)
   }
@@ -107,7 +104,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
     return()
   }
 
-  name <- block$name %||% object_topic(block$object)
+  name <- block$name %||% object_topic(attr(block, "object"))
   if (is.null(name)) {
     block_warning(block, "Missing name")
     return()
@@ -202,7 +199,7 @@ needs_doc <- function(block) {
 # Tag processing functions ------------------------------------------------
 
 topic_add_backref <- function(topic, block) {
-  backrefs <- block_tags(block, "backref") %||% block$srcref$filename
+  backrefs <- block_tags(block, "backref") %||% attr(block, "filename")
 
   for (backref in backrefs) {
     topic$add_simple_field("backref", backref)
@@ -228,8 +225,9 @@ topic_add_simple_tags <- function(topic, block) {
 
 topic_add_params <- function(topic, block) {
   # Used in process_inherit_params()
-  if (is.function(block$object$value)) {
-    formals <- formals(block$object$value)
+  value <- attr(block, "object")$value
+  if (is.function(value)) {
+    formals <- formals(value)
     topic$add_simple_field("formals", names(formals))
   }
 
@@ -249,7 +247,7 @@ topic_add_name_aliases <- function(topic, block, name) {
     # Don't add default aliases
     aliases <- aliases[aliases != "NULL"]
   } else {
-    aliases <- unique(c(name, block$object$alias, aliases))
+    aliases <- unique(c(name, attr(block, "object")$alias, aliases))
   }
 
   topic$add_simple_field("name", name)
@@ -258,7 +256,7 @@ topic_add_name_aliases <- function(topic, block, name) {
 
 
 topic_add_methods <- function(topic, block) {
-  obj <- block$object
+  obj <- attr(block, "object")
   if (!inherits(obj, "rcclass")) return()
 
   methods <- obj$methods
@@ -322,7 +320,7 @@ topic_add_keyword <- function(topic, block) {
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block) {
   if (is.null(block$usage)) {
-    usage <- wrap_string(object_usage(block$object))
+    usage <- wrap_string(object_usage(attr(block, "object")))
   } else if (block$usage == "NULL") {
     usage <- NULL
   } else {

@@ -30,11 +30,11 @@ process_templates <- function(block, base_path, global_options = list()) {
   results <- lapply(paths, template_eval, vars = list2env(vars))
 
   # Insert templates back in the location where they came from
-  block_pieces <- lapply(block, list)
-  block_pieces[template_locs] <- lapply(results, parse_block,
+  tags <- lapply(block, list)
+  tags[template_locs] <- lapply(results, parse_block,
     file = "TEMPLATE", registry = roclet_tags.roclet_rd(list()), offset = 0L,
     global_options = global_options)
-  names(block_pieces)[template_locs] <- ""
+  names(tags)[template_locs] <- ""
 
-  unlist(block_pieces, recursive = FALSE)
+  roxy_block_copy(block, unlist(tags, recursive = FALSE))
 }

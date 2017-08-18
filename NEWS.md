@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* Stricter regular expression ensures only files ending with `.R` or `.r` are
+  parsed for roxygen comments (#625).
+
 * `%` in inline code blocks in markdown is now automatically escaped
   (#640).
 

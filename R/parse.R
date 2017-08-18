@@ -148,7 +148,13 @@ block_evaluate <- function(block, env, registry) {
     env = env,
     tag_name = "@eval"
   )
-  results <- lapply(results, function(x) paste0("#' ", x))
+  results <- lapply(results, function(x) {
+    if (is.null(x)) {
+      character()
+    } else {
+      paste0("#' ", x)
+    }
+  })
 
   # Tokenise and parse
   tokens <- lapply(results, tokenise_block,
@@ -162,7 +168,7 @@ block_evaluate <- function(block, env, registry) {
   out[is_eval] <- tags
   names(out)[is_eval] <- ""
 
-  unlist(out, recursive = FALSE)
+  compact(unlist(out, recursive = FALSE))
 }
 
 parse_description <- function(tags) {

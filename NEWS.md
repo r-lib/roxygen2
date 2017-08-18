@@ -1,8 +1,8 @@
 # roxygen2 6.0.1.9000
 
 * `@eval foo()` evaluates `foo()` defined in the package namespace and inserts
-  the results into the block. The code should return a character vector with
-  one entry for each line (and they should not start with `#'`).  (#645)
+  the results into the current block (#645). The code should return a character 
+  vector with one entry for each line (and they should not start with `#'`).
   
     There are two small limitations to the current implementation:
     

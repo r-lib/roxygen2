@@ -97,43 +97,29 @@ parse_blocks <- function(file, env,
                          registry = list(),
                          global_options = list(),
                          file_encoding = "UTF-8") {
-  # Manaully add eval tag to registry - it's always active
-  registry$eval <- tag_code
-
-  extract <- function(call, srcref, tokens) {
-    tags <- parse_block(tokens,
-      registry = registry,
-      global_options = global_options
-    )
-    if (length(tags) == 0) return()
-
-    block <- roxy_block(tags,
-      filename = file,
-      location = as.vector(srcref),
-      call = call
-    )
-
-    block <- block_find_object(block, env)
-    block <- block_evaluate(block, env, registry = registry)
-    block
-  }
 
   tokenized <- tokenize_file(file, file_encoding = file_encoding)
-  if (length(tokenized) == 0)
-    return()
 
-  purrr::compact(purrr::pmap(tokenized, extract))
+  blocks <- purrr::pmap(tokenized, block_create,
+    registry = registry,
+    global_options = global_options
+  )
+  blocks <- compact(blocks)
+
+  blocks <- lapply(blocks, block_set_env,
+    env = env,
+    registry = registry,
+    global_options = global_options
+  )
+
+  blocks
 }
 
-parse_block <- function(tokens, registry, global_options = list()) {
+parse_tags <- function(tokens, registry = list(), global_options = list()) {
   markdown_activate(tokens, global_options = global_options)
 
   tokens <- parse_description(tokens)
-  parse_tags(tokens, registry = registry)
-}
-
-parse_tags <- function(tags, registry) {
-  tags <- compact(lapply(tags, parse_tag, registry = registry))
+  tags <- compact(lapply(tokens, parse_tag, registry = registry))
 
   # Convert to existing named list format - this isn't ideal, but
   # it's what roxygen already uses
@@ -145,7 +131,9 @@ parse_tags <- function(tags, registry) {
 parse_tag <- function(x, registry) {
   stopifnot(is.roxy_tag(x))
 
-  if (x$tag %in% ls(registry)) {
+  if (identical(x$tag, "eval")) {
+    tag_code(x)
+  } else if (x$tag %in% ls(registry)) {
     registry[[x$tag]](x)
   } else {
     roxy_tag_warning(x, "unknown tag")

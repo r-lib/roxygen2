@@ -33,7 +33,7 @@ process_templates <- function(block, base_path, global_options = list()) {
 
   # Insert templates back in the location where they came from
   tags <- lapply(block, list)
-  tags[template_locs] <- lapply(tokens, parse_block,
+  tags[template_locs] <- lapply(tokens, parse_tags,
     registry = roclet_tags.roclet_rd(list()),
     global_options = global_options
   )

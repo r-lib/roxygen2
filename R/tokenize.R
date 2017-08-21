@@ -7,7 +7,7 @@ tokenize_file <- function(file, file_encoding = "UTF-8") {
     srcfile = srcfilecopy(file, lines, isFile = TRUE)
   )
   if (length(parsed) == 0)
-    return()
+    return(list())
 
   refs <- utils::getSrcref(parsed)
 

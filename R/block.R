@@ -42,7 +42,39 @@ print.roxy_block <- function(x, ...) {
   cat_line("  Obj ? ", !is.null(attr(x, "object")))
 }
 
-block_evaluate <- function(block, env, registry) {
+# Creates roxy_block from list of raw tags ,
+block_create <- function(tokens, call, srcref,
+                         registry = list(),
+                         global_options = list()) {
+
+  tags <- parse_tags(tokens,
+    registry = registry,
+    global_options = global_options
+  )
+  if (length(tags) == 0) return()
+
+  roxy_block(tags,
+    filename = attr(srcref, "srcfile")$filename,
+    location = as.vector(srcref),
+    call = call
+  )
+}
+
+block_set_env <- function(block, env,
+                          registry = list(),
+                          global_options = list()
+                          ) {
+
+  block <- block_evaluate(block, env, registry = registry, global_options = global_options)
+  block <- block_find_object(block, env)
+  block
+}
+
+block_evaluate <- function(block, env,
+                           registry = list(),
+                           global_options = list()
+                           ) {
+
   is_eval <- names(block) == "eval"
   eval <- block[is_eval]
   if (length(eval) == 0)
@@ -67,7 +99,10 @@ block_evaluate <- function(block, env, registry) {
     file = attr(block, "filename"),
     offset = attr(block, "location")[[1]]
   )
-  tags <- lapply(tokens, parse_tags, registry = registry)
+  tags <- lapply(tokens, parse_tags,
+    registry = registry,
+    global_options = global_options
+  )
 
   # Interpolate results back into original locations
   out <- lapply(block, list)

@@ -9,10 +9,6 @@
 #' Note that roxygen2 is a dynamic documentation system: it works using
 #' by inspecting loaded objects in the package. This means that you must
 #' be able to load the package in order to document it.
-#' [source_package()] provides a simple simulation of package
-#' loading that works if you only have R files in your package. For more
-#' complicated packages, I recommend using `devtools::document` which
-#' does a much better job at simulating package install and load.
 #'
 #' @param package.dir Location of package top level directory. Default is
 #'   working directory.
@@ -30,18 +26,11 @@
 #' @importFrom stats setNames
 roxygenize <- function(package.dir = ".",
                        roclets = NULL,
-                       load_code = source_package,
+                       load_code = env_package,
                        clean = FALSE) {
 
-  is_first <- first_time(package.dir)
-  if (is_first) {
-    message("First time using roxygen2. Upgrading automatically...")
-  }
-
   base_path <- normalizePath(package.dir)
-  man_path <- file.path(base_path, "man")
-  dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
-  update_roxygen_version(base_path)
+  is_first <- roxygen_setup(base_path)
 
   options <- load_options(base_path)
   roclets <- roclets %||% options$roclets
@@ -58,20 +47,46 @@ roxygenize <- function(package.dir = ".",
 
   roclets <- lapply(roclets, roclet_find)
 
-  # Generate registry of all roclet tags
-  tags <- c(lapply(roclets, roclet_tags), list(list(include = tag_value)))
-  registry <- unlist(tags, recursive = FALSE)
+  # Tokenise each file
+  registry <- purrr::flatten(lapply(roclets, roclet_tags))
+  blocks <- parse_package(base_path,
+    env = NULL,
+    registry = registry,
+    global_options = options
+  )
 
-  parsed <- parse_package(base_path, load_code, registry, options)
-
-  roc_out <- function(roc) {
-    if (clean) {
-      roclet_clean(roc, base_path)
-    }
-    results <- roclet_process(roc, parsed, base_path)
-    roclet_output(roc, results, base_path, is_first = is_first)
+  if (clean) {
+    purrr::walk(roclets, roclet_clean, base_path = base_path)
   }
-  invisible(unlist(lapply(roclets, roc_out)))
+
+  roclets <- lapply(roclets, roclet_preprocess,
+    blocks = blocks,
+    global_options = options,
+    base_path = base_path
+  )
+
+  # Now load code
+  env <- load_code(base_path)
+  blocks <- lapply(blocks, block_set_env,
+    env = env,
+    registry = registry,
+    global_options = options
+  )
+
+  results <- lapply(roclets, roclet_process,
+    blocks = blocks,
+    env = env,
+    base_path = base_path,
+    global_options = options
+  )
+
+  out <- purrr::map2(
+    roclets, results,
+    roclet_output,
+    base_path = base_path,
+    is_first = is_first
+  )
+  invisible(out)
 }
 
 #' @rdname roxygenize
@@ -106,4 +121,18 @@ load_options <- function(base_path = ".") {
   }
 
   utils::modifyList(defaults, opts)
+}
+
+
+roxygen_setup <- function(base_path) {
+  is_first <- first_time(base_path)
+  if (is_first) {
+    message("First time using roxygen2. Upgrading automatically...")
+  }
+
+  man_path <- file.path(base_path, "man")
+  dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
+  update_roxygen_version(base_path)
+
+  is_first
 }

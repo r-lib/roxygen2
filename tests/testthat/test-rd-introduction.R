@@ -2,11 +2,25 @@ context("Rd: introduction")
 
 test_that("title and description taken from first line if only one", {
   out <- roc_proc_text(rd_roclet(), "
-    #' description
+    #' title
     #' @name a
     NULL")[[1]]
-  expect_equal(get_tag(out, "description")$values, "description")
-  expect_equal(get_tag(out, "title")$values, "description")
+  expect_equal(get_tag(out, "description")$values, "title")
+  expect_equal(get_tag(out, "title")$values, "title")
+})
+
+test_that("description taken from multiple titles if merged", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' T1
+    #' @name a
+    NULL
+
+    #' T2
+    #' @name a
+    NULL
+    ")[[1]]
+  expect_equal(get_tag(out, "title")$values, c("T1", "T2"))
+  expect_equal(get_tag(out, "description")$values, c("T1", "T2"))
 })
 
 test_that("title, description and details extracted correctly", {

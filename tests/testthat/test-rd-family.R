@@ -85,3 +85,13 @@ test_that("families listed in same order as input", {
   expect_match(seealso[1], "^Other b")
   expect_match(seealso[2], "^Other a")
 })
+
+test_that("family also included in concepts", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' foo
+    #' @family a
+    foo <- function() {}
+  ")[[1]]
+
+  expect_equal(out$get_field("concept")$values, "a")
+})

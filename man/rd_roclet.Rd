@@ -7,8 +7,11 @@
 rd_roclet()
 }
 \description{
-This roclet is the workhorse of \pkg{roxygen}, producing the Rd files that
+This roclet is the workhorse of \code{roxygen}, producing the Rd files that
 document that functions in your package.
+
+Generally you will not call this function directly
+but will instead use roxygenise() specifying the rd roclet
 }
 \seealso{
 \code{vignette("rd", package = "roxygen2")}
@@ -16,3 +19,4 @@ document that functions in your package.
 Other roclets: \code{\link{namespace_roclet}},
   \code{\link{vignette_roclet}}
 }
+\concept{roclets}

@@ -60,9 +60,6 @@ test_that("braces in code must match", {
   expect_true(rdComplete("# {}", TRUE))
 })
 
-
-
-
 # Test that incomplete Rd is caught in Rd blocks -------------------------------
 
 test_that("incomplete rd in tag raises error", {

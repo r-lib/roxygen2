@@ -1,40 +1,45 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Description: Generate your Rd documentation, 'NAMESPACE' file, and collation 
-    field using specially formatted comments. Writing documentation in-line
-    with code makes it easier to keep your documentation up-to-date as your
-    requirements change. 'Roxygen2' is inspired by the 'Doxygen' system for C++.
 Version: 6.0.1.9000
-License: GPL (>= 2)
 Authors@R: c(
     person("Hadley", "Wickham",, "hadley@rstudio.com", c("aut", "cre", "cph")),
     person("Peter", "Danenberg",, "pcd@roxygen.org", c("aut", "cph")),
     person("Manuel", "Eugster", role = c("aut", "cph")),
     person("RStudio", role = "cph")
     )
-Depends:
-    R (>= 3.0.2)
-Imports:
-    stringr (>= 0.5),
-    stringi,
-    brew,
-    digest,
-    methods,
-    Rcpp (>= 0.11.0),
-    R6 (>= 2.1.2),
-    desc,
-    commonmark,
-    xml2,
-    utils
-Suggests:
-    testthat (>= 0.8.0),
-    knitr,
-    devtools,
-    rmarkdown,
-    covr
-VignetteBuilder: knitr
-LinkingTo: Rcpp
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+Description: Generate your Rd documentation, 'NAMESPACE' file, and collation 
+    field using specially formatted comments. Writing documentation in-line
+    with code makes it easier to keep your documentation up-to-date as your
+    requirements change. 'Roxygen2' is inspired by the 'Doxygen' system for C++.
+License: GPL (>= 2)
 URL: https://github.com/klutometis/roxygen
 BugReports: https://github.com/klutometis/roxygen/issues
+Depends: 
+    R (>= 3.1)
+Imports: 
+    brew,
+    commonmark,
+    desc,
+    digest,
+    methods,
+    pkgload,
+    purrr,
+    R6 (>= 2.1.2),
+    Rcpp (>= 0.11.0),
+    stringi,
+    stringr (>= 0.5),
+    utils,
+    xml2
+Suggests: 
+    covr,
+    devtools,
+    knitr,
+    rmarkdown,
+    testthat (>= 0.8.0)
+LinkingTo: 
+    Rcpp
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.0.1.9000
+Remotes: 
+    r-lib/pkgload

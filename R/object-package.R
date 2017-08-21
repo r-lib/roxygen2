@@ -12,7 +12,7 @@ package_seealso <- function(desc) {
 }
 
 package_authors <- function(desc) {
-  authors <- tryCatch(eval(parse(text = desc$`Authors@R`)),
+  authors <- tryCatch(eval(parse(text = desc$`Authors@R` %||% "")),
     error = function(e) {
       warning(e)
       NULL

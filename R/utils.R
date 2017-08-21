@@ -100,7 +100,7 @@ same_contents <- function(path, contents) {
 }
 
 r_files <- function(path) {
-  sort_c(dir(file.path(path, "R"), "[.Rr]$", full.names = TRUE))
+  sort_c(dir(file.path(path, "R"), "\\.[Rr]$", full.names = TRUE))
 }
 
 ignore_files <- function(rfiles, path) {
@@ -128,19 +128,23 @@ compact <- function(x) {
   x[!null]
 }
 
-block_warning <- function(block, ...) {
-  warning(
-    srcref_location(block$srcref), ": ", ...,
-    call. = FALSE,
-    immediate. = TRUE
-  )
-  NULL
+block_eval <- function(tag, block, env, tag_name) {
+  tryCatch({
+    expr <- parse(text = tag)
+    out <- eval(expr, envir = env)
+
+    if (!is.character(out)) {
+      block_warning(block, tag_name, " did not evaluate to a string")
+    } else if (anyNA(out)) {
+      block_warning(block, tag_name, " result contained NA")
+    } else {
+      out
+    }
+  }, error = function(e) {
+    block_warning(block, tag_name, " failed with error:\n", e$message)
+  })
 }
 
-srcref_location <- function(srcref = NULL) {
-  if (is.null(srcref)) return()
-  paste0(basename(srcref$filename), ":", srcref$lloc[1])
-}
 
 # Parse DESCRIPTION into convenient format
 read.description <- function(file) {
@@ -184,4 +188,8 @@ collapse <- function(key, value, fun, ...) {
     key = names(dedup),
     value = unname(dedup)
   )
+}
+
+cat_line <- function(...) {
+  cat(..., "\n", sep = "")
 }

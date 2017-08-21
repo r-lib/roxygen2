@@ -40,7 +40,13 @@ find_data_for_package <- function(env, file) {
   pkg_path <- dirname(dirname(file))
   desc <- read.description(file.path(pkg_path, "DESCRIPTION"))
 
-  structure(list(desc = desc), class = "package")
+  structure(
+    list(
+      desc = desc,
+      path = pkg_path
+    ),
+    class = "package"
+  )
 }
 
 # Find namespace associated with environment

@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* New `roclet_preprocess` generic makes it possible for roclets to perform 
+  actions before code is evaluated.
+
 * `parse_package()`, `parse_file()` and `parse_code()` provide an exported API
   that allows you to use roxygen's parsing code independently of creating
   roclets.

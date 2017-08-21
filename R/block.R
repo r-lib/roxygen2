@@ -171,6 +171,8 @@ parse_tag <- function(x, registry) {
 
   if (identical(x$tag, "eval")) {
     tag_code(x)
+  } else if (identical(x$tag, "include")) {
+    tag_value(x)
   } else if (x$tag %in% ls(registry)) {
     registry[[x$tag]](x)
   } else {

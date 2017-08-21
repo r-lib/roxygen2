@@ -5,6 +5,7 @@
 \alias{roclet}
 \alias{roclet_output}
 \alias{roclet_tags}
+\alias{roclet_preprocess}
 \alias{roclet_process}
 \alias{roclet_clean}
 \title{Build a new roclet.}
@@ -15,13 +16,32 @@ roclet_output(x, results, base_path, ...)
 
 roclet_tags(x)
 
+roclet_preprocess(x, blocks, base_path, global_options = list())
+
 roclet_process(x, blocks, env, base_path, global_options = list())
 
 roclet_clean(x, base_path)
 }
 \description{
 To create a new roclet, you will need to create a constructor function
-that wraps \code{roclet}, and then implement methods for
-\code{roclet_tags}, \code{roclet_process}, \code{roclet_output}, and \code{roclet_clean}.
+that wraps \code{roclet}, and then implement the methods described below.
 }
+\section{Methods}{
+
+\itemize{
+\item \code{roclet_tags()}: return named list, where names give recognised tags and
+values give tag parsing function. See \link{roxy_tag} for built-in options.
+\item \code{roclet_preprocess()} is called after blocks have been parsed but before
+code has been evaluated. This should only be needed if your roclet affects
+how code will evaluated. Should return a roclet.
+\item \code{roclet_process()} called after blocks have been evaluated; i.e. the
+\code{@eval} tag has been processed, and the object associated with each block
+has been determined.
+\item \code{roclet_output()} is given the output from \code{roclet_process()} and should
+produce files on disk.
+\item \code{roclet_clean()} called when \code{roxygenise(clean = TRUE)}. Should remove
+any files created by the roclet.
+}
+}
+
 \keyword{internal}

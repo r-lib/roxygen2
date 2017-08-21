@@ -181,7 +181,6 @@ roclet_clean.roclet_rd <- function(x, base_path) {
   unlink(rd[made_by_me])
 }
 
-
 block_tags <- function(x, tag) {
   x[names(x) %in% tag]
 }

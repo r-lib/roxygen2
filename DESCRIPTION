@@ -23,6 +23,7 @@ Imports:
     digest,
     methods,
     pkgload,
+    purrr,
     R6 (>= 2.1.2),
     Rcpp (>= 0.11.0),
     stringi,

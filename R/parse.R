@@ -10,7 +10,7 @@ parse_package <- function(base_path = ".",
     env = env,
     registry = registry,
     global_options = global_options,
-    fileEncoding = desc$Encoding %||% "UTF-8"
+    file_encoding = desc$Encoding %||% "UTF-8"
   )
 
   blocks <- compact(unlist(list_of_blocks, recursive = FALSE))
@@ -93,23 +93,15 @@ test_env <- function() {
   env
 }
 
-parse_blocks <- function(file, env, registry = list(), global_options = list(), fileEncoding = "UTF-8") {
-
+parse_blocks <- function(file, env,
+                         registry = list(),
+                         global_options = list(),
+                         file_encoding = "UTF-8") {
   # Manaully add eval tag to registry - it's always active
   registry$eval <- tag_code
 
-  lines <- read_lines_enc(file, file_encoding = fileEncoding)
-  parsed <- parse(text = lines, keep.source = TRUE, srcfile = srcfilecopy(file, lines, isFile = TRUE))
-  if (length(parsed) == 0) return()
-
-  refs <- utils::getSrcref(parsed)
-  comment_refs <- comments(refs)
-
-  extract <- function(call, ref, comment_ref) {
-    tags <- parse_block(
-      comment_ref,
-      file = file,
-      env = env,
+  extract <- function(call, srcref, tokens) {
+    tags <- parse_block(tokens,
       registry = registry,
       global_options = global_options
     )
@@ -117,7 +109,7 @@ parse_blocks <- function(file, env, registry = list(), global_options = list(), 
 
     block <- roxy_block(tags,
       filename = file,
-      location = as.vector(ref),
+      location = as.vector(srcref),
       call = call
     )
 
@@ -126,18 +118,18 @@ parse_blocks <- function(file, env, registry = list(), global_options = list(), 
     block
   }
 
-  compact(Map(extract, parsed, refs, comment_refs))
-}
-
-parse_block <- function(x, file, env, registry, offset = x[[1]], global_options = list()) {
-  tags <- tokenise_block(as.character(x), file = basename(file), offset = offset)
-  if (length(tags) == 0)
+  tokenized <- tokenize_file(file, file_encoding = file_encoding)
+  if (length(tokenized) == 0)
     return()
 
-  markdown_activate(tags, file, offset, global_options)
+  purrr::compact(purrr::pmap(tokenized, extract))
+}
 
-  tags <- parse_description(tags)
-  parse_tags(tags, registry = registry)
+parse_block <- function(tokens, registry, global_options = list()) {
+  markdown_activate(tokens, global_options = global_options)
+
+  tokens <- parse_description(tokens)
+  parse_tags(tokens, registry = registry)
 }
 
 parse_tags <- function(tags, registry) {
@@ -216,30 +208,3 @@ parse_description <- function(tags) {
   c(compact(list(title, description, details)), tags)
 }
 
-
-# For each src ref, find the comment block preceeding it
-comments <- function(refs) {
-  srcfile <- attr(refs[[1]], "srcfile")
-
-  # first_line, first_byte, last_line, last_byte
-  com <- vector("list", length(refs))
-  for(i in seq_along(refs)) {
-    # Comments begin after last line of last block, and this block is included
-    # so that it can be parsed for additional comments
-    if (i == 1) {
-      first_byte <- 1
-      first_line <- 1
-    } else {
-      first_byte <- refs[[i - 1]][4] + 1
-      first_line <- refs[[i - 1]][3]
-    }
-
-    last_line <- refs[[i]][3]
-    last_byte <- refs[[i]][4]
-
-    lloc <- c(first_line, first_byte, last_line, last_byte)
-    com[[i]] <- srcref(srcfile, lloc)
-  }
-
-  com
-}

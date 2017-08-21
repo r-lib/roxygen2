@@ -74,6 +74,8 @@ format.roxy_field_alias <- function(x, ...) {
   x$values <- str_replace_all(x$values, fixed("%"), "\\%")
   format_rd(x, ..., sort = FALSE)
 }
+#' @export
+format.roxy_field_concept <- format_rd
 
 # Fields that keep the first occurence -----------------------------------------
 format_first <- function(x, ...) {
@@ -104,8 +106,6 @@ format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
 }
 #' @export
 format.roxy_field_author <- format_collapse
-#' @export
-format.roxy_field_concept <- format_collapse
 #' @export
 format.roxy_field_description <- format_collapse
 #' @export

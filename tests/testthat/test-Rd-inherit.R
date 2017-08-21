@@ -1,5 +1,22 @@
 context("Rd: inherit")
 
+
+# Rd parsing --------------------------------------------------------------
+
+test_that("can round-trip Rd", {
+  rd <- tools::parse_Rd(test_path("escapes.Rd"))
+
+  field <- find_field(rd, "description")
+  lines <- strsplit(field, "\n")[[1]]
+  expect_equal(
+    lines,
+    c(
+      "% Comment",   # Latex comments shouldn't be escaped
+      "\\code{\\\\}" # Backslashes in code should be
+    )
+  )
+})
+
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {
@@ -13,27 +30,25 @@ test_that("warns on unknown inherit type", {
 })
 
 test_that("no options gives default values", {
-  parsed <- parse_text("
+  block <- parse_text("
     #' @inherit fun
     NULL
-  ")
-  block <- parsed$blocks[[1]]
+  ")[[1]]
 
   expect_equal(
     block$inherit$fields,
     c(
-      "params", "return", "title", "description", "details", "seealso", "sections",
-      "references"
+      "params", "return", "title", "description", "details", "seealso",
+      "sections", "references", "examples"
     )
   )
 })
 
 test_that("some options overrides defaults", {
-  parsed <- parse_text("
+  block <- parse_text("
     #' @inherit fun return
     NULL
-  ")
-  block <- parsed$blocks[[1]]
+  ")[[1]]
 
   expect_equal(block$inherit$fields, "return")
 })
@@ -130,7 +145,7 @@ test_that("can inherit description from roxygen topic", {
   expect_equal(out$get_field("description")$values, "B")
 })
 
-test_that("won't inherit description if already set through title", {
+test_that("inherits description if omitted", {
   out <- roc_proc_text(rd_roclet(), "
     #' A.
     #'
@@ -144,7 +159,7 @@ test_that("won't inherit description if already set through title", {
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("description")$values, "C")
+  expect_equal(out$get_field("description")$values, "B")
 })
 
 test_that("can inherit details from roxygen topic", {
@@ -445,6 +460,8 @@ test_that("can inherit all from single function", {
     #'
     #' @param x x
     #' @param y y
+    #' @examples
+    #' x <- 1
     foo <- function(x, y) {}
 
     #' @inherit foo
@@ -456,4 +473,5 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_field("title")$values, "Foo")
   expect_equal(out$get_field("description")$values, "Description")
   expect_equal(out$get_field("details")$values, "Details")
+  expect_equal(out$get_field("examples")$values, rd("x <- 1"))
 })

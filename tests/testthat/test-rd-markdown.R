@@ -58,6 +58,16 @@ test_that("code blocks work", {
   expect_equivalent_rd(out1, out2)
 })
 
+test_that("inline code escapes %", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' `0.5%`
+    #' @md
+    f <- function() 1
+  ")[[1]]
+
+  expect_equal(out$get_field("title")$values, "\\code{0.5\\%}")
+})
+
 test_that("itemized lists work", {
   out1 <- roc_proc_text(roc, "
     #' Title

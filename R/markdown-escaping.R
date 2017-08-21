@@ -46,6 +46,7 @@ escaped_for_md <- paste0("\\", c(
   "testonly", "url", "var", "verb"
 ))
 
+#' @description
 #' It puts back the protected fragile Rd commands into
 #' the text after the markdown parsing.
 #'

@@ -5,10 +5,10 @@
 \alias{roxygenise}
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{
-roxygenize(package.dir = ".", roclets = NULL, load_code = source_package,
+roxygenize(package.dir = ".", roclets = NULL, load_code = env_package,
   clean = FALSE)
 
-roxygenise(package.dir = ".", roclets = NULL, load_code = source_package,
+roxygenise(package.dir = ".", roclets = NULL, load_code = env_package,
   clean = FALSE)
 }
 \arguments{
@@ -41,8 +41,4 @@ for more details.
 Note that roxygen2 is a dynamic documentation system: it works using
 by inspecting loaded objects in the package. This means that you must
 be able to load the package in order to document it.
-\code{\link[=source_package]{source_package()}} provides a simple simulation of package
-loading that works if you only have R files in your package. For more
-complicated packages, I recommend using \code{devtools::document} which
-does a much better job at simulating package install and load.
 }

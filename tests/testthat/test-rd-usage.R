@@ -58,6 +58,15 @@ test_that("default usage correct for S3 methods", {
   expect_equal(get_tag(out[[3]], "usage")$values, rd("\\method{[}{foo}(x) <- value"))
 })
 
+test_that("usage correct for non-function objects", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    hello <- 1
+  ")[[1]]
+
+  expect_equal(get_tag(out, "usage")$values, rd("hello"))
+})
 
 test_that("default usage correct for S4 methods", {
   env <- pkg_env()
@@ -128,7 +137,6 @@ test_that("backticks retained when needed", {
     f <- function(`_x`) 1")[[1]]
   expect_equal(as.character(get_tag(out, "usage")$values), "f(`_x`)")
 })
-
 
 # @usage -----------------------------------------------------------------------
 

@@ -1,8 +1,26 @@
 #' Build a new roclet.
 #'
 #' To create a new roclet, you will need to create a constructor function
-#' that wraps `roclet`, and then implement methods for
-#' `roclet_tags`, `roclet_process`, `roclet_output`, and `roclet_clean`.
+#' that wraps `roclet`, and then implement the methods described below.
+#'
+#' @section Methods:
+#'
+#' * `roclet_tags()`: return named list, where names give recognised tags and
+#'   values give tag parsing function. See [roxy_tag] for built-in options.
+#'
+#' * `roclet_preprocess()` is called after blocks have been parsed but before
+#'   code has been evaluated. This should only be needed if your roclet affects
+#'   how code will evaluated. Should return a roclet.
+#'
+#' * `roclet_process()` called after blocks have been evaluated; i.e. the
+#'   `@eval` tag has been processed, and the object associated with each block
+#'   has been determined.
+#'
+#' * `roclet_output()` is given the output from `roclet_process()` and should
+#'   produce files on disk.
+#'
+#' * `roclet_clean()` called when `roxygenise(clean = TRUE)`. Should remove
+#'   any files created by the roclet.
 #'
 #' @keywords internal
 #' @name roclet
@@ -26,9 +44,21 @@ roclet_tags <- function(x) {
   UseMethod("roclet_tags")
 }
 
+
 #' @export
 #' @rdname roclet
-roclet_process <- function(x, parsed, base_path, global_options = list()) {
+roclet_preprocess <- function(x, blocks, base_path, global_options = list()) {
+  UseMethod("roclet_preprocess")
+}
+
+#' @export
+roclet_preprocess.default <- function(x, blocks, base_path, global_options = list()) {
+  x
+}
+
+#' @export
+#' @rdname roclet
+roclet_process <- function(x, blocks, env, base_path, global_options = list()) {
   UseMethod("roclet_process")
 }
 
@@ -94,8 +124,13 @@ roc_proc_text <- function(roclet, input, registry = default_tags(),
                           global_options = list()) {
   stopifnot(is.roclet(roclet))
 
-  parsed <- parse_text(input, registry = registry, global_options)
-  roclet_process(roclet, parsed, base_path = ".", global_options)
+  file <- tempfile()
+  writeLines(input, file)
+  on.exit(unlink(file))
+
+  env <- env_file(file)
+  blocks <- parse_text(input, env = env, registry = registry, global_options)
+  roclet_process(roclet, blocks, env = env, base_path = ".", global_options)
 }
 
 default_tags <- function() {

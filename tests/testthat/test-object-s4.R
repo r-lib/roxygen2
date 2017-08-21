@@ -4,50 +4,55 @@ test_that("class captured from setClass", {
   out <- parse_text("
     #' Title
     setClass('A1')
-  ")$blocks[[1]]
+  ")[[1]]
 
-  expect_is(out$object, "s4class")
-  expect_equal(out$object$alias, NULL)
+  object <- attr(out, "object")
+  expect_is(object, "s4class")
+  expect_equal(object$alias, NULL)
 })
 
 test_that("class captured from assignment", {
   out <- parse_text("
     #' Title
     B <- setClass('B1')
-  ")$blocks[[1]]
+  ")[[1]]
 
-  expect_is(out$object, "s4class")
-  expect_equal(out$object$alias, "B")
+  object <- attr(out, "object")
+  expect_is(object, "s4class")
+  expect_equal(object$alias, "B")
 })
 
 test_that("class captured from setClassUnion", {
   out <- parse_text("
     #' Title
     setClassUnion('numberish', c('numeric', 'logical'))
-  ")$blocks[[1]]
+  ")[[1]]
 
-  expect_is(out$object, "s4class")
-  expect_equal(out$object$alias, NULL)
+  object <- attr(out, "object")
+  expect_is(object, "s4class")
+  expect_equal(object$alias, NULL)
 })
 
 test_that("class captured from setRefClass", {
   out <- parse_text("
     #' Title
     setRefClass('A1')
-  ")$blocks[[1]]
+  ")[[1]]
 
-  expect_is(out$object, "rcclass")
-  expect_equal(out$object$alias, NULL)
+  object <- attr(out, "object")
+  expect_is(object, "rcclass")
+  expect_equal(object$alias, NULL)
 })
 
 test_that("class captured from assignment of setRefClass", {
   out <- parse_text("
     #' Title
     B <- setRefClass('B1')
-  ")$blocks[[1]]
+  ")[[1]]
 
-  expect_is(out$object, "rcclass")
-  expect_equal(out$object$alias, "B")
+  object <- attr(out, "object")
+  expect_is(object, "rcclass")
+  expect_equal(object$alias, "B")
 })
 
 test_that("setMethod equivalent to setReplaceMethod", {
@@ -58,7 +63,7 @@ test_that("setMethod equivalent to setReplaceMethod", {
     setMethod('foo<-', 'numeric', function(x, value) value * 10)
     #' setReplace
     setReplaceMethod('foo', 'numeric', function(x, value) value * 10)
-    ")$blocks
+    ")
 
-  expect_equal(out[[2]]$object, out[[3]]$object)
+  expect_equal(attr(out[[1]], "object"), attr(out[[2]], "object"))
 })

@@ -2,30 +2,30 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 findEndOfTag <- function(string, is_code = FALSE) {
-    .Call('roxygen2_findEndOfTag', PACKAGE = 'roxygen2', string, is_code)
+    .Call(`_roxygen2_findEndOfTag`, string, is_code)
 }
 
 rdComplete <- function(string, is_code = FALSE) {
-    .Call('roxygen2_rdComplete', PACKAGE = 'roxygen2', string, is_code)
+    .Call(`_roxygen2_rdComplete`, string, is_code)
 }
 
 leadingSpaces <- function(lines) {
-    .Call('roxygen2_leadingSpaces', PACKAGE = 'roxygen2', lines)
+    .Call(`_roxygen2_leadingSpaces`, lines)
 }
 
 tokenise_block <- function(lines, file = "", offset = 0L) {
-    .Call('roxygen2_tokenise_block', PACKAGE = 'roxygen2', lines, file, offset)
+    .Call(`_roxygen2_tokenise_block`, lines, file, offset)
 }
 
 find_includes <- function(path) {
-    .Call('roxygen2_find_includes', PACKAGE = 'roxygen2', path)
+    .Call(`_roxygen2_find_includes`, path)
 }
 
 splitByWhitespace <- function(string) {
-    .Call('roxygen2_splitByWhitespace', PACKAGE = 'roxygen2', string)
+    .Call(`_roxygen2_splitByWhitespace`, string)
 }
 
 wrapString <- function(string, width = 80L, indent = 2L) {
-    .Call('roxygen2_wrapString', PACKAGE = 'roxygen2', string, width, indent)
+    .Call(`_roxygen2_wrapString`, string, width, indent)
 }
 

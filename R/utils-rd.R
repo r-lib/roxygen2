@@ -81,10 +81,7 @@ get_tags <- function(rd, tag) {
 }
 
 rd2text <- function(x) {
-  chr <- as.character(structure(x, class = "Rd"))
-  str <- paste(chr, collapse = "")
-
-  # re-escape comments
-  gsub("%", "\\%", str, fixed = TRUE)
+  chr <- as.character(structure(x, class = "Rd"), deparse = TRUE)
+  paste(chr, collapse = "")
 }
 

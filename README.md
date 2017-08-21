@@ -3,12 +3,12 @@
 [![Build Status](https://travis-ci.org/klutometis/roxygen.png)](https://travis-ci.org/klutometis/roxygen)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/klutometis/roxygen?branch=master&svg=true)](https://ci.appveyor.com/project/klutometis/roxygen)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/roxygen2)](https://cran.r-project.org/package=roxygen2)
-[![Coverage Status](https://img.shields.io/codecov/c/github/klutometis/roxygen/master.svg)](https://codecov.io/github/klutometis/roxygen?branch=master)
-
+[![Coverage status](https://codecov.io/gh/klutometis/roxygen/branch/master/graph/badge.svg)](https://codecov.io/github/klutometis/roxygen?branch=master)
+ 
 > all' hileth', Hephaiste; didou d'areten te kai olbon.*
 > --Homer, 7th century BCE
 
-# Why use roxygen2?
+# Why use roxygen2? <img src="man/figures/logo.png" align="right" />
 
 The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to produce Rd files in the `man/` directory.  Here's a simple example from the `stringr` package:
 

@@ -169,8 +169,8 @@ test_that("a weird markdown link bug is fixed", {
     #' Link to another package, function: [devtools::document()].
     #' Link to another package, non-function: [devtools::document].
     #'
-    #' Link with link text:  [this great function][roxygenize()] or
-    #' [that great function][roxygenize].
+    #' Link with link text: [this great function][roxygenize()],
+    #' [`roxygenize`][roxygenize()], or [that great function][roxygenize].
     #'
     #' In another package: [and this one][devtools::document].
     #'
@@ -188,8 +188,8 @@ test_that("a weird markdown link bug is fixed", {
     #' Link to another package, function: \\code{\\link[devtools:document]{devtools::document()}}.
     #' Link to another package, non-function: \\link[devtools:document]{devtools::document}.
     #'
-    #' Link with link text:  \\link[=roxygenize]{this great function} or
-    #' \\link[=roxygenize]{that great function}.
+    #' Link with link text: \\link[=roxygenize]{this great function},
+    #' \\code{\\link[=roxygenize]{roxygenize}}, or \\link[=roxygenize]{that great function}.
     #'
     #' In another package: \\link[devtools:document]{and this one}.
     #'
@@ -215,6 +215,32 @@ test_that("another markdown link bug is fixed", {
     #' Description, see \\code{\\link[=escape_rd_for_md]{escape_rd_for_md()}}.
     #'
     #' And also \\link{object}.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+})
+
+test_that("markdown code as link text is rendered as code", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see [`name`][dest],
+    #' [`function`][function()],
+    #' [`filter`][stats::filter()],
+    #' [`bar`][pkg::bar],
+    #' [`terms`][terms.object],
+    #' [`abc`][abc-class].
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description, see \\code{\\link[=dest]{name}},
+    #' \\code{\\link[=function]{function}},
+    #' \\code{\\link[stats:filter]{filter}},
+    #' \\code{\\link[pkg:bar]{bar}},
+    #' \\code{\\link[=terms.object]{terms}},
+    #' \\code{\\link[=abc-class]{abc}}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
@@ -271,6 +297,36 @@ test_that("[]() links are still fine", {
     #' Description, see \\href{http://www.someurl.com}{some thing}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Link
+    #' text [broken
+    #' across lines](http://www.someurl.com) preserve
+    #' whitespace, even when
+    #' [broken across
+    #' several
+    #' lines](http://www.someurl.com),
+    #' or with varying
+    #' [amounts \
+    #'   of  \
+    #' interspersed   \
+    #'   whitespace](http://www.someurl.com).
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Link
+    #' text \\href{http://www.someurl.com}{broken across lines} preserve
+    #' whitespace, even when
+    #' \\href{http://www.someurl.com}{broken across several lines},
+    #' or with varying
+    #' \\href{http://www.someurl.com}{amounts of interspersed whitespace}.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+
 })
 
 test_that("links to S4 classes are OK", {

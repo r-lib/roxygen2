@@ -6,14 +6,20 @@ parse_package <- function(base_path = ".",
   desc <- read_pkg_description(base_path)
 
   files <- package_files(base_path)
-  list_of_blocks <- lapply(files, parse_blocks,
-    env = env,
+  list_of_blocks <- lapply(files, tokenize_file,
     registry = registry,
     global_options = global_options,
     file_encoding = desc$Encoding %||% "UTF-8"
   )
 
-  blocks <- compact(unlist(list_of_blocks, recursive = FALSE))
+  blocks <- unlist(list_of_blocks, recursive = FALSE)
+
+  blocks <- lapply(blocks, block_set_env,
+    env = env,
+    registry = registry,
+    global_options = global_options
+  )
+
   blocks
 }
 
@@ -79,32 +85,11 @@ parse_file <- function(file,
                        global_options = list()) {
 
   sys.source(file, envir = env)
-  parse_blocks(
-    file,
-    env = env,
+
+  blocks <- tokenize_file(file,
     registry = registry,
     global_options = global_options
   )
-}
-
-test_env <- function() {
-  env <- new.env(parent = parent.env(globalenv()))
-  methods::setPackageName("roxygen_devtest", env)
-  env
-}
-
-parse_blocks <- function(file, env,
-                         registry = list(),
-                         global_options = list(),
-                         file_encoding = "UTF-8") {
-
-  tokenized <- tokenize_file(file, file_encoding = file_encoding)
-
-  blocks <- purrr::pmap(tokenized, block_create,
-    registry = registry,
-    global_options = global_options
-  )
-  blocks <- compact(blocks)
 
   blocks <- lapply(blocks, block_set_env,
     env = env,
@@ -113,6 +98,12 @@ parse_blocks <- function(file, env,
   )
 
   blocks
+}
+
+test_env <- function() {
+  env <- new.env(parent = parent.env(globalenv()))
+  methods::setPackageName("roxygen_devtest", env)
+  env
 }
 
 parse_tags <- function(tokens, registry = list(), global_options = list()) {

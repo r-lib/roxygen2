@@ -1,4 +1,9 @@
-tokenize_file <- function(file, file_encoding = "UTF-8") {
+# Returns list of roxy_blocks
+tokenize_file <- function(file,
+                          registry = list(),
+                          global_options = list(),
+                          file_encoding = "UTF-8"
+                          ) {
   lines <- read_lines_enc(file, file_encoding = file_encoding)
 
   parsed <- parse(
@@ -16,11 +21,17 @@ tokenize_file <- function(file, file_encoding = "UTF-8") {
 
   has_tokens <- !purrr::map_lgl(tokens, purrr::is_empty)
 
-  list(
-    call = as.list(parsed)[has_tokens],
-    srcref = refs[has_tokens],
-    tokens = tokens[has_tokens]
+  blocks <- purrr::pmap(
+    list(
+      call = as.list(parsed)[has_tokens],
+      srcref = refs[has_tokens],
+      tokens = tokens[has_tokens]
+    ),
+    block_create,
+    registry = registry,
+    global_options = global_options
   )
+  purrr::compact(blocks)
 }
 
 tokenise_ref <- function(x) {

@@ -94,7 +94,11 @@ roc_proc_text <- function(roclet, input, registry = default_tags(),
                           global_options = list()) {
   stopifnot(is.roclet(roclet))
 
-  env <- test_env()
+  file <- tempfile()
+  writeLines(input, file)
+  on.exit(unlink(file))
+
+  env <- env_file(file)
   blocks <- parse_text(input, env = env, registry = registry, global_options)
   roclet_process(roclet, blocks, env = env, base_path = ".", global_options)
 }

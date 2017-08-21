@@ -1,15 +1,3 @@
-#' Source all files in a package.
-#'
-#' This is a wrapper around [pkgload::load_all]
-#'
-#' @param path Path to a package.
-#' @return An environment, into which all R files in the directory were
-#'   sourced.
-#' @keywords internal
-source_package <- function(path) {
-  pkgload::load_all(path)$env
-}
-
 package_files <- function(path) {
   desc <- read_pkg_description(path)
 

@@ -1,5 +1,9 @@
 # roxygen2 6.0.1.9000
 
+* `parse_package()`, `parse_file()` and `parse_code()` provide an exported API
+  that allows you to use roxygen's parsing code independently of creating
+  roclets.
+
 * [API] Roxygen blocks now have an official structure as encoded in 
   `roxy_block()`. It is a named list containing the tags with attributes
   providing other metadata.

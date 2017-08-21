@@ -9,10 +9,6 @@
 #' Note that roxygen2 is a dynamic documentation system: it works using
 #' by inspecting loaded objects in the package. This means that you must
 #' be able to load the package in order to document it.
-#' [source_package()] provides a simple simulation of package
-#' loading that works if you only have R files in your package. For more
-#' complicated packages, I recommend using `devtools::document` which
-#' does a much better job at simulating package install and load.
 #'
 #' @param package.dir Location of package top level directory. Default is
 #'   working directory.
@@ -30,7 +26,7 @@
 #' @importFrom stats setNames
 roxygenize <- function(package.dir = ".",
                        roclets = NULL,
-                       load_code = source_package,
+                       load_code = env_package,
                        clean = FALSE) {
 
   is_first <- first_time(package.dir)

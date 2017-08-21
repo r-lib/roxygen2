@@ -12,7 +12,7 @@ parse_package <- function(base_path = ".",
     file_encoding = desc$Encoding %||% "UTF-8"
   )
 
-  blocks <- unlist(list_of_blocks, recursive = FALSE)
+  blocks <- purrr::flatten(list_of_blocks)
 
   blocks <- lapply(blocks, block_set_env,
     env = env,

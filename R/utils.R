@@ -115,11 +115,13 @@ ignore_files <- function(rfiles, path) {
   # Remove any files that match any perl-compatible regexp
   patterns <- readLines(rbuildignore, warn = FALSE)
   patterns <- patterns[patterns != ""]
+  if (length(patterns) == 0L) {
+    return(rfiles)
+  }
   matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
   matches <- Reduce("|", matches)
   rfiles[!matches]
 }
-
 
 compact <- function(x) {
   null <- vapply(x, is.null, logical(1))

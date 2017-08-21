@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* Ensure that an empty .Rbuildignore file is handled properly.  Previously, this
+  situation would cause an undesired error to be thrown (#576).
+
 * The NAMESPACE roclet nows works in two passes - it first generates the 
   a NAMESPACE containing only import directives becaues this can be generated
   without evaluating the code in the package. This alleviates a problem

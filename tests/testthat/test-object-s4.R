@@ -4,7 +4,7 @@ test_that("class captured from setClass", {
   out <- parse_text("
     #' Title
     setClass('A1')
-  ")$blocks[[1]]
+  ")[[1]]
 
   object <- attr(out, "object")
   expect_is(object, "s4class")
@@ -15,7 +15,7 @@ test_that("class captured from assignment", {
   out <- parse_text("
     #' Title
     B <- setClass('B1')
-  ")$blocks[[1]]
+  ")[[1]]
 
   object <- attr(out, "object")
   expect_is(object, "s4class")
@@ -26,7 +26,7 @@ test_that("class captured from setClassUnion", {
   out <- parse_text("
     #' Title
     setClassUnion('numberish', c('numeric', 'logical'))
-  ")$blocks[[1]]
+  ")[[1]]
 
   object <- attr(out, "object")
   expect_is(object, "s4class")
@@ -37,7 +37,7 @@ test_that("class captured from setRefClass", {
   out <- parse_text("
     #' Title
     setRefClass('A1')
-  ")$blocks[[1]]
+  ")[[1]]
 
   object <- attr(out, "object")
   expect_is(object, "rcclass")
@@ -48,7 +48,7 @@ test_that("class captured from assignment of setRefClass", {
   out <- parse_text("
     #' Title
     B <- setRefClass('B1')
-  ")$blocks[[1]]
+  ")[[1]]
 
   object <- attr(out, "object")
   expect_is(object, "rcclass")
@@ -63,7 +63,7 @@ test_that("setMethod equivalent to setReplaceMethod", {
     setMethod('foo<-', 'numeric', function(x, value) value * 10)
     #' setReplace
     setReplaceMethod('foo', 'numeric', function(x, value) value * 10)
-    ")$blocks
+    ")
 
-  expect_equal(attr(out[[2]], "object"), attr(out[[3]], "object"))
+  expect_equal(attr(out[[1]], "object"), attr(out[[2]], "object"))
 })

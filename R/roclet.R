@@ -28,7 +28,7 @@ roclet_tags <- function(x) {
 
 #' @export
 #' @rdname roclet
-roclet_process <- function(x, parsed, base_path, global_options = list()) {
+roclet_process <- function(x, blocks, env, base_path, global_options = list()) {
   UseMethod("roclet_process")
 }
 
@@ -94,8 +94,9 @@ roc_proc_text <- function(roclet, input, registry = default_tags(),
                           global_options = list()) {
   stopifnot(is.roclet(roclet))
 
-  parsed <- parse_text(input, registry = registry, global_options)
-  roclet_process(roclet, parsed, base_path = ".", global_options)
+  env <- test_env()
+  blocks <- parse_text(input, env = env, registry = registry, global_options)
+  roclet_process(roclet, blocks, env = env, base_path = ".", global_options)
 }
 
 default_tags <- function() {

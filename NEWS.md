@@ -1,5 +1,12 @@
 # roxygen2 6.0.1.9000
 
+* [API] Roxygen blocks now have an official structure as encoded in 
+  `roxy_block()`. It is a named list containing the tags with attributes
+  providing other metadata.
+
+* [API] The `parsed` argument to `roclet_process()` have been replaced with 
+  separate `blocks` and `env` arguments.
+
 * `@eval foo()` evaluates `foo()` defined in the package namespace and inserts
   the results into the current block (#645). The code should return a character 
   vector with one entry for each line (and they should not start with `#'`).

@@ -15,7 +15,7 @@ roclet_output(x, results, base_path, ...)
 
 roclet_tags(x)
 
-roclet_process(x, parsed, base_path, global_options = list())
+roclet_process(x, blocks, env, base_path, global_options = list())
 
 roclet_clean(x, base_path)
 }

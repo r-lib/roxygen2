@@ -4,9 +4,8 @@
 \alias{parse_code}
 \title{Parse roxygen2 comments in a piece of code.}
 \usage{
-parse_code(file, text = NULL, env, registry = default_tags(),
-  wrap = FALSE, markdown = markdown_global_default,
-  file_encoding = "UTF-8")
+parse_code(file, text = NULL, env = test_env(), registry = default_tags(),
+  wrap = FALSE, markdown = markdown_global_default)
 }
 \arguments{
 \item{file}{Path of the file to process.}

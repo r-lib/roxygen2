@@ -66,17 +66,20 @@ roclet_tags.roclet_rd <- function(x) {
 }
 
 #' @export
-roclet_process.roclet_rd <- function(x, parsed, base_path,
+roclet_process.roclet_rd <- function(x,
+                                     blocks,
+                                     env,
+                                     base_path,
                                      global_options = list()) {
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 
-  for (block in parsed$blocks) {
-    rd <- block_to_rd(block, base_path, parsed$env, global_options)
+  for (block in blocks) {
+    rd <- block_to_rd(block, base_path, env, global_options)
     topics$add(rd)
   }
   topics_process_family(topics)
-  topics_process_inherit(topics, parsed$env)
+  topics_process_inherit(topics, env)
   topics$drop_invalid()
   topics_fix_params_order(topics)
   topics_add_default_description(topics)

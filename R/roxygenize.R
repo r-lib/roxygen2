@@ -62,7 +62,12 @@ roxygenize <- function(package.dir = ".",
   tags <- c(lapply(roclets, roclet_tags), list(list(include = tag_value)))
   registry <- unlist(tags, recursive = FALSE)
 
-  parsed <- parse_package(base_path, load_code, registry, options)
+  env <- load_code(base_path)
+  blocks <- parse_package(base_path,
+    env = env,
+    registry = registry,
+    global_options = options
+  )
 
   roc_out <- function(roc) {
     if (clean) {
@@ -70,7 +75,8 @@ roxygenize <- function(package.dir = ".",
     }
     results <- roclet_process(
       roc,
-      parsed = parsed,
+      blocks = blocks,
+      env = env,
       base_path = base_path,
       global_options = options
     )

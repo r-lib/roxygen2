@@ -19,10 +19,13 @@ namespace_roclet <- function() {
 }
 
 #' @export
-roclet_process.roclet_namespace <- function(x, parsed, base_path,
+roclet_process.roclet_namespace <- function(x,
+                                            blocks,
+                                            env,
+                                            base_path,
                                             global_options = list()) {
 
-  ns <- unlist(lapply(parsed$blocks, block_to_ns, env = parsed$env)) %||%
+  ns <- unlist(lapply(blocks, block_to_ns, env = env)) %||%
     character()
   sort_c(unique(ns))
 }

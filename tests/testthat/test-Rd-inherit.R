@@ -30,11 +30,10 @@ test_that("warns on unknown inherit type", {
 })
 
 test_that("no options gives default values", {
-  parsed <- parse_text("
+  block <- parse_text("
     #' @inherit fun
     NULL
-  ")
-  block <- parsed$blocks[[1]]
+  ")[[1]]
 
   expect_equal(
     block$inherit$fields,
@@ -46,11 +45,10 @@ test_that("no options gives default values", {
 })
 
 test_that("some options overrides defaults", {
-  parsed <- parse_text("
+  block <- parse_text("
     #' @inherit fun return
     NULL
-  ")
-  block <- parsed$blocks[[1]]
+  ")[[1]]
 
   expect_equal(block$inherit$fields, "return")
 })

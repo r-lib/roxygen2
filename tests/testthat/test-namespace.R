@@ -183,9 +183,11 @@ test_that("useDynLib doesn't quote if comma present", {
 
 test_that("empty NAMESPACE generates zero-length vector", {
   base_path <- test_path("empty")
-  parsed <- parse_package(base_path, source_package, registry = list())
 
-  results <- roclet_process(namespace_roclet(), parsed, base_path)
+  env <- pkgload::load_all(base_path)$env
+  blocks <- parse_package(base_path, env = env, registry = list())
+
+  results <- roclet_process(namespace_roclet(), blocks, env = env, base_path)
   expect_equal(results, character())
 })
 

@@ -1,14 +1,20 @@
-parse_package <- function(base_path, load_code, registry, global_options = list()) {
-  env <- load_code(base_path)
+parse_package <- function(base_path = ".",
+                          env = source_package(base_path),
+                          registry = default_tags(),
+                          global_options = list()
+                          ) {
   desc <- read_pkg_description(base_path)
 
   files <- package_files(base_path)
-  parsed <- lapply(files, parse_blocks, env = env, registry = registry,
-                   global_options = global_options, fileEncoding = desc$Encoding %||% "UTF-8")
+  list_of_blocks <- lapply(files, parse_blocks,
+    env = env,
+    registry = registry,
+    global_options = global_options,
+    fileEncoding = desc$Encoding %||% "UTF-8"
+  )
 
-  blocks <- compact(unlist(parsed, recursive = FALSE))
-
-  list(env = env, blocks = blocks)
+  blocks <- compact(unlist(list_of_blocks, recursive = FALSE))
+  blocks
 }
 
 #' Parse roxygen2 comments in a piece of code.
@@ -32,40 +38,59 @@ parse_package <- function(base_path, load_code, registry, global_options = list(
 #' @keywords internal
 parse_code <- function(file,
                        text = NULL,
-                       env,
+                       env = test_env(),
                        registry = default_tags(),
                        wrap = FALSE,
-                       markdown = markdown_global_default,
-                       file_encoding = "UTF-8") {
+                       markdown = markdown_global_default) {
   if (missing(file) && !is.null(text)) {
     file <- tempfile()
     writeLines(text, file)
     on.exit(unlink(file))
   }
 
-  options <- list(wrap = wrap, markdown = markdown)
-  parse_blocks(
+  parse_file(
     file,
-    env,
+    env = env,
     registry = registry,
-    global_options = options,
-    fileEncoding = file_encoding
+    global_options = list(wrap = wrap, markdown = markdown)
   )
 }
 
-parse_text <- function(text, registry = default_tags(), global_options = list()) {
+parse_text <- function(text,
+                       env = test_env(),
+                       registry = default_tags(),
+                       global_options = list()) {
+
   file <- tempfile()
   writeLines(text, file)
   on.exit(unlink(file))
 
-  env <- new.env(parent = parent.env(globalenv()))
-  methods::setPackageName("roxygen_devtest", env)
+  parse_file(
+    file,
+    env = env,
+    registry = registry,
+    global_options = global_options
+  )
+}
+
+parse_file <- function(file,
+                       env = test_env(),
+                       registry = default_tags(),
+                       global_options = list()) {
 
   sys.source(file, envir = env)
-  blocks <- parse_blocks(file, env, registry = registry,
-                         global_options = global_options)
+  parse_blocks(
+    file,
+    env = env,
+    registry = registry,
+    global_options = global_options
+  )
+}
 
-  list(env = env, blocks = blocks)
+test_env <- function() {
+  env <- new.env(parent = parent.env(globalenv()))
+  methods::setPackageName("roxygen_devtest", env)
+  env
 }
 
 parse_blocks <- function(file, env, registry = list(), global_options = list(), fileEncoding = "UTF-8") {
@@ -101,7 +126,7 @@ parse_blocks <- function(file, env, registry = list(), global_options = list(), 
     block
   }
 
-  Map(extract, parsed, refs, comment_refs)
+  compact(Map(extract, parsed, refs, comment_refs))
 }
 
 parse_block <- function(x, file, env, registry, offset = x[[1]], global_options = list()) {

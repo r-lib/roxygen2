@@ -1,5 +1,11 @@
 # roxygen2 6.0.1.9000
 
+* The NAMESPACE roclet nows works in two passes - it first generates the 
+  a NAMESPACE containing only import directives becaues this can be generated
+  without evaluating the code in the package. This alleviates a problem
+  where it was previously possible to get into a state that you could only
+  get out of by carefully editting the NAMESPACE by hand (#372).
+
 * New `roclet_preprocess` generic makes it possible for roclets to perform 
   actions before code is evaluated.
 

@@ -22,6 +22,10 @@ namespace_roclet()
 This roclet automates the production of a \code{NAMESPACE} file,
 see Writing R Extensions.
 (\url{https://cran.r-project.org/doc/manuals/R-exts.pdf}) for details.
+The \code{NAMESPACE} is generated in two passes: the first generates only
+import directives (because this can be computed without evaluating package
+code), and the second generates everything (after the packaege has been
+loaded).
 }
 \seealso{
 \code{vignette("namespace", package = "roxygen2")}

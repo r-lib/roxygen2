@@ -1,12 +1,16 @@
-ns_tags <- c('evalNamespace', 'export', 'exportClass', 'exportMethod',
-  'exportPattern', 'rawNamespace', 'S3method', 'import', 'importFrom',
-  'importClassesFrom', 'importMethodsFrom', 'useDynLib')
+ns_tags_import <- c('import', 'importFrom', 'importClassesFrom', 'importMethodsFrom', 'useDynLib', 'rawNamespace')
+ns_tags_export <- c('export', 'exportClass', 'exportMethod', 'exportPattern', 'S3method')
+ns_tags <- c(ns_tags_import, ns_tags_export, 'evalNamespace')
 
 #' Roclet: make NAMESPACE.
 #'
 #' This roclet automates the production of a `NAMESPACE` file,
 #' see Writing R Extensions.
 #' (<https://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
+#' The `NAMESPACE` is generated in two passes: the first generates only
+#' import directives (because this can be computed without evaluating package
+#' code), and the second generates everything (after the packaege has been
+#' loaded).
 #'
 #' @family roclets
 #' @export
@@ -17,6 +21,27 @@ ns_tags <- c('evalNamespace', 'export', 'exportClass', 'exportMethod',
 namespace_roclet <- function() {
   roclet("namespace")
 }
+
+#' @export
+roclet_preprocess.roclet_namespace <- function(x,
+                                               blocks,
+                                               base_path,
+                                               global_options = list()) {
+
+  lines <- unlist(lapply(blocks, block_to_ns, tag_set = ns_tags_import)) %||% character()
+  lines <- sort_c(unique(lines))
+
+  NAMESPACE <- file.path(base_path, "NAMESPACE")
+  if (purrr::is_empty(lines) && !made_by_roxygen(NAMESPACE)) {
+    return(x)
+  }
+
+  results <- c(made_by("#"), lines)
+  write_if_different(NAMESPACE, results, check = FALSE)
+
+  invisible(x)
+}
+
 
 #' @export
 roclet_process.roclet_namespace <- function(x,
@@ -48,8 +73,8 @@ roclet_tags.roclet_namespace <- function(x) {
   )
 }
 
-block_to_ns <- function(block, env) {
-  tags <- intersect(names(block), ns_tags)
+block_to_ns <- function(block, env, tag_set = ns_tags) {
+  tags <- intersect(names(block), tag_set)
   lapply(tags, ns_process_tag, block = block, env = env)
 }
 

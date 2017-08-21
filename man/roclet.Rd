@@ -2,7 +2,6 @@
 % Please edit documentation in R/roclet.R
 \name{roclet}
 \alias{roclet}
-\alias{roclet}
 \alias{roclet_output}
 \alias{roclet_tags}
 \alias{roclet_preprocess}

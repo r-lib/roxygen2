@@ -1,5 +1,8 @@
 # roxygen2 6.0.1.9000
 
+* Tags (including `@alias`) are now de-duplicated and consistently sorted.
+  This reduces spurious diffs (#586, @flying-sheep).
+
 * Ensure that an empty .Rbuildignore file is handled properly.  Previously, this
   situation would cause an undesired error to be thrown (#576).
 

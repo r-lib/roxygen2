@@ -1,8 +1,11 @@
 # roxygen2 6.0.1.9000
 
+* Ensure that an empty .Rbuildignore file is handled properly.  Previously, this
+  situation would cause an undesired error to be thrown (#576).
+
 # roxygen2 6.0.1
 
-* Allowing empty lines in .Rbuildignore. Previously, empty lines caused all 
+* Allowing empty lines in .Rbuildignore. Previously, empty lines caused all
   files to be ignored. (#572, @jakob-r)
 
 * Automatically generating a usage section for an infix function containing "<-"
@@ -21,27 +24,27 @@
 
 ## Improved inheritance
 
-* New `@inheritDotParams` allows you to automatically generate parameter 
-  documentation for `...` for the common case where you pass `...` on to 
-  another function (#512). Because you often override some arguments, it 
+* New `@inheritDotParams` allows you to automatically generate parameter
+  documentation for `...` for the common case where you pass `...` on to
+  another function (#512). Because you often override some arguments, it
   comes with a flexible specification for argument selection:
-  
+
     * `@inheritDotParams foo` takes all parameters from `foo()`
-    * `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all 
+    * `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all
        parameters between `e` and `h`
     * `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
-    
+
     The documentation generated is similar to the style used in `?plot`
     and will eventually be incorporated in to RStudio's autocomplete.
 
 * New `@inherit` generalises `@inheritParams`, and allows to you inherit
   parameters, return, references, title, description, details, sections, and
   seealso.  The default `@inherit my_fun` will inherit all, you can document
-  an object entirely by specifying only the `@inherit` tag.  Alternatively, 
+  an object entirely by specifying only the `@inherit` tag.  Alternatively,
   you can select specific tags to inherit with `@inherit my_fun return params`
   (#384).
 
-* New `@inheritSection fun title` allows you to inherit the contents of 
+* New `@inheritSection fun title` allows you to inherit the contents of
   a single section from another topic (#513).
 
 * `@inheritParams` now works recursively, so that you can inherit parameters
@@ -52,18 +55,18 @@
 
 ### Tags
 
-* `@aliases` are no longer sorted alphabetically, but instead match the 
+* `@aliases` are no longer sorted alphabetically, but instead match the
   order of their usage. This gives you more control in pkgdown.
 
 * `@describeIn` now escapes special characters in function names (#450).
 
-* `@family` see alsos are added in the same order they appear, not 
-  alphabetically (#315). Fixed an issue where `.`s were sometimes added 
+* `@family` see alsos are added in the same order they appear, not
+  alphabetically (#315). Fixed an issue where `.`s were sometimes added
   between words within a `@family` tag (#477, @kevinushey).
 
 * `@author` is rendered after `@seealso`.
 
-* `@example` gives a nice warning message if you accidentally use it instead 
+* `@example` gives a nice warning message if you accidentally use it instead
   of `@examples` (#494). Multiple `@examples` sections are merged (#472, @krlmlr).
 
 * Roxygen will no longer write out topics that don't have a name or title,
@@ -78,7 +81,7 @@
 * Ensure that `functions` with S3 class are still treated as functions (#455).
 
 * S3 method declarations via `R.methodS3::setMethodS3()` and function
-  declarations via `R.oo::setConstructorS3()` are now supported 
+  declarations via `R.oo::setConstructorS3()` are now supported
   (@HenrikBengtsson, #525).
 
 ### S4
@@ -98,7 +101,7 @@
   from the `Authors@R` field (#527). It now works from `roxygenise()`; before
   it only worked from `devtools::document()` (#439, @krlmlr).
 
-* Manually created `NAMESPACE` or documentation files are never overwritten, 
+* Manually created `NAMESPACE` or documentation files are never overwritten,
   even if using `roxygen2` for the first time (@krlmlr, #436).
 
 * Changes to DESCRIPTION (i.e. `Collate:` and `RoxygenNote`) now use
@@ -113,7 +116,7 @@
 * The usage of replacement functions uses non-breaking spaces so that `<-`
   will never get put on its own line (#484).
 
-* Roxygen now parses nonASCII documentation correctly (as long as UTF-8 
+* Roxygen now parses nonASCII documentation correctly (as long as UTF-8
   encoded or specified Encoding in DESCRIPTION) (#532, @shrektan),
   and ignores files listed in `.Rbuildignore` (#446, @fmichonneau).
 
@@ -122,7 +125,7 @@
 * Deprecated `register.preref.parser()` and `register.preref.parsers()`
   have been removed. `register_tags()` has also been removed in favour of
   a new `roclet_tags()` generic.
-  
+
 * `roclet()` (the constructor), `roclet_tags()`, `roclet_process()`
   `roclet_output()`, `roc_clean()` and now exported making it possible
   to create roclets in other packages.  Helper functions `roxy_tag()` and
@@ -147,93 +150,93 @@
   field in the `DESCRIPTION` (#338). This will be the last time an roxygen2
   upgrade changes every file in `man/`.
 
-*   You can now easily re-export functions that you've imported from another 
+*   You can now easily re-export functions that you've imported from another
     package:
 
     ```R
     #' @export
     magrittr::`%>%`
     ```
-    
+
     All imported-and-re-exported functions will be documented in the same
-    file (`rexports.Rd`), containing a brief descrption and links to the 
+    file (`rexports.Rd`), containing a brief descrption and links to the
     original documentation (#376).
 
-*   You can more easily generate package documentation by documenting the 
+*   You can more easily generate package documentation by documenting the
     special string "_PACKAGE" (@krlmlr, #349):
-    
+
     ```R
     #' @details Details
-    "_PACKAGE" 
+    "_PACKAGE"
     ```
-    
+
     The title and description will be automatically filled in from the
     `DESCRIPTION`.
 
-* New tags `@rawRd` and `@rawNamespace` allow you to insert raw (unescaped) 
+* New tags `@rawRd` and `@rawNamespace` allow you to insert raw (unescaped)
   in Rd and the `NAMESPACE` (this is useful for conditional imports).
-  `@evalRd()` is similar, but instead of literal Rd, you give it R code that 
-  produces literal Rd code when run. This should make it easier to experiment 
-  with new types of output (#385). 
+  `@evalRd()` is similar, but instead of literal Rd, you give it R code that
+  produces literal Rd code when run. This should make it easier to experiment
+  with new types of output (#385).
 
 * Roxygen2 now parses the source code files in the order specified in the
-  `Collate` field in `DESCRIPTION`. This improves the ordering of the generated 
-  documentation when using `@describeIn` and/or `@rdname` split across several 
+  `Collate` field in `DESCRIPTION`. This improves the ordering of the generated
+  documentation when using `@describeIn` and/or `@rdname` split across several
   `.R` files, as often happens when working with S4 (#323, #324).
 
 ## Minor features and bug fixes
 
-* The contents of documented functions are now also parsed for roxygen comments. 
-  This allows, e.g., documenting a parameter's type close to where this type is 
-  checked, or documenting implementation details close to the source, and 
-  simplifies future extensions such as the documentation of R6 classes 
+* The contents of documented functions are now also parsed for roxygen comments.
+  This allows, e.g., documenting a parameter's type close to where this type is
+  checked, or documenting implementation details close to the source, and
+  simplifies future extensions such as the documentation of R6 classes
   (#397, @krlmlr).
 
 * Data objects get a simpler default `@format` that describes only the
-  object's class and dimensions.  The former default, generated by generated by 
-  `str()`, didn't usually produce useful output and was quite slow. The new S3 
-  generic `default_data_format()` generates the format and can be overridden to 
+  object's class and dimensions.  The former default, generated by generated by
+  `str()`, didn't usually produce useful output and was quite slow. The new S3
+  generic `default_data_format()` generates the format and can be overridden to
   generate a custom format (#410, @krlmlr).
 
-* The roxygen parsers has been completely rewritten in C++ (#295). This gives a 
+* The roxygen parsers has been completely rewritten in C++ (#295). This gives a
   nice performance boost and gives:
 
-  * Better error messages: you now get the exact the line number of the 
+  * Better error messages: you now get the exact the line number of the
     tag, not just the start of the block.
-    
+
   * The parser has been simplified a little: tags now must always start
     on a new line. This is recommended practice anyway, and it means
     that escaping inline `@` (with `@@`) is now optional. (#235)
-    
+
   * Unknown tags now emit a warning, rather than an error.
 
-* `@examples` no longer complains about non-matching braces inside 
+* `@examples` no longer complains about non-matching braces inside
   strings (#329).
 
 * `@family` now cross-links each manual page only once, instread of linking
   to all aliases (@gaborcsardi, #283, #367).
 
 * The special `@include` parser has also been rewritten in C++, giving
-  a performance boost for larger packages (#401). This is particularly 
+  a performance boost for larger packages (#401). This is particularly
   important because it's also called from `devtools::load_all()`.
-  Additionally, a space before `@include` is no longer necessary 
+  Additionally, a space before `@include` is no longer necessary
   (@krlmlr, #342).
 
-* `@inheritParams foo::bar` ensures that `%` remains escaped (#313). 
+* `@inheritParams foo::bar` ensures that `%` remains escaped (#313).
 
 * If you document multiple arguments with one `@param`, (e.g. `@param a,b,c`)
-  each parameter will get a space after it so it can be wrapped in the 
+  each parameter will get a space after it so it can be wrapped in the
   generated Rd file (#373).
 
-* `@section`s with identical titles are now merged together, just like 
-  `@description` and `@details`. This is useful in conjunction with the 
+* `@section`s with identical titles are now merged together, just like
+  `@description` and `@details`. This is useful in conjunction with the
   `@rdname` tag. (@krlmlr, #300).
 
-* Automatic `@usage` is now correctly generated for functions with string 
+* Automatic `@usage` is now correctly generated for functions with string
   arguments containing `"\""` (#265).
 
 * `load_options()` is now exported so `devtools::document()` doesn't have to
-  run `update_collate()` twice (#395). 
+  run `update_collate()` twice (#395).
 
 * `update_collate()` only rewrites the `Collate` entry in the DESCRIPTION file
   when it changes (#325, #723).
@@ -245,16 +248,16 @@
 
 ## Internal changes
 
-* `register.preref.parser()` and `register.preref.parsers()`  have been 
+* `register.preref.parser()` and `register.preref.parsers()`  have been
   deprecated - please use `register_tags()` instead.
 
-* Parser callbacks registered with `register_tags()` are now called for fields 
+* Parser callbacks registered with `register_tags()` are now called for fields
   parsed from the "introduction" (the text before the first tag)
   (@gaborcsardi, #370).
 
 # roxygen2 4.1.1
 
-* Formatting of the `Authors@R` field in the DESCRIPTION file is now retained 
+* Formatting of the `Authors@R` field in the DESCRIPTION file is now retained
   (@jranke, #330).
 
 * The collate roclet falls back to `base::strwrap()` when generating the
@@ -266,7 +269,7 @@
 
 * An off-by-one error in the C++ Roxygen preparser was fixed.
 
-* The new `@backref` tag makes it possible to override the sourceref for 
+* The new `@backref` tag makes it possible to override the sourceref for
   R code generators like `Rcpp` (@krlmlr, #291, #294).
 
 # roxygen2 4.1.0
@@ -297,7 +300,7 @@
 * If you don't use `@exports` or other namespace directives, your namespace
   file will not be touched (#276).
 
-* Methods no longer automatically attempt to inherit parameters from 
+* Methods no longer automatically attempt to inherit parameters from
   their generic. It's too fraught with difficulty (#261).
 
 * Roxygen now understands what to do with `setReplaceMethod()` (#266).
@@ -311,7 +314,7 @@
 
 # roxygen2 4.0.1
 
-* Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the 
+* Explicit `updateRoxygen()` is no longer needed - `roxygenize()` does the
   right thing the first time it is run.
 
 * Exporting a S4 generic works (#246).

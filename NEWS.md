@@ -1,5 +1,9 @@
 # roxygen2 6.0.1.9000
 
+* `vignette("rd")` received a thorough updating for current best-practice.
+  The vignette still needs more work so pull requests are greatly appreciated
+  (#650).
+
 * Tags (including `@alias`) are now de-duplicated and consistently sorted.
   This reduces spurious diffs (#586, @flying-sheep).
 

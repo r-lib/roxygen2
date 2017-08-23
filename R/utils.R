@@ -57,6 +57,7 @@ nice_name <- function(x) {
   x <- str_replace_all(x, "[^A-Za-z0-9_.-]+", "-")
   x <- str_replace_all(x, "-+", "-")
   x <- str_replace_all(x, "^-|-$", "")
+  x <- str_replace_all(x, "^\\.", "dot-")
   x
 }
 

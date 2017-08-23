@@ -1,10 +1,9 @@
 # Returns list of roxy_blocks
 tokenize_file <- function(file,
                           registry = list(),
-                          global_options = list(),
-                          file_encoding = "UTF-8"
+                          global_options = list()
                           ) {
-  lines <- read_lines_enc(file, file_encoding = file_encoding)
+  lines <- read_lines(file)
 
   parsed <- parse(
     text = lines,

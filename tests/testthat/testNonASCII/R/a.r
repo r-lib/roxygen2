@@ -1,9 +1,6 @@
-# This script is intended to be saved in GB2312 to test if non UTF-8 encoding is
-# supported.
-
-#' ÖÐÎÄ×¢ÊÍ
+#' ä¸­æ–‡æ³¨é‡Š
 #'
-#' @note ÎÒ°®ÖÐÎÄ¡£
+#' @note æˆ‘çˆ±ä¸­æ–‡ã€‚
 printChineseMsg <- function() {
-  message("ÎÒÊÇGB2312µÄÖÐÎÄ×Ö·û¡£")
+  message("æˆ‘æ˜¯UTF8çš„ä¸­æ–‡å­—ç¬¦ã€‚")
 }

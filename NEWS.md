@@ -69,6 +69,9 @@
 * Stricter regular expression ensures only files ending with `.R` or `.r` are
   parsed for roxygen comments (#625).
 
+* Objects with names starting with a dot are now by default documented in 
+  files with prefix 'dot-'.  
+
 * Roclets can now access global options as designed. This allows templates to
   use markdown formatting if set globally (#594).
 

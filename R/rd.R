@@ -92,7 +92,10 @@ topics_add_default_description <- function(topics) {
     if (length(topic$get_field("description")) > 0)
       next
 
-    topic$add_simple_field("description", topic$get_field("title")$values)
+    # rexport manually generates a own description, so don't need to
+    if (!topic$has_field("reexport")) {
+      topic$add_simple_field("description", topic$get_field("title")$values)
+    }
   }
 
   invisible()
@@ -136,6 +139,11 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_slots(rd, block)
   topic_add_usage(rd, block)
   topic_add_value(rd, block)
+
+  if (rd$has_field("description") && rd$has_field("reexport")) {
+    block_warning(block, "Can't use description when re-exporting")
+    return()
+  }
 
   describe_rdname <- topic_add_describe_in(rd, block, env)
 

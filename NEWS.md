@@ -52,7 +52,7 @@
 
 ## Minor improvements and bug fixes
 
-* `person` now supports all [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html "MARC Relator roles")
+* `person` now supports all [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html)
   role codes (#662, @publicus).
 
 * Empty `.Rbuildignore` now handled correctly (#576).

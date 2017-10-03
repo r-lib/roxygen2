@@ -36,10 +36,10 @@ package_authors <- function(desc) {
 }
 
 author_desc <- function(x) {
-  desc <- x$given
+  desc <- paste0(x$given, collapse = " ")
 
   if (!is.null(x$family)) {
-    desc <- paste0(desc, " ", x$family)
+    desc <- paste0(desc, " ", paste0(x$family, collapse = " "))
   }
 
   if (!is.null(x$email)) {

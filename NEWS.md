@@ -84,6 +84,9 @@
 * You can now autogenerate package documentation even if you don't have 
   `Authors@R` (#606).
 
+* Multiple given and/or family names are now supported in the
+  `Authors@R` field of the DESCRIPTION file (#672, @sgibb).
+
 * If a package logo exists (`man/figures/logo.png`) it will be automatically
   included in generated package docs (#609).
 

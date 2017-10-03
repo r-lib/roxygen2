@@ -36,7 +36,7 @@ package_authors <- function(desc) {
 }
 
 author_desc <- function(x) {
-  desc <- paste0(x$given, collapse=" ")
+  desc <- paste0(x$given, collapse = " ")
 
   if (!is.null(x$family)) {
     desc <- paste0(desc, " ", paste0(x$family, collapse = " "))

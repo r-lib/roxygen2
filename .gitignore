@@ -6,3 +6,5 @@
 *.pro
 *.pro.user
 inst/doc
+revdep/checks
+revdep/library

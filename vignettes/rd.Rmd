@@ -151,6 +151,24 @@ Functions are the mostly commonly documented objects. Most functions use three t
     put them in separate files and use `@example path/relative/to/packge/root`
     to insert them into the documentation.
 
+    If you have placed examples in separate files and need to wrap the example
+    inside of `\dontrun{}`, `\dontshow{}`, or `\donttest{}` then you can place
+    the command directly in the example file.  If you use the `@example` tag,
+    e.g., `@example path/relative/to/packge/root/dont-run.R`, you can add the
+    command directly in the file:
+
+```
+\dontrun{
+# some long running example
+}
+```
+    While this formating works well for roxygen to generate the man file, the
+    `dont-run.R` file can not be evaluated via `source()`.  To aliviate this
+    issue three additional example tags have been added: `@exampleDontrun`,
+    `@exampleDontshow`, and `@exampleDonttest`.  Using these tags in the same
+    way that the `@example` tag is used, allows R syntactically valid scripts to
+    be wrapped in the respected command in the manual file.
+
 *   `@return description` describes the output from the function. This is
     not always necessary, but is a good idea if you return different types
     of outputs depending on the input, or you're returning an S3, S4 or RC

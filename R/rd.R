@@ -34,6 +34,9 @@ roclet_tags.roclet_rd <- function(x) {
     encoding = tag_value,
     evalRd = tag_code,
     example = tag_value,
+    exampleDontrun = tag_value,
+    exampleDontshow = tag_value,
+    exampleDonttest = tag_value,
     examples = tag_examples,
     family = tag_value,
     field = tag_name_description,
@@ -200,6 +203,7 @@ needs_doc <- function(block) {
   }
 
   key_tags <- c("description", "param", "return", "title", "example",
+    "exampleDontrun", "exampleDontshow", "exampleDonttest",
     "examples", "name", "rdname", "usage", "details", "introduction",
     "inherit", "describeIn")
 
@@ -358,6 +362,7 @@ topic_add_examples <- function(topic, block, base_path) {
     topic$add_simple_field("examples", example)
   }
 
+  # for example tag 
   paths <- str_trim(unlist(block_tags(block, "example")))
   paths <- file.path(base_path, paths)
 
@@ -379,6 +384,73 @@ topic_add_examples <- function(topic, block, base_path) {
 
     topic$add_simple_field("examples", examples)
   }
+
+  # for exampleDontrun tag 
+  paths <- str_trim(unlist(block_tags(block, "exampleDontrun")))
+  paths <- file.path(base_path, paths)
+
+  for (path in paths) {
+    nl <- str_count(path, "\n")
+    if (any(nl) > 0) {
+      block_warning(block, "@exampleDontrun spans multiple lines. Do you want @examples?")
+      next
+    }
+
+    if (!file.exists(path)) {
+      block_warning(block, "@exampleDontrun ", path, " doesn't exist")
+      next
+    }
+
+    code <- c("\\dontrun{", read_lines(path), "}")
+    examples <- escape_examples(code)
+
+    topic$add_simple_field("examples", examples)
+  }
+
+  # for exampleDontshow tag 
+  paths <- str_trim(unlist(block_tags(block, "exampleDontshow")))
+  paths <- file.path(base_path, paths)
+
+  for (path in paths) {
+    nl <- str_count(path, "\n")
+    if (any(nl) > 0) {
+      block_warning(block, "@exampleDontshow spans multiple lines. Do you want @examples?")
+      next
+    }
+
+    if (!file.exists(path)) {
+      block_warning(block, "@exampleDontshow ", path, " doesn't exist")
+      next
+    }
+
+    code <- c("\\dontshow{", read_lines(path), "}")
+    examples <- escape_examples(code)
+
+    topic$add_simple_field("examples", examples)
+  }
+
+  # for exampleDonttest tag 
+  paths <- str_trim(unlist(block_tags(block, "exampleDonttest")))
+  paths <- file.path(base_path, paths)
+
+  for (path in paths) {
+    nl <- str_count(path, "\n")
+    if (any(nl) > 0) {
+      block_warning(block, "@exampleDonttest spans multiple lines. Do you want @examples?")
+      next
+    }
+
+    if (!file.exists(path)) {
+      block_warning(block, "@exampleDonttest ", path, " doesn't exist")
+      next
+    }
+
+    code <- c("\\donttest{", read_lines(path), "}")
+    examples <- escape_examples(code)
+
+    topic$add_simple_field("examples", examples)
+  }
+
 }
 
 topic_add_eval_rd <- function(topic, block, env) {

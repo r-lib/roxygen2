@@ -11,11 +11,11 @@ test_that("exporting a call to :: produces re-exports documentation", {
   )
 
   expect_equal(
-    out$get_field("title")$value,
+    out$get_field("title")$values,
     "Objects exported from other packages"
   )
 
-  expect_equal(out$get_field("keyword")$value, "internal")
+  expect_equal(out$get_field("keyword")$values, "internal")
 })
 
 test_that("multiple re-exports are combined", {

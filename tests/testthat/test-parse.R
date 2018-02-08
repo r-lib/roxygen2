@@ -21,7 +21,7 @@ test_that("Inline comments just before the closing brace are allowed", {
 
       #' @seealso somewhere
     }")[[1]]
-  expect_equal(get_tag(out, "seealso")$value, "somewhere")
+  expect_equal(get_tag(out, "seealso")$values, "somewhere")
 })
 
 test_that("Inline comments do not extend past the closing brace", {

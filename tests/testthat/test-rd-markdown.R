@@ -68,6 +68,16 @@ test_that("inline code escapes %", {
   expect_equal(out$get_field("title")$values, "\\code{0.5\\%}")
 })
 
+test_that("inline code works with < and >", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' `SELECT <name> FROM <table>`
+    #' @md
+    f <- function() 1
+  ")[[1]]
+
+  expect_equal(out$get_field("title")$values, "\\code{SELECT <name> FROM <table>}")
+})
+
 test_that("itemized lists work", {
   out1 <- roc_proc_text(roc, "
     #' Title

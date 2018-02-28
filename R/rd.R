@@ -331,7 +331,7 @@ topic_add_keyword <- function(topic, block) {
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block) {
   if (is.null(block$usage)) {
-    usage <- wrap_string(object_usage(attr(block, "object")))
+    usage <- wrap_string(object_usage(attr(block, "object")), width = 75L)
   } else if (block$usage == "NULL") {
     usage <- NULL
   } else {

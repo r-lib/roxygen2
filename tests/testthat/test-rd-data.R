@@ -1,6 +1,8 @@
 context("Rd: data")
 
 test_that("can document eager data", {
+  skip_if_not_installed("devtools")
+
   test_pkg <- temp_copy_pkg('testEagerData')
   on.exit(unlink(test_pkg, recursive = TRUE))
 
@@ -9,6 +11,8 @@ test_that("can document eager data", {
 })
 
 test_that("can document lazy data", {
+  skip_if_not_installed("devtools")
+
   test_pkg <- temp_copy_pkg('testLazyData')
   on.exit(unlink(test_pkg, recursive = TRUE))
 

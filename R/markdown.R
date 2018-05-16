@@ -132,7 +132,7 @@ markdown_tags <- list(
 
   code_block = function(xml) {
     ## Large block of code
-    list("\\preformatted{", xml_contents(xml), "}")
+    list("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}")
   },
 
   html = function(xml) {

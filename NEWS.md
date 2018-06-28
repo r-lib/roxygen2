@@ -105,6 +105,8 @@
       space (#628, @egnha).
   
     * `%` in inline code blocks is now automatically escaped (#640).
+    
+* Markdown code blocks escape percent signs. (@nteetor, #699)    
 
 # roxygen2 6.0.1
 

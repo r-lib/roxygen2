@@ -48,8 +48,8 @@ test_that("code blocks work", {
     #'
     #' Description
     #'
-    #' Details with a code block:\\preformatted{x <- 1:10 %>%
-    #'   multiply_by(10) %>%
+    #' Details with a code block:\\preformatted{x <- 1:10 \\%>\\%
+    #'   multiply_by(10) \\%>\\%
     #'   add(42)
     #' }
     #'
@@ -66,6 +66,19 @@ test_that("inline code escapes %", {
   ")[[1]]
 
   expect_equal(out$get_field("title")$values, "\\code{0.5\\%}")
+})
+
+test_that("code blocks escape %", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' ```
+    #' 1:10 %>% mean()
+    #' ```
+    #'
+    #' @md
+    f <- function() 1
+  ")[[1]]
+
+  expect_equal(out$get_field("title")$values, "\\preformatted{1:10 \\%>\\% mean()\n}")
 })
 
 test_that("inline code works with < and >", {

@@ -110,7 +110,8 @@
     * `%` in inline code blocks is now automatically escaped (#640).
     
     * Parsing of markdown links has been tweaked to reduce false positives 
-      (#555)
+      (#555). If you still get a false positive, you can now put `\\` in front 
+      of the `[` to avoid it being converted to a link (#720).
 
 # roxygen2 6.0.1
 

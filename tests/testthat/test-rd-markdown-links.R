@@ -31,6 +31,18 @@ test_that("can not have [ inside of link", {
   )
 })
 
+test_that("can escape [ to avoid spurious links", {
+  expect_equal(
+    md_link_html("\\[test\\]"),
+    "<p>[test]</p>\n"
+  )
+
+  expect_equal(
+    md_link_html("\\[ [test] \\]"),
+    "<p>[ <a href=\"R:test\">test</a> ]</p>\n",
+  )
+})
+
 test_that("commonmark picks up the various link references", {
   cases <- list(
     c("foo [func()] bar",

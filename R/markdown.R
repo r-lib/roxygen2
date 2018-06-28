@@ -278,7 +278,7 @@ add_linkrefs_to_md <- function(text) {
     regex(
       comments = TRUE,
       "
-        (?<=[^\\]]|^)           # must not be preceded by ]
+        (?<=[^\\]\\\\]|^)       # must not be preceded by ] or \
         \\[([^\\]\\[]+)\\]      # match anything inside of []
         (?:\\[([^\\]\\[]+)\\])? # match optional second pair of []
         (?=[^\\[]|$)            # must not be followed by [

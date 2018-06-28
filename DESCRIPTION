@@ -27,7 +27,7 @@ Imports:
     R6 (>= 2.1.2),
     Rcpp (>= 0.11.0),
     stringi,
-    stringr (>= 0.5),
+    stringr (>= 1.0.0),
     utils,
     xml2
 Suggests: 

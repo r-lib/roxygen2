@@ -25,28 +25,37 @@ test_that("proper link references are added", {
 })
 
 test_that("can not have [ inside of link", {
+  md <- markdown_on(TRUE)
+  on.exit(markdown_on(md))
+
   expect_equal(
-    md_link_html("`[[`. [subset()]"),
-    "<p><code>[[</code>. <a href=\"R:subset()\">subset()</a></p>\n"
+    full_markdown("`[[`. [subset()]"),
+    "\\code{[[}. \\code{\\link[=subset]{subset()}}"
   )
 })
 
 test_that("can escape [ to avoid spurious links", {
+  md <- markdown_on(TRUE)
+  on.exit(markdown_on(md))
+
   expect_equal(
-    md_link_html("\\[test\\]"),
-    "<p>[test]</p>\n"
+    full_markdown("\\[test\\]"),
+    "[test]"
   )
 
   expect_equal(
-    md_link_html("\\[ [test] \\]"),
-    "<p>[ <a href=\"R:test\">test</a> ]</p>\n",
+    full_markdown("\\[ [test] \\]"),
+    "[ \\link{test} ]",
   )
 })
 
 test_that("\\Sexpr with options not converted to links", {
-   expect_equal(
-     md_link_html("\\Sepxr[results=rd]{runif(1)}"),
-     "<p>\\Sepxr[results=rd]{runif(1)}</p>\n"
+  md <- markdown_on(TRUE)
+  on.exit(markdown_on(md))
+
+  expect_equal(
+     full_markdown("\\Sepxr[results=rd]{runif(1)}"),
+     "\\Sepxr[results=rd]{runif(1)}"
    )
 })
 

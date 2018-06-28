@@ -310,12 +310,6 @@ add_linkrefs_to_md <- function(text) {
   )
 }
 
-# Helper designed primarily for testing
-
-md_link_html <- function(x) {
-  commonmark::markdown_html(add_linkrefs_to_md(x))
-}
-
 #' Parse a MarkDown link, to see if we should create an Rd link
 #'
 #' See the table above.

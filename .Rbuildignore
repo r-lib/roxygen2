@@ -8,3 +8,5 @@
 ^revdep$
 ^codecov\.yml$
 ^appveyor\.yml$
+^_pkgdown\.yml$
+^docs$

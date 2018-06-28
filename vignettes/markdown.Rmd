@@ -135,10 +135,10 @@ Markdown hyperlinks work as usual:
 #' [Commonmark web site](http://commonmark.org/help)
 ```
 
-URLs are also automatically converted to hyperlinks:
+URLs inside angle brackets are also automatically converted to hyperlinks:
 
 ```r
-#' The main R web site is at https://r-project.org.
+#' The main R web site is at <https://r-project.org>.
 ```
 
 Markdown notation can be used to create links to other manual pages. There are six kinds of links:

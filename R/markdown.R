@@ -85,7 +85,14 @@ markdown_rparse <- function(xml, markdown_tags) {
 
   ## generic node
   if (is(xml, "xml_node") && xml_type(xml) == "element") {
-    return(markdown_rparse(markdown_tags[[ xml_name(xml) ]](xml), markdown_tags = markdown_tags))
+    parser <- markdown_tags[[ xml_name(xml) ]]
+
+    if (is.null(parser)) {
+      warning("Unknown xml node: ", xml_name(xml), call. = FALSE)
+      return(xml_text(xml))
+    }
+
+    return(markdown_rparse(parser(xml), markdown_tags = markdown_tags))
   }
 
   warning("Unknown xml object")
@@ -275,7 +282,15 @@ add_linkrefs_to_md <- function(text) {
 
   refs <- str_match_all(
     text,
-    regex("(?<=[^]]|^)\\[([^]]+)\\](?:\\[([^]]+)\\])?(?=[^\\[]|$)")
+    regex(
+      comments = TRUE,
+      "
+        (?<=[^\\]\\\\]|^)       # must not be preceded by ] or \
+        \\[([^\\]\\[]+)\\]      # match anything inside of []
+        (?:\\[([^\\]\\[]+)\\])? # match optional second pair of []
+        (?=[^\\[{]|$)            # must not be followed by [ or {
+      "
+    )
   )[[1]]
 
   if (length(refs) == 0) return(text)
@@ -337,7 +352,9 @@ parse_link <- function(destination, contents) {
 
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
+  pkg <- gsub("%", "\\\\%", pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
+  fun <- gsub("%", "\\\\%", fun)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
   s4 <- str_detect(destination, "-class$")
@@ -360,6 +377,8 @@ parse_link <- function(destination, contents) {
     )
 
   } else {
+    contents <- gsub("%", "\\\\%", xml2::xml_text(contents))
+
     list(
       paste0(
         if (is_code) "\\code{",

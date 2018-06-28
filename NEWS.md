@@ -34,6 +34,9 @@
   problems and ensures that `devtools::document()` and `roxygenise()` always
   have exactly the same behaviour (#568, #595).
 
+* If an inherited section cannot be found, the warning contains the help
+  page from which that section was requested (#732, @krlmlr).
+
 ## Extension API
 
 * [API] Roxygen blocks now have an official structure as encoded in 
@@ -104,9 +107,17 @@
     * Whitespace between words in link text is now preserved as single
       space (#628, @egnha).
   
-    * `%` in inline code blocks is now automatically escaped (#640).
+    * `%` in inline code (#640), code blocks (@nteetor, #699) and 
+      links (#724) is now automatically escaped.
     
-* Markdown code blocks escape percent signs. (@nteetor, #699)    
+    * Parsing of markdown links has been tweaked to reduce false positives 
+      (#555). If you still get a false positive, you can now put `\\` in front 
+      of the `[` to avoid it being converted to a link (#720). Links can no 
+      longer be followed by `{` to avoid spurious matches to Rd commands like
+      `\Sexpr{}`.
+      
+    * Unsupported markdown features now generate a mildly helpful warning
+      instead of throwing an utterly useless error (#560).
 
 # roxygen2 6.0.1
 

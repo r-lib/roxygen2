@@ -418,3 +418,17 @@ test_that("Do not pick up `` in arguments \\item #519", {
     foo <- function(`_arg1`, `_arg2`) {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
+
+test_that("unhandled markdown generates warning", {
+  text <- "
+    #' Title
+    #'
+    #' ## Heading
+    #'
+    #' Blabla
+    #' @md
+    #' @name x
+    NULL
+  "
+  expect_warning(roc_proc_text(rd_roclet(), text), "heading")
+})

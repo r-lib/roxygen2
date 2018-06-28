@@ -94,7 +94,7 @@ test_that("\\dontrun in @example unescaped", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @title a
-    #' @example Rd-example-5.R
+    #' @example Rd-example-5.txt
     NULL")[[1]]
 
   examples <- get_tag(out, "examples")$values

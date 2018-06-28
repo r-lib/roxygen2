@@ -34,6 +34,9 @@
   problems and ensures that `devtools::document()` and `roxygenise()` always
   have exactly the same behaviour (#568, #595).
 
+* If an inherited section cannot be found, the warning contains the help
+  page from which that section was requested (#732, @krlmlr).
+
 ## Extension API
 
 * [API] Roxygen blocks now have an official structure as encoded in 

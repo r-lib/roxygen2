@@ -166,7 +166,10 @@ inherit_section <- function(topic, topics) {
     selected <- new_section$title %in% titles[[i]]
 
     if (sum(selected) != 1) {
-      warning("Can't find section '", titles[[i]], "'", call. = FALSE)
+      warning(
+        "Can't find section '", titles[[i]], "' in ?",
+        sources[[i]], call. = FALSE
+      )
     }
 
     topic$add_field(

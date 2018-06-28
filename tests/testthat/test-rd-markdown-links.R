@@ -59,6 +59,16 @@ test_that("\\Sexpr with options not converted to links", {
    )
 })
 
+test_that("% in links are escaped", {
+  md <- markdown_on(TRUE)
+  on.exit(markdown_on(md))
+
+  expect_equal(full_markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
+  expect_equal(full_markdown("[%][x]"), "\\link[=x]{\\%}")
+  expect_equal(full_markdown("[%%]"), "\\link{\\%\\%}")
+  expect_equal(full_markdown("[foo::%%]"), "\\link[foo:\\%\\%]{foo::\\%\\%}")
+})
+
 test_that("commonmark picks up the various link references", {
   cases <- list(
     c("foo [func()] bar",

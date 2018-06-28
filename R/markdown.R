@@ -352,7 +352,9 @@ parse_link <- function(destination, contents) {
 
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
+  pkg <- gsub("%", "\\\\%", pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
+  fun <- gsub("%", "\\\\%", fun)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
   s4 <- str_detect(destination, "-class$")
@@ -375,6 +377,8 @@ parse_link <- function(destination, contents) {
     )
 
   } else {
+    contents <- gsub("%", "\\\\%", xml2::xml_text(contents))
+
     list(
       paste0(
         if (is_code) "\\code{",

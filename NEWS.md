@@ -107,7 +107,8 @@
     * Whitespace between words in link text is now preserved as single
       space (#628, @egnha).
   
-    * `%` in inline code blocks is now automatically escaped (#640).
+    * `%` in inline code blocks (#640) and links (#724) is now automatically 
+      escaped.
     
     * Parsing of markdown links has been tweaked to reduce false positives 
       (#555). If you still get a false positive, you can now put `\\` in front 

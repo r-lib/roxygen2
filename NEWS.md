@@ -114,6 +114,9 @@
       of the `[` to avoid it being converted to a link (#720). Links can no 
       longer be followed by `{` to avoid spurious matches to Rd commands like
       `\Sexpr{}`.
+      
+    * Unsupported markdown features now generate a mildly helpful warning
+      instead of throwing an utterly useless error (#560).
 
 # roxygen2 6.0.1
 

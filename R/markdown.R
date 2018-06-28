@@ -85,7 +85,14 @@ markdown_rparse <- function(xml, markdown_tags) {
 
   ## generic node
   if (is(xml, "xml_node") && xml_type(xml) == "element") {
-    return(markdown_rparse(markdown_tags[[ xml_name(xml) ]](xml), markdown_tags = markdown_tags))
+    parser <- markdown_tags[[ xml_name(xml) ]]
+
+    if (is.null(parser)) {
+      warning("Unknown xml node: ", xml_name(xml), call. = FALSE)
+      return(xml_text(xml))
+    }
+
+    return(markdown_rparse(parser(xml), markdown_tags = markdown_tags))
   }
 
   warning("Unknown xml object")

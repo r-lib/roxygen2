@@ -43,6 +43,13 @@ test_that("can escape [ to avoid spurious links", {
   )
 })
 
+test_that("\\Sexpr with options not converted to links", {
+   expect_equal(
+     md_link_html("\\Sepxr[results=rd]{runif(1)}"),
+     "<p>\\Sepxr[results=rd]{runif(1)}</p>\n"
+   )
+})
+
 test_that("commonmark picks up the various link references", {
   cases <- list(
     c("foo [func()] bar",

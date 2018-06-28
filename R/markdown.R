@@ -281,7 +281,7 @@ add_linkrefs_to_md <- function(text) {
         (?<=[^\\]\\\\]|^)       # must not be preceded by ] or \
         \\[([^\\]\\[]+)\\]      # match anything inside of []
         (?:\\[([^\\]\\[]+)\\])? # match optional second pair of []
-        (?=[^\\[]|$)            # must not be followed by [
+        (?=[^\\[{]|$)            # must not be followed by [ or {
       "
     )
   )[[1]]

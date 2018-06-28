@@ -111,7 +111,9 @@
     
     * Parsing of markdown links has been tweaked to reduce false positives 
       (#555). If you still get a false positive, you can now put `\\` in front 
-      of the `[` to avoid it being converted to a link (#720).
+      of the `[` to avoid it being converted to a link (#720). Links can no 
+      longer be followed by `{` to avoid spurious matches to Rd commands like
+      `\Sexpr{}`.
 
 # roxygen2 6.0.1
 

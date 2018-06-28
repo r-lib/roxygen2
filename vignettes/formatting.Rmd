@@ -33,9 +33,11 @@ To other documentation:
 
 * `\code{\link{function}}`: function in this package
 
-* `\code{\link[MASS]{stats}}`: function in another package
+* `\code{\link[MASS]{abbey}}`: function in another package
 
 * `\link[=dest]{name}`: link to dest, but show name
+
+* `\code{\link[MASS:abbey]{name}}`: link to function in another package, but show name.
 
 * `\linkS4class{abc}`: link to an S4 class
 

@@ -46,7 +46,7 @@ update_roxygen_version <- function(base_path) {
 
   if (!is.na(cur) && !is.na(prev) && package_version(cur) < package_version(prev)) {
     warning("Version of roxygen2 last used with this package is ", prev, ". ",
-      " You only have version ", cur, call. = FALSE)
+      " You only have version ", cur, call. = FALSE, immediate. = TRUE)
   } else if (!identical(cur, prev)) {
     message("Updating roxygen version in ", desc_path)
     desc::desc_set(RoxygenNote = cur, file = desc_path)

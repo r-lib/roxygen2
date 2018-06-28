@@ -24,6 +24,13 @@ test_that("proper link references are added", {
   }
 })
 
+test_that("can not have [ inside of link", {
+  expect_equal(
+    md_link_html("`[[`. [subset()]"),
+    "<p><code>[[</code>. <a href=\"R:subset()\">subset()</a></p>\n"
+  )
+})
+
 test_that("commonmark picks up the various link references", {
   cases <- list(
     c("foo [func()] bar",

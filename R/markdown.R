@@ -278,10 +278,10 @@ add_linkrefs_to_md <- function(text) {
     regex(
       comments = TRUE,
       "
-        (?<=[^\\]]|^)        # must not be preceded by ]
-        \\[([^\\]]+)\\]      # match anything inside of []
-        (?:\\[([^\\]]+)\\])? # match optional second pair of []
-        (?=[^\\[]|$)         # must not be followed by [
+        (?<=[^\\]]|^)           # must not be preceded by ]
+        \\[([^\\]\\[]+)\\]      # match anything inside of []
+        (?:\\[([^\\]\\[]+)\\])? # match optional second pair of []
+        (?=[^\\[]|$)            # must not be followed by [
       "
     )
   )[[1]]
@@ -301,6 +301,12 @@ add_linkrefs_to_md <- function(text) {
     paste(ref_text, collapse = "\n"),
     "\n"
   )
+}
+
+# Helper designed primarily for testing
+
+md_link_html <- function(x) {
+  commonmark::markdown_html(add_linkrefs_to_md(x))
 }
 
 #' Parse a MarkDown link, to see if we should create an Rd link

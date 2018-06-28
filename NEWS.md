@@ -108,6 +108,9 @@
       space (#628, @egnha).
   
     * `%` in inline code blocks is now automatically escaped (#640).
+    
+    * Parsing of markdown links has been tweaked to reduce false positives 
+      (#555)
 
 # roxygen2 6.0.1
 

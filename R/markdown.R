@@ -275,7 +275,15 @@ add_linkrefs_to_md <- function(text) {
 
   refs <- str_match_all(
     text,
-    regex("(?<=[^]]|^)\\[([^]]+)\\](?:\\[([^]]+)\\])?(?=[^\\[]|$)")
+    regex(
+      comments = TRUE,
+      "
+        (?<=[^\\]]|^)        # must not be preceded by ]
+        \\[([^\\]]+)\\]      # match anything inside of []
+        (?:\\[([^\\]]+)\\])? # match optional second pair of []
+        (?=[^\\[]|$)         # must not be followed by [
+      "
+    )
   )[[1]]
 
   if (length(refs) == 0) return(text)

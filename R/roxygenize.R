@@ -1,13 +1,13 @@
 #' Process a package with the Rd, namespace and collate roclets.
 #'
 #' This is the workhorse function that uses roclets, the built-in document
-#' tranformation functions, to build all documentation for a package.  See
+#' tranformation functions, to build all documentation for a package. See
 #' the documentation for the individual roclets, [rd_roclet()],
 #' [namespace_roclet()], and for [update_collate()],
 #' for more details.
 #'
-#' Note that roxygen2 is a dynamic documentation system: it works using
-#' by inspecting loaded objects in the package. This means that you must
+#' Note that roxygen2 is a dynamic documentation system: it works by
+#' inspecting loaded objects in the package. This means that you must
 #' be able to load the package in order to document it.
 #'
 #' @param package.dir Location of package top level directory. Default is

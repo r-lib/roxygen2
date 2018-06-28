@@ -32,13 +32,13 @@ created by roxygen before running each roclet.}
 }
 \description{
 This is the workhorse function that uses roclets, the built-in document
-tranformation functions, to build all documentation for a package.  See
+tranformation functions, to build all documentation for a package. See
 the documentation for the individual roclets, \code{\link[=rd_roclet]{rd_roclet()}},
 \code{\link[=namespace_roclet]{namespace_roclet()}}, and for \code{\link[=update_collate]{update_collate()}},
 for more details.
 }
 \details{
-Note that roxygen2 is a dynamic documentation system: it works using
-by inspecting loaded objects in the package. This means that you must
+Note that roxygen2 is a dynamic documentation system: it works by
+inspecting loaded objects in the package. This means that you must
 be able to load the package in order to document it.
 }

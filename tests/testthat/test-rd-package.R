@@ -18,3 +18,7 @@ test_that("can create package documentation", {
   expect_equal(get_tag(out, "docType")$values, "package")
   expect_equal(get_tag(out, "details")$values, "Details.")
 })
+
+test_that("Can read UTF-8 DESCRIPTIONS", {
+  expect_equal(read.description("testNonASCII/DESCRIPTION")$Author, "Shr\U00EBktan <shrektan@126.com>")
+})

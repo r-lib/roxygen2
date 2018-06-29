@@ -77,7 +77,7 @@ format.roxy_field_alias <- function(x, ...) {
 #' @export
 format.roxy_field_concept <- format_rd
 
-# Fields that keep the first occurence -----------------------------------------
+# Fields that keep the first occurrence -----------------------------------------
 format_first <- function(x, ...) {
   rd_macro(x$field, x$values[1])
 }

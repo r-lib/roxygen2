@@ -41,7 +41,7 @@ tokenise_ref <- function(x) {
   )
 }
 
-# For each src ref, find the comment block preceeding it
+# For each src ref, find the comment block preceding it
 comments <- function(refs) {
   srcfile <- attr(refs[[1]], "srcfile")
 

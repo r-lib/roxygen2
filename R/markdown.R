@@ -15,7 +15,7 @@ markdown_on <- function(value = NULL) {
 }
 
 markdown_activate <- function(tags, global_options = list()) {
-  ## markdown on/off based on global flag and presense of @md & @nomd
+  ## markdown on/off based on global flag and presence of @md & @nomd
   ## we need to use markdown_global_default as well, because global_options
   ## can be NULL, e.g. if called from parse_text()
 

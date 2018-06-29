@@ -148,7 +148,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
     `\donttest{}`| x         | x      |
 
     Instead of including examples directly in the documentation, you can
-    put them in separate files and use `@example path/relative/to/packge/root`
+    put them in separate files and use `@example path/relative/to/package/root`
     to insert them into the documentation.
 
 *   `@return description` describes the output from the function. This is

@@ -74,7 +74,7 @@ test_that("deleted objects not documented", {
 test_that("documenting unknown function requires name", {
   expect_warning(
     roc_proc_text(rd_roclet(), "
-      #' Virtual Class To Enforce Max Slot Lenght
+      #' Virtual Class To Enforce Max Slot Length
       #'
       #' @export
       setClass('A')

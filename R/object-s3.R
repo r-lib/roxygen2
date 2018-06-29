@@ -9,7 +9,7 @@
 #' and then checks if any of them actually is a generic.
 #'
 #' @param name Name of function.
-#' @param env Base environment in which to look for function defintion.
+#' @param env Base environment in which to look for function definition.
 #' @export
 is_s3_generic <- function(name, env = parent.frame()) {
   if (name == "") return(FALSE)

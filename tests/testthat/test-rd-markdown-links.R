@@ -54,8 +54,8 @@ test_that("\\Sexpr with options not converted to links", {
   on.exit(markdown_on(md))
 
   expect_equal(
-     full_markdown("\\Sepxr[results=rd]{runif(1)}"),
-     "\\Sepxr[results=rd]{runif(1)}"
+     full_markdown("\\Sexpr[results=rd]{runif(1)}"),
+     "\\Sexpr[results=rd]{runif(1)}"
    )
 })
 

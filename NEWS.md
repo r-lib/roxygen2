@@ -55,8 +55,13 @@
 
 ## Minor improvements and bug fixes
 
-* `person` now supports all [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html)
-  role codes (#662, @publicus).
+* `topic_add_usage()` now outputs formatted "Usage" section with max
+  width of 80 characters thanks to a now more flexible `wrap_string()`
+  (@JoshOBrien, #719).
+	
+* `person()` now supports all
+  [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html) role codes
+  (#662, @publicus).
 
 * Empty `.Rbuildignore` now handled correctly (#576).
 

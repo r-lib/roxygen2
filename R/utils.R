@@ -149,10 +149,10 @@ block_eval <- function(tag, block, env, tag_name) {
 
 # Parse DESCRIPTION into convenient format
 read.description <- function(file) {
-  dcf <- read.dcf(file, keep.white = "Authors@R")
+  dcf <- desc::desc(file = file)
 
-  dcf_list <- setNames(as.list(dcf[1, ]), colnames(dcf))
-  lapply(dcf_list, str_trim)
+  fields <- dcf$fields()
+  purrr::map(purrr::set_names(fields), ~ dcf$get_field(.x))
 }
 
 

@@ -5,11 +5,11 @@
 \alias{roxygenise}
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{
-roxygenize(package.dir = ".", roclets = NULL, load_code = env_package,
-  clean = FALSE)
+roxygenize(package.dir = ".", roclets = NULL,
+  load_code = env_package, clean = FALSE)
 
-roxygenise(package.dir = ".", roclets = NULL, load_code = env_package,
-  clean = FALSE)
+roxygenise(package.dir = ".", roclets = NULL,
+  load_code = env_package, clean = FALSE)
 }
 \arguments{
 \item{package.dir}{Location of package top level directory. Default is

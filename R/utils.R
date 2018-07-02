@@ -156,10 +156,10 @@ read.description <- function(file) {
 }
 
 
-wrap_string <- function(x) UseMethod("wrap_string")
-wrap_string.NULL <- function(x) return(x)
-wrap_string.default <- function(x) {
-  y <- wrapString(x)
+wrap_string <- function(x, ...) UseMethod("wrap_string")
+wrap_string.NULL <- function(x, width = NULL) return(x)
+wrap_string.default <- function(x, width = 80L) {
+  y <- wrapString(x, width = as.integer(width))
   y <- gsub("\u{A0}", " ", y, useBytes = TRUE)
   Encoding(y) <- "UTF-8"
   class(y) <- class(x)

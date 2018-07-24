@@ -403,3 +403,37 @@ test_that("links to S4 classes are OK", {
   expect_equivalent_rd(out1, out2)
 
 })
+
+test_that("linebreak in 'text' of [text][foo] turns into single space", {
+
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Link
+    #' text [broken
+    #' across lines][fcn] preserve
+    #' whitespace, even when
+    #' [broken across
+    #' several
+    #' lines][fcn],
+    #' or with varying
+    #' [amounts \
+    #'   of  \
+    #' interspersed   \
+    #'   whitespace][fcn].
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Link
+    #' text \\link[=fcn]{broken across lines} preserve
+    #' whitespace, even when
+    #' \\link[=fcn]{broken across several lines},
+    #' or with varying
+    #' \\link[=fcn]{amounts of interspersed whitespace}.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+
+})
+

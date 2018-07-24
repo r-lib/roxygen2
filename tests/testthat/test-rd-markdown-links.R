@@ -202,6 +202,34 @@ test_that("short and sweet links work", {
   expect_equivalent_rd(out1, out2)
 })
 
+test_that("whitespace is preserved as space in link-reference text (#754)", {
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' A [function link split
+    #' over lines][fun()].
+    #' An [object link split
+    #' over lines][obj].
+    #' A [namespace-referenced function link split
+    #' over lines][pkg::fun()].
+    #' A [namespace-referenced object link split
+    #' over lines][pkg::obj].
+    #'
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' A \\link[=fun]{function link split over lines}.
+    #' An \\link[=obj]{object link split over lines}.
+    #' A \\link[pkg:fun]{namespace-referenced function link split over lines}.
+    #' A \\link[pkg:obj]{namespace-referenced object link split over lines}.
+    #'
+    #' @md
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+})
+
 test_that("a weird markdown link bug is fixed", {
 
   out1 <- roc_proc_text(roc, "

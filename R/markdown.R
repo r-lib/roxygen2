@@ -232,9 +232,13 @@ ws_to_empty <- function(x) {
 ## xml_text(). So we preserve newlines as spaces.
 
 xml_href_text <- function(xml) {
-  cnts <- xml_contents(xml)
-  text <- xml_text(cnts)
-  text[xml_name(cnts) %in% c("linebreak", "softbreak")] <- " "
+  contents <- xml_contents(xml)
+  xml_text_preserve_ws(contents)
+}
+
+xml_text_preserve_ws <- function(contents) {
+  text <- xml_text(contents)
+  text[xml_name(contents) %in% c("linebreak", "softbreak")] <- " "
   text
 }
 
@@ -377,7 +381,7 @@ parse_link <- function(destination, contents) {
     )
 
   } else {
-    contents <- gsub("%", "\\\\%", xml2::xml_text(contents))
+    text <- gsub("%", "\\\\%", xml_text_preserve_ws(contents))
 
     list(
       paste0(
@@ -387,7 +391,7 @@ parse_link <- function(destination, contents) {
         obj,
         "]{"
       ),
-      contents,
+      text,
       "}",
       if (is_code) "}" else ""
     )

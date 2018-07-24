@@ -110,7 +110,8 @@
     * Code in link text is now properly rendered as code (#620, @egnha).
 
     * Whitespace between words in link text is now preserved as single
-      space (#628, @egnha).
+      space for links of the form `[text][fcn]` and `[text](URL)`
+      (#628, #754, #760, @egnha and @jennybc).
 
     * `%` in inline code (#640), code blocks (@nteetor, #699) and
       links (#724) is now automatically escaped.

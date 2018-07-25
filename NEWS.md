@@ -8,7 +8,7 @@
   where it was previously possible to get into a state that you could only
   get out of by carefully editting the NAMESPACE by hand (#372).
 
-* `@eval foo()` evaluates `foo()` defined in the package namespace and inserts
+* `@evalRd foo()` evaluates `foo()` defined in the package namespace and inserts
   the results into the current block (#645). The code should return a character
   vector with one entry for each line (and they should not start with `#'`).
 
@@ -37,13 +37,17 @@
 * If an inherited section cannot be found, the warning contains the help
   page from which that section was requested (#732, @krlmlr).
 
+* roxygen2 now always reads and writes using UTF-8 encoding. If used with a
+  package that does not have `Encoding: UTF-8` in the DESCRIPTION, you'll
+  now get a warning (#564, #592).
+
 ## Extension API
 
-* [API] Roxygen blocks now have an official structure as encoded in
+* Roxygen blocks now have an official structure as encoded in
   `roxy_block()`. It is a named list containing the tags with attributes
   providing other metadata.
 
-* [API] The `parsed` argument to `roclet_process()` have been replaced with
+* The `parsed` argument to `roclet_process()` have been replaced with
   separate `blocks` and `env` arguments.
 
 * New `roclet_preprocess()` generic makes it possible for roclets to perform
@@ -55,17 +59,7 @@
 
 ## Minor improvements and bug fixes
 
-* `topic_add_usage()` now outputs formatted "Usage" section with max
-  width of 80 characters thanks to a now more flexible `wrap_string()`
-  (@JoshOBrien, #719).
-	
-* `person()` now supports all
-  [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html) role codes
-  (#662, @publicus).
-
-* Empty `.Rbuildignore` now handled correctly (#576).
-
-* Tags (including `@alias`) are now de-duplicated and consistently sorted.
+* All tags (including `@alias`) are now de-duplicated and consistently sorted.
   This reduces spurious diffs (#586, @flying-sheep).
 
 * `@concept` now generates one `\concept` per tag (#611).
@@ -77,6 +71,11 @@
 
 * `@family` automatically adds its value to concepts (#611).
 
+* `@inherits`: The mechanism for extracting inherited Rd does a better job of
+  preserving escapes (#624)
+
+* Empty `.Rbuildignore` now handled correctly (#576).
+
 * Stricter regular expression ensures only files ending with `.R` or `.r` are
   parsed for roxygen comments (#625).
 
@@ -86,9 +85,6 @@
 * Roclets can now access global options as designed. This allows templates to
   use markdown formatting if set globally (#594).
 
-* The mechanism for extracting inherited Rd does a better job of
-  preserving escapes (#624)
-
 * You can now autogenerate package documentation even if you don't have
   `Authors@R` (#606).
 
@@ -97,10 +93,6 @@
 
 * If a package logo exists (`man/figures/logo.png`) it will be automatically
   included in generated package docs (#609).
-
-* roxygen2 now always reads and writes using UTF-8 encoding. If used with a
-  package that does not have `Encoding: UTF-8` in the DESCRIPTION, you'll
-  now get a warning (#564, #592).
 
 * Usage for data objects now correctly generated, avoiding double escaping
   other components of usage (#562).
@@ -124,6 +116,14 @@
 
     * Unsupported markdown features now generate a mildly helpful warning
       instead of throwing an utterly useless error (#560).
+
+* `person()` now supports all
+  [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html) role codes
+  (#662, @publicus).
+
+* `topic_add_usage()` now outputs formatted "Usage" section with max
+  width of 80 characters thanks to a now more flexible `wrap_string()`
+  (@JoshOBrien, #719).
 
 # roxygen2 6.0.1
 

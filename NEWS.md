@@ -1,4 +1,4 @@
-# roxygen2 6.0.1.9000
+# roxygen2 6.1.0
 
 ## New features
 

@@ -1,0 +1,16 @@
+reference:
+- title: Roclets
+  contents:
+  - ends_with("roclet")
+
+- title: Running roxygen2
+  contents:
+  - roxygenize
+  - update_collate
+
+- title: Utilities
+  contents:
+  - double_escape_md
+  - is_s3_generic
+  - object_format
+  - roclet_find

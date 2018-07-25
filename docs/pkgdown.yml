@@ -1,0 +1,13 @@
+pandoc: 2.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  collate: collate.html
+  formatting: formatting.html
+  markdown: markdown.html
+  namespace: namespace.html
+  rd: rd.html
+  rdkeywords: rdkeywords.html
+  roxygen2-6.0.0: releases/roxygen2-6.0.0.html
+  roxygen2: roxygen2.html
+

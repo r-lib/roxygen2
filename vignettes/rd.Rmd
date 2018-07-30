@@ -109,7 +109,7 @@ We'll discuss that more in [formatting](formatting.html). Also note the wrapping
 
 ## Object specifics
 
-Further details of roxygen2 depend on what you're documenting. You use use __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). The following sections describe the most commonly used tags for functions, S3, S4, and RC objects and data set.
+Further details of roxygen2 depend on what you're documenting. You use __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). The following sections describe the most commonly used tags for functions, S3, S4, and RC objects and data set.
 
 ### Functions
 

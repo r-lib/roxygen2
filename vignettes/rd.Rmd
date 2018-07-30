@@ -270,7 +270,7 @@ Package documentation should be placed in `pkgname.R`. Here's an example:
 "_PACKAGE"
 ```
 
-I recommend using `@keyword internals` for package documentation.
+I recommend using `@keywords internal` for package documentation.
 
 Some notes:
 

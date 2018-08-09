@@ -3,8 +3,7 @@ package_files <- function(path) {
 
   all <- normalizePath(r_files(path))
 
-  collate <- scan(text = desc$Collate %||% "", what = "", sep = " ",
-    quiet = TRUE)
+  collate <- unlist(strsplit(gsub("'", "", desc$Collate), "\\n\\s*"))
 
   collate <- normalizePath(file.path(path, 'R', collate))
 

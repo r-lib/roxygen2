@@ -1,5 +1,7 @@
 # roxygen2 6.1.0.9000
 
+* roxygen2 now specifically imports desc >= 1.2.0 (@crsh, #773, #777, #779)
+
 # roxygen2 6.1.0
 
 ## New features

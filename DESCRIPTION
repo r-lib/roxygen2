@@ -19,7 +19,7 @@ Depends:
 Imports: 
     brew,
     commonmark,
-    desc,
+    desc (>= 1.2.0),
     digest,
     methods,
     pkgload,

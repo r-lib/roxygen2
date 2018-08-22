@@ -1,12 +1,16 @@
+# roxygen2 6.1.0.9000
+
+* roxygen2 now specifically imports desc >= 1.2.0 (@crsh, #773, #777, #779)
+
 # roxygen2 6.1.0
 
 ## New features
 
-* The NAMESPACE roclet nows works in two passes - it first generates the
-  a NAMESPACE containing only import directives becaues this can be generated
+* The `NAMESPACE` roclet nows works in two passes - it first generates the
+  `NAMESPACE` containing only import directives becaues this can be generated
   without evaluating the code in the package. This alleviates a problem
   where it was previously possible to get into a state that you could only
-  get out of by carefully editting the NAMESPACE by hand (#372).
+  get out of by carefully editting the `NAMESPACE` by hand (#372).
 
 * `@evalRd foo()` evaluates `foo()` defined in the package namespace and inserts
   the results into the current block (#645). The code should return a character
@@ -639,7 +643,7 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
 * `@useDynLib` now works with more possible specifications - if you include a
   comma in the tag value, the output will be passed as is. This means that
   `@useDynLib mypackage, .registration = TRUE` will now generate
-  `useDynLib(mypackage, .registration = TRUE)` in the NAMESPACE. (#124)
+  `useDynLib(mypackage, .registration = TRUE)` in the `NAMESPACE`. (#124)
 
 * `inst` directory not created by default (#56).
 
@@ -698,7 +702,7 @@ Roxygen 3.0 also includes a number of minor fixes and improvements:
        useDynLib(packageName, routine1)
        useDynLib(packageName, routine2)
 
-   in the NAMESPACE file, instead of separate (wrong) useDynLib statements as
+   in the `NAMESPACE` file, instead of separate (wrong) useDynLib statements as
    before.
 
 * All namespace import directives now behave in the same way as the export

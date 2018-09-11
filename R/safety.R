@@ -1,4 +1,15 @@
 first_time <- function(path) {
+  description <- file.path(path, "DESCRIPTION")
+  if (!file.exists(description)) {
+    stop(
+      "`package.dir` must include a DESCRIPTION file:\n",
+      "  * \"", path, "\" does not.\n",
+      "Did you call `roxygenize()` in a directory ",
+      "that is not the package root?",
+      call. = FALSE
+    )
+  }
+
   generated <- dir(file.path(path, "man"), full.names = TRUE)
   generated <- generated[!file.info(generated)$isdir]
 

@@ -6,6 +6,7 @@ package_files <- function(path) {
   collate <- scan(text = desc$Collate %||% "", what = "", sep = " ",
     quiet = TRUE)
 
+  collate <- collate[collate != ""]
   collate <- normalizePath(file.path(path, 'R', collate))
 
   rfiles <- c(collate, setdiff(all, collate))

@@ -49,7 +49,7 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
 
 test_that("Collate with one file name per line (#790)", {
   expect_equal(
-    roxygen2:::package_files('testCollateParse'),
+    package_files('testCollateParse'),
     c("testCollateParse/R/b.r", "testCollateParse/R/c.r")
   )
 })

@@ -1,0 +1,12 @@
+Package: testCollateParse
+Title: Tools to make developing R code easier
+License: GPL-2
+Description: A test to make sure collate field is parsed correctly when it has
+    a file name per line and is indented (#790).  This package only has a
+    DESCRIPTION file.
+Author: Brodie Gaslam <brodie.gaslam@yahoo.com>
+Maintainer: Brodie Gaslam <brodie.gaslam@yahoo.com>
+Version: 0.1
+Collate:
+    'b.r'
+    'c.r'

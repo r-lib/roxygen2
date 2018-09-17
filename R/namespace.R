@@ -9,7 +9,7 @@ ns_tags <- c(ns_tags_import, ns_tags_export, 'evalNamespace')
 #' (<https://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
 #' The `NAMESPACE` is generated in two passes: the first generates only
 #' import directives (because this can be computed without evaluating package
-#' code), and the second generates everything (after the packaege has been
+#' code), and the second generates everything (after the package has been
 #' loaded).
 #'
 #' @family roclets

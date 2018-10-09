@@ -67,7 +67,7 @@ To get the current development version from github:
 
 ```R
 # install.packages("devtools")
-devtools::install_github("klutometis/roxygen")
+devtools::install_github("klutometis/roxygen2")
 ```
 
 # Running

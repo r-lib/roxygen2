@@ -71,33 +71,25 @@ test_that("% in links are escaped", {
 
 test_that("commonmark picks up the various link references", {
   cases <- list(
-    c("foo [func()] bar",
-      "<link destination=\"R:func\\(\\)\" title=\"\">\\s*<text>func\\(\\)</text>"),
-    c("foo [obj] bar",
-      "<link destination=\"R:obj\" title=\"\">\\s*<text>obj</text>"),
-    c("foo [text][func()] bar",
-      "<link destination=\"R:func\\(\\)\" title=\"\">\\s*<text>text</text>"),
-    c("foo [text][obj] bar",
-      "<link destination=\"R:obj\" title=\"\">\\s*<text>text</text>"),
-    c("foo [pkg::func()] bar",
-      "<link destination=\"R:pkg::func\\(\\)\" title=\"\">\\s*<text>pkg::func\\(\\)</text>"),
-    c("foo [pkg::obj] bar",
-      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text>pkg::obj</text>"),
-    c("foo [text][pkg::func()] bar",
-      "<link destination=\"R:pkg::func\\(\\)\" title=\"\">\\s*<text>text</text>"),
-    c("foo [text][pkg::obj] bar",
-      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text>text</text>"),
-    c("foo [linktos4-class] bar",
-      "<link destination=\"R:linktos4-class\" title=\"\">\\s*<text>linktos4-class</text>"),
-    c("foo [pkg::s4-class] bar",
-      "<link destination=\"R:pkg::s4-class\" title=\"\">\\s*<text>pkg::s4-class</text>")
+    list("foo [func()] bar",            c("R:func()", "func()")),
+    list("foo [obj] bar",               c("R:obj", "obj")),
+    list("foo [text][func()] bar",      c("R:func()", "text")),
+    list("foo [text][obj] bar",         c("R:obj", "text")),
+    list("foo [pkg::func()] bar",       c("R:pkg::func()", "pkg::func()")),
+    list("foo [pkg::obj] bar",          c("R:pkg::obj", "pkg::obj")),
+    list("foo [text][pkg::func()] bar", c("R:pkg::func()", "text")),
+    list("foo [text][pkg::obj] bar",    c("R:pkg::obj", "text")),
+    list("foo [linktos4-cl] bar",       c("R:linktos4-cl", "linktos4-cl")),
+    list("foo [pkg::s4-cl] bar",        c("R:pkg::s4-cl", "pkg::s4-cl"))
   )
 
   for (i in seq_along(cases)) {
-    expect_match(
-      commonmark::markdown_xml(add_linkrefs_to_md(cases[[i]][1])),
-      cases[[i]][2]
-    )
+    x <- commonmark::markdown_xml(add_linkrefs_to_md(cases[[i]][[1]]))
+    xdoc <- xml2::xml_ns_strip(xml2::read_xml(x))
+    link <- xml2::xml_find_first(xdoc, "//link")
+    expect_equal(xml2::xml_attr(link, "destination"), cases[[i]][[2]][1])
+    text <- xml2::xml_find_first(link, "./text")
+    expect_equal(xml2::xml_text(text), cases[[i]][[2]][2], info = i)
   }
 })
 

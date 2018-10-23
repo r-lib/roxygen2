@@ -70,7 +70,7 @@ When you use `?x`, `help("x")` or `example("x")` R looks for an Rd file containi
 
 ## Basics
 
-Roxygen comments start with `#'`. Each documentation block starts with some text which defines the title, the description, and the detais. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
+Roxygen comments start with `#'`. Each documentation block starts with some text which defines the title, the description, and the details. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
 
 ```{r}
 #' Sum of vector elements.
@@ -258,7 +258,7 @@ To show how everything fits together, the example below is an excerpt from the r
 
 As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages do this, but it's an extremely useful because instead of just listing functions like `help(package = pkgname)` it organises them and shows the user where to get started.
 
-Package documentation should describe the overall purpose of the package and point out the most important functions. The title and desription are automatically inherited from the `DESCRIPTION`, so generally you should only need to supply additional details in `@details`
+Package documentation should describe the overall purpose of the package and point out the most important functions. The title and description are automatically inherited from the `DESCRIPTION`, so generally you should only need to supply additional details in `@details`
 
 Package documentation should be placed in `pkgname.R`. Here's an example:
 
@@ -443,7 +443,7 @@ You can also use explicit `@title`, `@description`, and `@details` tags. This is
 
 ### Keywords
 
-Ues `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list replicated in the [keywords vignette](rdkeywords.html).
+Use `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list replicated in the [keywords vignette](rdkeywords.html).
 
 Keywords are not very useful, except for `@keywords internal`. Using the internal keyword removes the function from the documentation index and is useful for functions aimed primarily at other developers, not typically users of the package.
 

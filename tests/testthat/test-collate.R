@@ -50,6 +50,6 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
 test_that("Collate with one file name per line (#790)", {
   expect_equal(
     package_files('testCollateParse'),
-    c("testCollateParse/R/b.r", "testCollateParse/R/c.r")
+    normalizePath(c("testCollateParse/R/b.r", "testCollateParse/R/c.r"))
   )
 })

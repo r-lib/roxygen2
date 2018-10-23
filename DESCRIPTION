@@ -18,7 +18,7 @@ Depends:
     R (>= 3.1)
 Imports: 
     brew,
-    commonmark,
+    commonmark (>= 1.6),
     desc (>= 1.2.0),
     digest,
     methods,

@@ -72,25 +72,25 @@ test_that("% in links are escaped", {
 test_that("commonmark picks up the various link references", {
   cases <- list(
     c("foo [func()] bar",
-      "<link destination=\"R:func\\(\\)\" title=\"\">\\s*<text>func\\(\\)</text>"),
+      "<link destination=\"R:func\\(\\)\" title=\"\">\\s*<text xml:space=\"preserve\">func\\(\\)</text>"),
     c("foo [obj] bar",
-      "<link destination=\"R:obj\" title=\"\">\\s*<text>obj</text>"),
+      "<link destination=\"R:obj\" title=\"\">\\s*<text xml:space=\"preserve\">obj</text>"),
     c("foo [text][func()] bar",
-      "<link destination=\"R:func\\(\\)\" title=\"\">\\s*<text>text</text>"),
+      "<link destination=\"R:func\\(\\)\" title=\"\">\\s*<text xml:space=\"preserve\">text</text>"),
     c("foo [text][obj] bar",
-      "<link destination=\"R:obj\" title=\"\">\\s*<text>text</text>"),
+      "<link destination=\"R:obj\" title=\"\">\\s*<text xml:space=\"preserve\">text</text>"),
     c("foo [pkg::func()] bar",
-      "<link destination=\"R:pkg::func\\(\\)\" title=\"\">\\s*<text>pkg::func\\(\\)</text>"),
+      "<link destination=\"R:pkg::func\\(\\)\" title=\"\">\\s*<text xml:space=\"preserve\">pkg::func\\(\\)</text>"),
     c("foo [pkg::obj] bar",
-      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text>pkg::obj</text>"),
+      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text xml:space=\"preserve\">pkg::obj</text>"),
     c("foo [text][pkg::func()] bar",
-      "<link destination=\"R:pkg::func\\(\\)\" title=\"\">\\s*<text>text</text>"),
+      "<link destination=\"R:pkg::func\\(\\)\" title=\"\">\\s*<text xml:space=\"preserve\">text</text>"),
     c("foo [text][pkg::obj] bar",
-      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text>text</text>"),
+      "<link destination=\"R:pkg::obj\" title=\"\">\\s*<text xml:space=\"preserve\">text</text>"),
     c("foo [linktos4-class] bar",
-      "<link destination=\"R:linktos4-class\" title=\"\">\\s*<text>linktos4-class</text>"),
+      "<link destination=\"R:linktos4-class\" title=\"\">\\s*<text xml:space=\"preserve\">linktos4-class</text>"),
     c("foo [pkg::s4-class] bar",
-      "<link destination=\"R:pkg::s4-class\" title=\"\">\\s*<text>pkg::s4-class</text>")
+      "<link destination=\"R:pkg::s4-class\" title=\"\">\\s*<text xml:space=\"preserve\">pkg::s4-class</text>")
   )
 
   for (i in seq_along(cases)) {

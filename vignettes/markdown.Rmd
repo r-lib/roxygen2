@@ -2,7 +2,14 @@
 title: "Write R Documentation in Markdown"
 author: "Gábor Csárdi"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    fig_caption: false
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{Write R Documentation in Markdown}
   %\VignetteEngine{knitr::rmarkdown}

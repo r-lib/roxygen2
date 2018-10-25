@@ -3,12 +3,8 @@ title: "Write R Documentation in Markdown"
 author: "Gábor Csárdi"
 date: "`r Sys.Date()`"
 output:
-  html_document:
-    fig_caption: false
-    toc: true
-    toc_float:
-      collapsed: false
-      smooth_scroll: false
+  rmarkdown::html_vignette:
+    toc: yes
     toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{Write R Documentation in Markdown}

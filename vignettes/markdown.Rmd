@@ -146,54 +146,79 @@ URLs inside angle brackets are also automatically converted to hyperlinks:
 
 Markdown notation can also be used to create links to other help topics. There are two basic forms:
 
-  * `[ref]`: The target topic and the link text are the same.
+  * `[ref]`: The target topic and the link text are one and the same.
   * `[text][ref]`: Link text differs from the target.
 
-with variations depending on whether `ref` is in the same package and whether the link is automatically typeset as code. Use backticks inside the square brackets to typeset the link text as code, when it would not be otherwise:
+First we explore the simplest form: `[ref]`. The presence of trailing parentheses, e.g., `[func()]`, signals that the target `func` is a function, which causes two things to happen:
 
-  * ``[`ref`]``
-  * ``[`text`][ref]``
+  * The link text `func()` is automatically typeset as code.
+  * The parentheses are stripped in the derived Rd link target.
+
++--------------------+------------------------+--------------------------------+
+| `[ref]`\           | Links to help\         | Notes                          |
+|  examples          | topic for ...          |                                |
++:===================+:=======================+:===============================+
+| `[func()]`\        | a function in same\    | Always typeset as code.\                   |
+| `[pkg::func()]`    | package or in `pkg`    | Produces Rd: `\code{\link[=func]{func()}`\ | 
+|                    |                        | or `\code{\link[pkg:func]{pkg::func()}}`   |
++--------------------+------------------------+--------------------------------+
+| `[thing]`\         | a topic in same\       | Use for a topic that documents `NULL`\ |
+| `[pkg::thing]`     | package or in `pkg`    | and name is set via `@name`,\          |
+|                    |                        | e.g., a dataset or concept.\           | 
+|                    |                        | Not typeset as code.\                  | 
+|                    |                        | Produces Rd: `\link{thing}` or\        |
+|                    |                        | `\link[pkg:thing]{pkg::thing}`         |
++--------------------+------------------------+--------------------------------+
+| ``[`thing`]``\     | a topic in same\       | Same as above, but explicit backticks\ |
+| ``[`pkg::thing`]`` | package or in `pkg`    | mean that it **is** typeset as code.\  |
+|                    |                        | Good for documenting a class.          |
+|                    |                        | Produces Rd: `\code{\link{thing}}` or\ |
+|                    |                        | `\code{\link[pkg:thing]{pkg::thing}`}  |
++--------------------+------------------------+--------------------------------+
+
+Use the second form `[text][ref]` to link to the topic specified by `ref`, but with `text` as the link text.
+
++-----------------------+------------------------+-----------------------------+
+| `[text][ref]`\        | Links to help\         | Notes                       |
+| examples              | topic for ...          |                             |
++:======================+:=======================+:============================+
+| `[text][func()]`\     | a function in same\    | Text is not typeset as code.\         |
+| `[text][pkg::func()]` | package or in `pkg`    | Produces Rd: `\link[=func]{text}` or\ |
+|                       |                        | `\link[pkg:func]{text}`               |  
++-----------------------+------------------------+-----------------------------+
+| `[text][thing]`\      | a topic in same\       | Text is not typeset as code.\          |
+| `[text][pkg::thing]`  | package or in `pkg`    | Use for a topic that documents `NULL`\ |
+|                       |                        | and name is set via `@name`,\          |
+|                       |                        | e.g., a dataset or concept.\           |  
+|                       |                        | Produces Rd: `\link[=thing]{text}` or\ |
+|                       |                        | `\link[pkg:thing]{text}`               |
++-----------------------+------------------------+-----------------------------+
+
+In the `[text][ref]`, the link text is treated like normal text by default.
+
+  * Use backticks to typeset the link text as code: ``[`text`][ref]``.
+
+It is never appropriate to use backticks around the `ref` in this form.
+
+  * No, do not do this: ``[text][`blah-blah`]``
+  * Yes, do this instead: `[text][blah-blah]`
+  
+S3 and S4 class *not done yet*
 
 +-----------------------+------------------------+--------------------------+
 | Examples              | Help topic\            | Notes                    |
 |                       | for what?              |                          |
-+=======================+========================+==========================+
-| `[func()]`            | a function in\         | Always typeset as code.\            |
-|                       | same package           | In Rd: `\code{\link[=func]{func()}` | 
-+-----------------------+------------------------+--------------------------+  
-| `[object]`\           | a topic in\            | Use for a topic where you documented\ |
-| ``[`object`]``        | same package           | `NULL` and set its name via `@name`,\ |
-|                       |                        | e.g., a class, dataset, or theme.\    | 
-|                       |                        | Bring your own backticks.\            |
-|                       |                        | In Rd: `\link{object}`                |
-+-----------------------+------------------------+--------------------------+
-| `[text][func()]`\     | a function or topic\   | Use when you want to provide your\               |
-| `[text][object]`\     | in same package        | own link text.\                                  |
-| `[abc][abc-class]`    |                        | Bring your own backticks.\                       |
-|                       |                        | In Rd: `\link[=func]{text}`,                     |
-|                       |                        | `\link[=obj]{text}`, or `\link[=abc-class]{abc}` |
-+-----------------------+------------------------+--------------------------+
-| `[pkg::func()]`       | a function in `pkg`    | Always typeset as code.\                     |
-|                       |                        | In Rd: `\code{\link[pkg:func]{pkg::func()}}` |
-+-----------------------+------------------------+--------------------------+
-| `[pkg::object]`       | a topic in `pkg`       | Use for a non-function object in `pkg`\ |
-|                       |                        | Bring your own backticks.\              |
-|                       |                        | In Rd: `\link[pkg:object]{pkg::object}` |
-+-----------------------+------------------------+--------------------------+
-| `[text][pkg::func()]` | a function or topic\   | Use when you want to provide your\ |
-| `[text][pkg::object]` | in `pkg`               | own link text.\                    |
-|                       |                        | Bring your own backticks.\         |
-|                       |                        | In Rd: `\link[pkg:func]{text}` or\ |
-|                       |                        | `\link[pkg:obj]{text}`             |
-+-----------------------+------------------------+--------------------------+
++:======================+:=======================+:=========================+
 | `[abc-class]`\        | an S4 class named\     | In Rd: `\linkS4class{abc}` or\   |
 | `[pkg::abc-class]`    | "abc" in same package\ | `\link[pkg:abc-class]{pkg::abc}` |
 |                       | or in `pkg`            |                                  |
 +-----------------------+------------------------+--------------------------+
+| `[abc][abc-class]`    | *is this a thing?      | ??? `\link[=abc-class]{abc}` |
++-----------------------+------------------------+--------------------------+
 
 ## Images
 
-The parser recognizes the markdown notation for embedded images. The image files must in the  `man/figures` directory:
+Markdown syntax for inline images works. The image files must be in the `man/figures` directory:
 
 ```r
 #' Here is an example plot:

@@ -154,27 +154,26 @@ First we explore the simplest form: `[ref]`. The presence of trailing parenthese
   * The link text `func()` is automatically typeset as code.
   * The parentheses are stripped in the derived Rd link target.
 
-+--------------------+------------------------+--------------------------------+
-| `[ref]`\           | Links to help\         | Notes                          |
-|  examples          | topic for ...          |                                |
-+:===================+:=======================+:===============================+
-| `[func()]`\        | a function in same\    | Always typeset as code.\                   |
-| `[pkg::func()]`    | package or in `pkg`    | Produces Rd: `\code{\link[=func]{func()}`\ | 
-|                    |                        | or `\code{\link[pkg:func]{pkg::func()}}`   |
-+--------------------+------------------------+--------------------------------+
-| `[thing]`\         | a topic in same\       | Use for a topic that documents `NULL`\ |
-| `[pkg::thing]`     | package or in `pkg`    | and name is set via `@name`,\          |
-|                    |                        | e.g., a dataset or concept.\           | 
-|                    |                        | Not typeset as code.\                  | 
-|                    |                        | Produces Rd: `\link{thing}` or\        |
-|                    |                        | `\link[pkg:thing]{pkg::thing}`         |
-+--------------------+------------------------+--------------------------------+
-| ``[`thing`]``\     | a topic in same\       | Same as above, but explicit backticks\ |
-| ``[`pkg::thing`]`` | package or in `pkg`    | mean that it **is** typeset as code.\  |
-|                    |                        | Good for documenting a class.          |
-|                    |                        | Produces Rd: `\code{\link{thing}}` or\ |
-|                    |                        | `\code{\link[pkg:thing]{pkg::thing}`}  |
-+--------------------+------------------------+--------------------------------+
++--------------------+------------------------+---------------------------------------------+
+| `[ref]`\           | Links to help\         | Notes                                       |
+|  examples          | topic for ...          |                                             |
++:===================+:=======================+:============================================+
+| `[func()]`\        | a function in same\    | Always typeset as code.\                    |
+| `[pkg::func()]`    | package or in `pkg`    | Produces Rd: `\code{\link[=func]{func()}}`\ | 
+|                    |                        | or `\code{\link[pkg:func]{pkg::func()}}`    |
++--------------------+------------------------+---------------------------------------------+
+| `[thing]`\         | a topic in same\       | Use for a topic that documents `NULL` and name is set\ |
+| `[pkg::thing]`     | package or in `pkg`    | via `@name`, e.g., a dataset or concept.\              |
+|                    |                        | Not typeset as code.\                                  | 
+|                    |                        | Produces Rd: `\link{thing}` or\                        |
+|                    |                        | `\link[pkg:thing]{pkg::thing}`                         |
++--------------------+------------------------+---------------------------------------------+
+| ``[`thing`]``\     | a topic in same\       | Same as above, but explicit backticks\      |
+| ``[`pkg::thing`]`` | package or in `pkg`    | mean that it **is** typeset as code.\       |
+|                    |                        | Good for documenting a class.\              |
+|                    |                        | Produces Rd: `\code{\link{thing}}` or\      |
+|                    |                        | `\code{\link[pkg:thing]{pkg::thing}`}       |
++--------------------+------------------------+---------------------------------------------+
 
 Use the second form `[text][ref]` to link to the topic specified by `ref`, but with `text` as the link text.
 

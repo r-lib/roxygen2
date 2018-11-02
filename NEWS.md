@@ -1,5 +1,7 @@
 # roxygen2 6.1.0.9000
 
+* `roxygenise()` no longer recompiles packages containing src code (#784).
+
 * Correctly parse multi-line DESCRIPTION collate directives (@brodieG, #790).
 
 * `roxygenize()` now stops with an informative error message when run in a

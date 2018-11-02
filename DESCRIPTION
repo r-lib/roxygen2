@@ -22,7 +22,7 @@ Imports:
     desc (>= 1.2.0),
     digest,
     methods,
-    pkgload,
+    pkgload (>= 1.0.2),
     purrr,
     R6 (>= 2.1.2),
     Rcpp (>= 0.11.0),

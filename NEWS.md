@@ -1,4 +1,4 @@
-# roxygen2 6.1.0.9000
+# roxygen2 6.1.1
 
 * Now specifically imports recent version of desc package (>= 1.2.0) to
   fix various parsing issues (@crsh, #773, #777, #779). Multi-line DESCRIPTION 

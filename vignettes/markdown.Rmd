@@ -145,7 +145,7 @@ Markdown notation can be used to create links to other manual pages. There are s
 
 1. Link to another function in the same package: `[func()]`. These
    links will be typeset as code, and they are equavalent to
-   `\code{\link[=func]{func()}`.
+   `\code{\link[=func]{func()}}`.
 2. Link to a (non-function) object, class, data set, etc. in the same
    same package: `[object]`. These links that *not* typeset as code,
    so if you want them as code, enclose them in backticks (inside the

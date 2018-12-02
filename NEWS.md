@@ -1,3 +1,5 @@
+# roxygen2 (development version)
+
 # roxygen2 6.1.1
 
 * Now specifically imports recent version of desc package (>= 1.2.0) to

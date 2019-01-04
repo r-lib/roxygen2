@@ -1,6 +1,6 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 6.1.0.9000
+Version: 6.1.1.9000
 Authors@R: c(
     person("Hadley", "Wickham",, "hadley@rstudio.com", c("aut", "cre", "cph")),
     person("Peter", "Danenberg",, "pcd@roxygen.org", c("aut", "cph")),

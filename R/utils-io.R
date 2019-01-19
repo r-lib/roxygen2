@@ -6,5 +6,7 @@ read_lines <- function(path, n = -1L) {
 }
 
 write_lines <- function(text, path) {
+  path <- file(path, open = "wb")
   base::writeLines(enc2utf8(text), path, useBytes = TRUE)
+  close(path)
 }

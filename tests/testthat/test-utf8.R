@@ -36,9 +36,9 @@ test_that("unicode escapes are ok", {
 
 test_that("write_lines writes unix-style line endings.", {
   path <- "escapes.Rd"
-  old_binary <- readBin(path, "raw")
+  old_binary <- readBin(path, "raw", n = 100L)
   old_text <- read_lines(path)
   write_lines(old_text, path)
-  new_binary <- readBin(path, "raw")
+  new_binary <- readBin(path, "raw", n = 100L)
   expect_identical(new_binary, old_binary)
 })

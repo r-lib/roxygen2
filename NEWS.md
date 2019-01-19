@@ -9,6 +9,9 @@
 
 * roxygen2 now specifically imports desc >= 1.2.0 (@crsh, #773, #777, #779).
 
+* Files generatd on Windows systems now have unix-style line endings 
+  (@jonthegeek, #840).
+
 # roxygen2 6.1.0
 
 ## New features

@@ -90,9 +90,6 @@ same_contents <- function(path, contents) {
   if (!file.exists(path)) return(FALSE)
 
   contents <- paste0(paste0(contents, collapse = "\n"), "\n")
-  if (.Platform$OS.type == "windows") {
-    contents <- gsub("\n", "\r\n", contents, fixed = TRUE)
-  }
 
   text_hash <- digest::digest(contents, serialize = FALSE)
   file_hash <- digest::digest(file = path)

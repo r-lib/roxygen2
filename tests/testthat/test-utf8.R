@@ -41,6 +41,6 @@ test_that("write_lines writes unix-style line endings.", {
   old_text <- read_lines(path)
   write_lines(old_text, temp_filename)
   on.exit(unlink(temp_filename), add = TRUE)
-  new_binary <- readBin(temp_filename, "raw", n = 100L)
+  new_binary <- readBin(temp_filename, "raw", n = file.info(temp_filename)$size)
   expect_identical(new_binary, old_binary)
 })

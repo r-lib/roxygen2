@@ -66,8 +66,22 @@ inherit_dot_params <- function(topic, topics, env) {
   docs_selected <- unlist(Map(arg_matches, args, docs))
 
   # Build the arg string
-  from <- paste0("\\code{", inheritors$source, "}", collapse = ", ")
-  args <- paste0("  \\item{", names(docs_selected), "}{", docs_selected, "}",
+  pkgs <- lapply(inheritors$source, function(x) {
+    gsub("%", "\\\\%", str_match(x, "^(.*)::")[1,2])
+  })
+  fun_names <- lapply(inheritors$source, function(x) {
+    gsub("%", "\\\\%", utils::tail(strsplit(x, "::", fixed = TRUE)[[1]], 1))
+  })
+  from <- paste0(
+    "\\code{\\link[",
+    if (is.na(pkgs)) "=",
+    if (!is.na(pkgs)) paste0(pkgs, ":"),
+    paste0(fun_names, "]{"),
+    if (!is.na(pkgs)) paste0(pkgs, "::"),
+    paste0(fun_names, "}}"),
+    collapse = ", "
+  )
+  args <- paste0("  \\item{\\code{", names(docs_selected), "}}{", docs_selected, "}",
     collapse = "\n")
 
   rd <- paste0(

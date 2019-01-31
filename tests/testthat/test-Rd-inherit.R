@@ -444,8 +444,8 @@ test_that("can inherit all from single function", {
 
   params <- out$get_field("param")$values
   expect_named(params, "...")
-  expect_match(params, "Arguments passed on to \\code{foo}", fixed = TRUE)
-  expect_match(params, "\\item{x}{x}", fixed = TRUE)
+  expect_match(params, "Arguments passed on to \\code{\\link[=foo]{foo}}", fixed = TRUE)
+  expect_match(params, "\\item{\\code{x}}{x}", fixed = TRUE)
 })
 
 # inherit everything ------------------------------------------------------

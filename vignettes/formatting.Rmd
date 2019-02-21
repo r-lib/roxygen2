@@ -95,7 +95,7 @@ Tables are created with `\tabular{}`. It has two arguments:
 
 2. Table contents, with columns separated by `\tab` and rows by `\cr`.
 
-The following function turns an R data frame into into the correct format. It ignores column and row names, but should get you started.
+The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with `#' ` for pasting directly into the documentation.
 
 ```{r}
 tabular <- function(df, ...) {
@@ -106,10 +106,11 @@ tabular <- function(df, ...) {
 
   cols <- lapply(df, format, ...)
   contents <- do.call("paste",
-    c(cols, list(sep = " \\tab ", collapse = "\\cr\n  ")))
+    c(cols, list(sep = " \\tab ", collapse = "\\cr\n#'   ")))
 
-  paste("\\tabular{", paste(col_align, collapse = ""), "}{\n  ",
-    contents, "\n}\n", sep = "")
+  paste("#' \\tabular{", paste(col_align, collapse = ""), "}{\n#'   ",
+    paste0("\\strong{", names(df), "}", sep = "", collapse = " \\tab "), " \\cr\n#'   ",
+    contents, "\n#' }\n", sep = "")
 }
 
 cat(tabular(mtcars[1:5, 1:5]))

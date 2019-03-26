@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+## Minor improvements and bug fixes
+
+* Allow multiple @inheritDotParams (#767, @gustavdelius)
+
 # roxygen2 6.1.1
 
 * Now specifically imports recent version of desc package (>= 1.2.0) to

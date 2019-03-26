@@ -321,7 +321,7 @@ format.roxy_field_inherit_dot_params <- format_null
 #' @export
 merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_section(c(x$source, y$source), c(x$args, y$args))
+  roxy_field_inherit_dot_params(c(x$source, y$source), c(x$args, y$args))
 }
 
 # Sections ----------------------------------------------------------------

@@ -37,6 +37,14 @@ merge.roxy_field <- function(x, y, ...) {
   roxy_field_simple(x$field, c(x$values, y$values))
 }
 
+#' @export
+merge.roxy_field_param <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  # When parameters appear in both x and y, keep values from y
+  to_add <- setdiff(names(x$values), names(y$values))
+  roxy_field_simple(x$field, c(x$values[to_add], y$values))
+}
+
 
 # Comment fields -----------------------------------------------------------------------
 

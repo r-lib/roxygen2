@@ -56,17 +56,16 @@ Here is an example roxygen chunk that uses markdown.
 *Emphasis* and **strong** (bold) text are supported. For emphasis, put the text between asterisks or underline characters. For strong text, use two asterisks at both sides.
 
 ```r
-#' See `::is_falsy` for the definition of what is _falsy_
-#' and what is _truthy_.
-```
-
-```r
 #' @references
 #' Robert E Tarjan and Mihalis Yannakakis. (1984). Simple
-
 #' linear-time algorithms to test chordality of graphs, test acyclicity
 #' of hypergraphs, and selectively reduce acyclic hypergraphs.
 #' *SIAM Journal of Computation* **13**, 566-579.
+```
+
+```r
+#' See `::is_falsy` for the definition of what is _falsy_
+#' and what is _truthy_.
 ```
 
 ## Code
@@ -144,8 +143,8 @@ URLs inside angle brackets are also automatically converted to hyperlinks:
 Markdown notation can be used to create links to other manual pages. There are six kinds of links:
 
 1. Link to another function in the same package: `[func()]`. These
-   links will be typeset as code, and they are equavalent to
-   `\code{\link[=func]{func()}`.
+   links will be typeset as code, and they are equivalent to
+   `\code{\link[=func]{func()}}`.
 2. Link to a (non-function) object, class, data set, etc. in the same
    same package: `[object]`. These links that *not* typeset as code,
    so if you want them as code, enclose them in backticks (inside the

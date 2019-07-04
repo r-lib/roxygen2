@@ -99,13 +99,15 @@ This introductory block is broken up as follows:
    provide any other important details of how the function operates. The 
    details are optional.
 
+Note the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.
+
 Text within roxygen blocks can be formatted using `.Rd` syntax; see [formatting](formatting.html) for examples and [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text) for full details. You can also use Markdown formatting within roxygen blocks, as long as you have the following in the `DESCRIPTION`:
 
 ```
 Roxygen: list(markdown = TRUE)
 ```
 
-We'll discuss that more in [Markdown](markdown.html). Also note the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.
+We'll discuss that more in [Markdown](markdown.html).
 
 ## Object specifics
 

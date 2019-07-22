@@ -1,6 +1,6 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 6.1.0.9000
+Version: 6.1.1.9000
 Authors@R: c(
     person("Hadley", "Wickham",, "hadley@rstudio.com", c("aut", "cre", "cph")),
     person("Peter", "Danenberg",, "pcd@roxygen.org", c("aut", "cph")),
@@ -22,7 +22,7 @@ Imports:
     desc (>= 1.2.0),
     digest,
     methods,
-    pkgload,
+    pkgload (>= 1.0.2),
     purrr,
     R6 (>= 2.1.2),
     Rcpp (>= 0.11.0),
@@ -41,4 +41,4 @@ LinkingTo:
 VignetteBuilder: knitr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

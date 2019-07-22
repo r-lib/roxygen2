@@ -59,17 +59,16 @@ Here is an example roxygen chunk that uses markdown.
 *Emphasis* and **strong** (bold) text are supported. For emphasis, put the text between asterisks or underline characters. For strong text, use two asterisks at both sides.
 
 ```r
-#' See `::is_falsy` for the definition of what is _falsy_
-#' and what is _truthy_.
-```
-
-```r
 #' @references
 #' Robert E Tarjan and Mihalis Yannakakis. (1984). Simple
-
 #' linear-time algorithms to test chordality of graphs, test acyclicity
 #' of hypergraphs, and selectively reduce acyclic hypergraphs.
 #' *SIAM Journal of Computation* **13**, 566-579.
+```
+
+```r
+#' See `::is_falsy` for the definition of what is _falsy_
+#' and what is _truthy_.
 ```
 
 ## Code

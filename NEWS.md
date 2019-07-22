@@ -1,11 +1,15 @@
-# roxygen2 6.1.0.9000
+# roxygen2 (development version)
 
-* Correctly parse multi-line DESCRIPTION collate directives (@brodieG, #790).
+# roxygen2 6.1.1
 
-* `roxygenize()` now stops with an informative error message when run in a
+* Now specifically imports recent version of desc package (>= 1.2.0) to
+  fix various parsing issues (@crsh, #773, #777, #779). Multi-line DESCRIPTION 
+  collate directives now correctly parsed on windows (@brodieG, #790).
+
+* `roxygenise()` no longer recompiles packages containing src code (#784).
+
+* `roxygenise()` now stops with an informative error message when run in a
   directory that's not the package root (@mikmart, #704).
-
-* roxygen2 now specifically imports desc >= 1.2.0 (@crsh, #773, #777, #779).
 
 # roxygen2 6.1.0
 

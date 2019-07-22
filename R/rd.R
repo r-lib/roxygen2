@@ -71,6 +71,10 @@ roclet_process.roclet_rd <- function(x,
                                      env,
                                      base_path,
                                      global_options = list()) {
+
+  # Load roxygen metadata
+  roxy_meta_load(base_path)
+
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 

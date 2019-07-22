@@ -1,3 +1,15 @@
+topics_process_family_prefix <- function(family) {
+
+  # read custom family prefix from roxygen meta
+  opts <- roxy_meta_read("family.prefix")
+  if (!is.null(opts[[family]]))
+    return(opts[[family]])
+
+  # default prefix
+  paste("Other ", family, ": ", sep = "")
+
+}
+
 topics_process_family <- function(topics) {
   family_index <- invert(topics$simple_values("family"))
   aliases <- topics$simple_values("alias")
@@ -19,7 +31,7 @@ topics_process_family <- function(topics) {
       }, FUN.VALUE = character(1))
       links <- paste(sort_c(by_file), collapse = ", ")
 
-      seealso <- paste("Other ", family, ": ", sep = "")
+      seealso <- topics_process_family_prefix(family)
       out <- strwrap(links, initial = seealso, width = 60, exdent = 2)
 
       topic$add_simple_field("seealso", paste(out, collapse = "\n"))

@@ -95,3 +95,29 @@ test_that("family also included in concepts", {
 
   expect_equal(out$get_field("concept")$values, "a")
 })
+
+test_that("custom family prefixes can be set", {
+
+  owd <- setwd(tempdir())
+  on.exit(setwd(owd), add = TRUE)
+
+  dir.create("man-roxygen")
+  write_lines(
+    "list(family.prefix = list(a = 'Custom prefix: '))",
+    "man-roxygen/roxygen-meta.R"
+  )
+
+  out <- roc_proc_text(rd_roclet(), "
+    #' foo
+    #' @family a
+    foo <- function() {}
+
+    #' bar
+    #' @family a
+    bar <- function() {}
+  ")[[1]]
+
+  seealso <- get_tag(out, "seealso")$values
+  expect_match(seealso, "^Custom prefix:")
+
+})

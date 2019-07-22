@@ -1,8 +1,7 @@
 # roxygen2 (development version)
 
-## Minor improvements and bug fixes
-
 * Allow multiple @inheritDotParams (#767, @gustavdelius)
+* Avoid multiple `...` arguments when using @inheritDotParams (#857, @gustavdelius)
 
 # roxygen2 6.1.1
 

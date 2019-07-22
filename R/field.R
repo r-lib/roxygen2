@@ -41,6 +41,8 @@ merge.roxy_field <- function(x, y, ...) {
 merge.roxy_field_param <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
   # When parameters appear in both x and y, keep values from y
+  # This happens for example when inherit_dot_params adds a "..." param after
+  # inherit_params has done the same.
   to_add <- setdiff(names(x$values), names(y$values))
   roxy_field_simple(x$field, c(x$values[to_add], y$values))
 }

@@ -331,7 +331,16 @@ topic_add_keyword <- function(topic, block) {
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block) {
   if (is.null(block$usage)) {
-    usage <- wrap_string(object_usage(attr(block, "object")), width = 75L)
+    block_obj <- attr(block, "object")
+    fun_name <- switch(class(block_obj)[1L],
+                       "data" = " ",
+                       "function" = block_obj$alias,
+                       "s3generic" = block_obj$alias,
+                       "s3method" = attr(block_obj$value, "s3method")[1L],
+                       "s4generic" = block_obj$value@generic,
+                       "s4method" = block_obj$value@generic)
+    usage <- wrap_string(object_usage(block_obj), width = 75L,
+                         indent = nchar(fun_name) + 1L)
   } else if (block$usage == "NULL") {
     usage <- NULL
   } else {

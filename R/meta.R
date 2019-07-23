@@ -1,5 +1,5 @@
 
-.roxygen_meta <- NULL
+.roxygen_meta <- new.env(parent = emptyenv())
 
 roxy_meta_get <- function(name) {
   .roxygen_meta[[name]]
@@ -43,7 +43,7 @@ roxy_meta_load <- function(base_path = getwd()) {
     rlang::abort(message)
   }
 
-  .roxygen_meta <<- result
+  list2env(result, envir = .roxygen_meta)
   TRUE
 
 }

@@ -1,12 +1,12 @@
 topics_process_family_prefix <- function(family) {
 
   # read custom family prefix from roxygen meta
-  opts <- roxy_meta_read("family.prefix")
+  opts <- roxy_meta_read("rd_family_title")
   if (!is.null(opts[[family]]))
     return(opts[[family]])
 
   # default prefix
-  paste("Other ", family, ": ", sep = "")
+  paste0("Other ", family, ": ")
 
 }
 

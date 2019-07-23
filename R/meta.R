@@ -2,11 +2,11 @@
 .roxygen_meta <- new.env(parent = emptyenv())
 
 roxy_meta_get <- function(name) {
-  .roxygen_meta[[name]]
+  get(name, envir = .roxygen_meta)
 }
 
 roxy_meta_set <- function(key, value) {
-  .roxygen_meta[[key]] <<- value
+  assign(key, value, envir = .roxygen_meta)
 }
 
 roxy_meta_load <- function(base_path = getwd()) {

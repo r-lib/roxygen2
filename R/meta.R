@@ -1,11 +1,15 @@
 
 .roxygen_meta <- NULL
 
-roxy_meta_read <- function(name) {
+roxy_meta_get <- function(name) {
   .roxygen_meta[[name]]
 }
 
-roxy_meta_load <- function(base_path) {
+roxy_meta_set <- function(key, value) {
+  .roxygen_meta[[key]] <<- value
+}
+
+roxy_meta_load <- function(base_path = getwd()) {
 
   meta_dir <- file.path(base_path, "man/roxygen")
   if (!utils::file_test("-d", meta_dir))
@@ -17,12 +21,12 @@ roxy_meta_load <- function(base_path) {
     return(FALSE)
 
   if (length(meta_files) > 1) {
-    rlang::abort("multiple 'man/roxygen/meta.R' files found")
+    rlang::abort("Multiple 'man/roxygen/meta.R' files found")
   }
 
   parsed <- tryCatch(parse(meta_files), error = identity)
   if (inherits(parsed, "error")) {
-    message <- "could not parse 'man/roxygen/meta.R'"
+    message <- "Could not parse 'man/roxygen/meta.R'"
     rlang::abort(message, parent = parsed)
   }
 
@@ -30,12 +34,12 @@ roxy_meta_load <- function(base_path) {
   envir <- globalenv()
   result <- tryCatch(eval(parsed, envir = envir), error = identity)
   if (inherits(result, "error")) {
-    message <- "could not evaluate 'man/roxygen/meta.R'"
+    message <- "Could not evaluate 'man/roxygen/meta.R'"
     rlang::abort(message, parent = result)
   }
 
   if (!is.list(result)) {
-    message <- "evaluation of 'man/roxygen/meta.R' did not return a list"
+    message <- "Evaluation of 'man/roxygen/meta.R' did not return a list"
     rlang::abort(message)
   }
 

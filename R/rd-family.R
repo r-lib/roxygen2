@@ -1,7 +1,7 @@
 topics_process_family_prefix <- function(family) {
 
   # read custom family prefix from roxygen meta
-  opts <- roxy_meta_read("rd_family_title")
+  opts <- roxy_meta_get("rd_family_title")
   if (!is.null(opts[[family]]))
     return(opts[[family]])
 

@@ -97,15 +97,17 @@ This introductory block is broken up as follows:
 *  The third and subsequent paragraphs go into the __details__: this is a
    (often long) section that comes after the argument description and should 
    provide any other important details of how the function operates. The 
-   details are optional..
+   details are optional.
 
-Note that you can use markdown formatting within roxygen blocks, as long as you have the following in the `DESCRIPTION`:
+Note the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.
+
+Text within roxygen blocks can be formatted using `.Rd` syntax; see `vignette("formatting")` for examples and [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text) for full details. You can also use Markdown formatting within roxygen blocks, as long as you have the following in the `DESCRIPTION`:
 
 ```
 Roxygen: list(markdown = TRUE)
 ```
 
-We'll discuss that more in [formatting](formatting.html). Also note the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.
+We'll discuss that more in `vignette("markdown")`.
 
 ## Object specifics
 
@@ -443,7 +445,7 @@ You can also use explicit `@title`, `@description`, and `@details` tags. This is
 
 ### Keywords
 
-Use `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list replicated in the [keywords vignette](rdkeywords.html).
+Use `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list replicated in `vignette("rdkeywords").
 
 Keywords are not very useful, except for `@keywords internal`. Using the internal keyword removes the function from the documentation index and is useful for functions aimed primarily at other developers, not typically users of the package.
 

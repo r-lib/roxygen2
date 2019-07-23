@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Logo in package description is now scaled to a 120px width, cf. pkgdown websites (@peterdesmet, #834).
+
 # roxygen2 6.1.1
 
 * Now specifically imports recent version of desc package (>= 1.2.0) to
@@ -15,7 +17,7 @@
 
 ## New features
 
-* The `NAMESPACE` roclet nows works in two passes - it first generates the
+* The `NAMESPACE` roclet now works in two passes - it first generates the
   `NAMESPACE` containing only import directives becaues this can be generated
   without evaluating the code in the package. This alleviates a problem
   where it was previously possible to get into a state that you could only

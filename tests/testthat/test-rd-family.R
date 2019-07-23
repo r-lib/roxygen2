@@ -101,14 +101,7 @@ test_that("custom family prefixes can be set", {
   owd <- setwd(tempdir())
   on.exit(setwd(owd), add = TRUE)
 
-  dir.create("man/roxygen", recursive = TRUE)
-  write_lines(
-    "list(rd_family_title = list(a = 'Custom prefix: '))",
-    "man/roxygen/meta.R"
-  )
-
-  roxy_meta_load(getwd())
-
+  roxy_meta_set("rd_family_title", list(a = "Custom prefix: "))
   out <- roc_proc_text(rd_roclet(), "
     #' foo
     #' @family a

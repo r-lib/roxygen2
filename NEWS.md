@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Logo in package description is now scaled to a 120px width, cf. pkgdown websites (@peterdesmet, #834).
+
 # roxygen2 6.1.1
 
 * Now specifically imports recent version of desc package (>= 1.2.0) to

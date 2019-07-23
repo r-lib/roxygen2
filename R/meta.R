@@ -1,8 +1,11 @@
 
 .roxygen_meta <- new.env(parent = emptyenv())
 
-roxy_meta_get <- function(name) {
-  get(name, envir = .roxygen_meta)
+roxy_meta_get <- function(name, default = NULL) {
+  if (exists(name, envir = .roxygen_meta))
+    get(name, envir = .roxygen_meta)
+  else
+    NULL
 }
 
 roxy_meta_set <- function(key, value) {

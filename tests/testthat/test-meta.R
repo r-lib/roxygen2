@@ -8,6 +8,10 @@ test_that("evaluation of 'man/roxygen/meta.R' must return a list", {
   metafile <- file.path(tmpdir, "man/roxygen/meta.R")
   dir.create(dirname(metafile), recursive = TRUE)
 
+  # save + restore existing meta
+  meta <- roxy_meta_get()
+  on.exit({roxy_meta_clear(); roxy_meta_set(meta)}, add = TRUE)
+
   # return FALSE when no metafile exists
   expect_false(roxy_meta_load(tmpdir))
 

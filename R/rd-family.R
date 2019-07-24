@@ -1,12 +1,25 @@
 topics_process_family_prefix <- function(family) {
 
-  # read custom family prefix from roxygen meta
-  opts <- roxy_meta_get("rd_family_title")
-  if (!is.null(opts[[family]]))
-    return(opts[[family]])
+  default <- paste0("Other ", family, ": ")
 
-  # default prefix
-  paste0("Other ", family, ": ")
+  # check for meta (use default prefix when unset)
+  meta <- roxy_meta_get("rd_family_title")
+  if (is.null(meta))
+    return(default)
+
+  # validate meta structure
+  valid <- is.character(meta) || is.list(meta)
+  if (!valid) {
+    message <- "rd_family_title is set, but is not a named list / vector"
+    rlang::abort(message)
+  }
+
+  # extract element
+  prefix <- meta[[family]]
+  if (is.null(prefix))
+    return(default)
+
+  prefix
 
 }
 

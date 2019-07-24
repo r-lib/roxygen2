@@ -1,12 +1,12 @@
 # roxygen2 (development version)
 
-* A system for providing custom roxygen2 metadata is now available.
-  If the file "man-roxygen/roxygen-meta.R" is available, it will be
-  evaluated. Its evaluation should produce an R list, mapping roxygen
-  option names to values. Currently, only 'family.prefix' is recognized:
-  this field should itself be an R list, mapping family names to the
-  appropriate prefixes to be used in the generated R documentation
-  (as opposed to the default 'Other family: '). (#830, @kevinushey)
+* A new system for providing custom roxygen2 metadata is now available. When
+  `roxygenise()` is called, if a file "man/roxygen/meta.R" exists, it will be
+  evaluated. Its evaluation should produce an R list, mapping roxygen option
+  names to values. Currently, only 'rd_family_title' is recognized: this field
+  should itself be an R list, mapping family names to the appropriate prefixes
+  to be used in the generated R documentation (as opposed to the default
+  'Other family: ' prefix). (#830, @kevinushey)
   
 # roxygen2 6.1.1
 

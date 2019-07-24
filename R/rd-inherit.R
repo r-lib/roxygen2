@@ -65,6 +65,11 @@ inherit_dot_params <- function(topic, topics, env) {
   }
   docs_selected <- unlist(Map(arg_matches, args, docs))
 
+  # Only document params under "..." that aren't otherwise documented
+  documented <- get_documented_params(topic)
+  non_documented_params <- setdiff(names(docs_selected), documented)
+  docs_selected <- docs_selected[non_documented_params]
+
   # Build the arg string
   from <- paste0("\\code{", inheritors$source, "}", collapse = ", ")
   args <- paste0("  \\item{", names(docs_selected), "}{", docs_selected, "}",

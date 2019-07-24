@@ -52,9 +52,8 @@ roxy_meta_load <- function(base_path = getwd()) {
     }
   )
 
-  # TODO: appropriate evaluation environment?
   result <- tryCatch(
-    eval(parsed, envir = globalenv()),
+    eval(parsed, envir = baseenv()),
     error = function(cnd) {
       message <- "Evaluation of 'man/roxygen/meta.R' failed"
       rlang::abort(message, parent = result)

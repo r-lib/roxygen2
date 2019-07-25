@@ -6,7 +6,7 @@
 \alias{roxygen2-package}
 \title{roxygen2: In-Line Documentation for R}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
 Generate your Rd documentation, 'NAMESPACE' file, and collation 
     field using specially formatted comments. Writing documentation in-line

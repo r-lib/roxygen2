@@ -132,7 +132,7 @@ tag_two_part <- function(first, second, required = TRUE) {
   ## override this behavior
 
   function(x) {
-    if (x$val == "") {
+    if (str_trim(x$val) == "") {
       roxy_tag_warning(x, "requires a value")
     } else if (required && !str_detect(x$val, "[[:space:]]+")) {
       roxy_tag_warning(x, "requires ", first, " and ", second)

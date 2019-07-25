@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `@param` containing only whitespce gets a clear warning message (#869).
+
 * A new system for providing custom roxygen2 metadata is now available. When
   `roxygenise()` is called, if a file "man/roxygen/meta.R" exists, it will be
   evaluated. Its evaluation should produce an R list, mapping roxygen option

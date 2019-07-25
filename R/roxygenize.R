@@ -37,6 +37,7 @@ roxygenize <- function(package.dir = ".",
     warning("roxygen2 requires Encoding: UTF-8", call. = FALSE)
   }
 
+  roxy_meta_load(base_path)
   options <- load_options(base_path)
   roclets <- roclets %||% options$roclets
 

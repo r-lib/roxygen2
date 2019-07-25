@@ -1,5 +1,13 @@
 # roxygen2 (development version)
 
+* A new system for providing custom roxygen2 metadata is now available. When
+  `roxygenise()` is called, if a file "man/roxygen/meta.R" exists, it will be
+  evaluated. Its evaluation should produce an R list, mapping roxygen option
+  names to values. Currently, only 'rd_family_title' is recognized: this field
+  should itself be an R list, mapping family names to the appropriate prefixes
+  to be used in the generated R documentation (as opposed to the default
+  'Other family: ' prefix). (#830, @kevinushey)
+  
 * Logo in package description is now scaled to a 120px width, cf. pkgdown websites (@peterdesmet, #834).
 
 # roxygen2 6.1.1

@@ -71,6 +71,7 @@ roclet_process.roclet_rd <- function(x,
                                      env,
                                      base_path,
                                      global_options = list()) {
+
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 

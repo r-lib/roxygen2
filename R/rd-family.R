@@ -11,7 +11,7 @@ topics_process_family_prefix <- function(family) {
   valid <- is.character(meta) || is.list(meta)
   if (!valid) {
     message <- "rd_family_title is set, but is not a named list / vector"
-    rlang::abort(message)
+    abort(message)
   }
 
   # extract element

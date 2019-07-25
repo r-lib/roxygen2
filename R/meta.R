@@ -7,7 +7,7 @@ roxy_meta_get <- function(key = NULL, default = NULL) {
     return(as.list(.roxygen_meta))
 
   if (!is.character(key) || length(key) != 1)
-    rlang::abort("name must be NULL or a length one character vector")
+    abort("name must be NULL or a length one character vector")
 
   .roxygen_meta[[key]] %||% default
 
@@ -19,7 +19,7 @@ roxy_meta_set <- function(key, value = NULL) {
   else if (is.character(key))
     assign(key, value, envir = .roxygen_meta)
   else
-    rlang::abort("unexpected key / value pair in roxy_meta_set")
+    abort("unexpected key / value pair in roxy_meta_set")
 }
 
 roxy_meta_clear <- function() {
@@ -41,14 +41,14 @@ roxy_meta_load <- function(base_path = getwd()) {
     return(FALSE)
 
   if (length(meta_files) > 1) {
-    rlang::abort("Multiple 'man/roxygen/meta.R' files found")
+    abort("Multiple 'man/roxygen/meta.R' files found")
   }
 
   parsed <- tryCatch(
     parse(meta_files),
     error = function(cnd) {
       message <- "Parse of 'man/roxygen/meta.R' failed"
-      rlang::abort(message, parent = cnd)
+      abort(message, parent = cnd)
     }
   )
 
@@ -56,13 +56,13 @@ roxy_meta_load <- function(base_path = getwd()) {
     eval(parsed, envir = baseenv()),
     error = function(cnd) {
       message <- "Evaluation of 'man/roxygen/meta.R' failed"
-      rlang::abort(message, parent = result)
+      abort(message, parent = result)
     }
   )
 
   if (!is.list(result)) {
     message <- "Evaluation of 'man/roxygen/meta.R' did not return a list"
-    rlang::abort(message)
+    abort(message)
   }
 
   roxy_meta_clear()

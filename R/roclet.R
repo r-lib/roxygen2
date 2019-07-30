@@ -94,6 +94,12 @@ roclet_find <- function(x) {
   env$namespace <- namespace_roclet
   env$vignette <- vignette_roclet
 
+  # Making it possible to specify external roclets
+  # without the _roclet postfix.
+  if (!grepl(pattern = "_roclet$", x)) {
+    x <- paste0(x, "_roclet")
+  }
+
   expr <- parse(text = x)
   res <- eval(expr, env)
 

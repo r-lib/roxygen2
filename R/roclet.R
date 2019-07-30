@@ -120,15 +120,19 @@ is.roclet <- function(x) inherits(x, "roclet")
 #'
 #' Useful for testing.
 #'
-#' @param roclet Name of roclet to use for processing.
+#' @param roclets Roclets to use for processing.
 #' @param input Source string
 #' @param registry Named list of tag parsers
 #' @param global_options List of global options
+#'
+#' @return Note that if only one roclet provided,
+#' the result will be simplified to its result.
+#' Otherwise, a list of results are returned.
+#'
 #' @export
 #' @keywords internal
-roc_proc_text <- function(roclet, input, registry = default_tags(),
+roc_proc_text <- function(roclets, input, registry = default_tags(),
                           global_options = list()) {
-  stopifnot(is.roclet(roclet))
 
   file <- tempfile()
   write_lines(input, file)
@@ -136,7 +140,28 @@ roc_proc_text <- function(roclet, input, registry = default_tags(),
 
   env <- env_file(file)
   blocks <- parse_text(input, env = env, registry = registry, global_options)
-  roclet_process(roclet, blocks, env = env, base_path = ".", global_options)
+
+  if (is.roclet(roclets)) {
+    result <- roclet_process(roclets, blocks, env = env, base_path = ".", global_options)
+    return(result)
+  }
+
+  # roclets was not a single roclet; must be a list of roclets
+  stopifnot(is.list(roclets))
+  stopifnot(length(roclets) >= 1L)
+
+  for (roclet in roclets) {
+    stopifnot(is.roclet(roclet))
+  }
+
+  results <- lapply(roclets, roclet_process,
+                    blocks = blocks,
+                    env = env,
+                    base_path = ".",
+                    global_options = global_options
+  )
+
+  return(results)
 }
 
 default_tags <- function() {

@@ -4,17 +4,22 @@
 \alias{roc_proc_text}
 \title{Process roclet on string and capture results.}
 \usage{
-roc_proc_text(roclet, input, registry = default_tags(),
+roc_proc_text(roclets, input, registry = default_tags(),
   global_options = list())
 }
 \arguments{
-\item{roclet}{Name of roclet to use for processing.}
+\item{roclets}{Roclets to use for processing.}
 
 \item{input}{Source string}
 
 \item{registry}{Named list of tag parsers}
 
 \item{global_options}{List of global options}
+}
+\value{
+Note that if only one roclet provided,
+the result will be simplified to its result.
+Otherwise, a list of results are returned.
 }
 \description{
 Useful for testing.

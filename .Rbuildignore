@@ -12,3 +12,5 @@
 ^codecov\.yml$
 ^appveyor\.yml$
 ^\.github$
+^pkgdown$
+^\.covrignore$

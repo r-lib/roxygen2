@@ -8,6 +8,7 @@
 #' for a convenient way of converting Rd files to roxygen comments.
 #'
 #' @useDynLib roxygen2, .registration=TRUE
+#' @keywords internal
 #' @importFrom Rcpp sourceCpp
 #' @importFrom R6 R6Class
 #' @import rlang

@@ -7,13 +7,12 @@ knitr::opts_chunk$set(
   comment = "#>", 
   collapse = TRUE
 )
-library(readr)
 ```
 
 roxygen2 6.0.0 is now available on CRAN. roxygen2 helps you document your packages by turning specially formatted inline comments into R's standard Rd format. It automates everything that can be automated, and provides helpers for sharing documentation between topics. Learn more at <http://r-pkgs.had.co.nz/man.html>. Install the latest version with:
 
 ```{r, eval = FALSE}
-install.packages("readr")
+install.packages("roxygen2")
 ```
 
 There are two headline features in this version of roxygen2:

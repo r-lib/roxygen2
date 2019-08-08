@@ -1,9 +1,9 @@
 # roxygen2 <img src="man/figures/logo.png" align="right" />
 
-[![Travis build status](https://travis-ci.org/klutometis/roxygen.svg?branch=master)](https://travis-ci.org/klutometis/roxygen)
+[![Travis build status](https://travis-ci.org/r-lib/roxygen2.svg?branch=master)](https://travis-ci.org/r-lib/roxygen2)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/roxygen2)](https://cran.r-project.org/package=roxygen2)
-[![Coverage status](https://codecov.io/gh/klutometis/roxygen/branch/master/graph/badge.svg)](https://codecov.io/github/klutometis/roxygen?branch=master)
- 
+[![Coverage status](https://codecov.io/gh/r-lib/roxygen2/branch/master/graph/badge.svg)](https://codecov.io/github/r-lib/roxygen2?branch=master)
+
 > all' hileth', Hephaiste; didou d'areten te kai olbon.*
 > --Homer, 7th century BCE
 
@@ -67,7 +67,7 @@ To get the current development version from github:
 
 ```R
 # install.packages("devtools")
-devtools::install_github("klutometis/roxygen")
+devtools::install_github("r-lib/roxygen2")
 ```
 
 # Running

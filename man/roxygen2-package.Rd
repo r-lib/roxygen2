@@ -25,8 +25,8 @@ for a convenient way of converting Rd files to roxygen comments.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/klutometis/roxygen}
-  \item Report bugs at \url{https://github.com/klutometis/roxygen/issues}
+  \item \url{https://github.com/r-lib/roxygen2}
+  \item Report bugs at \url{https://github.com/r-lib/roxygen2/issues}
 }
 
 }

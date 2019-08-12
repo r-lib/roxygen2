@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* S4 methods that generate `.local()` wrapper no longer error with obscure
+  error message (#847).
+
 * `@param` containing only whitespce gets a clear warning message (#869).
 
 * A new system for providing custom roxygen2 metadata is now available. When

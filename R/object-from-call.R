@@ -158,3 +158,34 @@ parser_setConstructorS3 <- function(call, env, block) {
   value <- standardise_obj(name, get(name, env), env, block)
   object(value, name)
 }
+
+
+# helpers -----------------------------------------------------------------
+
+# When a generic has ... and a method adds new arguments, the S4 method
+# wraps the definition inside another function which has the same arguments
+# as the generic. This function figures out if that's the case, and extracts
+# the original function if so.
+#
+# It's based on expression processing based on the structure of the
+# constructed method which looks like:
+#
+# function (x, ...) {
+#   .local <- function (x, ..., y = 7) {}
+#   .local(x, ...)
+# }
+extract_method_fun <- function(x) {
+  fun <- x@.Data
+
+  method_body <- body(fun)
+  if (!is_call(method_body)) return(fun)
+  if (length(method_body) == 0) return(fun)
+  if (!identical(method_body[[1]], quote(`{`))) return(fun)
+
+  first_line <- method_body[[2]]
+  if (!is_call(first_line, name = "<-", n = 2)) return(fun)
+  if (!identical(first_line[[2]], quote(`.local`))) return(fun)
+
+  eval(first_line[[3]])
+}
+

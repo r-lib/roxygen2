@@ -366,7 +366,7 @@ You can inherit documentation from other functions in a few ways:
   from `source_function()`.
 
 * `@inheritSection source_function Section title` will inherit the single 
-  section called "Section title" from `source_function()`.
+  `@section` called "Section title" from `source_function()`.
   
 All of these work recursively so you can inherit documentation from a function that has inherited it from elsewhere.
 

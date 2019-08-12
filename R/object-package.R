@@ -47,7 +47,14 @@ author_desc <- function(x) {
   }
 
   if (!is.null(x$comment)) {
-    desc <- paste0(desc, " (", x$comment, ")")
+    if (has_name(x$comment, "ORCID")) {
+      desc <- paste0(desc, " (\\href{https://orcid.org/", x$comment[["ORCID"]], "}{ORCID})")
+      x$comment <- x$comment[setdiff(x$comments, "ORCID")]
+    }
+
+    if (length(x$comment) > 0) {
+      desc <- paste0(desc, " (", x$comment, ")")
+    }
   }
 
   extra_roles <- setdiff(x$role, c("cre", "aut"))

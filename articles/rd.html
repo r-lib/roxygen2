@@ -400,7 +400,7 @@ add(10, 1)
 <li><p><code>@inherit source_function</code> will inherit parameters, return, references, description, details, sections, and seealso from <code>source_function()</code>.</p></li>
 <li><p><code>@inherit source_function return details</code> will inherit selected components from <code>source_function()</code></p></li>
 <li><p><code>@inheritParams source_function</code> inherits just the parameter documentation from <code>source_function()</code>.</p></li>
-<li><p><code>@inheritSection source_function Section title</code> will inherit the single section called “Section title” from <code>source_function()</code>.</p></li>
+<li><p><code>@inheritSection source_function Section title</code> will inherit the single <code>@section</code> called “Section title” from <code>source_function()</code>.</p></li>
 </ul>
 <p>All of these work recursively so you can inherit documentation from a function that has inherited it from elsewhere.</p>
 <p>You can also inherit documentation from functions provided by another package by using <code>pkg::source_function</code>.</p>

@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Empty roxygen2 lines at the start of a block are now silently removed (#710).
+
 * S4 methods that generate `.local()` wrapper no longer error with obscure
   error message (#847).
 

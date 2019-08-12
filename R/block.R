@@ -192,6 +192,10 @@ parse_description <- function(tags) {
 
   intro <- tags[[1]]
   intro$val <- str_trim(intro$val)
+  if (intro$val == "") {
+    return(tags[-1])
+  }
+
   tags <- tags[-1]
   tag_names <- tag_names[-1]
 

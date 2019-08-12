@@ -36,7 +36,7 @@ Suggests:
     devtools,
     knitr,
     rmarkdown,
-    testthat (>= 0.8.0)
+    testthat (>= 2.1.0)
 LinkingTo: 
     Rcpp
 VignetteBuilder: knitr

@@ -460,6 +460,8 @@ test_that("can inherit all from single function", {
     #'
     #' @param x x
     #' @param y y
+    #' @author Hadley
+    #' @source my mind
     #' @examples
     #' x <- 1
     foo <- function(x, y) {}
@@ -474,4 +476,6 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_field("description")$values, "Description")
   expect_equal(out$get_field("details")$values, "Details")
   expect_equal(out$get_field("examples")$values, rd("x <- 1"))
+  expect_equal(out$get_field("author")$values, rd("Hadley"))
+  expect_equal(out$get_field("source")$values, rd("my mind"))
 })

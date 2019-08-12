@@ -356,8 +356,9 @@ For sum, these components might look like:
 
 You can inherit documentation from other functions in a few ways:
 
-* `@inherit source_function` will inherit parameters, return, references,
-  description, details, sections, and seealso from `source_function()`.
+* `@inherit source_function` will inherit author, parameters, return, 
+  references, description, details, sections, seealso, and source 
+  from `source_function()`.
   
 * `@inherit source_function return details` will inherit selected components 
   from `source_function()`

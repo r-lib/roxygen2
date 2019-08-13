@@ -105,7 +105,6 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Rd (documentation) tags</h1>
-                        <h4 class="author">Hadley Wickham</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/master/vignettes/rd.Rmd"><code>vignettes/rd.Rmd</code></a></small>
@@ -118,7 +117,13 @@
 <div id="basics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basics" class="anchor"></a>Basics</h2>
-<p>Roxygen comments start with <code>#'</code>. Each documentation block starts with some text which defines the title, the description, and the details. Here’s an example showing what the documentation for <code><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum()</a></code> might look like if it had been written with roxygen:</p>
+<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceeded by whitespace). Blocks gain additional structure through the use of <strong>tags</strong> like <code>@tag details</code>. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block).</p>
+<p>Text within roxygen blocks can be formatted using markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+</div>
+<div id="the-description-block" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-description-block" class="anchor"></a>The description block</h2>
+<p>Each documentation block starts with some text which defines the title, the description, and the details. Here’s an example showing what the documentation for <code><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum()</a></code> might look like if it had been written with roxygen:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#' Sum of vector elements.</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">#'</span></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#' `sum` returns the sum of all the values present in its arguments.</span></a>
@@ -134,15 +139,22 @@
 <li><p>The second paragraph is the <strong>description</strong>: this comes first in the documentation and should briefly describe what the function does.</p></li>
 <li><p>The third and subsequent paragraphs go into the <strong>details</strong>: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates. The details are optional.</p></li>
 </ul>
-<p>Note the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.</p>
-<p>Text within roxygen blocks can be formatted using <code>.Rd</code> syntax; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for examples and <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text">R extensions</a> for full details. You can also use Markdown formatting within roxygen blocks, as long as you have the following in the <code>DESCRIPTION</code>:</p>
-<pre><code>Roxygen: list(markdown = TRUE)</code></pre>
-<p>We’ll discuss that more in <code>vignette("markdown")</code>.</p>
+<p>You can also use explicit <code>@title</code>, <code>@description</code>, and <code>@details</code> tags. This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#' Sum of vector elements.</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#' </span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#' @description</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#' `sum` returns the sum of all the values present in its arguments.</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#' @details</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#' This is a generic function: methods can be defined for it directly</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#' or via the [Summary()] group generic. For this to work properly,</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#' the arguments `...` should be unnamed, and dispatch is on the</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#' first argument.</span></a></code></pre></div>
 </div>
 <div id="object-specifics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#object-specifics" class="anchor"></a>Object specifics</h2>
-<p>Further details of roxygen2 depend on what you’re documenting. You use <strong>tags</strong> like <code>@tag details</code>. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). The following sections describe the most commonly used tags for functions, S3, S4, and RC objects and data set.</p>
+<p>Further details of roxygen2 depend on what you’re documenting. The following sections describe the most commonly used tags for functions, S3, S4, datasets, and packages.</p>
 <div id="functions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#functions" class="anchor"></a>Functions</h3>
@@ -253,7 +265,7 @@
 <p>There are two additional tags that are useful for documenting datasets:</p>
 <ul>
 <li><p><code>@format</code>, which gives an overview of the structure of the dataset.</p></li>
-<li><p><code>@source</code> where you got the data form, often a <code>\url{}</code>.</p></li>
+<li><p><code>@source</code> where you got the data form, often a URL.</p></li>
 </ul>
 <p>To show how everything fits together, the example below is an excerpt from the roxygen block used to document the diamonds dataset in ggplot2.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#' Prices of 50,000 round cut diamonds.</span></a>
@@ -282,6 +294,7 @@
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#' @keywords internal</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">"_PACKAGE"</span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] "_PACKAGE"</span></a></code></pre></div>
+<p><code><a href="https://usethis.r-lib.org/reference/use_package_doc.html">usethis::use_package_doc()</a></code> will generate a basic template for you automatically.</p>
 <p>I recommend using <code>@keywords internal</code> for package documentation.</p>
 <p>Some notes:</p>
 <ul>
@@ -297,7 +310,7 @@
 <p>You can add arbitrary sections to the documentation for any object with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed by a colon. Titles may only take one line.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#' @section Warning:</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></a></code></pre></div>
-<p>To add a subsection, you must use the <code>Rd</code> <code>\subsection{}</code> command, as follows:</p>
+<p>To add a subsection, you must use the Rd <code>\subsection{}</code> command, as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#' @section Warning:</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#' You must not call this function unless ...</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#'</span></a>
@@ -399,7 +412,46 @@
 <div id="evaluating-arbitrary-code" class="section level3">
 <h3 class="hasAnchor">
 <a href="#evaluating-arbitrary-code" class="anchor"></a>Evaluating arbitrary code</h3>
-<p>A new and powerful technique is the <code>@eval</code> tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions.</p>
+<p>A new and powerful technique is the <code>@eval</code> tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading <code>#'</code>).</p>
+<p>For example, this code + roxygen block:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">my_params &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">    <span class="st">"@param x An integer vector"</span>,</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">    <span class="st">"@param y A character vector"</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">  )</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#' A title</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#' </span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#' @eval my_params()</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#' @export</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12">foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb14-13" data-line-number="13">}</a></code></pre></div>
+<p>Is equivalent to:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">#' A title</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#' </span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#' @param x An integer vector</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#' @param y A character vector</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#' @export</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">}</a></code></pre></div>
+<p>A related function is <code>@evalRd</code>. It works in the same way as <code>@eval</code> (i.e. it’s evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated <code>.Rd</code> file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.</p>
+<p>For example, this block:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">my_note &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">note{"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(x, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">collapse =</span><span class="st">""</span>), <span class="st">"}"</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#' @evalRd my_note(</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#'   "This is the first line",</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#'   "This is the second line"</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#' )</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; NULL</span></a></code></pre></div>
+<p>Would generate this Rd:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode latex"><code class="sourceCode latex"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="fu">\note</span>{</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">This is the first line</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">This is the second line</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">}</a></code></pre></div>
 </div>
 <div id="roxygen-templates" class="section level3">
 <h3 class="hasAnchor">
@@ -412,104 +464,6 @@
 <div id="other-tags" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-tags" class="anchor"></a>Other tags</h2>
-<div id="title-description-details" class="section level3">
-<h3 class="hasAnchor">
-<a href="#title-description-details" class="anchor"></a>Title, description, details</h3>
-<p>You can also use explicit <code>@title</code>, <code>@description</code>, and <code>@details</code> tags. This is unnecessary unless you want to have a multi-paragraph description.</p>
-</div>
-<div id="keywords" class="section level3">
-<h3 class="hasAnchor">
-<a href="#keywords" class="anchor"></a>Keywords</h3>
-<p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list below:</p>
-<pre><code>#&gt; GROUPED Keywords
-#&gt; ----------------
-#&gt; 
-#&gt; Graphics
-#&gt;  aplot       &amp;   Add to Existing Plot / internal plot
-#&gt;  dplot       &amp;   Computations Related to Plotting
-#&gt;  hplot       &amp;   High-Level Plots
-#&gt;  iplot       &amp;   Interacting with Plots
-#&gt;  color       &amp;   Color, Palettes etc
-#&gt;  dynamic     &amp;   Dynamic Graphics
-#&gt;  device      &amp;   Graphical Devices
-#&gt; 
-#&gt; Basics
-#&gt;  sysdata     &amp;   Basic System Variables      [!= S]
-#&gt;  datasets    &amp;   Datasets available by data(.)   [!= S]
-#&gt;  data        &amp;   Environments, Scoping, Packages [~= S]
-#&gt;  manip       &amp;   Data Manipulation
-#&gt;  attribute   &amp;   Data Attributes
-#&gt;  classes     &amp;   Data Types (not OO)
-#&gt;      &amp; character &amp;   Character Data ("String") Operations
-#&gt;      &amp; complex   &amp;   Complex Numbers
-#&gt;      &amp; category  &amp;   Categorical Data
-#&gt;      &amp; NA    &amp;   Missing Values          [!= S]
-#&gt;  list        &amp;   Lists
-#&gt;  chron       &amp;   Dates and Times
-#&gt;  package     &amp;   Package Summaries
-#&gt; 
-#&gt; Mathematics
-#&gt;  array       &amp;   Matrices and Arrays
-#&gt;        &amp; algebra &amp;   Linear Algebra
-#&gt;  arith       &amp;   Basic Arithmetic and Sorting    [!= S]
-#&gt;  math        &amp;   Mathematical Calculus etc.  [!= S]
-#&gt;  logic       &amp;   Logical Operators
-#&gt;  optimize    &amp;   Optimization
-#&gt;  symbolmath  &amp;   "Symbolic Math", as polynomials, fractions
-#&gt;  graphs      &amp;   Graphs, (not graphics), e.g. dendrograms
-#&gt; 
-#&gt; Programming, Input/Ouput, and Miscellaneous
-#&gt; 
-#&gt;  programming &amp;   Programming
-#&gt;       &amp; interface&amp;   Interfaces to Other Languages
-#&gt;  IO      &amp;   Input/output
-#&gt;       &amp; file &amp;   Files
-#&gt;       &amp; connection&amp;  Connections
-#&gt;       &amp; database &amp;   Interfaces to databases
-#&gt;  iteration   &amp;   Looping and Iteration
-#&gt;  methods     &amp;   Methods and Generic Functions
-#&gt;  print       &amp;   Printing
-#&gt;  error       &amp;   Error Handling
-#&gt; 
-#&gt;  environment &amp;   Session Environment
-#&gt;  internal    &amp;   Internal Objects (not part of API)
-#&gt;  utilities   &amp;   Utilities
-#&gt;  misc        &amp;   Miscellaneous
-#&gt;  documentation   &amp;   Documentation
-#&gt;  debugging   &amp;   Debugging Tools
-#&gt; 
-#&gt; Statistics
-#&gt; 
-#&gt;  datagen     &amp;   Functions for generating data sets
-#&gt;  distribution    &amp;   Probability Distributions and Random Numbers
-#&gt;  univar      &amp;   simple univariate statistics  [!= S]
-#&gt;  htest       &amp;   Statistical Inference
-#&gt;  models      &amp;   Statistical Models
-#&gt;      &amp; regression&amp;   Regression
-#&gt;      &amp; &amp;nonlinear&amp;   Non-linear Regression (only?)
-#&gt;  robust      &amp;   Robust/Resistant Techniques
-#&gt;  design      &amp;   Designed Experiments
-#&gt;  multivariate    &amp;   Multivariate Techniques
-#&gt;  ts      &amp;   Time Series
-#&gt;  survival    &amp;   Survival Analysis
-#&gt;  nonparametric   &amp;   Nonparametric Statistics [w/o 'smooth']
-#&gt;  smooth      &amp;   Curve (and Surface) Smoothing
-#&gt;       &amp; loess    &amp;   Loess Objects
-#&gt;  cluster     &amp;   Clustering
-#&gt;  tree        &amp;   Regression and Classification Trees
-#&gt;  survey      &amp;   Complex survey samples
-#&gt; 
-#&gt; 
-#&gt; MASS (2, 1997)
-#&gt; --------------
-#&gt; 
-#&gt; add the following keywords :
-#&gt; 
-#&gt;  classif     &amp;   Classification  ['class' package]
-#&gt;  spatial     &amp;   Spatial Statistics ['spatial' package]
-#&gt;  neural      &amp;   Neural Networks ['nnet'  package]</code></pre>
-<p>Keywords are not very useful, except for <code>@keywords internal</code>. Using the internal keyword removes the function from the documentation index and is useful for functions aimed primarily at other developers, not typically users of the package.</p>
-</div>
 <div id="indexing" class="section level3">
 <h3 class="hasAnchor">
 <a href="#indexing" class="anchor"></a>Indexing</h3>
@@ -517,6 +471,10 @@
 <ul>
 <li><p>Aliases form the index that <code>?</code> searches. Use <code>@aliases space separated aliases</code> to add additional aliases.</p></li>
 <li><p><code>@concept</code> add extra keywords that will be found with <code><a href="https://www.rdocumentation.org/packages/utils/topics/help.search">help.search()</a></code></p></li>
+<li>
+<p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list found <code>file.path(R.home("doc"), "KEYWORDS"))</code>.</p>
+<p>Keywords are not very useful, except for <code>@keywords internal</code>. Using the internal keyword removes the function from the documentation index and is useful for functions aimed primarily at other developers, not typically users of the package.</p>
+</li>
 </ul>
 </div>
 <div id="back-references" class="section level3">
@@ -524,10 +482,9 @@
 <a href="#back-references" class="anchor"></a>Back references</h3>
 <p>The original source location is added as a comment to the second line of each generated <code>.Rd</code> file in the following form:</p>
 <pre><code>% Please edit documentation in ...</code></pre>
-<p><code>roxygen2</code> tries to capture all locations from which the documentation is assembled. For code that <em>generates</em> R code with Roxygen comments (e.g., the <code>Rcpp</code> package), the <code>@backref</code> tag is provided. This allows specifying the “true” source of the documentation, and will substitute the default list of source files.</p>
-<p>Use one tag per source file:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#' @backref src/file.cpp</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#' @backref src/file.h</span></a></code></pre></div>
+<p><code>roxygen2</code> tries to capture all locations from which the documentation is assembled. For code that <em>generates</em> R code with Roxygen comments (e.g., the Rcpp package), the <code>@backref</code> tag is provided. This allows specifying the “true” source of the documentation, and will substitute the default list of source files. Use one tag per source file:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">#' @backref src/file.cpp</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#' @backref src/file.h</span></a></code></pre></div>
 </div>
 </div>
   </div>
@@ -538,6 +495,7 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#basics">Basics</a></li>
+      <li><a href="#the-description-block">The description block</a></li>
       <li><a href="#object-specifics">Object specifics</a></li>
       <li><a href="#sections">Sections</a></li>
       <li><a href="#do-repeat-yourself">Do repeat yourself</a></li>

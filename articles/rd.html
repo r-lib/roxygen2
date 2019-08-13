@@ -298,7 +298,8 @@
 <p>I recommend using <code>@keywords internal</code> for package documentation.</p>
 <p>Some notes:</p>
 <ul>
-<li><p>Like for datasets, there isn’t a object that we can document directly. Use <code>"_PACKAGE"</code> to indicate that you are creating the package’s documentation. This will automatically add the correct aliases so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. This also works if there’s already a function called <code>pkgname()</code>.</p></li>
+<li><p>Like for datasets, there isn’t a object that we can document directly. Use <code>"_PACKAGE"</code> to indicate that you are creating the package’s documentation.</p></li>
+<li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, override the default aliases with <code>@aliases {pkgname}-package</code></p></li>
 <li><p>Use <code>@references</code> point to published material about the package that users might find helpful.</p></li>
 </ul>
 <p>Package documentation is a good place to list all <code><a href="https://www.rdocumentation.org/packages/base/topics/options">options()</a></code> that a package understands and to document their behaviour. Put in a section called “Package options”, as described below.</p>

@@ -58,25 +58,13 @@
     <loc>https://roxygen2.r-lib.org/reference/vignette_roclet.html</loc>
   </url>
   <url>
-    <loc>https://roxygen2.r-lib.org/articles/collate.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/formatting.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/markdown.html</loc>
-  </url>
-  <url>
     <loc>https://roxygen2.r-lib.org/articles/namespace.html</loc>
   </url>
   <url>
+    <loc>https://roxygen2.r-lib.org/articles/rd-formatting.html</loc>
+  </url>
+  <url>
     <loc>https://roxygen2.r-lib.org/articles/rd.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/rdkeywords.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/releases/roxygen2-6.0.0.html</loc>
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/articles/roxygen2.html</loc>

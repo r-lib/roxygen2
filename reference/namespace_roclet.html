@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Roclet: make NAMESPACE. — namespace_roclet • roxygen2</title>
+<title>Roclet: make <code>NAMESPACE</code> — namespace_roclet • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,15 +37,16 @@
 
 
 
-<meta property="og:title" content="Roclet: make NAMESPACE. — namespace_roclet" />
+<meta property="og:title" content="Roclet: make <code>NAMESPACE</code> — namespace_roclet" />
 
-<meta property="og:description" content="This roclet automates the production of a NAMESPACE file,
-see Writing R Extensions.
-(https://cran.r-project.org/doc/manuals/R-exts.pdf) for details.
+<meta property="og:description" content="This roclet automates the production of a NAMESPACE file, which controls
+the functions imported and exported by your package, as described in
+Writing R extensions.
 The NAMESPACE is generated in two passes: the first generates only
 import directives (because this can be computed without evaluating package
 code), and the second generates everything (after the package has been
-loaded)." />
+loaded).
+See vignette(&quot;namespace&quot;) for details." />
 
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -85,12 +86,6 @@ loaded)." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/roxygen2.html">Get started</a>
 </li>
 <li>
@@ -104,30 +99,32 @@ loaded)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/collate.html">Collation order</a>
+      <a href="../articles/namespace.html">NAMESPACE tags</a>
     </li>
     <li>
-      <a href="../articles/formatting.html">Text formatting reference sheet</a>
+      <a href="../articles/rd-formatting.html">Rd formatting</a>
     </li>
     <li>
-      <a href="../articles/markdown.html">Write R Documentation in Markdown</a>
-    </li>
-    <li>
-      <a href="../articles/namespace.html">Package namespace</a>
-    </li>
-    <li>
-      <a href="../articles/rd.html">Generating Rd files</a>
-    </li>
-    <li>
-      <a href="../articles/rdkeywords.html">Rd keywords</a>
-    </li>
-    <li>
-      <a href="../articles/releases/roxygen2-6.0.0.html">roxygen2 6.0.0</a>
+      <a href="../articles/rd.html">Rd (documentation) tags</a>
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Release notes</li>
+    <li>
+      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Change log</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -150,20 +147,21 @@ loaded)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Roclet: make NAMESPACE.</h1>
+    <h1>Roclet: make <code>NAMESPACE</code></h1>
     <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/namespace.R'><code>R/namespace.R</code></a></small>
     <div class="hidden name"><code>namespace_roclet.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This roclet automates the production of a <code>NAMESPACE</code> file,
-see Writing R Extensions.
-(<a href='https://cran.r-project.org/doc/manuals/R-exts.pdf'>https://cran.r-project.org/doc/manuals/R-exts.pdf</a>) for details.
-The <code>NAMESPACE</code> is generated in two passes: the first generates only
+    <p>This roclet automates the production of a <code>NAMESPACE</code> file, which controls
+the functions imported and exported by your package, as described in
+<a href='https://cran.r-project.org/doc/manuals/r-release/R-exts.html'>Writing R extensions</a>.</p>
+<p>The <code>NAMESPACE</code> is generated in two passes: the first generates only
 import directives (because this can be computed without evaluating package
 code), and the second generates everything (after the package has been
 loaded).</p>
+<p>See <code><a href='../articles/namespace.html'>vignette("namespace")</a></code> for details.</p>
     
     </div>
 
@@ -171,18 +169,31 @@ loaded).</p>
         
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='../articles/namespace.html'>vignette("namespace", package = "roxygen2")</a></code></p>
-<p>Other roclets: <code><a href='rd_roclet.html'>rd_roclet</a></code>,
+    <div class='dont-index'><p>Other roclets: <code><a href='rd_roclet.html'>rd_roclet</a></code>,
   <code><a href='vignette_roclet.html'>vignette_roclet</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># The most common namespace tag is @export, which declares that a function</span>
+<span class='co'># is part of the external interface of your package</span>
+<span class='co'>#' @export</span>
+<span class='no'>foofy</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>z</span>) {
+}
+
+<span class='co'># You'll also often find global imports living in a file called</span>
+<span class='co'># R/{package}-package.R.</span>
+<span class='co'>#' @importFrom magrittr %&gt;%</span>
+<span class='co'>#' @import rlang</span>
+<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

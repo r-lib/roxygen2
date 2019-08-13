@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Update Collate field in DESCRIPTION. — update_collate • roxygen2</title>
+<title>Update Collate field in DESCRIPTION — update_collate • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,13 +37,18 @@
 
 
 
-<meta property="og:title" content="Update Collate field in DESCRIPTION. — update_collate" />
+<meta property="og:title" content="Update Collate field in DESCRIPTION — update_collate" />
 
-<meta property="og:description" content="Topologically sort R files and record in Collate field. The topological
-sort is based on the @include tag, which should specify the filenames
-(space separated) that should be loaded before the current file. These are
-typically necessary if you're using S4 or RC classes (because super classes
-must be defined before subclasses)." />
+<meta property="og:description" content="By default, R loads files in alphabetical order. Unfortunately not every
+alphabet puts letters in the same order, so you can't rely on alphabetic
+ordering if you need one file loaded before another. (This usually doesn't
+matter but is important for S4, where you need to make sure that classes are
+loaded before subclasses and generics are defined before methods.).
+You can override the default alphabetical ordering with @include before.R,
+which specify that before.R must be loaded before the current file.
+Generally, you will not need to run this function yourself; it should be
+run automatically by any package that needs to load your R files in
+collation order." />
 
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -83,12 +88,6 @@ must be defined before subclasses)." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/roxygen2.html">Get started</a>
 </li>
 <li>
@@ -102,30 +101,32 @@ must be defined before subclasses)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/collate.html">Collation order</a>
+      <a href="../articles/namespace.html">NAMESPACE tags</a>
     </li>
     <li>
-      <a href="../articles/formatting.html">Text formatting reference sheet</a>
+      <a href="../articles/rd-formatting.html">Rd formatting</a>
     </li>
     <li>
-      <a href="../articles/markdown.html">Write R Documentation in Markdown</a>
-    </li>
-    <li>
-      <a href="../articles/namespace.html">Package namespace</a>
-    </li>
-    <li>
-      <a href="../articles/rd.html">Generating Rd files</a>
-    </li>
-    <li>
-      <a href="../articles/rdkeywords.html">Rd keywords</a>
-    </li>
-    <li>
-      <a href="../articles/releases/roxygen2-6.0.0.html">roxygen2 6.0.0</a>
+      <a href="../articles/rd.html">Rd (documentation) tags</a>
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Release notes</li>
+    <li>
+      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Change log</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -148,18 +149,23 @@ must be defined before subclasses)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Update Collate field in DESCRIPTION.</h1>
+    <h1>Update Collate field in DESCRIPTION</h1>
     <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/collate.R'><code>R/collate.R</code></a></small>
     <div class="hidden name"><code>update_collate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Topologically sort R files and record in Collate field. The topological
-sort is based on the <code>@include</code> tag, which should specify the filenames
-(space separated) that should be loaded before the current file. These are
-typically necessary if you're using S4 or RC classes (because super classes
-must be defined before subclasses).</p>
+    <p>By default, R loads files in alphabetical order. Unfortunately not every
+alphabet puts letters in the same order, so you can't rely on alphabetic
+ordering if you need one file loaded before another. (This usually doesn't
+matter but is important for S4, where you need to make sure that classes are
+loaded before subclasses and generics are defined before methods.).
+You can override the default alphabetical ordering with <code>@include before.R</code>,
+which specify that <code>before.R</code> must be loaded before the current file.</p>
+<p>Generally, you will not need to run this function yourself; it should be
+run automatically by any package that needs to load your R files in
+collation order.</p>
     
     </div>
 
@@ -174,34 +180,31 @@ must be defined before subclasses).</p>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="collate"><a class="anchor" href="#collate"></a>Collate</h2>
 
-    <p>If there are no <code>@include</code> tags, roxygen2 will leave collate as is.
+    
+    <p>This is not a roclet because roclets need the values of objects in a package,
+and those values can not be generated unless you've sourced the files,
+and you can't source the files unless you know the correct order.
+If there are no <code>@include</code> tags, roxygen2 will leave collate as is.
 This makes it easier to use roxygen2 with an existing collate directive,
 but if you remove all your <code>@include</code> tags, you'll need to also
 manually delete the collate field.</p>
-<p>This is not a roclet because roclets need the values of objects in a package,
-and those values can not be generated unless you've sourced the files,
-and you can't source the files unless you know the correct order.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>#' `example-a.R', `example-b.R' and `example-c.R' reside</span>
-<span class='co'>#' in the `example' directory, with dependencies</span>
-<span class='co'>#' a -&gt; {b, c}. This is `example-a.R'.</span>
-<span class='co'>#' @include example-b.R</span>
-<span class='co'>#' @include example-c.R</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
-  <span class='fu'>update_collate</span>(<span class='st'>"my_package"</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='co'>#' If `example-a.R', `example-b.R' and `example-c.R' live in R/</span>
+<span class='co'>#' and we're in `example-a.R`, then the following @include statement</span>
+<span class='co'>#' ensures that example-b and example-c are sourced before example-a.</span>
+<span class='co'>#' @include example-b.R example-c.R</span>
+<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#details">Details</a></li>
+      <li><a href="#collate">Collate</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

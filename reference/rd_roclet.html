@@ -39,8 +39,10 @@
 
 <meta property="og:title" content="Roclet: make Rd files. — rd_roclet" />
 
-<meta property="og:description" content="This roclet is the workhorse of roxygen, producing the Rd files that
-document that functions in your package.
+<meta property="og:description" content="This roclet is the workhorse of roxygen, producing the .Rd files that
+R uses to document that functions, datasets, packages, classes, and
+other objects.
+See vignette(&quot;rd&quot;) for details.
 Generally you will not call this function directly
 but will instead use roxygenise() specifying the rd roclet" />
 
@@ -82,12 +84,6 @@ but will instead use roxygenise() specifying the rd roclet" />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/roxygen2.html">Get started</a>
 </li>
 <li>
@@ -101,30 +97,32 @@ but will instead use roxygenise() specifying the rd roclet" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/collate.html">Collation order</a>
+      <a href="../articles/namespace.html">NAMESPACE tags</a>
     </li>
     <li>
-      <a href="../articles/formatting.html">Text formatting reference sheet</a>
+      <a href="../articles/rd-formatting.html">Rd formatting</a>
     </li>
     <li>
-      <a href="../articles/markdown.html">Write R Documentation in Markdown</a>
-    </li>
-    <li>
-      <a href="../articles/namespace.html">Package namespace</a>
-    </li>
-    <li>
-      <a href="../articles/rd.html">Generating Rd files</a>
-    </li>
-    <li>
-      <a href="../articles/rdkeywords.html">Rd keywords</a>
-    </li>
-    <li>
-      <a href="../articles/releases/roxygen2-6.0.0.html">roxygen2 6.0.0</a>
+      <a href="../articles/rd.html">Rd (documentation) tags</a>
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Release notes</li>
+    <li>
+      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Change log</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -154,8 +152,10 @@ but will instead use roxygenise() specifying the rd roclet" />
 
     <div class="ref-description">
     
-    <p>This roclet is the workhorse of <code>roxygen</code>, producing the Rd files that
-document that functions in your package.</p>
+    <p>This roclet is the workhorse of <code>roxygen</code>, producing the <code>.Rd</code> files that
+R uses to document that functions, datasets, packages, classes, and
+other objects.</p>
+<p>See <code><a href='../articles/rd.html'>vignette("rd")</a></code> for details.</p>
 <p>Generally you will not call this function directly
 but will instead use roxygenise() specifying the rd roclet</p>
     
@@ -165,18 +165,32 @@ but will instead use roxygenise() specifying the rd roclet</p>
         
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='../articles/rd.html'>vignette("rd", package = "roxygen2")</a></code></p>
-<p>Other roclets: <code><a href='namespace_roclet.html'>namespace_roclet</a></code>,
+    <div class='dont-index'><p>Other roclets: <code><a href='namespace_roclet.html'>namespace_roclet</a></code>,
   <code><a href='vignette_roclet.html'>vignette_roclet</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>#' The length of a string (in characters)</span>
+<span class='co'>#'</span>
+<span class='co'>#' @param x String input character vector</span>
+<span class='co'>#' @return An integer vector the same length as `x`.</span>
+<span class='co'>#'   `NA` strings have `NA` length.</span>
+<span class='co'>#' @seealso [nchar()]</span>
+<span class='co'>#' @export</span>
+<span class='co'>#' @examples</span>
+<span class='co'>#' str_length(letters)</span>
+<span class='co'>#' str_length(c("i", "like", "programming", NA))</span>
+<span class='no'>str_length</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) {
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

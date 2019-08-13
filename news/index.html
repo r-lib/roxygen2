@@ -77,12 +77,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/roxygen2.html">Get started</a>
 </li>
 <li>
@@ -96,30 +90,32 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/collate.html">Collation order</a>
+      <a href="../articles/namespace.html">NAMESPACE tags</a>
     </li>
     <li>
-      <a href="../articles/formatting.html">Text formatting reference sheet</a>
+      <a href="../articles/rd-formatting.html">Rd formatting</a>
     </li>
     <li>
-      <a href="../articles/markdown.html">Write R Documentation in Markdown</a>
-    </li>
-    <li>
-      <a href="../articles/namespace.html">Package namespace</a>
-    </li>
-    <li>
-      <a href="../articles/rd.html">Generating Rd files</a>
-    </li>
-    <li>
-      <a href="../articles/rdkeywords.html">Rd keywords</a>
-    </li>
-    <li>
-      <a href="../articles/releases/roxygen2-6.0.0.html">roxygen2 6.0.0</a>
+      <a href="../articles/rd.html">Rd (documentation) tags</a>
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Release notes</li>
+    <li>
+      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Change log</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -241,7 +237,7 @@
 <h2 class="hasAnchor">
 <a href="#markdown" class="anchor"></a>Markdown</h2>
 <ul>
-<li>Most fields can now be written using Markdown markup instead of the traditional Rd language. You can turn on Markdown globally by adding <code>Roxygen: list(markdown = TRUE)</code> to <code>DESCRIPTION</code>. The <code>@md</code> / <code>@noMd</code> tags turn Markdown parsing on / off for the given block. See <code><a href="../articles/markdown.html">vignette("markdown")</a></code> for more details (<a href='https://github.com/r-lib/roxygen2/issues/364'>#364</a>, <a href='https://github.com/r-lib/roxygen2/issues/431'>#431</a>, <a href='https://github.com/r-lib/roxygen2/issues/499'>#499</a>, <a href='https://github.com/r-lib/roxygen2/issues/506'>#506</a>, <a href='https://github.com/r-lib/roxygen2/issues/507'>#507</a>), by <a href='https://github.com/gaborcsardi'>@gaborcsardi</a></li>
+<li>Most fields can now be written using Markdown markup instead of the traditional Rd language. You can turn on Markdown globally by adding <code>Roxygen: list(markdown = TRUE)</code> to <code>DESCRIPTION</code>. The <code>@md</code> / <code>@noMd</code> tags turn Markdown parsing on / off for the given block. See <code>vignette("markdown")</code> for more details (<a href='https://github.com/r-lib/roxygen2/issues/364'>#364</a>, <a href='https://github.com/r-lib/roxygen2/issues/431'>#431</a>, <a href='https://github.com/r-lib/roxygen2/issues/499'>#499</a>, <a href='https://github.com/r-lib/roxygen2/issues/506'>#506</a>, <a href='https://github.com/r-lib/roxygen2/issues/507'>#507</a>), by <a href='https://github.com/gaborcsardi'>@gaborcsardi</a></li>
 </ul>
 </div>
 <div id="improved-inheritance" class="section level2">
@@ -551,7 +547,7 @@
 <li><p>Infix functions are now escaped correctly in the <code>NAMESPACE</code>. (Thanks to <a href='https://github.com/crowding'>@crowding</a>, <a href='https://github.com/r-lib/roxygen2/issues/111'>#111</a>)</p></li>
 <li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> now works more like <code><a href="https://www.rdocumentation.org/packages/devtools/topics/document">devtools::document()</a></code> and only ever works in the current directory. The arguments <code>roxygen.dir</code>, <code>overwrite</code>, <code>copy.package</code> and <code>unlink.target</code> have been deprecated due to potential data loss problems.</p></li>
 <li><p>The collate roclet is no longer a roclet: it processes R files using custom code (only statically, not dynamically) and is designed to be executed before the code is sourced. Run <code><a href="../reference/update_collate.html">update_collate()</a></code> to update the Collate directive based on <code>@include</code> tags - if there are none present, a collate directive will not be generated.</p></li>
-<li><p><code>@useDynLib</code> now works with more possible specifications - if you include a comma in the tag value, the output will be passed as is. This means that <code>@useDynLib mypackage, .registration = TRUE</code> will now generate <code><a href="../reference/namespace_roclet.html">useDynLib(mypackage, .registration = TRUE)</a></code> in the <code>NAMESPACE</code>. (<a href='https://github.com/r-lib/roxygen2/issues/124'>#124</a>)</p></li>
+<li><p><code>@useDynLib</code> now works with more possible specifications - if you include a comma in the tag value, the output will be passed as is. This means that <code>@useDynLib mypackage, .registration = TRUE</code> will now generate <code>useDynLib(mypackage, .registration = TRUE)</code> in the <code>NAMESPACE</code>. (<a href='https://github.com/r-lib/roxygen2/issues/124'>#124</a>)</p></li>
 <li><p><code>inst</code> directory not created by default (<a href='https://github.com/r-lib/roxygen2/issues/56'>#56</a>).</p></li>
 <li><p>Explicitly depend on <code>utils</code> and <code>methods</code> packages to make roxygen compatible with <code>Rscript</code> (<a href='https://github.com/r-lib/roxygen2/issues/72'>#72</a>). Import <code>digest</code> package instead of depending on it.</p></li>
 <li><p>Always use C locale when sorting <code>NAMESPACE</code> file or tags in <code>.Rd</code> files. This ensures a consistent ordering across systems (<a href='https://github.com/r-lib/roxygen2/issues/127'>#127</a>).</p></li>
@@ -600,11 +596,11 @@
 <p><code>@useDynLib</code> now works correctly:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"> <span class="op">@</span>useDynLib packageName routine1 routine2</a></code></pre></div>
 <p>produces</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"> <span class="kw"><a href="../reference/namespace_roclet.html">useDynLib</a></span>(packageName, routine1)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"> <span class="kw"><a href="../reference/namespace_roclet.html">useDynLib</a></span>(packageName, routine2)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"> <span class="kw">useDynLib</span>(packageName, routine1)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"> <span class="kw">useDynLib</span>(packageName, routine2)</a></code></pre></div>
 <p>in the <code>NAMESPACE</code> file, instead of separate (wrong) useDynLib statements as before.</p>
 </li>
-<li><p>All namespace import directives now behave in the same way as the export directives, producing multiple single directives instead one multiple directive: <code>@importClassesFrom pkg a b</code> now produces <code><a href="../reference/namespace_roclet.html">importClassesFrom(pkg, a)</a></code> and <code><a href="../reference/namespace_roclet.html">importClassesFrom(pkg, b)</a></code></p></li>
+<li><p>All namespace import directives now behave in the same way as the export directives, producing multiple single directives instead one multiple directive: <code>@importClassesFrom pkg a b</code> now produces <code>importClassesFrom(pkg, a)</code> and <code>importClassesFrom(pkg, b)</code></p></li>
 <li><p>In example files included with <code>@example</code> you can now use infix operators (e.g. %*%) or other things with %, because they will be preceded by a backslash in the Rd file. This behaviour was already in place for examples directly included with <code>@examples</code>.</p></li>
 <li><p>Aliases are no longer quoted, and % is escaped with a backslash (Fixes <a href='https://github.com/r-lib/roxygen2/issues/24'>#24</a>). Names also have % escaped (Fixes <a href='https://github.com/r-lib/roxygen2/issues/50'>#50</a>)</p></li>
 <li><p>Replacement functions (e.g. <code>foo&lt;-</code>) now get correct usage statements: <code>foo() &lt;- value</code> instead of <code>foo()&lt;-value</code>. (Fixes <a href='https://github.com/r-lib/roxygen2/issues/38'>#38</a>)</p></li>

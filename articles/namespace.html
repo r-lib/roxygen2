@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Package namespace • roxygen2</title>
+<title>NAMESPACE tags • roxygen2</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Package namespace">
+<script src="../pkgdown.js"></script><meta property="og:title" content="NAMESPACE tags">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png">
 <meta name="twitter:card" content="summary">
@@ -44,12 +44,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/roxygen2.html">Get started</a>
 </li>
 <li>
@@ -63,30 +57,32 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/collate.html">Collation order</a>
+      <a href="../articles/namespace.html">NAMESPACE tags</a>
     </li>
     <li>
-      <a href="../articles/formatting.html">Text formatting reference sheet</a>
+      <a href="../articles/rd-formatting.html">Rd formatting</a>
     </li>
     <li>
-      <a href="../articles/markdown.html">Write R Documentation in Markdown</a>
-    </li>
-    <li>
-      <a href="../articles/namespace.html">Package namespace</a>
-    </li>
-    <li>
-      <a href="../articles/rd.html">Generating Rd files</a>
-    </li>
-    <li>
-      <a href="../articles/rdkeywords.html">Rd keywords</a>
-    </li>
-    <li>
-      <a href="../articles/releases/roxygen2-6.0.0.html">roxygen2 6.0.0</a>
+      <a href="../articles/rd.html">Rd (documentation) tags</a>
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li class="dropdown-header">Release notes</li>
+    <li>
+      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
+    </li>
+    <li class="divider">
+    <li>
+      <a href="../news/index.html">Change log</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -108,10 +104,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Package namespace</h1>
+      <h1>NAMESPACE tags</h1>
                         <h4 class="author">Hadley Wickham</h4>
             
-            <h4 class="date">2019-08-12</h4>
+            <h4 class="date">2019-08-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/master/vignettes/namespace.Rmd"><code>vignettes/namespace.Rmd</code></a></small>
       <div class="hidden name"><code>namespace.Rmd</code></div>
@@ -174,7 +170,7 @@ D &lt;- setClass("D")
 <ul>
 <li><p><code>@useDynLib package</code> imports all compiled functions.</p></li>
 <li><p><code>@useDynLib package routinea routineb</code> imports selected compiled functions.</p></li>
-<li><p>Any <code>@useDynLib</code> specification containing a comma, e.g. <code>@useDynLib mypackage, .registration = TRUE</code> will be inserted as is into the the NAMESPACE, e.g. <code><a href="../reference/namespace_roclet.html">useDynLib(mypackage, .registration = TRUE)</a></code></p></li>
+<li><p>Any <code>@useDynLib</code> specification containing a comma, e.g. <code>@useDynLib mypackage, .registration = TRUE</code> will be inserted as is into the the NAMESPACE, e.g. <code>useDynLib(mypackage, .registration = TRUE)</code></p></li>
 </ul>
 </div>
   </div>

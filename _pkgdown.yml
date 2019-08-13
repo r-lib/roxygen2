@@ -1,5 +1,10 @@
 url: https://roxygen2.r-lib.org
 
+home:
+  links:
+  - text: Learn more
+    href: https://r-pkgs.org/man.html
+
 reference:
 - title: Roclets
   contents:

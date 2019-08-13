@@ -234,9 +234,11 @@ Some notes:
 
 * Like for datasets, there isn't a object that we can document directly. Use
   `"_PACKAGE"` to indicate that you are creating the package's documentation.
-  This will automatically add the correct aliases so that both `?pkgname`
-  and `package?pkgname` will find the package help. This also works if there's
-  already a function called `pkgname()`.
+  
+* By default, aliases will be added so that both `?pkgname` and 
+  `package?pkgname` will find the package help. If there's an existing function
+  called `pkgname`, override the default aliases with 
+  `@aliases {pkgname}-package`
 
 * Use `@references` point to published material about the package that
   users might find helpful.

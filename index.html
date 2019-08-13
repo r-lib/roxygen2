@@ -107,95 +107,59 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-
 <div id="roxygen2" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#roxygen2" class="anchor"></a>roxygen2 <img src="reference/figures/logo.png" align="right">
 </h1></div>
+<!-- badges: start -->
 
-<blockquote>
-<p>all’ hileth’, Hephaiste; didou d’areten te kai olbon.* –Homer, 7th century BCE</p>
-</blockquote>
+<p>The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to automatically generate <code>.Rd</code> files in <code>man/</code>, <code>NAMESPACE</code>, and, if needed, the <code>Collate</code> field in <code>DESCRIPTION</code>.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Install devtools from CRAN</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"roxygen2"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># Or the development version from GitHub:</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"r-lib/roxygen2"</span>)</a></code></pre></div>
 </div>
-<div id="why-use-roxygen2" class="section level1">
-<h1 class="hasAnchor">
-<a href="#why-use-roxygen2" class="anchor"></a>Why use roxygen2?</h1>
-<p>The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to produce Rd files in the <code>man/</code> directory. Here’s a simple example from the <code>stringr</code> package:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#' The length of a string (in characters).</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#' @param string input character vector</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#' @return numeric vector giving number of characters in each element of the</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#'   character vector.  Missing strings have missing length.</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#' @seealso \code{\link{nchar}} which this function wraps</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#' @export</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#' @examples</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#' str_length(letters)</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#' str_length(c("i", "like", "programming", NA))</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">str_length &lt;-<span class="st"> </span><span class="cf">function</span>(string) {</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">  string &lt;-<span class="st"> </span><span class="kw">check_string</span>(string)</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">  nc &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nchar">nchar</a></span>(string, <span class="dt">allowNA =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(nc) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(string)</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">  nc</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">}</a></code></pre></div>
-<p>When you <code><a href="reference/roxygenize.html">roxygenise()</a></code> (or <code><a href="https://www.rdocumentation.org/packages/devtools/topics/document">devtools::document()</a></code>) your package these comments will be automatically transformed to the Rd file you need to pass <code>R CMD check</code>:</p>
-<pre><code>\name{str_length}
-\alias{str_length}
-\title{The length of a string (in characters).}
-\usage{str_length(string)}
-\arguments{
-  \item{string}{input character vector}
-}
-\description{
-The length of a string (in characters).
-}
-\seealso{\code{\link{nchar}} which this function wraps}
-\value{
-  numeric vector giving number of characters in each element of the
-  character vector.  Missings string have missing length.
-}
-\examples{
-str_length(letters)
-str_length(c("i", "like", "programming", NA))
-}</code></pre>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p>The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to produce Rd files in the <code>man/</code> directory. Here’s a <a href="https://stringr.tidyverse.org/reference/str_length.html">simple example</a> from the stringr package:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#' The length of a string</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#' Technically this returns the number of "code points", in a string. One</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#' code point usually corresponds to one character, but not always. For example,</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#' an u with a umlaut might be represented as a single character or as the</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#' combination a u and an umlaut.</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#' @inheritParams str_detect</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#' @return A numeric vector giving number of characters (code points) in each</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#'    element of the character vector. Missing string have missing length.</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#' @seealso [stringi::stri_length()] which this function wraps.</span></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#' @export</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#' @examples</span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#' str_length(letters)</span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#' str_length(NA)</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#' str_length(factor("abc"))</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#' str_length(c("i", "like", "programming", NA))</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">str_length &lt;-<span class="st"> </span><span class="cf">function</span>(string) {</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19">}</a></code></pre></div>
+<p>When you <code><a href="reference/roxygenize.html">roxygenise()</a></code> (or <code><a href="https://www.rdocumentation.org/packages/devtools/topics/document">devtools::document()</a></code>) your package these comments will be automatically transformed to the <code>.Rd</code> that R uses to generate the documentation you see when you type <code>?str_length</code>.</p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
-<p>To get the current released version from CRAN:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"roxygen2"</span>)</a></code></pre></div>
-<p>To get the current development version from github:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"r-lib/roxygen2"</span>)</a></code></pre></div>
-</div>
-<div id="running" class="section level1">
-<h1 class="hasAnchor">
-<a href="#running" class="anchor"></a>Running</h1>
-<p>Roxygen does a live analysis of your source code: it loads all the code in your package, so it can create documentation using values in an R environment, not just source code. However, simulating package loading is rather tricky to do in general, so there are two ways to do it with roxygen:</p>
+<div id="learn-more" class="section level2">
+<h2 class="hasAnchor">
+<a href="#learn-more" class="anchor"></a>Learn more</h2>
+<p>To get started, first read <code><a href="articles/roxygen2.html">vignette("roxygen2")</a></code>. Then read more about the specific package component that you want to generate:</p>
 <ul>
-<li><p><code><a href="reference/roxygenize.html">roxygen2::roxygenise()</a></code> just sources all files in the <code>R/</code> directory</p></li>
-<li><p><code><a href="https://www.rdocumentation.org/packages/devtools/topics/document">devtools::document()</a></code> sources all files in the <code>R/</code> directory, compiles source code in the <code>src/</code> directory, loads data in the <code>data/</code> directory and generally does an accurate job of simulating package loading.</p></li>
-</ul>
-<p>If you have a simple package, you can use <code><a href="reference/roxygenize.html">roxygenise()</a></code>, but for anything more complicated, I recommend that you use <code>document()</code>.</p>
-</div>
-<div id="roclets" class="section level1">
-<h1 class="hasAnchor">
-<a href="#roclets" class="anchor"></a>Roclets</h1>
-<p><code>roxygen2</code> comes with four roclets, tools for parsing your source code and producing files useful for documenting your package:</p>
-<ul>
-<li><p><code>collate_roclet</code>: allows you to add <code>@include</code> directives to ensure that files are loaded in the order they are needed</p></li>
-<li><p><code>namespace_roclet</code>: creates your <code>NAMESPACE</code> automatically. 95% of the time all you need to do is label functions, methods and classes that you want to export with the <code>@export</code> tag</p></li>
-<li><p><code>rd_roclet</code>: produces Rd files by inspecting both function definitions and roxygen2 comments in the source code</p></li>
-<li><p><code>vignette_roclet</code>: builds vignettes using <code><a href="https://www.rdocumentation.org/packages/tools/topics/buildVignette">tools::buildVignette()</a></code>.</p></li>
-</ul>
-<p>By default, <code>roxygenise</code> will run the first three, but you can choose which ones to run using the <code>roclet</code> parameter, or field <code>Roxygen</code> in your <code>DESCRIPTION</code>:</p>
-<pre><code>Roxygen: list(roclets = c("rd", "collate"))</code></pre>
-<hr>
-<ul>
-<li>Hail, Hephaistos! Grant skill and weal.</li>
+<li>For <code>.Rd</code> documentation files, read <code><a href="articles/rd.html">vignette("rd")</a></code>.</li>
+<li>For the <code>NAMESPACE</code>, read <code><a href="articles/namespace.html">vignette("namespace")</a></code>.</li>
+<li>For the <code>Collate</code> field in the <code>DESCRIPTION</code>, read <code><a href="reference/update_collate.html">update_collate()</a></code>.</li>
 </ul>
 </div>
-
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -207,6 +171,8 @@ str_length(c("i", "like", "programming", NA))
 <li>Browse source code at <br><a href="https://github.com/r-lib/roxygen2">https://​github.com/​r-lib/​roxygen2</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/r-lib/roxygen2/issues">https://​github.com/​r-lib/​roxygen2/​issues</a>
+</li>
+<li>Learn more at <br><a href="https://r-pkgs.org/man.html">https://​r-pkgs.org/​man.html</a>
 </li>
 </ul>
 </div>
@@ -230,9 +196,9 @@ str_length(c("i", "like", "programming", NA))
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=roxygen2"><img src="https://www.r-pkg.org/badges/version/roxygen2" alt="CRAN status"></a></li>
 <li><a href="https://travis-ci.org/r-lib/roxygen2"><img src="https://travis-ci.org/r-lib/roxygen2.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://cran.r-project.org/package=roxygen2"><img src="http://www.r-pkg.org/badges/version/roxygen2" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://codecov.io/github/r-lib/roxygen2?branch=master"><img src="https://codecov.io/gh/r-lib/roxygen2/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+<li><a href="https://codecov.io/gh/r-lib/roxygen2?branch=master"><img src="https://codecov.io/gh/r-lib/roxygen2/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 </div>

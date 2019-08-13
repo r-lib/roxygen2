@@ -13,7 +13,13 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 ## Basics
 
-Roxygen comments start with `#'`. Each documentation block starts with some text which defines the title, the description, and the details. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
+A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceeded by whitespace). Blocks gain additional structure through the use of __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). 
+
+Text within roxygen blocks can be formatted using markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
+
+## The description block
+
+Each documentation block starts with some text which defines the title, the description, and the details. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
 
 ```{r}
 #' Sum of vector elements.
@@ -42,19 +48,24 @@ This introductory block is broken up as follows:
    provide any other important details of how the function operates. The 
    details are optional.
 
-Note the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.
+You can also use explicit `@title`, `@description`, and `@details` tags. This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.
 
-Text within roxygen blocks can be formatted using `.Rd` syntax; see `vignette("rd-formatting")` for examples and [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text) for full details. You can also use Markdown formatting within roxygen blocks, as long as you have the following in the `DESCRIPTION`:
-
+```{r}
+#' Sum of vector elements.
+#' 
+#' @description
+#' `sum` returns the sum of all the values present in its arguments.
+#'
+#' @details
+#' This is a generic function: methods can be defined for it directly
+#' or via the [Summary()] group generic. For this to work properly,
+#' the arguments `...` should be unnamed, and dispatch is on the
+#' first argument.
 ```
-Roxygen: list(markdown = TRUE)
-```
-
-We'll discuss that more in `vignette("markdown")`.
 
 ## Object specifics
 
-Further details of roxygen2 depend on what you're documenting. You use __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). The following sections describe the most commonly used tags for functions, S3, S4, and RC objects and data set.
+Further details of roxygen2 depend on what you're documenting. The following sections describe the most commonly used tags for functions, S3, S4, datasets, and packages.
 
 ### Functions
 
@@ -180,7 +191,7 @@ There are two additional tags that are useful for documenting datasets:
 
 * `@format`, which gives an overview of the structure of the dataset.
 
-* `@source` where you got the data form, often a `\url{}`.
+* `@source` where you got the data form, often a URL.
 
 To show how everything fits together, the example below is an excerpt from the roxygen block used to document the diamonds dataset in ggplot2.
 
@@ -215,6 +226,8 @@ Package documentation should be placed in `pkgname.R`. Here's an example:
 "_PACKAGE"
 ```
 
+`usethis::use_package_doc()` will generate a basic template for you automatically.
+
 I recommend using `@keywords internal` for package documentation.
 
 Some notes:
@@ -239,7 +252,7 @@ You can add arbitrary sections to the documentation for any object with the `@se
 #' Do not operate heavy machinery within 8 hours of using this function.
 ```
 
-To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
+To add a subsection, you must use the Rd `\subsection{}` command, as follows:
 
 ```{r}
 #' @section Warning:
@@ -250,8 +263,7 @@ To add a subsection, you must use the `Rd` `\subsection{}` command, as follows:
 #' }
 ```
 
-Sections with identical titles will be merged.
-This is especially useful in conjunction with the `@rdname` tag:
+Sections with identical titles will be merged. This is especially useful in conjunction with the `@rdname` tag:
 
 ```{r}
 #' Basic arithmetic
@@ -382,20 +394,6 @@ Note that templates are parsed a little differently to regular blocks, so you'll
 
 ## Other tags
 
-### Title, description, details
-
-You can also use explicit `@title`, `@description`, and `@details` tags. This is unnecessary unless you want to have a multi-paragraph description.
-
-### Keywords
-
-Use `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list below:
-
-```{r, echo = FALSE}
-cat(readLines(file.path(R.home("doc"), "KEYWORDS")), sep = "\n")
-```
-
-Keywords are not very useful, except for `@keywords internal`. Using the internal keyword removes the function from the documentation index and is useful for functions aimed primarily at other developers, not typically users of the package.
-
 ### Indexing
 
 Three other tags make it easier for the user to find documentation:
@@ -404,6 +402,15 @@ Three other tags make it easier for the user to find documentation:
     `@aliases space separated aliases` to add additional aliases.
     
 *   `@concept` add extra keywords that will be found with `help.search()`
+
+*   Use `@keywords keyword1 keyword2 ...` to add standardised keywords. 
+    Keywords are optional, but if present, must be taken from the 
+    predefined list found `file.path(R.home("doc"), "KEYWORDS"))`.
+
+    Keywords are not very useful, except for `@keywords internal`. Using 
+    the internal keyword removes the function from the documentation index 
+    and is useful for functions aimed primarily at other developers, not
+    typically users of the package.
 
 ### Back references
 
@@ -415,10 +422,8 @@ to the second line of each generated `.Rd` file in the following form:
 ```
 
 `roxygen2` tries to capture all locations from which the documentation is assembled.
-For code that *generates* R code with Roxygen comments (e.g., the `Rcpp` package),
-the `@backref` tag is provided. This allows specifying the "true" source of the documentation, and will substitute the default list of source files. 
-
-Use one tag per source file:
+For code that *generates* R code with Roxygen comments (e.g., the Rcpp package),
+the `@backref` tag is provided. This allows specifying the "true" source of the documentation, and will substitute the default list of source files. Use one tag per source file:
 
 ```{r}
 #' @backref src/file.cpp

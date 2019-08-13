@@ -382,7 +382,63 @@ times <- function(x, y) x * y
 
 ### Evaluating arbitrary code
 
-A new and powerful technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions.
+A new and powerful technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).
+
+
+For example, this code + roxygen block:
+
+```{r}
+my_params <- function() {
+  c(
+    "@param x An integer vector",
+    "@param y A character vector"
+  )
+}
+
+#' A title
+#' 
+#' @eval my_params()
+#' @export
+foo <- function(x, y) {
+}
+```
+
+Is equivalent to:
+
+```{r}
+#' A title
+#' 
+#' @param x An integer vector
+#' @param y A character vector
+#' @export
+foo <- function(x, y) {
+}
+```
+
+A related function is `@evalRd`. It works in the same way as `@eval` (i.e. it's evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated `.Rd` file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.
+
+For example, this block:
+
+```{r}
+my_note <- function(x) {
+  paste0("\\note{", paste0(x, "\n", collapse =""), "}")
+}
+
+#' @evalRd my_note(
+#'   "This is the first line",
+#'   "This is the second line"
+#' )
+NULL
+```
+
+Would generate this Rd:
+
+```latex
+\note{
+This is the first line
+This is the second line
+}
+```
 
 ### Roxygen templates
 

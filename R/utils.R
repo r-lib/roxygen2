@@ -194,3 +194,7 @@ collapse <- function(key, value, fun, ...) {
 cat_line <- function(...) {
   cat(..., "\n", sep = "")
 }
+
+tag_aliases <- function(f) {
+  paste0("@aliases ", paste0("@", names(f()), collapse = " "))
+}

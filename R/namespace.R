@@ -2,22 +2,35 @@ ns_tags_import <- c('import', 'importFrom', 'importClassesFrom', 'importMethodsF
 ns_tags_export <- c('export', 'exportClass', 'exportMethod', 'exportPattern', 'S3method')
 ns_tags <- c(ns_tags_import, ns_tags_export, 'evalNamespace')
 
-#' Roclet: make NAMESPACE.
+#' Roclet: make `NAMESPACE`
 #'
-#' This roclet automates the production of a `NAMESPACE` file,
-#' see Writing R Extensions.
-#' (<https://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
+#' @description
+#' This roclet automates the production of a `NAMESPACE` file, which controls
+#' the functions imported and exported by your package, as described in
+#' [Writing R extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html).
+#'
 #' The `NAMESPACE` is generated in two passes: the first generates only
 #' import directives (because this can be computed without evaluating package
 #' code), and the second generates everything (after the package has been
 #' loaded).
 #'
+#' See `vignette("namespace")` for details.
+#'
 #' @family roclets
 #' @export
-#' @seealso `vignette("namespace", package = "roxygen2")`
-#' @aliases export exportClass exportMethod exportPattern
-#'   import importFrom importClassesFrom importMethodsFrom
-#'   evalNamespace rawNamespace S3method useDynLib
+#' @eval tag_aliases(roclet_tags.roclet_namespace)
+#' @examples
+#' # The most common namespace tag is @@export, which declares that a function
+#' # is part of the external interface of your package
+#' #' @export
+#' foofy <- function(x, y, z) {
+#' }
+#'
+#' # You'll also often find global imports living in a file called
+#' # R/{package}-package.R.
+#' #' @@importFrom magrittr %>%
+#' #' @@import rlang
+#' NULL
 namespace_roclet <- function() {
   roclet("namespace")
 }

@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* Roclets have now aliases to all the tags that they define so that you can
+  do (e.g.) `?"@export"`. These help files are generally not that useful, but
+  they do now provide basic examples, and point you towards the vignettes the
+  provide full details.
+
 * Package documentation now converts ORCIDs into a useful link (#721).
 
 * Empty roxygen2 lines at the start of a block are now silently removed (#710).

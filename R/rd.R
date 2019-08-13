@@ -3,11 +3,24 @@ NULL
 
 #' Roclet: make Rd files.
 #'
-#' @family roclets
 #' @template rd
+#' @family roclets
 #' @eval rd_roclet_description()
-#' @seealso `vignette("rd", package = "roxygen2")`
+#' @eval tag_aliases(roclet_tags.roclet_rd)
 #' @export
+#' @examples
+#' #' The length of a string (in characters)
+#' #'
+#' #' @param x String input character vector
+#' #' @return An integer vector the same length as `x`.
+#' #'   `NA` strings have `NA` length.
+#' #' @seealso [nchar()]
+#' #' @export
+#' #' @examples
+#' #' str_length(letters)
+#' #' str_length(c("i", "like", "programming", NA))
+#' str_length <- function(x) {
+#' }
 rd_roclet <- function() {
   roclet("rd")
 }

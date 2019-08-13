@@ -1,33 +1,37 @@
-#' Update Collate field in DESCRIPTION.
+#' Update Collate field in DESCRIPTION
 #'
-#' Topologically sort R files and record in Collate field. The topological
-#' sort is based on the `@include` tag, which should specify the filenames
-#' (space separated) that should be loaded before the current file. These are
-#' typically necessary if you're using S4 or RC classes (because super classes
-#' must be defined before subclasses).
+#' @description
+#' By default, R loads files in alphabetical order. Unfortunately not every
+#' alphabet puts letters in the same order, so you can't rely on alphabetic
+#' ordering if you need one file loaded before another. (This usually doesn't
+#' matter but is important for S4, where you need to make sure that classes are
+#' loaded before subclasses and generics are defined before methods.).
+#' You can override the default alphabetical ordering with `@include before.R`,
+#' which specify that `before.R` must be loaded before the current file.
 #'
+#' Generally, you will not need to run this function yourself; it should be
+#' run automatically by any package that needs to load your R files in
+#' collation order.
+#'
+#' @section Collate:
+#' This is not a roclet because roclets need the values of objects in a package,
+#' and those values can not be generated unless you've sourced the files,
+#' and you can't source the files unless you know the correct order.
+
 #' If there are no `@include` tags, roxygen2 will leave collate as is.
 #' This makes it easier to use roxygen2 with an existing collate directive,
 #' but if you remove all your `@include` tags, you'll need to also
 #' manually delete the collate field.
 #'
-#' This is not a roclet because roclets need the values of objects in a package,
-#' and those values can not be generated unless you've sourced the files,
-#' and you can't source the files unless you know the correct order.
-#'
 #' @param base_path Path to package directory.
 #' @examples
-#' #' `example-a.R', `example-b.R' and `example-c.R' reside
-#' #' in the `example' directory, with dependencies
-#' #' a -> {b, c}. This is `example-a.R'.
-#' #' @@include example-b.R
-#' #' @@include example-c.R
+#' #' If `example-a.R', `example-b.R' and `example-c.R' live in R/
+#' #' and we're in `example-a.R`, then the following @@include statement
+#' #' ensures that example-b and example-c are sourced before example-a.
+#' #' @@include example-b.R example-c.R
 #' NULL
-#'
-#' \dontrun{
-#'   update_collate("my_package")
-#' }
 #' @export
+#' @aliases @@include
 update_collate <- function(base_path) {
   new <- generate_collate(file.path(base_path, "R"))
   if (is.null(new)) return()

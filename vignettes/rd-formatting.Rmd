@@ -1,13 +1,8 @@
 ---
 title: "Rd formatting"
-author: "Gábor Csárdi"
-date: "`r Sys.Date()`"
-output:
-  rmarkdown::html_vignette:
-    toc: yes
-    toc_depth: 3
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Write R Documentation in Markdown}
+  %\VignetteIndexEntry{Rd formatting}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -1,9 +1,8 @@
 ---
 title: "Rd (documentation) tags"
-author: "Hadley Wickham"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Generating Rd files}
+  %\VignetteIndexEntry{Rd (documentation) tags}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

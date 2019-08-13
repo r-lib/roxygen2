@@ -1,10 +1,8 @@
 ---
 title: "Introduction to roxygen2"
-author: "Hadley Wickham"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to roxygen2}
+  %\VignetteIndexEntry{Getting started with roxygen2}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

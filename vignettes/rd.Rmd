@@ -1,5 +1,5 @@
 ---
-title: "Generating Rd files"
+title: "Rd (documentation) tags"
 author: "Hadley Wickham"
 output: rmarkdown::html_vignette
 vignette: >
@@ -45,7 +45,7 @@ This introductory block is broken up as follows:
 
 Note the wrapping of the roxygen block. You should make sure that your comments are less than ~80 columns wide.
 
-Text within roxygen blocks can be formatted using `.Rd` syntax; see `vignette("formatting")` for examples and [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text) for full details. You can also use Markdown formatting within roxygen blocks, as long as you have the following in the `DESCRIPTION`:
+Text within roxygen blocks can be formatted using `.Rd` syntax; see `vignette("rd-formatting")` for examples and [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text) for full details. You can also use Markdown formatting within roxygen blocks, as long as you have the following in the `DESCRIPTION`:
 
 ```
 Roxygen: list(markdown = TRUE)
@@ -389,7 +389,11 @@ You can also use explicit `@title`, `@description`, and `@details` tags. This is
 
 ### Keywords
 
-Use `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list replicated in `vignette("rdkeywords").
+Use `@keywords keyword1 keyword2 ...` to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list below:
+
+```{r, echo = FALSE}
+cat(readLines(file.path(R.home("doc"), "KEYWORDS")), sep = "\n")
+```
 
 Keywords are not very useful, except for `@keywords internal`. Using the internal keyword removes the function from the documentation index and is useful for functions aimed primarily at other developers, not typically users of the package.
 

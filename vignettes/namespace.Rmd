@@ -1,5 +1,5 @@
 ---
-title: "Package namespace"
+title: "NAMESPACE tags"
 author: "Hadley Wickham"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

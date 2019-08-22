@@ -1,17 +1,17 @@
-markdown_if_active <- function(text) {
+markdown_if_active <- function(text, tag) {
   if (markdown_on()) {
-    markdown(text)
+    markdown(text, tag)
   } else {
     text
   }
 }
 
-markdown <- function(text) {
+markdown <- function(text, tag = NULL) {
   esc_text <- escape_rd_for_md(text)
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
 
   mdxml <- md_to_mdxml(esc_text_linkrefs)
-  rd <- mdxml_children_to_rd(mdxml)
+  rd <- mdxml_children_to_rd(mdxml, tag)
 
   unescape_rd_for_md(str_trim(rd), esc_text)
 }
@@ -21,35 +21,35 @@ md_to_mdxml <- function(x) {
   xml2::read_xml(md)
 }
 
-mdxml_children_to_rd <- function(xml) {
-  out <- vapply(xml_children(xml), mdxml_node_to_rd, character(1))
+mdxml_children_to_rd <- function(xml, tag) {
+  out <- vapply(xml_children(xml), mdxml_node_to_rd, tag = tag, character(1))
   paste0(out, collapse = "")
 }
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
-mdxml_node_to_rd <- function(xml) {
+mdxml_node_to_rd <- function(xml, tag) {
   if (!inherits(xml, "xml_node") || xml_type(xml) != "element") {
-    warning("Internal failure in markdown translation.", call. = FALSE)
+    roxy_tag_warning(tag, "Internal markdown translation failure")
     return("")
   }
 
   switch(xml_name(xml),
     html = ,
     document = ,
-    unknown = mdxml_children_to_rd(xml),
+    unknown = mdxml_children_to_rd(xml, tag),
 
     code_block = paste0("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}"),
-    paragraph = paste0("\n\n", mdxml_children_to_rd(xml)),
+    paragraph = paste0("\n\n", mdxml_children_to_rd(xml, tag)),
     text = xml_text(xml),
     code = paste0("\\code{", gsub("%", "\\\\%", xml_text(xml)), "}"),
-    emph = paste0("\\emph{", mdxml_children_to_rd(xml), "}"),
-    strong = paste0("\\strong{", mdxml_children_to_rd(xml), "}"),
+    emph = paste0("\\emph{", mdxml_children_to_rd(xml, tag), "}"),
+    strong = paste0("\\strong{", mdxml_children_to_rd(xml, tag), "}"),
     softbreak = "\n",
     linebreak = "\n",
 
-    list = mdxml_list(xml),
-    item = mdxml_item(xml),
-    link = mxml_link(xml),
+    list = mdxml_list(xml, tag),
+    item = mdxml_item(xml, tag),
+    link = mdxml_link(xml),
     image = mdxml_image(xml),
 
     # Not supported
@@ -57,26 +57,26 @@ mdxml_node_to_rd <- function(xml) {
     block_quote = ,
     hrule = ,
     html_inline = ,
-    mdxml_unknown(xml)
+    mdxml_unknown(xml, tag)
   )
 }
 
-mdxml_unknown <- function(xml) {
-  warning("Unknown xml node: ", xml_name(xml), call. = FALSE)
+mdxml_unknown <- function(xml, tag) {
+  roxy_tag_warning(tag, "Unknown xml node: ", xml_name(xml))
   xml_text(xml)
 }
 
 # A list, either bulleted or numbered
-mdxml_list <- function(xml) {
+mdxml_list <- function(xml, tag) {
   type <- xml_attr(xml, "type")
   if (type == "ordered") {
-    paste0("\n\\enumerate{", mdxml_children_to_rd(xml), "\n}")
+    paste0("\n\\enumerate{", mdxml_children_to_rd(xml, tag), "\n}")
   } else {
-    paste0("\n\\itemize{", mdxml_children_to_rd(xml), "\n}")
+    paste0("\n\\itemize{", mdxml_children_to_rd(xml, tag), "\n}")
   }
 }
 
-mdxml_item <- function(xml) {
+mdxml_item <- function(xml, tag) {
   ## A single item within a list. We remove the first paragraph
   ## tag, to avoid an empty line at the beginning of the first item.
   children <- xml_children(xml)
@@ -84,16 +84,16 @@ mdxml_item <- function(xml) {
     cnts <- ""
   } else if (xml_name(children[[1]]) == "paragraph") {
     cnts <- paste0(
-      mdxml_children_to_rd(children[[1]]),
-      paste0(vapply(children[-1], mdxml_node_to_rd, character(1)), collapse = "")
+      mdxml_children_to_rd(children[[1]], tag),
+      paste0(vapply(children[-1], mdxml_node_to_rd, tag = tag, character(1)), collapse = "")
     )
   } else {
-    cnts <- mdxml_children_to_rd(xml)
+    cnts <- mdxml_children_to_rd(xml, tag)
   }
   paste0("\n\\item ", cnts)
 }
 
-mxml_link <- function(xml) {
+mdxml_link <- function(xml) {
   ## Hyperlink, this can also be a link to a function
   dest <- xml_attr(xml, "destination")
   contents <- xml_contents(xml)

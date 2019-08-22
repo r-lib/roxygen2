@@ -53,10 +53,10 @@ mdxml_node_to_rd <- function(xml, tag) {
     image = mdxml_image(xml),
 
     # Not supported
-    header = ,
-    block_quote = ,
-    hrule = ,
-    html_inline = ,
+    heading = mdxml_unsupported(xml, tag, "markdown headings"),
+    block_quote = mdxml_unsupported(xml, tag, "block quotes"),
+    hrule = mdxml_unsupported(xml, tag, "horizontal rules"),
+    html_inline = mdxml_unsupported(xml, tag, "inline HTML"),
     mdxml_unknown(xml, tag)
   )
 }
@@ -65,6 +65,11 @@ mdxml_unknown <- function(xml, tag) {
   roxy_tag_warning(tag, "Unknown xml node: ", xml_name(xml))
   xml_text(xml)
 }
+mdxml_unsupported <- function(xml, tag, feature) {
+  roxy_tag_warning(tag, "Use of ", feature, " is not currently supported")
+  xml_text(xml)
+}
+
 
 # A list, either bulleted or numbered
 mdxml_list <- function(xml, tag) {

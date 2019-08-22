@@ -433,5 +433,5 @@ test_that("unhandled markdown generates warning", {
     #' @name x
     NULL
   "
-  expect_warning(roc_proc_text(rd_roclet(), text), "heading")
+  expect_warning(roc_proc_text(rd_roclet(), text), "markdown headings")
 })

@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Use of unsupported markdown features (blockquotes, headings, inline HTML, 
+  and horizontal rules) now gets a more informative error message (#804).
+
 * `tag_markdown_restricted()` has been removed because it did exactly the
   same think as `tag_markdown()`.
 

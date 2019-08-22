@@ -32,6 +32,10 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     self$fields[[field_name]]
   },
 
+  get_name = function() {
+    self$get_field("name")$values
+  },
+
   inherits_from = function(type) {
     if (!self$has_field("inherit")) {
       return(character())

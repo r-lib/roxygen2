@@ -310,13 +310,23 @@ test_that("@inheritParam understands compound docs", {
     #' Title
     #'
     #' @inheritParams x
-    #' @param x y
     #' @param y y
     y <- function(x, y) {}")[[2]]
   params <- get_tag(out, "param")$values
-  expect_equal(params, c(x = "y", y = "y"))
+  expect_equal(params, c(x = "x", y = "y"))
 })
 
+test_that("warned if no params need documentation", {
+  code <- "
+    #' Title
+    #'
+    #' @param x x
+    #' @param y x
+    #' @inheritParams foo
+    x <- function(x, y) {}
+  "
+  expect_warning(roc_proc_text(rd_roclet(), code), "no parameters to inherit")
+})
 
 test_that("argument order, also for incomplete documentation", {
   out <- roc_proc_text(rd_roclet(), "

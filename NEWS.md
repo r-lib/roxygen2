@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@inheritParams` warns if there are no parameters that require 
+  documentation (#836).
+
 * roxygen2 now recgonises fully qualified S4 functions like 
   `methods::setGeneric()`, `methods::setClass()` and `methods::setMethod()`
   (#880).

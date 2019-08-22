@@ -26,19 +26,28 @@ topics_process_inherit <- function(topics, env) {
 # Inherit parameters -----------------------------------------------------------
 
 inherit_params <- function(topic, topics) {
-  documented <- get_documented_params(topic)
-  needed <- topic$get_field("formals")$values
-
-  missing <- setdiff(needed, documented)
-  if (length(missing) == 0) {
+  inheritors <- topic$inherits_from("params")
+  if (length(inheritors) == 0) {
     return()
   }
 
-  for (inheritor in topic$inherits_from("params")) {
+  documented <- get_documented_params(topic)
+  needed <- topic$get_field("formals")$values
+  missing <- setdiff(needed, documented)
+  if (length(missing) == 0) {
+    warn(paste0(
+      "Topic '", topic$get_name(), "': ",
+      "no parameters to inherit with @inheritParams"
+    ))
+    return()
+  }
+
+  for (inheritor in inheritors) {
     inherited <- find_params(inheritor, topics)
 
     to_add <- intersect(missing, names(inherited))
     if (length(to_add) == 0) {
+      # Can't warn here because @inherit inherits parameters
       next
     }
 

@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* roxygen2 now recgonises fully qualified S4 functions like 
+  `methods::setGeneric()`, `methods::setClass()` and `methods::setMethod()`
+  (#880).
+
 * Use of unsupported markdown features (blockquotes, headings, inline HTML, 
   and horizontal rules) now gets a more informative error message (#804).
 

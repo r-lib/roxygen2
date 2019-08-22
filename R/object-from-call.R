@@ -12,9 +12,15 @@ object_from_call <- function(call, env, block, file) {
   if (!is.call(call)) return()
 
   call <- standardise_call(call, env)
-  name <- as.character(call[[1]])
 
-  if (length(name) > 1) return(NULL)
+  name <- call[[1]]
+  if (is_symbol(call[[1]])) {
+    name <- as.character(call[[1]])
+  } else if (is_call(call[[1]], "::", n = 2) && is_symbol(call[[1]][[2]], "methods")) {
+    name <- as.character(call[[1]][[3]])
+  } else {
+    return(NULL)
+  }
 
   # Dispatch to registered srcref parsers based on function name
   parser <- find_parser(name)
@@ -178,9 +184,8 @@ extract_method_fun <- function(x) {
   fun <- x@.Data
 
   method_body <- body(fun)
-  if (!is_call(method_body)) return(fun)
-  if (length(method_body) == 0) return(fun)
-  if (!identical(method_body[[1]], quote(`{`))) return(fun)
+  if (!is_call(method_body, "{")) return(fun)
+  if (length(method_body) < 2) return(fun)
 
   first_line <- method_body[[2]]
   if (!is_call(first_line, name = "<-", n = 2)) return(fun)

@@ -29,6 +29,13 @@ object_from_call <- function(call, env, block, file) {
   parser(call, env, block)
 }
 
+object_from_call2 <- function(call, env = pkg_env()) {
+  call <- substitute(call)
+
+  eval(call, envir = env)
+  object_from_call(call[[length(call)]], env, block = NULL, file = NULL)
+}
+
 find_data <- function(name, env, file) {
   if (identical(name, "_PACKAGE")) {
     return(find_data_for_package(env, file))

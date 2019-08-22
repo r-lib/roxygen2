@@ -137,7 +137,7 @@ parse_link <- function(destination, contents) {
     )
 
   } else {
-    contents <- gsub("%", "\\\\%", xml_link_text(contents))
+    contents <- gsub("%", "\\\\%", mdxml_link_text(contents))
 
     list(
       paste0(

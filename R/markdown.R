@@ -55,36 +55,16 @@ markdown <- function(text, markdown_tags) {
   unescape_rd_for_md(rd_text, esc_text)
 }
 
-#' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr
-#'   xml_children
-#' @importFrom methods is
-
+#' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
 markdown_rparse <- function(xml, markdown_tags) {
-
-  ## We have a string, a list of things, or XML stuff
-
-  ## Strings are simply returned
-  if (is.character(xml)) return(paste(xml, collapse = ""))
-
-  ## List is iterated over
-  if (is(xml, "list")) {
-    return(paste(vapply(xml, markdown_rparse, "", markdown_tags = markdown_tags),
-                 collapse = ""))
-  }
-
-  ## Otherwise it is XML stuff, node set
-  if (is(xml, "xml_nodeset")) {
-    return(paste(vapply(xml, markdown_rparse, "", markdown_tags = markdown_tags),
-                 collapse = ""))
-  }
-
-  ## text node, only keep if not entirely whitespace
-  if (is(xml, "xml_node") && xml_type(xml) == "text") {
-    return(ws_to_empty(xml_text(xml)))
-  }
-
-  ## generic node
-  if (is(xml, "xml_node") && xml_type(xml) == "element") {
+  if (is.character(xml)) {
+    # base case: string
+    paste(xml, collapse = "")
+  } else if (inherits(xml, "xml_node") && xml_type(xml) == "text") {
+    # base case: text node, only keep if not entirely whitespace
+    ws_to_empty(xml_text(xml))
+  } else if (inherits(xml, "xml_node") && xml_type(xml) == "element") {
+    # recursive case: generic node
     parser <- markdown_tags[[ xml_name(xml) ]]
 
     if (is.null(parser)) {
@@ -92,10 +72,13 @@ markdown_rparse <- function(xml, markdown_tags) {
       return(xml_text(xml))
     }
 
-    return(markdown_rparse(parser(xml), markdown_tags = markdown_tags))
+    markdown_rparse(parser(xml), markdown_tags = markdown_tags)
+  } else if (is.list(xml) || inherits(xml, "xml_nodeset")) {
+    # recursive case: list or nodeset
+    paste(vapply(xml, markdown_rparse, "", markdown_tags = markdown_tags), collapse = "")
+  } else {
+    warning("Unknown xml object")
   }
-
-  warning("Unknown xml object")
 }
 
 markdown_tags <- list(
@@ -400,10 +383,8 @@ contains_once <- function(x, pattern, ...) {
   length(strsplit(x = x, split = pattern, ...)[[1]]) == 2
 }
 
-#' @importFrom methods is
-
 is_empty_xml <- function(x) {
-  is(x, "xml_nodeset") && length(x) == 0
+  inherits(x, "xml_nodeset") && length(x) == 0
 }
 
 #' Dummy page to test roxygen's markdown formatting

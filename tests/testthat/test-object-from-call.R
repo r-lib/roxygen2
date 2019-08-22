@@ -24,11 +24,40 @@ test_that("ignored compound assignment", {
 
 # S4 ----------------------------------------------------------------------
 
+test_that("finds key S4 types", {
+  obj <- object_from_call2(setClass("Foo"))
+  expect_s3_class(obj, "s4class")
+
+  obj <- object_from_call2({
+    setClass("Foo")
+    setClassUnion("Foo2", "Foo")
+  })
+  expect_s3_class(obj, "s4class")
+
+  obj <- object_from_call2(setRefClass("Foo3"))
+  expect_s3_class(obj, "rcclass")
+
+  obj <- object_from_call2(setGeneric("bar", function(x) standardGeneric("bar")))
+  expect_s3_class(obj, "s4generic")
+
+  obj <- object_from_call2({
+    setGeneric("bar", function(x) standardGeneric("bar"))
+    setMethod('bar', 'Foo', function(x) {})
+  })
+  expect_s3_class(obj, "s4method")
+
+  obj <- object_from_call2({
+    setGeneric("bar<-", function(x, value) standardGeneric("bar<-"))
+    setReplaceMethod("bar", "Foo", function(x, value) {})
+  })
+  expect_s3_class(obj, "s4method")
+})
+
 test_that("finds correct parser even when namespaced", {
   obj <- object_from_call2({
     setClass("Foo")
-    setGeneric("bar", function(x) standardGeneric("bar"))
-    methods::setMethod('bar', 'Foo', function(x) {})
+    setGeneric("baz", function(x) standardGeneric("baz"))
+    methods::setMethod('baz', 'Foo', function(x) {})
   })
   expect_s3_class(obj, "s4method")
 })

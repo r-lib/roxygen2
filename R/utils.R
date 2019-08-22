@@ -198,3 +198,9 @@ cat_line <- function(...) {
 tag_aliases <- function(f) {
   paste0("@aliases ", paste0("@", names(f()), collapse = " "))
 }
+
+pkg_env <- function() {
+  env <- new.env(parent = globalenv())
+  env$.packageName <- "roxygen2"
+  env
+}

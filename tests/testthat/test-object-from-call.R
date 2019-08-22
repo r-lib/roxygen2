@@ -3,14 +3,7 @@ test_that("undocumentable things return null", {
   expect_null(object_from_call2(NULL))
   expect_null(object_from_call2(10))
   expect_null(object_from_call2(1 + 2))
-
-  foo <- function() {
-    function() {}
-  }
-  expect_null(object_from_call2(foo()))
-  expect_null(object_from_call2(foo()()))
 })
-
 
 # functions ------------------------------------------------------------
 

@@ -7,19 +7,33 @@ object_from_call <- function(call, env, block, file) {
     object(value, call)
   } else if (is.call(call)) {
     call <- standardise_call(call, env)
-    if (is_symbol(call[[1]])) {
-      name <- as.character(call[[1]])
-    } else if (is_call(call[[1]], "::", n = 2) && is_symbol(call[[1]][[2]], "methods")) {
-      name <- as.character(call[[1]][[3]])
-    } else {
-      return(NULL)
-    }
+    name <- deparse(call[[1]])
+    switch(name,
+      "=" = ,
+      "<-" = ,
+      "<<-" = parser_assignment(call, env, block),
+      "::" = parser_import(call, env, block),
 
-    # Dispatch to registered srcref parsers based on function name
-    parser <- find_parser(name)
-    if (is.null(parser)) return(NULL)
+      "methods::setClass" = ,
+      "setClass" = parser_setClass(call, env, block),
+      "methods::setClassUnion" = ,
+      "setClassUnion" = parser_setClassUnion(call, env, block),
+      "methods::setRefClass" = ,
+      "setRefClass" = parser_setRefClass(call, env, block),
+      "methods::setGeneric" = ,
+      "setGeneric" = parser_setGeneric(call, env, block),
+      "methods::setMethod" = ,
+      "setMethod" = parser_setMethod(call, env, block),
+      "methods::setReplaceMethod" = ,
+      "setReplaceMethod" = parser_setReplaceMethod(call, env, block),
 
-    parser(call, env, block)
+      "R.methodsS3::setMethodS3" = ,
+      "setMethodS3" = parser_setMethodS3(call, env, block),
+
+      "R.oo::setConstructorS3" = ,
+      "setConstructorS3" = parser_setConstructorS3(call, env, block),
+      NULL
+    )
   } else {
     NULL
   }
@@ -72,14 +86,6 @@ env_namespace <- function(env) {
   ns
 }
 
-find_parser <- function(name) {
-  if (name %in% c("=", "<-", "<<-")) name <- "assignment"
-
-  parser_name <- paste0("parser_", name)
-  if (!exists(parser_name)) return(NULL)
-
-  get(parser_name, mode = "function")
-}
 
 standardise_call <- function(call, env = parent.frame()) {
   stopifnot(is.call(call))
@@ -150,7 +156,7 @@ parser_setReplaceMethod <- function(call, env, block) {
   object(value)
 }
 
-`parser_::` <- function(call, env, block) {
+parser_import <- function(call, env, block) {
   pkg <- as.character(call[[2]])
   fun <- as.character(call[[3]])
 
@@ -161,7 +167,7 @@ parser_setMethodS3 <- function(call, env, block) {
   # R.methodsS3::setMethodS3(name, class, ...)
   method <- as.character(call[[2]])
   class <- as.character(call[[3]])
-  name <- paste(method, class, sep=".")
+  name <- paste(method, class, sep = ".")
   value <- standardise_obj(name, get(name, env), env, block)
   object(value, name)
 }

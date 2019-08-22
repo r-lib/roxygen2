@@ -226,14 +226,6 @@ test_that("can inherit single section", {
   expect_equal(section$content, "1")
 })
 
-
-test_that("can find section in existing docs", {
-  out <- find_sections(find_topic("base::attach"))
-
-  expect_s3_class(out, "roxy_field_section")
-  expect_equal(out$title, "Good practice")
-})
-
 # Inherit parameters ------------------------------------------------------
 
 test_that("multiple @inheritParam tags gathers all params", {
@@ -475,3 +467,21 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_field("details")$values, "Details")
   expect_equal(out$get_field("examples")$values, rd("x <- 1"))
 })
+
+
+# get_rd() -----------------------------------------------------------------
+
+test_that("useful warnings if can't find topics", {
+  expect_warning(get_rd("base2::attach"), "Can't find package")
+  expect_warning(get_rd("base::function_not_found"), "Can't find help topic")
+  expect_warning(get_rd("function", RoxyTopics$new()), "Can't find help topic")
+})
+
+test_that("can find section in existing docs", {
+  out <- find_sections(get_rd("base::attach"))
+
+  expect_s3_class(out, "roxy_field_section")
+  expect_equal(out$title, "Good practice")
+})
+
+

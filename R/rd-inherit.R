@@ -95,7 +95,7 @@ get_documented_params <- function(topic, only_first = FALSE) {
 }
 
 find_params <- function(name, topics) {
-  topic <- check_topic(name, topics)
+  topic <- get_rd(name, topics)
   if (is.null(topic)) {
     return()
   }
@@ -135,7 +135,7 @@ inherit_sections <- function(topic, topics) {
   current_secs <- topic$get_field("section")$title
 
   for (inheritor in topic$inherits_from("sections")) {
-    inheritor <- check_topic(inheritor, topics)
+    inheritor <- get_rd(inheritor, topics)
     if (is.null(inheritor)) {
       return()
     }
@@ -157,7 +157,7 @@ inherit_section <- function(topic, topics) {
   titles <- sections$title
 
   for (i in seq_along(sources)) {
-    inheritor <- check_topic(sources[[i]], topics)
+    inheritor <- get_rd(sources[[i]], topics)
     if (is.null(inheritor)) {
       return()
     }
@@ -201,7 +201,7 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
 
   # Otherwise, try each try function listed in inherits
   for (inherit_from in topic$inherits_from(roxy_name)) {
-    inherit_topic <- check_topic(inherit_from, topics)
+    inherit_topic <- get_rd(inherit_from, topics)
     if (is.null(inherit_topic)) {
       next
     }
@@ -230,36 +230,37 @@ find_field <- function(topic, field_name) {
   }
 }
 
-
 # Find info in Rd or topic ------------------------------------------------
 
-find_topic <- function(name, topics) {
+get_rd <- function(name, topics) {
   if (has_colons(name)) {
-    tryCatch({
-      parsed <- parse(text = name)[[1]]
-      pkg <- as.character(parsed[[2]])
-      fun <- as.character(parsed[[3]])
+    # External package
+    parsed <- parse_expr(name)
+    pkg <- as.character(parsed[[2]])
+    fun <- as.character(parsed[[3]])
 
-      get_rd(fun, pkg)
-    }, error = function(e) {
-      NULL
-    })
+    get_rd_from_help(pkg, fun)
   } else {
-    # Reference within this package
+    # Current package
     rd_name <- topics$find_filename(name)
+    if (identical(rd_name, NA_character_)) {
+      warn(paste0("Can't find help topic '", name, "' in current package"))
+    }
     topics$get(rd_name)
   }
 }
 
-check_topic <- function(name, topic) {
-  topic <- find_topic(name, topic)
-  if (is.null(topic)) {
-    warning(
-      "Failed to find topic '", name, "'",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+get_rd_from_help <- function(package, alias) {
+  if (!is_installed(package)) {
+    warn(paste0("Can't find package '", package, "'"))
+    return()
   }
 
-  topic
+  help <- eval(expr(help(!!alias, !!package)))
+  if (length(help) == 0) {
+    warn(paste0("Can't find help topic '", alias, "' in '", package, "' package"))
+    return()
+  }
+
+  internal_f("utils", ".getHelpFile")(help)
 }

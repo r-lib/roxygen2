@@ -90,7 +90,7 @@ usage_args <- function(args) {
 
     text
   }
-  vapply(args, arg_to_text, character(1))
+  map_chr(args, arg_to_text)
 }
 
 args_string <- function(x) {

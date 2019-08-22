@@ -64,8 +64,7 @@ format_rd <- function(x, ..., sort = TRUE) {
     x$values <- sort_c(x$values)
   }
 
-  vapply(x$values, rd_macro, field = x$field,
-    FUN.VALUE = character(1), USE.NAMES = FALSE)
+  map_chr(x$values, rd_macro, field = x$field)
 }
 #' @export
 format.roxy_field_keyword <- format_rd
@@ -246,7 +245,7 @@ merge.roxy_field_reexport <- function(x, y, ...) {
 #' @export
 format.roxy_field_reexport <- function(x, ...) {
   pkgs <- split(x$fun, x$pkg)
-  pkg_links <- Map(pkg = names(pkgs), funs = pkgs, function(pkg, funs) {
+  pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
     links <- paste0("\\code{\\link[", pkg, "]{", escape(funs), "}}",
       collapse = ", ")
     paste0("\\item{", pkg, "}{", links, "}")

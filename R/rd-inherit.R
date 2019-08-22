@@ -54,16 +54,16 @@ inherit_dot_params <- function(topic, topics, env) {
 
   # Need to find formals for each source
   funs <- lapply(inheritors$source, function(x) eval(parse(text = x), envir = env))
-  args <- Map(select_args_text, funs, inheritors$args)
+  args <- map2(funs, inheritors$args, select_args_text)
 
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
   arg_matches <- function(args, docs) {
     doc_args <- str_split(names(docs), ", ?")
-    match <- vapply(doc_args, function(x) x %in% args, logical(1))
+    match <- map_lgl(doc_args, function(x) x %in% args)
     docs[match]
   }
-  docs_selected <- unlist(Map(arg_matches, args, docs))
+  docs_selected <- unlist(map2(args, docs, arg_matches))
 
   # Build the arg string
   from <- paste0("\\code{", inheritors$source, "}", collapse = ", ")
@@ -85,7 +85,7 @@ get_documented_params <- function(topic, only_first = FALSE) {
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
     if (only_first)
-      documented <- vapply(documented, `[[`, character(1), 1L)
+      documented <- map_chr(documented, 1)
     else
       documented <- unlist(documented)
   }
@@ -109,7 +109,7 @@ find_params <- function(name, topics) {
 
   # Split up compound names on , (swallowing spaces) duplicating their contents
   individual_names <- strsplit(param_names, ",\\s*")
-  reps <- vapply(individual_names, length, integer(1))
+  reps <- map_int(individual_names, length)
 
   setNames(rep.int(params, reps), unlist(individual_names))
 }
@@ -119,8 +119,8 @@ topic_params.Rd <- function(x) {
   arguments <- get_tags(x, "\\arguments")[[1]]
   items <- get_tags(arguments, "\\item")
 
-  values <- vapply(items, function(x) rd2text(x[[2]]), character(1))
-  params <- vapply(items, function(x) rd2text(x[[1]]), character(1))
+  values <- map_chr(items, function(x) rd2text(x[[2]]))
+  params <- map_chr(items, function(x) rd2text(x[[1]]))
 
   setNames(values, params)
 }
@@ -182,8 +182,8 @@ find_sections <- function(topic) {
   if (inherits(topic, "Rd")) {
     tag <- get_tags(topic, "\\section")
 
-    titles <- vapply(lapply(tag, `[[`, 1), rd2text, character(1))
-    contents <- vapply(lapply(tag, `[[`, 2), rd2text, character(1))
+    titles <- map_chr(map(tag, 1), rd2text)
+    contents <- map_chr(map(tag, 2), rd2text)
 
     roxy_field_section(titles, contents)
   } else {

@@ -18,7 +18,7 @@ first_time <- function(path) {
     generated <- c(generated, namespace)
   }
 
-  roxy <- vapply(generated, made_by_roxygen, logical(1))
+  roxy <- map_lgl(generated, made_by_roxygen)
   all(!roxy)
 }
 

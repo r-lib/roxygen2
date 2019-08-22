@@ -22,7 +22,7 @@ md_to_mdxml <- function(x) {
 }
 
 mdxml_children_to_rd <- function(xml, tag) {
-  out <- vapply(xml_children(xml), mdxml_node_to_rd, tag = tag, character(1))
+  out <- map_chr(xml_children(xml), mdxml_node_to_rd, tag)
   paste0(out, collapse = "")
 }
 
@@ -90,7 +90,7 @@ mdxml_item <- function(xml, tag) {
   } else if (xml_name(children[[1]]) == "paragraph") {
     cnts <- paste0(
       mdxml_children_to_rd(children[[1]], tag),
-      paste0(vapply(children[-1], mdxml_node_to_rd, tag = tag, character(1)), collapse = "")
+      paste0(map_chr(children[-1], mdxml_node_to_rd, tag), collapse = "")
     )
   } else {
     cnts <- mdxml_children_to_rd(xml, tag)

@@ -52,7 +52,7 @@ generate_collate <- function(base_path) {
   includes <- lapply(paths, find_includes)
   names(includes) <- paths
 
-  n <- sum(vapply(includes, length, integer(1)))
+  n <- sum(map_int(includes, length))
   if (n == 0) return()
 
   topo <- TopoSort$new()

@@ -125,8 +125,7 @@ ignore_files <- function(rfiles, path) {
 }
 
 compact <- function(x) {
-  null <- vapply(x, is.null, logical(1))
-  x[!null]
+  x[!map_lgl(x, is.null)]
 }
 
 block_eval <- function(tag, block, env, tag_name) {

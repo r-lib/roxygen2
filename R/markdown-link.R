@@ -59,7 +59,7 @@ add_linkrefs_to_md <- function(text) {
   # Need to check both NA and "" for different versions of stringr
   refs[, 3] <- ifelse(is.na(refs[,3]) | refs[,3] == "", refs[, 2], refs[,3])
 
-  refs3encoded <- vapply(refs[,3], URLencode, "")
+  refs3encoded <- map_chr(refs[,3], URLencode)
   ref_text <- paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
 
   paste0(

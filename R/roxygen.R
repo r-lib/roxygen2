@@ -11,6 +11,7 @@
 #' @keywords internal
 #' @importFrom Rcpp sourceCpp
 #' @importFrom R6 R6Class
+#' @importFrom purrr map map_int map_chr map_lgl map2
 #' @import rlang
 "_PACKAGE"
 

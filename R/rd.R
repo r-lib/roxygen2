@@ -171,7 +171,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
 roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE) {
   man <- normalizePath(file.path(base_path, "man"))
 
-  contents <- vapply(results, format, wrap = FALSE, FUN.VALUE = character(1))
+  contents <- map_chr(results, format, wrap = FALSE)
   paths <- file.path(man, names(results))
 
   # Always check for roxygen2 header before overwriting NAMESPACE (#436),
@@ -198,9 +198,7 @@ roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE
 roclet_clean.roclet_rd <- function(x, base_path) {
   rd <- dir(file.path(base_path, "man"), full.names = TRUE)
   rd <- rd[!file.info(rd)$isdir]
-  made_by_me <- vapply(rd, made_by_roxygen, logical(1))
-
-  unlink(rd[made_by_me])
+  unlink(purrr::keep(rd, made_by_roxygen))
 }
 
 block_tags <- function(x, tag) {
@@ -288,12 +286,12 @@ topic_add_methods <- function(topic, block) {
   if (is.null(obj$methods)) return()
 
   desc <- lapply(methods, function(x) docstring(x$value@.Data))
-  usage <- vapply(methods, function(x) {
+  usage <- map_chr(methods, function(x) {
     usage <- function_usage(x$value@name, formals(x$value@.Data))
     as.character(wrap_string(usage))
-  }, character(1))
+  })
 
-  has_docs <- !vapply(desc, is.null, logical(1))
+  has_docs <- !map_lgl(desc, is.null)
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 

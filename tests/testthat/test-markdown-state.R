@@ -1,7 +1,7 @@
 context("Rd: turning markdown on/off")
-roc <- rd_roclet()
 
 test_that("turning on/off markdown globally", {
+  roc <- rd_roclet()
   ## off
   out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
     #' Title
@@ -26,6 +26,7 @@ test_that("turning on/off markdown globally", {
 })
 
 test_that("turning on/off markdown locally", {
+  roc <- rd_roclet()
   ## off / off
   out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
     #' Title
@@ -77,6 +78,7 @@ test_that("turning on/off markdown locally", {
 })
 
 test_that("warning for both @md and @noMd", {
+  roc <- rd_roclet()
 
   expect_warning(
     out1 <- roc_proc_text(roc, "
@@ -122,5 +124,4 @@ test_that("warning for both @md and @noMd", {
     get_tag(out1, "description")$values,
     "Description with some `code` included. `More code.`"
   )
-
 })

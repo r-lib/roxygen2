@@ -1,19 +1,7 @@
 context("Rd: markdown markup")
-roc <- rd_roclet()
-
-test_that("markdown is off by default", {
-  out1 <- roc_proc_text(roc, "
-    #' Title
-    #'
-    #' Description with some `code` included. `More code.`
-    foo <- function() {}")[[1]]
-  expect_equal(
-    get_tag(out1, "description")$values,
-    "Description with some `code` included. `More code.`"
-  )
-})
 
 test_that("backticks are converted to \\code", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -29,6 +17,7 @@ test_that("backticks are converted to \\code", {
 })
 
 test_that("code blocks work", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -59,6 +48,7 @@ test_that("code blocks work", {
 })
 
 test_that("inline code escapes %", {
+  roc <- rd_roclet()
   out <- roc_proc_text(rd_roclet(), "
     #' `0.5%`
     #' @md
@@ -69,6 +59,7 @@ test_that("inline code escapes %", {
 })
 
 test_that("code blocks escape %", {
+  roc <- rd_roclet()
   out <- roc_proc_text(rd_roclet(), "
     #' ```
     #' 1:10 %>% mean()
@@ -82,6 +73,7 @@ test_that("code blocks escape %", {
 })
 
 test_that("inline code works with < and >", {
+  roc <- rd_roclet()
   out <- roc_proc_text(rd_roclet(), "
     #' `SELECT <name> FROM <table>`
     #' @md
@@ -92,6 +84,7 @@ test_that("inline code works with < and >", {
 })
 
 test_that("itemized lists work", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -125,6 +118,7 @@ test_that("itemized lists work", {
 })
 
 test_that("numbered lists work", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -158,6 +152,7 @@ test_that("numbered lists work", {
 })
 
 test_that("nested lists are OK", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -204,6 +199,7 @@ test_that("nested lists are OK", {
 })
 
 test_that("emphasis works", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -219,6 +215,7 @@ test_that("emphasis works", {
 })
 
 test_that("strong (bold) text works", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -234,6 +231,7 @@ test_that("strong (bold) text works", {
 })
 
 test_that("markdown links are converted", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -253,6 +251,7 @@ test_that("markdown links are converted", {
 })
 
 test_that("images are recognized", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -272,6 +271,7 @@ test_that("images are recognized", {
 })
 
 test_that("markdown is parsed in all fields where it is supported", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' @title Title **with bold**
     #'
@@ -343,6 +343,7 @@ test_that("markdown is parsed in all fields where it is supported", {
 
 
 test_that("markdown emphasis is ok", {
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -360,6 +361,7 @@ So far so good. \\preformatted{ *these are not
 })
 
 test_that("% and $ and _ are not unescaped", {
+  roc <- rd_roclet()
 
   out1 <- roc_proc_text(roc, "
     #' Title
@@ -380,7 +382,7 @@ test_that("% and $ and _ are not unescaped", {
 })
 
 test_that("Escaping is kept", {
-
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -396,7 +398,7 @@ test_that("Escaping is kept", {
 })
 
 test_that("Do not pick up `` in arguments \\item #519", {
-
+  roc <- rd_roclet()
   out1 <- roc_proc_text(roc, "
     #' Title
     #'
@@ -420,6 +422,7 @@ test_that("Do not pick up `` in arguments \\item #519", {
 })
 
 test_that("unhandled markdown generates warning", {
+  roc <- rd_roclet()
   text <- "
     #' Title
     #'

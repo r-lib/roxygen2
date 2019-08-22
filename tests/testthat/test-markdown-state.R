@@ -1,5 +1,18 @@
 context("Rd: turning markdown on/off")
 
+test_that("markdown is off by default", {
+  roc <- rd_roclet()
+  out1 <- roc_proc_text(roc, "
+    #' Title
+    #'
+    #' Description with some `code` included. `More code.`
+    foo <- function() {}")[[1]]
+  expect_equal(
+    get_tag(out1, "description")$values,
+    "Description with some `code` included. `More code.`"
+  )
+})
+
 test_that("turning on/off markdown globally", {
   roc <- rd_roclet()
   ## off

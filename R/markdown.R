@@ -1,13 +1,17 @@
-markdown <- function(text) {
-  if (!markdown_on()) {
-    return(text)
+markdown_if_active <- function(text) {
+  if (markdown_on()) {
+    markdown(text)
+  } else {
+    text
   }
+}
 
+markdown <- function(text) {
   esc_text <- escape_rd_for_md(text)
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
 
   mdxml <- md_to_mdxml(esc_text_linkrefs)
-  rd <- mdxml_to_rd(mdxml)
+  rd <- mdxml_children_to_rd(mdxml)
 
   unescape_rd_for_md(str_trim(rd), esc_text)
 }
@@ -17,43 +21,44 @@ md_to_mdxml <- function(x) {
   xml2::read_xml(md)
 }
 
+mdxml_children_to_rd <- function(xml) {
+  out <- vapply(xml_children(xml), mdxml_node_to_rd, character(1))
+  paste0(out, collapse = "")
+}
+
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
-mdxml_to_rd <- function(xml) {
-  if (inherits(xml, "xml_node") && xml_type(xml) == "element") {
-    # recursive case: generic node
-
-    switch(xml_name(xml),
-      html = ,
-      document = ,
-      unknown = mdxml_to_rd(xml_contents(xml)),
-
-      code_block = paste0("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}"),
-      paragraph = paste0("\n\n", mdxml_to_rd(xml_contents(xml))),
-      text = xml_text(xml),
-      code = paste0("\\code{", gsub("%", "\\\\%", xml_text(xml)), "}"),
-      emph = paste0("\\emph{", mdxml_to_rd(xml_contents(xml)), "}"),
-      strong = paste0("\\strong{", mdxml_to_rd(xml_contents(xml)), "}"),
-      softbreak = "\n",
-      linebreak = "\n",
-
-      list = mdxml_list(xml),
-      item = mdxml_item(xml),
-      link = mxml_link(xml),
-      image = mdxml_image(xml),
-
-      # Not supported
-      header = ,
-      block_quote = ,
-      hrule = ,
-      html_inline = ,
-      mdxml_unknown(xml)
-    )
-  } else if (inherits(xml, "xml_nodeset")) {
-    # recursive case: list or nodeset
-    paste(vapply(xml, mdxml_to_rd, character(1)), collapse = "")
-  } else {
+mdxml_node_to_rd <- function(xml) {
+  if (!inherits(xml, "xml_node") || xml_type(xml) != "element") {
     warning("Internal failure in markdown translation.", call. = FALSE)
+    return("")
   }
+
+  switch(xml_name(xml),
+    html = ,
+    document = ,
+    unknown = mdxml_children_to_rd(xml),
+
+    code_block = paste0("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}"),
+    paragraph = paste0("\n\n", mdxml_children_to_rd(xml)),
+    text = xml_text(xml),
+    code = paste0("\\code{", gsub("%", "\\\\%", xml_text(xml)), "}"),
+    emph = paste0("\\emph{", mdxml_children_to_rd(xml), "}"),
+    strong = paste0("\\strong{", mdxml_children_to_rd(xml), "}"),
+    softbreak = "\n",
+    linebreak = "\n",
+
+    list = mdxml_list(xml),
+    item = mdxml_item(xml),
+    link = mxml_link(xml),
+    image = mdxml_image(xml),
+
+    # Not supported
+    header = ,
+    block_quote = ,
+    hrule = ,
+    html_inline = ,
+    mdxml_unknown(xml)
+  )
 }
 
 mdxml_unknown <- function(xml) {
@@ -65,20 +70,25 @@ mdxml_unknown <- function(xml) {
 mdxml_list <- function(xml) {
   type <- xml_attr(xml, "type")
   if (type == "ordered") {
-    paste0("\n\\enumerate{", mdxml_to_rd(xml_contents(xml)), "\n}")
+    paste0("\n\\enumerate{", mdxml_children_to_rd(xml), "\n}")
   } else {
-    paste0("\n\\itemize{", mdxml_to_rd(xml_contents(xml)), "\n}")
+    paste0("\n\\itemize{", mdxml_children_to_rd(xml), "\n}")
   }
 }
 
 mdxml_item <- function(xml) {
   ## A single item within a list. We remove the first paragraph
   ## tag, to avoid an empty line at the beginning of the first item.
-  cnts <- xml_children(xml)
-  if (length(cnts) == 0) {
+  children <- xml_children(xml)
+  if (length(children) == 0) {
     cnts <- ""
-  } else if (xml_name(cnts[[1]]) == "paragraph") {
-    cnts <- paste0(mdxml_to_rd(xml_contents(cnts[[1]])), mdxml_to_rd(cnts[-1]))
+  } else if (xml_name(children[[1]]) == "paragraph") {
+    cnts <- paste0(
+      mdxml_children_to_rd(children[[1]]),
+      paste0(vapply(children[-1], mdxml_node_to_rd, character(1)), collapse = "")
+    )
+  } else {
+    cnts <- mdxml_children_to_rd(xml)
   }
   paste0("\n\\item ", cnts)
 }

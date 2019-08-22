@@ -25,9 +25,6 @@ test_that("proper link references are added", {
 })
 
 test_that("can not have [ inside of link", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
   expect_equal(
     markdown("`[[`. [subset()]"),
     "\\code{[[}. \\code{\\link[=subset]{subset()}}"
@@ -35,9 +32,6 @@ test_that("can not have [ inside of link", {
 })
 
 test_that("can escape [ to avoid spurious links", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
   expect_equal(
     markdown("\\[test\\]"),
     "[test]"
@@ -50,9 +44,6 @@ test_that("can escape [ to avoid spurious links", {
 })
 
 test_that("\\Sexpr with options not converted to links", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
   expect_equal(
      markdown("\\Sexpr[results=rd]{runif(1)}"),
      "\\Sexpr[results=rd]{runif(1)}"
@@ -60,9 +51,6 @@ test_that("\\Sexpr with options not converted to links", {
 })
 
 test_that("% in links are escaped", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
   expect_equal(markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
   expect_equal(markdown("[%][x]"), "\\link[=x]{\\%}")
   expect_equal(markdown("[%%]"), "\\link{\\%\\%}")

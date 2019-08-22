@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `tag_markdown_restricted()` has been removed because it did exactly the
+  same think as `tag_markdown()`.
+
 * Roclets have now aliases to all the tags that they define so that you can
   do (e.g.) `?"@export"`. These help files are generally not that useful, but
   they do now provide basic examples, and point you towards the vignettes the

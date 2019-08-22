@@ -29,7 +29,7 @@ test_that("can not have [ inside of link", {
   on.exit(markdown_on(md))
 
   expect_equal(
-    full_markdown("`[[`. [subset()]"),
+    markdown("`[[`. [subset()]"),
     "\\code{[[}. \\code{\\link[=subset]{subset()}}"
   )
 })
@@ -39,12 +39,12 @@ test_that("can escape [ to avoid spurious links", {
   on.exit(markdown_on(md))
 
   expect_equal(
-    full_markdown("\\[test\\]"),
+    markdown("\\[test\\]"),
     "[test]"
   )
 
   expect_equal(
-    full_markdown("\\[ [test] \\]"),
+    markdown("\\[ [test] \\]"),
     "[ \\link{test} ]",
   )
 })
@@ -54,7 +54,7 @@ test_that("\\Sexpr with options not converted to links", {
   on.exit(markdown_on(md))
 
   expect_equal(
-     full_markdown("\\Sexpr[results=rd]{runif(1)}"),
+     markdown("\\Sexpr[results=rd]{runif(1)}"),
      "\\Sexpr[results=rd]{runif(1)}"
    )
 })
@@ -63,10 +63,10 @@ test_that("% in links are escaped", {
   md <- markdown_on(TRUE)
   on.exit(markdown_on(md))
 
-  expect_equal(full_markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
-  expect_equal(full_markdown("[%][x]"), "\\link[=x]{\\%}")
-  expect_equal(full_markdown("[%%]"), "\\link{\\%\\%}")
-  expect_equal(full_markdown("[foo::%%]"), "\\link[foo:\\%\\%]{foo::\\%\\%}")
+  expect_equal(markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
+  expect_equal(markdown("[%][x]"), "\\link[=x]{\\%}")
+  expect_equal(markdown("[%%]"), "\\link{\\%\\%}")
+  expect_equal(markdown("[foo::%%]"), "\\link[foo:\\%\\%]{foo::\\%\\%}")
 })
 
 test_that("commonmark picks up the various link references", {

@@ -1,4 +1,4 @@
-markdown <- function(text, markdown_tags) {
+markdown <- function(text) {
   if (!markdown_on()) return(text)
   esc_text <- escape_rd_for_md(text)
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
@@ -6,12 +6,6 @@ markdown <- function(text, markdown_tags) {
   xml <- xml2::read_xml(md)
   rd_text <- str_trim(markdown_rparse(xml, markdown_tags))
   unescape_rd_for_md(rd_text, esc_text)
-}
-restricted_markdown <- function(rest) {
-  markdown(rest, markdown_tags_restricted)
-}
-full_markdown <- function(rest) {
-  markdown(rest, markdown_tags)
 }
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
@@ -162,8 +156,6 @@ markdown_tags <- list(
   }
 
 )
-
-markdown_tags_restricted <- markdown_tags
 
 ws_to_empty <- function(x) {
   sub("^\\s*$", "", x)

@@ -143,7 +143,7 @@ tag_two_part <- function(first, second, required = TRUE) {
 
       x$val <- list(
         pieces[, 1],
-        trim_docstring(full_markdown(pieces[, 2]))
+        trim_docstring(markdown(pieces[, 2]))
       )
       names(x$val) <- c(first, second)
       x
@@ -237,13 +237,6 @@ tag_examples <- function(x) {
 #' @export
 #' @rdname roxy_tag
 tag_markdown <- function(x) {
-  x$val <- full_markdown(x$val)
-  tag_value(x)
-}
-
-#' @export
-#' @rdname roxy_tag
-tag_markdown_restricted <- function(x) {
-  x$val <- restricted_markdown(x$val)
+  x$val <- markdown(x$val)
   tag_value(x)
 }

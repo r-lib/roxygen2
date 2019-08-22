@@ -14,7 +14,6 @@
 \alias{tag_code}
 \alias{tag_examples}
 \alias{tag_markdown}
-\alias{tag_markdown_restricted}
 \title{Parsing tags.}
 \usage{
 roxy_tag(tag, val, file = "", line = 0)
@@ -42,8 +41,6 @@ tag_code(x)
 tag_examples(x)
 
 tag_markdown(x)
-
-tag_markdown_restricted(x)
 }
 \arguments{
 \item{tag}{Tag name}

@@ -12,8 +12,6 @@ object_from_call <- function(call, env, block, file) {
   if (!is.call(call)) return()
 
   call <- standardise_call(call, env)
-
-  name <- call[[1]]
   if (is_symbol(call[[1]])) {
     name <- as.character(call[[1]])
   } else if (is_call(call[[1]], "::", n = 2) && is_symbol(call[[1]][[2]], "methods")) {
@@ -29,11 +27,16 @@ object_from_call <- function(call, env, block, file) {
   parser(call, env, block)
 }
 
-object_from_call2 <- function(call, env = pkg_env()) {
-  call <- substitute(call)
+object_from_call2 <- function(code, env = pkg_env()) {
+  code <- substitute(code)
 
-  eval(call, envir = env)
-  object_from_call(call[[length(call)]], env, block = NULL, file = NULL)
+  eval(code, envir = env)
+  if (is_call(code, "{")) {
+    call <- code[[length(code)]]
+  } else {
+    call <- code
+  }
+  object_from_call(call, env, block = NULL, file = NULL)
 }
 
 find_data <- function(name, env, file) {

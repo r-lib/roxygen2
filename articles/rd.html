@@ -237,20 +237,27 @@
 <div id="s3" class="section level3">
 <h3 class="hasAnchor">
 <a href="#s3" class="anchor"></a>S3</h3>
-<p>S3 <strong>generics</strong> are regular functions, so document them as such. S3 <strong>classes</strong> have no formal definition, so document the constructor function. It is your choice whether or not to document S3 <strong>methods</strong>. You don’t need to document methods for simple generics like <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code>. If your method is more complicated, you should document it so people know what the parameters do. In base R, you can find documentation for more complex methods like <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict.lm">predict.lm()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict.glm">predict.glm()</a></code>, and <code><a href="https://www.rdocumentation.org/packages/stats/topics/anova.glm">anova.glm()</a></code>.</p>
-<p>Generally, roxygen2 will automatically figure the generic associated with an S3 method. It should only fail if the generic and class are ambiguous. For example is <code>all.equal.data.frame()</code> the <code>equal.data.frame</code> method for <code>all</code>, or the <code>data.frame</code> method for <code>all.equal</code>?. If this happens, you can disambiguate with (e.g.) <code>@method all.equal data.frame</code>.</p>
+<ul>
+<li><p>S3 <strong>generics</strong> are regular functions, so document them as such. If necessary, include a <code>@section</code> that provides additional details for method implementors</p></li>
+<li><p>S3 <strong>classes</strong> have no formal definition, so document the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor">constructor</a>.</p></li>
+<li>
+<p>It is your choice whether or not to document S3 <strong>methods</strong>. Generally, it’s not necessary to document straightforward methods for common generics like <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code>. If your method is more complicated, you should document it so people know what the parameters do. In base R, you can find documentation for more complex methods like <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict.lm">?predict.lm</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict.glm">?predict.glm</a></code>, and <code><a href="https://www.rdocumentation.org/packages/stats/topics/anova.glm">?anova.glm</a></code>.</p>
+<p>Generally, roxygen2 will automatically figure the generic associated with an S3 method. It should only fail if the generic and class are ambiguous. For example is <code>all.equal.data.frame()</code> the <code>equal.data.frame</code> method for <code><a href="https://www.rdocumentation.org/packages/base/topics/all">all()</a></code>, or the <code>data.frame</code> method for <code><a href="https://www.rdocumentation.org/packages/base/topics/all.equal">all.equal()</a></code>?. If this happens to you, disambiguate with (e.g.) <code>@method all.equal data.frame</code>.</p>
+</li>
+</ul>
 </div>
 <div id="s4" class="section level3">
 <h3 class="hasAnchor">
 <a href="#s4" class="anchor"></a>S4</h3>
-<p>S4 <strong>generics</strong> are also functions, so document them as such. Document <strong>S4 classes</strong> by adding a roxygen block before <code>setClass()</code>. Use <code>@slot</code> to document the slots of the class. Here’s a simple example:</p>
+<p>S4 <strong>generics</strong> are also functions, so document them as such.</p>
+<p>Document <strong>S4 classes</strong> by adding a roxygen block before <code>setClass()</code>. Use <code>@slot</code> to document the slots of the class. Here’s a simple example:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">#' An S4 class to represent a bank account.</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#'</span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#' @slot balance A length-one numeric vector</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">Account &lt;-<span class="st"> </span><span class="kw">setClass</span>(<span class="st">"Account"</span>,</a>
 <a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">slots =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">balance =</span> <span class="st">"numeric"</span>)</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">)</a></code></pre></div>
-<p>S4 <strong>methods</strong> are a little more complicated. Unlike S3, all S4 methods must be documented. You can document them in three places:</p>
+<p>S4 <strong>methods</strong> are a little more complicated. Unlike S3 methods, all S4 methods must be documented. You can document them in three places:</p>
 <ul>
 <li><p>In the class. Most appropriate if the corresponding generic uses single dispatch and you created the class.</p></li>
 <li><p>In the generic. Most appropriate if the generic uses multiple dispatch and you control it.</p></li>
@@ -262,53 +269,58 @@
 <h3 class="hasAnchor">
 <a href="#datasets" class="anchor"></a>Datasets</h3>
 <p>Datasets are usually stored as <code>.rdata</code> files in <code>data/</code> and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset’s name.</p>
-<p>There are two additional tags that are useful for documenting datasets:</p>
-<ul>
-<li><p><code>@format</code>, which gives an overview of the structure of the dataset.</p></li>
-<li><p><code>@source</code> where you got the data form, often a URL.</p></li>
-</ul>
-<p>To show how everything fits together, the example below is an excerpt from the roxygen block used to document the diamonds dataset in ggplot2.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#' Prices of 50,000 round cut diamonds.</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#'</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#' A dataset containing the prices and other attributes of almost 54,000</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#' diamonds. The variables are as follows:</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#' diamonds.</span></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#' * `price`: price in US dollars (\$326--\$18,823)</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#' * `carat`: weight of the diamond (0.2--5.01)</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#' * ...</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#' @format A data frame with 53940 rows and 10 variables</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#' @source &lt;http://www.diamondse.info/&gt;</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="st">"diamonds"</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; [1] "diamonds"</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#' @format A data frame with 53940 rows and 10 variables</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#' \describe{</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#'   \item{price}{price in US dollars (\$326--\$18,823)}</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#'   \item{carat}{weight of the diamond (0.2--5.01)}</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#'   \item{color}{diamond colour, from D (best) to J (worst)}</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#'   \item{x}{length in mm (0--10.74)}</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#'   \item{y}{width in mm (0--58.9)}</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#'   \item{z}{depth in mm (0--31.8)}</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#'   \item{table}{width of top of diamond relative to widest point (43--95)}</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#' }</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#' @source &lt;http://www.diamondse.info/&gt;</span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="st">"diamonds"</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; [1] "diamonds"</span></a></code></pre></div>
+<p>Note the use of two additional tags that are particularly useful for documenting data:</p>
+<ul>
+<li><p><code>@format</code>, which gives an overview of the structure of the dataset. This should include a <strong>definition list</strong> that describes each variable. There’s currently no way to generate this with markdown, so this is one of the few places you’ll need to Rd markup directly.</p></li>
+<li><p><code>@source</code> where you got the data form, often a URL.</p></li>
+</ul>
 </div>
 <div id="packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#packages" class="anchor"></a>Packages</h3>
-<p>As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages do this, but it’s an extremely useful because instead of just listing functions like <code><a href="https://www.rdocumentation.org/packages/utils/topics/help">help(package = pkgname)</a></code> it organises them and shows the user where to get started.</p>
-<p>Package documentation should describe the overall purpose of the package and point out the most important functions. The title and description are automatically inherited from the <code>DESCRIPTION</code>, so generally you should only need to supply additional details in <code>@details</code></p>
-<p>Package documentation should be placed in <code>pkgname.R</code>. Here’s an example:</p>
+<p>As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel <code>"_PACKAGE"</code>. We recommend placing package documentation in <code>{pkgname}-package.R</code>, and have <code>@keywords internal</code>. Here’s an example:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">#' @details</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#' The only function you're likely to need from roxygen2 is [roxygenize()]. </span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#' Otherwise refer to the vignettes to see how to format the documentation.</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#' @keywords internal</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">"_PACKAGE"</span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] "_PACKAGE"</span></a></code></pre></div>
-<p><code><a href="https://usethis.r-lib.org/reference/use_package_doc.html">usethis::use_package_doc()</a></code> will generate a basic template for you automatically.</p>
-<p>I recommend using <code>@keywords internal</code> for package documentation.</p>
+<p>Package documentation is a good place to put <code>@section Package options:</code> that documents options used by the package.</p>
 <p>Some notes:</p>
 <ul>
-<li><p>Like for datasets, there isn’t a object that we can document directly. Use <code>"_PACKAGE"</code> to indicate that you are creating the package’s documentation.</p></li>
-<li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, override the default aliases with <code>@aliases {pkgname}-package</code></p></li>
+<li><p>Package documentation will automatically include information parsed from the <code>DESCRIPTION</code>, includoing title, description, list of authors, and useful URLs.</p></li>
+<li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, use <code>@aliases {pkgname}-package</code> to override the default.</p></li>
+<li><p><code><a href="https://usethis.r-lib.org/reference/use_package_doc.html">usethis::use_package_doc()</a></code> will generate a basic template to get you started.</p></li>
 <li><p>Use <code>@references</code> point to published material about the package that users might find helpful.</p></li>
 </ul>
-<p>Package documentation is a good place to list all <code><a href="https://www.rdocumentation.org/packages/base/topics/options">options()</a></code> that a package understands and to document their behaviour. Put in a section called “Package options”, as described below.</p>
 </div>
 </div>
 <div id="sections" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sections" class="anchor"></a>Sections</h2>
-<p>You can add arbitrary sections to the documentation for any object with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed by a colon. Titles may only take one line.</p>
+<p>You can add arbitrary sections with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case, must fit on one line, and must be followed by a colon.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#' @section Warning:</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></a></code></pre></div>
 <p>To add a subsection, you must use the Rd <code>\subsection{}</code> command, as follows:</p>
@@ -318,41 +330,31 @@
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#' \subsection{Exceptions}{</span></a>
 <a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#'    Apart from the following special cases...</span></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#' }</span></a></code></pre></div>
-<p>Sections with identical titles will be merged. This is especially useful in conjunction with the <code>@rdname</code> tag:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#' Basic arithmetic</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#' @param x,y numeric vectors.</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#' @section Neutral elements:</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#'   Addition: 0.</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">add &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#' @rdname add</span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#' @section Neutral elements:</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#'   Multiplication: 1.</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11">times &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">*</span><span class="st"> </span>y</a></code></pre></div>
-<p>For very long documentation files, you might consider using a vignette instead.</p>
+<p>If you find yourself adding a lot of sections, you might consider using a vignette instead.</p>
 </div>
 <div id="do-repeat-yourself" class="section level2">
 <h2 class="hasAnchor">
 <a href="#do-repeat-yourself" class="anchor"></a>Do repeat yourself</h2>
 <p>There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It’s frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides three ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:</p>
 <ul>
-<li>Cross-link documentation files with <code>@seealso</code> and <code>@family</code>.</li>
-<li>Reuse parameter documentation with <code>@inherit</code>, <code>@inheritParams</code>, and <code>@inheritSections</code>.</li>
-<li>Document multiple functions in the same place with <code>@describeIn</code> or <code>@rdname</code>.</li>
-<li>Run arbtirary R code with <code>@eval</code>.</li>
-<li>Create reusable templates with <code>@template</code> and <code>@templateVar</code>.</li>
+<li><p>Cross-link documentation files with <code>@seealso</code> and <code>@family</code>.</p></li>
+<li><p>Inherit documentation from another topic with<br><code>@inherit</code>, <code>@inheritParams</code>, and <code>@inheritSection</code>.</p></li>
+<li><p>Document multiple functions in the same topic with <code>@describeIn</code> or <code>@rdname</code>.</p></li>
+<li><p>Run arbtirary R code with <code>@eval</code>.</p></li>
+<li><p>Create reusable templates with <code>@template</code> and <code>@templateVar</code>.</p></li>
 </ul>
 <div id="cross-references" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cross-references" class="anchor"></a>Cross-references</h3>
-<p>There are two tags that make it easier for people to navigate around your documentation: <code>@seealso</code> and <code>@family</code>.</p>
-<p><code>@seealso</code> allows you to point to other useful resources, either on the web <code>&lt;http://www.r-project.org&gt;</code> or to other documentation with <code>[functioname()]</code>.</p>
-<p>If you have a family of related functions, you can use the <code>@family &lt;family&gt;</code> tag to automatically add appropriate lists and interlinks to the <code>@seealso</code> section. Because it will appear as “Other <family>:”, the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can make a function a member of multiple families by repeating the <span class="citation">@family</span> tag for each additional family. These will then get separate headings in the <strong>seealso</strong> section.</family></p>
-<p>For sum, these components might look like:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#' @family aggregate functions</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.</span></a></code></pre></div>
+<p>There are two tags that make it easier for people to navigate around your documentation: <code>@seealso</code> and <code>@family</code>. <code>@seealso</code> allows you to point to other useful resources, either on the web <code>&lt;http://www.r-project.org&gt;</code> or to other documentation with <code>[function_name()]</code>. If you have a family of related functions, you can use <code>@family {family}</code> to cross-reference each function to every other function within the family. A function can be a member of multiple families.</p>
+<p>For <code><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum()</a></code>, this might look like:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#' @family aggregations</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.</span></a></code></pre></div>
+<p>By default <code>@family {family}</code>, will generate the see also text “Other {family}:”, so the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can override the default title by providing a <code>rd_family_title</code> list in <code>man/roxygen/meta.R</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">rd_family_title &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="dt">aggregations =</span> <span class="st">"Aggregation functions"</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">)</a></code></pre></div>
 </div>
 <div id="inheriting-documentation-from-other-topics" class="section level3">
 <h3 class="hasAnchor">
@@ -468,15 +470,13 @@
 <div id="indexing" class="section level3">
 <h3 class="hasAnchor">
 <a href="#indexing" class="anchor"></a>Indexing</h3>
-<p>Three other tags make it easier for the user to find documentation:</p>
+<p>Three other tags make it easier for the user to find documentation within R’s help system:</p>
 <ul>
 <li><p>Aliases form the index that <code>?</code> searches. Use <code>@aliases space separated aliases</code> to add additional aliases.</p></li>
 <li><p><code>@concept</code> add extra keywords that will be found with <code><a href="https://www.rdocumentation.org/packages/utils/topics/help.search">help.search()</a></code></p></li>
-<li>
-<p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list found <code>file.path(R.home("doc"), "KEYWORDS"))</code>.</p>
-<p>Keywords are not very useful, except for <code>@keywords internal</code>. Using the internal keyword removes the function from the documentation index and is useful for functions aimed primarily at other developers, not typically users of the package.</p>
-</li>
+<li><p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list found <code>file.path(R.home("doc"), "KEYWORDS"))</code>.</p></li>
 </ul>
+<p>Apart from <code>@keywords internal</code>, these tags are not very useful because most people find documentation using goole. <code>@keywords internal</code> is useful because it removes the function from the documentation index; it’s useful for functions aimed primarily at other developers, not typical users of the package.</p>
 </div>
 <div id="back-references" class="section level3">
 <h3 class="hasAnchor">

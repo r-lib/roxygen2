@@ -153,13 +153,30 @@ Indent the second and subsequent lines of a tag so that when scanning the docume
 
 ### S3
 
-S3 __generics__ are regular functions, so document them as such. S3 __classes__ have no formal definition, so document the constructor function. It is your choice whether or not to document S3 __methods__. You don't need to document methods for simple generics like `print()`. If your method is more complicated, you should document it so people know what the parameters do. In base R, you can find documentation for more complex methods like `predict.lm()`, `predict.glm()`, and `anova.glm()`.
+* S3 __generics__ are regular functions, so document them as such. 
+  If necessary, include a `@section` that provides additional details for 
+  method implementors
+ 
+* S3 __classes__ have no formal definition, so document the 
+  [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor). 
 
-Generally, roxygen2 will automatically figure the generic associated with an S3 method. It  should only fail if the generic and class are ambiguous. For example is `all.equal.data.frame()` the `equal.data.frame` method for `all`, or the `data.frame` method for `all.equal`?. If this happens, you can disambiguate with (e.g.) `@method all.equal data.frame`.
+* It is your choice whether or not to document S3 __methods__. Generally, it's
+  not necessary to document straightforward methods for common generics like 
+  `print()`. If your method is more complicated, you should document it 
+  so people know what the parameters do. In base R, you can find documentation 
+  for more complex methods like `?predict.lm`, `?predict.glm`, and `?anova.glm`.
+
+  Generally, roxygen2 will automatically figure the generic associated with an 
+  S3 method. It should only fail if the generic and class are ambiguous. For 
+  example is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, 
+  or the `data.frame` method for `all.equal()`?. If this happens to you, 
+  disambiguate with (e.g.) `@method all.equal data.frame`.
 
 ### S4
 
-S4 __generics__ are also functions, so document them as such. Document __S4 classes__ by adding a roxygen block before `setClass()`. Use `@slot` to document the slots of the class. Here's a simple example:
+S4 __generics__ are also functions, so document them as such. 
+
+Document __S4 classes__ by adding a roxygen block before `setClass()`. Use `@slot` to document the slots of the class. Here's a simple example:
 
 ```{r}
 #' An S4 class to represent a bank account.
@@ -170,7 +187,7 @@ Account <- setClass("Account",
 )
 ```
 
-S4 __methods__ are a little more complicated. Unlike S3, all S4 methods must be documented. You can document them in three places:
+S4 __methods__ are a little more complicated. Unlike S3 methods, all S4 methods must be documented. You can document them in three places:
 
 * In the class. Most appropriate if the corresponding generic uses single
   dispatch and you created the class.
@@ -187,36 +204,42 @@ Use either `@rdname` or `@describeIn` to control where method documentation goes
 
 Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset's name.
 
-There are two additional tags that are useful for documenting datasets:
-
-* `@format`, which gives an overview of the structure of the dataset.
-
-* `@source` where you got the data form, often a URL.
-
-To show how everything fits together, the example below is an excerpt from the roxygen block used to document the diamonds dataset in ggplot2.
-
 ```{r}
 #' Prices of 50,000 round cut diamonds.
 #'
 #' A dataset containing the prices and other attributes of almost 54,000
-#' diamonds. The variables are as follows:
-#'
-#' * `price`: price in US dollars (\$326--\$18,823)
-#' * `carat`: weight of the diamond (0.2--5.01)
-#' * ...
+#' diamonds.
 #'
 #' @format A data frame with 53940 rows and 10 variables
+#' \describe{
+#'   \item{price}{price in US dollars (\$326--\$18,823)}
+#'   \item{carat}{weight of the diamond (0.2--5.01)}
+#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}
+#'   \item{color}{diamond colour, from D (best) to J (worst)}
+#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,
+#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}
+#'   \item{x}{length in mm (0--10.74)}
+#'   \item{y}{width in mm (0--58.9)}
+#'   \item{z}{depth in mm (0--31.8)}
+#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
+#'   \item{table}{width of top of diamond relative to widest point (43--95)}
+#' }
 #' @source <http://www.diamondse.info/>
 "diamonds"
 ```
 
+Note the use of two additional tags that are particularly useful for documenting data:
+
+* `@format`, which gives an overview of the structure of the dataset.
+  This should include a __definition list__ that describes each variable.
+  There's currently no way to generate this with markdown, so this is 
+  one of the few places you'll need to Rd markup directly.
+
+* `@source` where you got the data form, often a URL.
+
 ### Packages
 
-As well as documenting every exported object in the package, you should also document the package itself. Relatively few packages do this, but it's an extremely useful because instead of just listing functions like `help(package = pkgname)` it organises them and shows the user where to get started.
-
-Package documentation should describe the overall purpose of the package and point out the most important functions. The title and description are automatically inherited from the `DESCRIPTION`, so generally you should only need to supply additional details in `@details`
-
-Package documentation should be placed in `pkgname.R`. Here's an example:
+As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel `"_PACKAGE"`. We recommend placing package documentation in `{pkgname}-package.R`, and have `@keywords internal`. Here's an example:
 
 ```{r}
 #' @details
@@ -226,28 +249,28 @@ Package documentation should be placed in `pkgname.R`. Here's an example:
 "_PACKAGE"
 ```
 
-`usethis::use_package_doc()` will generate a basic template for you automatically.
-
-I recommend using `@keywords internal` for package documentation.
+Package documentation is a good place to put `@section Package options:` that documents options used by the package.
 
 Some notes:
 
-* Like for datasets, there isn't a object that we can document directly. Use
-  `"_PACKAGE"` to indicate that you are creating the package's documentation.
-  
+* Package documentation will automatically include information parsed from the
+  `DESCRIPTION`, includoing title, description, list of authors, and useful
+  URLs.
+
 * By default, aliases will be added so that both `?pkgname` and 
-  `package?pkgname` will find the package help. If there's an existing function
-  called `pkgname`, override the default aliases with 
-  `@aliases {pkgname}-package`
+  `package?pkgname` will find the package help. If there's an existing 
+  function called `pkgname`, use `@aliases {pkgname}-package` to
+  override the default.
+
+* `usethis::use_package_doc()` will generate a basic template to get 
+  you started.
 
 * Use `@references` point to published material about the package that
   users might find helpful.
 
-Package documentation is a good place to list all `options()` that a package understands and to document their behaviour. Put in a section called "Package options", as described below.
-
 ## Sections
 
-You can add arbitrary sections to the documentation for any object with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case and must be followed by a colon. Titles may only take one line.
+You can add arbitrary sections with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case, must fit on one line, and must be followed by a colon.
 
 ```{r}
 #' @section Warning:
@@ -265,48 +288,41 @@ To add a subsection, you must use the Rd `\subsection{}` command, as follows:
 #' }
 ```
 
-Sections with identical titles will be merged. This is especially useful in conjunction with the `@rdname` tag:
-
-```{r}
-#' Basic arithmetic
-#'
-#' @param x,y numeric vectors.
-#' @section Neutral elements:
-#'   Addition: 0.
-add <- function(x, y) x + y
-
-#' @rdname add
-#' @section Neutral elements:
-#'   Multiplication: 1.
-times <- function(x, y) x * y
-```
-
-For very long documentation files, you might consider using a vignette instead.
+If you find yourself adding a lot of sections, you might consider using a vignette instead.
 
 ## Do repeat yourself
 
 There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides three ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
 * Cross-link documentation files with `@seealso` and `@family`.
-* Reuse parameter documentation with `@inherit`, `@inheritParams`, and `@inheritSections`.
-* Document multiple functions in the same place with `@describeIn` or `@rdname`.
+
+* Inherit documentation from another topic with  
+  `@inherit`, `@inheritParams`, and `@inheritSection`.
+
+* Document multiple functions in the same topic with `@describeIn` or `@rdname`.
+
 * Run arbtirary R code with `@eval`.
+
 * Create reusable templates with `@template` and `@templateVar`.
 
 ### Cross-references
 
-There are two tags that make it easier for people to navigate around your documentation: `@seealso` and `@family`. 
+There are two tags that make it easier for people to navigate around your documentation: `@seealso` and `@family`.  `@seealso` allows you to point to other useful resources, either on the web `<http://www.r-project.org>` or to other documentation with `[function_name()]`. If you have a family of related functions, you can use `@family {family}` to cross-reference each function to every other function within the family. A function can be a member of multiple families.
 
-`@seealso` allows you to point to other useful resources, either on the web `<http://www.r-project.org>` or to other documentation with `[functioname()]`. 
-
-If you have a family of related functions, you can use the `@family <family>` tag to automatically add appropriate lists and interlinks to the `@seealso` section. Because it will appear as "Other <family>:", the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can make a function a member of multiple families by repeating the @family tag for each additional family. These will then get separate headings in the __seealso__ section.
-
-For sum, these components might look like:
+For `sum()`, this might look like:
 
 ```{r}
-#' @family aggregate functions
+#' @family aggregations
 #' @seealso [prod()] for products, [cumsum()] for cumulative sums, and
 #'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.
+```
+
+By default  `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can override the default title by providing a `rd_family_title` list in `man/roxygen/meta.R`:
+
+```{r, eval = FALSE}
+rd_family_title <- list(
+  aggregations = "Aggregation functions"
+)
 ```
 
 ### Inheriting documentation from other topics
@@ -386,7 +402,6 @@ times <- function(x, y) x * y
 
 A new and powerful technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).
 
-
 For example, this code + roxygen block:
 
 ```{r}
@@ -454,7 +469,7 @@ Note that templates are parsed a little differently to regular blocks, so you'll
 
 ### Indexing
 
-Three other tags make it easier for the user to find documentation:
+Three other tags make it easier for the user to find documentation within R's help system:
 
 *   Aliases form the index that `?` searches. Use 
     `@aliases space separated aliases` to add additional aliases.
@@ -465,10 +480,7 @@ Three other tags make it easier for the user to find documentation:
     Keywords are optional, but if present, must be taken from the 
     predefined list found `file.path(R.home("doc"), "KEYWORDS"))`.
 
-    Keywords are not very useful, except for `@keywords internal`. Using 
-    the internal keyword removes the function from the documentation index 
-    and is useful for functions aimed primarily at other developers, not
-    typically users of the package.
+Apart from `@keywords internal`, these tags are not very useful because most people find documentation using goole. `@keywords internal` is useful because it removes the function from the documentation index; it's useful for functions aimed primarily at other developers, not typical users of the package.
 
 ### Back references
 

@@ -1,30 +1,28 @@
 object_from_call <- function(call, env, block, file) {
-  if (is.null(call)) return()
-
-  # Special case: you can refer to other objects as strings
   if (is.character(call)) {
+    # Special case: you can refer to other objects as strings
     value <- find_data(call, env, file)
     value <- standardise_obj(call, value, env, block)
 
-    return(object(value, call))
-  }
+    object(value, call)
+  } else if (is.call(call)) {
+    call <- standardise_call(call, env)
+    if (is_symbol(call[[1]])) {
+      name <- as.character(call[[1]])
+    } else if (is_call(call[[1]], "::", n = 2) && is_symbol(call[[1]][[2]], "methods")) {
+      name <- as.character(call[[1]][[3]])
+    } else {
+      return(NULL)
+    }
 
-  if (!is.call(call)) return()
+    # Dispatch to registered srcref parsers based on function name
+    parser <- find_parser(name)
+    if (is.null(parser)) return(NULL)
 
-  call <- standardise_call(call, env)
-  if (is_symbol(call[[1]])) {
-    name <- as.character(call[[1]])
-  } else if (is_call(call[[1]], "::", n = 2) && is_symbol(call[[1]][[2]], "methods")) {
-    name <- as.character(call[[1]][[3]])
+    parser(call, env, block)
   } else {
-    return(NULL)
+    NULL
   }
-
-  # Dispatch to registered srcref parsers based on function name
-  parser <- find_parser(name)
-  if (is.null(parser)) return(NULL)
-
-  parser(call, env, block)
 }
 
 object_from_call2 <- function(code, env = pkg_env()) {

@@ -7,12 +7,12 @@ markdown <- function(text) {
 
   md <- commonmark::markdown_xml(esc_text_linkrefs, hardbreaks = TRUE)
   xml <- xml2::read_xml(md)
-  rd_text <- str_trim(markdown_rparse(xml, markdown_tags))
+  rd_text <- str_trim(markdown_rparse(xml))
   unescape_rd_for_md(rd_text, esc_text)
 }
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
-markdown_rparse <- function(xml, markdown_tags) {
+markdown_rparse <- function(xml) {
   if (is.character(xml)) {
     # base case: string
     paste(xml, collapse = "")
@@ -22,17 +22,17 @@ markdown_rparse <- function(xml, markdown_tags) {
     sub("^\\s*$", "", text)
   } else if (inherits(xml, "xml_node") && xml_type(xml) == "element") {
     # recursive case: generic node
-    parser <- markdown_tags[[ xml_name(xml) ]]
+    parser <- markdown_tags[[xml_name(xml)]]
 
     if (is.null(parser)) {
       warning("Unknown xml node: ", xml_name(xml), call. = FALSE)
       return(xml_text(xml))
     }
 
-    markdown_rparse(parser(xml), markdown_tags = markdown_tags)
+    markdown_rparse(parser(xml))
   } else if (is.list(xml) || inherits(xml, "xml_nodeset")) {
     # recursive case: list or nodeset
-    paste(vapply(xml, markdown_rparse, "", markdown_tags = markdown_tags), collapse = "")
+    paste(vapply(xml, markdown_rparse, ""), collapse = "")
   } else {
     warning("Unknown xml object")
   }

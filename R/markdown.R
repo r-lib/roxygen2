@@ -35,7 +35,7 @@ mdxml_to_rd <- function(xml) {
       return(xml_text(xml))
     }
 
-    mdxml_to_rd(parser(xml))
+    parser(xml)
   } else if (is.list(xml) || inherits(xml, "xml_nodeset")) {
     # recursive case: list or nodeset
     paste(vapply(xml, mdxml_to_rd, character(1)), collapse = "")
@@ -48,26 +48,26 @@ markdown_tags <- list(
 
   unknown = function(xml) {
     ## Just ignore the tag, keep the contents
-    xml_contents(xml)
+    mdxml_to_rd(xml_contents(xml))
   },
 
   document = function(xml) {
     ## Keep the contents only, tag does nothing
-    xml_contents(xml)
+    mdxml_to_rd(xml_contents(xml))
   },
 
   block_quote = function(xml) {
     ## Cannot really format this in Rd, so we just leave it
-    xml_contents(xml)
+    mdxml_to_rd(xml_contents(xml))
   },
 
   list = function(xml) {
     ## A list, either bulleted or numbered
     type <- xml_attr(xml, "type")
     if (type == "ordered") {
-      list("\n\\enumerate{", xml_contents(xml), "\n}")
+      paste0("\n\\enumerate{", mdxml_to_rd(xml_contents(xml)), "\n}")
     } else {
-      list("\n\\itemize{", xml_contents(xml), "\n}")
+      paste0("\n\\itemize{", mdxml_to_rd(xml_contents(xml)), "\n}")
     }
   },
 
@@ -78,29 +78,29 @@ markdown_tags <- list(
     if (length(cnts) == 0) {
       cnts <- ""
     } else if (xml_name(cnts[[1]]) == "paragraph") {
-      cnts <- list(xml_contents(cnts[[1]]), cnts[-1])
+      cnts <- paste0(mdxml_to_rd(xml_contents(cnts[[1]])), mdxml_to_rd(cnts[-1]))
     }
-    list("\n\\item ", cnts)
+    paste0("\n\\item ", cnts)
   },
 
   code_block = function(xml) {
     ## Large block of code
-    list("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}")
+    paste0("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}")
   },
 
   html = function(xml) {
     ## Not sure what to do with this, we'll just leave it
-    xml_contents(xml)
+    mdxml_to_rd(xml_contents(xml))
   },
 
   paragraph = function(xml) {
     ## Paragraph
-    list("\n\n", xml_contents(xml))
+    paste0("\n\n", mdxml_to_rd(xml_contents(xml)))
   },
 
   header = function(xml) {
     ## Not sure what this is, ignore it for now.
-    xml_contents(xml)
+    mdxml_to_rd(xml_contents(xml))
   },
 
   hrule = function(xml) {
@@ -125,22 +125,22 @@ markdown_tags <- list(
   },
 
   code = function(xml) {
-    list("\\code{", gsub("%", "\\\\%", xml_text(xml)), "}")
+    paste0("\\code{", gsub("%", "\\\\%", xml_text(xml)), "}")
   },
 
   html_inline = function(xml) {
     ## Will just ignore this for now.
-    xml_contents(xml)
+    mdxml_to_rd(xml_contents(xml))
   },
 
   emph = function(xml) {
     ## Emphasized text.
-    list("\\emph{", xml_contents(xml), "}")
+    paste0("\\emph{", mdxml_to_rd(xml_contents(xml)), "}")
   },
 
   strong = function(xml) {
     ## Bold text.
-    list("\\strong{", xml_contents(xml), "}")
+    paste0("\\strong{", mdxml_to_rd(xml_contents(xml)), "}")
   },
 
   link = function(xml) {
@@ -151,11 +151,11 @@ markdown_tags <- list(
     link <- parse_link(dest, contents)
 
     if (!is.null(link)) {
-      link
+      paste0(link, collapse = "")
     } else if (dest == "" || dest == xml_text(xml)) {
-      list("\\url{", xml_text(xml), "}")
+      paste0("\\url{", xml_text(xml), "}")
     } else {
-      list("\\href{", dest, "}{", xml_link_text(contents), "}")
+      paste0("\\href{", dest, "}{", xml_link_text(contents), "}")
     }
   },
 
@@ -173,5 +173,5 @@ markdown_tags <- list(
 xml_link_text <- function(xml_contents) {
   text <- xml_text(xml_contents)
   text[xml_name(xml_contents) %in% c("linebreak", "softbreak")] <- " "
-  text
+  paste0(text, collapse = "")
 }

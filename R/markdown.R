@@ -2,17 +2,23 @@ markdown <- function(text) {
   if (!markdown_on()) {
     return(text)
   }
+
   esc_text <- escape_rd_for_md(text)
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
 
-  md <- commonmark::markdown_xml(esc_text_linkrefs, hardbreaks = TRUE)
-  xml <- xml2::read_xml(md)
-  rd_text <- str_trim(markdown_rparse(xml))
-  unescape_rd_for_md(rd_text, esc_text)
+  mdxml <- md_to_mdxml(esc_text_linkrefs)
+  rd <- mdxml_to_rd(mdxml)
+
+  unescape_rd_for_md(str_trim(rd), esc_text)
+}
+
+md_to_mdxml <- function(x) {
+  md <- commonmark::markdown_xml(x, hardbreaks = TRUE)
+  xml2::read_xml(md)
 }
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
-markdown_rparse <- function(xml) {
+mdxml_to_rd <- function(xml) {
   if (is.character(xml)) {
     # base case: string
     paste(xml, collapse = "")
@@ -29,10 +35,10 @@ markdown_rparse <- function(xml) {
       return(xml_text(xml))
     }
 
-    markdown_rparse(parser(xml))
+    mdxml_to_rd(parser(xml))
   } else if (is.list(xml) || inherits(xml, "xml_nodeset")) {
     # recursive case: list or nodeset
-    paste(vapply(xml, markdown_rparse, ""), collapse = "")
+    paste(vapply(xml, mdxml_to_rd, character(1)), collapse = "")
   } else {
     warning("Unknown xml object")
   }

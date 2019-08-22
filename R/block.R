@@ -199,7 +199,7 @@ parse_description <- function(tags) {
   tags <- tags[-1]
   tag_names <- tag_names[-1]
 
-  paragraphs <- str_trim(str_split(intro$val, fixed('\n\n'))[[1]])
+  paragraphs <- str_split(intro$val, fixed('\n\n'))[[1]]
 
   # 1st paragraph = title (unless has @title)
   if ("title" %in% tag_names) {

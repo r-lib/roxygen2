@@ -1,7 +1,10 @@
 markdown <- function(text) {
-  if (!markdown_on()) return(text)
+  if (!markdown_on()) {
+    return(text)
+  }
   esc_text <- escape_rd_for_md(text)
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
+
   md <- commonmark::markdown_xml(esc_text_linkrefs, hardbreaks = TRUE)
   xml <- xml2::read_xml(md)
   rd_text <- str_trim(markdown_rparse(xml, markdown_tags))
@@ -15,7 +18,8 @@ markdown_rparse <- function(xml, markdown_tags) {
     paste(xml, collapse = "")
   } else if (inherits(xml, "xml_node") && xml_type(xml) == "text") {
     # base case: text node, only keep if not entirely whitespace
-    ws_to_empty(xml_text(xml))
+    text <- xml_text(xml)
+    sub("^\\s*$", "", text)
   } else if (inherits(xml, "xml_node") && xml_type(xml) == "element") {
     # recursive case: generic node
     parser <- markdown_tags[[ xml_name(xml) ]]
@@ -157,14 +161,9 @@ markdown_tags <- list(
 
 )
 
-ws_to_empty <- function(x) {
-  sub("^\\s*$", "", x)
-}
-
-## Newlines in markdown get converted to softbreaks/linebreaks by
-## markdown_xml(), which then get interpreted as empty strings by
-## xml_text(). So we preserve newlines as spaces.
-
+# Newlines in markdown get converted to softbreaks/linebreaks by
+# markdown_xml(), which then get interpreted as empty strings by
+# xml_text(). So we preserve newlines as spaces.
 xml_link_text <- function(xml_contents) {
   text <- xml_text(xml_contents)
   text[xml_name(xml_contents) %in% c("linebreak", "softbreak")] <- " "

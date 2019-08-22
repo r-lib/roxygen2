@@ -180,9 +180,7 @@ parser_setConstructorS3 <- function(call, env, block) {
 #   .local <- function (x, ..., y = 7) {}
 #   .local(x, ...)
 # }
-extract_method_fun <- function(x) {
-  fun <- x@.Data
-
+extract_method_fun <- function(fun) {
   method_body <- body(fun)
   if (!is_call(method_body, "{")) return(fun)
   if (length(method_body) < 2) return(fun)
@@ -191,6 +189,9 @@ extract_method_fun <- function(x) {
   if (!is_call(first_line, name = "<-", n = 2)) return(fun)
   if (!identical(first_line[[2]], quote(`.local`))) return(fun)
 
-  eval(first_line[[3]])
+  local_fun <- eval(first_line[[3]])
+  if (!is.function(local_fun)) return(fun)
+
+  local_fun
 }
 

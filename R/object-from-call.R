@@ -85,7 +85,17 @@ parser_assignment <- function(call, env, block) {
   }
 
   value <- get(name, env)
-  value <- standardise_obj(name, value, env, block)
+  if (is_generator(value)) {
+    # S4 and RC generators need to be converted to their classes
+    value <- methods::getClass(as.character(value@className), where = env)
+  } else if (inherits(value, "MethodDefinition")) {
+    # S4 methods need munging to get real function def
+    value@.Data <- extract_method_fun(value@.Data)
+  } else if (is.function(value)) {
+    # Potential S3 methods/generics need metadata added
+    method <- unlist(block$method, use.names = FALSE)
+    value <- add_s3_metadata(value, name, env, method)
+  }
 
   object(value, name)
 }
@@ -160,24 +170,6 @@ parser_setConstructorS3 <- function(call, env, block) {
 }
 
 # helpers -----------------------------------------------------------------
-
-# Take object created by assignment and standardise
-standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
-  if (is_generator(value)) {
-    # S4 and RC generators need to be converted to their classes
-    methods::getClass(as.character(value@className), where = env)
-  } else if (inherits(value, "MethodDefinition")) {
-    # S4 methods need munging to get real function def
-    value@.Data <- extract_method_fun(value@.Data)
-    value
-  } else if (is.function(value)) {
-    # Potential S3 methods/generics need metadata added
-    method <- unlist(block$method, use.names = FALSE)
-    add_s3_metadata(value, name, env, method)
-  } else {
-    value
-  }
-}
 
 # When a generic has ... and a method adds new arguments, the S4 method
 # wraps the definition inside another function which has the same arguments

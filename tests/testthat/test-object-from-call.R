@@ -1,4 +1,3 @@
-
 test_that("undocumentable things return null", {
   expect_null(object_from_call2(NULL))
   expect_null(object_from_call2(10))
@@ -57,7 +56,6 @@ test_that("finds S3 method created with assignment", {
   expect_s3_class(obj, "s3method")
 })
 
-
 test_that("finds data created with assignment", {
   obj <- object_from_call2({
     foo <- 1:10
@@ -91,9 +89,14 @@ test_that("ignored compound assignment", {
 
 # S4 ----------------------------------------------------------------------
 
-test_that("finds key S4 types", {
+test_that("finds S4 and RC classes", {
   obj <- object_from_call2(setClass("Foo"))
   expect_s3_class(obj, "s4class")
+  expect_equal(obj$topic, "Foo-class")
+  expect_equal(obj$alias, NULL)
+
+  obj <- object_from_call2(setRefClass("Foo"))
+  expect_s3_class(obj, "rcclass")
   expect_equal(obj$topic, "Foo-class")
 
   obj <- object_from_call2({
@@ -101,12 +104,13 @@ test_that("finds key S4 types", {
     setClassUnion("Foo2", "Foo")
   })
   expect_s3_class(obj, "s4class")
+  expect_equal(obj$topic, "Foo2-class")
+})
 
-  obj <- object_from_call2(setRefClass("Foo3"))
-  expect_s3_class(obj, "rcclass")
-  expect_equal(obj$topic, "Foo3-class")
-
-  obj <- object_from_call2(setGeneric("bar", function(x) standardGeneric("bar")))
+test_that("finds S4 generics and methods", {
+  obj <- object_from_call2({
+    setGeneric("bar", function(x) standardGeneric("bar"))
+  })
   expect_s3_class(obj, "s4generic")
 
   obj <- object_from_call2({
@@ -139,7 +143,6 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
   expect_s3_class(obj, "s4method")
   expect_named(formals(obj$value@.Data), c("x", "foo", "..."))
 })
-
 
 # R.oo / R.methodsS3 ------------------------------------------------------
 

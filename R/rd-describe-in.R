@@ -38,13 +38,11 @@ topic_add_describe_in <- function(topic, block, env) {
 # * can't use if @name overridden, but then you could just the use alias
 find_object <- function(name, env) {
   if (methods::isClass(name, where = env)) {
-    object(methods::getClass(name, where = env))
+    object(methods::getClass(name, where = env), NULL, "s4class")
   } else if (exists(name, envir = env)) {
-    obj <- get(name, envir = env)
-    obj <- standardise_obj(name, obj, env = env)
-    object(obj, name)
+    object_from_name(name, env, NULL)
   } else {
-    object(NULL, name)
+    object(NULL, name, "data")
   }
 }
 

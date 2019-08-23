@@ -8,7 +8,7 @@
 #'   generator function with different name.
 #' @export
 #' @keywords internal
-object <- function(value, alias = NULL, type = obj_type(value)) {
+object <- function(value, alias, type) {
   structure(
     list(
       alias = alias,
@@ -25,41 +25,4 @@ print.object <- function(x, ...) {
     if (!is.null(x$alias)) paste0(" (", x$alias, ")"), "\n",
     sep = ""
   )
-}
-
-is_generator <- function(x) {
-  methods::is(x, "refObjectGenerator") || methods::is(x, "classGeneratorFunction")
-}
-
-# Consistent naming scheme for R object classes --------------------------------
-# (s3/s4/rc x generic/class/method, function, data)
-
-obj_type <- function(x) UseMethod("obj_type")
-
-#' @export
-obj_type.s3generic <- function(x) "s3generic"
-#' @export
-obj_type.s3method <- function(x) "s3method"
-
-#' @export
-obj_type.classRepresentation <- function(x) "s4class"
-#' @export
-obj_type.genericFunction <- function(x) "s4generic"
-#' @export
-obj_type.MethodDefinition <- function(x) "s4method"
-
-#' @export
-obj_type.refClassRepresentation <- function(x) "rcclass"
-#' @export
-obj_type.refMethodDef <- function(x) "rcmethod"
-
-#' @export
-obj_type.package <- function(x) "package"
-#' @export
-obj_type.default <- function(x) {
-  if (is.function(x)) {
-    "function"
-  } else {
-    "data"
-  }
 }

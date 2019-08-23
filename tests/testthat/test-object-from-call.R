@@ -42,6 +42,22 @@ test_that("finds function created with assignment", {
   expect_s3_class(obj, "function")
 })
 
+test_that("finds S3 generic created with assignment", {
+  obj <- object_from_call2({
+    foo <- function(x, y, z) UseMethod("foo")
+  })
+  expect_s3_class(obj, "s3generic")
+})
+
+test_that("finds S3 method created with assignment", {
+  obj <- object_from_call2({
+    foo <- function(x, y, z) UseMethod("foo")
+    foo.method <- function(x, y, z) {}
+  })
+  expect_s3_class(obj, "s3method")
+})
+
+
 test_that("finds data created with assignment", {
   obj <- object_from_call2({
     foo <- 1:10
@@ -56,6 +72,14 @@ test_that("finds class generator", {
   expect_s3_class(obj, "s4class")
   expect_equal(obj$alias, "newFoo")
   expect_s4_class(obj$value, "classRepresentation")
+
+  obj <- object_from_call2({
+    newFoo <- setRefClass("Foo")
+  })
+  expect_s3_class(obj, "rcclass")
+  expect_equal(obj$alias, "newFoo")
+  expect_s4_class(obj$value, "classRepresentation")
+
 })
 
 test_that("ignored compound assignment", {

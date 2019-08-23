@@ -51,6 +51,41 @@ object_from_call2 <- function(code, env = pkg_env(), file = NULL) {
   object_from_call(call, env, block = NULL, file = file)
 }
 
+
+object_from_name <- function(name, env, block) {
+  value <- get(name, env)
+  if (methods::is(value, "refObjectGenerator")) {
+    value <- methods::getClass(as.character(value@className), where = env)
+    type <- "rcclass"
+  } else if (methods::is(value, "classGeneratorFunction")) {
+    value <- methods::getClass(as.character(value@className), where = env)
+    type <- "s4class"
+  } else if (methods::is(value, "MethodDefinition")) {
+    # S4 methods need munging to get real function def
+    value@.Data <- extract_method_fun(value@.Data)
+    type <- "s4method"
+  } else if (methods::is(value, "standardGeneric")) {
+    type <- "s4generic"
+  } else if (is.function(value)) {
+    # Potential S3 methods/generics need metadata added
+    method <- unlist(block$method, use.names = FALSE)
+    value <- add_s3_metadata(value, name, env, method)
+    if (inherits(value, "s3generic")) {
+      type <- "s3generic"
+    } else if (inherits(value, "s3method")) {
+      type <- "s3method"
+    } else {
+      type <- "function"
+    }
+  } else {
+    type <- "data"
+  }
+
+  object(value, name, type)
+}
+
+# Parsers for individual calls --------------------------------------------
+
 parser_data <- function(call, env, block) {
   if (isNamespace(env)) {
     value <- getExportedValue(call, ns = asNamespace(env))
@@ -84,48 +119,35 @@ parser_assignment <- function(call, env, block) {
     return()
   }
 
-  value <- get(name, env)
-  if (is_generator(value)) {
-    # S4 and RC generators need to be converted to their classes
-    value <- methods::getClass(as.character(value@className), where = env)
-  } else if (inherits(value, "MethodDefinition")) {
-    # S4 methods need munging to get real function def
-    value@.Data <- extract_method_fun(value@.Data)
-  } else if (is.function(value)) {
-    # Potential S3 methods/generics need metadata added
-    method <- unlist(block$method, use.names = FALSE)
-    value <- add_s3_metadata(value, name, env, method)
-  }
-
-  object(value, name)
+  object_from_name(name, env, block)
 }
 
 parser_setClass <- function(call, env, block) {
   name <- as.character(call$Class)
   value <- methods::getClass(name, where = env)
 
-  object(value)
+  object(value, NULL, "s4class")
 }
 
 parser_setClassUnion <- function(call, env, block) {
   name <- as.character(call$name)
   value <- methods::getClass(name, where = env)
 
-  object(value)
+  object(value, NULL, "s4class")
 }
 
 parser_setRefClass <- function(call, env, block) {
   name <- as.character(call$Class)
   value <- methods::getClass(name, where = env)
 
-  object(value)
+  object(value, NULL, "rcclass")
 }
 
 parser_setGeneric <- function(call, env, block) {
   name <- as.character(call$name)
   value <- methods::getGeneric(name, where = env)
 
-  object(value)
+  object(value, NULL, "s4generic")
 }
 
 parser_setMethod <- function(call, env, block) {
@@ -133,7 +155,7 @@ parser_setMethod <- function(call, env, block) {
   value <- methods::getMethod(name, eval(call$signature), where = env)
   value@.Data <- extract_method_fun(value@.Data)
 
-  object(value)
+  object(value, NULL, "s4method")
 }
 
 parser_setReplaceMethod <- function(call, env, block) {
@@ -141,7 +163,7 @@ parser_setReplaceMethod <- function(call, env, block) {
   value <- methods::getMethod(name, eval(call[[3]]), where = env)
   value@.Data <- extract_method_fun(value@.Data)
 
-  object(value)
+  object(value, NULL, "s4method")
 }
 
 parser_import <- function(call, env, block) {
@@ -170,6 +192,25 @@ parser_setConstructorS3 <- function(call, env, block) {
 }
 
 # helpers -----------------------------------------------------------------
+
+# @param override Either NULL to use default, or a character vector of length 2
+add_s3_metadata <- function(val, name, env, override = NULL) {
+  if (!is.null(override)) {
+    return(s3_method(val, override, env))
+  }
+
+  if (is_s3_generic(name, env)) {
+    class(val) <- c("s3generic", "function")
+    return(val)
+  }
+
+  method <- find_generic(name, env)
+  if (is.null(method)) {
+    val
+  } else {
+    s3_method(val, method, env)
+  }
+}
 
 # When a generic has ... and a method adds new arguments, the S4 method
 # wraps the definition inside another function which has the same arguments

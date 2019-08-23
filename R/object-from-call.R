@@ -39,19 +39,6 @@ object_from_call <- function(call, env, block, file) {
   }
 }
 
-object_from_call2 <- function(code, env = pkg_env(), file = NULL) {
-  code <- enexpr(code)
-
-  eval(code, envir = env)
-  if (is_call(code, "{")) {
-    call <- code[[length(code)]]
-  } else {
-    call <- code
-  }
-  object_from_call(call, env, block = NULL, file = file)
-}
-
-
 object_from_name <- function(name, env, block) {
   value <- get(name, env)
   if (methods::is(value, "refObjectGenerator")) {
@@ -284,4 +271,16 @@ object_topic <- function(value, alias, type) {
     data = alias,
     stop("Unsupported type '", type, "'", call. = FALSE)
   )
+}
+
+call_to_object <- function(code, env = pkg_env(), file = NULL) {
+  code <- enexpr(code)
+
+  eval(code, envir = env)
+  if (is_call(code, "{")) {
+    call <- code[[length(code)]]
+  } else {
+    call <- code
+  }
+  object_from_call(call, env, block = NULL, file = file)
 }

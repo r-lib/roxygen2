@@ -1,78 +1,78 @@
 
 test_that("usage captured from formals", {
   expect_equal(
-    usage_from_call(f <- function() {}),
+    call_to_usage(f <- function() {}),
     "f()"
   )
   expect_equal(
-    usage_from_call(f <- function(a = 1) {}),
+    call_to_usage(f <- function(a = 1) {}),
     "f(a = 1)"
   )
 })
 
 test_that("argument containing function is generates correct usage", {
   expect_equal(
-    usage_from_call(f <- function(a = function(x) 1) {}),
+    call_to_usage(f <- function(a = function(x) 1) {}),
     "f(a = function(x) 1)"
   )
 })
 
 test_that("backticks retained when needed", {
   expect_equal(
-    usage_from_call(f <- function(`_a`) {}),
+    call_to_usage(f <- function(`_a`) {}),
     "f(`_a`)"
   )
 })
 
 test_that("default usage formats data correctly", {
   expect_equal(
-    usage_from_call(hello <- 1),
+    call_to_usage(hello <- 1),
     "hello"
   )
 })
 
 test_that("default usage formats replacement functions correctly", {
   expect_equal(
-    usage_from_call(`f<-` <- function(x, value) {}),
+    call_to_usage(`f<-` <- function(x, value) {}),
     "f(x) <- value"
   )
   expect_equal(
-    usage_from_call(`f<-` <- function(x, y, value) {}),
+    call_to_usage(`f<-` <- function(x, y, value) {}),
     "f(x, y) <- value"
   )
 })
 
 test_that("default usage formats infix functions correctly", {
   expect_equal(
-    usage_from_call("%.%" <- function(a, b) {}),
+    call_to_usage("%.%" <- function(a, b) {}),
     "a \\%.\\% b"
   )
 
   # even if it contains <-
   expect_equal(
-    usage_from_call("%<-%" <- function(a, b) {}),
+    call_to_usage("%<-%" <- function(a, b) {}),
     "a \\%<-\\% b"
   )
 })
 
 test_that("default usage formats S3 methods correctly", {
   expect_equal(
-    usage_from_call(mean.foo <- function(x) {}),
+    call_to_usage(mean.foo <- function(x) {}),
     "\\method{mean}{foo}(x)"
   )
   expect_equal(
-    usage_from_call("+.foo" <- function(x, b) {}),
+    call_to_usage("+.foo" <- function(x, b) {}),
     "\\method{+}{foo}(x, b)"
   )
   expect_equal(
-    usage_from_call("[<-.foo" <- function(x, value) {}),
+    call_to_usage("[<-.foo" <- function(x, value) {}),
     "\\method{[}{foo}(x) <- value"
   )
 })
 
 test_that("S4 classes have no default usage", {
   expect_equal(
-    usage_from_call({
+    call_to_usage({
       setClass("Foo")
     }),
     character()
@@ -81,7 +81,7 @@ test_that("S4 classes have no default usage", {
 
 test_that("default usage correct for S4 methods", {
   expect_equal(
-    usage_from_call({
+    call_to_usage({
       setClass("Foo")
       setMethod("sum", "Foo", function(x, ..., na.rm = FALSE) {})
     }),
@@ -89,7 +89,7 @@ test_that("default usage correct for S4 methods", {
   )
 
   expect_equal(
-    usage_from_call({
+    call_to_usage({
       setClass("Foo")
       setMethod("+", "Foo", function(e1, e2) "foo")
     }),
@@ -97,7 +97,7 @@ test_that("default usage correct for S4 methods", {
   )
 
   expect_equal(
-    usage_from_call({
+    call_to_usage({
       setClass("Foo")
       setMethod("[<-", "Foo", function(x, i, j, ..., value) "foo")
     }),
@@ -107,7 +107,7 @@ test_that("default usage correct for S4 methods", {
 
 test_that("default usage correct for S4 methods with different args to generic", {
   expect_equal(
-    usage_from_call({
+    call_to_usage({
       setGeneric("testfun", function(x, ...) standardGeneric("testfun"))
       setMethod("testfun", "matrix", function(x, add = FALSE, ...) {
         x - 1
@@ -119,7 +119,7 @@ test_that("default usage correct for S4 methods with different args to generic",
 
 test_that("non-syntactic S4 class names are escaped in usage", {
   expect_equal(
-    usage_from_call({
+    call_to_usage({
       setGeneric("rhs", function(x) standardGeneric("rhs"))
       setMethod("rhs", "<-", function(x) x[[3]])
     }),

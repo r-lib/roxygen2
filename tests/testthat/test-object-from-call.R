@@ -1,13 +1,13 @@
 test_that("undocumentable things return null", {
-  expect_null(object_from_call2(NULL))
-  expect_null(object_from_call2(10))
-  expect_null(object_from_call2(1 + 2))
+  expect_null(call_to_object(NULL))
+  expect_null(call_to_object(10))
+  expect_null(call_to_object(1 + 2))
 })
 
 # data / package -------------------------------------------------------
 
 test_that("finds datasets given by name", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     df <- data.frame(x = 1, y = 2)
     "df"
   })
@@ -17,7 +17,7 @@ test_that("finds datasets given by name", {
 })
 
 test_that("finds package description", {
-  obj <- object_from_call2("_PACKAGE", file = test_path("testEagerData/R/a.r"))
+  obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
   expect_s3_class(obj, "package")
   expect_equal(obj$alias, "_PACKAGE")
   expect_equal(obj$value$desc$Package, "testEagerData")
@@ -26,7 +26,7 @@ test_that("finds package description", {
 # imports -----------------------------------------------------------------
 
 test_that("find function imported from another package", {
-  obj <- object_from_call2(purrr::map_int)
+  obj <- call_to_object(purrr::map_int)
   expect_s3_class(obj, "import")
   expect_equal(obj$alias, "map_int")
   expect_equal(obj$value$pkg, "purrr")
@@ -35,21 +35,21 @@ test_that("find function imported from another package", {
 # assignment ------------------------------------------------------------
 
 test_that("finds function created with assignment", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     foo <- function(x, y, z) {}
   })
   expect_s3_class(obj, "function")
 })
 
 test_that("finds S3 generic created with assignment", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     foo <- function(x, y, z) UseMethod("foo")
   })
   expect_s3_class(obj, "s3generic")
 })
 
 test_that("finds S3 method created with assignment", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     foo <- function(x, y, z) UseMethod("foo")
     foo.method <- function(x, y, z) {}
   })
@@ -57,21 +57,21 @@ test_that("finds S3 method created with assignment", {
 })
 
 test_that("finds data created with assignment", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     foo <- 1:10
   })
   expect_s3_class(obj, "data")
 })
 
 test_that("finds class generator", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     newFoo <- setClass("Foo")
   })
   expect_s3_class(obj, "s4class")
   expect_equal(obj$alias, "newFoo")
   expect_s4_class(obj$value, "classRepresentation")
 
-  obj <- object_from_call2({
+  obj <- call_to_object({
     newFoo <- setRefClass("Foo")
   })
   expect_s3_class(obj, "rcclass")
@@ -80,7 +80,7 @@ test_that("finds class generator", {
 })
 
 test_that("ignored compound assignment", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     foo <- list()
     foo[[1]] <- function(x, y, z) {}
   })
@@ -90,16 +90,16 @@ test_that("ignored compound assignment", {
 # S4 ----------------------------------------------------------------------
 
 test_that("finds S4 and RC classes", {
-  obj <- object_from_call2(setClass("Foo"))
+  obj <- call_to_object(setClass("Foo"))
   expect_s3_class(obj, "s4class")
   expect_equal(obj$topic, "Foo-class")
   expect_equal(obj$alias, NULL)
 
-  obj <- object_from_call2(setRefClass("Foo"))
+  obj <- call_to_object(setRefClass("Foo"))
   expect_s3_class(obj, "rcclass")
   expect_equal(obj$topic, "Foo-class")
 
-  obj <- object_from_call2({
+  obj <- call_to_object({
     setClass("Foo")
     setClassUnion("Foo2", "Foo")
   })
@@ -108,18 +108,18 @@ test_that("finds S4 and RC classes", {
 })
 
 test_that("finds S4 generics and methods", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     setGeneric("bar", function(x) standardGeneric("bar"))
   })
   expect_s3_class(obj, "s4generic")
 
-  obj <- object_from_call2({
+  obj <- call_to_object({
     setGeneric("bar", function(x) standardGeneric("bar"))
     setMethod('bar', 'Foo', function(x) {})
   })
   expect_s3_class(obj, "s4method")
 
-  obj <- object_from_call2({
+  obj <- call_to_object({
     setGeneric("bar<-", function(x, value) standardGeneric("bar<-"))
     setReplaceMethod("bar", "Foo", function(x, value) {})
   })
@@ -127,7 +127,7 @@ test_that("finds S4 generics and methods", {
 })
 
 test_that("finds correct parser even when namespaced", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     setClass("Foo")
     setGeneric("baz", function(x) standardGeneric("baz"))
     methods::setMethod('baz', 'Foo', function(x) {})
@@ -136,7 +136,7 @@ test_that("finds correct parser even when namespaced", {
 })
 
 test_that("finds arguments when S4 method wrapped inside .local()", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     setClass("Foo")
     setMethod('subset', 'Foo', function(x, foo, ...) {})
   })
@@ -147,7 +147,7 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
 # R.oo / R.methodsS3 ------------------------------------------------------
 
 test_that("can define constructor with R.oo", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     R.oo::setConstructorS3("Foo", function(x, y, z) {})
   })
   expect_s3_class(obj, "function")
@@ -155,7 +155,7 @@ test_that("can define constructor with R.oo", {
 })
 
 test_that("can define method for R.methodsS3", {
-  obj <- object_from_call2({
+  obj <- call_to_object({
     R.methodsS3::setMethodS3("foo", "default", function(x, ...) {})
   })
   expect_s3_class(obj, "s3method")

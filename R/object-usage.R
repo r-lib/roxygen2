@@ -105,7 +105,7 @@ args_string <- function(x) {
 # helpers -----------------------------------------------------------------
 
 # used for testing
-usage_from_call <- function(code, env = pkg_env()) {
-  obj <- object_from_call2(!!enexpr(code), env)
+call_to_usage <- function(code, env = pkg_env()) {
+  obj <- call_to_object(!!enexpr(code), env)
   gsub("\u{A0}", " ", as.character(object_usage(obj)))
 }

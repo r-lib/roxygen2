@@ -2,11 +2,13 @@ object_usage <- function(x) {
   UseMethod("object_usage")
 }
 
-object_usage.default <- function(x) NULL
+object_usage.default <- function(x) {
+  NULL
+}
 
-object_usage.NULL <- function(x) NULL
-
-object_usage.data <- function(x) rd(x$alias)
+object_usage.data <- function(x) {
+  rd(x$alias)
+}
 
 object_usage.function <- function(x) {
   function_usage(x$alias, formals(x$value), identity)
@@ -36,11 +38,6 @@ object_usage.s4method <- function(x) {
   }
   function_usage(x$value@generic, formals(x$value), s4method)
 }
-
-object_usage.s4class <- function(x) NULL
-
-object_usage.rcclass <- function(x) NULL
-
 
 # Function usage ----------------------------------------------------------
 
@@ -103,3 +100,21 @@ args_string <- function(x) {
 
   paste0(arg_names, sep, x, collapse = ", ")
 }
+
+
+# helpers -----------------------------------------------------------------
+
+# used for testing
+usage_from_call <- function(code, env = pkg_env()) {
+  code <- substitute(code)
+
+  eval(code, envir = env)
+  if (is_call(code, "{")) {
+    call <- code[[length(code)]]
+  } else {
+    call <- code
+  }
+  obj <- object_from_call(call, env, block = NULL, file = NULL)
+  gsub("\u{A0}", " ", as.character(object_usage(obj)))
+}
+

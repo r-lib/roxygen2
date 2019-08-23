@@ -1,4 +1,9 @@
-context("Rbuildignore")
+test_that("respects order in Collate (#790)", {
+  expect_equal(
+    package_files('testCollateParse'),
+    normalizePath(c("testCollateParse/R/b.r", "testCollateParse/R/c.r"))
+  )
+})
 
 test_that("roxygen ignores files with matching pattern in .Rbuildignore", {
   test_pkg <- temp_copy_pkg(test_path("testRbuildignore"))

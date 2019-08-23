@@ -115,6 +115,25 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
   expect_named(formals(obj$value@.Data), c("x", "foo", "..."))
 })
 
+
+# R.oo / R.methodsS3 ------------------------------------------------------
+
+test_that("can define constructor with R.oo", {
+  obj <- object_from_call2({
+    R.oo::setConstructorS3("Foo", function(x, y, z) {})
+  })
+  expect_s3_class(obj, "function")
+  expect_equal(obj$alias, "Foo")
+})
+
+test_that("can define method for R.methodsS3", {
+  obj <- object_from_call2({
+    R.methodsS3::setMethodS3("foo", "default", function(x, ...) {})
+  })
+  expect_s3_class(obj, "s3method")
+  expect_equal(obj$alias, "foo.default")
+})
+
 # extract_method_fun ------------------------------------------------------
 
 test_that("fails gracefully on bad inputs", {

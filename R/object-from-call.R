@@ -146,15 +146,17 @@ parser_setMethodS3 <- function(call, env, block) {
   method <- as.character(call[[2]])
   class <- as.character(call[[3]])
   name <- paste(method, class, sep = ".")
-  value <- standardise_obj(name, get(name, env), env, block)
-  object(value, name)
+
+  method <- unlist(block$method, use.names = FALSE)
+  value <- add_s3_metadata(get(name, env), name, env, method)
+
+  object(value, name, "s3method")
 }
 
 parser_setConstructorS3 <- function(call, env, block) {
   # R.oo::setConstructorS3(name, ...)
   name <- as.character(call[[2]])
-  value <- standardise_obj(name, get(name, env), env, block)
-  object(value, name)
+  object(get(name, env), name, "function")
 }
 
 # helpers -----------------------------------------------------------------

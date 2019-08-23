@@ -46,7 +46,9 @@ Suggests:
     devtools,
     knitr,
     rmarkdown,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    R.methodsS3,
+    R.oo
 LinkingTo: 
     Rcpp
 VignetteBuilder: 

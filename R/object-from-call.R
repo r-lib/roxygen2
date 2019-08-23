@@ -1,12 +1,12 @@
 object_from_call <- function(call, env, block, file) {
   if (is.character(call)) {
-    # Special case: you can refer to other objects as strings
-    value <- find_data(call, env, file)
-    value <- standardise_obj(call, value, env, block)
-
-    object(value, call)
+    if (identical(call, "_PACKAGE")) {
+      parser_package(call, env, block, file)
+    } else {
+      parser_data(call, env, file)
+    }
   } else if (is.call(call)) {
-    call <- standardise_call(call, env)
+    call <- call_standardise(call, env)
     name <- deparse(call[[1]])
     switch(name,
       "=" = ,
@@ -39,7 +39,7 @@ object_from_call <- function(call, env, block, file) {
   }
 }
 
-object_from_call2 <- function(code, env = pkg_env()) {
+object_from_call2 <- function(code, env = pkg_env(), file = NULL) {
   code <- substitute(code)
 
   eval(code, envir = env)
@@ -48,69 +48,47 @@ object_from_call2 <- function(code, env = pkg_env()) {
   } else {
     call <- code
   }
-  object_from_call(call, env, block = NULL, file = NULL)
+  object_from_call(call, env, block = NULL, file = file)
 }
 
-find_data <- function(name, env, file) {
-  if (identical(name, "_PACKAGE")) {
-    return(find_data_for_package(env, file))
-  }
-
-  ns <- env_namespace(env)
-  if (is.null(ns)) {
-    get(name, envir = env)
+parser_data <- function(call, env, block) {
+  if (isNamespace(env)) {
+    value <- getExportedValue(call, ns = asNamespace(env))
   } else {
-    getExportedValue(name, ns = ns)
+    value <- get(call, envir = env)
   }
+  object(value, call, type = "data")
 }
 
-find_data_for_package <- function(env, file) {
+parser_package <- function(call, env, block, file) {
   pkg_path <- dirname(dirname(file))
   desc <- read.description(file.path(pkg_path, "DESCRIPTION"))
 
-  structure(
-    list(
-      desc = desc,
-      path = pkg_path
-    ),
-    class = "package"
+  value <- list(
+    desc = desc,
+    path = pkg_path
   )
-}
-
-# Find namespace associated with environment
-env_namespace <- function(env) {
-  ns <- NULL
-  try(ns <- asNamespace(env), silent = TRUE)
-  if (is.null(ns)) return(NULL)
-
-  ns
-}
-
-
-standardise_call <- function(call, env = parent.frame()) {
-  stopifnot(is.call(call))
-
-  f <- eval(call[[1]], env)
-  if (is.primitive(f)) return(call)
-
-  match.call(f, call)
+  object(value, call, type = "package")
 }
 
 parser_assignment <- function(call, env, block) {
   name <- as.character(call[[2]])
 
   # If it's a compound assignment like x[[2]] <- ignore it
-  if (length(name) > 1)  return()
+  if (length(name) > 1) {
+    return()
+  }
 
   # If it doesn't exist (any more), don't document it.
-  if (!exists(name, env)) return()
+  if (!exists(name, env)) {
+    return()
+  }
 
   value <- get(name, env)
   value <- standardise_obj(name, value, env, block)
 
   object(value, name)
 }
-
 
 parser_setClass <- function(call, env, block) {
   name <- as.character(call$Class)
@@ -179,8 +157,25 @@ parser_setConstructorS3 <- function(call, env, block) {
   object(value, name)
 }
 
-
 # helpers -----------------------------------------------------------------
+
+# Take object created by assignment and standardise
+standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
+  if (is_generator(value)) {
+    # S4 and RC generators need to be converted to their classes
+    methods::getClass(as.character(value@className), where = env)
+  } else if (inherits(value, "MethodDefinition")) {
+    # S4 methods need munging to get real function def
+    value@.Data <- extract_method_fun(value@.Data)
+    value
+  } else if (is.function(value)) {
+    # Potential S3 methods/generics need metadata added
+    method <- unlist(block$method, use.names = FALSE)
+    add_s3_metadata(value, name, env, method)
+  } else {
+    value
+  }
+}
 
 # When a generic has ... and a method adds new arguments, the S4 method
 # wraps the definition inside another function which has the same arguments

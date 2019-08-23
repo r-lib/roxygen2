@@ -27,24 +27,6 @@ print.object <- function(x, ...) {
   )
 }
 
-# Take object created by assignment and standardise
-standardise_obj <- function(name, value, env = emptyenv(), block = list()) {
-  if (is_generator(value)) {
-    # S4 and RC generators need to be converted to their classes
-    methods::getClass(as.character(value@className), where = env)
-  } else if (inherits(value, "MethodDefinition")) {
-    # S4 methods need munging to get real function def
-    value@.Data <- extract_method_fun(value@.Data)
-    value
-  } else if (is.function(value)) {
-    # Potential S3 methods/generics need metadata added
-    method <- unlist(block$method, use.names = FALSE)
-    add_s3_metadata(value, name, env, method)
-  } else {
-    value
-  }
-}
-
 is_generator <- function(x) {
   methods::is(x, "refObjectGenerator") || methods::is(x, "classGeneratorFunction")
 }

@@ -5,13 +5,57 @@ test_that("undocumentable things return null", {
   expect_null(object_from_call2(1 + 2))
 })
 
-# functions ------------------------------------------------------------
+# data / package -------------------------------------------------------
+
+test_that("finds datasets given by name", {
+  obj <- object_from_call2({
+    df <- data.frame(x = 1, y = 2)
+    "df"
+  })
+  expect_s3_class(obj, "data")
+  expect_equal(obj$alias, "df")
+  expect_s3_class(obj$value, "data.frame")
+})
+
+test_that("finds package description", {
+  obj <- object_from_call2("_PACKAGE", file = test_path("testEagerData/R/a.r"))
+  expect_s3_class(obj, "package")
+  expect_equal(obj$alias, "_PACKAGE")
+  expect_equal(obj$value$desc$Package, "testEagerData")
+})
+
+# imports -----------------------------------------------------------------
+
+test_that("find function imported from another package", {
+  obj <- object_from_call2(purrr::map_int)
+  expect_s3_class(obj, "import")
+  expect_equal(obj$alias, "map_int")
+  expect_equal(obj$value$pkg, "purrr")
+})
+
+# assignment ------------------------------------------------------------
 
 test_that("finds function created with assignment", {
   obj <- object_from_call2({
     foo <- function(x, y, z) {}
   })
   expect_s3_class(obj, "function")
+})
+
+test_that("finds data created with assignment", {
+  obj <- object_from_call2({
+    foo <- 1:10
+  })
+  expect_s3_class(obj, "data")
+})
+
+test_that("finds class generator", {
+  obj <- object_from_call2({
+    newFoo <- setClass("Foo")
+  })
+  expect_s3_class(obj, "s4class")
+  expect_equal(obj$alias, "newFoo")
+  expect_s4_class(obj$value, "classRepresentation")
 })
 
 test_that("ignored compound assignment", {

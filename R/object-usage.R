@@ -106,15 +106,6 @@ args_string <- function(x) {
 
 # used for testing
 usage_from_call <- function(code, env = pkg_env()) {
-  code <- substitute(code)
-
-  eval(code, envir = env)
-  if (is_call(code, "{")) {
-    call <- code[[length(code)]]
-  } else {
-    call <- code
-  }
-  obj <- object_from_call(call, env, block = NULL, file = NULL)
+  obj <- object_from_call2(!!enexpr(code), env)
   gsub("\u{A0}", " ", as.character(object_usage(obj)))
 }
-

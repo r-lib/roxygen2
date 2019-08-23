@@ -40,7 +40,7 @@ object_from_call <- function(call, env, block, file) {
 }
 
 object_from_call2 <- function(code, env = pkg_env(), file = NULL) {
-  code <- substitute(code)
+  code <- enexpr(code)
 
   eval(code, envir = env)
   if (is_call(code, "{")) {

@@ -124,7 +124,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
     return()
   }
 
-  name <- block$name %||% object_topic(attr(block, "object"))
+  name <- block$name %||% attr(block, "object")$topic
   if (is.null(name)) {
     block_warning(block, "Missing name")
     return()

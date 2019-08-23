@@ -79,7 +79,6 @@ test_that("finds class generator", {
   expect_s3_class(obj, "rcclass")
   expect_equal(obj$alias, "newFoo")
   expect_s4_class(obj$value, "classRepresentation")
-
 })
 
 test_that("ignored compound assignment", {
@@ -95,6 +94,7 @@ test_that("ignored compound assignment", {
 test_that("finds key S4 types", {
   obj <- object_from_call2(setClass("Foo"))
   expect_s3_class(obj, "s4class")
+  expect_equal(obj$topic, "Foo-class")
 
   obj <- object_from_call2({
     setClass("Foo")
@@ -104,6 +104,7 @@ test_that("finds key S4 types", {
 
   obj <- object_from_call2(setRefClass("Foo3"))
   expect_s3_class(obj, "rcclass")
+  expect_equal(obj$topic, "Foo3-class")
 
   obj <- object_from_call2(setGeneric("bar", function(x) standardGeneric("bar")))
   expect_s3_class(obj, "s4generic")

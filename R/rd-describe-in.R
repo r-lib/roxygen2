@@ -30,7 +30,7 @@ topic_add_describe_in <- function(topic, block, env) {
     label$label,
     tags$describeIn$description
   ))
-  object_topic(dest)
+  dest$topic
 }
 
 # Imperfect:
@@ -74,7 +74,7 @@ build_label <- function(src, dest, block) {
   } else if (dest_type %in% c("function", "data") && src_type == "function") {
     # Multiple functions in one Rd labelled with function names
     type <- "function"
-    label <- object_name(src)
+    label <- src$topic
   } else {
     block_warning(block, "Don't know how to describe ", src_type, " in ", dest_type)
     return(NULL)

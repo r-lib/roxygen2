@@ -1,5 +1,3 @@
-context("Meta")
-
 test_that("evaluation of 'man/roxygen/meta.R' must return a list", {
 
   tmpdir <- tempfile("roxygen-meta-")

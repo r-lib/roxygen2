@@ -1,8 +1,5 @@
-context("Rd: turning markdown on/off")
-
 test_that("markdown is off by default", {
-  roc <- rd_roclet()
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -14,9 +11,8 @@ test_that("markdown is off by default", {
 })
 
 test_that("turning on/off markdown globally", {
-  roc <- rd_roclet()
   ## off
-  out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -27,7 +23,7 @@ test_that("turning on/off markdown globally", {
   )
 
   ## on
-  out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -39,9 +35,8 @@ test_that("turning on/off markdown globally", {
 })
 
 test_that("turning on/off markdown locally", {
-  roc <- rd_roclet()
   ## off / off
-  out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -53,7 +48,7 @@ test_that("turning on/off markdown locally", {
   )
 
   ## off / on
-  out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -65,7 +60,7 @@ test_that("turning on/off markdown locally", {
   )
 
   ## on / off
-  out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -77,7 +72,7 @@ test_that("turning on/off markdown locally", {
   )
 
   ## on / on
-  out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -91,10 +86,8 @@ test_that("turning on/off markdown locally", {
 })
 
 test_that("warning for both @md and @noMd", {
-  roc <- rd_roclet()
-
   expect_warning(
-    out1 <- roc_proc_text(roc, "
+    out1 <- roc_proc_text(rd_roclet(), "
       #' Title
       #'
       #' Description with some `code` included. `More code.`
@@ -109,7 +102,7 @@ test_that("warning for both @md and @noMd", {
   )
 
   expect_warning(
-    out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+    out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
       #' Title
       #'
       #' Description with some `code` included. `More code.`
@@ -124,7 +117,7 @@ test_that("warning for both @md and @noMd", {
   )
 
   expect_warning(
-    out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+    out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
       #' Title
       #'
       #' Description with some `code` included. `More code.`

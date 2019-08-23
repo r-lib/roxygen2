@@ -1,5 +1,3 @@
-context("Namespace")
-
 # @export -----------------------------------------------------------------
 
 test_that("export detects object name", {

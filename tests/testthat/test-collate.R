@@ -1,5 +1,3 @@
-context("Collate")
-
 test_that("collation as expected", {
   results <- generate_collate("collate")
   names <- str_replace(basename(results), "\\..*$", "")

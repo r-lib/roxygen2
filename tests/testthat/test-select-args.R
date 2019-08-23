@@ -1,5 +1,3 @@
-context("select_args")
-
 test_that("errors on invalid input", {
   expect_error(select_args_text(sum, "-xlab:"), "Failed to parse")
   expect_error(select_args_text(sum, '"a"'), "numbers")

@@ -1,5 +1,3 @@
-context("Utils")
-
 # nice_names --------------------------------------------------------------
 
 test_that("nice_name leaves ok chars unchanged", {

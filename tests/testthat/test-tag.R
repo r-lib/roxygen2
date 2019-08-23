@@ -1,5 +1,3 @@
-context("rdComplete()")
-
 # Test low-level behaviour ----------------------------------------------------
 
 test_that("braces must balance", {

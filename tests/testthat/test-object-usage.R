@@ -1,4 +1,3 @@
-
 test_that("usage captured from formals", {
   expect_equal(
     call_to_usage(f <- function() {}),

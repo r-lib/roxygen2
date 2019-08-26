@@ -18,7 +18,7 @@ first_time <- function(path) {
     generated <- c(generated, namespace)
   }
 
-  roxy <- vapply(generated, made_by_roxygen, logical(1))
+  roxy <- map_lgl(generated, made_by_roxygen)
   all(!roxy)
 }
 
@@ -27,15 +27,6 @@ made_by_roxygen <- function(path) {
 
   first <- read_lines(path, n = 1)
   check_made_by(first)
-}
-
-add_made_by_roxygen <- function(path, comment) {
-  if (!file.exists(path)) stop("Can't find ", path, call. = FALSE)
-
-  lines <- read_lines(path)
-  if (check_made_by(lines[1])) return()
-
-  write_lines(c(made_by(comment), lines), path)
 }
 
 check_made_by <- function(first) {

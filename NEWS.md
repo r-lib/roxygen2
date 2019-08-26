@@ -1,13 +1,52 @@
-# roxygen2 6.1.0.9000
+# roxygen2 (development version)
+
+* `@inheritParams` warns if there are no parameters that require 
+  documentation (#836).
+
+* roxygen2 now recgonises fully qualified S4 functions like 
+  `methods::setGeneric()`, `methods::setClass()` and `methods::setMethod()`
+  (#880).
+
+* Use of unsupported markdown features (blockquotes, headings, inline HTML, 
+  and horizontal rules) now gets a more informative error message (#804).
+
+* `tag_markdown_restricted()` has been removed because it did exactly the
+  same think as `tag_markdown()`.
+
+* Roclets have now aliases to all the tags that they define so that you can
+  do (e.g.) `?"@export"`. These help files are generally not that useful, but
+  they do now provide basic examples, and point you towards the vignettes the
+  provide full details.
+
+* Package documentation now converts ORCIDs into a useful link (#721).
+
+* Empty roxygen2 lines at the start of a block are now silently removed (#710).
+
+* S4 methods that generate `.local()` wrapper no longer error with obscure
+  error message (#847).
+
+* `@param` containing only whitespce gets a clear warning message (#869).
+
+* A new system for providing custom roxygen2 metadata is now available. When
+  `roxygenise()` is called, if a file "man/roxygen/meta.R" exists, it will be
+  evaluated. Its evaluation should produce an R list, mapping roxygen option
+  names to values. Currently, only 'rd_family_title' is recognized: this field
+  should itself be an R list, mapping family names to the appropriate prefixes
+  to be used in the generated R documentation (as opposed to the default
+  'Other family: ' prefix). (#830, @kevinushey)
+  
+* Logo in package description is now scaled to a 120px width, cf. pkgdown websites (@peterdesmet, #834).
+
+# roxygen2 6.1.1
+
+* Now specifically imports recent version of desc package (>= 1.2.0) to
+  fix various parsing issues (@crsh, #773, #777, #779). Multi-line DESCRIPTION 
+  collate directives now correctly parsed on windows (@brodieG, #790).
 
 * `roxygenise()` no longer recompiles packages containing src code (#784).
 
-* Correctly parse multi-line DESCRIPTION collate directives (@brodieG, #790).
-
-* `roxygenize()` now stops with an informative error message when run in a
+* `roxygenise()` now stops with an informative error message when run in a
   directory that's not the package root (@mikmart, #704).
-
-* roxygen2 now specifically imports desc >= 1.2.0 (@crsh, #773, #777, #779).
 
 * Files generatd on Windows systems now have unix-style line endings 
   (@jonthegeek, #840).
@@ -16,7 +55,7 @@
 
 ## New features
 
-* The `NAMESPACE` roclet nows works in two passes - it first generates the
+* The `NAMESPACE` roclet now works in two passes - it first generates the
   `NAMESPACE` containing only import directives becaues this can be generated
   without evaluating the code in the package. This alleviates a problem
   where it was previously possible to get into a state that you could only

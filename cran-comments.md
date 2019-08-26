@@ -1,33 +1,45 @@
 ## Test environments
-* OS X install: R 3.4
-* win-builder: R-devel
-* travis-ci: R 3.2, R 3.3, R 3.4, R 3.5, R-devel
+
+* local: darwin15.6.0-3.6.0
+* travis: 3.1, 3.2, 3.3, oldrel, release, devel
+* r-hub: windows-x86_64-devel, ubuntu-gcc-release, fedora-clang-devel
+* win-builder: windows-x86_64-devel
 
 ## R CMD check results
 There were no ERRORs, WARNINGs or NOTEs.
 
 ## revdepcheck results
 
-We checked 238 reverse dependencies (213 from CRAN + 25 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
+We checked 258 reverse dependencies (233 from CRAN + 25 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 1 new problems
- * We failed to check 8 packages
+ * We failed to check 16 packages
 
 Issues with CRAN packages are summarised below.
 
 ### New problems
 (This reports the first line of each new failure)
 
-* rstantools
-  checking tests ...
+* prioritizr
+  checking examples ... ERROR
+  
+  Error related to socketConnection, not changes to roxygen2
 
 ### Failed to check
 
-* dotCall64 (failed to install)
-* dynr      (failed to install)
-* jqr       (failed to install)
-* OpenMx    (check timed out)
-* redland   (failed to install)
-* rMouse    (failed to install)
-* rpf       (failed to install)
-* rstanarm  (check timed out)
+* circumplex       (failed to install)
+* deisotoper       (failed to install)
+* dotCall64        (failed to install)
+* dynr             (failed to install)
+* forecastHybrid   (failed to install)
+* jqr              (failed to install)
+* mapsRinteractive (failed to install)
+* mgarchBEKK       (failed to install)
+* OpenMx           (failed to install)
+* redland          (failed to install)
+* rMouse           (failed to install)
+* rpcdsearch       (failed to install)
+* rpf              (failed to install)
+* rstanarm         (check timed out)
+* SurfaceTortoise  (failed to install)
+* vortexR          (failed to install)

@@ -1,5 +1,3 @@
-context("Object: Package")
-
 test_that("author with more than one given/family name ", {
   expect_equal(
     author_desc(

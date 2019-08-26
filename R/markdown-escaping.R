@@ -84,14 +84,9 @@ find_fragile_rd_tags <- function(text, fragile) {
   ftags <- tags[ tags$tag %in% fragile, ]
 
   ## Remove embedded ones
-  keep <- vapply(
-    seq_len(nrow(ftags)),
-    function(i) {
-      sum(ftags$start <= ftags$start[i] &
-            ftags$argend >= ftags$argend[i]) == 1
-    },
-    TRUE
-  )
+  keep <- map_lgl(seq_len(nrow(ftags)), function(i) {
+    sum(ftags$start <= ftags$start[i] & ftags$argend >= ftags$argend[i]) == 1
+  })
 
   ftags <- ftags[keep, ]
 
@@ -119,14 +114,10 @@ find_all_rd_tags <- function(text) {
 
   ## Find the end of the argument list for each tag. Note that
   ## tags might be embedded into the arguments of other tags.
-  tags$argend <- vapply(
-    seq_len(nrow(tags)),
-    function(i) {
+  tags$argend <- map_int(seq_len(nrow(tags)), function(i) {
       tag_plus <- str_sub(text, tags$end[i], text_len)
       findEndOfTag(tag_plus, is_code = FALSE) + tags$end[i]
-    },
-    1L
-  )
+  })
 
   tags
 }

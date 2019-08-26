@@ -1,0 +1,354 @@
+---
+title: "Rd formatting"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Rd formatting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+```
+
+# Introduction
+
+Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the `commonmark` package, which is based on the CommonMark Reference Implementation to parse these tags. See http://commonmark.org/help/ for more about the parser and the markdown language it supports.
+
+# Turning on markdown support
+
+There are two ways to turn on markdown support for a package: globally, at the package level, and locally at the block level.
+
+To turn on markdown for the whole package, insert this entry into the `DESCRIPTION` file of the package:
+```
+Roxygen: list(markdown = TRUE)
+```
+The position of the entry in the file does not matter. After this, all Roxygen documentation will be parsed as markdown.
+
+Alternatively, you can use the `@md` tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in markdown.
+
+There is also a new `@noMd` tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.
+
+Here is an example roxygen chunk that uses markdown.
+
+```r
+#' Use roxygen to document a package.
+#'
+#' This function is a wrapper for the [roxygen2::roxygenize()] function from
+#' the `roxygen2` package. See the documentation and vignettes of
+#' that package to learn how to use roxygen.
+#'
+#' @param pkg package description, can be path or package name.  See
+#'   [as.package()] for more information
+#' @param clean,reload Deprecated.
+#' @inheritParams roxygen2::roxygenise
+#' @seealso [roxygen2::roxygenize()], `browseVignettes("roxygen2")`
+#' @export
+#' @md
+```
+
+# Syntax
+
+## Emphasis
+
+*Emphasis* and **strong** (bold) text are supported. For emphasis, put the text between asterisks or underline characters. For strong text, use two asterisks at both sides.
+
+```r
+#' @references
+#' Robert E Tarjan and Mihalis Yannakakis. (1984). Simple
+#' linear-time algorithms to test chordality of graphs, test acyclicity
+#' of hypergraphs, and selectively reduce acyclic hypergraphs.
+#' *SIAM Journal of Computation* **13**, 566-579.
+```
+
+```r
+#' See `::is_falsy` for the definition of what is _falsy_
+#' and what is _truthy_.
+```
+
+## Code
+
+Inline code is supported via backticks.
+
+```r
+#' @param ns Optionally, a named vector giving prefix-url pairs, as
+#'   produced by `xml_ns`. If provided, all names will be explicitly
+#'   qualified with the ns prefix, i.e. if the element `bar` is defined ...
+```
+
+For blocks of code, put your code between triple backticks:
+
+```r
+#' ```
+#' pkg <- make_packages(
+#'   foo1 = { f <- function() print("hello!") ; d <- 1:10 },
+#'   foo2 = { f <- function() print("hello again!") ; d <- 11:20 }
+#' )
+#' foo1::f()
+#' foo2::f()
+#' foo1::d
+#' foo2::d
+#' dispose_packages(pkg)
+#' ```
+```
+
+Note that this is not needed in `@examples`, since its contents is formatted as R code,
+anyway.
+
+## Lists
+
+Regular Markdown lists are recognized and converted to `\enumerate{}` or `\itemize{}` lists:
+
+```r
+#' There are two ways to use this function:
+#' 1. If its first argument is not named, then it returns a function
+#'    that can be used to color strings.
+#' 1. If its first argument is named, then it also creates a
+#'    style with the given name. This style can be used in
+#'    `style`. One can still use the return value
+#'    of the function, to create a style function.
+```
+
+```r
+#' The style (the `...` argument) can be anything of the
+#' following:
+#' * An R color name, see `colors()`.
+#' * A 6- or 8-digit hexa color string, e.g. `#ff0000` means
+#'   red. Transparency (alpha channel) values are ignored.
+#' * A one-column matrix with three rows for the red, green
+#'   and blue channels, as returned by [grDevices::col2rgb()]
+```
+
+Nested lists are also supported.
+
+Note that you do not have leave an empty line before the list. This is different from some markdown parsers.
+
+## Links
+
+Markdown hyperlinks work as usual:
+
+```r
+#' See more about the markdown markup at the
+#' [Commonmark web site](http://commonmark.org/help)
+```
+
+URLs inside angle brackets are also automatically converted to hyperlinks:
+
+```r
+#' The main R web site is at <https://r-project.org>.
+```
+
+Markdown notation can also be used to create links to other help topics. There are two basic forms:
+
+  * `[ref]`: The target topic and the link text are one and the same.
+  * `[text][ref]`: Link text differs from the target.
+
+First we explore the simplest form: `[ref]`. The presence of trailing parentheses, e.g., `[func()]`, signals that the target `func` is a function, which causes two things to happen:
+
+  * The link text `func()` is automatically typeset as code.
+  * The parentheses are stripped in the derived Rd link target.
+
++--------------------+------------------------+---------------------------------------------+
+| `[ref]`\           | Links to help\         | Notes                                       |
+|  examples          | topic for ...          |                                             |
++:===================+:=======================+:============================================+
+| `[func()]`\        | a function in same\    | Always typeset as code.\                    |
+| `[pkg::func()]`    | package or in `pkg`    | Produces Rd: `\code{\link[=func]{func()}}`\ | 
+|                    |                        | or `\code{\link[pkg:func]{pkg::func()}}`    |
++--------------------+------------------------+---------------------------------------------+
+| `[thing]`\         | a topic in same\       | Use for a topic that documents `NULL` and name is set\ |
+| `[pkg::thing]`     | package or in `pkg`    | via `@name`, e.g., a dataset or concept.\              |
+|                    |                        | Not typeset as code.\                                  | 
+|                    |                        | Produces Rd: `\link{thing}` or\                        |
+|                    |                        | `\link[pkg:thing]{pkg::thing}`                         |
++--------------------+------------------------+---------------------------------------------+
+| ``[`thing`]``\     | a topic in same\       | Same as above, but explicit backticks\      |
+| ``[`pkg::thing`]`` | package or in `pkg`    | mean that it **is** typeset as code.\       |
+|                    |                        | Good for documenting a class.\              |
+|                    |                        | Produces Rd: `\code{\link{thing}}` or\      |
+|                    |                        | `\code{\link[pkg:thing]{pkg::thing}`}       |
++--------------------+------------------------+---------------------------------------------+
+
+Use the second form `[text][ref]` to link to the topic specified by `ref`, but with `text` as the link text.
+
++-----------------------+------------------------+-----------------------------+
+| `[text][ref]`\        | Links to help\         | Notes                       |
+| examples              | topic for ...          |                             |
++:======================+:=======================+:============================+
+| `[text][func()]`\     | a function in same\    | Text is not typeset as code.\         |
+| `[text][pkg::func()]` | package or in `pkg`    | Produces Rd: `\link[=func]{text}` or\ |
+|                       |                        | `\link[pkg:func]{text}`               |  
++-----------------------+------------------------+-----------------------------+
+| `[text][thing]`\      | a topic in same\       | Text is not typeset as code.\          |
+| `[text][pkg::thing]`  | package or in `pkg`    | Use for a topic that documents `NULL`\ |
+|                       |                        | and name is set via `@name`,\          |
+|                       |                        | e.g., a dataset or concept.\           |  
+|                       |                        | Produces Rd: `\link[=thing]{text}` or\ |
+|                       |                        | `\link[pkg:thing]{text}`               |
++-----------------------+------------------------+-----------------------------+
+
+In the `[text][ref]`, the link text is treated like normal text by default.
+
+  * Use backticks to typeset the link text as code: ``[`text`][ref]``.
+
+It is never appropriate to use backticks around the `ref` in this form.
+
+  * No, do not do this: ``[text][`blah-blah`]``
+  * Yes, do this instead: `[text][blah-blah]`
+  
+S3 and S4 class *not done yet*
+
++-----------------------+------------------------+--------------------------+
+| Examples              | Help topic\            | Notes                    |
+|                       | for what?              |                          |
++:======================+:=======================+:=========================+
+| `[abc-class]`\        | an S4 class named\     | In Rd: `\linkS4class{abc}` or\   |
+| `[pkg::abc-class]`    | "abc" in same package\ | `\link[pkg:abc-class]{pkg::abc}` |
+|                       | or in `pkg`            |                                  |
++-----------------------+------------------------+--------------------------+
+| `[abc][abc-class]`    | *is this a thing?      | ??? `\link[=abc-class]{abc}` |
++-----------------------+------------------------+--------------------------+
+
+## Images
+
+Markdown syntax for inline images works. The image files must be in the `man/figures` directory:
+
+```r
+#' Here is an example plot:
+#' ![](example-plot.jpg "Example Plot Title")
+```
+
+# Roxygen and Rd tags *not* parsed as markdown
+
+Some of the roxygen tags are not parsed as markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without markdown support: `@aliases`, `@backref`, `@docType`, `@encoding`, `@evalRd`, `@example`, `@examples`, `@family`, `@inheritParams`, `@keywords`, `@method` `@name`, `@md`, `@noMd`, `@noRd`, `@rdname`, `@rawRd`, `@usage`.
+
+When mixing `Rd` and markdown notation, most `Rd` tags may contain markdown markup, the ones that can *not* are: `r paste0("\x60", roxygen2:::escaped_for_md, "\x60", collapse = ", ")`.
+
+# Possible problems
+
+## Mixing markdown and `Rd` markup
+
+Note that turning on markdown does *not* turn off the standard `Rd` syntax. We suggest that you use the regular `Rd` tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.
+
+## Leading whitespace
+
+Leading whitespace is interpreted by the commonmark parser, whereas it is ignored by the `Rd` parser (except in `\preformatted{}`). Make sure that you only include leading whitespace intentionally, for example for nested lists.
+
+## Spurious lists
+
+The Commonmark parser does not require an empty line before lists, and this might lead to unintended lists if a line starts with a number followed by a dot, or with an asterisk followed by whitespace:
+
+```r
+#' You can see more about this topic in the book cited below, on page
+#' 42. Clearly, the numbered list that starts here is not intentional.
+```
+
+## Links to operators
+
+Links to operators or objects that contain special characters, do not work currently. E.g. to link to the `%>%` operator in the `magrittr` package, instead of `[magrittr::%>%]`, you will need to use the `Rd` notation: `\code{\link[magrittr]{\%>\%}}`.
+
+## Rd formatting
+
+Within roxygen tags, you use `.Rd` syntax to format text. This vignette shows you examples of the most important commands. The full details are described in [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text).
+
+Note that `\` and `%` are special characters. To insert literals, escape with a backslash: `\\`, `\%`.
+
+### Character formatting
+
+* `\emph{italics}`
+
+* `\strong{bold}`
+
+* `\code{r_function_call(with = "arguments")}`, `\code{NULL}`, `\code{TRUE}`
+
+* `\pkg{package_name}`
+
+### Links
+
+To other documentation:
+
+* `\code{\link{function}}`: function in this package
+
+* `\code{\link[MASS]{abbey}}`: function in another package
+
+* `\link[=dest]{name}`: link to dest, but show name
+
+* `\code{\link[MASS:abbey]{name}}`: link to function in another package, but show name.
+
+* `\linkS4class{abc}`: link to an S4 class
+
+To the web:
+
+* `\url{http://rstudio.com}`
+
+* `\href{http://rstudio.com}{Rstudio}`
+
+* `\email{hadley@@rstudio.com}` (note the doubled `@`)
+
+### Lists
+
+* Ordered (numbered) lists:
+
+    ```{r}
+    #' \enumerate{
+    #'   \item First item
+    #'   \item Second item
+    #' }
+    ```
+
+* Unordered (bulleted) lists
+
+    ```{r}
+    #' \itemize{
+    #'   \item First item
+    #'   \item Second item
+    #' }
+    ```
+
+* Definition (named) lists
+
+    ```{r}
+    #' \describe{
+    #'   \item{One}{First item}
+    #'   \item{Two}{Second item}
+    #' }
+    ```
+
+### Mathematics
+
+Standard LaTeX (with no extensions):
+
+* `\eqn{a + b}`: inline eqution
+
+* `\deqn{a + b}`: display (block) equation
+
+### Tables
+
+Tables are created with `\tabular{}`. It has two arguments:
+
+1. Column alignment, specified by letter for each column (`l` = left, `r` = right,
+   `c` = centre.)
+
+2. Table contents, with columns separated by `\tab` and rows by `\cr`.
+
+The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with `#' ` for pasting directly into the documentation.
+
+```{r}
+tabular <- function(df, ...) {
+  stopifnot(is.data.frame(df))
+
+  align <- function(x) if (is.numeric(x)) "r" else "l"
+  col_align <- purrr::map_chr(df, align)
+
+  cols <- lapply(df, format, ...)
+  contents <- do.call("paste",
+    c(cols, list(sep = " \\tab ", collapse = "\\cr\n#'   ")))
+
+  paste("#' \\tabular{", paste(col_align, collapse = ""), "}{\n#'   ",
+    paste0("\\strong{", names(df), "}", sep = "", collapse = " \\tab "), " \\cr\n#'   ",
+    contents, "\n#' }\n", sep = "")
+}
+
+cat(tabular(mtcars[1:5, 1:5]))
+```
+

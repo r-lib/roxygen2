@@ -14,6 +14,6 @@ A \code{character} value with valid \code{Rd} syntax, or \code{NULL}.
 }
 \description{
 This function is called to generate the default "Format" section for each
-data object.  The default implementation will return the class and dimension
+data object. The default implementation will return the class and dimension
 information.
 }

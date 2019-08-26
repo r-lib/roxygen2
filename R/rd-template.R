@@ -20,12 +20,10 @@ process_templates <- function(block, base_path, global_options = list()) {
     return(block)
 
   templates <- unlist(template_tags, use.names = FALSE)
-  paths <- vapply(templates, template_find, base_path = base_path,
-    FUN.VALUE = character(1), USE.NAMES = FALSE)
+  paths <- map_chr(templates, template_find, base_path = base_path)
 
   var_tags <- block[names(block) == "templateVar"]
-  vars <- lapply(var_tags, "[[", "description")
-  names(vars) <- vapply(var_tags, "[[", "name", FUN.VALUE = character(1))
+  vars <- set_names(map(var_tags, "description"), map_chr(var_tags, "name"))
   vars <- lapply(vars, utils::type.convert, as.is = TRUE)
 
   results <- lapply(paths, template_eval, vars = list2env(vars))

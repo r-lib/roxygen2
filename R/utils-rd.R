@@ -68,14 +68,6 @@ rd_macro <- function(field, ..., space = FALSE) {
 
 # Input -------------------------------------------------------------------
 
-get_rd <- function(topic, package = NULL) {
-  help_call <- substitute(help(t, p), list(t = topic, p = package))
-  top <- eval(help_call)
-  if (length(top) == 0) return(NULL)
-
-  internal_f("utils", ".getHelpFile")(top)
-}
-
 get_tags <- function(rd, tag) {
   Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)
 }

@@ -72,7 +72,7 @@ vign_update_all <- function(pkg_path) {
     message("Updating vignettes")
 
     vigs <- tools::pkgVignettes(dir = pkg_path)
-    invisible(vapply(vigs$docs, vign_update, logical(1)))
+    invisible(map_lgl(vigs$docs, vign_update))
   }
 }
 

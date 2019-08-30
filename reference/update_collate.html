@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -37,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Update Collate field in DESCRIPTION — update_collate" />
 
+<meta property="og:title" content="Update Collate field in DESCRIPTION — update_collate" />
 <meta property="og:description" content="By default, R loads files in alphabetical order. Unfortunately not every
 alphabet puts letters in the same order, so you can't rely on alphabetic
 ordering if you need one file loaded before another. (This usually doesn't
@@ -49,9 +51,9 @@ which specify that before.R must be loaded before the current file.
 Generally, you will not need to run this function yourself; it should be
 run automatically by any package that needs to load your R files in
 collation order." />
-
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -129,7 +131,6 @@ collation order." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-lib/roxygen2">
@@ -155,7 +156,6 @@ collation order." />
     </div>
 
     <div class="ref-description">
-    
     <p>By default, R loads files in alphabetical order. Unfortunately not every
 alphabet puts letters in the same order, so you can't rely on alphabetic
 ordering if you need one file loaded before another. (This usually doesn't
@@ -166,11 +166,10 @@ which specify that <code>before.R</code> must be loaded before the current file.
 <p>Generally, you will not need to run this function yourself; it should be
 run automatically by any package that needs to load your R files in
 collation order.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>update_collate</span>(<span class='no'>base_path</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -179,7 +178,7 @@ collation order.</p>
       <td><p>Path to package directory.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="collate"><a class="anchor" href="#collate"></a>Collate</h2>
 
     
@@ -190,7 +189,6 @@ If there are no <code>@include</code> tags, roxygen2 will leave collate as is.
 This makes it easier to use roxygen2 with an existing collate directive,
 but if you remove all your <code>@include</code> tags, you'll need to also
 manually delete the collate field.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>#' If `example-a.R', `example-b.R' and `example-c.R' live in R/</span>
@@ -203,9 +201,7 @@ manually delete the collate field.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#collate">Collate</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

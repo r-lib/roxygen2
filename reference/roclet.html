@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -37,13 +39,13 @@
 
 
 
-<meta property="og:title" content="Build a new roclet. — roclet" />
 
+<meta property="og:title" content="Build a new roclet. — roclet" />
 <meta property="og:description" content="To create a new roclet, you will need to create a constructor function
 that wraps roclet, and then implement the methods described below." />
-
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -121,7 +123,6 @@ that wraps roclet, and then implement the methods described below." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-lib/roxygen2">
@@ -147,10 +148,8 @@ that wraps roclet, and then implement the methods described below." />
     </div>
 
     <div class="ref-description">
-    
     <p>To create a new roclet, you will need to create a constructor function
 that wraps <code>roclet</code>, and then implement the methods described below.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>roclet</span>(<span class='no'>subclass</span>, <span class='no'>...</span>)
@@ -164,7 +163,8 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
 <span class='fu'>roclet_process</span>(<span class='no'>x</span>, <span class='no'>blocks</span>, <span class='no'>env</span>, <span class='no'>base_path</span>, <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>())
 
 <span class='fu'>roclet_clean</span>(<span class='no'>x</span>, <span class='no'>base_path</span>)</pre>
-        
+
+
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -182,15 +182,13 @@ produce files on disk.</p></li>
 <li><p><code>roclet_clean()</code> called when <code><a href='roxygenize.html'>roxygenise(clean = TRUE)</a></code>. Should remove
 any files created by the roclet.</p></li>
 </ul>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
       <li><a href="#methods">Methods</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>

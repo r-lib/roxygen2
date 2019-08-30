@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Files generated on Windows systems now retain their existing line endings, or use 
+  unix-style line endings for new files (@jonthegeek, @jimhester, #840).
+  
 * `@inheritParams` warns if there are no parameters that require 
   documentation (#836).
 
@@ -47,9 +50,6 @@
 
 * `roxygenise()` now stops with an informative error message when run in a
   directory that's not the package root (@mikmart, #704).
-
-* Files generatd on Windows systems now have unix-style line endings 
-  (@jonthegeek, #840).
 
 # roxygen2 6.1.0
 

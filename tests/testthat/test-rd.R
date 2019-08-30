@@ -169,3 +169,13 @@ test_that("unicode escapes are ok", {
   expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
 })
 
+test_that("write_lines writes unix-style line endings.", {
+  path <- test_path("escapes.Rd")
+  temp_filename <- tempfile()
+  old_binary <- readBin(path, "raw", n = file.info(path)$size)
+  old_text <- read_lines(path)
+  write_lines(old_text, temp_filename)
+  on.exit(unlink(temp_filename), add = TRUE)
+  new_binary <- readBin(temp_filename, "raw", n = file.info(temp_filename)$size)
+  expect_identical(new_binary, old_binary)
+})

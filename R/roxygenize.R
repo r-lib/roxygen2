@@ -99,37 +99,6 @@ roxygenize <- function(package.dir = ".",
 #' @export
 roxygenise <- roxygenize
 
-#' Load options from DESCRIPTION.
-#'
-#' @param base_path Path to package.
-#' @export
-#' @keywords internal
-load_options <- function(base_path = ".") {
-  desc_path <- file.path(base_path, "DESCRIPTION")
-  desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
-
-  if (is.na(desc_opts)) {
-    opts <- list()
-  } else {
-    opts <- eval(parse(text = desc_opts))
-  }
-
-  defaults <- list(
-    wrap = FALSE,
-    roclets = c("collate", "namespace", "rd"),
-    markdown = markdown_global_default
-  )
-
-  unknown_opts <- setdiff(names(opts), names(defaults))
-  if (length(unknown_opts) > 0) {
-    warning("Unknown Roxygen options ", paste(unknown_opts, collapse = ", "),
-            ".\nSupported options: ", paste(names(defaults), collapse = ", "))
-  }
-
-  utils::modifyList(defaults, opts)
-}
-
-
 roxygen_setup <- function(base_path) {
   is_first <- first_time(base_path)
   if (is_first) {

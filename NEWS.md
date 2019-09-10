@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* As well as storing roxygen options in the `Roxygen` field of the 
+  `DESCRIPTION` you can now also store them in `man/roxygen/meta.R` (#889).
+
 * roxygen now looks for templates in `man/roxygen/templates` (#888).
 
 * Files generated on Windows systems now retain their existing line endings, or use 

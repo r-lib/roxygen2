@@ -1,4 +1,4 @@
-test_that("backticks are converted to \\code", {
+test_that("backticks are converted to \\code & \\verb", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -8,7 +8,7 @@ test_that("backticks are converted to \\code", {
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description with some \\code{code} included. \\code{More code.}
+    #' Description with some \\code{code} included. \\verb{More code.}
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
@@ -50,7 +50,7 @@ test_that("inline code escapes %", {
     f <- function() 1
   ")[[1]]
 
-  expect_equal(out$get_field("title")$values, "\\code{0.5\\%}")
+  expect_equal(out$get_field("title")$values, "\\verb{0.5\\%}")
 })
 
 test_that("code blocks escape %", {
@@ -73,7 +73,7 @@ test_that("inline code works with < and >", {
     f <- function() 1
   ")[[1]]
 
-  expect_equal(out$get_field("title")$values, "\\code{SELECT <name> FROM <table>}")
+  expect_equal(out$get_field("title")$values, "\\verb{SELECT <name> FROM <table>}")
 })
 
 test_that("itemized lists work", {
@@ -394,8 +394,8 @@ test_that("Do not pick up `` in arguments \\item #519", {
     #'
     #' Description.
     #'
-    #' @param `_arg1` should not be code. But \\code{this should}.
-    #' @param `_arg2` should not be code, either. \\code{But this.}
+    #' @param `_arg1` should not be code. But \\verb{this should}.
+    #' @param `_arg2` should not be code, either. \\verb{But this.}
     #'
     foo <- function(`_arg1`, `_arg2`) {}")[[1]]
   expect_equivalent_rd(out1, out2)

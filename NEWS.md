@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* Rd comments (`%`) are automatically escaped in markdown text. Existing
+  code that uses `\%` is automatically repaired; if you're generating
+  more exotic sequences like `\\%` you'll need to put them inside 
+  backticks (#879)
+
 * As well as storing roxygen options in the `Roxygen` field of the 
   `DESCRIPTION` you can now also store them in `man/roxygen/meta.R` (#889).
 

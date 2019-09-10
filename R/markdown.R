@@ -40,7 +40,7 @@ mdxml_node_to_rd <- function(xml, tag) {
 
     code_block = paste0("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}"),
     paragraph = paste0("\n\n", mdxml_children_to_rd(xml, tag)),
-    text = xml_text(xml),
+    text = escape_comment(xml_text(xml)),
     code = paste0("\\code{", gsub("%", "\\\\%", xml_text(xml)), "}"),
     emph = paste0("\\emph{", mdxml_children_to_rd(xml, tag), "}"),
     strong = paste0("\\strong{", mdxml_children_to_rd(xml, tag), "}"),
@@ -63,11 +63,11 @@ mdxml_node_to_rd <- function(xml, tag) {
 
 mdxml_unknown <- function(xml, tag) {
   roxy_tag_warning(tag, "Unknown xml node: ", xml_name(xml))
-  xml_text(xml)
+  escape_comment(xml_text(xml))
 }
 mdxml_unsupported <- function(xml, tag, feature) {
   roxy_tag_warning(tag, "Use of ", feature, " is not currently supported")
-  xml_text(xml)
+  escape_comment(xml_text(xml))
 }
 
 
@@ -108,7 +108,7 @@ mdxml_link <- function(xml) {
   if (!is.null(link)) {
     paste0(link, collapse = "")
   } else if (dest == "" || dest == xml_text(xml)) {
-    paste0("\\url{", xml_text(xml), "}")
+    paste0("\\url{", escape_comment(xml_text(xml)), "}")
   } else {
     paste0("\\href{", dest, "}{", mdxml_link_text(contents), "}")
   }
@@ -120,11 +120,21 @@ mdxml_link <- function(xml) {
 mdxml_link_text <- function(xml_contents) {
   text <- xml_text(xml_contents)
   text[xml_name(xml_contents) %in% c("linebreak", "softbreak")] <- " "
-  paste0(text, collapse = "")
+  escape_comment(paste0(text, collapse = ""))
 }
 
 mdxml_image = function(xml) {
   dest <- xml_attr(xml, "destination")
   title <- xml_attr(xml, "title")
   paste0("\\figure{", dest, "}{", title, "}")
+}
+
+
+escape_comment <- function(x) {
+  # Strip existing escaping - this is admittedly a hack and makes the
+  # state of % escaping more confusing, but it only affects markdown, and
+  # I think if you do want a literal \% you can do `\%`
+  x <- gsub("\\%", "%", x, fixed = TRUE)
+  x <- gsub("%", "\\%", x, fixed = TRUE)
+  x
 }

@@ -344,6 +344,13 @@ So far so good. \\preformatted{ *these are not
   expect_equal(get_tag(out1, "description")[[2]], desc1)
 })
 
+test_that("% is automatically escaped", {
+  expect_equal(markdown("5%"), "5\\%")
+
+  # Even if it was escaped before
+  expect_equal(markdown("5\\%"), "5\\%")
+})
+
 test_that("% and $ and _ are not unescaped", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title

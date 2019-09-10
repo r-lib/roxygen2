@@ -288,7 +288,7 @@ topic_add_methods <- function(topic, block) {
   desc <- lapply(methods, function(x) docstring(x$value@.Data))
   usage <- map_chr(methods, function(x) {
     usage <- function_usage(x$value@name, formals(x$value@.Data))
-    as.character(wrap_string(usage))
+    as.character(wrap_usage(usage))
   })
 
   has_docs <- !map_lgl(desc, is.null)
@@ -343,7 +343,7 @@ topic_add_keyword <- function(topic, block) {
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block) {
   if (is.null(block$usage)) {
-    usage <- wrap_string(object_usage(attr(block, "object")), width = 75L)
+    usage <- wrap_usage(object_usage(attr(block, "object")), width = 75L)
   } else if (block$usage == "NULL") {
     usage <- NULL
   } else {

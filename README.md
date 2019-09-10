@@ -4,6 +4,9 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/roxygen2)](https://CRAN.R-project.org/package=roxygen2)
 [![Travis build status](https://travis-ci.org/r-lib/roxygen2.svg?branch=master)](https://travis-ci.org/r-lib/roxygen2)
 [![Codecov test coverage](https://codecov.io/gh/r-lib/roxygen2/branch/master/graph/badge.svg)](https://codecov.io/gh/r-lib/roxygen2?branch=master)
+[![Azure pipelines build status](https://img.shields.io/azure-devops/build/r-lib/roxygen2/2)](https://dev.azure.com/r-lib/roxygen2/_build/latest?definitionId=1&branchName=master)
+[![Azure pipelines test status](https://img.shields.io/azure-devops/tests/r-lib/roxygen2/2?color=brightgreen&compact_message)](https://dev.azure.com/r-lib/roxygen2/_build/latest?definitionId=1&branchName=master)
+[![Azure pipelines coverage status](https://img.shields.io/azure-devops/coverage/r-lib/roxygen2/2)](https://dev.azure.com/r-lib/roxygen2/_build/latest?definitionId=1&branchName=master)
 <!-- badges: end -->
 
 The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to automatically generate `.Rd` files in `man/`, `NAMESPACE`, and, if needed, the `Collate` field in `DESCRIPTION`.

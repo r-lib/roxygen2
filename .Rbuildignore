@@ -15,3 +15,5 @@
 ^pkgdown$
 ^\.covrignore$
 ^azure-pipelines\.yml$
+^\.Rprofile$
+^r-packages$

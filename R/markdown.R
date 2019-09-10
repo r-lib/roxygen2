@@ -11,7 +11,9 @@ markdown <- function(text, tag = NULL) {
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
 
   mdxml <- md_to_mdxml(esc_text_linkrefs)
-  rd <- mdxml_children_to_rd(mdxml, tag)
+  state <- new.env(parent = emptyenv())
+  state$tag <- tag
+  rd <- mdxml_children_to_rd(mdxml, state)
 
   unescape_rd_for_md(str_trim(rd), esc_text)
 }
@@ -21,44 +23,44 @@ md_to_mdxml <- function(x) {
   xml2::read_xml(md)
 }
 
-mdxml_children_to_rd <- function(xml, tag) {
-  out <- map_chr(xml_children(xml), mdxml_node_to_rd, tag)
+mdxml_children_to_rd <- function(xml, state) {
+  out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
   paste0(out, collapse = "")
 }
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
-mdxml_node_to_rd <- function(xml, tag) {
+mdxml_node_to_rd <- function(xml, state) {
   if (!inherits(xml, "xml_node") || xml_type(xml) != "element") {
-    roxy_tag_warning(tag, "Internal markdown translation failure")
+    roxy_tag_warning(state$tag, "Internal markdown translation failure")
     return("")
   }
 
   switch(xml_name(xml),
     html = ,
     document = ,
-    unknown = mdxml_children_to_rd(xml, tag),
+    unknown = mdxml_children_to_rd(xml, state),
 
-    paragraph = paste0("\n\n", mdxml_children_to_rd(xml, tag)),
+    paragraph = paste0("\n\n", mdxml_children_to_rd(xml, state)),
     text = escape_comment(xml_text(xml)),
-    emph = paste0("\\emph{", mdxml_children_to_rd(xml, tag), "}"),
-    strong = paste0("\\strong{", mdxml_children_to_rd(xml, tag), "}"),
+    emph = paste0("\\emph{", mdxml_children_to_rd(xml, state), "}"),
+    strong = paste0("\\strong{", mdxml_children_to_rd(xml, state), "}"),
     softbreak = "\n",
     linebreak = "\n",
 
-    code = mdxml_code(xml, tag),
+    code = mdxml_code(xml, state),
     code_block = paste0("\\preformatted{", escape_verb(xml_text(xml)), "}"),
 
-    list = mdxml_list(xml, tag),
-    item = mdxml_item(xml, tag),
+    list = mdxml_list(xml, state),
+    item = mdxml_item(xml, state),
     link = mdxml_link(xml),
     image = mdxml_image(xml),
 
     # Not supported
-    heading = mdxml_unsupported(xml, tag, "markdown headings"),
-    block_quote = mdxml_unsupported(xml, tag, "block quotes"),
-    hrule = mdxml_unsupported(xml, tag, "horizontal rules"),
-    html_inline = mdxml_unsupported(xml, tag, "inline HTML"),
-    mdxml_unknown(xml, tag)
+    heading = mdxml_unsupported(xml, state$tag, "markdown headings"),
+    block_quote = mdxml_unsupported(xml, state$tag, "block quotes"),
+    hrule = mdxml_unsupported(xml, state$tag, "horizontal rules"),
+    html_inline = mdxml_unsupported(xml, state$tag, "inline HTML"),
+    mdxml_unknown(xml, state$tag)
   )
 }
 
@@ -99,16 +101,16 @@ escape_verb <- function(x) {
 }
 
 # A list, either bulleted or numbered
-mdxml_list <- function(xml, tag) {
+mdxml_list <- function(xml, state) {
   type <- xml_attr(xml, "type")
   if (type == "ordered") {
-    paste0("\n\\enumerate{", mdxml_children_to_rd(xml, tag), "\n}")
+    paste0("\n\\enumerate{", mdxml_children_to_rd(xml, state), "\n}")
   } else {
-    paste0("\n\\itemize{", mdxml_children_to_rd(xml, tag), "\n}")
+    paste0("\n\\itemize{", mdxml_children_to_rd(xml, state), "\n}")
   }
 }
 
-mdxml_item <- function(xml, tag) {
+mdxml_item <- function(xml, state) {
   ## A single item within a list. We remove the first paragraph
   ## tag, to avoid an empty line at the beginning of the first item.
   children <- xml_children(xml)
@@ -116,11 +118,11 @@ mdxml_item <- function(xml, tag) {
     cnts <- ""
   } else if (xml_name(children[[1]]) == "paragraph") {
     cnts <- paste0(
-      mdxml_children_to_rd(children[[1]], tag),
-      paste0(map_chr(children[-1], mdxml_node_to_rd, tag), collapse = "")
+      mdxml_children_to_rd(children[[1]], state),
+      paste0(map_chr(children[-1], mdxml_node_to_rd, state), collapse = "")
     )
   } else {
-    cnts <- mdxml_children_to_rd(xml, tag)
+    cnts <- mdxml_children_to_rd(xml, state)
   }
   paste0("\n\\item ", cnts)
 }

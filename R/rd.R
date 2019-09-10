@@ -51,6 +51,7 @@ roclet_tags.roclet_rd <- function(x) {
     family = tag_value,
     field = tag_name_description,
     format = tag_markdown,
+    includeRmd = tag_value,
     inherit = tag_inherit,
     inheritParams = tag_value,
     inheritDotParams = tag_two_part("source", "args", required = FALSE),
@@ -142,6 +143,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_backref(rd, block)
   topic_add_doc_type(rd, block)
   topic_add_eval_rd(rd, block, env)
+  topic_add_include_rmd(rd, block, env)
   topic_add_examples(rd, block, base_path)
   topic_add_fields(rd, block)
   topic_add_inherit(rd, block)
@@ -400,6 +402,17 @@ topic_add_eval_rd <- function(topic, block, env) {
     out <- block_eval(tag, block, env, "@evalRd")
     if (!is.null(out)) {
       topic$add_simple_field("rawRd", out)
+    }
+  }
+}
+
+topic_add_include_rmd <- function(topic, block, env) {
+  tags <- block_tags(block, "includeRmd")
+
+  for (tag in tags) {
+    out <- block_include_rmd(tag, block, env)
+    if (!is.null(out)) {
+      topic$add_simple_field("details", out)
     }
   }
 }

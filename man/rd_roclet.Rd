@@ -17,6 +17,7 @@
 \alias{@family}
 \alias{@field}
 \alias{@format}
+\alias{@includeRmd}
 \alias{@inherit}
 \alias{@inheritParams}
 \alias{@inheritDotParams}

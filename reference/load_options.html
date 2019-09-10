@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load options from DESCRIPTION. — load_options • roxygen2</title>
+<title>Load roxygen2 options — load_options • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,10 @@
 
 
 
-<meta property="og:title" content="Load options from DESCRIPTION. — load_options" />
-<meta property="og:description" content="Load options from DESCRIPTION." />
+<meta property="og:title" content="Load roxygen2 options — load_options" />
+<meta property="og:description" content="Options can be stored in the Roxygen field of the DESCRIPTION, or
+in man/roxygen/meta.R. In either case, the code is parsed and evaluated
+in a child of the base environment." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -145,13 +147,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load options from DESCRIPTION.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/roxygenize.R'><code>R/roxygenize.R</code></a></small>
+    <h1>Load roxygen2 options</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/options.R'><code>R/options.R</code></a></small>
     <div class="hidden name"><code>load_options.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Load options from DESCRIPTION.</p>
+    <p>Options can be stored in the <code>Roxygen</code> field of the <code>DESCRIPTION</code>, or
+in <code>man/roxygen/meta.R</code>. In either case, the code is parsed and evaluated
+in a child of the base environment.</p>
     </div>
 
     <pre class="usage"><span class='fu'>load_options</span>(<span class='kw'>base_path</span> <span class='kw'>=</span> <span class='st'>"."</span>)</pre>
@@ -165,12 +169,16 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Options in <code>man/roxygen/meta.R</code> override those present <code>DESCRIPTION</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>

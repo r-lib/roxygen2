@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
+  depending on whether it not it parses as R code. This should make it 
+  easier to include arbitrary "code" snippets in documentation with out
+  causing Rd failures (#654).
+
 * As well as storing roxygen options in the `Roxygen` field of the 
   `DESCRIPTION` you can now also store them in `man/roxygen/meta.R` (#889).
 

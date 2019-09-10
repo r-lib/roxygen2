@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* roxygen now looks for templates in `man/roxygen/templates` (#888).
+
 * Files generated on Windows systems now retain their existing line endings, or use 
   unix-style line endings for new files (@jonthegeek, @jimhester, #840).
   

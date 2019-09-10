@@ -1,12 +1,16 @@
 template_find <- function(base_path, template_name) {
-  path <- file.path(base_path, "man-roxygen", paste0(template_name, ".", c("R", "r")))
+  file_name <- paste0(template_name, ".", c("R", "r"))
+  path <- c(
+    file.path(base_path, "man-roxygen", file_name),
+    file.path(base_path, "man", "roxygen", "templates", file_name)
+  )
   path_exists <- file.exists(path)
 
   if (!any(path_exists)) {
     stop("Can't find template '", template_name, "'", call. = FALSE)
   }
 
-  path[path_exists][1]
+  path[path_exists][[1]]
 }
 
 template_eval <- function(template_path, vars) {

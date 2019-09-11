@@ -410,8 +410,12 @@ topic_add_include_rmd <- function(topic, block, base_path) {
   rmds <- block_tags(block, "includeRmd")
 
   for (rmd in rmds) {
-    tag <- roxy_tag("@includeRmd", rmd, attr(block, "filename"),
-                    attr(block, "location")[[1]])
+    tag <- roxy_tag(
+      "@includeRmd",
+      rmd,
+      attr(block, "filename"),
+      attr(block, "location")[[1]]
+    )
     if (!is_installed("rmarkdown")) {
       roxy_tag_warning(tag, "Needs the rmarkdown package")
     }

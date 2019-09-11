@@ -21,7 +21,8 @@ block_include_rmd <- function(tag, block, base_path) {
     root.dir = dirname(rmd),
     cache.path = cache_path,
     fig.path = fig_path,
-    child = rmd)
+    child = rmd
+  )
   optss <- paste0(names(opts), "=", encodeString(opts, quote = '"'))
   txt <- sprintf(
     "```{r %s}\n```\n\n%s\n",

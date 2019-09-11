@@ -170,7 +170,8 @@ pkg_env <- function() {
 uuid <- function(nchar = 8) {
   paste(
     sample(c(letters, LETTERS, 0:9), nchar, replace = TRUE),
-    collapse = "")
+    collapse = ""
+  )
 }
 
 # quoting -----------------------------------------------------------------

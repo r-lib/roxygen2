@@ -60,6 +60,10 @@ test_that("default usage formats S3 methods correctly", {
     "\\method{mean}{foo}(x)"
   )
   expect_equal(
+    call_to_usage(mean.function <- function(x) {}),
+    "\\method{mean}{`function`}(x)"
+  )
+  expect_equal(
     call_to_usage("+.foo" <- function(x, b) {}),
     "\\method{+}{foo}(x, b)"
   )

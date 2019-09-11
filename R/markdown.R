@@ -13,14 +13,23 @@ markdown <- function(text, tag = NULL) {
   mdxml <- md_to_mdxml(esc_text_linkrefs)
   state <- new.env(parent = emptyenv())
   state$tag <- tag
-  rd <- mdxml_children_to_rd(mdxml, state)
+  rd <- mdxml_children_to_rd_top(mdxml, state)
 
-  unescape_rd_for_md(str_trim(rd), esc_text)
+  unescape_rd_for_md(str_trim(rd$main), esc_text)
 }
 
 md_to_mdxml <- function(x) {
   md <- commonmark::markdown_xml(x, hardbreaks = TRUE)
   xml2::read_xml(md)
+}
+
+mdxml_children_to_rd_top <- function(xml, state) {
+  state$section_tag <- uuid()
+  out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
+  out <- c(out, mdxml_close_sections(state))
+  rd <- paste0(out, collapse = "")
+  secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]]
+  list(main = secs[[1]], sections = secs[-1])
 }
 
 mdxml_children_to_rd <- function(xml, state) {
@@ -55,8 +64,10 @@ mdxml_node_to_rd <- function(xml, state) {
     link = mdxml_link(xml),
     image = mdxml_image(xml),
 
+    # Only supported when including Rmds
+    heading = mdxml_heading(xml, state),
+
     # Not supported
-    heading = mdxml_unsupported(xml, state$tag, "markdown headings"),
     block_quote = mdxml_unsupported(xml, state$tag, "block quotes"),
     hrule = mdxml_unsupported(xml, state$tag, "horizontal rules"),
     html_inline = mdxml_unsupported(xml, state$tag, "inline HTML"),
@@ -160,4 +171,32 @@ mdxml_image = function(xml) {
 
 escape_comment <- function(x) {
   gsub("%", "\\%", x, fixed = TRUE)
+}
+
+mdxml_heading <- function(xml, state) {
+  if (state$tag$tag != "@includeRmd") {
+    return(mdxml_unsupported(xml, state$tag, "markdown headings"))
+  }
+  level <- xml_attr(xml, "level")
+  head <- paste0(
+    mdxml_close_sections(state, level),
+    "\n",
+    if (level == 1) paste0(state$section_tag, "\\section{"),
+    if (level > 1) "\\subsection{",
+    xml_text(xml),
+    "}{")
+  state$section <- c(state$section, level)
+  head
+}
+
+#' @importFrom utils head tail
+
+mdxml_close_sections <- function(state, upto = 1L) {
+  hmy <- 0L
+  while (length(state$section) && tail(state$section, 1) >= upto) {
+    hmy <- hmy + 1L
+    state$section <- head(state$section, -1L)
+  }
+
+  paste0(rep("\n}\n", hmy), collapse = "")
 }

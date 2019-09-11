@@ -413,9 +413,12 @@ topic_add_include_rmd <- function(topic, block) {
     tag <- roxy_tag("@includeRmd", rmd, attr(block, "filename"),
                     attr(block, "location")[[1]])
     out <- block_include_rmd(tag, block, env)
-    if (!is.null(out)) {
-      topic$add_simple_field("details", out)
+    if (!is.null(out$main)) {
+      topic$add_simple_field("details", out$main)
     }
+    lapply(out$sections, function(s) {
+      topic$add_simple_field("rawRd", s)
+    })
   }
 }
 

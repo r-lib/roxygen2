@@ -167,6 +167,12 @@ pkg_env <- function() {
   env
 }
 
+uuid <- function(nchar = 8) {
+  paste(
+    sample(c(letters, LETTERS, 0:9), nchar, replace = TRUE),
+    collapse = "")
+}
+
 # quoting -----------------------------------------------------------------
 is_parseable <- function(x) map_lgl(x, can_parse)
 auto_backtick <- function(x) {

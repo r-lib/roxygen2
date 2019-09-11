@@ -2,15 +2,21 @@
 block_include_rmd <- function(tag, block, env) {
   rmd <- tag$val
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
-  md_path <- tempfile(fileext = ".md")
-  on.exit(unlink(md_path, recursive = TRUE), add = TRUE)
   if (!requireNamespace("rmarkdown", quietly = TRUE)) {
     stop("@includeRmd requires the rmarkdown package")
   }
+
+  md_path <- tempfile(fileext = ".md")
+  on.exit(unlink(md_path, recursive = TRUE), add = TRUE)
   rmd_path <- rmd_process_links(rmd)
   on.exit(unlink(rmd_path, recursive = TRUE), add = TRUE)
-  rmarkdown::render(rmd_path, output_format = rmarkdown::github_document(),
-                    output_file = md_path, quiet = TRUE)
+
+  rmarkdown::render(
+    rmd_path,
+    output_format = rmarkdown::github_document(),
+    output_file = md_path,
+    quiet = TRUE
+  )
   rmd_eval_rd(md_path, tag)
 }
 
@@ -31,6 +37,6 @@ rmd_eval_rd <- function(path, tag) {
   mdxml <- xml2::read_xml(mdx)
   state <- new.env(parent = emptyenv())
   state$tag <- tag
-  rd <- mdxml_children_to_rd(mdxml, state = state)
+  rd <- mdxml_children_to_rd_top(mdxml, state = state)
   rd
 }

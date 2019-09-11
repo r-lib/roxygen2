@@ -220,15 +220,26 @@ make_random_string <- function(length = 32) {
   )
 }
 
-#' Escape \\\% and \\$ and \\_ once more, because commonmark
-#' removes the escaping. We do this everywhere currently.
+#' Check markdown escaping
+#'
+#' @description
+#' Each of the following bullets should look the same when rendered:
+#'
+#' * Double escapes: \\, \\%, \\$, \\_
+#' * Backticks: `\`, `\%`, `\$`, `\_`
+#' * `\verb{}`: \verb{\\}, \verb{\\%}, \verb{\$}, \verb{\_}
+#'
+#' \[ this isn't a link \]
+#' \\[ neither is this \\]
 #'
 #' @param text Input text.
 #' @return Double-escaped text.
 
 double_escape_md <- function(text) {
-  text <- gsub("\\%", "\\\\%", text, fixed = TRUE)
-  text <- gsub("\\_", "\\\\_", text, fixed = TRUE)
-  text <- gsub("\\$", "\\\\$", text, fixed = TRUE)
+  text <- gsub("\\", "\\\\", text, fixed = TRUE)
+
+  # De-dup escaping used to avoid [] creating a link
+  text <- gsub("\\\\[", "\\[", text, fixed = TRUE)
+  text <- gsub("\\\\]", "\\]", text, fixed = TRUE)
   text
 }

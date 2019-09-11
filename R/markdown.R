@@ -91,7 +91,7 @@ can_parse <- function(x) {
 }
 
 escape_verb <- function(x) {
-  x <- gsub("\\", "\\\\", x, fixed = TRUE)
+  # Don't need to escape \\ because that's already handled in double_escape_md()
   x <- gsub("%", "\\%", x, fixed = TRUE)
   x <- gsub("{", "\\{", x, fixed = TRUE)
   x <- gsub("}", "\\}", x, fixed = TRUE)

@@ -2,9 +2,6 @@
 block_include_rmd <- function(tag, block, base_path) {
   rmd <- tag$val
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
-  if (!requireNamespace("rmarkdown", quietly = TRUE)) {
-    stop("@includeRmd requires the rmarkdown package")
-  }
 
   rmd_path <- tempfile(fileext = ".Rmd")
   md_path <- tempfile(fileext = ".md")

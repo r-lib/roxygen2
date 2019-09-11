@@ -59,13 +59,14 @@ get_md_linkrefs <- function(text) {
   refs[, 3] <- ifelse(is.na(refs[,3]) | refs[,3] == "", refs[, 2], refs[,3])
 
   refs3encoded <- map_chr(refs[,3], URLencode)
-  ref_text <- paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
-  paste(ref_text, collapse = "\n")
+  ref_lines <- paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
+  ref_lines
 }
 
 add_linkrefs_to_md <- function(text) {
-  ref_text <- get_md_linkrefs(text)
-  if (! length(ref_text)) return(text)
+  ref_lines <- get_md_linkrefs(text)
+  if (! length(ref_lines)) return(text)
+  ref_text <- paste0(ref_lines, collapse = "\n")
   paste0(text, "\n\n", ref_text, "\n")
 }
 

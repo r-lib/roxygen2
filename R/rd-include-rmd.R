@@ -46,7 +46,7 @@ block_include_rmd <- function(tag, block, base_path) {
 rmd_linkrefs_from_file <- function(path) {
   lines <- read_lines(path)
   txt <- paste(lines, collapse = "\n")
-  get_md_linkrefs(txt)
+  paste(get_md_linkrefs(txt), collapse = "\n")
 }
 
 rmd_eval_rd <- function(path, tag) {

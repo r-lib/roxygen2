@@ -143,7 +143,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_backref(rd, block)
   topic_add_doc_type(rd, block)
   topic_add_eval_rd(rd, block, env)
-  topic_add_include_rmd(rd, block)
+  topic_add_include_rmd(rd, block, base_path)
   topic_add_examples(rd, block, base_path)
   topic_add_fields(rd, block)
   topic_add_inherit(rd, block)
@@ -406,13 +406,13 @@ topic_add_eval_rd <- function(topic, block, env) {
   }
 }
 
-topic_add_include_rmd <- function(topic, block) {
+topic_add_include_rmd <- function(topic, block, base_path) {
   rmds <- block_tags(block, "includeRmd")
 
   for (rmd in rmds) {
     tag <- roxy_tag("@includeRmd", rmd, attr(block, "filename"),
                     attr(block, "location")[[1]])
-    out <- block_include_rmd(tag, block, env)
+    out <- block_include_rmd(tag, block, base_path)
     if (!is.null(out$main)) {
       topic$add_simple_field("details", out$main)
     }

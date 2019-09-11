@@ -1,5 +1,5 @@
 
-block_include_rmd <- function(tag, block, env) {
+block_include_rmd <- function(tag, block, base_path) {
   rmd <- tag$val
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
   if (!requireNamespace("rmarkdown", quietly = TRUE)) {
@@ -10,12 +10,27 @@ block_include_rmd <- function(tag, block, env) {
   md_path <- tempfile(fileext = ".md")
   on.exit(unlink(c(rmd_path, md_path), recursive = TRUE), add = TRUE)
 
+  wd <- getwd()
+  setwd(base_path)
+  on.exit(setwd(wd), add = TRUE)
+
+  # This will create an absolute path
+  rmd <- normalizePath(rmd)
+
   cache_path <- paste0(sub("\\.Rmd$", "", rmd), "_cache/")
   fig_path <- file.path(dirname(rmd), "figure/")
   linkrefs <- rmd_linkrefs_from_file(rmd)
+  opts <- c(
+    root.dir = dirname(rmd),
+    cache.path = cache_path,
+    fig.path = fig_path,
+    child = rmd)
+  optss <- paste0(names(opts), "=", encodeString(opts, quote = '"'))
   txt <- sprintf(
-    "```{r cache.path = \"%s\", fig.path = \"%s\", child = \"%s\"}\n```\n\n%s\n",
-    cache_path, fig_path, rmd, linkrefs)
+    "```{r %s}\n```\n\n%s\n",
+    paste(optss, collapse = ","),
+    linkrefs
+  )
   cat(txt, file = rmd_path)
 
   rmarkdown::render(

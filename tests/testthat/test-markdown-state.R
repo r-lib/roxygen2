@@ -30,7 +30,7 @@ test_that("turning on/off markdown globally", {
     foo <- function() {}")[[1]]
   expect_equal(
     get_tag(out1, "description")$values,
-    "Description with some \\code{code} included. \\code{More code.}"
+    "Description with some \\code{code} included. \\verb{More code.}"
   )
 })
 
@@ -56,7 +56,7 @@ test_that("turning on/off markdown locally", {
     foo <- function() {}")[[1]]
   expect_equal(
     get_tag(out1, "description")$values,
-    "Description with some \\code{code} included. \\code{More code.}"
+    "Description with some \\code{code} included. \\verb{More code.}"
   )
 
   ## on / off
@@ -80,7 +80,7 @@ test_that("turning on/off markdown locally", {
     foo <- function() {}")[[1]]
   expect_equal(
     get_tag(out1, "description")$values,
-    "Description with some \\code{code} included. \\code{More code.}"
+    "Description with some \\code{code} included. \\verb{More code.}"
   )
 
 })

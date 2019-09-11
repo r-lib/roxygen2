@@ -2,7 +2,7 @@
 
 * Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
   depending on whether it not it parses as R code. This should make it 
-  easier to include arbitrary "code" snippets in documentation with out
+  easier to include arbitrary "code" snippets in documentation without
   causing Rd failures (#654).
 
 * As well as storing roxygen options in the `Roxygen` field of the 

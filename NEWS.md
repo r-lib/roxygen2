@@ -4,6 +4,7 @@
   code that uses `\%` is automatically repaired; if you're generating
   more exotic sequences like `\\%` you'll need to put them inside 
   backticks (#879)
+
 * Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
   depending on whether it not it parses as R code. This should make it 
   easier to include arbitrary "code" snippets in documentation without

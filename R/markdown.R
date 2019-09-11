@@ -38,14 +38,15 @@ mdxml_node_to_rd <- function(xml, tag) {
     document = ,
     unknown = mdxml_children_to_rd(xml, tag),
 
-    code_block = paste0("\\preformatted{", gsub("%", "\\\\%", xml_text(xml)), "}"),
     paragraph = paste0("\n\n", mdxml_children_to_rd(xml, tag)),
     text = xml_text(xml),
-    code = paste0("\\code{", gsub("%", "\\\\%", xml_text(xml)), "}"),
     emph = paste0("\\emph{", mdxml_children_to_rd(xml, tag), "}"),
     strong = paste0("\\strong{", mdxml_children_to_rd(xml, tag), "}"),
     softbreak = "\n",
     linebreak = "\n",
+
+    code = mdxml_code(xml, tag),
+    code_block = paste0("\\preformatted{", escape_verb(xml_text(xml)), "}"),
 
     list = mdxml_list(xml, tag),
     item = mdxml_item(xml, tag),
@@ -70,6 +71,32 @@ mdxml_unsupported <- function(xml, tag, feature) {
   xml_text(xml)
 }
 
+mdxml_code <- function(xml, tag) {
+  code <- xml_text(xml)
+
+  # See escaping details at
+  # https://cran.rstudio.com/doc/manuals/r-devel/R-exts.html#Insertions
+  if (can_parse(code)) {
+    paste0("\\code{", gsub("%", "\\\\%", code), "}")
+  } else {
+    paste0("\\verb{", escape_verb(code), "}")
+  }
+}
+
+can_parse <- function(x) {
+  tryCatch({
+    parse_expr(x)
+    TRUE
+  }, error = function(x) FALSE)
+}
+
+escape_verb <- function(x) {
+  x <- gsub("\\", "\\\\", x, fixed = TRUE)
+  x <- gsub("%", "\\%", x, fixed = TRUE)
+  x <- gsub("{", "\\{", x, fixed = TRUE)
+  x <- gsub("}", "\\}", x, fixed = TRUE)
+  x
+}
 
 # A list, either bulleted or numbered
 mdxml_list <- function(xml, tag) {

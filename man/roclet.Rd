@@ -34,7 +34,7 @@ values give tag parsing function. See \link{roxy_tag} for built-in options.
 code has been evaluated. This should only be needed if your roclet affects
 how code will evaluated. Should return a roclet.
 \item \code{roclet_process()} called after blocks have been evaluated; i.e. the
-\code{@eval} tag has been processed, and the object associated with each block
+\verb{@eval} tag has been processed, and the object associated with each block
 has been determined.
 \item \code{roclet_output()} is given the output from \code{roclet_process()} and should
 produce files on disk.

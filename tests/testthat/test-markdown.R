@@ -1,4 +1,6 @@
-test_that("backticks are converted to \\code", {
+# code --------------------------------------------------------------------
+
+test_that("backticks are converted to \\code & \\verb", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -8,7 +10,7 @@ test_that("backticks are converted to \\code", {
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description with some \\code{code} included. \\code{More code.}
+    #' Description with some \\code{code} included. \\verb{More code.}
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
@@ -44,26 +46,21 @@ test_that("code blocks work", {
 })
 
 test_that("inline code escapes %", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' `0.5%`
-    #' @md
-    f <- function() 1
-  ")[[1]]
+  expect_equal(markdown("`5%`"), "\\verb{5\\%}")
+  expect_equal(markdown("`'5%'`"), "\\code{'5\\%'}")
+})
 
-  expect_equal(out$get_field("title")$values, "\\code{0.5\\%}")
+test_that("inline verbatim escapes Rd special chars", {
+  expect_equal(markdown("`{`"), "\\verb{\\{}")
+  expect_equal(markdown("`}`"), "\\verb{\\}}")
+  expect_equal(markdown("`\\`"), "\\verb{\\\\}")
 })
 
 test_that("code blocks escape %", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' ```
-    #' 1:10 %>% mean()
-    #' ```
-    #'
-    #' @md
-    f <- function() 1
-  ")[[1]]
-
-  expect_equal(out$get_field("title")$values, "\\preformatted{1:10 \\%>\\% mean()\n}")
+  expect_equal(
+    markdown("```\n1:10 %>% mean()\n```"),
+    "\\preformatted{1:10 \\%>\\% mean()\n}"
+  )
 })
 
 test_that("inline code works with < and >", {
@@ -73,8 +70,11 @@ test_that("inline code works with < and >", {
     f <- function() 1
   ")[[1]]
 
-  expect_equal(out$get_field("title")$values, "\\code{SELECT <name> FROM <table>}")
+  expect_equal(out$get_field("title")$values, "\\verb{SELECT <name> FROM <table>}")
 })
+
+
+# lists -------------------------------------------------------------------
 
 test_that("itemized lists work", {
   out1 <- roc_proc_text(rd_roclet(), "
@@ -187,6 +187,9 @@ test_that("nested lists are OK", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
+
+
+# inline formatting -------------------------------------------------------
 
 test_that("emphasis works", {
   out1 <- roc_proc_text(rd_roclet(), "
@@ -394,8 +397,8 @@ test_that("Do not pick up `` in arguments \\item #519", {
     #'
     #' Description.
     #'
-    #' @param `_arg1` should not be code. But \\code{this should}.
-    #' @param `_arg2` should not be code, either. \\code{But this.}
+    #' @param `_arg1` should not be code. But \\verb{this should}.
+    #' @param `_arg2` should not be code, either. \\verb{But this.}
     #'
     foo <- function(`_arg1`, `_arg2`) {}")[[1]]
   expect_equivalent_rd(out1, out2)

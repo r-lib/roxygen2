@@ -24,7 +24,7 @@ test_that("proper link references are added", {
 test_that("can not have [ inside of link", {
   expect_equal(
     markdown("`[[`. [subset()]"),
-    "\\code{[[}. \\code{\\link[=subset]{subset()}}"
+    "\\verb{[[}. \\code{\\link[=subset]{subset()}}"
   )
 })
 
@@ -298,9 +298,9 @@ test_that("[] is not picked up in code", {
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' @param connect_args \\code{[named list]}\\cr Connection arguments
-    #' Description, see \\code{[foobar]}.
-    #' Also \\code{[this_too]}.
+    #' @param connect_args \\verb{[named list]}\\cr Connection arguments
+    #' Description, see \\verb{[foobar]}.
+    #' Also \\verb{[this_too]}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })

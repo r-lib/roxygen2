@@ -38,8 +38,7 @@
 #' @noRd
 #' @importFrom utils URLencode URLdecode
 
-add_linkrefs_to_md <- function(text) {
-
+get_md_linkrefs <- function(text) {
   refs <- str_match_all(
     text,
     regex(
@@ -53,7 +52,7 @@ add_linkrefs_to_md <- function(text) {
     )
   )[[1]]
 
-  if (length(refs) == 0) return(text)
+  if (length(refs) == 0) return("")
 
   ## For the [fun] form the link text is the same as the destination.
   # Need to check both NA and "" for different versions of stringr
@@ -61,13 +60,13 @@ add_linkrefs_to_md <- function(text) {
 
   refs3encoded <- map_chr(refs[,3], URLencode)
   ref_text <- paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
+  paste(ref_text, collapse = "\n")
+}
 
-  paste0(
-    text,
-    "\n\n",
-    paste(ref_text, collapse = "\n"),
-    "\n"
-  )
+add_linkrefs_to_md <- function(text) {
+  ref_text <- get_md_linkrefs(text)
+  if (! length(ref_text)) return(text)
+  paste0(text, "\n\n", ref_text, "\n")
 }
 
 #' Parse a MarkDown link, to see if we should create an Rd link

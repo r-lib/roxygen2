@@ -6,10 +6,17 @@ block_include_rmd <- function(tag, block, env) {
     stop("@includeRmd requires the rmarkdown package")
   }
 
+  rmd_path <- tempfile(fileext = ".Rmd")
   md_path <- tempfile(fileext = ".md")
-  on.exit(unlink(md_path, recursive = TRUE), add = TRUE)
-  rmd_path <- rmd_process_links(rmd)
-  on.exit(unlink(rmd_path, recursive = TRUE), add = TRUE)
+  on.exit(unlink(c(rmd_path, md_path), recursive = TRUE), add = TRUE)
+
+  cache_path <- paste0(sub("\\.Rmd$", "", rmd), "_cache/")
+  fig_path <- file.path(dirname(rmd), "figure/")
+  linkrefs <- rmd_linkrefs_from_file(rmd)
+  txt <- sprintf(
+    "```{r cache.path = \"%s\", fig.path = \"%s\", child = \"%s\"}\n```\n\n%s\n",
+    cache_path, fig_path, rmd, linkrefs)
+  cat(txt, file = rmd_path)
 
   rmarkdown::render(
     rmd_path,
@@ -17,17 +24,14 @@ block_include_rmd <- function(tag, block, env) {
     output_file = md_path,
     quiet = TRUE
   )
+
   rmd_eval_rd(md_path, tag)
 }
 
-rmd_process_links <- function(path) {
-  tmp <- tempfile(fileext = ".Rmd")
+rmd_linkrefs_from_file <- function(path) {
   lines <- read_lines(path)
   txt <- paste(lines, collapse = "\n")
-  esc <- add_linkrefs_to_md(txt)
-  lines2 <- strsplit(esc, "\n", fixed = TRUE)[[1]]
-  write_lines(lines2, tmp)
-  tmp
+  get_md_linkrefs(txt)
 }
 
 rmd_eval_rd <- function(path, tag) {

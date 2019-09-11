@@ -1,10 +1,3 @@
-#' Foo
-#'
-#' @param sign Sign filling
-foo <- function(sign = "\u2014") {
-
-}
-
 internal_f <- function(p, f) {
   stopifnot(is.character(p), length(p) == 1)
   stopifnot(is.character(f), length(f) == 1)

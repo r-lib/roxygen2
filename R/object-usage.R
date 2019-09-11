@@ -101,6 +101,19 @@ args_string <- function(x) {
   paste0(arg_names, sep, x, collapse = ", ")
 }
 
+# wrapping ----------------------------------------------------------------
+
+wrap_usage <- function(x, width = 80L) {
+  if (is.null(x)) {
+    return(NULL)
+  }
+
+  y <- wrapUsage(x, width = as.integer(width))
+  y <- gsub("\u{A0}", " ", y, useBytes = TRUE)
+  Encoding(y) <- "UTF-8"
+  class(y) <- class(x)
+  y
+}
 
 # helpers -----------------------------------------------------------------
 

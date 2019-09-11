@@ -64,27 +64,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// splitByWhitespace
-std::vector<std::string> splitByWhitespace(std::string string);
-RcppExport SEXP _roxygen2_splitByWhitespace(SEXP stringSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type string(stringSEXP);
-    rcpp_result_gen = Rcpp::wrap(splitByWhitespace(string));
-    return rcpp_result_gen;
-END_RCPP
-}
-// wrapString
-std::string wrapString(std::string string, int width, int indent);
-RcppExport SEXP _roxygen2_wrapString(SEXP stringSEXP, SEXP widthSEXP, SEXP indentSEXP) {
+// wrapUsage
+std::string wrapUsage(std::string string, int width, int indent);
+RcppExport SEXP _roxygen2_wrapUsage(SEXP stringSEXP, SEXP widthSEXP, SEXP indentSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type string(stringSEXP);
     Rcpp::traits::input_parameter< int >::type width(widthSEXP);
     Rcpp::traits::input_parameter< int >::type indent(indentSEXP);
-    rcpp_result_gen = Rcpp::wrap(wrapString(string, width, indent));
+    rcpp_result_gen = Rcpp::wrap(wrapUsage(string, width, indent));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -95,8 +84,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_roxygen2_leadingSpaces", (DL_FUNC) &_roxygen2_leadingSpaces, 1},
     {"_roxygen2_tokenise_block", (DL_FUNC) &_roxygen2_tokenise_block, 3},
     {"_roxygen2_find_includes", (DL_FUNC) &_roxygen2_find_includes, 1},
-    {"_roxygen2_splitByWhitespace", (DL_FUNC) &_roxygen2_splitByWhitespace, 1},
-    {"_roxygen2_wrapString", (DL_FUNC) &_roxygen2_wrapString, 3},
+    {"_roxygen2_wrapUsage", (DL_FUNC) &_roxygen2_wrapUsage, 3},
     {NULL, NULL, 0}
 };
 

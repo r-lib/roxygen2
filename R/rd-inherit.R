@@ -125,8 +125,11 @@ find_params <- function(name, topics) {
 
 topic_params <- function(x) UseMethod("topic_params")
 topic_params.Rd <- function(x) {
-  arguments <- get_tags(x, "\\arguments")[[1]]
-  items <- get_tags(arguments, "\\item")
+  arguments <- get_tags(x, "\\arguments")
+  if (length(arguments) != 1) {
+    return(list())
+  }
+  items <- get_tags(arguments[[1]], "\\item")
 
   values <- map_chr(items, function(x) rd2text(x[[2]]))
   params <- map_chr(items, function(x) rd2text(x[[1]]))

@@ -4,6 +4,8 @@
   depending on whether it not it parses as R code. This should make it 
   easier to include arbitrary "code" snippets in documentation without
   causing Rd failures (#654).
+* Inherting for a function with no arguments no longer throws a confusing
+  error message (#898)
 
 * As well as storing roxygen options in the `Roxygen` field of the 
   `DESCRIPTION` you can now also store them in `man/roxygen/meta.R` (#889).

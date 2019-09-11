@@ -1,9 +1,8 @@
 # roxygen2 (development version)
 
-* Rd comments (`%`) are automatically escaped in markdown text. Existing
-  code that uses `\%` is automatically repaired; if you're generating
-  more exotic sequences like `\\%` you'll need to put them inside 
-  backticks (#879)
+* Rd comments (`%`) are automatically escaped in markdown text. This is 
+  a backward incompatible check that will require that you replace
+  existing uses of `\%` with `%` (#879).
 
 * Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
   depending on whether it not it parses as R code. This should make it 

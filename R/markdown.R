@@ -156,12 +156,6 @@ mdxml_image = function(xml) {
   paste0("\\figure{", dest, "}{", title, "}")
 }
 
-
 escape_comment <- function(x) {
-  # Strip existing escaping - this is admittedly a hack and makes the
-  # state of % escaping more confusing, but it only affects markdown, and
-  # I think if you do want a literal \% you can do `\%`
-  x <- gsub("\\%", "%", x, fixed = TRUE)
-  x <- gsub("%", "\\%", x, fixed = TRUE)
-  x
+  gsub("%", "\\%", x, fixed = TRUE)
 }

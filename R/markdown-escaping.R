@@ -220,7 +220,7 @@ make_random_string <- function(length = 32) {
   )
 }
 
-#' Escape \\% and \\$ and \\_ once more, because commonmark
+#' Escape \\\% and \\$ and \\_ once more, because commonmark
 #' removes the escaping. We do this everywhere currently.
 #'
 #' @param text Input text.

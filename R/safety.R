@@ -51,6 +51,20 @@ update_roxygen_version <- function(base_path) {
       " You only have version ", cur, call. = FALSE, immediate. = TRUE)
   } else if (!identical(cur, prev)) {
     message("Updating roxygen version in ", desc_path)
+    upgrade_7_0_0(cur)
     desc::desc_set(RoxygenNote = cur, file = desc_path)
   }
+}
+
+upgrade_7_0_0 <- function(cur_version) {
+  if (numeric_version(cur_version) > "6.1.99") {
+    return()
+  }
+  rule <- paste0(paste(rep("-", options('width')), collapse = ""), "\n")
+  message(
+    rule,
+    "Changes in roxygen2 7.0.0: \n",
+    "* `%` is now escaped automatically; please replace any existing uses of `\\%` with `%`\n",
+    rule
+  )
 }

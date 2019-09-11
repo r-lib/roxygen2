@@ -153,6 +153,7 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Convert markdown code (<code>``</code>) to either <code>\code{}</code> or <code>\verb{}</code> depending on whether it not it parses as R code. This should make it easier to include arbitrary “code” snippets in documentation without causing Rd failures (<a href='https://github.com/r-lib/roxygen2/issues/654'>#654</a>).</p></li>
 <li><p>Inherting for a function with no arguments no longer throws a confusing error message (<a href='https://github.com/r-lib/roxygen2/issues/898'>#898</a>)</p></li>
 <li><p>As well as storing roxygen options in the <code>Roxygen</code> field of the <code>DESCRIPTION</code> you can now also store them in <code>man/roxygen/meta.R</code> (<a href='https://github.com/r-lib/roxygen2/issues/889'>#889</a>).</p></li>
 <li><p>roxygen now looks for templates in <code>man/roxygen/templates</code> (<a href='https://github.com/r-lib/roxygen2/issues/888'>#888</a>).</p></li>

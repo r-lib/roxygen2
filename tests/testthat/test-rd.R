@@ -171,6 +171,10 @@ test_that("unicode escapes are ok", {
 
 test_that("write_lines writes unix-style line endings.", {
   path <- test_path("escapes.Rd")
+
+  # skip if checked on windows with autocrlf = true
+  skip_if(has_windows_le(path))
+
   temp_filename <- tempfile()
   old_binary <- readBin(path, "raw", n = file.info(path)$size)
   old_text <- read_lines(path)

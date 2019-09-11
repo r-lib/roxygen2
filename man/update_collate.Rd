@@ -16,7 +16,7 @@ alphabet puts letters in the same order, so you can't rely on alphabetic
 ordering if you need one file loaded before another. (This usually doesn't
 matter but is important for S4, where you need to make sure that classes are
 loaded before subclasses and generics are defined before methods.).
-You can override the default alphabetical ordering with \code{@include before.R},
+You can override the default alphabetical ordering with \verb{@include before.R},
 which specify that \code{before.R} must be loaded before the current file.
 
 Generally, you will not need to run this function yourself; it should be
@@ -28,9 +28,9 @@ collation order.
 This is not a roclet because roclets need the values of objects in a package,
 and those values can not be generated unless you've sourced the files,
 and you can't source the files unless you know the correct order.
-If there are no \code{@include} tags, roxygen2 will leave collate as is.
+If there are no \verb{@include} tags, roxygen2 will leave collate as is.
 This makes it easier to use roxygen2 with an existing collate directive,
-but if you remove all your \code{@include} tags, you'll need to also
+but if you remove all your \verb{@include} tags, you'll need to also
 manually delete the collate field.
 }
 

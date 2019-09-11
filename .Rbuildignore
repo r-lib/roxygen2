@@ -17,3 +17,5 @@
 ^azure-pipelines\.yml$
 ^\.Rprofile$
 ^r-packages$
+^doc$
+^Meta$

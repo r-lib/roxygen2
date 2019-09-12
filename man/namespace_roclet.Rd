@@ -12,7 +12,6 @@
 \alias{@importFrom}
 \alias{@importMethodsFrom}
 \alias{@rawNamespace}
-\alias{@S3method}
 \alias{@useDynLib}
 \title{Roclet: make \code{NAMESPACE}}
 \usage{

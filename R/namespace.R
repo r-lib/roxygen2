@@ -1,5 +1,5 @@
 ns_tags_import <- c('import', 'importFrom', 'importClassesFrom', 'importMethodsFrom', 'useDynLib', 'rawNamespace')
-ns_tags_export <- c('export', 'exportClass', 'exportMethod', 'exportPattern', 'S3method')
+ns_tags_export <- c('export', 'exportClass', 'exportMethod', 'exportPattern')
 ns_tags <- c(ns_tags_import, ns_tags_export, 'evalNamespace')
 
 #' Roclet: make `NAMESPACE`
@@ -81,7 +81,6 @@ roclet_tags.roclet_namespace <- function(x) {
     importFrom = tag_words(2),
     importMethodsFrom = tag_words(2),
     rawNamespace = tag_code,
-    S3method = tag_words(2, 2),
     useDynLib = tag_words(1)
   )
 }
@@ -147,10 +146,6 @@ default_export.default   <- function(x, block) export(x$alias)
 #' @export
 default_export.NULL      <- function(x, block) export(block$name)
 
-ns_S3method          <- function(tag, block) {
-  block_warning(block, "@S3method is deprecated. Please use @export instead")
-  export_s3_method(tag)
-}
 ns_exportClass       <- function(tag, block) export_class(tag)
 ns_exportMethod      <- function(tag, block) export_s4_method(tag)
 ns_exportPattern     <- function(tag, block) one_per_line("exportPattern", tag)

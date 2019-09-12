@@ -142,12 +142,6 @@ test_that("poorly formed importFrom throws error", {
   "), "needs at least 2 words")
 })
 
-
-test_that("S3method is depecrated", {
-  expect_warning(roc_proc_text(namespace_roclet(), "#' @S3method test test\nNULL"),
-    "@S3method is deprecated")
-})
-
 test_that("multiline importFrom parsed correctly", {
   out <- roc_proc_text(namespace_roclet(), "
     #' @importFrom test test1

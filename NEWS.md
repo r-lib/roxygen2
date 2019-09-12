@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Support `@S3method` has been removed. It was deprecated in roxygen2 4.0.0
+  released 2014-05-02, over 5 years ago.
+
 * Rd comments (`%`) are automatically escaped in markdown text. This is 
   a backward incompatible check that will require that you replace
   existing uses of `\%` with `%` (#879).

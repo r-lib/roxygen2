@@ -222,7 +222,9 @@ make_random_string <- function(length = 32) {
 
 #' Check markdown escaping
 #'
-#' @description
+#' This is a regression test for Markdown escaping.
+#'
+#' @details
 #' Each of the following bullets should look the same when rendered:
 #'
 #' * Double escapes: \\, \\%, \\$, \\_
@@ -234,6 +236,7 @@ make_random_string <- function(length = 32) {
 #'
 #' @param text Input text.
 #' @return Double-escaped text.
+#' @keywords internal
 
 double_escape_md <- function(text) {
   text <- gsub("\\", "\\\\", text, fixed = TRUE)

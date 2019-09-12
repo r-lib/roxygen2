@@ -13,6 +13,9 @@ double_escape_md(text)
 Double-escaped text.
 }
 \description{
+This is a regression test for Markdown escaping.
+}
+\details{
 Each of the following bullets should look the same when rendered:
 \itemize{
 \item Double escapes: \\, \\\%, \\$, \\_
@@ -23,3 +26,4 @@ Each of the following bullets should look the same when rendered:
 [ this isn't a link ]
 \[ neither is this \]
 }
+\keyword{internal}

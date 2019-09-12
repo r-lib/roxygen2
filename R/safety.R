@@ -60,11 +60,12 @@ upgrade_7_0_0 <- function(cur_version) {
   if (numeric_version(cur_version) > "6.1.99") {
     return()
   }
-  rule <- paste0(paste(rep("-", options('width')), collapse = ""), "\n")
-  message(
+  rule <- paste0(paste(rep("-", options('width')), collapse = ""))
+  inform(c(
     rule,
-    "Changes in roxygen2 7.0.0: \n",
-    "* `%` is now escaped automatically; please replace any existing uses of `\\%` with `%`\n",
+    "Changes in roxygen2 7.0.0:",
+    "* `%` is now escaped automatically in Markdown mode.",
+    "Please carefully check .Rd files for changes",
     rule
-  )
+  ))
 }

@@ -78,8 +78,9 @@ tag_inherit <- function(x) {
     pieces <- str_split(str_trim(x$val), "\\s+")[[1]]
     fields <- pieces[-1]
 
+    # Also recorded in `rd.Rmd`
     all <- c("params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples")
+      "sections", "references", "examples", "author", "source")
     if (length(fields) == 0) {
       fields <- all
     } else {

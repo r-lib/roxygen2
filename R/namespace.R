@@ -1,6 +1,20 @@
-ns_tags_import <- c('import', 'importFrom', 'importClassesFrom', 'importMethodsFrom', 'useDynLib', 'rawNamespace')
-ns_tags_export <- c('export', 'exportClass', 'exportMethod', 'exportPattern')
-ns_tags <- c(ns_tags_import, ns_tags_export, 'evalNamespace')
+# Processed first
+ns_tags_import <- c(
+  "import",
+  "importFrom",
+  "importClassesFrom",
+  "importMethodsFrom",
+  "useDynLib",
+  "rawNamespace"
+)
+ns_tags <- c(
+  ns_tags_import,
+  "evalNamespace",
+  "export",
+  "exportClass",
+  "exportMethod",
+  "exportPattern"
+)
 
 #' Roclet: make `NAMESPACE`
 #'

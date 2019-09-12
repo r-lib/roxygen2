@@ -469,6 +469,55 @@ You can make templates more flexible by using template variables defined with `@
 
 Note that templates are parsed a little differently to regular blocks, so you'll need to explicitly set the title, description and details with `@title`, `@description` and `@details`.
 
+## Including external `.Rmd`/`.md` files
+
+Starting from roxygen2 7.0.0, you can use `@includeRmd path/to/file.Rmdname` to include an external `.Rmd` or `.md` document into a manual page (the path is relative package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.
+
+### Sections
+
+`@includeRmd` supports headings in the external Rmd. The rules are as follows:
+
+*   All text before the first level 1 heading (i.e. `#`), is added to the 
+    details section.
+
+*   Level 1 headings generate their own section (`\section{}`).
+
+*   Other headings (level 2 and so on) create subsections (`\subsection{}`)
+    within the section they appear in.
+
+All content in the Rmd file will go either in the details or in new top level sections. It is currently not possible to document function arguments, return values, etc. in external Rmd documents.
+
+### Links
+
+The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting.Rmd")` for details.
+
+### Caching and figures
+
+`@includeRmd` tries to set up knits to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
+
+`@includeRmd` also sets the knitr figure path of the (`fig.path`) to the default figure path of the included Rmd. Overriding this default is unlikely to work.
+
+### Sharing text between vignettes and the manual
+
+`@includeRmd` helps avoiding repetition, as you can use the same `.Rmd` or `.md`  document in the manual and also in the `README.md` file or in vignettes. One way to include an Rmd file in another one is to use child documents:
+
+````
+```{r child = "common.Rmd"}`r ''`
+```
+````
+
+If the Rmd file has links to other help topics, then some care is needed, as those links while not work in Rmd files. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which always links them to the help topics in the manual. Example:
+
+```
+See also the [roxygen2::roxygenize()] function.
+
+[roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html
+```
+
+This example will link to the supplied URLs in html / markdown files and it will link to the `roxygenize` help topic in the manual.
+
+Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in pandoc, and it is harmless.
+
 ## Other tags
 
 ### Indexing

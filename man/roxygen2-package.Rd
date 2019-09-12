@@ -37,6 +37,7 @@ Useful links:
 Authors:
 \itemize{
   \item Peter Danenberg \email{pcd@roxygen.org} [copyright holder]
+  \item Gábor Csárdi \email{csardi.gabor@gmail.com}
   \item Manuel Eugster [copyright holder]
 }
 

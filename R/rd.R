@@ -51,6 +51,7 @@ roclet_tags.roclet_rd <- function(x) {
     family = tag_value,
     field = tag_name_description,
     format = tag_markdown,
+    includeRmd = tag_value,
     inherit = tag_inherit,
     inheritParams = tag_value,
     inheritDotParams = tag_two_part("source", "args", required = FALSE),
@@ -142,6 +143,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_backref(rd, block)
   topic_add_doc_type(rd, block)
   topic_add_eval_rd(rd, block, env)
+  topic_add_include_rmd(rd, block, base_path)
   topic_add_examples(rd, block, base_path)
   topic_add_fields(rd, block)
   topic_add_inherit(rd, block)
@@ -401,6 +403,29 @@ topic_add_eval_rd <- function(topic, block, env) {
     if (!is.null(out)) {
       topic$add_simple_field("rawRd", out)
     }
+  }
+}
+
+topic_add_include_rmd <- function(topic, block, base_path) {
+  rmds <- block_tags(block, "includeRmd")
+
+  for (rmd in rmds) {
+    tag <- roxy_tag(
+      "@includeRmd",
+      rmd,
+      attr(block, "filename"),
+      attr(block, "location")[[1]]
+    )
+    if (!is_installed("rmarkdown")) {
+      roxy_tag_warning(tag, "Needs the rmarkdown package")
+    }
+    out <- block_include_rmd(tag, block, base_path)
+    if (!is.null(out$main)) {
+      topic$add_simple_field("details", out$main)
+    }
+    lapply(out$sections, function(s) {
+      topic$add_simple_field("rawRd", s)
+    })
   }
 }
 

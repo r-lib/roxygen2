@@ -71,13 +71,10 @@ build_label <- function(src, dest, block) {
     # Label S3 methods in generic with their class
     type <- "generic"
     label <- attr(src$value, "s3method")[2]
-  } else if (dest_type %in% c("function", "data") && src_type == "function") {
-    # Multiple functions in one Rd labelled with function names
+  } else {
+    # Otherwise just fallback to function + topic
     type <- "function"
     label <- src$topic
-  } else {
-    block_warning(block, "Don't know how to describe ", src_type, " in ", dest_type)
-    return(NULL)
   }
 
   list(type = type, label = label)

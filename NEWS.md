@@ -3,6 +3,8 @@
 * Rd comments (`%`) are automatically escaped in markdown text. This is 
   a backward incompatible check that will require that you replace
   existing uses of `\%` with `%` (#879).
+* `@describeIn` can now be used with any combination of function types 
+  (#666, #848).
 
 * Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
   depending on whether it not it parses as R code. This should make it 

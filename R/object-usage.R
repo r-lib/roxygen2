@@ -19,7 +19,7 @@ object_usage.s3generic <- object_usage.function
 object_usage.s3method <- function(x) {
   method <- attr(x$value, "s3method")
   s3method <- function(name) {
-    build_rd("\\method{", name, "}{", method[2], "}")
+    build_rd("\\method{", name, "}{", auto_backtick(method[2]), "}")
   }
   function_usage(method[1], formals(x$value), s3method)
 }
@@ -30,10 +30,7 @@ object_usage.s4generic <- function(x) {
 
 object_usage.s4method <- function(x) {
   s4method <- function(name) {
-    classes <- as.character(x$value@defined)
-    needs_backtick <- !is.syntactic(classes)
-    classes[needs_backtick] <- paste0("`", classes[needs_backtick], "`")
-
+    classes <- auto_backtick(as.character(x$value@defined))
     build_rd("\\S4method{", name, "}{", paste0(classes, collapse = ","), "}")
   }
   function_usage(x$value@generic, formals(x$value), s4method)
@@ -121,4 +118,11 @@ wrap_usage <- function(x, width = 80L) {
 call_to_usage <- function(code, env = pkg_env()) {
   obj <- call_to_object(!!enexpr(code), env)
   gsub("\u{A0}", " ", as.character(object_usage(obj)))
+}
+
+
+auto_backtick <- function(x) {
+  needs_backtick <- !is.syntactic(x)
+  x[needs_backtick] <- paste0("`", x[needs_backtick], "`")
+  x
 }

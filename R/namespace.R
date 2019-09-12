@@ -160,7 +160,7 @@ ns_importClassesFrom <- function(tag, block) repeat_first("importClassesFrom", t
 ns_importMethodsFrom <- function(tag, block) repeat_first("importMethodsFrom", tag)
 ns_useDynLib         <- function(tag, block) {
   if (length(tag) == 1) {
-    return(paste0("useDynLib(", quote_if_needed(tag), ")"))
+    return(paste0("useDynLib(", auto_quote(tag), ")"))
   }
 
   if (any(grepl(",", tag))) {
@@ -183,11 +183,13 @@ export_class     <- function(x) one_per_line("exportClasses", x)
 export_s4_method <- function(x) one_per_line("exportMethods", x)
 export_s3_method <- function(x) fun_args("S3method", x)
 
+# Helpers -----------------------------------------------------------------
+
 one_per_line <- function(name, x) {
-  paste0(name, "(", quote_if_needed(x), ")")
+  paste0(name, "(", auto_quote(x), ")")
 }
 repeat_first <- function(name, x) {
-  paste0(name, "(", quote_if_needed(x[1]), ",", quote_if_needed(x[-1]), ")")
+  paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
 }
 fun_args <- function(name, x) {
   if (any(grepl(",", x))) {
@@ -195,15 +197,15 @@ fun_args <- function(name, x) {
     # for roxygen2 to support other NAMESPACE forms not otherwise mapped
     args <- paste0(x, collapse = ", ")
   } else {
-    args <- paste0(quote_if_needed(x), collapse = ",")
+    args <- paste0(auto_quote(x), collapse = ",")
   }
 
   paste0(name, "(", args, ")")
 }
 
-quote_if_needed <- function(x) {
+auto_quote <- function(x) {
   needs_quotes <- !has.quotes(x) & !is.syntactic(x)
-  x[needs_quotes] <- paste0('"', str_replace_all(x[needs_quotes], '(["\\\\])', "\\\\\\1"), '"')
+  x[needs_quotes] <- encodeString(x[needs_quotes], quote = '"')
   x
 }
 is.syntactic <- function(x) make.names(x) == x

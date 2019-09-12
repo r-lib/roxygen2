@@ -58,7 +58,7 @@ function_usage <- function(name, formals, format_name = identity) {
   } else {
     # Quote non-syntactic names if no special formatting
     if (identical(format_name, identity)) {
-      name <- quote_if_needed(name)
+      name <- auto_quote(name)
     }
 
     build_rd(format_name(name), "(", arglist, ")")
@@ -120,9 +120,8 @@ call_to_usage <- function(code, env = pkg_env()) {
   gsub("\u{A0}", " ", as.character(object_usage(obj)))
 }
 
-
 auto_backtick <- function(x) {
   needs_backtick <- !is.syntactic(x)
-  x[needs_backtick] <- paste0("`", x[needs_backtick], "`")
+  x[needs_backtick] <- encodeString(x[needs_backtick], quote = "`")
   x
 }

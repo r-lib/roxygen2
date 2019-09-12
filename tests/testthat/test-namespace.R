@@ -290,3 +290,12 @@ test_that("evalNamspace can yield a vector", {
 
   expect_equal(out, c("export(a)", "export(b)"))
 })
+
+
+# helpers -----------------------------------------------------------------
+
+test_that("auto_quote behaves as needed", {
+  expect_equal(auto_quote("x"), "x")
+  expect_equal(auto_quote("if"), '"if"') # quotes non-syntactic
+  expect_equal(auto_quote("'if'"), "'if'") # unless already quoted
+})

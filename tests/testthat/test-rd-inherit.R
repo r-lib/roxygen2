@@ -22,14 +22,15 @@ test_that("\\links are transformed", {
     #' Title
     #'
     #' @inheritParams digest::sha1
-    #' @backref test
     wrapper <- function(algo) {}"
   )[[1]]
 
-  # \links{} should be transformed to include [digest]
   verify_output(
     test_path("test-rd-inherit-link.txt"),
-    print(out)
+    {
+      "\\link{} should include [digest]"
+      out$get_field("param")
+    }
   )
 })
 

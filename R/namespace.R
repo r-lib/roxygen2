@@ -181,7 +181,10 @@ ns_evalNamespace <- function(tag, block, env) {
 export           <- function(x) one_per_line("export", x)
 export_class     <- function(x) one_per_line("exportClasses", x)
 export_s4_method <- function(x) one_per_line("exportMethods", x)
-export_s3_method <- function(x) fun_args("S3method", x)
+export_s3_method <- function(x) {
+  args <- paste0(auto_quote(x), collapse = ",")
+  paste0("S3method(", args, ")")
+}
 
 # Helpers -----------------------------------------------------------------
 
@@ -190,17 +193,6 @@ one_per_line <- function(name, x) {
 }
 repeat_first <- function(name, x) {
   paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
-}
-fun_args <- function(name, x) {
-  if (any(grepl(",", x))) {
-    # If there's a comma in list, don't quote output. This makes it possible
-    # for roxygen2 to support other NAMESPACE forms not otherwise mapped
-    args <- paste0(x, collapse = ", ")
-  } else {
-    args <- paste0(auto_quote(x), collapse = ",")
-  }
-
-  paste0(name, "(", args, ")")
 }
 
 auto_quote <- function(x) {

@@ -1,5 +1,32 @@
 # roxygen2 (development version)
 
+* New `@exportS3Method` tag allows you to generate `S3method()` namespace
+  directives (note the different in capitalisation) (#796). Its primary use is 
+  for "delayed" method registration which allows you to define methods for 
+  generics found in suggested packages. This is only available in R 3.6 and 
+  greater, and looks like this:
+    
+    ```R
+    #' @exportS3Method package::generic
+    generic.foo <- function(x, ...) {
+    
+    }
+    ```
+    
+    (See [`vctrs::s3_register()`](https://vctrs.r-lib.org/reference/s3_register.html)
+    you need a version that works for earlier versions of R).
+    
+    You can also use it to generate arbitrary `S3method()` directions by 
+    providing two values:
+    
+    ```R
+    #' @exportS3Method generic class
+    NULL
+    ```
+
+* `namespace_roclet()` now uses `` ` `` to escape non-syntactic function 
+  names, rather than `'`.
+
 * Support `@S3method` has been removed. It was deprecated in roxygen2 4.0.0
   released 2014-05-02, over 5 years ago.
 

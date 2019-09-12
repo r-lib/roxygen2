@@ -5,6 +5,7 @@
 \alias{@evalNamespace}
 \alias{@export}
 \alias{@exportClass}
+\alias{@exportS3Method}
 \alias{@exportMethod}
 \alias{@exportPattern}
 \alias{@import}

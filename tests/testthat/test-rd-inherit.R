@@ -17,6 +17,22 @@ test_that("can round-trip Rd", {
   )
 })
 
+test_that("\\links are transformed", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' @inheritParams digest::sha1
+    #' @backref test
+    wrapper <- function(algo) {}"
+  )[[1]]
+
+  # \links{} should be transformed to include [digest]
+  verify_output(
+    test_path("test-rd-inherit-link.txt"),
+    print(out)
+  )
+})
+
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {

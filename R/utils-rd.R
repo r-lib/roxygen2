@@ -77,6 +77,21 @@ rd2text <- function(x) {
   paste(chr, collapse = "")
 }
 
+tweak_links <- function(x, package) {
+  tag <- attr(x, "Rd_tag")
+
+  if (is.list(x)) {
+    if (!is.null(tag) && tag == "\\link") {
+      if (is.null(attr(x, "Rd_option"))) {
+        attr(x, "Rd_option") <- structure(package, Rd_tag = "TEXT")
+      }
+    } else if (length(x) > 0) {
+      x[] <- map(x, tweak_links, package = package)
+    }
+  }
+
+  x
+}
 
 # helpers -----------------------------------------------------------------
 

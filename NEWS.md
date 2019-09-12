@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* `\link{foo}` links in external inherited documentation are automatically
+  transformed to `\link{package}{foo}` so that they work in the generated
+  documented (#635).
+
 * `\href{}` links in external inherited documentation are now inserted 
   correctly (without additional `{}`) (#778).
 

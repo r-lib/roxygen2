@@ -253,7 +253,7 @@ get_rd <- function(name, topics) {
     pkg <- as.character(parsed[[2]])
     fun <- as.character(parsed[[3]])
 
-    get_rd_from_help(pkg, fun)
+    tweak_links(get_rd_from_help(pkg, fun), package = pkg)
   } else {
     # Current package
     rd_name <- topics$find_filename(name)

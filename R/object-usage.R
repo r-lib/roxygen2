@@ -88,13 +88,8 @@ usage_args <- function(args) {
 }
 
 args_string <- function(x) {
-  missing_arg <- x == ""
-  sep <- ifelse(!missing_arg, "\u{A0}=\u{A0}", "")
-
-  arg_names <- names(x)
-  needs_backtick <- !is.syntactic(arg_names)
-  arg_names[needs_backtick] <- paste0("`", arg_names[needs_backtick], "`")
-
+  sep <- ifelse(x != "", "\u{A0}=\u{A0}", "")
+  arg_names <- auto_backtick(names(x))
   paste0(arg_names, sep, x, collapse = ", ")
 }
 
@@ -118,10 +113,4 @@ wrap_usage <- function(x, width = 80L) {
 call_to_usage <- function(code, env = pkg_env()) {
   obj <- call_to_object(!!enexpr(code), env)
   gsub("\u{A0}", " ", as.character(object_usage(obj)))
-}
-
-auto_backtick <- function(x) {
-  needs_backtick <- !is.syntactic(x)
-  x[needs_backtick] <- encodeString(x[needs_backtick], quote = "`")
-  x
 }

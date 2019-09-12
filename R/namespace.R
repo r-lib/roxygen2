@@ -194,11 +194,3 @@ one_per_line <- function(name, x) {
 repeat_first <- function(name, x) {
   paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
 }
-
-auto_quote <- function(x) {
-  needs_quotes <- !has.quotes(x) & !is.syntactic(x)
-  x[needs_quotes] <- encodeString(x[needs_quotes], quote = '"')
-  x
-}
-is.syntactic <- function(x) make.names(x) == x
-has.quotes <- function(x) str_detect(x, "^('|\").*\\1$")

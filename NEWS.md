@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@describeIn` can now be used with any combination of function types 
+  (#666, #848).
+
 * Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
   depending on whether it not it parses as R code. This should make it 
   easier to include arbitrary "code" snippets in documentation without

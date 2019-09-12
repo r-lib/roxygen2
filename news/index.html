@@ -167,6 +167,7 @@
 </li>
 <li><p><code><a href="../reference/namespace_roclet.html">namespace_roclet()</a></code> now uses <code>`</code> to escape non-syntactic function names, rather than <code>'</code>.</p></li>
 <li><p>Support <code>@S3method</code> has been removed. It was deprecated in roxygen2 4.0.0 released 2014-05-02, over 5 years ago.</p></li>
+<li><p><code>@includeRmd</code> converts an <code>.Rmd</code>/<code>.md</code> file to Rd and includes it in the manual page. This allows sharing text between vignettes, the <code>README.Rmd</code> file and the manual. See the “Rd (documentation) tags” vignette for details (<a href='https://github.com/r-lib/roxygen2/issues/902'>#902</a>).</p></li>
 <li><p>Rd comments (<code>%</code>) are automatically escaped in markdown text. This is a backward incompatible check that will require that you replace existing uses of <code>\%</code> with <code>%</code> (<a href='https://github.com/r-lib/roxygen2/issues/879'>#879</a>).</p></li>
 <li><p><code>@describeIn</code> can now be used with any combination of function types (<a href='https://github.com/r-lib/roxygen2/issues/666'>#666</a>, <a href='https://github.com/r-lib/roxygen2/issues/848'>#848</a>).</p></li>
 <li><p>Convert markdown code (<code>``</code>) to either <code>\code{}</code> or <code>\verb{}</code> depending on whether it not it parses as R code. This should make it easier to include arbitrary “code” snippets in documentation without causing Rd failures (<a href='https://github.com/r-lib/roxygen2/issues/654'>#654</a>).</p></li>
@@ -762,7 +763,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, Peter Danenberg, Manuel Eugster.</p>
+  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, Peter Danenberg, Gábor Csárdi, Manuel Eugster.</p>
 </div>
 
 <div class="pkgdown">

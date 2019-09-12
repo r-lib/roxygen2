@@ -476,6 +476,46 @@
 <p>Note that templates are parsed a little differently to regular blocks, so you’ll need to explicitly set the title, description and details with <code>@title</code>, <code>@description</code> and <code>@details</code>.</p>
 </div>
 </div>
+<div id="including-external--rmd-md-files" class="section level2">
+<h2 class="hasAnchor">
+<a href="#including-external--rmd-md-files" class="anchor"></a>Including external <code>.Rmd</code>/<code>.md</code> files</h2>
+<p>Starting from roxygen2 7.0.0, you can use <code>@includeRmd path/to/file.Rmdname</code> to include an external <code>.Rmd</code> or <code>.md</code> document into a manual page (the path is relative package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.</p>
+<div id="sections-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#sections-1" class="anchor"></a>Sections</h3>
+<p><code>@includeRmd</code> supports headings in the external Rmd. The rules are as follows:</p>
+<ul>
+<li><p>All text before the first level 1 heading (i.e. <code>#</code>), is added to the details section.</p></li>
+<li><p>Level 1 headings generate their own section (<code>\section{}</code>).</p></li>
+<li><p>Other headings (level 2 and so on) create subsections (<code>\subsection{}</code>) within the section they appear in.</p></li>
+</ul>
+<p>All content in the Rmd file will go either in the details or in new top level sections. It is currently not possible to document function arguments, return values, etc. in external Rmd documents.</p>
+</div>
+<div id="links" class="section level3">
+<h3 class="hasAnchor">
+<a href="#links" class="anchor"></a>Links</h3>
+<p>The included Rmd file can have roxygen markdown style links to other help topics. E.g. <code>[roxygen2::roxygenize()]</code> will link to the manual page of the <code>roxygenize</code> function in roxygen2. See <code>vignette("rd-formatting.Rmd")</code> for details.</p>
+</div>
+<div id="caching-and-figures" class="section level3">
+<h3 class="hasAnchor">
+<a href="#caching-and-figures" class="anchor"></a>Caching and figures</h3>
+<p><code>@includeRmd</code> tries to set up knits to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. <code>foo/bar/file_cache/</code> for <code>foo/bar/file.Rmd</code>), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to <code>.gitignore</code> and <code>.Rbuildignore</code>.</p>
+<p><code>@includeRmd</code> also sets the knitr figure path of the (<code>fig.path</code>) to the default figure path of the included Rmd. Overriding this default is unlikely to work.</p>
+</div>
+<div id="sharing-text-between-vignettes-and-the-manual" class="section level3">
+<h3 class="hasAnchor">
+<a href="#sharing-text-between-vignettes-and-the-manual" class="anchor"></a>Sharing text between vignettes and the manual</h3>
+<p><code>@includeRmd</code> helps avoiding repetition, as you can use the same <code>.Rmd</code> or <code>.md</code> document in the manual and also in the <code>README.md</code> file or in vignettes. One way to include an Rmd file in another one is to use child documents:</p>
+<pre><code>```{r child = "common.Rmd"}
+```</code></pre>
+<p>If the Rmd file has links to other help topics, then some care is needed, as those links while not work in Rmd files. A workaround is to specify external HTML links for them. These external locations will <em>not</em> be used for <code>@includeRmd</code>, which always links them to the help topics in the manual. Example:</p>
+<pre><code>See also the [roxygen2::roxygenize()] function.
+
+[roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html</code></pre>
+<p>This example will link to the supplied URLs in html / markdown files and it will link to the <code>roxygenize</code> help topic in the manual.</p>
+<p>Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in pandoc, and it is harmless.</p>
+</div>
+</div>
 <div id="other-tags" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-tags" class="anchor"></a>Other tags</h2>
@@ -496,8 +536,8 @@
 <p>The original source location is added as a comment to the second line of each generated <code>.Rd</code> file in the following form:</p>
 <pre><code>% Please edit documentation in ...</code></pre>
 <p><code>roxygen2</code> tries to capture all locations from which the documentation is assembled. For code that <em>generates</em> R code with Roxygen comments (e.g., the Rcpp package), the <code>@backref</code> tag is provided. This allows specifying the “true” source of the documentation, and will substitute the default list of source files. Use one tag per source file:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">#' @backref src/file.cpp</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#' @backref src/file.h</span></a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co">#' @backref src/file.cpp</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="co">#' @backref src/file.h</span></a></code></pre></div>
 </div>
 </div>
   </div>
@@ -513,6 +553,7 @@
       <li><a href="#object-specifics">Object specifics</a></li>
       <li><a href="#sections">Sections</a></li>
       <li><a href="#do-repeat-yourself">Do repeat yourself</a></li>
+      <li><a href="#including-external--rmd-md-files">Including external <code>.Rmd</code>/<code>.md</code> files</a></li>
       <li><a href="#other-tags">Other tags</a></li>
       </ul>
 </div>
@@ -523,7 +564,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://hadley.nz">Hadley Wickham</a>, Peter Danenberg, Manuel Eugster.</p>
+  <p>Developed by <a href="http://hadley.nz">Hadley Wickham</a>, Peter Danenberg, Gábor Csárdi, Manuel Eugster.</p>
 </div>
 
 <div class="pkgdown">

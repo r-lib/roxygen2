@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* White space is automatically trimmed off the `RoxygenNote` field when 
+  comparing the installed version of roxygen2 to the version used to 
+  generate the documentation (#802).
+
 * New `@exportS3Method` tag allows you to generate `S3method()` namespace
   directives (note the different in capitalisation) (#796). Its primary use is 
   for "delayed" method registration which allows you to define methods for 

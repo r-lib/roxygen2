@@ -44,7 +44,7 @@ update_roxygen_version <- function(base_path) {
   desc_path <- file.path(base_path, "DESCRIPTION")
 
   cur <- as.character(utils::packageVersion("roxygen2"))
-  prev <- desc::desc_get("RoxygenNote", file = desc_path)[[1]]
+  prev <- stringr::str_trim(desc::desc_get("RoxygenNote", file = desc_path)[[1]])
 
   if (!is.na(cur) && !is.na(prev) && package_version(cur) < package_version(prev)) {
     warning("Version of roxygen2 last used with this package is ", prev, ". ",

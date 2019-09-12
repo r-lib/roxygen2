@@ -183,7 +183,7 @@ parser_setConstructorS3 <- function(call, env, block) {
 # @param override Either NULL to use default, or a character vector of length 2
 add_s3_metadata <- function(val, name, env, override = NULL) {
   if (!is.null(override)) {
-    return(s3_method(val, override, env))
+    return(s3_method(val, override))
   }
 
   if (is_s3_generic(name, env)) {
@@ -195,7 +195,7 @@ add_s3_metadata <- function(val, name, env, override = NULL) {
   if (is.null(method)) {
     val
   } else {
-    s3_method(val, method, env)
+    s3_method(val, method)
   }
 }
 

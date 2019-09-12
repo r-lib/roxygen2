@@ -73,12 +73,12 @@ find_generic <- function(name, env = parent.frame()) {
   NULL
 }
 
-s3_method <- function(f, method, env) {
+s3_method <- function(f, method) {
+  stopifnot(is.function(f))
   stopifnot(length(method) == 2, is.character(method))
 
   class(f) <- c("s3method", "function")
   attr(f, "s3method") <- method
-  attr(f, "s3env") <- env
 
   f
 }

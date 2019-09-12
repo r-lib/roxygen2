@@ -30,7 +30,7 @@
 * Support `@S3method` has been removed. It was deprecated in roxygen2 4.0.0
   released 2014-05-02, over 5 years ago.
 
-* `@includeRmd` converts an (R) Markdown file to Rd and includes it in the
+* `@includeRmd` converts an `.Rmd`/`.md` file to Rd and includes it in the
   manual page. This allows sharing text between vignettes, the `README.Rmd`
   file and the manual. See the "Rd (documentation) tags" vignette for
   details (#902).

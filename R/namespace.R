@@ -134,7 +134,7 @@ default_export <- function(x, block) UseMethod("default_export")
 #' @export
 default_export.s4class   <- function(x, block) export_class(x$value@className)
 #' @export
-default_export.s4generic  <- function(x, block) export(x$value@generic)
+default_export.s4generic <- function(x, block) export(x$value@generic)
 #' @export
 default_export.s4method  <- function(x, block) export_s4_method(x$value@generic)
 #' @export

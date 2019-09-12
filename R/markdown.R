@@ -39,7 +39,7 @@ mdxml_node_to_rd <- function(xml, tag) {
     unknown = mdxml_children_to_rd(xml, tag),
 
     paragraph = paste0("\n\n", mdxml_children_to_rd(xml, tag)),
-    text = xml_text(xml),
+    text = escape_comment(xml_text(xml)),
     emph = paste0("\\emph{", mdxml_children_to_rd(xml, tag), "}"),
     strong = paste0("\\strong{", mdxml_children_to_rd(xml, tag), "}"),
     softbreak = "\n",
@@ -64,11 +64,11 @@ mdxml_node_to_rd <- function(xml, tag) {
 
 mdxml_unknown <- function(xml, tag) {
   roxy_tag_warning(tag, "Unknown xml node: ", xml_name(xml))
-  xml_text(xml)
+  escape_comment(xml_text(xml))
 }
 mdxml_unsupported <- function(xml, tag, feature) {
   roxy_tag_warning(tag, "Use of ", feature, " is not currently supported")
-  xml_text(xml)
+  escape_comment(xml_text(xml))
 }
 
 mdxml_code <- function(xml, tag) {
@@ -91,7 +91,7 @@ can_parse <- function(x) {
 }
 
 escape_verb <- function(x) {
-  x <- gsub("\\", "\\\\", x, fixed = TRUE)
+  # Don't need to escape \\ because that's already handled in double_escape_md()
   x <- gsub("%", "\\%", x, fixed = TRUE)
   x <- gsub("{", "\\{", x, fixed = TRUE)
   x <- gsub("}", "\\}", x, fixed = TRUE)
@@ -135,7 +135,7 @@ mdxml_link <- function(xml) {
   if (!is.null(link)) {
     paste0(link, collapse = "")
   } else if (dest == "" || dest == xml_text(xml)) {
-    paste0("\\url{", xml_text(xml), "}")
+    paste0("\\url{", escape_comment(xml_text(xml)), "}")
   } else {
     paste0("\\href{", dest, "}{", mdxml_link_text(contents), "}")
   }
@@ -147,11 +147,15 @@ mdxml_link <- function(xml) {
 mdxml_link_text <- function(xml_contents) {
   text <- xml_text(xml_contents)
   text[xml_name(xml_contents) %in% c("linebreak", "softbreak")] <- " "
-  paste0(text, collapse = "")
+  escape_comment(paste0(text, collapse = ""))
 }
 
 mdxml_image = function(xml) {
   dest <- xml_attr(xml, "destination")
   title <- xml_attr(xml, "title")
   paste0("\\figure{", dest, "}{", title, "}")
+}
+
+escape_comment <- function(x) {
+  gsub("%", "\\%", x, fixed = TRUE)
 }

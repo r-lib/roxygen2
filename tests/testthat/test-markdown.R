@@ -347,23 +347,8 @@ So far so good. \\preformatted{ *these are not
   expect_equal(get_tag(out1, "description")[[2]], desc1)
 })
 
-test_that("% and $ and _ are not unescaped", {
-  out1 <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' Description. It has some \\% and \\$ and also \\_.
-    #'
-    #' @param foo Item with \\% characters: \\%. And also \\$ and \\_.
-    foo <- function(foo) {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' Description. It has some \\% and \\$ and also \\_.
-    #'
-    #' @param foo Item with \\% characters: \\%. And also \\$ and \\_.
-    #' @md
-    foo <- function(foo) {}")[[1]]
-  expect_equivalent_rd(out1, out2)
+test_that("% is automatically escaped", {
+  expect_equal(markdown("5%"), "5\\%")
 })
 
 test_that("Escaping is kept", {

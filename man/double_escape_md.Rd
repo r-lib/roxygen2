@@ -2,8 +2,7 @@
 % Please edit documentation in R/markdown-escaping.R
 \name{double_escape_md}
 \alias{double_escape_md}
-\title{Escape \% and \$ and \_ once more, because commonmark
-removes the escaping. We do this everywhere currently.}
+\title{Check markdown escaping}
 \usage{
 double_escape_md(text)
 }
@@ -14,6 +13,17 @@ double_escape_md(text)
 Double-escaped text.
 }
 \description{
-Escape \% and \$ and \_ once more, because commonmark
-removes the escaping. We do this everywhere currently.
+This is a regression test for Markdown escaping.
 }
+\details{
+Each of the following bullets should look the same when rendered:
+\itemize{
+\item Double escapes: \\, \\\%, \\$, \\_
+\item Backticks: \verb{\\}, \verb{\\\%}, \verb{\\$}, \verb{\\_}
+\item \verb{\verb{}}: \verb{\\}, \verb{\\\%}, \verb{\$}, \verb{\_}
+}
+
+[ this isn't a link ]
+\[ neither is this \]
+}
+\keyword{internal}

@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">roxygen2</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">6.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">6.1.99.9000</span>
       </span>
     </div>
 
@@ -153,6 +153,8 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Rd comments (<code>%</code>) are automatically escaped in markdown text. This is a backward incompatible check that will require that you replace existing uses of <code>\%</code> with <code>%</code> (<a href='https://github.com/r-lib/roxygen2/issues/879'>#879</a>).</p></li>
+<li><p><code>@describeIn</code> can now be used with any combination of function types (<a href='https://github.com/r-lib/roxygen2/issues/666'>#666</a>, <a href='https://github.com/r-lib/roxygen2/issues/848'>#848</a>).</p></li>
 <li><p>Convert markdown code (<code>``</code>) to either <code>\code{}</code> or <code>\verb{}</code> depending on whether it not it parses as R code. This should make it easier to include arbitrary “code” snippets in documentation without causing Rd failures (<a href='https://github.com/r-lib/roxygen2/issues/654'>#654</a>).</p></li>
 <li><p>Inherting for a function with no arguments no longer throws a confusing error message (<a href='https://github.com/r-lib/roxygen2/issues/898'>#898</a>)</p></li>
 <li><p>As well as storing roxygen options in the <code>Roxygen</code> field of the <code>DESCRIPTION</code> you can now also store them in <code>man/roxygen/meta.R</code> (<a href='https://github.com/r-lib/roxygen2/issues/889'>#889</a>).</p></li>

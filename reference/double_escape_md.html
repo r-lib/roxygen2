@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Escape % and \$ and \_ once more, because commonmark
-removes the escaping. We do this everywhere currently. — double_escape_md • roxygen2</title>
+<title>Check markdown escaping — double_escape_md • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +42,8 @@ removes the escaping. We do this everywhere currently. — double_escape_md • 
 
 
 
-<meta property="og:title" content="Escape % and \$ and \_ once more, because commonmark
-removes the escaping. We do this everywhere currently. — double_escape_md" />
-<meta property="og:description" content="Escape % and \$ and \_ once more, because commonmark
-removes the escaping. We do this everywhere currently." />
+<meta property="og:title" content="Check markdown escaping — double_escape_md" />
+<meta property="og:description" content="This is a regression test for Markdown escaping." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -80,7 +77,7 @@ removes the escaping. We do this everywhere currently." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">roxygen2</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">6.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">6.1.99.9000</span>
       </span>
     </div>
 
@@ -148,15 +145,13 @@ removes the escaping. We do this everywhere currently." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Escape % and \$ and \_ once more, because commonmark
-removes the escaping. We do this everywhere currently.</h1>
+    <h1>Check markdown escaping</h1>
     <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/markdown-escaping.R'><code>R/markdown-escaping.R</code></a></small>
     <div class="hidden name"><code>double_escape_md.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Escape % and \$ and \_ once more, because commonmark
-removes the escaping. We do this everywhere currently.</p>
+    <p>This is a regression test for Markdown escaping.</p>
     </div>
 
     <pre class="usage"><span class='fu'>double_escape_md</span>(<span class='no'>text</span>)</pre>
@@ -173,6 +168,16 @@ removes the escaping. We do this everywhere currently.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Double-escaped text.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Each of the following bullets should look the same when rendered:</p><ul>
+<li><p>Double escapes: \, \%, \$, \_</p></li>
+<li><p>Backticks: <code>\</code>, <code>\%</code>, <code>\$</code>, <code>\_</code></p></li>
+<li><p><code>\verb{}</code>: <code>\</code>, <code>\%</code>, <code>\$</code>, <code>\_</code></p></li>
+</ul>
+
+<p>[ this isn't a link ]
+\[ neither is this \]</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -180,6 +185,7 @@ removes the escaping. We do this everywhere currently.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>

@@ -1,9 +1,18 @@
-context("Rd: turning markdown on/off")
-roc <- rd_roclet()
+test_that("markdown is off by default", {
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' Description with some `code` included. `More code.`
+    foo <- function() {}")[[1]]
+  expect_equal(
+    get_tag(out1, "description")$values,
+    "Description with some `code` included. `More code.`"
+  )
+})
 
 test_that("turning on/off markdown globally", {
   ## off
-  out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -14,20 +23,20 @@ test_that("turning on/off markdown globally", {
   )
 
   ## on
-  out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
     foo <- function() {}")[[1]]
   expect_equal(
     get_tag(out1, "description")$values,
-    "Description with some \\code{code} included. \\code{More code.}"
+    "Description with some \\code{code} included. \\verb{More code.}"
   )
 })
 
 test_that("turning on/off markdown locally", {
   ## off / off
-  out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -39,7 +48,7 @@ test_that("turning on/off markdown locally", {
   )
 
   ## off / on
-  out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -47,11 +56,11 @@ test_that("turning on/off markdown locally", {
     foo <- function() {}")[[1]]
   expect_equal(
     get_tag(out1, "description")$values,
-    "Description with some \\code{code} included. \\code{More code.}"
+    "Description with some \\code{code} included. \\verb{More code.}"
   )
 
   ## on / off
-  out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -63,7 +72,7 @@ test_that("turning on/off markdown locally", {
   )
 
   ## on / on
-  out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -71,15 +80,14 @@ test_that("turning on/off markdown locally", {
     foo <- function() {}")[[1]]
   expect_equal(
     get_tag(out1, "description")$values,
-    "Description with some \\code{code} included. \\code{More code.}"
+    "Description with some \\code{code} included. \\verb{More code.}"
   )
 
 })
 
 test_that("warning for both @md and @noMd", {
-
   expect_warning(
-    out1 <- roc_proc_text(roc, "
+    out1 <- roc_proc_text(rd_roclet(), "
       #' Title
       #'
       #' Description with some `code` included. `More code.`
@@ -94,7 +102,7 @@ test_that("warning for both @md and @noMd", {
   )
 
   expect_warning(
-    out1 <- roc_proc_text(roc, global_options = list(markdown = FALSE), "
+    out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
       #' Title
       #'
       #' Description with some `code` included. `More code.`
@@ -109,7 +117,7 @@ test_that("warning for both @md and @noMd", {
   )
 
   expect_warning(
-    out1 <- roc_proc_text(roc, global_options = list(markdown = TRUE), "
+    out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
       #' Title
       #'
       #' Description with some `code` included. `More code.`
@@ -122,5 +130,4 @@ test_that("warning for both @md and @noMd", {
     get_tag(out1, "description")$values,
     "Description with some `code` included. `More code.`"
   )
-
 })

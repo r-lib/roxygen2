@@ -19,7 +19,7 @@ print.rd <- function(x, ...) {
 escape <- function(x) UseMethod("escape")
 escape.rd <- function(x) x
 escape.character <- function(x) {
-  # wrap_string uses \u{A0}, the unicode non-breaking space, which
+  # wrap_usage uses \u{A0}, the unicode non-breaking space, which
   # is not necessarily valid in windows locales. useBytes is a quick
   # hack to fix the problem.
   x1 <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
@@ -67,14 +67,6 @@ rd_macro <- function(field, ..., space = FALSE) {
 
 
 # Input -------------------------------------------------------------------
-
-get_rd <- function(topic, package = NULL) {
-  help_call <- substitute(help(t, p), list(t = topic, p = package))
-  top <- eval(help_call)
-  if (length(top) == 0) return(NULL)
-
-  internal_f("utils", ".getHelpFile")(top)
-}
 
 get_tags <- function(rd, tag) {
   Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)

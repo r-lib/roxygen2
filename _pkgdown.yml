@@ -1,5 +1,10 @@
 url: https://roxygen2.r-lib.org
 
+home:
+  links:
+  - text: Learn more
+    href: https://r-pkgs.org/man.html
+
 reference:
 - title: Roclets
   contents:
@@ -16,3 +21,16 @@ reference:
   - is_s3_generic
   - object_format
   - roclet_find
+
+navbar:
+  components:
+    home: ~
+    news:
+      text: News
+      menu:
+      - text: "Release notes"
+      - text: "Version 6.0.0"
+        href: https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/
+      - text: "------------------"
+      - text: "Change log"
+        href: news/index.html

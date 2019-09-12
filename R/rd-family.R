@@ -39,9 +39,9 @@ topics_process_family <- function(topics) {
       if (length(others) < 1)
         next
 
-      by_file <- vapply(aliases[others], function(x) {
+      by_file <- map_chr(aliases[others], function(x) {
         paste0("\\code{\\link{", escape(x[1]), "}}")
-      }, FUN.VALUE = character(1))
+      })
       links <- paste(sort_c(by_file), collapse = ", ")
 
       seealso <- topics_process_family_prefix(family)

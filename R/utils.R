@@ -90,9 +90,6 @@ same_contents <- function(path, contents) {
   if (!file.exists(path)) return(FALSE)
 
   contents <- paste0(paste0(contents, collapse = "\n"), "\n")
-  if (.Platform$OS.type == "windows") {
-    contents <- gsub("\n", "\r\n", contents, fixed = TRUE)
-  }
 
   text_hash <- digest::digest(contents, serialize = FALSE)
   file_hash <- digest::digest(file = path)
@@ -100,33 +97,8 @@ same_contents <- function(path, contents) {
   identical(text_hash, file_hash)
 }
 
-r_files <- function(path) {
-  sort_c(dir(file.path(path, "R"), "\\.[Rr]$", full.names = TRUE))
-}
-
-ignore_files <- function(rfiles, path) {
-  rbuildignore <- file.path(path, ".Rbuildignore")
-  if (!file.exists(rbuildignore))
-    return(rfiles)
-
-  # Strip leading directory and slashes
-  rfiles_relative <- sub(normalizePath(path, winslash = "/"), "", normalizePath(rfiles, winslash = "/"), fixed = TRUE)
-  rfiles_relative <- sub("^[/]*", "", rfiles_relative)
-
-  # Remove any files that match any perl-compatible regexp
-  patterns <- read_lines(rbuildignore)
-  patterns <- patterns[patterns != ""]
-  if (length(patterns) == 0L) {
-    return(rfiles)
-  }
-  matches <- lapply(patterns, grepl, rfiles_relative, perl = TRUE)
-  matches <- Reduce("|", matches)
-  rfiles[!matches]
-}
-
 compact <- function(x) {
-  null <- vapply(x, is.null, logical(1))
-  x[!null]
+  x[!map_lgl(x, is.null)]
 }
 
 block_eval <- function(tag, block, env, tag_name) {
@@ -156,16 +128,6 @@ read.description <- function(file) {
 }
 
 
-wrap_string <- function(x, width = 80L) UseMethod("wrap_string")
-wrap_string.NULL <- function(x, width = 80L) return(x)
-wrap_string.default <- function(x, width = 80L) {
-  y <- wrapString(x, width = as.integer(width))
-  y <- gsub("\u{A0}", " ", y, useBytes = TRUE)
-  Encoding(y) <- "UTF-8"
-  class(y) <- class(x)
-  y
-}
-
 invert <- function(x) {
   if (length(x) == 0) return()
   stacked <- utils::stack(x)
@@ -193,4 +155,30 @@ collapse <- function(key, value, fun, ...) {
 
 cat_line <- function(...) {
   cat(..., "\n", sep = "")
+}
+
+tag_aliases <- function(f) {
+  paste0("@aliases ", paste0("@", names(f()), collapse = " "))
+}
+
+pkg_env <- function() {
+  env <- new.env(parent = globalenv())
+  env$.packageName <- "roxygen2"
+  env
+}
+
+# quoting -----------------------------------------------------------------
+is_parseable <- function(x) map_lgl(x, can_parse)
+auto_backtick <- function(x) {
+  needs_backtick <- !is_parseable(x)
+  x[needs_backtick] <- encodeString(x[needs_backtick], quote = "`")
+  x
+}
+
+is_syntactic <- function(x) make.names(x) == x
+has_quotes <- function(x) str_detect(x, "^('|\").*\\1$")
+auto_quote <- function(x) {
+  needs_quotes <- !has_quotes(x) & !is_syntactic(x)
+  x[needs_quotes] <- encodeString(x[needs_quotes], quote = '"')
+  x
 }

@@ -21,8 +21,8 @@ package_authors <- function(desc) {
   if (is.null(authors))
     return()
 
-  desc <- vapply(unclass(authors), author_desc, character(1))
-  type <- vapply(unclass(authors), author_type, character(1))
+  desc <- map_chr(unclass(authors), author_desc)
+  type <- map_chr(unclass(authors), author_type)
   by_type <- split(desc, type)
 
   paste(

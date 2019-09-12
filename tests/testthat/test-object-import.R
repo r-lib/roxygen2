@@ -1,5 +1,3 @@
-context("Re-export")
-
 test_that("exporting a call to :: produces re-exports documentation", {
   out <- roc_proc_text(rd_roclet(), "
     #' @export

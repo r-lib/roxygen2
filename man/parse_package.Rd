@@ -30,7 +30,7 @@ the input code. The defaults will do this for you in a test environment:
 for real code you'll need to generate the environment yourself.
 
 You can also set to \code{NULL} if you only want to get the tokenized code
-blocks only. This suppresses evaluation of \code{@eval} tags, and will not
+blocks only. This suppresses evaluation of \verb{@eval} tags, and will not
 find the code object associated with each block.}
 
 \item{registry}{A roclet tag registry: this is a named list where the

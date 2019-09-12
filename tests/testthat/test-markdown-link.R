@@ -1,6 +1,3 @@
-context("Rd: markdown links")
-roc <- rd_roclet()
-
 test_that("proper link references are added", {
   cases <- list(
     c("foo [func()] bar",           "[func()]: R:func()"),
@@ -25,48 +22,36 @@ test_that("proper link references are added", {
 })
 
 test_that("can not have [ inside of link", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
   expect_equal(
-    full_markdown("`[[`. [subset()]"),
-    "\\code{[[}. \\code{\\link[=subset]{subset()}}"
+    markdown("`[[`. [subset()]"),
+    "\\verb{[[}. \\code{\\link[=subset]{subset()}}"
   )
 })
 
 test_that("can escape [ to avoid spurious links", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
   expect_equal(
-    full_markdown("\\[test\\]"),
+    markdown("\\[test\\]"),
     "[test]"
   )
 
   expect_equal(
-    full_markdown("\\[ [test] \\]"),
+    markdown("\\[ [test] \\]"),
     "[ \\link{test} ]",
   )
 })
 
 test_that("\\Sexpr with options not converted to links", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
   expect_equal(
-     full_markdown("\\Sexpr[results=rd]{runif(1)}"),
+     markdown("\\Sexpr[results=rd]{runif(1)}"),
      "\\Sexpr[results=rd]{runif(1)}"
    )
 })
 
 test_that("% in links are escaped", {
-  md <- markdown_on(TRUE)
-  on.exit(markdown_on(md))
-
-  expect_equal(full_markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
-  expect_equal(full_markdown("[%][x]"), "\\link[=x]{\\%}")
-  expect_equal(full_markdown("[%%]"), "\\link{\\%\\%}")
-  expect_equal(full_markdown("[foo::%%]"), "\\link[foo:\\%\\%]{foo::\\%\\%}")
+  expect_equal(markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
+  expect_equal(markdown("[%][x]"), "\\link[=x]{\\%}")
+  expect_equal(markdown("[%%]"), "\\link{\\%\\%}")
+  expect_equal(markdown("[foo::%%]"), "\\link[foo:\\%\\%]{foo::\\%\\%}")
 })
 
 test_that("commonmark picks up the various link references", {
@@ -94,14 +79,14 @@ test_that("commonmark picks up the various link references", {
 })
 
 test_that("short and sweet links work", {
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [function()].
     #' And also [object].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\code{\\link[=function]{function()}}.
@@ -109,72 +94,72 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' See [pkg::function()], [pkg::object].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' See \\code{\\link[pkg:function]{pkg::function()}}, \\link[pkg:object]{pkg::object}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [name][dest].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\link[=dest]{name}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [name words][pkg::bar].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\link[pkg:bar]{name words}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [terms][terms.object].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\link[=terms.object]{terms}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [abc][abc-class].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\link[=abc-class]{abc}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title.
     #'
     #' In another package: [and this one][devtools::document].
@@ -183,7 +168,7 @@ test_that("short and sweet links work", {
     #' @md
     #' @name markdown-test
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title.
     #'
     #' In another package: \\link[devtools:document]{and this one}.
@@ -196,7 +181,7 @@ test_that("short and sweet links work", {
 
 test_that("a weird markdown link bug is fixed", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Dummy page to test roxygen's markdown formatting
     #'
     #' Links are very tricky, so I'll put in some links here:
@@ -215,7 +200,7 @@ test_that("a weird markdown link bug is fixed", {
     #' @name markdown-test
     #' @keywords internal
     NULL")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Dummy page to test roxygen's markdown formatting
     #'
     #' Links are very tricky, so I'll put in some links here:
@@ -238,7 +223,7 @@ test_that("a weird markdown link bug is fixed", {
 
 test_that("another markdown link bug is fixed", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [escape_rd_for_md()].
@@ -246,7 +231,7 @@ test_that("another markdown link bug is fixed", {
     #' And also [object].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\code{\\link[=escape_rd_for_md]{escape_rd_for_md()}}.
@@ -258,7 +243,7 @@ test_that("another markdown link bug is fixed", {
 
 test_that("markdown code as link text is rendered as code", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [`name`][dest],
@@ -269,7 +254,7 @@ test_that("markdown code as link text is rendered as code", {
     #' [`abc`][abc-class].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\code{\\link[=dest]{name}},
@@ -284,14 +269,14 @@ test_that("markdown code as link text is rendered as code", {
 
 test_that("non-code link in backticks works", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [`foobar`].
     #' Also [`this_too`].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\code{\\link{foobar}}.
@@ -302,7 +287,7 @@ test_that("non-code link in backticks works", {
 
 test_that("[] is not picked up in code", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' @param connect_args `[named list]`\\cr Connection arguments
@@ -310,32 +295,32 @@ test_that("[] is not picked up in code", {
     #' Also `[this_too]`.
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' @param connect_args \\code{[named list]}\\cr Connection arguments
-    #' Description, see \\code{[foobar]}.
-    #' Also \\code{[this_too]}.
+    #' @param connect_args \\verb{[named list]}\\cr Connection arguments
+    #' Description, see \\verb{[foobar]}.
+    #' Also \\verb{[this_too]}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("[]() links are still fine", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [some thing](http://www.someurl.com).
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\href{http://www.someurl.com}{some thing}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Link
@@ -352,7 +337,7 @@ test_that("[]() links are still fine", {
     #'   whitespace](http://www.someurl.com).
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Link
@@ -368,26 +353,26 @@ test_that("[]() links are still fine", {
 
 test_that("links to S4 classes are OK", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [linktos4-class] as well.
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\linkS4class{linktos4} as well.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [pkg::linktos4-class] as well.
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\link[pkg:linktos4-class]{pkg::linktos4} as well.
@@ -398,7 +383,7 @@ test_that("links to S4 classes are OK", {
 
 test_that("linebreak in 'text' of [text][foo] turns into single space", {
 
-  out1 <- roc_proc_text(roc, "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Link
@@ -415,7 +400,7 @@ test_that("linebreak in 'text' of [text][foo] turns into single space", {
     #'   whitespace][fcn].
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(roc, "
+  out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Link

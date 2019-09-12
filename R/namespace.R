@@ -1,23 +1,51 @@
-ns_tags_import <- c('import', 'importFrom', 'importClassesFrom', 'importMethodsFrom', 'useDynLib', 'rawNamespace')
-ns_tags_export <- c('export', 'exportClass', 'exportMethod', 'exportPattern', 'S3method')
-ns_tags <- c(ns_tags_import, ns_tags_export, 'evalNamespace')
+# Processed first
+ns_tags_import <- c(
+  "import",
+  "importFrom",
+  "importClassesFrom",
+  "importMethodsFrom",
+  "useDynLib",
+  "rawNamespace"
+)
+ns_tags <- c(
+  ns_tags_import,
+  "evalNamespace",
+  "export",
+  "exportClass",
+  "exportMethod",
+  "exportS3Method",
+  "exportPattern"
+)
 
-#' Roclet: make NAMESPACE.
+#' Roclet: make `NAMESPACE`
 #'
-#' This roclet automates the production of a `NAMESPACE` file,
-#' see Writing R Extensions.
-#' (<https://cran.r-project.org/doc/manuals/R-exts.pdf>) for details.
+#' @description
+#' This roclet automates the production of a `NAMESPACE` file, which controls
+#' the functions imported and exported by your package, as described in
+#' [Writing R extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html).
+#'
 #' The `NAMESPACE` is generated in two passes: the first generates only
 #' import directives (because this can be computed without evaluating package
 #' code), and the second generates everything (after the package has been
 #' loaded).
 #'
+#' See `vignette("namespace")` for details.
+#'
 #' @family roclets
 #' @export
-#' @seealso `vignette("namespace", package = "roxygen2")`
-#' @aliases export exportClass exportMethod exportPattern
-#'   import importFrom importClassesFrom importMethodsFrom
-#'   evalNamespace rawNamespace S3method useDynLib
+#' @eval tag_aliases(roclet_tags.roclet_namespace)
+#' @examples
+#' # The most common namespace tag is @@export, which declares that a function
+#' # is part of the external interface of your package
+#' #' @export
+#' foofy <- function(x, y, z) {
+#' }
+#'
+#' # You'll also often find global imports living in a file called
+#' # R/{package}-package.R.
+#' #' @@importFrom magrittr %>%
+#' #' @@import rlang
+#' NULL
 namespace_roclet <- function() {
   roclet("namespace")
 }
@@ -61,6 +89,7 @@ roclet_tags.roclet_namespace <- function(x) {
     evalNamespace = tag_code,
     export = tag_words_line,
     exportClass = tag_words(1),
+    exportS3Method = tag_words(min = 0, max = 2),
     exportMethod = tag_words(1),
     exportPattern = tag_words(1),
     import = tag_words(1),
@@ -68,7 +97,6 @@ roclet_tags.roclet_namespace <- function(x) {
     importFrom = tag_words(2),
     importMethodsFrom = tag_words(2),
     rawNamespace = tag_code,
-    S3method = tag_words(2, 2),
     useDynLib = tag_words(1)
   )
 }
@@ -122,7 +150,7 @@ default_export <- function(x, block) UseMethod("default_export")
 #' @export
 default_export.s4class   <- function(x, block) export_class(x$value@className)
 #' @export
-default_export.s4generic  <- function(x, block) export(x$value@generic)
+default_export.s4generic <- function(x, block) export(x$value@generic)
 #' @export
 default_export.s4method  <- function(x, block) export_s4_method(x$value@generic)
 #' @export
@@ -134,10 +162,6 @@ default_export.default   <- function(x, block) export(x$alias)
 #' @export
 default_export.NULL      <- function(x, block) export(block$name)
 
-ns_S3method          <- function(tag, block) {
-  block_warning(block, "@S3method is deprecated. Please use @export instead")
-  export_s3_method(tag)
-}
 ns_exportClass       <- function(tag, block) export_class(tag)
 ns_exportMethod      <- function(tag, block) export_s4_method(tag)
 ns_exportPattern     <- function(tag, block) one_per_line("exportPattern", tag)
@@ -145,9 +169,32 @@ ns_import            <- function(tag, block) one_per_line("import", tag)
 ns_importFrom        <- function(tag, block) repeat_first("importFrom", tag)
 ns_importClassesFrom <- function(tag, block) repeat_first("importClassesFrom", tag)
 ns_importMethodsFrom <- function(tag, block) repeat_first("importMethodsFrom", tag)
+
+ns_exportS3Method    <- function(tag, block) {
+  obj <- attr(block, "object")
+
+  if (length(tag) < 2 && !inherits(obj, "s3method")) {
+    block_warning(block,
+      "`@exportS3method` and `@exportS3method generic` must be used with an S3 method"
+    )
+    return()
+  }
+
+  if (identical(tag, "")) {
+    method <- attr(obj$value, "s3method")
+  } else if (length(tag) == 1) {
+    method <- c(tag, attr(obj$value, "s3method")[[2]])
+  } else {
+    method <- tag
+  }
+
+  export_s3_method(method)
+}
+
+
 ns_useDynLib         <- function(tag, block) {
   if (length(tag) == 1) {
-    return(paste0("useDynLib(", quote_if_needed(tag), ")"))
+    return(paste0("useDynLib(", auto_quote(tag), ")"))
   }
 
   if (any(grepl(",", tag))) {
@@ -168,30 +215,16 @@ ns_evalNamespace <- function(tag, block, env) {
 export           <- function(x) one_per_line("export", x)
 export_class     <- function(x) one_per_line("exportClasses", x)
 export_s4_method <- function(x) one_per_line("exportMethods", x)
-export_s3_method <- function(x) fun_args("S3method", x)
+export_s3_method <- function(x) {
+  args <- paste0(auto_backtick(x), collapse = ",")
+  paste0("S3method(", args, ")")
+}
+
+# Helpers -----------------------------------------------------------------
 
 one_per_line <- function(name, x) {
-  paste0(name, "(", quote_if_needed(x), ")")
+  paste0(name, "(", auto_backtick(x), ")")
 }
 repeat_first <- function(name, x) {
-  paste0(name, "(", quote_if_needed(x[1]), ",", quote_if_needed(x[-1]), ")")
+  paste0(name, "(", auto_backtick(x[1]), ",", auto_backtick(x[-1]), ")")
 }
-fun_args <- function(name, x) {
-  if (any(grepl(",", x))) {
-    # If there's a comma in list, don't quote output. This makes it possible
-    # for roxygen2 to support other NAMESPACE forms not otherwise mapped
-    args <- paste0(x, collapse = ", ")
-  } else {
-    args <- paste0(quote_if_needed(x), collapse = ",")
-  }
-
-  paste0(name, "(", args, ")")
-}
-
-quote_if_needed <- function(x) {
-  needs_quotes <- !has.quotes(x) & !is.syntactic(x)
-  x[needs_quotes] <- paste0('"', str_replace_all(x[needs_quotes], '(["\\\\])', "\\\\\\1"), '"')
-  x
-}
-is.syntactic <- function(x) make.names(x) == x
-has.quotes <- function(x) str_detect(x, "^('|\").*\\1$")

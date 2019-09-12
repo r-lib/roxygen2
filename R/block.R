@@ -161,9 +161,7 @@ parse_tags <- function(tokens, registry = list(), global_options = list()) {
 
   # Convert to existing named list format - this isn't ideal, but
   # it's what roxygen already uses
-  vals <- lapply(tags, `[[`, "val")
-  names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1))
-  setNames(vals, names)
+  set_names(map(tags, "val"), map_chr(tags, "tag"))
 }
 
 parse_tag <- function(x, registry) {
@@ -199,7 +197,7 @@ parse_description <- function(tags) {
   tags <- tags[-1]
   tag_names <- tag_names[-1]
 
-  paragraphs <- str_trim(str_split(intro$val, fixed('\n\n'))[[1]])
+  paragraphs <- str_split(intro$val, fixed('\n\n'))[[1]]
 
   # 1st paragraph = title (unless has @title)
   if ("title" %in% tag_names) {
@@ -226,8 +224,7 @@ parse_description <- function(tags) {
     # Find explicit @details tags
     didx <- which(tag_names == "details")
     if (length(didx) > 0) {
-      explicit_details <- vapply(tags[didx], `[[`, "val",
-        FUN.VALUE = character(1))
+      explicit_details <- map_chr(tags[didx], "val")
       tags <- tags[-didx]
       details_para <- paste(c(details_para, explicit_details), collapse = "\n\n")
     }

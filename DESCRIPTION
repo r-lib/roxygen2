@@ -1,6 +1,6 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 6.1.1.9000
+Version: 6.1.99.9000
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -46,11 +46,13 @@ Suggests:
     devtools,
     knitr,
     rmarkdown,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    R.methodsS3,
+    R.oo
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 6.1.99.9000

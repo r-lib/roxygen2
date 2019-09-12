@@ -1,5 +1,76 @@
 # roxygen2 (development version)
 
+* New `@exportS3Method` tag allows you to generate `S3method()` namespace
+  directives (note the different in capitalisation) (#796). Its primary use is 
+  for "delayed" method registration which allows you to define methods for 
+  generics found in suggested packages. This is only available in R 3.6 and 
+  greater, and looks like this:
+    
+    ```R
+    #' @exportS3Method package::generic
+    generic.foo <- function(x, ...) {
+    
+    }
+    ```
+    
+    (See [`vctrs::s3_register()`](https://vctrs.r-lib.org/reference/s3_register.html)
+    you need a version that works for earlier versions of R).
+    
+    You can also use it to generate arbitrary `S3method()` directions by 
+    providing two values:
+    
+    ```R
+    #' @exportS3Method generic class
+    NULL
+    ```
+
+* `namespace_roclet()` now uses `` ` `` to escape non-syntactic function 
+  names, rather than `'`.
+
+* Support `@S3method` has been removed. It was deprecated in roxygen2 4.0.0
+  released 2014-05-02, over 5 years ago.
+
+* Rd comments (`%`) are automatically escaped in markdown text. This is 
+  a backward incompatible check that will require that you replace
+  existing uses of `\%` with `%` (#879).
+
+* `@describeIn` can now be used with any combination of function types 
+  (#666, #848).
+
+* Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
+  depending on whether it not it parses as R code. This should make it 
+  easier to include arbitrary "code" snippets in documentation without
+  causing Rd failures (#654).
+
+* Inherting for a function with no arguments no longer throws a confusing
+  error message (#898)
+
+* As well as storing roxygen options in the `Roxygen` field of the 
+  `DESCRIPTION` you can now also store them in `man/roxygen/meta.R` (#889).
+
+* roxygen now looks for templates in `man/roxygen/templates` (#888).
+
+* Files generated on Windows systems now retain their existing line endings, or use 
+  unix-style line endings for new files (@jonthegeek, @jimhester, #840).
+  
+* `@inheritParams` warns if there are no parameters that require 
+  documentation (#836).
+
+* roxygen2 now recgonises fully qualified S4 functions like 
+  `methods::setGeneric()`, `methods::setClass()` and `methods::setMethod()`
+  (#880).
+
+* Use of unsupported markdown features (blockquotes, headings, inline HTML, 
+  and horizontal rules) now gets a more informative error message (#804).
+
+* `tag_markdown_restricted()` has been removed because it did exactly the
+  same think as `tag_markdown()`.
+
+* Roclets have now aliases to all the tags that they define so that you can
+  do (e.g.) `?"@export"`. These help files are generally not that useful, but
+  they do now provide basic examples, and point you towards the vignettes the
+  provide full details.
+
 * Package documentation now converts ORCIDs into a useful link (#721).
 
 * Empty roxygen2 lines at the start of a block are now silently removed (#710).

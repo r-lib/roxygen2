@@ -226,14 +226,6 @@ test_that("can inherit single section", {
   expect_equal(section$content, "1")
 })
 
-
-test_that("can find section in existing docs", {
-  out <- find_sections(find_topic("base::attach"))
-
-  expect_s3_class(out, "roxy_field_section")
-  expect_equal(out$title, "Good practice")
-})
-
 # Inherit parameters ------------------------------------------------------
 
 test_that("multiple @inheritParam tags gathers all params", {
@@ -318,13 +310,23 @@ test_that("@inheritParam understands compound docs", {
     #' Title
     #'
     #' @inheritParams x
-    #' @param x y
     #' @param y y
     y <- function(x, y) {}")[[2]]
   params <- get_tag(out, "param")$values
-  expect_equal(params, c(x = "y", y = "y"))
+  expect_equal(params, c(x = "x", y = "y"))
 })
 
+test_that("warned if no params need documentation", {
+  code <- "
+    #' Title
+    #'
+    #' @param x x
+    #' @param y x
+    #' @inheritParams foo
+    x <- function(x, y) {}
+  "
+  expect_warning(roc_proc_text(rd_roclet(), code), "no parameters to inherit")
+})
 
 test_that("argument order, also for incomplete documentation", {
   out <- roc_proc_text(rd_roclet(), "
@@ -479,3 +481,21 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_field("author")$values, "Hadley")
   expect_equal(out$get_field("source")$values, "my mind")
 })
+
+
+# get_rd() -----------------------------------------------------------------
+
+test_that("useful warnings if can't find topics", {
+  expect_warning(get_rd("base2::attach"), "Can't find package")
+  expect_warning(get_rd("base::function_not_found"), "Can't find help topic")
+  expect_warning(get_rd("function", RoxyTopics$new()), "Can't find help topic")
+})
+
+test_that("can find section in existing docs", {
+  out <- find_sections(get_rd("base::attach"))
+
+  expect_s3_class(out, "roxy_field_section")
+  expect_equal(out$title, "Good practice")
+})
+
+

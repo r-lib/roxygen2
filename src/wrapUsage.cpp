@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
 std::vector<std::string> splitByWhitespace(std::string string) {
   std::vector<std::string> out;
 
@@ -43,7 +42,7 @@ std::vector<std::string> splitByWhitespace(std::string string) {
 }
 
 // [[Rcpp::export]]
-std::string wrapString(std::string string, int width = 80, int indent = 2) {
+std::string wrapUsage(std::string string, int width = 80, int indent = 2) {
   std::vector<std::string> pieces = splitByWhitespace(string);
   int n = pieces.size();
   int cur_width = 0;

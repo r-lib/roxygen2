@@ -70,6 +70,19 @@ test_that("Multiple @describeIn generic combined into one", {
   expect_equal(get_tag(out, "minidesc")$desc, c("A", "B"))
 })
 
+
+test_that("all other combinations fallback to function list", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Generic
+    foo <- function(x) UseMethod('foo')
+
+    #' @describeIn foo related function
+    bar <- function(y) {}
+  ")[[1]]
+
+  expect_equal(get_tag(out, "minidesc")$type, "function")
+})
+
 test_that("@describeIn class captures function name", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title

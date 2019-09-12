@@ -9,7 +9,7 @@ rc_methods <- function(obj) {
   method_names <- setdiff(ls(envir = obj@refMethods), parent_methods)
   methods <- mget(method_names, envir = obj@refMethods)
 
-  lapply(methods, object)
+  lapply(methods, object, alias = NULL, type = "rcmethod")
 }
 
 add_rc_metadata <- function(val, name, class) {

@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `\href{}` links in external inherited documentation are now inserted 
+  correctly (without additional `{}`) (#778).
+
 * White space is automatically trimmed off the `RoxygenNote` field when 
   comparing the installed version of roxygen2 to the version used to 
   generate the documentation (#802).

@@ -73,7 +73,37 @@ get_tags <- function(rd, tag) {
 }
 
 rd2text <- function(x) {
-  chr <- as.character(structure(x, class = "Rd"), deparse = TRUE)
+  chr <- as_character_rd(structure(x, class = "Rd"), deparse = TRUE)
   paste(chr, collapse = "")
 }
 
+
+# helpers -----------------------------------------------------------------
+
+parse_rd <- function(x) {
+  con <- textConnection(x)
+  on.exit(close(con), add = TRUE)
+
+  tryCatch(
+    tools::parse_Rd(con, fragment = TRUE, encoding = "UTF-8"),
+    warning = function(cnd) NULL
+  )
+}
+
+# Generated in .onLoad()
+as_character_rd <- NULL
+make_as_character_rd <- function() {
+  # "as.character.Rd" appears to be missing \href in TWOARGS
+  # this code hacks the body of the function to add it
+  fn <- internal_f("tools", "as.character.Rd")
+
+  body <- body(fn)
+  idx <- purrr::detect_index(body, ~ is_call(.x, "<-", 2) && is_symbol(.x[[2]], "TWOARG"))
+  if (idx == 0) {
+    return(fn)
+  }
+
+  body[[idx]][[3]] <- call_modify(body[[idx]][[3]], "\\href")
+  body(fn) <- body
+  fn
+}

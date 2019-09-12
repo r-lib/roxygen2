@@ -175,7 +175,7 @@ ns_exportS3Method    <- function(tag, block) {
 
   if (length(tag) < 2 && !inherits(obj, "s3method")) {
     block_warning(block,
-      "`@exportS3method` and `@exportS3method generic` must be used with an S3 method"
+      "`@exportS3Method` and `@exportS3Method generic` must be used with an S3 method"
     )
     return()
   }

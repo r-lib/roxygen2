@@ -76,24 +76,15 @@ inherit_dot_params <- function(topic, topics, env) {
   }
   docs_selected <- unlist(map2(args, docs, arg_matches))
 
-  # Build the arg string
-  pkgs <- lapply(inheritors$source, function(x) {
-    gsub("%", "\\\\%", str_match(x, "^(.*)::")[1,2])
-  })
-  fun_names <- lapply(inheritors$source, function(x) {
-    gsub("%", "\\\\%", utils::tail(strsplit(x, "::", fixed = TRUE)[[1]], 1))
-  })
-  from <- paste0(
-    "\\code{\\link[",
-    if (is.na(pkgs)) "=",
-    if (!is.na(pkgs)) paste0(pkgs, ":"),
-    paste0(fun_names, "]{"),
-    if (!is.na(pkgs)) paste0(pkgs, "::"),
-    paste0(fun_names, "}}"),
-    collapse = ", "
-  )
-  args <- paste0("  \\item{\\code{", names(docs_selected), "}}{", docs_selected, "}",
-    collapse = "\n")
+  # Build the Rd
+  # (1) Link to function(s) that was inherited from
+  src <- inheritors$source
+  dest <- ifelse(grepl(src, "::"), gsub("::", ":", src), paste0("=", src))
+  from <- paste0("\\code{\\link[", dest, "]{", src, "}}", collapse = ", ")
+
+  # (2) Show each inherited argument
+  arg_names <- paste0("\\code{", names(docs_selected), "}")
+  args <- paste0("  \\item{", arg_names, "}{", docs_selected, "}", collapse = "\n")
 
   rd <- paste0(
     "Arguments passed on to ", from, "\n",

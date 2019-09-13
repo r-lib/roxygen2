@@ -37,6 +37,16 @@ merge.roxy_field <- function(x, y, ...) {
   roxy_field_simple(x$field, c(x$values, y$values))
 }
 
+#' @export
+merge.roxy_field_param <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  # When parameters appear in both x and y, keep values from y
+  # This happens for example when inherit_dot_params adds a "..." param after
+  # inherit_params has done the same.
+  to_add <- setdiff(names(x$values), names(y$values))
+  roxy_field_simple(x$field, c(x$values[to_add], y$values))
+}
+
 
 # Comment fields -----------------------------------------------------------------------
 
@@ -285,7 +295,7 @@ format.roxy_field_inherit_dot_params <- format_null
 #' @export
 merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_section(c(x$source, y$source), c(x$args, y$args))
+  roxy_field_inherit_dot_params(c(x$source, y$source), c(x$args, y$args))
 }
 
 # Sections ----------------------------------------------------------------

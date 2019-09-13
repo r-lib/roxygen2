@@ -76,16 +76,22 @@ inherit_dot_params <- function(topic, topics, env) {
   }
   docs_selected <- unlist(map2(args, docs, arg_matches))
 
-  # Build the arg string
-  from <- paste0("\\code{", inheritors$source, "}", collapse = ", ")
-  args <- paste0("  \\item{", names(docs_selected), "}{", docs_selected, "}",
-    collapse = "\n")
+  # Build the Rd
+  # (1) Link to function(s) that was inherited from
+  src <- inheritors$source
+  dest <- ifelse(has_colons(src), gsub("::", ":", src), paste0("=", src))
+  from <- paste0("\\code{\\link[", dest, "]{", src, "}}", collapse = ", ")
+
+  # (2) Show each inherited argument
+  arg_names <- paste0("\\code{", names(docs_selected), "}")
+  args <- paste0("    \\item{", arg_names, "}{", docs_selected, "}", collapse = "\n")
 
   rd <- paste0(
-    "Arguments passed on to ", from, "\n",
-    "\\describe{\n",
+    "\n",
+    "  Arguments passed on to ", from, "\n",
+    "  \\describe{\n",
     args, "\n",
-    "}"
+    "  }"
   )
   topic$add_simple_field("param", c("..." = rd))
 }

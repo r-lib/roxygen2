@@ -461,10 +461,10 @@ test_that("can inherit all from single function", {
     bar <- function(...) {}
   ")[[2]]
 
-  params <- out$get_field("param")$values
-  expect_named(params, "...")
-  expect_match(params, "Arguments passed on to \\code{foo}", fixed = TRUE)
-  expect_match(params, "\\item{x}{x}", fixed = TRUE)
+  verify_output(
+    test_path("test-rd-inherit-dots.txt"),
+    out$get_field("param")
+  )
 })
 
 test_that("does not produce multiple ... args", {
@@ -487,10 +487,11 @@ test_that("does not produce multiple ... args", {
     #' @param z z
     baz <- function(y, z) {}
   ")[[1]]
-  params <- out$get_field("param")$values
-  expect_length(params, 2)
-  expect_match(params[1], "x")
-  expect_match(params[2], "Arguments passed on to \\code{baz}", fixed = TRUE)
+
+  verify_output(
+    test_path("test-rd-inherit-dots-inherit.txt"),
+    out$get_field("param")
+  )
 })
 
 test_that("can inherit dots from several functions", {
@@ -498,26 +499,26 @@ test_that("can inherit dots from several functions", {
     #' Foo
     #'
     #' @param x x
-    #' @param y y
+    #' @param y y1
     foo <- function(x, y) {}
 
     #' Bar
     #'
+    #' @param y y2
     #' @param z z
     bar <- function(z) {}
 
     #' Foobar
     #'
-    #' @inheritDotParams foo -y
+    #' @inheritDotParams foo
     #' @inheritDotParams bar
     foobar <- function(...) {}
   ")[[3]]
 
-  params <- out$get_field("param")$values
-  expect_named(params, "...")
-  expect_match(params, "Arguments passed on to \\code{foo}, \\code{bar}",
-               fixed = TRUE)
-  expect_match(params, "\\item{x}{x}\n  \\item{z}{z}", fixed = TRUE)
+  verify_output(
+    test_path("test-rd-inherit-dots-multi.txt"),
+    out$get_field("param")
+  )
 })
 
 # inherit everything ------------------------------------------------------

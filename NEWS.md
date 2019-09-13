@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@inheritDotParams` includes link to function and wraps paramters
+  in `\code{}` (@halldc, #842)
+
 * Allow multiple `@inheritDotParams` (@gustavdelius, #767).
 
 * Avoid multiple `...` arguments when using `@inheritDotParams`

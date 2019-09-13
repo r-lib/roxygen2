@@ -1,0 +1,10 @@
+> out$get_field("param")
+\arguments{
+\item{...}{
+  Arguments passed on to \code{\link[=foo]{foo}}
+  \describe{
+    \item{\code{x}}{x}
+    \item{\code{y}}{y}
+  }}
+} 
+

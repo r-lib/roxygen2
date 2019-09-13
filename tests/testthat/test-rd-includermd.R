@@ -11,21 +11,20 @@ test_that("markdown file can be included", {
     #' @name foobar
     NULL", tmp)
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
-  out1$fields$details$values <- str_trim(out1$fields$details$values)
   out2 <- roc_proc_text(rd_roclet(), "
-    #' @details
-    #'
-    #'
-    #' List:
+    #' @title Title
+    #' @details List:
     #' \\itemize{
     #' \\item item1
     #' \\item item2
     #' }
     #'
     #' Inline \\code{code} and \\emph{emphasis}.
-    #' @title Title
     #' @name foobar
     NULL")[[1]]
+  # make sure fields are in the same order
+  expect_equal(sort(names(out1$fields)), sort(names(out2$fields)))
+  out2$fields <- out2$fields[names(out1$fields)]
   expect_equivalent_rd(out1, out2)
 })
 

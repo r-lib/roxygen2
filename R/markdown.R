@@ -1,21 +1,22 @@
-markdown_if_active <- function(text, tag) {
+markdown_if_active <- function(text, tag, sections = FALSE) {
   if (markdown_on()) {
-    markdown(text, tag)
+    markdown(text, tag, sections)
   } else {
     text
   }
 }
 
-markdown <- function(text, tag = NULL) {
+markdown <- function(text, tag = NULL, sections = FALSE) {
   esc_text <- escape_rd_for_md(text)
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
 
   mdxml <- md_to_mdxml(esc_text_linkrefs)
   state <- new.env(parent = emptyenv())
   state$tag <- tag
+  state$has_sections <- sections
   rd <- mdxml_children_to_rd_top(mdxml, state)
 
-  unescape_rd_for_md(str_trim(rd$main), esc_text)
+  map_chr(rd, unescape_rd_for_md, esc_text)
 }
 
 md_to_mdxml <- function(x) {
@@ -29,7 +30,7 @@ mdxml_children_to_rd_top <- function(xml, state) {
   out <- c(out, mdxml_close_sections(state))
   rd <- paste0(out, collapse = "")
   secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]]
-  list(main = secs[[1]], sections = secs[-1])
+  str_trim(secs)
 }
 
 mdxml_children_to_rd <- function(xml, state) {
@@ -175,7 +176,7 @@ escape_comment <- function(x) {
 
 mdxml_heading <- function(xml, state) {
   level <- xml_attr(xml, "level")
-  if (state$tag$tag != "@includeRmd" && level == 1) {
+  if (! state$has_sections && level == 1) {
     return(mdxml_unsupported(xml, state$tag, "level 1 markdown headings"))
   }
   head <- paste0(

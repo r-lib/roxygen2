@@ -243,7 +243,9 @@ topic_add_simple_tags <- function(topic, block) {
   tag_names <- names(block)[is_simple]
 
   for (i in seq_along(tag_values)) {
-    topic$add_simple_field(tag_names[[i]], tag_values[[i]][1])
+    if (length(tag_values[[i]]) && nchar(tag_values[[i]][[1]])) {
+      topic$add_simple_field(tag_names[[i]], tag_values[[i]][[1]])
+    }
     for (sec in tag_values[[i]][-1]) {
       topic$add_simple_field("rawRd", sec)
     }

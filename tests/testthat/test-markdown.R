@@ -532,3 +532,20 @@ test_that("level 1 heading in @details", {
 
   expect_equivalent_rd(out1, out2)
 })
+
+test_that("headings and empty sections", {
+  text1 <- "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @details
+    #' # This is its own section
+    #' With text.
+    #' @md
+    #' @name x
+    NULL
+  "
+  out1 <- roc_proc_text(rd_roclet(), text1)[[1]]
+  expect_false("details" %in% names(out1$fields))
+})

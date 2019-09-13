@@ -442,10 +442,10 @@ test_that("can inherit all from single function", {
     bar <- function(...) {}
   ")[[2]]
 
-  params <- out$get_field("param")$values
-  expect_named(params, "...")
-  expect_match(params, "Arguments passed on to \\code{\\link[=foo]{foo}}", fixed = TRUE)
-  expect_match(params, "\\item{\\code{x}}{x}", fixed = TRUE)
+  verify_output(
+    test_path("test-Rd-inherit-dots.txt"),
+    out$get_field("param")
+  )
 })
 
 # inherit everything ------------------------------------------------------

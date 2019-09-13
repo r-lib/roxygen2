@@ -86,6 +86,21 @@ test_that("families listed in same order as input", {
   expect_match(seealso[2], "^Other a")
 })
 
+test_that("only functions get () suffix", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' foo
+    #' @family a
+    foo <- function() {}
+
+    #' bar
+    #' @family a
+    bar <- 1:10
+  ")
+
+  expect_equal(get_tag(out[[1]], "seealso")$values, "Other a: \\code{\\link{bar}}")
+  expect_equal(get_tag(out[[2]], "seealso")$values, "Other a: \\code{\\link{foo}()}")
+})
+
 test_that("family also included in concepts", {
   out <- roc_proc_text(rd_roclet(), "
     #' foo

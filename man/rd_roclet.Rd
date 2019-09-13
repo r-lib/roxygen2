@@ -71,7 +71,7 @@ str_length <- function(x) {
 }
 }
 \seealso{
-Other roclets: \code{\link{namespace_roclet}},
-  \code{\link{vignette_roclet}}
+Other roclets: \code{\link{namespace_roclet}()},
+  \code{\link{vignette_roclet}()}
 }
 \concept{roclets}

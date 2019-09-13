@@ -1,9 +1,12 @@
 # roxygen2 (development version)
 
-* Subheadings, i.e. headings of level 2 and above, are now allowed in
-  markdown text. They generate subsections within the roxygen tag
-  (within `@description`, `@details`, `@return`, etc.) `##` creates a
-  subsection, `###` a sub-subsection, etc. Headings can be nested (#907).
+* `@family` automatically adds `()` when linking to functions (#815).
+
+* Headings are now allowed in markdown text. Subheadings, i.e. headings
+  with level 2 and above, generate subsections within roxygen tags
+  (e.g. within `@description`, `@details`, `@return`, etc.) `##` creates a
+  subsection, `###` a sub-subsection, etc. Level 1 headings generate
+  separate sections in the manual page (#907, #908).
 
 * `\link{foo}` links in external inherited documentation are automatically
   transformed to `\link{package}{foo}` so that they work in the generated

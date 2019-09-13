@@ -23,7 +23,7 @@ topics_process_family_prefix <- function(family) {
 
 }
 
-topics_process_family <- function(topics) {
+topics_process_family <- function(topics, env) {
   family_index <- invert(topics$simple_values("family"))
   aliases <- topics$simple_values("alias")
 
@@ -40,7 +40,9 @@ topics_process_family <- function(topics) {
         next
 
       by_file <- map_chr(aliases[others], function(x) {
-        paste0("\\code{\\link{", escape(x[1]), "}}")
+        obj <- find_object(x[1], env)
+        suffix <- if (is.function(obj$value)) "()" else ""
+        paste0("\\code{\\link{", escape(x[1]), "}", suffix, "}")
       })
       links <- paste(sort_c(by_file), collapse = ", ")
 

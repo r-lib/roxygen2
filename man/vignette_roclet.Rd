@@ -12,7 +12,7 @@ By default, it will rebuild all vignettes if the source file is newer than
 the output pdf or html. (This means it will automatically re-build the
 vignette if you change the vignette source, but \emph{not} when you
 change the R code). If you want finer control, add a Makefile to
-\code{vignettes/} and roxygen2 will use that instead.
+\verb{vignettes/} and roxygen2 will use that instead.
 }
 \details{
 To prevent RStudio from re-building the vignettes again when checking
@@ -20,7 +20,7 @@ your package, add \code{--no-build-vignettes} to the "Build Source Package"
 field in your project options.
 }
 \seealso{
-Other roclets: \code{\link{namespace_roclet}},
-  \code{\link{rd_roclet}}
+Other roclets: \code{\link{namespace_roclet}()},
+  \code{\link{rd_roclet}()}
 }
 \concept{roclets}

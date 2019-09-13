@@ -11,3 +11,11 @@
 ^revdep$
 ^codecov\.yml$
 ^appveyor\.yml$
+^\.github$
+^pkgdown$
+^\.covrignore$
+^azure-pipelines\.yml$
+^\.Rprofile$
+^r-packages$
+^doc$
+^Meta$

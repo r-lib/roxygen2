@@ -21,11 +21,7 @@ find_includes <- function(path) {
     .Call(`_roxygen2_find_includes`, path)
 }
 
-splitByWhitespace <- function(string) {
-    .Call(`_roxygen2_splitByWhitespace`, string)
-}
-
-wrapString <- function(string, width = 80L, indent = 2L) {
-    .Call(`_roxygen2_wrapString`, string, width, indent)
+wrapUsage <- function(string, width = 80L, indent = 2L) {
+    .Call(`_roxygen2_wrapUsage`, string, width, indent)
 }
 

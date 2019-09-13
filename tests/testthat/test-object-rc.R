@@ -1,5 +1,3 @@
-context("Object: rc")
-
 # Docstrings -------------------------------------------------------------------
 
 test_that("base functions don't have docstrings", {

@@ -2,21 +2,76 @@
 % Please edit documentation in R/rd.R
 \name{rd_roclet}
 \alias{rd_roclet}
+\alias{@aliases}
+\alias{@author}
+\alias{@backref}
+\alias{@concept}
+\alias{@describeIn}
+\alias{@description}
+\alias{@details}
+\alias{@docType}
+\alias{@encoding}
+\alias{@evalRd}
+\alias{@example}
+\alias{@examples}
+\alias{@family}
+\alias{@field}
+\alias{@format}
+\alias{@includeRmd}
+\alias{@inherit}
+\alias{@inheritParams}
+\alias{@inheritDotParams}
+\alias{@inheritSection}
+\alias{@keywords}
+\alias{@method}
+\alias{@name}
+\alias{@md}
+\alias{@noMd}
+\alias{@noRd}
+\alias{@note}
+\alias{@param}
+\alias{@rdname}
+\alias{@rawRd}
+\alias{@references}
+\alias{@return}
+\alias{@section}
+\alias{@seealso}
+\alias{@slot}
+\alias{@source}
+\alias{@template}
+\alias{@templateVar}
+\alias{@title}
+\alias{@usage}
 \title{Roclet: make Rd files.}
 \usage{
 rd_roclet()
 }
 \description{
-This roclet is the workhorse of \code{roxygen}, producing the Rd files that
-document that functions in your package.
+This roclet is the workhorse of \code{roxygen}, producing the \code{.Rd} files that
+R uses to document that functions, datasets, packages, classes, and
+other objects.
+
+See \code{vignette("rd")} for details.
 
 Generally you will not call this function directly
 but will instead use roxygenise() specifying the rd roclet
 }
+\examples{
+#' The length of a string (in characters)
+#'
+#' @param x String input character vector
+#' @return An integer vector the same length as `x`.
+#'   `NA` strings have `NA` length.
+#' @seealso [nchar()]
+#' @export
+#' @examples
+#' str_length(letters)
+#' str_length(c("i", "like", "programming", NA))
+str_length <- function(x) {
+}
+}
 \seealso{
-\code{vignette("rd", package = "roxygen2")}
-
-Other roclets: \code{\link{namespace_roclet}},
-  \code{\link{vignette_roclet}}
+Other roclets: \code{\link{namespace_roclet}()},
+  \code{\link{vignette_roclet}()}
 }
 \concept{roclets}

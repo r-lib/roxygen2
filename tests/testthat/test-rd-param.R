@@ -22,6 +22,16 @@ test_that("grouped args get spaces", {
   expect_match(format(args), "a, z")
 })
 
+test_that("empty @param generates warning", {
+  expect_warning(
+    roc_proc_text(rd_roclet(), "
+    #' A
+    #' @param
+    #'
+    a <- function() {}"),
+    "requires a value"
+  )
+})
 
 test_that("data objects don't get params", {
   out <- roc_proc_text(rd_roclet(), "

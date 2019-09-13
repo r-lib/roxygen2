@@ -1,12 +1,16 @@
 template_find <- function(base_path, template_name) {
-  path <- file.path(base_path, "man-roxygen", paste0(template_name, ".", c("R", "r")))
+  file_name <- paste0(template_name, ".", c("R", "r"))
+  path <- c(
+    file.path(base_path, "man-roxygen", file_name),
+    file.path(base_path, "man", "roxygen", "templates", file_name)
+  )
   path_exists <- file.exists(path)
 
   if (!any(path_exists)) {
     stop("Can't find template '", template_name, "'", call. = FALSE)
   }
 
-  path[path_exists][1]
+  path[path_exists][[1]]
 }
 
 template_eval <- function(template_path, vars) {
@@ -20,12 +24,10 @@ process_templates <- function(block, base_path, global_options = list()) {
     return(block)
 
   templates <- unlist(template_tags, use.names = FALSE)
-  paths <- vapply(templates, template_find, base_path = base_path,
-    FUN.VALUE = character(1), USE.NAMES = FALSE)
+  paths <- map_chr(templates, template_find, base_path = base_path)
 
   var_tags <- block[names(block) == "templateVar"]
-  vars <- lapply(var_tags, "[[", "description")
-  names(vars) <- vapply(var_tags, "[[", "name", FUN.VALUE = character(1))
+  vars <- set_names(map(var_tags, "description"), map_chr(var_tags, "name"))
   vars <- lapply(vars, utils::type.convert, as.is = TRUE)
 
   results <- lapply(paths, template_eval, vars = list2env(vars))

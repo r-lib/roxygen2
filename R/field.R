@@ -74,8 +74,7 @@ format_rd <- function(x, ..., sort = TRUE) {
     x$values <- sort_c(x$values)
   }
 
-  vapply(x$values, rd_macro, field = x$field,
-    FUN.VALUE = character(1), USE.NAMES = FALSE)
+  map_chr(x$values, rd_macro, field = x$field)
 }
 #' @export
 format.roxy_field_keyword <- format_rd
@@ -234,41 +233,6 @@ format.roxy_field_minidesc <- function(x, ...) {
     "\\itemize{\n",
     paste0("\\item \\code{", escape(x$label), "}: ", x$desc,
       collapse = "\n\n"),
-    "\n}}\n"
-  )
-}
-
-# Re-export ----------------------------------------------------------------
-
-roxy_field_reexport <- function(pkg, fun) {
-  stopifnot(is.character(pkg), is.character(fun))
-  stopifnot(length(pkg) == length(fun))
-
-  roxy_field("reexport", pkg = pkg, fun = fun)
-}
-
-#' @export
-merge.roxy_field_reexport <- function(x, y, ...) {
-  stopifnot(identical(class(x), class(y)))
-  roxy_field_reexport(c(x$pkg, y$pkg), c(x$fun, y$fun))
-}
-
-#' @export
-format.roxy_field_reexport <- function(x, ...) {
-  pkgs <- split(x$fun, x$pkg)
-  pkg_links <- Map(pkg = names(pkgs), funs = pkgs, function(pkg, funs) {
-    links <- paste0("\\code{\\link[", pkg, "]{", escape(funs), "}}",
-      collapse = ", ")
-    paste0("\\item{", pkg, "}{", links, "}")
-  })
-
-  paste0(
-    "\\description{\n",
-    "These objects are imported from other packages. Follow the links\n",
-    "below to see their documentation.\n",
-    "\n",
-    "\\describe{\n",
-    paste0("  ", unlist(pkg_links), collapse = "\n\n"),
     "\n}}\n"
   )
 }

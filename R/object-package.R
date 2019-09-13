@@ -21,8 +21,8 @@ package_authors <- function(desc) {
   if (is.null(authors))
     return()
 
-  desc <- vapply(unclass(authors), author_desc, character(1))
-  type <- vapply(unclass(authors), author_type, character(1))
+  desc <- map_chr(unclass(authors), author_desc)
+  type <- map_chr(unclass(authors), author_type)
   by_type <- split(desc, type)
 
   paste(
@@ -47,7 +47,14 @@ author_desc <- function(x) {
   }
 
   if (!is.null(x$comment)) {
-    desc <- paste0(desc, " (", x$comment, ")")
+    if (has_name(x$comment, "ORCID")) {
+      desc <- paste0(desc, " (\\href{https://orcid.org/", x$comment[["ORCID"]], "}{ORCID})")
+      x$comment <- x$comment[setdiff(x$comments, "ORCID")]
+    }
+
+    if (length(x$comment) > 0) {
+      desc <- paste0(desc, " (", x$comment, ")")
+    }
   }
 
   extra_roles <- setdiff(x$role, c("cre", "aut"))

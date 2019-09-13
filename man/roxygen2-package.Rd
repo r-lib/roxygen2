@@ -6,12 +6,13 @@
 \alias{roxygen2-package}
 \title{roxygen2: In-Line Documentation for R}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Generate your Rd documentation, 'NAMESPACE' file, and collation 
-    field using specially formatted comments. Writing documentation in-line
-    with code makes it easier to keep your documentation up-to-date as your
-    requirements change. 'Roxygen2' is inspired by the 'Doxygen' system for C++.
+Generate your Rd documentation, 'NAMESPACE' file,
+    and collation field using specially formatted comments. Writing
+    documentation in-line with code makes it easier to keep your
+    documentation up-to-date as your requirements change. 'Roxygen2' is
+    inspired by the 'Doxygen' system for C++.
 }
 \details{
 See \code{vignette("roxygen2", package = "roxygen2")} for an overview
@@ -25,17 +26,18 @@ for a convenient way of converting Rd files to roxygen comments.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/klutometis/roxygen}
-  \item Report bugs at \url{https://github.com/klutometis/roxygen/issues}
+  \item \url{https://github.com/r-lib/roxygen2}
+  \item Report bugs at \url{https://github.com/r-lib/roxygen2/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} [copyright holder]
+\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (\href{https://orcid.org/0000-0003-4757-117X}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
   \item Peter Danenberg \email{pcd@roxygen.org} [copyright holder]
+  \item Gábor Csárdi \email{csardi.gabor@gmail.com}
   \item Manuel Eugster [copyright holder]
 }
 
@@ -45,3 +47,4 @@ Other contributors:
 }
 
 }
+\keyword{internal}

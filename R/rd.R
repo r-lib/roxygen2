@@ -3,11 +3,24 @@ NULL
 
 #' Roclet: make Rd files.
 #'
-#' @family roclets
 #' @template rd
+#' @family roclets
 #' @eval rd_roclet_description()
-#' @seealso `vignette("rd", package = "roxygen2")`
+#' @eval tag_aliases(roclet_tags.roclet_rd)
 #' @export
+#' @examples
+#' #' The length of a string (in characters)
+#' #'
+#' #' @param x String input character vector
+#' #' @return An integer vector the same length as `x`.
+#' #'   `NA` strings have `NA` length.
+#' #' @seealso [nchar()]
+#' #' @export
+#' #' @examples
+#' #' str_length(letters)
+#' #' str_length(c("i", "like", "programming", NA))
+#' str_length <- function(x) {
+#' }
 rd_roclet <- function() {
   roclet("rd")
 }
@@ -38,6 +51,7 @@ roclet_tags.roclet_rd <- function(x) {
     family = tag_value,
     field = tag_name_description,
     format = tag_markdown,
+    includeRmd = tag_value,
     inherit = tag_inherit,
     inheritParams = tag_value,
     inheritDotParams = tag_two_part("source", "args", required = FALSE),
@@ -60,7 +74,7 @@ roclet_tags.roclet_rd <- function(x) {
     source = tag_markdown,
     template = tag_value,
     templateVar = tag_name_description,
-    title = tag_markdown_restricted,
+    title = tag_markdown,
     usage = tag_value
   )
 }
@@ -71,6 +85,7 @@ roclet_process.roclet_rd <- function(x,
                                      env,
                                      base_path,
                                      global_options = list()) {
+
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 
@@ -78,7 +93,7 @@ roclet_process.roclet_rd <- function(x,
     rd <- block_to_rd(block, base_path, env, global_options)
     topics$add(rd)
   }
-  topics_process_family(topics)
+  topics_process_family(topics, env)
   topics_process_inherit(topics, env)
   topics$drop_invalid()
   topics_fix_params_order(topics)
@@ -110,7 +125,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
     return()
   }
 
-  name <- block$name %||% object_topic(attr(block, "object"))
+  name <- block$name %||% attr(block, "object")$topic
   if (is.null(name)) {
     block_warning(block, "Missing name")
     return()
@@ -128,6 +143,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_backref(rd, block)
   topic_add_doc_type(rd, block)
   topic_add_eval_rd(rd, block, env)
+  topic_add_include_rmd(rd, block, base_path)
   topic_add_examples(rd, block, base_path)
   topic_add_fields(rd, block)
   topic_add_inherit(rd, block)
@@ -157,7 +173,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
 roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE) {
   man <- normalizePath(file.path(base_path, "man"))
 
-  contents <- vapply(results, format, wrap = FALSE, FUN.VALUE = character(1))
+  contents <- map_chr(results, format, wrap = FALSE)
   paths <- file.path(man, names(results))
 
   # Always check for roxygen2 header before overwriting NAMESPACE (#436),
@@ -184,9 +200,7 @@ roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE
 roclet_clean.roclet_rd <- function(x, base_path) {
   rd <- dir(file.path(base_path, "man"), full.names = TRUE)
   rd <- rd[!file.info(rd)$isdir]
-  made_by_me <- vapply(rd, made_by_roxygen, logical(1))
-
-  unlink(rd[made_by_me])
+  unlink(purrr::keep(rd, made_by_roxygen))
 }
 
 block_tags <- function(x, tag) {
@@ -274,12 +288,12 @@ topic_add_methods <- function(topic, block) {
   if (is.null(obj$methods)) return()
 
   desc <- lapply(methods, function(x) docstring(x$value@.Data))
-  usage <- vapply(methods, function(x) {
+  usage <- map_chr(methods, function(x) {
     usage <- function_usage(x$value@name, formals(x$value@.Data))
-    as.character(wrap_string(usage))
-  }, character(1))
+    as.character(wrap_usage(usage))
+  })
 
-  has_docs <- !vapply(desc, is.null, logical(1))
+  has_docs <- !map_lgl(desc, is.null)
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 
@@ -331,7 +345,7 @@ topic_add_keyword <- function(topic, block) {
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block) {
   if (is.null(block$usage)) {
-    usage <- wrap_string(object_usage(attr(block, "object")), width = 75L)
+    usage <- wrap_usage(object_usage(attr(block, "object")), width = 75L)
   } else if (block$usage == "NULL") {
     usage <- NULL
   } else {
@@ -389,6 +403,29 @@ topic_add_eval_rd <- function(topic, block, env) {
     if (!is.null(out)) {
       topic$add_simple_field("rawRd", out)
     }
+  }
+}
+
+topic_add_include_rmd <- function(topic, block, base_path) {
+  rmds <- block_tags(block, "includeRmd")
+
+  for (rmd in rmds) {
+    tag <- roxy_tag(
+      "@includeRmd",
+      rmd,
+      attr(block, "filename"),
+      attr(block, "location")[[1]]
+    )
+    if (!is_installed("rmarkdown")) {
+      roxy_tag_warning(tag, "Needs the rmarkdown package")
+    }
+    out <- block_include_rmd(tag, block, base_path)
+    if (!is.null(out$main)) {
+      topic$add_simple_field("details", out$main)
+    }
+    lapply(out$sections, function(s) {
+      topic$add_simple_field("rawRd", s)
+    })
   }
 }
 

@@ -19,7 +19,7 @@ print.rd <- function(x, ...) {
 escape <- function(x) UseMethod("escape")
 escape.rd <- function(x) x
 escape.character <- function(x) {
-  # wrap_string uses \u{A0}, the unicode non-breaking space, which
+  # wrap_usage uses \u{A0}, the unicode non-breaking space, which
   # is not necessarily valid in windows locales. useBytes is a quick
   # hack to fix the problem.
   x1 <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
@@ -68,20 +68,57 @@ rd_macro <- function(field, ..., space = FALSE) {
 
 # Input -------------------------------------------------------------------
 
-get_rd <- function(topic, package = NULL) {
-  help_call <- substitute(help(t, p), list(t = topic, p = package))
-  top <- eval(help_call)
-  if (length(top) == 0) return(NULL)
-
-  internal_f("utils", ".getHelpFile")(top)
-}
-
 get_tags <- function(rd, tag) {
   Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)
 }
 
 rd2text <- function(x) {
-  chr <- as.character(structure(x, class = "Rd"), deparse = TRUE)
+  chr <- as_character_rd(structure(x, class = "Rd"), deparse = TRUE)
   paste(chr, collapse = "")
 }
 
+tweak_links <- function(x, package) {
+  tag <- attr(x, "Rd_tag")
+
+  if (is.list(x)) {
+    if (!is.null(tag) && tag == "\\link") {
+      if (is.null(attr(x, "Rd_option"))) {
+        attr(x, "Rd_option") <- structure(package, Rd_tag = "TEXT")
+      }
+    } else if (length(x) > 0) {
+      x[] <- map(x, tweak_links, package = package)
+    }
+  }
+
+  x
+}
+
+# helpers -----------------------------------------------------------------
+
+parse_rd <- function(x) {
+  con <- textConnection(x)
+  on.exit(close(con), add = TRUE)
+
+  tryCatch(
+    tools::parse_Rd(con, fragment = TRUE, encoding = "UTF-8"),
+    warning = function(cnd) NULL
+  )
+}
+
+# Generated in .onLoad()
+as_character_rd <- NULL
+make_as_character_rd <- function() {
+  # "as.character.Rd" appears to be missing \href in TWOARGS
+  # this code hacks the body of the function to add it
+  fn <- internal_f("tools", "as.character.Rd")
+
+  body <- body(fn)
+  idx <- purrr::detect_index(body, ~ is_call(.x, "<-", 2) && is_symbol(.x[[2]], "TWOARG"))
+  if (idx == 0) {
+    return(fn)
+  }
+
+  body[[idx]][[3]] <- call_modify(body[[idx]][[3]], "\\href")
+  body(fn) <- body
+  fn
+}

@@ -393,12 +393,92 @@ test_that("unhandled markdown generates warning", {
   text <- "
     #' Title
     #'
-    #' ## Heading
+    #' > block quotes do not work,
+    #' > sadly
     #'
     #' Blabla
     #' @md
     #' @name x
     NULL
   "
-  expect_warning(roc_proc_text(rd_roclet(), text), "markdown headings")
+  expect_warning(roc_proc_text(rd_roclet(), text), "block quotes")
+})
+
+test_that("level 1 heading in markdown generates warning", {
+  text <- "
+    #' Title
+    #'
+    #' # This is not good
+    #'
+    #' Blabla
+    #' @md
+    #' @name x
+    NULL
+  "
+  expect_warning(
+    roc_proc_text(rd_roclet(), text),
+    "level 1 markdown headings"
+  )
+})
+
+test_that("level >2 markdown headings work in @description", {
+  text <- "
+    #' Title
+    #'
+    #' @description
+    #' ## This is good
+    #' yes
+    #'
+    #' @details
+    #' Blabla
+    #' @md
+    #' @name x
+    NULL
+  "
+  out <- roc_proc_text(rd_roclet(), text)[[1]]
+  expect_equal_strings(
+    out$fields$description$values,
+    "\\subsection{This is good}{\n\nyes\n}"
+  )
+})
+
+test_that("level >2 markdown headings work in @details", {
+  text <- "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @details
+    #' ## Heading 2
+    #' ### Heading 3
+    #' Text.
+    #' @md
+    #' @name x
+    NULL
+  "
+  out <- roc_proc_text(rd_roclet(), text)[[1]]
+  expect_equal_strings(
+    out$fields$details$values,
+    "\\subsection{Heading 2}{\n\\subsection{Heading 3}{\n\nText.\n}\n\n}"
+  )
+})
+
+test_that("level >2 markdown headings work in @return", {
+  text <- "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @return Even this
+    #' ## Can have a subsection.
+    #' Yes.
+    #' @md
+    #' @name x
+    NULL
+  "
+  out <- roc_proc_text(rd_roclet(), text)[[1]]
+  expect_equal_strings(
+    out$fields$value$values,
+    "Even this\n\\subsection{Can have a subsection.}{\n\nYes.\n}"
+  )
 })

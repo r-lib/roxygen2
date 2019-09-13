@@ -174,10 +174,10 @@ escape_comment <- function(x) {
 }
 
 mdxml_heading <- function(xml, state) {
-  if (state$tag$tag != "@includeRmd") {
-    return(mdxml_unsupported(xml, state$tag, "markdown headings"))
-  }
   level <- xml_attr(xml, "level")
+  if (state$tag$tag != "@includeRmd" && level == 1) {
+    return(mdxml_unsupported(xml, state$tag, "level 1 markdown headings"))
+  }
   head <- paste0(
     mdxml_close_sections(state, level),
     "\n",

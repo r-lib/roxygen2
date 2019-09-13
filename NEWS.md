@@ -1,7 +1,10 @@
 # roxygen2 (development version)
 
-* Allow multiple @inheritDotParams (#767, @gustavdelius)
-* Avoid multiple `...` arguments when using @inheritDotParams (#857, @gustavdelius)
+* Allow multiple `@inheritDotParams` (@gustavdelius, #767).
+
+* Avoid multiple `...` arguments when using `@inheritDotParams`
+  (@gustavdelius, #857).
+
 * `@family` automatically adds `()` when linking to functions (#815).
 
 * Headings are now allowed in markdown text. Subheadings, i.e. headings

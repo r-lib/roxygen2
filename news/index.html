@@ -153,6 +153,7 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Subheadings, i.e. headings of level 2 and above, are now allowed in markdown text. They generate subsections within the roxygen tag (within <code>@description</code>, <code>@details</code>, <code>@return</code>, etc.) <code>##</code> creates a subsection, <code>###</code> a sub-subsection, etc. Headings can be nested (<a href='https://github.com/r-lib/roxygen2/issues/907'>#907</a>).</p></li>
 <li><p><code>\link{foo}</code> links in external inherited documentation are automatically transformed to <code>\link{package}{foo}</code> so that they work in the generated documented (<a href='https://github.com/r-lib/roxygen2/issues/635'>#635</a>).</p></li>
 <li><p><code>\href{}</code> links in external inherited documentation are now inserted correctly (without additional <code>{}</code>) (<a href='https://github.com/r-lib/roxygen2/issues/778'>#778</a>).</p></li>
 <li><p>White space is automatically trimmed off the <code>RoxygenNote</code> field when comparing the installed version of roxygen2 to the version used to generate the documentation (<a href='https://github.com/r-lib/roxygen2/issues/802'>#802</a>).</p></li>

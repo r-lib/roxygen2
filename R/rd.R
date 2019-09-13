@@ -41,8 +41,8 @@ roclet_tags.roclet_rd <- function(x) {
     backref = tag_value,
     concept = tag_markdown,
     describeIn = tag_name_description,
-    description = tag_markdown,
-    details = tag_markdown,
+    description = tag_markdown_with_sections,
+    details = tag_markdown_with_sections,
     docType = tag_name,
     encoding = tag_value,
     evalRd = tag_code,
@@ -243,7 +243,12 @@ topic_add_simple_tags <- function(topic, block) {
   tag_names <- names(block)[is_simple]
 
   for (i in seq_along(tag_values)) {
-    topic$add_simple_field(tag_names[[i]], tag_values[[i]])
+    if (length(tag_values[[i]]) && nchar(tag_values[[i]][[1]])) {
+      topic$add_simple_field(tag_names[[i]], tag_values[[i]][[1]])
+    }
+    for (sec in tag_values[[i]][-1]) {
+      topic$add_simple_field("rawRd", sec)
+    }
   }
 }
 
@@ -411,7 +416,7 @@ topic_add_include_rmd <- function(topic, block, base_path) {
 
   for (rmd in rmds) {
     tag <- roxy_tag(
-      "@includeRmd",
+      "includeRmd",
       rmd,
       attr(block, "filename"),
       attr(block, "location")[[1]]
@@ -420,10 +425,10 @@ topic_add_include_rmd <- function(topic, block, base_path) {
       roxy_tag_warning(tag, "Needs the rmarkdown package")
     }
     out <- block_include_rmd(tag, block, base_path)
-    if (!is.null(out$main)) {
-      topic$add_simple_field("details", out$main)
+    if (!is.null(out[[1]])) {
+      topic$add_simple_field("details", out[[1]])
     }
-    lapply(out$sections, function(s) {
+    lapply(out[-1], function(s) {
       topic$add_simple_field("rawRd", s)
     })
   }

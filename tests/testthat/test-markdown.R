@@ -404,10 +404,11 @@ test_that("unhandled markdown generates warning", {
   expect_warning(roc_proc_text(rd_roclet(), text), "block quotes")
 })
 
-test_that("level 1 heading in markdown generates warning", {
+test_that("level 1 heading in markdown generates warning in some tags", {
   text <- "
     #' Title
     #'
+    #' @seealso this and that
     #' # This is not good
     #'
     #' Blabla
@@ -481,4 +482,70 @@ test_that("level >2 markdown headings work in @return", {
     out$fields$value$values,
     "Even this\n\\subsection{Can have a subsection.}{\n\nYes.\n}"
   )
+})
+
+test_that("level 1 heading in @details", {
+  text1 <- "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @details
+    #' Leading text goes into details.
+    #' # This is its own section
+    #' ## Can have a subsection
+    #' Yes.
+    #' # Another section
+    #' With text.
+    #' @md
+    #' @name x
+    NULL
+  "
+  out1 <- roc_proc_text(rd_roclet(), text1)[[1]]
+  text2 <- "
+    #' Title
+    #'
+    #' Description.
+    #' @details
+    #' Leading text goes into details.
+    #' @rawRd
+    #' \\section{This is its own section}{
+    #' \\subsection{Can have a subsection}{
+    #'
+    #' Yes.
+    #' }
+    #'
+    #' }
+    #' @rawRd
+    #' \\section{Another section}{
+    #'
+    #' With text.
+    #' }
+    #' @name x
+    NULL
+  "
+  out2 <- roc_proc_text(rd_roclet(), text2)[[1]]
+
+  # make sure fields are in the same order
+  expect_equal(sort(names(out1$fields)), sort(names(out2$fields)))
+  out2$fields <- out2$fields[names(out1$fields)]
+
+  expect_equivalent_rd(out1, out2)
+})
+
+test_that("headings and empty sections", {
+  text1 <- "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @details
+    #' # This is its own section
+    #' With text.
+    #' @md
+    #' @name x
+    NULL
+  "
+  out1 <- roc_proc_text(rd_roclet(), text1)[[1]]
+  expect_false("details" %in% names(out1$fields))
 })

@@ -49,6 +49,34 @@ Here is an example roxygen chunk that uses markdown.
 
 # Syntax
 
+## Sections
+
+The usual markdown heading markup creates sections and subsections. Top level headings, i.e. '`#`' create sections, via the `\section{}` Rd tag. '`#`' may only appear after the `@description` and `@details` tags. Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`, if you prefer to place it towards the end of the block, after `@return` for example:
+
+```r
+#' @details
+#' Trim the leading and trailing whitespace from a character vector.
+#'
+#' @param x Character vector.
+#' @return Character vector, with the whitespace trimmed.
+#'
+#' @details # This will be a new section
+#' ...
+```
+
+Top level sections are always placed at a fixed position in the manual page, after the parameters and the details, but before `\note{}`, `\seealso{}` and the `\examples{}`. Their order will be the same as in the roxygen block.
+
+## Subsections
+
+Headings at level two and above may appear inside any roxygen tag that formats lines of text. E.g. `@description`, `@details`, `@return`, etc. They create subsections, via the `\subsection{}` Rd tag. They are allowed within top level sections as well, i.e. after '`#`'. Subsections can be nested. Example:
+
+```r
+#' @details
+#' ## Subsection within details
+#' ### Sub-subsection
+#' ... text ...
+```
+
 ## Emphasis
 
 *Emphasis* and **strong** (bold) text are supported. For emphasis, put the text between asterisks or underline characters. For strong text, use two asterisks at both sides.

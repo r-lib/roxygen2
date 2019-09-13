@@ -54,6 +54,7 @@ rmd_eval_rd <- function(path, tag) {
   mdxml <- xml2::read_xml(mdx)
   state <- new.env(parent = emptyenv())
   state$tag <- tag
+  state$has_sections <- TRUE
   rd <- mdxml_children_to_rd_top(mdxml, state = state)
   rd
 }

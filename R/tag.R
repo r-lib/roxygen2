@@ -241,3 +241,23 @@ tag_markdown <- function(x) {
   x$val <- markdown_if_active(x$val, x)
   tag_value(x)
 }
+
+#' @export
+#' @rdname roxy_tag
+tag_markdown_with_sections <- function(x) {
+  if (x$val == "") {
+    return(roxy_tag_warning(x, "requires a value"))
+  }
+
+  x$val <- markdown_if_active(x$val, x, sections = TRUE)
+  for (i in seq_along(x$val)) {
+    if (!rdComplete(x$val[i])) {
+      roxy_tag_warning(x, "mismatched braces or quotes")
+      x$val[i] <- ""
+    } else {
+      x$val[i] <- str_trim(x$val[i])
+    }
+  }
+
+  x
+}

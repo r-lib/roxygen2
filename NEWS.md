@@ -2,6 +2,10 @@
 
 * `@inheritDotParams` includes link to function and wraps paramters
   in `\code{}` (@halldc, #842)
+* Allow multiple `@inheritDotParams` (@gustavdelius, #767).
+
+* Avoid multiple `...` arguments when using `@inheritDotParams`
+  (@gustavdelius, #857).
 
 * `@family` automatically adds `()` when linking to functions (#815).
 

@@ -467,6 +467,59 @@ test_that("can inherit all from single function", {
   )
 })
 
+test_that("does not produce multiple ... args", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Foo
+    #'
+    #' @inheritParams bar
+    #' @inheritDotParams baz
+    foo <- function(x, ...) {}
+
+    #' Bar
+    #'
+    #' @param x x
+    #' @param ... dots
+    bar <- function(x, ...) {}
+
+    #' Baz
+    #'
+    #' @param y y
+    #' @param z z
+    baz <- function(y, z) {}
+  ")[[1]]
+  params <- out$get_field("param")$values
+  expect_length(params, 2)
+  expect_match(params[1], "x")
+  expect_match(params[2], "Arguments passed on to \\code{baz}", fixed = TRUE)
+})
+
+test_that("can inherit dots from several functions", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Foo
+    #'
+    #' @param x x
+    #' @param y y
+    foo <- function(x, y) {}
+
+    #' Bar
+    #'
+    #' @param z z
+    bar <- function(z) {}
+
+    #' Foobar
+    #'
+    #' @inheritDotParams foo -y
+    #' @inheritDotParams bar
+    foobar <- function(...) {}
+  ")[[3]]
+
+  params <- out$get_field("param")$values
+  expect_named(params, "...")
+  expect_match(params, "Arguments passed on to \\code{foo}, \\code{bar}",
+               fixed = TRUE)
+  expect_match(params, "\\item{x}{x}\n  \\item{z}{z}", fixed = TRUE)
+})
+
 # inherit everything ------------------------------------------------------
 
 test_that("can inherit all from single function", {

@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@inheritDotParams` includes link to function and wraps paramters
+  in `\code{}` (@halldc, #842)
+
 * `@family` automatically adds `()` when linking to functions (#815).
 
 * Headings are now allowed in markdown text. Subheadings, i.e. headings

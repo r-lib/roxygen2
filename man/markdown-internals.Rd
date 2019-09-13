@@ -43,13 +43,13 @@ The list of protected Rd tags is in \code{escaped_for_md}.
 
 Some Rd macros are treated specially:
 \itemize{
-\item For \code{if}, markdown is only allowed in the second argument.
+\item For \verb{if}, markdown is only allowed in the second argument.
 \item For \code{ifelse} markdown is allowed in the second and third arguments.
 }
 
 See also \code{roclet-rd.R} for the list of tags that
 uses the markdown-enabled parser. Some tags, e.g.
-\code{@aliases}, \code{@backref}, etc. only use the
+\verb{@aliases}, \verb{@backref}, etc. only use the
 standard Roxygen parser.
 }
 \keyword{internal}

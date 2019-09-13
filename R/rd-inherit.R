@@ -11,6 +11,8 @@ topics_process_inherit <- function(topics, env) {
   topics$topo_apply(inherits("seealso"), inherit_field, "seealso")
   topics$topo_apply(inherits("references"), inherit_field, "references")
   topics$topo_apply(inherits("examples"), inherit_field, "examples")
+  topics$topo_apply(inherits("author"), inherit_field, "author")
+  topics$topo_apply(inherits("source"), inherit_field, "source")
 
   # First inherit individual sections, then all sections.
   topics$topo_apply(function(x) x$inherits_section_from(), inherit_section)
@@ -26,19 +28,28 @@ topics_process_inherit <- function(topics, env) {
 # Inherit parameters -----------------------------------------------------------
 
 inherit_params <- function(topic, topics) {
-  documented <- get_documented_params(topic)
-  needed <- topic$get_field("formals")$values
-
-  missing <- setdiff(needed, documented)
-  if (length(missing) == 0) {
+  inheritors <- topic$inherits_from("params")
+  if (length(inheritors) == 0) {
     return()
   }
 
-  for (inheritor in topic$inherits_from("params")) {
+  documented <- get_documented_params(topic)
+  needed <- topic$get_field("formals")$values
+  missing <- setdiff(needed, documented)
+  if (length(missing) == 0) {
+    warn(paste0(
+      "Topic '", topic$get_name(), "': ",
+      "no parameters to inherit with @inheritParams"
+    ))
+    return()
+  }
+
+  for (inheritor in inheritors) {
     inherited <- find_params(inheritor, topics)
 
     to_add <- intersect(missing, names(inherited))
     if (length(to_add) == 0) {
+      # Can't warn here because @inherit inherits parameters
       next
     }
 
@@ -54,16 +65,16 @@ inherit_dot_params <- function(topic, topics, env) {
 
   # Need to find formals for each source
   funs <- lapply(inheritors$source, function(x) eval(parse(text = x), envir = env))
-  args <- Map(select_args_text, funs, inheritors$args)
+  args <- map2(funs, inheritors$args, select_args_text)
 
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
   arg_matches <- function(args, docs) {
     doc_args <- str_split(names(docs), ", ?")
-    match <- vapply(doc_args, function(x) x %in% args, logical(1))
+    match <- map_lgl(doc_args, function(x) x %in% args)
     docs[match]
   }
-  docs_selected <- unlist(Map(arg_matches, args, docs))
+  docs_selected <- unlist(map2(args, docs, arg_matches))
 
   # Build the arg string
   pkgs <- lapply(inheritors$source, function(x) {
@@ -99,7 +110,7 @@ get_documented_params <- function(topic, only_first = FALSE) {
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
     if (only_first)
-      documented <- vapply(documented, `[[`, character(1), 1L)
+      documented <- map_chr(documented, 1)
     else
       documented <- unlist(documented)
   }
@@ -109,7 +120,7 @@ get_documented_params <- function(topic, only_first = FALSE) {
 }
 
 find_params <- function(name, topics) {
-  topic <- check_topic(name, topics)
+  topic <- get_rd(name, topics)
   if (is.null(topic)) {
     return()
   }
@@ -123,18 +134,21 @@ find_params <- function(name, topics) {
 
   # Split up compound names on , (swallowing spaces) duplicating their contents
   individual_names <- strsplit(param_names, ",\\s*")
-  reps <- vapply(individual_names, length, integer(1))
+  reps <- map_int(individual_names, length)
 
   setNames(rep.int(params, reps), unlist(individual_names))
 }
 
 topic_params <- function(x) UseMethod("topic_params")
 topic_params.Rd <- function(x) {
-  arguments <- get_tags(x, "\\arguments")[[1]]
-  items <- get_tags(arguments, "\\item")
+  arguments <- get_tags(x, "\\arguments")
+  if (length(arguments) != 1) {
+    return(list())
+  }
+  items <- get_tags(arguments[[1]], "\\item")
 
-  values <- vapply(items, function(x) rd2text(x[[2]]), character(1))
-  params <- vapply(items, function(x) rd2text(x[[1]]), character(1))
+  values <- map_chr(items, function(x) rd2text(x[[2]]))
+  params <- map_chr(items, function(x) rd2text(x[[1]]))
 
   setNames(values, params)
 }
@@ -149,7 +163,7 @@ inherit_sections <- function(topic, topics) {
   current_secs <- topic$get_field("section")$title
 
   for (inheritor in topic$inherits_from("sections")) {
-    inheritor <- check_topic(inheritor, topics)
+    inheritor <- get_rd(inheritor, topics)
     if (is.null(inheritor)) {
       return()
     }
@@ -171,7 +185,7 @@ inherit_section <- function(topic, topics) {
   titles <- sections$title
 
   for (i in seq_along(sources)) {
-    inheritor <- check_topic(sources[[i]], topics)
+    inheritor <- get_rd(sources[[i]], topics)
     if (is.null(inheritor)) {
       return()
     }
@@ -196,8 +210,8 @@ find_sections <- function(topic) {
   if (inherits(topic, "Rd")) {
     tag <- get_tags(topic, "\\section")
 
-    titles <- vapply(lapply(tag, `[[`, 1), rd2text, character(1))
-    contents <- vapply(lapply(tag, `[[`, 2), rd2text, character(1))
+    titles <- map_chr(map(tag, 1), rd2text)
+    contents <- map_chr(map(tag, 2), rd2text)
 
     roxy_field_section(titles, contents)
   } else {
@@ -215,7 +229,7 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
 
   # Otherwise, try each try function listed in inherits
   for (inherit_from in topic$inherits_from(roxy_name)) {
-    inherit_topic <- check_topic(inherit_from, topics)
+    inherit_topic <- get_rd(inherit_from, topics)
     if (is.null(inherit_topic)) {
       next
     }
@@ -244,36 +258,37 @@ find_field <- function(topic, field_name) {
   }
 }
 
-
 # Find info in Rd or topic ------------------------------------------------
 
-find_topic <- function(name, topics) {
+get_rd <- function(name, topics) {
   if (has_colons(name)) {
-    tryCatch({
-      parsed <- parse(text = name)[[1]]
-      pkg <- as.character(parsed[[2]])
-      fun <- as.character(parsed[[3]])
+    # External package
+    parsed <- parse_expr(name)
+    pkg <- as.character(parsed[[2]])
+    fun <- as.character(parsed[[3]])
 
-      get_rd(fun, pkg)
-    }, error = function(e) {
-      NULL
-    })
+    tweak_links(get_rd_from_help(pkg, fun), package = pkg)
   } else {
-    # Reference within this package
+    # Current package
     rd_name <- topics$find_filename(name)
+    if (identical(rd_name, NA_character_)) {
+      warn(paste0("Can't find help topic '", name, "' in current package"))
+    }
     topics$get(rd_name)
   }
 }
 
-check_topic <- function(name, topic) {
-  topic <- find_topic(name, topic)
-  if (is.null(topic)) {
-    warning(
-      "Failed to find topic '", name, "'",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+get_rd_from_help <- function(package, alias) {
+  if (!is_installed(package)) {
+    warn(paste0("Can't find package '", package, "'"))
+    return()
   }
 
-  topic
+  help <- eval(expr(help(!!alias, !!package)))
+  if (length(help) == 0) {
+    warn(paste0("Can't find help topic '", alias, "' in '", package, "' package"))
+    return()
+  }
+
+  internal_f("utils", ".getHelpFile")(help)
 }

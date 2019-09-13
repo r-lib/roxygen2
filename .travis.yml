@@ -1,15 +1,13 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: false
 cache: packages
 
-r:
-- # 3.1
-- 3.2
-- oldrel
-- release
-- devel
-
-after_success:
-  - Rscript -e 'covr::codecov()'
+matrix:
+  include:
+  - r: release
+    before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
+    deploy:
+      provider: script
+      script: Rscript -e 'pkgdown::deploy_site_github()'
+      skip_cleanup: true

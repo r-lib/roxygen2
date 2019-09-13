@@ -1,7 +1,7 @@
 #' Default format for data
 #'
 #' This function is called to generate the default "Format" section for each
-#' data object.  The default implementation will return the class and dimension
+#' data object. The default implementation will return the class and dimension
 #' information.
 #'
 #' @param x A data object
@@ -38,4 +38,12 @@ format_dim <- function(x) {
   } else {
     paste0("of length ", length(x))
   }
+}
+
+# helpers -----------------------------------------------------------------
+
+# used for testing
+call_to_format <- function(code, env = pkg_env()) {
+  obj <- call_to_object(!!enexpr(code), env)
+  object_format(obj$value)
 }

@@ -18,7 +18,7 @@ first_time <- function(path) {
     generated <- c(generated, namespace)
   }
 
-  roxy <- vapply(generated, made_by_roxygen, logical(1))
+  roxy <- map_lgl(generated, made_by_roxygen)
   all(!roxy)
 }
 
@@ -27,15 +27,6 @@ made_by_roxygen <- function(path) {
 
   first <- read_lines(path, n = 1)
   check_made_by(first)
-}
-
-add_made_by_roxygen <- function(path, comment) {
-  if (!file.exists(path)) stop("Can't find ", path, call. = FALSE)
-
-  lines <- read_lines(path)
-  if (check_made_by(lines[1])) return()
-
-  write_lines(c(made_by(comment), lines), path)
 }
 
 check_made_by <- function(first) {
@@ -53,13 +44,28 @@ update_roxygen_version <- function(base_path) {
   desc_path <- file.path(base_path, "DESCRIPTION")
 
   cur <- as.character(utils::packageVersion("roxygen2"))
-  prev <- desc::desc_get("RoxygenNote", file = desc_path)[[1]]
+  prev <- stringr::str_trim(desc::desc_get("RoxygenNote", file = desc_path)[[1]])
 
   if (!is.na(cur) && !is.na(prev) && package_version(cur) < package_version(prev)) {
     warning("Version of roxygen2 last used with this package is ", prev, ". ",
       " You only have version ", cur, call. = FALSE, immediate. = TRUE)
   } else if (!identical(cur, prev)) {
     message("Updating roxygen version in ", desc_path)
+    upgrade_7_0_0(cur)
     desc::desc_set(RoxygenNote = cur, file = desc_path)
   }
+}
+
+upgrade_7_0_0 <- function(cur_version) {
+  if (numeric_version(cur_version) > "6.1.99") {
+    return()
+  }
+  rule <- paste0(paste(rep("-", options('width')), collapse = ""))
+  inform(c(
+    rule,
+    "Changes in roxygen2 7.0.0:",
+    "* `%` is now escaped automatically in Markdown mode.",
+    "Please carefully check .Rd files for changes",
+    rule
+  ))
 }

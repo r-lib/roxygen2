@@ -1,28 +1,14 @@
-context("Namespace")
-
 # @export -----------------------------------------------------------------
 
-test_that("export detects object name", {
+test_that("export quote object name appropriate", {
   out <- roc_proc_text(namespace_roclet(), "#' @export\na <- function(){}")
   expect_equal(out, 'export(a)')
-})
 
-test_that("export escapes quotes name if needed", {
-  out <- roc_proc_text(namespace_roclet(), "#' @export\n'a<-' <- function(){}")
-  expect_equal(out, 'export("a<-")')
-})
+  out <- roc_proc_text(namespace_roclet(), "#' @export\n`+` <- function(){}")
+  expect_equal(out, 'export(`+`)')
 
-test_that("export escapes tricky names", {
-  out <- roc_proc_text(namespace_roclet(), "#' @export\n`%||%` <- function(){}")
-  expect_equal(out, 'export("%||%")')
-  out <- roc_proc_text(namespace_roclet(), "#' @export\n`%'%` <- function(){}")
-  expect_equal(out, 'export("%\'%")')
-  out <- roc_proc_text(namespace_roclet(), "#' @export\n`%\"%` <- function(){}")
-  expect_equal(out, 'export("%\\"%")')
-  out <- roc_proc_text(namespace_roclet(), "#' @export\n`%\"%` <- function(){}")
-  expect_equal(out, 'export("%\\"%")')
-  out <- roc_proc_text(namespace_roclet(), "#' @export\n`%\\\\%` <- function(){}")
-  expect_equal(out, 'export("%\\\\%")')
+  out <- roc_proc_text(namespace_roclet(), "#' @export\n`\\`` <- function(){}")
+  expect_equal(out, 'export(`\\``)')
 })
 
 test_that("export parameter overrides default", {
@@ -65,6 +51,36 @@ test_that("export detects S3 method", {
   expect_equal(out, 'S3method(mean,foo)')
 })
 
+test_that("@exportS3method generatedsS3method()", {
+  out <- roc_proc_text(namespace_roclet(),
+    "#' @exportS3Method
+    mean.foo <- function(x) 'foo'
+  ")
+  expect_equal(out, "S3method(mean,foo)")
+
+  out <- roc_proc_text(namespace_roclet(),
+    "#' @exportS3Method base::mean
+    mean.foo <- function(x) 'foo'
+  ")
+  expect_equal(out, "S3method(base::mean,foo)")
+
+  expect_warning(
+    roc_proc_text(namespace_roclet(),
+      "#' @exportS3Method base::mean
+      NULL
+    "),
+    "an S3 method"
+  )
+
+  out <- roc_proc_text(namespace_roclet(),
+    "#' @exportS3Method base::mean foo
+    NULL
+  ")
+  expect_equal(out, "S3method(base::mean,foo)")
+
+
+})
+
 test_that("exportClass overrides default class name", {
   out <- roc_proc_text(namespace_roclet(), "#' @exportClass b\nsetClass('a')")
   expect_equal(out, 'exportClasses(b)')
@@ -82,7 +98,7 @@ test_that("export method escapes if needed", {
     setGeneric('x<-', function(x, value) standardGeneric('x<-'))
     #' @export\n
     setMethod('x<-', 'a', function(x, value) value)")
-  expect_equal(out, 'exportMethods("x<-")')
+  expect_equal(out, 'exportMethods(`x<-`)')
 })
 
 test_that("export uses name if no object present", {
@@ -142,12 +158,6 @@ test_that("poorly formed importFrom throws error", {
     #' @importFrom test
     NULL
   "), "needs at least 2 words")
-})
-
-
-test_that("S3method is depecrated", {
-  expect_warning(roc_proc_text(namespace_roclet(), "#' @S3method test test\nNULL"),
-    "@S3method is deprecated")
 })
 
 test_that("multiline importFrom parsed correctly", {
@@ -291,4 +301,13 @@ test_that("evalNamspace can yield a vector", {
     NULL")
 
   expect_equal(out, c("export(a)", "export(b)"))
+})
+
+
+# helpers -----------------------------------------------------------------
+
+test_that("auto_quote behaves as needed", {
+  expect_equal(auto_quote("x"), "x")
+  expect_equal(auto_quote("if"), '"if"') # quotes non-syntactic
+  expect_equal(auto_quote("'if'"), "'if'") # unless already quoted
 })

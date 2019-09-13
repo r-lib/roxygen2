@@ -15,24 +15,13 @@ object_defaults.data <- function(x) {
 }
 
 #' @export
-object_defaults.import <- function(x) {
-  list(
-    docType = "import",
-    name = "reexports",
-    keywords = "internal",
-    title = "Objects exported from other packages",
-    .reexport = roxy_field_reexport(x$value$pkg, x$value$fun)
-  )
-}
-
-#' @export
 object_defaults.package <- function(x) {
   desc <- x$value$desc
 
   description <- as.character(desc$Description)
   logo_path <- file.path(x$value$path, "man", "figures", "logo.png")
   if (file.exists(logo_path)) {
-    fig <- "\\if{html}{\\figure{logo.png}{options: align='right'}}"
+    fig <- "\\if{html}{\\figure{logo.png}{options: align='right' alt='logo' width='120'}}"
     description <- paste0(fig, "\n\n", description)
   }
 

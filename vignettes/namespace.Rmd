@@ -1,10 +1,8 @@
 ---
-title: "Package namespace"
-author: "Hadley Wickham"
-date: "`r Sys.Date()`"
+title: "NAMESPACE tags"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Package namespace}
+  %\VignetteIndexEntry{NAMESPACE tags}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -37,6 +35,9 @@ Use the following guidelines to decide what to export:
 * S3 methods: every S3 method _must_ be exported, even if the generic is not.
   Otherwise the S3 method table will not be generated correctly and internal
   generics will not find the correct method.
+  
+    If you are providing a method for a generic defined in another package,
+    you must also import that generate.
 
 * S4 classes: if you want others to be able to extend your class, `@export` it.
   If you want others to create instances of your class, but not extend it,
@@ -64,12 +65,21 @@ Use the following guidelines to decide what to export:
 * S4 generics: `@export` if you want the generic to be publicly usable.
 
 * S4 methods: you only need to `@export` methods for generics that you
-  did not define. But `@export`ing every method is a good idea as it
-  will not cause problems and prevents you from forgetting to export an
-  important method.
+  did not define.
 
 * RC classes: the same principles apply as for S4 classes. `@export`
   will only export the class.
+
+### Specialised exports
+
+Generally, roxygen2 can genereate the correct namespace directive when `@export`ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:
+
+* `@export foo` generates `export(foo)`
+* `@exportClass foo` generates `exportClasses(foo)`
+* `@exportMethod foo` generates `exportMethods(foo)`
+* `@exportPattern foo` generates `exportPattern(foo)`
+
+For even more specialised cases you can use `@rawNamespace code` which inserts `code` literally into the `NAMESPACE`. If you need to automate this, `@evalNamespace foo()` will evaluate the `foo()` in the package environment and insert the results into `NAMESPACE`.
 
 ## Imports
 
@@ -85,7 +95,8 @@ If you are using S4 you may also need:
 
 * `@importClassesFrom package classa classb ...` to import selected S4 classes.
 
-* `@importMethodsFrom package methoda methodb ...` to import selected S4 methods.
+* `@importMethodsFrom package methoda methodb ...` to import selected S4 
+  methods.
 
 To import compiled code from another package, use `@useDynLib`
 

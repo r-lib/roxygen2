@@ -1,5 +1,3 @@
-context("Collate")
-
 test_that("collation as expected", {
   results <- generate_collate("collate")
   names <- str_replace(basename(results), "\\..*$", "")
@@ -46,10 +44,3 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
   expect_true(!length(capture.output(update_collate(pkg_path))), info = "update_collate on complete package: DESCRIPTION file is NOT updated")
 
  })
-
-test_that("Collate with one file name per line (#790)", {
-  expect_equal(
-    package_files('testCollateParse'),
-    normalizePath(c("testCollateParse/R/b.r", "testCollateParse/R/c.r"))
-  )
-})

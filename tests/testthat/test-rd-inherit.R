@@ -462,7 +462,7 @@ test_that("can inherit all from single function", {
   ")[[2]]
 
   verify_output(
-    test_path("test-Rd-inherit-dots.txt"),
+    test_path("test-rd-inherit-dots.txt"),
     out$get_field("param")
   )
 })

@@ -54,7 +54,8 @@ roclet_tags.roclet_rd <- function(x) {
     includeRmd = tag_value,
     inherit = tag_inherit,
     inheritParams = tag_value,
-    inheritDotParams = tag_two_part("source", "args", required = FALSE),
+    inheritDotParams =
+      tag_two_part("source", "args", required = FALSE, markdown = FALSE),
     inheritSection = tag_name_description,
     keywords = tag_value,
     method = tag_words(2, 2),

@@ -27,7 +27,7 @@ tag_inherit(x)
 
 tag_name(x)
 
-tag_two_part(first, second, required = TRUE)
+tag_two_part(first, second, required = TRUE, markdown = TRUE)
 
 tag_name_description(x)
 
@@ -58,6 +58,8 @@ a character vector, but sometimes a list).}
 
 \item{required}{Is the second part required (TRUE) or can it be blank
 (FALSE)?}
+
+\item{markdown}{Should the second part be parsed as markdown?}
 
 \item{min, max}{Minimum and maximum number of words}
 }

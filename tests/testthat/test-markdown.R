@@ -549,3 +549,9 @@ test_that("headings and empty sections", {
   out1 <- roc_proc_text(rd_roclet(), text1)[[1]]
   expect_false("details" %in% names(out1$fields))
 })
+
+test_that("markdown() on empty input", {
+  expect_identical(markdown(""), "")
+  expect_identical(markdown("  "), "")
+  expect_identical(markdown("\n"), "")
+})

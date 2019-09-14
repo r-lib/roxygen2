@@ -136,3 +136,18 @@ test_that("links to functions, with anchors", {
   )
   expect_equal_strings(out1$fields$details$values, exp_details)
 })
+
+test_that("empty Rmd", {
+  tmp <- tempfile()
+  on.exit(unlink(tmp), add = TRUE)
+  tag <- roxy_tag("includeRmd", tmp)
+
+  cat("", sep = "", file = tmp)
+  expect_equal(rmd_eval_rd(tmp, tag), "")
+
+  cat("  ", sep = "", file = tmp)
+  expect_equal(rmd_eval_rd(tmp, tag), "")
+
+  cat("\n", sep = "", file = tmp)
+  expect_equal(rmd_eval_rd(tmp, tag), "")
+})

@@ -30,6 +30,7 @@ mdxml_children_to_rd_top <- function(xml, state) {
   out <- c(out, mdxml_close_sections(state))
   rd <- paste0(out, collapse = "")
   secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]]
+  if (length(secs) == 0) secs <- ""
   str_trim(secs)
 }
 

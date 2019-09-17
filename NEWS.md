@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@inheritDotParams` automatically ignores arguments that can't be inherited
+  through `...` because they are used by the current function (@mjskay, #885).
+
 * `@inheritDotParams` includes link to function and wraps paramters
   in `\code{}` (@halldc, #842)
 

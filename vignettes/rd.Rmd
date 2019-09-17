@@ -402,6 +402,20 @@ add <- function(x, y) x + y
 times <- function(x, y) x * y
 ```
 
+### Order of includes
+
+By default, roxygen blocks are processed in the order in which they appear in the file. When you're combining multiple files, this can sometimes cause the function usage to appear in a suboptimal order. You can override the default ordering with `@order`. For example, the following the block would place `times` first in `arith.Rd` because 1 comes before 2.
+
+```{r}
+#' @rdname arith
+#' @order 2
+add <- function(x, y) x + y
+
+#' @rdname arith
+#' @order 1
+times <- function(x, y) x * y
+```
+
 ### Evaluating arbitrary code
 
 A new and powerful technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).

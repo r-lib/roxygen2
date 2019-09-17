@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* New `@order n` tag controls the order in which blocks are processed. You can
+  use it to override the usual ordering which proceeds in from the top of 
+  each file to the bottom. `@order 1` will be processed before `@order 2`, 
+  and before any blocks that don't have an explicit order set (#863).
+
 * `@example` and `@examples` are interwoven in the order in which they
   appear (#868).
 

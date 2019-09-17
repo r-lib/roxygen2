@@ -47,6 +47,7 @@ parse_package <- function(path = ".",
     )
   }
 
+  blocks <- order_blocks(blocks)
   blocks
 }
 
@@ -70,6 +71,7 @@ parse_file <- function(file,
     )
   }
 
+  blocks <- order_blocks(blocks)
   blocks
 }
 
@@ -84,12 +86,14 @@ parse_text <- function(text,
   write_lines(text, file)
   on.exit(unlink(file))
 
-  parse_file(
+  blocks <- parse_file(
     file,
     env = env,
     registry = registry,
     global_options = global_options
   )
+  blocks <- order_blocks(blocks)
+  blocks
 }
 
 #' @export
@@ -110,4 +114,24 @@ env_package <- function(path) {
     helpers = FALSE,
     attach_testthat = FALSE
   )$env
+}
+
+
+# helpers -----------------------------------------------------------------
+
+order_blocks <- function(blocks) {
+  block_order <- function(x) {
+    if (!"order" %in% names(x)) {
+      Inf
+    } else {
+      ord <- x[names(x) == "order"]
+      if (length(ord) > 1) {
+        ord <- ord[[length(ord)]]
+      }
+      as.double(ord)
+    }
+  }
+
+  ord <- vapply(blocks, block_order, double(1))
+  blocks[order(ord)]
 }

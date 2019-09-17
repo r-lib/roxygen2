@@ -136,7 +136,10 @@ tag_two_part <- function(first, second, required = TRUE, markdown = TRUE) {
     } else {
       pieces <- str_split_fixed(str_trim(x$val), "[[:space:]]+", 2)
 
-      if (markdown) pieces[,2] <- markdown_if_active(pieces[,2], x)
+      if (markdown) {
+        pieces[,2] <- markdown_if_active(pieces[,2], x)
+      }
+
       x$val <- list(
         pieces[, 1],
         trim_docstring(pieces[,2])

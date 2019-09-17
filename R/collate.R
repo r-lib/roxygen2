@@ -17,7 +17,7 @@
 #' This is not a roclet because roclets need the values of objects in a package,
 #' and those values can not be generated unless you've sourced the files,
 #' and you can't source the files unless you know the correct order.
-
+#'
 #' If there are no `@include` tags, roxygen2 will leave collate as is.
 #' This makes it easier to use roxygen2 with an existing collate directive,
 #' but if you remove all your `@include` tags, you'll need to also

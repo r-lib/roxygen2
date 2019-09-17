@@ -14,17 +14,18 @@ test_that("@example loads from specified files", {
   expect_match(examples, fixed("example <- 'example2'"), all = FALSE)
 })
 
-test_that("@examples captures examples", {
+test_that("@example captures examples (#470)", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @title a
-    #'
-    #' @examples a <- 2
-    #'
+    #' @examples
+    #' TRUE
+    #' @examples
+    #' FALSE
     NULL")[[1]]
 
   examples <- get_tag(out, "examples")$values
-  expect_match(examples, fixed("a <- 2"), all = FALSE)
+  expect_equal(examples, rd(c("TRUE", "FALSE")))
 })
 
 test_that("@examples and @example interleave", {
@@ -67,39 +68,16 @@ test_that("@example gives warning if used instead of @examples", {
   expect_null(get_tag(out, "examples")$values, NULL)
 })
 
-
-test_that("indentation in examples preserved", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @name a
-    #' @title a
-    #' @examples a <-
-    #'     2
-    NULL")[[1]]
-
-  examples <- get_tag(out, "examples")$values
-  expect_match(examples, fixed("a <-\n    2"), all = FALSE)
-})
-
-test_that("% and \\ in @example escaped", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @name a
-    #' @title a
-    #' @example Rd-example-4.R
-    NULL")[[1]]
-
-  examples <- get_tag(out, "examples")$values
-  expect_equal(examples, rd("x \\%*\\% y # \\\\x"))
-})
-
-test_that("\\dontrun in @example unescaped", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @name a
-    #' @title a
-    #' @example Rd-example-5.txt
-    NULL")[[1]]
-
-  examples <- get_tag(out, "examples")$values
-  expect_equal(examples, rd("\\dontrun{x <- 1}"))
+test_that("warns if path doesn't exist", {
+  expect_warning(
+    roc_proc_text(rd_roclet(), "
+      #' @name a
+      #' @title a
+      #' @example this-path-doesnt-exist.R
+      NULL
+    "),
+    "doesn't exist"
+  )
 })
 
 test_that("% in @examples escaped before matching braces test (#213)", {
@@ -114,22 +92,16 @@ test_that("% in @examples escaped before matching braces test (#213)", {
   expect_equal(examples, rd("{a \\%\\% b}"))
 })
 
-test_that("multiple examples (#470)", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @name a
-    #' @title a
-    #' @examples
-    #' TRUE
-    #' @examples
-    #' FALSE
-    NULL")[[1]]
-
-  examples <- get_tag(out, "examples")$values
-  expect_equal(examples, rd(c("TRUE", "FALSE")))
-})
-
 # escapes ------------------------------------------------------------------
+
+test_that("% and \\ in @example escaped", {
+  expect_equal(escape_examples("x %*% y # \\x"), rd("x \\%*\\% y # \\\\x"))
+})
 
 test_that("escapes within strings are not double escaped", {
   expect_equal(escape_examples("'34.00\\'"), rd("'34.00\\'"))
+})
+
+test_that("\\dontrun is not escaped", {
+  expect_equal(escape_examples("\\dontrun{x <- 1}"), rd("\\dontrun{x <- 1}"))
 })

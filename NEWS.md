@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@example` and `@examples` are interwoven in the order in which they
+  appear (#868).
+
 * `@inheritDotParams` automatically ignores arguments that can't be inherited
   through `...` because they are used by the current function (@mjskay, #885).
 

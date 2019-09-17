@@ -27,17 +27,18 @@ test_that("@examples captures examples", {
   expect_match(examples, fixed("a <- 2"), all = FALSE)
 })
 
-test_that("@examples and @example combine", {
+test_that("@examples and @example interleave", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @title a
     #' @example Rd-example-1.R
     #' @examples a <- 2
+    #' @example Rd-example-2.R
     NULL")[[1]]
 
-  examples <- get_tag(out, "examples")$values
-  expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
-  expect_match(examples, fixed("a <- 2"), all = FALSE)
+  verify_output(test_path("test-rd-examples-interleave.txt"), {
+    get_tag(out, "examples")
+  })
 })
 
 test_that("@example does not introduce extra empty lines", {

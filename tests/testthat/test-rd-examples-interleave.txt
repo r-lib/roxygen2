@@ -1,0 +1,7 @@
+> get_tag(out, "examples")
+\examples{
+example <- 'example1'
+a <- 2
+example <- 'example2'
+} 
+

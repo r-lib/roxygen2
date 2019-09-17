@@ -1,33 +1,31 @@
-
-# If \code{@@examples} is provided, use that; otherwise, concatenate
-# the files pointed to by each \code{@@example}.
 topic_add_examples <- function(topic, block, base_path) {
-  examples <- block_tags(block, "examples")
-  for (example in examples) {
+  examples <- block_tags(block, c("examples", "example"))
+
+  for (i in seq_along(examples)) {
+    if (names(examples)[[i]] == "examples") {
+      example <- examples[[i]]
+    } else {
+      example <- read_example_from_path(str_trim(examples[[i]]), base_path, block = block)
+    }
     topic$add_simple_field("examples", example)
   }
+}
 
-  paths <- str_trim(unlist(block_tags(block, "example")))
-  paths <- file.path(base_path, paths)
-
-  for (path in paths) {
-    # Check that haven't accidentally used example instead of examples
-    nl <- str_count(path, "\n")
-    if (any(nl) > 0) {
-      block_warning(block, "@example spans multiple lines. Do you want @examples?")
-      next
-    }
-
-    if (!file.exists(path)) {
-      block_warning(block, "@example ", path, " doesn't exist")
-      next
-    }
-
-    code <- read_lines(path)
-    examples <- escape_examples(code)
-
-    topic$add_simple_field("examples", examples)
+read_example_from_path <- function(path, base_path, block = NULL) {
+  nl <- str_count(path, "\n")
+  if (any(nl) > 0) {
+    block_warning(block, "@example spans multiple lines. Do you want @examples?")
+    return()
   }
+
+  path <- file.path(base_path, path)
+  if (!file.exists(path)) {
+    block_warning(block, "@example ", path, " doesn't exist")
+    return()
+  }
+
+  code <- read_lines(path)
+  escape_examples(code)
 }
 
 # Works like escape, but unescapes special rd example commands.

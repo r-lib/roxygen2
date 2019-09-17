@@ -17,6 +17,7 @@ print.rd <- function(x, ...) {
 }
 
 escape <- function(x) UseMethod("escape")
+escape.NULL <- function(x) NULL
 escape.rd <- function(x) x
 escape.character <- function(x) {
   # wrap_usage uses \u{A0}, the unicode non-breaking space, which

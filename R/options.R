@@ -17,7 +17,8 @@ load_options <- function(base_path = ".") {
   defaults <- list(
     wrap = FALSE,
     roclets = c("collate", "namespace", "rd"),
-    markdown = markdown_global_default
+    markdown = markdown_global_default,
+    old_usage = FALSE
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))

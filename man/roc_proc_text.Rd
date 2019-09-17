@@ -4,8 +4,12 @@
 \alias{roc_proc_text}
 \title{Process roclet on string and capture results.}
 \usage{
-roc_proc_text(roclet, input, registry = default_tags(),
-  global_options = list())
+roc_proc_text(
+  roclet,
+  input,
+  registry = default_tags(),
+  global_options = list()
+)
 }
 \arguments{
 \item{roclet}{Name of roclet to use for processing.}

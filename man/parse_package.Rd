@@ -8,14 +8,26 @@
 \alias{env_package}
 \title{Parse a package, file, or inline code}
 \usage{
-parse_package(path = ".", env = env_package(path),
-  registry = default_tags(), global_options = list())
+parse_package(
+  path = ".",
+  env = env_package(path),
+  registry = default_tags(),
+  global_options = list()
+)
 
-parse_file(file, env = env_file(file), registry = default_tags(),
-  global_options = list())
+parse_file(
+  file,
+  env = env_file(file),
+  registry = default_tags(),
+  global_options = list()
+)
 
-parse_text(text, env = env_file(file), registry = default_tags(),
-  global_options = list())
+parse_text(
+  text,
+  env = env_file(file),
+  registry = default_tags(),
+  global_options = list()
+)
 
 env_file(file)
 

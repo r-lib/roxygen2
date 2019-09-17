@@ -153,6 +153,7 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>@inheritDotParams</code> automatically ignores arguments that can’t be inherited through <code>...</code> because they are used by the current function (<a href='https://github.com/mjskay'>@mjskay</a>, <a href='https://github.com/r-lib/roxygen2/issues/885'>#885</a>).</p></li>
 <li>
 <p>The default formatting for function usage that spans multiple lines has now changed. Previously it was wrapped to produce the fewest number of lines, e.g.:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="../reference/parse_package.html">parse_package</a></span>(<span class="dt">path =</span> <span class="st">"."</span>, <span class="dt">env =</span> <span class="kw"><a href="../reference/parse_package.html">env_package</a></span>(path), </a>

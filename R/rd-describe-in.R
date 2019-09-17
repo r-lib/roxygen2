@@ -30,7 +30,7 @@ topic_add_describe_in <- function(topic, block, env) {
     label$label,
     tags$describeIn$description
   ))
-  object_topic(dest)
+  dest$topic
 }
 
 # Imperfect:
@@ -38,13 +38,11 @@ topic_add_describe_in <- function(topic, block, env) {
 # * can't use if @name overridden, but then you could just the use alias
 find_object <- function(name, env) {
   if (methods::isClass(name, where = env)) {
-    object(methods::getClass(name, where = env))
+    object(methods::getClass(name, where = env), NULL, "s4class")
   } else if (exists(name, envir = env)) {
-    obj <- get(name, envir = env)
-    obj <- standardise_obj(name, obj, env = env)
-    object(obj, name)
+    object_from_name(name, env, NULL)
   } else {
-    object(NULL, name)
+    object(NULL, name, "data")
   }
 }
 
@@ -73,13 +71,10 @@ build_label <- function(src, dest, block) {
     # Label S3 methods in generic with their class
     type <- "generic"
     label <- attr(src$value, "s3method")[2]
-  } else if (dest_type %in% c("function", "data") && src_type == "function") {
-    # Multiple functions in one Rd labelled with function names
-    type <- "function"
-    label <- object_name(src)
   } else {
-    block_warning(block, "Don't know how to describe ", src_type, " in ", dest_type)
-    return(NULL)
+    # Otherwise just fallback to function + topic
+    type <- "function"
+    label <- src$topic
   }
 
   list(type = type, label = label)

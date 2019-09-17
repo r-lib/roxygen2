@@ -15,17 +15,6 @@ object_defaults.data <- function(x) {
 }
 
 #' @export
-object_defaults.import <- function(x) {
-  list(
-    docType = "import",
-    name = "reexports",
-    keywords = "internal",
-    title = "Objects exported from other packages",
-    .reexport = roxy_field_reexport(x$value$pkg, x$value$fun)
-  )
-}
-
-#' @export
 object_defaults.package <- function(x) {
   desc <- x$value$desc
 

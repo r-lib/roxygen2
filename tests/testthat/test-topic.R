@@ -1,5 +1,3 @@
-context("Topic")
-
 test_that("adding tags merges with existing", {
   rd <- RoxyTopic$new()
 

@@ -78,8 +78,9 @@ tag_inherit <- function(x) {
     pieces <- str_split(str_trim(x$val), "\\s+")[[1]]
     fields <- pieces[-1]
 
+    # Also recorded in `rd.Rmd`
     all <- c("params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples")
+      "sections", "references", "examples", "author", "source")
     if (length(fields) == 0) {
       fields <- all
     } else {
@@ -120,19 +121,13 @@ tag_name <- function(x) {
 #' @param first,second Name of first and second parts of two part tags
 #' @param required Is the second part required (TRUE) or can it be blank
 #'   (FALSE)?
-tag_two_part <- function(first, second, required = TRUE) {
-
-  ## For now we parse only the second part as markdown, because
-  ## * for all current use cases, coming from tag_name_description
-  ##   (describeIn, field, inheritSection, param, slot, templateVar),
-  ##   this is the right thing to do, and
-  ## * if the two-part tag generally consists of a name and a
-  ##   description, then this is a sensible default.
-  ## In the future we might need extra arguments to this function to
-  ## override this behavior
+#' @param markdown Should the second part be parsed as markdown?
+tag_two_part <- function(first, second, required = TRUE, markdown = TRUE) {
+  force(required)
+  force(markdown)
 
   function(x) {
-    if (x$val == "") {
+    if (str_trim(x$val) == "") {
       roxy_tag_warning(x, "requires a value")
     } else if (required && !str_detect(x$val, "[[:space:]]+")) {
       roxy_tag_warning(x, "requires ", first, " and ", second)
@@ -141,9 +136,13 @@ tag_two_part <- function(first, second, required = TRUE) {
     } else {
       pieces <- str_split_fixed(str_trim(x$val), "[[:space:]]+", 2)
 
+      if (markdown) {
+        pieces[,2] <- markdown_if_active(pieces[,2], x)
+      }
+
       x$val <- list(
         pieces[, 1],
-        trim_docstring(full_markdown(pieces[, 2]))
+        trim_docstring(pieces[,2])
       )
       names(x$val) <- c(first, second)
       x
@@ -237,13 +236,26 @@ tag_examples <- function(x) {
 #' @export
 #' @rdname roxy_tag
 tag_markdown <- function(x) {
-  x$val <- full_markdown(x$val)
+  x$val <- markdown_if_active(x$val, x)
   tag_value(x)
 }
 
 #' @export
 #' @rdname roxy_tag
-tag_markdown_restricted <- function(x) {
-  x$val <- restricted_markdown(x$val)
-  tag_value(x)
+tag_markdown_with_sections <- function(x) {
+  if (x$val == "") {
+    return(roxy_tag_warning(x, "requires a value"))
+  }
+
+  x$val <- markdown_if_active(x$val, x, sections = TRUE)
+  for (i in seq_along(x$val)) {
+    if (!rdComplete(x$val[i])) {
+      roxy_tag_warning(x, "mismatched braces or quotes")
+      x$val[i] <- ""
+    } else {
+      x$val[i] <- str_trim(x$val[i])
+    }
+  }
+
+  x
 }

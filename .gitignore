@@ -8,3 +8,8 @@
 inst/doc
 revdep/checks
 revdep/library
+docs/
+/r-packages
+/.Rprofile
+doc
+Meta

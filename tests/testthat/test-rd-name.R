@@ -69,19 +69,3 @@ test_that("@name overides default", {
   expect_equal(get_tag(out, "name")$values, "b")
   expect_equal(sort(get_tag(out, "alias")$values), c("a", "b"))
 })
-
-test_that("refclass topicname has class prefix", {
-  env <- pkg_env()
-  setRefClass("X1", where = env)
-  on.exit(removeClass("X1", where = env))
-  obj <- object(getClass("X1", where = env))
-  expect_equal(object_topic(obj), "X1-class")
-})
-
-test_that("class topicname has class prefix", {
-  env <- pkg_env()
-  setClass("Y1", where = env)
-  on.exit(removeClass("Y1", where = env))
-  obj <- object(getClass("Y1", where = env))
-  expect_equal(object_topic(obj), "Y1-class")
-})

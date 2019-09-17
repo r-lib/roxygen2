@@ -23,7 +23,7 @@ is_roxy_field <- function(x) inherits(x, "roxy_field")
 
 #' @export
 print.roxy_field <- function(x, ...) {
-  cat(format(x), "\n")
+  cat(format(x, wrap = FALSE), "\n")
 }
 
 #' @export
@@ -35,6 +35,16 @@ format.roxy_field <- function(x, ...) {
 merge.roxy_field <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
   roxy_field_simple(x$field, c(x$values, y$values))
+}
+
+#' @export
+merge.roxy_field_param <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  # When parameters appear in both x and y, keep values from y
+  # This happens for example when inherit_dot_params adds a "..." param after
+  # inherit_params has done the same.
+  to_add <- setdiff(names(x$values), names(y$values))
+  roxy_field_simple(x$field, c(x$values[to_add], y$values))
 }
 
 
@@ -64,8 +74,7 @@ format_rd <- function(x, ..., sort = TRUE) {
     x$values <- sort_c(x$values)
   }
 
-  vapply(x$values, rd_macro, field = x$field,
-    FUN.VALUE = character(1), USE.NAMES = FALSE)
+  map_chr(x$values, rd_macro, field = x$field)
 }
 #' @export
 format.roxy_field_keyword <- format_rd
@@ -228,41 +237,6 @@ format.roxy_field_minidesc <- function(x, ...) {
   )
 }
 
-# Re-export ----------------------------------------------------------------
-
-roxy_field_reexport <- function(pkg, fun) {
-  stopifnot(is.character(pkg), is.character(fun))
-  stopifnot(length(pkg) == length(fun))
-
-  roxy_field("reexport", pkg = pkg, fun = fun)
-}
-
-#' @export
-merge.roxy_field_reexport <- function(x, y, ...) {
-  stopifnot(identical(class(x), class(y)))
-  roxy_field_reexport(c(x$pkg, y$pkg), c(x$fun, y$fun))
-}
-
-#' @export
-format.roxy_field_reexport <- function(x, ...) {
-  pkgs <- split(x$fun, x$pkg)
-  pkg_links <- Map(pkg = names(pkgs), funs = pkgs, function(pkg, funs) {
-    links <- paste0("\\code{\\link[", pkg, "]{", escape(funs), "}}",
-      collapse = ", ")
-    paste0("\\item{", pkg, "}{", links, "}")
-  })
-
-  paste0(
-    "\\description{\n",
-    "These objects are imported from other packages. Follow the links\n",
-    "below to see their documentation.\n",
-    "\n",
-    "\\describe{\n",
-    paste0("  ", unlist(pkg_links), collapse = "\n\n"),
-    "\n}}\n"
-  )
-}
-
 # Inherit ----------------------------------------------------------------
 
 # For each unique source, list which fields it inherits from
@@ -321,7 +295,7 @@ format.roxy_field_inherit_dot_params <- format_null
 #' @export
 merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_section(c(x$source, y$source), c(x$args, y$args))
+  roxy_field_inherit_dot_params(c(x$source, y$source), c(x$args, y$args))
 }
 
 # Sections ----------------------------------------------------------------

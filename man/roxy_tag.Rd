@@ -14,7 +14,7 @@
 \alias{tag_code}
 \alias{tag_examples}
 \alias{tag_markdown}
-\alias{tag_markdown_restricted}
+\alias{tag_markdown_with_sections}
 \title{Parsing tags.}
 \usage{
 roxy_tag(tag, val, file = "", line = 0)
@@ -27,7 +27,7 @@ tag_inherit(x)
 
 tag_name(x)
 
-tag_two_part(first, second, required = TRUE)
+tag_two_part(first, second, required = TRUE, markdown = TRUE)
 
 tag_name_description(x)
 
@@ -43,7 +43,7 @@ tag_examples(x)
 
 tag_markdown(x)
 
-tag_markdown_restricted(x)
+tag_markdown_with_sections(x)
 }
 \arguments{
 \item{tag}{Tag name}
@@ -58,6 +58,8 @@ a character vector, but sometimes a list).}
 
 \item{required}{Is the second part required (TRUE) or can it be blank
 (FALSE)?}
+
+\item{markdown}{Should the second part be parsed as markdown?}
 
 \item{min, max}{Minimum and maximum number of words}
 }

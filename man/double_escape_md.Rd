@@ -26,4 +26,9 @@ Each of the following bullets should look the same when rendered:
 [ this isn't a link ]
 \[ neither is this \]
 }
+\examples{
+"\%" # percent
+"\"" # double quote
+'\'' # single quote
+}
 \keyword{internal}

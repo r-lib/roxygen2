@@ -126,3 +126,9 @@ test_that("multiple examples (#470)", {
   examples <- get_tag(out, "examples")$values
   expect_equal(examples, rd(c("TRUE", "FALSE")))
 })
+
+# escapes ------------------------------------------------------------------
+
+test_that("escapes within strings are not double escaped", {
+  expect_equal(escape_examples("'34.00\\'"), rd("'34.00\\'"))
+})

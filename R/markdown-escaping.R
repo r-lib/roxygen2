@@ -237,7 +237,10 @@ make_random_string <- function(length = 32) {
 #' @param text Input text.
 #' @return Double-escaped text.
 #' @keywords internal
-
+#' @examples
+#' "%" # percent
+#' "\"" # double quote
+#' '\'' # single quote
 double_escape_md <- function(text) {
   text <- gsub("\\", "\\\\", text, fixed = TRUE)
 

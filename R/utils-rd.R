@@ -29,11 +29,6 @@ escape.character <- function(x) {
   rd(x2)
 }
 
-# Works like escape, but unescapes special rd example commands
-escape_examples <- function(x) {
-  gsub("\\\\dont", "\\dont", escape(x))
-}
-
 # Works like paste, but automatically escapes all input variables,
 # but not literal strings
 build_rd <- function(..., collapse = NULL, sep = "") {

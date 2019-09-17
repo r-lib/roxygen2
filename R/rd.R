@@ -369,37 +369,6 @@ topic_add_fields <- function(topic, block) {
   process_def_tag(topic, block, "field")
 }
 
-# If \code{@@examples} is provided, use that; otherwise, concatenate
-# the files pointed to by each \code{@@example}.
-topic_add_examples <- function(topic, block, base_path) {
-  examples <- block_tags(block, "examples")
-  for (example in examples) {
-    topic$add_simple_field("examples", example)
-  }
-
-  paths <- str_trim(unlist(block_tags(block, "example")))
-  paths <- file.path(base_path, paths)
-
-  for (path in paths) {
-    # Check that haven't accidentally used example instead of examples
-    nl <- str_count(path, "\n")
-    if (any(nl) > 0) {
-      block_warning(block, "@example spans multiple lines. Do you want @examples?")
-      next
-    }
-
-    if (!file.exists(path)) {
-      block_warning(block, "@example ", path, " doesn't exist")
-      next
-    }
-
-    code <- read_lines(path)
-    examples <- escape_examples(code)
-
-    topic$add_simple_field("examples", examples)
-  }
-}
-
 topic_add_eval_rd <- function(topic, block, env) {
   tags <- block_tags(block, "evalRd")
 

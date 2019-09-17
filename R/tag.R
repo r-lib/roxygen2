@@ -123,16 +123,6 @@ tag_name <- function(x) {
 #'   (FALSE)?
 #' @param markdown Should the second part be parsed as markdown?
 tag_two_part <- function(first, second, required = TRUE, markdown = TRUE) {
-
-  ## For now we parse only the second part as markdown, because
-  ## * for all current use cases, coming from tag_name_description
-  ##   (describeIn, field, inheritSection, param, slot, templateVar),
-  ##   this is the right thing to do, and
-  ## * if the two-part tag generally consists of a name and a
-  ##   description, then this is a sensible default.
-  ## In the future we might need extra arguments to this function to
-  ## override this behavior
-
   force(required)
   force(markdown)
 

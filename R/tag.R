@@ -121,16 +121,10 @@ tag_name <- function(x) {
 #' @param first,second Name of first and second parts of two part tags
 #' @param required Is the second part required (TRUE) or can it be blank
 #'   (FALSE)?
-tag_two_part <- function(first, second, required = TRUE) {
-
-  ## For now we parse only the second part as markdown, because
-  ## * for all current use cases, coming from tag_name_description
-  ##   (describeIn, field, inheritSection, param, slot, templateVar),
-  ##   this is the right thing to do, and
-  ## * if the two-part tag generally consists of a name and a
-  ##   description, then this is a sensible default.
-  ## In the future we might need extra arguments to this function to
-  ## override this behavior
+#' @param markdown Should the second part be parsed as markdown?
+tag_two_part <- function(first, second, required = TRUE, markdown = TRUE) {
+  force(required)
+  force(markdown)
 
   function(x) {
     if (str_trim(x$val) == "") {
@@ -142,9 +136,13 @@ tag_two_part <- function(first, second, required = TRUE) {
     } else {
       pieces <- str_split_fixed(str_trim(x$val), "[[:space:]]+", 2)
 
+      if (markdown) {
+        pieces[,2] <- markdown_if_active(pieces[,2], x)
+      }
+
       x$val <- list(
         pieces[, 1],
-        trim_docstring(markdown_if_active(pieces[, 2], x))
+        trim_docstring(pieces[,2])
       )
       names(x$val) <- c(first, second)
       x

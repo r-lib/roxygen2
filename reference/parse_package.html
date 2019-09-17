@@ -162,14 +162,26 @@ defaults that generate a temporary environment making it possible to
 associate each block with the corresponding live object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parse_package</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'>env_package</span>(<span class='no'>path</span>),
-  <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'>default_tags</span>(), <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+    <pre class="usage"><span class='fu'>parse_package</span>(
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"."</span>,
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'>env_package</span>(<span class='no'>path</span>),
+  <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'>default_tags</span>(),
+  <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+)
 
-<span class='fu'>parse_file</span>(<span class='no'>file</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'>env_file</span>(<span class='no'>file</span>), <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'>default_tags</span>(),
-  <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<span class='fu'>parse_file</span>(
+  <span class='no'>file</span>,
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'>env_file</span>(<span class='no'>file</span>),
+  <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'>default_tags</span>(),
+  <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+)
 
-<span class='fu'>parse_text</span>(<span class='no'>text</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'>env_file</span>(<span class='no'>file</span>), <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'>default_tags</span>(),
-  <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<span class='fu'>parse_text</span>(
+  <span class='no'>text</span>,
+  <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'>env_file</span>(<span class='no'>file</span>),
+  <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'>default_tags</span>(),
+  <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+)
 
 <span class='fu'>env_file</span>(<span class='no'>file</span>)
 

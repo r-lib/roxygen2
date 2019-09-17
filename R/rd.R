@@ -154,7 +154,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_simple_tags(rd, block)
   topic_add_sections(rd, block)
   topic_add_slots(rd, block)
-  topic_add_usage(rd, block)
+  topic_add_usage(rd, block, old_usage = global_options$old_usage)
   topic_add_value(rd, block)
 
   if (rd$has_field("description") && rd$has_field("reexport")) {
@@ -295,8 +295,7 @@ topic_add_methods <- function(topic, block) {
 
   desc <- lapply(methods, function(x) docstring(x$value@.Data))
   usage <- map_chr(methods, function(x) {
-    usage <- function_usage(x$value@name, formals(x$value@.Data))
-    as.character(wrap_usage(usage))
+    function_usage(x$value@name, formals(x$value@.Data))
   })
 
   has_docs <- !map_lgl(desc, is.null)
@@ -349,9 +348,9 @@ topic_add_keyword <- function(topic, block) {
 }
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
-topic_add_usage <- function(topic, block) {
+topic_add_usage <- function(topic, block, old_usage = FALSE) {
   if (is.null(block$usage)) {
-    usage <- wrap_usage(object_usage(attr(block, "object")), width = 75L)
+    usage <- object_usage(attr(block, "object"), old_usage = old_usage)
   } else if (block$usage == "NULL") {
     usage <- NULL
   } else {

@@ -129,3 +129,79 @@ test_that("non-syntactic S4 class names are escaped in usage", {
     "\\S4method{rhs}{`<-`}(x)"
   )
 })
+
+
+# Wrapping --------------------------------------------------------------------
+
+test_that("new wrapping style doesn't change unexpectedly", {
+  expect_known_output(file = test_path("test-object-usage-wrap-new.txt"), {
+    cat(call_to_usage({
+      f <- function(a = '                                    a',
+                    b = '                                    b',
+                    c = '                                    c',
+                    d = '                                    d') {}
+    }), "\n\n")
+
+    cat(call_to_usage({
+      f <- function(a = c('abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef',
+                    'abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef')) {}
+    }), "\n\n")
+
+    cat(call_to_usage({
+      mean.reallyratherquitelongclassname <-
+        function(reallyreatherquitelongargument = 'reallyratherquitelongvalue_____________________') {}
+    }), "\n\n")
+
+    cat(call_to_usage({
+      `long_replacement_fun<-` <- function(x,
+          a = 'aaaaaaaaaaaaaaaa',
+          b = 'aaaaaaaaaaaaaaaa',
+          c = 'aaaaaaaaaaaaaaaa',
+          value) {}
+    }), "\n\n")
+  })
+})
+
+test_that("old wrapping style doesn't change unexpectedly", {
+  expect_known_output(file = test_path("test-object-usage-wrap-old.txt"), {
+    cat(call_to_usage({
+      f <- function(a = '                                    a',
+                    b = '                                    b',
+                    c = '                                    c',
+                    d = '                                    d') {}
+    }, old_usage = TRUE), "\n\n")
+
+    cat(call_to_usage({
+      f <- function(a = c('abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef',
+                    'abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef')) {}
+    }, old_usage = TRUE), "\n\n")
+
+    cat(call_to_usage({
+      mean.reallyratherquitelongclassname <-
+        function(reallyreatherquitelongargument = 'reallyratherquitelongvalue_____________________') {}
+    }, old_usage = TRUE), "\n\n")
+
+    cat(call_to_usage({
+      `long_replacement_fun<-` <- function(x,
+          a = 'aaaaaaaaaaaaaaaa',
+          b = 'aaaaaaaaaaaaaaaa',
+          c = 'aaaaaaaaaaaaaaaa',
+          value) {}
+    }, old_usage = TRUE), "\n\n")
+
+    # breaking works after escapes (#265)
+    cat(call_to_usage({
+      f <- function(
+        xxxxxxxxxxxxxxxxxx1,
+        xxxxxxxxxxxxxxxxxx2,
+        xxxxxxxxxxxxxxxxxx3,
+        x = "\"'",
+        xxxxxxxxxxxxxxxxxx4,
+        xxxxxxxxxxxxxxxxxx5,
+        xxxxxxxxxxxxxxxxxx6,
+        xxxxxxxxxxxxxxxxxx7
+      ) {}
+    }, old_usage = TRUE), "\n\n")
+  })
+})
+

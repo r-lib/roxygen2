@@ -2,6 +2,32 @@
 
 * `@inheritDotParams` automatically ignores arguments that can't be inherited
   through `...` because they are used by the current function (@mjskay, #885).
+* The default formatting for function usage that spans multiple lines has
+  now changed. Previously it was wrapped to produce the fewest number of
+  lines, e.g.:
+  
+    ```R
+    parse_package(path = ".", env = env_package(path), 
+      registry = default_tags(), global_options = list())
+    ```
+    
+    Now it is wrapped so that each argument gets its own line (#820):
+    
+    ```R
+    parse_package(
+      path = ".",
+      env = env_package(path),
+      registry = default_tags(),
+      global_options = list()
+    )
+    ```
+    
+    If you prefer the old behaviour you can put the following in your
+    `DESCRIPTION`:
+    
+    ```
+    Roxygen: list(old_usage = TRUE)
+    ```
 
 * `@inheritDotParams` includes link to function and wraps paramters
   in `\code{}` (@halldc, #842)

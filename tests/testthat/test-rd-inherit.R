@@ -521,6 +521,35 @@ test_that("can inherit dots from several functions", {
   )
 })
 
+test_that("inheritDotParams does not add already-documented params", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Wrapper around original
+    #'
+    #' @inherit original
+    #' @inheritDotParams original
+    #' @param y some more specific description
+    #' @export
+    wrapper <- function(x = 'some_value', y = 'some other value', ...) {
+      original(x = x, y = y, ...)
+    }
+
+    #' Original function
+    #'
+    #' @param x x description
+    #' @param y y description
+    #' @param z z description
+    #' @export
+    original <- function(x, y, z, ...) {}
+  ")[[1]]
+
+  params <- out$get_field("param")$values
+  dot_param <- params[["..."]]
+  expect_named(params, c("x", "y", "..."))
+  expect_false(grepl("item{x}{x description}", dot_param, fixed = TRUE))
+  expect_false(grepl("item{y}{y description}", dot_param, fixed = TRUE))
+  expect_match(dot_param, "item{\\code{z}}{z description}", fixed = TRUE)
+})
+
 # inherit everything ------------------------------------------------------
 
 test_that("can inherit all from single function", {

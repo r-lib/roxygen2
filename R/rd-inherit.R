@@ -76,6 +76,11 @@ inherit_dot_params <- function(topic, topics, env) {
   }
   docs_selected <- unlist(map2(args, docs, arg_matches))
 
+  # Only document params under "..." that aren't otherwise documented
+  documented <- get_documented_params(topic)
+  non_documented_params <- setdiff(names(docs_selected), documented)
+  docs_selected <- docs_selected[non_documented_params]
+
   # Build the Rd
   # (1) Link to function(s) that was inherited from
   src <- inheritors$source

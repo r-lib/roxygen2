@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@inheritDotParams` automatically ignores arguments that can't be inherited
+  through `...` because they are used by the current function (@mjskay, #885).
+
 * The default formatting for function usage that spans multiple lines has
   now changed. Previously it was wrapped to produce the fewest number of
   lines, e.g.:

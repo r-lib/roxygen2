@@ -5,32 +5,22 @@
 \alias{roxygenise}
 \title{Process a package with the Rd, namespace and collate roclets.}
 \usage{
-roxygenize(
-  package.dir = ".",
-  roclets = NULL,
-  load_code = env_package,
-  clean = FALSE
-)
+roxygenize(package.dir = ".", roclets = NULL, load_code = NULL, clean = FALSE)
 
-roxygenise(
-  package.dir = ".",
-  roclets = NULL,
-  load_code = env_package,
-  clean = FALSE
-)
+roxygenise(package.dir = ".", roclets = NULL, load_code = NULL, clean = FALSE)
 }
 \arguments{
 \item{package.dir}{Location of package top level directory. Default is
 working directory.}
 
 \item{roclets}{Character vector of roclet names to use with package.
-This defaults to \code{NULL}, which will use the \code{roclets} fields in
-the list provided in the \code{Roxygen} DESCRIPTION field. If none are
-specified, defaults to \code{c("collate", "namespace", "rd")}.}
+The default, \code{NULL}, uses the roxygen \code{roclets} option,
+which defaults to \code{c("collate", "namespace", "rd")}.}
 
 \item{load_code}{A function used to load all the R code in the package
-directory. It is called with the path to the package, and it should return
-an environment containing all the sourced code.}
+directory. The default, \code{NULL}, uses the strategy defined by
+the \code{code} roxygen option, which defaults to \code{\link[=load_pkgload]{load_pkgload()}}.
+See \link{load} for more details.}
 
 \item{clean}{If \code{TRUE}, roxygen will delete all files previously
 created by roxygen before running each roclet.}
@@ -48,5 +38,6 @@ for more details.
 \details{
 Note that roxygen2 is a dynamic documentation system: it works by
 inspecting loaded objects in the package. This means that you must
-be able to load the package in order to document it.
+be able to load the package in order to document it: see \link{load} for
+details.
 }

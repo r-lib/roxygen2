@@ -2,6 +2,7 @@ pandoc: '2.2'
 pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
+  extending: extending.html
   namespace: namespace.html
   rd-formatting: rd-formatting.html
   rd: rd.html

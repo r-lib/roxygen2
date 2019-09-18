@@ -47,14 +47,6 @@ load_installed <- function(path) {
 #' @rdname load
 #' @export
 load_source <- function(path) {
-  r_path <- file.path(path, "R")
-  if (!file.exists(r_path)) {
-    abort("Can't find 'R/' directory")
-  }
-
-  old_dir <- setwd(r_path)
-  on.exit(setwd(old_dir))
-
   # Create environment
   env <- new.env(parent = globalenv())
   methods::setPackageName("roxygen_devtest", env)

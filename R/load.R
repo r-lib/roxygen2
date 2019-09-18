@@ -71,3 +71,22 @@ sys_source <- function(file, envir = baseenv()) {
   }
   invisible()
 }
+
+# Helpers -----------------------------------------------------------------
+
+find_load_strategy <- function(x, options) {
+  if (is.function(x)) {
+    return(x)
+  }
+
+  if (is.null(x)) {
+    x <- x %||% options$load
+  }
+
+  switch(x,
+    pkgload = load_pkgload,
+    source = load_source,
+    installed = load_installed,
+    abort("Unknown value of `load` option")
+  )
+}

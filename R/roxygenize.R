@@ -73,13 +73,7 @@ roxygenize <- function(package.dir = ".",
   )
 
   # Now load code
-  load_code <- load_code %||% switch(options$load,
-    pkgload = load_pkgload,
-    source = load_source,
-    installed = load_installed,
-    abort("Unknown value of `load` option")
-  )
-
+  load_code <- find_load_strategy(load_code, options)
   env <- load_code(base_path)
   blocks <- lapply(blocks, block_set_env,
     env = env,

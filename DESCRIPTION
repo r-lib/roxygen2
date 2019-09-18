@@ -58,5 +58,5 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = TRUE, load = "installed")
 RoxygenNote: 6.1.99.9000

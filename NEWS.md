@@ -2,13 +2,16 @@
 
 * roxygen2 now provides three strategies for loading your code:
 
-    * `load_pkgload()` uses pkgload (now compiling when needed).
+    * `load_pkgload()` uses pkgload.
     * `load_installed()` assumes you have installed the package.
     * `load_source()` attaches required packages and `source()`s code in `R/`.
     
     If the code loading strategy in roxygen2 6.1.0 and above has caused 
     you grief, you can revert to the old strategy by using 
     `Roxygen: list(load = "source")` (#822).
+    
+    Compared to the previous release, the default pkgload strategy now will 
+    recompile `src/` if needed.
 
 * New `@order n` tag controls the order in which blocks are processed. You can
   use it to override the usual ordering which proceeds in from the top of 

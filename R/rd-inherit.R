@@ -47,14 +47,18 @@ inherit_params <- function(topic, topics) {
   for (inheritor in inheritors) {
     inherited <- find_params(inheritor, topics)
 
-    to_add <- intersect(missing, names(inherited))
-    if (length(to_add) == 0) {
+    matches <- map_chr(missing, match_param, names(inherited))
+    new_match <- !is.na(matches)
+
+    if (!any(new_match)) {
       # Can't warn here because @inherit inherits parameters
       next
     }
 
-    topic$add_simple_field("param", inherited[to_add])
-    missing <- setdiff(missing, to_add)
+    topic$add_simple_field("param",
+      setNames(inherited[matches[new_match]], missing[new_match])
+    )
+    missing <- missing[!new_match]
   }
 }
 
@@ -289,3 +293,26 @@ get_rd_from_help <- function(package, alias) {
 
   internal_f("utils", ".getHelpFile")(help)
 }
+
+
+# helpers -----------------------------------------------------------------
+
+# Returns matching parameter name in haystack
+match_param <- function(needle, haystack) {
+  if (needle %in% haystack) {
+    return(needle)
+  }
+
+  if (substr(needle, 1, 1) == ".") {
+    if (needle %in% paste0(".", haystack)) {
+      return(substr(needle, 2, nchar(needle)))
+    }
+  } else {
+    if (paste0(".", needle) %in% haystack) {
+      return(paste0(".", needle))
+    }
+  }
+
+  NA
+}
+

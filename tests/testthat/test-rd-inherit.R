@@ -272,6 +272,34 @@ test_that("multiple @inheritParam tags gathers all params", {
   expect_equal(params[["y"]], "Y")
 })
 
+test_that("multiple @inheritParam tags gathers all params", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #'
+    #' @param x X
+    a <- function(x) {}
+
+
+    #' B
+    #'
+    #' @param .y Y
+    b <- function(.y) {}
+
+    #' C
+    #'
+    #' @inheritParams a
+    #' @inheritParams b
+    c <- function(.x, y) {}
+    ")
+
+  params <- get_tag(out[["c.Rd"]], "param")$values
+  expect_equal(length(params), 2)
+
+  expect_equal(params[[".x"]], "X")
+  expect_equal(params[["y"]], "Y")
+})
+
+
 test_that("@inheritParams can inherit from inherited params", {
   out <- roc_proc_text(rd_roclet(), "
     #' C

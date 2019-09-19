@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `@inheritParams` ignores leading dots when comparing argument names (#862).
+
 * roxygen2 now provides three strategies for loading your code:
 
     * `load_pkgload()` uses pkgload.

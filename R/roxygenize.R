@@ -8,17 +8,18 @@
 #'
 #' Note that roxygen2 is a dynamic documentation system: it works by
 #' inspecting loaded objects in the package. This means that you must
-#' be able to load the package in order to document it.
+#' be able to load the package in order to document it: see [load] for
+#' details.
 #'
 #' @param package.dir Location of package top level directory. Default is
 #'   working directory.
 #' @param roclets Character vector of roclet names to use with package.
-#'   This defaults to `NULL`, which will use the `roclets` fields in
-#'   the list provided in the `Roxygen` DESCRIPTION field. If none are
-#'   specified, defaults to `c("collate", "namespace", "rd")`.
+#'   The default, `NULL`, uses the roxygen `roclets` option,
+#'   which defaults to `c("collate", "namespace", "rd")`.
 #' @param load_code A function used to load all the R code in the package
-#'   directory. It is called with the path to the package, and it should return
-#'   an environment containing all the sourced code.
+#'   directory. The default, `NULL`, uses the strategy defined by
+#'   the `load` roxygen option, which defaults to [load_pkgload()].
+#'   See [load] for more details.
 #' @param clean If `TRUE`, roxygen will delete all files previously
 #'   created by roxygen before running each roclet.
 #' @return `NULL`
@@ -26,7 +27,7 @@
 #' @importFrom stats setNames
 roxygenize <- function(package.dir = ".",
                        roclets = NULL,
-                       load_code = env_package,
+                       load_code = NULL,
                        clean = FALSE) {
 
   base_path <- normalizePath(package.dir)
@@ -72,6 +73,7 @@ roxygenize <- function(package.dir = ".",
   )
 
   # Now load code
+  load_code <- find_load_strategy(load_code, options)
   env <- load_code(base_path)
   blocks <- lapply(blocks, block_set_env,
     env = env,

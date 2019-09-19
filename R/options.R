@@ -18,7 +18,8 @@ load_options <- function(base_path = ".") {
     wrap = FALSE,
     roclets = c("collate", "namespace", "rd"),
     markdown = markdown_global_default,
-    old_usage = FALSE
+    old_usage = FALSE,
+    load = "pkgload"
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))

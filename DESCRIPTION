@@ -1,6 +1,6 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 6.1.99.9000
+Version: 6.1.99.9001
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -58,5 +58,5 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.99.9000
+Roxygen: list(markdown = TRUE, load = "installed")
+RoxygenNote: 6.1.99.9001

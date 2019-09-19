@@ -109,13 +109,8 @@ env_file <- function(file) {
 #' @export
 #' @rdname parse_package
 env_package <- function(path) {
-  pkgload::load_all(path,
-    compile = FALSE,
-    helpers = FALSE,
-    attach_testthat = FALSE
-  )$env
+  load_pkgload(path)
 }
-
 
 # helpers -----------------------------------------------------------------
 

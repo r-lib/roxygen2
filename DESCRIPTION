@@ -59,4 +59,4 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
-RoxygenNote: 6.1.99.9000
+RoxygenNote: 6.1.99.9001

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Escape Rd markup, to avoid interpreting it as markdown — escape_rd_for_md • roxygen2</title>
+<title>Load package code — load • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,16 +42,29 @@
 
 
 
-<meta property="og:title" content="Escape Rd markup, to avoid interpreting it as markdown — escape_rd_for_md" />
-<meta property="og:description" content="This is needed, if we want to stay compatible with
-existing markup, even if markdown mode is switched on.
-Fragile Rd tags (tags that may contain markup that
-can be picked up by the markdown parser), are replaced
-by placeholders. After the markdown to Rd conversion
-is done, the original text is put back in place of the
-placeholders.
-It puts back the protected fragile Rd commands into
-the text after the markdown parsing." />
+<meta property="og:title" content="Load package code — load" />
+<meta property="og:description" content="roxygen2 is a dynamic documentation system, which means it works with the
+objects inside your package, not just the source code used to create them.
+These functions offer various ways of loading your package to suit various
+constraints:
+load_pkgload() uses pkgload::load_all() to simulate package loading
+as closely as we know how. It offers high fidelity handling of code that
+uses S4, but requires that the package be compiled.
+load_source() simulates package loading by attaching packages listed in
+Depends and Imports, then sources all files in the R/ directory.
+This was the default strategy used in roxygen2 6.0.0 and earlier;
+it's primary advantage is that it does not need compilation.
+load_installed() uses the installed version of the package. Use this
+strategy if you have installed a development version of the package
+already. This is the highest fidelity strategy, but requires work
+outside of roxygen2.
+
+
+You can change the default strategy for your function with roxygen2 load
+option. Override the default off pkgload to use the source or
+installed strategies:RoxygenNote: list(load = &quot;source&quot;)
+
+" />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -156,73 +169,57 @@ the text after the markdown parsing." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Escape Rd markup, to avoid interpreting it as markdown</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/markdown-escaping.R'><code>R/markdown-escaping.R</code></a></small>
-    <div class="hidden name"><code>markdown-internals.Rd</code></div>
+    <h1>Load package code</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/load.R'><code>R/load.R</code></a></small>
+    <div class="hidden name"><code>load.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is needed, if we want to stay compatible with
-existing markup, even if markdown mode is switched on.
-Fragile Rd tags (tags that may contain markup that
-can be picked up by the markdown parser), are replaced
-by placeholders. After the markdown to Rd conversion
-is done, the original text is put back in place of the
-placeholders.</p>
-<p>It puts back the protected fragile Rd commands into
-the text after the markdown parsing.</p>
+    <p>roxygen2 is a dynamic documentation system, which means it works with the
+objects inside your package, not just the source code used to create them.
+These functions offer various ways of loading your package to suit various
+constraints:</p><ul>
+<li><p><code>load_pkgload()</code> uses <code><a href='https://rdrr.io/pkg/pkgload/man/load_all.html'>pkgload::load_all()</a></code> to simulate package loading
+as closely as we know how. It offers high fidelity handling of code that
+uses S4, but requires that the package be compiled.</p></li>
+<li><p><code>load_source()</code> simulates package loading by attaching packages listed in
+<code>Depends</code> and <code>Imports</code>, then sources all files in the <code>R/</code> directory.
+This was the default strategy used in roxygen2 6.0.0 and earlier;
+it's primary advantage is that it does not need compilation.</p></li>
+<li><p><code>load_installed()</code> uses the installed version of the package. Use this
+strategy if you have installed a development version of the package
+already. This is the highest fidelity strategy, but requires work
+outside of roxygen2.</p></li>
+</ul>
+
+<p>You can change the default strategy for your function with roxygen2 <code>load</code>
+option. Override the default off <code>pkgload</code> to use the <code>source</code> or
+<code>installed</code> strategies:</p><pre>RoxygenNote: list(load = "source")
+</pre>
+
     </div>
 
-    <pre class="usage"><span class='fu'>escape_rd_for_md</span>(<span class='no'>text</span>)
+    <pre class="usage"><span class='fu'>load_pkgload</span>(<span class='no'>path</span>)
 
-<span class='fu'>unescape_rd_for_md</span>(<span class='no'>rd_text</span>, <span class='no'>esc_text</span>)</pre>
+<span class='fu'>load_installed</span>(<span class='no'>path</span>)
+
+<span class='fu'>load_source</span>(<span class='no'>path</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>text</th>
-      <td><p>Input text. Potentially contains Rd and/or
-markdown markup.</p></td>
-    </tr>
-    <tr>
-      <th>rd_text</th>
-      <td><p>The markdown parsed and interpreted text.</p></td>
-    </tr>
-    <tr>
-      <th>esc_text</th>
-      <td><p>The original escaped text from
-<code>escape_rd_for_md()</code>.</p></td>
+      <th>path</th>
+      <td><p>Path to source package</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>For <code>escape_rd_for_md</code>:
-A &#8220;safe&#8221; version of the input text, where
-each fragile Rd tag is replaced by a placeholder. The
-original text is added as an attribute for each placeholder.</p>
-<p>For <code>unescape_rd_for_md</code>: Rd text.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The list of protected Rd tags is in <code>escaped_for_md</code>.</p>
-<p>Some Rd macros are treated specially:</p><ul>
-<li><p>For <code>if</code>, markdown is only allowed in the second argument.</p></li>
-<li><p>For <code>ifelse</code> markdown is allowed in the second and third arguments.</p></li>
-</ul>
-
-<p>See also <code>roclet-rd.R</code> for the list of tags that
-uses the markdown-enabled parser. Some tags, e.g.
-<code>@aliases</code>, <code>@backref</code>, etc. only use the
-standard Roxygen parser.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>

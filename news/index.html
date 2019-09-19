@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">roxygen2</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">6.1.99.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">6.1.99.9001</span>
       </span>
     </div>
 
@@ -156,6 +156,19 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<p>roxygen2 now provides three strategies for loading your code:</p>
+<ul>
+<li>
+<code><a href="../reference/load.html">load_pkgload()</a></code> uses pkgload.</li>
+<li>
+<code><a href="../reference/load.html">load_installed()</a></code> assumes you have installed the package.</li>
+<li>
+<code><a href="../reference/load.html">load_source()</a></code> attaches required packages and <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>s code in <code>R/</code>.</li>
+</ul>
+<p>If the code loading strategy in roxygen2 6.1.0 and above has caused you grief, you can revert to the old strategy by using <code>Roxygen: list(load = "source")</code> (<a href='https://github.com/r-lib/roxygen2/issues/822'>#822</a>).</p>
+<p>Compared to the previous release, the default pkgload strategy now will recompile <code>src/</code> if needed.</p>
+</li>
 <li><p>New <code>@order n</code> tag controls the order in which blocks are processed. You can use it to override the usual ordering which proceeds in from the top of each file to the bottom. <code>@order 1</code> will be processed before <code>@order 2</code>, and before any blocks that don’t have an explicit order set (<a href='https://github.com/r-lib/roxygen2/issues/863'>#863</a>).</p></li>
 <li><p><code>@example</code> and <code>@examples</code> are interwoven in the order in which they appear (<a href='https://github.com/r-lib/roxygen2/issues/868'>#868</a>).</p></li>
 <li><p><code>@inheritDotParams</code> automatically ignores arguments that can’t be inherited through <code>...</code> because they are used by the current function (<a href='https://github.com/mjskay'>@mjskay</a>, <a href='https://github.com/r-lib/roxygen2/issues/885'>#885</a>).</p></li>

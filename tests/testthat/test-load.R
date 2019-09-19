@@ -1,4 +1,5 @@
 test_that("load_installed retrieves installed package", {
+  skip_if_not(file.exists(test_path("../../DESCRIPTION")))
   env <- load_installed(test_path("../.."))
   expect_identical(env, asNamespace("roxygen2"))
 })

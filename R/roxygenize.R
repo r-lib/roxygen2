@@ -18,7 +18,7 @@
 #'   which defaults to `c("collate", "namespace", "rd")`.
 #' @param load_code A function used to load all the R code in the package
 #'   directory. The default, `NULL`, uses the strategy defined by
-#'   the `code` roxygen option, which defaults to [load_pkgload()].
+#'   the `load` roxygen option, which defaults to [load_pkgload()].
 #'   See [load] for more details.
 #' @param clean If `TRUE`, roxygen will delete all files previously
 #'   created by roxygen before running each roclet.

@@ -80,7 +80,14 @@ find_load_strategy <- function(x, options) {
   }
 
   if (is.null(x)) {
-    x <- x %||% options$load
+    x <- options$load
+    if (!is.character(x) || length(x) != 1) {
+      abort("roxygen2 `load` option must be a string")
+    }
+  } else {
+    if (!is.character(x) || length(x) != 1) {
+      abort("`load_code` must be a string or function")
+    }
   }
 
   switch(x,

@@ -459,10 +459,10 @@ my_note <- function(x) {
   paste0("\\note{", paste0(x, "\n", collapse =""), "}")
 }
 
-#' @evalRd my_note(
+#' @evalRd my_note(c(
 #'   "This is the first line",
 #'   "This is the second line"
-#' )
+#' ))
 NULL
 ```
 

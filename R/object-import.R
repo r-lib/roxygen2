@@ -28,7 +28,7 @@ merge.roxy_field_reexport <- function(x, y, ...) {
 format.roxy_field_reexport <- function(x, ...) {
   pkgs <- split(x$fun, x$pkg)
   pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
-    links <- paste0("\\code{\\link[", pkg, "]{", escape(funs), "}}",
+    links <- paste0("\\code{\\link[", pkg, "]{", escape(sort(funs)), "}}",
       collapse = ", ")
     paste0("\\item{", pkg, "}{", links, "}")
   })

@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Functions documented in `reexports` are now sorted alphabetically by
+  package (#765).
+
 * `@inheritParams` ignores leading dots when comparing argument names (#862).
 
 * roxygen2 now provides three strategies for loading your code:

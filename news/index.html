@@ -156,6 +156,7 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Using <code>@docType package</code> no longer automatically adds <code>-name</code>. Instead document <code>_PACKAGE</code> to get all the defaults for package documentation. (Removing this feature allowed for simplification of the code.)</p></li>
 <li>
 <p><code><a href="../reference/roclet.html">roclet_tags()</a></code> is no longer used; instead define a <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> method. If you tag is <code>@mytag</code>, then the class name associated with it is <code>roxy_tag_mytag</code> so the method should be call <code>roxy_tag_parse.roxy_tag_mytag()</code>. Note that there is no namespacing so if you’re defining multiple new tags I recommend using your package name as common prefix.</p>
 <p>This means that the <code>registry</code> argument is no longer needed and has been removed.</p>

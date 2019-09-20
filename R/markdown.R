@@ -58,14 +58,15 @@ mdxml_node_to_rd <- function(xml, state) {
     item = mdxml_item(xml, state),
     link = mdxml_link(xml),
     image = mdxml_image(xml),
+    heading = mdxml_heading(xml, state),
 
     # Only supported when including Rmds
-    heading = mdxml_heading(xml, state),
+    html_block = mdxml_html_block(xml, state),
+    html_inline = mdxml_html_inline(xml, state),
 
     # Not supported
     block_quote = mdxml_unsupported(xml, state$tag, "block quotes"),
     hrule = mdxml_unsupported(xml, state$tag, "horizontal rules"),
-    html_inline = mdxml_unsupported(xml, state$tag, "inline HTML"),
     mdxml_unknown(xml, state$tag)
   )
 }
@@ -196,6 +197,28 @@ mdxml_heading <- function(xml, state) {
     "}{")
   state$section <- c(state$section, level)
   head
+}
+
+mdxml_html_block <- function(xml, state) {
+  if (state$tag$tag != "includeRmd") {
+    return(mdxml_unsupported(xml, state$tag, "HTML blocks"))
+  }
+  paste0(
+    "\\if{html}{\\out{\n",
+    gsub("}", "\\}", xml_text(xml), fixed = TRUE),
+    "}}\n"
+  )
+}
+
+mdxml_html_inline <- function(xml, state) {
+  if (state$tag$tag != "includeRmd") {
+    return(mdxml_unsupported(xml, state$tag, "inline HTML"))
+  }
+  paste0(
+    "\\if{html}{\\out{",
+    gsub("}", "\\}", xml_text(xml), fixed = TRUE),
+    "}}"
+  )
 }
 
 #' @importFrom utils head tail

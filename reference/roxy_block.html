@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Process roclet on string and capture results. — roc_proc_text • roxygen2</title>
+<title>Blocks — roxy_block • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,16 @@
 
 
 
-<meta property="og:title" content="Process roclet on string and capture results. — roc_proc_text" />
-<meta property="og:description" content="Useful for testing." />
+<meta property="og:title" content="Blocks — roxy_block" />
+<meta property="og:description" content="A roxy_block represents a single roxygen2 block.
+The block_* functions provide a few helpers for common operations:
+block_has_tag(blocks, tags): does block contain any of these tags?
+block_get_tags(block, tags): get all instances of tags
+block_get_tag(block, tag): get single tag. Returns NULL if 0,
+throws warning if more than 1.
+block_get_tag_value(block, tag): gets val field from single tag.
+
+" />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -148,44 +156,94 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Process roclet on string and capture results.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/roclet.R'><code>R/roclet.R</code></a></small>
-    <div class="hidden name"><code>roc_proc_text.Rd</code></div>
+    <h1>Blocks</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/block.R'><code>R/block.R</code></a></small>
+    <div class="hidden name"><code>roxy_block.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Useful for testing.</p>
+    <p>A <code>roxy_block</code> represents a single roxygen2 block.</p>
+<p>The <code>block_*</code> functions provide a few helpers for common operations:</p><ul>
+<li><p><code>block_has_tag(blocks, tags)</code>: does <code>block</code> contain any of these <code>tags</code>?</p></li>
+<li><p><code>block_get_tags(block, tags)</code>: get all instances of <code>tags</code></p></li>
+<li><p><code>block_get_tag(block, tag)</code>: get single tag. Returns <code>NULL</code> if 0,
+throws warning if more than 1.</p></li>
+<li><p><code>block_get_tag_value(block, tag)</code>: gets <code>val</code> field from single tag.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>roc_proc_text</span>(<span class='no'>roclet</span>, <span class='no'>input</span>, <span class='kw'>registry</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>roxy_block</span>(<span class='no'>tags</span>, <span class='no'>file</span>, <span class='no'>line</span>, <span class='no'>call</span>, <span class='kw'>object</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='fu'>block_has_tags</span>(<span class='no'>block</span>, <span class='no'>tags</span>)
+
+<span class='fu'>block_get_tags</span>(<span class='no'>block</span>, <span class='no'>tags</span>)
+
+<span class='fu'>block_get_tag</span>(<span class='no'>block</span>, <span class='no'>tag</span>)
+
+<span class='fu'>block_get_tag_value</span>(<span class='no'>block</span>, <span class='no'>tag</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>roclet</th>
-      <td><p>Name of roclet to use for processing.</p></td>
+      <th>tags</th>
+      <td><p>A list of <a href='roxy_tag.html'>roxy_tag</a>s.</p></td>
     </tr>
     <tr>
-      <th>input</th>
-      <td><p>Source string</p></td>
+      <th>file, line</th>
+      <td><p>Location of the <code>call</code> (i.e. the line after the last
+line of the block).</p></td>
     </tr>
     <tr>
-      <th>registry</th>
-      <td><p>Named list of tag parsers</p></td>
+      <th>call</th>
+      <td><p>Expression associated with block.</p></td>
     </tr>
     <tr>
-      <th>global_options</th>
-      <td><p>List of global options</p></td>
+      <th>object</th>
+      <td><p>Optionally, the object associated with the block, found
+by inspecting/evaluating <code>call</code>.</p></td>
+    </tr>
+    <tr>
+      <th>block</th>
+      <td><p>A <code>roxy_block</code> to manipulate.</p></td>
+    </tr>
+    <tr>
+      <th>tag, tags</th>
+      <td><p>Either a single tag name, or a character vector of tag names.</p></td>
     </tr>
     </table>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># The easiest way to see the structure of a roxy_block is to create one</span>
+<span class='co'># using parse_text:</span>
+<span class='no'>text</span> <span class='kw'>&lt;-</span> <span class='st'>"
+  #' This is a title
+  #'
+  #' @param x,y A number
+  #' @export
+  f &lt;- function(x, y) x + y
+"</span>
+
+<span class='co'># parse_text() returns a list of blocks, so I extract the first</span>
+<span class='no'>block</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='parse_package.html'>parse_text</a></span>(<span class='no'>text</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]
+<span class='no'>block</span></div><div class='output co'>#&gt; &lt;roxy_block&gt; [&lt;text&gt;:6]
+#&gt;   $tag
+#&gt;     [line:  1] @title 'This is a title' {parsed}
+#&gt;     [line:  5] @param 'x,y A number' {parsed}
+#&gt;     [line:  6] @export '' {parsed}
+#&gt;     [????:???] @backref '&lt;text&gt;' {parsed}
+#&gt;   $call   f &lt;- function(x, y) x + y
+#&gt;   $object &lt;function&gt; 
+#&gt;     $topic f
+#&gt;     $alias f</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

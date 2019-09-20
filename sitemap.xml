@@ -46,6 +46,9 @@
     <loc>https://roxygen2.r-lib.org/reference/roclet_find.html</loc>
   </url>
   <url>
+    <loc>https://roxygen2.r-lib.org/reference/roxy_block.html</loc>
+  </url>
+  <url>
     <loc>https://roxygen2.r-lib.org/reference/roxy_tag.html</loc>
   </url>
   <url>
@@ -53,6 +56,9 @@
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/roxygenize.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tag_parsers.html</loc>
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/update_collate.html</loc>

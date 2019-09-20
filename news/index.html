@@ -156,6 +156,9 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>The internal <code><a href="../reference/roxy_tag.html">roxy_tag()</a></code> gains a new field: <code>raw</code>. This now always contains the raw string value parsed from the file. <code>val</code> is only set after the tag has been parsed.</p></li>
+<li><p>The internal data structure used to represent blocks has been overhauled. It is now documented and stable - see <code><a href="../reference/roxy_block.html">roxy_block()</a></code> for details. If you’re one of the few people who have written a roxygen2 extension, this will break your code - but the documentation, object structure, and print methods are now much better that I hope it’s not too annoying! You can also learn more in the new <code><a href="../articles/extending.html">vignette("extending")</a></code> - a bit thanks to <a href='https://github.com/mikldk'>@mikldk</a> for getting this started (<a href='https://github.com/r-lib/roxygen2/issues/882'>#882</a>).</p></li>
+<li><p>You now get a warning if you use multiple <code>@usage</code> statements. Previously, the first was used without a warning</p></li>
 <li><p>Functions documented in <code>reexports</code> are now sorted alphabetically by package (<a href='https://github.com/r-lib/roxygen2/issues/765'>#765</a>).</p></li>
 <li><p><code>@inheritParams</code> ignores leading dots when comparing argument names (<a href='https://github.com/r-lib/roxygen2/issues/862'>#862</a>).</p></li>
 <li>
@@ -221,7 +224,7 @@
 <li><p><code>@inheritParams</code> warns if there are no parameters that require documentation (<a href='https://github.com/r-lib/roxygen2/issues/836'>#836</a>).</p></li>
 <li><p>roxygen2 now recgonises fully qualified S4 functions like <code><a href="https://rdrr.io/r/methods/setGeneric.html">methods::setGeneric()</a></code>, <code><a href="https://rdrr.io/r/methods/setClass.html">methods::setClass()</a></code> and <code><a href="https://rdrr.io/r/methods/setMethod.html">methods::setMethod()</a></code> (<a href='https://github.com/r-lib/roxygen2/issues/880'>#880</a>).</p></li>
 <li><p>Use of unsupported markdown features (blockquotes, headings, inline HTML, and horizontal rules) now gets a more informative error message (<a href='https://github.com/r-lib/roxygen2/issues/804'>#804</a>).</p></li>
-<li><p><code>tag_markdown_restricted()</code> has been removed because it did exactly the same think as <code><a href="../reference/roxy_tag.html">tag_markdown()</a></code>.</p></li>
+<li><p><code>tag_markdown_restricted()</code> has been removed because it did exactly the same think as <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>.</p></li>
 <li><p>Roclets have now aliases to all the tags that they define so that you can do (e.g.) <code><a href="../reference/namespace_roclet.html">?"@export"</a></code>. These help files are generally not that useful, but they do now provide basic examples, and point you towards the vignettes the provide full details.</p></li>
 <li><p>Package documentation now converts ORCIDs into a useful link (<a href='https://github.com/r-lib/roxygen2/issues/721'>#721</a>).</p></li>
 <li><p>Empty roxygen2 lines at the start of a block are now silently removed (<a href='https://github.com/r-lib/roxygen2/issues/710'>#710</a>).</p></li>
@@ -271,7 +274,7 @@
 <h2 class="hasAnchor">
 <a href="#extension-api" class="anchor"></a>Extension API</h2>
 <ul>
-<li><p>Roxygen blocks now have an official structure as encoded in <code>roxy_block()</code>. It is a named list containing the tags with attributes providing other metadata.</p></li>
+<li><p>Roxygen blocks now have an official structure as encoded in <code><a href="../reference/roxy_block.html">roxy_block()</a></code>. It is a named list containing the tags with attributes providing other metadata.</p></li>
 <li><p>The <code>parsed</code> argument to <code><a href="../reference/roclet.html">roclet_process()</a></code> have been replaced with separate <code>blocks</code> and <code>env</code> arguments.</p></li>
 <li><p>New <code><a href="../reference/roclet.html">roclet_preprocess()</a></code> generic makes it possible for roclets to perform actions before code is evaluated.</p></li>
 <li><p><code><a href="../reference/parse_package.html">parse_package()</a></code>, <code><a href="../reference/parse_package.html">parse_file()</a></code> and <code>parse_code()</code> provide an exported API that allows you to use roxygen’s parsing code independently of creating roclets.</p></li>

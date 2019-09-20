@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Process roclet on string and capture results. — roc_proc_text • roxygen2</title>
+<title>Parse tags — tag_parsers • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,11 @@
 
 
 
-<meta property="og:title" content="Process roclet on string and capture results. — roc_proc_text" />
-<meta property="og:description" content="Useful for testing." />
+<meta property="og:title" content="Parse tags — tag_parsers" />
+<meta property="og:description" content="These functions parse the raw tag value, convert a string into a richer R
+object and storing it in val, or provide an informative warning and
+returning NULL. Two exceptions to the rule are tag_words() and
+tag_two_part(), which are tag parsing generator functions." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -148,44 +151,78 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Process roclet on string and capture results.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/roclet.R'><code>R/roclet.R</code></a></small>
-    <div class="hidden name"><code>roc_proc_text.Rd</code></div>
+    <h1>Parse tags</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/roxygen2/blob/master/R/tag-parser.R'><code>R/tag-parser.R</code></a></small>
+    <div class="hidden name"><code>tag_parsers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Useful for testing.</p>
+    <p>These functions parse the <code>raw</code> tag value, convert a string into a richer R
+object and storing it in <code>val</code>, or provide an informative warning and
+returning <code>NULL</code>. Two exceptions to the rule are <code>tag_words()</code> and
+<code>tag_two_part()</code>, which are tag parsing generator functions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>roc_proc_text</span>(<span class='no'>roclet</span>, <span class='no'>input</span>, <span class='kw'>registry</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>tag_value</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_inherit</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_name</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_two_part</span>(<span class='no'>first</span>, <span class='no'>second</span>, <span class='kw'>required</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>markdown</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>tag_name_description</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_words</span>(<span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)
+
+<span class='fu'>tag_words_line</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_toggle</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_code</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_examples</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_markdown</span>(<span class='no'>x</span>)
+
+<span class='fu'>tag_markdown_with_sections</span>(<span class='no'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>roclet</th>
-      <td><p>Name of roclet to use for processing.</p></td>
+      <th>x</th>
+      <td><p>A <a href='roxy_tag.html'>roxy_tag</a> object to parss</p></td>
     </tr>
     <tr>
-      <th>input</th>
-      <td><p>Source string</p></td>
+      <th>first, second</th>
+      <td><p>Name of first and second parts of two part tags</p></td>
     </tr>
     <tr>
-      <th>registry</th>
-      <td><p>Named list of tag parsers</p></td>
+      <th>required</th>
+      <td><p>Is the second part required (TRUE) or can it be blank
+(FALSE)?</p></td>
     </tr>
     <tr>
-      <th>global_options</th>
-      <td><p>List of global options</p></td>
+      <th>markdown</th>
+      <td><p>Should the second part be parsed as markdown?</p></td>
+    </tr>
+    <tr>
+      <th>min, max</th>
+      <td><p>Minimum and maximum number of words</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <a href='roxy_tag.html'>roxy_tag</a> object with the <code>val</code> field set to the parsed value.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>

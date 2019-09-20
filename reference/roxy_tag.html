@@ -161,6 +161,8 @@ roxy_tag_warning() generates a warning that gives the location of the tag." />
 
     <pre class="usage"><span class='fu'>roxy_tag</span>(<span class='no'>tag</span>, <span class='no'>raw</span>, <span class='kw'>val</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>line</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>)
 
+<span class='fu'>roxy_tag_parse</span>(<span class='no'>x</span>)
+
 <span class='fu'>roxy_tag_warning</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -183,14 +185,25 @@ a list. Usually filled in by <code>tag_parsers</code></p></td>
       <th>file, line</th>
       <td><p>Location of the tag</p></td>
     </tr>
+    <tr>
+      <th>x</th>
+      <td><p>A tag</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
+    
+
+<p>Define a method for <code>roxy_tag_parse</code> to support new tags. See <a href='tag_parsers.html'>tag_parsers</a>
+for more details.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#methods">Methods</a></li>
     </ul>
 
   </div>

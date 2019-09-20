@@ -45,8 +45,7 @@
 <meta property="og:title" content="Parse tags — tag_parsers" />
 <meta property="og:description" content="These functions parse the raw tag value, convert a string into a richer R
 object and storing it in val, or provide an informative warning and
-returning NULL. Two exceptions to the rule are tag_words() and
-tag_two_part(), which are tag parsing generator functions." />
+returning NULL." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -159,8 +158,7 @@ tag_two_part(), which are tag parsing generator functions." />
     <div class="ref-description">
     <p>These functions parse the <code>raw</code> tag value, convert a string into a richer R
 object and storing it in <code>val</code>, or provide an informative warning and
-returning <code>NULL</code>. Two exceptions to the rule are <code>tag_words()</code> and
-<code>tag_two_part()</code>, which are tag parsing generator functions.</p>
+returning <code>NULL</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tag_value</span>(<span class='no'>x</span>)
@@ -169,11 +167,11 @@ returning <code>NULL</code>. Two exceptions to the rule are <code>tag_words()</c
 
 <span class='fu'>tag_name</span>(<span class='no'>x</span>)
 
-<span class='fu'>tag_two_part</span>(<span class='no'>first</span>, <span class='no'>second</span>, <span class='kw'>required</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>markdown</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>tag_two_part</span>(<span class='no'>x</span>, <span class='no'>first</span>, <span class='no'>second</span>, <span class='kw'>required</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>markdown</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>tag_name_description</span>(<span class='no'>x</span>)
 
-<span class='fu'>tag_words</span>(<span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)
+<span class='fu'>tag_words</span>(<span class='no'>x</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)
 
 <span class='fu'>tag_words_line</span>(<span class='no'>x</span>)
 
@@ -216,6 +214,12 @@ returning <code>NULL</code>. Two exceptions to the rule are <code>tag_words()</c
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <a href='roxy_tag.html'>roxy_tag</a> object with the <code>val</code> field set to the parsed value.</p>
+    <h2 class="hasAnchor" id="new-tag"><a class="anchor" href="#new-tag"></a>New tag</h2>
+
+    
+
+<p>To create a new <code>@mytag</code> define <code>roxy_tag_parse.roxy_tag_mytag()</code>. It should
+either call one of the functions here, or directly set <code>x$val</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -223,6 +227,7 @@ returning <code>NULL</code>. Two exceptions to the rule are <code>tag_words()</c
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#new-tag">New tag</a></li>
     </ul>
 
   </div>

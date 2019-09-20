@@ -161,15 +161,15 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
 
     <pre class="usage"><span class='fu'>roclet</span>(<span class='no'>subclass</span>, <span class='no'>...</span>)
 
-<span class='fu'>roclet_tags</span>(<span class='no'>x</span>)
-
 <span class='fu'>roclet_preprocess</span>(<span class='no'>x</span>, <span class='no'>blocks</span>, <span class='no'>base_path</span>, <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
 
 <span class='fu'>roclet_process</span>(<span class='no'>x</span>, <span class='no'>blocks</span>, <span class='no'>env</span>, <span class='no'>base_path</span>, <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
 
 <span class='fu'>roclet_output</span>(<span class='no'>x</span>, <span class='no'>results</span>, <span class='no'>base_path</span>, <span class='no'>...</span>)
 
-<span class='fu'>roclet_clean</span>(<span class='no'>x</span>, <span class='no'>base_path</span>)</pre>
+<span class='fu'>roclet_clean</span>(<span class='no'>x</span>, <span class='no'>base_path</span>)
+
+<span class='fu'>roclet_tags</span>(<span class='no'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -205,8 +205,6 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
     
 
 <ul>
-<li><p><code>roclet_tags()</code>: return named list, where names give recognised tags and
-values give tag parsing function. See <a href='roxy_tag.html'>roxy_tag</a> for built-in parsers.</p></li>
 <li><p><code>roclet_preprocess()</code> is called after blocks have been parsed but before
 code has been evaluated. This should only be needed if your roclet affects
 how code will evaluated. Should return a roclet.</p></li>
@@ -218,6 +216,11 @@ produce files on disk.</p></li>
 <li><p><code>roclet_clean()</code> called when <code><a href='roxygenize.html'>roxygenise(clean = TRUE)</a></code>. Should remove
 any files created by the roclet.</p></li>
 </ul>
+<h3>Deprecated methods</h3>
+
+
+<p><code>roclet_tags()</code> is no longer used; instead provide a <code><a href='roxy_tag.html'>roxy_tag_parse()</a></code>
+method for each tag.</p>
 
 
   </div>

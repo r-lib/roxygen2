@@ -33,6 +33,131 @@ rd_roclet_description <- function() {
 }
 
 #' @export
+roclet_process.roclet_rd <- function(x,
+                                     blocks,
+                                     env,
+                                     base_path,
+                                     global_options = list()) {
+
+  # Convert each block into a topic, indexed by filename
+  topics <- RoxyTopics$new()
+
+  for (block in blocks) {
+    rd <- block_to_rd(block, base_path, env, global_options)
+    topics$add(rd)
+  }
+  topics_process_family(topics, env)
+  topics_process_inherit(topics, env)
+  topics$drop_invalid()
+  topics_fix_params_order(topics)
+  topics_add_default_description(topics)
+
+  topics$topics
+}
+
+#' @export
+roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE) {
+  man <- normalizePath(file.path(base_path, "man"))
+
+  contents <- map_chr(results, format, wrap = FALSE)
+  paths <- file.path(man, names(results))
+
+  # Always check for roxygen2 header before overwriting NAMESPACE (#436),
+  # even when running for the first time
+  mapply(write_if_different, paths, contents, MoreArgs = list(check = TRUE))
+
+  if (!is_first) {
+    # Automatically delete any files in man directory that were generated
+    # by roxygen in the past, but weren't generated in this sweep.
+
+    old_paths <- setdiff(dir(man, full.names = TRUE), paths)
+    old_paths <- old_paths[!file.info(old_paths)$isdir]
+    old_roxygen <- Filter(made_by_roxygen, old_paths)
+    if (length(old_roxygen) > 0) {
+      message(paste0("Deleting ", basename(old_roxygen), collapse = "\n"))
+      unlink(old_roxygen)
+    }
+  }
+
+  paths
+}
+
+#' @export
+roclet_clean.roclet_rd <- function(x, base_path) {
+  rd <- dir(file.path(base_path, "man"), full.names = TRUE)
+  rd <- rd[!file.info(rd)$isdir]
+  unlink(purrr::keep(rd, made_by_roxygen))
+}
+
+# Does this block get an Rd file?
+needs_doc <- function(block) {
+  if (block_has_tags(block, "noRd")) {
+    return(FALSE)
+  }
+
+  block_has_tags(block, c(
+    "description", "param", "return", "title", "example",
+    "examples", "name", "rdname", "usage", "details", "introduction",
+    "inherit", "describeIn")
+  )
+}
+
+# Tag processing functions ------------------------------------------------
+
+block_to_rd <- function(block, base_path, env, global_options = list()) {
+  # Must start by processing templates
+  block <- process_templates(block, base_path, global_options)
+
+  if (!needs_doc(block)) {
+    return()
+  }
+
+  name <- block_get_tag(block, "name")$val %||% block$object$topic
+  if (is.null(name)) {
+    roxy_tag_warning(block$tags[[1]], "Missing name")
+    return()
+  }
+
+  # Note that order of operations here doesn't matter: fields are
+  # ordered by RoxyFile$format()
+  rd <- RoxyTopic$new()
+  topic_add_name_aliases(rd, block, name)
+
+  # Some fields added directly by roxygen internals
+  tags <- Filter(roxy_tag_is_field, block$tags)
+  for (tag in tags) {
+    rd$add(tag$val)
+  }
+
+  topic_add_backref(rd, block)
+  topic_add_doc_type(rd, block)
+  topic_add_eval_rd(rd, block, env)
+  topic_add_include_rmd(rd, block, base_path)
+  topic_add_examples(rd, block, base_path)
+  topic_add_fields(rd, block)
+  topic_add_inherit(rd, block)
+  topic_add_keyword(rd, block)
+  topic_add_methods(rd, block)
+  topic_add_params(rd, block)
+  topic_add_simple_tags(rd, block)
+  topic_add_sections(rd, block)
+  topic_add_slots(rd, block)
+  topic_add_usage(rd, block, old_usage = global_options$old_usage)
+  topic_add_value(rd, block)
+
+  if (rd$has_field("description") && rd$has_field("reexport")) {
+    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
+    return()
+  }
+
+  describe_rdname <- topic_add_describe_in(rd, block, env)
+  filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)
+  rd$filename <- paste0(filename, ".Rd")
+
+  rd
+}
+
+#' @export
 roxy_tag_parse.roxy_tag_aliases <- function(x) tag_value(x)
 #' @export
 roxy_tag_parse.roxy_tag_author <- function(x) tag_markdown(x)
@@ -113,28 +238,6 @@ roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_parse.roxy_tag_usage <- function(x) tag_value(x)
 
-#' @export
-roclet_process.roclet_rd <- function(x,
-                                     blocks,
-                                     env,
-                                     base_path,
-                                     global_options = list()) {
-
-  # Convert each block into a topic, indexed by filename
-  topics <- RoxyTopics$new()
-
-  for (block in blocks) {
-    rd <- block_to_rd(block, base_path, env, global_options)
-    topics$add(rd)
-  }
-  topics_process_family(topics, env)
-  topics_process_inherit(topics, env)
-  topics$drop_invalid()
-  topics_fix_params_order(topics)
-  topics_add_default_description(topics)
-
-  topics$topics
-}
 
 topics_add_default_description <- function(topics) {
   for (topic in topics$topics) {
@@ -150,108 +253,6 @@ topics_add_default_description <- function(topics) {
   invisible()
 }
 
-
-block_to_rd <- function(block, base_path, env, global_options = list()) {
-  # Must start by processing templates
-  block <- process_templates(block, base_path, global_options)
-
-  if (!needs_doc(block)) {
-    return()
-  }
-
-  name <- block_get_tag(block, "name")$val %||% block$object$topic
-  if (is.null(name)) {
-    roxy_tag_warning(block$tags[[1]], "Missing name")
-    return()
-  }
-
-  # Note that order of operations here doesn't matter: fields are
-  # ordered by RoxyFile$format()
-  rd <- RoxyTopic$new()
-  topic_add_name_aliases(rd, block, name)
-
-  # Some fields added directly by roxygen internals
-  tags <- Filter(roxy_tag_is_field, block$tags)
-  for (tag in tags) {
-    rd$add(tag$val)
-  }
-
-  topic_add_backref(rd, block)
-  topic_add_doc_type(rd, block)
-  topic_add_eval_rd(rd, block, env)
-  topic_add_include_rmd(rd, block, base_path)
-  topic_add_examples(rd, block, base_path)
-  topic_add_fields(rd, block)
-  topic_add_inherit(rd, block)
-  topic_add_keyword(rd, block)
-  topic_add_methods(rd, block)
-  topic_add_params(rd, block)
-  topic_add_simple_tags(rd, block)
-  topic_add_sections(rd, block)
-  topic_add_slots(rd, block)
-  topic_add_usage(rd, block, old_usage = global_options$old_usage)
-  topic_add_value(rd, block)
-
-  if (rd$has_field("description") && rd$has_field("reexport")) {
-    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
-    return()
-  }
-
-  describe_rdname <- topic_add_describe_in(rd, block, env)
-  filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)
-  rd$filename <- paste0(filename, ".Rd")
-
-  rd
-}
-
-#' @export
-roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE) {
-  man <- normalizePath(file.path(base_path, "man"))
-
-  contents <- map_chr(results, format, wrap = FALSE)
-  paths <- file.path(man, names(results))
-
-  # Always check for roxygen2 header before overwriting NAMESPACE (#436),
-  # even when running for the first time
-  mapply(write_if_different, paths, contents, MoreArgs = list(check = TRUE))
-
-  if (!is_first) {
-    # Automatically delete any files in man directory that were generated
-    # by roxygen in the past, but weren't generated in this sweep.
-
-    old_paths <- setdiff(dir(man, full.names = TRUE), paths)
-    old_paths <- old_paths[!file.info(old_paths)$isdir]
-    old_roxygen <- Filter(made_by_roxygen, old_paths)
-    if (length(old_roxygen) > 0) {
-      message(paste0("Deleting ", basename(old_roxygen), collapse = "\n"))
-      unlink(old_roxygen)
-    }
-  }
-
-  paths
-}
-
-#' @export
-roclet_clean.roclet_rd <- function(x, base_path) {
-  rd <- dir(file.path(base_path, "man"), full.names = TRUE)
-  rd <- rd[!file.info(rd)$isdir]
-  unlink(purrr::keep(rd, made_by_roxygen))
-}
-
-# Does this block get an Rd file?
-needs_doc <- function(block) {
-  if (block_has_tags(block, "noRd")) {
-    return(FALSE)
-  }
-
-  block_has_tags(block, c(
-    "description", "param", "return", "title", "example",
-    "examples", "name", "rdname", "usage", "details", "introduction",
-    "inherit", "describeIn")
-  )
-}
-
-# Tag processing functions ------------------------------------------------
 
 topic_add_backref <- function(topic, block) {
   tags <- block_get_tags(block, "backref")

@@ -569,3 +569,34 @@ test_that("markdown() on empty input", {
   expect_identical(markdown("  "), "")
   expect_identical(markdown("\n"), "")
 })
+
+test_that("markup in headings", {
+  text1 <- "
+    #' Title
+    #'
+    #' Description.
+    #'
+    #' @details
+    #' Leading text goes into details.
+    #' # Section with `code`
+    #' ## Subsection with **strong**
+    #' Yes.
+    #' @md
+    #' @name x
+    NULL
+  "
+  out1 <- roc_proc_text(rd_roclet(), text1)[[1]]
+  expect_equal(
+    out1$get_value("rawRd"),
+    paste(
+      sep = "\n",
+      "\\section{Section with \\code{code}}{",
+      "\\subsection{Subsection with \\strong{strong}}{",
+      "",
+      "Yes.",
+      "}",
+      "",
+      "}"
+      )
+  )
+})

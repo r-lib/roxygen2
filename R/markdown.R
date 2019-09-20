@@ -33,7 +33,8 @@ mdxml_children_to_rd <- function(xml, state) {
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
 mdxml_node_to_rd <- function(xml, state) {
-  if (!inherits(xml, "xml_node") || xml_type(xml) != "element") {
+  if (!inherits(xml, "xml_node") ||
+      ! xml_type(xml) %in% c("text", "element")) {
     roxy_tag_warning(state$tag, "Internal markdown translation failure")
     return("")
   }
@@ -188,12 +189,13 @@ mdxml_heading <- function(xml, state) {
   if (! state$has_sections && level == 1) {
     return(mdxml_unsupported(xml, state$tag, "level 1 markdown headings"))
   }
+  txt <- map_chr(xml_contents(xml), mdxml_node_to_rd, state)
   head <- paste0(
     mdxml_close_sections(state, level),
     "\n",
     if (level == 1) paste0(state$section_tag, "\\section{"),
     if (level > 1) "\\subsection{",
-    xml_text(xml),
+    paste(txt, collapse = ""),
     "}{")
   state$section <- c(state$section, level)
   head

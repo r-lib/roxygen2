@@ -118,32 +118,13 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
     return()
   }
 
-  # Note that order of operations here doesn't matter: fields are
-  # ordered by RoxyFile$format()
   rd <- RoxyTopic$new()
   topic_add_name_aliases(rd, block, name)
-
-  # Some fields added directly by roxygen internals
-  tags <- Filter(roxy_tag_is_field, block$tags)
-  for (tag in tags) {
-    rd$add(tag$val)
+  for (tag in block$tags) {
+    roxy_tag_rd(tag, rd, env = env, base_path = base_path)
   }
 
-  topic_add_backref(rd, block)
-  topic_add_doc_type(rd, block)
-  topic_add_eval_rd(rd, block, env)
-  topic_add_include_rmd(rd, block, base_path)
-  topic_add_examples(rd, block, base_path)
-  topic_add_fields(rd, block)
-  topic_add_inherit(rd, block)
-  topic_add_keyword(rd, block)
-  topic_add_methods(rd, block)
-  topic_add_params(rd, block)
-  topic_add_simple_tags(rd, block)
-  topic_add_sections(rd, block)
-  topic_add_slots(rd, block)
   topic_add_usage(rd, block, old_usage = global_options$old_usage)
-  topic_add_value(rd, block)
 
   if (rd$has_field("description") && rd$has_field("reexport")) {
     roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
@@ -157,87 +138,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   rd
 }
 
-#' @export
-roxy_tag_parse.roxy_tag_aliases <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_author <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_backref <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_concept <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_describeIn <- function(x) tag_name_description(x)
-#' @export
-roxy_tag_parse.roxy_tag_description <- function(x) tag_markdown_with_sections(x)
-#' @export
-roxy_tag_parse.roxy_tag_details <- function(x) tag_markdown_with_sections(x)
-#' @export
-roxy_tag_parse.roxy_tag_docType <- function(x) tag_name(x)
-#' @export
-roxy_tag_parse.roxy_tag_encoding <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_evalRd <- function(x) tag_code(x)
-#' @export
-roxy_tag_parse.roxy_tag_example <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_examples <- function(x) tag_examples(x)
-#' @export
-roxy_tag_parse.roxy_tag_family <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_field <- function(x) tag_name_description(x)
-#' @export
-roxy_tag_parse.roxy_tag_format <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_includeRmd <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_inherit <- function(x) tag_inherit(x)
-#' @export
-roxy_tag_parse.roxy_tag_inheritParams <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_inheritDotParams <- function(x) tag_two_part(x, "source", "args", required = FALSE, markdown = FALSE)
-#' @export
-roxy_tag_parse.roxy_tag_inheritSection <- function(x) tag_name_description(x)
-#' @export
-roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_method <- function(x) tag_words(x, 2, 2)
-#' @export
-roxy_tag_parse.roxy_tag_name <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_md <- function(x) tag_toggle(x)
-#' @export
-roxy_tag_parse.roxy_tag_noMd <- function(x) tag_toggle(x)
-#' @export
-roxy_tag_parse.roxy_tag_noRd <- function(x) tag_toggle(x)
-#' @export
-roxy_tag_parse.roxy_tag_note <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_param <- function(x) tag_name_description(x)
-#' @export
-roxy_tag_parse.roxy_tag_rdname <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_rawRd <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_references <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_return <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_section <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_seealso <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_slot <- function(x) tag_name_description(x)
-#' @export
-roxy_tag_parse.roxy_tag_source <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_template <- function(x) tag_value(x)
-#' @export
-roxy_tag_parse.roxy_tag_templateVar <- function(x) tag_name_description(x)
-#' @export
-roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_parse.roxy_tag_usage <- function(x) tag_value(x)
-
+# Special cases -----------------------------------------------------------
 
 topics_add_default_description <- function(topics) {
   for (topic in topics$topics) {
@@ -251,45 +152,6 @@ topics_add_default_description <- function(topics) {
   }
 
   invisible()
-}
-
-
-topic_add_backref <- function(topic, block) {
-  tags <- block_get_tags(block, "backref")
-  for (tag in tags) {
-    topic$add_simple_field("backref", tag$val)
-  }
-}
-
-# Simple tags can be converted directly to fields
-topic_add_simple_tags <- function(topic, block) {
-  simple_tags <- block_get_tags(block,
-    c(
-      "author", "concept", "description", "details", "encoding", "family",
-      "format", "note", "rawRd", "references",
-      "seealso", "source", "title"
-    )
-  )
-
-  for (tag in simple_tags) {
-    if (length(tag$val) && nchar(tag$val[[1]])) {
-      topic$add_simple_field(tag$tag, tag$val[[1]])
-    }
-    for (extra in tag$val[-1]) {
-      topic$add_simple_field("rawRd", extra)
-    }
-  }
-}
-
-topic_add_params <- function(topic, block) {
-  # Used in process_inherit_params()
-  value <- block$object$value
-  if (is.function(value)) {
-    formals <- formals(value)
-    topic$add_simple_field("formals", names(formals))
-  }
-
-  process_def_tag(topic, block, "param")
 }
 
 topic_add_name_aliases <- function(topic, block, name) {
@@ -314,70 +176,6 @@ topic_add_name_aliases <- function(topic, block, name) {
   topic$add_simple_field("alias", aliases)
 }
 
-
-topic_add_methods <- function(topic, block) {
-  obj <- block$object
-  if (!inherits(obj, "rcclass")) return()
-
-  methods <- obj$methods
-  if (is.null(obj$methods)) return()
-
-  desc <- lapply(methods, function(x) docstring(x$value@.Data))
-  usage <- map_chr(methods, function(x) {
-    function_usage(x$value@name, formals(x$value@.Data))
-  })
-
-  has_docs <- !map_lgl(desc, is.null)
-  desc <- desc[has_docs]
-  usage <- usage[has_docs]
-
-  topic$add_simple_field("rcmethods", setNames(desc, usage))
-}
-
-topic_add_inherit <- function(topic, block) {
-  tags <- block_get_tags(block, "inherit")
-  for (tag in tags) {
-    field <- roxy_field_inherit(tag$val$source, list(tag$val$fields))
-    topic$add_field(field)
-  }
-
-  tags <- block_get_tags(block, "inheritParams")
-  for (tag in tags) {
-    field <- roxy_field_inherit(tag$val, list("params"))
-    topic$add_field(field)
-  }
-
-  tags <- block_get_tags(block, "inheritSection")
-  for (tag in tags) {
-    field <- roxy_field_inherit_section(tag$val$name, tag$val$description)
-    topic$add_field(field)
-  }
-
-  tags <- block_get_tags(block, "inheritDotParams")
-  for (tag in tags) {
-    field <- roxy_field_inherit_dot_params(tag$val$source, tag$val$args)
-    topic$add_field(field)
-  }
-}
-
-
-topic_add_value <- function(topic, block) {
-  tags <- block_get_tags(block, "return")
-
-  for (tag in tags) {
-    topic$add_simple_field("value", tag$val)
-  }
-}
-
-topic_add_keyword <- function(topic, block) {
-  tags <- block_get_tags(block, "keywords")
-
-  vals <- map_chr(tags, "val")
-  keywords <- unlist(str_split(vals, "\\s+"))
-
-  topic$add_simple_field("keyword", keywords)
-}
-
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block, old_usage = FALSE) {
   tag <- block_get_tag(block, "usage")
@@ -394,88 +192,252 @@ topic_add_usage <- function(topic, block, old_usage = FALSE) {
   topic$add_simple_field("usage", usage)
 }
 
-topic_add_slots <- function(topic, block) {
-  process_def_tag(topic, block, "slot")
+# Tag-wise processing -----------------------------------------------------
+
+roxy_tag_rd <- function(x, topic, base_path, env) {
+  UseMethod("roxy_tag_rd")
 }
 
-topic_add_fields <- function(topic, block) {
-  process_def_tag(topic, block, "field")
+roxy_tag_rd.default <- function(x, topic, base_path, env) {
 }
 
-topic_add_eval_rd <- function(topic, block, env) {
-  tags <- block_get_tags(block, "evalRd")
 
-  for (tag in tags) {
-    out <- roxy_tag_eval(tag, env)
-    topic$add_simple_field("rawRd", out)
-  }
+# Internal tags -----------------------------------------------------------
+
+#' @export
+roxy_tag_rd.roxy_tag_.reexport <- function(x, topic, base_path, env) {
+  topic$add(roxy_field_reexport(x$val$pkg, x$val$fun))
 }
 
-topic_add_include_rmd <- function(topic, block, base_path) {
-  tags <- block_get_tags(block, "includeRmd")
-
-  for (tag in tags) {
-    if (!is_installed("rmarkdown")) {
-      roxy_tag_warning(tag, "Needs the rmarkdown package")
-    }
-    out <- block_include_rmd(tag, block, base_path)
-    if (!is.null(out[[1]])) {
-      topic$add_simple_field("details", out[[1]])
-    }
-    lapply(out[-1], function(s) {
-      topic$add_simple_field("rawRd", s)
-    })
-  }
+#' @export
+roxy_tag_rd.roxy_tag_.formals <- function(x, topic, base_path, env) {
+  topic$add_simple_field("formals", x$val)
 }
 
-topic_add_sections <- function(topic, block) {
-  tags <- block_get_tags(block, "section")
+#' @export
+roxy_tag_rd.roxy_tag_.methods <- function(x, topic, base_path, env) {
+  desc <- lapply(x$val, function(x) docstring(x$value@.Data))
+  usage <- map_chr(x$val, function(x) {
+    function_usage(x$value@name, formals(x$value@.Data))
+  })
 
-  for (tag in tags) {
-    pieces <- str_split(tag$val, ":", n = 2)[[1]]
+  has_docs <- !map_lgl(desc, is.null)
+  desc <- desc[has_docs]
+  usage <- usage[has_docs]
 
-    title <- str_split(pieces[1], "\n")[[1]]
-    if (length(title) > 1) {
-      roxy_tag_warning(tag,
-        "Section title spans multiple lines: \n", "@section ", title[1]
-      )
-      return()
-    }
-
-    topic$add_field(roxy_field_section(pieces[1], pieces[2]))
-  }
+  topic$add_simple_field("rcmethods", setNames(desc, usage))
 }
 
-topic_add_doc_type <- function(topic, block) {
-  tag <- block_get_tag(block, "docType")
-  if (is.null(tag)) {
+# Regular tags ------------------------------------------------------------
+
+#' @export
+roxy_tag_parse.roxy_tag_aliases <- function(x) tag_value(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_author <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_author <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_backref <- function(x) tag_value(x)
+#' @export
+roxy_tag_rd.roxy_tag_backref <- function(x, topic, base_path, env) {
+  topic$add_simple_field("backref", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_concept <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_concept <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_describeIn <- function(x) tag_name_description(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_description <- function(x) tag_markdown_with_sections(x)
+#' @export
+roxy_tag_rd.roxy_tag_description <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_details <- function(x) tag_markdown_with_sections(x)
+#' @export
+roxy_tag_rd.roxy_tag_details <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_docType <- function(x) tag_name(x)
+#' @export
+roxy_tag_rd.roxy_tag_docType <- function(x, topic, base_path, env) {
+  topic$add_simple_field("docType", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_encoding <- function(x) tag_value(x)
+#' @export
+roxy_tag_rd.roxy_tag_encoding <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_evalRd <- function(x) tag_code(x)
+#' @export
+roxy_tag_rd.roxy_tag_evalRd <- function(x, topic, base_path, env) {
+  topic$add_simple_field("rawRd", roxy_tag_eval(x, env))
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_family <- function(x) tag_value(x)
+#' @export
+roxy_tag_rd.roxy_tag_family <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_field <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_rd.roxy_tag_field <- function(x, topic, base_path, env) {
+  value <- setNames(x$val$description, x$val$name)
+  topic$add_simple_field(x$tag, value)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_format <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_format <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
+  if (!is_installed("rmarkdown")) {
+    roxy_tag_warning(x, "Needs the rmarkdown package")
     return()
   }
 
-  topic$add_simple_field("docType", tag$val)
-
-  if (tag$val == "package") {
-    name <- block_get_tag(block, "name")
-    if (!str_detect(name$val, "-package")) {
-      topic$add_simple_field("alias", package_suffix(name$val))
-    }
-  }
+  tag_value(x)
+}
+#' @export
+roxy_tag_rd.roxy_tag_includeRmd <- function(x, topic, base_path, env) {
+  topic$add_markdown_field("details", roxy_tag_include_rmd(x, base_path))
 }
 
-package_suffix <- function(name) {
-  paste0(name, "-package")
+#' @export
+roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
+#' @export
+roxy_tag_rd.roxy_tag_keywords <- function(x, topic, base_path, env) {
+  topic$add_simple_field("keyword", str_split(x$val, "\\s+")[[1]])
 }
 
-# Name + description tags ------------------------------------------------------
+#' @export
+roxy_tag_parse.roxy_tag_method <- function(x) tag_words(x, 2, 2)
 
-process_def_tag <- function(topic, block, tag) {
-  tags <- block_get_tags(block, tag)
-  if (length(tags) == 0) {
+#' @export
+roxy_tag_parse.roxy_tag_name <- function(x) tag_value(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_md <- function(x) tag_toggle(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_noMd <- function(x) tag_toggle(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_noRd <- function(x) tag_toggle(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_note <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_note <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_param <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_rd.roxy_tag_param <- function(x, topic, base_path, env) {
+  value <- setNames(x$val$description, x$val$name)
+  topic$add_simple_field(x$tag, value)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_rdname <- function(x) tag_value(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_rawRd <- function(x) tag_value(x)
+#' @export
+roxy_tag_rd.roxy_tag_rawRd <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_references <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_references <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_return <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_return <- function(x, topic, base_path, env) {
+  topic$add_simple_field("value", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_section <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_section <- function(x, topic, base_path, env) {
+  pieces <- str_split(x$val, ":", n = 2)[[1]]
+  title <- str_split(pieces[1], "\n")[[1]]
+
+  if (length(title) > 1) {
+    roxy_tag_warning(x, "Section title spans multiple lines")
     return()
   }
 
-  desc <- str_trim(map_chr(tags, c("val", "description")))
-  names(desc) <- map_chr(tags, c("val", "name"))
-
-  topic$add_simple_field(tag, desc)
+  topic$add_field(roxy_field_section(pieces[1], pieces[2]))
 }
+
+#' @export
+roxy_tag_parse.roxy_tag_seealso <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_seealso <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_slot <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_rd.roxy_tag_slot <- function(x, topic, base_path, env) {
+  value <- setNames(x$val$description, x$val$name)
+  topic$add_simple_field(x$tag, value)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_source <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_source <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_template <- function(x) tag_value(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_templateVar <- function(x) tag_name_description(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_title <- function(x, topic, base_path, env) {
+  topic$add_markdown_field(x$tag, x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_usage <- function(x) tag_value(x)

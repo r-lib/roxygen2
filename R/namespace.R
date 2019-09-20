@@ -1,22 +1,3 @@
-# Processed first
-ns_tags_import <- c(
-  "import",
-  "importFrom",
-  "importClassesFrom",
-  "importMethodsFrom",
-  "useDynLib",
-  "rawNamespace"
-)
-ns_tags <- c(
-  ns_tags_import,
-  "evalNamespace",
-  "export",
-  "exportClass",
-  "exportMethod",
-  "exportS3Method",
-  "exportPattern"
-)
-
 #' Roclet: make `NAMESPACE`
 #'
 #' @description
@@ -55,7 +36,7 @@ roclet_preprocess.roclet_namespace <- function(x,
                                                base_path,
                                                global_options = list()) {
 
-  lines <- blocks_to_ns(blocks, env, tag_set = ns_tags_import)
+  lines <- blocks_to_ns(blocks, env, import_only = TRUE)
   NAMESPACE <- file.path(base_path, "NAMESPACE")
 
   if (length(lines) == 0 && !made_by_roxygen(NAMESPACE)) {
@@ -63,7 +44,7 @@ roclet_preprocess.roclet_namespace <- function(x,
   }
 
   results <- c(made_by("#"), lines)
-  write_if_different(NAMESPACE, results, check = FALSE)
+  write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible(x)
 }
@@ -77,30 +58,6 @@ roclet_process.roclet_namespace <- function(x,
   blocks_to_ns(blocks, env)
 }
 
-#' @export
-roxy_tag_parse.roxy_tag_evalNamespace <- function(x) tag_code(x)
-#' @export
-roxy_tag_parse.roxy_tag_export <- function(x) tag_words_line(x)
-#' @export
-roxy_tag_parse.roxy_tag_exportClass <- function(x) tag_words(x, 1)
-#' @export
-roxy_tag_parse.roxy_tag_exportS3Method <- function(x) tag_words(x, min = 0, max = 2)
-#' @export
-roxy_tag_parse.roxy_tag_exportMethod <- function(x) tag_words(x, min = 1)
-#' @export
-roxy_tag_parse.roxy_tag_exportPattern <- function(x) tag_words(x, min = 1)
-#' @export
-roxy_tag_parse.roxy_tag_import <- function(x) tag_words(x, min = 1)
-#' @export
-roxy_tag_parse.roxy_tag_importClassesFrom <- function(x) tag_words(x, min = 2)
-#' @export
-roxy_tag_parse.roxy_tag_importFrom <- function(x) tag_words(x, min = 2)
-#' @export
-roxy_tag_parse.roxy_tag_importMethodsFrom <- function(x) tag_words(x, min = 2)
-#' @export
-roxy_tag_parse.roxy_tag_rawNamespace <- function(x) tag_code(x)
-#' @export
-roxy_tag_parse.roxy_tag_useDynLib <- function(x) tag_words(x, min = 1)
 
 #' @export
 roclet_output.roclet_namespace <- function(x, results, base_path, ...) {
@@ -124,85 +81,184 @@ roclet_clean.roclet_namespace <- function(x, base_path) {
 
 # NAMESPACE generation ----------------------------------------------------
 
-blocks_to_ns <- function(blocks, env, tag_set = ns_tags) {
-  lines <- map(blocks, block_to_ns, env = env, tag_set = tag_set)
+blocks_to_ns <- function(blocks, env, import_only = FALSE) {
+  lines <- map(blocks, block_to_ns, env = env, import_only = import_only)
   lines <- unlist(lines) %||% character()
 
   sort_c(unique(lines))
 }
 
-block_to_ns <- function(block, env, tag_set = ns_tags) {
-  tags <- block_get_tags(block, tag_set)
-
-  map(tags, function(tag) {
-    exec(paste0("ns_", tag$tag), tag, block, env)
-  })
+block_to_ns <- function(block, env, import_only = FALSE) {
+  map(block$tags, roxy_tag_ns, block = block, env = env, import_only = import_only)
 }
 
-ns_export <- function(tag, block, env) {
-  if (identical(tag$val, "")) {
+# Namespace tag methods ---------------------------------------------------
+
+roxy_tag_ns <- function(x, block, env, import_only = FALSE) {
+  UseMethod("roxy_tag_ns")
+}
+
+#' @export
+roxy_tag_ns.default <- function(x, block, env, import_only = FALSE) {
+
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_evalNamespace <- function(x) {
+  tag_code(x)
+}
+#' @export
+roxy_tag_ns.roxy_tag_evalNamespace <- function(x, block, env, import_only = FALSE) {
+  roxy_tag_eval(x, env)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_export <- function(x) {
+  tag_words_line(x)
+}
+#' @export
+roxy_tag_ns.roxy_tag_export <- function(x, block, env, import_only = FALSE) {
+  if (import_only) {
+    return()
+  }
+
+  if (identical(x$val, "")) {
     # FIXME: check for empty exports (i.e. no name)
     default_export(block$object, block)
   } else {
-    export(tag$val)
+    export(x$val)
   }
 }
 
-ns_exportClass       <- function(tag, block, env) export_class(tag$val)
-ns_exportMethod      <- function(tag, block, env) export_s4_method(tag$val)
-ns_exportPattern     <- function(tag, block, env) one_per_line("exportPattern", tag$val)
-ns_import            <- function(tag, block, env) one_per_line("import", tag$val)
-ns_importFrom        <- function(tag, block, env) repeat_first("importFrom", tag$val)
-ns_importClassesFrom <- function(tag, block, env) repeat_first("importClassesFrom", tag$val)
-ns_importMethodsFrom <- function(tag, block, env) repeat_first("importMethodsFrom", tag$val)
+#' @export
+roxy_tag_parse.roxy_tag_exportClass <- function(x) {
+  tag_words(x, 1)
+}
+#' @export
+roxy_tag_ns.roxy_tag_exportClass <- function(x, block, env, import_only = FALSE) {
+  if (import_only) {
+    return()
+  }
 
-ns_exportS3Method    <- function(tag, block, env) {
+  export_class(x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_exportMethod <- function(x) {
+  tag_words(x, min = 1)
+}
+#' @export
+roxy_tag_ns.roxy_tag_exportMethod <- function(x, block, env, import_only = FALSE) {
+  if (import_only) {
+    return()
+  }
+  export_s4_method(x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_exportPattern <- function(x) {
+  tag_words(x, min = 1)
+}
+#' @export
+roxy_tag_ns.roxy_tag_exportPattern <- function(x, block, env, import_only = FALSE) {
+  if (import_only) {
+    return()
+  }
+  one_per_line("exportPattern", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_exportS3Method <- function(x) {
+  tag_words(x, min = 0, max = 2)
+}
+#' @export
+roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env, import_only = FALSE) {
+  if (import_only) {
+    return()
+  }
+
   obj <- block$object
-
-  if (length(tag$val) < 2 && !inherits(obj, "s3method")) {
-    roxy_tag_warning(tag,
+  if (length(x$val) < 2 && !inherits(obj, "s3method")) {
+    roxy_tag_warning(x,
       "`@exportS3Method` and `@exportS3Method generic` must be used with an S3 method"
     )
     return()
   }
 
-  if (identical(tag$val, "")) {
+  if (identical(x$val, "")) {
     method <- attr(obj$value, "s3method")
-  } else if (length(tag$val) == 1) {
-    method <- c(tag$val, attr(obj$value, "s3method")[[2]])
+  } else if (length(x$val) == 1) {
+    method <- c(x$val, attr(obj$value, "s3method")[[2]])
   } else {
-    method <- tag$val
+    method <- x$val
   }
 
   export_s3_method(method)
 }
 
-ns_useDynLib         <- function(tag, block, env) {
-  if (length(tag$val) == 1) {
-    return(paste0("useDynLib(", auto_quote(tag$val), ")"))
+#' @export
+roxy_tag_parse.roxy_tag_import <- function(x) {
+  tag_words(x, min = 1)
+}
+#' @export
+roxy_tag_ns.roxy_tag_import <- function(x, block, env, import_only = FALSE) {
+  one_per_line("import", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_importClassesFrom <- function(x) {
+  tag_words(x, min = 2)
+}
+#' @export
+roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env, import_only = FALSE) {
+  repeat_first("importClassesFrom", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_importFrom <- function(x) {
+  tag_words(x, min = 2)
+}
+#' @export
+roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env, import_only = FALSE) {
+  repeat_first("importFrom", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_importMethodsFrom <- function(x) {
+  tag_words(x, min = 2)
+}
+#' @export
+roxy_tag_ns.roxy_tag_importMethodsFrom <- function(x, block, env, import_only = FALSE) {
+  repeat_first("importMethodsFrom", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_rawNamespace <- function(x) {
+  tag_code(x)
+}
+#' @export
+roxy_tag_ns.roxy_tag_rawNamespace  <- function(x, block, env, import_only = FALSE) {
+  x$val
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_useDynLib <- function(x) {
+  tag_words(x, min = 1)
+}
+#' @export
+roxy_tag_ns.roxy_tag_useDynLib <- function(x, block, env, import_only = FALSE) {
+  if (length(x$val) == 1) {
+    return(paste0("useDynLib(", auto_quote(x$val), ")"))
   }
 
-  if (any(grepl(",", tag$val))) {
+  if (any(grepl(",", x$val))) {
     # If there's a comma in list, don't quote output. This makes it possible
     # for roxygen2 to support other NAMESPACE forms not otherwise mapped
-    args <- paste0(tag$val, collapse = " ")
+    args <- paste0(x$val, collapse = " ")
     paste0("useDynLib(", args, ")")
   } else {
-    repeat_first("useDynLib", tag$val)
+    repeat_first("useDynLib", x$val)
   }
-}
-ns_rawNamespace  <- function(tag, block, env) tag$val
-ns_evalNamespace <- function(tag, block, env) {
-  roxy_tag_eval(tag, env)
-}
-
-# Functions used by both default_export and ns_* functions
-export           <- function(x) one_per_line("export", x)
-export_class     <- function(x) one_per_line("exportClasses", x)
-export_s4_method <- function(x) one_per_line("exportMethods", x)
-export_s3_method <- function(x) {
-  args <- paste0(auto_backtick(x), collapse = ",")
-  paste0("S3method(", args, ")")
 }
 
 # Default export methods --------------------------------------------------
@@ -223,8 +279,15 @@ default_export.default   <- function(x, block) export(x$alias)
 #' @export
 default_export.NULL      <- function(x, block) export(block_get_tag_value(block, "name"))
 
-
 # Helpers -----------------------------------------------------------------
+
+export           <- function(x) one_per_line("export", x)
+export_class     <- function(x) one_per_line("exportClasses", x)
+export_s4_method <- function(x) one_per_line("exportMethods", x)
+export_s3_method <- function(x) {
+  args <- paste0(auto_backtick(x), collapse = ",")
+  paste0("S3method(", args, ")")
+}
 
 one_per_line <- function(name, x) {
   paste0(name, "(", auto_backtick(x), ")")

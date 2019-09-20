@@ -1,27 +1,5 @@
 context("Rd: docType")
 
-# Package --------------------------------------------------------------------
-
-test_that("@docType package automatically adds package alias when needed", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @name a
-    #' @title a
-    #' @docType package
-    NULL
-
-    #' @name a-package
-    #' @title a
-    #' @docType package
-    NULL")
-
-  alias_1 <- get_tag(out[[1]], "alias")$values
-  expect_equal(alias_1, c("a", "a-package"))
-
-  alias_2 <- get_tag(out[[2]], "alias")$values
-  expect_equal(alias_2, c("a-package"))
-})
-
-
 # Data --------------------------------------------------------------------
 
 test_that("@docType data automatically adds sensible defaults", {

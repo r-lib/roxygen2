@@ -1,5 +1,4 @@
-
-block_include_rmd <- function(tag, block, base_path) {
+roxy_tag_include_rmd <- function(tag, base_path) {
   rmd <- tag$val
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
 

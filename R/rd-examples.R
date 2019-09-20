@@ -1,32 +1,34 @@
-topic_add_examples <- function(topic, block, base_path) {
-  tags <- block_get_tags(block, c("examples", "example"))
+#' @export
+roxy_tag_parse.roxy_tag_example <- function(x) {
+  x <- tag_value(x)
 
-  for (tag in tags) {
-    if (tag$tag == "examples") {
-      example <- tag$val
-    } else {
-      example <- read_example_from_path(tag, base_path)
-    }
-    topic$add_simple_field("examples", example)
-  }
-}
-
-read_example_from_path <- function(tag, base_path) {
-  path <- str_trim(tag$val)
-  nl <- str_count(path, "\n")
+  nl <- str_count(x$val, "\n")
   if (any(nl) > 0) {
-    roxy_tag_warning(tag, "spans multiple lines. Do you want @examples?")
+    roxy_tag_warning(x, "spans multiple lines. Do you want @examples?")
     return()
   }
 
-  path <- file.path(base_path, path)
+  x
+}
+#' @export
+roxy_tag_rd.roxy_tag_example <- function(x, topic, base_path, env) {
+  path <- file.path(base_path, x$val)
   if (!file.exists(path)) {
-    roxy_tag_warning(tag, "'", path, "' doesn't exist")
+    roxy_tag_warning(x, "'", path, "' doesn't exist")
     return()
   }
 
   code <- read_lines(path)
-  escape_examples(code)
+  topic$add_simple_field("examples", escape_examples(code))
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_examples <- function(x) {
+  tag_examples(x)
+}
+#' @export
+roxy_tag_rd.roxy_tag_examples <- function(x, topic, base_path, env) {
+  topic$add_simple_field("examples", x$val)
 }
 
 # Works like escape, but unescapes special rd example commands.

@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* Using `@docType package` no longer automatically adds `-name`. Instead 
+  document `_PACKAGE` to get all the defaults for package documentation.
+  (Removing this feature allowed for simplification of the code.)
+
 * `roclet_tags()` is no longer used; instead define a `roxy_tag_parse()` method.
   If you tag is `@mytag`, then the class name associated with it is
   `roxy_tag_mytag` so the method should be call `roxy_tag_parse.roxy_tag_mytag()`.

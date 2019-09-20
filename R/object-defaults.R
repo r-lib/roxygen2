@@ -3,6 +3,14 @@ object_defaults <- function(x) UseMethod("object_defaults")
 #' @export
 object_defaults.default <- function(x) list()
 
+#' @exportS3Method object_defaults "function"
+object_defaults.function <- function(x) {
+  # Used in process_inherit_params()
+  list(
+    roxy_tag(".formals", NULL, names(formals(x$value)))
+  )
+}
+
 #' @export
 object_defaults.data <- function(x) {
   str_out <- rd(object_format(x$value))
@@ -44,7 +52,7 @@ object_defaults.import <- function(x) {
     roxy_tag("name", NULL, "reexports"),
     roxy_tag("keywords", NULL, "internal"),
     roxy_tag("title", NULL, "Objects exported from other packages"),
-    roxy_tag(".reexport", NULL, roxy_field_reexport(x$value$pkg, x$value$fun))
+    roxy_tag(".reexport", NULL, list(pkg = x$value$pkg, fun = x$value$fun))
   )
 }
 
@@ -58,7 +66,9 @@ object_defaults.s4class <- function(x) {
 #' @export
 object_defaults.rcclass <- function(x) {
   list(
-    roxy_tag("docType", NULL, "class")
+    roxy_tag("docType", NULL, "class"),
+    if (!is.null(x$methods))
+      roxy_tag(".methods", NULL, x$methods)
   )
 }
 
@@ -68,3 +78,10 @@ object_defaults.s4method <- function(x) {
     roxy_tag("docType", NULL, "class")
   )
 }
+
+# Helpers -----------------------------------------------------------------
+
+package_suffix <- function(name) {
+  paste0(name, "-package")
+}
+

@@ -13,7 +13,8 @@ roxy_tag_parse(x)
 roxy_tag_warning(x, ...)
 }
 \arguments{
-\item{tag}{Tag name}
+\item{tag}{Tag name. Arguments starting with \code{.} are reserved for internal
+usage.}
 
 \item{raw}{Raw tag value, a string.}
 

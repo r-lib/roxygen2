@@ -1,3 +1,39 @@
+#' @export
+roxy_tag_parse.roxy_tag_inherit <- function(x) tag_inherit(x)
+#' @export
+roxy_tag_rd.roxy_tag_inherit <- function(x, topic, base_path, env) {
+  field <- roxy_field_inherit(x$val$source, list(x$val$fields))
+  topic$add_field(field)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_inheritParams <- function(x) tag_value(x)
+#' @export
+roxy_tag_rd.roxy_tag_inheritParams <- function(x, topic, base_path, env) {
+  field <- roxy_field_inherit(x$val, list("params"))
+  topic$add_field(field)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_inheritDotParams <- function(x) {
+  tag_two_part(x, "source", "args", required = FALSE, markdown = FALSE)
+}
+#' @export
+roxy_tag_rd.roxy_tag_inheritDotParams <- function(x, topic, base_path, env) {
+  field <- roxy_field_inherit_dot_params(x$val$source, x$val$args)
+  topic$add_field(field)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_inheritSection <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_rd.roxy_tag_inheritSection <- function(x, topic, base_path, env) {
+  field <- roxy_field_inherit_section(x$val$name, x$val$description)
+  topic$add_field(field)
+}
+
+# Process inheritance -----------------------------------------------------
+
 topics_process_inherit <- function(topics, env) {
   inherits <- function(type) {
     function(x) x$inherits_from(type)

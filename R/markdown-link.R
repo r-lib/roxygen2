@@ -82,7 +82,7 @@ add_linkrefs_to_md <- function(text) {
 #' @noRd
 #' @importFrom xml2 xml_name
 
-parse_link <- function(destination, contents) {
+parse_link <- function(destination, contents, state) {
 
   ## Not a [] or [][] type link, remove prefix if it is
   if (! grepl("^R:", destination)) return(NULL)
@@ -139,7 +139,7 @@ parse_link <- function(destination, contents) {
     )
 
   } else {
-    contents <- mdxml_link_text(contents)
+    contents <- mdxml_link_text(contents, state)
 
     list(
       paste0(

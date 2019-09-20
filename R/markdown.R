@@ -48,8 +48,8 @@ mdxml_node_to_rd <- function(xml, state) {
     text = escape_comment(xml_text(xml)),
     emph = paste0("\\emph{", mdxml_children_to_rd(xml, state), "}"),
     strong = paste0("\\strong{", mdxml_children_to_rd(xml, state), "}"),
-    softbreak = "\n",
-    linebreak = "\n",
+    softbreak = mdxml_break(state),
+    linebreak = mdxml_break(state),
 
     code = mdxml_code(xml, state),
     code_block = paste0("\\preformatted{", escape_verb(xml_text(xml)), "}"),
@@ -57,7 +57,7 @@ mdxml_node_to_rd <- function(xml, state) {
     table = mdxml_table(xml, state),
     list = mdxml_list(xml, state),
     item = mdxml_item(xml, state),
-    link = mdxml_link(xml),
+    link = mdxml_link(xml, state),
     image = mdxml_image(xml),
     heading = mdxml_heading(xml, state),
 
@@ -79,6 +79,10 @@ mdxml_unknown <- function(xml, tag) {
 mdxml_unsupported <- function(xml, tag, feature) {
   roxy_tag_warning(tag, "Use of ", feature, " is not currently supported")
   escape_comment(xml_text(xml))
+}
+
+mdxml_break <- function(state) {
+  if (isTRUE(state$inlink)) " " else "\n"
 }
 
 mdxml_code <- function(xml, tag) {
@@ -149,29 +153,32 @@ mdxml_item <- function(xml, state) {
   paste0("\n\\item ", cnts)
 }
 
-mdxml_link <- function(xml) {
+mdxml_link <- function(xml, state) {
   ## Hyperlink, this can also be a link to a function
   dest <- xml_attr(xml, "destination")
   contents <- xml_contents(xml)
 
-  link <- parse_link(dest, contents)
+  link <- parse_link(dest, contents, state)
 
   if (!is.null(link)) {
     paste0(link, collapse = "")
   } else if (dest == "" || dest == xml_text(xml)) {
     paste0("\\url{", escape_comment(xml_text(xml)), "}")
   } else {
-    paste0("\\href{", dest, "}{", mdxml_link_text(contents), "}")
+    paste0("\\href{", dest, "}{", mdxml_link_text(contents, state), "}")
   }
 }
 
-# Newlines in markdown get converted to softbreaks/linebreaks by
-# markdown_xml(), which then get interpreted as empty strings by
-# xml_text(). So we preserve newlines as spaces.
-mdxml_link_text <- function(xml_contents) {
-  text <- xml_text(xml_contents)
-  text[xml_name(xml_contents) %in% c("linebreak", "softbreak")] <- " "
-  escape_comment(paste0(text, collapse = ""))
+mdxml_link_text <- function(xml_contents, state) {
+  # Newlines in markdown get converted to softbreaks/linebreaks by
+  # markdown_xml(), which then get interpreted as empty strings by
+  # xml_text(). So we preserve newlines as spaces.
+  inlink <- state$inlink
+  on.exit(state$inlink <- inlink, add = TRUE)
+  state$inlink <- TRUE
+
+  text <- map_chr(xml_contents, mdxml_node_to_rd, state)
+  paste0(text, collapse = "")
 }
 
 mdxml_image = function(xml) {

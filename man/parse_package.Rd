@@ -19,7 +19,8 @@ parse_file(
   file,
   env = env_file(file),
   registry = default_tags(),
-  global_options = list()
+  global_options = list(),
+  srcref_path = NULL
 )
 
 parse_text(

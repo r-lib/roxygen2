@@ -29,7 +29,7 @@ test_that("error-ful evalRd generates warning", {
       #' @name a
       #' @title a
       NULL"),
-    "@evalRd failed with error"
+    "failed with error"
   )
 })
 

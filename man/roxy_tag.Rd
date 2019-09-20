@@ -3,75 +3,24 @@
 \name{roxy_tag}
 \alias{roxy_tag}
 \alias{roxy_tag_warning}
-\alias{tag_value}
-\alias{tag_inherit}
-\alias{tag_name}
-\alias{tag_two_part}
-\alias{tag_name_description}
-\alias{tag_words}
-\alias{tag_words_line}
-\alias{tag_toggle}
-\alias{tag_code}
-\alias{tag_examples}
-\alias{tag_markdown}
-\alias{tag_markdown_with_sections}
-\title{Parsing tags.}
+\title{\code{roxy_tag} S3 constructor}
 \usage{
-roxy_tag(tag, val, file = "", line = 0)
+roxy_tag(tag, raw, val = NULL, file = NA_character_, line = NA_integer_)
 
 roxy_tag_warning(x, ...)
-
-tag_value(x)
-
-tag_inherit(x)
-
-tag_name(x)
-
-tag_two_part(first, second, required = TRUE, markdown = TRUE)
-
-tag_name_description(x)
-
-tag_words(min = 0, max = Inf)
-
-tag_words_line(x)
-
-tag_toggle(x)
-
-tag_code(x)
-
-tag_examples(x)
-
-tag_markdown(x)
-
-tag_markdown_with_sections(x)
 }
 \arguments{
 \item{tag}{Tag name}
 
-\item{val}{Tag value. When read from the file, this will be a string,
-but after parsing can be a more complicated structure (typically
-a character vector, but sometimes a list).}
+\item{raw}{Raw tag value, a string.}
+
+\item{val}{Parsed tag value, typically a character vector, but sometimes
+a list. Usually filled in by \code{tag_parsers}}
 
 \item{file, line}{Location of the tag}
-
-\item{first, second}{Name of first and second parts of two part tags}
-
-\item{required}{Is the second part required (TRUE) or can it be blank
-(FALSE)?}
-
-\item{markdown}{Should the second part be parsed as markdown?}
-
-\item{min, max}{Minimum and maximum number of words}
 }
 \description{
-\code{roxy_tag} constructs a tag object, and \code{roxy_tag_warning} makes
-an informative warning using the location information stored in the tag.
-The remainder of the tag functions parse the tag value, convert a string
-into a richer R object, or providing informative warnings and returning
-valid if the value is invalid.
-}
-\details{
-Two exceptions to the rule are \code{tag_words} and \code{tag_two_part}, which are
-tag parsing generator functions.
+\code{roxy_tag()} is the constructor for tag objects.
+\code{roxy_tag_warning()} generates a warning that gives the location of the tag.
 }
 \keyword{internal}

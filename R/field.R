@@ -19,8 +19,6 @@ roxy_field <- function(field, ...) {
   )
 }
 
-is_roxy_field <- function(x) inherits(x, "roxy_field")
-
 #' @export
 print.roxy_field <- function(x, ...) {
   cat(format(x, wrap = FALSE), "\n")

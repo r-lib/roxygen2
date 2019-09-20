@@ -1,11 +1,3 @@
-markdown_if_active <- function(text, tag, sections = FALSE) {
-  if (markdown_on()) {
-    markdown(text, tag, sections)
-  } else {
-    text
-  }
-}
-
 markdown <- function(text, tag = NULL, sections = FALSE) {
   esc_text <- escape_rd_for_md(text)
   esc_text_linkrefs <- add_linkrefs_to_md(esc_text)

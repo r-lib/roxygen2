@@ -56,11 +56,13 @@ parse_package <- function(path = ".",
 parse_file <- function(file,
                        env = env_file(file),
                        registry = default_tags(),
-                       global_options = list()) {
+                       global_options = list(),
+                       srcref_path = NULL) {
 
   blocks <- tokenize_file(file,
     registry = registry,
-    global_options = global_options
+    global_options = global_options,
+    srcref_path = srcref_path
   )
 
   if (!is.null(env)) {
@@ -90,7 +92,8 @@ parse_text <- function(text,
     file,
     env = env,
     registry = registry,
-    global_options = global_options
+    global_options = global_options,
+    srcref_path = "<text>"
   )
   blocks <- order_blocks(blocks)
   blocks
@@ -116,14 +119,11 @@ env_package <- function(path) {
 
 order_blocks <- function(blocks) {
   block_order <- function(x) {
-    if (!"order" %in% names(x)) {
-      Inf
-    } else {
-      ord <- x[names(x) == "order"]
-      if (length(ord) > 1) {
-        ord <- ord[[length(ord)]]
-      }
+    if (block_has_tags(x, "order")) {
+      ord <- block_get_tag_value(x, "order")
       as.double(ord)
+    } else {
+      Inf
     }
   }
 

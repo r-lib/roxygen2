@@ -53,7 +53,7 @@ test_that("no options gives default values", {
   ")[[1]]
 
   expect_equal(
-    block$inherit$fields,
+    block_get_tag_value(block, "inherit")$fields,
     c(
       "params", "return", "title", "description", "details", "seealso",
       "sections", "references", "examples", "author", "source"
@@ -67,7 +67,7 @@ test_that("some options overrides defaults", {
     NULL
   ")[[1]]
 
-  expect_equal(block$inherit$fields, "return")
+  expect_equal(block_get_tag_value(block, "inherit")$fields, "return")
 })
 
 

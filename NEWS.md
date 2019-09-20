@@ -1,5 +1,20 @@
 # roxygen2 (development version)
 
+* The internal `roxy_tag()` gains a new field: `raw`. This now always contains
+  the raw string value parsed from the file. `val` is only set after the tag
+  has been parsed.
+
+* The internal data structure used to represent blocks has been overhauled.
+  It is now documented and stable - see `roxy_block()` for details. If you're
+  one of the few people who have written a roxygen2 extension, this will
+  break your code - but the documentation, object structure, and print methods 
+  are now much better that I hope it's not too annoying! You can also
+  learn more in the new `vignette("extending")` - a bit thanks to @mikldk
+  for getting this started (#882).
+
+* You now get a warning if you use multiple `@usage` statements. Previously,
+  the first was used without a warning
+
 * Functions documented in `reexports` are now sorted alphabetically by
   package (#765).
 

@@ -2,16 +2,14 @@
 % Please edit documentation in R/roclet.R
 \name{roclet}
 \alias{roclet}
-\alias{roclet_output}
 \alias{roclet_tags}
 \alias{roclet_preprocess}
 \alias{roclet_process}
+\alias{roclet_output}
 \alias{roclet_clean}
 \title{Build a new roclet.}
 \usage{
 roclet(subclass, ...)
-
-roclet_output(x, results, base_path, ...)
 
 roclet_tags(x)
 
@@ -19,7 +17,22 @@ roclet_preprocess(x, blocks, base_path, global_options = list())
 
 roclet_process(x, blocks, env, base_path, global_options = list())
 
+roclet_output(x, results, base_path, ...)
+
 roclet_clean(x, base_path)
+}
+\arguments{
+\item{x}{A \code{roclet} object.}
+
+\item{blocks}{A list of \link{roxy_block} objects.}
+
+\item{base_path}{Path to root of source package.}
+
+\item{global_options}{List of roxygen2 options.}
+
+\item{env}{Package environment.}
+
+\item{results}{Value returned from your \code{roclet_process()} method.}
 }
 \description{
 To create a new roclet, you will need to create a constructor function
@@ -29,7 +42,7 @@ that wraps \code{roclet}, and then implement the methods described below.
 
 \itemize{
 \item \code{roclet_tags()}: return named list, where names give recognised tags and
-values give tag parsing function. See \link{roxy_tag} for built-in options.
+values give tag parsing function. See \link{roxy_tag} for built-in parsers.
 \item \code{roclet_preprocess()} is called after blocks have been parsed but before
 code has been evaluated. This should only be needed if your roclet affects
 how code will evaluated. Should return a roclet.

@@ -126,9 +126,9 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
     return()
   }
 
-  name <- block$name %||% attr(block, "object")$topic
+  name <- block_get_tag(block, "name")$val %||% block$object$topic
   if (is.null(name)) {
-    block_warning(block, "Missing name")
+    roxy_tag_warning(block$tags[[1]], "Missing name")
     return()
   }
 
@@ -138,8 +138,10 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_name_aliases(rd, block, name)
 
   # Some fields added directly by roxygen internals
-  fields <- Filter(is_roxy_field, block)
-  rd$add(fields)
+  tags <- Filter(roxy_tag_is_field, block$tags)
+  for (tag in tags) {
+    rd$add(tag$val)
+  }
 
   topic_add_backref(rd, block)
   topic_add_doc_type(rd, block)
@@ -158,13 +160,12 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   topic_add_value(rd, block)
 
   if (rd$has_field("description") && rd$has_field("reexport")) {
-    block_warning(block, "Can't use description when re-exporting")
+    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
     return()
   }
 
   describe_rdname <- topic_add_describe_in(rd, block, env)
-
-  filename <- describe_rdname %||% block$rdname %||% nice_name(name)
+  filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)
   rd$filename <- paste0(filename, ".Rd")
 
   rd
@@ -204,58 +205,51 @@ roclet_clean.roclet_rd <- function(x, base_path) {
   unlink(purrr::keep(rd, made_by_roxygen))
 }
 
-block_tags <- function(x, tag) {
-  x[names(x) %in% tag]
-}
-
+# Does this block get an Rd file?
 needs_doc <- function(block) {
-  # Does this block get an Rd file?
-  if (any(names(block) == "noRd")) {
+  if (block_has_tags(block, "noRd")) {
     return(FALSE)
   }
 
-  key_tags <- c("description", "param", "return", "title", "example",
+  block_has_tags(block, c(
+    "description", "param", "return", "title", "example",
     "examples", "name", "rdname", "usage", "details", "introduction",
     "inherit", "describeIn")
-
-  any(names(block) %in% key_tags)
+  )
 }
 
 # Tag processing functions ------------------------------------------------
 
 topic_add_backref <- function(topic, block) {
-  backrefs <- block_tags(block, "backref") %||% attr(block, "filename")
-
-  for (backref in backrefs) {
-    topic$add_simple_field("backref", backref)
+  tags <- block_get_tags(block, "backref")
+  for (tag in tags) {
+    topic$add_simple_field("backref", tag$val)
   }
 }
 
 # Simple tags can be converted directly to fields
 topic_add_simple_tags <- function(topic, block) {
-  simple_tags <- c(
-    "author", "concept", "description", "details", "encoding", "family",
-    "format", "note", "rawRd", "references",
-    "seealso", "source", "title"
+  simple_tags <- block_get_tags(block,
+    c(
+      "author", "concept", "description", "details", "encoding", "family",
+      "format", "note", "rawRd", "references",
+      "seealso", "source", "title"
+    )
   )
 
-  is_simple <- names(block) %in% simple_tags
-  tag_values <- block[is_simple]
-  tag_names <- names(block)[is_simple]
-
-  for (i in seq_along(tag_values)) {
-    if (length(tag_values[[i]]) && nchar(tag_values[[i]][[1]])) {
-      topic$add_simple_field(tag_names[[i]], tag_values[[i]][[1]])
+  for (tag in simple_tags) {
+    if (length(tag$val) && nchar(tag$val[[1]])) {
+      topic$add_simple_field(tag$tag, tag$val[[1]])
     }
-    for (sec in tag_values[[i]][-1]) {
-      topic$add_simple_field("rawRd", sec)
+    for (extra in tag$val[-1]) {
+      topic$add_simple_field("rawRd", extra)
     }
   }
 }
 
 topic_add_params <- function(topic, block) {
   # Used in process_inherit_params()
-  value <- attr(block, "object")$value
+  value <- block$object$value
   if (is.function(value)) {
     formals <- formals(value)
     topic$add_simple_field("formals", names(formals))
@@ -265,19 +259,20 @@ topic_add_params <- function(topic, block) {
 }
 
 topic_add_name_aliases <- function(topic, block, name) {
-  tags <- block_tags(block, "aliases")
+  tags <- block_get_tags(block, "aliases")
 
   if (length(tags) == 0) {
     aliases <- character()
   } else {
-    aliases <- str_split(str_trim(unlist(tags, use.names = FALSE)), "\\s+")[[1]]
+    vals <- map_chr(tags, "val")
+    aliases <- unlist(str_split(vals, "\\s+"))
   }
 
   if (any(aliases == "NULL")) {
     # Don't add default aliases
-    aliases <- aliases[aliases != "NULL"]
+    aliases <- setdiff(aliases, "NULL")
   } else {
-    aliases <- c(name, attr(block, "object")$alias, aliases)
+    aliases <- c(name, block$object$alias, aliases)
   }
   aliases <- unique(aliases)
 
@@ -287,7 +282,7 @@ topic_add_name_aliases <- function(topic, block, name) {
 
 
 topic_add_methods <- function(topic, block) {
-  obj <- attr(block, "object")
+  obj <- block$object
   if (!inherits(obj, "rcclass")) return()
 
   methods <- obj$methods
@@ -306,57 +301,61 @@ topic_add_methods <- function(topic, block) {
 }
 
 topic_add_inherit <- function(topic, block) {
-  tags <- block_tags(block, "inherit")
+  tags <- block_get_tags(block, "inherit")
   for (tag in tags) {
-    field <- roxy_field_inherit(tag$source, list(tag$fields))
+    field <- roxy_field_inherit(tag$val$source, list(tag$val$fields))
     topic$add_field(field)
   }
 
-  tags <- block_tags(block, "inheritParams")
+  tags <- block_get_tags(block, "inheritParams")
   for (tag in tags) {
-    field <- roxy_field_inherit(tag, list("params"))
+    field <- roxy_field_inherit(tag$val, list("params"))
     topic$add_field(field)
   }
 
-  tags <- block_tags(block, "inheritSection")
+  tags <- block_get_tags(block, "inheritSection")
   for (tag in tags) {
-    field <- roxy_field_inherit_section(tag$name, tag$description)
+    field <- roxy_field_inherit_section(tag$val$name, tag$val$description)
     topic$add_field(field)
   }
 
-  tags <- block_tags(block, "inheritDotParams")
+  tags <- block_get_tags(block, "inheritDotParams")
   for (tag in tags) {
-    field <- roxy_field_inherit_dot_params(tag$source, tag$args)
+    field <- roxy_field_inherit_dot_params(tag$val$source, tag$val$args)
     topic$add_field(field)
   }
 }
 
 
 topic_add_value <- function(topic, block) {
-  tags <- block_tags(block, "return")
+  tags <- block_get_tags(block, "return")
 
   for (tag in tags) {
-    topic$add_simple_field("value", tag)
+    topic$add_simple_field("value", tag$val)
   }
 }
 
 topic_add_keyword <- function(topic, block) {
-  tags <- block_tags(block, "keywords")
-  keywords <- unlist(str_split(str_trim(tags), "\\s+"))
+  tags <- block_get_tags(block, "keywords")
+
+  vals <- map_chr(tags, "val")
+  keywords <- unlist(str_split(vals, "\\s+"))
 
   topic$add_simple_field("keyword", keywords)
 }
 
 # Prefer explicit \code{@@usage} to a \code{@@formals} list.
 topic_add_usage <- function(topic, block, old_usage = FALSE) {
-  if (is.null(block$usage)) {
-    usage <- object_usage(attr(block, "object"), old_usage = old_usage)
-  } else if (block$usage == "NULL") {
+  tag <- block_get_tag(block, "usage")
+
+  if (is.null(tag)) {
+    usage <- object_usage(block$object, old_usage = old_usage)
+  } else if (tag$val == "NULL") {
     usage <- NULL
   } else {
     # Treat user input as already escaped, otherwise they have no way
     # to enter \S4method etc.
-    usage <- rd(block$usage)
+    usage <- rd(tag$val)
   }
   topic$add_simple_field("usage", usage)
 }
@@ -370,26 +369,18 @@ topic_add_fields <- function(topic, block) {
 }
 
 topic_add_eval_rd <- function(topic, block, env) {
-  tags <- block_tags(block, "evalRd")
+  tags <- block_get_tags(block, "evalRd")
 
   for (tag in tags) {
-    out <- block_eval(tag, block, env, "@evalRd")
-    if (!is.null(out)) {
-      topic$add_simple_field("rawRd", out)
-    }
+    out <- roxy_tag_eval(tag, env)
+    topic$add_simple_field("rawRd", out)
   }
 }
 
 topic_add_include_rmd <- function(topic, block, base_path) {
-  rmds <- block_tags(block, "includeRmd")
+  tags <- block_get_tags(block, "includeRmd")
 
-  for (rmd in rmds) {
-    tag <- roxy_tag(
-      "includeRmd",
-      rmd,
-      attr(block, "filename"),
-      attr(block, "location")[[1]]
-    )
+  for (tag in tags) {
     if (!is_installed("rmarkdown")) {
       roxy_tag_warning(tag, "Needs the rmarkdown package")
     }
@@ -404,17 +395,17 @@ topic_add_include_rmd <- function(topic, block, base_path) {
 }
 
 topic_add_sections <- function(topic, block) {
-  sections <- block_tags(block, "section")
+  tags <- block_get_tags(block, "section")
 
-  for (section in sections) {
-    pieces <- str_split(section, ":", n = 2)[[1]]
+  for (tag in tags) {
+    pieces <- str_split(tag$val, ":", n = 2)[[1]]
 
     title <- str_split(pieces[1], "\n")[[1]]
     if (length(title) > 1) {
-      return(block_warning(
-        block,
+      roxy_tag_warning(tag,
         "Section title spans multiple lines: \n", "@section ", title[1]
-      ))
+      )
+      return()
     }
 
     topic$add_field(roxy_field_section(pieces[1], pieces[2]))
@@ -422,40 +413,35 @@ topic_add_sections <- function(topic, block) {
 }
 
 topic_add_doc_type <- function(topic, block) {
-  doctype <- block$docType
-  if (is.null(doctype)) return()
-
-  topic$add_simple_field("docType", doctype)
-
-  if (doctype == "package") {
-    name <- block$name
-    if (!str_detect(name, "-package")) {
-      topic$add_simple_field("alias", package_suffix(name))
-    }
+  tag <- block_get_tag(block, "docType")
+  if (is.null(tag)) {
+    return()
   }
 
+  topic$add_simple_field("docType", tag$val)
+
+  if (tag$val == "package") {
+    name <- block_get_tag(block, "name")
+    if (!str_detect(name$val, "-package")) {
+      topic$add_simple_field("alias", package_suffix(name$val))
+    }
+  }
 }
 
 package_suffix <- function(name) {
   paste0(name, "-package")
 }
 
-process_tag <- function(block, tag, f = roxy_field, ...) {
-  matches <- block[names(block) == tag]
-  if (length(matches) == 0) return()
-
-  lapply(matches, function(p) f(tag, p, ...))
-}
-
 # Name + description tags ------------------------------------------------------
 
-
 process_def_tag <- function(topic, block, tag) {
-  tags <- block[names(block) == tag]
-  if (length(tags) == 0) return()
+  tags <- block_get_tags(block, tag)
+  if (length(tags) == 0) {
+    return()
+  }
 
-  desc <- str_trim(sapply(tags, "[[", "description"))
-  names(desc) <- sapply(tags, "[[", "name")
+  desc <- str_trim(map_chr(tags, c("val", "description")))
+  names(desc) <- map_chr(tags, c("val", "name"))
 
   topic$add_simple_field(tag, desc)
 }

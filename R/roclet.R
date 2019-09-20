@@ -6,7 +6,7 @@
 #' @section Methods:
 #'
 #' * `roclet_tags()`: return named list, where names give recognised tags and
-#'   values give tag parsing function. See [roxy_tag] for built-in options.
+#'   values give tag parsing function. See [roxy_tag] for built-in parsers.
 #'
 #' * `roclet_preprocess()` is called after blocks have been parsed but before
 #'   code has been evaluated. This should only be needed if your roclet affects
@@ -22,6 +22,12 @@
 #' * `roclet_clean()` called when `roxygenise(clean = TRUE)`. Should remove
 #'   any files created by the roclet.
 #'
+#' @param x A `roclet` object.
+#' @param blocks A list of [roxy_block] objects.
+#' @param results Value returned from your `roclet_process()` method.
+#' @param base_path Path to root of source package.
+#' @param global_options List of roxygen2 options.
+#' @param env Package environment.
 #' @keywords internal
 #' @name roclet
 NULL
@@ -34,16 +40,9 @@ roclet <- function(subclass, ...) {
 
 #' @export
 #' @rdname roclet
-roclet_output <- function(x, results, base_path, ...) {
-  UseMethod("roclet_output", x)
-}
-
-#' @export
-#' @rdname roclet
 roclet_tags <- function(x) {
   UseMethod("roclet_tags")
 }
-
 
 #' @export
 #' @rdname roclet
@@ -60,6 +59,12 @@ roclet_preprocess.default <- function(x, blocks, base_path, global_options = lis
 #' @rdname roclet
 roclet_process <- function(x, blocks, env, base_path, global_options = list()) {
   UseMethod("roclet_process")
+}
+
+#' @export
+#' @rdname roclet
+roclet_output <- function(x, results, base_path, ...) {
+  UseMethod("roclet_output", x)
 }
 
 #' @export
@@ -120,9 +125,15 @@ is.roclet <- function(x) inherits(x, "roclet")
 #' @param global_options List of global options
 #' @export
 #' @keywords internal
-roc_proc_text <- function(roclet, input, registry = default_tags(),
+roc_proc_text <- function(roclet,
+                          input,
+                          registry = NULL,
                           global_options = list()) {
   stopifnot(is.roclet(roclet))
+
+  if (is.null(registry)) {
+    registry <- c(default_tags(), roclet_tags(roclet))
+  }
 
   file <- tempfile()
   write_lines(input, file)

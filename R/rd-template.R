@@ -18,28 +18,27 @@ template_eval <- function(template_path, vars) {
 }
 
 process_templates <- function(block, base_path, global_options = list()) {
-  template_locs <- names(block) == "template"
-  template_tags <- block[template_locs]
-  if (length(template_tags) == 0)
+  tags <- block_get_tags(block, "template")
+  if (length(tags) == 0)
     return(block)
 
-  templates <- unlist(template_tags, use.names = FALSE)
+  templates <- map_chr(tags, "val")
   paths <- map_chr(templates, template_find, base_path = base_path)
 
-  var_tags <- block[names(block) == "templateVar"]
-  vars <- set_names(map(var_tags, "description"), map_chr(var_tags, "name"))
+  var_tags <- block_get_tags(block, "templateVar")
+  vars <- set_names(
+    map(var_tags, c("val", "description")),
+    map_chr(var_tags, c("val", "name"))
+  )
   vars <- lapply(vars, utils::type.convert, as.is = TRUE)
 
   results <- lapply(paths, template_eval, vars = list2env(vars))
   tokens <- lapply(results, tokenise_block, file = "TEMPLATE", offset = 0L)
-
-  # Insert templates back in the location where they came from
-  tags <- lapply(block, list)
-  tags[template_locs] <- lapply(tokens, parse_tags,
+  tags <- lapply(tokens, parse_tags,
     registry = roclet_tags.roclet_rd(list()),
     global_options = global_options
   )
-  names(tags)[template_locs] <- ""
 
-  roxy_block_copy(block, unlist(tags, recursive = FALSE))
+  # Insert templates back in the location where they came from
+  block_replace_tags(block, "template", tags)
 }

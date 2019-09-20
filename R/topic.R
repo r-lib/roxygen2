@@ -66,7 +66,6 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     if (is.null(field))
       return()
 
-    stopifnot(is_roxy_field(field))
     field_name <- field$field
     if (self$has_field(field_name) && !overwrite) {
       field <- merge(self$get_field(field_name), field)

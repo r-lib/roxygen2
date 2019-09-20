@@ -150,7 +150,8 @@ List tokenise_block(CharacterVector lines, std::string file = "",
       _["line"] = rows[i] + 1,
       _["tag"] = tags[i],
       // Rcpp::String() necessary to tag string as UTF-8
-      _["val"] = Rcpp::String(stripTrailingNewline(vals[i]))
+      _["raw"] = Rcpp::String(stripTrailingNewline(vals[i])),
+      _["val"] = R_NilValue
     );
     out[i].attr("class") = "roxy_tag";
   }

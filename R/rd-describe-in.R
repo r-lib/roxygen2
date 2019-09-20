@@ -1,34 +1,31 @@
 topic_add_describe_in <- function(topic, block, env) {
-  tags <- block_tags(block, "describeIn")
-  if (length(tags) == 0)
-    return(NULL)
-
-  if (length(tags) > 1) {
-    block_warning(block, "May only use one @describeIn per block")
-    return()
-  }
-  if (is.null(attr(block, "object"))) {
-    block_warning(block, "@describeIn must be used with an object")
-    return()
-  }
-  if (any(names(block) == "name")) {
-    block_warning(block, "@describeIn can not be used with @name")
-    return()
-  }
-  if (any(names(block) == "rdname")) {
-    block_warning(block, "@describeIn can not be used with @rdname")
+  tag <- block_get_tag(block, "describeIn")
+  if (is.null(tag)) {
     return()
   }
 
-  dest <- find_object(tags$describeIn$name, env)
-  label <- build_label(attr(block, "object"), dest, block)
+  if (is.null(block$object)) {
+    roxy_tag_warning(tag, "must be used with an object")
+    return()
+  }
+  if (block_has_tags(block,  "name")) {
+    roxy_tag_warning(tag, "can not be used with @name")
+    return()
+  }
+  if (block_has_tags(block, "rdname")) {
+    roxy_tag_warning(tag, "can not be used with @rdname")
+    return()
+  }
+
+  dest <- find_object(tag$val$name, env)
+  label <- build_label(block$object, dest, block)
   if (is.null(label))
     return()
 
   topic$add(roxy_field_minidesc(
     label$type,
     label$label,
-    tags$describeIn$description
+    tag$val$description
   ))
   dest$topic
 }

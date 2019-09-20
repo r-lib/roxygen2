@@ -68,8 +68,12 @@ test_that("incomplete rd in tag raises error", {
 })
 
 test_that("incomplete rd in prequel raises error", {
-  expect_warning(roc_proc_text(rd_roclet(), "
-    #' Title {
-    x <- 1"), "mismatched braces")
+  expect_warning(
+    roc_proc_text(rd_roclet(), "
+      #' Title {
+      x <- 1"
+    ),
+    "mismatched braces"
+  )
 })
 

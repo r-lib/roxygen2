@@ -101,24 +101,6 @@ compact <- function(x) {
   x[!map_lgl(x, is.null)]
 }
 
-block_eval <- function(tag, block, env, tag_name) {
-  tryCatch({
-    expr <- parse(text = tag)
-    out <- eval(expr, envir = env)
-
-    if (!is.character(out)) {
-      block_warning(block, tag_name, " did not evaluate to a string")
-    } else if (anyNA(out)) {
-      block_warning(block, tag_name, " result contained NA")
-    } else {
-      out
-    }
-  }, error = function(e) {
-    block_warning(block, tag_name, " failed with error:\n", e$message)
-  })
-}
-
-
 # Parse DESCRIPTION into convenient format
 read.description <- function(file) {
   dcf <- desc::desc(file = file)
@@ -126,7 +108,6 @@ read.description <- function(file) {
   fields <- dcf$fields()
   purrr::map(purrr::set_names(fields), ~ dcf$get_field(.x))
 }
-
 
 invert <- function(x) {
   if (length(x) == 0) return()
@@ -154,7 +135,7 @@ collapse <- function(key, value, fun, ...) {
 }
 
 cat_line <- function(...) {
-  cat(..., "\n", sep = "")
+  cat(paste0(..., "\n", collapse = ""))
 }
 
 tag_aliases <- function(f) {

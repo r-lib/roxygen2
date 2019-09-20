@@ -69,23 +69,6 @@ test_that("argument order for multi-parameter documentation", {
   expect_equal(get_tag(out[["b.Rd"]], "param")$values, c(`x,z`="X,Z", y="Y", w="W"))
 })
 
-test_that("argument order for multiple usage statements", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' A.
-    #'
-    #' @usage a(x, w)
-    #' @usage a(x, y)
-    #' @usage a(x, z)
-    #' @param x X
-    #' @param w W
-    #' @param y Y
-    #' @param z Z
-    a <- function(x, y, z, w) {}
-    ")
-
-  expect_equal(get_tag(out[["a.Rd"]], "param")$values, c(x="X", y="Y", z="Z", w="W"))
-})
-
 test_that("argument order for @rdfile", {
   out <- roc_proc_text(rd_roclet(), "
     #' A

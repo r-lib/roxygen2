@@ -5,7 +5,7 @@ test_that("parses into tag and value", {
   expect_equal(length(x), 1)
 
   expect_equal(x[[1]]$tag, "xyz")
-  expect_equal(x[[1]]$val, "abc")
+  expect_equal(x[[1]]$raw, "abc")
 })
 
 test_that("description block gets empty tag", {
@@ -13,7 +13,7 @@ test_that("description block gets empty tag", {
   expect_equal(length(x), 1)
 
   expect_equal(x[[1]]$tag, "")
-  expect_equal(x[[1]]$val, "abc")
+  expect_equal(x[[1]]$raw, "abc")
 })
 
 test_that("multi line tags collapsed into one", {
@@ -22,7 +22,7 @@ test_that("multi line tags collapsed into one", {
     "#'   def"
   ))
   expect_equal(length(x), 1)
-  expect_equal(x[[1]]$val, "abc\n  def")
+  expect_equal(x[[1]]$raw, "abc\n  def")
 })
 
 test_that("description block gets empty tag when followed by tag", {
@@ -33,10 +33,10 @@ test_that("description block gets empty tag when followed by tag", {
   expect_equal(length(x), 2)
 
   expect_equal(x[[1]]$tag, "")
-  expect_equal(x[[1]]$val, "abc")
+  expect_equal(x[[1]]$raw, "abc")
 
   expect_equal(x[[2]]$tag, "xyz")
-  expect_equal(x[[2]]$val, "abc")
+  expect_equal(x[[2]]$raw, "abc")
 })
 
 test_that("leading whitespace is ignored", {
@@ -53,7 +53,7 @@ test_that("need one or more #", {
 })
 
 test_that("@@ becomes @", {
-  expect_equal(tokenise_block("#' @tag @@")[[1]]$val, "@")
+  expect_equal(tokenise_block("#' @tag @@")[[1]]$raw, "@")
 })
 
 # Inline comments ---------------------------------------------------------
@@ -89,3 +89,4 @@ test_that("Inline comments do not extend past the closing brace", {
     }; #' @seealso somewhere")[[1]]
   expect_null(get_tag(out, "seealso"))
 })
+

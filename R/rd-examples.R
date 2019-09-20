@@ -1,26 +1,27 @@
 topic_add_examples <- function(topic, block, base_path) {
-  examples <- block_tags(block, c("examples", "example"))
+  tags <- block_get_tags(block, c("examples", "example"))
 
-  for (i in seq_along(examples)) {
-    if (names(examples)[[i]] == "examples") {
-      example <- examples[[i]]
+  for (tag in tags) {
+    if (tag$tag == "examples") {
+      example <- tag$val
     } else {
-      example <- read_example_from_path(str_trim(examples[[i]]), base_path, block = block)
+      example <- read_example_from_path(tag, base_path)
     }
     topic$add_simple_field("examples", example)
   }
 }
 
-read_example_from_path <- function(path, base_path, block = NULL) {
+read_example_from_path <- function(tag, base_path) {
+  path <- str_trim(tag$val)
   nl <- str_count(path, "\n")
   if (any(nl) > 0) {
-    block_warning(block, "@example spans multiple lines. Do you want @examples?")
+    roxy_tag_warning(tag, "spans multiple lines. Do you want @examples?")
     return()
   }
 
   path <- file.path(base_path, path)
   if (!file.exists(path)) {
-    block_warning(block, "@example ", path, " doesn't exist")
+    roxy_tag_warning(tag, "'", path, "' doesn't exist")
     return()
   }
 

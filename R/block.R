@@ -1,29 +1,57 @@
+#' Blocks
+#'
+#' @description
+#' A `roxy_block` represents a single roxygen2 block.
+#'
+#' The `block_*` functions provide a few helpers for common operations:
+#' * `block_has_tag(blocks, tags)`: does `block` contain any of these `tags`?
+#' * `block_get_tags(block, tags)`: get all instances of `tags`
+#' * `block_get_tag(block, tag)`: get single tag. Returns `NULL` if 0,
+#'    throws warning if more than 1.
+#' * `block_get_tag_value(block, tag)`: gets `val` field from single tag.
+#'
+#' @param tags A list of [roxy_tag]s.
+#' @param file,line Location of the `call` (i.e. the line after the last
+#'   line of the block).
+#' @param call Expression associated with block.
+#' @param object Optionally, the object associated with the block, found
+#'   by inspecting/evaluating `call`.
+#' @param block A `roxy_block` to manipulate.
+#' @param tag,tags Either a single tag name, or a character vector of tag names.
+#' @export
+#' @keywords internal
+#' @examples
+#' # The easiest way to see the structure of a roxy_block is to create one
+#' # using parse_text:
+#' text <- "
+#'   #' This is a title
+#'   #'
+#'   #' @param x,y A number
+#'   #' @export
+#'   f <- function(x, y) x + y
+#' "
+#'
+#' # parse_text() returns a list of blocks, so I extract the first
+#' block <- parse_text(text)[[1]]
+#' block
 roxy_block <- function(tags,
-                       filename,
-                       location,
+                       file,
+                       line,
                        call,
                        object = NULL) {
   stopifnot(is.list(tags))
-  stopifnot(is.character(filename))
-  stopifnot(is.vector(location))
+  stopifnot(is.character(file), length(file) == 1)
+  stopifnot(is.integer(line), length(line) == 1)
 
   structure(
-    tags,
-    filename = filename,
-    location = location,
-    call = call,
-    object = object,
+    list(
+      tags = tags,
+      file = file,
+      line = line,
+      call = call,
+      object = object
+    ),
     class = "roxy_block"
-  )
-}
-
-roxy_block_copy <- function(block, tags) {
-  roxy_block(
-    tags,
-    filename = attr(block, "filename"),
-    location = attr(block, "location"),
-    call = attr(block, "call"),
-    object = attr(block, "object")
   )
 }
 
@@ -31,18 +59,20 @@ is_roxy_block <- function(x) inherits(x, "roxy_block")
 
 #' @export
 print.roxy_block <- function(x, ...) {
-  call <- deparse(attr(x, "call"), nlines = 2)
+  call <- deparse(x$call, nlines = 2)
   if (length(call) == 2) {
     call <- paste0(call[[1]], " ...")
   }
+  obj <- format(x$object)
 
-  cat_line("<roxy_block> @ ", block_location(x))
-  cat_line("  Tags: ", paste0(names(x), collapse = ", "))
-  cat_line("  Call: ", call)
-  cat_line("  Obj ? ", !is.null(attr(x, "object")))
+  cat_line("<roxy_block> [", basename(x$file), ":", x$line, "]")
+  cat_line("  $tag")
+  cat_line("    ", map_chr(x$tags, format, file = x$file))
+  cat_line("  $call   ", call)
+  cat_line("  $object ", obj[[1]])
+  cat_line("  ", obj[-1])
 }
 
-# Creates roxy_block from list of raw tags ,
 block_create <- function(tokens, call, srcref,
                          registry = list(),
                          global_options = list()) {
@@ -54,8 +84,8 @@ block_create <- function(tokens, call, srcref,
   if (length(tags) == 0) return()
 
   roxy_block(tags,
-    filename = attr(srcref, "srcfile")$filename,
-    location = as.vector(srcref),
+    file = attr(srcref, "srcfile")$filename,
+    line = as.vector(srcref)[[1]],
     call = call
   )
 }
@@ -75,17 +105,13 @@ block_evaluate <- function(block, env,
                            global_options = list()
                            ) {
 
-  is_eval <- names(block) == "eval"
-  eval <- block[is_eval]
-  if (length(eval) == 0)
+  tags <- block_get_tags(block, "eval")
+  if (length(tags) == 0) {
     return(block)
+  }
 
   # Evaluate
-  results <- lapply(eval, block_eval,
-    block = block,
-    env = env,
-    tag_name = "@eval"
-  )
+  results <- lapply(tags, roxy_tag_eval, env = env)
   results <- lapply(results, function(x) {
     if (is.null(x)) {
       character()
@@ -96,8 +122,8 @@ block_evaluate <- function(block, env,
 
   # Tokenise and parse
   tokens <- lapply(results, tokenise_block,
-    file = attr(block, "filename"),
-    offset = attr(block, "location")[[1]]
+    file = block$file,
+    offset = block$line
   )
   tags <- lapply(tokens, parse_tags,
     registry = registry,
@@ -105,63 +131,88 @@ block_evaluate <- function(block, env,
   )
 
   # Interpolate results back into original locations
-  out <- lapply(block, list)
-  out[is_eval] <- tags
-  names(out)[is_eval] <- ""
-
-  roxy_block_copy(block, compact(unlist(out, recursive = FALSE)))
+  block_replace_tags(block, "eval", tags)
 }
 
 block_find_object <- function(block, env) {
   stopifnot(is_roxy_block(block))
 
   object <- object_from_call(
-    call = attr(block, "call"),
+    call = block$call,
     env = env,
     block = block,
-    file = attr(block, "filename")
+    file = block$file
   )
-  attr(block, "object") <- object
+  block$object <- object
 
   # Add in defaults generated from the object
   defaults <- object_defaults(object)
+  defaults <- c(defaults, list(roxy_tag("backref", block$file, block$file)))
 
-  for (tag in names(defaults)) {
-    if (tag %in% names(block))
-      next
+  default_tags <- map_chr(defaults, "tag")
+  defaults <- defaults[!default_tags %in% block_tags(block)]
 
-    block[[tag]] <- defaults[[tag]]
-  }
-
+  block$tags <- c(block$tags, defaults)
   block
 }
 
-block_location <- function(block) {
-  if (is.null(block)) {
+# block accessors ---------------------------------------------------------
+
+block_tags <- function(block) {
+  map_chr(block$tags, "tag")
+}
+
+#' @export
+#' @rdname roxy_block
+block_has_tags <- function(block, tags) {
+  any(block_tags(block) %in% tags)
+}
+
+#' @export
+#' @rdname roxy_block
+block_get_tags <- function(block, tags) {
+  block$tags[block_tags(block) %in% tags]
+}
+
+#' @export
+#' @rdname roxy_block
+block_get_tag <- function(block, tag) {
+  matches <- which(block_tags(block) %in% tag)
+  n <- length(matches)
+  if (n == 0) {
     NULL
+  } else if (n == 1) {
+    block$tags[[matches]]
   } else {
-    paste0(basename(attr(block, "filename")), ":", attr(block, "location")[[1]])
+    roxy_tag_warning(block$tags[[matches[[2]]]], "May only use one @", tag, " per block")
+    block$tags[[matches[[1]]]]
   }
 }
 
-block_warning <- function(block, ...) {
-  warning(
-    block_location(block), ": ", ...,
-    call. = FALSE,
-    immediate. = TRUE
-  )
-  NULL
+#' @export
+#' @rdname roxy_block
+block_get_tag_value <- function(block, tag) {
+  block_get_tag(block, tag)$val
 }
+
+block_replace_tags <- function(block, tags, values) {
+  indx <- which(block_tags(block) %in% tags)
+  stopifnot(length(indx) == length(values))
+
+  tags <- lapply(block$tags, list)
+  tags[indx] <- values
+
+  block$tags <- compact(unlist(tags, recursive = FALSE))
+  block
+}
+
+# parsing -----------------------------------------------------------------
 
 parse_tags <- function(tokens, registry = list(), global_options = list()) {
   markdown_activate(tokens, global_options = global_options)
 
   tokens <- parse_description(tokens)
-  tags <- compact(lapply(tokens, parse_tag, registry = registry))
-
-  # Convert to existing named list format - this isn't ideal, but
-  # it's what roxygen already uses
-  set_names(map(tags, "val"), map_chr(tags, "tag"))
+  compact(lapply(tokens, parse_tag, registry = registry))
 }
 
 parse_tag <- function(x, registry) {
@@ -191,7 +242,7 @@ parse_description <- function(tags) {
   }
 
   intro <- tags[[1]]
-  intro$val <- str_trim(intro$val)
+  intro$val <- str_trim(intro$raw)
   if (intro$val == "") {
     return(tags[-1])
   }
@@ -205,17 +256,17 @@ parse_description <- function(tags) {
   if ("title" %in% tag_names) {
     title <- NULL
   } else if (length(paragraphs) > 0) {
-    title <- roxy_tag("title", paragraphs[1], intro$file, intro$line)
+    title <- roxy_tag("title", paragraphs[1], NULL, intro$file, intro$line)
     paragraphs <- paragraphs[-1]
   } else {
-    title <- roxy_tag("title", "", intro$file, intro$line)
+    title <- roxy_tag("title", "", NULL, intro$file, intro$line)
   }
 
   # 2nd paragraph = description (unless has @description)
   if ("description" %in% tag_names || length(paragraphs) == 0) {
     description <- NULL
   } else if (length(paragraphs) > 0) {
-    description <- roxy_tag("description", paragraphs[1], intro$file, intro$line)
+    description <- roxy_tag("description", paragraphs[1], NULL, intro$file, intro$line)
     paragraphs <- paragraphs[-1]
   }
 
@@ -226,12 +277,12 @@ parse_description <- function(tags) {
     # Find explicit @details tags
     didx <- which(tag_names == "details")
     if (length(didx) > 0) {
-      explicit_details <- map_chr(tags[didx], "val")
+      explicit_details <- map_chr(tags[didx], "raw")
       tags <- tags[-didx]
       details_para <- paste(c(details_para, explicit_details), collapse = "\n\n")
     }
 
-    details <- roxy_tag("details", details_para, intro$file, intro$line)
+    details <- roxy_tag("details", details_para, NULL, intro$file, intro$line)
   } else {
     details <- NULL
   }

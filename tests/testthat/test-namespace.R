@@ -112,9 +112,6 @@ test_that("export uses name if no object present", {
   expect_equal(out, 'export(x)')
 })
 
-
-
-
 test_that("default export uses exportClass for RC objects", {
   out <- roc_proc_text(namespace_roclet(), "
     #' Title
@@ -245,7 +242,7 @@ test_that("evalNamespace generates warning when code raises error", {
       #' @name a
       #' @title a
       NULL"),
-    "@evalNamespace failed with error"  # From block_eval
+    "failed with error"  # From block_eval
   )
 })
 
@@ -258,7 +255,7 @@ test_that("evalNamespace generates warning when code doesn't eval to string", {
       #' @name a
       #' @title a
       NULL"),
-    "@evalNamespace did not evaluate to a string"  # From block_eval
+    "did not evaluate to a string"  # From block_eval
   )
 
   # NA_character_ not allowed
@@ -269,7 +266,7 @@ test_that("evalNamespace generates warning when code doesn't eval to string", {
       #' @name a
       #' @title a
       NULL"),
-    "@evalNamespace result contained NA"  # From block_eval
+    "result contained NA"  # From block_eval
   )
 })
 

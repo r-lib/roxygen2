@@ -62,7 +62,7 @@ test_that("@example gives warning if used instead of @examples", {
       #' a <- 1
       #' a + b
       NULL")[[1]],
-    "@example spans multiple lines"
+    "spans multiple lines"
   )
 
   expect_null(get_tag(out, "examples")$values, NULL)

@@ -187,7 +187,7 @@ test_that("html block", {
   cat(sep = "\n", file = tmp,
     "Text at the front",
     "",
-    "<div>HTML block</div>",
+    "<a id=\"test\"></a>",
     "",
     "Text")
   rox <- sprintf("
@@ -198,9 +198,7 @@ test_that("html block", {
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- paste0(
     "Text at the front",
-    "\\if{html}{\\out{\n<div>\n}}",
-    "HTML block",
-    "\\if{html}{\\out{\n</div>\n}}",
+    "\\if{html}{\\out{<a id=\"test\">}}\\if{html}{\\out{</a>}}",
     "Text"
   )
   expect_equal_strings(out1$get_value("details"), exp_details)

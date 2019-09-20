@@ -3,6 +3,10 @@
 #' `roxy_tag()` is the constructor for tag objects.
 #' `roxy_tag_warning()` generates a warning that gives the location of the tag.
 #'
+#' @section Methods:
+#' Define a method for `roxy_tag_parse` to support new tags. See [tag_parsers]
+#' for more details.
+#'
 #' @keywords internal
 #' @export
 #' @param tag Tag name
@@ -19,8 +23,20 @@ roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_integ
       tag = tag,
       val = val
     ),
-    class = "roxy_tag"
+    class = c(paste0("roxy_tag_", tag), "roxy_tag")
   )
+}
+
+#' @rdname roxy_tag
+#' @param x A tag
+#' @export
+roxy_tag_parse <- function(x) {
+  UseMethod("roxy_tag_parse")
+}
+
+#' @export
+roxy_tag_parse.default <- function(x) {
+  roxy_tag_warning(x, "unknown tag")
 }
 
 is.roxy_tag <- function(x) inherits(x, "roxy_tag")

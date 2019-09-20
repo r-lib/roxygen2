@@ -5,9 +5,6 @@
 #'
 #' @section Methods:
 #'
-#' * `roclet_tags()`: return named list, where names give recognised tags and
-#'   values give tag parsing function. See [roxy_tag] for built-in parsers.
-#'
 #' * `roclet_preprocess()` is called after blocks have been parsed but before
 #'   code has been evaluated. This should only be needed if your roclet affects
 #'   how code will evaluated. Should return a roclet.
@@ -21,6 +18,11 @@
 #'
 #' * `roclet_clean()` called when `roxygenise(clean = TRUE)`. Should remove
 #'   any files created by the roclet.
+#'
+#' ### Deprecated methods
+#'
+#' `roclet_tags()` is no longer used; instead provide a [roxy_tag_parse()]
+#' method for each tag.
 #'
 #' @param x A `roclet` object.
 #' @param blocks A list of [roxy_block] objects.
@@ -36,12 +38,6 @@ NULL
 #' @rdname roclet
 roclet <- function(subclass, ...) {
   structure(list(...), class = c(paste0("roclet_", subclass), "roclet"))
-}
-
-#' @export
-#' @rdname roclet
-roclet_tags <- function(x) {
-  UseMethod("roclet_tags")
 }
 
 #' @export
@@ -71,6 +67,12 @@ roclet_output <- function(x, results, base_path, ...) {
 #' @rdname roclet
 roclet_clean <- function(x, base_path) {
   UseMethod("roclet_clean")
+}
+
+#' @export
+#' @rdname roclet
+roclet_tags <- function(x) {
+  UseMethod("roclet_tags")
 }
 
 #' Create a roclet from a string.
@@ -121,32 +123,19 @@ is.roclet <- function(x) inherits(x, "roclet")
 #'
 #' @param roclet Name of roclet to use for processing.
 #' @param input Source string
-#' @param registry Named list of tag parsers
 #' @param global_options List of global options
 #' @export
 #' @keywords internal
 roc_proc_text <- function(roclet,
                           input,
-                          registry = NULL,
                           global_options = list()) {
   stopifnot(is.roclet(roclet))
-
-  if (is.null(registry)) {
-    registry <- c(default_tags(), roclet_tags(roclet))
-  }
 
   file <- tempfile()
   write_lines(input, file)
   on.exit(unlink(file))
 
   env <- env_file(file)
-  blocks <- parse_text(input, env = env, registry = registry, global_options)
+  blocks <- parse_text(input, env = env, global_options)
   roclet_process(roclet, blocks, env = env, base_path = ".", global_options)
-}
-
-default_tags <- function() {
-  c(
-    roclet_tags.roclet_namespace(list()),
-    roclet_tags.roclet_rd(list())
-  )
 }

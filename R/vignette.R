@@ -23,11 +23,6 @@ roclet_process.roclet_vignette <- function(x, blocks, env, base_path,
 }
 
 #' @export
-roclet_tags.roclet_vignette <- function(x) {
-  list()
-}
-
-#' @export
 roclet_output.roclet_vignette <- function(x, results, base_path, ...) {
   vign_update_all(base_path)
 }

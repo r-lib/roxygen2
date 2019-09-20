@@ -33,7 +33,6 @@ ns_tags <- c(
 #'
 #' @family roclets
 #' @export
-#' @eval tag_aliases(roclet_tags.roclet_namespace)
 #' @examples
 #' # The most common namespace tag is @@export, which declares that a function
 #' # is part of the external interface of your package
@@ -79,22 +78,29 @@ roclet_process.roclet_namespace <- function(x,
 }
 
 #' @export
-roclet_tags.roclet_namespace <- function(x) {
-  list(
-    evalNamespace = tag_code,
-    export = tag_words_line,
-    exportClass = tag_words(1),
-    exportS3Method = tag_words(min = 0, max = 2),
-    exportMethod = tag_words(1),
-    exportPattern = tag_words(1),
-    import = tag_words(1),
-    importClassesFrom = tag_words(2),
-    importFrom = tag_words(2),
-    importMethodsFrom = tag_words(2),
-    rawNamespace = tag_code,
-    useDynLib = tag_words(1)
-  )
-}
+roxy_tag_parse.roxy_tag_evalNamespace <- function(x) tag_code(x)
+#' @export
+roxy_tag_parse.roxy_tag_export <- function(x) tag_words_line(x)
+#' @export
+roxy_tag_parse.roxy_tag_exportClass <- function(x) tag_words(x, 1)
+#' @export
+roxy_tag_parse.roxy_tag_exportS3Method <- function(x) tag_words(x, min = 0, max = 2)
+#' @export
+roxy_tag_parse.roxy_tag_exportMethod <- function(x) tag_words(x, min = 1)
+#' @export
+roxy_tag_parse.roxy_tag_exportPattern <- function(x) tag_words(x, min = 1)
+#' @export
+roxy_tag_parse.roxy_tag_import <- function(x) tag_words(x, min = 1)
+#' @export
+roxy_tag_parse.roxy_tag_importClassesFrom <- function(x) tag_words(x, min = 2)
+#' @export
+roxy_tag_parse.roxy_tag_importFrom <- function(x) tag_words(x, min = 2)
+#' @export
+roxy_tag_parse.roxy_tag_importMethodsFrom <- function(x) tag_words(x, min = 2)
+#' @export
+roxy_tag_parse.roxy_tag_rawNamespace <- function(x) tag_code(x)
+#' @export
+roxy_tag_parse.roxy_tag_useDynLib <- function(x) tag_words(x, min = 1)
 
 #' @export
 roclet_output.roclet_namespace <- function(x, results, base_path, ...) {

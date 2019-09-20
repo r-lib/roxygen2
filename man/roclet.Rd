@@ -2,16 +2,14 @@
 % Please edit documentation in R/roclet.R
 \name{roclet}
 \alias{roclet}
-\alias{roclet_tags}
 \alias{roclet_preprocess}
 \alias{roclet_process}
 \alias{roclet_output}
 \alias{roclet_clean}
+\alias{roclet_tags}
 \title{Build a new roclet.}
 \usage{
 roclet(subclass, ...)
-
-roclet_tags(x)
 
 roclet_preprocess(x, blocks, base_path, global_options = list())
 
@@ -20,6 +18,8 @@ roclet_process(x, blocks, env, base_path, global_options = list())
 roclet_output(x, results, base_path, ...)
 
 roclet_clean(x, base_path)
+
+roclet_tags(x)
 }
 \arguments{
 \item{x}{A \code{roclet} object.}
@@ -41,8 +41,6 @@ that wraps \code{roclet}, and then implement the methods described below.
 \section{Methods}{
 
 \itemize{
-\item \code{roclet_tags()}: return named list, where names give recognised tags and
-values give tag parsing function. See \link{roxy_tag} for built-in parsers.
 \item \code{roclet_preprocess()} is called after blocks have been parsed but before
 code has been evaluated. This should only be needed if your roclet affects
 how code will evaluated. Should return a roclet.
@@ -53,6 +51,11 @@ has been determined.
 produce files on disk.
 \item \code{roclet_clean()} called when \code{roxygenise(clean = TRUE)}. Should remove
 any files created by the roclet.
+}
+\subsection{Deprecated methods}{
+
+\code{roclet_tags()} is no longer used; instead provide a \code{\link[=roxy_tag_parse]{roxy_tag_parse()}}
+method for each tag.
 }
 }
 

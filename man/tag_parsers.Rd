@@ -22,11 +22,11 @@ tag_inherit(x)
 
 tag_name(x)
 
-tag_two_part(first, second, required = TRUE, markdown = TRUE)
+tag_two_part(x, first, second, required = TRUE, markdown = TRUE)
 
 tag_name_description(x)
 
-tag_words(min = 0, max = Inf)
+tag_words(x, min = 0, max = Inf)
 
 tag_words_line(x)
 
@@ -58,7 +58,12 @@ A \link{roxy_tag} object with the \code{val} field set to the parsed value.
 \description{
 These functions parse the \code{raw} tag value, convert a string into a richer R
 object and storing it in \code{val}, or provide an informative warning and
-returning \code{NULL}. Two exceptions to the rule are \code{tag_words()} and
-\code{tag_two_part()}, which are tag parsing generator functions.
+returning \code{NULL}.
 }
+\section{New tag}{
+
+To create a new \verb{@mytag} define \code{roxy_tag_parse.roxy_tag_mytag()}. It should
+either call one of the functions here, or directly set \code{x$val}.
+}
+
 \keyword{internal}

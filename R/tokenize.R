@@ -1,6 +1,5 @@
 # Returns list of roxy_blocks
 tokenize_file <- function(file,
-                          registry = list(),
                           global_options = list(),
                           srcref_path = NULL
                           ) {
@@ -28,7 +27,6 @@ tokenize_file <- function(file,
       tokens = tokens[has_tokens]
     ),
     block_create,
-    registry = registry,
     global_options = global_options
   )
   purrr::compact(blocks)

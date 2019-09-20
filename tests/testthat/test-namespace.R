@@ -192,7 +192,7 @@ test_that("empty NAMESPACE generates zero-length vector", {
   base_path <- test_path("empty")
 
   env <- pkgload::load_all(base_path)$env
-  blocks <- parse_package(base_path, env = env, registry = list())
+  blocks <- parse_package(base_path, env = env)
 
   results <- roclet_process(namespace_roclet(), blocks, env = env, base_path)
   expect_equal(results, character())

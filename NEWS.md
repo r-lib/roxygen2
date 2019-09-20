@@ -1,5 +1,16 @@
 # roxygen2 (development version)
 
+* `roclet_tags()` is no longer used; instead define a `roxy_tag_parse()` method.
+  If you tag is `@mytag`, then the class name associated with it is
+  `roxy_tag_mytag` so the method should be call `roxy_tag_parse.roxy_tag_mytag()`.
+  Note that there is no namespacing so if you're defining multiple new tags
+  I recommend using your package name as common prefix.
+  
+    This means that the `registry` argument is no longer needed and has been
+    removed.
+
+* `tag_two_part()` and `tag_words()` are now regular functions.
+
 * The internal `roxy_tag()` gains a new field: `raw`. This now always contains
   the raw string value parsed from the file. `val` is only set after the tag
   has been parsed.
@@ -171,11 +182,6 @@
 
 * `tag_markdown_restricted()` has been removed because it did exactly the
   same think as `tag_markdown()`.
-
-* Roclets have now aliases to all the tags that they define so that you can
-  do (e.g.) `?"@export"`. These help files are generally not that useful, but
-  they do now provide basic examples, and point you towards the vignettes the
-  provide full details.
 
 * Package documentation now converts ORCIDs into a useful link (#721).
 

@@ -55,10 +55,8 @@ roxygenize <- function(package.dir = ".",
   roclets <- lapply(roclets, roclet_find)
 
   # Tokenise each file
-  registry <- purrr::flatten(lapply(roclets, roclet_tags))
   blocks <- parse_package(base_path,
     env = NULL,
-    registry = registry,
     global_options = options
   )
 
@@ -77,7 +75,6 @@ roxygenize <- function(package.dir = ".",
   env <- load_code(base_path)
   blocks <- lapply(blocks, block_set_env,
     env = env,
-    registry = registry,
     global_options = options
   )
 

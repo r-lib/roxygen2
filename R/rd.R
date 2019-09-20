@@ -6,7 +6,6 @@ NULL
 #' @template rd
 #' @family roclets
 #' @eval rd_roclet_description()
-#' @eval tag_aliases(roclet_tags.roclet_rd)
 #' @export
 #' @examples
 #' #' The length of a string (in characters)
@@ -34,51 +33,85 @@ rd_roclet_description <- function() {
 }
 
 #' @export
-roclet_tags.roclet_rd <- function(x) {
-  list(
-    aliases = tag_value,
-    author = tag_markdown,
-    backref = tag_value,
-    concept = tag_markdown,
-    describeIn = tag_name_description,
-    description = tag_markdown_with_sections,
-    details = tag_markdown_with_sections,
-    docType = tag_name,
-    encoding = tag_value,
-    evalRd = tag_code,
-    example = tag_value,
-    examples = tag_examples,
-    family = tag_value,
-    field = tag_name_description,
-    format = tag_markdown,
-    includeRmd = tag_value,
-    inherit = tag_inherit,
-    inheritParams = tag_value,
-    inheritDotParams =
-      tag_two_part("source", "args", required = FALSE, markdown = FALSE),
-    inheritSection = tag_name_description,
-    keywords = tag_value,
-    method = tag_words(2, 2),
-    name = tag_value,
-    md = tag_toggle,
-    noMd = tag_toggle,
-    noRd = tag_toggle,
-    note = tag_markdown,
-    param = tag_name_description,
-    rdname = tag_value,
-    rawRd = tag_value,
-    references = tag_markdown,
-    return = tag_markdown,
-    section = tag_markdown,
-    seealso = tag_markdown,
-    slot = tag_name_description,
-    source = tag_markdown,
-    template = tag_value,
-    templateVar = tag_name_description,
-    title = tag_markdown,
-    usage = tag_value
-  )
-}
+roxy_tag_parse.roxy_tag_aliases <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_author <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_backref <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_concept <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_describeIn <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_parse.roxy_tag_description <- function(x) tag_markdown_with_sections(x)
+#' @export
+roxy_tag_parse.roxy_tag_details <- function(x) tag_markdown_with_sections(x)
+#' @export
+roxy_tag_parse.roxy_tag_docType <- function(x) tag_name(x)
+#' @export
+roxy_tag_parse.roxy_tag_encoding <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_evalRd <- function(x) tag_code(x)
+#' @export
+roxy_tag_parse.roxy_tag_example <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_examples <- function(x) tag_examples(x)
+#' @export
+roxy_tag_parse.roxy_tag_family <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_field <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_parse.roxy_tag_format <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_includeRmd <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_inherit <- function(x) tag_inherit(x)
+#' @export
+roxy_tag_parse.roxy_tag_inheritParams <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_inheritDotParams <- function(x) tag_two_part(x, "source", "args", required = FALSE, markdown = FALSE)
+#' @export
+roxy_tag_parse.roxy_tag_inheritSection <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_method <- function(x) tag_words(x, 2, 2)
+#' @export
+roxy_tag_parse.roxy_tag_name <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_md <- function(x) tag_toggle(x)
+#' @export
+roxy_tag_parse.roxy_tag_noMd <- function(x) tag_toggle(x)
+#' @export
+roxy_tag_parse.roxy_tag_noRd <- function(x) tag_toggle(x)
+#' @export
+roxy_tag_parse.roxy_tag_note <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_param <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_parse.roxy_tag_rdname <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_rawRd <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_references <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_return <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_section <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_seealso <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_slot <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_parse.roxy_tag_source <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_template <- function(x) tag_value(x)
+#' @export
+roxy_tag_parse.roxy_tag_templateVar <- function(x) tag_name_description(x)
+#' @export
+roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_parse.roxy_tag_usage <- function(x) tag_value(x)
 
 #' @export
 roclet_process.roclet_rd <- function(x,

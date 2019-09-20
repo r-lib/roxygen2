@@ -2,10 +2,13 @@
 % Please edit documentation in R/tag.R
 \name{roxy_tag}
 \alias{roxy_tag}
+\alias{roxy_tag_parse}
 \alias{roxy_tag_warning}
 \title{\code{roxy_tag} S3 constructor}
 \usage{
 roxy_tag(tag, raw, val = NULL, file = NA_character_, line = NA_integer_)
+
+roxy_tag_parse(x)
 
 roxy_tag_warning(x, ...)
 }
@@ -18,9 +21,17 @@ roxy_tag_warning(x, ...)
 a list. Usually filled in by \code{tag_parsers}}
 
 \item{file, line}{Location of the tag}
+
+\item{x}{A tag}
 }
 \description{
 \code{roxy_tag()} is the constructor for tag objects.
 \code{roxy_tag_warning()} generates a warning that gives the location of the tag.
 }
+\section{Methods}{
+
+Define a method for \code{roxy_tag_parse} to support new tags. See \link{tag_parsers}
+for more details.
+}
+
 \keyword{internal}

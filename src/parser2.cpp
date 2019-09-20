@@ -153,7 +153,7 @@ List tokenise_block(CharacterVector lines, std::string file = "",
       _["raw"] = Rcpp::String(stripTrailingNewline(vals[i])),
       _["val"] = R_NilValue
     );
-    out[i].attr("class") = "roxy_tag";
+    out[i].attr("class") = Rcpp::CharacterVector::create("roxy_tag_" + tags[i], "roxy_tag");
   }
   return out;
 }

@@ -2,18 +2,6 @@
 % Please edit documentation in R/namespace.R
 \name{namespace_roclet}
 \alias{namespace_roclet}
-\alias{@evalNamespace}
-\alias{@export}
-\alias{@exportClass}
-\alias{@exportS3Method}
-\alias{@exportMethod}
-\alias{@exportPattern}
-\alias{@import}
-\alias{@importClassesFrom}
-\alias{@importFrom}
-\alias{@importMethodsFrom}
-\alias{@rawNamespace}
-\alias{@useDynLib}
 \title{Roclet: make \code{NAMESPACE}}
 \usage{
 namespace_roclet()

@@ -74,13 +74,9 @@ print.roxy_block <- function(x, ...) {
 }
 
 block_create <- function(tokens, call, srcref,
-                         registry = list(),
                          global_options = list()) {
 
-  tags <- parse_tags(tokens,
-    registry = registry,
-    global_options = global_options
-  )
+  tags <- parse_tags(tokens, global_options = global_options)
   if (length(tags) == 0) return()
 
   roxy_block(tags,
@@ -91,17 +87,15 @@ block_create <- function(tokens, call, srcref,
 }
 
 block_set_env <- function(block, env,
-                          registry = list(),
                           global_options = list()
                           ) {
 
-  block <- block_evaluate(block, env, registry = registry, global_options = global_options)
+  block <- block_evaluate(block, env, global_options = global_options)
   block <- block_find_object(block, env)
   block
 }
 
 block_evaluate <- function(block, env,
-                           registry = list(),
                            global_options = list()
                            ) {
 
@@ -125,10 +119,7 @@ block_evaluate <- function(block, env,
     file = block$file,
     offset = block$line
   )
-  tags <- lapply(tokens, parse_tags,
-    registry = registry,
-    global_options = global_options
-  )
+  tags <- lapply(tokens, parse_tags, global_options = global_options)
 
   # Interpolate results back into original locations
   block_replace_tags(block, "eval", tags)
@@ -208,27 +199,21 @@ block_replace_tags <- function(block, tags, values) {
 
 # parsing -----------------------------------------------------------------
 
-parse_tags <- function(tokens, registry = list(), global_options = list()) {
+parse_tags <- function(tokens, global_options = list()) {
   markdown_activate(tokens, global_options = global_options)
 
   tokens <- parse_description(tokens)
-  compact(lapply(tokens, parse_tag, registry = registry))
+  compact(lapply(tokens, roxy_tag_parse))
 }
 
-parse_tag <- function(x, registry) {
-  stopifnot(is.roxy_tag(x))
+#' @export
+roxy_tag_parse.roxy_tag_eval <- function(x) {
+  tag_code(x)
+}
 
-  if (identical(x$tag, "eval")) {
-    tag_code(x)
-  } else if (identical(x$tag, "include")) {
-    tag_value(x)
-  } else if (identical(x$tag, "order")) {
-    tag_value(x)
-  } else if (x$tag %in% ls(registry)) {
-    registry[[x$tag]](x)
-  } else {
-    roxy_tag_warning(x, "unknown tag")
-  }
+#' @export
+roxy_tag_parse.roxy_tag_include <- function(x) {
+  tag_value(x)
 }
 
 parse_description <- function(tags) {

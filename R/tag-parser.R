@@ -2,8 +2,11 @@
 #'
 #' These functions parse the `raw` tag value, convert a string into a richer R
 #' object and storing it in `val`, or provide an informative warning and
-#' returning `NULL`. Two exceptions to the rule are `tag_words()` and
-#' `tag_two_part()`, which are tag parsing generator functions.
+#' returning `NULL`.
+#'
+#' @section New tag:
+#' To create a new `@mytag` define `roxy_tag_parse.roxy_tag_mytag()`. It should
+#' either call one of the functions here, or directly set `x$val`.
 #'
 #' @param x A [roxy_tag] object to parss
 #' @return A [roxy_tag] object with the `val` field set to the parsed value.
@@ -79,57 +82,52 @@ tag_name <- function(x) {
 #' @param required Is the second part required (TRUE) or can it be blank
 #'   (FALSE)?
 #' @param markdown Should the second part be parsed as markdown?
-tag_two_part <- function(first, second, required = TRUE, markdown = TRUE) {
-  force(required)
-  force(markdown)
+tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
+  if (str_trim(x$raw) == "") {
+    roxy_tag_warning(x, "requires a value")
+  } else if (required && !str_detect(x$raw, "[[:space:]]+")) {
+    roxy_tag_warning(x, "requires ", first, " and ", second)
+  } else if (!rdComplete(x$raw)) {
+    roxy_tag_warning(x, "mismatched braces or quotes")
+  } else {
+    pieces <- str_split_fixed(str_trim(x$raw), "[[:space:]]+", 2)
 
-  function(x) {
-    if (str_trim(x$raw) == "") {
-      roxy_tag_warning(x, "requires a value")
-    } else if (required && !str_detect(x$raw, "[[:space:]]+")) {
-      roxy_tag_warning(x, "requires ", first, " and ", second)
-    } else if (!rdComplete(x$raw)) {
-      roxy_tag_warning(x, "mismatched braces or quotes")
-    } else {
-      pieces <- str_split_fixed(str_trim(x$raw), "[[:space:]]+", 2)
-
-      if (markdown) {
-        pieces[,2] <- markdown_if_active(pieces[,2], x)
-      }
-
-      x$val <- list(
-        pieces[, 1],
-        trim_docstring(pieces[,2])
-      )
-      names(x$val) <- c(first, second)
-      x
+    if (markdown) {
+      pieces[,2] <- markdown_if_active(pieces[,2], x)
     }
+
+    x$val <- list(
+      pieces[, 1],
+      trim_docstring(pieces[,2])
+    )
+    names(x$val) <- c(first, second)
+    x
   }
 }
 
 #' @export
 #' @rdname tag_parsers
-tag_name_description <- tag_two_part("name", "description")
+tag_name_description <- function(x) {
+  tag_two_part(x, "name", "description")
+}
 
 #' @export
 #' @rdname tag_parsers
 #' @param min,max Minimum and maximum number of words
-tag_words <- function(min = 0, max = Inf) {
-  function(x) {
-    if (!rdComplete(x$raw)) {
-      return(roxy_tag_warning(x, "mismatched braces or quotes"))
-    }
-
-    words <- str_split(str_trim(x$raw), "\\s+")[[1]]
-    if (length(words) < min) {
-      roxy_tag_warning(x,  " needs at least ", min, " words")
-    } else if (length(words) > max) {
-      roxy_tag_warning(x,  " can have at most ", max, " words")
-    }
-
-    x$val <- words
-    x
+tag_words <- function(x, min = 0, max = Inf) {
+  if (!rdComplete(x$raw)) {
+    return(roxy_tag_warning(x, "mismatched braces or quotes"))
   }
+
+  words <- str_split(str_trim(x$raw), "\\s+")[[1]]
+  if (length(words) < min) {
+    roxy_tag_warning(x,  " needs at least ", min, " words")
+  } else if (length(words) > max) {
+    roxy_tag_warning(x,  " can have at most ", max, " words")
+  }
+
+  x$val <- words
+  x
 }
 
 #' @export

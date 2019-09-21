@@ -52,7 +52,7 @@ mdxml_node_to_rd <- function(xml, state) {
     linebreak = mdxml_break(state),
 
     code = mdxml_code(xml, state),
-    code_block = paste0("\\preformatted{", escape_verb(xml_text(xml)), "}"),
+    code_block = mdxml_code_block(xml, state),
 
     table = mdxml_table(xml, state),
     list = mdxml_list(xml, state),
@@ -95,6 +95,18 @@ mdxml_code <- function(xml, tag) {
   } else {
     paste0("\\verb{", escape_verb(code), "}")
   }
+}
+
+mdxml_code_block <- function(xml, state) {
+  info <- xml_attr(xml, "info")[1]
+  if (is.na(info) || nchar(info[1]) == 0) info <- NA_character_
+  paste0(
+    if (!is.na(info)) paste0("\\if{html}{\\out{<div class=\"", info, "\">}}"),
+    "\\preformatted{",
+    escape_verb(xml_text(xml)),
+    "}",
+    if (!is.na(info)) "\\if{html}{\\out{</div>}}"
+  )
 }
 
 can_parse <- function(x) {

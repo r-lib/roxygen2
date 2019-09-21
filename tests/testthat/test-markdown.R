@@ -22,7 +22,7 @@ test_that("code blocks work", {
     #' Description
     #'
     #' Details with a code block:
-    #' ```r
+    #' ```
     #' x <- 1:10 %>%
     #'   multiply_by(10) %>%
     #'   add(42)
@@ -39,6 +39,36 @@ test_that("code blocks work", {
     #'   multiply_by(10) \\%>\\%
     #'   add(42)
     #' }
+    #'
+    #' Normal text again.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+})
+
+test_that("code block with language creates HTML tag", {
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' Description
+    #'
+    #' Details with a code block:
+    #' ```r
+    #' x <- 1:10 %>%
+    #'   multiply_by(10) %>%
+    #'   add(42)
+    #' ```
+    #' Normal text again.
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' Description
+    #'
+    #' Details with a code block:\\if{html}{\\out{<div class=\"r\">}}\\preformatted{x <- 1:10 \\%>\\%
+    #'   multiply_by(10) \\%>\\%
+    #'   add(42)
+    #' }\\if{html}{\\out{</div>}}
     #'
     #' Normal text again.
     foo <- function() {}")[[1]]

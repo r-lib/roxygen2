@@ -1,3 +1,8 @@
+#' @export
+roxy_tag_parse.roxy_tag_md <- function(x) tag_toggle(x)
+
+#' @export
+roxy_tag_parse.roxy_tag_noMd <- function(x) tag_toggle(x)
 
 ## If not specified in DESCRIPTION
 markdown_global_default <- FALSE

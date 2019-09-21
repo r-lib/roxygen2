@@ -318,12 +318,6 @@ roxy_tag_parse.roxy_tag_method <- function(x) tag_words(x, 2, 2)
 roxy_tag_parse.roxy_tag_name <- function(x) tag_value(x)
 
 #' @export
-roxy_tag_parse.roxy_tag_md <- function(x) tag_toggle(x)
-
-#' @export
-roxy_tag_parse.roxy_tag_noMd <- function(x) tag_toggle(x)
-
-#' @export
 roxy_tag_parse.roxy_tag_noRd <- function(x) tag_toggle(x)
 
 #' @export

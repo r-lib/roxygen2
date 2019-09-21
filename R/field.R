@@ -101,12 +101,10 @@ format.roxy_field_value <- format_collapse
 
 # Fields that don't have output ------------------------------------------------
 
-format_null <- function(x, ...) NULL
-
 #' @export
-format.roxy_field_family <- format_null
+format.roxy_field_family <- function(x, ...) NULL
 #' @export
-format.roxy_field_formals <- format_null
+format.roxy_field_formals <- function(x, ...) NULL
 
 # Fields with special errors or other semantics --------------------------------
 
@@ -145,67 +143,6 @@ format.roxy_field_rcmethods <- function(x, ...) {
 #' @export
 format.roxy_field_rawRd <- function(x, ...) {
   paste(x$values, collapse = "\n")
-}
-
-# Inherit ----------------------------------------------------------------
-
-# For each unique source, list which fields it inherits from
-roxy_field_inherit <- function(source, fields) {
-  stopifnot(is.character(source), is.list(fields))
-  stopifnot(!anyDuplicated(source))
-  stopifnot(length(source) == length(fields))
-
-  roxy_field("inherit", source = source, fields = fields)
-}
-
-#' @export
-format.roxy_field_inherit <- format_null
-
-#' @export
-merge.roxy_field_inherit <- function(x, y, ...) {
-  stopifnot(identical(class(x), class(y)))
-
-  dedup <- collapse(
-    c(x$source, y$source),
-    c(x$fields, y$fields),
-    function(x) Reduce(union, x)
-  )
-
-  roxy_field_inherit(dedup$key, dedup$value)
-}
-
-
-roxy_field_inherit_section <- function(source, title) {
-  stopifnot(is.character(source), is.character(title))
-  stopifnot(length(source) == length(title))
-
-  roxy_field("inherit_section", source = source, title = title)
-}
-
-#' @export
-format.roxy_field_inherit_section <- format_null
-
-#' @export
-merge.roxy_field_inherit_section <- function(x, y, ...) {
-  stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_section(c(x$source, y$source), c(x$title, y$title))
-}
-
-
-roxy_field_inherit_dot_params <- function(source, args) {
-  stopifnot(is.character(source), is.character(args))
-  stopifnot(length(source) == length(args))
-
-  roxy_field("inherit_dot_params", source = source, args = args)
-}
-
-#' @export
-format.roxy_field_inherit_dot_params <- format_null
-
-#' @export
-merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
-  stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_dot_params(c(x$source, y$source), c(x$args, y$args))
 }
 
 # Sections ----------------------------------------------------------------

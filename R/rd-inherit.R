@@ -1,3 +1,5 @@
+# Tags --------------------------------------------------------------------
+
 #' @export
 roxy_tag_parse.roxy_tag_inherit <- function(x) tag_inherit(x)
 #' @export
@@ -27,6 +29,67 @@ roxy_tag_parse.roxy_tag_inheritSection <- function(x) tag_name_description(x)
 roxy_tag_rd.roxy_tag_inheritSection <- function(x, base_path, env) {
   roxy_field_inherit_section(x$val$name, x$val$description)
 }
+
+
+# Fields ------------------------------------------------------------------
+
+# For each unique source, list which fields it inherits from
+roxy_field_inherit <- function(source, fields) {
+  stopifnot(is.character(source), is.list(fields))
+  stopifnot(!anyDuplicated(source))
+  stopifnot(length(source) == length(fields))
+
+  roxy_field("inherit", source = source, fields = fields)
+}
+
+#' @export
+merge.roxy_field_inherit <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+
+  dedup <- collapse(
+    c(x$source, y$source),
+    c(x$fields, y$fields),
+    function(x) Reduce(union, x)
+  )
+
+  roxy_field_inherit(dedup$key, dedup$value)
+}
+
+#' @export
+format.roxy_field_inherit <- function(x, ...) NULL
+
+roxy_field_inherit_section <- function(source, title) {
+  stopifnot(is.character(source), is.character(title))
+  stopifnot(length(source) == length(title))
+
+  roxy_field("inherit_section", source = source, title = title)
+}
+
+#' @export
+format.roxy_field_inherit_section <- function(x, ...) NULL
+
+#' @export
+merge.roxy_field_inherit_section <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  roxy_field_inherit_section(c(x$source, y$source), c(x$title, y$title))
+}
+
+roxy_field_inherit_dot_params <- function(source, args) {
+  stopifnot(is.character(source), is.character(args))
+  stopifnot(length(source) == length(args))
+
+  roxy_field("inherit_dot_params", source = source, args = args)
+}
+
+#' @export
+format.roxy_field_inherit_dot_params <- function(x, ...) NULL
+
+#' @export
+merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  roxy_field_inherit_dot_params(c(x$source, y$source), c(x$args, y$args))
+}
+
 
 # Process inheritance -----------------------------------------------------
 

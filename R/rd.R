@@ -241,13 +241,6 @@ roxy_tag_rd.roxy_tag_author <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_backref <- function(x) tag_value(x)
-#' @export
-roxy_tag_rd.roxy_tag_backref <- function(x, base_path, env) {
-  roxy_field_simple("backref", x$val)
-}
-
-#' @export
 roxy_tag_parse.roxy_tag_concept <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_concept <- function(x, base_path, env) {

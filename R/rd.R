@@ -371,20 +371,6 @@ roxy_tag_rd.roxy_tag_return <- function(x, base_path, env) {
   roxy_field_markdown("value", x$val)
 }
 
-#' @export
-roxy_tag_parse.roxy_tag_section <- function(x) tag_markdown(x)
-#' @export
-roxy_tag_rd.roxy_tag_section <- function(x, base_path, env) {
-  pieces <- str_split(x$val, ":", n = 2)[[1]]
-  title <- str_split(pieces[1], "\n")[[1]]
-
-  if (length(title) > 1) {
-    roxy_tag_warning(x, "Section title spans multiple lines")
-    return()
-  }
-
-  roxy_field_section(pieces[1], pieces[2])
-}
 
 #' @export
 roxy_tag_parse.roxy_tag_seealso <- function(x) tag_markdown(x)

@@ -14,7 +14,6 @@ test_that("warn if forgotton colom", {
   )
 })
 
-
 test_that("@section-s with identical titles are merged", {
   out <- roc_proc_text(rd_roclet(), "
     #' Foo

@@ -121,7 +121,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
   rd <- RoxyTopic$new()
   topic_add_name_aliases(rd, block, name)
   for (tag in block$tags) {
-    roxy_tag_rd(tag, rd, env = env, base_path = base_path)
+    rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
   }
 
   topic_add_usage(rd, block, old_usage = global_options$old_usage)
@@ -194,28 +194,28 @@ topic_add_usage <- function(topic, block, old_usage = FALSE) {
 
 # Tag-wise processing -----------------------------------------------------
 
-roxy_tag_rd <- function(x, topic, base_path, env) {
+roxy_tag_rd <- function(x, base_path, env) {
   UseMethod("roxy_tag_rd")
 }
 
-roxy_tag_rd.default <- function(x, topic, base_path, env) {
+roxy_tag_rd.default <- function(x, base_path, env) {
 }
 
 
 # Internal tags -----------------------------------------------------------
 
 #' @export
-roxy_tag_rd.roxy_tag_.reexport <- function(x, topic, base_path, env) {
-  topic$add(roxy_field_reexport(x$val$pkg, x$val$fun))
+roxy_tag_rd.roxy_tag_.reexport <- function(x, base_path, env) {
+  roxy_field_reexport(x$val$pkg, x$val$fun)
 }
 
 #' @export
-roxy_tag_rd.roxy_tag_.formals <- function(x, topic, base_path, env) {
-  topic$add_simple_field("formals", x$val)
+roxy_tag_rd.roxy_tag_.formals <- function(x, base_path, env) {
+  roxy_field_simple("formals", x$val)
 }
 
 #' @export
-roxy_tag_rd.roxy_tag_.methods <- function(x, topic, base_path, env) {
+roxy_tag_rd.roxy_tag_.methods <- function(x, base_path, env) {
   desc <- lapply(x$val, function(x) docstring(x$value@.Data))
   usage <- map_chr(x$val, function(x) {
     function_usage(x$value@name, formals(x$value@.Data))
@@ -225,7 +225,7 @@ roxy_tag_rd.roxy_tag_.methods <- function(x, topic, base_path, env) {
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 
-  topic$add_simple_field("rcmethods", setNames(desc, usage))
+  roxy_field_simple("rcmethods", setNames(desc, usage))
 }
 
 # Regular tags ------------------------------------------------------------
@@ -236,22 +236,22 @@ roxy_tag_parse.roxy_tag_aliases <- function(x) tag_value(x)
 #' @export
 roxy_tag_parse.roxy_tag_author <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_author <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_author <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_backref <- function(x) tag_value(x)
 #' @export
-roxy_tag_rd.roxy_tag_backref <- function(x, topic, base_path, env) {
-  topic$add_simple_field("backref", x$val)
+roxy_tag_rd.roxy_tag_backref <- function(x, base_path, env) {
+  roxy_field_simple("backref", x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_concept <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_concept <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_concept <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
@@ -260,58 +260,58 @@ roxy_tag_parse.roxy_tag_describeIn <- function(x) tag_name_description(x)
 #' @export
 roxy_tag_parse.roxy_tag_description <- function(x) tag_markdown_with_sections(x)
 #' @export
-roxy_tag_rd.roxy_tag_description <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_description <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_details <- function(x) tag_markdown_with_sections(x)
 #' @export
-roxy_tag_rd.roxy_tag_details <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_details <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_docType <- function(x) tag_name(x)
 #' @export
-roxy_tag_rd.roxy_tag_docType <- function(x, topic, base_path, env) {
-  topic$add_simple_field("docType", x$val)
+roxy_tag_rd.roxy_tag_docType <- function(x, base_path, env) {
+  roxy_field_simple("docType", x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_encoding <- function(x) tag_value(x)
 #' @export
-roxy_tag_rd.roxy_tag_encoding <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_encoding <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_evalRd <- function(x) tag_code(x)
 #' @export
-roxy_tag_rd.roxy_tag_evalRd <- function(x, topic, base_path, env) {
-  topic$add_simple_field("rawRd", roxy_tag_eval(x, env))
+roxy_tag_rd.roxy_tag_evalRd <- function(x, base_path, env) {
+  roxy_field_simple("rawRd", roxy_tag_eval(x, env))
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_family <- function(x) tag_value(x)
 #' @export
-roxy_tag_rd.roxy_tag_family <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_family <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_field <- function(x) tag_name_description(x)
 #' @export
-roxy_tag_rd.roxy_tag_field <- function(x, topic, base_path, env) {
+roxy_tag_rd.roxy_tag_field <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
-  topic$add_simple_field(x$tag, value)
+  roxy_field_simple(x$tag, value)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_format <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_format <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_format <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
@@ -324,15 +324,15 @@ roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
   tag_value(x)
 }
 #' @export
-roxy_tag_rd.roxy_tag_includeRmd <- function(x, topic, base_path, env) {
-  topic$add_markdown_field("details", roxy_tag_include_rmd(x, base_path))
+roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
+  roxy_field_markdown("details", roxy_tag_include_rmd(x, base_path))
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
 #' @export
-roxy_tag_rd.roxy_tag_keywords <- function(x, topic, base_path, env) {
-  topic$add_simple_field("keyword", str_split(x$val, "\\s+")[[1]])
+roxy_tag_rd.roxy_tag_keywords <- function(x, base_path, env) {
+  roxy_field_simple("keyword", str_split(x$val, "\\s+")[[1]])
 }
 
 #' @export
@@ -353,16 +353,16 @@ roxy_tag_parse.roxy_tag_noRd <- function(x) tag_toggle(x)
 #' @export
 roxy_tag_parse.roxy_tag_note <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_note <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_note <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_param <- function(x) tag_name_description(x)
 #' @export
-roxy_tag_rd.roxy_tag_param <- function(x, topic, base_path, env) {
+roxy_tag_rd.roxy_tag_param <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
-  topic$add_simple_field(x$tag, value)
+  roxy_field_simple(x$tag, value)
 }
 
 #' @export
@@ -371,28 +371,28 @@ roxy_tag_parse.roxy_tag_rdname <- function(x) tag_value(x)
 #' @export
 roxy_tag_parse.roxy_tag_rawRd <- function(x) tag_value(x)
 #' @export
-roxy_tag_rd.roxy_tag_rawRd <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_rawRd <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_references <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_references <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_references <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_return <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_return <- function(x, topic, base_path, env) {
-  topic$add_simple_field("value", x$val)
+roxy_tag_rd.roxy_tag_return <- function(x, base_path, env) {
+  roxy_field_markdown("value", x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_section <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_section <- function(x, topic, base_path, env) {
+roxy_tag_rd.roxy_tag_section <- function(x, base_path, env) {
   pieces <- str_split(x$val, ":", n = 2)[[1]]
   title <- str_split(pieces[1], "\n")[[1]]
 
@@ -401,29 +401,29 @@ roxy_tag_rd.roxy_tag_section <- function(x, topic, base_path, env) {
     return()
   }
 
-  topic$add_field(roxy_field_section(pieces[1], pieces[2]))
+  roxy_field_section(pieces[1], pieces[2])
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_seealso <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_seealso <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_seealso <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_slot <- function(x) tag_name_description(x)
 #' @export
-roxy_tag_rd.roxy_tag_slot <- function(x, topic, base_path, env) {
+roxy_tag_rd.roxy_tag_slot <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
-  topic$add_simple_field(x$tag, value)
+  roxy_field_simple(x$tag, value)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_source <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_source <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_source <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export
@@ -435,8 +435,8 @@ roxy_tag_parse.roxy_tag_templateVar <- function(x) tag_name_description(x)
 #' @export
 roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
 #' @export
-roxy_tag_rd.roxy_tag_title <- function(x, topic, base_path, env) {
-  topic$add_markdown_field(x$tag, x$val)
+roxy_tag_rd.roxy_tag_title <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
 }
 
 #' @export

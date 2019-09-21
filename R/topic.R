@@ -81,16 +81,6 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     invisible()
   },
 
-  add_markdown_field = function(name, values) {
-    if (length(values) && nchar(values[[1]])) {
-      self$add_simple_field(name, values[[1]])
-    }
-    # Any additional components are sections
-    for (extra in values[-1]) {
-      self$add_simple_field("rawRd", extra)
-    }
-  },
-
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$fields, overwrite = overwrite)

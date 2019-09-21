@@ -327,3 +327,19 @@ merge.roxy_field_section <- function(x, y, ...) {
   )
   roxy_field_section(dedup$key, unlist(dedup$value))
 }
+
+# Markdown ----------------------------------------------------------------
+
+roxy_field_markdown <- function(name, values) {
+  # Any additional components are sections
+  if (length(values) > 1) {
+    name <- c(name, rep("rawRd", length(values) - 1))
+
+    if (values[[1]] == "") {
+      name <- name[-1]
+      values <- values[-1]
+    }
+  }
+
+  map2(name, values, roxy_field_simple)
+}

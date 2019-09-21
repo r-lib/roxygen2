@@ -1,20 +1,11 @@
-template_find <- function(base_path, template_name) {
-  file_name <- paste0(template_name, ".", c("R", "r"))
-  path <- c(
-    file.path(base_path, "man-roxygen", file_name),
-    file.path(base_path, "man", "roxygen", "templates", file_name)
-  )
-  path_exists <- file.exists(path)
-
-  if (!any(path_exists)) {
-    stop("Can't find template '", template_name, "'", call. = FALSE)
-  }
-
-  path[path_exists][[1]]
+#' @export
+roxy_tag_parse.roxy_tag_template <- function(x) {
+  tag_value(x)
 }
 
-template_eval <- function(template_path, vars) {
-  utils::capture.output(brew::brew(template_path, envir = vars))
+#' @export
+roxy_tag_parse.roxy_tag_templateVar <- function(x) {
+  tag_name_description(x)
 }
 
 process_templates <- function(block, base_path, global_options = list()) {
@@ -38,4 +29,25 @@ process_templates <- function(block, base_path, global_options = list()) {
 
   # Insert templates back in the location where they came from
   block_replace_tags(block, "template", tags)
+}
+
+# Helpers -----------------------------------------------------------------
+
+template_find <- function(base_path, template_name) {
+  file_name <- paste0(template_name, ".", c("R", "r"))
+  path <- c(
+    file.path(base_path, "man-roxygen", file_name),
+    file.path(base_path, "man", "roxygen", "templates", file_name)
+  )
+  path_exists <- file.exists(path)
+
+  if (!any(path_exists)) {
+    stop("Can't find template '", template_name, "'", call. = FALSE)
+  }
+
+  path[path_exists][[1]]
+}
+
+template_eval <- function(template_path, vars) {
+  utils::capture.output(brew::brew(template_path, envir = vars))
 }

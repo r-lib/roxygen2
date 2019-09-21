@@ -375,12 +375,6 @@ roxy_tag_rd.roxy_tag_source <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_template <- function(x) tag_value(x)
-
-#' @export
-roxy_tag_parse.roxy_tag_templateVar <- function(x) tag_name_description(x)
-
-#' @export
 roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_title <- function(x, base_path, env) {

@@ -1,4 +1,8 @@
 #' @export
+roxy_tag_parse.roxy_tag_examples <- function(x) {
+  tag_examples(x)
+}
+#' @export
 roxy_tag_parse.roxy_tag_example <- function(x) {
   x <- tag_value(x)
 
@@ -9,6 +13,11 @@ roxy_tag_parse.roxy_tag_example <- function(x) {
   }
 
   x
+}
+
+#' @export
+roxy_tag_rd.roxy_tag_examples <- function(x, topic, base_path, env) {
+  roxy_field_simple("examples", x$val)
 }
 #' @export
 roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
@@ -23,12 +32,9 @@ roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_examples <- function(x) {
-  tag_examples(x)
-}
-#' @export
-roxy_tag_rd.roxy_tag_examples <- function(x, topic, base_path, env) {
-  roxy_field_simple("examples", x$val)
+format.roxy_field_examples <- function(x, ...) {
+  values <- paste0(x$values, collapse = "\n")
+  rd_macro(x$field, values, space = TRUE)
 }
 
 # Works like escape, but unescapes special rd example commands.

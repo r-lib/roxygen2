@@ -138,12 +138,6 @@ describe_section <- function(name, dt, dd) {
 }
 
 #' @export
-format.roxy_field_examples <- function(x, ...) {
-  values <- paste0(x$values, collapse = "\n")
-  rd_macro(x$field, values, space = TRUE)
-}
-
-#' @export
 format.roxy_field_rcmethods <- function(x, ...) {
   describe_section("Methods", names(x$values), x$values)
 }

@@ -305,20 +305,6 @@ roxy_tag_rd.roxy_tag_format <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
-  if (!is_installed("rmarkdown")) {
-    roxy_tag_warning(x, "Needs the rmarkdown package")
-    return()
-  }
-
-  tag_value(x)
-}
-#' @export
-roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
-  roxy_field_markdown("details", roxy_tag_include_rmd(x, base_path))
-}
-
-#' @export
 roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
 #' @export
 roxy_tag_rd.roxy_tag_keywords <- function(x, base_path, env) {

@@ -1,5 +1,16 @@
-roxy_tag_include_rmd <- function(tag, base_path) {
-  rmd <- tag$val
+#' @export
+roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
+  if (!is_installed("rmarkdown")) {
+    roxy_tag_warning(x, "Needs the rmarkdown package")
+    return()
+  }
+
+  tag_value(x)
+}
+
+#' @export
+roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
+  rmd <- x$val
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
 
   rmd_path <- tempfile(fileext = ".Rmd")
@@ -37,8 +48,11 @@ roxy_tag_include_rmd <- function(tag, base_path) {
     quiet = TRUE
   )
 
-  rmd_eval_rd(md_path, tag)
+  value <- rmd_eval_rd(md_path, x)
+  roxy_field_markdown("details", value)
 }
+
+# Helpers -----------------------------------------------------------------
 
 rmd_linkrefs_from_file <- function(path) {
   lines <- read_lines(path)

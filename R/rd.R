@@ -248,9 +248,6 @@ roxy_tag_rd.roxy_tag_concept <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_describeIn <- function(x) tag_name_description(x)
-
-#' @export
 roxy_tag_parse.roxy_tag_description <- function(x) tag_markdown_with_sections(x)
 #' @export
 roxy_tag_rd.roxy_tag_description <- function(x, base_path, env) {

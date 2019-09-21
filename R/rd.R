@@ -358,14 +358,6 @@ roxy_tag_rd.roxy_tag_note <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_param <- function(x) tag_name_description(x)
-#' @export
-roxy_tag_rd.roxy_tag_param <- function(x, base_path, env) {
-  value <- setNames(x$val$description, x$val$name)
-  roxy_field_simple(x$tag, value)
-}
-
-#' @export
 roxy_tag_parse.roxy_tag_rdname <- function(x) tag_value(x)
 
 #' @export

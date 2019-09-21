@@ -35,17 +35,6 @@ merge.roxy_field <- function(x, y, ...) {
   roxy_field_simple(x$field, c(x$values, y$values))
 }
 
-#' @export
-merge.roxy_field_param <- function(x, y, ...) {
-  stopifnot(identical(class(x), class(y)))
-  # When parameters appear in both x and y, keep values from y
-  # This happens for example when inherit_dot_params adds a "..." param after
-  # inherit_params has done the same.
-  to_add <- setdiff(names(x$values), names(y$values))
-  roxy_field_simple(x$field, c(x$values[to_add], y$values))
-}
-
-
 # Comment fields -----------------------------------------------------------------------
 
 #' @export
@@ -144,20 +133,6 @@ format.roxy_field_usage <- function(x, ...) {
   rd_macro(x$field, build_rd(x$values, collapse = "\n\n"), space = TRUE)
 }
 
-#' @export
-format.roxy_field_param <- function(x, ..., wrap = TRUE) {
-  names <- names(x$values)
-
-  # add space to multiple arguments so they can wrap
-  names <- gsub(",", ", ", names)
-
-  items <- paste0("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
-  if (wrap) {
-    items <- str_wrap(items, width = 60, exdent = 2, indent = 2)
-  }
-
-  rd_macro("arguments", items, space = TRUE)
-}
 
 #' @export
 format.roxy_field_slot <- function(x, ...) {

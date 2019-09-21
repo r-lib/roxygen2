@@ -1,3 +1,41 @@
+#' @export
+roxy_tag_parse.roxy_tag_param <- function(x) {
+  tag_name_description(x)
+}
+
+#' @export
+roxy_tag_rd.roxy_tag_param <- function(x, base_path, env) {
+  value <- setNames(x$val$description, x$val$name)
+  roxy_field_simple(x$tag, value)
+}
+
+#' @export
+merge.roxy_field_param <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  # When parameters appear in both x and y, keep values from y
+  # This happens for example when inherit_dot_params adds a "..." param after
+  # inherit_params has done the same.
+  to_add <- setdiff(names(x$values), names(y$values))
+  roxy_field_simple(x$field, c(x$values[to_add], y$values))
+}
+
+#' @export
+format.roxy_field_param <- function(x, ..., wrap = TRUE) {
+  names <- names(x$values)
+
+  # add space to multiple arguments so they can wrap
+  names <- gsub(",", ", ", names)
+
+  items <- paste0("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
+  if (wrap) {
+    items <- str_wrap(items, width = 60, exdent = 2, indent = 2)
+  }
+
+  rd_macro("arguments", items, space = TRUE)
+}
+
+# Other helpers -----------------------------------------------------------
+
 # Postprocessing to reset ordering of parameter documentation
 topics_fix_params_order <- function(topics) {
   for (topic in topics$topics) {

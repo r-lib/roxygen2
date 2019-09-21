@@ -626,4 +626,11 @@ test_that("can find section in existing docs", {
   expect_equal(out$title, "Good practice")
 })
 
+# find_params -------------------------------------------------------------
+
+test_that("find_params parses input", {
+  params <- find_params("utils::`?`", NULL)
+  expect_equal(names(params), c("topic", "type"))
+})
+
 

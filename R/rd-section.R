@@ -20,18 +20,18 @@ roxy_field_section <- function(title, content) {
   stopifnot(is.character(title), is.character(content))
   stopifnot(length(title) == length(content))
 
-  roxy_field("section", title = title, content = content)
+  roxy_field("section", list(title = title, content = content))
 }
 
 #' @export
 format.roxy_field_section <- function(x, ..., wrap = TRUE) {
   if (wrap) {
-    content <- str_wrap(str_trim(x$content), width = 60, exdent = 2, indent = 2)
+    content <- str_wrap(str_trim(x$values$content), width = 60, exdent = 2, indent = 2)
   } else {
-    content <- x$content
+    content <- x$values$content
   }
 
-  paste0("\\section{", x$title, "}{\n", content, "\n}\n", collapse = "\n")
+  paste0("\\section{", x$values$title, "}{\n", content, "\n}\n", collapse = "\n")
 }
 
 #' @export
@@ -39,9 +39,9 @@ merge.roxy_field_section <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
 
   dedup <- collapse(
-    c(x$title, y$title),
-    c(x$content, y$content),
+    c(x$values$title, y$values$title),
+    c(x$values$content, y$values$content),
     paste, collapse = "\n\n"
   )
-  roxy_field_section(dedup$key, unlist(dedup$value))
+  roxy_field("section", list(title = dedup$key, content = unlist(dedup$value)))
 }

@@ -10,8 +10,8 @@ test_that("@describeIn generic captures s3 method class", {
     f.a <- function(x) 1
   ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$type, "generic")
-  expect_equal(get_tag(out, "minidesc")$label, "a")
+  expect_equal(get_tag(out, "minidesc")$values$type, "generic")
+  expect_equal(get_tag(out, "minidesc")$values$label, "a")
 })
 
 test_that("@describeIn generic captures s4 method class", {
@@ -23,7 +23,7 @@ test_that("@describeIn generic captures s4 method class", {
     setMethod(f, signature('a'), function(x) 1)
   ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$label, "a")
+  expect_equal(get_tag(out, "minidesc")$values$label, "a")
 })
 
 test_that("@describeIn class captures s3 generic name", {
@@ -36,7 +36,7 @@ test_that("@describeIn class captures s3 generic name", {
     mean.boo <- function(x) 1
     ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$label, "mean")
+  expect_equal(get_tag(out, "minidesc")$values$label, "mean")
 })
 
 test_that("@describeIn class captures s4 generic name", {
@@ -50,7 +50,7 @@ test_that("@describeIn class captures s4 generic name", {
     setMethod('mean', 'a', function(x) 1)
     ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$label, "mean")
+  expect_equal(get_tag(out, "minidesc")$values$label, "mean")
 })
 
 test_that("Multiple @describeIn generic combined into one", {
@@ -65,9 +65,9 @@ test_that("Multiple @describeIn generic combined into one", {
     f.b <- function(x) 1
   ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$type, "generic")
-  expect_equal(get_tag(out, "minidesc")$label, c("a", "b"))
-  expect_equal(get_tag(out, "minidesc")$desc, c("A", "B"))
+  expect_equal(get_tag(out, "minidesc")$values$type, "generic")
+  expect_equal(get_tag(out, "minidesc")$values$label, c("a", "b"))
+  expect_equal(get_tag(out, "minidesc")$values$desc, c("A", "B"))
 })
 
 
@@ -80,7 +80,7 @@ test_that("all other combinations fallback to function list", {
     bar <- function(y) {}
   ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$type, "function")
+  expect_equal(get_tag(out, "minidesc")$values$type, "function")
 })
 
 test_that("@describeIn class captures function name", {
@@ -92,7 +92,7 @@ test_that("@describeIn class captures function name", {
     f2 <- function(x) 1
     ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$label, "f2")
+  expect_equal(get_tag(out, "minidesc")$values$label, "f2")
 })
 
 test_that("@describeIn class captures function name with data", {
@@ -105,7 +105,7 @@ test_that("@describeIn class captures function name with data", {
     f2 <- function(x) 1
     ")[[1]]
 
-  expect_equal(get_tag(out, "minidesc")$label, "f2")
+  expect_equal(get_tag(out, "minidesc")$values$label, "f2")
 })
 
 test_that("function names are escaped", {

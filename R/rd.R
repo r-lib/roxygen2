@@ -211,7 +211,7 @@ roxy_tag_rd.roxy_tag_.reexport <- function(x, base_path, env) {
 
 #' @export
 roxy_tag_rd.roxy_tag_.formals <- function(x, base_path, env) {
-  roxy_field_simple("formals", x$val)
+  roxy_field("formals", x$val)
 }
 
 #' @export
@@ -225,7 +225,7 @@ roxy_tag_rd.roxy_tag_.methods <- function(x, base_path, env) {
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 
-  roxy_field_simple("rcmethods", setNames(desc, usage))
+  roxy_field("rcmethods", setNames(desc, usage))
 }
 
 # Regular tags ------------------------------------------------------------
@@ -265,7 +265,7 @@ roxy_tag_rd.roxy_tag_details <- function(x, base_path, env) {
 roxy_tag_parse.roxy_tag_docType <- function(x) tag_name(x)
 #' @export
 roxy_tag_rd.roxy_tag_docType <- function(x, base_path, env) {
-  roxy_field_simple("docType", x$val)
+  roxy_field("docType", x$val)
 }
 
 #' @export
@@ -279,7 +279,7 @@ roxy_tag_rd.roxy_tag_encoding <- function(x, base_path, env) {
 roxy_tag_parse.roxy_tag_evalRd <- function(x) tag_code(x)
 #' @export
 roxy_tag_rd.roxy_tag_evalRd <- function(x, base_path, env) {
-  roxy_field_simple("rawRd", roxy_tag_eval(x, env))
+  roxy_field("rawRd", roxy_tag_eval(x, env))
 }
 
 #' @export
@@ -294,7 +294,7 @@ roxy_tag_parse.roxy_tag_field <- function(x) tag_name_description(x)
 #' @export
 roxy_tag_rd.roxy_tag_field <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
-  roxy_field_simple(x$tag, value)
+  roxy_field(x$tag, value)
 }
 
 #' @export
@@ -308,7 +308,7 @@ roxy_tag_rd.roxy_tag_format <- function(x, base_path, env) {
 roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
 #' @export
 roxy_tag_rd.roxy_tag_keywords <- function(x, base_path, env) {
-  roxy_field_simple("keyword", str_split(x$val, "\\s+")[[1]])
+  roxy_field("keyword", str_split(x$val, "\\s+")[[1]])
 }
 
 #' @export
@@ -364,7 +364,7 @@ roxy_tag_parse.roxy_tag_slot <- function(x) tag_name_description(x)
 #' @export
 roxy_tag_rd.roxy_tag_slot <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
-  roxy_field_simple(x$tag, value)
+  roxy_field(x$tag, value)
 }
 
 #' @export

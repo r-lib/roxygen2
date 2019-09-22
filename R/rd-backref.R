@@ -5,7 +5,7 @@ roxy_tag_parse.roxy_tag_backref <- function(x) {
 
 #' @export
 roxy_tag_rd.roxy_tag_backref <- function(x, base_path, env) {
-  roxy_field_simple("backref", x$val)
+  roxy_field("backref", x$val)
 }
 
 #' @export

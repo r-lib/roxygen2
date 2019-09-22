@@ -17,7 +17,7 @@ roxy_tag_parse.roxy_tag_example <- function(x) {
 
 #' @export
 roxy_tag_rd.roxy_tag_examples <- function(x, topic, base_path, env) {
-  roxy_field_simple("examples", x$val)
+  roxy_field("examples", x$val)
 }
 #' @export
 roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
@@ -28,7 +28,7 @@ roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
   }
 
   code <- read_lines(path)
-  roxy_field_simple("examples", escape_examples(code))
+  roxy_field("examples", escape_examples(code))
 }
 
 #' @export

@@ -4,13 +4,13 @@ roxy_field_reexport <- function(pkg, fun) {
   stopifnot(is.character(pkg), is.character(fun))
   stopifnot(length(pkg) == length(fun))
 
-  roxy_field("reexport", pkg = pkg, fun = fun)
+  roxy_field("reexport", list(pkg = pkg, fun = fun))
 }
 
 #' @export
 merge.roxy_field_reexport <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_reexport(c(x$pkg, y$pkg), c(x$fun, y$fun))
+  roxy_field_reexport(c(x$values$pkg, y$values$pkg), c(x$values$fun, y$values$fun))
 }
 
 #' @export

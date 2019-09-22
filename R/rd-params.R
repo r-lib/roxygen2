@@ -6,7 +6,7 @@ roxy_tag_parse.roxy_tag_param <- function(x) {
 #' @export
 roxy_tag_rd.roxy_tag_param <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
-  roxy_field_simple(x$tag, value)
+  roxy_field(x$tag, value)
 }
 
 #' @export
@@ -16,7 +16,7 @@ merge.roxy_field_param <- function(x, y, ...) {
   # This happens for example when inherit_dot_params adds a "..." param after
   # inherit_params has done the same.
   to_add <- setdiff(names(x$values), names(y$values))
-  roxy_field_simple(x$field, c(x$values[to_add], y$values))
+  roxy_field(x$field, c(x$values[to_add], y$values))
 }
 
 #' @export

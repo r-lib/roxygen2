@@ -41,7 +41,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
       return(character())
     }
 
-    inherit <- self$get_field("inherit")
+    inherit <- self$get_field("inherit")$values
 
     inherits_field <- map_lgl(inherit$fields, function(x) type %in% x)
     sources <- inherit$source[inherits_field]
@@ -57,7 +57,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
       return(character())
     }
 
-    self$get_field("inherit_section")$source
+    self$get_field("inherit_section")$values$source
   },
 
   # Ensures that each type of name (as given by its name), only appears
@@ -77,7 +77,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   },
 
   add_simple_field = function(name, values, overwrite = FALSE) {
-    self$add_field(roxy_field_simple(name, values), overwrite = overwrite)
+    self$add_field(roxy_field(name, values), overwrite = overwrite)
     invisible()
   },
 

@@ -220,7 +220,7 @@ test_that("inherits missing sections", {
     b <- function(y) {}
   ")[[2]]
 
-  section <- out$get_field("section")
+  section <- out$get_field("section")$values
   expect_equal(section$title, c("A", "B"))
   expect_equal(section$content, c("2", "1"))
 })
@@ -238,7 +238,7 @@ test_that("can inherit single section", {
     b <- function(y) {}
   ")[[2]]
 
-  section <- out$get_field("section")
+  section <- out$get_field("section")$values
   expect_equal(section$title, "B")
   expect_equal(section$content, "1")
 })
@@ -621,8 +621,6 @@ test_that("useful warnings if can't find topics", {
 
 test_that("can find section in existing docs", {
   out <- find_sections(get_rd("base::attach"))
-
-  expect_s3_class(out, "roxy_field_section")
   expect_equal(out$title, "Good practice")
 })
 

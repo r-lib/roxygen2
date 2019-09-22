@@ -1,19 +1,13 @@
-roxy_field_simple <- function(field, values) {
+roxy_field <- function(field, values) {
   if (is.null(values) || identical(values, "NULL")) {
     # NULL is special sentinel value that suppresses output of that field
     return()
   }
 
-  roxy_field(field, values = values)
-}
-
-# Low level constructor that doesn't impose any structure on the values
-roxy_field <- function(field, ...) {
-
   structure(
     list(
       field = field,
-      ...
+      values = values
     ),
     class = c(paste0("roxy_field_", field), "roxy_field")
   )
@@ -32,7 +26,7 @@ format.roxy_field <- function(x, ...) {
 #' @export
 merge.roxy_field <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_simple(x$field, c(x$values, y$values))
+  roxy_field(x$field, c(x$values, y$values))
 }
 
 # Fields that repeat multiple times --------------------------------------------
@@ -158,5 +152,5 @@ roxy_field_markdown <- function(name, values) {
     }
   }
 
-  map2(name, values, roxy_field_simple)
+  map2(name, values, roxy_field)
 }

@@ -41,23 +41,23 @@ roxy_field_minidesc <- function(type, label, desc) {
   stopifnot(is.character(type), is.character(label), is.character(desc))
   stopifnot(length(desc) == length(label))
 
-  roxy_field("minidesc", type = type, desc = desc, label = label)
+  roxy_field("minidesc", list(type = type, desc = desc, label = label))
 }
 
 #' @export
 merge.roxy_field_minidesc <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  stopifnot(identical(x$type, y$type))
+  stopifnot(identical(x$values$type, y$values$type))
   roxy_field_minidesc(
-    x$type,
-    label = c(x$label, y$label),
-    desc = c(x$desc, y$desc)
+    x$values$type,
+    label = c(x$values$label, y$values$label),
+    desc = c(x$values$desc, y$values$desc)
   )
 }
 
 #' @export
 format.roxy_field_minidesc <- function(x, ...) {
-  title <- switch(x$type,
+  title <- switch(x$values$type,
     generic = "Methods (by class)",
     class = "Methods (by generic)",
     "function" = "Functions"
@@ -66,7 +66,7 @@ format.roxy_field_minidesc <- function(x, ...) {
   paste0(
     "\\section{", title, "}{\n",
     "\\itemize{\n",
-    paste0("\\item \\code{", escape(x$label), "}: ", x$desc,
+    paste0("\\item \\code{", escape(x$values$label), "}: ", x$values$desc,
       collapse = "\n\n"),
     "\n}}\n"
   )

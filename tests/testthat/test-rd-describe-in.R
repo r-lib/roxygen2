@@ -1,5 +1,3 @@
-context("Rd: describeIn")
-
 test_that("@describeIn generic captures s3 method class", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title

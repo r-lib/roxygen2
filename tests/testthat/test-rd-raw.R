@@ -1,5 +1,3 @@
-context("Rd: raw output")
-
 test_that("rawRd inserted unchanged", {
   out <- roc_proc_text(rd_roclet(), "
     #' @rawRd #this is a comment

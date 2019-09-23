@@ -1,5 +1,3 @@
-context("Rd: markdown escaping")
-
 tag_df <- function(tag, start, end, argend = NULL) {
   df <- data.frame(
     stringsAsFactors = FALSE,

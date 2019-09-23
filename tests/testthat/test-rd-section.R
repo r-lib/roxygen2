@@ -1,5 +1,3 @@
-context("Rd: section")
-
 test_that("warn if forgotton colom", {
   expect_warning(
     roc_proc_text(rd_roclet(), "

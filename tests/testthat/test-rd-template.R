@@ -1,5 +1,3 @@
-context("Rd: template")
-
 test_that("can find template from name", {
   base <- test_path("templates/")
 

@@ -1,5 +1,3 @@
-context("Rd: family")
-
 test_that("long families are wrapped", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title

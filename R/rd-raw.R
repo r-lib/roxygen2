@@ -15,3 +15,20 @@ roxy_tag_rd.roxy_tag_rawRd <- function(x, base_path, env) {
 format.roxy_field_rawRd <- function(x, ...) {
   paste(x$value, collapse = "\n")
 }
+
+roxy_tag_eval <- function(tag, env) {
+  tryCatch({
+    expr <- parse(text = tag$val)
+    out <- eval(expr, envir = env)
+
+    if (!is.character(out)) {
+      roxy_tag_warning(tag, "did not evaluate to a string")
+    } else if (anyNA(out)) {
+      roxy_tag_warning(tag, "result contained NA")
+    } else {
+      out
+    }
+  }, error = function(e) {
+    roxy_tag_warning(tag, "failed with error:\n", e$message)
+  })
+}

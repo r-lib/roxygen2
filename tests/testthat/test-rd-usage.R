@@ -1,8 +1,3 @@
-context("Rd: usage")
-
-
-# @usage -----------------------------------------------------------------------
-
 test_that("@usage overrides default", {
   out <- roc_proc_text(rd_roclet(), "
     #' A

@@ -1,6 +1,3 @@
-context("Rd: inherit")
-
-
 # Rd parsing --------------------------------------------------------------
 
 test_that("can round-trip Rd", {

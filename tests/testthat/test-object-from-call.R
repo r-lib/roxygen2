@@ -6,6 +6,17 @@ test_that("undocumentable things return null", {
 
 # data / package -------------------------------------------------------
 
+test_that("finds package description", {
+  obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
+  expect_s3_class(obj, "package")
+  expect_equal(obj$alias, "_PACKAGE")
+  expect_equal(obj$value$desc$Package, "testEagerData")
+})
+
+test_that("Can read UTF-8 DESCRIPTIONS", {
+  expect_equal(read.description("testNonASCII/DESCRIPTION")$Author, "Shr\U00EBktan <shrektan@126.com>")
+})
+
 test_that("finds datasets given by name", {
   obj <- call_to_object({
     df <- data.frame(x = 1, y = 2)
@@ -16,12 +27,26 @@ test_that("finds datasets given by name", {
   expect_s3_class(obj$value, "data.frame")
 })
 
-test_that("finds package description", {
-  obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
-  expect_s3_class(obj, "package")
-  expect_equal(obj$alias, "_PACKAGE")
-  expect_equal(obj$value$desc$Package, "testEagerData")
+test_that("can document eager data", {
+  skip_if_not_installed("devtools")
+
+  test_pkg <- temp_copy_pkg('testEagerData')
+  on.exit(unlink(test_pkg, recursive = TRUE))
+
+  expect_output(devtools::document(test_pkg), "a[.]Rd")
+  expect_true(file.exists(file.path(test_pkg, "man", "a.Rd")))
 })
+
+test_that("can document lazy data", {
+  skip_if_not_installed("devtools")
+
+  test_pkg <- temp_copy_pkg('testLazyData')
+  on.exit(unlink(test_pkg, recursive = TRUE))
+
+  expect_output(devtools::document(test_pkg), "a[.]Rd")
+  expect_true(file.exists(file.path(test_pkg, "man", "a.Rd")))
+})
+
 
 # imports -----------------------------------------------------------------
 

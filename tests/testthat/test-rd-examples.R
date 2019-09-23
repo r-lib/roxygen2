@@ -1,5 +1,3 @@
-context("Rd: examples")
-
 test_that("@example loads from specified files", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a

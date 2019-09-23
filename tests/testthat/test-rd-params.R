@@ -1,5 +1,3 @@
-context("Rd: param")
-
 test_that("@param documents arguments", {
   out <- roc_proc_text(rd_roclet(), "
     #' A

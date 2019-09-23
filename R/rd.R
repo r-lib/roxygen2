@@ -174,23 +174,6 @@ roxy_tag_rd.roxy_tag_.formals <- function(x, base_path, env) {
 #' @export
 format.roxy_field_formals <- function(x, ...) NULL
 
-#' @export
-roxy_tag_rd.roxy_tag_.methods <- function(x, base_path, env) {
-  desc <- lapply(x$val, function(x) docstring(x$value@.Data))
-  usage <- map_chr(x$val, function(x) {
-    function_usage(x$value@name, formals(x$value@.Data))
-  })
-
-  has_docs <- !map_lgl(desc, is.null)
-  desc <- desc[has_docs]
-  usage <- usage[has_docs]
-
-  roxy_field("rcmethods", setNames(desc, usage))
-}
-#' @export
-format.roxy_field_rcmethods <- function(x, ...) {
-  roxy_field_description("Methods", names(x$value), x$value)
-}
 
 #' @export
 roxy_tag_parse.roxy_tag_method <- function(x) tag_words(x, 2, 2)

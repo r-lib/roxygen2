@@ -47,8 +47,8 @@ merge.roxy_field_inherit <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
 
   dedup <- collapse(
-    c(x$values$source, y$values$source),
-    c(x$values$fields, y$values$fields),
+    c(x$value$source, y$value$source),
+    c(x$value$fields, y$value$fields),
     function(x) Reduce(union, x)
   )
 
@@ -71,7 +71,7 @@ format.roxy_field_inherit_section <- function(x, ...) NULL
 #' @export
 merge.roxy_field_inherit_section <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_section(c(x$values$source, y$values$source), c(x$values$title, y$values$title))
+  roxy_field_inherit_section(c(x$value$source, y$value$source), c(x$value$title, y$value$title))
 }
 
 roxy_field_inherit_dot_params <- function(source, args) {
@@ -87,7 +87,7 @@ format.roxy_field_inherit_dot_params <- function(x, ...) NULL
 #' @export
 merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_dot_params(c(x$values$source, y$values$source), c(x$values$args, y$values$args))
+  roxy_field_inherit_dot_params(c(x$value$source, y$value$source), c(x$value$args, y$value$args))
 }
 
 

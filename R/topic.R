@@ -33,7 +33,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   },
 
   get_value = function(field) {
-    self$get_field(field)$values
+    self$get_field(field)$value
   },
 
   get_rd = function(field) {

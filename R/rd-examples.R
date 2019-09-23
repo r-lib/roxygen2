@@ -33,8 +33,8 @@ roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
 
 #' @export
 format.roxy_field_examples <- function(x, ...) {
-  values <- paste0(x$values, collapse = "\n")
-  rd_macro(x$field, values, space = TRUE)
+  value <- paste0(x$value, collapse = "\n")
+  rd_macro(x$field, value, space = TRUE)
 }
 
 # Works like escape, but unescapes special rd example commands.

@@ -10,7 +10,7 @@ roxy_tag_rd.roxy_tag_backref <- function(x, base_path, env) {
 
 #' @export
 format.roxy_field_backref <- function(x, ...) {
-  filename <- unique(x$values)
+  filename <- unique(x$value)
   filename <- file.path(basename(dirname(filename)), basename(filename), fsep = "/")
 
   lines <- stringi::stri_wrap(

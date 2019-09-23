@@ -15,18 +15,18 @@ merge.roxy_field_param <- function(x, y, ...) {
   # When parameters appear in both x and y, keep values from y
   # This happens for example when inherit_dot_params adds a "..." param after
   # inherit_params has done the same.
-  to_add <- setdiff(names(x$values), names(y$values))
-  roxy_field(x$field, c(x$values[to_add], y$values))
+  to_add <- setdiff(names(x$value), names(y$value))
+  roxy_field(x$field, c(x$value[to_add], y$value))
 }
 
 #' @export
 format.roxy_field_param <- function(x, ..., wrap = TRUE) {
-  names <- names(x$values)
+  names <- names(x$value)
 
   # add space to multiple arguments so they can wrap
   names <- gsub(",", ", ", names)
 
-  items <- paste0("\\item{", names, "}{", x$values, "}", collapse = "\n\n")
+  items <- paste0("\\item{", names, "}{", x$value, "}", collapse = "\n\n")
   if (wrap) {
     items <- str_wrap(items, width = 60, exdent = 2, indent = 2)
   }

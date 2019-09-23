@@ -1,5 +1,5 @@
-roxy_field <- function(field, values) {
-  if (is.null(values) || identical(values, "NULL")) {
+roxy_field <- function(field, value) {
+  if (is.null(value) || identical(value, "NULL")) {
     # NULL is special sentinel value that suppresses output of that field
     return()
   }
@@ -7,7 +7,7 @@ roxy_field <- function(field, values) {
   structure(
     list(
       field = field,
-      values = values
+      value = value
     ),
     class = c(paste0("roxy_field_", field), "roxy_field")
   )
@@ -26,24 +26,24 @@ format.roxy_field <- function(x, ...) {
 #' @export
 merge.roxy_field <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field(x$field, c(x$values, y$values))
+  roxy_field(x$field, c(x$value, y$value))
 }
 
 # Fields that repeat multiple times --------------------------------------------
 
 format_rd <- function(x, ..., sort = TRUE) {
-  x$values <- unique(x$values)
+  x$value <- unique(x$value)
   if (sort) {
-    x$values <- sort_c(x$values)
+    x$value <- sort_c(x$value)
   }
 
-  map_chr(x$values, rd_macro, field = x$field)
+  map_chr(x$value, rd_macro, field = x$field)
 }
 #' @export
 format.roxy_field_keyword <- format_rd
 #' @export
 format.roxy_field_alias <- function(x, ...) {
-  x$values <- str_replace_all(x$values, fixed("%"), "\\%")
+  x$value <- str_replace_all(x$value, fixed("%"), "\\%")
   format_rd(x, ..., sort = FALSE)
 }
 #' @export
@@ -51,11 +51,11 @@ format.roxy_field_concept <- format_rd
 
 # Fields that keep the first occurrence -----------------------------------------
 format_first <- function(x, ...) {
-  rd_macro(x$field, x$values[1])
+  rd_macro(x$field, x$value[1])
 }
 #' @export
 format.roxy_field_name <- function(x, ...) {
-  x$values <- str_replace_all(x$values, fixed("%"), "\\%")
+  x$value <- str_replace_all(x$value, fixed("%"), "\\%")
   format_first(x, ...)
 }
 #' @export
@@ -67,14 +67,14 @@ format.roxy_field_format <- format_first
 #' @export
 format.roxy_field_encoding <- format_first
 
-# Fields collapse their values into a single string ----------------------------
+# Fields collapse their value into a single string ----------------------------
 
 format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
-  values <- paste0(x$values, collapse = "\n\n")
+  value <- paste0(x$value, collapse = "\n\n")
   if (wrap) {
-    values <- str_wrap(values, width = 60, indent = indent, exdent = exdent)
+    value <- str_wrap(value, width = 60, indent = indent, exdent = exdent)
   }
-  rd_macro(x$field, values, space = TRUE)
+  rd_macro(x$field, value, space = TRUE)
 }
 #' @export
 format.roxy_field_author <- format_collapse
@@ -104,18 +104,18 @@ format.roxy_field_formals <- function(x, ...) NULL
 
 #' @export
 format.roxy_field_usage <- function(x, ...) {
-  rd_macro(x$field, build_rd(x$values, collapse = "\n\n"), space = TRUE)
+  rd_macro(x$field, build_rd(x$value, collapse = "\n\n"), space = TRUE)
 }
 
 
 #' @export
 format.roxy_field_slot <- function(x, ...) {
-  describe_section("Slots", names(x$values), x$values)
+  describe_section("Slots", names(x$value), x$value)
 }
 
 #' @export
 format.roxy_field_field <- function(x, ...) {
-  describe_section("Fields", names(x$values), x$values)
+  describe_section("Fields", names(x$value), x$value)
 }
 
 describe_section <- function(name, dt, dd) {
@@ -131,26 +131,26 @@ describe_section <- function(name, dt, dd) {
 
 #' @export
 format.roxy_field_rcmethods <- function(x, ...) {
-  describe_section("Methods", names(x$values), x$values)
+  describe_section("Methods", names(x$value), x$value)
 }
 
 #' @export
 format.roxy_field_rawRd <- function(x, ...) {
-  paste(x$values, collapse = "\n")
+  paste(x$value, collapse = "\n")
 }
 
 # Markdown ----------------------------------------------------------------
 
-roxy_field_markdown <- function(name, values) {
+roxy_field_markdown <- function(name, value) {
   # Any additional components are sections
-  if (length(values) > 1) {
-    name <- c(name, rep("rawRd", length(values) - 1))
+  if (length(value) > 1) {
+    name <- c(name, rep("rawRd", length(value) - 1))
 
-    if (values[[1]] == "") {
+    if (value[[1]] == "") {
       name <- name[-1]
-      values <- values[-1]
+      value <- value[-1]
     }
   }
 
-  map2(name, values, roxy_field)
+  map2(name, value, roxy_field)
 }

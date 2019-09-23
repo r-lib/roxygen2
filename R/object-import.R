@@ -10,7 +10,7 @@ roxy_field_reexport <- function(pkg, fun) {
 #' @export
 merge.roxy_field_reexport <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_reexport(c(x$values$pkg, y$values$pkg), c(x$values$fun, y$values$fun))
+  roxy_field_reexport(c(x$value$pkg, y$value$pkg), c(x$value$fun, y$value$fun))
 }
 
 #' @export

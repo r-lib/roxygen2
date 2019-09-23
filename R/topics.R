@@ -87,7 +87,7 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
   # Extract values for simple fields
   simple_values = function(field) {
     fields <- lapply(self$topics, function(rd) rd$get_field(field))
-    lapply(compact(fields), "[[", "values")
+    lapply(compact(fields), "[[", "value")
   }
 
 ))

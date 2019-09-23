@@ -69,11 +69,6 @@ roxy_field_description <- function(name, dt, dd) {
   )
 }
 
-#' @export
-format.roxy_field_rcmethods <- function(x, ...) {
-  roxy_field_description("Methods", names(x$value), x$value)
-}
-
 roxy_field_markdown <- function(name, value) {
   # Any additional components are sections
   if (length(value) > 1) {

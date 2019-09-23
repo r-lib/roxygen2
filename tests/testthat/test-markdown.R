@@ -70,7 +70,7 @@ test_that("inline code works with < and >", {
     f <- function() 1
   ")[[1]]
 
-  expect_equal(out$get_field("title")$values, "\\verb{SELECT <name> FROM <table>}")
+  expect_equal(out$get_value("title"), "\\verb{SELECT <name> FROM <table>}")
 })
 
 
@@ -438,7 +438,7 @@ test_that("level >2 markdown headings work in @description", {
   "
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
-    out$fields$description$values,
+    out$get_value("description"),
     "\\subsection{This is good}{\n\nyes\n}"
   )
 })
@@ -459,7 +459,7 @@ test_that("level >2 markdown headings work in @details", {
   "
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
-    out$fields$details$values,
+    out$get_value("details"),
     "\\subsection{Heading 2}{\n\\subsection{Heading 3}{\n\nText.\n}\n\n}"
   )
 })
@@ -479,7 +479,7 @@ test_that("level >2 markdown headings work in @return", {
   "
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
-    out$fields$value$values,
+    out$get_value("value"),
     "Even this\n\\subsection{Can have a subsection.}{\n\nYes.\n}"
   )
 })

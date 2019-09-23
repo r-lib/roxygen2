@@ -86,7 +86,7 @@ test_that("can inherit return values from roxygen topic", {
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("value")$values, "ABC")
+  expect_equal(out$get_value("value"), "ABC")
 })
 
 
@@ -110,7 +110,7 @@ test_that("takes value from first with return", {
     c <- function(y) {}
   ")[[3]]
 
-  expect_equal(out$get_field("value")$values, "B")
+  expect_equal(out$get_value("value"), "B")
 })
 
 test_that("can inherit return value from external function", {
@@ -120,8 +120,8 @@ test_that("can inherit return value from external function", {
     a1 <- function(x) {}
   ")[[1]]
 
-  expect_match(out$get_field("value")$values, "before the mean is computed.$")
-  expect_match(out$get_field("value")$values, "^If \\\\code")
+  expect_match(out$get_value("value"), "before the mean is computed.$")
+  expect_match(out$get_value("value"), "^If \\\\code")
 })
 
 
@@ -140,7 +140,7 @@ test_that("can inherit return values from roxygen topic", {
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("seealso")$values, "ABC")
+  expect_equal(out$get_value("seealso"), "ABC")
 })
 
 # Inherit description and details -----------------------------------------
@@ -159,7 +159,7 @@ test_that("can inherit description from roxygen topic", {
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("description")$values, "B")
+  expect_equal(out$get_value("description"), "B")
 })
 
 test_that("inherits description if omitted", {
@@ -176,7 +176,7 @@ test_that("inherits description if omitted", {
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("description")$values, "B")
+  expect_equal(out$get_value("description"), "B")
 })
 
 test_that("can inherit details from roxygen topic", {
@@ -198,8 +198,8 @@ test_that("can inherit details from roxygen topic", {
     b <- function(y) {}
   ")[[2]]
 
-  expect_equal(out$get_field("description")$values, "E")
-  expect_equal(out$get_field("details")$values, "C")
+  expect_equal(out$get_value("description"), "E")
+  expect_equal(out$get_value("details"), "C")
 })
 
 
@@ -220,7 +220,7 @@ test_that("inherits missing sections", {
     b <- function(y) {}
   ")[[2]]
 
-  section <- out$get_field("section")$values
+  section <- out$get_value("section")
   expect_equal(section$title, c("A", "B"))
   expect_equal(section$content, c("2", "1"))
 })
@@ -238,7 +238,7 @@ test_that("can inherit single section", {
     b <- function(y) {}
   ")[[2]]
 
-  section <- out$get_field("section")$values
+  section <- out$get_value("section")
   expect_equal(section$title, "B")
   expect_equal(section$content, "1")
 })
@@ -318,7 +318,7 @@ test_that("@inheritParams can inherit from inherited params", {
     a <- function(x) {}
     ")
 
-  expect_equal(out[["c.Rd"]]$get_field("param")$values, c(x = "X"))
+  expect_equal(out[["c.Rd"]]$get_value("param"), c(x = "X"))
 })
 
 test_that("multiple @inheritParam inherits from existing topics", {
@@ -467,7 +467,7 @@ test_that("inherit params ... named \\dots", {
   ")[[2]]
 
   expect_equal(
-    out$get_field("param")$values,
+    out$get_value("param"),
     c(x = "x", "\\dots" = "bar")
   )
 
@@ -570,7 +570,7 @@ test_that("inheritDotParams does not add already-documented params", {
     original <- function(x, y, z, ...) {}
   ")[[1]]
 
-  params <- out$get_field("param")$values
+  params <- out$get_value("param")
   dot_param <- params[["..."]]
   expect_named(params, c("x", "y", "..."))
   expect_false(grepl("item{x}{x description}", dot_param, fixed = TRUE))
@@ -600,14 +600,13 @@ test_that("can inherit all from single function", {
     bar <- function(x, y) {}
   ")[[2]]
 
-  params <- out$get_field("param")$values
-  expect_named(params, c("x", "y"))
-  expect_equal(out$get_field("title")$values, "Foo")
-  expect_equal(out$get_field("description")$values, "Description")
-  expect_equal(out$get_field("details")$values, "Details")
-  expect_equal(out$get_field("examples")$values, rd("x <- 1"))
-  expect_equal(out$get_field("author")$values, "Hadley")
-  expect_equal(out$get_field("source")$values, "my mind")
+  expect_named(out$get_value("param"), c("x", "y"))
+  expect_equal(out$get_value("title"), "Foo")
+  expect_equal(out$get_value("description"), "Description")
+  expect_equal(out$get_value("details"), "Details")
+  expect_equal(out$get_value("examples"), rd("x <- 1"))
+  expect_equal(out$get_value("author"), "Hadley")
+  expect_equal(out$get_value("source"), "my mind")
 })
 
 

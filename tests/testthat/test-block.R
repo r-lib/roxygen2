@@ -195,7 +195,7 @@ test_that("evaluation occurs during parsing", {
     #' @eval foo()
     NULL")[[1]]
 
-  expect_equal(out$get_field("title")$values, "a")
+  expect_equal(out$get_value("title"), "a")
   expect_equal(out$filename, "a.Rd")
 })
 

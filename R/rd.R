@@ -147,7 +147,7 @@ topics_add_default_description <- function(topics) {
 
     # rexport manually generates a own description, so don't need to
     if (!topic$has_field("reexport")) {
-      topic$add_simple_field("description", topic$get_field("title")$values)
+      topic$add_simple_field("description", topic$get_value("title"))
     }
   }
 

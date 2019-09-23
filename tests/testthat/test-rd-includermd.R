@@ -61,8 +61,8 @@ test_that("markdown with headers", {
     "}"),
     "\\section{Header 11}{Text again}"
   )
-  expect_equal_strings(out1$fields$details$values, exp_details)
-  expect_equal_strings(out1$fields$rawRd$values, exp_secs)
+  expect_equal_strings(out1$get_value("details"), exp_details)
+  expect_equal_strings(out1$get_value("rawRd"), exp_secs)
 })
 
 test_that("subsection within details", {
@@ -87,7 +87,7 @@ test_that("subsection within details", {
     "Text at the front",
     "\\subsection{Subsection in details}{ Some subsection text }"
   )
-  expect_equal_strings(out1$fields$details$values, exp_details)
+  expect_equal_strings(out1$get_value("details"), exp_details)
 })
 
 test_that("links to functions", {
@@ -109,7 +109,7 @@ test_that("links to functions", {
     "This is a link: \\code{\\link[=roxygenize]{roxygenize()}}.",
     "Another one:\n\\code{\\link[stringr:str_length]{stringr::str_length()}}"
   )
-  expect_equal_strings(out1$fields$details$values, exp_details)
+  expect_equal_strings(out1$get_value("details"), exp_details)
 })
 
 test_that("links to functions, with anchors", {
@@ -134,7 +134,7 @@ test_that("links to functions, with anchors", {
     "This is a link: \\code{\\link[=roxygenize]{roxygenize()}}.",
     "Another one:\n\\code{\\link[stringr:str_length]{stringr::str_length()}}"
   )
-  expect_equal_strings(out1$fields$details$values, exp_details)
+  expect_equal_strings(out1$get_value("details"), exp_details)
 })
 
 test_that("empty Rmd", {

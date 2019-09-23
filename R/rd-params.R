@@ -41,7 +41,7 @@ topics_fix_params_order <- function(topics) {
   for (topic in topics$topics) {
     # Compute correct ordering of parameter documentation
     # Check what's needed...
-    needed <- topic$get_field("formals")$values
+    needed <- topic$get_value("formals")
 
     # (Workaround for dupes that can occur but perhaps shouldn't,
     #  cf. https://github.com/r-lib/roxygen2/commit/83d125dce50a072534988787d49ffe206d19b232#commitcomment-6742169)
@@ -62,7 +62,7 @@ topics_fix_params_order <- function(topics) {
     required_order <- c(required_order, setdiff(documented_indexes, required_order))
 
     # Overwrite all param fields to fix order
-    param <- topic$get_field("param")$values[required_order]
+    param <- topic$get_value("param")[required_order]
     topic$add_simple_field("param", param, overwrite = TRUE)
   }
 

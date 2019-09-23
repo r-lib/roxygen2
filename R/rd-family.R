@@ -29,7 +29,7 @@ topics_process_family <- function(topics, env) {
 
   for (topic_name in names(topics$topics)) {
     topic <- topics$get(topic_name)
-    families <- topic$get_field("family")$values
+    families <- topic$get_value("family")
 
     for (family in families) {
       related <- family_index[[family]]

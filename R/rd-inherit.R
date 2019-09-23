@@ -129,7 +129,7 @@ inherit_params <- function(topic, topics) {
   }
 
   documented <- get_documented_params(topic)
-  needed <- topic$get_field("formals")$values
+  needed <- topic$get_value("formals")
   missing <- setdiff(needed, documented)
   if (length(missing) == 0) {
     warn(paste0(
@@ -158,7 +158,7 @@ inherit_params <- function(topic, topics) {
 }
 
 inherit_dot_params <- function(topic, topics, env) {
-  inheritors <- topic$get_field("inherit_dot_params")$values
+  inheritors <- topic$get_value("inherit_dot_params")
   if (is.null(inheritors))
     return()
 
@@ -202,7 +202,7 @@ inherit_dot_params <- function(topic, topics, env) {
 
 
 get_documented_params <- function(topic, only_first = FALSE) {
-  documented <- names(topic$get_field("param")$values)
+  documented <- names(topic$get_value("param"))
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
     if (only_first)
@@ -249,14 +249,14 @@ topic_params.Rd <- function(x) {
   setNames(values, params)
 }
 topic_params.RoxyTopic <- function(x) {
-  x$get_field("param")$values
+  x$get_value("param")
 }
 
 
 # Inherit sections --------------------------------------------------------
 
 inherit_sections <- function(topic, topics) {
-  current_secs <- topic$get_field("section")$values$title
+  current_secs <- topic$get_value("section")$title
 
   for (inheritor in topic$inherits_from("sections")) {
     inheritor <- get_rd(inheritor, topics)
@@ -276,7 +276,7 @@ inherit_sections <- function(topic, topics) {
 }
 
 inherit_section <- function(topic, topics) {
-  sections <- topic$get_field("inherit_section")$values
+  sections <- topic$get_value("inherit_section")
   sources <- sections$source
   titles <- sections$title
 
@@ -311,7 +311,7 @@ find_sections <- function(topic) {
 
     list(title = titles, contents = contents)
   } else {
-    topic$get_field("section")$values
+    topic$get_value("section")
   }
 }
 
@@ -350,7 +350,7 @@ find_field <- function(topic, field_name) {
 
     str_trim(rd2text(value))
   } else {
-    topic$get_field(field_name)$values
+    topic$get_value(field_name)
   }
 }
 

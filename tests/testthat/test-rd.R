@@ -1,5 +1,3 @@
-context("Rd")
-
 test_that("empty file gives empty list", {
   out <- roc_proc_text(rd_roclet(), "")
   expect_identical(out, list())
@@ -8,35 +6,6 @@ test_that("empty file gives empty list", {
 test_that("NULL gives empty list", {
   out <- roc_proc_text(rd_roclet(), "NULL")
   expect_identical(out, list())
-})
-
-test_that("generic keys produce expected output", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @title a
-    #' @references test
-    #' @note test
-    #' @author test
-    #' @seealso test
-    #' @encoding test
-    #' @name a
-    NULL")[[1]]
-  expect_equal(out$get_value("references"), "test")
-  expect_equal(out$get_value("note"), "test")
-  expect_equal(out$get_value("seealso"), "test")
-  expect_equal(out$get_value("encoding"), "test")
-  expect_equal(out$get_value("author"), "test")
-})
-
-test_that("one line per concept", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @title a
-    #' @name a
-    #' @concept test1
-    #' @concept test2
-    NULL")[[1]]
-
-  expect_equal(out$get_value("concept"), c("test1", "test2"))
-  expect_equal(out$get_rd("concept"), c("\\concept{test1}", "\\concept{test2}"))
 })
 
 test_that("@noRd inhibits documentation", {
@@ -67,13 +36,10 @@ test_that("deleted objects not documented", {
   expect_equal(names(out), "f2.Rd")
 })
 
-
 test_that("documenting unknown function requires name", {
   expect_warning(
     roc_proc_text(rd_roclet(), "
       #' Virtual Class To Enforce Max Slot Length
-      #'
-      #' @export
       setClass('A')
 
       #' Validity function.
@@ -93,43 +59,6 @@ test_that("documenting NA gives useful error message (#194)", {
   )
 })
 
-
-# format ------------------------------------------------------------------
-
-test_that("@format overrides defaults", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' @format abc
-    #'
-    x <- list(a = 1, b = 2)")[[1]]
-
-  expect_equal(out$get_value("format"), "abc")
-})
-
-test_that("@format NULL suppresses default usage", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' @format NULL
-    #'
-    x <- list(a = 1, b = 2)")[[1]]
-
-  expect_equal(out$get_value("format"), NULL)
-})
-
-test_that("@format not escaped", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #' @format %
-    #'
-    x <- list(a = 1, b = 2)")[[1]]
-
-  expect_equal(out$get_value("format"), "%")
-  expect_equal(out$get_rd("format"), "\\format{%}")
-})
-
-
 # UTF-8 -------------------------------------------------------------------
 
 test_that("can generate nonASCII document", {
@@ -148,7 +77,6 @@ test_that("can generate nonASCII document", {
   # Shouldn't change again
   expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
 })
-
 
 test_that("unicode escapes are ok", {
   test_pkg <- temp_copy_pkg(test_path('testUtf8Escape'))

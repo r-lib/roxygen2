@@ -56,11 +56,22 @@ format.roxy_tag <- function(x, ..., file = NULL) {
   loc <- paste0("[", file, ":", line, "]")
 
   if (!is.null(x$raw)) {
-    if (nchar(x$raw) > 50) {
-      raw <-  paste0(substr(x$raw, 1, 47), "...")
+    lines <- strsplit(x$raw, "\n")[[1]]
+    ellipsis <- FALSE
+
+    if (length(lines) > 1) {
+      raw <- lines[[1]]
+      ellipsis <- TRUE
     } else {
       raw <- x$raw
     }
+
+    if (nchar(raw) > 50) {
+      raw <- substr(raw, 1, 47)
+      ellipsis <- TRUE
+    }
+
+    raw <- paste0(raw, if (ellipsis) "...")
   } else {
     raw <- "<generated>"
   }

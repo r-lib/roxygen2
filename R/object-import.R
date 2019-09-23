@@ -1,5 +1,4 @@
 # Re-export ----------------------------------------------------------------
-
 roxy_field_reexport <- function(pkg, fun) {
   stopifnot(is.character(pkg), is.character(fun))
   stopifnot(length(pkg) == length(fun))
@@ -8,11 +7,14 @@ roxy_field_reexport <- function(pkg, fun) {
 }
 
 #' @export
+roxy_tag_rd.roxy_tag_.reexport <- function(x, base_path, env) {
+  roxy_field_reexport(x$val$pkg, x$val$fun)
+}
+#' @export
 merge.roxy_field_reexport <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
   roxy_field_reexport(c(x$value$pkg, y$value$pkg), c(x$value$fun, y$value$fun))
 }
-
 #' @export
 format.roxy_field_reexport <- function(x, ...) {
   pkgs <- split(x$fun, x$pkg)

@@ -163,12 +163,9 @@ roxy_tag_rd <- function(x, base_path, env) {
 roxy_tag_rd.default <- function(x, base_path, env) {
 }
 
-# Internal tags -----------------------------------------------------------
-
-#' @export
-roxy_tag_rd.roxy_tag_.reexport <- function(x, base_path, env) {
-  roxy_field_reexport(x$val$pkg, x$val$fun)
-}
+# Special tags ------------------------------------------------------------
+# These tags do not directly affect the output, and are no complicated enough
+# to require their own files.
 
 #' @export
 roxy_tag_rd.roxy_tag_.formals <- function(x, base_path, env) {
@@ -194,8 +191,6 @@ roxy_tag_rd.roxy_tag_.methods <- function(x, base_path, env) {
 format.roxy_field_rcmethods <- function(x, ...) {
   roxy_field_description("Methods", names(x$value), x$value)
 }
-
-# Special tags ------------------------------------------------------------
 
 #' @export
 roxy_tag_parse.roxy_tag_method <- function(x) tag_words(x, 2, 2)

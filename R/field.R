@@ -64,16 +64,3 @@ roxy_field_description <- function(name, dt, dd) {
   )
 }
 
-roxy_field_markdown <- function(name, value) {
-  # Any additional components are sections
-  if (length(value) > 1) {
-    name <- c(name, rep("rawRd", length(value) - 1))
-
-    if (value[[1]] == "") {
-      name <- name[-1]
-      value <- value[-1]
-    }
-  }
-
-  map2(name, value, roxy_field)
-}

@@ -1,5 +1,5 @@
 #' @export
-roxy_tag_parse.roxy_tag_family <- function(x) tag_value(x)
+roxy_tag_parse.roxy_tag_family <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_family <- function(x, base_path, env) {
   roxy_field(x$tag, x$val)

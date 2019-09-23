@@ -1,8 +1,10 @@
+# Without sections --------------------------------------------------------
+
 #' @export
 roxy_tag_parse.roxy_tag_author <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_author <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
+  roxy_field(x$tag, x$val)
 }
 #' @export
 format.roxy_field_author <- function(x, ...) {
@@ -10,32 +12,10 @@ format.roxy_field_author <- function(x, ...) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_description <- function(x) tag_markdown_with_sections(x)
-#' @export
-roxy_tag_rd.roxy_tag_description <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
-}
-#' @export
-format.roxy_field_description <- function(x, ...) {
-  format_collapse(x, ...)
-}
-
-#' @export
-roxy_tag_parse.roxy_tag_details <- function(x) tag_markdown_with_sections(x)
-#' @export
-roxy_tag_rd.roxy_tag_details <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
-}
-#' @export
-format.roxy_field_details <- function(x, ...) {
-  format_collapse(x, ...)
-}
-
-#' @export
 roxy_tag_parse.roxy_tag_format <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_format <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
+  roxy_field(x$tag, x$val)
 }
 #' @export
 format.roxy_field_format <- function(x, ...) {
@@ -46,7 +26,7 @@ format.roxy_field_format <- function(x, ...) {
 roxy_tag_parse.roxy_tag_note <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_note <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
+  roxy_field(x$tag, x$val)
 }
 #' @export
 format.roxy_field_note <- function(x, ...) {
@@ -57,7 +37,7 @@ format.roxy_field_note <- function(x, ...) {
 roxy_tag_parse.roxy_tag_references <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_references <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
+  roxy_field(x$tag, x$val)
 }
 #' @export
 format.roxy_field_references <- function(x, ...) {
@@ -68,7 +48,7 @@ format.roxy_field_references <- function(x, ...) {
 roxy_tag_parse.roxy_tag_return <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_return <- function(x, base_path, env) {
-  roxy_field_markdown("value", x$val)
+  roxy_field("value", x$val)
 }
 #' @export
 format.roxy_field_value <- function(x, ...) {
@@ -79,7 +59,7 @@ format.roxy_field_value <- function(x, ...) {
 roxy_tag_parse.roxy_tag_seealso <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_seealso <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
+  roxy_field(x$tag, x$val)
 }
 #' @export
 format.roxy_field_seealso <- function(x, ...) {
@@ -90,7 +70,7 @@ format.roxy_field_seealso <- function(x, ...) {
 roxy_tag_parse.roxy_tag_source <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_source <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
+  roxy_field(x$tag, x$val)
 }
 #' @export
 format.roxy_field_source <- function(x, ...) {
@@ -101,9 +81,52 @@ format.roxy_field_source <- function(x, ...) {
 roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_title <- function(x, base_path, env) {
-  roxy_field_markdown(x$tag, x$val)
+  roxy_field(x$tag, x$val)
 }
 #' @export
 format.roxy_field_title <- function(x, ...) {
   format_first(x, ...)
 }
+
+# With sections -----------------------------------------------------------
+
+#' @export
+roxy_tag_parse.roxy_tag_description <- function(x) {
+  tag_markdown_with_sections(x)
+}
+#' @export
+roxy_tag_rd.roxy_tag_description <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
+}
+#' @export
+format.roxy_field_description <- function(x, ...) {
+  format_collapse(x, ...)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_details <- function(x) {
+  tag_markdown_with_sections(x)
+}
+#' @export
+roxy_tag_rd.roxy_tag_details <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
+}
+#' @export
+format.roxy_field_details <- function(x, ...) {
+  format_collapse(x, ...)
+}
+
+roxy_field_markdown <- function(name, value) {
+  # Any additional components are sections
+  if (length(value) > 1) {
+    name <- c(name, rep("rawRd", length(value) - 1))
+
+    if (value[[1]] == "") {
+      name <- name[-1]
+      value <- value[-1]
+    }
+  }
+
+  map2(name, value, roxy_field)
+}
+

@@ -265,7 +265,7 @@ test_that("multiple @inheritParam tags gathers all params", {
     c <- function(x, y) {}
     ")
 
-  params <- get_tag(out[["c.Rd"]], "param")$values
+  params <- out[["c.Rd"]]$get_value("param")
   expect_equal(length(params), 2)
 
   expect_equal(params[["x"]], "X")
@@ -292,7 +292,7 @@ test_that("multiple @inheritParam tags gathers all params", {
     c <- function(.x, y) {}
     ")
 
-  params <- get_tag(out[["c.Rd"]], "param")$values
+  params <- out[["c.Rd"]]$get_value("param")
   expect_equal(length(params), 2)
 
   expect_equal(params[[".x"]], "X")
@@ -327,7 +327,7 @@ test_that("multiple @inheritParam inherits from existing topics", {
     #'
     #' @inheritParams base::mean
     mymean <- function(x, trim) {}")[[1]]
-  params <- get_tag(out, "param")$values
+  params <- out$get_value("param")
   expect_equal(length(params), 2)
   expect_equal(sort(names(params)), c("trim", "x"))
 })
@@ -339,7 +339,7 @@ test_that("@inheritParam can cope with multivariable argument definitions", {
                        #'
                        #' @inheritParams base::merge
                        mymerge <- function(x, y) {}")[[1]]
-  params <- get_tag(out, "param")$values
+  params <- out$get_value("param")
   expect_equal(length(params), 2)
   expect_equal(sort(names(params)), c("x", "y"))
 })
@@ -357,7 +357,7 @@ test_that("@inheritParam understands compound docs", {
     #' @inheritParams x
     #' @param y y
     y <- function(x, y) {}")[[2]]
-  params <- get_tag(out, "param")$values
+  params <- out$get_value("param")
   expect_equal(params, c(x = "x", y = "y"))
 })
 
@@ -404,11 +404,11 @@ test_that("argument order, also for incomplete documentation", {
     e <- function(x, y, z) {}
   ")
 
-  expect_equal(get_tag(out[["a.Rd"]], "param")$values, c(x="X", y="Y"))
-  expect_equal(get_tag(out[["b.Rd"]], "param")$values, c(y="Y"))
-  expect_equal(get_tag(out[["c.Rd"]], "param")$values, c(x="X"))
-  expect_equal(get_tag(out[["d.Rd"]], "param")$values, c(y="Y", z="Z"))
-  expect_equal(get_tag(out[["e.Rd"]], "param")$values, c(x="X", y="Y"))
+  expect_equal(out[["a.Rd"]]$get_value("param"), c(x="X", y="Y"))
+  expect_equal(out[["b.Rd"]]$get_value("param"), c(y="Y"))
+  expect_equal(out[["c.Rd"]]$get_value("param"), c(x="X"))
+  expect_equal(out[["d.Rd"]]$get_value("param"), c(y="Y", z="Z"))
+  expect_equal(out[["e.Rd"]]$get_value("param"), c(x="X", y="Y"))
 })
 
 test_that("argument order with @inheritParam", {
@@ -444,10 +444,10 @@ test_that("argument order with @inheritParam", {
     c2<- function(x, y) {}
     ")
 
-  expect_equal(get_tag(out[["b1.Rd"]], "param")$values, c(x="X", y="B"))
-  expect_equal(get_tag(out[["b2.Rd"]], "param")$values, c(x="X", y="B"))
-  expect_equal(get_tag(out[["c1.Rd"]], "param")$values, c(x="C", y="Y"))
-  expect_equal(get_tag(out[["c2.Rd"]], "param")$values, c(x="C", y="Y"))
+  expect_equal(out[["b1.Rd"]]$get_value("param"), c(x = "X", y = "B"))
+  expect_equal(out[["b2.Rd"]]$get_value("param"), c(x = "X", y = "B"))
+  expect_equal(out[["c1.Rd"]]$get_value("param"), c(x = "C", y = "Y"))
+  expect_equal(out[["c2.Rd"]]$get_value("param"), c(x = "C", y = "Y"))
 })
 
 

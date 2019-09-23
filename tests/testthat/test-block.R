@@ -20,8 +20,8 @@ test_that("title and description taken from first line if only one", {
     #' title
     #' @name a
     NULL")[[1]]
-  expect_equal(get_tag(out, "description")$values, "title")
-  expect_equal(get_tag(out, "title")$values, "title")
+  expect_equal(out$get_value("description"), "title")
+  expect_equal(out$get_value("title"), "title")
 })
 
 test_that("description taken from multiple titles if merged", {
@@ -34,8 +34,8 @@ test_that("description taken from multiple titles if merged", {
     #' @name a
     NULL
     ")[[1]]
-  expect_equal(get_tag(out, "title")$values, c("T1", "T2"))
-  expect_equal(get_tag(out, "description")$values, c("T1", "T2"))
+  expect_equal(out$get_value("title"), c("T1", "T2"))
+  expect_equal(out$get_value("description"), c("T1", "T2"))
 })
 
 test_that("title, description and details extracted correctly", {
@@ -47,8 +47,8 @@ test_that("title, description and details extracted correctly", {
     #' details
     #' @name a
     NULL")[[1]]
-  expect_equal(get_tag(out, "description")$values, "description")
-  expect_equal(get_tag(out, "details")$values, "details")
+  expect_equal(out$get_value("description"), "description")
+  expect_equal(out$get_value("details"), "details")
 })
 
 test_that("title taken from first paragraph", {
@@ -58,9 +58,8 @@ test_that("title taken from first paragraph", {
     #' That continueth.
     #' @name a
     NULL")[[1]]
-  expect_equal(get_tag(out, "title")$values, "Description with sentence.")
-  expect_equal(get_tag(out, "description")$values,
-    "That continueth.")
+  expect_equal(out$get_value("title"), "Description with sentence.")
+  expect_equal(out$get_value("description"), "That continueth.")
 })
 
 test_that("@title overrides default title", {
@@ -69,8 +68,8 @@ test_that("@title overrides default title", {
     #' @title Overridden title
     #' @name a
     NULL")[[1]]
-  expect_equal(get_tag(out, "title")$values, "Overridden title")
-  expect_equal(get_tag(out, "description")$values, "Would be title")
+  expect_equal(out$get_value("title"), "Overridden title")
+  expect_equal(out$get_value("description"), "Would be title")
 })
 
 test_that("docs parsed correctly if no blank text", {
@@ -80,15 +79,15 @@ test_that("docs parsed correctly if no blank text", {
     #' @param x value
     a <- function(x) {}")[[1]]
 
-  expect_equal(get_tag(out, "title")$values, "My title")
-  expect_equal(get_tag(out, "description")$values, "My description")
+  expect_equal(out$get_value("title"), "My title")
+  expect_equal(out$get_value("description"), "My description")
 })
 
 test_that("question mark ends sentence", {
   out <- roc_proc_text(rd_roclet(), "
     #' Is a number odd?
     is.odd <- function(a) {}")[[1]]
-  expect_equal(get_tag(out, "title")$values, "Is a number odd?")
+  expect_equal(out$get_value("title"), "Is a number odd?")
 
 })
 
@@ -96,7 +95,7 @@ test_that("no ending punctuation does not produce ellipsis", {
   out <- roc_proc_text(rd_roclet(), "
     #' Whether a number is odd
     is.odd <- function(a) {}")[[1]]
-  expect_equal(get_tag(out, "title")$values, "Whether a number is odd")
+  expect_equal(out$get_value("title"), "Whether a number is odd")
 })
 
 test_that("details are merged if needed", {
@@ -114,8 +113,10 @@ test_that("details are merged if needed", {
     #' Details4
     foo <- function(x) {}")[[1]]
 
-  expect_equal(get_tag(out, "details")$values,
-               "Details1\n\nDetails2\n\nDetails3\n\nDetails4")
+  expect_equal(
+    out$get_value("details"),
+    "Details1\n\nDetails2\n\nDetails3\n\nDetails4"
+  )
 })
 
 test_that("whitespace is not detected as details", {
@@ -133,7 +134,7 @@ test_that("whitespace is not detected as details", {
     )[[1]]
   )
 
-  expect_null(get_tag(out, "details"))
+  expect_null(out$get_value("details"))
 })
 
 
@@ -152,8 +153,8 @@ test_that("@description and @details are merged", {
     bar <- function(y = '%') y
   ")[[1]]
 
-  expect_equal(get_tag(out, "description")$values, c("This.", "And that."))
-  expect_equal(get_tag(out, "details")$values, c("OBTW.", "ORLY?"))
+  expect_equal(out$get_value("description"), c("This.", "And that."))
+  expect_equal(out$get_value("details"), c("OBTW.", "ORLY?"))
 })
 
 test_that("empty description block is silently removed", {

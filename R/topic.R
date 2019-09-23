@@ -32,8 +32,15 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     self$fields[[field_name]]
   },
 
+  get_value = function(field) {
+    self$get_field(field)$values
+  },
+
+  get_rd = function(field) {
+    format(self$get_field(field))
+  },
   get_name = function() {
-    self$get_field("name")$values
+    self$get_value("name")
   },
 
   inherits_from = function(type) {
@@ -41,7 +48,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
       return(character())
     }
 
-    inherit <- self$get_field("inherit")$values
+    inherit <- self$get_value("inherit")
 
     inherits_field <- map_lgl(inherit$fields, function(x) type %in% x)
     sources <- inherit$source[inherits_field]
@@ -57,7 +64,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
       return(character())
     }
 
-    self$get_field("inherit_section")$values$source
+    self$get_value("inherit_section")$source
   },
 
   # Ensures that each type of name (as given by its name), only appears
@@ -105,5 +112,3 @@ move_names_to_front <- function(x, to_front) {
   nms <- names(x)
   x[union(intersect(to_front, nms), nms)]
 }
-
-get_tag <- function(topic, field_name) topic$get_field(field_name)

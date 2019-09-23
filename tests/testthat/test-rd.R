@@ -20,11 +20,11 @@ test_that("generic keys produce expected output", {
     #' @encoding test
     #' @name a
     NULL")[[1]]
-  expect_equal(get_tag(out, "references")$values, "test")
-  expect_equal(get_tag(out, "note")$values, "test")
-  expect_equal(get_tag(out, "seealso")$values, "test")
-  expect_equal(get_tag(out, "encoding")$values, "test")
-  expect_equal(get_tag(out, "author")$values, "test")
+  expect_equal(out$get_value("references"), "test")
+  expect_equal(out$get_value("note"), "test")
+  expect_equal(out$get_value("seealso"), "test")
+  expect_equal(out$get_value("encoding"), "test")
+  expect_equal(out$get_value("author"), "test")
 })
 
 test_that("one line per concept", {
@@ -35,10 +35,8 @@ test_that("one line per concept", {
     #' @concept test2
     NULL")[[1]]
 
-  field <- out$get_field("concept")
-
-  expect_equal(field$values, c("test1", "test2"))
-  expect_equal(format(field), c("\\concept{test1}", "\\concept{test2}"))
+  expect_equal(out$get_value("concept"), c("test1", "test2"))
+  expect_equal(out$get_rd("concept"), c("\\concept{test1}", "\\concept{test2}"))
 })
 
 test_that("@noRd inhibits documentation", {
@@ -51,7 +49,6 @@ test_that("@noRd inhibits documentation", {
 
   expect_equal(length(out), 0)
 })
-
 
 test_that("deleted objects not documented", {
   out <- roc_proc_text(rd_roclet(), "
@@ -107,7 +104,7 @@ test_that("@format overrides defaults", {
     #'
     x <- list(a = 1, b = 2)")[[1]]
 
-  expect_equal(get_tag(out, "format")$values, "abc")
+  expect_equal(out$get_value("format"), "abc")
 })
 
 test_that("@format NULL suppresses default usage", {
@@ -118,7 +115,7 @@ test_that("@format NULL suppresses default usage", {
     #'
     x <- list(a = 1, b = 2)")[[1]]
 
-  expect_equal(get_tag(out, "format")$values, NULL)
+  expect_equal(out$get_value("format"), NULL)
 })
 
 test_that("@format not escaped", {
@@ -128,8 +125,8 @@ test_that("@format not escaped", {
     #'
     x <- list(a = 1, b = 2)")[[1]]
 
-  expect_equal(get_tag(out, "format")$values, "%")
-  expect_equal(format(get_tag(out, "format")), "\\format{%}")
+  expect_equal(out$get_value("format"), "%")
+  expect_equal(out$get_rd("format"), "\\format{%}")
 })
 
 

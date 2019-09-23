@@ -21,10 +21,9 @@ test_that("long families are wrapped", {
     long_function_name_________________________4 <- function() {}
   ")[[1]]
 
-  seealso <- get_tag(out, "seealso")$values
+  seealso <- out$get_value("seealso")
   expect_true(grepl("^Other Long family name:", seealso))
   expect_equal(str_count(seealso, "\n"), 2)
-
 })
 
 test_that("special names escaped in family tag", {
@@ -38,7 +37,7 @@ test_that("special names escaped in family tag", {
     '%+%' <- function(a, b) {}
   ")[[1]]
 
-  seealso <- get_tag(out, "seealso")$values
+  seealso <- out$get_value("seealso")
   expect_true(grepl("^Other Long family name:", seealso))
   expect_match(seealso, "\\\\%\\+\\\\%")
 
@@ -59,7 +58,7 @@ test_that("family links to name only, not all aliases", {
     g <- function() {}
   ")[[1]]
 
-  seealso <- get_tag(out, "seealso")$values
+  seealso <- out$get_value("seealso")
   expect_true(grepl("^Other many aliases:", seealso))
   expect_equal(str_count(seealso, fixed("\\code{\\link")), 1)
 
@@ -81,7 +80,7 @@ test_that("families listed in same order as input", {
     baz <- function() {}
   ")[[2]]
 
-  seealso <- get_tag(out, "seealso")$values
+  seealso <- out$get_value("seealso")
   expect_match(seealso[1], "^Other b")
   expect_match(seealso[2], "^Other a")
 })
@@ -97,8 +96,8 @@ test_that("only functions get () suffix", {
     bar <- 1:10
   ")
 
-  expect_equal(get_tag(out[[1]], "seealso")$values, "Other a: \\code{\\link{bar}}")
-  expect_equal(get_tag(out[[2]], "seealso")$values, "Other a: \\code{\\link{foo}()}")
+  expect_equal(out[[1]]$get_value("seealso"), "Other a: \\code{\\link{bar}}")
+  expect_equal(out[[2]]$get_value("seealso"), "Other a: \\code{\\link{foo}()}")
 })
 
 test_that("family also included in concepts", {
@@ -108,7 +107,7 @@ test_that("family also included in concepts", {
     foo <- function() {}
   ")[[1]]
 
-  expect_equal(out$get_field("concept")$values, "a")
+  expect_equal(out$get_value("concept"), "a")
 })
 
 test_that("custom family prefixes can be set", {
@@ -127,7 +126,5 @@ test_that("custom family prefixes can be set", {
     bar <- function() {}
   ")[[1]]
 
-  seealso <- get_tag(out, "seealso")$values
-  expect_match(seealso, "^Custom prefix:")
-
+  expect_match(out$get_value("seealso"), "^Custom prefix:")
 })

@@ -5,7 +5,7 @@ test_that("markdown is off by default", {
     #' Description with some `code` included. `More code.`
     foo <- function() {}")[[1]]
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some `code` included. `More code.`"
   )
 })
@@ -18,7 +18,7 @@ test_that("turning on/off markdown globally", {
     #' Description with some `code` included. `More code.`
     foo <- function() {}")[[1]]
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some `code` included. `More code.`"
   )
 
@@ -29,7 +29,7 @@ test_that("turning on/off markdown globally", {
     #' Description with some `code` included. `More code.`
     foo <- function() {}")[[1]]
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some \\code{code} included. \\verb{More code.}"
   )
 })
@@ -43,7 +43,7 @@ test_that("turning on/off markdown locally", {
     #' @noMd
     foo <- function() {}")[[1]]
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some `code` included. `More code.`"
   )
 
@@ -55,7 +55,7 @@ test_that("turning on/off markdown locally", {
     #' @md
     foo <- function() {}")[[1]]
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some \\code{code} included. \\verb{More code.}"
   )
 
@@ -67,7 +67,7 @@ test_that("turning on/off markdown locally", {
     #' @noMd
     foo <- function() {}")[[1]]
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some `code` included. `More code.`"
   )
 
@@ -79,7 +79,7 @@ test_that("turning on/off markdown locally", {
     #' @md
     foo <- function() {}")[[1]]
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some \\code{code} included. \\verb{More code.}"
   )
 
@@ -97,7 +97,7 @@ test_that("warning for both @md and @noMd", {
     "Both @md and @noMd, no markdown parsing"
   )
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some `code` included. `More code.`"
   )
 
@@ -112,7 +112,7 @@ test_that("warning for both @md and @noMd", {
     "Both @md and @noMd, no markdown parsing"
   )
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some `code` included. `More code.`"
   )
 
@@ -127,7 +127,7 @@ test_that("warning for both @md and @noMd", {
     "Both @md and @noMd, no markdown parsing"
   )
   expect_equal(
-    get_tag(out1, "description")$values,
+    out1$get_value("description"),
     "Description with some `code` included. `More code.`"
   )
 })

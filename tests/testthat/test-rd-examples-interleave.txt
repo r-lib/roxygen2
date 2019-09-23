@@ -1,4 +1,4 @@
-> get_tag(out, "examples")
+> out$get_field("examples")
 \examples{
 example <- 'example1'
 a <- 2

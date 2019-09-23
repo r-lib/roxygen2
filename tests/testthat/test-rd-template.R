@@ -33,6 +33,6 @@ test_that("templates replace variables with their values", {
     #' @templateVar z c
     x <- 10")[[1]]
 
-  expect_equal(get_tag(out, "title")$values, "a")
-  expect_equal(get_tag(out, "param")$values, c(b = "c"))
+  expect_equal(out$get_value("title"), "a")
+  expect_equal(out$get_value("param"), c(b = "c"))
 })

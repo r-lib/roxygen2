@@ -1,13 +1,11 @@
-context("Rd: backref")
 test_that("Source reference is included as comment", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @title a
     #' @docType package
-    NULL")
+    NULL")[[1]]
 
-  backref <- format(get_tag(out[[1]], "backref"))
-  expect_match(backref, "^% Please edit documentation in ")
+  expect_match(out$get_rd("backref"), "^% Please edit documentation in ")
 })
 
 test_that("Explicit @backref is included as comment", {
@@ -17,8 +15,7 @@ test_that("Explicit @backref is included as comment", {
     #' @backref back/ref.file
     #' @backref root.file
     #' @docType package
-    NULL")
+    NULL")[[1]]
 
-  backref <- format(get_tag(out[[1]], "backref"))
-  expect_match(backref, "^% Please edit documentation in back/ref[.]file, [.]/root[.]file")
+  expect_equal(out$get_value("backref"), c("back/ref.file", "root.file"))
 })

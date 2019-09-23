@@ -10,5 +10,5 @@ test_that("@fields creates a new section and lists fields", {
     #'
     setRefClass('test')
     ")[[1]]
-  expect_equal(get_tag(out, "field")$values, c(a = "field a", b = "field b"))
+  expect_equal(out$get_value("field"), c(a = "field a", b = "field b"))
 })

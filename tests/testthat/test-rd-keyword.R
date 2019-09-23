@@ -7,6 +7,5 @@ test_that("keywords split into pieces", {
     #' @name a
     NULL")[[1]]
 
-  expect_match(get_tag(out, "keyword")$values, fixed("a"), all = FALSE)
-  expect_match(get_tag(out, "keyword")$values, fixed("b"), all = FALSE)
+  expect_equal(out$get_value("keyword"), c("a", "b"))
 })

@@ -3,21 +3,23 @@ context("Rd: name")
 test_that("name captured from assignment", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title.
-    a <- function() {} ")[[1]]
+    a <- function() {}
+  ")[[1]]
 
-  expect_equal(get_tag(out, "name")$values, "a")
-  expect_equal(get_tag(out, "alias")$values, "a")
-  expect_equal(get_tag(out, "title")$values, "Title.")
+  expect_equal(out$get_value("name"), "a")
+  expect_equal(out$get_value("alias"), "a")
+  expect_equal(out$get_value("title"), "Title.")
 })
 
 test_that("name also captured from assignment by =", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title.
-    a = function() {} ")[[1]]
+    a = function() {}
+  ")[[1]]
 
-  expect_equal(get_tag(out, "name")$values, "a")
-  expect_equal(get_tag(out, "alias")$values, "a")
-  expect_equal(get_tag(out, "title")$values, "Title.")
+  expect_equal(out$get_value("name"), "a")
+  expect_equal(out$get_value("alias"), "a")
+  expect_equal(out$get_value("title"), "Title.")
 })
 
 
@@ -25,47 +27,52 @@ test_that("`$` not to be parsed as assignee in foo$bar(a = 1)", {
   out <- roc_proc_text(rd_roclet(), "
     #' foo object
     foo <- list(bar = function(a) a)
-    foo$bar(a = 1)")[[1]]
+    foo$bar(a = 1)
+  ")[[1]]
 
-  expect_equal(get_tag(out, "name")$values, "foo")
+  expect_equal(out$get_value("name"), "foo")
 })
-
 
 test_that("names escaped, not quoted", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
-    '%a%' <- function(x, y) x + y")[[1]]
-  expect_equal(format(get_tag(out, "name")), "\\name{\\%a\\%}")
+    '%a%' <- function(x, y) x + y
+  ")[[1]]
+  expect_equal(out$get_rd("name"), "\\name{\\%a\\%}")
 })
 
 test_that("quoted names captured from assignment", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title.
-    \"myfunction\" <- function(...) {}")[[1]]
+    \"myfunction\" <- function(...) {}
+  ")[[1]]
 
-  expect_equal(get_tag(out, "name")$values, "myfunction")
-  expect_equal(get_tag(out, "alias")$values, "myfunction")
-
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title.
-    `myfunction` <- function(...) {}")[[1]]
-  expect_equal(get_tag(out, "name")$values, "myfunction")
-  expect_equal(get_tag(out, "alias")$values, "myfunction")
+  expect_equal(out$get_value("name"), "myfunction")
+  expect_equal(out$get_value("alias"), "myfunction")
 
   out <- roc_proc_text(rd_roclet(), "
     #' Title.
-    \"my function\" <- function(...) {}")[[1]]
+    `myfunction` <- function(...) {}
+  ")[[1]]
+  expect_equal(out$get_value("name"), "myfunction")
+  expect_equal(out$get_value("alias"), "myfunction")
 
-  expect_equal(get_tag(out, "name")$values, "my function")
-  expect_equal(get_tag(out, "alias")$values, "my function")
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title.
+    \"my function\" <- function(...) {}
+  ")[[1]]
+
+  expect_equal(out$get_value("name"), "my function")
+  expect_equal(out$get_value("alias"), "my function")
 })
 
 test_that("@name overides default", {
   out <- roc_proc_text(rd_roclet(), "
     #' A
     #' @name b
-    a <- function() {}")[[1]]
+    a <- function() {}
+  ")[[1]]
 
-  expect_equal(get_tag(out, "name")$values, "b")
-  expect_equal(sort(get_tag(out, "alias")$values), c("a", "b"))
+  expect_equal(out$get_value("name"), "b")
+  expect_setequal(out$get_value("alias"), c("a", "b"))
 })

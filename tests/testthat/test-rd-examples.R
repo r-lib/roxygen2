@@ -9,7 +9,7 @@ test_that("@example loads from specified files", {
     #' @example Rd-example-2.R
     NULL")[[1]]
 
-  examples <- get_tag(out, "examples")$values
+  examples <- out$get_value("examples")
   expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
   expect_match(examples, fixed("example <- 'example2'"), all = FALSE)
 })
@@ -24,7 +24,7 @@ test_that("@example captures examples (#470)", {
     #' FALSE
     NULL")[[1]]
 
-  examples <- get_tag(out, "examples")$values
+  examples <- out$get_value("examples")
   expect_equal(examples, rd(c("TRUE", "FALSE")))
 })
 
@@ -38,7 +38,7 @@ test_that("@examples and @example interleave", {
     NULL")[[1]]
 
   verify_output(test_path("test-rd-examples-interleave.txt"), {
-    get_tag(out, "examples")
+    out$get_field("examples")
   })
 })
 
@@ -49,8 +49,7 @@ test_that("@example does not introduce extra empty lines", {
     #' @example Rd-example-3.R
     NULL")[[1]]
 
-  examples <- get_tag(out, "examples")$values
-  expect_identical(length(examples), 2L)
+  expect_length(out$get_value("examples"), 2L)
 })
 
 test_that("@example gives warning if used instead of @examples", {
@@ -65,7 +64,7 @@ test_that("@example gives warning if used instead of @examples", {
     "spans multiple lines"
   )
 
-  expect_null(get_tag(out, "examples")$values, NULL)
+  expect_null(out$get_value("examples"))
 })
 
 test_that("warns if path doesn't exist", {
@@ -88,8 +87,7 @@ test_that("% in @examples escaped before matching braces test (#213)", {
     #' {a %% b}
     NULL")[[1]]
 
-  examples <- get_tag(out, "examples")$values
-  expect_equal(examples, rd("{a \\%\\% b}"))
+  expect_equal(out$get_value("examples"), rd("{a \\%\\% b}"))
 })
 
 # escapes ------------------------------------------------------------------

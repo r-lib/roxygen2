@@ -5,21 +5,19 @@ test_that("@param documents arguments", {
     #' A
     #' @param a first
     #' @param z last
-    a <- function(a=1, z=2) {}")[[1]]
+    a <- function(a=1, z=2) {}
+  ")[[1]]
 
-  args <- get_tag(out, "param")$values
-  expect_equivalent(args["a"], "first")
-  expect_equivalent(args["z"], "last")
+  expect_equal(out$get_value("param"), c(a = "first", z = "last"))
 })
 
 test_that("grouped args get spaces", {
   out <- roc_proc_text(rd_roclet(), "
-  #' A
-  #' @param a,z Two arguments
-  a <- function(a=1, z=2) {}")[[1]]
-
-  args <- get_tag(out, "param")
-  expect_match(format(args), "a, z")
+    #' A
+    #' @param a,z Two arguments
+    a <- function(a=1, z=2) {}
+  ")[[1]]
+  expect_match(out$get_rd("param"), "a, z")
 })
 
 test_that("empty @param generates warning", {
@@ -39,8 +37,7 @@ test_that("data objects don't get params", {
     #' @rdname xy
     x <- 'x'
   ")[[1]]
-  expect_equal(get_tag(out, "param"), NULL)
-
+  expect_equal(out$get_value("param"), NULL)
 })
 
 test_that("arguments ordered by usage", {
@@ -50,11 +47,10 @@ test_that("arguments ordered by usage", {
     #' @param y Y
     #' @param x X
     #' @rdname rd
-    a <- function(x, y) {
-    }
-  ")
+    a <- function(x, y) {}
+  ")[[1]]
 
-  expect_named(get_tag(out[["rd.Rd"]], "param")$values, c("x", "y"))
+  expect_named(out$get_value("param"), c("x", "y"))
 })
 
 test_that("multiple arguments ordered by first", {
@@ -65,7 +61,7 @@ test_that("multiple arguments ordered by first", {
     #' @param x,z X,Z
     #' @param w W
     b <- function(x, y, z, w) {}
-    ")[[1]]
+  ")[[1]]
 
-  expect_named(get_tag(out, "param")$values, c("x,z", "y", "w"))
+  expect_named(out$get_value("param"), c("x,z", "y", "w"))
 })

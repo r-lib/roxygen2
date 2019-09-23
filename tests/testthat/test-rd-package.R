@@ -1,5 +1,3 @@
-context("Rd: package")
-
 test_that("can create package documentation", {
   with_mock(
     `roxygen2::read.description` = function(...)
@@ -10,13 +8,12 @@ test_that("can create package documentation", {
     #' @details Details.
     '_PACKAGE'")[[1]]
   )
-  expect_equal(get_tag(out, "name")$values, "roxygen_devtest-package")
-  expect_equal(get_tag(out, "alias")$values, c("roxygen_devtest",
-                                               "roxygen_devtest-package"))
-  expect_equal(get_tag(out, "title")$values, "roxygen_devtest: Package Title")
-  expect_equal(get_tag(out, "description")$values, "Package description.")
-  expect_equal(get_tag(out, "docType")$values, "package")
-  expect_equal(get_tag(out, "details")$values, "Details.")
+  expect_equal(out$get_value("name"), "roxygen_devtest-package")
+  expect_equal(out$get_value("alias"), c("roxygen_devtest", "roxygen_devtest-package"))
+  expect_equal(out$get_value("title"), "roxygen_devtest: Package Title")
+  expect_equal(out$get_value("description"), "Package description.")
+  expect_equal(out$get_value("docType"), "package")
+  expect_equal(out$get_value("details"), "Details.")
 })
 
 test_that("Can read UTF-8 DESCRIPTIONS", {

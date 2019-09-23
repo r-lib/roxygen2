@@ -8,7 +8,7 @@ test_that("@usage overrides default", {
     #' A
     #' @usage a(a=2)
     a <- function(a=1) {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, rd("a(a=2)"))
+  expect_equal(out$get_value("usage"), rd("a(a=2)"))
 })
 
 test_that("@usage overrides default for @docType data", {
@@ -20,7 +20,7 @@ test_that("@usage overrides default for @docType data", {
     #' @usage data(abc)
     NULL")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, rd("data(abc)"))
+  expect_equal(out$get_value("usage"), rd("data(abc)"))
 })
 
 test_that("@usage NULL suppresses default usage", {
@@ -29,7 +29,7 @@ test_that("@usage NULL suppresses default usage", {
     #' @usage NULL
     a <- function(a=1) {}")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, NULL)
+  expect_equal(out$get_value("usage"), NULL)
 })
 
 test_that("quoted topics have usage statements", {
@@ -37,13 +37,8 @@ test_that("quoted topics have usage statements", {
     #' Title.
     \"f\" <- function(a = 1, b = 2, c = a + b) {}")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values,
-    rd("f(a = 1, b = 2, c = a + b)"))
-
-  expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\nf(a = 1, b = 2, c = a + b)\n}"
-  )
-
+  expect_equal(out$get_value("usage"), rd("f(a = 1, b = 2, c = a + b)"))
+  expect_equal(out$get_rd("usage"), "\\usage{\nf(a = 1, b = 2, c = a + b)\n}")
 })
 
 # Escaping --------------------------------------------------------------------
@@ -57,7 +52,7 @@ test_that("usage escaping preserved when combined", {
     bar <- function(y = '%') y
   ")[[1]]
 
-  expect_is(get_tag(out, "usage")$values, "rd")
+  expect_is(out$get_value("usage"), "rd")
 })
 
 test_that("default usage not double escaped", {
@@ -66,17 +61,15 @@ test_that("default usage not double escaped", {
     mean.foo <- function(x) 'foo'
   ")[[1]]
 
-  expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\n\\method{mean}{foo}(x)\n}")
+  expect_equal(out$get_rd("usage"), "\\usage{\n\\method{mean}{foo}(x)\n}")
 })
 
 test_that("% and \\ are escaped in usage", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title.
     a <- function(a='%\\\\') {}")[[1]]
-  expect_equal(get_tag(out, "usage")$values, escape('a(a = "%\\\\")'))
-  expect_equal(format(get_tag(out, "usage")),
-    "\\usage{\na(a = \"\\%\\\\\\\\\")\n}")
+  expect_equal(out$get_value("usage"), escape('a(a = "%\\\\")'))
+  expect_equal(out$get_rd("usage"), "\\usage{\na(a = \"\\%\\\\\\\\\")\n}")
 })
 
 test_that("% and \\ not escaped in manual usage", {
@@ -85,8 +78,8 @@ test_that("% and \\ not escaped in manual usage", {
     #' @usage %\\
     a <- function(a) {}
   ")[[1]]
-  expect_equal(get_tag(out, "usage")$values, rd('%\\'))
-  expect_equal(format(get_tag(out, "usage")), '\\usage{\n%\\\n}')
+  expect_equal(out$get_value("usage"), rd('%\\'))
+  expect_equal(out$get_rd("usage"), '\\usage{\n%\\\n}')
 })
 
 test_that("non-syntactic names are quoted", {
@@ -95,7 +88,7 @@ test_that("non-syntactic names are quoted", {
     #' Title.
     'a b' <- function(x) x")[[1]]
 
-  expect_equal(get_tag(out, "usage")$values, rd('"a b"(x)'))
+  expect_equal(out$get_value("usage"), rd('"a b"(x)'))
 })
 
 
@@ -110,6 +103,5 @@ test_that("Special vars removed in rc methods usage", {
     )
   ")[[1]]
 
-  methods <- get_tag(out, "rcmethods")$values
-  expect_equal(methods, list("draw(x = 1)" = "2"))
+  expect_equal(out$get_value("rcmethods"), list("draw(x = 1)" = "2"))
 })

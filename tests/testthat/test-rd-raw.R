@@ -41,6 +41,5 @@ test_that("evalRd inserted unchanged", {
     #' @title a
     NULL")[[1]]
 
-  args <- get_tag(out, "rawRd")$values
-  expect_equal(args, "20")
+  expect_equal(out$get_value("rawRd"), "20")
 })

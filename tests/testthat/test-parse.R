@@ -15,5 +15,5 @@ test_that("can control processing order with @order", {
     NULL
   ")[[1]]
 
-  expect_equal(get_tag(out, "details")$values, c("1", "2"))
+  expect_equal(out$get_value("details"), c("1", "2"))
 })

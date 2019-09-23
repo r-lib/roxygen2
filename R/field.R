@@ -39,15 +39,6 @@ format_rd <- function(x, ..., sort = TRUE) {
 
   map_chr(x$value, rd_macro, field = x$field)
 }
-#' @export
-format.roxy_field_keyword <- format_rd
-#' @export
-format.roxy_field_alias <- function(x, ...) {
-  x$value <- str_replace_all(x$value, fixed("%"), "\\%")
-  format_rd(x, ..., sort = FALSE)
-}
-#' @export
-format.roxy_field_concept <- format_rd
 
 # Fields that keep the first occurrence -----------------------------------------
 format_first <- function(x, ...) {
@@ -58,16 +49,6 @@ format.roxy_field_name <- function(x, ...) {
   x$value <- str_replace_all(x$value, fixed("%"), "\\%")
   format_first(x, ...)
 }
-#' @export
-format.roxy_field_title <- format_first
-#' @export
-format.roxy_field_docType <- format_first
-#' @export
-format.roxy_field_format <- format_first
-#' @export
-format.roxy_field_encoding <- format_first
-
-# Fields collapse their value into a single string ----------------------------
 
 format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
   value <- paste0(x$value, collapse = "\n\n")
@@ -76,49 +57,8 @@ format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
   }
   rd_macro(x$field, value, space = TRUE)
 }
-#' @export
-format.roxy_field_author <- format_collapse
-#' @export
-format.roxy_field_description <- format_collapse
-#' @export
-format.roxy_field_details <- format_collapse
-#' @export
-format.roxy_field_note <- format_collapse
-#' @export
-format.roxy_field_references <- format_collapse
-#' @export
-format.roxy_field_seealso <- format_collapse
-#' @export
-format.roxy_field_source <- format_collapse
-#' @export
-format.roxy_field_value <- format_collapse
 
-# Fields that don't have output ------------------------------------------------
-
-#' @export
-format.roxy_field_family <- function(x, ...) NULL
-#' @export
-format.roxy_field_formals <- function(x, ...) NULL
-
-# Fields with special errors or other semantics --------------------------------
-
-#' @export
-format.roxy_field_usage <- function(x, ...) {
-  rd_macro(x$field, build_rd(x$value, collapse = "\n\n"), space = TRUE)
-}
-
-
-#' @export
-format.roxy_field_slot <- function(x, ...) {
-  describe_section("Slots", names(x$value), x$value)
-}
-
-#' @export
-format.roxy_field_field <- function(x, ...) {
-  describe_section("Fields", names(x$value), x$value)
-}
-
-describe_section <- function(name, dt, dd) {
+roxy_field_description <- function(name, dt, dd) {
   if (length(dt) == 0) return("")
 
   items <- paste0("\\item{\\code{", dt, "}}{", dd, "}", collapse = "\n\n")
@@ -131,15 +71,8 @@ describe_section <- function(name, dt, dd) {
 
 #' @export
 format.roxy_field_rcmethods <- function(x, ...) {
-  describe_section("Methods", names(x$value), x$value)
+  roxy_field_description("Methods", names(x$value), x$value)
 }
-
-#' @export
-format.roxy_field_rawRd <- function(x, ...) {
-  paste(x$value, collapse = "\n")
-}
-
-# Markdown ----------------------------------------------------------------
 
 roxy_field_markdown <- function(name, value) {
   # Any additional components are sections

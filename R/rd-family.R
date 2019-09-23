@@ -1,3 +1,16 @@
+#' @export
+roxy_tag_parse.roxy_tag_family <- function(x) tag_value(x)
+#' @export
+roxy_tag_rd.roxy_tag_family <- function(x, base_path, env) {
+  roxy_field(x$tag, x$val)
+}
+#' @export
+format.roxy_field_family <- function(x, ...) {
+  NULL
+}
+
+# -------------------------------------------------------------------------
+
 topics_process_family_prefix <- function(family) {
 
   default <- paste0("Other ", family, ": ")

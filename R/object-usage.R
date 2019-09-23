@@ -1,3 +1,31 @@
+#' @export
+roxy_tag_parse.roxy_tag_usage <- function(x) {
+  tag_value(x)
+}
+
+# Prefer explicit \code{@@usage} to a \code{@@formals} list.
+topic_add_usage <- function(topic, block, old_usage = FALSE) {
+  tag <- block_get_tag(block, "usage")
+
+  if (is.null(tag)) {
+    usage <- object_usage(block$object, old_usage = old_usage)
+  } else if (tag$val == "NULL") {
+    usage <- NULL
+  } else {
+    # Treat user input as already escaped, otherwise they have no way
+    # to enter \S4method etc.
+    usage <- rd(tag$val)
+  }
+  topic$add_simple_field("usage", usage)
+}
+
+#' @export
+format.roxy_field_usage <- function(x, ...) {
+  rd_macro(x$field, build_rd(x$value, collapse = "\n\n"), space = TRUE)
+}
+
+# object_usage ------------------------------------------------------------
+
 object_usage <- function(x, old_usage = FALSE) {
   UseMethod("object_usage")
 }

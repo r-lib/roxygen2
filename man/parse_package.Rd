@@ -37,7 +37,6 @@ find the code object associated with each block.}
 
 \item{global_options}{A list of global options:
 \itemize{
-\item \code{wrap} Logical; should roxygen2 output be wrapped? \code{FALSE} by default.
 \item `markdown`` Logical value indicating whether to parse Markdown tags.
 }}
 }

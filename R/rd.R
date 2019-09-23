@@ -59,7 +59,7 @@ roclet_process.roclet_rd <- function(x,
 roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE) {
   man <- normalizePath(file.path(base_path, "man"))
 
-  contents <- map_chr(results, format, wrap = FALSE)
+  contents <- map_chr(results, format)
   paths <- file.path(man, names(results))
 
   # Always check for roxygen2 header before overwriting NAMESPACE (#436),

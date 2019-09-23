@@ -15,7 +15,7 @@ roxy_field <- function(field, value) {
 
 #' @export
 print.roxy_field <- function(x, ...) {
-  cat(format(x, wrap = FALSE), "\n")
+  cat(format(x), "\n")
 }
 
 #' @export
@@ -44,12 +44,9 @@ format_first <- function(x, ...) {
   rd_macro(x$field, x$value[1])
 }
 
-format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
+format_collapse <- function(x, ..., indent = 0, exdent = 0) {
   # Collapse all into a single string
   value <- paste0(x$value, collapse = "\n\n")
-  if (wrap) {
-    value <- str_wrap(value, width = 60, indent = indent, exdent = exdent)
-  }
   rd_macro(x$field, value, space = TRUE)
 }
 

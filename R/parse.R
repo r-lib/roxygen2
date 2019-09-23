@@ -16,8 +16,6 @@
 #'    blocks only. This suppresses evaluation of `@eval` tags, and will not
 #'    find the code object associated with each block.
 #' @param global_options A list of global options:
-#'
-#'  * `wrap` Logical; should roxygen2 output be wrapped? `FALSE` by default.
 #'  * `markdown`` Logical value indicating whether to parse Markdown tags.
 #' @return A list of roxy_block objects
 #' @export

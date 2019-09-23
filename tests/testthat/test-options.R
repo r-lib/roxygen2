@@ -1,6 +1,6 @@
 test_that("merged options from can load options from DESCRIPTION", {
   opts <- load_options(test_path("test-options"))
-  expect_equal(opts$wrap, TRUE) # from DESCRIPTION
+  expect_equal(opts$old_usage, TRUE) # from DESCRIPTION
   expect_equal(opts$markdown, TRUE) # from meta.R
 })
 

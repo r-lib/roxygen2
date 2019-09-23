@@ -24,14 +24,11 @@ roxy_field_section <- function(title, content) {
 }
 
 #' @export
-format.roxy_field_section <- function(x, ..., wrap = TRUE) {
-  if (wrap) {
-    content <- str_wrap(str_trim(x$value$content), width = 60, exdent = 2, indent = 2)
-  } else {
-    content <- x$value$content
-  }
-
-  paste0("\\section{", x$value$title, "}{\n", content, "\n}\n", collapse = "\n")
+format.roxy_field_section <- function(x, ...) {
+  paste0(
+    "\\section{", x$value$title, "}{\n", x$value$content, "\n}\n",
+    collapse = "\n"
+  )
 }
 
 #' @export

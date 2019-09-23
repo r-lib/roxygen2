@@ -20,16 +20,12 @@ merge.roxy_field_param <- function(x, y, ...) {
 }
 
 #' @export
-format.roxy_field_param <- function(x, ..., wrap = TRUE) {
+format.roxy_field_param <- function(x, ...) {
   names <- names(x$value)
 
   # add space to multiple arguments so they can wrap
   names <- gsub(",", ", ", names)
-
   items <- paste0("\\item{", names, "}{", x$value, "}", collapse = "\n\n")
-  if (wrap) {
-    items <- str_wrap(items, width = 60, exdent = 2, indent = 2)
-  }
 
   rd_macro("arguments", items, space = TRUE)
 }

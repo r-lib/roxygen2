@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Using the old `wrap` option will now trigger a warning. It hasn't worked
+  for some time.
+
 * Using `@docType package` no longer automatically adds `-name`. Instead 
   document `_PACKAGE` to get all the defaults for package documentation.
   (Removing this feature allowed for simplification of the code.)

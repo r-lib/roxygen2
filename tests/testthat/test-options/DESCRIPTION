@@ -1,1 +1,1 @@
-Roxygen: list(wrap = TRUE)
+Roxygen: list(old_usage = TRUE)

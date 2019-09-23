@@ -15,7 +15,6 @@ load_options <- function(base_path = ".") {
   opts <- utils::modifyList(desc, meta)
 
   defaults <- list(
-    wrap = FALSE,
     roclets = c("collate", "namespace", "rd"),
     markdown = markdown_global_default,
     old_usage = FALSE,

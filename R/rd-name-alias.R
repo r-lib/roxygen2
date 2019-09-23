@@ -8,6 +8,11 @@ format.roxy_field_alias <- function(x, ...) {
 
 #' @export
 roxy_tag_parse.roxy_tag_name <- function(x) tag_value(x)
+#' @export
+format.roxy_field_name <- function(x, ...) {
+  x$value <- str_replace_all(x$value, fixed("%"), "\\%")
+  format_first(x, ...)
+}
 
 topic_add_name_aliases <- function(topic, block, name) {
   tags <- block_get_tags(block, "aliases")

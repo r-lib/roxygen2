@@ -1,4 +1,15 @@
 #' @export
+roxy_tag_parse.roxy_tag_author <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_author <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
+}
+#' @export
+format.roxy_field_author <- function(x, ...) {
+  format_collapse(x, ...)
+}
+
+#' @export
 roxy_tag_parse.roxy_tag_description <- function(x) tag_markdown_with_sections(x)
 #' @export
 roxy_tag_rd.roxy_tag_description <- function(x, base_path, env) {
@@ -9,7 +20,6 @@ format.roxy_field_description <- function(x, ...) {
   format_collapse(x, ...)
 }
 
-
 #' @export
 roxy_tag_parse.roxy_tag_details <- function(x) tag_markdown_with_sections(x)
 #' @export
@@ -19,6 +29,17 @@ roxy_tag_rd.roxy_tag_details <- function(x, base_path, env) {
 #' @export
 format.roxy_field_details <- function(x, ...) {
   format_collapse(x, ...)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_format <- function(x) tag_markdown(x)
+#' @export
+roxy_tag_rd.roxy_tag_format <- function(x, base_path, env) {
+  roxy_field_markdown(x$tag, x$val)
+}
+#' @export
+format.roxy_field_format <- function(x, ...) {
+  format_first(x, ...)
 }
 
 #' @export

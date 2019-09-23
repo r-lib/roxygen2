@@ -20,7 +20,7 @@ print.roxy_field <- function(x, ...) {
 
 #' @export
 format.roxy_field <- function(x, ...) {
-  paste0("[ ", x$field, " FIELD ]\n")
+  abort(paste0("`format.", class(x)[[1]], "` not found"))
 }
 
 #' @export
@@ -29,9 +29,8 @@ merge.roxy_field <- function(x, y, ...) {
   roxy_field(x$field, c(x$value, y$value))
 }
 
-# Fields that repeat multiple times --------------------------------------------
-
 format_rd <- function(x, ..., sort = TRUE) {
+  # One rd macro for each value
   x$value <- unique(x$value)
   if (sort) {
     x$value <- sort_c(x$value)
@@ -40,17 +39,13 @@ format_rd <- function(x, ..., sort = TRUE) {
   map_chr(x$value, rd_macro, field = x$field)
 }
 
-# Fields that keep the first occurrence -----------------------------------------
 format_first <- function(x, ...) {
+  # Only use the first value
   rd_macro(x$field, x$value[1])
-}
-#' @export
-format.roxy_field_name <- function(x, ...) {
-  x$value <- str_replace_all(x$value, fixed("%"), "\\%")
-  format_first(x, ...)
 }
 
 format_collapse <- function(x, ..., indent = 0, exdent = 0, wrap = TRUE) {
+  # Collapse all into a single string
   value <- paste0(x$value, collapse = "\n\n")
   if (wrap) {
     value <- str_wrap(value, width = 60, indent = indent, exdent = exdent)

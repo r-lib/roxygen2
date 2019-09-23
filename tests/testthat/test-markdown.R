@@ -269,8 +269,6 @@ test_that("markdown is parsed in all fields where it is supported", {
     #'
     #' @references References **with bold**
     #'
-    #' @concept Concept **with bold**
-    #'
     #' @note Note **with bold**
     #'
     #' @seealso See also **with bold**
@@ -302,8 +300,6 @@ test_that("markdown is parsed in all fields where it is supported", {
     #' @details Details \\strong{with bold}
     #'
     #' @references References \\strong{with bold}
-    #'
-    #' @concept Concept \\strong{with bold}
     #'
     #' @note Note \\strong{with bold}
     #'

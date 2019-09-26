@@ -26,6 +26,15 @@ topic_add_r6_methods <- function(rd, block, env) {
     del <- c(del, i)
   }
 
+  nodoc <- map_int(methods$tags, length) == 0
+  for (i in which(nodoc)) {
+    msg <- sprintf(
+      "Undocumented R6 method at %s:%i: `%s()`",
+      methods$file[i], methods$line[i], methods$name[i]
+    )
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
   block$tags[del] <- NULL
 
   # Now do the main tags first

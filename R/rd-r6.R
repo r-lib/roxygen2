@@ -126,9 +126,11 @@ r6_method_params <- function(block, method) {
   val <- map_chr(par, c("val", "description"))
   c(
     "\\subsection{Arguments}{",
-    "\\describe{",
-    paste0("\\item{", nms, "}{", val, "}", collapse = "\n\n"),
+    "\\if{html}{\\out{<div class=\"arguments\">}}",
+    "\\tabular{rl}{",
+    paste0(nms, "\\tab ", val, "\\cr ", collapse = "\n\n"),
     "}",
+    "\\if{html}{\\out{</div>}}",
     "}"
   )
 }

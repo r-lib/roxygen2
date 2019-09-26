@@ -129,9 +129,31 @@ r6_method_details <- function(block, method) {
 
 r6_method_params <- function(block, method) {
   par <- purrr::keep(method$tags[[1]], function(t) t$tag == "param")
-  if (length(par) == 0) return()
   nms <- map_chr(par, c("val", "name"))
   nms <- gsub(",", ", ", nms)
+
+  # Each arg should appear exactly once
+  mnames <- str_trim(unlist(strsplit(nms, ",")))
+  fnames <- names(method$formals[[1]])
+  miss <- setdiff(fnames, mnames)
+  for (m in miss) {
+    msg <- sprintf(
+      "Undocumented argument for R6 method `%s()` at %s:%i: `%s`",
+      method$name, method$file, method$line, m
+    )
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
+  dup <- unique(mnames[duplicated(mnames)])
+  for (m in dup) {
+    msg <- sprintf(
+      "Argument `%s` documented multiple times for R6 method `%s` at %s:%i",
+      m, method$name, method$file, method$line)
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
+  if (length(par) == 0) return()
+
   val <- map_chr(par, c("val", "description"))
   c(
     "\\subsection{Arguments}{",

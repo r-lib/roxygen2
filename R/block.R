@@ -130,6 +130,11 @@ block_find_object <- function(block, env) {
   )
   block$object <- object
 
+  class(block) <- unique(c(
+    paste0("roxy_block_", class(object)),
+    class(block)
+  ))
+
   # Add in defaults generated from the object
   defaults <- object_defaults(object)
   defaults <- c(defaults, list(roxy_tag("backref", block$file, block$file)))

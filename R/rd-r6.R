@@ -126,8 +126,8 @@ r6_method_params <- function(block, method) {
   val <- map_chr(par, c("val", "description"))
   c(
     "\\subsection{Arguments}{",
-    "\\itemize{",
-    paste0("\\item \\code{", nms, "}: ", val, collapse = "\n\n"),
+    "\\describe{",
+    paste0("\\item{", nms, "}{", val, "}", collapse = "\n\n"),
     "}",
     "}"
   )
@@ -142,7 +142,9 @@ r6_method_return <- function(block, method) {
   ret <- ret[[1]]
   c(
     "\\subsection{Returns}{",
+    "\\describe{",
     ret$val,
+    "}",
     "}"
   )
 }

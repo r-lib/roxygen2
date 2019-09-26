@@ -2,6 +2,7 @@
 
 S3method(block_to_rd,default)
 S3method(block_to_rd,roxy_block)
+S3method(block_to_rd,roxy_block_r6class)
 S3method(c,rd)
 S3method(default_export,NULL)
 S3method(default_export,default)

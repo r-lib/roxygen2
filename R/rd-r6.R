@@ -233,9 +233,7 @@ r6_method_return <- function(block, method) {
   ret <- ret[[1]]
   c(
     "\\subsection{Returns}{",
-    "\\describe{",
     ret$val,
-    "}",
     "}"
   )
 }

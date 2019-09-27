@@ -3,7 +3,8 @@ topic_add_r6_methods <- function(rd, block, env) {
   # We get the @param, @examples, and @return tags that belong to
   # the methods. We match them to methods.
   r6data <- block_get_tag_value(block, ".r6data")
-  methods <- r6data[r6data$type == "method", ]
+  methods <- r6data$self
+  methods <- methods[methods$type == "method", ]
   methods <- methods[order(methods$file, methods$line), ]
   methods$tags <- replicate(nrow(methods), list(), simplify = FALSE)
 
@@ -42,17 +43,48 @@ topic_add_r6_methods <- function(rd, block, env) {
     rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
   }
 
+  # We need to add the whole thing as a big section.
+
+  rd_lines <- c(
+    r6_superclass(block, r6data, env),
+    r6_methods(block, r6data, methods)
+  )
+
+  rd$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
+}
+
+r6_superclass <- function(block, r6data, env) {
+  super <- r6data$super
+  cls <- unique(super$classname)
+  if (length(cls) == 0) return()
+
+  lines <- character()
+  push <- function(...) lines <<- c(lines, ...)
+
+  title <- if (length(cls) > 1) "Super classes" else "Super class"
+  push(paste0("\\section{", title, "}{"))
+
+  pkgs <- super$package[match(cls, super$classname)]
+  clsx <- c(rev(cls), block$object$alias)
+  pkgsx <- c(rev(pkgs), environmentName(env))
+  path <- sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgsx, clsx, pkgsx, clsx)
+  push(paste0(path, collapse = " -> "))
+
+  push("}")
+
+  lines
+}
+
+r6_methods <- function(block, r6data, methods) {
   # And then the methods, if any
   if (nrow(methods) == 0) return()
 
-  # We need to add the whole thing as a big section, that's how RoxyTopic
-  # works. So we just collect all the text.
-
-  rd_lines <- character()
-  push <- function(...) rd_lines <<- c(rd_lines, ...)
+  lines <- character()
+  push <- function(...) lines <<- c(lines, ...)
 
   push("\\section{Methods}{")
   push(r6_method_list(block, methods))
+  push(r6_inherited_method_list(block, r6data))
   for (i in seq_len(nrow(methods))) {
     push(r6_method_begin(block, methods[i,]))
     push(r6_method_usage(block, methods[i,]))
@@ -64,7 +96,7 @@ topic_add_r6_methods <- function(rd, block, env) {
   }
   push("}")
 
-  rd$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
+  lines
 }
 
 find_method_for_tag <- function(methods, tag) {
@@ -95,6 +127,31 @@ r6_method_list <- function(block, methods) {
     ),
     "}",
     "}"
+  )
+}
+
+r6_inherited_method_list <- function(block, r6data) {
+  super <- r6data$super
+  if (is.null(super)) return()
+
+  # drop methods that were shadowed in a subclass
+  self <- r6data$self
+  super <- super[! super$name %in% self$name, ]
+  super <- super[! duplicated(super$name), ]
+
+  c("\\if{html}{\\subsection{Inherited methods}{",
+    "\\itemize{",
+    sprintf(
+      "\\item \\href{../../%s/html/%s.html#method-%s}{\\code{%s::%s$%s()}}",
+      super$package,
+      super$classname,
+      super$name,
+      super$package,
+      super$classname,
+      super$name
+    ),
+    "}",
+    "}}"
   )
 }
 

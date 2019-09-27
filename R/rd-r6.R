@@ -101,6 +101,7 @@ r6_method_list <- function(block, methods) {
 r6_method_begin <- function(block, method) {
   nm <- r6_show_name(method$name)
   c(
+    "\\if{html}{\\out{<hr>}}",
     paste0("\\if{html}{\\out{<a id=\"method-", nm, "\"></a>}}"),
     paste0("\\subsection{Method \\code{", nm, "()}}{")
   )
@@ -202,7 +203,6 @@ r6_method_examples <- function(block, method) {
 
 r6_method_end <- function(block, method) {
   c(
-    "}",
-    "\\if{html}{\\out{<hr>}}"
+    "}"
   )
 }

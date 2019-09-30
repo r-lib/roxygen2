@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* `rd_section()` and `roxy_tag_rd()` are now exported so that you can more 
+  easily extend `rd_roclet()` with your own tags that genereate output in
+  `.Rd` files.
+
 * Using the old `wrap` option will now trigger a warning. It hasn't worked
   for some time.
 

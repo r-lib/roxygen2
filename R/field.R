@@ -1,3 +1,22 @@
+#' Construct an `rd_section` object
+#'
+#' An `rd_section` represents an Rd command that can appear at the top-level
+#' of an Rd document, like `\name{}`, `\title{}`, `\description{}`, or
+#' `\section{}`.
+#'
+#' @section Methods:
+#' If provide your own `rd_section` type, you'll also need to define a
+#' `format.rd_section_{type}` method that returns formatted Rd output. You
+#' may also need to provide a `merge.rd_section_{type}` method if two
+#' sections can not be combined with `rd_section(x$type, c(x$value, y$value))`.
+#' See `vignette("extending")` for more details.
+#'
+#' @param type Section type. Stored in `type` field, and in class
+#'   `rd_section_{type}`. To avoid namespace clashes between different
+#'   extensions, this should include the package name.
+#' @param value Section data. Only used by `format()` and `merge()` methods.
+#' @export
+#' @keywords internal
 rd_section <- function(type, value) {
   if (is.null(value) || identical(value, "NULL")) {
     # NULL is special sentinel value that suppresses output of that field

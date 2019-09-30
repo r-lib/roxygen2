@@ -16,7 +16,7 @@ roxy_tag_parse.roxy_tag_example <- function(x) {
 }
 
 #' @export
-roxy_tag_rd.roxy_tag_examples <- function(x, topic, base_path, env) {
+roxy_tag_rd.roxy_tag_examples <- function(x, base_path, env) {
   rd_section("examples", x$val)
 }
 #' @export

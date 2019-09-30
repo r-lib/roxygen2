@@ -156,6 +156,17 @@ topics_add_default_description <- function(topics) {
 
 # Tag-wise processing -----------------------------------------------------
 
+#' Generate Rd output from a tag
+#'
+#' Provide a method for this generic if you want a tag to generate output
+#' in `.Rd` files. See `vignette("extending")` for more details.
+#'
+#' @param x The tag
+#' @param base_path Path to package root directory.
+#' @param env Environment in which to evaluate code (if needed)
+#' @return Methods must return a [rd_section].
+#' @export
+#' @keywords internal
 roxy_tag_rd <- function(x, base_path, env) {
   UseMethod("roxy_tag_rd")
 }

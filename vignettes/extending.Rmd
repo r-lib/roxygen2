@@ -16,7 +16,15 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 Roxygen is extensible with user-defined __roclets__. 
 It means that you can take advantage of Roxygen's parser and extend it with your own `@tags`.
 
-Note that's not currently possible to extend an existing roclet, so you need to create your own if you want to add new features. This restriction may be relaxed in the future.
+There are two primary ways to extend roxygen2:
+
+* Add new tag that generates a new top-level section in `.Rd` files.
+
+* Add a new roclet that does anything you like.
+
+This vignette will introduce you to the key data structures in roxygen2, and then show you how to use these two extension points.
+This vignette is very rough, so you should expect to have to also read some roxygen2 source code to understand all the extension points.
+Hopefully it's useful enough to help you get started, and if you have problems, please [file an issue](https://github.com/r-lib/roxygen2/issues/new)!
 
 ```{r setup}
 library(roxygen2)
@@ -24,12 +32,12 @@ library(roxygen2)
 
 ## Key data structures
 
-Before we talk about creating your own roclets, we need to first discuss two important data structures that power roxygen: blocks and tags.
+Before we talk about extending roxygen2, we need to first discuss two important data structures that power roxygen: tags and blocks.
 
 ### Tags
 
 A tag (a list with S3 class `roxy_tag`) represents a single tag. 
-It contains:
+It has the following fields:
 
 * `tag`: the name of the tag.
 
@@ -48,22 +56,24 @@ roxy_tag("name", "Hadley")
 str(roxy_tag("name", "Hadley"))
 ```
 
-However, you should rarely need to do so, because you'll typically have them given to you in a block object
+However, you should rarely need to do so, because you'll typically have them given to you in a block object, as you'll see shortly.
 
-## Blocks
+### Blocks
 
-A block (a list with S3 class `roxy_block`) represents a single roxygen block. It contains:
+A block (a list with S3 class `roxy_block`) represents a single roxygen block. It has the following fields:
 
 * `tags`: a list of `roxy_tags`.
 * `call`: the R code associated with the block (usually a function call).
 * `file` and `line`: the location of the R code.
 * `object`: the evaluated R object associated with the code.
 
-The easiest way to see the basic structure of a `roxy_block()` is to generate one by parsing a roxygen block:
+The easiest way to see the basic structure of a `roxy_block()` is to generate one by parsing a roxygen block with `parse_text()`:
 
 ```{r}
 text <- "
   #' This is a title
+  #'
+  #' This is the description.
   #'
   #' @param x,y A number
   #' @export
@@ -75,7 +85,112 @@ block <- parse_text(text)[[1]]
 block
 ```
 
-## Roclets
+## Adding a new `.Rd` tag
+
+The easiest way to extend roxygen2 is to create a new tag that adds output to `.Rd` files. 
+This requires two steps:
+
+1.  Define a `roxy_tag_parse()` method that describes how to parse our new
+    tag.
+   
+1.  Define a `roxy_tag_rd()` method that describes how to convert the tag
+    into `.Rd` commands.
+    
+To illustrate the basic idea we'll create a new `@tip` tag that will create a bulleted list of tips about how to use a function. 
+The idea is to take something like this: 
+
+```{r}
+#' @tip The mean of a logical vector is the proportion of `TRUE` values.
+#' @tip You can compute means of dates and date-times!
+```
+
+And generate Rd like this:
+
+```latex
+\section{Tips and tricks}{
+\itemize{
+  \item The mean of a logical vector is the proportion of \code{TRUE} values.
+  \item You can compute means of dates and date-times!
+}
+}
+```
+
+The first step is to define a method for `roxy_tag_parse()` that describes how to turn the parse the tag text.
+The name of the class will be `roxy_tag_{tag}`, which in this case is `roxy_tag_tip`. 
+This function takes a `roxy_tag` as input, and it's job is to set `x$val` to a convenient parsed value that will be used later by the roclet.
+Here we want to process the text using markdown so we can just use `tag_markdown()`:
+
+```{r}
+roxy_tag_parse.roxy_tag_tip <- function(x) {
+  tag_markdown(x)
+}
+```
+```{r, include = FALSE}
+# Needed for vignette
+registerS3method("roxy_tag_parse", "roxy_tag_tip", roxy_tag_parse.roxy_tag_tip)
+```
+
+We check this works by using `parse_text()`:
+
+```{r}
+text <- "
+  #' Title
+  #'
+  #' @tip The mean of a logical vector is the proportion of `TRUE` values.
+  #' @tip You can compute means of dates and date-times!
+  #' @md
+  f <- function(x, y) {
+    # ...
+  }
+"
+block <- parse_text(text)[[1]]
+block
+
+str(block$tags[[2]])
+```
+
+(Here I explicit turn markdown parsing on using `@md`; it's usually turned on for a package using roxygen options).
+
+Next we define a method for `roxy_tag_rd()`, which must create an `rd_section()`.
+We're going to create a new section called `tip`.
+It will contain a character vector of tips:
+
+```{r}
+roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
+  rd_section("tip", x$val)
+}
+```
+```{r, include = FALSE}
+# Needed for vignette
+registerS3method("roxy_tag_rd", "roxy_tag_tip", roxy_tag_rd.roxy_tag_tip)
+```
+
+We then need to define a `format()` method to converts this object into text for the `.Rd` file:
+
+```{r}
+format.rd_section_tip <- function(x, ...) {
+  paste0(
+    "\\section{Tips and tricks}{\n",
+    "\\itemize{\n",
+    paste0("  \\item ", x$value, "\n", collapse = ""),
+    "}\n",
+    "}\n"
+  )
+}
+```
+```{r, include = FALSE}
+# Needed for vignette
+registerS3method("format", "rd_section_tip", format.rd_section_tip)
+```
+
+We can now try this out with `roclet_text()`:
+
+```{r}
+topic <- roc_proc_text(rd_roclet(), text)[[1]]
+topic$get_section("tip")
+```
+
+## Creating a new roclet
 
 Creating a new roclet is usually a two part process.
 First, you define new tags that your roclet will work with.
@@ -96,9 +211,7 @@ As an example:
 @memo [EFFICIENCY] Currently brute-force; find better algorithm.
 ```
 
-To make our roclet work, we first define a method for `roxy_tag_parse`. 
-The name of the class will be `roxy_tag_{tag}`, which in this case is `roxy_tag_memo`.
-This function takes a `roxy_tag` as input, and it's job is to set `x$val` to a convenient parsed value that will be used later by the roclet.
+As above, we first define a parse method:
 
 ```{r}
 roxy_tag_parse.roxy_tag_memo <- function(x) {
@@ -122,7 +235,7 @@ roxy_tag_parse.roxy_tag_memo <- function(x) {
 registerS3method("roxy_tag_parse", "roxy_tag_memo", roxy_tag_parse.roxy_tag_memo)
 ```
 
-We check this works by using `parse_text()`:
+Then check it works with `parse_text()`:
 
 ```{r}
 text <- "
@@ -138,10 +251,10 @@ block
 str(block$tags[[1]])
 ```
 
-## The roclet
+### The roclet
 
-To create a roclet, you first create a roclet object using `roclet()`.
-Our `memo` roclet doesn't have any options so this is very simple here:
+Next we create a constructor for the roclet, which uses `roclet()`.
+Our `memo` roclet doesn't have any options so this is very simple:
 
 ```{r}
 memo_roclet <- function() {

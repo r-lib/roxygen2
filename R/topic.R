@@ -1,6 +1,6 @@
 # An RoxyTopic is an ordered collection of unique rd_sections
 RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
-  fields = list(),
+  sections = list(),
   filename = "",
 
   format = function(...) {
@@ -10,9 +10,9 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
       "details", "minidesc", "field", "slot", "rcmethods", "note",
       "section", "examples", "references", "seealso", "author",
       "concept", "keyword", "rawRd")
-    fields <- move_names_to_front(self$fields, order)
+    sections <- move_names_to_front(self$sections, order)
 
-    formatted <- lapply(fields, format, ...)
+    formatted <- lapply(sections, format, ...)
     paste0(
       made_by("%"),
       paste0(unlist(formatted), collapse = "\n")
@@ -20,24 +20,24 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   },
 
   is_valid = function() {
-    # Needs both title and name fields to generate valid Rd
+    # Needs both title and name sections to generate valid Rd
     all(self$has_section(c("title", "name")))
   },
 
-  has_section = function(field_name) {
-    field_name %in% names(self$fields)
+  has_section = function(type) {
+    type %in% names(self$sections)
   },
 
-  get_section = function(field_name) {
-    self$fields[[field_name]]
+  get_section = function(type) {
+    self$sections[[type]]
   },
 
-  get_value = function(field) {
-    self$get_section(field)$value
+  get_value = function(type) {
+    self$get_section(type)$value
   },
 
-  get_rd = function(field) {
-    format(self$get_section(field))
+  get_rd = function(type) {
+    format(self$get_section(type))
   },
   get_name = function() {
     self$get_value("name")
@@ -69,12 +69,12 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
 
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
-      self$add(x$fields, overwrite = overwrite)
+      self$add(x$sections, overwrite = overwrite)
     } else if (inherits(x, "rd_section")) {
       self$add_section(x, overwrite = overwrite)
     } else if (is.list(x)) {
-      for (field in x) {
-        self$add_section(field, overwrite = overwrite)
+      for (section in x) {
+        self$add_section(section, overwrite = overwrite)
       }
     } else if (is.null(x)) {
       # skip
@@ -85,18 +85,14 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   },
 
   # Ensures that each type of name (as given by its name), only appears
-  # once in self$fields - should only be used internally.
-  add_section = function(field, overwrite = FALSE) {
-    if (is.null(field))
-      return()
-
-    field_name <- field$type
-    if (self$has_section(field_name) && !overwrite) {
-      field <- merge(self$get_section(field_name), field)
+  # once in self$sections - for internal use only.
+  add_section = function(section, overwrite = FALSE) {
+    type <- section$type
+    if (self$has_section(type) && !overwrite) {
+      section <- merge(self$get_section(type), section)
     }
 
-    self$fields[[field_name]] <- field
-
+    self$sections[[type]] <- section
     invisible()
   }
 ))

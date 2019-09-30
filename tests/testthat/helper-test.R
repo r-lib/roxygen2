@@ -1,6 +1,6 @@
 expect_equivalent_rd <- function(out1, out2) {
-  out1$fields$backref <- NULL
-  out2$fields$backref <- NULL
+  out1$sections$backref <- NULL
+  out2$sections$backref <- NULL
   expect_equal(out1, out2)
 }
 

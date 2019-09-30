@@ -22,9 +22,9 @@ test_that("markdown file can be included", {
     #' Inline \\code{code} and \\emph{emphasis}.
     #' @name foobar
     NULL")[[1]]
-  # make sure fields are in the same order
-  expect_equal(sort(names(out1$fields)), sort(names(out2$fields)))
-  out2$fields <- out2$fields[names(out1$fields)]
+  # make sure sections are in the same order
+  expect_equal(sort(names(out1$sections)), sort(names(out2$sections)))
+  out2$sections <- out2$sections[names(out1$sections)]
   expect_equivalent_rd(out1, out2)
 })
 

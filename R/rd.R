@@ -169,10 +169,10 @@ roxy_tag_rd.default <- function(x, base_path, env) {
 
 #' @export
 roxy_tag_rd.roxy_tag_.formals <- function(x, base_path, env) {
-  roxy_field("formals", x$val)
+  rd_section("formals", x$val)
 }
 #' @export
-format.roxy_field_formals <- function(x, ...) NULL
+format.rd_section_formals <- function(x, ...) NULL
 
 
 #' @export

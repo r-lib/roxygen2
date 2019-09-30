@@ -5,7 +5,7 @@ test_that("exporting a call to :: produces re-exports documentation", {
 
   expect_equal(
     out$get_field("reexport"),
-    roxy_field_reexport("testthat", "auto_test")
+    rd_section_reexport("testthat", "auto_test")
   )
   expect_equal(out$get_value("title"), "Objects exported from other packages")
   expect_equal(out$get_value("keyword"), "internal")
@@ -22,7 +22,7 @@ test_that("multiple re-exports are combined", {
 
   expect_equal(
     out$get_field("reexport"),
-    roxy_field_reexport(c("testthat", "testthat"), c("expect_lt", "expect_gt"))
+    rd_section_reexport(c("testthat", "testthat"), c("expect_lt", "expect_gt"))
   )
 })
 

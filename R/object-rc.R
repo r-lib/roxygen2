@@ -9,11 +9,11 @@ roxy_tag_rd.roxy_tag_.methods <- function(x, base_path, env) {
   desc <- desc[has_docs]
   usage <- usage[has_docs]
 
-  roxy_field("rcmethods", setNames(desc, usage))
+  rd_section("rcmethods", setNames(desc, usage))
 }
 #' @export
-format.roxy_field_rcmethods <- function(x, ...) {
-  roxy_field_description("Methods", names(x$value), x$value)
+format.rd_section_rcmethods <- function(x, ...) {
+  rd_section_description("Methods", names(x$value), x$value)
 }
 
 # Extract all methods from an RC definition, returning a list of "objects".

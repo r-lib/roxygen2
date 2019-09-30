@@ -13,18 +13,18 @@ roxy_tag_rd.roxy_tag_section <- function(x, base_path, env) {
     return()
   }
 
-  roxy_field_section(pieces[1], pieces[2])
+  rd_section_section(pieces[1], pieces[2])
 }
 
-roxy_field_section <- function(title, content) {
+rd_section_section <- function(title, content) {
   stopifnot(is.character(title), is.character(content))
   stopifnot(length(title) == length(content))
 
-  roxy_field("section", list(title = title, content = content))
+  rd_section("section", list(title = title, content = content))
 }
 
 #' @export
-format.roxy_field_section <- function(x, ...) {
+format.rd_section_section <- function(x, ...) {
   paste0(
     "\\section{", x$value$title, "}{\n", x$value$content, "\n}\n",
     collapse = "\n"
@@ -32,7 +32,7 @@ format.roxy_field_section <- function(x, ...) {
 }
 
 #' @export
-merge.roxy_field_section <- function(x, y, ...) {
+merge.rd_section_section <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
 
   dedup <- collapse(
@@ -40,5 +40,5 @@ merge.roxy_field_section <- function(x, y, ...) {
     c(x$value$content, y$value$content),
     paste, collapse = "\n\n"
   )
-  roxy_field("section", list(title = dedup$key, content = unlist(dedup$value)))
+  rd_section("section", list(title = dedup$key, content = unlist(dedup$value)))
 }

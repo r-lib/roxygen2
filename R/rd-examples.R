@@ -17,7 +17,7 @@ roxy_tag_parse.roxy_tag_example <- function(x) {
 
 #' @export
 roxy_tag_rd.roxy_tag_examples <- function(x, topic, base_path, env) {
-  roxy_field("examples", x$val)
+  rd_section("examples", x$val)
 }
 #' @export
 roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
@@ -28,13 +28,13 @@ roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
   }
 
   code <- read_lines(path)
-  roxy_field("examples", escape_examples(code))
+  rd_section("examples", escape_examples(code))
 }
 
 #' @export
-format.roxy_field_examples <- function(x, ...) {
+format.rd_section_examples <- function(x, ...) {
   value <- paste0(x$value, collapse = "\n")
-  rd_macro(x$field, value, space = TRUE)
+  rd_macro(x$type, value, space = TRUE)
 }
 
 # Works like escape, but unescapes special rd example commands.

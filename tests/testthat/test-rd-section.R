@@ -30,7 +30,7 @@ test_that("@section-s with identical titles are merged", {
 
   expect_equal(
     out$get_field("section"),
-    roxy_field_section(
+    rd_section_section(
       c("Haz dox", "TL", "RT"),
       c(" Here.\n\n\n  Got news.", " DR.", " FM.")
     )
@@ -52,6 +52,6 @@ test_that("@section-s with different titles are kept as they are", {
 
   expect_equal(
     out$get_field("section"),
-    roxy_field_section(LETTERS[1:3], c(" 1", " 2", " 3"))
+    rd_section_section(LETTERS[1:3], c(" 1", " 2", " 3"))
   )
 })

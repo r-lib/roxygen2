@@ -6,21 +6,21 @@ roxy_tag_parse.roxy_tag_param <- function(x) {
 #' @export
 roxy_tag_rd.roxy_tag_param <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
-  roxy_field(x$tag, value)
+  rd_section(x$tag, value)
 }
 
 #' @export
-merge.roxy_field_param <- function(x, y, ...) {
+merge.rd_section_param <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
   # When parameters appear in both x and y, keep values from y
   # This happens for example when inherit_dot_params adds a "..." param after
   # inherit_params has done the same.
   to_add <- setdiff(names(x$value), names(y$value))
-  roxy_field(x$field, c(x$value[to_add], y$value))
+  rd_section(x$type, c(x$value[to_add], y$value))
 }
 
 #' @export
-format.roxy_field_param <- function(x, ...) {
+format.rd_section_param <- function(x, ...) {
   names <- names(x$value)
 
   # add space to multiple arguments so they can wrap

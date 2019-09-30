@@ -2,10 +2,10 @@
 roxy_tag_parse.roxy_tag_concept <- function(x) tag_value(x)
 #' @export
 roxy_tag_rd.roxy_tag_concept <- function(x, base_path, env) {
-  roxy_field(x$tag, x$val)
+  rd_section(x$tag, x$val)
 }
 #' @export
-format.roxy_field_concept <- function(x, ...) {
+format.rd_section_concept <- function(x, ...) {
   format_rd(x, ...)
 }
 
@@ -13,10 +13,10 @@ format.roxy_field_concept <- function(x, ...) {
 roxy_tag_parse.roxy_tag_docType <- function(x) tag_name(x)
 #' @export
 roxy_tag_rd.roxy_tag_docType <- function(x, base_path, env) {
-  roxy_field("docType", x$val)
+  rd_section("docType", x$val)
 }
 #' @export
-format.roxy_field_docType <- function(x, ...) {
+format.rd_section_docType <- function(x, ...) {
   format_first(x, ...)
 }
 
@@ -24,10 +24,10 @@ format.roxy_field_docType <- function(x, ...) {
 roxy_tag_parse.roxy_tag_encoding <- function(x) tag_value(x)
 #' @export
 roxy_tag_rd.roxy_tag_encoding <- function(x, base_path, env) {
-  roxy_field(x$tag, x$val)
+  rd_section(x$tag, x$val)
 }
 #' @export
-format.roxy_field_encoding <- function(x, ...) {
+format.rd_section_encoding <- function(x, ...) {
   format_first(x, ...)
 }
 
@@ -35,9 +35,9 @@ format.roxy_field_encoding <- function(x, ...) {
 roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
 #' @export
 roxy_tag_rd.roxy_tag_keywords <- function(x, base_path, env) {
-  roxy_field("keyword", str_split(x$val, "\\s+")[[1]])
+  rd_section("keyword", str_split(x$val, "\\s+")[[1]])
 }
 #' @export
-format.roxy_field_keyword <- function(x, ...) {
+format.rd_section_keyword <- function(x, ...) {
   format_rd(x, ...)
 }

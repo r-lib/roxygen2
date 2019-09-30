@@ -2,10 +2,10 @@
 roxy_tag_parse.roxy_tag_family <- function(x) tag_markdown(x)
 #' @export
 roxy_tag_rd.roxy_tag_family <- function(x, base_path, env) {
-  roxy_field(x$tag, x$val)
+  rd_section(x$tag, x$val)
 }
 #' @export
-format.roxy_field_family <- function(x, ...) {
+format.rd_section_family <- function(x, ...) {
   NULL
 }
 

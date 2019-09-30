@@ -5,11 +5,11 @@ roxy_tag_parse.roxy_tag_backref <- function(x) {
 
 #' @export
 roxy_tag_rd.roxy_tag_backref <- function(x, base_path, env) {
-  roxy_field("backref", x$val)
+  rd_section("backref", x$val)
 }
 
 #' @export
-format.roxy_field_backref <- function(x, ...) {
+format.rd_section_backref <- function(x, ...) {
   filename <- unique(x$value)
   filename <- file.path(basename(dirname(filename)), basename(filename), fsep = "/")
 

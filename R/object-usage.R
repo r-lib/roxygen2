@@ -20,8 +20,8 @@ topic_add_usage <- function(topic, block, old_usage = FALSE) {
 }
 
 #' @export
-format.roxy_field_usage <- function(x, ...) {
-  rd_macro(x$field, build_rd(x$value, collapse = "\n\n"), space = TRUE)
+format.rd_section_usage <- function(x, ...) {
+  rd_macro(x$type, build_rd(x$value, collapse = "\n\n"), space = TRUE)
 }
 
 # object_usage ------------------------------------------------------------

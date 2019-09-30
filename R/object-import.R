@@ -1,22 +1,22 @@
 # Re-export ----------------------------------------------------------------
-roxy_field_reexport <- function(pkg, fun) {
+rd_section_reexport <- function(pkg, fun) {
   stopifnot(is.character(pkg), is.character(fun))
   stopifnot(length(pkg) == length(fun))
 
-  roxy_field("reexport", list(pkg = pkg, fun = fun))
+  rd_section("reexport", list(pkg = pkg, fun = fun))
 }
 
 #' @export
 roxy_tag_rd.roxy_tag_.reexport <- function(x, base_path, env) {
-  roxy_field_reexport(x$val$pkg, x$val$fun)
+  rd_section_reexport(x$val$pkg, x$val$fun)
 }
 #' @export
-merge.roxy_field_reexport <- function(x, y, ...) {
+merge.rd_section_reexport <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_reexport(c(x$value$pkg, y$value$pkg), c(x$value$fun, y$value$fun))
+  rd_section_reexport(c(x$value$pkg, y$value$pkg), c(x$value$fun, y$value$fun))
 }
 #' @export
-format.roxy_field_reexport <- function(x, ...) {
+format.rd_section_reexport <- function(x, ...) {
   pkgs <- split(x$fun, x$pkg)
   pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
     links <- paste0("\\code{\\link[", pkg, "]{", escape(sort(funs)), "}}",

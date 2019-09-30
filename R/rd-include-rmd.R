@@ -49,7 +49,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   )
 
   value <- rmd_eval_rd(md_path, x)
-  roxy_field_markdown("details", value)
+  rd_section_markdown("details", value)
 }
 
 # Helpers -----------------------------------------------------------------

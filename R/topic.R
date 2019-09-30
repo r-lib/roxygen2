@@ -1,4 +1,4 @@
-# An RoxyTopic is an ordered collection of unique roxy_fields
+# An RoxyTopic is an ordered collection of unique rd_sections
 RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   fields = list(),
   filename = "",
@@ -73,7 +73,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     if (is.null(field))
       return()
 
-    field_name <- field$field
+    field_name <- field$type
     if (self$has_field(field_name) && !overwrite) {
       field <- merge(self$get_field(field_name), field)
     }
@@ -84,14 +84,14 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   },
 
   add_simple_field = function(name, values, overwrite = FALSE) {
-    self$add_field(roxy_field(name, values), overwrite = overwrite)
+    self$add_field(rd_section(name, values), overwrite = overwrite)
     invisible()
   },
 
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$fields, overwrite = overwrite)
-    } else if (inherits(x, "roxy_field")) {
+    } else if (inherits(x, "rd_section")) {
       self$add_field(x, overwrite = overwrite)
     } else if (is.list(x)) {
       for (field in x) {

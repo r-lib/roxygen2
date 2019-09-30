@@ -4,14 +4,14 @@
 roxy_tag_parse.roxy_tag_inherit <- function(x) tag_inherit(x)
 #' @export
 roxy_tag_rd.roxy_tag_inherit <- function(x, base_path, env) {
-  roxy_field_inherit(x$val$source, list(x$val$fields))
+  rd_section_inherit(x$val$source, list(x$val$fields))
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_inheritParams <- function(x) tag_value(x)
 #' @export
 roxy_tag_rd.roxy_tag_inheritParams <- function(x, base_path, env) {
-  roxy_field_inherit(x$val, list("params"))
+  rd_section_inherit(x$val, list("params"))
 }
 
 #' @export
@@ -20,30 +20,30 @@ roxy_tag_parse.roxy_tag_inheritDotParams <- function(x) {
 }
 #' @export
 roxy_tag_rd.roxy_tag_inheritDotParams <- function(x, base_path, env) {
-  roxy_field_inherit_dot_params(x$val$source, x$val$args)
+  rd_section_inherit_dot_params(x$val$source, x$val$args)
 }
 
 #' @export
 roxy_tag_parse.roxy_tag_inheritSection <- function(x) tag_name_description(x)
 #' @export
 roxy_tag_rd.roxy_tag_inheritSection <- function(x, base_path, env) {
-  roxy_field_inherit_section(x$val$name, x$val$description)
+  rd_section_inherit_section(x$val$name, x$val$description)
 }
 
 
 # Fields ------------------------------------------------------------------
 
 # For each unique source, list which fields it inherits from
-roxy_field_inherit <- function(source, fields) {
+rd_section_inherit <- function(source, fields) {
   stopifnot(is.character(source), is.list(fields))
   stopifnot(!anyDuplicated(source))
   stopifnot(length(source) == length(fields))
 
-  roxy_field("inherit", list(source = source, fields = fields))
+  rd_section("inherit", list(source = source, fields = fields))
 }
 
 #' @export
-merge.roxy_field_inherit <- function(x, y, ...) {
+merge.rd_section_inherit <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
 
   dedup <- collapse(
@@ -52,42 +52,42 @@ merge.roxy_field_inherit <- function(x, y, ...) {
     function(x) Reduce(union, x)
   )
 
-  roxy_field("inherit", list(source = dedup$key, fields = dedup$value))
+  rd_section("inherit", list(source = dedup$key, fields = dedup$value))
 }
 
 #' @export
-format.roxy_field_inherit <- function(x, ...) NULL
+format.rd_section_inherit <- function(x, ...) NULL
 
-roxy_field_inherit_section <- function(source, title) {
+rd_section_inherit_section <- function(source, title) {
   stopifnot(is.character(source), is.character(title))
   stopifnot(length(source) == length(title))
 
-  roxy_field("inherit_section", list(source = source, title = title))
+  rd_section("inherit_section", list(source = source, title = title))
 }
 
 #' @export
-format.roxy_field_inherit_section <- function(x, ...) NULL
+format.rd_section_inherit_section <- function(x, ...) NULL
 
 #' @export
-merge.roxy_field_inherit_section <- function(x, y, ...) {
+merge.rd_section_inherit_section <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_section(c(x$value$source, y$value$source), c(x$value$title, y$value$title))
+  rd_section_inherit_section(c(x$value$source, y$value$source), c(x$value$title, y$value$title))
 }
 
-roxy_field_inherit_dot_params <- function(source, args) {
+rd_section_inherit_dot_params <- function(source, args) {
   stopifnot(is.character(source), is.character(args))
   stopifnot(length(source) == length(args))
 
-  roxy_field("inherit_dot_params", list(source = source, args = args))
+  rd_section("inherit_dot_params", list(source = source, args = args))
 }
 
 #' @export
-format.roxy_field_inherit_dot_params <- function(x, ...) NULL
+format.rd_section_inherit_dot_params <- function(x, ...) NULL
 
 #' @export
-merge.roxy_field_inherit_dot_params <- function(x, y, ...) {
+merge.rd_section_inherit_dot_params <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  roxy_field_inherit_dot_params(c(x$value$source, y$value$source), c(x$value$args, y$value$args))
+  rd_section_inherit_dot_params(c(x$value$source, y$value$source), c(x$value$args, y$value$args))
 }
 
 
@@ -270,7 +270,7 @@ inherit_sections <- function(topic, topics) {
       next
 
     topic$add_field(
-      roxy_field_section(sections$title[needed], sections$content[needed])
+      rd_section_section(sections$title[needed], sections$content[needed])
     )
   }
 }
@@ -297,7 +297,7 @@ inherit_section <- function(topic, topics) {
     }
 
     topic$add_field(
-      roxy_field_section(new_section$title[selected], new_section$content[selected])
+      rd_section_section(new_section$title[selected], new_section$content[selected])
     )
   }
 }

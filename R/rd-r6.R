@@ -38,9 +38,12 @@ topic_add_r6_methods <- function(rd, block, env) {
 
   block$tags[del] <- NULL
 
-  # Now do the main tags first
+  # Now do the main tags first. We leave out the param tags, those are
+  # for the methods
   for (tag in block$tags) {
-    rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
+    if (tag$tag != "param") {
+      rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
+    }
   }
 
   # We need to add the whole thing as a big section.
@@ -187,21 +190,10 @@ r6_method_details <- function(block, method) {
 
 r6_method_params <- function(block, method) {
   par <- purrr::keep(method$tags[[1]], function(t) t$tag == "param")
-  nms <- map_chr(par, c("val", "name"))
-  nms <- gsub(",", ", ", nms)
+  nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
 
   # Each arg should appear exactly once
   mnames <- str_trim(unlist(strsplit(nms, ",")))
-  fnames <- names(method$formals[[1]])
-  miss <- setdiff(fnames, mnames)
-  for (m in miss) {
-    msg <- sprintf(
-      "Undocumented argument for R6 method `%s()` at %s:%i: `%s`",
-      method$name, method$file, method$line, m
-    )
-    warning(msg, call. = FALSE, immediate. = TRUE)
-  }
-
   dup <- unique(mnames[duplicated(mnames)])
   for (m in dup) {
     msg <- sprintf(
@@ -210,9 +202,42 @@ r6_method_params <- function(block, method) {
     warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
+  # Now add the missing ones from the class
+  fnames <- names(method$formals[[1]])
+  miss <- setdiff(fnames, mnames)
+  is_in_cls <- map_lgl(
+    block$tags,
+    function(t) {
+      !is.na(t$line) && t$line < block$line && t$tag == "param" &&
+        t$val$name %in% miss
+    }
+  )
+  par <- c(par, block$tags[is_in_cls])
+
+  # Check if anything is missing
+  nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
+  mnames <- str_trim(unlist(strsplit(nms, ",")))
+  miss <- setdiff(fnames, mnames)
+    for (m in miss) {
+    msg <- sprintf(
+      "Undocumented argument for R6 method `%s()` at %s:%i: `%s`",
+      method$name, method$file, method$line, m
+    )
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
   if (length(par) == 0) return()
 
+  # Order them according to formals
+  firstnames <- str_trim(
+    map_chr(strsplit(map_chr(par, c("val", "name")), ","), 1)
+  )
+  par <- par[order(match(firstnames, fnames))]
+
   val <- map_chr(par, c("val", "description"))
+  nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
+
+  # Ready to go
   c(
     "\\subsection{Arguments}{",
     "\\if{html}{\\out{<div class=\"arguments\">}}",

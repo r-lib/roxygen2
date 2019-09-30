@@ -37,6 +37,9 @@
     <loc>https://roxygen2.r-lib.org/reference/rd_roclet.html</loc>
   </url>
   <url>
+    <loc>https://roxygen2.r-lib.org/reference/rd_section.html</loc>
+  </url>
+  <url>
     <loc>https://roxygen2.r-lib.org/reference/roc_proc_text.html</loc>
   </url>
   <url>
@@ -50,6 +53,9 @@
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/roxy_tag.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/roxy_tag_rd.html</loc>
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/roxygen2-package.html</loc>

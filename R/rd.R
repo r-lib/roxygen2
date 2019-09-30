@@ -126,7 +126,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
 
   topic_add_usage(rd, block, old_usage = global_options$old_usage)
 
-  if (rd$has_field("description") && rd$has_field("reexport")) {
+  if (rd$has_section("description") && rd$has_section("reexport")) {
     roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
     return()
   }
@@ -142,12 +142,12 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
 
 topics_add_default_description <- function(topics) {
   for (topic in topics$topics) {
-    if (length(topic$get_field("description")) > 0)
+    if (length(topic$get_section("description")) > 0)
       next
 
     # rexport manually generates a own description, so don't need to
-    if (!topic$has_field("reexport")) {
-      topic$add_simple_field("description", topic$get_value("title"))
+    if (!topic$has_section("reexport")) {
+      topic$add_section(rd_section("description", topic$get_value("title")))
     }
   }
 

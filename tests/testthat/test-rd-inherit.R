@@ -26,7 +26,7 @@ test_that("\\links are transformed", {
     test_path("test-rd-inherit-link.txt"),
     {
       "\\link{} should include [digest]"
-      out$get_field("param")
+      out$get_section("param")
     }
   )
 })
@@ -488,7 +488,7 @@ test_that("can inherit all from single function", {
 
   verify_output(
     test_path("test-rd-inherit-dots.txt"),
-    out$get_field("param")
+    out$get_section("param")
   )
 })
 
@@ -515,7 +515,7 @@ test_that("does not produce multiple ... args", {
 
   verify_output(
     test_path("test-rd-inherit-dots-inherit.txt"),
-    out$get_field("param")
+    out$get_section("param")
   )
 })
 
@@ -542,7 +542,7 @@ test_that("can inherit dots from several functions", {
 
   verify_output(
     test_path("test-rd-inherit-dots-multi.txt"),
-    out$get_field("param")
+    out$get_section("param")
   )
 })
 

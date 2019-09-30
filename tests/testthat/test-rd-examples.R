@@ -36,7 +36,7 @@ test_that("@examples and @example interleave", {
     NULL")[[1]]
 
   verify_output(test_path("test-rd-examples-interleave.txt"), {
-    out$get_field("examples")
+    out$get_section("examples")
   })
 })
 

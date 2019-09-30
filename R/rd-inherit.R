@@ -150,8 +150,11 @@ inherit_params <- function(topic, topics) {
       next
     }
 
-    topic$add_simple_field("param",
-      setNames(inherited[matches[new_match]], missing[new_match])
+    topic$add_section(
+      rd_section(
+        "param",
+        setNames(inherited[matches[new_match]], missing[new_match])
+      )
     )
     missing <- missing[!new_match]
   }
@@ -197,7 +200,7 @@ inherit_dot_params <- function(topic, topics, env) {
     args, "\n",
     "  }"
   )
-  topic$add_simple_field("param", c("..." = rd))
+  topic$add_section(rd_section("param", c("..." = rd)))
 }
 
 
@@ -269,7 +272,7 @@ inherit_sections <- function(topic, topics) {
     if (!any(needed))
       next
 
-    topic$add_field(
+    topic$add_section(
       rd_section_section(sections$title[needed], sections$content[needed])
     )
   }
@@ -296,7 +299,7 @@ inherit_section <- function(topic, topics) {
       )
     }
 
-    topic$add_field(
+    topic$add_section(
       rd_section_section(new_section$title[selected], new_section$content[selected])
     )
   }
@@ -320,7 +323,7 @@ find_sections <- function(topic) {
 
 inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
   # Already has the field, so don't need to inherit
-  if (topic$has_field(rd_name))
+  if (topic$has_section(rd_name))
     return()
 
   # Otherwise, try each try function listed in inherits
@@ -334,7 +337,7 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
     if (is.null(inheritee))
       next
 
-    topic$add_simple_field(rd_name, inheritee)
+    topic$add_section(rd_section(rd_name, inheritee))
     return()
   }
 }

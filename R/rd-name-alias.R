@@ -32,6 +32,6 @@ topic_add_name_aliases <- function(topic, block, name) {
   }
   aliases <- unique(aliases)
 
-  topic$add_simple_field("name", name)
-  topic$add_simple_field("alias", aliases)
+  topic$add_section(rd_section("name", name))
+  topic$add_section(rd_section("alias", aliases))
 }

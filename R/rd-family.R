@@ -46,7 +46,7 @@ topics_process_family <- function(topics, env) {
 
     for (family in families) {
       related <- family_index[[family]]
-      topic$add_simple_field("concept", family)
+      topic$add_section(rd_section("concept", family))
 
       others <- setdiff(related, topic_name)
       if (length(others) < 1)
@@ -62,7 +62,7 @@ topics_process_family <- function(topics, env) {
       seealso <- topics_process_family_prefix(family)
       out <- strwrap(links, initial = seealso, width = 60, exdent = 2)
 
-      topic$add_simple_field("seealso", paste(out, collapse = "\n"))
+      topic$add_section(rd_section("seealso", paste(out, collapse = "\n")))
     }
   }
 

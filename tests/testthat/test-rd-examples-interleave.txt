@@ -1,4 +1,4 @@
-> out$get_field("examples")
+> out$get_section("examples")
 \examples{
 example <- 'example1'
 a <- 2

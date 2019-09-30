@@ -29,7 +29,7 @@ test_that("@section-s with identical titles are merged", {
   ")[[1]]
 
   expect_equal(
-    out$get_field("section"),
+    out$get_section("section"),
     rd_section_section(
       c("Haz dox", "TL", "RT"),
       c(" Here.\n\n\n  Got news.", " DR.", " FM.")
@@ -51,7 +51,7 @@ test_that("@section-s with different titles are kept as they are", {
   ")[[1]]
 
   expect_equal(
-    out$get_field("section"),
+    out$get_section("section"),
     rd_section_section(LETTERS[1:3], c(" 1", " 2", " 3"))
   )
 })

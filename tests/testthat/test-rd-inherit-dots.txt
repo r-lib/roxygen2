@@ -1,4 +1,4 @@
-> out$get_field("param")
+> out$get_section("param")
 \arguments{
 \item{...}{
   Arguments passed on to \code{\link[=foo]{foo}}

@@ -21,30 +21,30 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
 
   is_valid = function() {
     # Needs both title and name fields to generate valid Rd
-    all(self$has_field(c("title", "name")))
+    all(self$has_section(c("title", "name")))
   },
 
-  has_field = function(field_name) {
+  has_section = function(field_name) {
     field_name %in% names(self$fields)
   },
 
-  get_field = function(field_name) {
+  get_section = function(field_name) {
     self$fields[[field_name]]
   },
 
   get_value = function(field) {
-    self$get_field(field)$value
+    self$get_section(field)$value
   },
 
   get_rd = function(field) {
-    format(self$get_field(field))
+    format(self$get_section(field))
   },
   get_name = function() {
     self$get_value("name")
   },
 
   inherits_from = function(type) {
-    if (!self$has_field("inherit")) {
+    if (!self$has_section("inherit")) {
       return(character())
     }
 
@@ -60,7 +60,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   },
 
   inherits_section_from = function() {
-    if (!self$has_field("inherit_section")) {
+    if (!self$has_section("inherit_section")) {
       return(character())
     }
 
@@ -69,13 +69,13 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
 
   # Ensures that each type of name (as given by its name), only appears
   # once in self$fields
-  add_field = function(field, overwrite = FALSE) {
+  add_section = function(field, overwrite = FALSE) {
     if (is.null(field))
       return()
 
     field_name <- field$type
-    if (self$has_field(field_name) && !overwrite) {
-      field <- merge(self$get_field(field_name), field)
+    if (self$has_section(field_name) && !overwrite) {
+      field <- merge(self$get_section(field_name), field)
     }
 
     self$fields[[field_name]] <- field
@@ -83,19 +83,14 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     invisible()
   },
 
-  add_simple_field = function(name, values, overwrite = FALSE) {
-    self$add_field(rd_section(name, values), overwrite = overwrite)
-    invisible()
-  },
-
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$fields, overwrite = overwrite)
     } else if (inherits(x, "rd_section")) {
-      self$add_field(x, overwrite = overwrite)
+      self$add_section(x, overwrite = overwrite)
     } else if (is.list(x)) {
       for (field in x) {
-        self$add_field(field, overwrite = overwrite)
+        self$add_section(field, overwrite = overwrite)
       }
     } else if (is.null(x)) {
       # skip
@@ -104,8 +99,6 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     }
     invisible()
   }
-
-
 ))
 
 move_names_to_front <- function(x, to_front) {

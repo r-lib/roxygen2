@@ -340,7 +340,7 @@ test_that("markdown emphasis is ok", {
 So far so good. \\preformatted{ *these are not
   emphasised*. Or are they?
 }"
-  expect_equal(out1$get_field("description")[[2]], desc1)
+  expect_equal(out1$get_section("description")[[2]], desc1)
 })
 
 test_that("% is automatically escaped", {

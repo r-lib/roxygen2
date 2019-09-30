@@ -99,52 +99,51 @@ test_that("Line numbers are ok", {
   }
 
   text <-
-"#' @title
-#' Foo
-#'
-#' @description
-#' Description
-#'
-#' @details
-#' Details
-#'
-#' @param x xyz
-#' @export
-NULL"
+    "#' @title
+     #' Foo
+     #'
+     #' @description
+     #' Description
+     #'
+     #' @details
+     #' Details
+     #'
+     #' @param x xyz
+     #' @export
+     NULL"
   block <- roxygen2::parse_text(text)[[1]]
   ls <- c(title = 1, description = 4, details = 7, param = 10, export = 11)
   check_line_nums(block, ls)
 
   text <-
-"#' @title Foo
-#'
-#' @description Description
-#'
-#' @details Details
-#'
-#' @param x xy
-#' z
-#'
-#' @export
-NULL"
+    "#' @title Foo
+     #'
+     #' @description Description
+     #'
+     #' @details Details
+     #'
+     #' @param x xy
+     #' z
+     #'
+     #' @export
+     NULL"
   block <- roxygen2::parse_text(text)[[1]]
   ls <- c(title = 1, description = 3, details = 5, param = 7, export = 10)
   check_line_nums(block, ls)
 
   text <-
-"#' @title Foo
-#'
-#' @description Description
-#'
-#' @details Details
-# not - a - roxy - comment
-#' @param x xy
-#' z
-quote(neither - is -
-#' @export
-this)"
+    "#' @title Foo
+     #'
+     #' @description Description
+     #'
+     #' @details Details
+     # not - a - roxy - comment
+     #' @param x xy
+     #' z
+     quote(neither - is -
+     #' @export
+     this)"
   block <- roxygen2::parse_text(text)[[1]]
   ls <- c(title = 1, description = 3, details = 5, param = 7, export = 10)
   check_line_nums(block, ls)
-
 })

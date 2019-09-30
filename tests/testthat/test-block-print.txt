@@ -1,9 +1,9 @@
 > block
-<roxy_block> [<text>:6]
+<roxy_block> [<text>:5]
   $tag
     [line:  1] @title 'This is a title' {parsed}
-    [line:  5] @param 'x,y A number' {parsed}
-    [line:  6] @export '' {parsed}
+    [line:  3] @param 'x,y A number' {parsed}
+    [line:  4] @export '' {parsed}
     [????:???] @.formals '<generated>' {parsed}
     [????:???] @backref '<text>' {parsed}
   $call   f <- function(x, y) x + y

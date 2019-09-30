@@ -2,8 +2,8 @@
 # object ------------------------------------------------------------------
 
 test_that("has thoughtful print method", {
-  text <- "
-    #' This is a title
+  text <-
+    "#' This is a title
     #'
     #' @param x,y A number
     #' @export

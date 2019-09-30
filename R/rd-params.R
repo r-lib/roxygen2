@@ -59,7 +59,7 @@ topics_fix_params_order <- function(topics) {
 
     # Overwrite all param fields to fix order
     param <- topic$get_value("param")[required_order]
-    topic$add_section(rd_section("param", param), overwrite = TRUE)
+    topic$add(rd_section("param", param), overwrite = TRUE)
   }
 
   invisible()

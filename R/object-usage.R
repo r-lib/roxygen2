@@ -16,7 +16,7 @@ topic_add_usage <- function(topic, block, old_usage = FALSE) {
     # to enter \S4method etc.
     usage <- rd(tag$val)
   }
-  topic$add_section(rd_section("usage", usage))
+  topic$add(rd_section("usage", usage))
 }
 
 #' @export

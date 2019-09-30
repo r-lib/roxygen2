@@ -150,7 +150,7 @@ inherit_params <- function(topic, topics) {
       next
     }
 
-    topic$add_section(
+    topic$add(
       rd_section(
         "param",
         setNames(inherited[matches[new_match]], missing[new_match])
@@ -200,7 +200,7 @@ inherit_dot_params <- function(topic, topics, env) {
     args, "\n",
     "  }"
   )
-  topic$add_section(rd_section("param", c("..." = rd)))
+  topic$add(rd_section("param", c("..." = rd)))
 }
 
 
@@ -272,7 +272,7 @@ inherit_sections <- function(topic, topics) {
     if (!any(needed))
       next
 
-    topic$add_section(
+    topic$add(
       rd_section_section(sections$title[needed], sections$content[needed])
     )
   }
@@ -299,7 +299,7 @@ inherit_section <- function(topic, topics) {
       )
     }
 
-    topic$add_section(
+    topic$add(
       rd_section_section(new_section$title[selected], new_section$content[selected])
     )
   }
@@ -337,7 +337,7 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
     if (is.null(inheritee))
       next
 
-    topic$add_section(rd_section(rd_name, inheritee))
+    topic$add(rd_section(rd_name, inheritee))
     return()
   }
 }

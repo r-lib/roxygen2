@@ -67,22 +67,6 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     self$get_value("inherit_section")$source
   },
 
-  # Ensures that each type of name (as given by its name), only appears
-  # once in self$fields
-  add_section = function(field, overwrite = FALSE) {
-    if (is.null(field))
-      return()
-
-    field_name <- field$type
-    if (self$has_section(field_name) && !overwrite) {
-      field <- merge(self$get_section(field_name), field)
-    }
-
-    self$fields[[field_name]] <- field
-
-    invisible()
-  },
-
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$fields, overwrite = overwrite)
@@ -97,6 +81,22 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     } else {
       stop("Don't know how to add object of type ", class(x)[1])
     }
+    invisible()
+  },
+
+  # Ensures that each type of name (as given by its name), only appears
+  # once in self$fields - should only be used internally.
+  add_section = function(field, overwrite = FALSE) {
+    if (is.null(field))
+      return()
+
+    field_name <- field$type
+    if (self$has_section(field_name) && !overwrite) {
+      field <- merge(self$get_section(field_name), field)
+    }
+
+    self$fields[[field_name]] <- field
+
     invisible()
   }
 ))

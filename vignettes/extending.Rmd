@@ -94,7 +94,7 @@ This requires two steps:
     tag.
    
 1.  Define a `roxy_tag_rd()` method that describes how to convert the tag
-    into `.Rd` commands.
+    into `.Rd` commands. 
     
 To illustrate the basic idea we'll create a new `@tip` tag that will create a bulleted list of tips about how to use a function. 
 The idea is to take something like this: 
@@ -164,6 +164,11 @@ roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
 # Needed for vignette
 registerS3method("roxy_tag_rd", "roxy_tag_tip", roxy_tag_rd.roxy_tag_tip)
 ```
+
+This additional layer is needed because there can multiple tags of the same time in a single block, and multiple blocks can contribute to the same `.Rd` file.
+The job of the `rd_section` is to combine all the tags into a single top-level Rd section.
+Each tag generates an `rd_section` which is then combined with any previous section using `merge()`.
+The default `merge.rd_section()` just concatenates the values together (`rd_section(x$type, c(x$value, y$value))`); you can override this method if you need more sophisticated behaviour.
 
 We then need to define a `format()` method to converts this object into text for the `.Rd` file:
 

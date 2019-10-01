@@ -187,6 +187,43 @@ test_that("description block preserves whitespace", {
 })
 
 
+test_that("line numbers offset correctly", {
+  out <- parse_text(
+    "#' Title
+    #'
+    #' Line 3
+    #' Line 4
+    #' Line 5
+    #'
+    #' Line 7
+    #' Line 8
+    f <- function() {}
+    "
+  )[[1]]
+
+  expect_equal(out$tags[[1]]$line, 1)
+  expect_equal(out$tags[[2]]$line, 3)
+  expect_equal(out$tags[[3]]$line, 7)
+})
+
+test_that("even with explicit title/description", {
+  out <- parse_text(
+    "#' Line 1
+    #' Line 2
+    #' Line 3
+    #'
+    #' Line 5
+    #' Line 6
+    #' @title This is a title
+    f <- function() {}
+    "
+  )[[1]]
+
+  expect_equal(out$tags[[1]]$line, 1)
+  expect_equal(out$tags[[2]]$line, 5)
+  expect_equal(out$tags[[3]]$line, 7)
+})
+
 # evaluate ----------------------------------------------------------------
 
 test_that("evaluation occurs during parsing", {

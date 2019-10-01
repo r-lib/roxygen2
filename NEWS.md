@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@description` and `@detail` tags automatically generated from the leading
+  description block now have correct line numbers (#917).
+
 * `rd_section()` and `roxy_tag_rd()` are now exported so that you can more 
   easily extend `rd_roclet()` with your own tags that genereate output in
   `.Rd` files.

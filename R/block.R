@@ -236,13 +236,16 @@ parse_description <- function(tags) {
   tag_names <- tag_names[-1]
 
   paragraphs <- str_split(intro$val, fixed('\n\n'))[[1]]
+  lines <- str_count(paragraphs, "\n") + rep(2, length(paragraphs))
+  offsets <- c(0, cumsum(lines))
 
   # 1st paragraph = title (unless has @title)
   if ("title" %in% tag_names) {
     title <- NULL
   } else if (length(paragraphs) > 0) {
-    title <- roxy_tag("title", paragraphs[1], NULL, intro$file, intro$line)
+    title <- roxy_tag("title", paragraphs[1], NULL, intro$file, intro$line + offsets[[1]])
     paragraphs <- paragraphs[-1]
+    offsets <- offsets[-1]
   } else {
     title <- roxy_tag("title", "", NULL, intro$file, intro$line)
   }
@@ -251,8 +254,9 @@ parse_description <- function(tags) {
   if ("description" %in% tag_names || length(paragraphs) == 0) {
     description <- NULL
   } else if (length(paragraphs) > 0) {
-    description <- roxy_tag("description", paragraphs[1], NULL, intro$file, intro$line)
+    description <- roxy_tag("description", paragraphs[1], NULL, intro$file, intro$line + offsets[[1]])
     paragraphs <- paragraphs[-1]
+    offsets <- offsets[-1]
   }
 
   # Every thing else = details, combined with @details
@@ -267,7 +271,7 @@ parse_description <- function(tags) {
       details_para <- paste(c(details_para, explicit_details), collapse = "\n\n")
     }
 
-    details <- roxy_tag("details", details_para, NULL, intro$file, intro$line)
+    details <- roxy_tag("details", details_para, NULL, intro$file, intro$line + offsets[[1]])
   } else {
     details <- NULL
   }

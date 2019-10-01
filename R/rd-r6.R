@@ -275,12 +275,18 @@ r6_method_begin <- function(block, method) {
 }
 
 r6_method_usage <- function(block, method) {
-  usage <- format(function_usage("XXX", method$formals[[1]]))
   name <- paste0(block$object$alias, "$", r6_show_name(method$name))
-  c("\\if{html}{\\out{<div class=\"r\">}}",
-    paste0("\\preformatted{", sub("^XXX", name, usage)),
-    "}",
-    "\\if{html}{\\out{</div>}}"
+  fake <- paste(rep("X", nchar(name)), collapse = "")
+  usage <- format(function_usage(fake, method$formals[[1]]))
+  c(
+    "\\subsection{Usage}{",
+    paste0(
+      "\\if{html}{\\out{<div class=\"r\">}}",
+      "\\preformatted{", sub(paste0("^", fake), name, usage),
+      "}",
+      "\\if{html}{\\out{</div>}}"
+    ),
+    "}\n"
   )
 }
 
@@ -289,9 +295,12 @@ r6_method_details <- function(block, method) {
   # Add an empty line between @details tags, if there isn't one
   # there already
   txt <- map_chr(det, "val")
+  if (length(txt) == 0) return()
   c(
+    "\\subsection{Details}{",
     sub("\n?\n?$", "\n\n", head(txt, -1)),
-    utils::tail(txt, 1)
+    utils::tail(txt, 1),
+    "}\n"
   )
 }
 

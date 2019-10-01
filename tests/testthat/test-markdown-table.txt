@@ -1,0 +1,11 @@
+> cat(markdown(
++   "\n| x   | y   |\n| --- | --- |\n| 1   | 2   |\n\n| x   | y   |\n| :-: | --: |\n| 1   | 2   |\n    "))
+\tabular{ll}{
+   x \tab y \cr
+   1 \tab 2 \cr
+}
+\tabular{cr}{
+   x \tab y \cr
+   1 \tab 2 \cr
+}
+

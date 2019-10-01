@@ -170,6 +170,13 @@ parse_link <- function(destination, contents) {
 #'
 #' In another package: [and this one][devtools::document].
 #'
+#' This is a table:
+#'
+#' | __foo__ | __bar__ |
+#' | :-- | --: |
+#' | 1   | 2   |
+#' | 100 | 200 |
+#'
 #' @name markdown-test
 #' @keywords internal
 NULL

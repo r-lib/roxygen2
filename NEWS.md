@@ -1,5 +1,15 @@
 # roxygen2 (development version)
 
+* Markdown tables are now converted to the Rd `\tabular{}` command (#290).
+  roxygen2 supports the [GFM table syntax](https://github.github.com/gfm/#tables-extension-)
+  which looks like:
+  
+    ```md
+    | foo | bar |
+    | --- | --- |
+    | baz | bim |
+    ```
+
 * `global_options` is no longer passed to all roclet methods. Instead use 
   `roxy_meta_get()` to retrieve values stored in the options (#918).
 

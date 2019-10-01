@@ -189,6 +189,24 @@ test_that("nested lists are OK", {
 })
 
 
+# tables ------------------------------------------------------------------
+
+
+test_that("can convert table to Rd", {
+  verify_output(
+    test_path("test-markdown-table.txt"),
+    cat(markdown("
+| x   | y   |
+| --- | --- |
+| 1   | 2   |
+
+| x   | y   |
+| :-: | --: |
+| 1   | 2   |
+    "))
+  )
+})
+
 # inline formatting -------------------------------------------------------
 
 test_that("emphasis works", {

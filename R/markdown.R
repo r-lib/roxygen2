@@ -12,7 +12,7 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 }
 
 md_to_mdxml <- function(x) {
-  md <- commonmark::markdown_xml(x, hardbreaks = TRUE)
+  md <- commonmark::markdown_xml(x, hardbreaks = TRUE, extensions = "table")
   xml2::read_xml(md)
 }
 
@@ -53,6 +53,7 @@ mdxml_node_to_rd <- function(xml, state) {
     code = mdxml_code(xml, state),
     code_block = paste0("\\preformatted{", escape_verb(xml_text(xml)), "}"),
 
+    table = mdxml_table(xml, state),
     list = mdxml_list(xml, state),
     item = mdxml_item(xml, state),
     link = mdxml_link(xml),
@@ -103,6 +104,20 @@ escape_verb <- function(x) {
   x <- gsub("{", "\\{", x, fixed = TRUE)
   x <- gsub("}", "\\}", x, fixed = TRUE)
   x
+}
+
+mdxml_table <- function(xml, state) {
+  head <- xml_children(xml)[[1]]
+  align <- substr(xml_attr(xml_children(head), "align", default = "left"), 1, 1)
+
+  rows <- xml_children(xml)
+  rows <- map(rows, xml_children)
+  rows_rd <- map(rows, ~ map_chr(xml_children(.x), mdxml_node_to_rd, state = state))
+  rows_rd <- map_chr(rows_rd, paste0, collapse = " \\tab ")
+
+  paste0("\\tabular{", paste(align, collapse = ""), "}{\n",
+    paste("  ", rows_rd, "\\cr\n", collapse = ""),
+  "}\n")
 }
 
 # A list, either bulleted or numbered

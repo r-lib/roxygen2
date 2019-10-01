@@ -151,6 +151,24 @@ Nested lists are also supported.
 
 Note that you do not have leave an empty line before the list. This is different from some markdown parsers.
 
+## Tables
+
+Use [GFM table formatting](https://github.github.com/gfm/#tables-extension-):
+
+```r
+| foo | bar |
+| --- | --- |
+| baz | bim |
+```
+
+By default, columns are left-aligned. Use colons to generate right and center aligned columns:
+
+```r
+| left | center | right |
+| :--- | :----: | ----: |
+| 1    | 2      | 3     |
+```
+
 ## Links
 
 Markdown hyperlinks work as usual:

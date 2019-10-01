@@ -16,5 +16,11 @@ Link with link text: \link[=roxygenize]{this great function},
 \code{\link[=roxygenize]{roxygenize}}, or \link[=roxygenize]{that great function}.
 
 In another package: \link[devtools:document]{and this one}.
+
+This is a table:\tabular{lr}{
+   \strong{foo} \tab \strong{bar} \cr
+   1 \tab 2 \cr
+   100 \tab 200 \cr
+}
 }
 \keyword{internal}

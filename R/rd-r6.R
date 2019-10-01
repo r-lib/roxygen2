@@ -55,8 +55,11 @@ topic_add_r6_methods <- function(rd, block, env) {
   rd$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
 
   # Dump all method examples at the end of the examples block
-  ex_txt <- paste0(r6_all_examples(block, methods), collapse = "\n")
-  rd$add(rd_section("examples", ex_txt), overwrite = FALSE)
+  ex_lines <- r6_all_examples(block, methods)
+  if (length(ex_lines) > 0) {
+    ex_txt <- paste0(r6_all_examples(block, methods), collapse = "\n")
+    rd$add(rd_section("examples", ex_txt), overwrite = FALSE)
+  }
 }
 
 r6_superclass <- function(block, r6data, env) {

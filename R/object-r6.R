@@ -9,7 +9,8 @@ object_defaults.r6class <- function(x) {
 extract_r6_data <- function(x) {
   self <- rbind(
     extract_r6_methods(x),
-    extract_r6_fields(x)
+    extract_r6_fields(x),
+    extract_r6_bindings(x)
   )
   list(
     self = self,
@@ -58,6 +59,18 @@ extract_r6_fields <- function(x) {
     file = rep(NA, length(field_nms)),
     line = rep(NA, length(field_nms)),
     formals = I(replicate(length(field_nms), NULL))
+  )
+}
+
+extract_r6_bindings <- function(x) {
+  bind_nms <- names(x$active)
+  data.frame(
+    stringsAsFactors = FALSE,
+    type = if (length(bind_nms)) "active" else character(),
+    name = as.character(bind_nms),
+    file = rep(NA, length(bind_nms)),
+    line = rep(NA, length(bind_nms)),
+    formals = I(replicate(length(bind_nms), NULL))
   )
 }
 

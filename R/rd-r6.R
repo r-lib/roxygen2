@@ -50,6 +50,7 @@ topic_add_r6_methods <- function(rd, block, env) {
   rd_lines <- c(
     r6_superclass(block, r6data, env),
     r6_fields(block, r6data),
+    r6_active_bindings(block, r6data),
     r6_methods(block, r6data, methods)
   )
 
@@ -81,8 +82,13 @@ r6_superclass <- function(block, r6data, env) {
 r6_fields <- function(block, r6data) {
   self <- r6data$self
   fields <- self$name[self$type == "field"]
+  active <- self$name[self$type == "active"]
 
-  tags <- purrr::keep(block$tags, function(t) t$tag == "field")
+  tags <- purrr::keep(
+    block$tags,
+    function(t) t$tag == "field" && ! t$val$name %in% active
+  )
+
   labels <- gsub(",", ", ", map_chr(tags, c("val", "name")))
   docd <- str_trim(unlist(strsplit(labels, ",")))
 
@@ -113,7 +119,7 @@ r6_fields <- function(block, r6data) {
       "Unknown R6 field `%s` for block at %s:%i",
       f, block$file, block$line
     )
-    warning(msg, call. = FALSE, immmediate. = TRUE)
+    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   if (length(fields) == 0) return()
@@ -123,6 +129,54 @@ r6_fields <- function(block, r6data) {
   vals <- map_chr(tags, c("val", "description"))
   c("\\section{Public fields}{",
     "\\if{html}{\\out{<div class=\"r6-fields\">}}",
+    "\\tabular{rl}{",
+    paste0(labels, "\\tab ", vals, "\\cr ", collapse = "\n\n"),
+    "}",
+    "\\if{html}{\\out{</div>}}",
+    "}"
+  )
+}
+
+r6_active_bindings <- function(block, r6data) {
+  self <- r6data$self
+  fields <- self$name[self$type == "field"]
+  active <- self$name[self$type == "active"]
+
+  tags <- purrr::keep(
+    block$tags,
+    function(t) t$tag == "field" && ! t$val$name %in% fields
+  )
+
+  labels <- gsub(",", ", ", map_chr(tags, c("val", "name")))
+  docd <- str_trim(unlist(strsplit(labels, ",")))
+
+  # Check for missing bindings
+  miss <- setdiff(active, docd)
+  for (f in miss) {
+    msg <- sprintf(
+      "Undocumented R6 active binding for block at %s:%i: `%s`",
+      block$file, block$line, f
+    )
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
+  # Check for duplicate bindings
+  dup <- unique(docd[duplicated(docd)])
+  for (f in dup) {
+    msg <- sprintf(
+      "R6 active binding `%s` documented multiple times for block at %s:%i",
+      f, block$file, block$line
+    )
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
+  if (length(active) == 0) return()
+
+  # We keep the order of the documentation
+
+  vals <- map_chr(tags, c("val", "description"))
+  c("\\section{Active bindings}{",
+    "\\if{html}{\\out{<div class=\"r6-active-bindings\">}}",
     "\\tabular{rl}{",
     paste0(labels, "\\tab ", vals, "\\cr ", collapse = "\n\n"),
     "}",

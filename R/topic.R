@@ -1,7 +1,30 @@
-# An RoxyTopic is an ordered collection of unique rd_sections
+
+#' A `RoxyTopic` is an ordered collection of unique rd_sections
+#'
+#' @description
+#' A `RoxyTopic` object corresponds to a generated `.Rd` file.
+#'
+#' @param type Section type, a character scalar.
+#' @param overwrite Whether to overwrite an existing section. If `FALSE`
+#' then the two sections will be merged.
+#'
+#' @keywords internal
+
 RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
+
+  #' @field sections Named list of sections. Each item must be an
+  #' [rd_section()] object.
   sections = list(),
+
+  #' @field filename Path to the `.Rd` file to generate.
   filename = "",
+
+  #' @description Format the `.Rd` file. It considers the sections in
+  #' particular order, even though Rd tools will reoder them again.
+  #'
+  #' @param ... Passed to the `format()` methods of the [rd_section()]
+  #' objects, the sections.
+  #' @return Character string.
 
   format = function(...) {
     # This has to happen here to get a better order when combining topics
@@ -19,30 +42,55 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     )
   },
 
+  #' @description Check if an `.Rd` file is valid
+  #' @return Logical flag, `TRUE` for valid `.Rd` files
+
   is_valid = function() {
     # Needs both title and name sections to generate valid Rd
     all(self$has_section(c("title", "name")))
   },
 
+  #' @description Check if an `.Rd` file has a certain section.
+  #' @return Logical flag.
+
   has_section = function(type) {
     type %in% names(self$sections)
   },
+
+  #' @description Query a section.
+  #' @return The [rd_section] object representing the section, or `NULL`
+  #' if the topic has no such section.
 
   get_section = function(type) {
     self$sections[[type]]
   },
 
+  #' @description Query the value of a section. This is the value of
+  #' the [rd_section] object.
+  #' @return Value.
+
   get_value = function(type) {
     self$get_section(type)$value
   },
 
+  #' @description Get the Rd code of a section.
+  #' @return Character vector, one element per line.
+
   get_rd = function(type) {
     format(self$get_section(type))
   },
+
+  #' @description Get the value of the `name` section. This is the name
+  #' of the Rd topic.
+  #' @return Character scalar.
+
   get_name = function() {
     self$get_value("name")
   },
 
+  #' @description Query the topics this topic inherits `type` from.
+  #' @return A character vector of topic names.
+  
   inherits_from = function(type) {
     if (!self$has_section("inherit")) {
       return(character())
@@ -59,6 +107,9 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     sources
   },
 
+  #' @description Query the topix this topic inherits sections from.
+  #' @return A character vector of topic names.
+  
   inherits_section_from = function() {
     if (!self$has_section("inherit_section")) {
       return(character())
@@ -67,6 +118,12 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     self$get_value("inherit_section")$source
   },
 
+  #' @description Add one or more sections to the topic.
+  #' @param x Section(s) to add. It may be
+  #' another `RoxyTopic` object, all of its sections will be added;
+  #' or an [rd_section] object;
+  #' or a list of [rd_section] objects to add.
+  
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$sections, overwrite = overwrite)
@@ -84,8 +141,12 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     invisible()
   },
 
-  # Ensures that each type of name (as given by its name), only appears
-  # once in self$sections - for internal use only.
+  #' @description Add a section.
+  #' @details 
+  #' Ensures that each type of name (as given by its name), only appears
+  #' once in `self$sections`. This method if for internal use only.
+  #' @param section [rd_section] object to add.
+  
   add_section = function(section, overwrite = FALSE) {
     type <- section$type
     if (self$has_section(type) && !overwrite) {

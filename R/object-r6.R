@@ -7,8 +7,12 @@ object_defaults.r6class <- function(x) {
 }
 
 extract_r6_data <- function(x) {
+  self <- rbind(
+    extract_r6_methods(x),
+    extract_r6_fields(x)
+  )
   list(
-    self = extract_r6_methods(x),
+    self = self,
     super = extract_r6_super_data(x)
   )
 }
@@ -42,6 +46,18 @@ extract_r6_methods <- function(x) {
     file = method_fnm,
     line = unname(method_loc),
     formals = I(method_formals)
+  )
+}
+
+extract_r6_fields <- function(x) {
+  field_nms <- names(x$public_fields)
+  data.frame(
+    stringsAsFactors = FALSE,
+    type = rep("field", length(field_nms)),
+    name = as.character(field_nms),
+    file = rep(NA, length(field_nms)),
+    line = rep(NA, length(field_nms)),
+    formals = I(replicate(length(field_nms), NULL))
   )
 }
 

@@ -1,10 +1,10 @@
 
 topic_add_r6_methods <- function(rd, block, env) {
-  # We get the @param, @examples, and @return tags that belong to
-  # the methods. We match them to methods.
+  # We get the @field, @param, @examples, and @return tags that belong
+  # to the methods. We match them to methods.
   r6data <- block_get_tag_value(block, ".r6data")
-  methods <- r6data$self
-  methods <- methods[methods$type == "method", ]
+  self <- r6data$self
+  methods <- self[self$type == "method", ]
   methods <- methods[order(methods$file, methods$line), ]
   methods$tags <- replicate(nrow(methods), list(), simplify = FALSE)
 
@@ -41,15 +41,15 @@ topic_add_r6_methods <- function(rd, block, env) {
   # Now do the main tags first. We leave out the param tags, those are
   # for the methods
   for (tag in block$tags) {
-    if (tag$tag != "param") {
+    if (! tag$tag %in% c("param", "field")) {
       rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
     }
   }
 
   # We need to add the whole thing as a big section.
-
   rd_lines <- c(
     r6_superclass(block, r6data, env),
+    r6_fields(block, r6data),
     r6_methods(block, r6data, methods)
   )
 
@@ -76,6 +76,59 @@ r6_superclass <- function(block, r6data, env) {
   push("}")
 
   lines
+}
+
+r6_fields <- function(block, r6data) {
+  self <- r6data$self
+  fields <- self$name[self$type == "field"]
+
+  tags <- purrr::keep(block$tags, function(t) t$tag == "field")
+  labels <- gsub(",", ", ", map_chr(tags, c("val", "name")))
+  docd <- str_trim(unlist(strsplit(labels, ",")))
+
+  # Check for missing fields
+  miss <- setdiff(fields, docd)
+  for (f in miss) {
+    msg <- sprintf(
+      "Undocumented R6 field for block at %s:%i: `%s`",
+      block$file, block$line, f
+    )
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
+  # Check for duplicate fields
+  dup <- unique(docd[duplicated(docd)])
+  for (f in dup) {
+    msg <- sprintf(
+      "R6 field `%s` documented multiple times for block at %s:%i",
+      f, block$file, block$line
+    )
+    warning(msg, call. = FALSE, immediate. = TRUE)
+  }
+
+  # Check for extra fields
+  xtra <- setdiff(docd, fields)
+  for (f in xtra) {
+    msg <- sprintf(
+      "Unknown R6 field `%s` for block at %s:%i",
+      f, block$file, block$line
+    )
+    warning(msg, call. = FALSE, immmediate. = TRUE)
+  }
+
+  if (length(fields) == 0) return()
+
+  # We keep the order of the documentation
+
+  vals <- map_chr(tags, c("val", "description"))
+  c("\\section{Public fields}{",
+    "\\if{html}{\\out{<div class=\"r6-fields\">}}",
+    "\\tabular{rl}{",
+    paste0(labels, "\\tab ", vals, "\\cr ", collapse = "\n\n"),
+    "}",
+    "\\if{html}{\\out{</div>}}",
+    "}"
+  )
 }
 
 r6_methods <- function(block, r6data, methods) {

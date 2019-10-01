@@ -1,14 +1,12 @@
 
 topic_add_r6_methods <- function(rd, block, env) {
-  # We get the @field, @param, @examples, and @return tags that belong
-  # to the methods. We match them to methods.
   r6data <- block_get_tag_value(block, ".r6data")
   self <- r6data$self
   methods <- self[self$type == "method", ]
   methods <- methods[order(methods$file, methods$line), ]
   methods$tags <- replicate(nrow(methods), list(), simplify = FALSE)
 
-  r6_tags <- c("details", "param", "return", "examples")
+  r6_tags <- c("description", "details", "param", "return", "examples")
 
   del <- integer()
   for (i in seq_along(block$tags)) {
@@ -197,9 +195,10 @@ r6_methods <- function(block, r6data, methods) {
   push(r6_inherited_method_list(block, r6data))
   for (i in seq_len(nrow(methods))) {
     push(r6_method_begin(block, methods[i,]))
+    push(r6_method_description(block, methods[i,]))
     push(r6_method_usage(block, methods[i,]))
-    push(r6_method_details(block, methods[i,]))
     push(r6_method_params(block, methods[i,]))
+    push(r6_method_details(block, methods[i,]))
     push(r6_method_return(block, methods[i,]))
     push(r6_method_examples(block, methods[i,]))
     push(r6_method_end(block, methods[i,]))
@@ -271,6 +270,17 @@ r6_method_begin <- function(block, method) {
     "\\if{html}{\\out{<hr>}}",
     paste0("\\if{html}{\\out{<a id=\"method-", nm, "\"></a>}}"),
     paste0("\\subsection{Method \\code{", nm, "()}}{")
+  )
+}
+
+r6_method_description <- function(block, method) {
+  det <- purrr::keep(method$tags[[1]], function(t) t$tag == "description")
+  # Add an empty line between @description tags, if there isn't one
+  # there already
+  txt <- map_chr(det, "val")
+  c(
+    sub("\n?\n?$", "\n\n", head(txt, -1)),
+    utils::tail(txt, 1)
   )
 }
 

@@ -17,7 +17,7 @@ merge.rd_section_reexport <- function(x, y, ...) {
 }
 #' @export
 format.rd_section_reexport <- function(x, ...) {
-  pkgs <- split(x$fun, x$pkg)
+  pkgs <- split(x$value$fun, x$value$pkg)
   pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
     links <- paste0("\\code{\\link[", pkg, "]{", escape(sort(funs)), "}}",
       collapse = ", ")

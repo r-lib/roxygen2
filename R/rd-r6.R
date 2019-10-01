@@ -53,6 +53,10 @@ topic_add_r6_methods <- function(rd, block, env) {
   )
 
   rd$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
+
+  # Dump all method examples at the end of the examples block
+  ex_txt <- paste0(r6_all_examples(block, methods), collapse = "\n")
+  rd$add(rd_section("examples", ex_txt), overwrite = FALSE)
 }
 
 r6_superclass <- function(block, r6data, env) {
@@ -411,4 +415,20 @@ r6_method_end <- function(block, method) {
   c(
     "}"
   )
+}
+
+r6_all_examples <- function(block, methods) {
+  unlist(lapply(
+    seq_len(nrow(methods)),
+    function(i) {
+      exa <- purrr::keep(methods$tags[[i]], function(t) t$tag == "examples")
+      if (length(exa) == 0) return()
+      name <- paste0(block$object$alias, "$", r6_show_name(methods$name[i]))
+      c(
+        "\n## ------------------------------------------------",
+        paste0("## Method `", name, "`"),
+        "## ------------------------------------------------\n",
+        paste(map_chr(exa, "val"), collapse = "\n")
+      )
+  }))
 }

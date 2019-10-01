@@ -228,14 +228,26 @@
 <p>Nested lists are also supported.</p>
 <p>Note that you do not have leave an empty line before the list. This is different from some markdown parsers.</p>
 </div>
+<div id="tables" class="section level2">
+<h2 class="hasAnchor">
+<a href="#tables" class="anchor"></a>Tables</h2>
+<p>Use <a href="https://github.github.com/gfm/#tables-extension-">GFM table formatting</a>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="op">|</span><span class="st"> </span>foo <span class="op">|</span><span class="st"> </span>bar <span class="op">|</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="er">|</span><span class="st"> </span>baz <span class="op">|</span><span class="st"> </span>bim <span class="op">|</span></a></code></pre></div>
+<p>By default, columns are left-aligned. Use colons to generate right and center aligned columns:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="op">|</span><span class="st"> </span>left <span class="op">|</span><span class="st"> </span>center <span class="op">|</span><span class="st"> </span>right <span class="op">|</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="er">|</span><span class="st"> </span><span class="er">:</span><span class="op">---</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="er">:</span><span class="op">----</span><span class="er">:</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="op">----</span><span class="er">:</span><span class="st"> </span><span class="er">|</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="er">|</span><span class="st"> </span><span class="dv">1</span>    <span class="op">|</span><span class="st"> </span><span class="dv">2</span>      <span class="op">|</span><span class="st"> </span><span class="dv">3</span>     <span class="op">|</span></a></code></pre></div>
+</div>
 <div id="links" class="section level2">
 <h2 class="hasAnchor">
 <a href="#links" class="anchor"></a>Links</h2>
 <p>Markdown hyperlinks work as usual:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">#' See more about the markdown markup at the</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#' [Commonmark web site](http://commonmark.org/help)</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">#' See more about the markdown markup at the</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#' [Commonmark web site](http://commonmark.org/help)</span></a></code></pre></div>
 <p>URLs inside angle brackets are also automatically converted to hyperlinks:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#' The main R web site is at &lt;https://r-project.org&gt;.</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co">#' The main R web site is at &lt;https://r-project.org&gt;.</span></a></code></pre></div>
 <p>Markdown notation can also be used to create links to other help topics. There are two basic forms:</p>
 <ul>
 <li>
@@ -394,8 +406,8 @@ or in <code>pkg</code>
 <h2 class="hasAnchor">
 <a href="#images" class="anchor"></a>Images</h2>
 <p>Markdown syntax for inline images works. The image files must be in the <code>man/figures</code> directory:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">#' Here is an example plot:</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#' ![](example-plot.jpg "Example Plot Title")</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">#' Here is an example plot:</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#' ![](example-plot.jpg "Example Plot Title")</span></a></code></pre></div>
 </div>
 </div>
 <div id="roxygen-and-rd-tags-not-parsed-as-markdown" class="section level1">
@@ -421,8 +433,8 @@ or in <code>pkg</code>
 <h2 class="hasAnchor">
 <a href="#spurious-lists" class="anchor"></a>Spurious lists</h2>
 <p>The Commonmark parser does not require an empty line before lists, and this might lead to unintended lists if a line starts with a number followed by a dot, or with an asterisk followed by whitespace:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co">#' You can see more about this topic in the book cited below, on page</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#' You can see more about this topic in the book cited below, on page</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></a></code></pre></div>
 </div>
 <div id="links-to-operators" class="section level2">
 <h2 class="hasAnchor">
@@ -468,24 +480,24 @@ or in <code>pkg</code>
 <ul>
 <li>
 <p>Ordered (numbered) lists:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">#' \enumerate{</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co">#' \enumerate{</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
 </li>
 <li>
 <p>Unordered (bulleted) lists</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#' \itemize{</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co">#' \itemize{</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
 </li>
 <li>
 <p>Definition (named) lists</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co">#' \describe{</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#'   \item{One}{First item}</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#'   \item{Two}{Second item}</span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">#' \describe{</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#'   \item{One}{First item}</span></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co">#'   \item{Two}{Second item}</span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
 </li>
 </ul>
 </div>
@@ -498,39 +510,39 @@ or in <code>pkg</code>
 <li><p><code>\deqn{a + b}</code>: display (block) equation</p></li>
 </ul>
 </div>
-<div id="tables" class="section level3">
+<div id="tables-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#tables" class="anchor"></a>Tables</h3>
+<a href="#tables-1" class="anchor"></a>Tables</h3>
 <p>Tables are created with <code>\tabular{}</code>. It has two arguments:</p>
 <ol style="list-style-type: decimal">
 <li><p>Column alignment, specified by letter for each column (<code>l</code> = left, <code>r</code> = right, <code>c</code> = centre.)</p></li>
 <li><p>Table contents, with columns separated by <code>\tab</code> and rows by <code>\cr</code>.</p></li>
 </ol>
 <p>The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with <code>#'</code> for pasting directly into the documentation.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">tabular &lt;-<span class="st"> </span><span class="cf">function</span>(df, ...) {</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span>(df))</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">  align &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(x)) <span class="st">"r"</span> <span class="cf">else</span> <span class="st">"l"</span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">  col_align &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span>(df, align)</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">  cols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(df, format, ...)</a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">  contents &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">"paste"</span>,</a>
-<a class="sourceLine" id="cb18-9" data-line-number="9">    <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(cols, <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">sep =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>, <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>)))</a>
-<a class="sourceLine" id="cb18-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb18-11" data-line-number="11">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"#' </span><span class="ch">\\</span><span class="st">tabular{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(col_align, <span class="dt">collapse =</span> <span class="st">""</span>), <span class="st">"}{</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
-<a class="sourceLine" id="cb18-12" data-line-number="12">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">strong{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(df), <span class="st">"}"</span>, <span class="dt">sep =</span> <span class="st">""</span>, <span class="dt">collapse =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>), <span class="st">" </span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
-<a class="sourceLine" id="cb18-13" data-line-number="13">    contents, <span class="st">"</span><span class="ch">\n</span><span class="st">#' }</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">sep =</span> <span class="st">""</span>)</a>
-<a class="sourceLine" id="cb18-14" data-line-number="14">}</a>
-<a class="sourceLine" id="cb18-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw">tabular</span>(mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]))</a>
-<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt; #' \tabular{rrrrr}{</span></a>
-<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span></a>
-<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
-<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
-<a class="sourceLine" id="cb18-21" data-line-number="21"><span class="co">#&gt; #'   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span></a>
-<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span></a>
-<a class="sourceLine" id="cb18-23" data-line-number="23"><span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span></a>
-<a class="sourceLine" id="cb18-24" data-line-number="24"><span class="co">#&gt; #' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">tabular &lt;-<span class="st"> </span><span class="cf">function</span>(df, ...) {</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span>(df))</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">  align &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(x)) <span class="st">"r"</span> <span class="cf">else</span> <span class="st">"l"</span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">  col_align &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span>(df, align)</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7">  cols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(df, format, ...)</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8">  contents &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">"paste"</span>,</a>
+<a class="sourceLine" id="cb20-9" data-line-number="9">    <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(cols, <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">sep =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>, <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>)))</a>
+<a class="sourceLine" id="cb20-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb20-11" data-line-number="11">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"#' </span><span class="ch">\\</span><span class="st">tabular{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(col_align, <span class="dt">collapse =</span> <span class="st">""</span>), <span class="st">"}{</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
+<a class="sourceLine" id="cb20-12" data-line-number="12">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">strong{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(df), <span class="st">"}"</span>, <span class="dt">sep =</span> <span class="st">""</span>, <span class="dt">collapse =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>), <span class="st">" </span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
+<a class="sourceLine" id="cb20-13" data-line-number="13">    contents, <span class="st">"</span><span class="ch">\n</span><span class="st">#' }</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">sep =</span> <span class="st">""</span>)</a>
+<a class="sourceLine" id="cb20-14" data-line-number="14">}</a>
+<a class="sourceLine" id="cb20-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb20-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw">tabular</span>(mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]))</a>
+<a class="sourceLine" id="cb20-17" data-line-number="17"><span class="co">#&gt; #' \tabular{rrrrr}{</span></a>
+<a class="sourceLine" id="cb20-18" data-line-number="18"><span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span></a>
+<a class="sourceLine" id="cb20-19" data-line-number="19"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
+<a class="sourceLine" id="cb20-20" data-line-number="20"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
+<a class="sourceLine" id="cb20-21" data-line-number="21"><span class="co">#&gt; #'   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span></a>
+<a class="sourceLine" id="cb20-22" data-line-number="22"><span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span></a>
+<a class="sourceLine" id="cb20-23" data-line-number="23"><span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span></a>
+<a class="sourceLine" id="cb20-24" data-line-number="24"><span class="co">#&gt; #' }</span></a></code></pre></div>
 </div>
 </div>
 </div>
@@ -551,6 +563,7 @@ or in <code>pkg</code>
       <li><a href="#emphasis">Emphasis</a></li>
       <li><a href="#code">Code</a></li>
       <li><a href="#lists">Lists</a></li>
+      <li><a href="#tables">Tables</a></li>
       <li><a href="#links">Links</a></li>
       <li><a href="#images">Images</a></li>
       </ul>

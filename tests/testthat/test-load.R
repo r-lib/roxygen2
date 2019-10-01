@@ -28,7 +28,7 @@ test_that("look up string", {
 })
 
 test_that("NULL uses option", {
-  expect_equal(find_load_strategy(NULL, list(load = "installed")), load_installed)
+  expect_equal(find_load_strategy(NULL, "installed"), load_installed)
 })
 
 test_that("informative errors for bad inputs", {

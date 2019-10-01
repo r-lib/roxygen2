@@ -2,9 +2,12 @@
 % Please edit documentation in R/options.R
 \name{load_options}
 \alias{load_options}
+\alias{roxy_meta_get}
 \title{Load roxygen2 options}
 \usage{
 load_options(base_path = ".")
+
+roxy_meta_get(key = NULL, default = NULL)
 }
 \arguments{
 \item{base_path}{Path to package.}
@@ -12,9 +15,10 @@ load_options(base_path = ".")
 \description{
 Options can be stored in the \code{Roxygen} field of the \code{DESCRIPTION}, or
 in \code{man/roxygen/meta.R}. In either case, the code is parsed and evaluated
-in a child of the base environment.
+in a child of the base environment. Call \code{roxy_meta_get()} to access
+current option values from within tag and roclet methods.
 }
 \details{
-Options in \code{man/roxygen/meta.R} override those present \code{DESCRIPTION}.
+Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION}.
 }
 \keyword{internal}

@@ -15,28 +15,18 @@
 #'    You can also set to `NULL` if you only want to get the tokenized code
 #'    blocks only. This suppresses evaluation of `@eval` tags, and will not
 #'    find the code object associated with each block.
-#' @param global_options A list of global options:
-#'  * `markdown`` Logical value indicating whether to parse Markdown tags.
 #' @return A list of roxy_block objects
 #' @export
 #' @keywords internal
-parse_package <- function(path = ".",
-                          env = env_package(path),
-                          global_options = list()
-                          ) {
+parse_package <- function(path = ".", env = env_package(path)) {
 
   files <- package_files(path)
-  list_of_blocks <- lapply(files, tokenize_file,
-    global_options = global_options
-  )
+  list_of_blocks <- lapply(files, tokenize_file)
 
   blocks <- purrr::flatten(list_of_blocks)
 
   if (!is.null(env)) {
-    blocks <- lapply(blocks, block_set_env,
-      env = env,
-      global_options = global_options
-    )
+    blocks <- lapply(blocks, block_set_env, env = env)
   }
 
   blocks <- order_blocks(blocks)
@@ -47,19 +37,12 @@ parse_package <- function(path = ".",
 #' @rdname parse_package
 parse_file <- function(file,
                        env = env_file(file),
-                       global_options = list(),
                        srcref_path = NULL) {
 
-  blocks <- tokenize_file(file,
-    global_options = global_options,
-    srcref_path = srcref_path
-  )
+  blocks <- tokenize_file(file, srcref_path = srcref_path)
 
   if (!is.null(env)) {
-    blocks <- lapply(blocks, block_set_env,
-      env = env,
-      global_options = global_options
-    )
+    blocks <- lapply(blocks, block_set_env, env = env)
   }
 
   blocks <- order_blocks(blocks)
@@ -68,20 +51,13 @@ parse_file <- function(file,
 
 #' @export
 #' @rdname parse_package
-parse_text <- function(text,
-                       env = env_file(file),
-                       global_options = list()) {
+parse_text <- function(text, env = env_file(file)) {
 
   file <- tempfile()
   write_lines(text, file)
   on.exit(unlink(file))
 
-  blocks <- parse_file(
-    file,
-    env = env,
-    global_options = global_options,
-    srcref_path = "<text>"
-  )
+  blocks <- parse_file(file, env = env, srcref_path = "<text>")
   blocks <- order_blocks(blocks)
   blocks
 }

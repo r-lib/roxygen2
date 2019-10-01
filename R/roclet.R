@@ -28,7 +28,6 @@
 #' @param blocks A list of [roxy_block] objects.
 #' @param results Value returned from your `roclet_process()` method.
 #' @param base_path Path to root of source package.
-#' @param global_options List of roxygen2 options.
 #' @param env Package environment.
 #' @keywords internal
 #' @name roclet
@@ -42,18 +41,18 @@ roclet <- function(subclass, ...) {
 
 #' @export
 #' @rdname roclet
-roclet_preprocess <- function(x, blocks, base_path, global_options = list()) {
+roclet_preprocess <- function(x, blocks, base_path) {
   UseMethod("roclet_preprocess")
 }
 
 #' @export
-roclet_preprocess.default <- function(x, blocks, base_path, global_options = list()) {
+roclet_preprocess.default <- function(x, blocks, base_path) {
   x
 }
 
 #' @export
 #' @rdname roclet
-roclet_process <- function(x, blocks, env, base_path, global_options = list()) {
+roclet_process <- function(x, blocks, env, base_path) {
   UseMethod("roclet_process")
 }
 
@@ -123,12 +122,9 @@ is.roclet <- function(x) inherits(x, "roclet")
 #'
 #' @param roclet Name of roclet to use for processing.
 #' @param input Source string
-#' @param global_options List of global options
 #' @export
 #' @keywords internal
-roc_proc_text <- function(roclet,
-                          input,
-                          global_options = list()) {
+roc_proc_text <- function(roclet, input) {
   stopifnot(is.roclet(roclet))
 
   file <- tempfile()
@@ -136,6 +132,6 @@ roc_proc_text <- function(roclet,
   on.exit(unlink(file))
 
   env <- env_file(file)
-  blocks <- parse_text(input, env = env, global_options)
-  roclet_process(roclet, blocks, env = env, base_path = ".", global_options)
+  blocks <- parse_text(input, env = env)
+  roclet_process(roclet, blocks, env = env, base_path = ".")
 }

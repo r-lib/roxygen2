@@ -11,9 +11,9 @@
 \usage{
 roclet(subclass, ...)
 
-roclet_preprocess(x, blocks, base_path, global_options = list())
+roclet_preprocess(x, blocks, base_path)
 
-roclet_process(x, blocks, env, base_path, global_options = list())
+roclet_process(x, blocks, env, base_path)
 
 roclet_output(x, results, base_path, ...)
 
@@ -29,8 +29,6 @@ roclet_tags(x)
 \item{results}{Value returned from your \code{roclet_process()} method.}
 
 \item{base_path}{Path to root of source package.}
-
-\item{global_options}{List of roxygen2 options.}
 
 \item{env}{Package environment.}
 }

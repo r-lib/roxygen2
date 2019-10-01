@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `global_options` is no longer passed to all roclet methods. Instead use 
+  `roxy_meta_get()` to retrieve values stored in the options (#918).
+
 * `@description` and `@detail` tags automatically generated from the leading
   description block now have correct line numbers (#917).
 

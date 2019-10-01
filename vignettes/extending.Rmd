@@ -279,7 +279,7 @@ There are two methods that almost every roclet will use:
 For this roclet, we'll have `roclet_process()` collect all the memo tags into a named list:
 
 ```{r}
-roclet_process.roclet_memo <- function(x, blocks, env, base_path, global_options = list()) {
+roclet_process.roclet_memo <- function(x, blocks, env, base_path) {
   results <- list()
   
   for (block in blocks) {

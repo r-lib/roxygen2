@@ -163,23 +163,26 @@ test_that("new wrapping style doesn't change unexpectedly", {
 })
 
 test_that("old wrapping style doesn't change unexpectedly", {
+  old <- roxy_meta_set("old_usage", TRUE)
+  on.exit(roxy_meta_set("old_usage", old))
+
   expect_known_output(file = test_path("test-object-usage-wrap-old.txt"), {
     cat(call_to_usage({
       f <- function(a = '                                    a',
                     b = '                                    b',
                     c = '                                    c',
                     d = '                                    d') {}
-    }, old_usage = TRUE), "\n\n")
+    }), "\n\n")
 
     cat(call_to_usage({
       f <- function(a = c('abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef',
                     'abcdef', 'abcdef', 'abcdef', 'abcdef', 'abcdef')) {}
-    }, old_usage = TRUE), "\n\n")
+    }), "\n\n")
 
     cat(call_to_usage({
       mean.reallyratherquitelongclassname <-
         function(reallyreatherquitelongargument = 'reallyratherquitelongvalue_____________________') {}
-    }, old_usage = TRUE), "\n\n")
+    }), "\n\n")
 
     cat(call_to_usage({
       `long_replacement_fun<-` <- function(x,
@@ -187,7 +190,7 @@ test_that("old wrapping style doesn't change unexpectedly", {
           b = 'aaaaaaaaaaaaaaaa',
           c = 'aaaaaaaaaaaaaaaa',
           value) {}
-    }, old_usage = TRUE), "\n\n")
+    }), "\n\n")
 
     # breaking works after escapes (#265)
     cat(call_to_usage({
@@ -201,7 +204,7 @@ test_that("old wrapping style doesn't change unexpectedly", {
         xxxxxxxxxxxxxxxxxx6,
         xxxxxxxxxxxxxxxxxx7
       ) {}
-    }, old_usage = TRUE), "\n\n")
+    }), "\n\n")
   })
 })
 

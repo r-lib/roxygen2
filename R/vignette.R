@@ -18,8 +18,7 @@ vignette_roclet <- function() {
 }
 
 #' @export
-roclet_process.roclet_vignette <- function(x, blocks, env, base_path,
-                                           global_options = list()) {
+roclet_process.roclet_vignette <- function(x, blocks, env, base_path) {
 }
 
 #' @export

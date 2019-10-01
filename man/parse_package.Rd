@@ -8,16 +8,11 @@
 \alias{env_package}
 \title{Parse a package, file, or inline code}
 \usage{
-parse_package(path = ".", env = env_package(path), global_options = list())
+parse_package(path = ".", env = env_package(path))
 
-parse_file(
-  file,
-  env = env_file(file),
-  global_options = list(),
-  srcref_path = NULL
-)
+parse_file(file, env = env_file(file), srcref_path = NULL)
 
-parse_text(text, env = env_file(file), global_options = list())
+parse_text(text, env = env_file(file))
 
 env_file(file)
 
@@ -34,11 +29,6 @@ for real code you'll need to generate the environment yourself.
 You can also set to \code{NULL} if you only want to get the tokenized code
 blocks only. This suppresses evaluation of \verb{@eval} tags, and will not
 find the code object associated with each block.}
-
-\item{global_options}{A list of global options:
-\itemize{
-\item `markdown`` Logical value indicating whether to parse Markdown tags.
-}}
 }
 \value{
 A list of roxy_block objects

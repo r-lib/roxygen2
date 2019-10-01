@@ -2,9 +2,10 @@
 #'
 #' Options can be stored in the `Roxygen` field of the `DESCRIPTION`, or
 #' in `man/roxygen/meta.R`. In either case, the code is parsed and evaluated
-#' in a child of the base environment.
+#' in a child of the base environment. Call `roxy_meta_get()` to access
+#' current option values from within tag and roclet methods.
 #'
-#' Options in `man/roxygen/meta.R` override those present `DESCRIPTION`.
+#' Options in `man/roxygen/meta.R` override those present in `DESCRIPTION`.
 #'
 #' @param base_path Path to package.
 #' @export
@@ -16,9 +17,9 @@ load_options <- function(base_path = ".") {
 
   defaults <- list(
     roclets = c("collate", "namespace", "rd"),
-    markdown = markdown_global_default,
+    load = "pkgload",
     old_usage = FALSE,
-    load = "pkgload"
+    markdown = FALSE
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))
@@ -66,3 +67,27 @@ load_options_meta <- function(base_path = ".", path = "man/roxygen/meta.R") {
 
   value
 }
+
+# Global binding mangaemnet -----------------------------------------------
+
+roxy_meta <- new_environment()
+
+#' @export
+#' @rdname load_options
+roxy_meta_get <- function(key = NULL, default = NULL) {
+  env_get(roxy_meta, key, default = default)
+}
+
+roxy_meta_set <- function(key, value = NULL) {
+  env_poke(roxy_meta, key, value)
+}
+
+roxy_meta_clear <- function() {
+  env_unbind(roxy_meta, env_names(roxy_meta))
+}
+
+roxy_meta_load <- function(base_path = getwd()) {
+  roxy_meta_clear()
+  env_bind(roxy_meta, !!!load_options(base_path))
+}
+

@@ -33,17 +33,13 @@ rd_roclet_description <- function() {
 }
 
 #' @export
-roclet_process.roclet_rd <- function(x,
-                                     blocks,
-                                     env,
-                                     base_path,
-                                     global_options = list()) {
+roclet_process.roclet_rd <- function(x, blocks, env, base_path) {
 
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 
   for (block in blocks) {
-    rd <- block_to_rd(block, base_path, env, global_options)
+    rd <- block_to_rd(block, base_path, env)
     topics$add(rd)
   }
   topics_process_family(topics, env)
@@ -104,9 +100,9 @@ needs_doc <- function(block) {
 
 # Tag processing functions ------------------------------------------------
 
-block_to_rd <- function(block, base_path, env, global_options = list()) {
+block_to_rd <- function(block, base_path, env) {
   # Must start by processing templates
-  block <- process_templates(block, base_path, global_options)
+  block <- process_templates(block, base_path)
 
   if (!needs_doc(block)) {
     return()
@@ -124,7 +120,7 @@ block_to_rd <- function(block, base_path, env, global_options = list()) {
     rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
   }
 
-  topic_add_usage(rd, block, old_usage = global_options$old_usage)
+  topic_add_usage(rd, block)
 
   if (rd$has_section("description") && rd$has_section("reexport")) {
     roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")

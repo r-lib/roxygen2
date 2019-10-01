@@ -74,13 +74,13 @@ sys_source <- function(file, envir = baseenv()) {
 
 # Helpers -----------------------------------------------------------------
 
-find_load_strategy <- function(x, options) {
+find_load_strategy <- function(x, option = roxy_meta_get("load", "pkgload")) {
   if (is.function(x)) {
     return(x)
   }
 
   if (is.null(x)) {
-    x <- options$load
+    x <- option
     if (!is.character(x) || length(x) != 1) {
       abort("roxygen2 `load` option must be a string")
     }

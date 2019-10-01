@@ -11,8 +11,7 @@ test_that("markdown is off by default", {
 })
 
 test_that("turning on/off markdown globally", {
-  ## off
-  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -22,8 +21,9 @@ test_that("turning on/off markdown globally", {
     "Description with some `code` included. `More code.`"
   )
 
-  ## on
-  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
+  old <- roxy_meta_set("markdown", TRUE)
+  on.exit(roxy_meta_set("markdown", old))
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -35,8 +35,7 @@ test_that("turning on/off markdown globally", {
 })
 
 test_that("turning on/off markdown locally", {
-  ## off / off
-  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -47,8 +46,7 @@ test_that("turning on/off markdown locally", {
     "Description with some `code` included. `More code.`"
   )
 
-  ## off / on
-  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -59,8 +57,9 @@ test_that("turning on/off markdown locally", {
     "Description with some \\code{code} included. \\verb{More code.}"
   )
 
-  ## on / off
-  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
+  old <- roxy_meta_set("markdown", TRUE)
+  on.exit(roxy_meta_set("markdown", old))
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -72,7 +71,7 @@ test_that("turning on/off markdown locally", {
   )
 
   ## on / on
-  out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
+  out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
@@ -101,23 +100,10 @@ test_that("warning for both @md and @noMd", {
     "Description with some `code` included. `More code.`"
   )
 
+  old <- roxy_meta_set("markdown", TRUE)
+  on.exit(roxy_meta_set("markdown", old))
   expect_warning(
-    out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = FALSE), "
-      #' Title
-      #'
-      #' Description with some `code` included. `More code.`
-      #' @md
-      #' @noMd
-      foo <- function() {}")[[1]],
-    "Both @md and @noMd, no markdown parsing"
-  )
-  expect_equal(
-    out1$get_value("description"),
-    "Description with some `code` included. `More code.`"
-  )
-
-  expect_warning(
-    out1 <- roc_proc_text(rd_roclet(), global_options = list(markdown = TRUE), "
+    out1 <- roc_proc_text(rd_roclet(), "
       #' Title
       #'
       #' Description with some `code` included. `More code.`

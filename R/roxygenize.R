@@ -39,9 +39,8 @@ roxygenize <- function(package.dir = ".",
   }
 
   roxy_meta_load(base_path)
-  options <- load_options(base_path)
-  roclets <- roclets %||% options$roclets
 
+  roclets <- roclets %||% roxy_meta_get("roclets")
   # Special case collate: it doesn't need to execute code, and must be run
   # first to ensure that code can be executed
   if ("collate" %in% roclets) {
@@ -55,10 +54,7 @@ roxygenize <- function(package.dir = ".",
   roclets <- lapply(roclets, roclet_find)
 
   # Tokenise each file
-  blocks <- parse_package(base_path,
-    env = NULL,
-    global_options = options
-  )
+  blocks <- parse_package(base_path, env = NULL)
 
   if (clean) {
     purrr::walk(roclets, roclet_clean, base_path = base_path)
@@ -66,23 +62,18 @@ roxygenize <- function(package.dir = ".",
 
   roclets <- lapply(roclets, roclet_preprocess,
     blocks = blocks,
-    global_options = options,
     base_path = base_path
   )
 
   # Now load code
-  load_code <- find_load_strategy(load_code, options)
+  load_code <- find_load_strategy(load_code)
   env <- load_code(base_path)
-  blocks <- lapply(blocks, block_set_env,
-    env = env,
-    global_options = options
-  )
+  blocks <- lapply(blocks, block_set_env, env = env)
 
   results <- lapply(roclets, roclet_process,
     blocks = blocks,
     env = env,
-    base_path = base_path,
-    global_options = options
+    base_path = base_path
   )
 
   out <- purrr::map2(

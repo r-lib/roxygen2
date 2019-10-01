@@ -31,10 +31,7 @@ namespace_roclet <- function() {
 }
 
 #' @export
-roclet_preprocess.roclet_namespace <- function(x,
-                                               blocks,
-                                               base_path,
-                                               global_options = list()) {
+roclet_preprocess.roclet_namespace <- function(x, blocks, base_path) {
 
   lines <- blocks_to_ns(blocks, env, import_only = TRUE)
   NAMESPACE <- file.path(base_path, "NAMESPACE")
@@ -50,14 +47,9 @@ roclet_preprocess.roclet_namespace <- function(x,
 }
 
 #' @export
-roclet_process.roclet_namespace <- function(x,
-                                            blocks,
-                                            env,
-                                            base_path,
-                                            global_options = list()) {
+roclet_process.roclet_namespace <- function(x, blocks, env, base_path) {
   blocks_to_ns(blocks, env)
 }
-
 
 #' @export
 roclet_output.roclet_namespace <- function(x, results, base_path, ...) {

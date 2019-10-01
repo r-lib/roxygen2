@@ -8,7 +8,7 @@ roxy_tag_parse.roxy_tag_templateVar <- function(x) {
   tag_name_description(x)
 }
 
-process_templates <- function(block, base_path, global_options = list()) {
+process_templates <- function(block, base_path) {
   tags <- block_get_tags(block, "template")
   if (length(tags) == 0)
     return(block)
@@ -25,7 +25,7 @@ process_templates <- function(block, base_path, global_options = list()) {
 
   results <- lapply(paths, template_eval, vars = list2env(vars))
   tokens <- lapply(results, tokenise_block, file = "TEMPLATE", offset = 0L)
-  tags <- lapply(tokens, parse_tags, global_options = global_options)
+  tags <- lapply(tokens, parse_tags)
 
   # Insert templates back in the location where they came from
   block_replace_tags(block, "template", tags)

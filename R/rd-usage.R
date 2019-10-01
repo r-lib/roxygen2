@@ -1,22 +1,18 @@
 #' @export
 roxy_tag_parse.roxy_tag_usage <- function(x) {
-  tag_value(x)
+  x <- tag_value(x)
+  x$val <- rd(x$val)
+  x
 }
 
-# Prefer explicit \code{@@usage} to a \code{@@formals} list.
-topic_add_usage <- function(topic, block) {
-  tag <- block_get_tag(block, "usage")
-
-  if (is.null(tag)) {
-    usage <- object_usage(block$object)
-  } else if (tag$val == "NULL") {
+#' @export
+roxy_tag_rd.roxy_tag_usage <- function(x, base_path, env) {
+  if (identical(x$val, rd("NULL"))) {
     usage <- NULL
   } else {
-    # Treat user input as already escaped, otherwise they have no way
-    # to enter \S4method etc.
-    usage <- rd(tag$val)
+    usage <- x$val
   }
-  topic$add(rd_section("usage", usage))
+  rd_section("usage", usage)
 }
 
 #' @export

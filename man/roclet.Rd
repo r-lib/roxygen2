@@ -26,11 +26,11 @@ roclet_tags(x)
 
 \item{blocks}{A list of \link{roxy_block} objects.}
 
-\item{results}{Value returned from your \code{roclet_process()} method.}
-
 \item{base_path}{Path to root of source package.}
 
 \item{env}{Package environment.}
+
+\item{results}{Value returned from your \code{roclet_process()} method.}
 }
 \description{
 To create a new roclet, you will need to create a constructor function

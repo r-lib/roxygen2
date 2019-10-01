@@ -93,8 +93,7 @@ needs_doc <- function(block) {
 
   block_has_tags(block, c(
     "description", "param", "return", "title", "example",
-    "examples", "name", "rdname", "usage", "details", "introduction",
-    "inherit", "describeIn")
+    "examples", "name", "rdname", "details", "inherit", "describeIn")
   )
 }
 
@@ -119,8 +118,6 @@ block_to_rd <- function(block, base_path, env) {
   for (tag in block$tags) {
     rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
   }
-
-  topic_add_usage(rd, block)
 
   if (rd$has_section("description") && rd$has_section("reexport")) {
     roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")

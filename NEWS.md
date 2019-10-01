@@ -157,6 +157,12 @@ You can override the default either by calling (e.g.) `roxygenise(load_code = "s
 * `global_options` is no longer passed to all roclet methods. Instead use 
   `roxy_meta_get()` to retrieve values stored in the options (#918).
 
+* `@description` and `@detail` tags automatically generated from the leading
+  description block now have correct line numbers (#917).
+
+* roxygen2 now supports documentation for R6 classes. See the
+  "Rd (documentation) tags" vignette for details (#922).
+
 * `rd_section()` and `roxy_tag_rd()` are now exported so that you can more 
   easily extend `rd_roclet()` with your own tags that genereate output in
   `.Rd` files.

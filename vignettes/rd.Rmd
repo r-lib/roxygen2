@@ -200,6 +200,92 @@ S4 __methods__ are a little more complicated. Unlike S3 methods, all S4 methods 
 
 Use either `@rdname` or `@describeIn` to control where method documentation goes. See the next section for more details.
 
+### R6
+
+Starting from version 7.0.0 roxygen treats documentation for R6 classes
+specially:
+
+* R6 methods can be documented in-line, i.e. the method's documentation
+  comments come right before the definition of the method.
+
+* Method documentation can use the `@description`, `@details`,
+  `@param`, `@return` and `@examples` tags. These are used to create a
+  subsection for the method, within a separate 'Methods' section.
+  All roxygen comment lines of a method documentation must appear after
+  a tag.
+
+* `@param` tags that appear before the class definition are automatically
+  inherited by all methods, if needed.
+
+* R6 fields and active bindings can make use of the `@field` tag.
+  Their documentation should also be in-line.
+
+* Roxygen2 checks that all public methods, public fields, active
+  bindings and all method arguments are documented, and issues warnings
+  otherwise.
+
+Roxygen2 automatically generates additional sections for an R6 class:
+
+* A section with information about the superclass(es) of the class,
+  with links. In HTML this includes a list of all inherited methods,
+  with links.
+
+* An 'Examples' section that contains all class and method examples.
+  This section is run by `R CMD check`, so method examples must work
+  without errors.
+
+An example from the R6 tutorial:
+
+```{r}
+#' R6 Class Representing a Person
+#'
+#' @description
+#' A person has a name and a hair color.
+#'
+#' @details
+#' A person can also greet you.
+
+Person <- R6::R6Class("Person",
+public = list(
+
+    #' @field name First or full name of the person.
+    name = NULL,
+
+    #' @field hair Hair color of the person.
+    hair = NULL,
+
+    #' @description
+    #' Create a new person object.
+    #' @param name Name.
+    #' @param hair Hair color.
+    #' @return A new `Person` object.
+    initialize = function(name = NA, hair = NA) {
+      self$name <- name
+      self$hair <- hair
+      self$greet()
+    },
+
+    #' @description
+    #' Change hair color.
+    #' @param val New hair color.
+    #' @examples
+    #' P <- Person("Ann", "black")
+    #' P$hair
+    #' P$set_hair("red")
+    #' P$hair
+    set_hair = function(val) {
+      self$hair <- val
+    },
+
+    #' @description
+    #' Say hi.
+    greet = function() {
+      cat(paste0("Hello, my name is ", self$name, ".\n"))
+    }
+  )
+)
+```
+
 ### Datasets
 
 Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset's name.

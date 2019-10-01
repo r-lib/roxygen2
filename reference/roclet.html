@@ -161,9 +161,9 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
 
     <pre class="usage"><span class='fu'>roclet</span>(<span class='no'>subclass</span>, <span class='no'>...</span>)
 
-<span class='fu'>roclet_preprocess</span>(<span class='no'>x</span>, <span class='no'>blocks</span>, <span class='no'>base_path</span>, <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<span class='fu'>roclet_preprocess</span>(<span class='no'>x</span>, <span class='no'>blocks</span>, <span class='no'>base_path</span>)
 
-<span class='fu'>roclet_process</span>(<span class='no'>x</span>, <span class='no'>blocks</span>, <span class='no'>env</span>, <span class='no'>base_path</span>, <span class='kw'>global_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<span class='fu'>roclet_process</span>(<span class='no'>x</span>, <span class='no'>blocks</span>, <span class='no'>env</span>, <span class='no'>base_path</span>)
 
 <span class='fu'>roclet_output</span>(<span class='no'>x</span>, <span class='no'>results</span>, <span class='no'>base_path</span>, <span class='no'>...</span>)
 
@@ -183,20 +183,16 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
       <td><p>A list of <a href='roxy_block.html'>roxy_block</a> objects.</p></td>
     </tr>
     <tr>
-      <th>results</th>
-      <td><p>Value returned from your <code>roclet_process()</code> method.</p></td>
-    </tr>
-    <tr>
       <th>base_path</th>
       <td><p>Path to root of source package.</p></td>
     </tr>
     <tr>
-      <th>global_options</th>
-      <td><p>List of roxygen2 options.</p></td>
-    </tr>
-    <tr>
       <th>env</th>
       <td><p>Package environment.</p></td>
+    </tr>
+    <tr>
+      <th>results</th>
+      <td><p>Value returned from your <code>roclet_process()</code> method.</p></td>
     </tr>
     </table>
 

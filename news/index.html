@@ -156,6 +156,7 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>global_options</code> is no longer passed to all roclet methods. Instead use <code><a href="../reference/load_options.html">roxy_meta_get()</a></code> to retrieve values stored in the options (<a href='https://github.com/r-lib/roxygen2/issues/918'>#918</a>).</p></li>
 <li><p><code>@description</code> and <code>@detail</code> tags automatically generated from the leading description block now have correct line numbers (<a href='https://github.com/r-lib/roxygen2/issues/917'>#917</a>).</p></li>
 <li><p><code><a href="../reference/rd_section.html">rd_section()</a></code> and <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code> are now exported so that you can more easily extend <code><a href="../reference/rd_roclet.html">rd_roclet()</a></code> with your own tags that genereate output in <code>.Rd</code> files.</p></li>
 <li><p>Using the old <code>wrap</code> option will now trigger a warning. It hasn’t worked for some time.</p></li>

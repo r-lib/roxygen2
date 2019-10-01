@@ -45,7 +45,8 @@
 <meta property="og:title" content="Load roxygen2 options — load_options" />
 <meta property="og:description" content="Options can be stored in the Roxygen field of the DESCRIPTION, or
 in man/roxygen/meta.R. In either case, the code is parsed and evaluated
-in a child of the base environment." />
+in a child of the base environment. Call roxy_meta_get() to access
+current option values from within tag and roclet methods." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -158,10 +159,13 @@ in a child of the base environment." />
     <div class="ref-description">
     <p>Options can be stored in the <code>Roxygen</code> field of the <code>DESCRIPTION</code>, or
 in <code>man/roxygen/meta.R</code>. In either case, the code is parsed and evaluated
-in a child of the base environment.</p>
+in a child of the base environment. Call <code>roxy_meta_get()</code> to access
+current option values from within tag and roclet methods.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_options</span>(<span class='kw'>base_path</span> <span class='kw'>=</span> <span class='st'>"."</span>)</pre>
+    <pre class="usage"><span class='fu'>load_options</span>(<span class='kw'>base_path</span> <span class='kw'>=</span> <span class='st'>"."</span>)
+
+<span class='fu'>roxy_meta_get</span>(<span class='kw'>key</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>default</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,7 +178,7 @@ in a child of the base environment.</p>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Options in <code>man/roxygen/meta.R</code> override those present <code>DESCRIPTION</code>.</p>
+    <p>Options in <code>man/roxygen/meta.R</code> override those present in <code>DESCRIPTION</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

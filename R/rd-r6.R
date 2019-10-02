@@ -73,10 +73,9 @@ r6_superclass <- function(block, r6data, env) {
   push(paste0("\\section{", title, "}{"))
 
   pkgs <- super$classes$package[match(cls, super$classes$classname)]
-  clsx <- c(rev(cls), block$object$alias)
-  pkgsx <- c(rev(pkgs), environmentName(env))
-  path <- sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgsx, clsx, pkgsx, clsx)
-  push(paste0(path, collapse = " -> "))
+  path <- sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls)
+  me <- sprintf("\\code{%s}", block$object$value$classname)
+  push(paste(c(path, me), collapse = " -> "))
 
   push("}")
 

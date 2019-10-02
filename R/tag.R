@@ -89,13 +89,5 @@ print.roxy_tag <- function(x, ...) {
 #' @export
 #' @rdname roxy_tag
 roxy_tag_warning <- function(x, ...) {
-  message <- paste0(
-    if (!is.na(x$file)) paste0("[", x$file, ":", x$line, "] "),
-    "@", x$tag, " ",
-    ...,
-    collapse = " "
-  )
-
-  warning(message, call. = FALSE, immediate. = TRUE)
-  NULL
+  roxy_warning(file = x$file, line = x$line, "@", x$tag, " ", ...)
 }

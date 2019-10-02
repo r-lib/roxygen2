@@ -27,11 +27,10 @@ topic_add_r6_methods <- function(rd, block, env) {
 
   nodoc <- map_int(methods$tags, length) == 0
   for (i in which(nodoc)) {
-    msg <- sprintf(
-      "Undocumented R6 method at %s:%i: `%s()`",
-      methods$file[i], methods$line[i], methods$name[i]
+    roxy_warning(
+      sprintf("`%s()`: undocumented R6 method", methods$name[i]),
+      file = block$file, line = methods$line[i]
     )
-    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   block$tags[del] <- NULL
@@ -100,31 +99,28 @@ r6_fields <- function(block, r6data) {
   # Check for missing fields
   miss <- setdiff(fields, docd)
   for (f in miss) {
-    msg <- sprintf(
-      "Undocumented R6 field for block at %s:%i: `%s`",
-      block$file, block$line, f
+    roxy_warning(
+      sprintf("`%s`: undocumented R6 field", f),
+      file = block$file, line = block$line
     )
-    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   # Check for duplicate fields
   dup <- unique(docd[duplicated(docd)])
   for (f in dup) {
-    msg <- sprintf(
-      "R6 field `%s` documented multiple times for block at %s:%i",
-      f, block$file, block$line
+    roxy_warning(
+      sprintf("`%s`: R6 field documented multiple times", f),
+      file = block$file, line = block$line
     )
-    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   # Check for extra fields
   xtra <- setdiff(docd, fields)
   for (f in xtra) {
-    msg <- sprintf(
-      "Unknown R6 field `%s` for block at %s:%i",
-      f, block$file, block$line
+    roxy_warning(
+      sprintf("`%s`: Unknown R6 field", f),
+      file = block$file, line = block$line
     )
-    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   if (length(fields) == 0) return()
@@ -158,21 +154,19 @@ r6_active_bindings <- function(block, r6data) {
   # Check for missing bindings
   miss <- setdiff(active, docd)
   for (f in miss) {
-    msg <- sprintf(
-      "Undocumented R6 active binding for block at %s:%i: `%s`",
-      block$file, block$line, f
+    roxy_warning(
+      sprintf("`%s`: undocumented R6 active binding", f),
+      file = block$file, line = block$line
     )
-    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   # Check for duplicate bindings
   dup <- unique(docd[duplicated(docd)])
   for (f in dup) {
-    msg <- sprintf(
-      "R6 active binding `%s` documented multiple times for block at %s:%i",
-      f, block$file, block$line
+    roxy_warning(
+      sprintf("`%s`: R6 active binding documented multiple times", f),
+      file = block$file, line = block$line
     )
-    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   if (length(active) == 0) return()
@@ -328,10 +322,10 @@ r6_method_params <- function(block, method) {
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   dup <- unique(mnames[duplicated(mnames)])
   for (m in dup) {
-    msg <- sprintf(
-      "Argument `%s` documented multiple times for R6 method `%s` at %s:%i",
-      m, method$name, method$file, method$line)
-    warning(msg, call. = FALSE, immediate. = TRUE)
+    roxy_warning(
+      sprintf("argument `%s` documented multiple times for R6 method `%s`", m, method$name),
+      file = block$file, line = method$line
+    )
   }
 
   # Now add the missing ones from the class
@@ -350,12 +344,11 @@ r6_method_params <- function(block, method) {
   nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   miss <- setdiff(fnames, mnames)
-    for (m in miss) {
-    msg <- sprintf(
-      "Undocumented argument for R6 method `%s()` at %s:%i: `%s`",
-      method$name, method$file, method$line, m
+  for (m in miss) {
+    roxy_warning(
+      sprintf("argument `%s` undocumented for R6 method `%s()`", m, method$name),
+      file = block$file, line = method$line
     )
-    warning(msg, call. = FALSE, immediate. = TRUE)
   }
 
   if (length(par) == 0) return()

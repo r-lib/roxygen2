@@ -1,52 +1,24 @@
 # roxygen2 (development version)
 
-## Markdown
+## New features
 
-* Markdown tables are now converted to the Rd `\tabular{}` command (#290).
-  roxygen2 supports the [GFM table syntax](https://github.github.com/gfm/#tables-extension-)
-  which looks like:
-  
-    ```md
-    | foo | bar |
-    | --- | --- |
-    | baz | bim |
-    ```
-
-* Headings are now allowed in markdown text. Subheadings, i.e. headings
-  with level 2 and above, generate subsections within roxygen tags
-  (e.g. within `@description`, `@details`, `@return`, etc.) `##` creates a
-  subsection, `###` a sub-subsection, etc. Level 1 headings generate
-  separate sections in the manual page (#907, #908).
-
-* Rd comments (`%`) are automatically escaped in markdown text. This is 
-  a backward incompatible check that will require that you replace
-  existing uses of `\%` with `%` (#879).
-
-* Convert markdown code (``` `` ```) to either `\code{}` or `\verb{}` 
-  depending on whether it not it parses as R code. This should make it 
-  easier to include arbitrary "code" snippets in documentation without
-  causing Rd failures (#654).
-
-* Use of unsupported markdown features (blockquotes, headings, inline HTML, 
-  and horizontal rules) now gets a more informative error message (#804).
-
-## New tags
+### New tags
 
 * `@includeRmd` converts an `.Rmd`/`.md` file to Rd and includes it in the
   manual page. This allows sharing text between vignettes, the `README.Rmd`
   file and the manual. See the "Rd (documentation) tags" vignette for
   details (#902).
 
-* New `@order n` tag controls the order in which blocks are processed. You can
+* `@order n` tag controls the order in which blocks are processed. You can
   use it to override the usual ordering which proceeds in from the top of 
   each file to the bottom. `@order 1` will be processed before `@order 2`, 
   and before any blocks that don't have an explicit order set (#863).
 
-* New `@exportS3Method` tag allows you to generate `S3method()` namespace
+* `@exportS3Method` tag allows you to generate `S3method()` namespace
   directives (note the different in capitalisation) (#796). Its primary use is 
   for "delayed" method registration which allows you to define methods for 
-  generics found in suggested packages. This is only available in R 3.6 and 
-  greater, and looks like this:
+  generics found in suggested packages (available in R 3.6 and greater).
+  For example,
     
     ```R
     #' @exportS3Method package::generic
@@ -55,22 +27,59 @@
     }
     ```
     
+    will generate
+    
+    ```
+    S3method(package::generic, foo)
+    ```
+    
+    
     (See [`vctrs::s3_register()`](https://vctrs.r-lib.org/reference/s3_register.html)
     you need a version that works for earlier versions of R).
     
-    You can also use it to generate arbitrary `S3method()` directions by 
-    providing two values:
+    Its two argument form allows you generate arbitrary `S3method()` directives:
     
     ```R
     #' @exportS3Method generic class
     NULL
     ```
+    
+    ```
+    S3method(generic, class)
+    ```
 
-## Other features
+### Markdown improvements
+
+* Markdown headings are supported in tags like `@description`, `@details`, 
+  and `@return` (#907, #908). Level 1 headings create a new top-level 
+  `\section{}`. Level 2 and above headings create nested `\subsections{}`.
+
+* Markdown tables generate `\tabular{}` (#290). roxygen2 supports the 
+  [GFM table syntax](https://github.github.com/gfm/#tables-extension-)
+  which looks like this:
+  
+    ```md
+    | foo | bar |
+    | --- | --- |
+    | baz | bim |
+    ```
+
+* Markdown code (``` `` ```) is converted to to either `\code{}` or `\verb{}` 
+  depending on whether it not it parses as R code. This should make it 
+  easier to include arbitrary "code" snippets in documentation without
+  causing Rd failures (#654).
+
+* Rd comments (`%`) are automatically escaped. You will need to replace any
+  existing uses of `\%` with `%` (#879).
+
+* Use of unsupported markdown features (blockquotes, headings, inline HTML, 
+  and horizontal rules) now gnerate more informative error messages (#804).
+
+### Default usage
 
 * The default formatting for function usage that spans multiple lines has
-  now changed. Previously it was wrapped to produce the fewest number of
-  lines, e.g.:
+  now changed. Previously, the usage was wrapped to produce the smallest number 
+  of lines, e.g.:
   
     ```R
     parse_package(path = ".", env = env_package(path), 
@@ -94,32 +103,30 @@
     ```
     Roxygen: list(old_usage = TRUE)
     ```
+### Code loading
 
-* roxygen2 now provides three strategies for loading your code:
+roxygen2 now provides three strategies for loading your code:
 
-    * `load_pkgload()` uses pkgload.
-    * `load_installed()` assumes you have installed the package.
-    * `load_source()` attaches required packages and `source()`s code in `R/`.
-    
-    If the code loading strategy in roxygen2 6.1.0 and above has caused 
-    you grief, you can revert to the old strategy by using 
-    `Roxygen: list(load = "source")` (#822).
-    
-    Compared to the previous release, the default pkgload strategy now will 
-    recompile `src/` if needed.
+* `load_pkgload()`, the default, uses pkgload.
+* `load_installed()` assumes you have installed the package.
+* `load_source()` attaches required packages and `source()`s code in `R/`.
 
-### New options
+If the code loading strategy in roxygen2 6.1.0 and above has caused 
+you grief, you can revert to the old strategy by using 
+`Roxygen: list(load = "source")` (#822).
+
+Compared to the previous release, the default strategy now will 
+recompile `src/` if needed.
+
+### Options
 
 * As well as storing roxygen options in the `Roxygen` field of the 
   `DESCRIPTION` you can now also store them in `man/roxygen/meta.R` (#889).
-
-* roxygen now looks for templates in `man/roxygen/templates` (#888).
-
-* A new system for providing custom roxygen2 metadata is now available. When
-  `roxygenise()` is called, if a file "man/roxygen/meta.R" exists, it will be
-  evaluated. Its evaluation should produce an R list, mapping roxygen option
+  The evaluation of this file should produce a named list that maps option
   names to values. 
   
+* roxygen now also looks for templates in `man/roxygen/templates` (#888).
+
 * New `rd_family_title` option: this field should itself be an R list, mapping 
   family names to the appropriate prefixes to be used in the generated R 
   documentation (as opposed to the default 'Other family: ' prefix). 
@@ -127,8 +134,8 @@
 
 ## Breaking changes
 
-* Using the old `wrap` option will now trigger a warning. It hasn't worked
-  for some time.
+* Rd comments (`%`) are automatically escaped. This is a backward incompatible 
+  change because you will need to replace existing uses of `\%` with `%` (#879).
 
 * Using `@docType package` no longer automatically adds `-name`. Instead 
   document `_PACKAGE` to get all the defaults for package documentation.
@@ -244,6 +251,10 @@
 * `@param` containing only whitespce gets a clear warning message (#869).
 
 * Logo in package description is now scaled to a 120px width, cf. pkgdown websites (@peterdesmet, #834).
+
+* Using the old `wrap` option will now trigger a warning. It hasn't worked
+  for some time.
+
 
 # roxygen2 6.1.1
 

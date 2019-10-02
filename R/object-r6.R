@@ -30,15 +30,15 @@ extract_r6_methods <- function(x) {
   method_loc <- map_int(
     x$public_methods[method_nms],
     function(m) {
-      ref <- getSrcref(m)
+      ref <- utils::getSrcref(m)
       if (is.null(ref)) stop("R6 class without source references")
-      getSrcLocation(ref)
+      utils::getSrcLocation(ref)
     }
   )
   method_fnm <- map_chr(
     x$public_methods[method_nms],
     function(m) {
-      getSrcFilename(getSrcref(m))
+      utils::getSrcFilename(utils::getSrcref(m))
     }
   )
   method_formals <- map(x$public_methods[method_nms], formals)

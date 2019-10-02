@@ -7,14 +7,17 @@ object_defaults.r6class <- function(x) {
 }
 
 extract_r6_data <- function(x) {
-  self <- rbind(
+  list(
+    self = extract_r6_self_data(x),
+    super = extract_r6_super_data(x)
+  )
+}
+
+extract_r6_self_data <- function(x) {
+  rbind(
     extract_r6_methods(x),
     extract_r6_fields(x),
     extract_r6_bindings(x)
-  )
-  list(
-    self = self,
-    super = extract_r6_super_data(x)
   )
 }
 
@@ -43,10 +46,10 @@ extract_r6_methods <- function(x) {
   data.frame(
     stringsAsFactors = FALSE,
     type = if (length(method_loc)) "method" else character(),
-    name = method_nms,
-    file = method_fnm,
+    name = unname(method_nms),
+    file = unname(method_fnm),
     line = unname(method_loc),
-    formals = I(method_formals)
+    formals = I(unname(method_formals))
   )
 }
 
@@ -77,16 +80,38 @@ extract_r6_bindings <- function(x) {
 extract_r6_super_data <- function(x) {
   if (is.null(x$inherit)) return()
   super <- x$get_inherit()
+  super_data <- extract_r6_super_data(super)
+
   method_nms <- setdiff(names(super$public_methods), omit_r6_methods())
+  field_nms <- names(super$public_fields)
+  active_nms <- names(super$active)
+  classname <- super$classname %||% NA_character_
   pkg <- environmentName(topenv(super$parent_env))
 
-  rbind(
+  cls <- rbind(
     data.frame(
       stringsAsFactors = FALSE,
       package = pkg,
-      classname = super$classname,
-      name = sort(method_nms)
+      classname = classname
     ),
-    extract_r6_super_data(super)
+    super_data$classes
   )
+
+  types <- rep(
+    c("method", "field", "active"),
+    c(length(method_nms), length(field_nms), length(active_nms))
+  )
+  names <-c(sort(method_nms), sort(field_nms), sort(active_nms))
+  mth <- rbind(
+    data.frame(
+      stringsAsFactors = FALSE,
+      package = rep(pkg, length(names)),
+      classname = rep(classname , length(names)),
+      type = types,
+      name = names
+    ),
+    super_data$members
+  )
+
+  list(classes = cls, members = mth)
 }

@@ -64,7 +64,7 @@ topic_add_r6_methods <- function(rd, block, env) {
 
 r6_superclass <- function(block, r6data, env) {
   super <- r6data$super
-  cls <- unique(super$classname)
+  cls <- unique(super$classes$classname)
   if (length(cls) == 0) return()
 
   lines <- character()
@@ -73,7 +73,7 @@ r6_superclass <- function(block, r6data, env) {
   title <- if (length(cls) > 1) "Super classes" else "Super class"
   push(paste0("\\section{", title, "}{"))
 
-  pkgs <- super$package[match(cls, super$classname)]
+  pkgs <- super$classes$package[match(cls, super$classes$classname)]
   clsx <- c(rev(cls), block$object$alias)
   pkgsx <- c(rev(pkgs), environmentName(env))
   path <- sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgsx, clsx, pkgsx, clsx)
@@ -229,8 +229,6 @@ r6_show_name <- function(names) {
   ifelse(names == "initialize", "new", names)
 }
 
-# also vectorized
-
 r6_method_list <- function(block, methods) {
   nms <- r6_show_name(methods$name)
   c("\\subsection{Public methods}{",
@@ -251,20 +249,21 @@ r6_inherited_method_list <- function(block, r6data) {
   if (is.null(super)) return()
 
   # drop methods that were shadowed in a subclass
+  super_meth <- super$members[super$members$type == "method", ]
   self <- r6data$self
-  super <- super[! super$name %in% self$name, ]
-  super <- super[! duplicated(super$name), ]
+  super <- super_meth[! super_meth$name %in% self$name, ]
+  super <- super_meth[! duplicated(super_meth$name), ]
 
   c("\\if{html}{\\subsection{Inherited methods}{",
     "\\itemize{",
     sprintf(
       "\\item \\href{../../%s/html/%s.html#method-%s}{\\code{%s::%s$%s()}}",
-      super$package,
-      super$classname,
-      super$name,
-      super$package,
-      super$classname,
-      super$name
+      super_meth$package,
+      super_meth$classname,
+      super_meth$name,
+      super_meth$package,
+      super_meth$classname,
+      super_meth$name
     ),
     "}",
     "}}"

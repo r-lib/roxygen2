@@ -9,11 +9,11 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 \keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
-\tabular{rl}{
-sections\tab Named list of sections. Each item must be an
-\code{\link[=rd_section]{rd_section()}} object.\cr 
+\describe{
+\item{\code{sections}}{Named list of sections. Each item must be an
+\code{\link[=rd_section]{rd_section()}} object.}
 
-filename\tab Path to the \code{.Rd} file to generate.\cr 
+\item{\code{filename}}{Path to the \code{.Rd} file to generate.}
 }
 \if{html}{\out{</div>}}
 }
@@ -44,9 +44,9 @@ particular order, even though Rd tools will reoder them again.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-...\tab Passed to the \code{format()} methods of the \code{\link[=rd_section]{rd_section()}}
-objects, the sections.\cr 
+\describe{
+\item{\code{...}}{Passed to the \code{format()} methods of the \code{\link[=rd_section]{rd_section()}}
+objects, the sections.}
 }
 \if{html}{\out{</div>}}
 }
@@ -76,8 +76,8 @@ Check if an \code{.Rd} file has a certain section.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-type\tab Section type, a character scalar.\cr 
+\describe{
+\item{\code{type}}{Section type, a character scalar.}
 }
 \if{html}{\out{</div>}}
 }
@@ -95,8 +95,8 @@ Query a section.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-type\tab Section type, a character scalar.\cr 
+\describe{
+\item{\code{type}}{Section type, a character scalar.}
 }
 \if{html}{\out{</div>}}
 }
@@ -116,8 +116,8 @@ the \link{rd_section} object.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-type\tab Section type, a character scalar.\cr 
+\describe{
+\item{\code{type}}{Section type, a character scalar.}
 }
 \if{html}{\out{</div>}}
 }
@@ -135,8 +135,8 @@ Get the Rd code of a section.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-type\tab Section type, a character scalar.\cr 
+\describe{
+\item{\code{type}}{Section type, a character scalar.}
 }
 \if{html}{\out{</div>}}
 }
@@ -167,8 +167,8 @@ Query the topics this topic inherits \code{type} from.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-type\tab Section type, a character scalar.\cr 
+\describe{
+\item{\code{type}}{Section type, a character scalar.}
 }
 \if{html}{\out{</div>}}
 }
@@ -198,14 +198,14 @@ Add one or more sections to the topic.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-x\tab Section(s) to add. It may be
+\describe{
+\item{\code{x}}{Section(s) to add. It may be
 another \code{RoxyTopic} object, all of its sections will be added;
 or an \link{rd_section} object;
-or a list of \link{rd_section} objects to add.\cr 
+or a list of \link{rd_section} objects to add.}
 
-overwrite\tab Whether to overwrite an existing section. If \code{FALSE}
-then the two sections will be merged.\cr 
+\item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
+then the two sections will be merged.}
 }
 \if{html}{\out{</div>}}
 }
@@ -220,11 +220,11 @@ Add a section.
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
-\tabular{rl}{
-section\tab \link{rd_section} object to add.\cr 
+\describe{
+\item{\code{section}}{\link{rd_section} object to add.}
 
-overwrite\tab Whether to overwrite an existing section. If \code{FALSE}
-then the two sections will be merged.\cr 
+\item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
+then the two sections will be merged.}
 }
 \if{html}{\out{</div>}}
 }

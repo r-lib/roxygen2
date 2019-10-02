@@ -80,8 +80,8 @@ test_that("r6_fields", {
   r6data <- block_get_tag_value(block, ".r6data")
   expect_silent(doc <- r6_fields(block, r6data))
 
-  expect_true(any(grepl("field1\\tab Foo.", doc, fixed = TRUE)))
-  expect_true(any(grepl("field2\\tab Bar.", doc, fixed = TRUE)))
+  expect_true(any(grepl("code{field1}}{Foo.", doc, fixed = TRUE)))
+  expect_true(any(grepl("code{field2}}{Bar.", doc, fixed = TRUE)))
 })
 
 test_that("r6_active_bindings", {
@@ -105,6 +105,6 @@ test_that("r6_active_bindings", {
   r6data <- block_get_tag_value(block, ".r6data")
   expect_silent(doc <- r6_active_bindings(block, r6data))
 
-  expect_true(any(grepl("bind1\\tab Active binding.", doc, fixed = TRUE)))
-  expect_true(any(grepl("bind2\\tab Active 2.", doc, fixed = TRUE)))
+  expect_true(any(grepl("code{bind1}}{Active binding.", doc, fixed = TRUE)))
+  expect_true(any(grepl("code{bind2}}{Active 2.", doc, fixed = TRUE)))
 })

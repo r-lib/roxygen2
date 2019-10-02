@@ -134,8 +134,8 @@ r6_fields <- function(block, r6data) {
   vals <- map_chr(tags, c("val", "description"))
   c("\\section{Public fields}{",
     "\\if{html}{\\out{<div class=\"r6-fields\">}}",
-    "\\tabular{rl}{",
-    paste0(labels, "\\tab ", vals, "\\cr ", collapse = "\n\n"),
+    "\\describe{",
+    paste0("\\item{\\code{", labels, "}}{", vals, "}", collapse = "\n\n"),
     "}",
     "\\if{html}{\\out{</div>}}",
     "}"
@@ -182,8 +182,8 @@ r6_active_bindings <- function(block, r6data) {
   vals <- map_chr(tags, c("val", "description"))
   c("\\section{Active bindings}{",
     "\\if{html}{\\out{<div class=\"r6-active-bindings\">}}",
-    "\\tabular{rl}{",
-    paste0(labels, "\\tab ", vals, "\\cr ", collapse = "\n\n"),
+    "\\describe{",
+    paste0("\\item{\\code{", labels, "}}{", vals, "}", collapse = "\n\n"),
     "}",
     "\\if{html}{\\out{</div>}}",
     "}"
@@ -374,8 +374,8 @@ r6_method_params <- function(block, method) {
   c(
     "\\subsection{Arguments}{",
     "\\if{html}{\\out{<div class=\"arguments\">}}",
-    "\\tabular{rl}{",
-    paste0(nms, "\\tab ", val, "\\cr ", collapse = "\n\n"),
+    "\\describe{",
+    paste0("\\item{\\code{", nms, "}}{", val, "}", collapse = "\n\n"),
     "}",
     "\\if{html}{\\out{</div>}}",
     "}"

@@ -253,6 +253,8 @@
 <a href="#extension-points" class="anchor"></a>Extension points</h3>
 <ul>
 <li><p><code>global_options</code> is no longer passed to all roclet methods. Instead use <code><a href="../reference/load_options.html">roxy_meta_get()</a></code> to retrieve values stored in the options (<a href='https://github.com/r-lib/roxygen2/issues/918'>#918</a>).</p></li>
+<li><p><code>@description</code> and <code>@detail</code> tags automatically generated from the leading description block now have correct line numbers (<a href='https://github.com/r-lib/roxygen2/issues/917'>#917</a>).</p></li>
+<li><p>roxygen2 now supports documentation for R6 classes. See the “Rd (documentation) tags” vignette for details (<a href='https://github.com/r-lib/roxygen2/issues/922'>#922</a>).</p></li>
 <li><p><code><a href="../reference/rd_section.html">rd_section()</a></code> and <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code> are now exported so that you can more easily extend <code><a href="../reference/rd_roclet.html">rd_roclet()</a></code> with your own tags that genereate output in <code>.Rd</code> files.</p></li>
 <li>
 <p><code><a href="../reference/roclet.html">roclet_tags()</a></code> is no longer used; instead define a <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> method. If you tag is <code>@mytag</code>, then the class name associated with it is <code>roxy_tag_mytag</code> so the method should be call <code>roxy_tag_parse.roxy_tag_mytag()</code>. Note that there is no namespacing so if you’re defining multiple new tags I recommend using your package name as common prefix.</p>

@@ -270,32 +270,97 @@
 </ul>
 <p>Use either <code>@rdname</code> or <code>@describeIn</code> to control where method documentation goes. See the next section for more details.</p>
 </div>
+<div id="r6" class="section level3">
+<h3 class="hasAnchor">
+<a href="#r6" class="anchor"></a>R6</h3>
+<p>Starting from version 7.0.0 roxygen treats documentation for R6 classes specially:</p>
+<ul>
+<li><p>R6 methods can be documented in-line, i.e. the method’s documentation comments come right before the definition of the method.</p></li>
+<li><p>Method documentation can use the <code>@description</code>, <code>@details</code>, <code>@param</code>, <code>@return</code> and <code>@examples</code> tags. These are used to create a subsection for the method, within a separate ‘Methods’ section. All roxygen comment lines of a method documentation must appear after a tag.</p></li>
+<li><p><code>@param</code> tags that appear before the class definition are automatically inherited by all methods, if needed.</p></li>
+<li><p>R6 fields and active bindings can make use of the <code>@field</code> tag. Their documentation should also be in-line.</p></li>
+<li><p>Roxygen2 checks that all public methods, public fields, active bindings and all method arguments are documented, and issues warnings otherwise.</p></li>
+</ul>
+<p>Roxygen2 automatically generates additional sections for an R6 class:</p>
+<ul>
+<li><p>A section with information about the superclass(es) of the class, with links. In HTML this includes a list of all inherited methods, with links.</p></li>
+<li><p>An ‘Examples’ section that contains all class and method examples. This section is run by <code>R CMD check</code>, so method examples must work without errors.</p></li>
+</ul>
+<p>An example from the R6 tutorial:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#' R6 Class Representing a Person</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#' @description</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#' A person has a name and a hair color.</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#' @details</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#' A person can also greet you.</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">Person &lt;-<span class="st"> </span>R6<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/R6/man/R6Class.html">R6Class</a></span>(<span class="st">"Person"</span>,</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="dt">public =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">    <span class="co">#' @field name First or full name of the person.</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">    <span class="dt">name =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">    <span class="co">#' @field hair Hair color of the person.</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16">    <span class="dt">hair =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18">    <span class="co">#' @description</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19">    <span class="co">#' Create a new person object.</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20">    <span class="co">#' @param name Name.</span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21">    <span class="co">#' @param hair Hair color.</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22">    <span class="co">#' @return A new `Person` object.</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23">    <span class="dt">initialize =</span> <span class="cf">function</span>(<span class="dt">name =</span> <span class="ot">NA</span>, <span class="dt">hair =</span> <span class="ot">NA</span>) {</a>
+<a class="sourceLine" id="cb5-24" data-line-number="24">      self<span class="op">$</span>name &lt;-<span class="st"> </span>name</a>
+<a class="sourceLine" id="cb5-25" data-line-number="25">      self<span class="op">$</span>hair &lt;-<span class="st"> </span>hair</a>
+<a class="sourceLine" id="cb5-26" data-line-number="26">      self<span class="op">$</span><span class="kw">greet</span>()</a>
+<a class="sourceLine" id="cb5-27" data-line-number="27">    },</a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29">    <span class="co">#' @description</span></a>
+<a class="sourceLine" id="cb5-30" data-line-number="30">    <span class="co">#' Change hair color.</span></a>
+<a class="sourceLine" id="cb5-31" data-line-number="31">    <span class="co">#' @param val New hair color.</span></a>
+<a class="sourceLine" id="cb5-32" data-line-number="32">    <span class="co">#' @examples</span></a>
+<a class="sourceLine" id="cb5-33" data-line-number="33">    <span class="co">#' P &lt;- Person("Ann", "black")</span></a>
+<a class="sourceLine" id="cb5-34" data-line-number="34">    <span class="co">#' P$hair</span></a>
+<a class="sourceLine" id="cb5-35" data-line-number="35">    <span class="co">#' P$set_hair("red")</span></a>
+<a class="sourceLine" id="cb5-36" data-line-number="36">    <span class="co">#' P$hair</span></a>
+<a class="sourceLine" id="cb5-37" data-line-number="37">    <span class="dt">set_hair =</span> <span class="cf">function</span>(val) {</a>
+<a class="sourceLine" id="cb5-38" data-line-number="38">      self<span class="op">$</span>hair &lt;-<span class="st"> </span>val</a>
+<a class="sourceLine" id="cb5-39" data-line-number="39">    },</a>
+<a class="sourceLine" id="cb5-40" data-line-number="40"></a>
+<a class="sourceLine" id="cb5-41" data-line-number="41">    <span class="co">#' @description</span></a>
+<a class="sourceLine" id="cb5-42" data-line-number="42">    <span class="co">#' Say hi.</span></a>
+<a class="sourceLine" id="cb5-43" data-line-number="43">    <span class="dt">greet =</span> <span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb5-44" data-line-number="44">      <span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Hello, my name is "</span>, self<span class="op">$</span>name, <span class="st">".</span><span class="ch">\n</span><span class="st">"</span>))</a>
+<a class="sourceLine" id="cb5-45" data-line-number="45">    }</a>
+<a class="sourceLine" id="cb5-46" data-line-number="46">  )</a>
+<a class="sourceLine" id="cb5-47" data-line-number="47">)</a></code></pre></div>
+</div>
 <div id="datasets" class="section level3">
 <h3 class="hasAnchor">
 <a href="#datasets" class="anchor"></a>Datasets</h3>
 <p>Datasets are usually stored as <code>.rdata</code> files in <code>data/</code> and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset’s name.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#' Prices of 50,000 round cut diamonds.</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#' A dataset containing the prices and other attributes of almost 54,000</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#' diamonds.</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#' @format A data frame with 53940 rows and 10 variables</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#' \describe{</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#'   \item{price}{price in US dollars (\$326--\$18,823)}</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#'   \item{carat}{weight of the diamond (0.2--5.01)}</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#'   \item{color}{diamond colour, from D (best) to J (worst)}</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#'   \item{x}{length in mm (0--10.74)}</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#'   \item{y}{width in mm (0--58.9)}</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#'   \item{z}{depth in mm (0--31.8)}</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}</span></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#'   \item{table}{width of top of diamond relative to widest point (43--95)}</span></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#' }</span></a>
-<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#' @source &lt;http://www.diamondse.info/&gt;</span></a>
-<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="st">"diamonds"</span></a>
-<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; [1] "diamonds"</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">#' Prices of 50,000 round cut diamonds.</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#' A dataset containing the prices and other attributes of almost 54,000</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#' diamonds.</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#' @format A data frame with 53940 rows and 10 variables</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#' \describe{</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#'   \item{price}{price in US dollars (\$326--\$18,823)}</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#'   \item{carat}{weight of the diamond (0.2--5.01)}</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#'   \item{color}{diamond colour, from D (best) to J (worst)}</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#'   \item{x}{length in mm (0--10.74)}</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#'   \item{y}{width in mm (0--58.9)}</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#'   \item{z}{depth in mm (0--31.8)}</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#'   \item{table}{width of top of diamond relative to widest point (43--95)}</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#' }</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#' @source &lt;http://www.diamondse.info/&gt;</span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="st">"diamonds"</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; [1] "diamonds"</span></a></code></pre></div>
 <p>Note the use of two additional tags that are particularly useful for documenting data:</p>
 <ul>
 <li><p><code>@format</code>, which gives an overview of the structure of the dataset. This should include a <strong>definition list</strong> that describes each variable. There’s currently no way to generate this with markdown, so this is one of the few places you’ll need to Rd markup directly.</p></li>
@@ -306,12 +371,12 @@
 <h3 class="hasAnchor">
 <a href="#packages" class="anchor"></a>Packages</h3>
 <p>As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel <code>"_PACKAGE"</code>. We recommend placing package documentation in <code>{pkgname}-package.R</code>, and have <code>@keywords internal</code>. Here’s an example:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">#' @details</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#' The only function you're likely to need from roxygen2 is [roxygenize()]. </span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#' Otherwise refer to the vignettes to see how to format the documentation.</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#' @keywords internal</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">"_PACKAGE"</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] "_PACKAGE"</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#' @details</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#' The only function you're likely to need from roxygen2 is [roxygenize()]. </span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#' Otherwise refer to the vignettes to see how to format the documentation.</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#' @keywords internal</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">"_PACKAGE"</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; [1] "_PACKAGE"</span></a></code></pre></div>
 <p>Package documentation is a good place to put <code>@section Package options:</code> that documents options used by the package.</p>
 <p>Some notes:</p>
 <ul>
@@ -326,15 +391,15 @@
 <h2 class="hasAnchor">
 <a href="#sections" class="anchor"></a>Sections</h2>
 <p>You can add arbitrary sections with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case, must fit on one line, and must be followed by a colon.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#' @section Warning:</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></a></code></pre></div>
-<p>To add a subsection, you must use the Rd <code>\subsection{}</code> command, as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#' @section Warning:</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#' You must not call this function unless ...</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#' \subsection{Exceptions}{</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#'    Apart from the following special cases...</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#' }</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></a></code></pre></div>
+<p>To add a subsection, you must use the Rd <code>\subsection{}</code> command, as follows:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#' @section Warning:</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#' You must not call this function unless ...</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#' \subsection{Exceptions}{</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#'    Apart from the following special cases...</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#' }</span></a></code></pre></div>
 <p>If you find yourself adding a lot of sections, you might consider using a vignette instead.</p>
 </div>
 <div id="do-repeat-yourself" class="section level2">
@@ -353,13 +418,13 @@
 <a href="#cross-references" class="anchor"></a>Cross-references</h3>
 <p>There are two tags that make it easier for people to navigate around your documentation: <code>@seealso</code> and <code>@family</code>. <code>@seealso</code> allows you to point to other useful resources, either on the web <code>&lt;http://www.r-project.org&gt;</code> or to other documentation with <code>[function_name()]</code>. If you have a family of related functions, you can use <code>@family {family}</code> to cross-reference each function to every other function within the family. A function can be a member of multiple families.</p>
 <p>For <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code>, this might look like:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#' @family aggregations</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#' @family aggregations</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.</span></a></code></pre></div>
 <p>By default <code>@family {family}</code>, will generate the see also text “Other {family}:”, so the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can override the default title by providing a <code>rd_family_title</code> list in <code>man/roxygen/meta.R</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">rd_family_title &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="dt">aggregations =</span> <span class="st">"Aggregation functions"</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">rd_family_title &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="dt">aggregations =</span> <span class="st">"Aggregation functions"</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">)</a></code></pre></div>
 </div>
 <div id="inheriting-documentation-from-other-topics" class="section level3">
 <h3 class="hasAnchor">
@@ -389,99 +454,99 @@
 <li>documenting functions with the same (or similar arguments)</li>
 </ul>
 <p>It generates a new section, named either “Methods (by class)”, “Methods (by generic)” or “Functions”. The section contains a bulleted list describing each function, labelled so that you know what function or method it’s talking about. Here’s an example, documenting an imaginary new generic:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">#' Foo bar generic</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#' @param x Object to foo.</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">foobar &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html">UseMethod</a></span>(<span class="st">"x"</span>)</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#' @describeIn foobar Difference between the mean and the median</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">foobar.numeric &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(x) <span class="op">-</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(x))</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#' @describeIn foobar First and last values pasted together in a string.</span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10">foobar.character &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(x[<span class="dv">1</span>], <span class="st">"-"</span>, x[<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(x)])</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#' Foo bar generic</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#' @param x Object to foo.</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">foobar &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html">UseMethod</a></span>(<span class="st">"x"</span>)</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#' @describeIn foobar Difference between the mean and the median</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">foobar.numeric &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(x) <span class="op">-</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(x))</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#' @describeIn foobar First and last values pasted together in a string.</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">foobar.character &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(x[<span class="dv">1</span>], <span class="st">"-"</span>, x[<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(x)])</a></code></pre></div>
 </div>
 <div id="rdname" class="section level4">
 <h4 class="hasAnchor">
 <a href="#rdname" class="anchor"></a><code>@rdname</code>
 </h4>
 <p><code>@rdname</code> is a more general purpose tool. It overrides the default file name generated by roxygen and merges documentation for multiple objects into one file. This gives you complete freedom to combine documentation however you see fit. There are two ways to use <code>@rdname</code>. You can add documentation to an existing function:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#' Basic arithmetic</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#' @param x,y numeric vectors.</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">add &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#' @rdname add</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">times &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">*</span><span class="st"> </span>y</a></code></pre></div>
-<p>Or, you can create a dummy documentation file by documenting <code>NULL</code> and setting an informative <code>@name</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">#' Basic arithmetic</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#'</span></a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#' @param x,y numeric vectors.</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#' @name arith</span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#' @rdname arith</span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9">add &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#' @rdname arith</span></a>
-<a class="sourceLine" id="cb13-12" data-line-number="12">times &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">*</span><span class="st"> </span>y</a></code></pre></div>
+<a class="sourceLine" id="cb13-4" data-line-number="4">add &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#' @rdname add</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">times &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">*</span><span class="st"> </span>y</a></code></pre></div>
+<p>Or, you can create a dummy documentation file by documenting <code>NULL</code> and setting an informative <code>@name</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co">#' Basic arithmetic</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#' @param x,y numeric vectors.</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#' @name arith</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#' @rdname arith</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9">add &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#' @rdname arith</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12">times &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">*</span><span class="st"> </span>y</a></code></pre></div>
 </div>
 </div>
 <div id="order-of-includes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#order-of-includes" class="anchor"></a>Order of includes</h3>
 <p>By default, roxygen blocks are processed in the order in which they appear in the file. When you’re combining multiple files, this can sometimes cause the function usage to appear in a suboptimal order. You can override the default ordering with <code>@order</code>. For example, the following the block would place <code>times</code> first in <code>arith.Rd</code> because 1 comes before 2.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co">#' @rdname arith</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#' @order 2</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">add &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#' @rdname arith</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#' @order 1</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">times &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">*</span><span class="st"> </span>y</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">#' @rdname arith</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#' @order 2</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">add &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#' @rdname arith</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#' @order 1</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">times &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">*</span><span class="st"> </span>y</a></code></pre></div>
 </div>
 <div id="evaluating-arbitrary-code" class="section level3">
 <h3 class="hasAnchor">
 <a href="#evaluating-arbitrary-code" class="anchor"></a>Evaluating arbitrary code</h3>
 <p>A new and powerful technique is the <code>@eval</code> tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading <code>#'</code>).</p>
 <p>For example, this code + roxygen block:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">my_params &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">    <span class="st">"@param x An integer vector"</span>,</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">    <span class="st">"@param y A character vector"</span></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5">  )</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#' A title</span></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#' </span></a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#' @eval my_params()</span></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#' @export</span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12">foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
-<a class="sourceLine" id="cb15-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">my_params &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">    <span class="st">"@param x An integer vector"</span>,</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">    <span class="st">"@param y A character vector"</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">  )</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#' A title</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#' </span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#' @eval my_params()</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#' @export</span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12">foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb16-13" data-line-number="13">}</a></code></pre></div>
 <p>Is equivalent to:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#' A title</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#' </span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#' @param x An integer vector</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#' @param y A character vector</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#' @export</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">}</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co">#' A title</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#' </span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#' @param x An integer vector</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#' @param y A character vector</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#' @export</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb17-7" data-line-number="7">}</a></code></pre></div>
 <p>A related function is <code>@evalRd</code>. It works in the same way as <code>@eval</code> (i.e. it’s evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated <code>.Rd</code> file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.</p>
 <p>For example, this block:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">my_note &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">note{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(x, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">collapse =</span><span class="st">""</span>), <span class="st">"}"</span>)</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#' @evalRd my_note(c(</span></a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">#'   "This is the first line",</span></a>
-<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#'   "This is the second line"</span></a>
-<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#' ))</span></a>
-<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">#&gt; NULL</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">my_note &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">note{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(x, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">collapse =</span><span class="st">""</span>), <span class="st">"}"</span>)</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">#' @evalRd my_note(c(</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#'   "This is the first line",</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#'   "This is the second line"</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#' ))</span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt; NULL</span></a></code></pre></div>
 <p>Would generate this Rd:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode latex"><code class="sourceCode latex"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="fu">\note</span>{</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">This is the first line</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">This is the second line</a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">}</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode latex"><code class="sourceCode latex"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="fu">\note</span>{</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">This is the first line</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">This is the second line</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">}</a></code></pre></div>
 </div>
 <div id="roxygen-templates" class="section level3">
 <h3 class="hasAnchor">
@@ -551,8 +616,8 @@
 <p>The original source location is added as a comment to the second line of each generated <code>.Rd</code> file in the following form:</p>
 <pre><code>% Please edit documentation in ...</code></pre>
 <p><code>roxygen2</code> tries to capture all locations from which the documentation is assembled. For code that <em>generates</em> R code with Roxygen comments (e.g., the Rcpp package), the <code>@backref</code> tag is provided. This allows specifying the “true” source of the documentation, and will substitute the default list of source files. Use one tag per source file:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co">#' @backref src/file.cpp</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co">#' @backref src/file.h</span></a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co">#' @backref src/file.cpp</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="co">#' @backref src/file.h</span></a></code></pre></div>
 </div>
 </div>
   </div>

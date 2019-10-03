@@ -155,18 +155,105 @@
 <h1 class="page-header">
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+<div id="new-tags" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-tags" class="anchor"></a>New tags</h3>
+<ul>
+<li><p><code>@includeRmd</code> converts an <code>.Rmd</code>/<code>.md</code> file to Rd and includes it in the manual page. This allows sharing text between vignettes, the <code>README.Rmd</code> file and the manual. See the “Rd (documentation) tags” vignette for details (<a href='https://github.com/r-lib/roxygen2/issues/902'>#902</a>).</p></li>
+<li><p><code>@order n</code> tag controls the order in which blocks are processed. You can use it to override the usual ordering which proceeds in from the top of each file to the bottom. <code>@order 1</code> will be processed before <code>@order 2</code>, and before any blocks that don’t have an explicit order set (<a href='https://github.com/r-lib/roxygen2/issues/863'>#863</a>).</p></li>
+<li>
+<p><code>@exportS3Method</code> tag allows you to generate <code>S3method()</code> namespace directives (note the different in capitalisation) (<a href='https://github.com/r-lib/roxygen2/issues/796'>#796</a>). Its primary use is for “delayed” method registration which allows you to define methods for generics found in suggested packages (available in R 3.6 and greater). For example,</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> package::generic</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">generic.foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">}</a></code></pre></div>
+<p>will generate</p>
+<pre><code>S3method(package::generic, foo)</code></pre>
+<p>(See <a href="https://vctrs.r-lib.org/reference/s3_register.html"><code><a href="https://rdrr.io/pkg/vctrs/man/s3_register.html">vctrs::s3_register()</a></code></a> you need a version that works for earlier versions of R).</p>
+<p>Its two argument form allows you generate arbitrary <code>S3method()</code> directives:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> generic class</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="ot">NULL</span></a></code></pre></div>
+<pre><code>S3method(generic, class)</code></pre>
+</li>
+</ul>
+</div>
+<div id="markdown-improvements" class="section level3">
+<h3 class="hasAnchor">
+<a href="#markdown-improvements" class="anchor"></a>Markdown improvements</h3>
+<ul>
+<li><p>Markdown headings are supported in tags like <code>@description</code>, <code>@details</code>, and <code>@return</code> (<a href='https://github.com/r-lib/roxygen2/issues/907'>#907</a>, <a href='https://github.com/r-lib/roxygen2/issues/908'>#908</a>). Level 1 headings create a new top-level <code>\section{}</code>. Level 2 and above headings create nested <code>\subsections{}</code>.</p></li>
+<li>
+<p>Markdown tables generate <code>\tabular{}</code> (<a href='https://github.com/r-lib/roxygen2/issues/290'>#290</a>). roxygen2 supports the <a href="https://github.github.com/gfm/#tables-extension-">GFM table syntax</a> which looks like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode md"><code class="sourceCode markdown"><a class="sourceLine" id="cb5-1" data-line-number="1">| foo | bar |</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">| --- | --- |</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">| baz | bim |</a></code></pre></div>
+</li>
+<li>
+<p>Markdown code (<code>``</code>) is converted to to either <code>\code{}</code> or <code>\verb{}</code> depending on whether it not it parses as R code. This should make it easier to include arbitrary “code” snippets in documentation without causing Rd failures (<a href='https://github.com/r-lib/roxygen2/issues/654'>#654</a>).</p>
+<p>TODO: Add details from tidyr.</p>
+</li>
+<li><p>Rd comments (<code>%</code>) are automatically escaped. You will need to replace any existing uses of <code>\%</code> with <code>%</code> (<a href='https://github.com/r-lib/roxygen2/issues/879'>#879</a>).</p></li>
+<li><p>Use of unsupported markdown features (blockquotes, headings, inline HTML, and horizontal rules) now gnerate more informative error messages (<a href='https://github.com/r-lib/roxygen2/issues/804'>#804</a>).</p></li>
+</ul>
+</div>
+<div id="default-usage" class="section level3">
+<h3 class="hasAnchor">
+<a href="#default-usage" class="anchor"></a>Default usage</h3>
 <ul>
 <li>
-<p>Markdown tables are now converted to the Rd <code>\tabular{}</code> command (<a href='https://github.com/r-lib/roxygen2/issues/290'>#290</a>). roxygen2 supports the <a href="https://github.github.com/gfm/#tables-extension-">GFM table syntax</a> which looks like:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode md"><code class="sourceCode markdown"><a class="sourceLine" id="cb1-1" data-line-number="1">| foo | bar |</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">| --- | --- |</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">| baz | bim |</a></code></pre></div>
+<p>The default formatting for function usage that spans multiple lines has now changed. Previously, the usage was wrapped to produce the smallest number of lines, e.g.:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/parse_package.html">parse_package</a></span>(<span class="dt">path =</span> <span class="st">"."</span>, <span class="dt">env =</span> <span class="kw"><a href="../reference/parse_package.html">env_package</a></span>(path), </a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="dt">registry =</span> <span class="kw">default_tags</span>(), <span class="dt">global_options =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>())</a></code></pre></div>
+<p>Now it is wrapped so that each argument gets its own line (<a href='https://github.com/r-lib/roxygen2/issues/820'>#820</a>):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/parse_package.html">parse_package</a></span>(</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="dt">path =</span> <span class="st">"."</span>,</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">env =</span> <span class="kw"><a href="../reference/parse_package.html">env_package</a></span>(path),</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="dt">registry =</span> <span class="kw">default_tags</span>(),</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">  <span class="dt">global_options =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>()</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">)</a></code></pre></div>
+<p>If you prefer the old behaviour you can put the following in your <code>DESCRIPTION</code>:</p>
+<pre><code>Roxygen: list(old_usage = TRUE)</code></pre>
 </li>
+</ul>
+</div>
+<div id="code-loading" class="section level3">
+<h3 class="hasAnchor">
+<a href="#code-loading" class="anchor"></a>Code loading</h3>
+<p>roxygen2 now provides three strategies for loading your code (<a href='https://github.com/r-lib/roxygen2/issues/822'>#822</a>):</p>
+<ul>
+<li><p><code><a href="../reference/load.html">load_pkgload()</a></code>, the default, uses <a href="https://www.github.com/r-lib/pkgload">pkgload</a>. Compared to the previous release, this now automatically recompiles your pacakge if needed.</p></li>
+<li><p><code><a href="../reference/load.html">load_source()</a></code> attaches required packages and <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>s code in <code>R/</code>. This is a cruder simulation of package loading than using pkgload (and hence is unreliable if you use S4 extensively), but does not require that the package be compiled. Use if the default strategy (used in roxygen2 6.1.0 and above) causes you grief.</p></li>
+<li><p><code><a href="../reference/load.html">load_installed()</a></code> assumes you have installed the package. This is best used as part of a bigger automated workflow.</p></li>
+</ul>
+<p>You can override the default either by calling (e.g.) <code>roxygenise(load_code = "source"))</code> or by setting the <code>load</code> option in your DESCRIPTION: <code>Roxygen: list(load = "source")</code>.</p>
+</div>
+<div id="options" class="section level3">
+<h3 class="hasAnchor">
+<a href="#options" class="anchor"></a>Options</h3>
+<ul>
+<li><p>As well as storing roxygen options in the <code>Roxygen</code> field of the <code>DESCRIPTION</code> you can now also store them in <code>man/roxygen/meta.R</code> (<a href='https://github.com/r-lib/roxygen2/issues/889'>#889</a>). The evaluation of this file should produce a named list that maps option names to values.</p></li>
+<li><p>roxygen now also looks for templates in <code>man/roxygen/templates</code> (<a href='https://github.com/r-lib/roxygen2/issues/888'>#888</a>).</p></li>
+<li><p>New <code>rd_family_title</code> option: an named list that overrides the default “Other family:” prefix that <code>@family</code> generates. For example, to override the prefix generated by <code>@family foo</code> use <code>rd_family_title &lt;- list(foo = "Custom prefix: ")</code>. (<a href='https://github.com/r-lib/roxygen2/issues/830'>#830</a>, <a href='https://github.com/kevinushey'>@kevinushey</a>)</p></li>
+</ul>
+</div>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li><p>Rd comments (<code>%</code>) are automatically escaped. This is a backward incompatible change because you will need to replace existing uses of <code>\%</code> with <code>%</code> (<a href='https://github.com/r-lib/roxygen2/issues/879'>#879</a>).</p></li>
+<li><p>Using <code>@docType package</code> no longer automatically adds <code>-name</code>. Instead document <code>_PACKAGE</code> to get all the defaults for package documentation, or use <code>@name</code> to override the default file name.</p></li>
+<li><p><code>@S3method</code> has been removed. It was deprecated in roxygen2 4.0.0 released 2014-05-02, over 5 years ago.</p></li>
+</ul>
+<div id="extension-points" class="section level3">
+<h3 class="hasAnchor">
+<a href="#extension-points" class="anchor"></a>Extension points</h3>
+<ul>
 <li><p><code>global_options</code> is no longer passed to all roclet methods. Instead use <code><a href="../reference/load_options.html">roxy_meta_get()</a></code> to retrieve values stored in the options (<a href='https://github.com/r-lib/roxygen2/issues/918'>#918</a>).</p></li>
-<li><p><code>@description</code> and <code>@detail</code> tags automatically generated from the leading description block now have correct line numbers (<a href='https://github.com/r-lib/roxygen2/issues/917'>#917</a>).</p></li>
 <li><p><code><a href="../reference/rd_section.html">rd_section()</a></code> and <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code> are now exported so that you can more easily extend <code><a href="../reference/rd_roclet.html">rd_roclet()</a></code> with your own tags that genereate output in <code>.Rd</code> files.</p></li>
-<li><p>Using the old <code>wrap</code> option will now trigger a warning. It hasn’t worked for some time.</p></li>
-<li><p>Using <code>@docType package</code> no longer automatically adds <code>-name</code>. Instead document <code>_PACKAGE</code> to get all the defaults for package documentation. (Removing this feature allowed for simplification of the code.)</p></li>
 <li>
 <p><code><a href="../reference/roclet.html">roclet_tags()</a></code> is no longer used; instead define a <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> method. If you tag is <code>@mytag</code>, then the class name associated with it is <code>roxy_tag_mytag</code> so the method should be call <code>roxy_tag_parse.roxy_tag_mytag()</code>. Note that there is no namespacing so if you’re defining multiple new tags I recommend using your package name as common prefix.</p>
 <p>This means that the <code>registry</code> argument is no longer needed and has been removed.</p>
@@ -177,80 +264,41 @@
 <p>The internal data structure used to represent blocks has been overhauled. It is now documented and stable - see <code><a href="../reference/roxy_block.html">roxy_block()</a></code> for details. If you’re one of the few people who have written a roxygen2 extension, this will break your code - but the documentation, object structure, and print methods are now much better that I hope it’s not too annoying! Because this interface is now documented, it will not change in the future without warning and a deprecation cycle.</p>
 <p>You can learn more in the new <code><a href="../articles/extending.html">vignette("extending")</a></code> - a big thanks to <a href='https://github.com/mikldk'>@mikldk</a> for getting this started (<a href='https://github.com/r-lib/roxygen2/issues/882'>#882</a>).</p>
 </li>
-<li><p>You now get a warning if you use multiple <code>@usage</code> statements. Previously, the first was used without a warning</p></li>
+<li><p><code>tag_markdown_restricted()</code> has been removed because it did exactly the same think as <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>.</p></li>
+</ul>
+</div>
+</div>
+<div id="bug-fixes-and-minor-improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-and-minor-improvements" class="anchor"></a>Bug fixes and minor improvements</h2>
+<ul>
+<li><p><code>@description</code> and <code>@detail</code> tags automatically generated from the leading description block now have correct line numbers (<a href='https://github.com/r-lib/roxygen2/issues/917'>#917</a>).</p></li>
 <li><p>Functions documented in <code>reexports</code> are now sorted alphabetically by package (<a href='https://github.com/r-lib/roxygen2/issues/765'>#765</a>).</p></li>
 <li><p><code>@inheritParams</code> ignores leading dots when comparing argument names (<a href='https://github.com/r-lib/roxygen2/issues/862'>#862</a>).</p></li>
-<li>
-<p>roxygen2 now provides three strategies for loading your code:</p>
-<ul>
-<li>
-<code><a href="../reference/load.html">load_pkgload()</a></code> uses pkgload.</li>
-<li>
-<code><a href="../reference/load.html">load_installed()</a></code> assumes you have installed the package.</li>
-<li>
-<code><a href="../reference/load.html">load_source()</a></code> attaches required packages and <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>s code in <code>R/</code>.</li>
-</ul>
-<p>If the code loading strategy in roxygen2 6.1.0 and above has caused you grief, you can revert to the old strategy by using <code>Roxygen: list(load = "source")</code> (<a href='https://github.com/r-lib/roxygen2/issues/822'>#822</a>).</p>
-<p>Compared to the previous release, the default pkgload strategy now will recompile <code>src/</code> if needed.</p>
-</li>
-<li><p>New <code>@order n</code> tag controls the order in which blocks are processed. You can use it to override the usual ordering which proceeds in from the top of each file to the bottom. <code>@order 1</code> will be processed before <code>@order 2</code>, and before any blocks that don’t have an explicit order set (<a href='https://github.com/r-lib/roxygen2/issues/863'>#863</a>).</p></li>
 <li><p><code>@example</code> and <code>@examples</code> are interwoven in the order in which they appear (<a href='https://github.com/r-lib/roxygen2/issues/868'>#868</a>).</p></li>
 <li><p><code>@inheritDotParams</code> automatically ignores arguments that can’t be inherited through <code>...</code> because they are used by the current function (<a href='https://github.com/mjskay'>@mjskay</a>, <a href='https://github.com/r-lib/roxygen2/issues/885'>#885</a>).</p></li>
 <li><p>Escaped <code>'</code> and <code>"</code> in strings in examples are no longer double escaped (<a href='https://github.com/r-lib/roxygen2/issues/873'>#873</a>).</p></li>
-<li>
-<p>The default formatting for function usage that spans multiple lines has now changed. Previously it was wrapped to produce the fewest number of lines, e.g.:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="../reference/parse_package.html">parse_package</a></span>(<span class="dt">path =</span> <span class="st">"."</span>, <span class="dt">env =</span> <span class="kw"><a href="../reference/parse_package.html">env_package</a></span>(path), </a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">registry =</span> <span class="kw">default_tags</span>(), <span class="dt">global_options =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>())</a></code></pre></div>
-<p>Now it is wrapped so that each argument gets its own line (<a href='https://github.com/r-lib/roxygen2/issues/820'>#820</a>):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="../reference/parse_package.html">parse_package</a></span>(</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="dt">path =</span> <span class="st">"."</span>,</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">env =</span> <span class="kw"><a href="../reference/parse_package.html">env_package</a></span>(path),</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">registry =</span> <span class="kw">default_tags</span>(),</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">global_options =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>()</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">)</a></code></pre></div>
-<p>If you prefer the old behaviour you can put the following in your <code>DESCRIPTION</code>:</p>
-<pre><code>Roxygen: list(old_usage = TRUE)</code></pre>
-</li>
 <li><p><code>@inheritDotParams</code> includes link to function and wraps paramters in <code>\code{}</code> (<a href='https://github.com/halldc'>@halldc</a>, <a href='https://github.com/r-lib/roxygen2/issues/842'>#842</a>)</p></li>
 <li><p>Allow multiple <code>@inheritDotParams</code> (<a href='https://github.com/gustavdelius'>@gustavdelius</a>, <a href='https://github.com/r-lib/roxygen2/issues/767'>#767</a>).</p></li>
 <li><p>Avoid multiple <code>...</code> arguments when using <code>@inheritDotParams</code> (<a href='https://github.com/gustavdelius'>@gustavdelius</a>, <a href='https://github.com/r-lib/roxygen2/issues/857'>#857</a>).</p></li>
 <li><p><code>@family</code> automatically adds <code>()</code> when linking to functions (<a href='https://github.com/r-lib/roxygen2/issues/815'>#815</a>).</p></li>
-<li><p>Headings are now allowed in markdown text. Subheadings, i.e. headings with level 2 and above, generate subsections within roxygen tags (e.g. within <code>@description</code>, <code>@details</code>, <code>@return</code>, etc.) <code>##</code> creates a subsection, <code>###</code> a sub-subsection, etc. Level 1 headings generate separate sections in the manual page (<a href='https://github.com/r-lib/roxygen2/issues/907'>#907</a>, <a href='https://github.com/r-lib/roxygen2/issues/908'>#908</a>).</p></li>
 <li><p><code>\link{foo}</code> links in external inherited documentation are automatically transformed to <code>\link{package}{foo}</code> so that they work in the generated documented (<a href='https://github.com/r-lib/roxygen2/issues/635'>#635</a>).</p></li>
 <li><p><code>\href{}</code> links in external inherited documentation are now inserted correctly (without additional <code>{}</code>) (<a href='https://github.com/r-lib/roxygen2/issues/778'>#778</a>).</p></li>
 <li><p>White space is automatically trimmed off the <code>RoxygenNote</code> field when comparing the installed version of roxygen2 to the version used to generate the documentation (<a href='https://github.com/r-lib/roxygen2/issues/802'>#802</a>).</p></li>
-<li>
-<p>New <code>@exportS3Method</code> tag allows you to generate <code>S3method()</code> namespace directives (note the different in capitalisation) (<a href='https://github.com/r-lib/roxygen2/issues/796'>#796</a>). Its primary use is for “delayed” method registration which allows you to define methods for generics found in suggested packages. This is only available in R 3.6 and greater, and looks like this:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> package::generic</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">generic.foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">}</a></code></pre></div>
-<p>(See <a href="https://vctrs.r-lib.org/reference/s3_register.html"><code><a href="https://rdrr.io/pkg/vctrs/man/s3_register.html">vctrs::s3_register()</a></code></a> you need a version that works for earlier versions of R).</p>
-<p>You can also use it to generate arbitrary <code>S3method()</code> directions by providing two values:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> generic class</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="ot">NULL</span></a></code></pre></div>
-</li>
-<li><p><code><a href="../reference/namespace_roclet.html">namespace_roclet()</a></code> now uses <code>`</code> to escape non-syntactic function names, rather than <code>'</code>.</p></li>
-<li><p>Support <code>@S3method</code> has been removed. It was deprecated in roxygen2 4.0.0 released 2014-05-02, over 5 years ago.</p></li>
-<li><p><code>@includeRmd</code> converts an <code>.Rmd</code>/<code>.md</code> file to Rd and includes it in the manual page. This allows sharing text between vignettes, the <code>README.Rmd</code> file and the manual. See the “Rd (documentation) tags” vignette for details (<a href='https://github.com/r-lib/roxygen2/issues/902'>#902</a>).</p></li>
-<li><p>Rd comments (<code>%</code>) are automatically escaped in markdown text. This is a backward incompatible check that will require that you replace existing uses of <code>\%</code> with <code>%</code> (<a href='https://github.com/r-lib/roxygen2/issues/879'>#879</a>).</p></li>
+<li><p>You now get a warning if you use multiple <code>@usage</code> statements in a single block. Previously, the first was used without a warning.</p></li>
 <li><p><code>@describeIn</code> can now be used with any combination of function types (<a href='https://github.com/r-lib/roxygen2/issues/666'>#666</a>, <a href='https://github.com/r-lib/roxygen2/issues/848'>#848</a>).</p></li>
-<li><p>Convert markdown code (<code>``</code>) to either <code>\code{}</code> or <code>\verb{}</code> depending on whether it not it parses as R code. This should make it easier to include arbitrary “code” snippets in documentation without causing Rd failures (<a href='https://github.com/r-lib/roxygen2/issues/654'>#654</a>).</p></li>
 <li><p>Inherting for a function with no arguments no longer throws a confusing error message (<a href='https://github.com/r-lib/roxygen2/issues/898'>#898</a>)</p></li>
-<li><p>As well as storing roxygen options in the <code>Roxygen</code> field of the <code>DESCRIPTION</code> you can now also store them in <code>man/roxygen/meta.R</code> (<a href='https://github.com/r-lib/roxygen2/issues/889'>#889</a>).</p></li>
-<li><p>roxygen now looks for templates in <code>man/roxygen/templates</code> (<a href='https://github.com/r-lib/roxygen2/issues/888'>#888</a>).</p></li>
 <li><p>Files generated on Windows systems now retain their existing line endings, or use unix-style line endings for new files (<a href='https://github.com/jonthegeek'>@jonthegeek</a>, <a href='https://github.com/jimhester'>@jimhester</a>, <a href='https://github.com/r-lib/roxygen2/issues/840'>#840</a>).</p></li>
 <li><p><code>@inheritParams</code> warns if there are no parameters that require documentation (<a href='https://github.com/r-lib/roxygen2/issues/836'>#836</a>).</p></li>
 <li><p>roxygen2 now recgonises fully qualified S4 functions like <code><a href="https://rdrr.io/r/methods/setGeneric.html">methods::setGeneric()</a></code>, <code><a href="https://rdrr.io/r/methods/setClass.html">methods::setClass()</a></code> and <code><a href="https://rdrr.io/r/methods/setMethod.html">methods::setMethod()</a></code> (<a href='https://github.com/r-lib/roxygen2/issues/880'>#880</a>).</p></li>
-<li><p>Use of unsupported markdown features (blockquotes, headings, inline HTML, and horizontal rules) now gets a more informative error message (<a href='https://github.com/r-lib/roxygen2/issues/804'>#804</a>).</p></li>
-<li><p><code>tag_markdown_restricted()</code> has been removed because it did exactly the same think as <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>.</p></li>
 <li><p>Package documentation now converts ORCIDs into a useful link (<a href='https://github.com/r-lib/roxygen2/issues/721'>#721</a>).</p></li>
 <li><p>Empty roxygen2 lines at the start of a block are now silently removed (<a href='https://github.com/r-lib/roxygen2/issues/710'>#710</a>).</p></li>
 <li><p>S4 methods that generate <code>.local()</code> wrapper no longer error with obscure error message (<a href='https://github.com/r-lib/roxygen2/issues/847'>#847</a>).</p></li>
 <li><p><code>@param</code> containing only whitespce gets a clear warning message (<a href='https://github.com/r-lib/roxygen2/issues/869'>#869</a>).</p></li>
-<li><p>A new system for providing custom roxygen2 metadata is now available. When <code><a href="../reference/roxygenize.html">roxygenise()</a></code> is called, if a file “man/roxygen/meta.R” exists, it will be evaluated. Its evaluation should produce an R list, mapping roxygen option names to values. Currently, only ‘rd_family_title’ is recognized: this field should itself be an R list, mapping family names to the appropriate prefixes to be used in the generated R documentation (as opposed to the default ‘Other family:’ prefix). (<a href='https://github.com/r-lib/roxygen2/issues/830'>#830</a>, <a href='https://github.com/kevinushey'>@kevinushey</a>)</p></li>
 <li><p>Logo in package description is now scaled to a 120px width, cf. pkgdown websites (<a href='https://github.com/peterdesmet'>@peterdesmet</a>, <a href='https://github.com/r-lib/roxygen2/issues/834'>#834</a>).</p></li>
+<li><p>Using the old <code>wrap</code> option will now trigger a warning. It hasn’t worked for some time.</p></li>
 </ul>
+</div>
 </div>
     <div id="roxygen2-6-1-1" class="section level1">
 <h1 class="page-header">
@@ -266,9 +314,9 @@
 <h1 class="page-header">
 <a href="#roxygen2-6-1-0" class="anchor"></a>roxygen2 6.1.0<small> 2018-07-27 </small>
 </h1>
-<div id="new-features" class="section level2">
+<div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New features</h2>
+<a href="#new-features-1" class="anchor"></a>New features</h2>
 <ul>
 <li><p>The <code>NAMESPACE</code> roclet now works in two passes - it first generates the <code>NAMESPACE</code> containing only import directives becaues this can be generated without evaluating the code in the package. This alleviates a problem where it was previously possible to get into a state that you could only get out of by carefully editting the <code>NAMESPACE</code> by hand (<a href='https://github.com/r-lib/roxygen2/issues/372'>#372</a>).</p></li>
 <li>
@@ -444,21 +492,21 @@
 <h1 class="page-header">
 <a href="#roxygen2-5-0-0" class="anchor"></a>roxygen2 5.0.0<small> 2015-10-28 </small>
 </h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New features</h2>
+<a href="#new-features-2" class="anchor"></a>New features</h2>
 <ul>
 <li><p>Roxygen now records its version in a single place: the <code>RoxygenNote</code> field in the <code>DESCRIPTION</code> (<a href='https://github.com/r-lib/roxygen2/issues/338'>#338</a>). This will be the last time an roxygen2 upgrade changes every file in <code>man/</code>.</p></li>
 <li>
 <p>You can now easily re-export functions that you’ve imported from another package:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#' <a href='https://github.com/export'>@export</a></span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">magrittr<span class="op">::</span><span class="st">`</span><span class="dt">%&gt;%</span><span class="st">`</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#' <a href='https://github.com/export'>@export</a></span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">magrittr<span class="op">::</span><span class="st">`</span><span class="dt">%&gt;%</span><span class="st">`</span></a></code></pre></div>
 <p>All imported-and-re-exported functions will be documented in the same file (<code>rexports.Rd</code>), containing a brief descrption and links to the original documentation (<a href='https://github.com/r-lib/roxygen2/issues/376'>#376</a>).</p>
 </li>
 <li>
 <p>You can more easily generate package documentation by documenting the special string "_PACKAGE" (<a href='https://github.com/krlmlr'>@krlmlr</a>, <a href='https://github.com/r-lib/roxygen2/issues/349'>#349</a>):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#' <a href='https://github.com/details'>@details</a> Details</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">"_PACKAGE"</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#' <a href='https://github.com/details'>@details</a> Details</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">"_PACKAGE"</span></a></code></pre></div>
 <p>The title and description will be automatically filled in from the <code>DESCRIPTION</code>.</p>
 </li>
 <li><p>New tags <code>@rawRd</code> and <code>@rawNamespace</code> allow you to insert raw (unescaped) in Rd and the <code>NAMESPACE</code> (this is useful for conditional imports). <code>@evalRd()</code> is similar, but instead of literal Rd, you give it R code that produces literal Rd code when run. This should make it easier to experiment with new types of output (<a href='https://github.com/r-lib/roxygen2/issues/385'>#385</a>).</p></li>
@@ -555,19 +603,19 @@
 <a href="#roxygen2-4-0-0" class="anchor"></a>roxygen2 4.0.0<small> 2014-05-02 </small>
 </h1>
 <p>Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you’ll need to run <code>roxygen2::upgradeRoxygen()</code>. That will flag all existing files as being created by roxygen2.</p>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New features</h2>
+<a href="#new-features-3" class="anchor"></a>New features</h2>
 <ul>
 <li><p>Six vignettes provide a comprehensive overview of using roxygen2 in practice. Run <code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes("roxygen2")</a></code> to access.</p></li>
 <li><p><code>@describeIn</code> makes it easier to describe multiple functions in one file. This is especially useful if you want to document methods with their generic, or with a common class, but it’s also useful if you want to document multiple related functions in one file (<a href='https://github.com/r-lib/roxygen2/issues/185'>#185</a>).</p></li>
 <li><p><code>@field</code> documents the fields on a reference class (<a href='https://github.com/r-lib/roxygen2/issues/181'>#181</a>). It works the same way as <code>@slot</code> for S4 classes.</p></li>
 <li>
 <p>You can now document objects defined elsewhere (like datasets) by documenting their name as a string (<a href='https://github.com/r-lib/roxygen2/issues/221'>#221</a>). For example, to document an dataset called <code>mydata</code>, you can do:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#' Mydata set</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#' Some data I collected about myself</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">"mydata"</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">#' Mydata set</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#' Some data I collected about myself</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">"mydata"</span></a></code></pre></div>
 </li>
 <li><p>Roxygen2 now adds a comment to all generated files so that you know they’ve been generated, and should not be hand edited.</p></li>
 <li><p>Roxygen2 no longer wraps the text in Rd files by default, i.e. the default option is <code>wrap = FALSE</code> now. To override it, you have to specify a field <code>Roxygen: list(wrap = TRUE)</code> in <code>DESCRIPTION</code> (<a href='https://github.com/r-lib/roxygen2/issues/178'>#178</a>).</p></li>
@@ -587,9 +635,9 @@
 <li><p>Better error message if you try to document something other than NULL, an assignment, a class, a generic or a method (<a href='https://github.com/r-lib/roxygen2/issues/194'>#194</a>).</p></li>
 </ul>
 </div>
-<div id="bug-fixes-and-minor-improvements" class="section level2">
+<div id="bug-fixes-and-minor-improvements-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-and-minor-improvements" class="anchor"></a>Bug fixes and minor improvements</h2>
+<a href="#bug-fixes-and-minor-improvements-1" class="anchor"></a>Bug fixes and minor improvements</h2>
 <ul>
 <li><p>Better parsing of non-syntactic function names in other packages when used in <code>@inheritParams</code> (<a href='https://github.com/r-lib/roxygen2/issues/236'>#236</a>).</p></li>
 <li><p>Deprecated arguments to <code><a href="../reference/roxygenize.html">roxygenise()</a></code> (<code>roxygen.dir</code>, <code>copy.package</code>, <code>overwrite</code>, <code>unlink.target</code>) removed.</p></li>
@@ -613,12 +661,12 @@
 <h2 class="hasAnchor">
 <a href="#documentation-for-reference-classes" class="anchor"></a>Documentation for reference classes</h2>
 <p>It’s now possible to document reference classes, using the “docstring” convention described in <code>?setRefClass</code>. If you want to provide a short paragraph description of what a method does, make the first component of the message a string containing the description, e.g.:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">setRefClass</span>(<span class="st">"A"</span>, <span class="dt">methods =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="dt">f =</span> <span class="cf">function</span>(a, b) {</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">    <span class="st">"Take numbers \code{a} and \code{b} and add them together"</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">    a <span class="op">+</span><span class="st"> </span>b</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">  }</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">))</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">setRefClass</span>(<span class="st">"A"</span>, <span class="dt">methods =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="dt">f =</span> <span class="cf">function</span>(a, b) {</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">    <span class="st">"Take numbers \code{a} and \code{b} and add them together"</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">    a <span class="op">+</span><span class="st"> </span>b</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">  }</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">))</a></code></pre></div>
 <p>Unlike the documentation for R functions, the documentation for methods can be quite succinct.</p>
 <p>Roxygen adopts the convention that documented methods are public, and will be listed in the man page for the object. Undocumented methods are private and will not be shown in the documentation. The methods for all superclasses are also listed, so that you don’t need to flip through multiple pages of documentation to understand what you can do with an object. All documented methods will be placed in a bulleted list in a section titled “Methods”, the method usage will be automatically prepended to the docstring.</p>
 </div>
@@ -687,9 +735,9 @@
 <h1 class="page-header">
 <a href="#roxygen2-2-2" class="anchor"></a>roxygen2 2.2<small> 2011-11-12 </small>
 </h1>
-<div id="new-features-3" class="section level2">
+<div id="new-features-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-3" class="anchor"></a>New features</h2>
+<a href="#new-features-4" class="anchor"></a>New features</h2>
 <ul>
 <li><p>Package docType will automatically add package alias, if needed. (Fixes <a href='https://github.com/r-lib/roxygen2/issues/4'>#4</a>)</p></li>
 <li><p>Data docType will automatically add <code>datasets</code> keyword, default usage, and default format. (Fixes <a href='https://github.com/r-lib/roxygen2/issues/5'>#5</a>). Data docType automatically added to data objects.</p></li>
@@ -704,10 +752,10 @@
 <li><p><code>@details</code> and <code>@description</code> now work correctly</p></li>
 <li>
 <p><code>@useDynLib</code> now works correctly:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"> <span class="op">@</span>useDynLib packageName routine1 routine2</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"> <span class="op">@</span>useDynLib packageName routine1 routine2</a></code></pre></div>
 <p>produces</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"> <span class="kw">useDynLib</span>(packageName, routine1)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"> <span class="kw">useDynLib</span>(packageName, routine2)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"> <span class="kw">useDynLib</span>(packageName, routine1)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"> <span class="kw">useDynLib</span>(packageName, routine2)</a></code></pre></div>
 <p>in the <code>NAMESPACE</code> file, instead of separate (wrong) useDynLib statements as before.</p>
 </li>
 <li><p>All namespace import directives now behave in the same way as the export directives, producing multiple single directives instead one multiple directive: <code>@importClassesFrom pkg a b</code> now produces <code>importClassesFrom(pkg, a)</code> and <code>importClassesFrom(pkg, b)</code></p></li>
@@ -729,9 +777,9 @@
 <h1 class="page-header">
 <a href="#roxygen2-2-1" class="anchor"></a>roxygen2 2.1<small> 2011-07-29 </small>
 </h1>
-<div id="new-features-4" class="section level2">
+<div id="new-features-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-4" class="anchor"></a>New features</h2>
+<a href="#new-features-5" class="anchor"></a>New features</h2>
 <ul>
 <li><p>package dependencies loaded automatically</p></li>
 <li><p>added support for the <code>@source</code> tag</p></li>
@@ -779,9 +827,9 @@
 <li><p><code>@export</code> correctly uses <code>@method</code> to generate <code>S3method</code> namespace directive</p></li>
 </ul>
 </div>
-<div id="new-tags" class="section level2">
+<div id="new-tags-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-tags" class="anchor"></a>New tags</h2>
+<a href="#new-tags-1" class="anchor"></a>New tags</h2>
 <ul>
 <li><p><code>@rdname filename</code> sets the output filename (without extension). Use for functions non-alphanumeric functions (e.g. <code>[&lt;-</code>) or if you want to document multiple functions in one file</p></li>
 <li><p><code>@template templatename</code> includes a documentation template (see above)</p></li>

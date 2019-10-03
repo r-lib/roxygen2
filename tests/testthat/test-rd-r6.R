@@ -1,4 +1,19 @@
 
+test_that("extract_r6_data without source refs", {
+  txt <-
+    "R6::R6Class(
+       public = list(
+         field1 = NULL,
+         meth1 = function(Z) { },
+         meth2 = function(Z = 10, ...) { },
+         field2 = \"foobar\",
+         meth3 = function() { }
+       )
+     )"
+  C <- eval(parse(text = txt, keep.source = FALSE))
+  expect_error(extract_r6_data(C), "without source references")
+})
+
 test_that("extract_r6_methods", {
   txt <-
     "R6::R6Class(
@@ -152,6 +167,97 @@ test_that("r6_active_bindings", {
 
   expect_true(any(grepl("code{bind1}}{Active binding.", doc, fixed = TRUE)))
   expect_true(any(grepl("code{bind2}}{Active 2.", doc, fixed = TRUE)))
+})
+
+test_that("R56 edge cases, class without methods", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    #' @field field1 Field.
+    #' @field field2 Another field.
+    #' @field bind1 Active binding.
+    #' @field bind2 Active 2.
+    C <- R6::R6Class(
+      public = list(
+        field1 = NULL,
+        field2 = \"foobar\"
+      ),
+      active = list(
+        bind1 = function(x) { },
+        bind2 = function(x) { }
+      )
+    )"
+  block <- parse_text(text)[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_silent(topic_add_r6_methods(rd, block, environment()))
+  expect_false(grepl("method", format(rd), ignore.case = TRUE))
+})
+
+test_that("R56 edge cases, class without fields", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    #' @field bind1 Active binding.
+    #' @field bind2 Active 2.
+    C <- R6::R6Class(
+      public = list(
+      ),
+      active = list(
+        bind1 = function(x) { },
+        bind2 = function(x) { }
+      )
+    )"
+  block <- parse_text(text)[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_silent(topic_add_r6_methods(rd, block, environment()))
+  expect_false(grepl("field", format(rd), ignore.case = TRUE))
+})
+
+test_that("R56 edge cases, class without active bindings", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    #' @field field1 Field.
+    #' @field field2 Another field.
+    C <- R6::R6Class(
+      public = list(
+        field1 = NULL,
+        field2 = \"foobar\"
+      ),
+      active = list(
+      )
+    )"
+  block <- parse_text(text)[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_silent(topic_add_r6_methods(rd, block, environment()))
+  expect_false(grepl("active", format(rd), ignore.case = TRUE))
+})
+
+test_that("R56 edge cases, class without anything", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    C <- R6::R6Class(
+      public = list(
+      ),
+      active = list(
+      )
+    )"
+  block <- parse_text(text)[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_silent(topic_add_r6_methods(rd, block, environment()))
+  doc <- format(rd)
+  expect_false(grepl("method", format(rd), ignore.case = TRUE))
+  expect_false(grepl("field", format(rd), ignore.case = TRUE))
+  expect_false(grepl("active", format(rd), ignore.case = TRUE))
 })
 
 test_that("integration test", {

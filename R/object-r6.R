@@ -101,7 +101,8 @@ extract_r6_super_data <- function(x) {
     c("method", "field", "active"),
     c(length(method_nms), length(field_nms), length(active_nms))
   )
-  names <-c(sort(method_nms), sort(field_nms), sort(active_nms))
+  rsort <- function(x) sort(x, decreasing = TRUE)
+  names <-c(rsort(method_nms), rsort(field_nms), rsort(active_nms))
   mth <- rbind(
     data.frame(
       stringsAsFactors = FALSE,

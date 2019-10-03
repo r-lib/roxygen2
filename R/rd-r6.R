@@ -75,7 +75,7 @@ r6_superclass <- function(block, r6data, env) {
   pkgs <- super$classes$package[match(cls, super$classes$classname)]
   path <- sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls)
   me <- sprintf("\\code{%s}", block$object$value$classname)
-  push(paste(c(path, me), collapse = " -> "))
+  push(paste(c(rev(path), me), collapse = " -> "))
 
   push("}")
 
@@ -244,8 +244,10 @@ r6_inherited_method_list <- function(block, r6data) {
   # drop methods that were shadowed in a subclass
   super_meth <- super$members[super$members$type == "method", ]
   self <- r6data$self
-  super <- super_meth[! super_meth$name %in% self$name, ]
-  super <- super_meth[! duplicated(super_meth$name), ]
+  super_meth <- super_meth[! super_meth$name %in% self$name, ]
+  super_meth <- super_meth[! duplicated(super_meth$name), ]
+
+  super_meth <- super_meth[rev(seq_len(nrow(super_meth))), ]
 
   c("\\if{html}{\\subsection{Inherited methods}{",
     "\\itemize{",

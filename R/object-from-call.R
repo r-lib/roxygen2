@@ -41,7 +41,9 @@ object_from_call <- function(call, env, block, file) {
 
 object_from_name <- function(name, env, block) {
   value <- get(name, env)
-  if (methods::is(value, "refObjectGenerator")) {
+  if (inherits(value, "R6ClassGenerator")) {
+    type <- "r6class"
+  } else if (methods::is(value, "refObjectGenerator")) {
     value <- methods::getClass(as.character(value@className), where = env)
     type <- "rcclass"
   } else if (methods::is(value, "classGeneratorFunction")) {
@@ -268,6 +270,7 @@ object_topic <- function(value, alias, type) {
     s4class = paste0(value@className, "-class"),
     s4generic = value@generic,
     rcclass = paste0(value@className, "-class"),
+    r6class = alias,
     rcmethod = value@name,
     s3generic = alias,
     s3method = alias,

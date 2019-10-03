@@ -100,6 +100,18 @@ needs_doc <- function(block) {
 # Tag processing functions ------------------------------------------------
 
 block_to_rd <- function(block, base_path, env) {
+  UseMethod("block_to_rd")
+}
+
+#' @export
+
+block_to_rd.default <- function(block, ...) {
+  stop("Internal roxygen error, unknown block type")
+}
+
+#' @export
+
+block_to_rd.roxy_block <- function(block, base_path, env) {
   # Must start by processing templates
   block <- process_templates(block, base_path)
 
@@ -123,6 +135,42 @@ block_to_rd <- function(block, base_path, env) {
     roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
     return()
   }
+
+  describe_rdname <- topic_add_describe_in(rd, block, env)
+  filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)
+  rd$filename <- paste0(filename, ".Rd")
+
+  rd
+}
+
+#' @export
+
+block_to_rd.roxy_block_r6class <- function(block, base_path, env) {
+  # Must start by processing templates
+  block <- process_templates(block, base_path)
+
+  if (!needs_doc(block)) {
+    return()
+  }
+
+  name <- block_get_tag(block, "name")$val %||% block$object$topic
+  if (is.null(name)) {
+    roxy_tag_warning(block$tags[[1]], "Missing name")
+    return()
+  }
+
+  rd <- RoxyTopic$new()
+  topic_add_name_aliases(rd, block, name)
+
+  rd$add(roxy_tag_rd(block_get_tag(block, "name"), env = env, base_path = base_path))
+  rd$add(roxy_tag_rd(block_get_tag(block, "title"), env = env, base_path = base_path))
+
+  if (rd$has_section("description") && rd$has_section("reexport")) {
+    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
+    return()
+  }
+
+  topic_add_r6_methods(rd, block, env)
 
   describe_rdname <- topic_add_describe_in(rd, block, env)
   filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)

@@ -33,7 +33,8 @@ mdxml_children_to_rd <- function(xml, state) {
 
 #' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children
 mdxml_node_to_rd <- function(xml, state) {
-  if (!inherits(xml, "xml_node") || xml_type(xml) != "element") {
+  if (!inherits(xml, "xml_node") ||
+      ! xml_type(xml) %in% c("text", "element")) {
     roxy_tag_warning(state$tag, "Internal markdown translation failure")
     return("")
   }
@@ -47,25 +48,26 @@ mdxml_node_to_rd <- function(xml, state) {
     text = escape_comment(xml_text(xml)),
     emph = paste0("\\emph{", mdxml_children_to_rd(xml, state), "}"),
     strong = paste0("\\strong{", mdxml_children_to_rd(xml, state), "}"),
-    softbreak = "\n",
-    linebreak = "\n",
+    softbreak = mdxml_break(state),
+    linebreak = mdxml_break(state),
 
     code = mdxml_code(xml, state),
-    code_block = paste0("\\preformatted{", escape_verb(xml_text(xml)), "}"),
+    code_block = mdxml_code_block(xml, state),
 
     table = mdxml_table(xml, state),
     list = mdxml_list(xml, state),
     item = mdxml_item(xml, state),
-    link = mdxml_link(xml),
+    link = mdxml_link(xml, state),
     image = mdxml_image(xml),
+    heading = mdxml_heading(xml, state),
 
     # Only supported when including Rmds
-    heading = mdxml_heading(xml, state),
+    html_block = mdxml_html_block(xml, state),
+    html_inline = mdxml_html_inline(xml, state),
 
     # Not supported
     block_quote = mdxml_unsupported(xml, state$tag, "block quotes"),
     hrule = mdxml_unsupported(xml, state$tag, "horizontal rules"),
-    html_inline = mdxml_unsupported(xml, state$tag, "inline HTML"),
     mdxml_unknown(xml, state$tag)
   )
 }
@@ -79,6 +81,10 @@ mdxml_unsupported <- function(xml, tag, feature) {
   escape_comment(xml_text(xml))
 }
 
+mdxml_break <- function(state) {
+  if (isTRUE(state$inlink)) " " else "\n"
+}
+
 mdxml_code <- function(xml, tag) {
   code <- xml_text(xml)
 
@@ -89,6 +95,18 @@ mdxml_code <- function(xml, tag) {
   } else {
     paste0("\\verb{", escape_verb(code), "}")
   }
+}
+
+mdxml_code_block <- function(xml, state) {
+  info <- xml_attr(xml, "info")[1]
+  if (is.na(info) || nchar(info[1]) == 0) info <- NA_character_
+  paste0(
+    if (!is.na(info)) paste0("\\if{html}{\\out{<div class=\"", info, "\">}}"),
+    "\\preformatted{",
+    escape_verb(xml_text(xml)),
+    "}",
+    if (!is.na(info)) "\\if{html}{\\out{</div>}}"
+  )
 }
 
 can_parse <- function(x) {
@@ -147,29 +165,32 @@ mdxml_item <- function(xml, state) {
   paste0("\n\\item ", cnts)
 }
 
-mdxml_link <- function(xml) {
+mdxml_link <- function(xml, state) {
   ## Hyperlink, this can also be a link to a function
   dest <- xml_attr(xml, "destination")
   contents <- xml_contents(xml)
 
-  link <- parse_link(dest, contents)
+  link <- parse_link(dest, contents, state)
 
   if (!is.null(link)) {
     paste0(link, collapse = "")
   } else if (dest == "" || dest == xml_text(xml)) {
     paste0("\\url{", escape_comment(xml_text(xml)), "}")
   } else {
-    paste0("\\href{", dest, "}{", mdxml_link_text(contents), "}")
+    paste0("\\href{", dest, "}{", mdxml_link_text(contents, state), "}")
   }
 }
 
-# Newlines in markdown get converted to softbreaks/linebreaks by
-# markdown_xml(), which then get interpreted as empty strings by
-# xml_text(). So we preserve newlines as spaces.
-mdxml_link_text <- function(xml_contents) {
-  text <- xml_text(xml_contents)
-  text[xml_name(xml_contents) %in% c("linebreak", "softbreak")] <- " "
-  escape_comment(paste0(text, collapse = ""))
+mdxml_link_text <- function(xml_contents, state) {
+  # Newlines in markdown get converted to softbreaks/linebreaks by
+  # markdown_xml(), which then get interpreted as empty strings by
+  # xml_text(). So we preserve newlines as spaces.
+  inlink <- state$inlink
+  on.exit(state$inlink <- inlink, add = TRUE)
+  state$inlink <- TRUE
+
+  text <- map_chr(xml_contents, mdxml_node_to_rd, state)
+  paste0(text, collapse = "")
 }
 
 mdxml_image = function(xml) {
@@ -187,15 +208,38 @@ mdxml_heading <- function(xml, state) {
   if (! state$has_sections && level == 1) {
     return(mdxml_unsupported(xml, state$tag, "level 1 markdown headings"))
   }
+  txt <- map_chr(xml_contents(xml), mdxml_node_to_rd, state)
   head <- paste0(
     mdxml_close_sections(state, level),
     "\n",
     if (level == 1) paste0(state$section_tag, "\\section{"),
     if (level > 1) "\\subsection{",
-    xml_text(xml),
+    paste(txt, collapse = ""),
     "}{")
   state$section <- c(state$section, level)
   head
+}
+
+mdxml_html_block <- function(xml, state) {
+  if (state$tag$tag != "includeRmd") {
+    return(mdxml_unsupported(xml, state$tag, "HTML blocks"))
+  }
+  paste0(
+    "\\if{html}{\\out{\n",
+    gsub("}", "\\}", xml_text(xml), fixed = TRUE),
+    "}}\n"
+  )
+}
+
+mdxml_html_inline <- function(xml, state) {
+  if (state$tag$tag != "includeRmd") {
+    return(mdxml_unsupported(xml, state$tag, "inline HTML"))
+  }
+  paste0(
+    "\\if{html}{\\out{",
+    gsub("}", "\\}", xml_text(xml), fixed = TRUE),
+    "}}"
+  )
 }
 
 #' @importFrom utils head tail

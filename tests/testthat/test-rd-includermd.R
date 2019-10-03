@@ -151,3 +151,55 @@ test_that("empty Rmd", {
   cat("\n", sep = "", file = tmp)
   expect_equal(rmd_eval_rd(tmp, tag), "")
 })
+
+test_that("inline html", {
+  skip_if_not(rmarkdown::pandoc_available())
+
+  tmp <- tempfile(fileext = ".md")
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  cat(sep = "\n", file = tmp,
+    "Text at the front",
+    "",
+    "",
+    "## Subsection in details",
+    "",
+    "Some subsection text with <span>inline html</span>.")
+  rox <- sprintf("
+    #' Title
+    #' @includeRmd %s
+    #' @name foobar
+    NULL", tmp)
+  out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
+  exp_details <- paste0(
+    "Text at the front",
+    "\\subsection{Subsection in details}{",
+    "Some subsection text with ",
+    "\\if{html}{\\out{<span>}}inline html\\if{html}{\\out{</span>}}.\n}"
+  )
+  expect_equal_strings(out1$get_value("details"), exp_details)
+})
+
+test_that("html block", {
+  skip_if_not(rmarkdown::pandoc_available())
+
+  tmp <- tempfile(fileext = ".md")
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  cat(sep = "\n", file = tmp,
+    "Text at the front",
+    "",
+    "<a id=\"test\"></a>",
+    "",
+    "Text")
+  rox <- sprintf("
+    #' Title
+    #' @includeRmd %s
+    #' @name foobar
+    NULL", tmp)
+  out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
+  exp_details <- paste0(
+    "Text at the front",
+    "\\if{html}{\\out{<a id=\"test\">}}\\if{html}{\\out{</a>}}",
+    "Text"
+  )
+  expect_equal_strings(out1$get_value("details"), exp_details)
+})

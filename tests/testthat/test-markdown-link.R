@@ -414,3 +414,19 @@ test_that("linebreak in 'text' of [text][foo] turns into single space", {
 
 })
 
+test_that("markup in link text", {
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' Description, see [`code link text`][func].
+    #' And also [`code as well`](https://external.com).
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' Description, see \\code{\\link[=func]{code link text}}.
+    #' And also \\href{https://external.com}{\\verb{code as well}}.
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+})

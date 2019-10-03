@@ -80,6 +80,10 @@ See `vignette("rd")` for details.
 * Rd comments (`%`) are automatically escaped. You will need to replace any
   existing uses of `\%` with `%` (#879).
 
+* Markdown links can now contain formatting. E.g. in
+  `See [*Formatting*][formatting]` the link text will be emphasised.
+  Similarly in external links: `See [*this web page*](https://...)` (#919).
+
 * Use of unsupported markdown features (blockquotes, headings, inline HTML, 
   and horizontal rules) now gnerate more informative error messages (#804).
 

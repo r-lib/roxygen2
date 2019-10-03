@@ -48,6 +48,12 @@
     S3method(generic, class)
     ```
 
+### R6
+
+roxygen2 now supports documentation for R6 classes (#922).
+
+See `vignette("rd")` for details.
+
 ### Markdown improvements
 
 * Markdown headings are supported in tags like `@description`, `@details`, 
@@ -152,122 +158,106 @@ You can override the default either by calling (e.g.) `roxygenise(load_code = "s
 * `@S3method` has been removed. It was deprecated in roxygen2 4.0.0
   released 2014-05-02, over 5 years ago.
 
-### Extension points
+### Extending roxygen2
 
-* `global_options` is no longer passed to all roclet methods. Instead use 
-  `roxy_meta_get()` to retrieve values stored in the options (#918).
+The process for extending roxygen2 with new tags and new roclets has been completely overhauled, and is now documented in `vignette("extending")`. If you're one of the few people who have written a roxygen2 extension, this will break your code - but the documentation, object structure, and print methods are now much better that I hope it's not too annoying! Because this interface is now documented, it will not change in the future without warning and a deprecation cycle. 
 
-* `@description` and `@detail` tags automatically generated from the leading
-  description block now have correct line numbers (#917).
+If you have previously made a new roclet, the major changes are:
 
-* roxygen2 now supports documentation for R6 classes. See the
-  "Rd (documentation) tags" vignette for details (#922).
+* The previously internal data structures used to represent blocks and tags
+  have been overhauled. They are now documented and stable. See `roxy_block()` 
+  and `roxy_tag()` for details.
+
+* `roclet_tags()` is no longer used; instead define a `roxy_tag_parse()` method.
+  For example, if you create a new `@mytag` tag, it will generate a class of 
+  `roxy_tag_mytag`, and will be parsed by `roxy_tag_parse.roxy_tag_mytag()` 
+  method. The method should return a new `roxy_tag()` object with the 
+  `val` field set.
+  
+    This means that the `registry` argument is no longer needed and has 
+    been removed.
 
 * `rd_section()` and `roxy_tag_rd()` are now exported so that you can more 
   easily extend `rd_roclet()` with your own tags that genereate output in
   `.Rd` files.
 
-* `roclet_tags()` is no longer used; instead define a `roxy_tag_parse()` method.
-  If you tag is `@mytag`, then the class name associated with it is
-  `roxy_tag_mytag` so the method should be call `roxy_tag_parse.roxy_tag_mytag()`.
-  Note that there is no namespacing so if you're defining multiple new tags
-  I recommend using your package name as common prefix.
-  
-    This means that the `registry` argument is no longer needed and has been
-    removed.
+* `global_options` is no longer passed to all roclet methods. Instead use 
+  `roxy_meta_get()` to retrieve values stored in the options (#918).
 
-* `tag_two_part()` and `tag_words()` are now regular functions.
+* `tag_two_part()` and `tag_words()` are now simple functions, not function 
+  factories. `tag_markdown_restricted()` has been removed because it did 
+  exactly the same think as `tag_markdown()`.
 
-* The internal `roxy_tag()` gains a new field: `raw`. This now always contains
-  the raw string value parsed from the file. `val` is only set after the tag
-  has been parsed.
-
-* The internal data structure used to represent blocks has been overhauled.
-  It is now documented and stable - see `roxy_block()` for details. If you're
-  one of the few people who have written a roxygen2 extension, this will
-  break your code - but the documentation, object structure, and print methods 
-  are now much better that I hope it's not too annoying! Because this interface
-  is now documented, it will not change in the future without warning and 
-  a deprecation cycle. 
-    
-    You can learn more in the new `vignette("extending")` - a big thanks to
-    @mikldk for getting this started (#882).
-
-* `tag_markdown_restricted()` has been removed because it did exactly the
-  same think as `tag_markdown()`.
+A big thanks goes to @mikldk for starting on the vignette and motivating me to make the extension process much more pleasant (#882).
 
 ## Bug fixes and minor improvements
 
-* `@description` and `@detail` tags automatically generated from the leading
-  description block now have correct line numbers (#917).
-
-* Functions documented in `reexports` are now sorted alphabetically by
-  package (#765).
-
-* `@inheritParams` ignores leading dots when comparing argument names (#862).
-
-* `@example` and `@examples` are interwoven in the order in which they
-  appear (#868).
-
-* `@inheritDotParams` automatically ignores arguments that can't be inherited
-  through `...` because they are used by the current function (@mjskay, #885).
-
-* Escaped `'` and `"` in strings in examples are no longer double escaped 
-  (#873).
-
-* `@inheritDotParams` includes link to function and wraps paramters
-  in `\code{}` (@halldc, #842)
-
-* Allow multiple `@inheritDotParams` (@gustavdelius, #767).
-
-* Avoid multiple `...` arguments when using `@inheritDotParams`
-  (@gustavdelius, #857).
-
-* `@family` automatically adds `()` when linking to functions (#815).
-
-* `\link{foo}` links in external inherited documentation are automatically
-  transformed to `\link{package}{foo}` so that they work in the generated
-  documented (#635).
-
-* `\href{}` links in external inherited documentation are now inserted 
-  correctly (without additional `{}`) (#778).
+* Empty roxygen2 lines at the start of a block are now silently removed (#710).
 
 * White space is automatically trimmed off the `RoxygenNote` field when 
   comparing the installed version of roxygen2 to the version used to 
   generate the documentation (#802).
 
-* You now get a warning if you use multiple `@usage` statements in a single
-  block. Previously, the first was used without a warning.
-
-* `@describeIn` can now be used with any combination of function types 
-  (#666, #848).
-
-* Inherting for a function with no arguments no longer throws a confusing
-  error message (#898)
-
 * Files generated on Windows systems now retain their existing line endings, or use 
   unix-style line endings for new files (@jonthegeek, @jimhester, #840).
   
-* `@inheritParams` warns if there are no parameters that require 
-  documentation (#836).
-
 * roxygen2 now recgonises fully qualified S4 functions like 
   `methods::setGeneric()`, `methods::setClass()` and `methods::setMethod()`
   (#880).
 
 * Package documentation now converts ORCIDs into a useful link (#721).
-
-* Empty roxygen2 lines at the start of a block are now silently removed (#710).
+  Automatically included logo is now scaled to a 120px width (@peterdesmet, #834).
 
 * S4 methods that generate `.local()` wrapper no longer error with obscure
   error message (#847).
 
-* `@param` containing only whitespce gets a clear warning message (#869).
-
-* Logo in package description is now scaled to a 120px width, cf. pkgdown websites (@peterdesmet, #834).
-
 * Using the old `wrap` option will now trigger a warning. It hasn't worked
   for some time.
+
+* Functions documented in `reexports` are now sorted alphabetically by
+  package (#765).
+
+* `@describeIn` can now be used with any combination of function types 
+  (#666, #848).
+
+* `@description` and `@detail` tags automatically generated from the leading
+  description block now have correct line numbers (#917).
+
+* `@example` and `@examples` are interwoven in the order in which they
+  appear (#868).
+
+* In `@examples`, escaped `'` and `"` in strings are no longer doubly escaped 
+  (#873).
+
+* `@family` automatically adds `()` when linking to functions (#815).
+
+* When `@inherit`ing from external documentation, `\link{foo}` links 
+  are automatically transformed to `\link{package}{foo}` so that they work in 
+  the generated documented (#635). `\href{}` links in external inherited are 
+  now inserted correctly (without additional `{}`) (#778).
+
+* `@inherit`ing a a function with no arguments no longer throws a confusing
+  error message (#898)
+
+* `@inheritDotParams` automatically ignores arguments that can't be inherited
+  through `...` because they are used by the current function (@mjskay, #885).
+  
+* `@inheritDotParams` includes link to function and wraps paramters
+  in `\code{}` (@halldc, #842)
+
+* `@inheritDotParams` are now permitted (@gustavdelius, #767).
+
+* `@inheritDotParams` avoids multiple `...` arguments (@gustavdelius, #857).
+
+* `@inheritParams` ignores leading dots when comparing argument names (#862).
+
+* `@inheritParams` warns if there are no parameters that require 
+  documentation (#836).
+
+* `@param` containing only whitespce gets a clear warning message (#869).
+
+* Multiple `@usage` statements in a single block now generate a warning. 
+  Previously, the first was used without a warning.
 
 # roxygen2 6.1.1
 

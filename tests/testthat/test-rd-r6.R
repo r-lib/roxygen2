@@ -260,6 +260,32 @@ test_that("R56 edge cases, class without anything", {
   expect_false(grepl("active", format(rd), ignore.case = TRUE))
 })
 
+test_that("warning if no method comes after the docs", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    #' @field field1 Yep.
+    C <- R6::R6Class(
+      public = list(
+        #' @description Method 1.
+        method1 = function() { },
+        #' @description Dangling.
+        field1 = NULL
+      )
+    )"
+
+  eval(parse(text = text, keep.source = TRUE))
+  block <- parse_text(text, env = environment())[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_warning(
+    topic_add_r6_methods(rd, block, environment()),
+    "Cannot find matching R6 method"
+  )
+  doc <- format(rd)
+})
+
 test_that("integration test", {
 
   wd <- getwd()

@@ -1,4 +1,49 @@
 
+test_that("extract_r6_methods", {
+  txt <-
+    "R6::R6Class(
+       public = list(
+         field1 = NULL,
+         meth1 = function(Z) { },
+         meth2 = function(Z = 10, ...) { },
+         field2 = \"foobar\",
+         meth3 = function() { }
+       )
+     )"
+  C <- eval(parse(text = txt, keep.source = TRUE))
+  M <- extract_r6_methods(C)
+  expect_equal(M$type, rep("method", 3))
+  expect_equal(M$name, paste0("meth", 1:3))
+  expect_equal(M$line, c(4L, 5L, 7L))
+  expect_equal(
+    M$formals,
+    I(list(as.pairlist(alist(Z=)), as.pairlist(alist(Z = 10, ... = )), NULL)))
+})
+
+test_that("extract_r6_super_data", {
+
+  eval(parse(test_path("roxygen-block-3.R"), keep.source = TRUE))
+
+  D <- extract_r6_super_data(C)
+  mypkg <- environmentName(topenv())
+  expect_equal(D$classes$package, rep(mypkg, 2))
+  expect_equal(D$classes$classname, c("B", "A"))
+  expect_equal(D$members$package, rep(mypkg, 16))
+  expect_equal(D$members$classname, rep(c("B", "A"), c(7, 9)))
+  expect_equal(
+    D$members$type,
+    c("method", "method", "field", "field", "active", "active", "active",
+      "method", "method", "method", "field", "field", "field", "active",
+      "active", "active")
+  )
+  expect_equal(
+    D$members$name,
+    c("meth4", "meth1", "field4", "field1", "active5", "active4",
+      "active1", "meth3", "meth2", "meth1", "field3", "field2", "field1",
+      "active3", "active2", "active1")
+  )
+})
+
 test_that("extract_r6_fields", {
   C <- R6::R6Class(
     public = list(
@@ -107,4 +152,47 @@ test_that("r6_active_bindings", {
 
   expect_true(any(grepl("code{bind1}}{Active binding.", doc, fixed = TRUE)))
   expect_true(any(grepl("code{bind2}}{Active 2.", doc, fixed = TRUE)))
+})
+
+test_that("integration test", {
+
+  wd <- getwd()
+  on.exit(setwd(wd), add = TRUE)
+  setwd(test_path())
+
+  env <- new.env(parent = asNamespace("roxygen2"))
+  eval(
+    parse(test_path("roxygen-block-3.R"), keep.source = TRUE),
+    envir = env
+  )
+
+  blocks <- parse_file(test_path("roxygen-block-3.R"), env = env)
+
+  roc <- roclet_preprocess(roclet_find("rd"))
+
+  roxy_warnings <- character()
+
+  withCallingHandlers(
+    res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path()),
+    warning = function(w) {
+      roxy_warnings <<- c(roxy_warnings, w$message)
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  # Warnings
+  verify_output(
+    test_path(paste0("roxygen-block-3-warnings.txt")),
+    sort(roxy_warnings)
+  )
+
+  tmp <- tempfile()
+  on.exit(unlink(tmp), add = TRUE)
+  for (n in names(res)) {
+    path <- test_path(paste0("roxygen-block-3-", n))
+    verify_output(path, res[[n]])
+    cat(format(res[[n]]), file = tmp)
+    expect_silent(chk <- tools::checkRd(tmp))
+    expect_equal(length(chk), 0L)
+  }
 })

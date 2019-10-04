@@ -8,7 +8,7 @@
 #' To create a new `@mytag` define `roxy_tag_parse.roxy_tag_mytag()`. It should
 #' either call one of the functions here, or directly set `x$val`.
 #'
-#' @param x A [roxy_tag] object to parss
+#' @param x A [roxy_tag] object to parse
 #' @return A [roxy_tag] object with the `val` field set to the parsed value.
 #' @name tag_parsers
 #' @keywords internal

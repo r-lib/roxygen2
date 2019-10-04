@@ -85,7 +85,7 @@ See `vignette("rd")` for details.
   Similarly in external links: `See [*this web page*](https://...)` (#919).
 
 * Use of unsupported markdown features (blockquotes, headings, inline HTML, 
-  and horizontal rules) now gnerate more informative error messages (#804).
+  and horizontal rules) now generate more informative error messages (#804).
 
 ### Default usage
 
@@ -122,7 +122,7 @@ roxygen2 now provides three strategies for loading your code (#822):
 
 * `load_pkgload()`, the default, uses [pkgload](https://www.github.com/r-lib/pkgload). 
   Compared to the previous release, this now automatically recompiles your 
-  pacakge if needed.
+  package if needed.
 
 * `load_source()` attaches required packages and `source()`s code in `R/`. 
   This is a cruder simulation of package loading than using pkgload (and hence
@@ -182,7 +182,7 @@ If you have previously made a new roclet, the major changes are:
     been removed.
 
 * `rd_section()` and `roxy_tag_rd()` are now exported so that you can more 
-  easily extend `rd_roclet()` with your own tags that genereate output in
+  easily extend `rd_roclet()` with your own tags that generate output in
   `.Rd` files.
 
 * `global_options` is no longer passed to all roclet methods. Instead use 
@@ -205,7 +205,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * Files generated on Windows systems now retain their existing line endings, or use 
   unix-style line endings for new files (@jonthegeek, @jimhester, #840).
   
-* roxygen2 now recgonises fully qualified S4 functions like 
+* roxygen2 now recognises fully qualified S4 functions like 
   `methods::setGeneric()`, `methods::setClass()` and `methods::setMethod()`
   (#880).
 
@@ -246,7 +246,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@inheritDotParams` automatically ignores arguments that can't be inherited
   through `...` because they are used by the current function (@mjskay, #885).
   
-* `@inheritDotParams` includes link to function and wraps paramters
+* `@inheritDotParams` includes link to function and wraps parameters
   in `\code{}` (@halldc, #842)
 
 * `@inheritDotParams` are now permitted (@gustavdelius, #767).
@@ -279,10 +279,10 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 ## New features
 
 * The `NAMESPACE` roclet now works in two passes - it first generates the
-  `NAMESPACE` containing only import directives becaues this can be generated
+  `NAMESPACE` containing only import directives because this can be generated
   without evaluating the code in the package. This alleviates a problem
   where it was previously possible to get into a state that you could only
-  get out of by carefully editting the `NAMESPACE` by hand (#372).
+  get out of by carefully editing the `NAMESPACE` by hand (#372).
 
 * `@evalRd foo()` evaluates `foo()` defined in the package namespace and inserts
   the results into the current block (#645). The code should return a character
@@ -306,7 +306,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 
 * `roxygenise()` uses `pkgload::load_all()` instead of a home grown solution
   to simulate package loading (this is needed because roxygen2 uses run-time
-  information to generate the documetation). This should reduce S4 related
+  information to generate the documentation). This should reduce S4 related
   problems and ensures that `devtools::document()` and `roxygenise()` always
   have exactly the same behaviour (#568, #595).
 
@@ -486,7 +486,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 
 * You can now document `setClassUnion()`s (#514).
 
-* The default alias for S4 method now re-addeds trailing ANY signatures
+* The default alias for S4 method now re-adds trailing ANY signatures
   that are sometimes dropped (#460).
 
 * Back references are now wrapped over multiple lines, if long
@@ -557,7 +557,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
     ```
 
     All imported-and-re-exported functions will be documented in the same
-    file (`rexports.Rd`), containing a brief descrption and links to the
+    file (`rexports.Rd`), containing a brief description and links to the
     original documentation (#376).
 
 *   You can more easily generate package documentation by documenting the
@@ -611,7 +611,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@examples` no longer complains about non-matching braces inside
   strings (#329).
 
-* `@family` now cross-links each manual page only once, instread of linking
+* `@family` now cross-links each manual page only once, instead of linking
   to all aliases (@gaborcsardi, #283, #367).
 
 * The special `@include` parser has also been rewritten in C++, giving

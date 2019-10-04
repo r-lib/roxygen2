@@ -60,3 +60,4 @@ VignetteBuilder:
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
 RoxygenNote: 6.1.99.9001
+Language: en-GB

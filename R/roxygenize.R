@@ -1,7 +1,7 @@
 #' Process a package with the Rd, namespace and collate roclets.
 #'
 #' This is the workhorse function that uses roclets, the built-in document
-#' tranformation functions, to build all documentation for a package. See
+#' transformation functions, to build all documentation for a package. See
 #' the documentation for the individual roclets, [rd_roclet()],
 #' [namespace_roclet()], and for [update_collate()],
 #' for more details.

@@ -135,7 +135,7 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
     out <- wrapUsage(x, width = as.integer(width))
   } else {
     args <- paste0("  ", args)
-    args <- map_chr(args, wrapUsage, width = 95, indent = 4)
+    args <- map_chr(args, wrapUsage, width = 90, indent = 4)
     out <- paste0(format_name(name), "(\n", paste0(args, collapse = ",\n"), "\n)")
   }
 

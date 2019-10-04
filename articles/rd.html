@@ -122,7 +122,7 @@
 <div id="basics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basics" class="anchor"></a>Basics</h2>
-<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceeded by whitespace). Blocks gain additional structure through the use of <strong>tags</strong> like <code>@tag details</code>. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block).</p>
+<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceded by whitespace). Blocks gain additional structure through the use of <strong>tags</strong> like <code>@tag details</code>. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block).</p>
 <p>Text within roxygen blocks can be formatted using markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
 </div>
 <div id="the-description-block" class="section level2">
@@ -380,7 +380,7 @@
 <p>Package documentation is a good place to put <code>@section Package options:</code> that documents options used by the package.</p>
 <p>Some notes:</p>
 <ul>
-<li><p>Package documentation will automatically include information parsed from the <code>DESCRIPTION</code>, includoing title, description, list of authors, and useful URLs.</p></li>
+<li><p>Package documentation will automatically include information parsed from the <code>DESCRIPTION</code>, including title, description, list of authors, and useful URLs.</p></li>
 <li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, use <code>@aliases {pkgname}-package</code> to override the default.</p></li>
 <li><p><code><a href="https://usethis.r-lib.org/reference/use_package_doc.html">usethis::use_package_doc()</a></code> will generate a basic template to get you started.</p></li>
 <li><p>Use <code>@references</code> point to published material about the package that users might find helpful.</p></li>
@@ -410,7 +410,7 @@
 <li><p>Cross-link documentation files with <code>@seealso</code> and <code>@family</code>.</p></li>
 <li><p>Inherit documentation from another topic with<br><code>@inherit</code>, <code>@inheritParams</code>, and <code>@inheritSection</code>.</p></li>
 <li><p>Document multiple functions in the same topic with <code>@describeIn</code> or <code>@rdname</code>.</p></li>
-<li><p>Run arbtirary R code with <code>@eval</code>.</p></li>
+<li><p>Run arbitrary R code with <code>@eval</code>.</p></li>
 <li><p>Create reusable templates with <code>@template</code> and <code>@templateVar</code>.</p></li>
 </ul>
 <div id="cross-references" class="section level3">
@@ -608,7 +608,7 @@
 <li><p><code>@concept</code> add extra keywords that will be found with <code><a href="https://rdrr.io/r/utils/help.search.html">help.search()</a></code></p></li>
 <li><p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list found <code>file.path(R.home("doc"), "KEYWORDS"))</code>.</p></li>
 </ul>
-<p>Apart from <code>@keywords internal</code>, these tags are not very useful because most people find documentation using goole. <code>@keywords internal</code> is useful because it removes the function from the documentation index; it’s useful for functions aimed primarily at other developers, not typical users of the package.</p>
+<p>Apart from <code>@keywords internal</code>, these tags are not very useful because most people find documentation using Google. <code>@keywords internal</code> is useful because it removes the function from the documentation index; it’s useful for functions aimed primarily at other developers, not typical users of the package.</p>
 </div>
 <div id="back-references" class="section level3">
 <h3 class="hasAnchor">

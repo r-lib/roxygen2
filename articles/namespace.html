@@ -123,7 +123,7 @@
 <div id="exports" class="section level2">
 <h2 class="hasAnchor">
 <a href="#exports" class="anchor"></a>Exports</h2>
-<p>For a function to be usable outside of your package, you must <strong>export</strong> it. By default roxygen2 doesn’t export anything from your package. If you want an object to be publically available, you must explicitly tag it with <code>@export</code>.</p>
+<p>For a function to be usable outside of your package, you must <strong>export</strong> it. By default roxygen2 doesn’t export anything from your package. If you want an object to be publicly available, you must explicitly tag it with <code>@export</code>.</p>
 <p>Use the following guidelines to decide what to export:</p>
 <ul>
 <li><p>Functions: export functions that you want to make available. Exported functions must be documented, and you must be cautious when changing their interface.</p></li>
@@ -162,7 +162,7 @@ D &lt;- setClass("D")
 <div id="specialised-exports" class="section level3">
 <h3 class="hasAnchor">
 <a href="#specialised-exports" class="anchor"></a>Specialised exports</h3>
-<p>Generally, roxygen2 can genereate the correct namespace directive when <code>@export</code>ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:</p>
+<p>Generally, roxygen2 can generate the correct namespace directive when <code>@export</code>ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:</p>
 <ul>
 <li>
 <code>@export foo</code> generates <code>export(foo)</code>

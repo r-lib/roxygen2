@@ -122,7 +122,7 @@ make_as_character_rd <- function() {
 has_topic <- function(topic, package) {
   tryCatch(
     {
-      help((topic), package = (package))
+      utils::help((topic), package = (package))
       TRUE
     },
     error = function(c) FALSE

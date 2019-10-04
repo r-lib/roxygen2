@@ -123,7 +123,7 @@ r6_fields <- function(block, r6data) {
     )
   }
 
-  if (length(fields) == 0) return()
+  if (length(docd) == 0) return()
 
   # We keep the order of the documentation
 
@@ -169,7 +169,7 @@ r6_active_bindings <- function(block, r6data) {
     )
   }
 
-  if (length(active) == 0) return()
+  if (length(docd) == 0) return()
 
   # We keep the order of the documentation
 

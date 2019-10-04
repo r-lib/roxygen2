@@ -195,7 +195,7 @@ test_that("R56 edge cases, class without methods", {
   expect_false(grepl("method", format(rd), ignore.case = TRUE))
 })
 
-test_that("R56 edge cases, class without fields", {
+test_that("R56 edge cases, class without (documented) fields", {
   text <- "
     #' @title Title
     #' @description Description.
@@ -214,6 +214,27 @@ test_that("R56 edge cases, class without fields", {
   rd <- RoxyTopic$new()
 
   expect_silent(topic_add_r6_methods(rd, block, environment()))
+  expect_false(grepl("field", format(rd), ignore.case = TRUE))
+
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    #' @field bind1 Active binding.
+    #' @field bind2 Active 2.
+    C <- R6::R6Class(
+      public = list(
+        undocumented_field = NULL
+      ),
+      active = list(
+        bind1 = function(x) { },
+        bind2 = function(x) { }
+      )
+    )"
+  block <- parse_text(text)[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_warning(topic_add_r6_methods(rd, block, environment()))
   expect_false(grepl("field", format(rd), ignore.case = TRUE))
 })
 

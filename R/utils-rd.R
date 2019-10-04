@@ -78,7 +78,7 @@ tweak_links <- function(x, package) {
 
   if (is.list(x)) {
     if (!is.null(tag) && tag == "\\link") {
-      if (is.null(attr(x, "Rd_option"))) {
+      if (is.null(attr(x, "Rd_option")) && has_topic(x[[1]], package)) {
         attr(x, "Rd_option") <- structure(package, Rd_tag = "TEXT")
       }
     } else if (length(x) > 0) {
@@ -117,4 +117,14 @@ make_as_character_rd <- function() {
   body[[idx]][[3]] <- call_modify(body[[idx]][[3]], "\\href")
   body(fn) <- body
   fn
+}
+
+has_topic <- function(topic, package) {
+  tryCatch(
+    {
+      help((topic), package = (package))
+      TRUE
+    },
+    error = function(c) FALSE
+  )
 }

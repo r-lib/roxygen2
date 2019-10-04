@@ -37,7 +37,7 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 \if{html}{\out{<a id="method-format"></a>}}
 \subsection{Method \code{format()}}{
 Format the \code{.Rd} file. It considers the sections in
-particular order, even though Rd tools will reoder them again.
+particular order, even though Rd tools will reorder them again.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$format(...)}\if{html}{\out{</div>}}
 }
@@ -179,7 +179,7 @@ A character vector of topic names.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inherits_section_from"></a>}}
 \subsection{Method \code{inherits_section_from()}}{
-Query the topix this topic inherits sections from.
+Query the topics this topic inherits sections from.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$inherits_section_from()}\if{html}{\out{</div>}}
 }

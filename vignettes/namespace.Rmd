@@ -15,7 +15,7 @@ The package `NAMESPACE` is one of the most confusing parts of building a package
 
 ## Exports
 
-For a function to be usable outside of your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publically available, you must explicitly tag it with `@export`.
+For a function to be usable outside of your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publicly available, you must explicitly tag it with `@export`.
 
 Use the following guidelines to decide what to export:
 
@@ -72,7 +72,7 @@ Use the following guidelines to decide what to export:
 
 ### Specialised exports
 
-Generally, roxygen2 can genereate the correct namespace directive when `@export`ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:
+Generally, roxygen2 can generate the correct namespace directive when `@export`ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:
 
 * `@export foo` generates `export(foo)`
 * `@exportClass foo` generates `exportClasses(foo)`

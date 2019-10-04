@@ -13,7 +13,7 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 ## Basics
 
-A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceeded by whitespace). Blocks gain additional structure through the use of __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). 
+A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceded by whitespace). Blocks gain additional structure through the use of __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). 
 
 Text within roxygen blocks can be formatted using markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
 
@@ -340,7 +340,7 @@ Package documentation is a good place to put `@section Package options:` that do
 Some notes:
 
 * Package documentation will automatically include information parsed from the
-  `DESCRIPTION`, includoing title, description, list of authors, and useful
+  `DESCRIPTION`, including title, description, list of authors, and useful
   URLs.
 
 * By default, aliases will be added so that both `?pkgname` and 
@@ -387,7 +387,7 @@ There is a tension between the DRY (do not repeat yourself) principle of program
 
 * Document multiple functions in the same topic with `@describeIn` or `@rdname`.
 
-* Run arbtirary R code with `@eval`.
+* Run arbitrary R code with `@eval`.
 
 * Create reusable templates with `@template` and `@templateVar`.
 
@@ -633,7 +633,7 @@ Three other tags make it easier for the user to find documentation within R's he
     Keywords are optional, but if present, must be taken from the 
     predefined list found `file.path(R.home("doc"), "KEYWORDS"))`.
 
-Apart from `@keywords internal`, these tags are not very useful because most people find documentation using goole. `@keywords internal` is useful because it removes the function from the documentation index; it's useful for functions aimed primarily at other developers, not typical users of the package.
+Apart from `@keywords internal`, these tags are not very useful because most people find documentation using Google. `@keywords internal` is useful because it removes the function from the documentation index; it's useful for functions aimed primarily at other developers, not typical users of the package.
 
 ### Back references
 

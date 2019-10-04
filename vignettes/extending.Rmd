@@ -42,7 +42,7 @@ It has the following fields:
 * `tag`: the name of the tag.
 
 * `raw`: the raw contents of the tag (i.e. everything from the end of 
-  this tag to the begining of the net).
+  this tag to the beginning of the net).
   
 * `val`: the parsed value, which we'll come back to shortly.
 

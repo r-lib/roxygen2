@@ -20,7 +20,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   filename = "",
 
   #' @description Format the `.Rd` file. It considers the sections in
-  #' particular order, even though Rd tools will reoder them again.
+  #' particular order, even though Rd tools will reorder them again.
   #'
   #' @param ... Passed to the `format()` methods of the [rd_section()]
   #' objects, the sections.
@@ -90,7 +90,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
 
   #' @description Query the topics this topic inherits `type` from.
   #' @return A character vector of topic names.
-  
+
   inherits_from = function(type) {
     if (!self$has_section("inherit")) {
       return(character())
@@ -107,9 +107,9 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     sources
   },
 
-  #' @description Query the topix this topic inherits sections from.
+  #' @description Query the topics this topic inherits sections from.
   #' @return A character vector of topic names.
-  
+
   inherits_section_from = function() {
     if (!self$has_section("inherit_section")) {
       return(character())
@@ -123,7 +123,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' another `RoxyTopic` object, all of its sections will be added;
   #' or an [rd_section] object;
   #' or a list of [rd_section] objects to add.
-  
+
   add = function(x, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
       self$add(x$sections, overwrite = overwrite)
@@ -142,11 +142,11 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   },
 
   #' @description Add a section.
-  #' @details 
+  #' @details
   #' Ensures that each type of name (as given by its name), only appears
   #' once in `self$sections`. This method if for internal use only.
   #' @param section [rd_section] object to add.
-  
+
   add_section = function(section, overwrite = FALSE) {
     type <- section$type
     if (self$has_section(type) && !overwrite) {

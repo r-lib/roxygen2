@@ -41,7 +41,7 @@ tag_markdown(x)
 tag_markdown_with_sections(x)
 }
 \arguments{
-\item{x}{A \link{roxy_tag} object to parss}
+\item{x}{A \link{roxy_tag} object to parse}
 
 \item{first, second}{Name of first and second parts of two part tags}
 

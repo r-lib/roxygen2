@@ -51,13 +51,15 @@ Classs C details.
 \item \href{#method-undocumented_method}{\code{C$undocumented_method()}}
 }
 }
-\if{html}{\subsection{Inherited methods}{
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \href{../../roxygen2/html/A.html#method-meth3}{\code{roxygen2::A$meth3()}}
 \item \href{../../roxygen2/html/B.html#method-meth1}{\code{roxygen2::B$meth1()}}
 \item \href{../../roxygen2/html/B.html#method-meth4}{\code{roxygen2::B$meth4()}}
 }
-}}
+\out{</details>}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth2"></a>}}
 \subsection{Method \code{meth2()}}{

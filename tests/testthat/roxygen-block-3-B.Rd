@@ -41,10 +41,12 @@ Class B details.
 }
 }
 \if{html}{\subsection{Inherited methods}{
+\out{<details open>}
 \itemize{
 \item \href{../../roxygen2/html/A.html#method-meth2}{\code{roxygen2::A$meth2()}}
 \item \href{../../roxygen2/html/A.html#method-meth3}{\code{roxygen2::A$meth3()}}
 }
+\out{</details>}
 }}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth1"></a>}}

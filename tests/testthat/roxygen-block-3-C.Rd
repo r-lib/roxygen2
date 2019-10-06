@@ -54,9 +54,9 @@ Classs C details.
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \href{../../roxygen2/html/A.html#method-meth3}{\code{roxygen2::A$meth3()}}
-\item \href{../../roxygen2/html/B.html#method-meth1}{\code{roxygen2::B$meth1()}}
-\item \href{../../roxygen2/html/B.html#method-meth4}{\code{roxygen2::B$meth4()}}
+\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3">}\href{../../roxygen2/html/A.html#method-meth3}{\code{roxygen2::A$meth3()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth1">}\href{../../roxygen2/html/B.html#method-meth1}{\code{roxygen2::B$meth1()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth4">}\href{../../roxygen2/html/B.html#method-meth4}{\code{roxygen2::B$meth4()}}\out{</span>}
 }
 \out{</details>}
 }

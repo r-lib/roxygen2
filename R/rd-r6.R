@@ -260,7 +260,15 @@ r6_inherited_method_list <- function(block, r6data) {
     paste0("\\out{", details, "}"),
     "\\itemize{",
     sprintf(
-      "\\item \\href{../../%s/html/%s.html#method-%s}{\\code{%s::%s$%s()}}",
+      paste0(
+        "\\item \\out{<span class=\"pkg-link\" data-pkg=\"%s\" ",
+        "data-topic=\"%s\" data-id=\"%s\">}",
+        "\\href{../../%s/html/%s.html#method-%s}{\\code{%s::%s$%s()}}",
+        "\\out{</span>}"
+      ),
+      super_meth$package,
+      super_meth$classname,
+      super_meth$name,
       super_meth$package,
       super_meth$classname,
       super_meth$name,

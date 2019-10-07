@@ -27,12 +27,7 @@ topic_add_r6_methods <- function(rd, block, env) {
   }
 
   nodoc <- map_int(methods$tags, length) == 0
-  for (i in which(nodoc)) {
-    roxy_warning(
-      sprintf("`%s()`: undocumented R6 method", methods$name[i]),
-      file = block$file, line = methods$line[i]
-    )
-  }
+  r6_warning(block, "undocumented R6 method[s]: %s", methods$name[nodoc])
 
   block$tags[del] <- NULL
 
@@ -98,30 +93,15 @@ r6_fields <- function(block, r6data) {
 
   # Check for missing fields
   miss <- setdiff(fields, docd)
-  for (f in miss) {
-    roxy_warning(
-      sprintf("`%s`: undocumented R6 field", f),
-      file = block$file, line = block$line
-    )
-  }
+  r6_warning(block, "undocumented R6 field[s]: %s", miss)
 
   # Check for duplicate fields
   dup <- unique(docd[duplicated(docd)])
-  for (f in dup) {
-    roxy_warning(
-      sprintf("`%s`: R6 field documented multiple times", f),
-      file = block$file, line = block$line
-    )
-  }
+  r6_warning(block, "R6 field[s] documented multiple times: %s", dup)
 
   # Check for extra fields
   xtra <- setdiff(docd, fields)
-  for (f in xtra) {
-    roxy_warning(
-      sprintf("`%s`: Unknown R6 field", f),
-      file = block$file, line = block$line
-    )
-  }
+  r6_warning(block, "unknown R6 field[s]: %s", xtra)
 
   if (length(docd) == 0) return()
 
@@ -153,21 +133,11 @@ r6_active_bindings <- function(block, r6data) {
 
   # Check for missing bindings
   miss <- setdiff(active, docd)
-  for (f in miss) {
-    roxy_warning(
-      sprintf("`%s`: undocumented R6 active binding", f),
-      file = block$file, line = block$line
-    )
-  }
+  r6_warning(block, "undocumented R6 active binding[s]: %s", miss)
 
   # Check for duplicate bindings
   dup <- unique(docd[duplicated(docd)])
-  for (f in dup) {
-    roxy_warning(
-      sprintf("`%s`: R6 active binding documented multiple times", f),
-      file = block$file, line = block$line
-    )
-  }
+  r6_warning(block, "R6 active binding[s] documented multiple times: %s", dup)
 
   if (length(docd) == 0) return()
 
@@ -444,4 +414,17 @@ r6_all_examples <- function(block, methods) {
         paste(map_chr(exa, "val"), collapse = "\n")
       )
   }))
+}
+
+first_five <- function(x) {
+  x <- encodeString(x, quote = "`")
+  if (length(x) > 5) x <- c(x[1:5], "...")
+  paste(x, collapse = ", ")
+}
+
+r6_warning <- function(block, template, bad) {
+  if (length(bad) == 0) return()
+  badlist <- first_five(bad)
+  template <- gsub("[s]", if (length(bad) == 1) "" else "s", template, fixed = TRUE)
+  roxy_warning(sprintf(template, badlist), file = block$file, line = block$line)
 }

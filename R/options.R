@@ -19,7 +19,8 @@ load_options <- function(base_path = ".") {
     roclets = c("collate", "namespace", "rd"),
     load = "pkgload",
     old_usage = FALSE,
-    markdown = FALSE
+    markdown = FALSE,
+    package = NA_character_
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))
@@ -35,13 +36,17 @@ load_options <- function(base_path = ".") {
 
 load_options_description <- function(base_path = ".") {
   desc_path <- file.path(base_path, "DESCRIPTION")
-  desc_opts <- read.dcf(desc_path, fields = "Roxygen")[[1, 1]]
+  dcf <- read.dcf(desc_path, fields = c("Roxygen", "Package"))
+  desc_opts <- dcf[[1, 1]]
 
   if (is.na(desc_opts)) {
-    list()
+    opts <- list()
   } else {
-    eval(parse(text = desc_opts), child_env(baseenv()))
+    opts <- eval(parse(text = desc_opts), child_env(baseenv()))
   }
+
+  opts$package <- dcf[[1, 2]]
+  opts
 }
 
 load_options_meta <- function(base_path = ".", path = "man/roxygen/meta.R") {

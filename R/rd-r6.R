@@ -27,7 +27,7 @@ topic_add_r6_methods <- function(rd, block, env) {
   }
 
   nodoc <- map_int(methods$tags, length) == 0
-  r6_warning("undocumented R6 method[s]: %s", block, methods$name[nodoc])
+  r6_warning(block, "undocumented R6 method[s]: %s", methods$name[nodoc])
 
   block$tags[del] <- NULL
 
@@ -93,15 +93,15 @@ r6_fields <- function(block, r6data) {
 
   # Check for missing fields
   miss <- setdiff(fields, docd)
-  r6_warning("undocumented R6 field[s]: %s", block, miss)
+  r6_warning(block, "undocumented R6 field[s]: %s", miss)
 
   # Check for duplicate fields
   dup <- unique(docd[duplicated(docd)])
-  r6_warning("R6 field[s] documented multiple times: %s", block, dup)
+  r6_warning(block, "R6 field[s] documented multiple times: %s", dup)
 
   # Check for extra fields
   xtra <- setdiff(docd, fields)
-  r6_warning("unknown R6 field[s]: %s", block, xtra)
+  r6_warning(block, "unknown R6 field[s]: %s", xtra)
 
   if (length(docd) == 0) return()
 
@@ -133,11 +133,11 @@ r6_active_bindings <- function(block, r6data) {
 
   # Check for missing bindings
   miss <- setdiff(active, docd)
-  r6_warning("undocumented R6 active binding[s]: %s", block, miss)
+  r6_warning(block, "undocumented R6 active binding[s]: %s", miss)
 
   # Check for duplicate bindings
   dup <- unique(docd[duplicated(docd)])
-  r6_warning("R6 active binding[s] documented multiple times: %s", block, dup)
+  r6_warning(block, "R6 active binding[s] documented multiple times: %s", dup)
 
   if (length(docd) == 0) return()
 
@@ -422,7 +422,7 @@ first_five <- function(x) {
   paste(x, collapse = ", ")
 }
 
-r6_warning <- function(template, block, bad) {
+r6_warning <- function(block, template, bad) {
   if (length(bad) == 0) return()
   badlist <- first_five(bad)
   template <- gsub("[s]", if (length(bad) == 1) "" else "s", template, fixed = TRUE)

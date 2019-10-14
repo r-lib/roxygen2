@@ -122,7 +122,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <code>commonmark</code> package, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="http://commonmark.org/help/" class="uri">http://commonmark.org/help/</a> for more about the parser and the markdown language it supports.</p>
+<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <a href="https://jeroen.cran.dev/commonmark">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports.</p>
 </div>
 <div id="turning-on-markdown-support" class="section level1">
 <h1 class="hasAnchor">
@@ -134,10 +134,10 @@
 <p>Alternatively, you can use the <code>@md</code> tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in markdown.</p>
 <p>There is also a new <code>@noMd</code> tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.</p>
 <p>Here is an example roxygen chunk that uses markdown.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#' Use roxygen to document a package.</span></a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#' Use roxygen to document a package</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#'</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#' This function is a wrapper for the [roxygen2::roxygenize()] function from</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#' the `roxygen2` package. See the documentation and vignettes of</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#' the roxygen2 package. See the documentation and vignettes of</span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#' that package to learn how to use roxygen.</span></a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#'</span></a>
 <a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#' @param pkg package description, can be path or package name.  See</span></a>
@@ -205,7 +205,7 @@
 <a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#' foo2::d</span></a>
 <a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#' dispose_packages(pkg)</span></a>
 <a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#' ```</span></a></code></pre></div>
-<p>Note that this is not needed in <code>@examples</code>, since its contents is formatted as R code, anyway.</p>
+<p>Note that this is not needed in <code>@examples</code>, since its contents are formatted as R code, anyway.</p>
 </div>
 <div id="lists" class="section level2">
 <h2 class="hasAnchor">

@@ -13,7 +13,7 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 # Introduction
 
-Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the `commonmark` package, which is based on the CommonMark Reference Implementation to parse these tags. See http://commonmark.org/help/ for more about the parser and the markdown language it supports.
+Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the [commonmark package](https://jeroen.cran.dev/commonmark), which is based on the CommonMark Reference Implementation to parse these tags. See <https://commonmark.org/help/> for more about the parser and the markdown language it supports.
 
 # Turning on markdown support
 
@@ -32,10 +32,10 @@ There is also a new `@noMd` tag. Use this if you turned on markdown parsing glob
 Here is an example roxygen chunk that uses markdown.
 
 ```r
-#' Use roxygen to document a package.
+#' Use roxygen to document a package
 #'
 #' This function is a wrapper for the [roxygen2::roxygenize()] function from
-#' the `roxygen2` package. See the documentation and vignettes of
+#' the roxygen2 package. See the documentation and vignettes of
 #' that package to learn how to use roxygen.
 #'
 #' @param pkg package description, can be path or package name.  See
@@ -120,8 +120,7 @@ For blocks of code, put your code between triple backticks:
 #' ```
 ```
 
-Note that this is not needed in `@examples`, since its contents is formatted as R code,
-anyway.
+Note that this is not needed in `@examples`, since its contents are formatted as R code, anyway.
 
 ## Lists
 

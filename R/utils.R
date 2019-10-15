@@ -91,12 +91,26 @@ same_contents <- function(path, contents) {
 
   contents <- paste0(paste0(contents, collapse = "\n"), "\n")
 
-  text_hash <- digest::digest(contents, serialize = FALSE)
+  text_hash <- md5_string(contents)
 
-  path <- normalizePath(path, mustWork = TRUE)
-  file_hash <- digest::digest(file = path)
+  file_hash <- md5_file(path)
 
   identical(text_hash, file_hash)
+}
+
+md5_string <- function(text) {
+  digest::digest(text, serialize = FALSE, algo = "md5")
+}
+
+md5_file <- function(path) {
+  # tools::md5sum returns NA if it cannot open the file. This also happens
+  # for Unicode file names on Windows, so we try a bit harder.
+  md5 <- tools::md5sum(path)[[1]]
+  if (is.na(md5)) {
+    data <- readBin(path, raw(), n = file.info(path)$size)
+    md5 <- digest::digest(data, serialize = FALSE, algo = "md5")
+  }
+  md5
 }
 
 compact <- function(x) {

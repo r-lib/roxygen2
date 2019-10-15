@@ -78,6 +78,27 @@ test_that("can generate nonASCII document", {
   expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
 })
 
+test_that("non ascii paths are fine", {
+  skip("Fails currently")
+  tmp <- tempfile()
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  path <- file.path(tmp, "trickyx")
+  path2 <- file.path(tmp, "tricky-\u0151")
+  dir.create(path, recursive = TRUE)
+  file.copy(
+    normalizePath("testNonASCII"),
+    normalizePath(path),
+    recursive = TRUE
+  )
+  file.rename(path, path2)
+  test_pkg <- normalizePath(file.path(path2, "testNonASCII"))
+
+  expect_error(roxygenise(test_pkg, roclets = "rd"), NA)
+
+  rd_path <- file.path(test_pkg, "man", "printChineseMsg.Rd")
+  expect_true(file.exists(rd_path))
+})
+
 test_that("unicode escapes are ok", {
   test_pkg <- temp_copy_pkg(test_path('testUtf8Escape'))
   on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)

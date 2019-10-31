@@ -1,9 +1,5 @@
 url: https://roxygen2.r-lib.org
 
-template:
-  params:
-    ganalytics: UA-115082821-1
-
 home:
   links:
   - text: Learn more

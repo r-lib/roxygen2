@@ -146,6 +146,10 @@ block_to_rd.roxy_block <- function(block, base_path, env) {
 #' @export
 
 block_to_rd.roxy_block_r6class <- function(block, base_path, env) {
+
+  r6on <- roxy_meta_get("r6", TRUE)
+  if (!isTRUE(r6on)) return(NextMethod())
+
   # Must start by processing templates
   block <- process_templates(block, base_path)
 

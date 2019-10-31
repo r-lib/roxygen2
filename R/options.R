@@ -20,6 +20,7 @@ load_options <- function(base_path = ".") {
     load = "pkgload",
     old_usage = FALSE,
     markdown = FALSE,
+    r6 = TRUE,
     package = NA_character_
   )
 

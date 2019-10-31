@@ -1,9 +1,14 @@
 #' @export
 object_defaults.r6class <- function(x) {
-  list(
-    roxy_tag("docType", NULL, NULL),
-    roxy_tag(".r6data", NULL, extract_r6_data(x$value))
-  )
+  r6on <- roxy_meta_get("r6", TRUE)
+  if (isTRUE(r6on)) {
+    list(
+      roxy_tag("docType", NULL, NULL),
+      roxy_tag(".r6data", NULL, extract_r6_data(x$value))
+    )
+  } else {
+    NextMethod()
+  }
 }
 
 extract_r6_data <- function(x) {

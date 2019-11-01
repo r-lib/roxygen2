@@ -286,6 +286,7 @@
 <li><p><code>@param</code> tags that appear before the class definition are automatically inherited by all methods, if needed.</p></li>
 <li><p>R6 fields and active bindings can make use of the <code>@field</code> tag. Their documentation should also be in-line.</p></li>
 <li><p>Roxygen2 checks that all public methods, public fields, active bindings and all method arguments are documented, and issues warnings otherwise.</p></li>
+<li><p>To turn off the special handling of R6 classes and go back to the roxygen2 6.x.x behavior, use the <code>r6 = FALSE</code> option in <code>DESCRIPTION</code>, in the <code>Roxygen</code> entry: <code>Roxygen: list(r6 = FALSE)</code>.</p></li>
 </ul>
 <p>Roxygen2 automatically generates additional sections for an R6 class:</p>
 <ul>

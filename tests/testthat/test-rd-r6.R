@@ -349,3 +349,27 @@ test_that("integration test", {
     expect_equal(length(chk), 0L)
   }
 })
+
+test_that("r6 option", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    C <- R6::R6Class(
+      public = list(
+        field = NULL,
+        #' @description Method desc.
+        #' @param arg Method arg.
+        meth = function(arg) { }
+      )
+    )"
+  old <- roxy_meta_get("r6")
+  on.exit(roxy_meta_set("r6", old), add = TRUE)
+  roxy_meta_set("r6", FALSE)
+
+  expect_silent(
+    out <- roc_proc_text(rd_roclet(), text)
+  )
+  rd <- format(out$C.Rd)
+  expect_false(grepl("section{Methods}", rd, fixed = TRUE))
+  expect_true(grepl("arguments{", rd, fixed = TRUE))
+})

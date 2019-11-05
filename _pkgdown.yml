@@ -14,6 +14,7 @@ reference:
   contents:
   - roxygenize
   - update_collate
+  - load
 
 - title: Utilities
   contents:

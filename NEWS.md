@@ -4,12 +4,11 @@
 
 ### New tags
 
-* `@includeRmd` converts an `.Rmd`/`.md` file to `.Rd` and includes it in the
-  manual page. This allows sharing text between vignettes, the `README.Rmd`
-  file and the manual. See the "Rd (documentation) tags" vignette 
-  (`vignette("rd")`) for details (#902).
+* `@includeRmd {path.Rmd}` converts an `.Rmd`/`.md` file to `.Rd` and includes 
+  it in the manual page. This allows sharing text between vignettes, 
+  `README.Rmd`, and the documentation. See `vignette("rd")` for details (#902).
 
-* `@order n` tag controls the order in which blocks are processed. You can
+* `@order {n}` tag controls the order in which blocks are processed. You can
   use it to override the usual ordering which proceeds from the top of 
   each file to the bottom. `@order 1` will be processed before `@order 2`, 
   and before any blocks that don't have an explicit order set (#863).
@@ -33,11 +32,11 @@
     S3method(package::generic, foo)
     ```
     
-    
     (See [`vctrs::s3_register()`](https://vctrs.r-lib.org/reference/s3_register.html)
     you need a version that works for earlier versions of R).
     
-    Its two argument form allows you generate arbitrary `S3method()` directives:
+    It also has a two argument form allows you generate arbitrary `S3method()` 
+    directives:
     
     ```R
     #' @exportS3Method generic class
@@ -48,22 +47,23 @@
     S3method(generic, class)
     ```
 
-*  New `@returns` works the same way as `@return` (#952).
+*  New `@returns` is an alias for `@return` (#952).
 
 ### R6
 
-roxygen2 now supports documentation for R6 classes (#922).
-
-See `vignette("rd")` for details.
+roxygen2 can now document R6 classes (#922). See `vignette("rd")` for details.
 
 ### Markdown improvements
+
+* Rd comments (`%`) are now automatically escaped. You will need to replace any
+  existing uses of `\%` with `%` (#879).
 
 * Markdown headings are supported in tags like `@description`, `@details`, 
   and `@return` (#907, #908). Level 1 headings create a new top-level 
   `\section{}`. Level 2 headings and below create nested `\subsections{}`.
 
-* Markdown tables generate `\tabular{}` (#290). roxygen2 supports the 
-  [GFM table syntax](https://github.github.com/gfm/#tables-extension-)
+* Markdown tables are converted to a `\tabular{}` macro (#290). roxygen2 
+  supports the [GFM table syntax](https://github.github.com/gfm/#tables-extension-)
   which looks like this:
   
     ```md
@@ -72,22 +72,17 @@ See `vignette("rd")` for details.
     | baz | bim |
     ```
 
-* Markdown code (``` `` ```) is converted to to either `\code{}` or `\verb{}`, 
-  depending on whether it not it parses as R code. This should make it 
-  easier to include arbitrary "code" snippets in documentation without
-  causing Rd failures (#654).
-  
-    TODO: Add details from tidyr.
+* Markdown code (``` `foofy` ```) is converted to to either `\code{}` or 
+  `\verb{}`, depending on whether it not it parses as R code. This better
+  matches the description of `\code{}` and `\verb{}` macros, solves a certain
+  class of escaping problems, and should make it easier to include arbitrary 
+  "code" snippets in documentation without causing Rd failures (#654).
 
-* Rd comments (`%`) are now automatically escaped. You will need to replace any
-  existing uses of `\%` with `%` (#879).
+* Markdown links can now contain formatting, e.g. `[*mean*][mean]` will now
+  generate `\link[=mean]{\emph{mean}}`.
 
-* Markdown links can now contain formatting. E.g. in
-  `See [*Formatting*][formatting]` the link text will be emphasised.
-  Similarly, in external links: `See [*this web page*](https://...)` (#919).
-
-* Use of unsupported markdown features (blockquotes, headings, inline HTML, 
-  and horizontal rules) now generate more informative error messages (#804).
+* Use of unsupported markdown features (e.g. blockquotes, inline HTML, 
+  and horizontal rules) generates informative error messages (#804).
 
 ### Default usage
 
@@ -126,9 +121,9 @@ roxygen2 now provides three strategies for loading your code (#822):
   Compared to the previous release, this now automatically recompiles your 
   package if needed.
 
-* `load_source()` attaches required packages and `source()`s code in `R/`. 
-  This is a cruder simulation of package loading than using pkgload (and hence
-  is unreliable if you use S4 extensively), but it does not require that the 
+* `load_source()` attaches required packages and `source()`s all files in `R/`. 
+  This is a cruder simulation of package loading than pkgload (and e.g. is 
+  unreliable if you use S4 extensively), but it does not require that the 
   package be compiled. Use if the default strategy (used in roxygen2 6.1.0 
   and above) causes you grief.
 
@@ -146,16 +141,17 @@ You can override the default either by calling (e.g.) `roxygenise(load_code = "s
   
 * roxygen now also looks for templates in `man/roxygen/templates` (#888).
 
-* New `rd_family_title` option: a named list that overrides the default
-  "Other family: " prefix that `@family` generates. For example, to 
-  override the prefix generated by `@family foo` use 
-  `rd_family_title <- list(foo = "Custom prefix: ")`
-  (#830, @kevinushey).
+* New `rd_family_title` option: this should be a named list, and is used to
+  overrides the default "Other family: " prefix that `@family` generates. 
+  For example, to override the prefix generated by `@family foo` place 
+  `rd_family_title <- list(foo = "Custom prefix: ")` in 
+  `man/roxygen/meta.R` (#830, @kevinushey).
 
 ## Breaking changes
 
-* Rd comments (`%`) are automatically escaped. This is a backward incompatible 
-  change because you will need to replace existing uses of `\%` with `%` (#879).
+* Rd comments (`%`) are automatically escaped in markdown formatted text. 
+  This is a backward incompatible change because you will need to replace 
+  existing uses of `\%` with `%` (#879).
 
 * Using `@docType package` no longer automatically adds `-name`. Instead 
   document `_PACKAGE` to get all the defaults for package documentation, or
@@ -163,6 +159,10 @@ You can override the default either by calling (e.g.) `roxygenise(load_code = "s
 
 * `@S3method` has been removed. It was deprecated in roxygen2 4.0.0
   released 2014-05-02, over 5 years ago.
+
+* Using the old `wrap` option will now trigger a warning, as hasn't worked
+  for quite some time. Supress the error by deleting the option from your
+  `DESCRIPTION`.
 
 ### Extending roxygen2
 
@@ -206,21 +206,19 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
   comparing the installed version of roxygen2 to the version used to 
   generate the documentation (#802).
 
-* Files generated on Windows systems now retain their existing line endings, or use 
-  unix-style line endings for new files (@jonthegeek, @jimhester, #840).
+* Files generated on Windows systems now retain their existing line endings, or 
+  use unix-style line endings for new files (@jonthegeek, @jimhester, #840).
   
 * roxygen2 now recognises fully qualified S4 functions like 
   `methods::setGeneric()`, `methods::setClass()` and `methods::setMethod()`
   (#880).
 
 * Package documentation now converts ORCIDs into a useful link (#721).
-  Automatically included logo is now scaled to a 120px width (@peterdesmet, #834).
+  The package logo (if found at `man/images/logo.png`) is now scaled to 120px 
+  wide (@peterdesmet, #834).
 
-* S4 methods that generate `.local()` wrapper no longer error with obscure
-  error message (#847).
-
-* Using the old `wrap` option will now trigger a warning. It hasn't worked
-  for some time.
+* Documenting an S4 method that has a `.local()` wrapper no longer fails with 
+  an obscure error message (#847).
 
 * Functions documented in `reexports` are now sorted alphabetically by
   package (#765).
@@ -254,7 +252,8 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@inheritDotParams` includes link to function and wraps parameters
   in `\code{}` (@halldc, #842).
 
-* `@inheritDotParams` are now permitted (@gustavdelius, #767).
+* `@inheritDotParams` can be repeated to inherit dot docs from multiple 
+  functions (@gustavdelius, #767).
 
 * `@inheritDotParams` avoids multiple `...` arguments (@gustavdelius, #857).
 

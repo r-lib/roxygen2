@@ -48,6 +48,8 @@
     S3method(generic, class)
     ```
 
+*  New `@returns` works the same way as `@return` (#952).
+
 ### R6
 
 roxygen2 now supports documentation for R6 classes (#922).

@@ -9,7 +9,7 @@
 #' either call one of the functions here, or directly set `x$val`.
 #'
 #' @param x A [roxy_tag] object to parse
-#' @return A [roxy_tag] object with the `val` field set to the parsed value.
+#' @returns A [roxy_tag] object with the `val` field set to the parsed value.
 #' @name tag_parsers
 #' @keywords internal
 NULL

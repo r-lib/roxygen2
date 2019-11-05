@@ -47,9 +47,13 @@ format.rd_section_references <- function(x, ...) {
 #' @export
 roxy_tag_parse.roxy_tag_return <- function(x) tag_markdown(x)
 #' @export
+roxy_tag_parse.roxy_tag_returns <- roxy_tag_parse.roxy_tag_return
+#' @export
 roxy_tag_rd.roxy_tag_return <- function(x, base_path, env) {
   rd_section("value", x$val)
 }
+#' @export
+roxy_tag_rd.roxy_tag_returns <- roxy_tag_rd.roxy_tag_return
 #' @export
 format.rd_section_value <- function(x, ...) {
   format_collapse(x, ...)

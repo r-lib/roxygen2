@@ -20,7 +20,8 @@ your package, add \code{--no-build-vignettes} to the "Build Source Package"
 field in your project options.
 }
 \seealso{
-Other roclets: \code{\link{namespace_roclet}()},
-  \code{\link{rd_roclet}()}
+Other roclets: 
+\code{\link{namespace_roclet}()},
+\code{\link{rd_roclet}()}
 }
 \concept{roclets}

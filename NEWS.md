@@ -237,7 +237,8 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * In `@examples`, escaped `'` and `"` in strings are no longer doubly escaped 
   (#873).
 
-* `@family` automatically adds `()` when linking to functions (#815).
+* `@family` automatically adds `()` when linking to functions (#815),
+  and print each link on its own line (to improve diffs).
 
 * When `@inherit`ing from external documentation, `\link{foo}` links 
   are automatically transformed to `\link{package}{foo}` so that they work in 

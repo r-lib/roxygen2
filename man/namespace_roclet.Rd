@@ -32,7 +32,8 @@ foofy <- function(x, y, z) {
 NULL
 }
 \seealso{
-Other roclets: \code{\link{rd_roclet}()},
-  \code{\link{vignette_roclet}()}
+Other roclets: 
+\code{\link{rd_roclet}()},
+\code{\link{vignette_roclet}()}
 }
 \concept{roclets}

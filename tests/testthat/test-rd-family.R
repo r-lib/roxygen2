@@ -21,7 +21,7 @@ test_that("long families are wrapped", {
 
   seealso <- out$get_value("seealso")
   expect_true(grepl("^Other Long family name:", seealso))
-  expect_equal(str_count(seealso, "\n"), 2)
+  expect_equal(str_count(seealso, "\n"), 3)
 })
 
 test_that("special names escaped in family tag", {
@@ -94,8 +94,8 @@ test_that("only functions get () suffix", {
     bar <- 1:10
   ")
 
-  expect_equal(out[[1]]$get_value("seealso"), "Other a: \\code{\\link{bar}}")
-  expect_equal(out[[2]]$get_value("seealso"), "Other a: \\code{\\link{foo}()}")
+  expect_equal(out[[1]]$get_value("seealso"), "Other a: \n\\code{\\link{bar}}")
+  expect_equal(out[[2]]$get_value("seealso"), "Other a: \n\\code{\\link{foo}()}")
 })
 
 test_that("family also included in concepts", {

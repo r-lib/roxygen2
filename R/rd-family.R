@@ -57,12 +57,10 @@ topics_process_family <- function(topics, env) {
         suffix <- if (is.function(obj$value)) "()" else ""
         paste0("\\code{\\link{", escape(x[1]), "}", suffix, "}")
       })
-      links <- paste(sort_c(by_file), collapse = ", ")
-
+      links <- paste(sort_c(by_file), collapse = ",\n")
       seealso <- topics_process_family_prefix(family)
-      out <- strwrap(links, initial = seealso, width = 60, exdent = 2)
 
-      topic$add(rd_section("seealso", paste(out, collapse = "\n")))
+      topic$add(rd_section("seealso", paste0(seealso, "\n", links)))
     }
   }
 

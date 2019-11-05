@@ -92,6 +92,7 @@ B <- R6::R6Class(
 C <- R6::R6Class(
   "C",
   inherit = B,
+  cloneable = FALSE,
   public = list(
     field2 = NULL,
     #' @description C method 2.

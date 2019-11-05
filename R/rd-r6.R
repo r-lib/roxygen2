@@ -26,6 +26,8 @@ topic_add_r6_methods <- function(rd, block, env) {
     del <- c(del, i)
   }
 
+  methods <- add_default_methods(methods)
+
   nodoc <- map_int(methods$tags, length) == 0
   r6_warning(block, "undocumented R6 method[s]: %s", methods$name[nodoc])
 
@@ -55,6 +57,27 @@ topic_add_r6_methods <- function(rd, block, env) {
     ex_txt <- paste0(r6_all_examples(block, methods), collapse = "\n")
     rd$add(rd_section("examples", ex_txt), overwrite = FALSE)
   }
+}
+
+add_default_methods <- function(methods) {
+  defaults <- list(
+    clone = list(
+      roxy_tag_parse(roxy_tag(
+        "description",
+        "The objects of this class are cloneable with this method."
+      )),
+      roxy_tag_parse(roxy_tag("param", "deep Whether to make a deep clone."))
+    )
+  )
+
+  for (mname in names(defaults)) {
+    mline <- match(mname, methods$name)
+    if (is.na(mline)) next
+    if (length(methods$tags[[mline]]) > 0) next
+    methods$tags[[mline]] <- defaults[[mname]]
+  }
+
+  methods
 }
 
 r6_superclass <- function(block, r6data, env) {

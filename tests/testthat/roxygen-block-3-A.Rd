@@ -52,6 +52,7 @@ Class A details
 \item \href{#method-meth1}{\code{A$meth1()}}
 \item \href{#method-meth2}{\code{A$meth2()}}
 \item \href{#method-meth3}{\code{A$meth3()}}
+\item \href{#method-clone}{\code{A$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -130,6 +131,22 @@ Method 3 details.
 
 \subsection{Returns}{
 twice.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{A$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
 }
 }
 }

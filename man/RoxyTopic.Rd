@@ -31,6 +31,7 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 \item \href{#method-inherits_section_from}{\code{RoxyTopic$inherits_section_from()}}
 \item \href{#method-add}{\code{RoxyTopic$add()}}
 \item \href{#method-add_section}{\code{RoxyTopic$add_section()}}
+\item \href{#method-clone}{\code{RoxyTopic$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -233,5 +234,21 @@ Ensures that each type of name (as given by its name), only appears
 once in \code{self$sections}. This method if for internal use only.
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
 }
 }

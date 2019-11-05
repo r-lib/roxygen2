@@ -169,7 +169,7 @@ test_that("r6_active_bindings", {
   expect_true(any(grepl("code{bind2}}{Active 2.", doc, fixed = TRUE)))
 })
 
-test_that("R56 edge cases, class without methods", {
+test_that("R6 edge cases, class without methods", {
   text <- "
     #' @title Title
     #' @description Description.
@@ -195,7 +195,7 @@ test_that("R56 edge cases, class without methods", {
   expect_false(grepl("method", format(rd), ignore.case = TRUE))
 })
 
-test_that("R56 edge cases, class without (documented) fields", {
+test_that("R6 edge cases, class without (documented) fields", {
   text <- "
     #' @title Title
     #' @description Description.
@@ -238,7 +238,7 @@ test_that("R56 edge cases, class without (documented) fields", {
   expect_false(grepl("field", format(rd), ignore.case = TRUE))
 })
 
-test_that("R56 edge cases, class without active bindings", {
+test_that("R6 edge cases, class without active bindings", {
   text <- "
     #' @title Title
     #' @description Description.
@@ -260,7 +260,7 @@ test_that("R56 edge cases, class without active bindings", {
   expect_false(grepl("active", format(rd), ignore.case = TRUE))
 })
 
-test_that("R56 edge cases, class without anything", {
+test_that("R6 edge cases, class without anything", {
   text <- "
     #' @title Title
     #' @description Description.

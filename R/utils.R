@@ -158,17 +158,17 @@ uuid <- function(nchar = 8) {
 }
 
 # quoting -----------------------------------------------------------------
-is_parseable <- function(x) map_lgl(x, can_parse)
 auto_backtick <- function(x) {
-  needs_backtick <- !is_parseable(x)
+  needs_backtick <- !has_quotes(x) & !is_syntactic(x)
   x[needs_backtick] <- encodeString(x[needs_backtick], quote = "`")
   x
 }
 
-is_syntactic <- function(x) make.names(x) == x
-has_quotes <- function(x) str_detect(x, "^('|\").*\\1$")
 auto_quote <- function(x) {
   needs_quotes <- !has_quotes(x) & !is_syntactic(x)
   x[needs_quotes] <- encodeString(x[needs_quotes], quote = '"')
   x
 }
+
+is_syntactic <- function(x) make.names(x) == x
+has_quotes <- function(x) str_detect(x, "^(`|'|\").*\\1$")

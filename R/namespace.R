@@ -263,7 +263,7 @@ default_export.s4generic <- function(x, block) export(x$value@generic)
 #' @export
 default_export.s4method  <- function(x, block) export_s4_method(x$value@generic)
 #' @export
-default_export.s3method  <- function(x, block) export_s3_method(attr(x$value, "s3method"))
+default_export.s3method  <- function(x, block) export_s3_method(auto_quote(attr(x$value, "s3method")))
 #' @export
 default_export.rcclass   <- function(x, block) export_class(x$value@className)
 #' @export
@@ -277,13 +277,13 @@ export           <- function(x) one_per_line("export", x)
 export_class     <- function(x) one_per_line("exportClasses", x)
 export_s4_method <- function(x) one_per_line("exportMethods", x)
 export_s3_method <- function(x) {
-  args <- paste0(auto_backtick(x), collapse = ",")
+  args <- paste0(x, collapse = ",")
   paste0("S3method(", args, ")")
 }
 
 one_per_line <- function(name, x) {
-  paste0(name, "(", auto_backtick(x), ")")
+  paste0(name, "(", auto_quote(x), ")")
 }
 repeat_first <- function(name, x) {
-  paste0(name, "(", auto_backtick(x[1]), ",", auto_backtick(x[-1]), ")")
+  paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
 }

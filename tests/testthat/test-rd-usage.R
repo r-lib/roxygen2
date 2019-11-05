@@ -77,16 +77,6 @@ test_that("% and \\ not escaped in manual usage", {
   expect_equal(out$get_rd("usage"), '\\usage{\n%\\\n}')
 })
 
-test_that("non-syntactic names are quoted", {
-
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title.
-    'a b' <- function(x) x")[[1]]
-
-  expect_equal(out$get_value("usage"), rd('"a b"(x)'))
-})
-
-
 test_that("Special vars removed in rc methods usage", {
   out <- roc_proc_text(rd_roclet(), "
     #' Class Blob
@@ -125,6 +115,22 @@ test_that("backticks retained when needed", {
   expect_equal(
     call_to_usage(f <- function(`_a`) {}),
     "f(`_a`)"
+  )
+
+  expect_equal(
+    call_to_usage(`-f` <- function(x) {}),
+    "`-f`(x)"
+  )
+})
+
+test_that("% escaped when not in infix function", {
+  expect_equal(
+    call_to_usage(`%foo%bar` <- function(x, table) {}),
+    "`\\%foo\\%bar`(x, table)"
+  )
+  expect_equal(
+    call_to_usage(`%foo%bar<-` <- function(x, value) {}),
+    "`\\%foo\\%bar`(x) <- value"
   )
 })
 

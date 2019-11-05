@@ -5,10 +5,10 @@ test_that("export quote object name appropriate", {
   expect_equal(out, 'export(a)')
 
   out <- roc_proc_text(namespace_roclet(), "#' @export\n`+` <- function(){}")
-  expect_equal(out, 'export(`+`)')
+  expect_equal(out, 'export("+")')
 
   out <- roc_proc_text(namespace_roclet(), "#' @export\n`\\`` <- function(){}")
-  expect_equal(out, 'export(`\\``)')
+  expect_equal(out, 'export("`")')
 })
 
 test_that("export parameter overrides default", {
@@ -49,6 +49,21 @@ test_that("export detects S4 generic", {
 test_that("export detects S3 method", {
   out <- roc_proc_text(namespace_roclet(), "#' @export\nmean.foo <- function(x) 'foo'")
   expect_equal(out, 'S3method(mean,foo)')
+})
+
+test_that("export handles non-syntactic names", {
+  out <- roc_proc_text(namespace_roclet(),  "
+    #' @export
+    `mean.foo-bar` <- function(x) 'foo'
+  ")
+  expect_equal(out, "S3method(mean,\"foo-bar\")")
+
+  out <- roc_proc_text(namespace_roclet(),  "
+    `foo-bar` <- function(x) UseMethod('foo-bar')
+    #' @export
+    `foo-bar.integer` <- function(x) 'foo'
+  ")
+  expect_equal(out, "S3method(\"foo-bar\",integer)")
 })
 
 test_that("@exportS3method generatedsS3method()", {
@@ -98,7 +113,7 @@ test_that("export method escapes if needed", {
     setGeneric('x<-', function(x, value) standardGeneric('x<-'))
     #' @export\n
     setMethod('x<-', 'a', function(x, value) value)")
-  expect_equal(out, 'exportMethods(`x<-`)')
+  expect_equal(out, 'exportMethods("x<-")')
 })
 
 test_that("export uses name if no object present", {

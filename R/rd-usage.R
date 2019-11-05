@@ -69,6 +69,10 @@ object_usage.s4method <- function(x) {
 function_usage <- function(name, formals, format_name = identity) {
   if (is_replacement_fun(name) && !is_infix_fun(name)) {
     name <- str_replace(name, fixed("<-"), "")
+    if (identical(format_name, identity)) {
+      name <- auto_backtick(name)
+    }
+    name <- gsub("%", "\\%", name, fixed = TRUE)
     formals$value <- NULL
 
     wrap_usage(name, format_name, formals, suffix = " <- value")
@@ -77,6 +81,10 @@ function_usage <- function(name, formals, format_name = identity) {
     arg_names <- names(formals)
     build_rd(arg_names[1], " ", format_name(name), " ", arg_names[2])
   } else {
+    if (identical(format_name, identity)) {
+      name <- auto_backtick(name)
+    }
+    name <- gsub("%", "\\%", name, fixed = TRUE)
     wrap_usage(name, format_name, formals)
   }
 }
@@ -119,11 +127,6 @@ args_call <- function(call, args) {
 #' @param suffix Optional suffix, used for replacement functions
 #' @noRd
 wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
-  # Quote non-syntactic names if no special formatting
-  if (identical(format_name, identity)) {
-    name <- auto_quote(name)
-  }
-
   args <- args_string(usage_args(formals))
 
   # Do we need any wrapping?

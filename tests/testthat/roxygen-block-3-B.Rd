@@ -38,6 +38,7 @@ Class B details.
 \itemize{
 \item \href{#method-meth1}{\code{B$meth1()}}
 \item \href{#method-meth4}{\code{B$meth4()}}
+\item \href{#method-clone}{\code{B$clone()}}
 }
 }
 \if{html}{
@@ -72,6 +73,22 @@ A method 4.
 \if{html}{\out{<div class="r">}}\preformatted{B$meth4()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{B$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
 }
 }
 

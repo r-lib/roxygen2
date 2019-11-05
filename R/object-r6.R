@@ -14,8 +14,16 @@ object_defaults.r6class <- function(x) {
 extract_r6_data <- function(x) {
   list(
     self = extract_r6_self_data(x),
-    super = extract_r6_super_data(x)
+    super = drop_clone_maybe(x, extract_r6_super_data(x))
   )
+}
+
+drop_clone_maybe <- function(x, data) {
+  if (! "clone" %in% names(x$public_methods)) {
+    cline <- which(data$members$name == "clone" & data$members$type == "method")
+    if (length(cline)) data$members <- data$members[-cline, ]
+  }
+  data
 }
 
 extract_r6_self_data <- function(x) {
@@ -26,12 +34,12 @@ extract_r6_self_data <- function(x) {
   )
 }
 
-omit_r6_methods <- function() {
+default_r6_methods <- function() {
   "clone"
 }
 
 extract_r6_methods <- function(x) {
-  method_nms <- setdiff(names(x$public_methods), omit_r6_methods())
+  method_nms <- setdiff(names(x$public_methods), default_r6_methods())
   method_loc <- map_int(
     x$public_methods[method_nms],
     function(m) {
@@ -48,7 +56,7 @@ extract_r6_methods <- function(x) {
   )
   method_formals <- map(x$public_methods[method_nms], formals)
 
-  data.frame(
+  methods <- data.frame(
     stringsAsFactors = FALSE,
     type = if (length(method_loc)) "method" else character(),
     name = unname(method_nms),
@@ -56,6 +64,33 @@ extract_r6_methods <- function(x) {
     line = unname(method_loc),
     formals = I(unname(method_formals))
   )
+
+  add_default_method_data(x, methods)
+}
+
+add_default_method_data <- function(obj, methods) {
+  pubm <- obj$public_methods
+  defaults <- list(
+    clone = list(
+      formals = if ("clone" %in% names(pubm)) I(list(formals(pubm$clone)))
+    )
+  )
+
+  for (mname in names(defaults)) {
+    if (mname %in% methods$name) next
+    if (! mname %in% names(obj$public_methods)) next
+    rec <- data.frame(
+      stringsAsFactors = FALSE,
+      type = defaults[[mname]]$type %||% "method",
+      name = defaults[[mname]]$name %||% mname,
+      file = defaults[[mname]]$file %||% NA_character_,
+      line = defaults[[mname]]$line %||% NA_integer_,
+      formals = defaults[[mname]]$formals %||% NULL
+    )
+    methods <- rbind(methods, rec)
+  }
+
+  methods
 }
 
 extract_r6_fields <- function(x) {
@@ -87,7 +122,7 @@ extract_r6_super_data <- function(x) {
   super <- x$get_inherit()
   super_data <- extract_r6_super_data(super)
 
-  method_nms <- setdiff(names(super$public_methods), omit_r6_methods())
+  method_nms <- names(super$public_methods)
   field_nms <- names(super$public_fields)
   active_nms <- names(super$active)
   classname <- super$classname %||% NA_character_

@@ -1,0 +1,7 @@
+> out$get_section("examples")
+\examples{
+\dontshow{ \{ }
+# Hidden!
+\dontshow{ \} }
+} 
+

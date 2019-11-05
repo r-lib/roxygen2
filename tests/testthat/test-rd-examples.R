@@ -98,6 +98,26 @@ test_that("escapes within strings are not double escaped", {
   expect_equal(escape_examples("'34.00\\'"), rd("'34.00\\'"))
 })
 
-test_that("\\dontrun is not escaped", {
+test_that("\\dontrun etc. is not escaped #1", {
   expect_equal(escape_examples("\\dontrun{x <- 1}"), rd("\\dontrun{x <- 1}"))
+
+  expect_equal(
+    escape_examples("\\dontrun{ \\{ x <- 1 \\} }"),
+    rd("\\dontrun{ \\{ x <- 1 \\} }")
+  )
+})
+
+test_that("\\dontrun etc. is not escaped #2", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' @name a
+    #' @title a
+    #' @examples
+    #' \\dontshow{ \\{ }
+    #' # Hidden!
+    #' \\dontshow{ \\} }
+    NULL")[[1]]
+
+  verify_output(test_path("test-rd-examples-dotrun-escape.txt"), {
+    out$get_section("examples")
+  })
 })

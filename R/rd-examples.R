@@ -37,13 +37,26 @@ format.rd_section_examples <- function(x, ...) {
   rd_macro(x$type, value, space = TRUE)
 }
 
-# Works like escape, but unescapes special rd example commands.
+# We take out the \dontshow{} etc. commands, because these should be
+# left as is, to allow the user to escape braces for example:
+# #' @examples
+# #' \\dontshow{ \{ }
+# #' # Hidden!
+# #' \\dontshow{ \} }
+#
+# Otherwise, it works like escape, but unescapes special rd example commands.
 # Also unescapes quotes because they must already be in strings and hence
 # don't need an additional layer of quoting.
 escape_examples <- function(x) {
+  ex_tags <- c("\\dontshow", "\\dontrun", "\\donttest", "\\testonly")
+  rd_tags <- find_fragile_rd_tags(x, ex_tags)
+  x <- x0 <- protect_rd_tags(x, rd_tags)
+
+  attr(x, "roxygen-markdown-subst") <- NULL
   x <- escape(x)
   x <- gsub("\\\\dont", "\\dont", x, fixed = TRUE)
   x <- gsub("\\\\'", "\\'", x, fixed = TRUE)
   x <- gsub('\\\\"', '\\"', x, fixed = TRUE)
-  x
+
+  rd(unescape_rd_for_md(x, x0))
 }

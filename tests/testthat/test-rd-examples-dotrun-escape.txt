@@ -1,7 +1,7 @@
 > out$get_section("examples")
 \examples{
-\dontshow{ \\{ }
+\dontshow{ \{ }
 # Hidden!
-\dontshow{ \\} }
+\dontshow{ \} }
 } 
 

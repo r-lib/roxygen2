@@ -162,15 +162,19 @@ Indent the second and subsequent lines of a tag so that when scanning the docume
 
 * It is your choice whether or not to document S3 __methods__. Generally, it's
   not necessary to document straightforward methods for common generics like 
-  `print()`. If your method is more complicated, you should document it 
-  so people know what the parameters do. In base R, you can find documentation 
-  for more complex methods like `?predict.lm`, `?predict.glm`, and `?anova.glm`.
+  `print()`. (You should, however, always `@export` S3 methods).
+  
+  If your method is more complicated, you should document it by setting 
+  `@rdname`. Typically you will document methods with their generic, so you'd
+  document `foofy.data.frame` by setting `@rdname`. In base R, you can find 
+  documentation for more complex methods like `?predict.lm`, `?predict.glm`, 
+  and `?anova.glm`.
 
-  Generally, roxygen2 will automatically figure the generic associated with an 
-  S3 method. It should only fail if the generic and class are ambiguous. For 
-  example is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, 
-  or the `data.frame` method for `all.equal()`?. If this happens to you, 
-  disambiguate with (e.g.) `@method all.equal data.frame`.
+  Generally, roxygen2 will automatically figure out the generic that the method
+  belongs to, and you should only need to use `@method` if there is ambiguity.
+  For example, is `all.equal.data.frame()` the `equal.data.frame` method for 
+  `all()`, or the `data.frame` method for `all.equal()`?. If this happens to 
+  you, disambiguate with (e.g.) `@method all.equal data.frame`.
 
 ### S4
 

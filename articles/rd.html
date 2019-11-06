@@ -623,7 +623,7 @@
 <ul>
 <li><p>Aliases form the index that <code>?</code> searches. Use <code>@aliases space separated aliases</code> to add additional aliases.</p></li>
 <li><p><code>@concept</code> add extra keywords that will be found with <code><a href="https://rdrr.io/r/utils/help.search.html">help.search()</a></code></p></li>
-<li><p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list found <code>file.path(R.home("doc"), "KEYWORDS"))</code>.</p></li>
+<li><p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list found <code><a href="https://rdrr.io/r/base/file.path.html">file.path(R.home("doc"), "KEYWORDS")</a></code>.</p></li>
 </ul>
 <p>Apart from <code>@keywords internal</code>, these tags are not very useful because most people find documentation using Google. <code>@keywords internal</code> is useful because it removes the function from the documentation index; it’s useful for functions aimed primarily at other developers, not typical users of the package.</p>
 </div>

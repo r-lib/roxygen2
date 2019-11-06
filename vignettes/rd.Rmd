@@ -639,7 +639,7 @@ Three other tags make it easier for the user to find documentation within R's he
 
 *   Use `@keywords keyword1 keyword2 ...` to add standardised keywords. 
     Keywords are optional, but if present, must be taken from the 
-    predefined list found `file.path(R.home("doc"), "KEYWORDS"))`.
+    predefined list found `file.path(R.home("doc"), "KEYWORDS")`.
 
 Apart from `@keywords internal`, these tags are not very useful because most people find documentation using Google. `@keywords internal` is useful because it removes the function from the documentation index; it's useful for functions aimed primarily at other developers, not typical users of the package.
 

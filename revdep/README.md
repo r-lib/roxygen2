@@ -5,12 +5,12 @@
 |version  |R version 3.6.0 (2019-04-26) |
 |os       |macOS Mojave 10.14.6         |
 |system   |x86_64, darwin15.6.0         |
-|ui       |X11                          |
+|ui       |RStudio                      |
 |language |(EN)                         |
 |collate  |en_US.UTF-8                  |
 |ctype    |en_US.UTF-8                  |
 |tz       |America/Chicago              |
-|date     |2019-11-05                   |
+|date     |2019-11-06                   |
 
 # Dependencies
 
@@ -67,11 +67,9 @@
 |rstanarm        |2.19.2    |1     |        |     |
 |smurf           |1.0.1     |1     |        |     |
 
-## New problems (3)
+## New problems (1)
 
-|package                        |version |error  |warning |note |
-|:------------------------------|:-------|:------|:-------|:----|
-|[epivizr](problems.md#epivizr) |2.14.0  |__+1__ |        |1    |
-|[spocc](problems.md#spocc)     |1.0.2   |__+1__ |        |     |
-|[zoon](problems.md#zoon)       |0.6.3   |__+1__ |        |     |
+|package                  |version |error  |warning |note |
+|:------------------------|:-------|:------|:-------|:----|
+|[zoon](problems.md#zoon) |0.6.3   |__+1__ |        |     |
 

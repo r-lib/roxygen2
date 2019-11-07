@@ -1,6 +1,6 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 6.1.99.9001
+Version: 7.0.0
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",

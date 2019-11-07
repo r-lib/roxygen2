@@ -22,6 +22,9 @@ Issues with CRAN packages are summarised below.
 
 * zoon
   checking tests ...
+  
+  This failure is due to a deliberate API change; the maintainer has been
+  informed about the change and is working on a fix.
 
 ### Failed to check
 

@@ -90,12 +90,19 @@ mdxml_code <- function(xml, tag) {
 
   # See escaping details at
   # https://cran.rstudio.com/doc/manuals/r-devel/R-exts.html#Insertions
-  if (can_parse(code)) {
+  if (can_parse(code) || code %in% special) {
     paste0("\\code{", gsub("%", "\\\\%", code), "}")
   } else {
     paste0("\\verb{", escape_verb(code), "}")
   }
 }
+
+special <- c(
+  "-", ":", "::", ":::", "!", "!=", "(", "[", "[[", "@",
+  "*", "/", "&", "&&", "%*%", "%/%", "%%", "%in%", "%o%", "%x%",
+  "^", "+", "<", "<=", "=", "==", ">", ">=", "|", "||", "~", "$",
+  "for", "function", "if", "repeat", "while"
+)
 
 mdxml_code_block <- function(xml, state) {
   info <- xml_attr(xml, "info")[1]

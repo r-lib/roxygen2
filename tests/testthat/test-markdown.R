@@ -78,12 +78,17 @@ test_that("code block with language creates HTML tag", {
 test_that("inline code escapes %", {
   expect_equal(markdown("`5%`"), "\\verb{5\\%}")
   expect_equal(markdown("`'5%'`"), "\\code{'5\\%'}")
+  expect_equal(markdown("`%*%`"), "\\code{\\%*\\%}")
 })
 
 test_that("inline verbatim escapes Rd special chars", {
   expect_equal(markdown("`{`"), "\\verb{\\{}")
   expect_equal(markdown("`}`"), "\\verb{\\}}")
   expect_equal(markdown("`\\`"), "\\verb{\\\\}")
+})
+
+test_that("special operators get \\code{}, not \\verb{}", {
+  expect_equal(markdown("`if`"), "\\code{if}")
 })
 
 test_that("code blocks escape %", {

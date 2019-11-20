@@ -24,7 +24,7 @@ test_that("proper link references are added", {
 test_that("can not have [ inside of link", {
   expect_equal(
     markdown("`[[`. [subset()]"),
-    "\\verb{[[}. \\code{\\link[=subset]{subset()}}"
+    "\\code{[[}. \\code{\\link[=subset]{subset()}}"
   )
 })
 

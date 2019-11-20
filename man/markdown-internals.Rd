@@ -43,7 +43,7 @@ The list of protected Rd tags is in \code{escaped_for_md}.
 
 Some Rd macros are treated specially:
 \itemize{
-\item For \verb{if}, markdown is only allowed in the second argument.
+\item For \code{if}, markdown is only allowed in the second argument.
 \item For \code{ifelse} markdown is allowed in the second and third arguments.
 }
 

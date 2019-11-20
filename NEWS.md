@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Operator and other special syntax (e.g. `function`, `if`) in markdown code 
+  blocks are now converted to `\code{}` rather than `\verb{}` (#971)
+
 # roxygen2 7.0.0
 
 ## New features

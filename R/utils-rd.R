@@ -122,8 +122,8 @@ make_as_character_rd <- function() {
 has_topic <- function(topic, package) {
   tryCatch(
     {
-      utils::help((topic), package = (package))
-      TRUE
+      out <- utils::help((topic), package = (package))
+      length(out) == 1
     },
     error = function(c) FALSE
   )

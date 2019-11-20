@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* Internal `has_topic()` helper has a better implementation; this means that
+  you're less likely to get package names spuriously introduced into links when
+  inheriting documentation from other packages (#973).
+
 * Operator and other special syntax (e.g. `function`, `if`) in markdown code 
   blocks are now converted to `\code{}` rather than `\verb{}` (#971)
 

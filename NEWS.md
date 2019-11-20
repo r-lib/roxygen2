@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@includeRmd` chunks are now evaluated in a child of the global 
+  environment (#972).
+
 * Internal `has_topic()` helper has a better implementation; this means that
   you're less likely to get package names spuriously introduced into links when
   inheriting documentation from other packages (#973).

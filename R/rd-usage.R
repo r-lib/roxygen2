@@ -43,7 +43,7 @@ object_usage.s3generic <- object_usage.function
 object_usage.s3method <- function(x) {
   method <- attr(x$value, "s3method")
   s3method <- function(name) {
-    build_rd("\\method{", name, "}{", auto_backtick(method[2]), "}")
+    paste0("\\method{", name, "}{", auto_backtick(method[2]), "}")
   }
   function_usage(method[1], formals(x$value), s3method)
 }
@@ -55,7 +55,7 @@ object_usage.s4generic <- function(x) {
 object_usage.s4method <- function(x) {
   s4method <- function(name) {
     classes <- auto_backtick(as.character(x$value@defined))
-    build_rd("\\S4method{", name, "}{", paste0(classes, collapse = ","), "}")
+    paste0("\\S4method{", name, "}{", paste0(classes, collapse = ","), "}")
   }
   function_usage(x$value@generic, formals(x$value), s4method)
 }

@@ -197,6 +197,15 @@ test_that("S4 classes have no default usage", {
   )
 })
 
+test_that("default usage correct for S4 generics", {
+  expect_equal(
+    call_to_usage({
+      setGeneric("foo", function(x, y) {})
+    }),
+    "foo(x, y)"
+  )
+})
+
 test_that("default usage correct for S4 methods", {
   expect_equal(
     call_to_usage({

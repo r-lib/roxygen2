@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Links of the form `\link[=topic]{text}` are now automatically converted to
+  `\link[pkg:topic]{text}` when inherited from other packages (#979)
+
 * Internal `has_topic()` helper has a better implementation; this means that
   you're less likely to get package names spuriously introduced into links when
   inheriting documentation from other packages (#973).

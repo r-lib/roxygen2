@@ -65,11 +65,11 @@ tag_inherit <- function(x) {
 #' @rdname tag_parsers
 tag_name <- function(x) {
   if (x$raw == "") {
-    roxy_tag_warning("requires a name")
+    roxy_tag_warning(x, "requires a name")
   } else if (!rdComplete(x$raw)) {
-    roxy_tag_warning("mismatched braces or quotes")
+    roxy_tag_warning(x, "mismatched braces or quotes")
   } else if (str_count(x$raw, "\\s+") > 1) {
-    roxy_tag_warning("should have only a single argument")
+    roxy_tag_warning(x, "should have only a single argument")
   } else {
     x$val <- str_trim(x$raw)
     x

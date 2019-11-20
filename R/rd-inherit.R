@@ -312,7 +312,7 @@ find_sections <- function(topic) {
     titles <- map_chr(map(tag, 1), rd2text)
     contents <- map_chr(map(tag, 2), rd2text)
 
-    list(title = titles, contents = contents)
+    list(title = titles, content = contents)
   } else {
     topic$get_value("section")
   }

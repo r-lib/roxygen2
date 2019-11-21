@@ -586,7 +586,10 @@ Starting from roxygen2 7.0.0, you can use `@includeRmd path/to/file.Rmdname` to 
 `@includeRmd` supports headings in the external Rmd. The rules are as follows:
 
 *   All text before the first level 1 heading (i.e. `#`), is added to the 
-    details section.
+    details section. If you prefer a different section, then write the
+    name of the section after the path in the `@includeRmd` tag, in all
+    lowercase. Example: `@includeRmd path description`. This currently does
+    not work with user defined sections (created with `@section`).
 
 *   Level 1 headings generate their own section (`\section{}`).
 

@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@includeRmd` has now an optional second argument, the top level section
+  the included file will go to. It defaults to the details section (#970).
+
 * Links of the form `\link[=topic]{text}` are now automatically converted to
   `\link[pkg:topic]{text}` when inherited from other packages (#979)
 

@@ -5,12 +5,14 @@ roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
     return()
   }
 
-  tag_value(x)
+  tag_two_part(x, "path", "section", required = FALSE, markdown = FALSE)
 }
 
 #' @export
 roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
-  rmd <- x$val
+  rmd <- x$val$path
+  section <- x$val$section
+  if (section == "") section <- "details"
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
 
   rmd_path <- tempfile(fileext = ".Rmd")
@@ -50,7 +52,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   )
 
   value <- rmd_eval_rd(md_path, x)
-  rd_section_markdown("details", value)
+  rd_section_markdown(section, value)
 }
 
 # Helpers -----------------------------------------------------------------

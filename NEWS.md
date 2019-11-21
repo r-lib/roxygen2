@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Markdown tables with cells that contain multiple elements (e.g. text and code)
+  are now rendered correctly (#985).
+
 * `@includeRmd` has now an optional second argument, the top level section
   the included file will go to. It defaults to the details section (#970).
 

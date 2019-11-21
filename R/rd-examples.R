@@ -37,29 +37,43 @@ format.rd_section_examples <- function(x, ...) {
   rd_macro(x$type, value, space = TRUE)
 }
 
-# We take out the \dontshow{} etc. commands, because these should be
-# left as is, to allow the user to escape braces for example:
-# #' @examples
-# #' \\dontshow{ \{ }
-# #' # Hidden!
-# #' \\dontshow{ \} }
-#
-# Otherwise, it works like escape, but unescapes special rd example commands.
-# Also unescapes quotes because they must already be in strings and hence
-# don't need an additional layer of quoting.
+#' Escape examples
+#'
+#' This documentation topic is used primarily for testing and to record
+#' our understanding of the `\example{}` escaping rules.
+#'
+#' @keywords internal
+#' @examples
+#' # The only thing that must be escaped in examples is Rd comments:
+#' 100 %% 30
+#' # even if they are in strings
+#' "50%"
+#'
+#' # Otherwise, backslashes and braces can be left as is
+#' "\""
+#' "{"
+#' # It looks like you could use Rd tags in comments, but these are
+#' # not actually parsed
+#' 1 # \link{mean}
+#'
+#' # The only place that a backslash can occur in R code is as part of
+#' # an infix operator or in a non-syntactic name. If you do either of those
+#' # things, you'll need to escape it yourself.
+#' `%\\\\%` <- function(x, y) x + y
+#' 10 %\\% 20
+#'
+#' # You must escape braces if they are unbalanced, which typically
+#' # only occurs in \dontshow{}:
+#' \dontshow{if (FALSE) \{ }
+#' print("Hello")
+#' \dontshow{ \} }
+#'
+#' # Otherwise, you _can_ escape them, but there's little point.
+#' # The following two lines are equivalent
+#' f <- function() { NULL }
+#' f <- function() \{ NULL \}
 escape_examples <- function(x) {
-  x <- paste(x, collapse = "\n")
-  ex_tags <- c("\\dontshow", "\\dontrun", "\\donttest", "\\testonly")
-  rd_tags <- find_fragile_rd_tags(x, ex_tags)
-  x <- x0 <- protect_rd_tags(x, rd_tags)
-
-  attr(x, "roxygen-markdown-subst") <- NULL
-  x <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
-  x <- gsub("\\\\dont", "\\dont", x, fixed = TRUE)
-  x <- gsub("\\\\'", "\\'", x, fixed = TRUE)
-  x <- gsub('\\\\"', '\\"', x, fixed = TRUE)
-
-  x1 <- rd(unescape_rd_for_md(x, x0))
-  x2 <- gsub("%", "\\%", x1, fixed = TRUE, useBytes = TRUE)
-  rd(x2)
+  x <- paste0(x, collapse = "\n")
+  x <- gsub("%", "\\%", x, fixed = TRUE, useBytes = TRUE)
+  rd(x)
 }

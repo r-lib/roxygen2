@@ -37,29 +37,25 @@ format.rd_section_examples <- function(x, ...) {
   rd_macro(x$type, value, space = TRUE)
 }
 
-# We take out the \dontshow{} etc. commands, because these should be
-# left as is, to allow the user to escape braces for example:
-# #' @examples
-# #' \\dontshow{ \{ }
-# #' # Hidden!
-# #' \\dontshow{ \} }
-#
-# Otherwise, it works like escape, but unescapes special rd example commands.
-# Also unescapes quotes because they must already be in strings and hence
-# don't need an additional layer of quoting.
+#' Escape examples
+#'
+#' @keywords internal
+#' @examples
+#' # Rd comments are escaped automatically
+#' 100 %% 30
+#' "50%"
+#'
+#' # Braces are left as is
+#' 1 # \link{mean}
+#' "{"
+#'
+#' # As are backslashes
+#' "\""
+#'
+#' \dontshow{if (FALSE) \{ }
+#' print("Hello")
+#' \dontshow{ \} }
 escape_examples <- function(x) {
-  x <- paste(x, collapse = "\n")
-  ex_tags <- c("\\dontshow", "\\dontrun", "\\donttest", "\\testonly")
-  rd_tags <- find_fragile_rd_tags(x, ex_tags)
-  x <- x0 <- protect_rd_tags(x, rd_tags)
-
-  attr(x, "roxygen-markdown-subst") <- NULL
-  x <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
-  x <- gsub("\\\\dont", "\\dont", x, fixed = TRUE)
-  x <- gsub("\\\\'", "\\'", x, fixed = TRUE)
-  x <- gsub('\\\\"', '\\"', x, fixed = TRUE)
-
-  x1 <- rd(unescape_rd_for_md(x, x0))
-  x2 <- gsub("%", "\\%", x1, fixed = TRUE, useBytes = TRUE)
-  rd(x2)
+  x <- gsub("%", "\\%", x, fixed = TRUE, useBytes = TRUE)
+  rd(x)
 }

@@ -47,7 +47,7 @@ test_that("@example does not introduce extra empty lines", {
     #' @example Rd-example-3.R
     NULL")[[1]]
 
-  expect_length(out$get_value("examples"), 2L)
+  expect_equal(str_count(out$get_value("examples"), "\n"), 1L)
 })
 
 test_that("@example gives warning if used instead of @examples", {
@@ -120,4 +120,19 @@ test_that("\\dontrun etc. is not escaped #2", {
   verify_output(test_path("test-rd-examples-dotrun-escape.txt"), {
     out$get_section("examples")
   })
+})
+
+test_that("multi-line macros in @example", {
+  # https://github.com/r-lib/roxygen2/issues/974
+  out <- roxygen2:::roc_proc_text(roxygen2:::rd_roclet(), "
+    #' @name a
+    #' @title a
+    #'
+    #' @example Rd-example-4.R
+    NULL")[[1]]
+
+  expect_equal(
+    format(out$get_section("examples")),
+    "\\examples{\n\\dontrun{\n1 + 1\n}\n}"
+  )
 })

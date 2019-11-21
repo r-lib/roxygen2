@@ -10,32 +10,13 @@ There were no ERRORs, WARNINGs or NOTEs.
 
 ## revdepcheck results
 
-We checked 291 reverse dependencies (257 from CRAN + 34 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
+We checked 19 reverse dependencies (18 from CRAN + 1 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 1 new problems
- * We failed to check 11 packages
+ * We saw 0 new problems
+ * We failed to check 1 packages
 
 Issues with CRAN packages are summarised below.
 
-### New problems
-(This reports the first line of each new failure)
-
-* zoon
-  checking tests ...
-  
-  This failure is due to a deliberate API change; the maintainer has been
-  informed about the change and is working on a fix.
-
 ### Failed to check
 
-* circumplex (NA)
-* dynr       (NA)
-* geometa    (NA)
-* gqlr       (NA)
-* h5         (NA)
-* jqr        (NA)
-* OpenMx     (NA)
-* redland    (NA)
-* rpf        (NA)
-* rstanarm   (NA)
-* smurf      (NA)
+* redland (NA)

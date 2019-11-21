@@ -203,3 +203,33 @@ test_that("html block", {
   )
   expect_equal_strings(out1$get_value("details"), exp_details)
 })
+
+test_that("include as another section", {
+  skip_if_not(rmarkdown::pandoc_available())
+
+  tmp <- tempfile(fileext = ".md")
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  cat("List:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
+      file = tmp)
+  rox <- sprintf("
+    #' Title
+    #' @includeRmd %s description
+    #' @name foobar
+    NULL", tmp)
+  out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
+  out2 <- roc_proc_text(rd_roclet(), "
+    #' @title Title
+    #' @description List:
+    #' \\itemize{
+    #' \\item item1
+    #' \\item item2
+    #' }
+    #'
+    #' Inline \\code{code} and \\emph{emphasis}.
+    #' @name foobar
+    NULL")[[1]]
+  # make sure sections are in the same order
+  expect_equal(sort(names(out1$sections)), sort(names(out2$sections)))
+  out2$sections <- out2$sections[names(out1$sections)]
+  expect_equivalent_rd(out1, out2)
+})

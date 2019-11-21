@@ -53,10 +53,12 @@ escape_examples <- function(x) {
   x <- x0 <- protect_rd_tags(x, rd_tags)
 
   attr(x, "roxygen-markdown-subst") <- NULL
-  x <- escape(x)
+  x <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
   x <- gsub("\\\\dont", "\\dont", x, fixed = TRUE)
   x <- gsub("\\\\'", "\\'", x, fixed = TRUE)
   x <- gsub('\\\\"', '\\"', x, fixed = TRUE)
 
-  rd(unescape_rd_for_md(x, x0))
+  x1 <- rd(unescape_rd_for_md(x, x0))
+  x2 <- gsub("%", "\\%", x1, fixed = TRUE, useBytes = TRUE)
+  rd(x2)
 }

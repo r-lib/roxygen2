@@ -90,52 +90,10 @@ test_that("% in @examples escaped before matching braces test (#213)", {
 
 # escapes ------------------------------------------------------------------
 
-test_that("% and \\ in @example escaped", {
-  expect_equal(escape_examples("x %*% y # \\x"), rd("x \\%*\\% y # \\\\x"))
-})
-
-test_that("escapes within strings are not double escaped", {
+test_that("only % escaped in @examples", {
+  expect_equal(escape_examples("x %*% y"), rd("x \\%*\\% y"))
+  expect_equal(escape_examples("# \\x"), rd("# \\x"))
   expect_equal(escape_examples("'34.00\\'"), rd("'34.00\\'"))
-})
-
-test_that("\\dontrun etc. is not escaped much #1", {
-  expect_equal(escape_examples("\\dontrun{x <- 1}"), rd("\\dontrun{x <- 1}"))
-
-  expect_equal(
-    escape_examples("\\dontrun{ \\{ x <- 1 \\} }"),
-    rd("\\dontrun{ \\{ x <- 1 \\} }")
-  )
-})
-
-test_that("\\dontrun etc. is not escaped much #2", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' @name a
-    #' @title a
-    #' @examples
-    #' \\dontshow{ \\{ }
-    #' # Hidden!
-    #' \\dontshow{ \\} }
-    NULL")[[1]]
-
-  verify_output(test_path("test-rd-examples-dontrun-escape.txt"), {
-    out$get_section("examples")
-  })
-})
-
-test_that("but % is still escaped in \\dontrun", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #' @examples
-    #' mtcars %>% identity()
-    #'
-    #' \\dontrun{
-    #' mtcars %>% identity()
-    #' }
-    foo <- function() {}")[[1]]
-
-  verify_output(test_path("test-rd-examples-dontrun-escape-2.txt"), {
-    out$get_section("examples")
-  })
 })
 
 test_that("multi-line macros in @example", {

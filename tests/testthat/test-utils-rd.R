@@ -12,7 +12,9 @@ test_that("has_topic() works as you'd expect", {
 test_that("can tweak links to point to new package", {
   rd1 <- tweak_links(parse_rd("\\link{abbreviate}"), package = "base")
   rd2 <- tweak_links(parse_rd("\\link[base]{abbreviate}"), package = "base")
+  rd3 <- tweak_links(parse_rd("\\link[=abbreviate]{abbr}"), package = "base")
 
   expect_equal(rd2text(rd1), "\\link[base]{abbreviate}\n")
   expect_equal(rd2text(rd2), "\\link[base]{abbreviate}\n")
+  expect_equal(rd2text(rd3), "\\link[base:abbreviate]{abbr}\n")
 })

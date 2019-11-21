@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Example escaping has been considerably simplified (#967).
+
 * Markdown tables with cells that contain multiple elements (e.g. text and code)
   are now rendered correctly (#985).
 

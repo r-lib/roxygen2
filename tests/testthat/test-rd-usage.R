@@ -179,6 +179,10 @@ test_that("default usage formats S3 methods correctly", {
     "\\method{+}{foo}(x, b)"
   )
   expect_equal(
+    call_to_usage("%%.foo" <- function(x, b) {}),
+    "\\method{\\%\\%}{foo}(x, b)"
+  )
+  expect_equal(
     call_to_usage("[<-.foo" <- function(x, value) {}),
     "\\method{[}{foo}(x) <- value"
   )
@@ -190,6 +194,15 @@ test_that("S4 classes have no default usage", {
       setClass("Foo")
     }),
     character()
+  )
+})
+
+test_that("default usage correct for S4 generics", {
+  expect_equal(
+    call_to_usage({
+      setGeneric("foo", function(x, y) {})
+    }),
+    "foo(x, y)"
   )
 })
 
@@ -216,6 +229,14 @@ test_that("default usage correct for S4 methods", {
       setMethod("[<-", "Foo", function(x, i, j, ..., value) "foo")
     }),
     "\\S4method{[}{Foo}(x, i, j, ...) <- value"
+  )
+
+  expect_equal(
+    call_to_usage({
+      setGeneric("%&&%", function(x, y) standardGeneric("%&&%"))
+      setMethod("%&&%", signature("logical", "logical"), function(x, y) {})
+    }),
+    "\\S4method{\\%&&\\%}{logical,logical}(x, y)"
   )
 })
 

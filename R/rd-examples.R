@@ -48,6 +48,7 @@ format.rd_section_examples <- function(x, ...) {
 # Also unescapes quotes because they must already be in strings and hence
 # don't need an additional layer of quoting.
 escape_examples <- function(x) {
+  x <- paste(x, collapse = "\n")
   ex_tags <- c("\\dontshow", "\\dontrun", "\\donttest", "\\testonly")
   rd_tags <- find_fragile_rd_tags(x, ex_tags)
   x <- x0 <- protect_rd_tags(x, rd_tags)

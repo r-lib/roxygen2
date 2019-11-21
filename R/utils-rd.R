@@ -78,8 +78,19 @@ tweak_links <- function(x, package) {
 
   if (is.list(x)) {
     if (!is.null(tag) && tag == "\\link") {
-      if (is.null(attr(x, "Rd_option")) && has_topic(x[[1]], package)) {
-        attr(x, "Rd_option") <- structure(package, Rd_tag = "TEXT")
+      opt <- attr(x, "Rd_option")
+      if (is.null(opt)) {
+        if (has_topic(x[[1]], package)) {
+          attr(x, "Rd_option") <- structure(package, Rd_tag = "TEXT")
+        }
+      } else {
+        if (is.character(opt) && length(opt) == 1 && substr(opt, 1, 1) == "=") {
+          topic <- substr(opt, 2, nchar(opt))
+
+          if (has_topic(topic, package)) {
+            attr(x, "Rd_option") <- structure(paste0(package, ":", topic), Rd_tag = "TEXT")
+          }
+        }
       }
     } else if (length(x) > 0) {
       x[] <- map(x, tweak_links, package = package)

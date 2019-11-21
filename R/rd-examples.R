@@ -56,6 +56,7 @@ format.rd_section_examples <- function(x, ...) {
 #' print("Hello")
 #' \dontshow{ \} }
 escape_examples <- function(x) {
+  x <- paste0(x, collapse = "\n")
   x <- gsub("%", "\\%", x, fixed = TRUE, useBytes = TRUE)
   rd(x)
 }

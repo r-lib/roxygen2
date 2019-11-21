@@ -41,20 +41,28 @@ format.rd_section_examples <- function(x, ...) {
 #'
 #' @keywords internal
 #' @examples
-#' # Rd comments are escaped automatically
+#' # The only thing that must be escaped in examples is Rd comments:
 #' 100 %% 30
+#' # even if they are in strings
 #' "50%"
 #'
-#' # Braces are left as is
-#' 1 # \link{mean}
-#' "{"
-#'
-#' # As are backslashes
+#' # Otherwise, backslashes and braces can be left as is
 #' "\""
+#' "{"
+#' # It looks like you could use Rd tags in comments, but these are
+#' # not actually parsed
+#' 1 # \link{mean}
 #'
+#' # You must escape braces if they are unbalanced, which typically
+#' # only occurs in \dontshow{}:
 #' \dontshow{if (FALSE) \{ }
 #' print("Hello")
 #' \dontshow{ \} }
+#'
+#' # Otherwise, you _can_ escape them, but there's little point.
+#' # The following two lines are equivalent
+#' f <- function() { NULL }
+#' f <- function() \{ NULL \}
 escape_examples <- function(x) {
   x <- paste0(x, collapse = "\n")
   x <- gsub("%", "\\%", x, fixed = TRUE, useBytes = TRUE)

@@ -22,6 +22,11 @@ Escape examples
 # not actually parsed
 1 # \link{mean}
 
+# The only place that a backslash can occur in R code is as part of
+# an infix operator. If you do that, you'll need to escape yourself.
+`\%\\\%` <- function(x, y) x + y
+x \%\\\% y
+
 # You must escape braces if they are unbalanced, which typically
 # only occurs in \dontshow{}:
 \dontshow{if (FALSE) \{ }

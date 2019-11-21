@@ -7,7 +7,8 @@
 escape_examples(x)
 }
 \description{
-Escape examples
+This documentation topic is used primarily for testing and to record
+our understanding of the \verb{\\example\{\}} escaping rules.
 }
 \examples{
 # The only thing that must be escaped in examples is Rd comments:
@@ -25,7 +26,7 @@ Escape examples
 # The only place that a backslash can occur in R code is as part of
 # an infix operator. If you do that, you'll need to escape yourself.
 `\%\\\%` <- function(x, y) x + y
-x \%\\\% y
+10 \%\\\% 20
 
 # You must escape braces if they are unbalanced, which typically
 # only occurs in \dontshow{}:

@@ -585,7 +585,7 @@
 <a href="#sections-1" class="anchor"></a>Sections</h3>
 <p><code>@includeRmd</code> supports headings in the external Rmd. The rules are as follows:</p>
 <ul>
-<li><p>All text before the first level 1 heading (i.e. <code>#</code>), is added to the details section.</p></li>
+<li><p>All text before the first level 1 heading (i.e. <code>#</code>), is added to the details section. If you prefer a different section, then write the name of the section after the path in the <code>@includeRmd</code> tag, in all lowercase. Example: <code>@includeRmd path description</code>. This currently does not work with user defined sections (created with <code>@section</code>).</p></li>
 <li><p>Level 1 headings generate their own section (<code>\section{}</code>).</p></li>
 <li><p>Other headings (level 2 and so on) create subsections (<code>\subsection{}</code>) within the section they appear in.</p></li>
 </ul>

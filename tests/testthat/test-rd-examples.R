@@ -128,7 +128,7 @@ test_that("multi-line macros in @example", {
     #' @name a
     #' @title a
     #'
-    #' @example Rd-example-4.R
+    #' @example Rd-example-4.txt
     NULL")[[1]]
 
   expect_equal(

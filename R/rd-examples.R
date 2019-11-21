@@ -48,15 +48,18 @@ format.rd_section_examples <- function(x, ...) {
 # Also unescapes quotes because they must already be in strings and hence
 # don't need an additional layer of quoting.
 escape_examples <- function(x) {
+  x <- paste(x, collapse = "\n")
   ex_tags <- c("\\dontshow", "\\dontrun", "\\donttest", "\\testonly")
   rd_tags <- find_fragile_rd_tags(x, ex_tags)
   x <- x0 <- protect_rd_tags(x, rd_tags)
 
   attr(x, "roxygen-markdown-subst") <- NULL
-  x <- escape(x)
+  x <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
   x <- gsub("\\\\dont", "\\dont", x, fixed = TRUE)
   x <- gsub("\\\\'", "\\'", x, fixed = TRUE)
   x <- gsub('\\\\"', '\\"', x, fixed = TRUE)
 
-  rd(unescape_rd_for_md(x, x0))
+  x1 <- rd(unescape_rd_for_md(x, x0))
+  x2 <- gsub("%", "\\%", x1, fixed = TRUE, useBytes = TRUE)
+  rd(x2)
 }

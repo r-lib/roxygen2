@@ -47,7 +47,7 @@ test_that("@example does not introduce extra empty lines", {
     #' @example Rd-example-3.R
     NULL")[[1]]
 
-  expect_length(out$get_value("examples"), 2L)
+  expect_equal(str_count(out$get_value("examples"), "\n"), 1L)
 })
 
 test_that("@example gives warning if used instead of @examples", {
@@ -98,7 +98,7 @@ test_that("escapes within strings are not double escaped", {
   expect_equal(escape_examples("'34.00\\'"), rd("'34.00\\'"))
 })
 
-test_that("\\dontrun etc. is not escaped #1", {
+test_that("\\dontrun etc. is not escaped much #1", {
   expect_equal(escape_examples("\\dontrun{x <- 1}"), rd("\\dontrun{x <- 1}"))
 
   expect_equal(
@@ -107,7 +107,7 @@ test_that("\\dontrun etc. is not escaped #1", {
   )
 })
 
-test_that("\\dontrun etc. is not escaped #2", {
+test_that("\\dontrun etc. is not escaped much #2", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @title a
@@ -117,7 +117,38 @@ test_that("\\dontrun etc. is not escaped #2", {
     #' \\dontshow{ \\} }
     NULL")[[1]]
 
-  verify_output(test_path("test-rd-examples-dotrun-escape.txt"), {
+  verify_output(test_path("test-rd-examples-dontrun-escape.txt"), {
     out$get_section("examples")
   })
+})
+
+test_that("but % is still escaped in \\dontrun", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #' @examples
+    #' mtcars %>% identity()
+    #'
+    #' \\dontrun{
+    #' mtcars %>% identity()
+    #' }
+    foo <- function() {}")[[1]]
+
+  verify_output(test_path("test-rd-examples-dontrun-escape-2.txt"), {
+    out$get_section("examples")
+  })
+})
+
+test_that("multi-line macros in @example", {
+  # https://github.com/r-lib/roxygen2/issues/974
+  out <- roxygen2:::roc_proc_text(roxygen2:::rd_roclet(), "
+    #' @name a
+    #' @title a
+    #'
+    #' @example Rd-example-4.txt
+    NULL")[[1]]
+
+  expect_equal(
+    format(out$get_section("examples")),
+    "\\examples{\n\\dontrun{\n1 + 1\n}\n}"
+  )
 })

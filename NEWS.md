@@ -1,4 +1,4 @@
-# roxygen2 (development version)
+# roxygen2 7.0.1
 
 * `@includeRmd` has now an optional second argument, the top level section
   the included file will go to. It defaults to the details section (#970).

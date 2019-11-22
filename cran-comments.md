@@ -1,3 +1,7 @@
+This is a resubmission that fixes a failure on R-devel.
+
+---
+
 ## Test environments
 
 * local: darwin15.6.0-3.6.0

@@ -77,6 +77,21 @@ test_that("warns if path doesn't exist", {
   )
 })
 
+test_that("@examplesIf", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' @name a
+    #' @title a
+    #' @examplesIf foo::bar()
+    #' maybe-run-this-code
+    #' @examplesIf foobar()
+    #' and-this
+    NULL")[[1]]
+
+  verify_output(test_path("test-rd-examplesIf.txt"), {
+    out$get_section("examples")
+  })
+})
+
 test_that("% in @examples escaped before matching braces test (#213)", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a

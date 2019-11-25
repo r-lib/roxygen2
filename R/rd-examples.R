@@ -52,7 +52,8 @@ format.rd_section_examples <- function(x, ...) {
 #' "50%"
 #'
 #' # And backslashes inside of strings
-#' "\link{mean}"
+#' "\link{mean} \var{mean}"
+#' "\\link{mean} \\var{mean}"
 #' "\\"
 #' "\n"
 #' # \

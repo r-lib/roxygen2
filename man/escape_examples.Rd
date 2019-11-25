@@ -9,6 +9,8 @@ escape_examples(x)
 \description{
 This documentation topic is used primarily for testing and to record
 our understanding of the \verb{\\example\{\}} escaping rules.
+See \url{https://developer.r-project.org/parseRd.pdf} for the details provided
+by R core.
 }
 \examples{
 # The only thing that must be escaped in examples is Rd comments:
@@ -16,26 +18,26 @@ our understanding of the \verb{\\example\{\}} escaping rules.
 # even if they are in strings
 "50\%"
 
-# Otherwise, backslashes and braces can be left as is
-"\""
-"{"
-# It looks like you could use Rd tags in comments, but these are
-# not actually parsed
-1 # \link{mean}
+# And backslashes inside of strings
+"\link{mean}"
+"\\"
+"\n"
+# \
 
-# The only place that a backslash can occur in R code is as part of
-# an infix operator or in a non-syntactic name. If you do either of those
-# things, you'll need to escape it yourself.
+# Otherwise, backslashes and parentheses are left as is.
+
+# This means that you'll need to escape backslashs in infix operators
+# and non-syntactic names.
 `\%\\\\\%` <- function(x, y) x + y
 10 \%\\\% 20
 
-# You must escape braces if they are unbalanced, which typically
-# only occurs in \dontshow{}:
+# And you'll need to escape unbalanced parentheses, which typically
+# only occur in \dontshow{}:
 \dontshow{if (FALSE) \{ }
 print("Hello")
 \dontshow{ \} }
 
-# Otherwise, you _can_ escape them, but there's little point.
+# Otherwise, you _can_ escape parentheses, but there's little point.
 # The following two lines are equivalent
 f <- function() { NULL }
 f <- function() \{ NULL \}

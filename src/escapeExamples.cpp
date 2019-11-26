@@ -8,14 +8,21 @@ std::string escapeExamples(std::string x) {
 
   char in_string = '\0';
   bool in_escape = false;
+  bool in_comment = false;
 
   std::string::const_iterator cur, end = x.end();
   for (cur = x.begin(); cur != end; cur++) {
-    if (in_string == '\0') {
-      if (*cur == '\'' || *cur == '"' || *cur == '`') {
+    if (in_comment) { // inside comment
+      if (*cur == '\n') {
+        in_comment = false;
+      }
+    } else if (in_string == '\0') { // regular code
+      if (*cur == '#') {
+        in_comment = true;
+      } else if (*cur == '\'' || *cur == '"' || *cur == '`') {
         in_string = *cur;
       }
-    } else {
+    } else { // inside string/symbol
       if (in_escape) {
         in_escape = false;
         if (*cur == 'l' || *cur == 'v') {

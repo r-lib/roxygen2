@@ -60,21 +60,18 @@ format.rd_section_examples <- function(x, ...) {
 #' "\""
 #' "\n"
 #'
-#' # Otherwise, backslashes and parentheses are left as is. This means that
-#' # you'll need to escape backslashes in infix operators and comments
-#' `%\\%` <- function(x, y) x + y
-#' 10 %\\% 20
-#' # \\ (renders as two backslashes)
-#'
-#' # And unbalanced parentheses, which typically only occur in \dontshow{}:
+#' # Otherwise, backslashes and parentheses are left as is. This
+#' # means that you need to escape unbalanced parentheses, which typically only
+#' # occur in \dontshow{}:
 #' \dontshow{if (FALSE) \{ }
 #' print("Hello")
 #' \dontshow{ \} }
 #'
-#' # Otherwise, you _can_ escape parentheses, but there's little point.
-#' # The following two lines are equivalent
-#' f <- function() { NULL }
-#' f <- function() \{ NULL \}
+#' # You also need to escape backslashes in infix operators and comments
+#' # (this is generally rare)
+#' `%\\%` <- function(x, y) x + y
+#' 10 %\\% 20
+#' # \\\\ (renders as two backslashes)
 escape_examples <- function(x) {
   x <- paste0(x, collapse = "\n")
   rd(escapeExamples(x))

@@ -44,7 +44,9 @@
 
 <meta property="og:title" content="Escape examples — escape_examples" />
 <meta property="og:description" content="This documentation topic is used primarily for testing and to record
-our understanding of the \example{} escaping rules." />
+our understanding of the \example{} escaping rules.
+See https://developer.r-project.org/parseRd.pdf for the details provided
+by R core." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -178,7 +180,9 @@ our understanding of the \example{} escaping rules." />
 
     <div class="ref-description">
     <p>This documentation topic is used primarily for testing and to record
-our understanding of the <code>\example{}</code> escaping rules.</p>
+our understanding of the <code>\example{}</code> escaping rules.
+See <a href='https://developer.r-project.org/parseRd.pdf'>https://developer.r-project.org/parseRd.pdf</a> for the details provided
+by R core.</p>
     </div>
 
     <pre class="usage"><span class='fu'>escape_examples</span>(<span class='no'>x</span>)</pre>
@@ -186,28 +190,26 @@ our understanding of the <code>\example{}</code> escaping rules.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># The only thing that must be escaped in examples is Rd comments:</span>
+    <pre class="examples"><div class='input'><span class='co'># In examples we automatically escape Rd comments (%):</span>
 <span class='fl'>100</span> <span class='kw'>%%</span> <span class='fl'>30</span></div><div class='output co'>#&gt; [1] 10</div><div class='input'><span class='co'># even if they are in strings</span>
 <span class='st'>"50%"</span></div><div class='output co'>#&gt; [1] "50%"</div><div class='input'>
-<span class='co'># Otherwise, backslashes and braces can be left as is</span>
-<span class='st'>"\""</span></div><div class='output co'>#&gt; [1] "\""</div><div class='input'><span class='st'>"{"</span></div><div class='output co'>#&gt; [1] "{"</div><div class='input'><span class='co'># It looks like you could use Rd tags in comments, but these are</span>
-<span class='co'># not actually parsed</span>
-<span class='fl'>1</span> <span class='co'># \link{mean}</span></div><div class='output co'>#&gt; [1] 1</div><div class='input'>
-<span class='co'># The only place that a backslash can occur in R code is as part of</span>
-<span class='co'># an infix operator or in a non-syntactic name. If you do either of those</span>
-<span class='co'># things, you'll need to escape it yourself.</span>
-<span class='no'>`%\\%`</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='no'>x</span> + <span class='no'>y</span>
-<span class='fl'>10</span> <span class='kw'>%\%</span> <span class='fl'>20</span></div><div class='output co'>#&gt; [1] 30</div><div class='input'>
-<span class='co'># You must escape braces if they are unbalanced, which typically</span>
-<span class='co'># only occurs in \dontshow{}:</span>
+<span class='co'># and \ and \v inside of strings and symbols</span>
+<span class='st'>"\v"</span> <span class='co'># vertical tab</span></div><div class='output co'>#&gt; [1] "\v"</div><div class='input'><span class='st'>"\\"</span></div><div class='output co'>#&gt; [1] "\\"</div><div class='input'><span class='co'># but not comments: \l \v</span>
+
+<span class='co'># other string escapes are left as is</span>
+<span class='st'>"\""</span></div><div class='output co'>#&gt; [1] "\""</div><div class='input'><span class='st'>"\n"</span></div><div class='output co'>#&gt; [1] "\n"</div><div class='input'>
+<span class='co'># Otherwise, backslashes and parentheses are left as is. This</span>
+<span class='co'># means that you need to escape unbalanced parentheses, which typically only</span>
+<span class='co'># occur in \dontshow{}:</span>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='st'>"Hello"</span>)
  }
 
-<span class='co'># Otherwise, you _can_ escape them, but there's little point.</span>
-<span class='co'># The following two lines are equivalent</span>
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>() { <span class='kw'>NULL</span> }
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>() { <span class='kw'>NULL</span> }</div></pre>
+<span class='co'># You also need to escape backslashes in infix operators and comments</span>
+<span class='co'># (this is generally rare)</span>
+<span class='no'>`%\\%`</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='no'>x</span> + <span class='no'>y</span>
+<span class='fl'>10</span> <span class='kw'>%\%</span> <span class='fl'>20</span></div><div class='output co'>#&gt; [1] 30</div><div class='input'># \\ (renders as two backslashes)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

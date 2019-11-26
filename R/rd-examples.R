@@ -51,20 +51,20 @@ format.rd_section_examples <- function(x, ...) {
 #' # even if they are in strings
 #' "50%"
 #'
-#' # and special backslashes inside of strings and symbols
-#' "\link{} \var{}" # \link{}
-#' "\\link{} \\var{}" # \\link{}
+#' # and \\ and \v inside of strings and symbols
+#' "\v" # vertical tab
 #' "\\"
-#' `\\`
+#' # but not comments: \l \v
 #'
-#' # (but only \\, \l, and \v need special treatment)
+#' # other string escapes are left as is
 #' "\""
 #' "\n"
 #'
-#' # Otherwise, backslashes and parentheses are left as is.
-#' # This means that you'll need to escape backslashes in infix operators
+#' # Otherwise, backslashes and parentheses are left as is. This means that
+#' # you'll need to escape backslashes in infix operators and comments
 #' `%\\%` <- function(x, y) x + y
 #' 10 %\\% 20
+#' # \\ (renders as two backslashes)
 #'
 #' # And unbalanced parentheses, which typically only occur in \dontshow{}:
 #' \dontshow{if (FALSE) \{ }

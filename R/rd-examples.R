@@ -46,27 +46,27 @@ format.rd_section_examples <- function(x, ...) {
 #'
 #' @keywords internal
 #' @examples
-#' # The only thing that must be escaped in examples is Rd comments:
+#' # In examples we automatically escape Rd comments (%):
 #' 100 %% 30
 #' # even if they are in strings
 #' "50%"
 #'
-#' # And backslashes inside of strings
-#' "\link{mean} \var{mean}"
-#' "\\link{mean} \\var{mean}"
+#' # and special backslashes inside of strings and symbols
+#' "\link{} \var{}" # \link{}
+#' "\\link{} \\var{}" # \\link{}
 #' "\\"
+#' `\\`
+#'
+#' # (but only \\, \l, and \v need special treatment)
+#' "\""
 #' "\n"
-#' # \
 #'
 #' # Otherwise, backslashes and parentheses are left as is.
-#'
-#' # This means that you'll need to escape backslashs in infix operators
-#' # and non-syntactic names.
-#' `%\\\\%` <- function(x, y) x + y
+#' # This means that you'll need to escape backslashes in infix operators
+#' `%\\%` <- function(x, y) x + y
 #' 10 %\\% 20
 #'
-#' # And you'll need to escape unbalanced parentheses, which typically
-#' # only occur in \dontshow{}:
+#' # And unbalanced parentheses, which typically only occur in \dontshow{}:
 #' \dontshow{if (FALSE) \{ }
 #' print("Hello")
 #' \dontshow{ \} }
@@ -77,6 +77,5 @@ format.rd_section_examples <- function(x, ...) {
 #' f <- function() \{ NULL \}
 escape_examples <- function(x) {
   x <- paste0(x, collapse = "\n")
-  x <- gsub("%", "\\%", x, fixed = TRUE, useBytes = TRUE)
-  rd(x)
+  rd(escapeExamples(x))
 }

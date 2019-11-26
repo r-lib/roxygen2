@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// escapeExamples
+std::string escapeExamples(std::string x);
+RcppExport SEXP _roxygen2_escapeExamples(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(escapeExamples(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // findEndOfTag
 int findEndOfTag(std::string string, bool is_code);
 RcppExport SEXP _roxygen2_findEndOfTag(SEXP stringSEXP, SEXP is_codeSEXP) {
@@ -79,6 +90,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_roxygen2_escapeExamples", (DL_FUNC) &_roxygen2_escapeExamples, 1},
     {"_roxygen2_findEndOfTag", (DL_FUNC) &_roxygen2_findEndOfTag, 2},
     {"_roxygen2_rdComplete", (DL_FUNC) &_roxygen2_rdComplete, 2},
     {"_roxygen2_leadingSpaces", (DL_FUNC) &_roxygen2_leadingSpaces, 1},

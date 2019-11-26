@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `\example{}` escaping has been improved (again!) so that special escapes 
+  within strings are correctly escaped (#990).
+
 # roxygen2 7.0.1
 
 * `@includeRmd` has now an optional second argument, the top level section

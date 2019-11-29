@@ -106,6 +106,12 @@ Functions are the mostly commonly documented objects. Most functions use three t
     Instead of including examples directly in the documentation, you can
     put them in separate files and use `@example path/relative/to/package/root`
     to insert them into the documentation.
+    
+    Moreover you can include example code from a function body of a
+    non-exported function from your package by
+    `@exampleFunction example_myFunction`
+    But you need to run `roxygenize` from the package root, else
+    the non-exported function will not be found.
 
 *   `@return description` describes the output from the function. This is
     not always necessary, but is a good idea if you return different types

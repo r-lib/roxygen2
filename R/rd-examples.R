@@ -14,6 +14,18 @@ roxy_tag_parse.roxy_tag_example <- function(x) {
 
   x
 }
+#' @export
+roxy_tag_parse.roxy_tag_exampleFunction <- function(x) {
+  x <- tag_value(x)
+
+  nl <- str_count(x$val, "\n")
+  if (any(nl) > 0) {
+    roxy_tag_warning(x, "spans multiple lines. Do you want @examples?")
+    return()
+  }
+
+  x
+}
 
 #' @export
 roxy_tag_rd.roxy_tag_examples <- function(x, base_path, env) {
@@ -30,6 +42,42 @@ roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
   code <- read_lines(path)
   rd_section("examples", escape_examples(code))
 }
+
+#' @export
+roxy_tag_rd.roxy_tag_exampleFunction <- function(x, base_path, env) {
+  pkgName <- load_options_description(base_path)$package
+  if (!length(pkgName)) {
+    roxy_tag_warning(
+      x, "could not determine package name. You need to run roxygenize"
+      , "from package root directory to use the @exampleFunction tag.")
+    return()
+  }
+  requireNamespace(pkgName)
+  func <- try(get(x$val, asNamespace(pkgName)), silent = TRUE)
+  if (inherits(func,"try-error")) {
+    roxy_tag_warning(
+      x, "function with example '", x$val, "' not found in package ", pkgName)
+    return()
+  }
+  # if srcref is not available fall back to body(func)
+  # that however does not provide comments
+  src <- as.character(attr(func, "srcref"))
+  bd <- if (length(src)) src[-c(1,length(src))] else {
+    bd <- as.character(body(func))
+    if(bd[[1]] == '{') bd[-1] else bd
+  }
+  code <- paste0(as.character(bd), collapse = "\n")
+  rd_section("examples", escape_examples(code))
+}
+
+example_fromFunctionBody <- function(){
+  # the body of this non-exported function is used
+  # to create example section with test @exampleFile standard
+  # comment from example_fromFunctionBody
+  tmp <- "example_fromFunctionBody"
+  tmp2 <- "example_fromFunctionBody2"
+}
+
 
 #' @export
 format.rd_section_examples <- function(x, ...) {

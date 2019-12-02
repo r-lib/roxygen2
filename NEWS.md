@@ -1,4 +1,4 @@
-# roxygen2 (development version)
+# roxygen2 7.0.2
 
 * `\example{}` escaping has been improved (again!) so that special escapes 
   within strings are correctly escaped (#990).

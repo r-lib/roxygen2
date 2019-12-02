@@ -1,7 +1,3 @@
-This is a resubmission that fixes a failure on R-devel.
-
----
-
 ## Test environments
 
 * local: darwin15.6.0-3.6.0
@@ -14,13 +10,4 @@ There were no ERRORs, WARNINGs or NOTEs.
 
 ## revdepcheck results
 
-We checked 19 reverse dependencies (18 from CRAN + 1 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
-
- * We saw 0 new problems
- * We failed to check 1 packages
-
-Issues with CRAN packages are summarised below.
-
-### Failed to check
-
-* redland (NA)
+I did not run revdep checks because this is a minor patch that only affects escaping of examples in a handful of cases.

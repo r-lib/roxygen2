@@ -45,18 +45,30 @@ roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
 
 #' @export
 roxy_tag_rd.roxy_tag_exampleFunction <- function(x, base_path, env) {
-  pkgName <- load_options_description(base_path)$package
-  if (!length(pkgName)) {
+  pkgName <- try(
+    load_options_description(base_path)$package, silent = TRUE)
+  if (inherits(pkgName,"try-error")  || !length(pkgName)) {
     roxy_tag_warning(
-      x, "could not determine package name. You need to run roxygenize"
+      x, "cannot not determine package name. You need to run roxygenize"
       , "from package root directory to use the @exampleFunction tag.")
     return()
   }
-  requireNamespace(pkgName)
-  func <- try(get(x$val, asNamespace(pkgName)), silent = TRUE)
+  funcName <- x$val
+  if (funcName == "default") {
+    # assume name of function to document given in env[[1]]
+    # construct name by example_<functionToDoc>
+    if (!length(ls(env))) {
+      roxy_tag_warning(
+        x, "cannot determine default function name")
+      return()
+    }
+    funcNameToDoc <- ls(env)[[1]]
+    funcName <- paste0("example_",funcNameToDoc)
+  }
+  func <- try(get(funcName, asNamespace(pkgName)), silent = TRUE)
   if (inherits(func,"try-error")) {
     roxy_tag_warning(
-      x, "function with example '", x$val, "' not found in package ", pkgName)
+      x, "function with example body '", x$val, "' not found in package ", pkgName)
     return()
   }
   # if srcref is not available fall back to body(func)
@@ -75,7 +87,7 @@ example_fromFunctionBody <- function(){
   # to create example section with test @exampleFile standard
   # comment from example_fromFunctionBody
   tmp <- "example_fromFunctionBody"
-  tmp2 <- "example_fromFunctionBody2"
+  testPercent <- "%d%m%Y"
 }
 
 

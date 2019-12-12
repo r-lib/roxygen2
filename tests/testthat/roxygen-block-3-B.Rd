@@ -51,6 +51,7 @@ Class B details.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth1"></a>}}
+\if{latex}{\out{\hypertarget{method-meth1}{}}}
 \subsection{Method \code{meth1()}}{
 B method 1.
 \subsection{Usage}{
@@ -67,6 +68,7 @@ B method 1.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth4"></a>}}
+\if{latex}{\out{\hypertarget{method-meth4}{}}}
 \subsection{Method \code{meth4()}}{
 A method 4.
 \subsection{Usage}{
@@ -76,6 +78,7 @@ A method 4.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

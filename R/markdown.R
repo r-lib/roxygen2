@@ -48,7 +48,10 @@ parse_md_pos <- function(text) {
 }
 
 eval_code_nodes <- function(text) {
-  evalenv <- new.env(parent = roxy_meta_get("env"))
+  pkgenv <- roxy_meta_get("env")
+  # This should only happen in our test cases
+  if (is.null(pkgenv)) pkgenv <- baseenv()
+  evalenv <- new.env(parent = pkgenv)
   map_chr(
     text,
     ~ paste(eval(parse(text = .), envir = evalenv), collapse = "\n")

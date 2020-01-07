@@ -1,6 +1,81 @@
+
 markdown <- function(text, tag = NULL, sections = FALSE) {
+  expanded_text <- markdown_pass1(text)
+  markdown_pass2(expanded_text, tag = tag, sections = sections)
+}
+
+#' Expand the embedded inline code
+#'
+#' For example this becomes two: `r 1+1`.
+#' Variables can be set and then reused, within the same
+#' tag: `r x <- 100; NULL`
+#' The value of `x` is `r x`.
+#'
+#' @param text Input text.
+#' @return Text with the inline code expanded. A character vector of the
+#' same length as the input `text`.
+#'
+#' @importFrom xml2 xml_ns_strip xml_find_all xml_attr
+#' @importFrom purrr keep
+#'
+#' @keywords internal
+
+markdown_pass1 <- function(text) {
+  text <- paste(text, collapse = "\n")
   esc_text <- escape_rd_for_md(text)
-  esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
+  mdxml <- xml_ns_strip(md_to_mdxml(esc_text, sourcepos = TRUE))
+  code_nodes <- xml_find_all(mdxml, ".//code")
+  rcode_nodes <- keep(code_nodes, ~ str_sub(xml_text(.), 1, 2) == "r ")
+  if (length(rcode_nodes) == 0) return(esc_text)
+  code_text <- str_replace(map_chr(rcode_nodes, xml_text), "^r ", "")
+  code_pos <- parse_md_pos(map_chr(rcode_nodes, xml_attr, "sourcepos"))
+  out <- eval_code_nodes(code_text)
+  str_set_all_pos(esc_text, code_pos, out)
+}
+
+parse_md_pos <- function(text) {
+  nums <- map(strsplit(text, "[:-]"), as.integer)
+  data.frame(
+    start_line = map_int(nums, 1),
+    start_column = map_int(nums, 2),
+    end_line = map_int(nums, 3),
+    end_column = map_int(nums, 4)
+  )
+}
+
+eval_code_nodes <- function(text) {
+  evalenv <- new.env(parent = roxy_meta_get("env"))
+  map_chr(
+    text,
+    ~ paste(eval(parse(text = .), envir = evalenv), collapse = "\n")
+  )
+}
+
+str_set_all_pos <- function(text, pos, value) {
+  # Need to collapse the string, because of the potential multi-line
+  # code tags, and then also recode the positions
+  lens <- nchar(str_split(text, fixed("\n"))[[1]])
+  shifts <- c(0, cumsum(lens + 1L))
+  shifts <- shifts[-length(shifts)]
+  start <- shifts[pos$start_line] + pos$start_column
+  end <- shifts[pos$end_line] + pos$end_column
+
+  # Create intervals for the parts we keep
+  keep_start <- c(1, end + 2L)
+  keep_end <- c(start - 2L, nchar(text))
+
+  # Now piece them together
+  out <- paste0(
+    substring(text, keep_start, keep_end),
+    c(value, ""),
+    collapse = ""
+  )
+  attributes(out) <- attributes(text)
+  out
+}
+
+markdown_pass2 <- function(text, tag = NULL, sections = FALSE) {
+  esc_text_linkrefs <- add_linkrefs_to_md(text)
 
   mdxml <- md_to_mdxml(esc_text_linkrefs)
   state <- new.env(parent = emptyenv())
@@ -8,11 +83,11 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
   state$has_sections <- sections
   rd <- mdxml_children_to_rd_top(mdxml, state)
 
-  map_chr(rd, unescape_rd_for_md, esc_text)
+  map_chr(rd, unescape_rd_for_md, text)
 }
 
-md_to_mdxml <- function(x) {
-  md <- commonmark::markdown_xml(x, hardbreaks = TRUE, extensions = "table")
+md_to_mdxml <- function(x, ...) {
+  md <- commonmark::markdown_xml(x, hardbreaks = TRUE, extensions = "table", ...)
   xml2::read_xml(md)
 }
 

@@ -1,6 +1,15 @@
 
 markdown <- function(text, tag = NULL, sections = FALSE) {
-  expanded_text <- markdown_pass1(text)
+  tryCatch(
+    expanded_text <- markdown_pass1(text),
+    error = function(e) {
+      message <- paste0(
+        if (!is.na(tag$file)) paste0("[", tag$file, ":", tag$line, "] "),
+        "@", tag$tag, " in inline code: ", e$message
+      )
+      stop(message, call. = FALSE)
+    }
+  )
   markdown_pass2(expanded_text, tag = tag, sections = sections)
 }
 
@@ -59,7 +68,15 @@ eval_code_nodes <- function(text) {
 }
 
 str_set_all_pos <- function(text, pos, value) {
-  # Need to collapse the string, because of the potential multi-line
+  # Cmark has a bug when reporting source positions for multi-line
+  # code tags, and it does not count the indenting space in the
+  # continuation lines. However, the bug might get fixed later, so
+  # for now we just simply error for multi-line inline code.
+  if (any(pos$start_line != pos$end_line)) {
+    stop("multi-line `r ` markup is not supported")
+  }
+
+  # Need to split the string, because of the potential multi-line
   # code tags, and then also recode the positions
   lens <- nchar(str_split(text, fixed("\n"))[[1]])
   shifts <- c(0, cumsum(lens + 1L))

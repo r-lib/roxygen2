@@ -19,4 +19,9 @@ Variables can be set and then reused, within the same
 tag:
 The value of \code{x} is 100.
 }
+\details{
+We have access to the internal functions of the package, e.g.
+since this is \emph{roxygen2}, we can refer to the internal \code{markdown}
+function, and this is \code{TRUE}: TRUE.
+}
 \keyword{internal}

@@ -11,6 +11,10 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' tag: `r x <- 100; NULL`
 #' The value of `x` is `r x`.
 #'
+#' We have access to the internal functions of the package, e.g.
+#' since this is _roxygen2_, we can refer to the internal `markdown`
+#' function, and this is `TRUE`: `r is.function(markdown)`.
+#'
 #' @param text Input text.
 #' @return Text with the inline code expanded. A character vector of the
 #' same length as the input `text`.

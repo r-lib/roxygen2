@@ -23,5 +23,12 @@ The value of \code{x} is 100.
 We have access to the internal functions of the package, e.g.
 since this is \emph{roxygen2}, we can refer to the internal \code{markdown}
 function, and this is \code{TRUE}: TRUE.
+
+Roxygen created this manual page using R version 3.6.1.
+
+To insert the name of the current package: roxygen2.
+
+The \code{iris} data set has 5 columns:
+\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.
 }
 \keyword{internal}

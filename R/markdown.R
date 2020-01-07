@@ -24,6 +24,13 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' since this is _roxygen2_, we can refer to the internal `markdown`
 #' function, and this is `TRUE`: `r is.function(markdown)`.
 #'
+#' Roxygen created this manual page using R version `r getRversion()`.
+#'
+#' To insert the name of the current package: `r packageName()`.
+#'
+#' The `iris` data set has `r ncol(iris)` columns:
+#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.
+#'
 #' @param text Input text.
 #' @return Text with the inline code expanded. A character vector of the
 #' same length as the input `text`.

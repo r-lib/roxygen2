@@ -44,7 +44,7 @@ extract_r6_methods <- function(x) {
     x$public_methods[method_nms],
     function(m) {
       ref <- utils::getSrcref(m)
-      if (is.null(ref)) stop("R6 class without source references")
+      if (is.null(ref)) stop("R6 class without source references. Try re-installing with installation option '--with-keep.source'.")
       utils::getSrcLocation(ref)
     }
   )

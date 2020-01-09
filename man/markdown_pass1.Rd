@@ -14,12 +14,14 @@ Text with the inline code expanded. A character vector of the
 same length as the input \code{text}.
 }
 \description{
+Expand the embedded inline code
+}
+\details{
 For example this becomes two: 2.
 Variables can be set and then reused, within the same
 tag:
 The value of \code{x} is 100.
-}
-\details{
+
 We have access to the internal functions of the package, e.g.
 since this is \emph{roxygen2}, we can refer to the internal \code{markdown}
 function, and this is \code{TRUE}: TRUE.
@@ -27,6 +29,9 @@ function, and this is \code{TRUE}: TRUE.
 To insert the name of the current package: roxygen2.
 
 The \code{iris} data set has 5 columns:
-\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.
+\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.\if{html}{\out{<div class="r">}}\preformatted{# Code block demo
+x + 1
+}\if{html}{\out{</div>}}\preformatted{## [1] 101
+}
 }
 \keyword{internal}

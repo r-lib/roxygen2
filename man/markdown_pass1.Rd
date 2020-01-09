@@ -33,5 +33,17 @@ The \code{iris} data set has 5 columns:
 x + 1
 }\if{html}{\out{</div>}}\preformatted{## [1] 101
 }
+
+Chunk options:\if{html}{\out{<div class="r">}}\preformatted{names(mtcars)
+nrow(mtcars)
+}\if{html}{\out{</div>}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
+## [11] "carb"
+## [1] 32
+}
+
+Plots:\if{html}{\out{<div class="r">}}\preformatted{plot(1:10)
+}\if{html}{\out{</div>}}
+
+\figure{test-figure-1.png}{}
 }
 \keyword{internal}

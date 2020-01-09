@@ -35,6 +35,19 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' x + 1
 #' ```
 #'
+#' Chunk options:
+#'
+#' ```{r results = "hold"}
+#' names(mtcars)
+#' nrow(mtcars)
+#' ```
+#'
+#' Plots:
+#'
+#' ```{r test-figure}
+#' plot(1:10)
+#' ```
+#'
 #' @param text Input text.
 #' @return Text with the inline code expanded. A character vector of the
 #' same length as the input `text`.
@@ -77,8 +90,11 @@ eval_code_nodes <- function(nodes) {
   # This should only happen in our test cases
   if (is.null(evalenv)) evalenv <- new.env(parent = baseenv())
   map_chr(nodes, eval_code_node, env = evalenv)
-}  
-  
+}
+
+#' @importFrom xml2 xml_name
+#' @importFrom knitr knit opts_chunk
+
 eval_code_node <- function(node, env) {
   if (xml_name(node) == "code") {
     text <- str_replace(xml_text(node), "^r ", "")
@@ -86,6 +102,11 @@ eval_code_node <- function(node, env) {
 
   } else {
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
+    opts_chunk$set(
+      error = FALSE,
+      fig.path = "man/figures/",
+      fig.process = function(path) basename(path)
+    )
     knit(text = text, quiet = TRUE, envir = env)
   }
 }

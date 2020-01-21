@@ -1,59 +1,13 @@
 
-test_that("can eval in various tags", {
+test_that("can eval", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' @title Title `r 1 + 1`
-    #'
     #' @description Description `r 2 + 2`
-    #'
-    #' @details Details `r 3 + 3`
-    #'
-    #' @references References `r 4 + 4`
-    #'
-    #' @note Note `r 5 + 5`
-    #'
-    #' @seealso See also `r 6 + 6`
-    #'
-    #' @return Return `r 7 + 7`
-    #'
-    #' @author Author `r 8 + 8`
-    #'
-    #' @section Foobar `r 8.5 + 8.5`:
-    #' With some `r 9 + 9`
-    #'
-    #' @format Format `r 10 + 10`
-    #'
-    #' @source Source `r 11 + 11`
-    #'
-    #' @param param Param `r 12 + 12`
-    #'
-    #' @slot slot Slot `r 13 + 13`
-    #'
-    #' @field field Field `r 14 + 14`
-    #'
     #' @md
     foo <- function() {}")[[1]]
 
   expect_equal(out1$get_value("title"), "Title 2")
   expect_equal(out1$get_value("description"), "Description 4")
-  expect_equal(out1$get_value("details"), "Details 6")
-  expect_equal(out1$get_value("references"), "References 8")
-  expect_equal(out1$get_value("note"), "Note 10")
-  expect_equal(out1$get_value("seealso"), "See also 12")
-  expect_equal(out1$get_value("value"), "Return 14")
-  expect_equal(out1$get_value("author"), "Author 16")
-  expect_equal(out1$get_value("section")$title, "Foobar 17")
-  expect_equal(out1$get_value("section")$content, "\nWith some 18")
-  expect_equal(out1$get_value("format"), "Format 20")
-  expect_equal(out1$get_value("source"), "Source 22")
-  expect_equal(out1$get_value("param"), c(param = "Param 24"))
-  expect_equal(out1$get_value("slot"), c(slot = "Slot 26"))
-  expect_equal(out1$get_value("field"), c(field = "Field 28"))
-})
-
-test_that("can see the package env", {
-  # This is better tested in the internal `markdown_pass` manual
-  # page, since there is a package env there, unlike here...
-  expect_true(TRUE)
 })
 
 test_that("uses the same env for a tag, but does not reuse envs", {

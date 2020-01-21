@@ -22,7 +22,7 @@ test_that("uses the same env for a tag, but does not reuse envs", {
   expect_equal(out1$get_value("description"), "Description FALSE")
 })
 
-test_that("can create markdown markdup", {
+test_that("can create markdown markup", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'

@@ -23,39 +23,26 @@ test_that("uses the same env for a tag, but does not reuse envs", {
 })
 
 test_that("can create markdown markup", {
-  out1 <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' Description `r paste0('_', 'keyword', '_')`
-    #' @md
-    #' @name dummy
-    NULL")[[1]]
-  expect_equal(out1$get_value("description"), "Description \\emph{keyword}")
+  expect_identical(
+    markdown("Description `r paste0('_', 'keyword', '_')`"),
+    "Description \\emph{keyword}"
+  )
 })
 
 test_that("can create markdown markup piecewise", {
-  out1 <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' Description [`r paste0('https://url]')`](`r paste0('link text')`).
-    #' @md
-    #' @name dummy
-    NULL")[[1]]
-  expect_equal(
-    out1$get_value("description"),
-    "Description \\link{https://url}](link text)."
+  expect_identical(
+    markdown(
+      "Description [`r paste0('https://url]')`](`r paste0('link text')`)"
+    ),
+    "Description \\link{https://url}](link text)"
   )
 })
 
 test_that("NULL creates no text", {
-  out1 <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' Description --`r NULL`--
-    #' @md
-    #' @name dummy
-    NULL")[[1]]
-  expect_equal(out1$get_value("description"), "Description ----")
+  expect_identical(
+    markdown("Description --`r NULL`--"),
+    "Description ----"
+  )
 })
 
 test_that("multi-line inline code block errors", {

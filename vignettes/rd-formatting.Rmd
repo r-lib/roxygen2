@@ -270,6 +270,7 @@ Markdown syntax for inline images works. The image files must be in the `man/fig
 Similarly to the knitr package, you can use the markdown inline code markup to evaluate R code and insert its output into the manual page.
 To do this, prefix the code with `r `, i.e. the lowercase letter 'r' and a space character.
 Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value.
+After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.
 
 For example, the following will insert the date and the R version of the roxygen run.
 

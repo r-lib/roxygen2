@@ -10,16 +10,24 @@ test_that("can eval", {
   expect_equal(out1$get_value("description"), "Description 4")
 })
 
-test_that("uses the same env for a tag, but does not reuse envs", {
+test_that("uses the same env for a block, but not across blocks", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title `r foobarxxx123 <- 420` `r foobarxxx123`
     #'
     #' Description `r exists('foobarxxx123', inherits = FALSE)`
     #' @md
     #' @name dummy
-    NULL")[[1]]
-  expect_equal(out1$get_value("title"), "Title 420 420")
-  expect_equal(out1$get_value("description"), "Description FALSE")
+    NULL
+
+    #' Title another
+    #'
+    #' Description `r exists('foobarxxx123', inherits = FALSE)`
+    #' @md
+    #' @name dummy2
+    NULL")
+  expect_equal(out1$dummy.Rd$get_value("title"), "Title 420 420")
+  expect_equal(out1$dummy.Rd$get_value("description"), "Description TRUE")
+  expect_equal(out1$dummy2.Rd$get_value("description"), "Description FALSE")
 })
 
 test_that("can create markdown markup", {

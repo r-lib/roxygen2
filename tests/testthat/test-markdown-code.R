@@ -45,8 +45,10 @@ test_that("NULL creates no text", {
   )
 })
 
-test_that("multi-line inline code block errors", {
-  expect_error(
+test_that("various errors", {
+  verify_output(test_path("markdown-code-errors.txt"), {
+
+    # multi-line inline code block
     roc_proc_text(rd_roclet(), "
       #' Title
       #'
@@ -54,33 +56,25 @@ test_that("multi-line inline code block errors", {
       #'   1`--
       #' @md
       #' @name dummy
-      NULL")[[1]],
-    "in inline code: multi-line `r ` markup is not supported"
-  )
-})
+      NULL"
+      )[[1]]
 
-test_that("evaluation errors are reported nicely", {
-  expect_error(
+    # evaluation errors are reported nicely
     roc_proc_text(rd_roclet(), "
       #' Title
       #'
       #' Description --`r 1 + 'a'`--
       #' @md
       #' @name dummy
-      NULL")[[1]],
-    "in inline code: non-numeric argument to binary operator"
-  )
-})
+      NULL")[[1]]
 
-test_that("pase errors are reported nicely", {
-  expect_error(
+    # parse errors are reported nicely
     roc_proc_text(rd_roclet(), "
       #' Title
       #'
       #' Description --`r 1 + `--
       #' @md
       #' @name dummy
-      NULL")[[1]],
-    "in inline code:.*unexpected end of input"
-  )
+      NULL")[[1]]
+  })
 })

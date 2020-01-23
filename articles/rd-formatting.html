@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">roxygen2</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">7.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">7.0.2.9000</span>
       </span>
     </div>
 
@@ -211,6 +211,7 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#' @param ns Optionally, a named vector giving prefix-url pairs, as</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#'   produced by `xml_ns`. If provided, all names will be explicitly</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#'   qualified with the ns prefix, i.e. if the element `bar` is defined ...</span></a></code></pre></div>
+<p>You can also use this syntax to run custom R code and insert its output into the manual page. See section ‘Dynamic R code’ below.</p>
 <p>For blocks of code, put your code between triple backticks:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#' ```</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#' pkg &lt;- make_packages(</span></a>
@@ -428,6 +429,35 @@ or in <code>pkg</code>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#' ![](example-plot.jpg "Example Plot Title")</span></a></code></pre></div>
 </div>
 </div>
+<div id="dynamic-r-code" class="section level1">
+<h1 class="hasAnchor">
+<a href="#dynamic-r-code" class="anchor"></a>Dynamic R code</h1>
+<p>Similarly to the knitr package, you can use the markdown inline code markup to evaluate R code and insert its output into the manual page. To do this, prefix the code with <code>r</code>, i.e. the lowercase letter ‘r’ and a space character. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.</p>
+<p>For example, the following will insert the date and the R version of the roxygen run.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#' Roxygen created this manual page on `r Sys.Date()` using R version</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#' `r getRversion()`.</span></a></code></pre></div>
+<p>The value of the R expression is converted to a character string, with <code><a href="https://rdrr.io/r/base/paste.html">paste(collapse = "\n")</a></code>. So you don’t need expicitly convert to a character value, numeric values or any R object with an <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code> S3 method is fine. Also, you can insert multiple lines by returning a character vector. If you want to run R code without inseringt any output, return an empty string or <code>NULL</code>.</p>
+<p>The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to <code>.Rd</code> conversion, so you can create markdown markup dynamically:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co">#' The `iris` data set has `r ncol(iris)` columns:</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.</span></a></code></pre></div>
+<p>Note that you need to escape backtick characters, if they appear in the R expression, by doubling them, like above. The result after the dynamic R code evaluation will be:</p>
+<pre><code>The `iris` data set has 5 columns:
+`Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, `Species`.</code></pre>
+<p>And the final result in the <code>.Rd</code> file will look as:</p>
+<pre><code>The \code{iris} data set has 5 columns:
+\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.</code></pre>
+<p>The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting. This means that you can call (internal or exported) functions of the package. <code><a href="https://rdrr.io/r/utils/packageName.html">packageName()</a></code> will also report the name of the package:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co">#' To insert the name of the current package: `r packageName()`.</span></a></code></pre></div>
+<p>A new evaluation environment is created for each roxygen <em>block</em>. So the output of this code:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co">#' @title ... `r myvar &lt;- "foo"; NULL` `r myvar`</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="co">#' @description ... `r myvar`</span></a></code></pre></div>
+<p>will be:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co">#' @title ... foo</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co">#'</span></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co">#' @description ... foo</span></a></code></pre></div>
+<p>Currently the whole code expression must be on the same line, multi-line expressions are not supported.</p>
+</div>
 <div id="roxygen-and-rd-tags-not-parsed-as-markdown" class="section level1">
 <h1 class="hasAnchor">
 <a href="#roxygen-and-rd-tags-not-parsed-as-markdown" class="anchor"></a>Roxygen and Rd tags <em>not</em> parsed as markdown</h1>
@@ -451,8 +481,8 @@ or in <code>pkg</code>
 <h2 class="hasAnchor">
 <a href="#spurious-lists" class="anchor"></a>Spurious lists</h2>
 <p>The Commonmark parser does not require an empty line before lists, and this might lead to unintended lists if a line starts with a number followed by a dot, or with an asterisk followed by whitespace:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#' You can see more about this topic in the book cited below, on page</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co">#' You can see more about this topic in the book cited below, on page</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></a></code></pre></div>
 </div>
 <div id="links-to-operators" class="section level2">
 <h2 class="hasAnchor">
@@ -498,24 +528,24 @@ or in <code>pkg</code>
 <ul>
 <li>
 <p>Ordered (numbered) lists:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co">#' \enumerate{</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co">#' \enumerate{</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
 </li>
 <li>
 <p>Unordered (bulleted) lists</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co">#' \itemize{</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co">#' \itemize{</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
+<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
 </li>
 <li>
 <p>Definition (named) lists</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">#' \describe{</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#'   \item{One}{First item}</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co">#'   \item{Two}{Second item}</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co">#' \describe{</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="co">#'   \item{One}{First item}</span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co">#'   \item{Two}{Second item}</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
 </li>
 </ul>
 </div>
@@ -537,30 +567,30 @@ or in <code>pkg</code>
 <li><p>Table contents, with columns separated by <code>\tab</code> and rows by <code>\cr</code>.</p></li>
 </ol>
 <p>The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with <code>#'</code> for pasting directly into the documentation.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">tabular &lt;-<span class="st"> </span><span class="cf">function</span>(df, ...) {</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span>(df))</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">  align &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(x)) <span class="st">"r"</span> <span class="cf">else</span> <span class="st">"l"</span></a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">  col_align &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span>(df, align)</a>
-<a class="sourceLine" id="cb20-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb20-7" data-line-number="7">  cols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(df, format, ...)</a>
-<a class="sourceLine" id="cb20-8" data-line-number="8">  contents &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">"paste"</span>,</a>
-<a class="sourceLine" id="cb20-9" data-line-number="9">    <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(cols, <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">sep =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>, <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>)))</a>
-<a class="sourceLine" id="cb20-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb20-11" data-line-number="11">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"#' </span><span class="ch">\\</span><span class="st">tabular{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(col_align, <span class="dt">collapse =</span> <span class="st">""</span>), <span class="st">"}{</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
-<a class="sourceLine" id="cb20-12" data-line-number="12">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">strong{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(df), <span class="st">"}"</span>, <span class="dt">sep =</span> <span class="st">""</span>, <span class="dt">collapse =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>), <span class="st">" </span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
-<a class="sourceLine" id="cb20-13" data-line-number="13">    contents, <span class="st">"</span><span class="ch">\n</span><span class="st">#' }</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">sep =</span> <span class="st">""</span>)</a>
-<a class="sourceLine" id="cb20-14" data-line-number="14">}</a>
-<a class="sourceLine" id="cb20-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb20-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw">tabular</span>(mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]))</a>
-<a class="sourceLine" id="cb20-17" data-line-number="17"><span class="co">#&gt; #' \tabular{rrrrr}{</span></a>
-<a class="sourceLine" id="cb20-18" data-line-number="18"><span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span></a>
-<a class="sourceLine" id="cb20-19" data-line-number="19"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
-<a class="sourceLine" id="cb20-20" data-line-number="20"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
-<a class="sourceLine" id="cb20-21" data-line-number="21"><span class="co">#&gt; #'   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span></a>
-<a class="sourceLine" id="cb20-22" data-line-number="22"><span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span></a>
-<a class="sourceLine" id="cb20-23" data-line-number="23"><span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span></a>
-<a class="sourceLine" id="cb20-24" data-line-number="24"><span class="co">#&gt; #' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">tabular &lt;-<span class="st"> </span><span class="cf">function</span>(df, ...) {</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span>(df))</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">  align &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(x)) <span class="st">"r"</span> <span class="cf">else</span> <span class="st">"l"</span></a>
+<a class="sourceLine" id="cb27-5" data-line-number="5">  col_align &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span>(df, align)</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">  cols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(df, format, ...)</a>
+<a class="sourceLine" id="cb27-8" data-line-number="8">  contents &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">"paste"</span>,</a>
+<a class="sourceLine" id="cb27-9" data-line-number="9">    <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(cols, <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">sep =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>, <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>)))</a>
+<a class="sourceLine" id="cb27-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb27-11" data-line-number="11">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"#' </span><span class="ch">\\</span><span class="st">tabular{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(col_align, <span class="dt">collapse =</span> <span class="st">""</span>), <span class="st">"}{</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
+<a class="sourceLine" id="cb27-12" data-line-number="12">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">strong{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(df), <span class="st">"}"</span>, <span class="dt">sep =</span> <span class="st">""</span>, <span class="dt">collapse =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>), <span class="st">" </span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
+<a class="sourceLine" id="cb27-13" data-line-number="13">    contents, <span class="st">"</span><span class="ch">\n</span><span class="st">#' }</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">sep =</span> <span class="st">""</span>)</a>
+<a class="sourceLine" id="cb27-14" data-line-number="14">}</a>
+<a class="sourceLine" id="cb27-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb27-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw">tabular</span>(mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]))</a>
+<a class="sourceLine" id="cb27-17" data-line-number="17"><span class="co">#&gt; #' \tabular{rrrrr}{</span></a>
+<a class="sourceLine" id="cb27-18" data-line-number="18"><span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span></a>
+<a class="sourceLine" id="cb27-19" data-line-number="19"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
+<a class="sourceLine" id="cb27-20" data-line-number="20"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
+<a class="sourceLine" id="cb27-21" data-line-number="21"><span class="co">#&gt; #'   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span></a>
+<a class="sourceLine" id="cb27-22" data-line-number="22"><span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span></a>
+<a class="sourceLine" id="cb27-23" data-line-number="23"><span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span></a>
+<a class="sourceLine" id="cb27-24" data-line-number="24"><span class="co">#&gt; #' }</span></a></code></pre></div>
 </div>
 </div>
 </div>
@@ -586,6 +616,7 @@ or in <code>pkg</code>
       <li><a href="#images">Images</a></li>
       </ul>
 </li>
+      <li><a href="#dynamic-r-code">Dynamic R code</a></li>
       <li><a href="#roxygen-and-rd-tags-not-parsed-as-markdown">Roxygen and Rd tags <em>not</em> parsed as markdown</a></li>
       <li>
 <a href="#possible-problems">Possible problems</a><ul class="nav nav-pills nav-stacked">

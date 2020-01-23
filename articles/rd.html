@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">roxygen2</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">7.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">7.0.2.9000</span>
       </span>
     </div>
 
@@ -425,11 +425,12 @@
 <div id="do-repeat-yourself" class="section level2">
 <h2 class="hasAnchor">
 <a href="#do-repeat-yourself" class="anchor"></a>Do repeat yourself</h2>
-<p>There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It’s frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides three ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:</p>
+<p>There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It’s frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:</p>
 <ul>
 <li><p>Cross-link documentation files with <code>@seealso</code> and <code>@family</code>.</p></li>
 <li><p>Inherit documentation from another topic with<br><code>@inherit</code>, <code>@inheritParams</code>, and <code>@inheritSection</code>.</p></li>
 <li><p>Document multiple functions in the same topic with <code>@describeIn</code> or <code>@rdname</code>.</p></li>
+<li><p>Run arbitrary R code with the markdown markup for inline code, see section ‘Dynamic R code’ in <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code>.</p></li>
 <li><p>Run arbitrary R code with <code>@eval</code>.</p></li>
 <li><p>Create reusable templates with <code>@template</code> and <code>@templateVar</code>.</p></li>
 </ul>
@@ -527,7 +528,7 @@
 <div id="evaluating-arbitrary-code" class="section level3">
 <h3 class="hasAnchor">
 <a href="#evaluating-arbitrary-code" class="anchor"></a>Evaluating arbitrary code</h3>
-<p>A new and powerful technique is the <code>@eval</code> tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading <code>#'</code>).</p>
+<p>Another technique is the <code>@eval</code> tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading <code>#'</code>).</p>
 <p>For example, this code + roxygen block:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">my_params &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
@@ -550,6 +551,7 @@
 <a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#' @export</span></a>
 <a class="sourceLine" id="cb17-6" data-line-number="6">foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
 <a class="sourceLine" id="cb17-7" data-line-number="7">}</a></code></pre></div>
+<p>Note that <code>@eval</code> cannot be embedded into another roxygen tag. If you want to dynamically generate part of a roxygen tag, see section ‘Dynamic R code’ in <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code>.</p>
 <p>A related function is <code>@evalRd</code>. It works in the same way as <code>@eval</code> (i.e. it’s evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated <code>.Rd</code> file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.</p>
 <p>For example, this block:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">my_note &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>

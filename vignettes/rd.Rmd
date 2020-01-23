@@ -386,7 +386,7 @@ If you find yourself adding a lot of sections, you might consider using a vignet
 
 ## Do repeat yourself
 
-There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides three ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
+There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
 * Cross-link documentation files with `@seealso` and `@family`.
 
@@ -394,6 +394,8 @@ There is a tension between the DRY (do not repeat yourself) principle of program
   `@inherit`, `@inheritParams`, and `@inheritSection`.
 
 * Document multiple functions in the same topic with `@describeIn` or `@rdname`.
+
+* Run arbitrary R code with the markdown markup for inline code, see section 'Dynamic R code' in `vignette("rd-formatting")`.
 
 * Run arbitrary R code with `@eval`.
 
@@ -512,7 +514,7 @@ times <- function(x, y) x * y
 
 ### Evaluating arbitrary code
 
-A new and powerful technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).
+Another technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).
 
 For example, this code + roxygen block:
 
@@ -543,6 +545,8 @@ Is equivalent to:
 foo <- function(x, y) {
 }
 ```
+
+Note that `@eval` cannot be embedded into another roxygen tag. If you want to dynamically generate part of a roxygen tag, see section 'Dynamic R code' in `vignette("rd-formatting")`.
 
 A related function is `@evalRd`. It works in the same way as `@eval` (i.e. it's evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated `.Rd` file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.
 

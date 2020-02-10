@@ -73,6 +73,14 @@ write_if_different <- function(path, contents, check = TRUE) {
     return(FALSE)
   }
 
+  if (has_windows_le(path)) {
+    line_ending <- "\r\n"
+  } else {
+    line_ending <- "\n"
+  }
+
+  contents <- paste0(paste0(contents, collapse = line_ending), line_ending)
+  contents <- gsub("\r?\n", line_ending, contents)
   if (same_contents(path, contents)) return(FALSE)
 
   name <- basename(path)
@@ -81,15 +89,13 @@ write_if_different <- function(path, contents, check = TRUE) {
     FALSE
   } else {
     cat(sprintf('Writing %s\n', name))
-    write_lines(contents, path)
+    writeBin(charToRaw(enc2utf8(contents)), path)
     TRUE
   }
 }
 
 same_contents <- function(path, contents) {
   if (!file.exists(path)) return(FALSE)
-
-  contents <- paste0(paste0(contents, collapse = "\n"), "\n")
 
   text_hash <- digest::digest(contents, serialize = FALSE)
 

@@ -5,11 +5,13 @@ read_lines <- function(path, n = -1L) {
   base::readLines(path, n = n, encoding = "UTF-8", warn = FALSE)
 }
 
-write_lines <- function(text, path) {
-  if (has_windows_le(path)) {
-    line_ending <- "\r\n"
-  } else {
-    line_ending <- "\n"
+write_lines <- function(text, path, line_ending = NULL) {
+  if (is.null(line_ending)) {
+    if (has_windows_le(path)) {
+      line_ending <- "\r\n"
+    } else {
+      line_ending <- "\n"
+    }
   }
 
   # we need to convert any embedded newlines as well

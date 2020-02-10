@@ -80,7 +80,7 @@ write_if_different <- function(path, contents, check = TRUE) {
   }
 
   contents <- paste0(paste0(contents, collapse = line_ending), line_ending)
-  contents <- gsub("\r?\n", line_ending, contents)
+  contents <- enc2utf8(gsub("\r?\n", line_ending, contents))
   if (same_contents(path, contents)) return(FALSE)
 
   name <- basename(path)
@@ -89,7 +89,7 @@ write_if_different <- function(path, contents, check = TRUE) {
     FALSE
   } else {
     cat(sprintf('Writing %s\n', name))
-    writeBin(charToRaw(enc2utf8(contents)), path)
+    writeBin(charToRaw(contents), path)
     TRUE
   }
 }

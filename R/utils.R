@@ -73,12 +73,7 @@ write_if_different <- function(path, contents, check = TRUE) {
     return(FALSE)
   }
 
-  if (has_windows_le(path)) {
-    line_ending <- "\r\n"
-  } else {
-    line_ending <- "\n"
-  }
-
+  line_ending <- detect_line_ending(path)
   contents <- paste0(paste0(contents, collapse = line_ending), line_ending)
   contents <- enc2utf8(gsub("\r?\n", line_ending, contents))
   if (same_contents(path, contents)) return(FALSE)

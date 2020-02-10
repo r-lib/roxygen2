@@ -98,7 +98,7 @@ test_that("write_lines writes unix-style line endings.", {
   path <- test_path("escapes.Rd")
 
   # skip if checked on windows with autocrlf = true
-  skip_if(has_windows_le(path))
+  skip_if(detect_line_ending(path) == "\r\n")
 
   temp_filename <- tempfile()
   old_binary <- readBin(path, "raw", n = file.info(path)$size)

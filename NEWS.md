@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* roxygen2 now keeps using Windows (CR LF) line endings for files that
+  already have CR LF line endings, and uses LF for new files (#989).
+
 # roxygen2 7.0.2
 
 * `\example{}` escaping has been improved (again!) so that special escapes 

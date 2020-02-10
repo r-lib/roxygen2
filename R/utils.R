@@ -90,6 +90,9 @@ write_if_different <- function(path, contents, check = TRUE) {
 }
 
 same_contents <- function(path, contents) {
+  if (length(contents) != 1) {
+    stop("Internal roxygen error: `contents` must be character(1)")
+  }
   if (!file.exists(path)) return(FALSE)
 
   text_hash <- digest::digest(contents, serialize = FALSE)

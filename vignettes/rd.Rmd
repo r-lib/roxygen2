@@ -305,19 +305,18 @@ Datasets are usually stored as `.rdata` files in `data/` and not as regular R ob
 #' diamonds.
 #'
 #' @format A data frame with 53940 rows and 10 variables
-#' \describe{
-#'   \item{price}{price in US dollars (\$326--\$18,823)}
-#'   \item{carat}{weight of the diamond (0.2--5.01)}
-#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}
-#'   \item{color}{diamond colour, from D (best) to J (worst)}
-#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,
-#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}
-#'   \item{x}{length in mm (0--10.74)}
-#'   \item{y}{width in mm (0--58.9)}
-#'   \item{z}{depth in mm (0--31.8)}
-#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
-#'   \item{table}{width of top of diamond relative to widest point (43--95)}
-#' }
+#'   * price: price in US dollars (\$326--\$18,823)
+#'   * carat: weight of the diamond (0.2--5.01)
+#'   * cut: quality of the cut (Fair, Good, Very Good, Premium, Ideal)
+#'   * color: diamond colour, from D (best) to J (worst)
+#'   * clarity: a measurement of how clear the diamond is (I1 (worst), SI2,
+#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))
+#'   * x: length in mm (0--10.74)
+#'   * y: width in mm (0--58.9)
+#'   * z: depth in mm (0--31.8)
+#'   * depth: total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)
+#'   * table: width of top of diamond relative to widest point (43--95)
+#'
 #' @source <http://www.diamondse.info/>
 "diamonds"
 ```
@@ -371,15 +370,23 @@ You can add arbitrary sections with the `@section` tag. This is a useful way of 
 #' Do not operate heavy machinery within 8 hours of using this function.
 ```
 
-To add a subsection, you must use the Rd `\subsection{}` command, as follows:
+You can also create sections using the markdown syntax for headers. For example, the previously-defined section can be created with markdown headers like this:
 
 ```{r}
-#' @section Warning:
+#' @details # Warning
+#' Do not operate heavy machinery within 8 hours of using this function.
+```
+
+Note that '`#`' may only appear after the `@description` and `@details` tags. Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`.
+
+To add a subsection, use level two or greater headings:
+
+```{r}
+#' @details # Warning
 #' You must not call this function unless ...
 #'
-#' \subsection{Exceptions}{
-#'    Apart from the following special cases...
-#' }
+#' ## Exceptions
+#' Apart from the following special cases...
 ```
 
 If you find yourself adding a lot of sections, you might consider using a vignette instead.

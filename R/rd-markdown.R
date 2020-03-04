@@ -19,7 +19,7 @@ roxy_tag_rd.roxy_tag_format <- function(x, base_path, env) {
 }
 #' @export
 format.rd_section_format <- function(x, ...) {
-  format_first(x, ...)
+  format_collapse(x, ...)
 }
 
 #' @export

@@ -86,3 +86,41 @@ test_that("various errors", {
       NULL")[[1]]
   })
 })
+
+test_that("interleaving fences and inline code", {
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' @details Details `r x <- 10`
+    #'
+    #' ```{r}
+    #' y <- x + 10
+    #' y
+    #' ```
+    #'
+    #' @md
+    #' @name dummy
+    NULL")[[1]]
+
+  details <- out1$get_value("details")
+  expect_match(details, "Details 10", fixed = TRUE)
+  expect_match(details, "## [1] 20", fixed = TRUE)
+})
+
+test_that("fence options are used", {
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' @details Details
+    #'
+    #' ```{r eval = FALSE}
+    #' this - would - fail - to - eval
+    #' ```
+    #'
+    #' @md
+    #' @name dummy
+    NULL")[[1]]
+
+  details <- out1$get_value("details")
+  expect_false(grepl("Error", details))
+})

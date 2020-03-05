@@ -369,12 +369,17 @@ Plots will create `.png` files in the `man/figures` directory. The file names ar
 #' ```
 ```
 
+Note that the generated `.png` files will be added to the package, and they can considerably increase the size of the package.
+
 Note that code block support is currently experimental, and somewhat limited.
 Some of the known limitations:
   * Because the code blocks are evaluated individually, they cannot refer to each other.
   * Some knitr chunk options are reset at the start of every code block, so if you want to change these, you'll have to specify them for every chunk.
     These are currently `error`, `fig.path`, `fig.process`.
   * Some knitr options might not create meaningful output.
+  * The markdown code runs every time you call `roxygenize()` (or `devtools::document()`) to generated the Rd files.
+    This potentially makes `roxygenize()` (much) slower.
+    You can turn on knitr caching as usual, but make sure to omit the cache from the package.
 
 # Roxygen and Rd tags *not* parsed as markdown
 

@@ -13,6 +13,10 @@
 
 * Multiple `@format` tags are now combined (#1015).
 
+* roxygen2 now omits empty annotations (alternate text) for figures added
+  via markdown. This caused issues when generating pkgdown web sites
+  (#1051).
+
 # roxygen2 7.0.2
 
 * `\example{}` escaping has been improved (again!) so that special escapes 

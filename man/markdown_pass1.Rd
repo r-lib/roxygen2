@@ -44,6 +44,6 @@ nrow(mtcars)
 Plots:\if{html}{\out{<div class="r">}}\preformatted{plot(1:10)
 }\if{html}{\out{</div>}}
 
-\figure{test-figure-1.png}{}
+\figure{test-figure-1.png}
 }
 \keyword{internal}

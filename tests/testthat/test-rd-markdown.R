@@ -32,7 +32,6 @@ test_that("@format NULL suppresses default usage", {
     #' Title
     #'
     #' @format NULL
-    #'
     x <- list(a = 1, b = 2)")[[1]]
 
   expect_equal(out$get_value("format"), NULL)
@@ -42,10 +41,9 @@ test_that("@format not escaped", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @format %
-    #'
     x <- list(a = 1, b = 2)")[[1]]
 
   expect_equal(out$get_value("format"), "%")
-  expect_equal(out$get_rd("format"), "\\format{%}")
+  expect_equal(out$get_rd("format"), "\\format{\n%\n}")
 })
 

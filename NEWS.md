@@ -11,6 +11,8 @@
 * roxygen2 now adds hyperlinks to R6 methods in the PDF manual as well,
   (#1006).
 
+* Multiple `@format` tags are now combined (#1015).
+
 # roxygen2 7.0.2
 
 * `\example{}` escaping has been improved (again!) so that special escapes 

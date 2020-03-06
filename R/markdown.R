@@ -348,7 +348,10 @@ mdxml_link_text <- function(xml_contents, state) {
 mdxml_image = function(xml) {
   dest <- xml_attr(xml, "destination")
   title <- xml_attr(xml, "title")
-  paste0("\\figure{", dest, "}{", title, "}")
+  paste0(
+    "\\figure{", dest, "}",
+    if (nchar(title)) paste0("{", title, "}")
+  )
 }
 
 escape_comment <- function(x) {

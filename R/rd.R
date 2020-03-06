@@ -191,7 +191,8 @@ topics_add_default_description <- function(topics) {
       next
 
     # rexport manually generates a own description, so don't need to
-    if (!topic$has_section("reexport")) {
+    if (!topic$has_section("reexport") &&
+        !identical(topic$get_value("docType"), "package")) {
       topic$add(rd_section("description", topic$get_value("title")))
     }
   }

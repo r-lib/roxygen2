@@ -13,8 +13,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Rd formatting">
 <meta property="og:description" content="">
@@ -152,19 +152,19 @@
 <p>Alternatively, you can use the <code>@md</code> tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in markdown.</p>
 <p>There is also a new <code>@noMd</code> tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.</p>
 <p>Here is an example roxygen chunk that uses markdown.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#' Use roxygen to document a package</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#' This function is a wrapper for the [roxygen2::roxygenize()] function from</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#' the roxygen2 package. See the documentation and vignettes of</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#' that package to learn how to use roxygen.</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#' @param pkg package description, can be path or package name.  See</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#'   [as.package()] for more information</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#' @param clean,reload Deprecated.</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#' @inheritParams roxygen2::roxygenise</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#' @seealso [roxygen2::roxygenize()], `browseVignettes("roxygen2")`</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#' @export</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#' @md</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#' Use roxygen to document a package</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#'</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#' This function is a wrapper for the [roxygen2::roxygenize()] function from</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#' the roxygen2 package. See the documentation and vignettes of</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#' that package to learn how to use roxygen.</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#'</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#' @param pkg package description, can be path or package name.  See</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#'   [as.package()] for more information</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#' @param clean,reload Deprecated.</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#' @inheritParams roxygen2::roxygenise</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#' @seealso [roxygen2::roxygenize()], `browseVignettes("roxygen2")`</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#' @export</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#' @md</span></span></code></pre></div>
 </div>
 <div id="syntax" class="section level1">
 <h1 class="hasAnchor">
@@ -172,78 +172,79 @@
 <div id="sections" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sections" class="anchor"></a>Sections</h2>
-<p>The usual markdown heading markup creates sections and subsections. Top level headings, i.e. ‘<code>#</code>’ create sections, via the <code>\section{}</code> Rd tag. ‘<code>#</code>’ may only appear after the <code>@description</code> and <code>@details</code> tags. Since <code>@details</code> can appear multiple times in a block, you can always precede a ‘<code>#</code>’ section with <code>@details</code>, if you prefer to place it towards the end of the block, after <code>@return</code> for example:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#' @details</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#' Trim the leading and trailing whitespace from a character vector.</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#' @param x Character vector.</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#' @return Character vector, with the whitespace trimmed.</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#' @details # This will be a new section</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#' ...</span></a></code></pre></div>
+<p>The usual markdown heading markup creates sections and subsections. Top level headings, i.e. ‘<code>#</code>’ create sections, via the <code>\section{}</code> Rd tag. ‘<code>#</code>’ may only appear after the <code>@description</code> and <code>@details</code> tags. Since <code>@details</code> can appear multiple times in a block, you can always precede a ‘<code>#</code>’ section with <code>@details</code>, if you prefer to place it towards the end of the block, after <code>@return</code> for example:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#' @details</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#' Trim the leading and trailing whitespace from a character vector.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#'</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#' @param x Character vector.</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#' @return Character vector, with the whitespace trimmed.</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#'</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#' @details # This will be a new section</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#' ...</span></span></code></pre></div>
 <p>Top level sections are always placed at a fixed position in the manual page, after the parameters and the details, but before <code>\note{}</code>, <code>\seealso{}</code> and the <code>\examples{}</code>. Their order will be the same as in the roxygen block.</p>
 </div>
 <div id="subsections" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subsections" class="anchor"></a>Subsections</h2>
 <p>Headings at level two and above may appear inside any roxygen tag that formats lines of text. E.g. <code>@description</code>, <code>@details</code>, <code>@return</code>, etc. They create subsections, via the <code>\subsection{}</code> Rd tag. They are allowed within top level sections as well, i.e. after ‘<code>#</code>’. Subsections can be nested. Example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">#' @details</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#' ## Subsection within details</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#' </span><span class="al">###</span><span class="co"> Sub-subsection</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#' ... text ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#' @details</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#' ## Subsection within details</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#' </span><span class="al">###</span><span class="co"> Sub-subsection</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#' ... text ...</span></span></code></pre></div>
 </div>
 <div id="emphasis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#emphasis" class="anchor"></a>Emphasis</h2>
 <p><em>Emphasis</em> and <strong>strong</strong> (bold) text are supported. For emphasis, put the text between asterisks or underline characters. For strong text, use two asterisks at both sides.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#' @references</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#' Robert E Tarjan and Mihalis Yannakakis. (1984). Simple</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#' linear-time algorithms to test chordality of graphs, test acyclicity</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#' of hypergraphs, and selectively reduce acyclic hypergraphs.</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#' *SIAM Journal of Computation* **13**, 566-579.</span></a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">#' See `::is_falsy` for the definition of what is _falsy_</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#' and what is _truthy_.</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">#' @references</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#' Robert E Tarjan and Mihalis Yannakakis. (1984). Simple</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#' linear-time algorithms to test chordality of graphs, test acyclicity</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#' of hypergraphs, and selectively reduce acyclic hypergraphs.</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#' *SIAM Journal of Computation* **13**, 566-579.</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#' See `::is_falsy` for the definition of what is _falsy_</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#' and what is _truthy_.</span></span></code></pre></div>
 </div>
 <div id="code" class="section level2">
 <h2 class="hasAnchor">
 <a href="#code" class="anchor"></a>Code</h2>
 <p>Inline code is supported via backticks.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#' @param ns Optionally, a named vector giving prefix-url pairs, as</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#'   produced by `xml_ns`. If provided, all names will be explicitly</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#'   qualified with the ns prefix, i.e. if the element `bar` is defined ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#' @param ns Optionally, a named vector giving prefix-url pairs, as</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#'   produced by `xml_ns`. If provided, all names will be explicitly</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#'   qualified with the ns prefix, i.e. if the element `bar` is defined ...</span></span></code></pre></div>
 <p>You can also use this syntax to run custom R code and insert its output into the manual page. See section ‘Dynamic R code’ below.</p>
 <p>For blocks of code, put your code between triple backticks:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#' ```</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#' pkg &lt;- make_packages(</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#'   foo1 = { f &lt;- function() print("hello!") ; d &lt;- 1:10 },</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#'   foo2 = { f &lt;- function() print("hello again!") ; d &lt;- 11:20 }</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#' )</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#' foo1::f()</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#' foo2::f()</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#' foo1::d</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#' foo2::d</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#' dispose_packages(pkg)</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#' ```</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#' ```</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#' pkg &lt;- make_packages(</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#'   foo1 = { f &lt;- function() print("hello!") ; d &lt;- 1:10 },</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#'   foo2 = { f &lt;- function() print("hello again!") ; d &lt;- 11:20 }</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#' )</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#' foo1::f()</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#' foo2::f()</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#' foo1::d</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#' foo2::d</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#' dispose_packages(pkg)</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#' ```</span></span></code></pre></div>
 <p>Note that this is not needed in <code>@examples</code>, since its contents are formatted as R code, anyway.</p>
+<p>You can use similar syntax to include a block of R code and/or its output in the manual page. See section ‘Dynamic R code’ below.</p>
 </div>
 <div id="lists" class="section level2">
 <h2 class="hasAnchor">
 <a href="#lists" class="anchor"></a>Lists</h2>
 <p>Regular Markdown lists are recognized and converted to <code>\enumerate{}</code> or <code>\itemize{}</code> lists:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#' There are two ways to use this function:</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#' 1. If its first argument is not named, then it returns a function</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#'    that can be used to color strings.</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#' 1. If its first argument is named, then it also creates a</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#'    style with the given name. This style can be used in</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#'    `style`. One can still use the return value</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#'    of the function, to create a style function.</span></a></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#' The style (the `...` argument) can be anything of the</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#' following:</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#' * An R color name, see `colors()`.</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#' * A 6- or 8-digit hexa color string, e.g. `#ff0000` means</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#'   red. Transparency (alpha channel) values are ignored.</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#' * A one-column matrix with three rows for the red, green</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#'   and blue channels, as returned by [grDevices::col2rgb()]</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#' There are two ways to use this function:</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#' 1. If its first argument is not named, then it returns a function</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#'    that can be used to color strings.</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#' 1. If its first argument is named, then it also creates a</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#'    style with the given name. This style can be used in</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#'    `style`. One can still use the return value</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#'    of the function, to create a style function.</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">#' The style (the `...` argument) can be anything of the</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#' following:</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#' * An R color name, see `colors()`.</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#' * A 6- or 8-digit hexa color string, e.g. `#ff0000` means</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#'   red. Transparency (alpha channel) values are ignored.</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#' * A one-column matrix with three rows for the red, green</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#'   and blue channels, as returned by [grDevices::col2rgb()]</span></span></code></pre></div>
 <p>Nested lists are also supported.</p>
 <p>Note that you do not have leave an empty line before the list. This is different from some markdown parsers.</p>
 </div>
@@ -251,22 +252,22 @@
 <h2 class="hasAnchor">
 <a href="#tables" class="anchor"></a>Tables</h2>
 <p>Use <a href="https://github.github.com/gfm/#tables-extension-">GFM table formatting</a>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="op">|</span><span class="st"> </span>foo <span class="op">|</span><span class="st"> </span>bar <span class="op">|</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="er">|</span><span class="st"> </span>baz <span class="op">|</span><span class="st"> </span>bim <span class="op">|</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">|</span><span class="st"> </span>foo <span class="op">|</span><span class="st"> </span>bar <span class="op">|</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="er">|</span><span class="st"> </span>baz <span class="op">|</span><span class="st"> </span>bim <span class="op">|</span></span></code></pre></div>
 <p>By default, columns are left-aligned. Use colons to generate right and center aligned columns:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="op">|</span><span class="st"> </span>left <span class="op">|</span><span class="st"> </span>center <span class="op">|</span><span class="st"> </span>right <span class="op">|</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="er">|</span><span class="st"> </span><span class="er">:</span><span class="op">---</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="er">:</span><span class="op">----</span><span class="er">:</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="op">----</span><span class="er">:</span><span class="st"> </span><span class="er">|</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="er">|</span><span class="st"> </span><span class="dv">1</span>    <span class="op">|</span><span class="st"> </span><span class="dv">2</span>      <span class="op">|</span><span class="st"> </span><span class="dv">3</span>     <span class="op">|</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">|</span><span class="st"> </span>left <span class="op">|</span><span class="st"> </span>center <span class="op">|</span><span class="st"> </span>right <span class="op">|</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="er">|</span><span class="st"> </span><span class="er">:</span><span class="op">---</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="er">:</span><span class="op">----</span><span class="er">:</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="op">----</span><span class="er">:</span><span class="st"> </span><span class="er">|</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="er">|</span><span class="st"> </span><span class="dv">1</span>    <span class="op">|</span><span class="st"> </span><span class="dv">2</span>      <span class="op">|</span><span class="st"> </span><span class="dv">3</span>     <span class="op">|</span></span></code></pre></div>
 </div>
 <div id="links" class="section level2">
 <h2 class="hasAnchor">
 <a href="#links" class="anchor"></a>Links</h2>
 <p>Markdown hyperlinks work as usual:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">#' See more about the markdown markup at the</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#' [Commonmark web site](http://commonmark.org/help)</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#' See more about the markdown markup at the</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#' [Commonmark web site](http://commonmark.org/help)</span></span></code></pre></div>
 <p>URLs inside angle brackets are also automatically converted to hyperlinks:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co">#' The main R web site is at &lt;https://r-project.org&gt;.</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#' The main R web site is at &lt;https://r-project.org&gt;.</span></span></code></pre></div>
 <p>Markdown notation can also be used to create links to other help topics. There are two basic forms:</p>
 <ul>
 <li>
@@ -425,21 +426,25 @@ or in <code>pkg</code>
 <h2 class="hasAnchor">
 <a href="#images" class="anchor"></a>Images</h2>
 <p>Markdown syntax for inline images works. The image files must be in the <code>man/figures</code> directory:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">#' Here is an example plot:</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#' ![](example-plot.jpg "Example Plot Title")</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">#' Here is an example plot:</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#' ![](example-plot.jpg "Example Plot Title")</span></span></code></pre></div>
 </div>
 </div>
 <div id="dynamic-r-code" class="section level1">
 <h1 class="hasAnchor">
 <a href="#dynamic-r-code" class="anchor"></a>Dynamic R code</h1>
-<p>Similarly to the knitr package, you can use the markdown inline code markup to evaluate R code and insert its output into the manual page. To do this, prefix the code with <code>r</code>, i.e. the lowercase letter ‘r’ and a space character. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.</p>
+<p>Similarly to the knitr package, you can use the markdown inline code markup or markdown code blocks to evaluate R code and insert its output into the manual page.</p>
+<div id="inline-code" class="section level2">
+<h2 class="hasAnchor">
+<a href="#inline-code" class="anchor"></a>Inline code</h2>
+<p>To do this, prefix the code with <code>r</code>, i.e. the lowercase letter ‘r’ and a space character. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.</p>
 <p>For example, the following will insert the date and the R version of the roxygen run.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#' Roxygen created this manual page on `r Sys.Date()` using R version</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#' `r getRversion()`.</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">#' Roxygen created this manual page on `r Sys.Date()` using R version</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co">#' `r getRversion()`.</span></span></code></pre></div>
 <p>The value of the R expression is converted to a character string, with <code><a href="https://rdrr.io/r/base/paste.html">paste(collapse = "\n")</a></code>. So you don’t need expicitly convert to a character value, numeric values or any R object with an <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code> S3 method is fine. Also, you can insert multiple lines by returning a character vector. If you want to run R code without inseringt any output, return an empty string or <code>NULL</code>.</p>
 <p>The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to <code>.Rd</code> conversion, so you can create markdown markup dynamically:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co">#' The `iris` data set has `r ncol(iris)` columns:</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">#' The `iris` data set has `r ncol(iris)` columns:</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co">#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.</span></span></code></pre></div>
 <p>Note that you need to escape backtick characters, if they appear in the R expression, by doubling them, like above. The result after the dynamic R code evaluation will be:</p>
 <pre><code>The `iris` data set has 5 columns:
 `Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, `Species`.</code></pre>
@@ -447,16 +452,39 @@ or in <code>pkg</code>
 <pre><code>The \code{iris} data set has 5 columns:
 \code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.</code></pre>
 <p>The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting. This means that you can call (internal or exported) functions of the package. <code><a href="https://rdrr.io/r/utils/packageName.html">packageName()</a></code> will also report the name of the package:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co">#' To insert the name of the current package: `r packageName()`.</span></a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co">#' To insert the name of the current package: `r packageName()`.</span></span></code></pre></div>
 <p>A new evaluation environment is created for each roxygen <em>block</em>. So the output of this code:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co">#' @title ... `r myvar &lt;- "foo"; NULL` `r myvar`</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="co">#' @description ... `r myvar`</span></a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co">#' @title ... `r myvar &lt;- "foo"; NULL` `r myvar`</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co">#'</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#' @description ... `r myvar`</span></span></code></pre></div>
 <p>will be:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co">#' @title ... foo</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co">#'</span></a>
-<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co">#' @description ... foo</span></a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co">#' @title ... foo</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#'</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="co">#' @description ... foo</span></span></code></pre></div>
 <p>Currently the whole code expression must be on the same line, multi-line expressions are not supported.</p>
+</div>
+<div id="code-blocks" class="section level2">
+<h2 class="hasAnchor">
+<a href="#code-blocks" class="anchor"></a>Code blocks</h2>
+<p>Markdown code blocks can be dynamic as well, if you use ```{r} to start them, just like in knitr documents.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co">#' ```{r}</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#' # This block of code will be evaluated</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#' summary(iris)</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#' ```</span></span></code></pre></div>
+<p>Within a roxygen block, code blocks and inline code use the same evaluation environment, so variables created in one of them can be used in others.</p>
+<p>Code blocks support knitr chunk options, e.g. to keep the output of several expressions together, you can specify <code>results= "hold"</code>:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co">#' ```{r results = "hold"}</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="co">#' names(mtcars)</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#' nrow(mtcars)</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co">#' ```</span></span></code></pre></div>
+<p>Plots will create <code>.png</code> files in the <code>man/figures</code> directory. The file names are created from the chunk names:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co">#' ```{r iris-pairs-plot}</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="co">#' pairs(iris[1:4], main = "Anderson's Iris Data -- 3 species",</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="co">#'   pch = 21, bg = c("red", "green3", "blue")[unclass(iris$Species)])</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="co">#' ```</span></span></code></pre></div>
+<p>Note that the generated <code>.png</code> files will be added to the package, and they can considerably increase the size of the package.</p>
+<p>Note that code block support is currently experimental, and somewhat limited. Some of the known limitations: * Because the code blocks are evaluated individually, they cannot refer to each other. * Some knitr chunk options are reset at the start of every code block, so if you want to change these, you’ll have to specify them for every chunk. These are currently <code>error</code>, <code>fig.path</code>, <code>fig.process</code>. * Some knitr options might not create meaningful output. * The markdown code runs every time you call <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (or <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code>) to generated the Rd files. This potentially makes <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (much) slower. You can turn on knitr caching as usual, but make sure to omit the cache from the package.</p>
+</div>
 </div>
 <div id="roxygen-and-rd-tags-not-parsed-as-markdown" class="section level1">
 <h1 class="hasAnchor">
@@ -481,8 +509,8 @@ or in <code>pkg</code>
 <h2 class="hasAnchor">
 <a href="#spurious-lists" class="anchor"></a>Spurious lists</h2>
 <p>The Commonmark parser does not require an empty line before lists, and this might lead to unintended lists if a line starts with a number followed by a dot, or with an asterisk followed by whitespace:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co">#' You can see more about this topic in the book cited below, on page</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co">#' You can see more about this topic in the book cited below, on page</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></span></code></pre></div>
 </div>
 <div id="links-to-operators" class="section level2">
 <h2 class="hasAnchor">
@@ -528,24 +556,24 @@ or in <code>pkg</code>
 <ul>
 <li>
 <p>Ordered (numbered) lists:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co">#' \enumerate{</span></a>
-<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
-<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
-<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co">#' \enumerate{</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="co">#'   \item First item</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="co">#'   \item Second item</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a><span class="co">#' }</span></span></code></pre></div>
 </li>
 <li>
 <p>Unordered (bulleted) lists</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co">#' \itemize{</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="co">#'   \item First item</span></a>
-<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="co">#'   \item Second item</span></a>
-<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co">#' \itemize{</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="co">#'   \item First item</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="co">#'   \item Second item</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="co">#' }</span></span></code></pre></div>
 </li>
 <li>
 <p>Definition (named) lists</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co">#' \describe{</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="co">#'   \item{One}{First item}</span></a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co">#'   \item{Two}{Second item}</span></a>
-<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="co">#' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co">#' \describe{</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a><span class="co">#'   \item{One}{First item}</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a><span class="co">#'   \item{Two}{Second item}</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a><span class="co">#' }</span></span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -567,36 +595,36 @@ or in <code>pkg</code>
 <li><p>Table contents, with columns separated by <code>\tab</code> and rows by <code>\cr</code>.</p></li>
 </ol>
 <p>The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with <code>#'</code> for pasting directly into the documentation.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">tabular &lt;-<span class="st"> </span><span class="cf">function</span>(df, ...) {</a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span>(df))</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb27-4" data-line-number="4">  align &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(x)) <span class="st">"r"</span> <span class="cf">else</span> <span class="st">"l"</span></a>
-<a class="sourceLine" id="cb27-5" data-line-number="5">  col_align &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span>(df, align)</a>
-<a class="sourceLine" id="cb27-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb27-7" data-line-number="7">  cols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(df, format, ...)</a>
-<a class="sourceLine" id="cb27-8" data-line-number="8">  contents &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">"paste"</span>,</a>
-<a class="sourceLine" id="cb27-9" data-line-number="9">    <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(cols, <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">sep =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>, <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>)))</a>
-<a class="sourceLine" id="cb27-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb27-11" data-line-number="11">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"#' </span><span class="ch">\\</span><span class="st">tabular{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(col_align, <span class="dt">collapse =</span> <span class="st">""</span>), <span class="st">"}{</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
-<a class="sourceLine" id="cb27-12" data-line-number="12">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">strong{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(df), <span class="st">"}"</span>, <span class="dt">sep =</span> <span class="st">""</span>, <span class="dt">collapse =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>), <span class="st">" </span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>,</a>
-<a class="sourceLine" id="cb27-13" data-line-number="13">    contents, <span class="st">"</span><span class="ch">\n</span><span class="st">#' }</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">sep =</span> <span class="st">""</span>)</a>
-<a class="sourceLine" id="cb27-14" data-line-number="14">}</a>
-<a class="sourceLine" id="cb27-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb27-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw">tabular</span>(mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]))</a>
-<a class="sourceLine" id="cb27-17" data-line-number="17"><span class="co">#&gt; #' \tabular{rrrrr}{</span></a>
-<a class="sourceLine" id="cb27-18" data-line-number="18"><span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span></a>
-<a class="sourceLine" id="cb27-19" data-line-number="19"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
-<a class="sourceLine" id="cb27-20" data-line-number="20"><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></a>
-<a class="sourceLine" id="cb27-21" data-line-number="21"><span class="co">#&gt; #'   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span></a>
-<a class="sourceLine" id="cb27-22" data-line-number="22"><span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span></a>
-<a class="sourceLine" id="cb27-23" data-line-number="23"><span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span></a>
-<a class="sourceLine" id="cb27-24" data-line-number="24"><span class="co">#&gt; #' }</span></a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>tabular &lt;-<span class="st"> </span><span class="cf">function</span>(df, ...) {</span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span>(df))</span>
+<span id="cb30-3"><a href="#cb30-3"></a></span>
+<span id="cb30-4"><a href="#cb30-4"></a>  align &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(x)) <span class="st">"r"</span> <span class="cf">else</span> <span class="st">"l"</span></span>
+<span id="cb30-5"><a href="#cb30-5"></a>  col_align &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span>(df, align)</span>
+<span id="cb30-6"><a href="#cb30-6"></a></span>
+<span id="cb30-7"><a href="#cb30-7"></a>  cols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(df, format, ...)</span>
+<span id="cb30-8"><a href="#cb30-8"></a>  contents &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">"paste"</span>,</span>
+<span id="cb30-9"><a href="#cb30-9"></a>    <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(cols, <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">sep =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>, <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>)))</span>
+<span id="cb30-10"><a href="#cb30-10"></a></span>
+<span id="cb30-11"><a href="#cb30-11"></a>  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"#' </span><span class="ch">\\</span><span class="st">tabular{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(col_align, <span class="dt">collapse =</span> <span class="st">""</span>), <span class="st">"}{</span><span class="ch">\n</span><span class="st">#'   "</span>,</span>
+<span id="cb30-12"><a href="#cb30-12"></a>    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"</span><span class="ch">\\</span><span class="st">strong{"</span>, <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(df), <span class="st">"}"</span>, <span class="dt">sep =</span> <span class="st">""</span>, <span class="dt">collapse =</span> <span class="st">" </span><span class="ch">\\</span><span class="st">tab "</span>), <span class="st">" </span><span class="ch">\\</span><span class="st">cr</span><span class="ch">\n</span><span class="st">#'   "</span>,</span>
+<span id="cb30-13"><a href="#cb30-13"></a>    contents, <span class="st">"</span><span class="ch">\n</span><span class="st">#' }</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">sep =</span> <span class="st">""</span>)</span>
+<span id="cb30-14"><a href="#cb30-14"></a>}</span>
+<span id="cb30-15"><a href="#cb30-15"></a></span>
+<span id="cb30-16"><a href="#cb30-16"></a><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw">tabular</span>(mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]))</span>
+<span id="cb30-17"><a href="#cb30-17"></a><span class="co">#&gt; #' \tabular{rrrrr}{</span></span>
+<span id="cb30-18"><a href="#cb30-18"></a><span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span></span>
+<span id="cb30-19"><a href="#cb30-19"></a><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></span>
+<span id="cb30-20"><a href="#cb30-20"></a><span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></span>
+<span id="cb30-21"><a href="#cb30-21"></a><span class="co">#&gt; #'   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span></span>
+<span id="cb30-22"><a href="#cb30-22"></a><span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span></span>
+<span id="cb30-23"><a href="#cb30-23"></a><span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span></span>
+<span id="cb30-24"><a href="#cb30-24"></a><span class="co">#&gt; #' }</span></span></code></pre></div>
 </div>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
         <div id="tocnav">
       <h2 class="hasAnchor">
@@ -616,7 +644,12 @@ or in <code>pkg</code>
       <li><a href="#images">Images</a></li>
       </ul>
 </li>
-      <li><a href="#dynamic-r-code">Dynamic R code</a></li>
+      <li>
+<a href="#dynamic-r-code">Dynamic R code</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#inline-code">Inline code</a></li>
+      <li><a href="#code-blocks">Code blocks</a></li>
+      </ul>
+</li>
       <li><a href="#roxygen-and-rd-tags-not-parsed-as-markdown">Roxygen and Rd tags <em>not</em> parsed as markdown</a></li>
       <li>
 <a href="#possible-problems">Possible problems</a><ul class="nav nav-pills nav-stacked">
@@ -640,7 +673,7 @@ or in <code>pkg</code>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>

@@ -25,8 +25,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -183,15 +183,15 @@
 <ul>
 <li>
 <p>If you know the source of the problem, you can often recreate it using a <code><a href="reference/roc_proc_text.html">roc_proc_text()</a></code> and text snippet:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(roxygen2)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="reference/roc_proc_text.html">roc_proc_text</a></span>(<span class="kw"><a href="reference/rd_roclet.html">rd_roclet</a></span>(), <span class="st">"</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  #' Title</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="st">  #' @param</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">  #'</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">  #' @export</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">  foo &lt;- function() {}"</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; Error in FUN(X[[i]], ...): subscript out of bounds</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(roxygen2)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="reference/roc_proc_text.html">roc_proc_text</a></span>(<span class="kw"><a href="reference/rd_roclet.html">rd_roclet</a></span>(), <span class="st">"</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="st">  #' Title</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="st">  #' @param</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="st">  #'</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  #' @export</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  foo &lt;- function() {}"</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt; Error in FUN(X[[i]], ...): subscript out of bounds</span></span></code></pre></div>
 <p>It’s really helpful if you can spend a little time reducing the text to the absolute minimum. Make sure you delete the body of the function (since roxygen2 never looks at it), and try each roxygen2 tag in turn. Only leave a tag in if you’ve confirmed it’s definitely part of the problem.</p>
 </li>
 <li><p>Issues that involve multiple files or that don’t give useful error messages are harder to track down. In these cases, sometimes your best option is to create a copy of your package, and progressively delete files until the problem goes away. Once you’ve done that, sometimes you’ll be able to reduce the problem further to a call to <code><a href="reference/roc_proc_text.html">roc_proc_text()</a></code> as above. If not, you’ll need to make your minimal package available somewhere on the internet (preferrably github) and link to it in the issue. The more you can do to make the package as small as possible, the less time it’ll take me to find the bug, and the more time I’ll have to work on it.</p></li>
@@ -208,7 +208,7 @@
 </li>
 <li>If you’re not sure: let the community help you figure it out! If your problem <em>is</em> a bug or a feature request, you can easily return here and report it.</li>
 </ul>
-<p>Before opening a new issue, be sure to <a href="https://github.com/tidyverse/roxygen2/issues">search issues and pull requests</a> to make sure the bug hasn’t been reported and/or already fixed in the development version. By default, the search will be pre-populated with <code>is:issue is:open</code>. You can <a href="https://help.github.com/articles/searching-issues-and-pull-requests/">edit the qualifiers</a> (e.g. <code>is:pr</code>, <code>is:closed</code>) as needed. For example, you’d simply remove <code>is:open</code> to search <em>all</em> issues in the repo, open or closed.</p>
+<p>Before opening a new issue, be sure to <a href="https://github.com/tidyverse/roxygen2/issues">search issues and pull requests</a> to make sure the bug hasn’t been reported and/or already fixed in the development version. By default, the search will be pre-populated with <code>is:issue is:open</code>. You can <a href="https://help.github.com/articles/searching-issues-and-pull-requests/">edit the qualifiers</a> (e.g. <code>is:pr</code>, <code>is:closed</code>) as needed. For example, you’d simply remove <code>is:open</code> to search <em>all</em> issues in the repo, open or closed.</p>
 </div>
 <div id="general-advice" class="section level2">
 <h2 class="hasAnchor">
@@ -229,7 +229,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>

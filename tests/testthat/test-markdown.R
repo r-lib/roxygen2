@@ -570,19 +570,12 @@ test_that("level 1 heading in @details", {
     #' Description.
     #' @details
     #' Leading text goes into details.
-    #' @rawRd
-    #' \\section{This is its own section}{
-    #' \\subsection{Can have a subsection}{
+    #' @section This is its own section:\\subsection{Can have a subsection}{
     #'
     #' Yes.
     #' }
     #'
-    #' }
-    #' @rawRd
-    #' \\section{Another section}{
-    #'
-    #' With text.
-    #' }
+    #' @section Another section:With text.
     #' @name x
     NULL
   "
@@ -635,16 +628,16 @@ test_that("markup in headings", {
   "
   out1 <- roc_proc_text(rd_roclet(), text1)[[1]]
   expect_equal(
-    out1$get_value("rawRd"),
-    paste(
-      sep = "\n",
-      "\\section{Section with \\code{code}}{",
-      "\\subsection{Subsection with \\strong{strong}}{",
-      "",
-      "Yes.",
-      "}",
-      "",
-      "}"
+    out1$get_value("section"),
+    list(
+      title = "Section with \\code{code}",
+      content = paste(
+        sep = "\n",
+        "\\subsection{Subsection with \\strong{strong}}{",
+        "",
+        "Yes.",
+        "}"
       )
+    )
   )
 })

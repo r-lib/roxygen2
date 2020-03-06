@@ -164,10 +164,13 @@ mdxml_children_to_rd_top <- function(xml, state) {
   state$section_tag <- uuid()
   out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
   out <- c(out, mdxml_close_sections(state))
-  rd <- paste0(out, collapse = "")
-  secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]]
-  if (length(secs) == 0) secs <- ""
-  str_trim(secs)
+  rd <- str_trim(paste0(out, collapse = ""))
+  if (state$has_sections) {
+    secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]] %||% ""
+    titles <- c("", state$titles)
+    rd <- structure(str_trim(secs), names = titles)
+  }
+  rd
 }
 
 mdxml_children_to_rd <- function(xml, state) {
@@ -364,13 +367,16 @@ mdxml_heading <- function(xml, state) {
     return(mdxml_unsupported(xml, state$tag, "level 1 markdown headings"))
   }
   txt <- map_chr(xml_contents(xml), mdxml_node_to_rd, state)
+  if (level == 1) {
+    state$titles <- c(state$titles, paste(txt, collapse = ""))
+  }
   head <- paste0(
     mdxml_close_sections(state, level),
     "\n",
-    if (level == 1) paste0(state$section_tag, "\\section{"),
-    if (level > 1) "\\subsection{",
-    paste(txt, collapse = ""),
-    "}{")
+    if (level == 1) state$section_tag else "\\subsection{",
+    if (level > 1) paste(txt, collapse = ""),
+    if (level > 1) "}{"
+  )
   state$section <- c(state$section, level)
   head
 }
@@ -401,6 +407,7 @@ mdxml_html_inline <- function(xml, state) {
 
 mdxml_close_sections <- function(state, upto = 1L) {
   hmy <- 0L
+  upto <- max(upto, 2L)
   while (length(state$section) && tail(state$section, 1) >= upto) {
     hmy <- hmy + 1L
     state$section <- head(state$section, -1L)

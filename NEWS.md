@@ -3,6 +3,14 @@
 * roxygen2 now keeps using Windows (CR LF) line endings for files that
   already have CR LF line endings, and uses LF for new files (#989).
 
+* roxygen2 now does not fail for `@description NULL` and `@details NULL`.
+  Instead, these tags are ignored, except for `@description NULL` in
+  package level documentation, where it can be used to suppress the
+  auto-generated Description section (#1008).
+
+* roxygen2 now adds hyperlinks to R6 methods in the PDF manual as well,
+  (#1006).
+
 * Multiple `@format` tags are now combined (#1015).
 
 # roxygen2 7.0.2

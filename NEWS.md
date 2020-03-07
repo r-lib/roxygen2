@@ -210,7 +210,7 @@ You can override the default either by calling (e.g.) `roxygenise(load_code = "s
   released 2014-05-02, over 5 years ago.
 
 * Using the old `wrap` option will now trigger a warning, as hasn't worked
-  for quite some time. Supress the error by deleting the option from your
+  for quite some time. Suppress the error by deleting the option from your
   `DESCRIPTION`.
 
 ### Extending roxygen2

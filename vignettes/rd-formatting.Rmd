@@ -285,9 +285,9 @@ For example, the following will insert the date and the R version of the roxygen
 ```
 
 The value of the R expression is converted to a character string, with `paste(collapse = "\n")`.
-So you don't need expicitly convert to a character value, numeric values or any R object with an `as.character()` S3 method is fine.
+So you don't need explicitly convert to a character value, numeric values or any R object with an `as.character()` S3 method is fine.
 Also, you can insert multiple lines by returning a character vector.
-If you want to run R code without inseringt any output, return an empty string or `NULL`.
+If you want to run R code without inserting any output, return an empty string or `NULL`.
 
 The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to `.Rd` conversion, so you can create markdown markup dynamically:
 

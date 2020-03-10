@@ -1,32 +1,34 @@
 # roxygen2 (development version)
 
-* Auto-generated package documentation can now handle author ORCID comments
-  containing full url (#1040).
-
-* The warning for section titles spanning multiple lines now includes the hint 
-  "Did you forget a colon (:) at the end of the title?" (@maelle, #994).
-
-* Can now document objects created with `delayedAssign()` by forcing
-  evaluation at documentation time (#1041)
-
-* `evalNamespace()` works again (#1022).
+## New features
 
 * roxygen2 now keeps using Windows (CR LF) line endings for files that
   already have CR LF line endings, and uses LF for new files (#989).
 
-* roxygen2 now does not fail for `@description NULL` and `@details NULL`.
-  Instead, these tags are ignored, except for `@description NULL` in
-  package level documentation, where it can be used to suppress the
-  auto-generated Description section (#1008).
+## Minor improvements and bug fixes 
 
-* roxygen2 now adds hyperlinks to R6 methods in the PDF manual as well,
-  (#1006).
+* Auto-generated package documentation can now handle author ORCID comments
+  containing full url (#1040).
+
+* Hyperlinks to R6 methods are also added in the PDF manual (#1006).
+
+* Empty annotations (alternate text) for figures added via markdown are now
+  omitted. This caused issues when generating pkgdown web sites (#1051).
+
+* `@evalNamespace()` works again (#1022).
+
+* `@description NULL` and `@details NULL` no longer fail; instead, these tags 
+  are ignored, except for `@description NULL` in package level documentation, 
+  where it can be used to suppress the auto-generated Description section 
+  (#1008).
 
 * Multiple `@format` tags are now combined (#1015).
 
-* roxygen2 now omits empty annotations (alternate text) for figures added
-  via markdown. This caused issues when generating pkgdown web sites
-  (#1051).
+* The warning for `@section` titles spanning multiple lines now includes a 
+  hint that you're missing a colon (@maelle, #994).
+
+* Can now document objects created with `delayedAssign()` by forcing
+  evaluation at documentation time (#1041)
 
 # roxygen2 7.0.2
 

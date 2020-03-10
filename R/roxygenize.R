@@ -30,7 +30,7 @@ roxygenize <- function(package.dir = ".",
                        load_code = NULL,
                        clean = FALSE) {
 
-  base_path <- normalizePath(package.dir)
+  base_path <- normalizePath(package.dir, mustWork = TRUE)
   is_first <- roxygen_setup(base_path)
 
   encoding <- desc::desc_get("Encoding", file = base_path)[[1]]

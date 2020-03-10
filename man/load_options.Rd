@@ -17,8 +17,33 @@ Options can be stored in the \code{Roxygen} field of the \code{DESCRIPTION}, or
 in \code{man/roxygen/meta.R}. In either case, the code is parsed and evaluated
 in a child of the base environment. Call \code{roxy_meta_get()} to access
 current option values from within tag and roclet methods.
-}
-\details{
+
 Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION}.
 }
+\section{Possible options}{
+
+\itemize{
+\item \code{roclets} \verb{<character>}: giving names of roclets to run. See
+\code{\link[=roclet_find]{roclet_find()}} for details.
+\item \code{packages} \verb{<character>}: packages to load that implement new tags.
+\item \code{load} \verb{<string>}: how to load R code. See \link{load} for details.
+\item \code{old_usage} \verb{<flag>}: use old style usage formatting?
+\item \code{markdown} \verb{<flag>}: translate markdown syntax to Rd?
+\item \code{r6} \verb{<flag>}: document R6 classes?
+\item \code{current_package} \verb{<string>} (read only): name of package being documented.
+}
+}
+
+\section{How to set}{
+
+Either set in \code{DESCRIPTION}:\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
+}
+
+Or if longer, you can put in \verb{/man/roxygen/meta.R}:\preformatted{list(
+  markdown = TRUE,
+  load = "installed"
+)
+}
+}
+
 \keyword{internal}

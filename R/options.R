@@ -1,11 +1,45 @@
 #' Load roxygen2 options
 #'
+#' @description
 #' Options can be stored in the `Roxygen` field of the `DESCRIPTION`, or
 #' in `man/roxygen/meta.R`. In either case, the code is parsed and evaluated
 #' in a child of the base environment. Call `roxy_meta_get()` to access
 #' current option values from within tag and roclet methods.
 #'
 #' Options in `man/roxygen/meta.R` override those present in `DESCRIPTION`.
+#'
+#' @section Possible options:
+#'
+#' * `roclets` `<character>`: giving names of roclets to run. See
+#'    [roclet_find()] for details.
+#'
+#' * `packages` `<character>`: packages to load that implement new tags.
+#'
+#' * `load` `<string>`: how to load R code. See [load] for details.
+#'
+#' * `old_usage` `<flag>`: use old style usage formatting?
+#'
+#' * `markdown` `<flag>`: translate markdown syntax to Rd?
+#'
+#' * `r6` `<flag>`: document R6 classes?
+#'
+#' * `current_package` `<string>` (read only): name of package being documented.
+#'
+#' @section How to set:
+#' Either set in `DESCRIPTION`:
+#'
+#' ```
+#' Roxygen: list(markdown = TRUE, load = "installed")
+#' ```
+#'
+#' Or if longer, you can put in `/man/roxygen/meta.R`:
+#'
+#' ```
+#' list(
+#'   markdown = TRUE,
+#'   load = "installed"
+#' )
+#' ```
 #'
 #' @param base_path Path to package.
 #' @export
@@ -17,11 +51,12 @@ load_options <- function(base_path = ".") {
 
   defaults <- list(
     roclets = c("collate", "namespace", "rd"),
+    packages = character(),
     load = "pkgload",
     old_usage = FALSE,
     markdown = FALSE,
     r6 = TRUE,
-    package = NA_character_
+    current_package = NA_character_
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))
@@ -46,7 +81,7 @@ load_options_description <- function(base_path = ".") {
     opts <- eval(parse(text = desc_opts), child_env(baseenv()))
   }
 
-  opts$package <- dcf[[1, 2]]
+  opts$current_package <- dcf[[1, 2]]
   opts
 }
 

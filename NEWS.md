@@ -31,6 +31,15 @@
 * Empty annotations (alternate text) for figures added via markdown are now
   omitted. This caused issues when generating pkgdown web sites (#1051).
 
+* Roxygen metadata can now have a `packages` element, giving a character vector 
+  of package names to load. This makes it easier to use extension package that 
+  provide new tags for existing roclets (#1013). See `?load_options` for
+  more details.
+  
+    ```yaml
+    Roxygen: list(markdown = TRUE, packages = "roxygenlabs")
+    ```
+
 * `@evalNamespace()` works again (#1022).
 
 * `@description NULL` and `@details NULL` no longer fail; instead, these tags 

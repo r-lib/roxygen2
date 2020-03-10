@@ -40,6 +40,10 @@ roxygenize <- function(package.dir = ".",
 
   roxy_meta_load(base_path)
 
+  # Load required packages for method registration
+  packages <- roxy_meta_get("packages")
+  lapply(packages, requireNamespace, quietly = TRUE)
+
   roclets <- roclets %||% roxy_meta_get("roclets")
   # Special case collate: it doesn't need to execute code, and must be run
   # first to ensure that code can be executed

@@ -1,3 +1,10 @@
+test_that("end-to-end NAMESPACE generation works", {
+  expect_output(roxygenise(test_path("testNamespace"), "namespace", clean = TRUE))
+
+  ns <- read_lines(test_path("testNamespace/NAMESPACE"))
+  expect_length(ns, 4)
+})
+
 # @export -----------------------------------------------------------------
 
 test_that("export quote object name appropriate", {

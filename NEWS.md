@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `evalNamespace()` works again (#1022).
+
 * roxygen2 now keeps using Windows (CR LF) line endings for files that
   already have CR LF line endings, and uses LF for new files (#989).
 

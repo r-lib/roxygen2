@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Can now document objects created with `delayedAssign()` by forcing
+  evaluation at documentation time (#1041)
+
 * `evalNamespace()` works again (#1022).
 
 * roxygen2 now keeps using Windows (CR LF) line endings for files that

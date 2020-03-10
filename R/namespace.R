@@ -32,8 +32,7 @@ namespace_roclet <- function() {
 
 #' @export
 roclet_preprocess.roclet_namespace <- function(x, blocks, base_path) {
-
-  lines <- blocks_to_ns(blocks, env, import_only = TRUE)
+  lines <- blocks_to_ns(blocks, emptyenv(), import_only = TRUE)
   NAMESPACE <- file.path(base_path, "NAMESPACE")
 
   if (length(lines) == 0 && !made_by_roxygen(NAMESPACE)) {
@@ -101,6 +100,10 @@ roxy_tag_parse.roxy_tag_evalNamespace <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_evalNamespace <- function(x, block, env, import_only = FALSE) {
+  if (import_only) {
+    return()
+  }
+
   roxy_tag_eval(x, env)
 }
 

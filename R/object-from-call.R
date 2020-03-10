@@ -12,6 +12,7 @@ object_from_call <- function(call, env, block, file) {
       "=" = ,
       "<-" = ,
       "<<-" = parser_assignment(call, env, block),
+      "delayedAssign" = parser_delayedAssign(call, env, block),
       "::" = parser_import(call, env, block),
 
       "methods::setClass" = ,
@@ -108,6 +109,11 @@ parser_assignment <- function(call, env, block) {
     return()
   }
 
+  object_from_name(name, env, block)
+}
+
+parser_delayedAssign <- function(call, env, block) {
+  name <- as.character(call$x)
   object_from_name(name, env, block)
 }
 

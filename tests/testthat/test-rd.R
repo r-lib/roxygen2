@@ -59,6 +59,85 @@ test_that("documenting NA gives useful error message (#194)", {
   )
 })
 
+test_that("@description NULL", {
+  # Just ignore in this case
+  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    #' Title
+    #'
+    #' @description NULL
+    #' @format NULL
+    foobar <- 1:10
+  ")
+  expect_identical(out[[1]]$get_value("description"), "Title")
+
+  # Still ignore
+  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    #' Title
+    #' @description NULL
+    #' @description desc
+    #' @format NULL
+    foobar <- 1:10
+  ")
+  expect_identical(out[[1]]$get_value("description"), "desc")
+
+  # Still ignore for objects as well
+  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    #' Title
+    #' @description NULL
+    #' @format NULL
+    foobar <- 1:10
+  ")
+  expect_identical(out[[1]]$get_value("description"), "Title")
+
+  # But drop for package docs
+  with_mock(
+    `roxygen2::read.description` = function(...)
+      list(Package = "roxygen_devtest",
+           Title = "Package Title",
+           Description = "Package description."),
+    out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+      #' Title
+      #'
+      #' @docType package
+      #' @description NULL
+      #' @name pkg
+      '_PACKAGE'
+    ")
+  )
+  expect_null(out[[1]]$get_value("description"))
+})
+
+test_that("@details NULL", {
+  # Just ignore in this case
+  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    #' Title
+    #'
+    #' @details NULL
+    #' @format NULL
+    foobar <- 1:10
+  ")
+  expect_null(out[[1]]$get_value("details"))
+
+  # Still ignore
+  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    #' Title
+    #' @details NULL
+    #' @details desc
+    #' @format NULL
+    foobar <- 1:10
+  ")
+  expect_identical(out[[1]]$get_value("details"), "desc")
+
+  # Still ignore for objects as well
+  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    #' Title
+    #' @details NULL
+    #' @format NULL
+    foobar <- 1:10
+  ")
+  expect_null(out[[1]]$get_value("details"))
+})
+
 # UTF-8 -------------------------------------------------------------------
 
 test_that("can generate nonASCII document", {
@@ -98,7 +177,7 @@ test_that("write_lines writes unix-style line endings.", {
   path <- test_path("escapes.Rd")
 
   # skip if checked on windows with autocrlf = true
-  skip_if(has_windows_le(path))
+  skip_if(detect_line_ending(path) == "\r\n")
 
   temp_filename <- tempfile()
   old_binary <- readBin(path, "raw", n = file.info(path)$size)

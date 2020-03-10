@@ -36,6 +36,7 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-format"></a>}}
+\if{latex}{\out{\hypertarget{method-format}{}}}
 \subsection{Method \code{format()}}{
 Format the \code{.Rd} file. It considers the sections in
 particular order, even though Rd tools will reorder them again.
@@ -57,6 +58,7 @@ Character string.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_valid"></a>}}
+\if{latex}{\out{\hypertarget{method-is_valid}{}}}
 \subsection{Method \code{is_valid()}}{
 Check if an \code{.Rd} file is valid
 \subsection{Usage}{
@@ -69,6 +71,7 @@ Logical flag, \code{TRUE} for valid \code{.Rd} files
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-has_section"></a>}}
+\if{latex}{\out{\hypertarget{method-has_section}{}}}
 \subsection{Method \code{has_section()}}{
 Check if an \code{.Rd} file has a certain section.
 \subsection{Usage}{
@@ -88,6 +91,7 @@ Logical flag.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_section"></a>}}
+\if{latex}{\out{\hypertarget{method-get_section}{}}}
 \subsection{Method \code{get_section()}}{
 Query a section.
 \subsection{Usage}{
@@ -108,6 +112,7 @@ if the topic has no such section.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_value"></a>}}
+\if{latex}{\out{\hypertarget{method-get_value}{}}}
 \subsection{Method \code{get_value()}}{
 Query the value of a section. This is the value of
 the \link{rd_section} object.
@@ -128,6 +133,7 @@ Value.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_rd"></a>}}
+\if{latex}{\out{\hypertarget{method-get_rd}{}}}
 \subsection{Method \code{get_rd()}}{
 Get the Rd code of a section.
 \subsection{Usage}{
@@ -147,6 +153,7 @@ Character vector, one element per line.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_name"></a>}}
+\if{latex}{\out{\hypertarget{method-get_name}{}}}
 \subsection{Method \code{get_name()}}{
 Get the value of the \code{name} section. This is the name
 of the Rd topic.
@@ -160,6 +167,7 @@ Character scalar.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inherits_from"></a>}}
+\if{latex}{\out{\hypertarget{method-inherits_from}{}}}
 \subsection{Method \code{inherits_from()}}{
 Query the topics this topic inherits \code{type} from.
 \subsection{Usage}{
@@ -179,6 +187,7 @@ A character vector of topic names.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inherits_section_from"></a>}}
+\if{latex}{\out{\hypertarget{method-inherits_section_from}{}}}
 \subsection{Method \code{inherits_section_from()}}{
 Query the topics this topic inherits sections from.
 \subsection{Usage}{
@@ -191,6 +200,7 @@ A character vector of topic names.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
+\if{latex}{\out{\hypertarget{method-add}{}}}
 \subsection{Method \code{add()}}{
 Add one or more sections to the topic.
 \subsection{Usage}{
@@ -213,6 +223,7 @@ then the two sections will be merged.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_section"></a>}}
+\if{latex}{\out{\hypertarget{method-add_section}{}}}
 \subsection{Method \code{add_section()}}{
 Add a section.
 \subsection{Usage}{
@@ -237,6 +248,7 @@ once in \code{self$sections}. This method if for internal use only.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -35,6 +35,7 @@ Imports:
     commonmark,
     desc (>= 1.2.0),
     digest,
+    knitr,
     methods,
     pkgload (>= 1.0.2),
     purrr (>= 0.3.3),
@@ -48,7 +49,6 @@ Imports:
 Suggests: 
     covr,
     devtools,
-    knitr,
     rmarkdown,
     testthat (>= 2.1.0),
     R.methodsS3,
@@ -59,5 +59,5 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
-RoxygenNote: 7.0.1.9000
+RoxygenNote: 7.0.2.9000
 Language: en-GB

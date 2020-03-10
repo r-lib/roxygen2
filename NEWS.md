@@ -1,5 +1,13 @@
 # roxygen2 (development version)
 
+* Roxygen metadata can now have a `packages` element, giving a character vector 
+  of package names to load. This makes it easier to use extension package that 
+  provide new tags for existing roclets (#1013).
+  
+    ```yaml
+    Roxygen: list(markdown = TRUE, packages = "roxygenlabs")
+    ```
+  
 * The warning for section titles spanning multiple lines now includes the hint 
   "Did you forget a colon (:) at the end of the title?" (@maelle, #994).
 

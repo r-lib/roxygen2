@@ -2,6 +2,22 @@
 
 ## New features
 
+* roxygen2 now supports inline markdown code and also code chunks,
+  using the same notation as the knitr package. For example:
+
+    ```R
+    #' This manual was generated at: `r Sys.time()`.
+    #' ...
+    #' `mtcars` is a data frame with `r ncol(mtcars)` columns, here
+    #' is a summary of them:
+    #'
+    #' ```{r}
+    #' summary(mtcars)
+    #' ```
+    ```
+
+  See `vignette("rd-formatting")` for details.
+
 * roxygen2 now keeps using Windows (CR LF) line endings for files that
   already have CR LF line endings, and uses LF for new files (#989).
 

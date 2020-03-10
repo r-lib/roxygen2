@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Auto-generated package documentation can now handle author ORCID comments
+  containing full url (#1040).
+
 * The warning for section titles spanning multiple lines now includes the hint 
   "Did you forget a colon (:) at the end of the title?" (@maelle, #994).
 

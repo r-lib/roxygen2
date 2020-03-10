@@ -35,6 +35,7 @@ Imports:
     commonmark,
     desc (>= 1.2.0),
     digest,
+    knitr,
     methods,
     pkgload (>= 1.0.2),
     purrr (>= 0.3.3),
@@ -48,7 +49,6 @@ Imports:
 Suggests: 
     covr,
     devtools,
-    knitr,
     rmarkdown,
     testthat (>= 2.1.0),
     R.methodsS3,

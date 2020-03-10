@@ -54,15 +54,15 @@ test_that("markdown with headers", {
     NULL", tmp)
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- "Text at the front"
-  exp_secs <- c(paste0(
-    "\\section{Header 1}{",
-    "\\subsection{Header 2}{Text}",
-    "\\subsection{Header 22}{}",
-    "}"),
-    "\\section{Header 11}{Text again}"
+  exp_secs <- list(
+    title = c("Header 1", "Header 11"),
+    content = c(
+      "\\subsection{Header 2}{\n\nText\n}\n\n\\subsection{Header 22}{\n}",
+      "Text again"
+    )
   )
   expect_equal_strings(out1$get_value("details"), exp_details)
-  expect_equal_strings(out1$get_value("rawRd"), exp_secs)
+  expect_equal_strings(out1$get_value("section"), exp_secs)
 })
 
 test_that("subsection within details", {
@@ -143,13 +143,13 @@ test_that("empty Rmd", {
   tag <- roxy_tag("includeRmd", tmp)
 
   cat("", sep = "", file = tmp)
-  expect_equal(rmd_eval_rd(tmp, tag), "")
+  expect_equal(rmd_eval_rd(tmp, tag), structure("", names = ""))
 
   cat("  ", sep = "", file = tmp)
-  expect_equal(rmd_eval_rd(tmp, tag), "")
+  expect_equal(rmd_eval_rd(tmp, tag), structure("", names = ""))
 
   cat("\n", sep = "", file = tmp)
-  expect_equal(rmd_eval_rd(tmp, tag), "")
+  expect_equal(rmd_eval_rd(tmp, tag), structure("", names = ""))
 })
 
 test_that("inline html", {
@@ -232,4 +232,26 @@ test_that("include as another section", {
   expect_equal(sort(names(out1$sections)), sort(names(out2$sections)))
   out2$sections <- out2$sections[names(out1$sections)]
   expect_equivalent_rd(out1, out2)
+})
+
+test_that("order of sections is correct", {
+  skip_if_not(rmarkdown::pandoc_available())
+
+  tmp <- tempfile(fileext = ".md")
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  cat("# Rmd\n\nList:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
+      file = tmp)
+  rox <- sprintf("
+    #' Title
+    #' @description desc
+    #' @details details
+    #' @includeRmd %s
+    #' @section After:
+    #' This is after.
+    #' @section After2:
+    #' This is even more after.
+    #' @name foobar
+    NULL", tmp)
+  out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
+  expect_match(format(out1), "Rmd.*After.*After2")
 })

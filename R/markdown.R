@@ -1,6 +1,150 @@
+
 markdown <- function(text, tag = NULL, sections = FALSE) {
+  tryCatch(
+    expanded_text <- markdown_pass1(text),
+    error = function(e) {
+      message <- paste0(
+        if (!is.na(tag$file)) paste0("[", tag$file, ":", tag$line, "] "),
+        "@", tag$tag, " in inline code: ", e$message
+      )
+      stop(message, call. = FALSE)
+    }
+  )
+  markdown_pass2(expanded_text, tag = tag, sections = sections)
+}
+
+#' Expand the embedded inline code
+#'
+#' @details
+#' For example this becomes two: `r 1+1`.
+#' Variables can be set and then reused, within the same
+#' tag: `r x <- 100; NULL`
+#' The value of `x` is `r x`.
+#'
+#' We have access to the internal functions of the package, e.g.
+#' since this is _roxygen2_, we can refer to the internal `markdown`
+#' function, and this is `TRUE`: `r is.function(markdown)`.
+#'
+#' To insert the name of the current package: `r packageName()`.
+#'
+#' The `iris` data set has `r ncol(iris)` columns:
+#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.
+#'
+#' ```{r}
+#' # Code block demo
+#' x + 1
+#' ```
+#'
+#' Chunk options:
+#'
+#' ```{r results = "hold"}
+#' names(mtcars)
+#' nrow(mtcars)
+#' ```
+#'
+#' Plots:
+#'
+#' ```{r test-figure}
+#' plot(1:10)
+#' ```
+#'
+#' @param text Input text.
+#' @return Text with the inline code expanded. A character vector of the
+#' same length as the input `text`.
+#'
+#' @importFrom xml2 xml_ns_strip xml_find_all xml_attr
+#' @importFrom purrr keep
+#'
+#' @keywords internal
+
+markdown_pass1 <- function(text) {
+  text <- paste(text, collapse = "\n")
   esc_text <- escape_rd_for_md(text)
-  esc_text_linkrefs <- add_linkrefs_to_md(esc_text)
+  mdxml <- xml_ns_strip(md_to_mdxml(esc_text, sourcepos = TRUE))
+  code_nodes <- xml_find_all(mdxml, ".//code | .//code_block")
+  rcode_nodes <- keep(code_nodes, is_markdown_code_node)
+  if (length(rcode_nodes) == 0) return(esc_text)
+  rcode_pos <- parse_md_pos(map_chr(rcode_nodes, xml_attr, "sourcepos"))
+  out <- eval_code_nodes(rcode_nodes)
+  str_set_all_pos(esc_text, rcode_pos, out, rcode_nodes)
+}
+
+is_markdown_code_node <- function(x) {
+  info <- str_sub(xml_attr(x, "info"), 1, 3)
+  str_sub(xml_text(x), 1, 2) == "r " ||
+    (!is.na(info) && info %in% c("{r ", "{r}", "{r,"))
+}
+
+parse_md_pos <- function(text) {
+  nums <- map(strsplit(text, "[:-]"), as.integer)
+  data.frame(
+    start_line = map_int(nums, 1),
+    start_column = map_int(nums, 2),
+    end_line = map_int(nums, 3),
+    end_column = map_int(nums, 4)
+  )
+}
+
+eval_code_nodes <- function(nodes) {
+  evalenv <- roxy_meta_get("evalenv")
+  # This should only happen in our test cases
+  if (is.null(evalenv)) evalenv <- new.env(parent = baseenv())
+  map_chr(nodes, eval_code_node, env = evalenv)
+}
+
+#' @importFrom xml2 xml_name
+#' @importFrom knitr knit opts_chunk
+
+eval_code_node <- function(node, env) {
+  if (xml_name(node) == "code") {
+    text <- str_replace(xml_text(node), "^r ", "")
+    paste(eval(parse(text = text), envir = env), collapse = "\n")
+
+  } else {
+    text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
+    opts_chunk$set(
+      error = FALSE,
+      fig.path = "man/figures/",
+      fig.process = function(path) basename(path)
+    )
+    knit(text = text, quiet = TRUE, envir = env)
+  }
+}
+
+str_set_all_pos <- function(text, pos, value, nodes) {
+  # Cmark has a bug when reporting source positions for multi-line
+  # code tags, and it does not count the indenting space in the
+  # continuation lines. However, the bug might get fixed later, so
+  # for now we just simply error for multi-line inline code.
+  types <- xml_name(nodes)
+  if (any(types == "code" & pos$start_line != pos$end_line)) {
+    stop("multi-line `r ` markup is not supported")
+  }
+
+  # Need to split the string, because of the potential multi-line
+  # code tags, and then also recode the positions
+  lens <- nchar(str_split(text, fixed("\n"))[[1]])
+  shifts <- c(0, cumsum(lens + 1L))
+  shifts <- shifts[-length(shifts)]
+  start <- shifts[pos$start_line] + pos$start_column
+  end <- shifts[pos$end_line] + pos$end_column
+
+  # Create intervals for the parts we keep
+  keep_start <- c(1, end + 2L)
+  keep_end <- c(start - 2L, nchar(text))
+
+  # Now piece them together
+  out <- paste0(
+    substring(text, keep_start, keep_end),
+    c(value, ""),
+    collapse = ""
+  )
+  attributes(out) <- attributes(text)
+  out
+}
+
+markdown_pass2 <- function(text, tag = NULL, sections = FALSE) {
+  esc_text_linkrefs <- add_linkrefs_to_md(text)
 
   mdxml <- md_to_mdxml(esc_text_linkrefs)
   state <- new.env(parent = emptyenv())
@@ -8,11 +152,11 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
   state$has_sections <- sections
   rd <- mdxml_children_to_rd_top(mdxml, state)
 
-  map_chr(rd, unescape_rd_for_md, esc_text)
+  map_chr(rd, unescape_rd_for_md, text)
 }
 
-md_to_mdxml <- function(x) {
-  md <- commonmark::markdown_xml(x, hardbreaks = TRUE, extensions = "table")
+md_to_mdxml <- function(x, ...) {
+  md <- commonmark::markdown_xml(x, hardbreaks = TRUE, extensions = "table", ...)
   xml2::read_xml(md)
 }
 
@@ -20,10 +164,13 @@ mdxml_children_to_rd_top <- function(xml, state) {
   state$section_tag <- uuid()
   out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
   out <- c(out, mdxml_close_sections(state))
-  rd <- paste0(out, collapse = "")
-  secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]]
-  if (length(secs) == 0) secs <- ""
-  str_trim(secs)
+  rd <- str_trim(paste0(out, collapse = ""))
+  if (state$has_sections) {
+    secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]] %||% ""
+    titles <- c("", state$titles)
+    rd <- structure(str_trim(secs), names = titles)
+  }
+  rd
 }
 
 mdxml_children_to_rd <- function(xml, state) {
@@ -204,7 +351,10 @@ mdxml_link_text <- function(xml_contents, state) {
 mdxml_image = function(xml) {
   dest <- xml_attr(xml, "destination")
   title <- xml_attr(xml, "title")
-  paste0("\\figure{", dest, "}{", title, "}")
+  paste0(
+    "\\figure{", dest, "}",
+    if (nchar(title)) paste0("{", title, "}")
+  )
 }
 
 escape_comment <- function(x) {
@@ -217,13 +367,16 @@ mdxml_heading <- function(xml, state) {
     return(mdxml_unsupported(xml, state$tag, "level 1 markdown headings"))
   }
   txt <- map_chr(xml_contents(xml), mdxml_node_to_rd, state)
+  if (level == 1) {
+    state$titles <- c(state$titles, paste(txt, collapse = ""))
+  }
   head <- paste0(
     mdxml_close_sections(state, level),
     "\n",
-    if (level == 1) paste0(state$section_tag, "\\section{"),
-    if (level > 1) "\\subsection{",
-    paste(txt, collapse = ""),
-    "}{")
+    if (level == 1) state$section_tag else "\\subsection{",
+    if (level > 1) paste(txt, collapse = ""),
+    if (level > 1) "}{"
+  )
   state$section <- c(state$section, level)
   head
 }
@@ -254,6 +407,7 @@ mdxml_html_inline <- function(xml, state) {
 
 mdxml_close_sections <- function(state, upto = 1L) {
   hmy <- 0L
+  upto <- max(upto, 2L)
   while (length(state$section) && tail(state$section, 1) >= upto) {
     hmy <- hmy + 1L
     state$section <- head(state$section, -1L)

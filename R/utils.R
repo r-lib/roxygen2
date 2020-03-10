@@ -73,6 +73,9 @@ write_if_different <- function(path, contents, check = TRUE) {
     return(FALSE)
   }
 
+  line_ending <- detect_line_ending(path)
+  contents <- paste0(paste0(contents, collapse = line_ending), line_ending)
+  contents <- enc2utf8(gsub("\r?\n", line_ending, contents))
   if (same_contents(path, contents)) return(FALSE)
 
   name <- basename(path)
@@ -81,15 +84,16 @@ write_if_different <- function(path, contents, check = TRUE) {
     FALSE
   } else {
     cat(sprintf('Writing %s\n', name))
-    write_lines(contents, path)
+    writeBin(charToRaw(contents), path)
     TRUE
   }
 }
 
 same_contents <- function(path, contents) {
+  if (length(contents) != 1) {
+    stop("Internal roxygen error: `contents` must be character(1)")
+  }
   if (!file.exists(path)) return(FALSE)
-
-  contents <- paste0(paste0(contents, collapse = "\n"), "\n")
 
   text_hash <- digest::digest(contents, serialize = FALSE)
 

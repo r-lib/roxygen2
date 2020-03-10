@@ -62,6 +62,7 @@ Classs C details.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth2"></a>}}
+\if{latex}{\out{\hypertarget{method-meth2}{}}}
 \subsection{Method \code{meth2()}}{
 C method 2.
 \subsection{Usage}{
@@ -80,6 +81,7 @@ C method 2.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth5"></a>}}
+\if{latex}{\out{\hypertarget{method-meth5}{}}}
 \subsection{Method \code{meth5()}}{
 C method 5.
 \subsection{Usage}{
@@ -89,6 +91,7 @@ C method 5.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-undocumented_method"></a>}}
+\if{latex}{\out{\hypertarget{method-undocumented_method}{}}}
 \subsection{Method \code{undocumented_method()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{C$undocumented_method()}\if{html}{\out{</div>}}

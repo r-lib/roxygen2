@@ -46,7 +46,7 @@ There are three main ways to run roxygen:
 
 * `Ctrl + Shift + D`, if you're using RStudio.
 
-You can mix hand written Rd and roxygen2; roxygen2 will never overwrite a file it didn't create. 
+You can mix handwritten Rd and roxygen2; roxygen2 will never overwrite a file it didn't create. 
 
 ## Basic process
 
@@ -103,7 +103,7 @@ Rd files are a special file format loosely based on LaTeX. You can read more abo
 
 When you use `?x`, `help("x")` or `example("x")` R looks for an Rd file containing `\alias{x}`. It then parses the file, converts it into html and displays it. These functions look for an Rd file in _installed_ packages. This isn't very useful for package development, because you want to use the `.Rd` files in the _source_ package. For this reason, we recommend that you use roxygen2 in conjunction with devtools: `devtools::load_all()` automatically adds shims so that `?` and friends will look in the development package. Note, however, that this preview does not work with intra-package links. To preview those, you'll need to install the package. If you use RStudio, the easiest way to do this is to click the "Build & Reload button".
 
-### RCpp
+### Rcpp
 
 You can also use roxygen2 with Rcpp. Simply include roxygen2 comments in your C++ code (using `//` instead of `#`), and Rcpp will automatically carry the comments along into `RcppExports.R` where roxygen2 will find them. 
 

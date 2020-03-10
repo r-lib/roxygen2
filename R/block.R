@@ -75,6 +75,13 @@ print.roxy_block <- function(x, ...) {
 
 block_create <- function(tokens, call, srcref) {
 
+  pkgenv <- roxy_meta_get("env")
+  # This should only happen in our test cases
+  if (is.null(pkgenv)) pkgenv <- baseenv()
+  evalenv <- new.env(parent = pkgenv)
+  roxy_meta_set("evalenv", evalenv)
+  on.exit(roxy_meta_set("evalenv", NULL), add = TRUE)
+
   tags <- parse_tags(tokens)
   if (length(tags) == 0) return()
 
@@ -277,4 +284,3 @@ parse_description <- function(tags) {
 
   c(compact(list(title, description, details)), tags)
 }
-

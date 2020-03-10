@@ -24,7 +24,7 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 
 \itemize{
 \item \code{roclets} \verb{<character>}: giving names of roclets to run. See
-\code{\link[=find_roclet]{find_roclet()}} for details.
+\code{\link[=roclet_find]{roclet_find()}} for details.
 \item \code{packages} \verb{<character>}: packages to load that implement new tags.
 \item \code{load} \verb{<string>}: how to load R code. See \link{load} for details.
 \item \code{old_usage} \verb{<flag>}: use old style usage formatting?

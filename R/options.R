@@ -11,7 +11,7 @@
 #' @section Possible options:
 #'
 #' * `roclets` `<character>`: giving names of roclets to run. See
-#'    [find_roclet()] for details.
+#'    [roclet_find()] for details.
 #'
 #' * `packages` `<character>`: packages to load that implement new tags.
 #'

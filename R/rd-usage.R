@@ -155,3 +155,29 @@ call_to_usage <- function(code, env = pkg_env()) {
   obj <- call_to_object(!!enexpr(code), env)
   gsub("\u{A0}", " ", as.character(object_usage(obj)))
 }
+
+
+#' Test usage generation
+#'
+#' @keywords internal
+#' @name usage-internals
+NULL
+
+setGeneric("roxygen_test_fun", function(x) {
+  standardGeneric("roxygen_test_fun")
+})
+
+#' @rdname usage-internals
+setMethod("roxygen_test_fun", "function", function(x) {
+  10
+})
+#' @rdname usage-internals
+setMethod("roxygen_test_fun", "<-", function(x) {
+  10
+})
+
+#' @rdname usage-internals
+mean.function <- function(x) 10
+
+#' @rdname usage-internals
+`mean.<-` <- function(x) 10

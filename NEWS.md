@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* The warning for section titles spanning multiple lines now includes the hint 
+  "Did you forget a colon (:) at the end of the title?" (@maelle, #994).
+
 * Can now document objects created with `delayedAssign()` by forcing
   evaluation at documentation time (#1041)
 
@@ -23,8 +26,6 @@
   (#1051).
 
 # roxygen2 7.0.2
-
-* The warning for section titles spanning multiple lines now includes the hint "Did you forget a colon (:) at the end of the title?". (#994, @maelle)
 
 * `\example{}` escaping has been improved (again!) so that special escapes 
   within strings are correctly escaped (#990).

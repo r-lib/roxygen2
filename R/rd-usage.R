@@ -157,6 +157,8 @@ call_to_usage <- function(code, env = pkg_env()) {
 }
 
 
+# -------------------------------------------------------------------------
+
 #' Test usage generation
 #'
 #' @keywords internal
@@ -171,13 +173,6 @@ setGeneric("roxygen_test_fun", function(x) {
 setMethod("roxygen_test_fun", "function", function(x) {
   10
 })
-#' @rdname usage-internals
-setMethod("roxygen_test_fun", "<-", function(x) {
-  10
-})
 
 #' @rdname usage-internals
 mean.function <- function(x) 10
-
-#' @rdname usage-internals
-`mean.<-` <- function(x) 10

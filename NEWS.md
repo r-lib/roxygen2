@@ -2,7 +2,8 @@
 
 * Roxygen metadata can now have a `packages` element, giving a character vector 
   of package names to load. This makes it easier to use extension package that 
-  provide new tags for existing roclets (#1013).
+  provide new tags for existing roclets (#1013). See `?load_options` for
+  more details.
   
     ```yaml
     Roxygen: list(markdown = TRUE, packages = "roxygenlabs")

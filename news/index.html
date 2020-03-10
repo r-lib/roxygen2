@@ -178,6 +178,7 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>evalNamespace()</code> works again (<a href='https://github.com/r-lib/roxygen2/issues/1022'>#1022</a>).</p></li>
 <li><p>roxygen2 now keeps using Windows (CR LF) line endings for files that already have CR LF line endings, and uses LF for new files (<a href='https://github.com/r-lib/roxygen2/issues/989'>#989</a>).</p></li>
 <li><p>roxygen2 now does not fail for <code>@description NULL</code> and <code>@details NULL</code>. Instead, these tags are ignored, except for <code>@description NULL</code> in package level documentation, where it can be used to suppress the auto-generated Description section (<a href='https://github.com/r-lib/roxygen2/issues/1008'>#1008</a>).</p></li>
 <li><p>roxygen2 now adds hyperlinks to R6 methods in the PDF manual as well, (<a href='https://github.com/r-lib/roxygen2/issues/1006'>#1006</a>).</p></li>

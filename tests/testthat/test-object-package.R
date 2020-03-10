@@ -1,26 +1,19 @@
-test_that("author with more than one given/family name ", {
-  expect_equal(
-    author_desc(
-      person(
-        given = c("First", "Second"),
-        family = c("Family1", "Family2"),
-        email = "first.second.family@email.tld"
-      )
-    ),
-    paste(
-      "First Second",
-      "Family1 Family2",
-      "\\email{first.second.family@email.tld}"
-    )
-  )
-})
-
 test_that("person turned into meaningful text", {
-  verify_output(test_path("test-object-package-author.txt"), {
-    hw1 <- person("H", "W", , "h@w.com", "aut", c("ORCID" = "1234"))
-    author_desc(hw1)
+  person_desc <- function(given = "H", family = "W", email = "h@w.com", role = "aut", comment = NULL) {
+    out <- person(given = given, family = family, email = email, role = role, comment = comment)
+    author_desc(unclass(out)[[1]])
+  }
 
-    hw2 <- person("H", "W", , "h@w.com", "aut", c("ORCID" = "https://orcid.org/1234"))
-    author_desc(hw2)
+  verify_output(test_path("test-object-package-author.txt"), {
+    "Multiple given/family names"
+    person_desc(c("First", "Second"), c("Family1", "Family2"))
+
+    "Multiple roles"
+    person_desc(role = "ctb")
+
+    "ORCID comments"
+    person_desc(comment = c("ORCID" = "1234"))
+    person_desc(comment = c("ORCID" = "https://orcid.org/1234"))
+    person_desc(comment = c("ORCID" = "1234", "extra"))
   })
 })

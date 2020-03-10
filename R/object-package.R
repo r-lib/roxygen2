@@ -36,6 +36,10 @@ package_authors <- function(desc) {
 }
 
 author_desc <- function(x) {
+  if (inherits(x, "person")) {
+    stop("person class must be stripped", call. = FALSE)
+  }
+
   desc <- paste0(x$given, collapse = " ")
 
   if (!is.null(x$family)) {
@@ -55,7 +59,7 @@ author_desc <- function(x) {
       } else {
         desc <- paste0(desc, " (\\href{https://orcid.org/", orcid, "}{ORCID})")
       }
-      x$comment <- x$comment[setdiff(x$comment, "ORCID")]
+      x$comment <- x$comment[!names(x$comment) %in% "ORCID"]
     }
 
     if (length(x$comment) > 0) {

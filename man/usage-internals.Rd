@@ -2,11 +2,11 @@
 % Please edit documentation in R/rd-usage.R
 \name{usage-internals}
 \alias{usage-internals}
-\alias{roxygen_test_fun,function-method}
+\alias{roxygen_test_fun,function,function-method}
 \alias{mean.function}
 \title{Test usage generation}
 \usage{
-\S4method{roxygen_test_fun}{`function`}(x)
+\S4method{roxygen_test_fun}{`function`,`function`}(x, y)
 
 \method{mean}{`function`}(x)
 }

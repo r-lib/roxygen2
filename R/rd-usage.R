@@ -165,14 +165,15 @@ call_to_usage <- function(code, env = pkg_env()) {
 #' @name usage-internals
 NULL
 
-setGeneric("roxygen_test_fun", function(x) {
+setGeneric("roxygen_test_fun", function(x, y) {
   standardGeneric("roxygen_test_fun")
 })
 
 #' @rdname usage-internals
-setMethod("roxygen_test_fun", "function", function(x) {
+setMethod("roxygen_test_fun", c("function", "function"), function(x, y) {
   10
 })
+
 
 #' @rdname usage-internals
 mean.function <- function(x) 10

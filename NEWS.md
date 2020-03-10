@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* The warning for section titles spanning multiple lines now includes the hint 
+  "Did you forget a colon (:) at the end of the title?" (@maelle, #994).
+
 * Can now document objects created with `delayedAssign()` by forcing
   evaluation at documentation time (#1041)
 

@@ -1,21 +1,5 @@
 # roxygen2 (development version)
 
-* Roxygen metadata can now have a `packages` element, giving a character vector 
-  of package names to load. This makes it easier to use extension package that 
-  provide new tags for existing roclets (#1013). See `?load_options` for
-  more details.
-  
-    ```yaml
-    Roxygen: list(markdown = TRUE, packages = "roxygenlabs")
-    ```
-  
-* The warning for section titles spanning multiple lines now includes the hint 
-  "Did you forget a colon (:) at the end of the title?" (@maelle, #994).
-
-* Can now document objects created with `delayedAssign()` by forcing
-  evaluation at documentation time (#1041)
-
-* `evalNamespace()` works again (#1022).
 ## New features
 
 * roxygen2 now keeps using Windows (CR LF) line endings for files that
@@ -30,6 +14,15 @@
 
 * Empty annotations (alternate text) for figures added via markdown are now
   omitted. This caused issues when generating pkgdown web sites (#1051).
+
+* Roxygen metadata can now have a `packages` element, giving a character vector 
+  of package names to load. This makes it easier to use extension package that 
+  provide new tags for existing roclets (#1013). See `?load_options` for
+  more details.
+  
+    ```yaml
+    Roxygen: list(markdown = TRUE, packages = "roxygenlabs")
+    ```
 
 * `@evalNamespace()` works again (#1022).
 

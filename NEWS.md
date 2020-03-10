@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Auto-generated package documentation can now handle author ORCID comments
+  containing full url (#1040).
+
 * Can now document objects created with `delayedAssign()` by forcing
   evaluation at documentation time (#1041)
 

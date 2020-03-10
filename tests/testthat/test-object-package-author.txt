@@ -1,0 +1,12 @@
+> hw1 <- person("H", "W", "A", "h@w.com", "aut", c(ORCID = "1234"))
+Message: It is recommended to use 'given' instead of 'middle'.
+
+> author_desc(hw1)
+[1] "H A W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID})"
+
+> hw2 <- person("H", "W", "A", "h@w.com", "aut", c(ORCID = "https://orcid.org/1234"))
+Message: It is recommended to use 'given' instead of 'middle'.
+
+> author_desc(hw2)
+[1] "H A W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID})"
+

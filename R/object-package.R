@@ -48,12 +48,14 @@ author_desc <- function(x) {
 
   if (!is.null(x$comment)) {
     if (has_name(x$comment, "ORCID")) {
-      if (grepl("orcid.org", x$comment[["ORCID"]])) {
-        desc <- paste0(desc, " (\\href{", x$comment[["ORCID"]], "}{ORCID})")
+      orcid <- x$comment[["ORCID"]]
+
+      if (grepl("https?://", orcid)) {
+        desc <- paste0(desc, " (\\href{", orcid, "}{ORCID})")
       } else {
-        desc <- paste0(desc, " (\\href{https://orcid.org/", x$comment[["ORCID"]], "}{ORCID})")
+        desc <- paste0(desc, " (\\href{https://orcid.org/", orcid, "}{ORCID})")
       }
-      x$comment <- x$comment[setdiff(x$comments, "ORCID")]
+      x$comment <- x$comment[setdiff(x$comment, "ORCID")]
     }
 
     if (length(x$comment) > 0) {

@@ -112,6 +112,13 @@ test_that("ignored compound assignment", {
   expect_null(obj)
 })
 
+test_that("finds function created with delayed assignment", {
+  obj <- call_to_object({
+    delayedAssign("foo", function(x, y, z) {})
+  })
+  expect_s3_class(obj, "function")
+})
+
 # S4 ----------------------------------------------------------------------
 
 test_that("finds S4 and RC classes", {

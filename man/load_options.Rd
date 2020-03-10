@@ -30,7 +30,7 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 \item \code{old_usage} \verb{<flag>}: use old style usage formatting?
 \item \code{markdown} \verb{<flag>}: translate markdown syntax to Rd?
 \item \code{r6} \verb{<flag>}: document R6 classes?
-\item \code{package} \verb{<string>}: name of package being documented.
+\item \code{current_package} \verb{<string>} (read only): name of package being documented.
 }
 }
 

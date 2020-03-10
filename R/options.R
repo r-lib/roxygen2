@@ -23,7 +23,7 @@
 #'
 #' * `r6` `<flag>`: document R6 classes?
 #'
-#' * `package` `<string>`: name of package being documented.
+#' * `current_package` `<string>` (read only): name of package being documented.
 #'
 #' @section How to set:
 #' Either set in `DESCRIPTION`:
@@ -56,7 +56,7 @@ load_options <- function(base_path = ".") {
     old_usage = FALSE,
     markdown = FALSE,
     r6 = TRUE,
-    package = NA_character_
+    current_package = NA_character_
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))
@@ -81,7 +81,7 @@ load_options_description <- function(base_path = ".") {
     opts <- eval(parse(text = desc_opts), child_env(baseenv()))
   }
 
-  opts$package <- dcf[[1, 2]]
+  opts$current_package <- dcf[[1, 2]]
   opts
 }
 

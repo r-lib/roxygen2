@@ -371,15 +371,23 @@ You can add arbitrary sections with the `@section` tag. This is a useful way of 
 #' Do not operate heavy machinery within 8 hours of using this function.
 ```
 
-To add a subsection, you must use the Rd `\subsection{}` command, as follows:
+You can also create sections using the markdown syntax for headers. For example, the previously-defined section can be created with markdown headers like this:
 
 ```{r}
-#' @section Warning:
+#' @details # Warning
+#' Do not operate heavy machinery within 8 hours of using this function.
+```
+
+Note that '`#`' may only appear after the `@description` and `@details` tags. Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`.
+
+To add a subsection, use level two or greater headings:
+
+```{r}
+#' @details # Warning
 #' You must not call this function unless ...
 #'
-#' \subsection{Exceptions}{
-#'    Apart from the following special cases...
-#' }
+#' ## Exceptions
+#' Apart from the following special cases...
 ```
 
 If you find yourself adding a lot of sections, you might consider using a vignette instead.

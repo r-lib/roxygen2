@@ -46,7 +46,8 @@
 <meta property="og:description" content="Options can be stored in the Roxygen field of the DESCRIPTION, or
 in man/roxygen/meta.R. In either case, the code is parsed and evaluated
 in a child of the base environment. Call roxy_meta_get() to access
-current option values from within tag and roclet methods." />
+current option values from within tag and roclet methods.
+Options in man/roxygen/meta.R override those present in DESCRIPTION." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -183,6 +184,7 @@ current option values from within tag and roclet methods." />
 in <code>man/roxygen/meta.R</code>. In either case, the code is parsed and evaluated
 in a child of the base environment. Call <code>roxy_meta_get()</code> to access
 current option values from within tag and roclet methods.</p>
+<p>Options in <code>man/roxygen/meta.R</code> override those present in <code>DESCRIPTION</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>load_options</span>(<span class='kw'>base_path</span> <span class='kw'>=</span> <span class='st'>"."</span>)
@@ -198,16 +200,42 @@ current option values from within tag and roclet methods.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="possible-options"><a class="anchor" href="#possible-options"></a>Possible options</h2>
 
-    <p>Options in <code>man/roxygen/meta.R</code> override those present in <code>DESCRIPTION</code>.</p>
+    
+
+<ul>
+<li><p><code>roclets</code> <code>&lt;character&gt;</code>: giving names of roclets to run. See
+<code><a href='roclet_find.html'>roclet_find()</a></code> for details.</p></li>
+<li><p><code>packages</code> <code>&lt;character&gt;</code>: packages to load that implement new tags.</p></li>
+<li><p><code>load</code> <code>&lt;string&gt;</code>: how to load R code. See <a href='load.html'>load</a> for details.</p></li>
+<li><p><code>old_usage</code> <code>&lt;flag&gt;</code>: use old style usage formatting?</p></li>
+<li><p><code>markdown</code> <code>&lt;flag&gt;</code>: translate markdown syntax to Rd?</p></li>
+<li><p><code>r6</code> <code>&lt;flag&gt;</code>: document R6 classes?</p></li>
+<li><p><code>current_package</code> <code>&lt;string&gt;</code> (read only): name of package being documented.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="how-to-set"><a class="anchor" href="#how-to-set"></a>How to set</h2>
+
+    
+
+<p>Either set in <code>DESCRIPTION</code>:</p><pre>Roxygen: list(markdown = TRUE, load = "installed")
+</pre>
+
+<p>Or if longer, you can put in <code>/man/roxygen/meta.R</code>:</p><pre>list(
+  markdown = TRUE,
+  load = "installed"
+)
+</pre>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
+      <li><a href="#possible-options">Possible options</a></li>
+      <li><a href="#how-to-set">How to set</a></li>
     </ul>
 
   </div>

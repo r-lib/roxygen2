@@ -10,4 +10,20 @@ There were no ERRORs, WARNINGs or NOTEs.
 
 ## revdepcheck results
 
-I did not run revdep checks because this is a minor patch that only affects escaping of examples in a handful of cases.
+We checked 290 reverse dependencies (255 from CRAN + 35 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 8 packages
+
+Issues with CRAN packages are summarised below.
+
+### Failed to check
+
+* circumplex (NA)
+* dynr       (NA)
+* jqr        (NA)
+* OpenMx     (NA)
+* redland    (NA)
+* rpf        (NA)
+* rstanarm   (NA)
+* smurf      (NA)

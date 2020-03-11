@@ -42,7 +42,7 @@ roxygenize <- function(package.dir = ".",
 
   # Load required packages for method registration
   packages <- roxy_meta_get("packages")
-  lapply(packages, requireNamespace, quietly = TRUE)
+  lapply(packages, loadNamespace)
 
   roclets <- roclets %||% roxy_meta_get("roclets")
   # Special case collate: it doesn't need to execute code, and must be run

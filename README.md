@@ -42,6 +42,7 @@ The premise of roxygen2 is simple: describe your functions in comments next to t
 #' str_length(factor("abc"))
 #' str_length(c("i", "like", "programming", NA))
 str_length <- function(string) {
+    stri_length(string)
 }
 ```
 

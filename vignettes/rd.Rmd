@@ -424,8 +424,8 @@ For `sum()`, this might look like:
 By default  `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can override the default title by providing a `rd_family_title` list in `man/roxygen/meta.R`:
 
 ```{r, eval = FALSE}
-rd_family_title <- list(
-  aggregations = "Aggregation functions"
+list(
+  rd_family_title = list(aggregations = "Aggregation functions")
 )
 ```
 

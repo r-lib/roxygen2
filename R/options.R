@@ -109,7 +109,7 @@ load_options_meta <- function(base_path = ".", path = "man/roxygen/meta.R") {
   value
 }
 
-# Global binding mangaemnet -----------------------------------------------
+# Global binding management -----------------------------------------------
 
 roxy_meta <- new_environment()
 

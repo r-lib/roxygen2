@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -45,7 +49,6 @@
 <meta property="og:title" content="A <code>RoxyTopic</code> is an ordered collection of unique rd_sections — RoxyTopic" />
 <meta property="og:description" content="A RoxyTopic object corresponds to a generated .Rd file." />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -73,7 +76,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -155,7 +158,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/r-lib/roxygen2">
+  <a href="https://github.com/r-lib/roxygen2/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -186,7 +189,7 @@
 
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+    <p><div class="r6-fields"></p><dl>
 <dt><code>sections</code></dt><dd><p>Named list of sections. Each item must be an
 <code><a href='rd_section.html'>rd_section()</a></code> object.</p></dd>
 
@@ -216,10 +219,10 @@
 <a id="method-format"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code></h3>
 <p>Format the <code>.Rd</code> file. It considers the sections in
 particular order, even though Rd tools will reorder them again.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$format(...)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='no'>...</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>...</code></dt><dd><p>Passed to the <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> methods of the <code><a href='rd_section.html'>rd_section()</a></code>
 objects, the sections.</p></dd>
 
@@ -229,17 +232,17 @@ objects, the sections.</p></dd>
 <p><hr>
 <a id="method-is_valid"></a></p><h3>Method <code>is_valid()</code></h3>
 <p>Check if an <code>.Rd</code> file is valid</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$is_valid()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>is_valid</span>()</pre><p></div></p>
 
 <h3>Returns</h3>
 <p>Logical flag, <code>TRUE</code> for valid <code>.Rd</code> files</p>
 <p><hr>
 <a id="method-has_section"></a></p><h3>Method <code>has_section()</code></h3>
 <p>Check if an <code>.Rd</code> file has a certain section.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$has_section(type)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>has_section</span>(<span class='no'>type</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>type</code></dt><dd><p>Section type, a character scalar.</p></dd>
 
 </dl><p></div></p>
@@ -248,10 +251,10 @@ objects, the sections.</p></dd>
 <p><hr>
 <a id="method-get_section"></a></p><h3>Method <code>get_section()</code></h3>
 <p>Query a section.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$get_section(type)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>get_section</span>(<span class='no'>type</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>type</code></dt><dd><p>Section type, a character scalar.</p></dd>
 
 </dl><p></div></p>
@@ -262,10 +265,10 @@ if the topic has no such section.</p>
 <a id="method-get_value"></a></p><h3>Method <code>get_value()</code></h3>
 <p>Query the value of a section. This is the value of
 the <a href='rd_section.html'>rd_section</a> object.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$get_value(type)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>get_value</span>(<span class='no'>type</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>type</code></dt><dd><p>Section type, a character scalar.</p></dd>
 
 </dl><p></div></p>
@@ -274,10 +277,10 @@ the <a href='rd_section.html'>rd_section</a> object.</p><h3>Usage</h3>
 <p><hr>
 <a id="method-get_rd"></a></p><h3>Method <code>get_rd()</code></h3>
 <p>Get the Rd code of a section.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$get_rd(type)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>get_rd</span>(<span class='no'>type</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>type</code></dt><dd><p>Section type, a character scalar.</p></dd>
 
 </dl><p></div></p>
@@ -287,17 +290,17 @@ the <a href='rd_section.html'>rd_section</a> object.</p><h3>Usage</h3>
 <a id="method-get_name"></a></p><h3>Method <code>get_name()</code></h3>
 <p>Get the value of the <code>name</code> section. This is the name
 of the Rd topic.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$get_name()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>get_name</span>()</pre><p></div></p>
 
 <h3>Returns</h3>
 <p>Character scalar.</p>
 <p><hr>
 <a id="method-inherits_from"></a></p><h3>Method <code>inherits_from()</code></h3>
 <p>Query the topics this topic inherits <code>type</code> from.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$inherits_from(type)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>inherits_from</span>(<span class='no'>type</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>type</code></dt><dd><p>Section type, a character scalar.</p></dd>
 
 </dl><p></div></p>
@@ -306,17 +309,17 @@ of the Rd topic.</p><h3>Usage</h3>
 <p><hr>
 <a id="method-inherits_section_from"></a></p><h3>Method <code>inherits_section_from()</code></h3>
 <p>Query the topics this topic inherits sections from.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$inherits_section_from()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>inherits_section_from</span>()</pre><p></div></p>
 
 <h3>Returns</h3>
 <p>A character vector of topic names.</p>
 <p><hr>
 <a id="method-add"></a></p><h3>Method <code>add()</code></h3>
 <p>Add one or more sections to the topic.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$add(x, overwrite = FALSE)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>add</span>(<span class='no'>x</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>x</code></dt><dd><p>Section(s) to add. It may be
 another <code>RoxyTopic</code> object, all of its sections will be added;
 or an <a href='rd_section.html'>rd_section</a> object;
@@ -329,10 +332,10 @@ then the two sections will be merged.</p></dd>
 <p><hr>
 <a id="method-add_section"></a></p><h3>Method <code>add_section()</code></h3>
 <p>Add a section.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$add_section(section, overwrite = FALSE)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>add_section</span>(<span class='no'>section</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>section</code></dt><dd><p><a href='rd_section.html'>rd_section</a> object to add.</p></dd>
 
 <dt><code>overwrite</code></dt><dd><p>Whether to overwrite an existing section. If <code>FALSE</code>
@@ -346,10 +349,10 @@ once in <code>self$sections</code>. This method if for internal use only.</p>
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>RoxyTopic$clone(deep = FALSE)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>RoxyTopic</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
 </dl><p></div></p>
@@ -358,12 +361,9 @@ once in <code>self$sections</code>. This method if for internal use only.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#public-fields">Public fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-    </ul>
-
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -374,7 +374,7 @@ once in <code>self$sections</code>. This method if for internal use only.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

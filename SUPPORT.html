@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="pkgdown.css" rel="stylesheet">
@@ -44,7 +48,6 @@
 
 <meta property="og:title" content="Getting help with roxygen2" />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -72,7 +75,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -154,7 +157,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/r-lib/roxygen2">
+  <a href="https://github.com/r-lib/roxygen2/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -186,15 +189,15 @@
 <ul>
 <li>
 <p>If you know the source of the problem, you can often recreate it using a <code><a href="reference/roc_proc_text.html">roc_proc_text()</a></code> and text snippet:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(roxygen2)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="reference/roc_proc_text.html">roc_proc_text</a></span>(<span class="kw"><a href="reference/rd_roclet.html">rd_roclet</a></span>(), <span class="st">"</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="st">  #' Title</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="st">  #' @param</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="st">  #'</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  #' @export</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  foo &lt;- function() {}"</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt; Error in FUN(X[[i]], ...): subscript out of bounds</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><html><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">roxygen2</span>)
+<span class="fu"><a href="reference/roc_proc_text.html">roc_proc_text</a></span>(<span class="fu"><a href="reference/rd_roclet.html">rd_roclet</a></span>(), <span class="st">"
+  #' Title
+  #' @param
+  #'
+  #' @export
+  foo &lt;- function() {}"</span>
+)
+<span class="co">#&gt; Error in FUN(X[[i]], ...): subscript out of bounds</span></pre></html></div>
 <p>It’s really helpful if you can spend a little time reducing the text to the absolute minimum. Make sure you delete the body of the function (since roxygen2 never looks at it), and try each roxygen2 tag in turn. Only leave a tag in if you’ve confirmed it’s definitely part of the problem.</p>
 </li>
 <li><p>Issues that involve multiple files or that don’t give useful error messages are harder to track down. In these cases, sometimes your best option is to create a copy of your package, and progressively delete files until the problem goes away. Once you’ve done that, sometimes you’ll be able to reduce the problem further to a call to <code><a href="reference/roc_proc_text.html">roc_proc_text()</a></code> as above. If not, you’ll need to make your minimal package available somewhere on the internet (preferrably github) and link to it in the issue. The more you can do to make the package as small as possible, the less time it’ll take me to find the bug, and the more time I’ll have to work on it.</p></li>
@@ -222,6 +225,12 @@
 
   </div>
 
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
+  </div>
+
 </div>
 
 
@@ -232,7 +241,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

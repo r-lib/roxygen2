@@ -373,6 +373,7 @@ Note that the generated `.png` files will be added to the package, and they can 
 
 Note that code block support is currently experimental, and somewhat limited.
 Some of the known limitations:
+
   * Because the code blocks are evaluated individually, they cannot refer to each other.
   * Some knitr chunk options are reset at the start of every code block, so if you want to change these, you'll have to specify them for every chunk.
     These are currently `error`, `fig.path`, `fig.process`.

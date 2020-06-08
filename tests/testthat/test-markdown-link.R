@@ -83,6 +83,7 @@ test_that("short and sweet links work", {
     #' Title
     #'
     #' Description, see [function()].
+    #' Details, see [function_call(a = 1, b = 2)].
     #' And also [object].
     #' @md
     foo <- function() {}")[[1]]
@@ -90,6 +91,7 @@ test_that("short and sweet links work", {
     #' Title
     #'
     #' Description, see \\code{\\link[=function]{function()}}.
+    #' Details, see \\code{\\link[=function_call]{function_call(a = 1, b = 2)}}.
     #' And also \\link{object}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)

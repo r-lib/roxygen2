@@ -41,6 +41,8 @@ test_that("write_lines writes windows newlines for files with windows newlines, 
   file.create(empty_file)
 
   on.exit({
+    close(unix_nl_con)
+    close(win_nl_con)
     unlink(c(win_nl, unix_nl, empty_file, non_existent_file))
   })
 

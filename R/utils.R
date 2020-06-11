@@ -161,6 +161,31 @@ uuid <- function(nchar = 8) {
   )
 }
 
+find_topic_filename <- function(pkg, topic) {
+  # This is needed because we have the escaped text here, and parse_Rd will
+  # un-escape it properly.
+  raw_topic <- str_trim(tools::parse_Rd(textConnection(topic))[[1]][1])
+  if (is.na(pkg) || identical(roxy_meta_get("current_package"), pkg)) {
+    # TODO: we need to do this later when the file names are available
+    topic
+  } else {
+    # TODO: include file names and line numbers in warning messages
+    path <- tryCatch(
+      basename(utils::help((raw_topic), (pkg))[1]),
+      error = function(err) {
+        roxy_warning("Link to unavailable package: ", pkg, ". ", err$message)
+        topic
+      }
+    )
+    if (is.na(path)) {
+      roxy_warning("Link to unknown topic: ", topic, " in package ", pkg)
+      topic
+    } else {
+      path
+    }
+  }
+}
+
 # quoting -----------------------------------------------------------------
 auto_backtick <- function(x) {
   needs_backtick <- !has_quotes(x) & !is_syntactic(x)

@@ -4,18 +4,23 @@
 #' spaces between the closing and opening bracket in the `[text][ref]`
 #' form.
 #'
+#' Starting from R 4.0.2-ish, links to topics are not allowed, so for each
+#' linked topic, we look up the linked file and check if the file name is the
+#' same as the topic name, and generate the longer form for `[obj]` style
+#' links.
+#'
 #' These are the link references we add:
 #' ```
 #' MARKDOWN           LINK TEXT  CODE RD
 #' --------           ---------  ---- --
-#' [fun()]            fun()       T   \\link[=fun]{fun()}
-#' [obj]              obj         F   \\link{obj}
-#' [pkg::fun()]       pkg::fun()  T   \\link[pkg:fun]{pkg::fun()}
-#' [pkg::obj]         pkg::obj    F   \\link[pkg:obj]{pkg::obj}
-#' [text][fun()]      text        F   \\link[=fun]{text}
-#' [text][obj]        text        F   \\link[=obj]{text}
-#' [text][pkg::fun()] text        F   \\link[pkg:fun]{text}
-#' [text][pkg::obj]   text        F   \\link[pkg:obj]{text}
+#' [fun()]            fun()       T   \\link[=file]{fun()}
+#' [obj]              obj         F   \\link{obj} or \\link[=file]{obj}
+#' [pkg::fun()]       pkg::fun()  T   \\link[pkg:file]{pkg::fun()}
+#' [pkg::obj]         pkg::obj    F   \\link[pkg:file]{pkg::obj}
+#' [text][fun()]      text        F   \\link[=file]{text}
+#' [text][obj]        text        F   \\link[=file]{text}
+#' [text][pkg::fun()] text        F   \\link[pkg:file]{text}
+#' [text][pkg::obj]   text        F   \\link[pkg:file]{text}
 #' [s4-class]         s4          F   \\linkS4class{s4}
 #' [pkg::s4-class]    pkg::s4     F   \\link[pkg:s4-class]{pkg::s4}
 #' ```
@@ -111,6 +116,7 @@ parse_link <- function(destination, contents, state) {
   ## `obj` is fun or obj (fun is without parens)
   ## `s4` is TRUE if we link to an S4 class (i.e. have -class suffix)
   ## `noclass` is fun with -class removed
+  ## file is the filename of the linked topic
 
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
@@ -121,16 +127,17 @@ parse_link <- function(destination, contents, state) {
   obj <- sub("[(][)]$", "", fun)
   s4 <- str_detect(destination, "-class$")
   noclass <- str_match(fun, "^(.*)-class$")[1,2]
+  file <- find_topic_filename(pkg, obj)
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {
     paste0(
       if (is_code) "\\code{",
       if (s4 && is.na(pkg)) "\\linkS4class" else "\\link",
-      if (is_fun || ! is.na(pkg)) "[",
-      if (is_fun && is.na(pkg)) "=",
+      if (is_fun || ! is.na(pkg) || file != obj) "[",
+      if ((is_fun || file != obj) && is.na(pkg)) "=",
       if (! is.na(pkg)) paste0(pkg, ":"),
-      if (is_fun || ! is.na(pkg)) paste0(obj, "]"),
+      if (is_fun || ! is.na(pkg) || file != obj) paste0(file, "]"),
       "{",
       if (!is.na(pkg)) paste0(pkg, "::"),
       if (s4) noclass else fun,
@@ -146,7 +153,7 @@ parse_link <- function(destination, contents, state) {
         if (is_code) "\\code{",
         "\\link[",
         if (is.na(pkg)) "=" else paste0(pkg, ":"),
-        obj,
+        file,
         "]{"
       ),
       contents,

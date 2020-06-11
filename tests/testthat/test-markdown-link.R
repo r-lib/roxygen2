@@ -51,7 +51,7 @@ test_that("% in links are escaped", {
   expect_equal(markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
   expect_equal(markdown("[%][x]"), "\\link[=x]{\\%}")
   expect_equal(markdown("[%%]"), "\\link{\\%\\%}")
-  expect_equal(markdown("[foo::%%]"), "\\link[foo:\\%\\%]{foo::\\%\\%}")
+  expect_equal(markdown("[base::%%]"), "\\link[base:Arithmetic]{base::\\%\\%}")
 })
 
 test_that("commonmark picks up the various link references", {
@@ -97,13 +97,13 @@ test_that("short and sweet links work", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' See [pkg::function()], [pkg::object].
+    #' See [commonmark::markdown_xml()], [commonmark::markdown_xml].
     #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' See \\code{\\link[pkg:function]{pkg::function()}}, \\link[pkg:object]{pkg::object}.
+    #' See \\code{\\link[commonmark:commonmark]{commonmark::markdown_xml()}}, \\link[commonmark:commonmark]{commonmark::markdown_xml}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
@@ -123,13 +123,13 @@ test_that("short and sweet links work", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description, see [name words][pkg::bar].
+    #' Description, see [name words][commonmark::markdown_xml].
     #' @md
     foo <- function() {}")[[1]]
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description, see \\link[pkg:bar]{name words}.
+    #' Description, see \\link[commonmark:commonmark]{name words}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
@@ -249,7 +249,7 @@ test_that("markdown code as link text is rendered as code", {
     #' Description, see [`name`][dest],
     #' [`function`][function()],
     #' [`filter`][stats::filter()],
-    #' [`bar`][pkg::bar],
+    #' [`bar`][stats::filter],
     #' [`terms`][terms.object],
     #' [`abc`][abc-class].
     #' @md
@@ -260,7 +260,7 @@ test_that("markdown code as link text is rendered as code", {
     #' Description, see \\code{\\link[=dest]{name}},
     #' \\code{\\link[=function]{function}},
     #' \\code{\\link[stats:filter]{filter}},
-    #' \\code{\\link[pkg:bar]{bar}},
+    #' \\code{\\link[stats:filter]{bar}},
     #' \\code{\\link[=terms.object]{terms}},
     #' \\code{\\link[=abc-class]{abc}}.
     foo <- function() {}")[[1]]
@@ -366,12 +366,13 @@ test_that("links to S4 classes are OK", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  # pkg::linktos4 is not a proper S4 class, so we ignore a roxy warning here
+  out1 <- suppressWarnings(roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [pkg::linktos4-class] as well.
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]])
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'

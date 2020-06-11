@@ -88,6 +88,23 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
   simple_values = function(field) {
     fields <- lapply(self$topics, function(rd) rd$get_section(field))
     lapply(compact(fields), "[[", "value")
+  },
+
+  # Add a map from topic names to file names, this is needed for fixing the
+  # link targets
+  add_linkmap = function() {
+    # If no link id, then nothing to do, this only happens in tests
+    id <- roxy_meta_get("link_id")
+    if (is.null(id)) return()
+
+    map <- new.env(parent = emptyenv())
+    for (i in seq_along(self$topics)) {
+      self$topics[[i]]$linkmap <- map
+      filename <- names(self$topics)[i]
+      filename <- substr(filename, 1, nchar(filename) - 3) # remove .Rd
+      aliases <- self$topics[[i]]$get_value("alias")
+      for (al in aliases) map[[al]] <- c(map[[al]], filename)
+    }
   }
 
 ))

@@ -164,10 +164,11 @@ uuid <- function(nchar = 8) {
 find_topic_filename <- function(pkg, topic) {
   # This is needed because we have the escaped text here, and parse_Rd will
   # un-escape it properly.
+  # TODO: include file name and line number here as well
   raw_topic <- str_trim(tools::parse_Rd(textConnection(topic))[[1]][1])
   if (is.na(pkg) || identical(roxy_meta_get("current_package"), pkg)) {
-    # TODO: we need to do this later when the file names are available
-    topic
+    id <- roxy_meta_get("link_id")
+    paste0(id, topic, id)
   } else {
     # TODO: include file names and line numbers in warning messages
     path <- tryCatch(

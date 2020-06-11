@@ -6,7 +6,7 @@
 \description{
 Links are very tricky, so I'll put in some links here:
 Link to a function: \code{\link[=roxygenize]{roxygenize()}}.
-Link to an object: \link{roxygenize} (we just treat it like an object here.
+Link to an object: \link[=roxygenize]{roxygenize} (we just treat it like an object here.
 }
 \details{
 Link to another package, function: \code{\link[devtools:document]{devtools::document()}}.

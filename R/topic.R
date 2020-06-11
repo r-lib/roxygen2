@@ -19,6 +19,10 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' @field filename Path to the `.Rd` file to generate.
   filename = "",
 
+  #' @field linkmap Environment that maps topic names to file names, for
+  #' fixing links.
+  linkmap = NULL,
+
   #' @description Format the `.Rd` file. It considers the sections in
   #' particular order, even though Rd tools will reorder them again.
   #'
@@ -36,10 +40,29 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     sections <- move_names_to_front(self$sections, order)
 
     formatted <- lapply(sections, format, ...)
-    paste0(
+    rd <- paste0(
       made_by("%"),
       paste0(unlist(formatted), collapse = "\n")
     )
+
+    if (!is.null(self$linkmap)) {
+      id <- roxy_meta_get("link_id")
+      idlen <- nchar(id)
+      fixer <- function(str) {
+        topic <- substr(str, idlen + 1, nchar(str) - idlen)
+        filename <- self$linkmap[[topic]]
+        if (length(filename) == 0) {
+          roxy_warning(
+            "Link to unknown topic '", topic, "' in file '", self$filename, "'"
+          )
+          filename <- topic
+        }
+        filename[1]
+      }
+      rd <- str_replace_all(rd, regex(paste0(id, "(.*?)", id)), fixer)
+    }
+
+    rd
   },
 
   #' @description Check if an `.Rd` file is valid

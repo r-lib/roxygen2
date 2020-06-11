@@ -14,6 +14,9 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 \code{\link[=rd_section]{rd_section()}} object.}
 
 \item{\code{filename}}{Path to the \code{.Rd} file to generate.}
+
+\item{\code{linkmap}}{Environment that maps topic names to file names, for
+fixing links.}
 }
 \if{html}{\out{</div>}}
 }
@@ -106,7 +109,7 @@ Query a section.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The \link{rd_section} object representing the section, or \code{NULL}
+The \link[=rd_section]{rd_section} object representing the section, or \code{NULL}
 if the topic has no such section.
 }
 }
@@ -115,7 +118,7 @@ if the topic has no such section.
 \if{latex}{\out{\hypertarget{method-get_value}{}}}
 \subsection{Method \code{get_value()}}{
 Query the value of a section. This is the value of
-the \link{rd_section} object.
+the \link[=rd_section]{rd_section} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$get_value(type)}\if{html}{\out{</div>}}
 }
@@ -212,8 +215,8 @@ Add one or more sections to the topic.
 \describe{
 \item{\code{x}}{Section(s) to add. It may be
 another \code{RoxyTopic} object, all of its sections will be added;
-or an \link{rd_section} object;
-or a list of \link{rd_section} objects to add.}
+or an \link[=rd_section]{rd_section} object;
+or a list of \link[=rd_section]{rd_section} objects to add.}
 
 \item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
 then the two sections will be merged.}
@@ -233,7 +236,7 @@ Add a section.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{section}}{\link{rd_section} object to add.}
+\item{\code{section}}{\link[=rd_section]{rd_section} object to add.}
 
 \item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
 then the two sections will be merged.}

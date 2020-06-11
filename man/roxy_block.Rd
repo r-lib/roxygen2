@@ -19,7 +19,7 @@ block_get_tag(block, tag)
 block_get_tag_value(block, tag)
 }
 \arguments{
-\item{tags}{A list of \link{roxy_tag}s.}
+\item{tags}{A list of \link[=roxy_tag]{roxy_tag}s.}
 
 \item{file, line}{Location of the \code{call} (i.e. the line after the last
 line of the block).}

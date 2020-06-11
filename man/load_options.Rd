@@ -26,7 +26,7 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 \item \code{roclets} \verb{<character>}: giving names of roclets to run. See
 \code{\link[=roclet_find]{roclet_find()}} for details.
 \item \code{packages} \verb{<character>}: packages to load that implement new tags.
-\item \code{load} \verb{<string>}: how to load R code. See \link{load} for details.
+\item \code{load} \verb{<string>}: how to load R code. See \link[=load]{load} for details.
 \item \code{old_usage} \verb{<flag>}: use old style usage formatting?
 \item \code{markdown} \verb{<flag>}: translate markdown syntax to Rd?
 \item \code{r6} \verb{<flag>}: document R6 classes?

@@ -116,7 +116,8 @@ parse_link <- function(destination, contents, state) {
   ## `obj` is fun or obj (fun is without parens)
   ## `s4` is TRUE if we link to an S4 class (i.e. have -class suffix)
   ## `noclass` is fun with -class removed
-  ## file is the filename of the linked topic
+  ## `file` is the file name of the linked topic, if known. Otherwise random
+  ##   id to fill in later.
 
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]

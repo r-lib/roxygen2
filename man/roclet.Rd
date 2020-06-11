@@ -24,7 +24,7 @@ roclet_tags(x)
 \arguments{
 \item{x}{A \code{roclet} object.}
 
-\item{blocks}{A list of \link{roxy_block} objects.}
+\item{blocks}{A list of \link[=roxy_block]{roxy_block} objects.}
 
 \item{base_path}{Path to root of source package.}
 
@@ -52,7 +52,7 @@ any files created by the roclet.
 }
 \subsection{Deprecated methods}{
 
-\code{roclet_tags()} is no longer used; instead provide a \code{\link[=roxy_tag_parse]{roxy_tag_parse()}}
+\code{roclet_tags()} is no longer used; instead provide a \code{\link[=roxy_tag]{roxy_tag_parse()}}
 method for each tag.
 }
 }

@@ -179,6 +179,13 @@ parse_link <- function(destination, contents, state) {
 #'
 #' In another package: [and this one][devtools::document].
 #'
+#' Can we link to another package, without specifying which one?
+#' E.g. [str_replace()]. Or to a non-function topic: [str_replace].
+#' This is the correct filename, so all is good.
+#'
+#' This one is not the correct filename, so we'll need to remove it before
+#' CRAN submission: [str_replace_all()] and [str_replace_all].
+#'
 #' This is a table:
 #'
 #' | __foo__ | __bar__ |

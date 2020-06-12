@@ -17,6 +17,13 @@ Link with link text: \link[=roxygenize]{this great function},
 
 In another package: \link[devtools:document]{and this one}.
 
+Can we link to another package, without specifying which one?
+E.g. \code{\link[=str_replace]{str_replace()}}. Or to a non-function topic: \link{str_replace}.
+This is the correct filename, so all is good.
+
+This one is not the correct filename, so we'll need to remove it before
+CRAN submission: \code{\link[=str_replace_all]{str_replace_all()}} and \link{str_replace_all}.
+
 This is a table:\tabular{lr}{
    \strong{foo} \tab \strong{bar} \cr
    1 \tab 2 \cr

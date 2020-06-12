@@ -46,12 +46,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     )
 
     if (!is.null(self$linkmap)) {
-      id <- roxy_meta_get("link_id")
-      rd <- str_replace_all(
-        rd,
-        regex(paste0("(\\[=)?", id, "(.*?)", id, "(\\])?")),
-        function(str) fix_link_to_file(str, self$linkmap)
-      )
+      rd <- fix_links_to_file(rd, self$linkmap)
     }
 
     rd

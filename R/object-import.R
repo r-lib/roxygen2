@@ -20,8 +20,7 @@ format.rd_section_reexport <- function(x, ...) {
   pkgs <- split(x$value$fun, x$value$pkg)
   pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
     funs <- sort(funs)
-    # TODO: warn for unknown package or topic
-    files <- vapply(funs, find_topic_in_package, character(1), pkg = pkg)
+    files <- vapply(funs, find_topic_in_package_reexp, character(1), pkg = pkg)
     links <- paste0(
       "\\code{\\link[", pkg,
       ifelse(files == funs, "", paste0(":", files)),
@@ -39,4 +38,20 @@ format.rd_section_reexport <- function(x, ...) {
     paste0("  ", unlist(pkg_links), collapse = "\n\n"),
     "\n}}\n"
   )
+}
+
+find_topic_in_package_reexp <- function(pkg, topic) {
+  path <- tryCatch(
+    find_topic_in_package(pkg, topic),
+    error = function(err) {
+      roxy_warning("Unavailable package in re-export: ", pkg, "::", topic)
+      topic
+    }
+  )
+  if (is.na(path)) {
+    roxy_warning("Unavailable topic in re-export: ", pkg, "::", topic)
+    topic
+  } else {
+    path
+  }
 }

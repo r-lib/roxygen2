@@ -47,19 +47,11 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
 
     if (!is.null(self$linkmap)) {
       id <- roxy_meta_get("link_id")
-      idlen <- nchar(id)
-      fixer <- function(str) {
-        topic <- substr(str, idlen + 1, nchar(str) - idlen)
-        filename <- self$linkmap[[topic]]
-        if (length(filename) == 0) {
-          roxy_warning(
-            "Link to unknown topic '", topic, "' in file '", self$filename, "'"
-          )
-          filename <- topic
-        }
-        filename[1]
-      }
-      rd <- str_replace_all(rd, regex(paste0(id, "(.*?)", id)), fixer)
+      rd <- str_replace_all(
+        rd,
+        regex(paste0("(\\[=)?", id, "(.*?)", id, "(\\])?")),
+        function(str) fix_link_to_file(str, self$linkmap)
+      )
     }
 
     rd

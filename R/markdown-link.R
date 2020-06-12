@@ -128,7 +128,8 @@ parse_link <- function(destination, contents, state) {
   obj <- sub("[(][)]$", "", fun)
   s4 <- str_detect(destination, "-class$")
   noclass <- str_match(fun, "^(.*)-class$")[1,2]
-  file <- find_topic_filename(pkg, obj)
+  force_file_name <- has_link_text || is_fun || !is.na(pkg)
+  file <- find_topic_filename(pkg, obj, state$tag, force_file_name)
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {

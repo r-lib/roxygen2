@@ -20,7 +20,7 @@ which defaults to \code{c("collate", "namespace", "rd")}.}
 \item{load_code}{A function used to load all the R code in the package
 directory. The default, \code{NULL}, uses the strategy defined by
 the \code{load} roxygen option, which defaults to \code{\link[=load]{load_pkgload()}}.
-See \link[=load]{load} for more details.}
+See \link{load} for more details.}
 
 \item{clean}{If \code{TRUE}, roxygen will delete all files previously
 created by roxygen before running each roclet.}
@@ -38,6 +38,6 @@ for more details.
 \details{
 Note that roxygen2 is a dynamic documentation system: it works by
 inspecting loaded objects in the package. This means that you must
-be able to load the package in order to document it: see \link[=load]{load} for
+be able to load the package in order to document it: see \link{load} for
 details.
 }

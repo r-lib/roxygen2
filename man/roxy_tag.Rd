@@ -31,7 +31,7 @@ a list. Usually filled in by \code{tag_parsers}}
 }
 \section{Methods}{
 
-Define a method for \code{roxy_tag_parse} to support new tags. See \link[=tag_parsers]{tag_parsers}
+Define a method for \code{roxy_tag_parse} to support new tags. See \link{tag_parsers}
 for more details.
 }
 

@@ -20,7 +20,8 @@ format.rd_section_reexport <- function(x, ...) {
   pkgs <- split(x$value$fun, x$value$pkg)
   pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
     funs <- sort(funs)
-    files <- vapply(funs, find_topic_filename, character(1), pkg = pkg)
+    # TODO: warn for unknown package or topic
+    files <- vapply(funs, find_topic_in_package, character(1), pkg = pkg)
     links <- paste0(
       "\\code{\\link[", pkg,
       ifelse(files == funs, "", paste0(":", files)),

@@ -24,7 +24,7 @@ roclet_tags(x)
 \arguments{
 \item{x}{A \code{roclet} object.}
 
-\item{blocks}{A list of \link[=roxy_block]{roxy_block} objects.}
+\item{blocks}{A list of \link{roxy_block} objects.}
 
 \item{base_path}{Path to root of source package.}
 

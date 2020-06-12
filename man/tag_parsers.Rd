@@ -41,7 +41,7 @@ tag_markdown(x)
 tag_markdown_with_sections(x)
 }
 \arguments{
-\item{x}{A \link[=roxy_tag]{roxy_tag} object to parse}
+\item{x}{A \link{roxy_tag} object to parse}
 
 \item{first, second}{Name of first and second parts of two part tags}
 
@@ -53,7 +53,7 @@ tag_markdown_with_sections(x)
 \item{min, max}{Minimum and maximum number of words}
 }
 \value{
-A \link[=roxy_tag]{roxy_tag} object with the \code{val} field set to the parsed value.
+A \link{roxy_tag} object with the \code{val} field set to the parsed value.
 }
 \description{
 These functions parse the \code{raw} tag value, convert a string into a richer R

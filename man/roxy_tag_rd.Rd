@@ -14,7 +14,7 @@ roxy_tag_rd(x, base_path, env)
 \item{env}{Environment in which to evaluate code (if needed)}
 }
 \value{
-Methods must return a \link[=rd_section]{rd_section}.
+Methods must return a \link{rd_section}.
 }
 \description{
 Provide a method for this generic if you want a tag to generate output

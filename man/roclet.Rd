@@ -52,7 +52,7 @@ any files created by the roclet.
 }
 \subsection{Deprecated methods}{
 
-\code{roclet_tags()} is no longer used; instead provide a \code{\link[=roxy_tag]{roxy_tag_parse()}}
+\code{roclet_tags()} is no longer used; instead provide a \code{\link[=roxy_tag_parse]{roxy_tag_parse()}}
 method for each tag.
 }
 }

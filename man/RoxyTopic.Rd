@@ -14,9 +14,6 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 \code{\link[=rd_section]{rd_section()}} object.}
 
 \item{\code{filename}}{Path to the \code{.Rd} file to generate.}
-
-\item{\code{linkmap}}{Environment that maps topic names to file names, for
-fixing links.}
 }
 \if{html}{\out{</div>}}
 }

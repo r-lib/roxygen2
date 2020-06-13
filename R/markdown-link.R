@@ -4,25 +4,23 @@
 #' spaces between the closing and opening bracket in the `[text][ref]`
 #' form.
 #'
-#' Starting from R 4.0.2-ish, links to topics are not allowed, so for each
-#' linked topic, we look up the linked file and check if the file name is the
-#' same as the topic name, and generate the longer form for `[obj]` style
-#' links.
+#' Starting from R 4.0.2-ish, explicit cross-package links to topics are not
+#' allowed, so for each such linked topic, we look up the linked file.
 #'
 #' These are the link references we add:
 #' ```
 #' MARKDOWN           LINK TEXT  CODE RD
 #' --------           ---------  ---- --
-#' [fun()]            fun()       T   \\link[=file]{fun()}
-#' [obj]              obj         F   \\link{obj} or \\link[=file]{obj}
+#' [fun()]            fun()       T   \\link[=fun]{fun()}
+#' [obj]              obj         F   \\link{obj}
 #' [pkg::fun()]       pkg::fun()  T   \\link[pkg:file]{pkg::fun()}
 #' [pkg::obj]         pkg::obj    F   \\link[pkg:file]{pkg::obj}
-#' [text][fun()]      text        F   \\link[=file]{text}
-#' [text][obj]        text        F   \\link[=file]{text}
+#' [text][fun()]      text        F   \\link[=fun]{text}
+#' [text][obj]        text        F   \\link[=obj]{text}
 #' [text][pkg::fun()] text        F   \\link[pkg:file]{text}
 #' [text][pkg::obj]   text        F   \\link[pkg:file]{text}
 #' [s4-class]         s4          F   \\linkS4class{s4}
-#' [pkg::s4-class]    pkg::s4     F   \\link[pkg:s4-class]{pkg::s4}
+#' [pkg::s4-class]    pkg::s4     F   \\link[pkg:file]{pkg::s4}
 #' ```
 #'
 #' The reference links will always look like `R:ref` for `[ref]` and
@@ -128,18 +126,17 @@ parse_link <- function(destination, contents, state) {
   obj <- sub("[(][)]$", "", fun)
   s4 <- str_detect(destination, "-class$")
   noclass <- str_match(fun, "^(.*)-class$")[1,2]
-  force_file_name <- has_link_text || is_fun || !is.na(pkg)
-  file <- find_topic_filename(pkg, obj, state$tag, force_file_name)
+  file <- find_topic_filename(pkg, obj, state$tag)
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {
     paste0(
       if (is_code) "\\code{",
       if (s4 && is.na(pkg)) "\\linkS4class" else "\\link",
-      if (is_fun || ! is.na(pkg) || file != obj) "[",
-      if ((is_fun || file != obj) && is.na(pkg)) "=",
+      if (is_fun || ! is.na(pkg)) "[",
+      if (is_fun && is.na(pkg)) "=",
       if (! is.na(pkg)) paste0(pkg, ":"),
-      if (is_fun || ! is.na(pkg) || file != obj) paste0(file, "]"),
+      if (is_fun || ! is.na(pkg)) paste0(if (is.na(pkg)) obj else file, "]"),
       "{",
       if (!is.na(pkg)) paste0(pkg, "::"),
       if (s4) noclass else fun,
@@ -155,7 +152,7 @@ parse_link <- function(destination, contents, state) {
         if (is_code) "\\code{",
         "\\link[",
         if (is.na(pkg)) "=" else paste0(pkg, ":"),
-        file,
+        if (is.na(pkg)) obj else file,
         "]{"
       ),
       contents,
@@ -178,10 +175,6 @@ parse_link <- function(destination, contents, state) {
 #' [`roxygenize`][roxygenize()], or [that great function][roxygenize].
 #'
 #' In another package: [and this one][devtools::document].
-#'
-#' Can we link to another package, without specifying which one?
-#' E.g. [str_replace()]. Or to a non-function topic: [str_replace].
-#' This is the correct filename, so all is good.
 #'
 #' This is a table:
 #'

@@ -36,8 +36,7 @@ x + 1
 
 Chunk options:\if{html}{\out{<div class="r">}}\preformatted{names(mtcars)
 nrow(mtcars)
-}\if{html}{\out{</div>}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
-## [11] "carb"
+}\if{html}{\out{</div>}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear" "carb"
 ## [1] 32
 }
 

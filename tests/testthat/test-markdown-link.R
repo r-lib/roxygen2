@@ -94,16 +94,19 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  expect_warning(
+    out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' See [commonmark::markdown_xml()], [commonmark::markdown_xml].
+    #' See [11pkg::function()], [11pkg::object].
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]],
+    "Link to unavailable package"
+  )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' See \\code{\\link[commonmark:commonmark]{commonmark::markdown_xml()}}, \\link[commonmark:commonmark]{commonmark::markdown_xml}.
+    #' See \\code{\\link[11pkg:function]{11pkg::function()}}, \\link[11pkg:object]{11pkg::object}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
@@ -120,16 +123,19 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  expect_warning(
+    out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description, see [name words][commonmark::markdown_xml].
+    #' Description, see [name words][stringr::bar111].
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]],
+    "Link to unknown topic: bar111 in package stringr"
+  )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description, see \\link[commonmark:commonmark]{name words}.
+    #' Description, see \\link[stringr:bar111]{name words}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
@@ -243,24 +249,24 @@ test_that("another markdown link bug is fixed", {
 
 test_that("markdown code as link text is rendered as code", {
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  suppressWarnings(out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [`name`][dest],
     #' [`function`][function()],
     #' [`filter`][stats::filter()],
-    #' [`bar`][stats::filter],
+    #' [`bar`][pkg::bar],
     #' [`terms`][terms.object],
     #' [`abc`][abc-class].
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]])
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see \\code{\\link[=dest]{name}},
     #' \\code{\\link[=function]{function}},
     #' \\code{\\link[stats:filter]{filter}},
-    #' \\code{\\link[stats:filter]{bar}},
+    #' \\code{\\link[pkg:bar]{bar}},
     #' \\code{\\link[=terms.object]{terms}},
     #' \\code{\\link[=abc-class]{abc}}.
     foo <- function() {}")[[1]]
@@ -366,8 +372,7 @@ test_that("links to S4 classes are OK", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  # pkg::linktos4 is not a proper S4 class, so we ignore a roxy warning here
-  out1 <- suppressWarnings(roc_proc_text(rd_roclet(), "
+  suppressWarnings(out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [pkg::linktos4-class] as well.

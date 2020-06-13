@@ -47,7 +47,6 @@ roclet_process.roclet_rd <- function(x, blocks, env, base_path) {
   topics$drop_invalid()
   topics_fix_params_order(topics)
   topics_add_default_description(topics)
-  topics$add_linkmap()
 
   topics$topics
 }

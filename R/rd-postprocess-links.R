@@ -57,8 +57,10 @@ fix_links_to_file <- function(rd, linkmap) {
     }
     if (filename[1] == topic && nopkg && pieces[2] == "0") {
       ""
-    } else {
+    } else if (nopkg) {
       paste0("[=", filename[1], "]")
+    } else {
+      filename[1]
     }
   }
 

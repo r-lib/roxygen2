@@ -115,9 +115,6 @@ find_topic_in_package <- function(pkg, topic) {
 #' @return String. `rd`, with the link placeholders filled in.
 #'
 #' @details
-#' TODO: Currently we give a warning for each topic that we cannot find,
-#' but we'll change this to a single note.
-#'
 #' The workhorse is the `fix_link_to_file()` function, that receives the
 #' text of the placeholder, usually with the surrounding `[=` ... `]` symbols.
 #' (If these are not present, that's a qualified self link to the dev package.)
@@ -139,11 +136,7 @@ fix_links_to_file <- function(rd, linkmap) {
     topic <- pieces[5]
     filename <- linkmap[[topic]]
     if (length(filename) == 0) {
-      roxy_warning(
-        "Link to unknown topic '", topic, "'",
-        file = utils::URLdecode(pieces[3]),
-        line = as.integer(pieces[4])
-      )
+      # If we were to warn about this, this is the place
       filename <- topic
     }
     if (filename[1] == topic && nopkg && pieces[2] == "0") {

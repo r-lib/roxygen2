@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* When processing cross package markdown links (e.g. `[pkg::fun()]`),
+  roxygen2 now looks up the file it needs to link to, instead of linking to
+  the topic, to avoid "Non-file package-anchored links" `R CMD check` warnings.
+
 # roxygen2 7.1.0
 
 ## New features

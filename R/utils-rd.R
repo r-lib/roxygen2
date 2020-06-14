@@ -88,8 +88,14 @@ tweak_links <- function(x, package) {
           topic <- substr(opt, 2, nchar(opt))
 
           if (has_topic(topic, package)) {
-            attr(x, "Rd_option") <- structure(paste0(package, ":", topic), Rd_tag = "TEXT")
+            file <- find_topic_in_package(package, topic)
+            attr(x, "Rd_option") <- structure(paste0(package, ":", file), Rd_tag = "TEXT")
           }
+        } else if (grepl(":", opt)) {
+          # need to fix the link to point to a file
+          target <- str_split_fixed(opt, ":", n = 2)
+          file <- find_topic_in_inherited_link(target[1], target[2])
+          attr(x, "Rd_option") <- structure(paste0(target[1], ":", file), Rd_tag = "TEXT")
         }
       }
     } else if (length(x) > 0) {
@@ -98,6 +104,22 @@ tweak_links <- function(x, package) {
   }
 
   x
+}
+
+find_topic_in_inherited_link <- function(pkg, topic) {
+  path <- tryCatch(
+    find_topic_in_package(pkg, topic),
+    error = function(err) {
+      roxy_warning("Unavailable package in inherited link: ", pkg, "::", topic)
+      topic
+    }
+  )
+  if (is.na(path)) {
+    roxy_warning("Unavailable topic in inherited link: ", pkg, "::", topic)
+    topic
+  } else {
+    path
+  }
 }
 
 # helpers -----------------------------------------------------------------

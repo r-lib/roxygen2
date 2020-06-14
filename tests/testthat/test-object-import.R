@@ -51,3 +51,14 @@ test_that("can't set description and re-export", {
 
   expect_length(out, 0)
 })
+
+test_that("warnings for unknown packages and objects", {
+  expect_warning(
+    format(rd_section_reexport("11papaya", "fun")),
+    "Unavailable package in re-export"
+  )
+  expect_warning(
+    format(rd_section_reexport("stringr", "12345543221")),
+    "Unavailable topic in re-export"
+  )
+})

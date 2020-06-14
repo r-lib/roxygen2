@@ -359,7 +359,7 @@ Some notes:
 * `usethis::use_package_doc()` will generate a basic template to get 
   you started.
 
-* Use `@references` point to published material about the package that
+* Use `@references` to point to published material about the package that
   users might find helpful.
 
 ## Sections

@@ -124,3 +124,21 @@ test_that("fence options are used", {
   details <- out1$get_value("details")
   expect_false(grepl("Error", details))
 })
+
+test_that("dynamic code in fragile tags still runs", {
+  out <- markdown("foo \\out{`r 1+1`} bar")
+  expect_equal(out, "foo \\out{2} bar")
+})
+
+test_that("fragile tags in dynamic code are left alone", {
+  out <- markdown("foo `r substr('\\\\out{xxx}', 2, 4)` bar")
+  expect_equal(out, "foo out bar")
+})
+
+test_that("fragile tags in generated code", {
+  out <- markdown("foo `r '\\\\out{*1*}'` bar")
+  expect_equal(out, "foo \\out{*1*} bar")
+
+  expect_silent(out2 <- markdown("foo `r '\\\\out{<span></span>}'` bar"))
+  expect_equal(out2, "foo \\out{<span></span>} bar")
+})

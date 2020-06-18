@@ -107,19 +107,12 @@ tweak_links <- function(x, package) {
 }
 
 find_topic_in_inherited_link <- function(pkg, topic) {
-  path <- tryCatch(
-    find_topic_in_package(pkg, topic),
-    error = function(err) {
-      roxy_warning("Unavailable package in inherited link: ", pkg, "::", topic)
-      topic
-    }
+  try_find_topic_in_package(
+    pkg,
+    topic,
+    "Unavailable package in inherited link",
+    "Unavailable topic in inherited link"
   )
-  if (is.na(path)) {
-    roxy_warning("Unavailable topic in inherited link: ", pkg, "::", topic)
-    topic
-  } else {
-    path
-  }
 }
 
 # helpers -----------------------------------------------------------------

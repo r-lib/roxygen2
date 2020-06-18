@@ -41,17 +41,10 @@ format.rd_section_reexport <- function(x, ...) {
 }
 
 find_topic_in_package_reexp <- function(pkg, topic) {
-  path <- tryCatch(
-    find_topic_in_package(pkg, topic),
-    error = function(err) {
-      roxy_warning("Unavailable package in re-export: ", pkg, "::", topic)
-      topic
-    }
+  try_find_topic_in_package(
+    pkg,
+    topic,
+    "Unavailable package in re-export",
+    "Unavailable topic in re-export"
   )
-  if (is.na(path)) {
-    roxy_warning("Unavailable topic in re-export: ", pkg, "::", topic)
-    topic
-  } else {
-    path
-  }
 }

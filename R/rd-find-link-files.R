@@ -21,23 +21,10 @@
 #' @noRd
 
 find_topic_filename <- function(pkg, topic, tag = NULL) {
-  tag <- tag %||% list(file = NA, line = NA)
   if (is.na(pkg) || identical(roxy_meta_get("current_package"), pkg)) {
     topic
   } else {
-    path <- tryCatch(
-      find_topic_in_package(pkg, topic),
-      error = function(err) {
-        roxy_tag_warning(tag, "Link to unavailable package: ", pkg, ". ", err$message)
-        topic
-      }
-    )
-    if (is.na(path)) {
-      roxy_tag_warning(tag, "Link to unknown topic: ", topic, " in package ", pkg)
-      topic
-    } else {
-      path
-    }
+    try_find_topic_in_package(pkg, topic, tag = tag)
   }
 }
 
@@ -60,6 +47,36 @@ find_topic_in_package <- function(pkg, topic) {
   # un-escape it properly.
   raw_topic <- str_trim(tools::parse_Rd(textConnection(topic))[[1]][1])
   basename(utils::help((raw_topic), (pkg))[1])
+}
+
+try_find_topic_in_package <- function(pkg, topic,
+                                      no_pkg_msg = "Link to unavailable package",
+                                      no_topic_msg = "Link to unknown topic",
+                                      tag = NULL) {
+  path <- tryCatch(
+    find_topic_in_package(pkg, topic),
+    error = function(err) {
+      msg <- paste0(no_pkg_msg, ": ", pkg, "::", topic, ". ", err$message)
+      if (is.null(tag)) {
+        roxy_warning(msg)
+      } else {
+        roxy_tag_warning(tag, msg)
+      }
+      topic
+    }
+  )
+
+  if (is.na(path)) {
+    msg <- paste0(no_topic_msg, ": ", pkg, "::", topic)
+    if (is.null(tag)) {
+      roxy_warning(msg)
+    } else {
+      roxy_tag_warning(tag, msg)
+    }
+    topic
+  } else {
+    path
+  }
 }
 
 resolve_qualified_link <- function(topic) {

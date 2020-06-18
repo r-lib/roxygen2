@@ -130,7 +130,7 @@ test_that("short and sweet links work", {
     #' Description, see [name words][stringr::bar111].
     #' @md
     foo <- function() {}")[[1]],
-    "Link to unknown topic: bar111 in package stringr"
+    "Link to unknown topic: stringr::bar111"
   )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title

@@ -20,7 +20,7 @@
 #'
 #' @noRd
 
-find_topic_filename <- function(pkg, topic, tag) {
+find_topic_filename <- function(pkg, topic, tag = NULL) {
   tag <- tag %||% list(file = NA, line = NA)
   if (is.na(pkg) || identical(roxy_meta_get("current_package"), pkg)) {
     topic

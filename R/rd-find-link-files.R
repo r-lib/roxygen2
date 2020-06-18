@@ -61,3 +61,13 @@ find_topic_in_package <- function(pkg, topic) {
   raw_topic <- str_trim(tools::parse_Rd(textConnection(topic))[[1]][1])
   basename(utils::help((raw_topic), (pkg))[1])
 }
+
+resolve_qualified_link <- function(topic) {
+  if (has_colons(topic)) {
+    target <- str_split_fixed(topic, "::", n = 2)
+    file <- find_topic_in_package(target[1], target[2])
+    paste0(target[1], ":", file)
+  } else {
+    paste0("=", topic)
+  }
+}

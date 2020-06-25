@@ -94,7 +94,11 @@ tweak_links <- function(x, package) {
         } else if (grepl(":", opt)) {
           # need to fix the link to point to a file
           target <- str_split_fixed(opt, ":", n = 2)
-          file <- find_topic_in_inherited_link(target[1], target[2])
+          file <- try_find_topic_in_package(
+            target[1],
+            target[2],
+            where = " in inherited text"
+          )
           attr(x, "Rd_option") <- structure(paste0(target[1], ":", file), Rd_tag = "TEXT")
         }
       }
@@ -104,15 +108,6 @@ tweak_links <- function(x, package) {
   }
 
   x
-}
-
-find_topic_in_inherited_link <- function(pkg, topic) {
-  try_find_topic_in_package(
-    pkg,
-    topic,
-    "Unavailable package in inherited link",
-    "Unavailable topic in inherited link"
-  )
 }
 
 # helpers -----------------------------------------------------------------

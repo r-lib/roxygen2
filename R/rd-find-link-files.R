@@ -51,14 +51,14 @@ find_topic_in_package <- function(pkg, topic) {
   basename(utils::help((raw_topic), (pkg))[1])
 }
 
-try_find_topic_in_package <- function(pkg, topic,
-                                      no_pkg_msg = "Link to unavailable package",
-                                      no_topic_msg = "Link to unknown topic",
-                                      tag = NULL) {
+try_find_topic_in_package <- function(pkg, topic, where = "", tag = NULL) {
   path <- tryCatch(
     find_topic_in_package(pkg, topic),
     error = function(err) {
-      msg <- paste0(no_pkg_msg, ": ", pkg, "::", topic, ". ", err$message)
+      msg <- paste0(
+        "Link to unavailable package", where, ": ", pkg, "::",
+        topic, ". ", err$message
+      )
       if (is.null(tag)) {
         roxy_warning(msg)
       } else {
@@ -69,7 +69,7 @@ try_find_topic_in_package <- function(pkg, topic,
   )
 
   if (is.na(path)) {
-    msg <- paste0(no_topic_msg, ": ", pkg, "::", topic)
+    msg <- paste0("Link to unknown topic", where, ": ", pkg, "::", topic)
     if (is.null(tag)) {
       roxy_warning(msg)
     } else {

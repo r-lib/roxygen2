@@ -20,7 +20,12 @@ format.rd_section_reexport <- function(x, ...) {
   pkgs <- split(x$value$fun, x$value$pkg)
   pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
     funs <- sort(funs)
-    files <- vapply(funs, find_topic_in_package_reexp, character(1), pkg = pkg)
+    files <- map_chr(
+      funs,
+      try_find_topic_in_package,
+      pkg = pkg,
+      where = " in re-export"
+    )
     links <- paste0(
       "\\code{\\link[", pkg,
       ifelse(files == funs, "", paste0(":", files)),
@@ -37,14 +42,5 @@ format.rd_section_reexport <- function(x, ...) {
     "\\describe{\n",
     paste0("  ", unlist(pkg_links), collapse = "\n\n"),
     "\n}}\n"
-  )
-}
-
-find_topic_in_package_reexp <- function(pkg, topic) {
-  try_find_topic_in_package(
-    pkg,
-    topic,
-    "Unavailable package in re-export",
-    "Unavailable topic in re-export"
   )
 }

@@ -127,7 +127,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="namespace_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>NAMESPACE tags</h1>
@@ -205,8 +205,8 @@ D &lt;- setClass("D")
 <h2 class="hasAnchor">
 <a href="#imports" class="anchor"></a>Imports</h2>
 <p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package. Only unique directives are saved to the <code>NAMESPACE</code> file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.</p>
-<p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>. Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code>::</code>.</p>
-<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make available without using <code>::</code>.</p>
+<p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code>, e.g., <code>pkg::fun()</code>. Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code>.</p>
+<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make available without using <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code>.</p>
 <p>If you want to add a new method to an S3 generic, import it with <code>@importFrom pkg generic</code>.</p>
 <p>If you are using S4 you may also need:</p>
 <ul>

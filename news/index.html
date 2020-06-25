@@ -183,6 +183,9 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
+<ul>
+<li>roxygen2 now supports inline markdown code and code chunks inside Rd tags. In particular in <code>\out{}</code> (<a href='https://github.com/r-lib/roxygen2/issues/1115'>#1115</a>).</li>
+</ul>
 </div>
     <div id="roxygen2-710" class="section level1">
 <h1 class="page-header" data-toc-text="7.1.0">
@@ -194,15 +197,17 @@
 <ul>
 <li>
 <p>roxygen2 now supports inline markdown code and also code chunks, using the same notation as the knitr package. For example:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="co">#' This manual was generated at: `r Sys.time()`.</span>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co">#' This manual was generated at: `r Sys.time()`.</span>
 <span class="co">#' ...</span>
 <span class="co">#' `mtcars` is a data frame with `r ncol(mtcars)` columns, here</span>
 <span class="co">#' is a summary of them:</span>
 <span class="co">#'</span>
 <span class="co">#' ```{r}</span>
 <span class="co">#' summary(mtcars)</span>
-<span class="co">#' ```</span></pre></div>
-<p>See <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<span class="co">#' ```</span>
+</pre></div>
+<p>See <code>vignette("rd-formatting")</code> for details.</p>
 </li>
 <li><p>roxygen2 now keeps using Windows (CR LF) line endings for files that already have CR LF line endings, and uses LF for new files (<a href='https://github.com/r-lib/roxygen2/issues/989'>#989</a>).</p></li>
 </ul>
@@ -215,7 +220,7 @@
 <li><p>Hyperlinks to R6 methods are also added in the PDF manual (<a href='https://github.com/r-lib/roxygen2/issues/1006'>#1006</a>).</p></li>
 <li><p>Empty annotations (alternate text) for figures added via markdown are now omitted. This caused issues when generating pkgdown web sites (<a href='https://github.com/r-lib/roxygen2/issues/1051'>#1051</a>).</p></li>
 <li>
-<p>Roxygen metadata can now have a <code>packages</code> element, giving a character vector of package names to load. This makes it easier to use extension package that provide new tags for existing roclets (<a href='https://github.com/r-lib/roxygen2/issues/1013'>#1013</a>). See <code><a href="../reference/load_options.html">?load_options</a></code> for more details.</p>
+<p>Roxygen metadata can now have a <code>packages</code> element, giving a character vector of package names to load. This makes it easier to use extension package that provide new tags for existing roclets (<a href='https://github.com/r-lib/roxygen2/issues/1013'>#1013</a>). See <code><a href="https://roxygen2.r-lib.org/reference/load_options.html">?load_options</a></code> for more details.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">Roxygen</span><span class="kw">:</span><span class="at"> list(markdown = TRUE, packages = "roxygenlabs")</span></span></code></pre></div>
 </li>
 <li><p><code>@evalNamespace()</code> works again (<a href='https://github.com/r-lib/roxygen2/issues/1022'>#1022</a>).</p></li>
@@ -263,20 +268,24 @@
 <h3 class="hasAnchor">
 <a href="#new-tags" class="anchor"></a>New tags</h3>
 <ul>
-<li><p><code>@includeRmd {path.Rmd}</code> converts an <code>.Rmd</code>/<code>.md</code> file to <code>.Rd</code> and includes it in the manual page. This allows sharing text between vignettes, <code>README.Rmd</code>, and the documentation. See <code><a href="../articles/rd.html">vignette("rd")</a></code> for details (<a href='https://github.com/r-lib/roxygen2/issues/902'>#902</a>).</p></li>
+<li><p><code>@includeRmd {path.Rmd}</code> converts an <code>.Rmd</code>/<code>.md</code> file to <code>.Rd</code> and includes it in the manual page. This allows sharing text between vignettes, <code>README.Rmd</code>, and the documentation. See <code>vignette("rd")</code> for details (<a href='https://github.com/r-lib/roxygen2/issues/902'>#902</a>).</p></li>
 <li><p><code>@order {n}</code> tag controls the order in which blocks are processed. You can use it to override the usual ordering which proceeds from the top of each file to the bottom. <code>@order 1</code> will be processed before <code>@order 2</code>, and before any blocks that don’t have an explicit order set (<a href='https://github.com/r-lib/roxygen2/issues/863'>#863</a>).</p></li>
 <li>
 <p><code>@exportS3Method</code> tag allows you to generate <code>S3method()</code> namespace directives (note the different in capitalisation) (<a href='https://github.com/r-lib/roxygen2/issues/796'>#796</a>). Its primary use is for “delayed” method registration, which allows you to define methods for generics found in suggested packages (available in R 3.6 and greater). For example,</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> package::generic</span>
-<span class="no">generic.foo</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">...</span>) {
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> package::generic</span>
+<span class="kw">generic.foo</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">x</span>, <span class="kw">...</span>) {
 
-}</pre></div>
+}
+</pre></div>
 <p>will generate</p>
 <pre><code>S3method(package::generic, foo)</code></pre>
-<p>(See <a href="https://vctrs.r-lib.org/reference/s3_register.html"><code><a href="https://vctrs.r-lib.org/reference/s3_register.html">vctrs::s3_register()</a></code></a> you need a version that works for earlier versions of R).</p>
+<p>(See <a href="https://vctrs.r-lib.org/reference/s3_register.html"><code>vctrs::s3_register()</code></a> you need a version that works for earlier versions of R).</p>
 <p>It also has a two argument form allows you generate arbitrary <code>S3method()</code> directives:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> generic class</span>
-<span class="kw">NULL</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="co">#' <a href='https://github.com/exportS3Method'>@exportS3Method</a> generic class</span>
+<span class="kw">NULL</span>
+</pre></div>
 <pre><code>S3method(generic, class)</code></pre>
 </li>
 <li><p>New <code>@returns</code> is an alias for <code>@return</code> (<a href='https://github.com/r-lib/roxygen2/issues/952'>#952</a>).</p></li>
@@ -285,7 +294,7 @@
 <div id="r6" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r6" class="anchor"></a>R6</h3>
-<p>roxygen2 can now document R6 classes (<a href='https://github.com/r-lib/roxygen2/issues/922'>#922</a>). See <code><a href="../articles/rd.html">vignette("rd")</a></code> for details.</p>
+<p>roxygen2 can now document R6 classes (<a href='https://github.com/r-lib/roxygen2/issues/922'>#922</a>). See <code>vignette("rd")</code> for details.</p>
 </div>
 <div id="markdown-improvements" class="section level3">
 <h3 class="hasAnchor">
@@ -310,15 +319,19 @@
 <ul>
 <li>
 <p>The default formatting for function usage that spans multiple lines has now changed. Previously, the usage was wrapped to produce the smallest number of lines, e.g.:</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="../reference/parse_package.html">parse_package</a></span>(<span class="kw">path</span> <span class="kw">=</span> <span class="st">"."</span>, <span class="kw">env</span> <span class="kw">=</span> <span class="fu"><a href="../reference/parse_package.html">env_package</a></span>(<span class="no">path</span>),
-  <span class="kw">registry</span> <span class="kw">=</span> <span class="fu">default_tags</span>(), <span class="kw">global_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>())</pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="fu"><a href="https://roxygen2.r-lib.org/reference/parse_package.html">parse_package</a></span>(path = <span class="st">"."</span>, env = <span class="fu"><a href="https://roxygen2.r-lib.org/reference/parse_package.html">env_package</a></span>(<span class="kw">path</span>), 
+  registry = <span class="fu">default_tags</span>(), global_options = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>())
+</pre></div>
 <p>Now it is wrapped so that each argument gets its own line (<a href='https://github.com/r-lib/roxygen2/issues/820'>#820</a>):</p>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="../reference/parse_package.html">parse_package</a></span>(
-  <span class="kw">path</span> <span class="kw">=</span> <span class="st">"."</span>,
-  <span class="kw">env</span> <span class="kw">=</span> <span class="fu"><a href="../reference/parse_package.html">env_package</a></span>(<span class="no">path</span>),
-  <span class="kw">registry</span> <span class="kw">=</span> <span class="fu">default_tags</span>(),
-  <span class="kw">global_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-)</pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="fu"><a href="https://roxygen2.r-lib.org/reference/parse_package.html">parse_package</a></span>(
+  path = <span class="st">"."</span>,
+  env = <span class="fu"><a href="https://roxygen2.r-lib.org/reference/parse_package.html">env_package</a></span>(<span class="kw">path</span>),
+  registry = <span class="fu">default_tags</span>(),
+  global_options = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+)
+</pre></div>
 <p>If you prefer the old behaviour you can put the following in your <code>DESCRIPTION</code>:</p>
 <pre><code>Roxygen: list(old_usage = TRUE)</code></pre>
 </li>
@@ -329,9 +342,9 @@
 <a href="#code-loading" class="anchor"></a>Code loading</h3>
 <p>roxygen2 now provides three strategies for loading your code (<a href='https://github.com/r-lib/roxygen2/issues/822'>#822</a>):</p>
 <ul>
-<li><p><code><a href="../reference/load.html">load_pkgload()</a></code>, the default, uses <a href="https://www.github.com/r-lib/pkgload">pkgload</a>. Compared to the previous release, this now automatically recompiles your package if needed.</p></li>
-<li><p><code><a href="../reference/load.html">load_source()</a></code> attaches required packages and <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>s all files in <code>R/</code>. This is a cruder simulation of package loading than pkgload (and e.g. is unreliable if you use S4 extensively), but it does not require that the package be compiled. Use if the default strategy (used in roxygen2 6.1.0 and above) causes you grief.</p></li>
-<li><p><code><a href="../reference/load.html">load_installed()</a></code> assumes you have installed the package. This is best used as part of a bigger automated workflow.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/load.html">load_pkgload()</a></code>, the default, uses <a href="https://www.github.com/r-lib/pkgload">pkgload</a>. Compared to the previous release, this now automatically recompiles your package if needed.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/load.html">load_source()</a></code> attaches required packages and <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>s all files in <code>R/</code>. This is a cruder simulation of package loading than pkgload (and e.g. is unreliable if you use S4 extensively), but it does not require that the package be compiled. Use if the default strategy (used in roxygen2 6.1.0 and above) causes you grief.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/load.html">load_installed()</a></code> assumes you have installed the package. This is best used as part of a bigger automated workflow.</p></li>
 </ul>
 <p>You can override the default either by calling (e.g.) <code>roxygenise(load_code = "source"))</code> or by setting the <code>load</code> option in your DESCRIPTION: <code>Roxygen: list(load = "source")</code>.</p>
 </div>
@@ -357,18 +370,18 @@
 <div id="extending-roxygen2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#extending-roxygen2" class="anchor"></a>Extending roxygen2</h3>
-<p>The process for extending roxygen2 with new tags and new roclets has been completely overhauled, and is now documented in <code><a href="../articles/extending.html">vignette("extending")</a></code>. If you’re one of the few people who have written a roxygen2 extension, this will break your code - but the documentation, object structure, and print methods are now so much better that I hope it’s not too annoying! Because this interface is now documented, it will not change in the future without warning and a deprecation cycle.</p>
+<p>The process for extending roxygen2 with new tags and new roclets has been completely overhauled, and is now documented in <code>vignette("extending")</code>. If you’re one of the few people who have written a roxygen2 extension, this will break your code - but the documentation, object structure, and print methods are now so much better that I hope it’s not too annoying! Because this interface is now documented, it will not change in the future without warning and a deprecation cycle.</p>
 <p>If you have previously made a new roclet, the major changes are:</p>
 <ul>
-<li><p>The previously internal data structures used to represent blocks and tags have been overhauled. They are now documented and stable. See <code><a href="../reference/roxy_block.html">roxy_block()</a></code> and <code><a href="../reference/roxy_tag.html">roxy_tag()</a></code> for details.</p></li>
+<li><p>The previously internal data structures used to represent blocks and tags have been overhauled. They are now documented and stable. See <code><a href="https://roxygen2.r-lib.org/reference/roxy_block.html">roxy_block()</a></code> and <code><a href="https://roxygen2.r-lib.org/reference/roxy_tag.html">roxy_tag()</a></code> for details.</p></li>
 <li>
-<p><code><a href="../reference/roclet.html">roclet_tags()</a></code> is no longer used; instead define a <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> method. For example, if you create a new <code>@mytag</code> tag, it will generate a class of <code>roxy_tag_mytag</code>, and will be parsed by <code>roxy_tag_parse.roxy_tag_mytag()</code> method. The method should return a new <code><a href="../reference/roxy_tag.html">roxy_tag()</a></code> object with the <code>val</code> field set.</p>
+<p><code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet_tags()</a></code> is no longer used; instead define a <code><a href="https://roxygen2.r-lib.org/reference/roxy_tag.html">roxy_tag_parse()</a></code> method. For example, if you create a new <code>@mytag</code> tag, it will generate a class of <code>roxy_tag_mytag</code>, and will be parsed by <code>roxy_tag_parse.roxy_tag_mytag()</code> method. The method should return a new <code><a href="https://roxygen2.r-lib.org/reference/roxy_tag.html">roxy_tag()</a></code> object with the <code>val</code> field set.</p>
 <p>This means that the <code>registry</code> argument is no longer needed and has been removed.</p>
 </li>
-<li><p><code><a href="../reference/rd_section.html">rd_section()</a></code> and <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code> are now exported so that you can more easily extend <code><a href="../reference/rd_roclet.html">rd_roclet()</a></code> with your own tags that generate output in <code>.Rd</code> files.</p></li>
-<li><p><code>global_options</code> is no longer passed to all roclet methods. Instead, use <code><a href="../reference/load_options.html">roxy_meta_get()</a></code> to retrieve values stored in the options (<a href='https://github.com/r-lib/roxygen2/issues/918'>#918</a>).</p></li>
-<li><p><code><a href="../reference/tag_parsers.html">tag_two_part()</a></code> and <code><a href="../reference/tag_parsers.html">tag_words()</a></code> are now simple functions, not function factories.</p></li>
-<li><p><code>tag_markdown_restricted()</code> has been removed because it did exactly the same thing as <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/rd_section.html">rd_section()</a></code> and <code><a href="https://roxygen2.r-lib.org/reference/roxy_tag_rd.html">roxy_tag_rd()</a></code> are now exported so that you can more easily extend <code><a href="https://roxygen2.r-lib.org/reference/rd_roclet.html">rd_roclet()</a></code> with your own tags that generate output in <code>.Rd</code> files.</p></li>
+<li><p><code>global_options</code> is no longer passed to all roclet methods. Instead, use <code><a href="https://roxygen2.r-lib.org/reference/load_options.html">roxy_meta_get()</a></code> to retrieve values stored in the options (<a href='https://github.com/r-lib/roxygen2/issues/918'>#918</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/tag_parsers.html">tag_two_part()</a></code> and <code><a href="https://roxygen2.r-lib.org/reference/tag_parsers.html">tag_words()</a></code> are now simple functions, not function factories.</p></li>
+<li><p><code>tag_markdown_restricted()</code> has been removed because it did exactly the same thing as <code><a href="https://roxygen2.r-lib.org/reference/tag_parsers.html">tag_markdown()</a></code>.</p></li>
 </ul>
 <p>A big thanks goes to <a href='https://github.com/mikldk'>@mikldk</a> for starting on the vignette and motivating me to make the extension process much more pleasant (<a href='https://github.com/r-lib/roxygen2/issues/882'>#882</a>).</p>
 </div>
@@ -408,8 +421,8 @@
 </h1>
 <ul>
 <li><p>Now specifically imports recent version of desc package (&gt;= 1.2.0) to fix various parsing issues (<a href='https://github.com/crsh'>@crsh</a>, <a href='https://github.com/r-lib/roxygen2/issues/773'>#773</a>, <a href='https://github.com/r-lib/roxygen2/issues/777'>#777</a>, <a href='https://github.com/r-lib/roxygen2/issues/779'>#779</a>). Multi-line DESCRIPTION collate directives now correctly parsed on windows (<a href='https://github.com/brodieG'>@brodieG</a>, <a href='https://github.com/r-lib/roxygen2/issues/790'>#790</a>).</p></li>
-<li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> no longer recompiles packages containing src code (<a href='https://github.com/r-lib/roxygen2/issues/784'>#784</a>).</p></li>
-<li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> now stops with an informative error message when run in a directory that’s not the package root (<a href='https://github.com/mikmart'>@mikmart</a>, <a href='https://github.com/r-lib/roxygen2/issues/704'>#704</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> no longer recompiles packages containing src code (<a href='https://github.com/r-lib/roxygen2/issues/784'>#784</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> now stops with an informative error message when run in a directory that’s not the package root (<a href='https://github.com/mikmart'>@mikmart</a>, <a href='https://github.com/r-lib/roxygen2/issues/704'>#704</a>).</p></li>
 </ul>
 </div>
     <div id="roxygen2-610" class="section level1">
@@ -432,8 +445,8 @@
 </li>
 <li><p><code>@evalNamespace</code> does for <code>NAMESPACE</code> what <code>@evalRd</code> does for Rd files: you give it R code that produces a literal entry in <code>NAMESPACE</code> when run. This should make it easier to export functions that are generated by other functions in your package (<a href='https://github.com/r-lib/roxygen2/issues/531'>#531</a>, <a href='https://github.com/egnha'>@egnha</a>).</p></li>
 <li><p><code>@inherits</code> can now inherit examples (<a href='https://github.com/r-lib/roxygen2/issues/588'>#588</a>).</p></li>
-<li><p><code><a href="../articles/rd.html">vignette("rd")</a></code> received a thorough updating for current best-practices. The vignette still needs more work so pull requests are greatly appreciated (<a href='https://github.com/r-lib/roxygen2/issues/650'>#650</a>).</p></li>
-<li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> uses <code><a href="https://rdrr.io/pkg/pkgload/man/load_all.html">pkgload::load_all()</a></code> instead of a home grown solution to simulate package loading (this is needed because roxygen2 uses run-time information to generate the documentation). This should reduce S4 related problems and ensures that <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> and <code><a href="../reference/roxygenize.html">roxygenise()</a></code> always have exactly the same behaviour (<a href='https://github.com/r-lib/roxygen2/issues/568'>#568</a>, <a href='https://github.com/r-lib/roxygen2/issues/595'>#595</a>).</p></li>
+<li><p><code>vignette("rd")</code> received a thorough updating for current best-practices. The vignette still needs more work so pull requests are greatly appreciated (<a href='https://github.com/r-lib/roxygen2/issues/650'>#650</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> uses <code><a href="https://rdrr.io/pkg/pkgload/man/load_all.html">pkgload::load_all()</a></code> instead of a home grown solution to simulate package loading (this is needed because roxygen2 uses run-time information to generate the documentation). This should reduce S4 related problems and ensures that <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> and <code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> always have exactly the same behaviour (<a href='https://github.com/r-lib/roxygen2/issues/568'>#568</a>, <a href='https://github.com/r-lib/roxygen2/issues/595'>#595</a>).</p></li>
 <li><p>If an inherited section cannot be found, the warning contains the help page from which that section was requested (<a href='https://github.com/r-lib/roxygen2/issues/732'>#732</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>).</p></li>
 <li><p>roxygen2 now always reads and writes using UTF-8 encoding. If used with a package that does not have <code>Encoding: UTF-8</code> in the DESCRIPTION, you’ll now get a warning (<a href='https://github.com/r-lib/roxygen2/issues/564'>#564</a>, <a href='https://github.com/r-lib/roxygen2/issues/592'>#592</a>).</p></li>
 </ul>
@@ -442,10 +455,10 @@
 <h2 class="hasAnchor">
 <a href="#extension-api" class="anchor"></a>Extension API</h2>
 <ul>
-<li><p>Roxygen blocks now have an official structure as encoded in <code><a href="../reference/roxy_block.html">roxy_block()</a></code>. It is a named list containing the tags with attributes providing other metadata.</p></li>
-<li><p>The <code>parsed</code> argument to <code><a href="../reference/roclet.html">roclet_process()</a></code> have been replaced with separate <code>blocks</code> and <code>env</code> arguments.</p></li>
-<li><p>New <code><a href="../reference/roclet.html">roclet_preprocess()</a></code> generic makes it possible for roclets to perform actions before code is evaluated.</p></li>
-<li><p><code><a href="../reference/parse_package.html">parse_package()</a></code>, <code><a href="../reference/parse_package.html">parse_file()</a></code> and <code>parse_code()</code> provide an exported API that allows you to use roxygen’s parsing code independently of creating roclets.</p></li>
+<li><p>Roxygen blocks now have an official structure as encoded in <code><a href="https://roxygen2.r-lib.org/reference/roxy_block.html">roxy_block()</a></code>. It is a named list containing the tags with attributes providing other metadata.</p></li>
+<li><p>The <code>parsed</code> argument to <code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet_process()</a></code> have been replaced with separate <code>blocks</code> and <code>env</code> arguments.</p></li>
+<li><p>New <code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet_preprocess()</a></code> generic makes it possible for roclets to perform actions before code is evaluated.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/parse_package.html">parse_package()</a></code>, <code><a href="https://roxygen2.r-lib.org/reference/parse_package.html">parse_file()</a></code> and <code>parse_code()</code> provide an exported API that allows you to use roxygen’s parsing code independently of creating roclets.</p></li>
 </ul>
 </div>
 <div id="minor-improvements-and-bug-fixes-1" class="section level2">
@@ -516,7 +529,7 @@
 <li>
 <code>@inheritDotParams foo -x -y</code> takes all parameters except for <code>x</code> and <code>y</code>.</li>
 </ul>
-<p>The documentation generated is similar to the style used in <code><a href="https://rdrr.io/r/base/plot.html">?plot</a></code> and will eventually be incorporated in to RStudio’s autocomplete.</p>
+<p>The documentation generated is similar to the style used in <code><a href="https://rdrr.io/r/graphics/plot.default.html">?plot</a></code> and will eventually be incorporated in to RStudio’s autocomplete.</p>
 </li>
 <li><p>New <code>@inherit</code> generalises <code>@inheritParams</code>, and allows to you inherit parameters, return, references, title, description, details, sections, and seealso. The default <code>@inherit my_fun</code> will inherit all, you can document an object entirely by specifying only the <code>@inherit</code> tag. Alternatively, you can select specific tags to inherit with <code>@inherit my_fun return params</code> (<a href='https://github.com/r-lib/roxygen2/issues/384'>#384</a>).</p></li>
 <li><p>New <code>@inheritSection fun title</code> allows you to inherit the contents of a single section from another topic (<a href='https://github.com/r-lib/roxygen2/issues/513'>#513</a>).</p></li>
@@ -560,12 +573,12 @@
 <h3 class="hasAnchor">
 <a href="#other" class="anchor"></a>Other</h3>
 <ul>
-<li><p><code>"_PACKAGE"</code> documentation now generates a default <code>@seealso</code> combining the <code>URL</code> and <code>BugReport</code> fields, and a default <code>@author</code> field generated from the <code>Authors@R</code> field (<a href='https://github.com/r-lib/roxygen2/issues/527'>#527</a>). It now works from <code><a href="../reference/roxygenize.html">roxygenise()</a></code>; before it only worked from <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> (<a href='https://github.com/r-lib/roxygen2/issues/439'>#439</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>).</p></li>
+<li><p><code>"_PACKAGE"</code> documentation now generates a default <code>@seealso</code> combining the <code>URL</code> and <code>BugReport</code> fields, and a default <code>@author</code> field generated from the <code>Authors@R</code> field (<a href='https://github.com/r-lib/roxygen2/issues/527'>#527</a>). It now works from <code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code>; before it only worked from <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> (<a href='https://github.com/r-lib/roxygen2/issues/439'>#439</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>).</p></li>
 <li><p>Manually created <code>NAMESPACE</code> or documentation files are never overwritten, even if using <code>roxygen2</code> for the first time (<a href='https://github.com/krlmlr'>@krlmlr</a>, <a href='https://github.com/r-lib/roxygen2/issues/436'>#436</a>).</p></li>
 <li><p>Changes to DESCRIPTION (i.e. <code>Collate:</code> and <code>RoxygenNote</code>) now use the desc package. This will minimise spurious changes (<a href='https://github.com/r-lib/roxygen2/issues/430'>#430</a>).</p></li>
-<li><p><code>default_data_format()</code> has been renamed to <code><a href="../reference/object_format.html">object_format()</a></code>.</p></li>
-<li><p>New <code><a href="../reference/roclet_find.html">roclet_find()</a></code> provides a more flexible way to specify roclets: as roclet name (e.g. “rd_roclet”), in an package (“foo::roclet_bar”), or with options (“foo::roclet_bar(baz = TRUE)”).</p></li>
-<li><p>The usage of replacement functions uses non-breaking spaces so that <code>&lt;-</code> will never get put on its own line (<a href='https://github.com/r-lib/roxygen2/issues/484'>#484</a>).</p></li>
+<li><p><code>default_data_format()</code> has been renamed to <code><a href="https://roxygen2.r-lib.org/reference/object_format.html">object_format()</a></code>.</p></li>
+<li><p>New <code><a href="https://roxygen2.r-lib.org/reference/roclet_find.html">roclet_find()</a></code> provides a more flexible way to specify roclets: as roclet name (e.g. “rd_roclet”), in an package (“foo::roclet_bar”), or with options (“foo::roclet_bar(baz = TRUE)”).</p></li>
+<li><p>The usage of replacement functions uses non-breaking spaces so that <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code> will never get put on its own line (<a href='https://github.com/r-lib/roxygen2/issues/484'>#484</a>).</p></li>
 <li><p>Roxygen now parses nonASCII documentation correctly (as long as UTF-8 encoded or specified Encoding in DESCRIPTION) (<a href='https://github.com/r-lib/roxygen2/issues/532'>#532</a>, <a href='https://github.com/shrektan'>@shrektan</a>), and ignores files listed in <code>.Rbuildignore</code> (<a href='https://github.com/r-lib/roxygen2/issues/446'>#446</a>, <a href='https://github.com/fmichonneau'>@fmichonneau</a>).</p></li>
 </ul>
 </div>
@@ -574,9 +587,9 @@
 <h2 class="hasAnchor">
 <a href="#extending-roxygen2-1" class="anchor"></a>Extending roxygen2</h2>
 <ul>
-<li><p>Deprecated <code>register.preref.parser()</code> and <code>register.preref.parsers()</code> have been removed. <code>register_tags()</code> has also been removed in favour of a new <code><a href="../reference/roclet.html">roclet_tags()</a></code> generic.</p></li>
-<li><p><code><a href="../reference/roclet.html">roclet()</a></code> (the constructor), <code><a href="../reference/roclet.html">roclet_tags()</a></code>, <code><a href="../reference/roclet.html">roclet_process()</a></code> <code><a href="../reference/roclet.html">roclet_output()</a></code>, <code>roc_clean()</code> and now exported making it possible to create roclets in other packages. Helper functions <code><a href="../reference/roxy_tag.html">roxy_tag()</a></code> and <code><a href="../reference/roxy_tag.html">roxy_tag_warning()</a></code> are also exported.</p></li>
-<li><p><code>new_roclet()</code> is no longer exported - use <code><a href="../reference/roclet.html">roclet()</a></code> instead.</p></li>
+<li><p>Deprecated <code>register.preref.parser()</code> and <code>register.preref.parsers()</code> have been removed. <code>register_tags()</code> has also been removed in favour of a new <code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet_tags()</a></code> generic.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet()</a></code> (the constructor), <code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet_tags()</a></code>, <code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet_process()</a></code> <code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet_output()</a></code>, <code>roc_clean()</code> and now exported making it possible to create roclets in other packages. Helper functions <code><a href="https://roxygen2.r-lib.org/reference/roxy_tag.html">roxy_tag()</a></code> and <code><a href="https://roxygen2.r-lib.org/reference/roxy_tag.html">roxy_tag_warning()</a></code> are also exported.</p></li>
+<li><p><code>new_roclet()</code> is no longer exported - use <code><a href="https://roxygen2.r-lib.org/reference/roclet.html">roclet()</a></code> instead.</p></li>
 </ul>
 </div>
 </div>
@@ -601,14 +614,18 @@
 <li><p>Roxygen now records its version in a single place: the <code>RoxygenNote</code> field in the <code>DESCRIPTION</code> (<a href='https://github.com/r-lib/roxygen2/issues/338'>#338</a>). This will be the last time an roxygen2 upgrade changes every file in <code>man/</code>.</p></li>
 <li>
 <p>You can now easily re-export functions that you’ve imported from another package:</p>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="co">#' <a href='https://github.com/export'>@export</a></span>
-<span class="kw pkg">magrittr</span><span class="kw ns">::</span><span class="no">`%&gt;%`</span></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="co">#' <a href='https://github.com/export'>@export</a></span>
+<span class="kw">magrittr</span>::<span class="kw">`%&gt;%`</span>
+</pre></div>
 <p>All imported-and-re-exported functions will be documented in the same file (<code>rexports.Rd</code>), containing a brief description and links to the original documentation (<a href='https://github.com/r-lib/roxygen2/issues/376'>#376</a>).</p>
 </li>
 <li>
 <p>You can more easily generate package documentation by documenting the special string "_PACKAGE" (<a href='https://github.com/krlmlr'>@krlmlr</a>, <a href='https://github.com/r-lib/roxygen2/issues/349'>#349</a>):</p>
-<div class="sourceCode" id="cb12"><pre class="r"><span class="co">#' <a href='https://github.com/details'>@details</a> Details</span>
-<span class="st">"_PACKAGE"</span></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="co">#' <a href='https://github.com/details'>@details</a> Details</span>
+<span class="st">"_PACKAGE"</span>
+</pre></div>
 <p>The title and description will be automatically filled in from the <code>DESCRIPTION</code>.</p>
 </li>
 <li><p>New tags <code>@rawRd</code> and <code>@rawNamespace</code> allow you to insert raw (unescaped) in Rd and the <code>NAMESPACE</code> (this is useful for conditional imports). <code>@evalRd()</code> is similar, but instead of literal Rd, you give it R code that produces literal Rd code when run. This should make it easier to experiment with new types of output (<a href='https://github.com/r-lib/roxygen2/issues/385'>#385</a>).</p></li>
@@ -625,7 +642,7 @@
 <p>The roxygen parsers has been completely rewritten in C++ (<a href='https://github.com/r-lib/roxygen2/issues/295'>#295</a>). This gives a nice performance boost and gives:</p>
 <ul>
 <li><p>Better error messages: you now get the exact the line number of the tag, not just the start of the block.</p></li>
-<li><p>The parser has been simplified a little: tags now must always start on a new line. This is recommended practice anyway, and it means that escaping inline <code>@</code> (with <code>@@</code>) is now optional. (<a href='https://github.com/r-lib/roxygen2/issues/235'>#235</a>)</p></li>
+<li><p>The parser has been simplified a little: tags now must always start on a new line. This is recommended practice anyway, and it means that escaping inline <code><a href="https://rdrr.io/r/base/slotOp.html">@</a></code> (with <code>@@</code>) is now optional. (<a href='https://github.com/r-lib/roxygen2/issues/235'>#235</a>)</p></li>
 <li><p>Unknown tags now emit a warning, rather than an error.</p></li>
 </ul>
 </li>
@@ -636,8 +653,8 @@
 <li><p>If you document multiple arguments with one <code>@param</code>, (e.g. <code>@param a,b,c</code>) each parameter will get a space after it so it can be wrapped in the generated Rd file (<a href='https://github.com/r-lib/roxygen2/issues/373'>#373</a>).</p></li>
 <li><p><code>@section</code>s with identical titles are now merged together, just like <code>@description</code> and <code>@details</code>. This is useful in conjunction with the <code>@rdname</code> tag. (<a href='https://github.com/krlmlr'>@krlmlr</a>, <a href='https://github.com/r-lib/roxygen2/issues/300'>#300</a>).</p></li>
 <li><p>Automatic <code>@usage</code> is now correctly generated for functions with string arguments containing <code>"\""</code> (<a href='https://github.com/r-lib/roxygen2/issues/265'>#265</a>).</p></li>
-<li><p><code><a href="../reference/load_options.html">load_options()</a></code> is now exported so <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> doesn’t have to run <code><a href="../reference/update_collate.html">update_collate()</a></code> twice (<a href='https://github.com/r-lib/roxygen2/issues/395'>#395</a>).</p></li>
-<li><p><code><a href="../reference/update_collate.html">update_collate()</a></code> only rewrites the <code>Collate</code> entry in the DESCRIPTION file when it changes (<a href='https://github.com/r-lib/roxygen2/issues/325'>#325</a>, <a href='https://github.com/r-lib/roxygen2/issues/723'>#723</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/load_options.html">load_options()</a></code> is now exported so <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> doesn’t have to run <code><a href="https://roxygen2.r-lib.org/reference/update_collate.html">update_collate()</a></code> twice (<a href='https://github.com/r-lib/roxygen2/issues/395'>#395</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/update_collate.html">update_collate()</a></code> only rewrites the <code>Collate</code> entry in the DESCRIPTION file when it changes (<a href='https://github.com/r-lib/roxygen2/issues/325'>#325</a>, <a href='https://github.com/r-lib/roxygen2/issues/723'>#723</a>).</p></li>
 <li><p>An empty <code>NAMESPACE</code> file is written if it is maintained by <code>roxygen2</code> (<a href='https://github.com/krlmlr'>@krlmlr</a>, <a href='https://github.com/r-lib/roxygen2/issues/348'>#348</a>).</p></li>
 <li><p>Data that is not lazy-loaded can be documented (<a href='https://github.com/krlmlr'>@krlmlr</a>, <a href='https://github.com/r-lib/roxygen2/issues/390'>#390</a>).</p></li>
 </ul>
@@ -686,7 +703,7 @@
 <li><p>Methods no longer automatically attempt to inherit parameters from their generic. It’s too fraught with difficulty (<a href='https://github.com/r-lib/roxygen2/issues/261'>#261</a>).</p></li>
 <li><p>Roxygen now understands what to do with <code>setReplaceMethod()</code> (<a href='https://github.com/r-lib/roxygen2/issues/266'>#266</a>).</p></li>
 <li><p>Parameter documentation is ordered according to the order of the formals, if possible (<a href='https://github.com/krlmlr'>@krlmlr</a>, <a href='https://github.com/r-lib/roxygen2/issues/63'>#63</a>).</p></li>
-<li><p>Export <code><a href="../reference/is_s3_generic.html">is_s3_method()</a></code>.</p></li>
+<li><p>Export <code><a href="https://roxygen2.r-lib.org/reference/is_s3_generic.html">is_s3_method()</a></code>.</p></li>
 <li><p>Roxygen no longer fails when run in non-UTF-8 locales on windows.</p></li>
 </ul>
 </div>
@@ -695,9 +712,9 @@
 <a href="#roxygen2-401" class="anchor"></a>roxygen2 4.0.1<small> 2014-05-17 </small>
 </h1>
 <ul>
-<li><p>Explicit <code>updateRoxygen()</code> is no longer needed - <code><a href="../reference/roxygenize.html">roxygenize()</a></code> does the right thing the first time it is run.</p></li>
+<li><p>Explicit <code>updateRoxygen()</code> is no longer needed - <code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenize()</a></code> does the right thing the first time it is run.</p></li>
 <li><p>Exporting a S4 generic works (<a href='https://github.com/r-lib/roxygen2/issues/246'>#246</a>).</p></li>
-<li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> no longer complains about absence of <code>wrap</code> field because it’s so unlikely that anyone wants the old behaviour (<a href='https://github.com/r-lib/roxygen2/issues/245'>#245</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> no longer complains about absence of <code>wrap</code> field because it’s so unlikely that anyone wants the old behaviour (<a href='https://github.com/r-lib/roxygen2/issues/245'>#245</a>).</p></li>
 </ul>
 </div>
     <div id="roxygen2-400" class="section level1">
@@ -714,10 +731,12 @@
 <li><p><code>@field</code> documents the fields on a reference class (<a href='https://github.com/r-lib/roxygen2/issues/181'>#181</a>). It works the same way as <code>@slot</code> for S4 classes.</p></li>
 <li>
 <p>You can now document objects defined elsewhere (like datasets) by documenting their name as a string (<a href='https://github.com/r-lib/roxygen2/issues/221'>#221</a>). For example, to document an dataset called <code>mydata</code>, you can do:</p>
-<div class="sourceCode" id="cb13"><pre class="r"><span class="co">#' Mydata set</span>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="co">#' Mydata set</span>
 <span class="co">#'</span>
 <span class="co">#' Some data I collected about myself</span>
-<span class="st">"mydata"</span></pre></div>
+<span class="st">"mydata"</span>
+</pre></div>
 </li>
 <li><p>Roxygen2 now adds a comment to all generated files so that you know they’ve been generated, and should not be hand edited.</p></li>
 <li><p>Roxygen2 no longer wraps the text in Rd files by default, i.e. the default option is <code>wrap = FALSE</code> now. To override it, you have to specify a field <code>Roxygen: list(wrap = TRUE)</code> in <code>DESCRIPTION</code> (<a href='https://github.com/r-lib/roxygen2/issues/178'>#178</a>).</p></li>
@@ -728,7 +747,7 @@
 <h2 class="hasAnchor">
 <a href="#improved-error-handling" class="anchor"></a>Improved error handling</h2>
 <ul>
-<li><p>Roxygen2 will never overwrite a file that was not generated by roxygen2. This means that the first time you use this version of roxygen, you’ll need to delete all existing Rd files. <code><a href="../reference/roxygenize.html">roxygenise()</a></code> gains a clean argument that will automatically remove any files previously created by roxygen2.</p></li>
+<li><p>Roxygen2 will never overwrite a file that was not generated by roxygen2. This means that the first time you use this version of roxygen, you’ll need to delete all existing Rd files. <code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> gains a clean argument that will automatically remove any files previously created by roxygen2.</p></li>
 <li><p>Parsing is stricter: many issues that were previously warnings are now errors. All errors should now give you the line number of the roxygen block associated with the error.</p></li>
 <li><p>Every input is now checked to make sure that you have matching braces (e.g. every <code>{</code> has a matching <code>}</code>). This should prevent frustrating errors that require careful reading of <code>.Rd</code> files (<a href='https://github.com/r-lib/roxygen2/issues/183'>#183</a>).</p></li>
 <li><p><code>@section</code> titles and <code>@export</code> tags can now only span a single line to prevent common bugs.</p></li>
@@ -742,7 +761,7 @@
 <a href="#bug-fixes-and-minor-improvements-1" class="anchor"></a>Bug fixes and minor improvements</h2>
 <ul>
 <li><p>Better parsing of non-syntactic function names in other packages when used in <code>@inheritParams</code> (<a href='https://github.com/r-lib/roxygen2/issues/236'>#236</a>).</p></li>
-<li><p>Deprecated arguments to <code><a href="../reference/roxygenize.html">roxygenise()</a></code> (<code>roxygen.dir</code>, <code>copy.package</code>, <code>overwrite</code>, <code>unlink.target</code>) removed.</p></li>
+<li><p>Deprecated arguments to <code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> (<code>roxygen.dir</code>, <code>copy.package</code>, <code>overwrite</code>, <code>unlink.target</code>) removed.</p></li>
 <li><p>Remove unneeded codetools and tools dependencies.</p></li>
 <li><p>Bump required Rcpp version to 0.11.0, and remove custom makefiles.</p></li>
 <li><p>Non-syntactic argument names (like <code>_x</code>) are now surrounded by back-ticks in the usage (<a href='https://github.com/r-lib/roxygen2/issues/191'>#191</a>).</p></li>
@@ -750,7 +769,7 @@
 <li><p>Usage statements in generated roxygen statements non-longer contain non-ASCII characters and will be wrapped if long (<a href='https://github.com/r-lib/roxygen2/issues/180'>#180</a>).</p></li>
 <li><p>By default, reference classes now only document their own methods, not their methods of parents (<a href='https://github.com/r-lib/roxygen2/issues/201'>#201</a>).</p></li>
 <li><p>Default aliases always include the original name of the object, even if overridden by <code>@name</code>. This also means that <code>A &lt;- setClass("A")</code> will get two aliases by default: <code>A</code> and <code>A-class</code> (<a href='https://github.com/r-lib/roxygen2/issues/202'>#202</a>). Use <code>@aliases NULL</code> to suppress default alias.</p></li>
-<li><p>Non-syntactic class names (like <code>&lt;-</code>) are now escaped in the usage section of S4 methods (<a href='https://github.com/r-lib/roxygen2/issues/205'>#205</a>).</p></li>
+<li><p>Non-syntactic class names (like <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code>) are now escaped in the usage section of S4 methods (<a href='https://github.com/r-lib/roxygen2/issues/205'>#205</a>).</p></li>
 <li><p>Eliminated two more cases where wrapping occurred even when <code>wrap = FALSE</code>.</p></li>
 </ul>
 </div>
@@ -763,12 +782,12 @@
 <h2 class="hasAnchor">
 <a href="#documentation-for-reference-classes" class="anchor"></a>Documentation for reference classes</h2>
 <p>It’s now possible to document reference classes, using the “docstring” convention described in <code>?setRefClass</code>. If you want to provide a short paragraph description of what a method does, make the first component of the message a string containing the description, e.g.:</p>
-<div class="sourceCode" id="cb14"><pre class="r">setRefClass("A", methods = list(
-  f = function(a, b) {
-    "Take numbers \code{a} and \code{b} and add them together"
-    a + b
-  }
-))</pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">setRefClass</span>(<span class="st">"A"</span>, <span class="dt">methods =</span> <span class="kw">list</span>(</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="dt">f =</span> <span class="cf">function</span>(a, b) {</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    <span class="st">"Take numbers \code{a} and \code{b} and add them together"</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>    a <span class="op">+</span><span class="st"> </span>b</span>
+<span id="cb14-5"><a href="#cb14-5"></a>  }</span>
+<span id="cb14-6"><a href="#cb14-6"></a>))</span></code></pre></div>
 <p>Unlike the documentation for R functions, the documentation for methods can be quite succinct.</p>
 <p>Roxygen adopts the convention that documented methods are public, and will be listed in the man page for the object. Undocumented methods are private and will not be shown in the documentation. The methods for all superclasses are also listed, so that you don’t need to flip through multiple pages of documentation to understand what you can do with an object. All documented methods will be placed in a bulleted list in a section titled “Methods”, the method usage will be automatically prepended to the docstring.</p>
 </div>
@@ -777,8 +796,8 @@
 <a href="#minor-fixes-and-improvements" class="anchor"></a>Minor fixes and improvements</h2>
 <ul>
 <li><p>Fixes for Rcpp 0.11.0 compatibility.</p></li>
-<li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> now invisible returns a list of all files generated by individual roclets. This is useful for tools that want to figure out if there are extra files in the <code>man/</code> directory.</p></li>
-<li><p><code><a href="../reference/is_s3_generic.html">is_s3_generic()</a></code> now recognises group generics (<a href='https://github.com/r-lib/roxygen2/issues/166'>#166</a>).</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> now invisible returns a list of all files generated by individual roclets. This is useful for tools that want to figure out if there are extra files in the <code>man/</code> directory.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/is_s3_generic.html">is_s3_generic()</a></code> now recognises group generics (<a href='https://github.com/r-lib/roxygen2/issues/166'>#166</a>).</p></li>
 <li><p>Don’t try and add parameters for data objects (<a href='https://github.com/r-lib/roxygen2/issues/165'>#165</a>).</p></li>
 <li><p>Sort output of families using C locale (<a href='https://github.com/r-lib/roxygen2/issues/171'>#171</a>).</p></li>
 <li><p><code>@family</code> now escapes function names in references (<a href='https://github.com/r-lib/roxygen2/issues/172'>#172</a>).</p></li>
@@ -805,8 +824,8 @@
 <p>Roxygen 3.0 also includes a number of minor fixes and improvements:</p>
 <ul>
 <li><p>Infix functions are now escaped correctly in the <code>NAMESPACE</code>. (Thanks to <a href='https://github.com/crowding'>@crowding</a>, <a href='https://github.com/r-lib/roxygen2/issues/111'>#111</a>)</p></li>
-<li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> now works more like <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> and only ever works in the current directory. The arguments <code>roxygen.dir</code>, <code>overwrite</code>, <code>copy.package</code> and <code>unlink.target</code> have been deprecated due to potential data loss problems.</p></li>
-<li><p>The collate roclet is no longer a roclet: it processes R files using custom code (only statically, not dynamically) and is designed to be executed before the code is sourced. Run <code><a href="../reference/update_collate.html">update_collate()</a></code> to update the Collate directive based on <code>@include</code> tags - if there are none present, a collate directive will not be generated.</p></li>
+<li><p><code><a href="https://roxygen2.r-lib.org/reference/roxygenize.html">roxygenise()</a></code> now works more like <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> and only ever works in the current directory. The arguments <code>roxygen.dir</code>, <code>overwrite</code>, <code>copy.package</code> and <code>unlink.target</code> have been deprecated due to potential data loss problems.</p></li>
+<li><p>The collate roclet is no longer a roclet: it processes R files using custom code (only statically, not dynamically) and is designed to be executed before the code is sourced. Run <code><a href="https://roxygen2.r-lib.org/reference/update_collate.html">update_collate()</a></code> to update the Collate directive based on <code>@include</code> tags - if there are none present, a collate directive will not be generated.</p></li>
 <li><p><code>@useDynLib</code> now works with more possible specifications - if you include a comma in the tag value, the output will be passed as is. This means that <code>@useDynLib mypackage, .registration = TRUE</code> will now generate <code>useDynLib(mypackage, .registration = TRUE)</code> in the <code>NAMESPACE</code>. (<a href='https://github.com/r-lib/roxygen2/issues/124'>#124</a>)</p></li>
 <li><p><code>inst</code> directory not created by default (<a href='https://github.com/r-lib/roxygen2/issues/56'>#56</a>).</p></li>
 <li><p>Explicitly depend on <code>utils</code> and <code>methods</code> packages to make roxygen compatible with <code>Rscript</code> (<a href='https://github.com/r-lib/roxygen2/issues/72'>#72</a>). Import <code>digest</code> package instead of depending on it.</p></li>
@@ -866,7 +885,7 @@
 <li><p>Replacement functions (e.g. <code>foo&lt;-</code>) now get correct usage statements: <code>foo() &lt;- value</code> instead of <code>foo()&lt;-value</code>. (Fixes <a href='https://github.com/r-lib/roxygen2/issues/38'>#38</a>)</p></li>
 <li><p>Functions with no arguments now correctly get usage statements (Fixes <a href='https://github.com/r-lib/roxygen2/issues/35'>#35</a>)</p></li>
 <li><p>Indentation in examples now preserved (Fixes <a href='https://github.com/r-lib/roxygen2/issues/27'>#27</a>)</p></li>
-<li><p>roxygen2 will replace characters that are not valid in filenames with a character substitute, e.g. <code>[]</code> becomes <code>sub</code>, <code>&lt;-</code> becomes <code>set</code> (Fixes <a href='https://github.com/r-lib/roxygen2/issues/6'>#6</a>)</p></li>
+<li><p>roxygen2 will replace characters that are not valid in filenames with a character substitute, e.g. <code>[]</code> becomes <code>sub</code>, <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code> becomes <code>set</code> (Fixes <a href='https://github.com/r-lib/roxygen2/issues/6'>#6</a>)</p></li>
 <li><p>Usage strings use non-breaking spaces to prevent string default values containing whitespace to be split across multiple lines. This may cause problems in the unlikely event that you have default value containing a non-breaking space (`“\uA0”’) (Fixes <a href='https://github.com/r-lib/roxygen2/issues/21'>#21</a>)</p></li>
 <li><p>Functions with quoted names now get correct usage statements (Fixes <a href='https://github.com/r-lib/roxygen2/issues/41'>#41</a>)</p></li>
 <li><p>Objects that no longer exist are not documented (Fixes <a href='https://github.com/r-lib/roxygen2/issues/42'>#42</a>)</p></li>
@@ -893,7 +912,7 @@
 <ul>
 <li><p><code>NAMESPACE</code> file no longer needs to exist</p></li>
 <li><p><code>Collate</code> field in <code>DESCRIPTION</code> no longer needs to exist</p></li>
-<li><p><code>=</code> now recognised as way of assigning functions</p></li>
+<li><p><code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code> now recognised as way of assigning functions</p></li>
 <li><p><code>x$y &lt;- function() {...}</code> no longer causes error</p></li>
 <li><p><code>@example</code> no longer added extra new-lines.</p></li>
 <li><p>Correct directory normalisation under windows fixes broken test.</p></li>

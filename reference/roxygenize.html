@@ -188,14 +188,14 @@ for more details." />
     <div class="ref-description">
     <p>This is the workhorse function that uses roclets, the built-in document
 transformation functions, to build all documentation for a package. See
-the documentation for the individual roclets, <code><a href='rd_roclet.html'>rd_roclet()</a></code>,
-<code><a href='namespace_roclet.html'>namespace_roclet()</a></code>, and for <code><a href='update_collate.html'>update_collate()</a></code>,
+the documentation for the individual roclets, <code><a href='https://roxygen2.r-lib.org/reference/rd_roclet.html'>rd_roclet()</a></code>,
+<code><a href='https://roxygen2.r-lib.org/reference/namespace_roclet.html'>namespace_roclet()</a></code>, and for <code><a href='https://roxygen2.r-lib.org/reference/update_collate.html'>update_collate()</a></code>,
 for more details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>roxygenize</span>(<span class='kw'>package.dir</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>roclets</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>load_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'><a href='https://roxygen2.r-lib.org/reference/roxygenize.html'>roxygenize</a></span>(package.dir = <span class='st'>"."</span>, roclets = <span class='kw'>NULL</span>, load_code = <span class='kw'>NULL</span>, clean = <span class='fl'>FALSE</span>)
 
-<span class='fu'>roxygenise</span>(<span class='kw'>package.dir</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>roclets</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>load_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'><a href='https://roxygen2.r-lib.org/reference/roxygenize.html'>roxygenise</a></span>(package.dir = <span class='st'>"."</span>, roclets = <span class='kw'>NULL</span>, load_code = <span class='kw'>NULL</span>, clean = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -215,8 +215,8 @@ which defaults to <code><a href='https://rdrr.io/r/base/c.html'>c("collate", "na
       <th>load_code</th>
       <td><p>A function used to load all the R code in the package
 directory. The default, <code>NULL</code>, uses the strategy defined by
-the <code>load</code> roxygen option, which defaults to <code><a href='load.html'>load_pkgload()</a></code>.
-See <a href='load.html'>load</a> for more details.</p></td>
+the <code>load</code> roxygen option, which defaults to <code><a href='https://roxygen2.r-lib.org/reference/load.html'>load_pkgload()</a></code>.
+See <a href='https://roxygen2.r-lib.org/reference/load.html'>load</a> for more details.</p></td>
     </tr>
     <tr>
       <th>clean</th>
@@ -232,7 +232,7 @@ created by roxygen before running each roclet.</p></td>
 
     <p>Note that roxygen2 is a dynamic documentation system: it works by
 inspecting loaded objects in the package. This means that you must
-be able to load the package in order to document it: see <a href='load.html'>load</a> for
+be able to load the package in order to document it: see <a href='https://roxygen2.r-lib.org/reference/load.html'>load</a> for
 details.</p>
 
   </div>

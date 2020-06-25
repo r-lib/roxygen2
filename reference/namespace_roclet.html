@@ -196,23 +196,23 @@ the functions imported and exported by your package, as described in
 import directives (because this can be computed without evaluating package
 code), and the second generates everything (after the package has been
 loaded).</p>
-<p>See <code><a href='../articles/namespace.html'>vignette("namespace")</a></code> for details.</p>
+<p>See <code>vignette("namespace")</code> for details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>namespace_roclet</span>()</pre>
+    <pre class="usage"><span class='fu'><a href='https://roxygen2.r-lib.org/reference/namespace_roclet.html'>namespace_roclet</a></span>()</pre>
 
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other roclets: 
-<code><a href='rd_roclet.html'>rd_roclet</a>()</code>,
-<code><a href='vignette_roclet.html'>vignette_roclet</a>()</code></p></div>
+<code><a href='https://roxygen2.r-lib.org/reference/rd_roclet.html'>rd_roclet</a>()</code>,
+<code><a href='https://roxygen2.r-lib.org/reference/vignette_roclet.html'>vignette_roclet</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The most common namespace tag is @export, which declares that a function</span>
 <span class='co'># is part of the external interface of your package</span>
 <span class='co'>#' @export</span>
-<span class='no'>foofy</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>z</span>) {
+<span class='kw'>foofy</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>z</span>) {
 }
 
 <span class='co'># You'll also often find global imports living in a file called</span>

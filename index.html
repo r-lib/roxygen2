@@ -143,18 +143,21 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># Install devtools from CRAN</span>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co"># Install devtools from CRAN</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"roxygen2"</span>)
 
 <span class="co"># Or the development version from GitHub:</span>
 <span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"r-lib/roxygen2"</span>)</pre></div>
+<span class="kw">devtools</span>::<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"r-lib/roxygen2"</span>)
+</pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to produce Rd files in the <code>man/</code> directory. Here’s a <a href="https://stringr.tidyverse.org/reference/str_length.html">simple example</a> from the stringr package:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co">#' The length of a string</span>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co">#' The length of a string</span>
 <span class="co">#'</span>
 <span class="co">#' Technically this returns the number of "code points", in a string. One</span>
 <span class="co">#' code point usually corresponds to one character, but not always. For example,</span>
@@ -171,8 +174,9 @@
 <span class="co">#' str_length(NA)</span>
 <span class="co">#' str_length(factor("abc"))</span>
 <span class="co">#' str_length(c("i", "like", "programming", NA))</span>
-<span class="no">str_length</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">string</span>) {
-}</pre></div>
+<span class="kw">str_length</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">string</span>) {
+}
+</pre></div>
 <p>When you <code><a href="reference/roxygenize.html">roxygenise()</a></code> (or <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code>) your package these comments will be automatically transformed to the <code>.Rd</code> that R uses to generate the documentation you see when you type <code>?str_length</code>.</p>
 </div>
 <div id="learn-more" class="section level2">

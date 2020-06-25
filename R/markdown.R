@@ -1,5 +1,6 @@
 
 markdown <- function(text, tag = NULL, sections = FALSE) {
+  tag <- tag %||% list(file = NA, line = NA)
   tryCatch(
     expanded_text <- markdown_pass1(text),
     error = function(e) {
@@ -10,7 +11,8 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
       stop(message, call. = FALSE)
     }
   )
-  markdown_pass2(expanded_text, tag = tag, sections = sections)
+  escaped_text <- escape_rd_for_md(expanded_text)
+  markdown_pass2(escaped_text, tag = tag, sections = sections)
 }
 
 #' Expand the embedded inline code
@@ -59,14 +61,13 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 
 markdown_pass1 <- function(text) {
   text <- paste(text, collapse = "\n")
-  esc_text <- escape_rd_for_md(text)
-  mdxml <- xml_ns_strip(md_to_mdxml(esc_text, sourcepos = TRUE))
+  mdxml <- xml_ns_strip(md_to_mdxml(text, sourcepos = TRUE))
   code_nodes <- xml_find_all(mdxml, ".//code | .//code_block")
   rcode_nodes <- keep(code_nodes, is_markdown_code_node)
-  if (length(rcode_nodes) == 0) return(esc_text)
+  if (length(rcode_nodes) == 0) return(text)
   rcode_pos <- parse_md_pos(map_chr(rcode_nodes, xml_attr, "sourcepos"))
   out <- eval_code_nodes(rcode_nodes)
-  str_set_all_pos(esc_text, rcode_pos, out, rcode_nodes)
+  str_set_all_pos(text, rcode_pos, out, rcode_nodes)
 }
 
 is_markdown_code_node <- function(x) {

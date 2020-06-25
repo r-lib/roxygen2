@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* roxygen2 now supports inline markdown code and code chunks inside
+  Rd tags. In particular in `\out{}` (#1115).
+
 # roxygen2 7.1.0
 
 ## New features

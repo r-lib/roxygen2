@@ -116,9 +116,11 @@ parse_link <- function(destination, contents, state) {
   ## `noclass` is fun with -class removed
   ## `file` is the file name of the linked topic.
 
+  thispkg <- roxy_meta_get("current_package") %||% ""
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
   pkg <- gsub("%", "\\\\%", pkg)
+  if (!is.na(pkg) && pkg == thispkg) pkg <- NA_character_
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   fun <- gsub("%", "\\\\%", fun)
   is_fun <- grepl("[(][)]$", fun)

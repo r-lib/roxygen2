@@ -436,3 +436,13 @@ test_that("markup in link text", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
+
+test_that("linking to self is unqualified", {
+  old <- roxy_meta_set("current_package", "myself")
+  on.exit(roxy_meta_set("current_package", old), add = TRUE)
+  rd <- markdown("foo [myself::fun()] and [myself::obj] bar")
+  expect_equal(
+    rd,
+    "foo \\code{\\link[=fun]{fun()}} and \\link{obj} bar"
+  )
+})

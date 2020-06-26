@@ -359,7 +359,7 @@ Some notes:
 * `usethis::use_package_doc()` will generate a basic template to get 
   you started.
 
-* Use `@references` point to published material about the package that
+* Use `@references` to point to published material about the package that
   users might find helpful.
 
 ## Sections
@@ -424,8 +424,8 @@ For `sum()`, this might look like:
 By default  `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can override the default title by providing a `rd_family_title` list in `man/roxygen/meta.R`:
 
 ```{r, eval = FALSE}
-rd_family_title <- list(
-  aggregations = "Aggregation functions"
+list(
+  rd_family_title = list(aggregations = "Aggregation functions")
 )
 ```
 
@@ -591,7 +591,7 @@ Note that templates are parsed a little differently to regular blocks, so you'll
 
 ## Including external `.Rmd`/`.md` files
 
-Starting from roxygen2 7.0.0, you can use `@includeRmd path/to/file.Rmdname` to include an external `.Rmd` or `.md` document into a manual page (the path is relative package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.
+Starting from roxygen2 7.0.0, you can use `@includeRmd path/to/file.Rmd` to include an external `.Rmd` or `.md` document into a manual page (the path is relative from the source package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.
 
 ### Sections
 
@@ -616,7 +616,7 @@ The included Rmd file can have roxygen markdown style links to other help topics
 
 ### Caching and figures
 
-`@includeRmd` tries to set up knits to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
+`@includeRmd` tries to set up knitr to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
 
 `@includeRmd` also sets the knitr figure path of the (`fig.path`) to the default figure path of the included Rmd. Overriding this default is unlikely to work.
 

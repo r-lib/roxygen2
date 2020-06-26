@@ -420,7 +420,7 @@ public = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></s
 <li><p>Package documentation will automatically include information parsed from the <code>DESCRIPTION</code>, including title, description, list of authors, and useful URLs.</p></li>
 <li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, use <code>@aliases {pkgname}-package</code> to override the default.</p></li>
 <li><p><code><a href="https://usethis.r-lib.org/reference/use_package_doc.html">usethis::use_package_doc()</a></code> will generate a basic template to get you started.</p></li>
-<li><p>Use <code>@references</code> point to published material about the package that users might find helpful.</p></li>
+<li><p>Use <code>@references</code> to point to published material about the package that users might find helpful.</p></li>
 </ul>
 </div>
 </div>
@@ -645,7 +645,7 @@ public = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></s
 <div id="caching-and-figures" class="section level3">
 <h3 class="hasAnchor">
 <a href="#caching-and-figures" class="anchor"></a>Caching and figures</h3>
-<p><code>@includeRmd</code> tries to set up knits to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. <code>foo/bar/file_cache/</code> for <code>foo/bar/file.Rmd</code>), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to <code>.gitignore</code> and <code>.Rbuildignore</code>.</p>
+<p><code>@includeRmd</code> tries to set up knitr to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. <code>foo/bar/file_cache/</code> for <code>foo/bar/file.Rmd</code>), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to <code>.gitignore</code> and <code>.Rbuildignore</code>.</p>
 <p><code>@includeRmd</code> also sets the knitr figure path of the (<code>fig.path</code>) to the default figure path of the included Rmd. Overriding this default is unlikely to work.</p>
 </div>
 <div id="sharing-text-between-vignettes-and-the-manual" class="section level3">

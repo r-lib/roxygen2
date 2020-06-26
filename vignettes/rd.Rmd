@@ -359,7 +359,7 @@ Some notes:
 * `usethis::use_package_doc()` will generate a basic template to get 
   you started.
 
-* Use `@references` point to published material about the package that
+* Use `@references` to point to published material about the package that
   users might find helpful.
 
 ## Sections
@@ -616,7 +616,7 @@ The included Rmd file can have roxygen markdown style links to other help topics
 
 ### Caching and figures
 
-`@includeRmd` tries to set up knits to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
+`@includeRmd` tries to set up knitr to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
 
 `@includeRmd` also sets the knitr figure path of the (`fig.path`) to the default figure path of the included Rmd. Overriding this default is unlikely to work.
 

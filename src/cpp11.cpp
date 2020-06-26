@@ -27,10 +27,10 @@ extern "C" SEXP _roxygen2_rdComplete(SEXP string, SEXP is_code) {
   END_CPP11
 }
 // leadingSpaces.cpp
-IntegerVector leadingSpaces(CharacterVector lines);
+cpp11::integers leadingSpaces(cpp11::strings lines);
 extern "C" SEXP _roxygen2_leadingSpaces(SEXP lines) {
   BEGIN_CPP11
-    return cpp11::as_sexp(leadingSpaces(cpp11::unmove(cpp11::as_cpp<CharacterVector>(lines))));
+    return cpp11::as_sexp(leadingSpaces(cpp11::unmove(cpp11::as_cpp<cpp11::strings>(lines))));
   END_CPP11
 }
 // parser2.cpp

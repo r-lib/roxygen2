@@ -1,5 +1,5 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/integers.hpp>
+#include <cpp11/strings.hpp>
 
 int leadingSpacesOne(std::string line) {
   int n = line.size();
@@ -13,13 +13,12 @@ int leadingSpacesOne(std::string line) {
 }
 
 [[cpp11::register]]
-IntegerVector leadingSpaces(CharacterVector lines) {
+cpp11::integers leadingSpaces(cpp11::strings lines) {
   int n = lines.size();
-  IntegerVector out(n);
+  cpp11::writable::integers out(n);
 
   for(int i = 0; i < n; ++i) {
-    String cur = lines[i];
-    out[i] = leadingSpacesOne(cur);
+    out[i] = leadingSpacesOne(lines[i]);
   }
   return out;
 }

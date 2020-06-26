@@ -12,7 +12,7 @@ int leadingSpacesOne(std::string line) {
   return n;
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 IntegerVector leadingSpaces(CharacterVector lines) {
   int n = lines.size();
   IntegerVector out(n);

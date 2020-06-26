@@ -54,7 +54,8 @@ Suggests:
     R.methodsS3,
     R.oo
 LinkingTo: 
-    Rcpp
+    Rcpp,
+    cpp11
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

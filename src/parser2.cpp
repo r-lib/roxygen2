@@ -100,9 +100,9 @@ std::string stripTrailingNewline(std::string x) {
   return x;
 }
 
-// [[Rcpp::export]]
-List tokenise_block(CharacterVector lines, std::string file = "",
-                    int offset = 0) {
+[[cpp11::register]]
+List tokenise_block(CharacterVector lines, std::string file,
+                    int offset) {
   std::vector<std::string> tags, vals;
   std::vector<int> rows;
 
@@ -158,7 +158,7 @@ List tokenise_block(CharacterVector lines, std::string file = "",
   return out;
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 CharacterVector find_includes(std::string path) {
   std::vector<std::string> includes;
 

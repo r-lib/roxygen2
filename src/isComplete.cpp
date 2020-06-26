@@ -1,5 +1,5 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/R.hpp>
+#include <string>
 
 // From http://developer.r-project.org/parseRd.pdf:  The characters \, %, {,
 // and } have special meaning in almost all parts of an Rd file. In code,

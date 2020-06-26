@@ -1,5 +1,6 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/strings.hpp>
+#include <vector>
+#include <string>
 
 std::vector<std::string> splitByWhitespace(std::string string) {
   std::vector<std::string> out;

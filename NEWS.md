@@ -1,4 +1,4 @@
-# roxygen2 (development version)
+# roxygen2 7.1.1
 
 * When processing cross package markdown links (e.g. `[pkg::fun()]`),
   roxygen2 now looks up the file it needs to link to, instead of linking to

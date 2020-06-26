@@ -1,3 +1,5 @@
+#include <cpp11/list.hpp>
+#include <cpp11/strings.hpp>
 #include <Rcpp.h>
 using namespace Rcpp;
 #include <fstream>
@@ -101,7 +103,7 @@ std::string stripTrailingNewline(std::string x) {
 }
 
 [[cpp11::register]]
-List tokenise_block(CharacterVector lines, std::string file,
+cpp11::list tokenise_block(cpp11::strings lines, std::string file,
                     int offset) {
   std::vector<std::string> tags, vals;
   std::vector<int> rows;
@@ -141,19 +143,24 @@ List tokenise_block(CharacterVector lines, std::string file,
   }
 
   // Convert to a list
-  int n = rows.size();
-  ListOf<List> out(n);
+  R_xlen_t n = rows.size();
+  cpp11::writable::list out(n);
 
-  for (int i = 0; i < n; ++i) {
-    out[i] = List::create(
-      _["file"] = file,
-      _["line"] = rows[i],
-      _["tag"] = tags[i],
-      // Rcpp::String() necessary to tag string as UTF-8
-      _["raw"] = Rcpp::String(stripTrailingNewline(vals[i])),
-      _["val"] = R_NilValue
-    );
-    out[i].attr("class") = Rcpp::CharacterVector::create("roxy_tag_" + tags[i], "roxy_tag");
+  using namespace cpp11::literals;
+
+  for (R_xlen_t i = 0; i < n; ++i) {
+    cpp11::writable::list x({
+        "file"_nm = file,
+        "line"_nm = rows[i],
+        "tag"_nm = tags[i],
+        // Rcpp::String() necessary to tag string as UTF-8
+        "raw"_nm = stripTrailingNewline(vals[i]),
+        "val"_nm = R_NilValue
+        });
+    std::string tag("roxy_tag_");
+    tag += tags[i];
+    x.attr("class") = cpp11::writable::strings({tag.c_str(), "roxy_tag"});
+    out[i] = x;
   }
   return out;
 }

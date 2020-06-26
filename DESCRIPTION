@@ -58,6 +58,7 @@ LinkingTo:
     cpp11
 VignetteBuilder: 
     knitr
+SystemRequirements: C++11
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
 RoxygenNote: 7.1.0

@@ -34,10 +34,10 @@ extern "C" SEXP _roxygen2_leadingSpaces(SEXP lines) {
   END_CPP11
 }
 // parser2.cpp
-List tokenise_block(CharacterVector lines, std::string file, int offset);
+cpp11::list tokenise_block(cpp11::strings lines, std::string file, int offset);
 extern "C" SEXP _roxygen2_tokenise_block(SEXP lines, SEXP file, SEXP offset) {
   BEGIN_CPP11
-    return cpp11::as_sexp(tokenise_block(cpp11::unmove(cpp11::as_cpp<CharacterVector>(lines)), cpp11::unmove(cpp11::as_cpp<std::string>(file)), cpp11::unmove(cpp11::as_cpp<int>(offset))));
+    return cpp11::as_sexp(tokenise_block(cpp11::unmove(cpp11::as_cpp<cpp11::strings>(lines)), cpp11::unmove(cpp11::as_cpp<std::string>(file)), cpp11::unmove(cpp11::as_cpp<int>(offset))));
   END_CPP11
 }
 // parser2.cpp

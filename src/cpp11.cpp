@@ -41,7 +41,7 @@ extern "C" SEXP _roxygen2_tokenise_block(SEXP lines, SEXP file, SEXP offset) {
   END_CPP11
 }
 // parser2.cpp
-CharacterVector find_includes(std::string path);
+cpp11::strings find_includes(std::string path);
 extern "C" SEXP _roxygen2_find_includes(SEXP path) {
   BEGIN_CPP11
     return cpp11::as_sexp(find_includes(cpp11::unmove(cpp11::as_cpp<std::string>(path))));

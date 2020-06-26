@@ -1,9 +1,10 @@
 #include <cpp11/list.hpp>
 #include <cpp11/strings.hpp>
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/protect.hpp>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <string>
 
 class RoxygenLine {
   std::string line_;
@@ -153,7 +154,6 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
         "file"_nm = file,
         "line"_nm = rows[i],
         "tag"_nm = tags[i],
-        // Rcpp::String() necessary to tag string as UTF-8
         "raw"_nm = stripTrailingNewline(vals[i]),
         "val"_nm = R_NilValue
         });
@@ -166,12 +166,12 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
 }
 
 [[cpp11::register]]
-CharacterVector find_includes(std::string path) {
+cpp11::strings find_includes(std::string path) {
   std::vector<std::string> includes;
 
   std::ifstream file(path.c_str());
   if (!file.good())
-    stop("Failed to open %s", path);
+    cpp11::stop("Failed to open %s", path.c_str());
 
   std::string rawline;
   while (std::getline(file, rawline)) {
@@ -199,5 +199,5 @@ CharacterVector find_includes(std::string path) {
     );
   }
 
-  return wrap(includes);
+  return cpp11::as_sexp(includes);
 }

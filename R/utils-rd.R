@@ -88,8 +88,18 @@ tweak_links <- function(x, package) {
           topic <- substr(opt, 2, nchar(opt))
 
           if (has_topic(topic, package)) {
-            attr(x, "Rd_option") <- structure(paste0(package, ":", topic), Rd_tag = "TEXT")
+            file <- find_topic_in_package(package, topic)
+            attr(x, "Rd_option") <- structure(paste0(package, ":", file), Rd_tag = "TEXT")
           }
+        } else if (grepl(":", opt)) {
+          # need to fix the link to point to a file
+          target <- str_split_fixed(opt, ":", n = 2)
+          file <- try_find_topic_in_package(
+            target[1],
+            target[2],
+            where = " in inherited text"
+          )
+          attr(x, "Rd_option") <- structure(paste0(target[1], ":", file), Rd_tag = "TEXT")
         }
       }
     } else if (length(x) > 0) {

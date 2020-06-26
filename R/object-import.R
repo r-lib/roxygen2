@@ -19,7 +19,7 @@ merge.rd_section_reexport <- function(x, y, ...) {
 format.rd_section_reexport <- function(x, ...) {
   pkgs <- split(x$value$fun, x$value$pkg)
   pkg_links <- map2(names(pkgs), pkgs, function(pkg, funs) {
-    funs <- sort(funs)
+    funs <- sort_c(funs)
     files <- map_chr(
       funs,
       try_find_topic_in_package,

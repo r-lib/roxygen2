@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* R6 methods and re-exported functions are always sorted in the C locale;
+  this ensures they're always sorted the same way in every environment (#1077).
+
 * When processing cross package markdown links (e.g. `[pkg::fun()]`),
   roxygen2 now looks up the file it needs to link to, instead of linking to
   the topic, to avoid "Non-file package-anchored links" `R CMD check` warnings.

@@ -1,5 +1,5 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/strings.hpp>
+#include <string>
 
 [[cpp11::register]]
 std::string escapeExamples(std::string x) {

@@ -1,4 +1,5 @@
 #include <cpp11/list.hpp>
+#include <cpp11/list_of.hpp>
 #include <cpp11/strings.hpp>
 #include <cpp11/protect.hpp>
 #include <fstream>
@@ -159,7 +160,7 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
         });
     std::string tag("roxy_tag_");
     tag += tags[i];
-    x.attr("class") = cpp11::writable::strings({tag.c_str(), "roxy_tag"});
+    x.attr("class") = {tag.c_str(), "roxy_tag"};
     out[i] = x;
   }
   return out;

@@ -472,8 +472,8 @@ public = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></s
 </pre></div>
 <p>By default <code>@family {family}</code>, will generate the see also text “Other {family}:”, so the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can override the default title by providing a <code>rd_family_title</code> list in <code>man/roxygen/meta.R</code>:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="kw">rd_family_title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
-  aggregations = <span class="st">"Aggregation functions"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  rd_family_title = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(aggregations = <span class="st">"Aggregation functions"</span>)
 )
 </pre></div>
 </div>

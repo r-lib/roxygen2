@@ -184,8 +184,8 @@
 <a href="#roxygen2-development-version" class="anchor"></a>roxygen2 (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>R6 methods and re-exported functions are always sorted in the C locale; this ensures they’re always sorted the same way in every environment (<a href='https://github.com/r-lib/roxygen2/issues/1077'>#1077</a>).</p></li>
 <li><p>When processing cross package markdown links (e.g. <code>[pkg::fun()]</code>), roxygen2 now looks up the file it needs to link to, instead of linking to the topic, to avoid “Non-file package-anchored links” <code>R CMD check</code> warnings.</p></li>
+<li><p>R6 methods and re-exported functions are always sorted in the C locale; this ensures they’re always sorted the same way in every environment (<a href='https://github.com/r-lib/roxygen2/issues/1077'>#1077</a>).</p></li>
 <li><p>roxygen2 now supports inline markdown code and code chunks inside Rd tags. In particular in <code>\out{}</code> (<a href='https://github.com/r-lib/roxygen2/issues/1115'>#1115</a>).</p></li>
 </ul>
 </div>

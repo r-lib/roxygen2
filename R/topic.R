@@ -148,6 +148,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' @param section [rd_section] object to add.
 
   add_section = function(section, overwrite = FALSE) {
+    if (is.null(section)) return()
     type <- section$type
     if (self$has_section(type) && !overwrite) {
       section <- merge(self$get_section(type), section)

@@ -359,7 +359,7 @@ Some notes:
 * `usethis::use_package_doc()` will generate a basic template to get 
   you started.
 
-* Use `@references` point to published material about the package that
+* Use `@references` to point to published material about the package that
   users might find helpful.
 
 ## Sections
@@ -371,22 +371,30 @@ You can add arbitrary sections with the `@section` tag. This is a useful way of 
 #' Do not operate heavy machinery within 8 hours of using this function.
 ```
 
-To add a subsection, you must use the Rd `\subsection{}` command, as follows:
+You can also create sections using the markdown syntax for headers. For example, the previously-defined section can be created with markdown headers like this:
 
 ```{r}
-#' @section Warning:
+#' @details # Warning
+#' Do not operate heavy machinery within 8 hours of using this function.
+```
+
+Note that '`#`' may only appear after the `@description` and `@details` tags. Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`.
+
+To add a subsection, use level two or greater headings:
+
+```{r}
+#' @details # Warning
 #' You must not call this function unless ...
 #'
-#' \subsection{Exceptions}{
-#'    Apart from the following special cases...
-#' }
+#' ## Exceptions
+#' Apart from the following special cases...
 ```
 
 If you find yourself adding a lot of sections, you might consider using a vignette instead.
 
 ## Do repeat yourself
 
-There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides three ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
+There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
 * Cross-link documentation files with `@seealso` and `@family`.
 
@@ -394,6 +402,8 @@ There is a tension between the DRY (do not repeat yourself) principle of program
   `@inherit`, `@inheritParams`, and `@inheritSection`.
 
 * Document multiple functions in the same topic with `@describeIn` or `@rdname`.
+
+* Run arbitrary R code with the markdown markup for inline code, see section 'Dynamic R code' in `vignette("rd-formatting")`.
 
 * Run arbitrary R code with `@eval`.
 
@@ -414,8 +424,8 @@ For `sum()`, this might look like:
 By default  `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can override the default title by providing a `rd_family_title` list in `man/roxygen/meta.R`:
 
 ```{r, eval = FALSE}
-rd_family_title <- list(
-  aggregations = "Aggregation functions"
+list(
+  rd_family_title = list(aggregations = "Aggregation functions")
 )
 ```
 
@@ -512,7 +522,7 @@ times <- function(x, y) x * y
 
 ### Evaluating arbitrary code
 
-A new and powerful technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).
+Another technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).
 
 For example, this code + roxygen block:
 
@@ -543,6 +553,8 @@ Is equivalent to:
 foo <- function(x, y) {
 }
 ```
+
+Note that `@eval` cannot be embedded into another roxygen tag. If you want to dynamically generate part of a roxygen tag, see section 'Dynamic R code' in `vignette("rd-formatting")`.
 
 A related function is `@evalRd`. It works in the same way as `@eval` (i.e. it's evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated `.Rd` file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.
 
@@ -579,7 +591,7 @@ Note that templates are parsed a little differently to regular blocks, so you'll
 
 ## Including external `.Rmd`/`.md` files
 
-Starting from roxygen2 7.0.0, you can use `@includeRmd path/to/file.Rmdname` to include an external `.Rmd` or `.md` document into a manual page (the path is relative package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.
+Starting from roxygen2 7.0.0, you can use `@includeRmd path/to/file.Rmd` to include an external `.Rmd` or `.md` document into a manual page (the path is relative from the source package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.
 
 ### Sections
 
@@ -604,7 +616,7 @@ The included Rmd file can have roxygen markdown style links to other help topics
 
 ### Caching and figures
 
-`@includeRmd` tries to set up knits to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
+`@includeRmd` tries to set up knitr to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
 
 `@includeRmd` also sets the knitr figure path of the (`fig.path`) to the default figure path of the included Rmd. Overriding this default is unlikely to work.
 

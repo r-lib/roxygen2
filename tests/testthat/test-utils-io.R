@@ -1,4 +1,4 @@
-test_that("has_windows_le works", {
+test_that("detect_line_ending works", {
   # write files with various newlines
   win_nl <- tempfile()
   win_nl_con <- file(win_nl, "wb")
@@ -21,10 +21,10 @@ test_that("has_windows_le works", {
   base::writeLines(c("foo", "bar"), unix_nl_con, sep = "\n")
   close(unix_nl_con)
 
-  expect_true(has_windows_le(win_nl))
-  expect_false(has_windows_le(unix_nl))
-  expect_false(has_windows_le(non_existent_file))
-  expect_false(has_windows_le(empty_file))
+  expect_equal(detect_line_ending(win_nl), "\r\n")
+  expect_equal(detect_line_ending(unix_nl), "\n")
+  expect_equal(detect_line_ending(non_existent_file), "\n")
+  expect_equal(detect_line_ending(empty_file), "\n")
 })
 
 test_that("write_lines writes windows newlines for files with windows newlines, and unix newlines otherwise", {

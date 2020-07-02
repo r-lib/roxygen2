@@ -37,7 +37,7 @@ Use the following guidelines to decide what to export:
   generics will not find the correct method.
   
     If you are providing a method for a generic defined in another package,
-    you must also import that generate.
+    you must also import that generic.
 
 * S4 classes: if you want others to be able to extend your class, `@export` it.
   If you want others to create instances of your class, but not extend it,
@@ -79,7 +79,7 @@ Generally, roxygen2 can generate the correct namespace directive when `@export`i
 * `@exportMethod foo` generates `exportMethods(foo)`
 * `@exportPattern foo` generates `exportPattern(foo)`
 
-For even more specialised cases you can use `@rawNamespace code` which inserts `code` literally into the `NAMESPACE`. If you need to automate this, `@evalNamespace foo()` will evaluate the `foo()` in the package environment and insert the results into `NAMESPACE`.
+For even more specialised cases you can use `@rawNamespace code` which inserts `code` literally into the `NAMESPACE`. If you need to automate this, `@evalNamespace foo()` will evaluate the `foo()` in the package environment and insert the results into `NAMESPACE`. Because `evalNamespace()` is run in the package environment, it can only generate exports, not imports.
 
 ## Imports
 

@@ -104,6 +104,8 @@ Inline code is supported via backticks.
 #'   qualified with the ns prefix, i.e. if the element `bar` is defined ...
 ```
 
+You can also use this syntax to run custom R code and insert its output into the manual page. See section 'Dynamic R code' below.
+
 For blocks of code, put your code between triple backticks:
 
 ```r
@@ -121,6 +123,8 @@ For blocks of code, put your code between triple backticks:
 ```
 
 Note that this is not needed in `@examples`, since its contents are formatted as R code, anyway.
+
+You can use similar syntax to include a block of R code and/or its output in the manual page. See section 'Dynamic R code' below.
 
 ## Lists
 
@@ -262,6 +266,121 @@ Markdown syntax for inline images works. The image files must be in the `man/fig
 #' Here is an example plot:
 #' ![](example-plot.jpg "Example Plot Title")
 ```
+
+# Dynamic R code
+
+Similarly to the knitr package, you can use the markdown inline code markup or markdown code blocks to evaluate R code and insert its output into the manual page.
+
+## Inline code
+
+To do this, prefix the code with `r `, i.e. the lowercase letter 'r' and a space character.
+Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value.
+After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.
+
+For example, the following will insert the date and the R version of the roxygen run.
+
+```r
+#' Roxygen created this manual page on `r "\x60r Sys.Date()\x60"` using R version
+#' `r "\x60r getRversion()\x60"`.
+```
+
+The value of the R expression is converted to a character string, with `paste(collapse = "\n")`.
+So you don't need explicitly convert to a character value, numeric values or any R object with an `as.character()` S3 method is fine.
+Also, you can insert multiple lines by returning a character vector.
+If you want to run R code without inserting any output, return an empty string or `NULL`.
+
+The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to `.Rd` conversion, so you can create markdown markup dynamically:
+
+```r
+#' The `iris` data set has `r "\x60r ncol(iris)\x60"` columns:
+#' `r "\x60r paste0(\"\x60\x60\", colnames(iris), \"\x60\x60\", collapse = \", \")\x60"`.
+```
+
+Note that you need to escape backtick characters, if they appear in the R expression, by doubling them, like above.
+The result after the dynamic R code evaluation will be:
+
+```
+The `iris` data set has 5 columns:
+`Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, `Species`.
+```
+
+And the final result in the `.Rd` file will look as:
+
+```
+The \code{iris} data set has 5 columns:
+\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.
+```
+
+The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting.
+This means that you can call (internal or exported) functions of the package.
+`packageName()` will also report the name of the package:
+
+```r
+#' To insert the name of the current package: `r "\x60r packageName()\x60"`.
+```
+
+A new evaluation environment is created for each roxygen _block_.
+So the output of this code:
+
+```r
+#' @title ... `r "\x60r myvar <- \"foo\"; NULL\x60"` `r "\x60r myvar\x60"`
+#'
+#' @description ... `r "\x60r myvar\x60"`
+```
+
+will be:
+
+```r
+#' @title ... foo
+#'
+#' @description ... foo
+```
+
+Currently the whole code expression must be on the same line, multi-line expressions are not supported.
+
+## Code blocks
+
+Markdown code blocks can be dynamic as well, if you use `r "\x60\x60\x60{r}"` to start them, just like in knitr documents.
+
+```r
+#' ```{r}
+#' # This block of code will be evaluated
+#' summary(iris)
+#' ```
+```
+
+Within a roxygen block, code blocks and inline code use the same evaluation environment, so variables created in one of them can be used in others.
+
+Code blocks support knitr chunk options, e.g. to keep the output of several expressions together, you can specify `results= "hold"`:
+
+```r
+#' ```{r results = "hold"}
+#' names(mtcars)
+#' nrow(mtcars)
+#' ```
+```
+
+Plots will create `.png` files in the `man/figures` directory. The file names are created from the chunk names:
+
+```r
+#' ```{r iris-pairs-plot}
+#' pairs(iris[1:4], main = "Anderson's Iris Data -- 3 species",
+#'   pch = 21, bg = c("red", "green3", "blue")[unclass(iris$Species)])
+#' ```
+```
+
+Note that the generated `.png` files will be added to the package, and they can considerably increase the size of the package.
+
+Note that code block support is currently experimental, and somewhat limited.
+Some of the known limitations:
+
+  * Because the code blocks are evaluated individually, they cannot refer to each other.
+  * Some knitr chunk options are reset at the start of every code block, so if you want to change these, you'll have to specify them for every chunk.
+    These are currently `error`, `fig.path`, `fig.process`.
+  * Some knitr options might not create meaningful output.
+  * The markdown code runs every time you call `roxygenize()` (or `devtools::document()`) to generated the Rd files.
+    This potentially makes `roxygenize()` (much) slower.
+    You can turn on knitr caching as usual, but make sure to omit the cache from the package.
 
 # Roxygen and Rd tags *not* parsed as markdown
 

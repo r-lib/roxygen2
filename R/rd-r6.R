@@ -280,6 +280,7 @@ r6_method_begin <- function(block, method) {
   c(
     "\\if{html}{\\out{<hr>}}",
     paste0("\\if{html}{\\out{<a id=\"method-", nm, "\"></a>}}"),
+    paste0("\\if{latex}{\\out{\\hypertarget{method-", nm, "}{}}}"),
     paste0("\\subsection{Method \\code{", nm, "()}}{")
   )
 }

@@ -19,7 +19,7 @@ roxy_tag_rd.roxy_tag_format <- function(x, base_path, env) {
 }
 #' @export
 format.rd_section_format <- function(x, ...) {
-  format_first(x, ...)
+  format_collapse(x, ...)
 }
 
 #' @export
@@ -123,7 +123,14 @@ format.rd_section_details <- function(x, ...) {
 rd_section_markdown <- function(name, value) {
   # Any additional components are sections
   if (length(value) > 1) {
-    name <- c(name, rep("rawRd", length(value) - 1))
+    titles <- names(value)
+    value <- unname(value)
+
+    name <- c(name, rep("section", length(value) - 1))
+    value <- c(
+      list(value[[1]]),
+      map2(titles[-1], value[-1], ~ list(title = .x, content = .y))
+    )
 
     if (value[[1]] == "") {
       name <- name[-1]

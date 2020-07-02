@@ -52,7 +52,8 @@ std::string wrapUsage(std::string string, int width = 80, int indent = 2) {
   for (int i = 0; i < n; ++i) {
     int piece_width = pieces[i].size();
 
-    if (piece_width + cur_width < width) {
+    // Need to include space for a space
+    if (piece_width + cur_width + 1 < width) {
       cur_width += piece_width;
       if (i != 0) {
         out += " ";
@@ -60,7 +61,7 @@ std::string wrapUsage(std::string string, int width = 80, int indent = 2) {
       }
     } else {
       cur_width = piece_width + indent;
-      out += "\n" + std::string(indent, ' ') ;
+      out += "\n" + std::string(indent, ' ');
     }
     out += pieces[i];
   }

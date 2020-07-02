@@ -11,4 +11,4 @@ with_collate <- function(locale, code) {
   force(code)
 }
 
-sort_c <- function(x) with_collate("C", sort(x))
+sort_c <- function(x, ...) with_collate("C", sort(x, ...))

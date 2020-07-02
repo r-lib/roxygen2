@@ -186,7 +186,7 @@ inherit_dot_params <- function(topic, topics, env) {
   # Build the Rd
   # (1) Link to function(s) that was inherited from
   src <- inheritors$source
-  dest <- ifelse(has_colons(src), gsub("::", ":", src), paste0("=", src))
+  dest <- map_chr(src, resolve_qualified_link)
   from <- paste0("\\code{\\link[", dest, "]{", src, "}}", collapse = ", ")
 
   # (2) Show each inherited argument

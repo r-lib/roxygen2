@@ -1,5 +1,74 @@
 # roxygen2 (development version)
 
+# roxygen2 7.1.1
+
+* When processing cross package markdown links (e.g. `[pkg::fun()]`),
+  roxygen2 now looks up the file it needs to link to, instead of linking to
+  the topic, to avoid "Non-file package-anchored links" `R CMD check` warnings.
+
+* R6 methods and re-exported functions are always sorted in the C locale;
+  this ensures they're always sorted the same way in every environment (#1077).
+
+* roxygen2 now supports inline markdown code and code chunks inside
+  Rd tags. In particular in `\out{}` (#1115).
+
+# roxygen2 7.1.0
+
+## New features
+
+* roxygen2 now supports inline markdown code and also code chunks,
+  using the same notation as the knitr package. For example:
+
+    ```R
+    #' This manual was generated at: `r Sys.time()`.
+    #' ...
+    #' `mtcars` is a data frame with `r ncol(mtcars)` columns, here
+    #' is a summary of them:
+    #'
+    #' ```{r}
+    #' summary(mtcars)
+    #' ```
+    ```
+
+  See `vignette("rd-formatting")` for details.
+
+* roxygen2 now keeps using Windows (CR LF) line endings for files that
+  already have CR LF line endings, and uses LF for new files (#989).
+
+## Minor improvements and bug fixes 
+
+* Auto-generated package documentation can now handle author ORCID comments
+  containing full url (#1040).
+
+* Hyperlinks to R6 methods are also added in the PDF manual (#1006).
+
+* Empty annotations (alternate text) for figures added via markdown are now
+  omitted. This caused issues when generating pkgdown web sites (#1051).
+
+* Roxygen metadata can now have a `packages` element, giving a character vector 
+  of package names to load. This makes it easier to use extension package that 
+  provide new tags for existing roclets (#1013). See `?load_options` for
+  more details.
+  
+    ```yaml
+    Roxygen: list(markdown = TRUE, packages = "roxygenlabs")
+    ```
+
+* `@evalNamespace()` works again (#1022).
+
+* `@description NULL` and `@details NULL` no longer fail; instead, these tags 
+  are ignored, except for `@description NULL` in package level documentation, 
+  where it can be used to suppress the auto-generated Description section 
+  (#1008).
+
+* Multiple `@format` tags are now combined (#1015).
+
+* The warning for `@section` titles spanning multiple lines now includes a 
+  hint that you're missing a colon (@maelle, #994).
+
+* Can now document objects created with `delayedAssign()` by forcing
+  evaluation at documentation time (#1041)
+
 # roxygen2 7.0.2
 
 * `\example{}` escaping has been improved (again!) so that special escapes 
@@ -193,7 +262,7 @@ You can override the default either by calling (e.g.) `roxygenise(load_code = "s
   released 2014-05-02, over 5 years ago.
 
 * Using the old `wrap` option will now trigger a warning, as hasn't worked
-  for quite some time. Supress the error by deleting the option from your
+  for quite some time. Suppress the error by deleting the option from your
   `DESCRIPTION`.
 
 ### Extending roxygen2

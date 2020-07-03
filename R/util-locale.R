@@ -12,3 +12,5 @@ with_collate <- function(locale, code) {
 }
 
 sort_c <- function(x, ...) with_collate("C", sort(x, ...))
+
+ls_c <- function(...) with_collate("C", ls(...))

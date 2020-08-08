@@ -92,7 +92,7 @@ needs_doc <- function(block) {
   }
 
   block_has_tags(block, c(
-    "description", "param", "return", "title", "example",
+    "description", "param", "return", "title", "example", "s4methods",
     "examples", "name", "rdname", "details", "inherit", "describeIn")
   )
 }
@@ -107,6 +107,333 @@ block_to_rd <- function(block, base_path, env) {
 
 block_to_rd.default <- function(block, ...) {
   stop("Internal roxygen error, unknown block type")
+}
+
+#helper
+pkg_super_class_names <- function(class,env){
+    # fixme:
+    # env$documented_s4_class_names is set in roxygenize
+    # which is a bit awkward,
+    pkg_class_names<-env$documented_s4_class_names 
+    
+    super_class_names<- getAllSuperClasses(class)
+    names <- intersect(super_class_names,pkg_class_names)
+    names
+}
+
+
+
+#' @export
+
+block_to_rd.roxy_block_s4class<- function(block, base_path, env) {
+  # Must start by processing templates
+  block <- process_templates(block, base_path)
+  if (!needs_doc(block)) {
+    return()
+  }
+  name <- block_get_tag(block, "name")$val %||% block$object$topic
+  if (is.null(name)) {
+    roxy_tag_warning(block$tags[[1]], "Missing name")
+    return()
+  }
+
+  if (block_has_tags(block, "s4methods")){
+    # replace the empty tag by one that has the
+    # methods as value
+    s4cd<-block$object$value
+    className<-as.character(attr(s4cd,'className'))
+    #pkgName<-attr(attr(s4cd,'className'),'package')
+    #pkg_generics_names<-getGenerics(paste0('package:',pkgName))
+    pkg_generics_names<-getGenerics(where=env)
+    meths=unlist(lapply(
+      pkg_generics_names,
+      function(genName){
+        gen<-methods::getGeneric(genName,where=env)
+        methods::findMethods(gen,classes=c(className))
+      }
+    ))
+    aliases<-lapply(
+      meths,
+      function(m){
+        methodDocName(m)
+      }
+    )
+    # create a nested list
+    present_class_section<- list(class=className,methods=aliases)
+
+
+    super_class_sections<-lapply(
+        pkg_super_class_names(block$object$value,env),
+        function(className){
+          meths<-unlist(
+            lapply(
+              pkg_generics_names,
+              function(genName){
+                gen<-methods::getGeneric(genName,where=env)
+                methods::findMethods(gen,classes=c(className))
+              }
+            )
+          )
+          aliases<-lapply(
+            meths,
+            function(m){
+              methodDocName(m)
+            }
+          )
+          list(class=className,methods=aliases)
+        }
+    )
+    new_tag<-roxy_tag(
+        tag='s4methods',
+        raw="",
+        val= list(
+          type                              ='class',
+          direct_record                     =present_class_section,
+          super_class_record_list           =super_class_sections
+        )
+    )
+    #new_tag<-class_methods_tag(block$object$value,env)
+    block$tags<-append(
+      purrr::discard(
+        block$tags,
+        function(tag){tag$tag=="s4methods"}
+      ),
+      list(new_tag)
+    )
+  }
+  if (block_has_tags(block, "s4subclasses")){
+    # replace the empty tag by one that has the
+    # subclasses as value
+    block$tags<-append(
+      purrr::discard(
+        block$tags,
+        function(tag){tag$tag=="s4subclasses"}
+      ),
+      list(
+        roxy_tag(
+          tag='s4subclasses',
+          raw="",
+          val=names(attr(block$object$value,'subclasses'))
+        )
+      )
+    )
+  }
+  if (block_has_tags(block, "s4superclasses")){
+    #super_classes<- attr(block$object$value,'contains')
+    #pkg_super_classes<-purrr::keep(
+    #  super_classes,
+    #  function(ce){ce@package==env$.packageName}
+    #)
+    # replace the empty tag by one that has the
+    # subclasses as value
+    block$tags<-append(
+      
+      purrr::discard(
+        block$tags,
+        function(tag){tag$tag=="s4superclasses"}
+      ),
+
+      list(
+        roxy_tag(
+          tag='s4superclasses',
+          raw="",
+          #val=names(pkg_super_classes)
+          val= pkg_super_class_names(block$object$value,env)
+        )
+      )
+      
+    )
+  }
+  
+  rd <- RoxyTopic$new()
+  topic_add_name_aliases(rd, block, name)
+  for (tag in block$tags) {
+    rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
+  }
+
+  if (rd$has_section("description") && rd$has_section("reexport")) {
+    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
+    return()
+  }
+  describe_rdname <- topic_add_describe_in(rd, block, env)
+
+  filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)
+  rd$filename <- paste0(filename, ".Rd")
+  rd
+}
+
+#' @export
+
+block_to_rd.roxy_block_s4method <- function(block, base_path, env) {
+  # Must start by processing templates
+  block <- process_templates(block, base_path)
+  if (!needs_doc(block)) {
+    return()
+  }
+  name <- block_get_tag(block, "name")$val %||% block$object$topic
+  if (is.null(name)) {
+    roxy_tag_warning(block$tags[[1]], "Missing name")
+    return()
+  }
+  
+  if (block_has_tags(block, "auto")){
+    str<-block$object$topic
+    tt<- roxy_tag(
+        tag='title',
+        raw=str,
+        val=str
+      )
+    block$tags<-append(block$tags,list(tt))
+  }
+  # create empty tags for undocumented params
+
+  function_args<-names(formals(block$object$value))
+  md <- block$object$value
+  sig <- md@defined
+  genName <- attr(md,'generic')[[1]]
+
+  present_param_tags<-block_get_tags(block,'param')
+  other_tags<-setdiff(block$tags,present_param_tags)
+  documented_args<-unlist( lapply(present_param_tags,function(tag){tag$val$name}))
+  
+  extra_tags <- extra_param_tags(block$object, param_names=setdiff(function_args,documented_args))
+  
+  # now add the class information to the description of all param tags 
+  updated_param_tags <- lapply(
+    append(present_param_tags,extra_tags),
+    function(tag){
+      v<-tag$val
+      if (v$name %in% names(sig) && sig[[v$name]] !='ANY'){
+        d <- paste("object of class:", "\\code{",sig[[v$name]],"}",', ' ,v$description,sep='')
+        tag <- roxy_tag(
+          tag='param',
+          raw=paste(v$name,': ',d,sep=''),
+          val=list("name"=v$name,description=d)
+        )
+      }
+      tag
+    }
+  )
+  block$tags <- append(other_tags,updated_param_tags)
+  
+  rd <- RoxyTopic$new()
+  topic_add_name_aliases(rd, block, name)
+  for (tag in block$tags) {
+    rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
+  }
+
+  if (rd$has_section("description") && rd$has_section("reexport")) {
+    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
+    return()
+  }
+  
+
+  describe_rdname <- topic_add_describe_in(rd, block, env)
+
+  filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)
+  rd$filename <- paste0(filename, ".Rd")
+  rd
+}
+
+methodDocName=function (value){
+    paste0(value@generic, ",", paste0(value@defined, collapse = ","), "-method")
+}
+
+
+
+
+#' @export
+#'
+block_to_rd.roxy_block_s4generic<- function(block, base_path, env) {
+  # Must start by processing templates
+  block <- process_templates(block, base_path)
+
+  if (!needs_doc(block)) {
+    return()
+  }
+
+  name <- block_get_tag(block, "name")$val %||% block$object$topic
+  if (is.null(name)) {
+    roxy_tag_warning(block$tags[[1]], "Missing name")
+    return()
+  }
+  if (block_has_tags(block, "auto")){
+    # create a title tag
+    str<-block$object$topic
+    tt<- roxy_tag(
+        tag='title',
+        raw=str,
+        val=str
+      )
+    # create an empty s4method tag
+    s4mt<- roxy_tag(
+        tag='s4methods',
+        raw="",
+        val="" 
+      )
+    block$tags<-append(block$tags,list(tt,s4mt))
+  }  
+  if (block_has_tags(block, "s4methods")){
+    # replace the empty tag by one that has the
+    # methods as value
+    generic<-block$object$value
+    genName<-as.character(attr(generic,'generic'))
+    meths<-methods::findMethods(generic,where=env)
+    aliases<-lapply(
+      meths,
+      function(m){
+        methodDocName(m)
+      }
+    )
+    new_tag<-roxy_tag(
+      tag='s4methods',
+      raw="",
+      val= list(type='generic',genName=genName,methods=aliases)
+    )
+      block$tags<-append(
+        purrr::discard(
+          block$tags,
+          function(tag){tag$tag=="s4methods"}
+        ),
+        list(new_tag)
+      )
+    }
+
+  rd <- RoxyTopic$new()
+  topic_add_name_aliases(rd, block, name)
+  
+  param_tags <- block_get_tags(block,'param')
+  documented_args<-unlist(
+    lapply(
+      block_get_tags(block,'param')
+      ,function(tag){tag$val$name}
+    )
+  )
+  function_args<-names(formals(block$object$value))
+  undocumented_args <- setdiff(function_args,documented_args)
+  extra_tags <- lapply(
+    undocumented_args
+    ,function(arg){
+      roxy_tag(
+        tag='param'
+        ,raw=paste(arg,': see method arguments')
+        ,val=list("name"=arg,description="see method arguments")
+      )
+    }
+  )
+  block$tags<-append(block$tags,extra_tags)
+  for (tag in block$tags) {
+    rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
+  }
+
+  if (rd$has_section("description") && rd$has_section("reexport")) {
+    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
+    return()
+  }
+  describe_rdname <- topic_add_describe_in(rd, block, env)
+  filename <- describe_rdname %||% block_get_tag(block, "rdname")$val %||% nice_name(name)
+  rd$filename <- paste0(filename, ".Rd")
+  rd
 }
 
 #' @export

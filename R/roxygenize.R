@@ -76,6 +76,47 @@ roxygenize <- function(package.dir = ".",
   )
 
   blocks <- lapply(blocks, block_set_env, env = env)
+  # fixme: mm 08/06/2020
+  # We create a list of all the S4-classes from the blocks and very manually appending it to
+  # the env, which introduces duplication in the form of a 'secret property' whose
+  # name has to be known at the receiving end.
+  # Ideally this would
+  # not be necessary because we could inspect the env where we need it with
+  # s4_class_names <- methods::getClasses(where=env) 
+  # Unfortunately s4 <- s4_class_names would contain too many
+  # classes ,e.g. superclasse we can not document e.g.:atomic_vector,numLike,number Mnumeric 
+  # if our classes inherited from them and 
+  # env had been produced by pkglaod::load_all 
+  # (even if the export_all flag is set to FALSE)
+  # or even if we use a namespace env as returned by loadNamespace.
+  # Furthermore the results of getNamespaceExports(ns_env) differ depending
+  # on if ns_env had been the result of:
+  # 1.) ns_env <- loadNamespace(pkg_name)  (Assuming pkg_name=pgkload::pkg_name(base_path)
+  # 2.) ns_env <-  pkgload::pkg_ns(base_path)
+  #
+  # In case of our package TEE/SoilR-exp 
+  # s4_class_names <- intersect(getNamespaceExports(ns_env),getClasses(where=ns_env))
+  # results in 16 Classes for approach 1.) as opposed to 49 for approach 2)
+  # 
+  # At least the 49 classes are consistent with the result from the blocks, so we 
+  # could remove this code
+  #
+  # It is however also important that the classes are documented.
+  # otherwise the links will fail.
+
+  s4_class_names = sapply(
+    purrr::keep(
+      blocks,
+      .p=function(block){
+          attr(block,"class")[1] == 'roxy_block_s4class'
+      }
+    ),
+    function(block){
+      attr(block$object$value,'className')[1]
+    }
+  )
+  env$documented_s4_class_names=s4_class_names
+
 
   results <- lapply(roclets, roclet_process,
     blocks = blocks,

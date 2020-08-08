@@ -58,6 +58,23 @@ nice_name <- function(x) {
   x <- str_replace_all(x, "-+", "-")
   x <- str_replace_all(x, "^-|-$", "")
   x <- str_replace_all(x, "^\\.", "dot-")
+  permitted_length<-72
+  if (stringr::str_length(x)>permitted_length){
+    # If the filename for the *.Rd  file would get too long
+    # to be accepted by cran due to limitations 
+    # of the  'tar ' program ( which happens for methods with
+    # long signatures )
+    # we compute a hash which is shorter but 
+    # also unique (at least with with very high probality)
+    # and then construct a new name that starts with 
+    # the first letters of the original name but 
+    # uses the hash for the rest.
+    # This way we keep as much of the descriptive part
+    # of the filename as possible (in most cases everything).
+    x<-paste0(
+      substring(x,1,(permitted_length-8)), #the first characters
+      digest::digest(as.character(x),algo='crc32')) # the last 8
+  }
   x
 }
 
@@ -176,3 +193,70 @@ auto_quote <- function(x) {
 
 is_syntactic <- function(x) make.names(x) == x
 has_quotes <- function(x) str_detect(x, "^(`|'|\").*\\1$")
+
+
+#helper
+extra_param_tags<- function(object, names,...) {
+  UseMethod("extra_param_tags")
+}
+
+extra_param_tags.s4method<-function(
+  object,
+  param_names=names(formals(object$value)),
+  class_info=FALSE  
+){
+  sig<-object$value@defined
+  lapply(
+    param_names,
+    function(name,object){
+      d<-'no manual documentation'
+      if (class_info){ 
+        # actually this flag should not be needed at all if we allow  block_to_rd.roxy_block_s4method 
+        # to add the class information to all param tags
+        if (name %in% names(sig)){
+          cl<-sig[[name]]
+          if (cl!='ANY'){
+            d <- paste0(
+              "object of class:",
+              "\\code{",
+              sig[[name]],
+              "}",
+              ', ',
+              d
+            )
+          }
+        }
+      }
+      roxy_tag(
+        tag='param',
+        raw=paste(name,d),
+        val=list("name"=name,description=d)
+      )
+    }
+  )
+}
+extra_param_tags.s4generic<-function(object,param_names=names(formals(object$value))){
+  lapply(
+    param_names,
+    function(name) {
+      d<-'no manual documentation, see method documentation'
+      roxy_tag(
+        tag='param',
+        raw=paste(name,d),
+        val=list("name"=name,description=d)
+      )
+    }
+  )
+}
+
+# helper
+param_tag_to_block_lines<-function(tag){
+  value<-tag$val
+  name<-value$name
+  d   <-value$description
+  line<-comment_tag(
+    tag='@param',
+    value=paste(name,d)
+  )
+  line
+}

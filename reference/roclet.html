@@ -187,17 +187,17 @@ that wraps roclet, and then implement the methods described below." />
 that wraps <code>roclet</code>, and then implement the methods described below.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet</a></span>(<span class='kw'>subclass</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>roclet</span><span class='op'>(</span><span class='va'>subclass</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_preprocess</a></span>(<span class='kw'>x</span>, <span class='kw'>blocks</span>, <span class='kw'>base_path</span>)
+<span class='fu'>roclet_preprocess</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>blocks</span>, <span class='va'>base_path</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_process</a></span>(<span class='kw'>x</span>, <span class='kw'>blocks</span>, <span class='kw'>env</span>, <span class='kw'>base_path</span>)
+<span class='fu'>roclet_process</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>blocks</span>, <span class='va'>env</span>, <span class='va'>base_path</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_output</a></span>(<span class='kw'>x</span>, <span class='kw'>results</span>, <span class='kw'>base_path</span>, <span class='kw'>...</span>)
+<span class='fu'>roclet_output</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>results</span>, <span class='va'>base_path</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_clean</a></span>(<span class='kw'>x</span>, <span class='kw'>base_path</span>)
+<span class='fu'>roclet_clean</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>base_path</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_tags</a></span>(<span class='kw'>x</span>)</pre>
+<span class='fu'>roclet_tags</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,7 +208,7 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
     </tr>
     <tr>
       <th>blocks</th>
-      <td><p>A list of <a href='https://roxygen2.r-lib.org/reference/roxy_block.html'>roxy_block</a> objects.</p></td>
+      <td><p>A list of <a href='roxy_block.html'>roxy_block</a> objects.</p></td>
     </tr>
     <tr>
       <th>base_path</th>
@@ -220,7 +220,7 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
     </tr>
     <tr>
       <th>results</th>
-      <td><p>Value returned from your <code><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_process()</a></code> method.</p></td>
+      <td><p>Value returned from your <code>roclet_process()</code> method.</p></td>
     </tr>
     </table>
 
@@ -229,21 +229,21 @@ that wraps <code>roclet</code>, and then implement the methods described below.<
     
 
 <ul>
-<li><p><code><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_preprocess()</a></code> is called after blocks have been parsed but before
+<li><p><code>roclet_preprocess()</code> is called after blocks have been parsed but before
 code has been evaluated. This should only be needed if your roclet affects
 how code will evaluated. Should return a roclet.</p></li>
-<li><p><code><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_process()</a></code> called after blocks have been evaluated; i.e. the
+<li><p><code>roclet_process()</code> called after blocks have been evaluated; i.e. the
 <code>@eval</code> tag has been processed, and the object associated with each block
 has been determined.</p></li>
-<li><p><code><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_output()</a></code> is given the output from <code><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_process()</a></code> and should
+<li><p><code>roclet_output()</code> is given the output from <code>roclet_process()</code> and should
 produce files on disk.</p></li>
-<li><p><code><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_clean()</a></code> called when <code><a href='https://roxygen2.r-lib.org/reference/roxygenize.html'>roxygenise(clean = TRUE)</a></code>. Should remove
+<li><p><code>roclet_clean()</code> called when <code><a href='roxygenize.html'>roxygenise(clean = TRUE)</a></code>. Should remove
 any files created by the roclet.</p></li>
 </ul>
-<h3>Deprecated methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Deprecated methods</h3>
 
 
-<p><code><a href='https://roxygen2.r-lib.org/reference/roclet.html'>roclet_tags()</a></code> is no longer used; instead provide a <code><a href='https://roxygen2.r-lib.org/reference/roxy_tag.html'>roxy_tag_parse()</a></code>
+<p><code>roclet_tags()</code> is no longer used; instead provide a <code><a href='roxy_tag.html'>roxy_tag_parse()</a></code>
 method for each tag.</p>
 
 
@@ -262,7 +262,7 @@ method for each tag.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

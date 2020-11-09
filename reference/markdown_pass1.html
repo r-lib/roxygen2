@@ -185,7 +185,7 @@
     <p>Expand the embedded inline code</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://roxygen2.r-lib.org/reference/markdown_pass1.html'>markdown_pass1</a></span>(<span class='kw'>text</span>)</pre>
+    <pre class="usage"><span class='fu'>markdown_pass1</span><span class='op'>(</span><span class='va'>text</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -212,13 +212,18 @@ function, and this is <code>TRUE</code>: TRUE.</p>
 <p>To insert the name of the current package: roxygen2.</p>
 <p>The <code>iris</code> data set has 5 columns:
 <code>Sepal.Length</code>, <code>Sepal.Width</code>, <code>Petal.Length</code>, <code>Petal.Width</code>, <code>Species</code>.<div class="r"></p><pre><span class='co'># Code block demo</span>
-<span class='kw'>x</span> <span class='op'>+</span> <span class='fl'>1</span></pre><p></div></p><pre><span class='co'>## [1] 101</span></pre>
+<span class='va'>x</span> <span class='op'>+</span> <span class='fl'>1</span>
+</pre><p></div></p><pre><span class='co'>## [1] 101</span>
+</pre>
 
-<p>Chunk options:<div class="r"></p><pre><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>mtcars</span>)</pre><p></div></p><pre><span class='co'>##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear" "carb"</span>
-<span class='co'>## [1] 32</span></pre>
+<p>Chunk options:<div class="r"></p><pre><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</pre><p></div></p><pre><span class='co'>##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear" "carb"</span>
+<span class='co'>## [1] 32</span>
+</pre>
 
-<p>Plots:<div class="r"></p><pre><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>)</pre><p></div></p>
+<p>Plots:<div class="r"></p><pre><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>
+</pre><p></div></p>
 <p><img src='figures/test-figure-1.png' alt='' /></p>
 
   </div>
@@ -236,7 +241,7 @@ function, and this is <code>TRUE</code>: TRUE.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Roclet: make <code>NAMESPACE</code> — namespace_roclet • roxygen2</title>
+<title>Roclet: make NAMESPACE — namespace_roclet • roxygen2</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Roclet: make <code>NAMESPACE</code> — namespace_roclet" />
+<meta property="og:title" content="Roclet: make NAMESPACE — namespace_roclet" />
 <meta property="og:description" content="This roclet automates the production of a NAMESPACE file, which controls
 the functions imported and exported by your package, as described in
 Writing R extensions.
@@ -196,30 +196,31 @@ the functions imported and exported by your package, as described in
 import directives (because this can be computed without evaluating package
 code), and the second generates everything (after the package has been
 loaded).</p>
-<p>See <code>vignette("namespace")</code> for details.</p>
+<p>See <code><a href='../articles/namespace.html'>vignette("namespace")</a></code> for details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://roxygen2.r-lib.org/reference/namespace_roclet.html'>namespace_roclet</a></span>()</pre>
+    <pre class="usage"><span class='fu'>namespace_roclet</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other roclets: 
-<code><a href='https://roxygen2.r-lib.org/reference/rd_roclet.html'>rd_roclet</a>()</code>,
-<code><a href='https://roxygen2.r-lib.org/reference/vignette_roclet.html'>vignette_roclet</a>()</code></p></div>
+<code><a href='rd_roclet.html'>rd_roclet</a>()</code>,
+<code><a href='vignette_roclet.html'>vignette_roclet</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The most common namespace tag is @export, which declares that a function</span>
 <span class='co'># is part of the external interface of your package</span>
 <span class='co'>#' @export</span>
-<span class='kw'>foofy</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>z</span>) {
-}
+<span class='va'>foofy</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='op'>}</span>
 
 <span class='co'># You'll also often find global imports living in a file called</span>
 <span class='co'># R/{package}-package.R.</span>
 <span class='co'>#' @importFrom magrittr %&gt;%</span>
 <span class='co'>#' @import rlang</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div></pre>
+<span class='cn'>NULL</span>
+</div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -235,7 +236,7 @@ loaded).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

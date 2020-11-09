@@ -67,6 +67,7 @@ outside of roxygen2.
 You can change the default strategy for your function with roxygen2 load
 option. Override the default off pkgload to use the source or
 installed strategies:RoxygenNote: list(load = &quot;source&quot;)
+
 " />
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png" />
 
@@ -206,14 +207,14 @@ installed strategies:RoxygenNote: list(load = &quot;source&quot;)
 objects inside your package, not just the source code used to create them.
 These functions offer various ways of loading your package to suit various
 constraints:</p><ul>
-<li><p><code><a href='https://roxygen2.r-lib.org/reference/load.html'>load_pkgload()</a></code> uses <code><a href='https://rdrr.io/pkg/pkgload/man/load_all.html'>pkgload::load_all()</a></code> to simulate package loading
+<li><p><code>load_pkgload()</code> uses <code><a href='https://rdrr.io/pkg/pkgload/man/load_all.html'>pkgload::load_all()</a></code> to simulate package loading
 as closely as we know how. It offers high fidelity handling of code that
 uses S4, but requires that the package be compiled.</p></li>
-<li><p><code><a href='https://roxygen2.r-lib.org/reference/load.html'>load_source()</a></code> simulates package loading by attaching packages listed in
+<li><p><code>load_source()</code> simulates package loading by attaching packages listed in
 <code>Depends</code> and <code>Imports</code>, then sources all files in the <code>R/</code> directory.
 This was the default strategy used in roxygen2 6.0.0 and earlier;
 it's primary advantage is that it does not need compilation.</p></li>
-<li><p><code><a href='https://roxygen2.r-lib.org/reference/load.html'>load_installed()</a></code> uses the installed version of the package. Use this
+<li><p><code>load_installed()</code> uses the installed version of the package. Use this
 strategy if you have installed a development version of the package
 already. This is the highest fidelity strategy, but requires work
 outside of roxygen2.</p></li>
@@ -221,15 +222,16 @@ outside of roxygen2.</p></li>
 
 <p>You can change the default strategy for your function with roxygen2 <code>load</code>
 option. Override the default off <code>pkgload</code> to use the <code>source</code> or
-<code>installed</code> strategies:</p><pre><span class='kw'>RoxygenNote</span><span class='op'>:</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(load = <span class='st'>"source"</span>)</pre>
+<code>installed</code> strategies:</p><pre><span class='va'>RoxygenNote</span><span class='op'>:</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>load <span class='op'>=</span> <span class='st'>"source"</span><span class='op'>)</span>
+</pre>
 
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://roxygen2.r-lib.org/reference/load.html'>load_pkgload</a></span>(<span class='kw'>path</span>)
+    <pre class="usage"><span class='fu'>load_pkgload</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://roxygen2.r-lib.org/reference/load.html'>load_installed</a></span>(<span class='kw'>path</span>)
+<span class='fu'>load_installed</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://roxygen2.r-lib.org/reference/load.html'>load_source</a></span>(<span class='kw'>path</span>)</pre>
+<span class='fu'>load_source</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -256,7 +258,7 @@ option. Override the default off <code>pkgload</code> to use the <code>source</c
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

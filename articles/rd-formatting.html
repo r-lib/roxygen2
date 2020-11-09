@@ -155,8 +155,8 @@
 <p>Alternatively, you can use the <code>@md</code> tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in markdown.</p>
 <p>There is also a new <code>@noMd</code> tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.</p>
 <p>Here is an example roxygen chunk that uses markdown.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">#' Use roxygen to document a package</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' Use roxygen to document a package</span>
 <span class="co">#'</span>
 <span class="co">#' This function is a wrapper for the [roxygen2::roxygenize()] function from</span>
 <span class="co">#' the roxygen2 package. See the documentation and vignettes of</span>
@@ -168,8 +168,7 @@
 <span class="co">#' @inheritParams roxygen2::roxygenise</span>
 <span class="co">#' @seealso [roxygen2::roxygenize()], `browseVignettes("roxygen2")`</span>
 <span class="co">#' @export</span>
-<span class="co">#' @md</span>
-</pre></div>
+<span class="co">#' @md</span></code></pre></div>
 </div>
 <div id="syntax" class="section level1">
 <h1 class="hasAnchor">
@@ -178,58 +177,53 @@
 <h2 class="hasAnchor">
 <a href="#sections" class="anchor"></a>Sections</h2>
 <p>The usual markdown heading markup creates sections and subsections. Top level headings, i.e. ‘<code>#</code>’ create sections, via the <code>\section{}</code> Rd tag. ‘<code>#</code>’ may only appear after the <code>@description</code> and <code>@details</code> tags. Since <code>@details</code> can appear multiple times in a block, you can always precede a ‘<code>#</code>’ section with <code>@details</code>, if you prefer to place it towards the end of the block, after <code>@return</code> for example:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co">#' @details</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @details</span>
 <span class="co">#' Trim the leading and trailing whitespace from a character vector.</span>
 <span class="co">#'</span>
 <span class="co">#' @param x Character vector.</span>
 <span class="co">#' @return Character vector, with the whitespace trimmed.</span>
 <span class="co">#'</span>
 <span class="co">#' @details # This will be a new section</span>
-<span class="co">#' ...</span>
-</pre></div>
+<span class="co">#' ...</span></code></pre></div>
 <p>Top level sections are always placed at a fixed position in the manual page, after the parameters and the details, but before <code>\note{}</code>, <code>\seealso{}</code> and the <code>\examples{}</code>. Their order will be the same as in the roxygen block.</p>
 </div>
 <div id="subsections" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subsections" class="anchor"></a>Subsections</h2>
 <p>Headings at level two and above may appear inside any roxygen tag that formats lines of text. E.g. <code>@description</code>, <code>@details</code>, <code>@return</code>, etc. They create subsections, via the <code>\subsection{}</code> Rd tag. They are allowed within top level sections as well, i.e. after ‘<code>#</code>’. Subsections can be nested. Example:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co">#' @details</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @details</span>
 <span class="co">#' ## Subsection within details</span>
 <span class="co">#' ### Sub-subsection</span>
-<span class="co">#' ... text ...</span>
-</pre></div>
+<span class="co">#' ... text ...</span></code></pre></div>
 </div>
 <div id="emphasis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#emphasis" class="anchor"></a>Emphasis</h2>
 <p><em>Emphasis</em> and <strong>strong</strong> (bold) text are supported. For emphasis, put the text between asterisks or underline characters. For strong text, use two asterisks at both sides.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co">#' @references</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @references</span>
 <span class="co">#' Robert E Tarjan and Mihalis Yannakakis. (1984). Simple</span>
 <span class="co">#' linear-time algorithms to test chordality of graphs, test acyclicity</span>
 <span class="co">#' of hypergraphs, and selectively reduce acyclic hypergraphs.</span>
-<span class="co">#' *SIAM Journal of Computation* **13**, 566-579.</span>
-</pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="co">#' See `::is_falsy` for the definition of what is _falsy_</span>
-<span class="co">#' and what is _truthy_.</span>
-</pre></div>
+<span class="co">#' *SIAM Journal of Computation* **13**, 566-579.</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' See `::is_falsy` for the definition of what is _falsy_</span>
+<span class="co">#' and what is _truthy_.</span></code></pre></div>
 </div>
 <div id="code" class="section level2">
 <h2 class="hasAnchor">
 <a href="#code" class="anchor"></a>Code</h2>
 <p>Inline code is supported via backticks.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co">#' @param ns Optionally, a named vector giving prefix-url pairs, as</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @param ns Optionally, a named vector giving prefix-url pairs, as</span>
 <span class="co">#'   produced by `xml_ns`. If provided, all names will be explicitly</span>
-<span class="co">#'   qualified with the ns prefix, i.e. if the element `bar` is defined ...</span>
-</pre></div>
+<span class="co">#'   qualified with the ns prefix, i.e. if the element `bar` is defined ...</span></code></pre></div>
 <p>You can also use this syntax to run custom R code and insert its output into the manual page. See section ‘Dynamic R code’ below.</p>
 <p>For blocks of code, put your code between triple backticks:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="co">#' ```</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' ```</span>
 <span class="co">#' pkg &lt;- make_packages(</span>
 <span class="co">#'   foo1 = { f &lt;- function() print("hello!") ; d &lt;- 1:10 },</span>
 <span class="co">#'   foo2 = { f &lt;- function() print("hello again!") ; d &lt;- 11:20 }</span>
@@ -239,8 +233,7 @@
 <span class="co">#' foo1::d</span>
 <span class="co">#' foo2::d</span>
 <span class="co">#' dispose_packages(pkg)</span>
-<span class="co">#' ```</span>
-</pre></div>
+<span class="co">#' ```</span></code></pre></div>
 <p>Note that this is not needed in <code>@examples</code>, since its contents are formatted as R code, anyway.</p>
 <p>You can use similar syntax to include a block of R code and/or its output in the manual page. See section ‘Dynamic R code’ below.</p>
 </div>
@@ -248,24 +241,22 @@
 <h2 class="hasAnchor">
 <a href="#lists" class="anchor"></a>Lists</h2>
 <p>Regular Markdown lists are recognized and converted to <code>\enumerate{}</code> or <code>\itemize{}</code> lists:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="co">#' There are two ways to use this function:</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' There are two ways to use this function:</span>
 <span class="co">#' 1. If its first argument is not named, then it returns a function</span>
 <span class="co">#'    that can be used to color strings.</span>
 <span class="co">#' 1. If its first argument is named, then it also creates a</span>
 <span class="co">#'    style with the given name. This style can be used in</span>
 <span class="co">#'    `style`. One can still use the return value</span>
-<span class="co">#'    of the function, to create a style function.</span>
-</pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="co">#' The style (the `...` argument) can be anything of the</span>
+<span class="co">#'    of the function, to create a style function.</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' The style (the `...` argument) can be anything of the</span>
 <span class="co">#' following:</span>
 <span class="co">#' * An R color name, see `colors()`.</span>
 <span class="co">#' * A 6- or 8-digit hexa color string, e.g. `#ff0000` means</span>
 <span class="co">#'   red. Transparency (alpha channel) values are ignored.</span>
 <span class="co">#' * A one-column matrix with three rows for the red, green</span>
-<span class="co">#'   and blue channels, as returned by [grDevices::col2rgb()]</span>
-</pre></div>
+<span class="co">#'   and blue channels, as returned by [grDevices::col2rgb()]</span></code></pre></div>
 <p>Nested lists are also supported.</p>
 <p>Note that you do not have leave an empty line before the list. This is different from some markdown parsers.</p>
 </div>
@@ -285,14 +276,12 @@
 <h2 class="hasAnchor">
 <a href="#links" class="anchor"></a>Links</h2>
 <p>Markdown hyperlinks work as usual:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="co">#' See more about the markdown markup at the</span>
-<span class="co">#' [Commonmark web site](http://commonmark.org/help)</span>
-</pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' See more about the markdown markup at the</span>
+<span class="co">#' [Commonmark web site](http://commonmark.org/help)</span></code></pre></div>
 <p>URLs inside angle brackets are also automatically converted to hyperlinks:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="co">#' The main R web site is at &lt;https://r-project.org&gt;.</span>
-</pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' The main R web site is at &lt;https://r-project.org&gt;.</span></code></pre></div>
 <p>Markdown notation can also be used to create links to other help topics. There are two basic forms:</p>
 <ul>
 <li>
@@ -451,10 +440,9 @@ or in <code>pkg</code>
 <h2 class="hasAnchor">
 <a href="#images" class="anchor"></a>Images</h2>
 <p>Markdown syntax for inline images works. The image files must be in the <code>man/figures</code> directory:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="co">#' Here is an example plot:</span>
-<span class="co">#' ![](example-plot.jpg "Example Plot Title")</span>
-</pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' Here is an example plot:</span>
+<span class="co">#' ![](example-plot.jpg "Example Plot Title")</span></code></pre></div>
 </div>
 </div>
 <div id="dynamic-r-code" class="section level1">
@@ -466,16 +454,14 @@ or in <code>pkg</code>
 <a href="#inline-code" class="anchor"></a>Inline code</h2>
 <p>To do this, prefix the code with <code>r</code>, i.e. the lowercase letter ‘r’ and a space character. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.</p>
 <p>For example, the following will insert the date and the R version of the roxygen run.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="co">#' Roxygen created this manual page on `r Sys.Date()` using R version</span>
-<span class="co">#' `r getRversion()`.</span>
-</pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' Roxygen created this manual page on `r Sys.Date()` using R version</span>
+<span class="co">#' `r getRversion()`.</span></code></pre></div>
 <p>The value of the R expression is converted to a character string, with <code><a href="https://rdrr.io/r/base/paste.html">paste(collapse = "\n")</a></code>. So you don’t need explicitly convert to a character value, numeric values or any R object with an <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code> S3 method is fine. Also, you can insert multiple lines by returning a character vector. If you want to run R code without inserting any output, return an empty string or <code>NULL</code>.</p>
 <p>The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to <code>.Rd</code> conversion, so you can create markdown markup dynamically:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="co">#' The `iris` data set has `r ncol(iris)` columns:</span>
-<span class="co">#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.</span>
-</pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' The `iris` data set has `r ncol(iris)` columns:</span>
+<span class="co">#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.</span></code></pre></div>
 <p>Note that you need to escape backtick characters, if they appear in the R expression, by doubling them, like above. The result after the dynamic R code evaluation will be:</p>
 <pre><code>The `iris` data set has 5 columns:
 `Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, `Species`.</code></pre>
@@ -483,48 +469,42 @@ or in <code>pkg</code>
 <pre><code>The \code{iris} data set has 5 columns:
 \code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.</code></pre>
 <p>The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting. This means that you can call (internal or exported) functions of the package. <code><a href="https://rdrr.io/r/utils/packageName.html">packageName()</a></code> will also report the name of the package:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
-<span class="co">#' To insert the name of the current package: `r packageName()`.</span>
-</pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' To insert the name of the current package: `r packageName()`.</span></code></pre></div>
 <p>A new evaluation environment is created for each roxygen <em>block</em>. So the output of this code:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
-<span class="co">#' @title ... `r myvar &lt;- "foo"; NULL` `r myvar`</span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @title ... `r myvar &lt;- "foo"; NULL` `r myvar`</span>
 <span class="co">#'</span>
-<span class="co">#' @description ... `r myvar`</span>
-</pre></div>
+<span class="co">#' @description ... `r myvar`</span></code></pre></div>
 <p>will be:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit">
-<span class="co">#' @title ... foo</span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @title ... foo</span>
 <span class="co">#'</span>
-<span class="co">#' @description ... foo</span>
-</pre></div>
+<span class="co">#' @description ... foo</span></code></pre></div>
 <p>Currently the whole code expression must be on the same line, multi-line expressions are not supported.</p>
 </div>
 <div id="code-blocks" class="section level2">
 <h2 class="hasAnchor">
 <a href="#code-blocks" class="anchor"></a>Code blocks</h2>
 <p>Markdown code blocks can be dynamic as well, if you use ```{r} to start them, just like in knitr documents.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit">
-<span class="co">#' ```{r}</span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' ```{r}</span>
 <span class="co">#' # This block of code will be evaluated</span>
 <span class="co">#' summary(iris)</span>
-<span class="co">#' ```</span>
-</pre></div>
+<span class="co">#' ```</span></code></pre></div>
 <p>Within a roxygen block, code blocks and inline code use the same evaluation environment, so variables created in one of them can be used in others.</p>
 <p>Code blocks support knitr chunk options, e.g. to keep the output of several expressions together, you can specify <code>results= "hold"</code>:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit">
-<span class="co">#' ```{r results = "hold"}</span>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' ```{r results = "hold"}</span>
 <span class="co">#' names(mtcars)</span>
 <span class="co">#' nrow(mtcars)</span>
-<span class="co">#' ```</span>
-</pre></div>
+<span class="co">#' ```</span></code></pre></div>
 <p>Plots will create <code>.png</code> files in the <code>man/figures</code> directory. The file names are created from the chunk names:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit">
-<span class="co">#' ```{r iris-pairs-plot}</span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' ```{r iris-pairs-plot}</span>
 <span class="co">#' pairs(iris[1:4], main = "Anderson's Iris Data -- 3 species",</span>
 <span class="co">#'   pch = 21, bg = c("red", "green3", "blue")[unclass(iris$Species)])</span>
-<span class="co">#' ```</span>
-</pre></div>
+<span class="co">#' ```</span></code></pre></div>
 <p>Note that the generated <code>.png</code> files will be added to the package, and they can considerably increase the size of the package.</p>
 <p>Note that code block support is currently experimental, and somewhat limited. Some of the known limitations:</p>
 <ul>
@@ -558,10 +538,9 @@ or in <code>pkg</code>
 <h2 class="hasAnchor">
 <a href="#spurious-lists" class="anchor"></a>Spurious lists</h2>
 <p>The Commonmark parser does not require an empty line before lists, and this might lead to unintended lists if a line starts with a number followed by a dot, or with an asterisk followed by whitespace:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit">
-<span class="co">#' You can see more about this topic in the book cited below, on page</span>
-<span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span>
-</pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' You can see more about this topic in the book cited below, on page</span>
+<span class="co">#' 42. Clearly, the numbered list that starts here is not intentional.</span></code></pre></div>
 </div>
 <div id="links-to-operators" class="section level2">
 <h2 class="hasAnchor">
@@ -607,30 +586,27 @@ or in <code>pkg</code>
 <ul>
 <li>
 <p>Ordered (numbered) lists:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit">
-<span class="co">#' \enumerate{</span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' \enumerate{</span>
 <span class="co">#'   \item First item</span>
 <span class="co">#'   \item Second item</span>
-<span class="co">#' }</span>
-</pre></div>
+<span class="co">#' }</span></code></pre></div>
 </li>
 <li>
 <p>Unordered (bulleted) lists</p>
-<div class="sourceCode" id="cb28"><pre class="downlit">
-<span class="co">#' \itemize{</span>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' \itemize{</span>
 <span class="co">#'   \item First item</span>
 <span class="co">#'   \item Second item</span>
-<span class="co">#' }</span>
-</pre></div>
+<span class="co">#' }</span></code></pre></div>
 </li>
 <li>
 <p>Definition (named) lists</p>
-<div class="sourceCode" id="cb29"><pre class="downlit">
-<span class="co">#' \describe{</span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' \describe{</span>
 <span class="co">#'   \item{One}{First item}</span>
 <span class="co">#'   \item{Two}{Second item}</span>
-<span class="co">#' }</span>
-</pre></div>
+<span class="co">#' }</span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -652,23 +628,23 @@ or in <code>pkg</code>
 <li><p>Table contents, with columns separated by <code>\tab</code> and rows by <code>\cr</code>.</p></li>
 </ol>
 <p>The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with <code>#'</code> for pasting directly into the documentation.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit">
-<span class="kw">tabular</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">df</span>, <span class="kw">...</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span>(<span class="kw">df</span>))
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tabular</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>
 
-  <span class="kw">align</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">x</span>) <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(<span class="kw">x</span>)) <span class="st">"r"</span> <span class="co">else</span> <span class="st">"l"</span>
-  <span class="kw">col_align</span> <span class="op">&lt;-</span> <span class="kw">purrr</span>::<span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span>(<span class="kw">df</span>, <span class="kw">align</span>)
+  <span class="va">align</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="st">"r"</span> <span class="kw">else</span> <span class="st">"l"</span>
+  <span class="va">col_align</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">align</span><span class="op">)</span>
 
-  <span class="kw">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">df</span>, <span class="kw">format</span>, <span class="kw">...</span>)
-  <span class="kw">contents</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">"paste"</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">cols</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(sep = <span class="st">" \\tab "</span>, collapse = <span class="st">"\\cr\n#'   "</span>)))
+  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">format</span>, <span class="va">...</span><span class="op">)</span>
+  <span class="va">contents</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="st">"paste"</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">cols</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>sep <span class="op">=</span> <span class="st">" \\tab "</span>, collapse <span class="op">=</span> <span class="st">"\\cr\n#'   "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"#' \\tabular{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="kw">col_align</span>, collapse = <span class="st">""</span>), <span class="st">"}{\n#'   "</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"\\strong{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">df</span>), <span class="st">"}"</span>, sep = <span class="st">""</span>, collapse = <span class="st">" \\tab "</span>), <span class="st">" \\cr\n#'   "</span>,
-    <span class="kw">contents</span>, <span class="st">"\n#' }\n"</span>, sep = <span class="st">""</span>)
-}
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"#' \\tabular{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">col_align</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, <span class="st">"}{\n#'   "</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"\\strong{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="st">"}"</span>, sep <span class="op">=</span> <span class="st">""</span>, collapse <span class="op">=</span> <span class="st">" \\tab "</span><span class="op">)</span>, <span class="st">" \\cr\n#'   "</span>,
+    <span class="va">contents</span>, <span class="st">"\n#' }\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu">tabular</span>(<span class="kw">mtcars</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>]))
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu">tabular</span><span class="op">(</span><span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; #' \tabular{rrrrr}{</span>
 <span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span>
 <span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span>
@@ -676,8 +652,7 @@ or in <code>pkg</code>
 <span class="co">#&gt; #'   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span>
 <span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span>
 <span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span>
-<span class="co">#&gt; #' }</span>
-</pre></div>
+<span class="co">#&gt; #' }</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -698,7 +673,7 @@ or in <code>pkg</code>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

@@ -103,6 +103,8 @@ Functions are the mostly commonly documented objects. Most functions use three t
     `\dontshow{}`| x         |        | x           | x
     `\donttest{}`| x         | x      |             | x
 
+    Note that `R CMD check --as-cran` is run for incoming CRAN checks but
+    not for regular CRAN checks.
     
     For finer control you can use `@examplesIf
     

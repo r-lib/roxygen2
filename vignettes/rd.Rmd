@@ -97,12 +97,33 @@ Functions are the mostly commonly documented objects. Most functions use three t
     have examples that take a long time to run. The options are summarised
     below.
 
-    Command      | example   | help   | R CMD check
-    ------------ | --------- | ------ | -----------
-    `\dontrun{}` |           | x      |
-    `\dontshow{}`| x         |        | x
-    `\donttest{}`| x         | x      |
+    Command      | example   | help   | R CMD check | R CMD check --as-cran 
+    ------------ | --------- | ------ | ----------- | ---------------------
+    `\dontrun{}` |           | x      |             |
+    `\dontshow{}`| x         |        | x           | x
+    `\donttest{}`| x         | x      |             | x
 
+    
+    For finer control you can use `@examplesIf
+    
+    ```r
+    #' @examplesIf interactive()
+    #' browseURL("https://roxygen2.r-lib.org")
+    ```
+    
+    will generate
+    
+    ```
+    \examples{
+    \dontshow{if (interactive() (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+    gh_organizations(since = 42)
+    \dontshow{\}) # examplesIf}
+    }
+    ```
+    
+    This way the code evaluating whether the example can be run is not 
+    shown to users reading the help, but it still prevents R CMD check failures.
+    
     Instead of including examples directly in the documentation, you can
     put them in separate files and use `@example path/relative/to/package/root`
     to insert them into the documentation.

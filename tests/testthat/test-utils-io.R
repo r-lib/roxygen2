@@ -51,14 +51,22 @@ test_that("write_lines writes windows newlines for files with windows newlines, 
   close(unix_nl_con)
 
   write_lines("baz", win_nl)
-  expect_equal(readChar(file(win_nl, "rb"), 100), "baz\r\n")
+  win_n1_conn <- file(win_nl, "rb")
+  expect_equal(readChar(win_n1_conn, 100), "baz\r\n")
+  close(win_n1_conn)
 
   write_lines("baz", unix_nl)
-  expect_equal(readChar(file(unix_nl, "rb"), 100), "baz\n")
+  unix_nl_conn <- file(unix_nl, "rb")
+  expect_equal(readChar(unix_nl_conn, 100), "baz\n")
+  close(unix_nl_conn)
 
   write_lines("baz", non_existent_file)
-  expect_equal(readChar(file(non_existent_file, "rb"), 100), "baz\n")
+  non_existent_file_conn <- file(non_existent_file, "rb")
+  expect_equal(readChar(non_existent_file_conn, 100), "baz\n")
+  close(non_existent_file_conn)
 
   write_lines("baz", empty_file)
-  expect_equal(readChar(file(empty_file, "rb"), 100), "baz\n")
+  empty_file_conn <- file(empty_file, "rb")
+  expect_equal(readChar(empty_file_conn, 100), "baz\n")
+  close(empty_file_conn)
 })

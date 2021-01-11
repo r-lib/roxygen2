@@ -76,6 +76,9 @@ test_that("all other combinations fallback to function list", {
 
     #' @describeIn foo related function
     bar <- function(y) {}
+
+    #' @describeIn foo related method
+    as.character.zap <- function(z) {}
   ")[[1]]
 
   expect_equal(out$get_value("minidesc")$type, "function")

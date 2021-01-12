@@ -165,8 +165,8 @@ Indent the second and subsequent lines of a tag so that when scanning the docume
   `print()`. (You should, however, always `@export` S3 methods).
   
   If your method is more complicated, you should document it by setting 
-  `@rdname`. Typically you will document methods with their generic, so you'd
-  document `foofy.data.frame` by setting `@rdname`. In base R, you can find 
+  `@describeIn`. Typically you will document methods with their generic, so you'd
+  document `foofy.data.frame` by setting `@describeIn`. In base R, you can find 
   documentation for more complex methods like `?predict.lm`, `?predict.glm`, 
   and `?anova.glm`.
 
@@ -455,26 +455,77 @@ You can document multiple functions in the same file by using either `@rdname` o
 
 #### `@describeIn`
 
-`@describeIn` is designed for the most common cases:
+Use `@describeIn` to document a group of tightly related functions.
 
-* documenting methods in a generic
-* documenting methods in a class
-* documenting functions with the same (or similar arguments)
+It generates a new section named "Function Group", further divided by type of function
+(see below) into subsections. The subsections contains a bulleted list describing each function.
 
-It generates a new section, named either "Methods (by class)", "Methods (by generic)" or "Functions". The section contains a bulleted list describing each function, labelled so that you know what function or method it's talking about. Here's an example, documenting an imaginary new generic:
+The short description in `@describeIn` can be used to explain the relationship to
+other functions in the group.
 
-```{r}
-#' Foo bar generic
-#'
-#' @param x Object to foo.
-foobar <- function(x) UseMethod("x")
+For example, you can document several functions which perform slight variations of a task
+or which use different defaults:
 
-#' @describeIn foobar Difference between the mean and the median
-foobar.numeric <- function(x) abs(mean(x) - median(x))
-
-#' @describeIn foobar First and last values pasted together in a string.
-foobar.character <- function(x) paste0(x[1], "-", x[length(x)])
+```{r, echo=FALSE, results="asis"}
+# FIXME weirdly, normal child option in chunk header does not work
+cat(
+  knitr::knit_child("../tests/testthat/test-rd-describe-in-simple.Rmd"), 
+  sep = "\n"
+)
 ```
+
+`@describeIn` is also well suited to explain the relationships between functions
+making up an object-oriented scheme using S3.
+
+Your new methods will be organised in two ways:
+
+1. Your new methods will be listed in a subsection titled "**Methods (by generic)**"
+    labelled by the generic which they extend.
+    
+    ```{r, echo = FALSE, results = "asis"}
+    cat(
+      knitr::knit_child("../tests/testthat/test-rd-describe-in-by-generic.Rmd"), 
+      sep = "\n"
+    )
+    ```
+    
+    The resulting output describes `print.foo()` (a method) and `is_foo()` (a normal
+    function) under different headings, pointing users to the different semantics 
+    for both. 
+    
+    Though many methods such as those for `print()` may be quite simple, `@describeIn` 
+    can help you showcase features of your S3 scheme with minimal overhead.
+    
+    You may want to do place your S3 class constructor helper (`foo()` in this case)
+    as the "parent" documentation, which your other functions are `@describeIn` *in*, 
+    but you can also use any other function. Note that S3 class constructor functions 
+    are optional and just "normal" functions.
+    
+    Conversely, given S3's informal design, if you added a `print.bar()` method to 
+    the above, that extension of the `print()` method would also be documented.
+2. If the function you are `@describeIn` *in* is a generic, your new methods for 
+    that generic will be organised by classes, in a subsection titled 
+    "**Methods (by class)**".
+    The subsection will include all methods for your new generic, labelled by the 
+    class they cover.
+
+    ```{r, echo = FALSE, results = "asis"}
+    cat(
+      knitr::knit_child("../tests/testthat/test-rd-describe-in-by-class.Rmd"), 
+      sep = "\n"
+    )
+    ```
+    
+    The methods `zap.numeric()` and `zap.character()` will be labelled by their 
+    classes, because they extend the generic `zap()` in the parent documentation.
+    The method `print.qux()` will be labelled by the existing generic `print()` 
+    which it extends.
+    The `zap_helper()` function will be displayed as a normal function.
+
+While you can mix and match different types of functions with `@describeIn`, the
+output may quickly become disorienting for users if the functions are not tightly
+related.
+
 
 #### `@rdname`
 

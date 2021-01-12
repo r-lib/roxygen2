@@ -37,37 +37,66 @@ topic_add_describe_in <- function(topic, block, env) {
 
 # Field -------------------------------------------------------------------
 
-rd_section_minidesc <- function(type, label, desc) {
+rd_section_minidesc <- function(type = c("function", "generic", "class"),
+                                label,
+                                desc) {
+  type <- arg_match(type)
   stopifnot(is.character(type), is.character(label), is.character(desc))
-  stopifnot(length(desc) == length(label))
+  stopifnot(unique(c(length(type), length(desc), length(label))) == 1L)
 
-  rd_section("minidesc", list(type = type, desc = desc, label = label))
+  rd_section(
+    "minidesc",
+    data.frame(
+      stringsAsFactors = FALSE,
+      type = type,
+      desc = desc,
+      label = label
+    )
+  )
 }
 
 #' @export
 merge.rd_section_minidesc <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  stopifnot(identical(x$value$type, y$value$type))
-  rd_section_minidesc(
-    x$value$type,
-    label = c(x$value$label, y$value$label),
-    desc = c(x$value$desc, y$value$desc)
+  rd_section(
+    "minidesc",
+    rbind(x$value, y$value)
   )
 }
 
 #' @export
 format.rd_section_minidesc <- function(x, ...) {
-  title <- switch(x$value$type,
-    generic = "Methods (by class)",
-    class = "Methods (by generic)",
-    "function" = "Functions"
-  )
+  section_title <- "Function Group"
 
+  types <- unique(x$value$type)
+  df <- x$value
+  section_body <- purrr::map_chr(.x = types, .f = function(type) {
+    format_subsection(
+      type = type,
+      label = df[df$type == type, "label"],
+      desc = df[df$type == type, "desc"]
+    )
+  })
   paste0(
-    "\\section{", title, "}{\n",
+    "\\section{", section_title, "}{\n",
+    paste0(section_body, collapse = ""),
+    "}\n"
+  )
+}
+
+format_subsection <- function(type = c("function", "generic", "class"),
+                              label,
+                              desc) {
+  type <- arg_match(type)
+  subsection_title <- switch(type,
+   "function" = "Other Functions",
+    generic = "Methods (by class)",
+    class = "Methods (by generic)"
+  )
+  paste0(
+    "\\subsection{", subsection_title, "}{\n",
     "\\itemize{\n",
-    paste0("\\item \\code{", escape(x$value$label), "}: ", x$value$desc,
-      collapse = "\n\n"),
+    paste0("\\item \\code{", escape(label), "}: ", desc, collapse = "\n"),
     "\n}}\n"
   )
 }

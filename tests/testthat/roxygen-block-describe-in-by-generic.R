@@ -1,12 +1,13 @@
-```{r}
 #' Class constructor
-#' 
+#'
 #' @param x Object to convert to class `foo`.
 foo <- function(x) structure(x, class = "foo")
 
 #' @describeIn foo Pretty printing in the console
 print.foo <- function(x) print("I'm a foo.")
 
+#' @describeIn foo Pretty formatting
+format.foo <- function(x) format("I'm still a foo.")
+
 #' @describeIn foo Validation for foo objects
 is_foo <- function(x) if (FALSE) stop("I'm not a good foo.")
-```

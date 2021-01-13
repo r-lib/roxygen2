@@ -1,4 +1,3 @@
-```{r}
 #' Power
 #' @param x base
 #' @param exp exponent
@@ -9,4 +8,3 @@ square <- function(x) power(x, 2)
 
 #' @describeIn power Cube a number
 cube <- function(x) power(x, 3)
-```

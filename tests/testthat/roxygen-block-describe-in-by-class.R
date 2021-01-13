@@ -1,4 +1,3 @@
-```{r}
 #' Zap generic
 #'
 #' @param x Object to zap.
@@ -15,4 +14,3 @@ print.qux <- function(x) print("I'm a qux.")
 
 #' @describeIn zap Helper function to zap
 zap_helper <- function(x) print("Zap zap.")
-```

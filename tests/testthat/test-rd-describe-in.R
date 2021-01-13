@@ -51,23 +51,6 @@ test_that("@describeIn class captures s4 generic name", {
   expect_equal(out$get_value("minidesc")$label, "mean")
 })
 
-test_that("Multiple @describeIn generic combined into one", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title
-    f <- function(x) UseMethod('f')
-
-    #' @describeIn f A
-    f.a <- function(x) 1
-
-    #' @describeIn f B
-    f.b <- function(x) 1
-  ")[[1]]
-
-  expect_equal(out$get_value("minidesc")$type, c("generic", "generic"))
-  expect_equal(out$get_value("minidesc")$label, c("a", "b"))
-  expect_equal(out$get_value("minidesc")$desc, c("A", "B"))
-})
-
 test_that("@describeIn class captures function name", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -93,6 +76,18 @@ test_that("@describeIn class captures function name with data", {
   expect_equal(out$get_value("minidesc")$label, "f2")
 })
 
+test_that("@describeIn class captures function description", {
+  out <- roc_proc_text(rd_roclet(), "
+  #' Title
+  f <- function(x) 1
+
+  #' @describeIn f A
+  f2 <- function(x) 1
+  ")[[1]]
+
+  expect_equal(out$get_value("minidesc")$desc, "A")
+})
+
 test_that("function names are escaped", {
   out <- roc_proc_text(rd_roclet(), "
     #' foo
@@ -103,3 +98,38 @@ test_that("function names are escaped", {
     ")[[1]]
   expect_match(out$get_rd("minidesc"), "\\\\%foo\\\\%")
 })
+
+test_that("Multiple @describeIn functions combined into one", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    brio::read_file(test_path("roxygen-block-describe-in-functions.R"))
+  )[[1]]
+  expect_equal(out$get_value("minidesc")$type, c("function", "function"))
+  expect_equal(out$get_value("minidesc")$label, c("square", "cube"))
+})
+
+test_that(
+  "Multiple @describeIn methods for external generics and functions combined into one", 
+  {
+    out <- roc_proc_text(
+      rd_roclet(),
+      brio::read_file(test_path("roxygen-block-describe-in-by-generic.R"))
+    )[[1]]
+
+    expect_equal(out$get_value("minidesc")$type, c("class", "class", "function"))
+    expect_equal(out$get_value("minidesc")$label, c("print", "format", "is_foo"))
+  }
+)
+
+test_that(
+  "Multiple @describeIn methods for internal generics, external generics and functions combined into one", 
+  {
+    out <- roc_proc_text(
+      rd_roclet(),
+      brio::read_file(test_path("roxygen-block-describe-in-by-class.R"))
+    )[[1]]
+
+    expect_equal(out$get_value("minidesc")$type, c("generic", "generic", "generic", "function"))
+    expect_equal(out$get_value("minidesc")$label, c("numeric", "character", "qux", "zap_helper"))
+  }
+)

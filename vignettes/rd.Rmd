@@ -466,12 +466,7 @@ other functions in the group.
 For example, you can document several functions which perform slight variations of a task
 or which use different defaults:
 
-```{r, echo=FALSE, results="asis"}
-# FIXME weirdly, normal child option in chunk header does not work
-cat(
-  knitr::knit_child("../tests/testthat/test-rd-describe-in-simple.Rmd"), 
-  sep = "\n"
-)
+```{r, child = "../tests/testthat/test-rd-describe-in-simple.Rmd"}
 ```
 
 `@describeIn` is also well suited to explain the relationships between functions
@@ -482,11 +477,7 @@ Your new methods will be organised in two ways:
 1. Your new methods will be listed in a subsection titled "**Methods (by generic)**"
     labelled by the generic which they extend.
     
-    ```{r, echo = FALSE, results = "asis"}
-    cat(
-      knitr::knit_child("../tests/testthat/test-rd-describe-in-by-generic.Rmd"), 
-      sep = "\n"
-    )
+    ```{r, child = "../tests/testthat/test-rd-describe-in-by-generic.Rmd"}
     ```
     
     The resulting output describes `print.foo()` (a method) and `is_foo()` (a normal
@@ -509,11 +500,7 @@ Your new methods will be organised in two ways:
     The subsection will include all methods for your new generic, labelled by the 
     class they cover.
 
-    ```{r, echo = FALSE, results = "asis"}
-    cat(
-      knitr::knit_child("../tests/testthat/test-rd-describe-in-by-class.Rmd"), 
-      sep = "\n"
-    )
+    ```{r, child = "../tests/testthat/test-rd-describe-in-by-class.Rmd"}
     ```
     
     The methods `zap.numeric()` and `zap.character()` will be labelled by their 

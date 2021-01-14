@@ -124,7 +124,7 @@ test_that(
     example <- test_path("roxygen-block-describe-in-by-class.R")
     out <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
 
-    expect_equal(out$get_value("minidesc")$type, c("generic", "generic", "generic", "function"))
-    expect_equal(out$get_value("minidesc")$label, c("numeric", "character", "qux", "zap_helper"))
+    expect_equal(out$get_value("minidesc")$type, c("generic", "generic", "class", "function"))
+    expect_equal(out$get_value("minidesc")$label, c("numeric", "character", "print", "zap_helper"))
   }
 )

@@ -133,14 +133,16 @@ build_label <- function(src, dest, block) {
     } else {
       label <- paste0(names(sig), " = ", sig, collapse = ",")
     }
-  } else if (dest_type == "function" && src_type == "s3method") {
-    # Assuming you document S3 methods in the class constructor
-    type <- "class"
-    label <- attr(src$value, "s3method")[1]
-  } else if (dest_type == "s3generic" && src_type == "s3method") {
-    # Label S3 methods in generic with their class
-    type <- "generic"
-    label <- attr(src$value, "s3method")[2]
+  } else if (src_type == "s3method") {
+    if (dest_type == "s3generic" && attr(src$value, "s3method")[1] == dest$topic) {
+      # label only those src with their class, which extend generic in dest
+      type <- "generic"
+      label <- attr(src$value, "s3method")[2]
+    } else {
+      # otherwise, label by generic which they extend
+      type <- "class"
+      label <- attr(src$value, "s3method")[1]
+    }
   } else {
     # Otherwise just fallback to function + topic
     type <- "function"

@@ -455,63 +455,49 @@ You can document multiple functions in the same file by using either `@rdname` o
 
 #### `@describeIn`
 
-Use `@describeIn` to document a group of tightly related functions.
+Use `@describeIn` to surface the relationships between one or more "source" functions, and the destination file you want them documented in.
+If you add `@describeIn <destination> <description>` to some source function, it will be documented inside the `<destination>` file (usually the function name).
+It generates a new section named "**Related Functions and Methods**", further divided into subsections by the type of relationship between the source and the destination documentation.
+Each subsections contains a bulleted list including your `<description>`.
 
-It generates a new section named "Function Group", further divided by type of function
-(see below) into subsections. The subsections contains a bulleted list describing each function.
+##### Functions
 
-The short description in `@describeIn` can be used to explain the relationship to
-other functions in the group.
-
-For example, you can document several functions which perform slight variations of a task
-or which use different defaults:
+You can document several functions which perform slight variations of a task or which use different defaults in one documentation file:
 
 ```{r, code = brio::read_lines("../tests/testthat/roxygen-block-describe-in-functions.R")}
 ```
 
-`@describeIn` is also well suited to explain the relationships between functions
-making up an object-oriented scheme using S3.
+In this case, both destination and source are "normal" functions, and you can use `<description>` to explain their differences.
 
-Your new methods will be organised in two ways:
+##### Methods
 
-1. Your new methods will be listed in a subsection titled "**Methods (by generic)**"
-    labelled by the generic which they extend.
-    
-    ```{r, code = brio::read_lines("../tests/testthat/roxygen-block-describe-in-by-generic.R")}
-    ```
-    
-    The resulting output describes `print.foo()` (a method) and `is_foo()` (a normal
-    function) under different headings, pointing users to the different semantics 
-    for both. 
-    
-    Though many methods such as those for `print()` may be quite simple, `@describeIn` 
-    can help you showcase features of your S3 scheme with minimal overhead.
-    
-    You may want to do place your S3 class constructor helper (`foo()` in this case)
-    as the "parent" documentation, which your other functions are `@describeIn` *in*, 
-    but you can also use any other function. Note that S3 class constructor functions 
-    are optional and just "normal" functions.
-    
-    Conversely, given S3's informal design, if you added a `print.bar()` method to 
-    the above, that extension of the `print()` method would also be documented.
-2. If the function you are `@describeIn` *in* is a generic, your new methods for 
-    that generic will be organised by classes, in a subsection titled 
-    "**Methods (by class)**".
-    The subsection will include all methods for your new generic, labelled by the 
-    class they cover.
+`@describeIn` is also well suited to explain the relationships between functions making up an object oriented (OO) scheme using S3 or S4.
+In this case, roxygen will automatically detect whether a source function is a method and document the relationship to the relevant class or generic.
 
-    ```{r, code = brio::read_lines("../tests/testthat/roxygen-block-describe-in-by-class.R")}
+Your new methods will be organised in one of two ways:
+
+1. If your new method extends a generic in the `<destination>`, it will be listed in a subsection titled "**Methods extending `<destination>` generic (by class)**".
+    The subsection will include all methods for your new generic, labelled by the class they cover.
+
+    ```{r, code = brio::read_lines("../tests/testthat/roxygen-block-describe-in-method-in-gen.R")}
     ```
     
     The methods `zap.numeric()` and `zap.character()` will be labelled by their 
     classes, because they extend the generic `zap()` in the parent documentation.
-    The method `print.qux()` will be labelled by the existing generic `print()` 
-    which it extends.
-    The `zap_helper()` function will be displayed as a normal function.
+    The method `print.qux()` will be labelled as a normal function, because it extends an unrelated generic `print()`.
+    The `zap_helper()` function will, likewise, be displayed as a normal function.
 
-While you can mix and match different types of functions with `@describeIn`, the
-output may quickly become disorienting for users if the functions are not tightly
-related.
+1. If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled "**Methods extending other generics (by generic)**"
+    It will be labelled by the generic which the method extends.
+    
+    ```{r, code = brio::read_lines("../tests/testthat/roxygen-block-describe-in-method-in-const.R")}
+    ```
+    
+    The resulting output describes `print.foo()` (a method) and `is_foo()` (a normal function) under different headings, pointing users to the different semantics for both. 
+    `format.bar()` will also be presented as a normal method, because it does not cover the class in question.
+
+While you can mix and match (some) different types of functions with `@describeIn`, the output may quickly become disorienting for users if the functions are not tightly related.
+
 
 
 #### `@rdname`

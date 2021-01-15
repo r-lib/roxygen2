@@ -165,19 +165,20 @@ build_label <- function(src, dest, block) {
       # Label S4 methods in class with their generic
       method <- TRUE
       generic <- ""
-      label <- as.character(src$value@generic)
+      label <- src$value@generic
     } else if (dest_type == "s4generic") {
       # Label S4 methods in generic with their signature
       method <- TRUE
       generic <- dest_name
       sig <- src$value@defined
       if (length(sig) == 1) {
-        label <- as.character(sig)
+        label <- sig
       } else {
         label <- paste0(names(sig), " = ", sig, collapse = ",")
       }
     }
   }
+  label <-  as.character(label)
 
   list(method = method, generic = generic, label = label)
 }

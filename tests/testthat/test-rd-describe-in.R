@@ -134,14 +134,13 @@ test_that("Multiple @describeIn functions combined into one", {
 })
 
 test_that(
-  "Multiple @describeIn methods and others are combined into a generic",{
+  "Multiple @describeIn methods and others are combined into a generic", {
     example <- test_path("roxygen-block-describe-in-method-in-gen.R")
     out <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
-
     expect_equal(out$get_value("minidesc")$method, c(TRUE, TRUE, FALSE, FALSE))
     expect_equal(out$get_value("minidesc")$generic, c("zap", "zap", "", ""))
     expect_equal(
-      out$get_value("minidesc")$label, 
+      out$get_value("minidesc")$label,
       c("numeric", "character", "print.qux", "zap_helper")
     )
   }

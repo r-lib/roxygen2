@@ -66,10 +66,7 @@ format.rd_section_minidesc <- function(x, ...) {
   section_title <- "Related Functions and Methods"
 
   groups <- unique(x$value[, c("method", "generic")])
-  groups <- purrr::cross(groups)
-  out <- purrr::map_chr(groups, function(group) {
-    method <- group$method
-    generic <- group$generic
+  out <- purrr::map2_chr(groups$method, groups$generic, function(method, generic) {
     if (method) {
       subsection_title <- "Methods extending"
       if (generic == "") {

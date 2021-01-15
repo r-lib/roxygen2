@@ -22,7 +22,7 @@ Text within roxygen blocks can be formatted using markdown or `Rd` commands; see
 Each documentation block starts with some text which defines the title, the description, and the details. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
 
 ```{r}
-#' Sum of vector elements.
+#' Sum of vector elements
 #'
 #' `sum` returns the sum of all the values present in its arguments.
 #'
@@ -51,7 +51,7 @@ This introductory block is broken up as follows:
 You can also use explicit `@title`, `@description`, and `@details` tags. This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.
 
 ```{r}
-#' Sum of vector elements.
+#' Sum of vector elements
 #' 
 #' @description
 #' `sum` returns the sum of all the values present in its arguments.
@@ -115,7 +115,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
 We could use these new tags to improve our documentation of `sum()` as follows:
 
 ```{r}
-#' Sum of vector elements.
+#' Sum of vector elements
 #'
 #' `sum()` returns the sum of all the values present in its arguments.
 #'
@@ -183,7 +183,7 @@ S4 __generics__ are also functions, so document them as such.
 Document __S4 classes__ by adding a roxygen block before `setClass()`. Use `@slot` to document the slots of the class. Here's a simple example:
 
 ```{r}
-#' An S4 class to represent a bank account.
+#' An S4 class to represent a bank account
 #'
 #' @slot balance A length-one numeric vector
 Account <- setClass("Account",
@@ -299,7 +299,7 @@ public = list(
 Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset's name.
 
 ```{r}
-#' Prices of 50,000 round cut diamonds.
+#' Prices of 50,000 round cut diamonds
 #'
 #' A dataset containing the prices and other attributes of almost 54,000
 #' diamonds.

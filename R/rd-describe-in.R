@@ -45,7 +45,12 @@ topic_add_describe_in <- function(topic, block, env) {
 rd_section_minidesc <- function(df, method = FALSE, generic = "") {
   stopifnot(is_scalar_logical(method))
   stopifnot(is_scalar_character(generic))
-  data <- cbind(method = method, generic = generic, df)
+  data <- cbind(
+    method = method,
+    generic = generic,
+    df, 
+    stringsAsFactors = FALSE
+  )
   rd_section(
     "minidesc",
     data

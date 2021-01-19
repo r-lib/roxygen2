@@ -57,7 +57,7 @@ merge.rd_section_minidesc <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
   rd_section(
     "minidesc",
-    rbind(x$value, y$value)
+    rbind(x$value, y$value, stringsAsFactors = FALSE)
   )
 }
 

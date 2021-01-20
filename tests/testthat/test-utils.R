@@ -16,7 +16,7 @@ test_that("write_if_different and end of line", {
   cnt_mix  <- c("foo\nbar\r\nbaz", "foobar")
 
   tmp <- tempfile("roxy-", fileext = ".Rd")
-  on.exit(unlink(tmp), add = TRUE)
+  on.exit(unlink(tmp), add = TRUE, after = FALSE)
 
   # do not change unix le
   write_lines(cnt_unix, tmp, line_ending = "\n")
@@ -32,7 +32,7 @@ test_that("write_if_different and end of line", {
 
   # change mixed le to windows
   tmp_win <- tempfile("roxy-", fileext = ".Rd")
-  on.exit(unlink(tmp_win), add = TRUE)
+  on.exit(unlink(tmp_win), add = TRUE, after = FALSE)
   write_lines(cnt_win, tmp_win, line_ending = "\r\n")
 
   # write_lines changes line endings, so we use writeBin to create a file with mixed

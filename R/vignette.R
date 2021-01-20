@@ -59,7 +59,7 @@ vign_update_all <- function(pkg_path) {
 
     make <- Sys.getenv("MAKE", "make")
     old <- setwd(vig_path)
-    on.exit(setwd(old), add = TRUE)
+    on.exit(setwd(old), add = TRUE, after = FALSE)
 
     system(make)
   } else {

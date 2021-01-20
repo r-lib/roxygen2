@@ -142,7 +142,7 @@ test_that("@details NULL", {
 
 test_that("can generate nonASCII document", {
   test_pkg <- temp_copy_pkg(test_path('testNonASCII'))
-  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
+  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE, after = FALSE)
 
   expect_output(roxygenise(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
 
@@ -159,7 +159,7 @@ test_that("can generate nonASCII document", {
 
 test_that("unicode escapes are ok", {
   test_pkg <- temp_copy_pkg(test_path('testUtf8Escape'))
-  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
+  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE, after = FALSE)
 
   expect_output(roxygenise(test_pkg, roclets = "rd"), "a[.]Rd")
 
@@ -183,7 +183,7 @@ test_that("write_lines writes unix-style line endings.", {
   old_binary <- readBin(path, "raw", n = file.info(path)$size)
   old_text <- read_lines(path)
   write_lines(old_text, temp_filename)
-  on.exit(unlink(temp_filename), add = TRUE)
+  on.exit(unlink(temp_filename), add = TRUE, after = FALSE)
   new_binary <- readBin(temp_filename, "raw", n = file.info(temp_filename)$size)
   expect_identical(new_binary, old_binary)
 })

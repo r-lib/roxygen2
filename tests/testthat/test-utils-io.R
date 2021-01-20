@@ -11,9 +11,11 @@ test_that("detect_line_ending works", {
   empty_file <- tempfile()
   file.create(empty_file)
 
-  on.exit({
-    unlink(c(win_nl, unix_nl, empty_file))
-  })
+  on.exit(
+    unlink(c(win_nl, unix_nl, empty_file)),
+    add = TRUE,
+    after = FALSE
+  )
 
   base::writeLines(c("foo", "bar"), win_nl_con, sep = "\r\n")
   close(win_nl_con)
@@ -40,9 +42,11 @@ test_that("write_lines writes windows newlines for files with windows newlines, 
   empty_file <- tempfile()
   file.create(empty_file)
 
-  on.exit({
-    unlink(c(win_nl, unix_nl, empty_file, non_existent_file))
-  })
+  on.exit(
+    unlink(c(win_nl, unix_nl, empty_file, non_existent_file)),
+    add = TRUE,
+    after = FALSE
+  )
 
   base::writeLines(c("foo", "bar"), win_nl_con, sep = "\r\n")
   close(win_nl_con)

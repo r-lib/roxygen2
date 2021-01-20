@@ -342,7 +342,7 @@ mdxml_link_text <- function(xml_contents, state) {
   # markdown_xml(), which then get interpreted as empty strings by
   # xml_text(). So we preserve newlines as spaces.
   inlink <- state$inlink
-  on.exit(state$inlink <- inlink, add = TRUE)
+  on.exit(state$inlink <- inlink, add = TRUE, after = FALSE)
   state$inlink <- TRUE
 
   text <- map_chr(xml_contents, mdxml_node_to_rd, state)

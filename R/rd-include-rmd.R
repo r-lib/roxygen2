@@ -21,7 +21,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
 
   wd <- getwd()
   setwd(base_path)
-  on.exit(setwd(wd), add = TRUE)
+  on.exit(setwd(wd), add = TRUE, after = FALSE)
 
   # This will create an absolute path
   rmd <- normalizePath(rmd)

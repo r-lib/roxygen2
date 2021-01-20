@@ -296,7 +296,7 @@ test_that("new wrapping style doesn't change unexpectedly", {
 
 test_that("old wrapping style doesn't change unexpectedly", {
   old <- roxy_meta_set("old_usage", TRUE)
-  on.exit(roxy_meta_set("old_usage", old))
+  on.exit(roxy_meta_set("old_usage", old), add = TRUE, after = FALSE)
 
   expect_known_output(file = test_path("test-object-usage-wrap-old.txt"), {
     cat(call_to_usage({
@@ -339,5 +339,3 @@ test_that("old wrapping style doesn't change unexpectedly", {
     }), "\n\n")
   })
 })
-
-

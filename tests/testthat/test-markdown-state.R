@@ -22,7 +22,7 @@ test_that("turning on/off markdown globally", {
   )
 
   old <- roxy_meta_set("markdown", TRUE)
-  on.exit(roxy_meta_set("markdown", old))
+  on.exit(roxy_meta_set("markdown", old), add = TRUE, after = FALSE)
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -58,7 +58,7 @@ test_that("turning on/off markdown locally", {
   )
 
   old <- roxy_meta_set("markdown", TRUE)
-  on.exit(roxy_meta_set("markdown", old))
+  on.exit(roxy_meta_set("markdown", old), add = TRUE, after = FALSE)
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -101,7 +101,7 @@ test_that("warning for both @md and @noMd", {
   )
 
   old <- roxy_meta_set("markdown", TRUE)
-  on.exit(roxy_meta_set("markdown", old))
+  on.exit(roxy_meta_set("markdown", old), add = TRUE, after = FALSE)
   expect_warning(
     out1 <- roc_proc_text(rd_roclet(), "
       #' Title

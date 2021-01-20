@@ -318,7 +318,7 @@ test_that("warning if no method comes after the docs", {
 test_that("integration test", {
 
   wd <- getwd()
-  on.exit(setwd(wd), add = TRUE)
+  on.exit(setwd(wd), add = TRUE, after = FALSE)
   setwd(test_path())
 
   env <- new.env(parent = asNamespace("roxygen2"))
@@ -348,7 +348,7 @@ test_that("integration test", {
   )
 
   tmp <- tempfile()
-  on.exit(unlink(tmp), add = TRUE)
+  on.exit(unlink(tmp), add = TRUE, after = FALSE)
   for (n in names(res)) {
     path <- test_path(paste0("roxygen-block-3-", n))
     verify_output(path, res[[n]])
@@ -371,7 +371,7 @@ test_that("r6 option", {
       )
     )"
   old <- roxy_meta_get("r6")
-  on.exit(roxy_meta_set("r6", old), add = TRUE)
+  on.exit(roxy_meta_set("r6", old), add = TRUE, after = FALSE)
   roxy_meta_set("r6", FALSE)
 
   expect_silent(

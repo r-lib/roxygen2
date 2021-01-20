@@ -2,7 +2,7 @@ test_that("markdown file can be included", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat("List:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
       file = tmp)
   rox <- sprintf("
@@ -32,7 +32,7 @@ test_that("markdown with headers", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat(sep = "\n", file = tmp,
     "Text at the front",
     "",
@@ -69,7 +69,7 @@ test_that("subsection within details", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat(sep = "\n", file = tmp,
     "Text at the front",
     "",
@@ -94,7 +94,7 @@ test_that("links to functions", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat(sep = "\n", file = tmp,
     "This is a link: [roxygenize()].",
     "Another one: [stringr::str_length()]"
@@ -116,7 +116,7 @@ test_that("links to functions, with anchors", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat(sep = "\n", file = tmp,
     "This is a link: [roxygenize()].",
     "Another one: [stringr::str_length()]",
@@ -139,7 +139,7 @@ test_that("links to functions, with anchors", {
 
 test_that("empty Rmd", {
   tmp <- tempfile()
-  on.exit(unlink(tmp), add = TRUE)
+  on.exit(unlink(tmp), add = TRUE, after = FALSE)
   tag <- roxy_tag("includeRmd", tmp)
 
   cat("", sep = "", file = tmp)
@@ -156,7 +156,7 @@ test_that("inline html", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat(sep = "\n", file = tmp,
     "Text at the front",
     "",
@@ -183,7 +183,7 @@ test_that("html block", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat(sep = "\n", file = tmp,
     "Text at the front",
     "",
@@ -208,7 +208,7 @@ test_that("include as another section", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat("List:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
       file = tmp)
   rox <- sprintf("
@@ -238,7 +238,7 @@ test_that("order of sections is correct", {
   skip_if_not(rmarkdown::pandoc_available())
 
   tmp <- tempfile(fileext = ".md")
-  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE, after = FALSE)
   cat("# Rmd\n\nList:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
       file = tmp)
   rox <- sprintf("

@@ -114,7 +114,7 @@ tweak_links <- function(x, package) {
 
 parse_rd <- function(x) {
   con <- textConnection(x)
-  on.exit(close(con), add = TRUE)
+  on.exit(close(con), add = TRUE, after = FALSE)
 
   tryCatch(
     tools::parse_Rd(con, fragment = TRUE, encoding = "UTF-8"),

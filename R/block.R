@@ -80,7 +80,7 @@ block_create <- function(tokens, call, srcref) {
   if (is.null(pkgenv)) pkgenv <- baseenv()
   evalenv <- new.env(parent = pkgenv)
   roxy_meta_set("evalenv", evalenv)
-  on.exit(roxy_meta_set("evalenv", NULL), add = TRUE)
+  on.exit(roxy_meta_set("evalenv", NULL), add = TRUE, after = FALSE)
 
   tags <- parse_tags(tokens)
   if (length(tags) == 0) return()

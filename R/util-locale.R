@@ -6,7 +6,7 @@ set_collate <- function(locale) {
 
 with_collate <- function(locale, code) {
   old <- set_collate(locale)
-  on.exit(set_collate(old))
+  on.exit(set_collate(old), add = TRUE, after = FALSE)
 
   force(code)
 }

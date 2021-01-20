@@ -18,7 +18,7 @@ test_that("collation as expected", {
 
 test_that("Collate field unchanged when no @includes", {
   test_pkg <- temp_copy_pkg('testCollateNoIncludes')
-  on.exit(unlink(test_pkg, recursive = TRUE))
+  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE, after = FALSE)
 
   old_desc <- read.description(file.path(test_pkg, "DESCRIPTION"))
   update_collate(test_pkg)
@@ -35,7 +35,11 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
 
   # make backup copy of incomplete DESCRIPTION file (restored on exit)
   file.copy(desc_path, tmp <- tempfile())
-  on.exit( file.copy(tmp, desc_path, overwrite = TRUE), add = TRUE)
+  on.exit(
+    file.copy(tmp, desc_path, overwrite = TRUE),
+    add = TRUE,
+    after = FALSE
+  )
 
   # load package: this should update the DESCRIPTION file (warning)
   expect_output(update_collate(pkg_path), "Updating collate directive", info = "update_collate on incomplete package: DESCRIPTION file is updated")

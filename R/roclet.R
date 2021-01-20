@@ -129,7 +129,7 @@ roc_proc_text <- function(roclet, input) {
 
   file <- tempfile()
   write_lines(input, file)
-  on.exit(unlink(file))
+  on.exit(unlink(file), add = TRUE, after = FALSE)
 
   env <- env_file(file)
   blocks <- parse_text(input, env = env)

@@ -55,7 +55,7 @@ parse_text <- function(text, env = env_file(file)) {
 
   file <- tempfile()
   write_lines(text, file)
-  on.exit(unlink(file))
+  on.exit(unlink(file), add = TRUE, after = FALSE)
 
   blocks <- parse_file(file, env = env, srcref_path = "<text>")
   blocks <- order_blocks(blocks)

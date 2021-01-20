@@ -9,9 +9,7 @@ write_lines <- function(text, path, line_ending = detect_line_ending(path)) {
   # we need to convert any embedded newlines as well
   text <- gsub("\r?\n", line_ending, text)
 
-  path <- file(path, open = "wb")
   base::writeLines(enc2utf8(text), path, sep = line_ending, useBytes = TRUE)
-  close(path)
 }
 
 detect_line_ending <- function(path) {

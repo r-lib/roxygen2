@@ -1,10 +1,8 @@
 test_that("detect_line_ending works", {
   # write files with various newlines
   win_nl <- tempfile()
-  win_nl_con <- file(win_nl, "wb")
 
   unix_nl <- tempfile()
-  unix_nl_con <- file(unix_nl, "wb")
 
   non_existent_file <- tempfile()
 
@@ -15,11 +13,9 @@ test_that("detect_line_ending works", {
     unlink(c(win_nl, unix_nl, empty_file))
   })
 
-  base::writeLines(c("foo", "bar"), win_nl_con, sep = "\r\n")
-  close(win_nl_con)
+  base::writeLines(c("foo", "bar"), win_nl, sep = "\r\n")
 
-  base::writeLines(c("foo", "bar"), unix_nl_con, sep = "\n")
-  close(unix_nl_con)
+  base::writeLines(c("foo", "bar"), unix_nl, sep = "\n")
 
   expect_equal(detect_line_ending(win_nl), "\r\n")
   expect_equal(detect_line_ending(unix_nl), "\n")
@@ -30,25 +26,20 @@ test_that("detect_line_ending works", {
 test_that("write_lines writes windows newlines for files with windows newlines, and unix newlines otherwise", {
   # write files with various newlines
   win_nl <- tempfile()
-  win_nl_con <- file(win_nl, "wb")
 
   unix_nl <- tempfile()
-  unix_nl_con <- file(unix_nl, "wb")
 
   non_existent_file <- tempfile()
 
   empty_file <- tempfile()
-  file.create(empty_file)
 
   on.exit({
     unlink(c(win_nl, unix_nl, empty_file, non_existent_file))
   })
 
-  base::writeLines(c("foo", "bar"), win_nl_con, sep = "\r\n")
-  close(win_nl_con)
+  base::writeLines(c("foo", "bar"), win_nl, sep = "\r\n")
 
-  base::writeLines(c("foo", "bar"), unix_nl_con, sep = "\n")
-  close(unix_nl_con)
+  base::writeLines(c("foo", "bar"), unix_nl, sep = "\n")
 
   write_lines("baz", win_nl)
   expect_equal(readChar(win_nl, 100), "baz\r\n")

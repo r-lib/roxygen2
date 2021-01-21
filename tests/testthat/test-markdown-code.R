@@ -25,7 +25,7 @@ test_that("uses the same env for a block, but not across blocks", {
     #' @md
     #' @name dummy2
     NULL")
-  expect_equal(out1$dummy.Rd$get_value("title"), "Title 420 420")
+  expect_equal(out1$dummy.Rd$get_value("title"), "Title  420")
   expect_equal(out1$dummy.Rd$get_value("description"), "Description TRUE")
   expect_equal(out1$dummy2.Rd$get_value("description"), "Description FALSE")
 })
@@ -55,6 +55,7 @@ test_that("appropriate knit print method for fenced and inline is applied", {
     NULL
   ")
   expect_match(out1$bar.Rd$get_value("details"), "fenced", fixed = TRUE)
+  expect_match(out1$bar.Rd$get_value("title"), "inline", fixed = TRUE)
 })
 
 test_that("can create markdown markup", {
@@ -118,7 +119,7 @@ test_that("interleaving fences and inline code", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' @details Details `r x <- 10`
+    #' @details Details `r x <- 10; x`
     #'
     #' ```{r}
     #' y <- x + 10

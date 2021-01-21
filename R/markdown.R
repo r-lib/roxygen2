@@ -98,18 +98,18 @@ eval_code_nodes <- function(nodes) {
 
 eval_code_node <- function(node, env) {
   if (xml_name(node) == "code") {
-    text <- str_replace(xml_text(node), "^r ", "")
-    paste(eval(parse(text = text), envir = env), collapse = "\n")
-
+    # this is for inline code
+    text <- paste0("`", xml_text(node), "`")
   } else {
+    # this is for fenced code
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
-    opts_chunk$set(
-      error = FALSE,
-      fig.path = "man/figures/",
-      fig.process = function(path) basename(path)
-    )
-    knit(text = text, quiet = TRUE, envir = env)
   }
+  opts_chunk$set(
+    error = FALSE,
+    fig.path = "man/figures/",
+    fig.process = function(path) basename(path)
+  )
+  knit(text = text, quiet = TRUE, envir = env)
 }
 
 str_set_all_pos <- function(text, pos, value, nodes) {

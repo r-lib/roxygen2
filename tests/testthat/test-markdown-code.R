@@ -58,6 +58,15 @@ test_that("appropriate knit print method for fenced and inline is applied", {
   expect_match(out1$bar.Rd$get_value("title"), "inline", fixed = TRUE)
 })
 
+test_that("can write backticks programmatically inline", {
+  # this workaround is recommended by @yihui
+  # "proper" escaping for inline knitr tracked in https://github.com/yihui/knitr/issues/1704
+  expect_identical(
+    markdown("Description `r paste0('\\x60', 'zap', '\\x60')`"),
+    "Description \\code{zap}"
+  )
+})
+
 test_that("can create markdown markup", {
   expect_identical(
     markdown("Description `r paste0('_', 'keyword', '_')`"),

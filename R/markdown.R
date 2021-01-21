@@ -1,4 +1,3 @@
-
 markdown <- function(text, tag = NULL, sections = FALSE) {
   tag <- tag %||% list(file = NA, line = NA)
   tryCatch(
@@ -18,9 +17,11 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' Expand the embedded inline code
 #'
 #' @details
+#' Inline code can be used as is familiar from knitr.
+#' 
 #' For example this becomes two: `r 1+1`.
 #' Variables can be set and then reused, within the same
-#' tag: `r x <- 100; NULL`
+#' tag: `r x <- 100`
 #' The value of `x` is `r x`.
 #'
 #' We have access to the internal functions of the package, e.g.
@@ -29,8 +30,11 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #'
 #' To insert the name of the current package: `r packageName()`.
 #'
-#' The `iris` data set has `r ncol(iris)` columns:
-#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.
+#' To to markup your results as code, 
+#' use the unicode hex code `"\x60"` for a backtick, 
+#' instead of a literal `"`"`.
+#' For example, you can describe the column names of a data set like so:
+#' `r paste0("\\x60", colnames(iris), "\\60", collapse = ", ")`.
 #'
 #' ```{r}
 #' # Code block demo
@@ -98,10 +102,10 @@ eval_code_nodes <- function(nodes) {
 
 eval_code_node <- function(node, env) {
   if (xml_name(node) == "code") {
-    # this is for inline code
+    # write knitr markup for inline code
     text <- paste0("`", xml_text(node), "`")
   } else {
-    # this is for fenced code
+    # write knitr markup for fenced code
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
   }
   opts_chunk$set(

@@ -17,6 +17,8 @@ same length as the input \code{text}.
 Expand the embedded inline code
 }
 \details{
+Inline code can be used as is familiar from knitr.
+
 For example this becomes two: 2.
 Variables can be set and then reused, within the same
 tag:
@@ -28,8 +30,9 @@ function, and this is \code{TRUE}: TRUE.
 
 To insert the name of the current package: roxygen2.
 
-The \code{iris} data set has 5 columns:
-\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.\if{html}{\out{<div class="r">}}\preformatted{# Code block demo
+To to markup your results as code,
+use the unicode hex code \code{"\\x60"} for a backtick,
+instead of a literal \verb{"}"\verb{. For example, you can describe the column names of a data set like so: }r paste0("\\x60", colnames(iris), "\\60", collapse = ", ")`.\if{html}{\out{<div class="r">}}\preformatted{# Code block demo
 x + 1
 }\if{html}{\out{</div>}}\preformatted{## [1] 101
 }

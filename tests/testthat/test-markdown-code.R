@@ -30,6 +30,33 @@ test_that("uses the same env for a block, but not across blocks", {
   expect_equal(out1$dummy2.Rd$get_value("description"), "Description FALSE")
 })
 
+test_that("appropriate knit print method for fenced and inline is applied", {
+  knit_print.foo <- function(x, inline = FALSE, ...) {
+    knitr::asis_output(ifelse(inline, "inline", "fenced"))
+  }
+  library(knitr)
+  on.exit(detach(package:knitr), add = TRUE, after = FALSE)
+  registerS3method(
+    genname = "knit_print", 
+    class = "foo", 
+    method = "knit_print.foo"
+  )
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' @title Title `r structure('default', class = 'foo')`
+    #' 
+    #' @details Details
+    #'
+    #' ```{r}
+    #' structure('default', class = 'foo')
+    #' ```
+    #'
+    #' @md
+    #' @name bar
+    NULL
+  ")
+  expect_match(out1$bar.Rd$get_value("details"), "fenced", fixed = TRUE)
+})
+
 test_that("can create markdown markup", {
   expect_identical(
     markdown("Description `r paste0('_', 'keyword', '_')`"),

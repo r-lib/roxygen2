@@ -14,49 +14,15 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
   markdown_pass2(escaped_text, tag = tag, sections = sections)
 }
 
-#' Expand the embedded inline code
+#' Expand R code
 #'
 #' @details
-#' Inline code can be used as is familiar from knitr.
+#' See `vignette("rd-formatting")`.
 #' 
-#' For example this becomes two: `r 1+1`.
-#' Variables can be set and then reused, within the same
-#' tag: `r x <- 100`
-#' The value of `x` is `r x`.
-#'
-#' We have access to the internal functions of the package, e.g.
-#' since this is _roxygen2_, we can refer to the internal `markdown`
-#' function, and this is `TRUE`: `r is.function(markdown)`.
-#'
-#' To insert the name of the current package: `r packageName()`.
-#'
-#' To to markup your results as code, 
-#' use the unicode hex code `"\x60"` for a backtick, 
-#' instead of a literal `"`"`.
-#' For example, you can describe the column names of a data set like so:
-#' `r paste0("\\x60", colnames(iris), "\\60", collapse = ", ")`.
-#'
-#' ```{r}
-#' # Code block demo
-#' x + 1
-#' ```
-#'
-#' Chunk options:
-#'
-#' ```{r results = "hold"}
-#' names(mtcars)
-#' nrow(mtcars)
-#' ```
-#'
-#' Plots:
-#'
-#' ```{r test-figure}
-#' plot(1:10)
-#' ```
-#'
 #' @param text Input text.
-#' @return Text with the inline code expanded. A character vector of the
-#' same length as the input `text`.
+#' @return 
+#' Text with R code expanded. 
+#' A character vector of the same length as the input `text`.
 #'
 #' @importFrom xml2 xml_ns_strip xml_find_all xml_attr
 #' @importFrom purrr keep
@@ -108,13 +74,15 @@ eval_code_node <- function(node, env) {
     # write knitr markup for fenced code
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
   }
-  opts_chunk$set(
-    error = FALSE,
-    fig.path = "man/figures/",
-    fig.process = function(path) basename(path)
-  )
+  purrr::invoke(opts_chunk$set, knitr_chunk_defaults)
   knit(text = text, quiet = TRUE, envir = env)
 }
+
+knitr_chunk_defaults <- list(
+  error = FALSE,
+  fig.path = "man/figures/",
+  fig.process = function(path) basename(path)
+)
 
 str_set_all_pos <- function(text, pos, value, nodes) {
   # Cmark has a bug when reporting source positions for multi-line

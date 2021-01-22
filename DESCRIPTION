@@ -52,7 +52,8 @@ Suggests:
     rmarkdown,
     testthat (>= 2.1.0),
     R.methodsS3,
-    R.oo
+    R.oo,
+    brio
 LinkingTo: 
     Rcpp
 VignetteBuilder: 

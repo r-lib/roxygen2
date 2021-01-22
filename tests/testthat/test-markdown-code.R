@@ -1,33 +1,23 @@
-
-test_that("can eval", {
-  out1 <- roc_proc_text(rd_roclet(), "
-    #' @title Title `r 1 + 1`
-    #' @description Description `r 2 + 2`
-    #' @md
-    foo <- function() {}")[[1]]
-
+test_that("can eval inline code", {
+  example <- test_path("roxygen-block-md-code-simple-inline.R")
+  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
   expect_equal(out1$get_value("title"), "Title 2")
   expect_equal(out1$get_value("description"), "Description 4")
 })
 
-test_that("uses the same env for a block, but not across blocks", {
-  out1 <- roc_proc_text(rd_roclet(), "
-    #' Title `r foobarxxx123 <- 420` `r foobarxxx123`
-    #'
-    #' Description `r exists('foobarxxx123', inherits = FALSE)`
-    #' @md
-    #' @name dummy
-    NULL
+test_that("can eval fenced code", {
+  example <- test_path("roxygen-block-md-code-simple-fenced.R")
+  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+  expect_match(out1$get_value("details"), "2")
+})
 
-    #' Title another
-    #'
-    #' Description `r exists('foobarxxx123', inherits = FALSE)`
-    #' @md
-    #' @name dummy2
-    NULL")
-  expect_equal(out1$dummy.Rd$get_value("title"), "Title  420")
-  expect_equal(out1$dummy.Rd$get_value("description"), "Description TRUE")
-  expect_equal(out1$dummy2.Rd$get_value("description"), "Description FALSE")
+test_that("use same env within, but not across blocks", {
+  example <- test_path("roxygen-block-md-code-envs.R")
+  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+  out2 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[2]]
+  expect_equal(out1$get_value("title"), "Title  420")
+  expect_equal(out1$get_value("description"), "Description TRUE")
+  expect_equal(out2$get_value("description"), "Description FALSE")
 })
 
 test_that("appropriate knit print method for fenced and inline is applied", {
@@ -58,15 +48,6 @@ test_that("appropriate knit print method for fenced and inline is applied", {
   expect_match(out1$bar.Rd$get_value("title"), "inline", fixed = TRUE)
 })
 
-test_that("can write backticks programmatically inline", {
-  # this workaround is recommended by @yihui
-  # "proper" escaping for inline knitr tracked in https://github.com/yihui/knitr/issues/1704
-  expect_identical(
-    markdown("Description `r paste0('\\x60', 'zap', '\\x60')`"),
-    "Description \\code{zap}"
-  )
-})
-
 test_that("can create markdown markup", {
   expect_identical(
     markdown("Description `r paste0('_', 'keyword', '_')`"),
@@ -77,10 +58,18 @@ test_that("can create markdown markup", {
 test_that("can create markdown markup piecewise", {
   expect_identical(
     markdown(
-      "Description [`r paste0('https://url]')`](`r paste0('link text')`)"
+      "Description [`r paste0('https://url')`](`r paste0('link text')`)"
     ),
-    "Description \\link{https://url}](link text)"
+    "Description \\link{https://url}(link text)"
   )
+})
+
+test_that("can create escaped markdown markup", {
+  # this workaround is recommended by @yihui
+  # "proper" escaping for inline knitr tracked in https://github.com/yihui/knitr/issues/1704
+  example <- test_path("roxygen-block-md-code-backtick.R")
+  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+  expect_match(out1$get_value("title"), "\\code{bar}", fixed = TRUE)
 })
 
 test_that("NULL creates no text", {

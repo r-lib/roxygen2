@@ -2,7 +2,7 @@
 % Please edit documentation in R/markdown.R
 \name{markdown_pass1}
 \alias{markdown_pass1}
-\title{Expand the embedded inline code}
+\title{Expand R code}
 \usage{
 markdown_pass1(text)
 }
@@ -10,42 +10,13 @@ markdown_pass1(text)
 \item{text}{Input text.}
 }
 \value{
-Text with the inline code expanded. A character vector of the
-same length as the input \code{text}.
+Text with R code expanded.
+A character vector of the same length as the input \code{text}.
 }
 \description{
-Expand the embedded inline code
+Expand R code
 }
 \details{
-Inline code can be used as is familiar from knitr.
-
-For example this becomes two: 2.
-Variables can be set and then reused, within the same
-tag:
-The value of \code{x} is 100.
-
-We have access to the internal functions of the package, e.g.
-since this is \emph{roxygen2}, we can refer to the internal \code{markdown}
-function, and this is \code{TRUE}: TRUE.
-
-To insert the name of the current package: roxygen2.
-
-To to markup your results as code,
-use the unicode hex code \code{"\\x60"} for a backtick,
-instead of a literal \verb{"}"\verb{. For example, you can describe the column names of a data set like so: }r paste0("\\x60", colnames(iris), "\\60", collapse = ", ")`.\if{html}{\out{<div class="r">}}\preformatted{# Code block demo
-x + 1
-}\if{html}{\out{</div>}}\preformatted{## [1] 101
-}
-
-Chunk options:\if{html}{\out{<div class="r">}}\preformatted{names(mtcars)
-nrow(mtcars)
-}\if{html}{\out{</div>}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear" "carb"
-## [1] 32
-}
-
-Plots:\if{html}{\out{<div class="r">}}\preformatted{plot(1:10)
-}\if{html}{\out{</div>}}
-
-\figure{test-figure-1.png}
+See \code{vignette("rd-formatting")}.
 }
 \keyword{internal}

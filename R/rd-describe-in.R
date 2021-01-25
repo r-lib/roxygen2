@@ -158,9 +158,7 @@ build_label <- function(src, dest, block) {
       method <- TRUE
       generic <- dest_name
       label <- attr(src$value, "s3method")[2]
-    } else if (attr(src$value, "s3method")[2] == dest_name) {
-      # assuming that dest is class constructor, when class == dest name
-      # no formal check for S3 constructor is possible
+    } else if (has_constructor(dest_name, src)) {
       method <- TRUE
       generic <- ""
       label <- attr(src$value, "s3method")[1]
@@ -186,4 +184,15 @@ build_label <- function(src, dest, block) {
   label <-  as.character(label)
 
   list(method = method, generic = generic, label = label)
+}
+
+#' Tests if destination is a constructor for class of src
+#' 
+#' No formal test is possible, these are heuristics.
+#' @noRd 
+has_constructor <- function(dest_name, src) {
+  src_class <- attr(src$value, "s3method")[2]
+  # assuming that dest is class constructor, when class == dest name
+  # or when pkg_class, as recommended
+  src_class == dest_name | stringr::str_detect(dest_name, paste0("_", src_class))
 }

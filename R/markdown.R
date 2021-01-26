@@ -74,7 +74,9 @@ eval_code_node <- function(node, env) {
     # write knitr markup for fenced code
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
   }
-  purrr::invoke(opts_chunk$set, knitr_chunk_defaults)
+  old_opts <- knitr::opts_chunk$get()
+  purrr::exec(opts_chunk$set, knitr_chunk_defaults)
+  on.exit(purrr::exec(opts_chunk$set, old_opts), add = TRUE, after = FALSE)
   knit(text = text, quiet = TRUE, envir = env)
 }
 

@@ -2,8 +2,8 @@
 
 * Inline R code is now powered by knitr. Where available, (knit) print methods 
   are applied (#1179). This change alters outputs and brings roxygen in line
-  in line with console and R markdown behavior. `x <- "foo"` no longer inserts
-  anything to the resulting documentation, but `x <- "foo"; x` will.
+  with console and R markdown behavior. `x <- "foo"` no longer inserts anything
+  into the resulting documentation, but `x <- "foo"; x` will.
 
 * The new `@exmaplesIf` tag can be used to create conditional
   examples. These examples only run if a specified condition

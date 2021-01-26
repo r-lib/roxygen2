@@ -289,7 +289,7 @@ The resulting text, together with the whole tag is interpreted as markdown, as u
 This means that you can use R to dynamically write markdown.
 To markup something as code from within R, you must replace the inner backticks with the unicode hex code `"\x60"`, rather than an actual unicode backtick character.
 
-The interpretation from source all the way to the final Rd documentation goes through three steps.
+The interpretation from the source all the way to the final Rd documentation goes through three steps.
 For example:
 
 `r backtick <- brio::read_lines("../tests/testthat/roxygen-block-md-code-backtick.R")`
@@ -302,7 +302,7 @@ For example:
     ```{r code = roxygen2:::markdown_pass1(backtick)}
     ```
     
-2. is then run through roxygen's markdown engine
+2. is then run through roxygen's markdown engine, yielding:
     
     ```{r code = roxygen2:::markdown(backtick)}
     ```
@@ -319,35 +319,24 @@ For example:
 
 ## Code blocks
 
-To insert entire blocks of code, enclose them in ` ```{r} ` to start them, just like in knitr documents.
+To insert entire blocks of code, enclose them in ` ```{r} `, just like in knitr documents.
+They go through the same three steps described above for inline code.
 
-The interpretation from source all the way to the final Rd documentation goes through three steps.
 For example:
-
 `r simple_fenced <- brio::read_lines("../tests/testthat/roxygen-block-md-code-simple-fenced.R")`
 
 ```{r code = simple_fenced}
 ```
 
-1. is run through knitr to evaluate R, yielding:
-    
-    ```{r code = roxygen2:::markdown_pass1(simple_fenced)}
-    ```
-    
-2. is then run through roxygen's markdown engine, yielding:
-    
-    ```{r code = roxygen2:::markdown(simple_fenced)}
-    ```
-    
-3. is finally turned into Rd documentation using roxgen, yielding:
-    
-    ```{r, echo=FALSE, results="asis"}
-    cat(
-      "\x60\x60\x60rd\n",
-      format(roxygen2:::roc_proc_text(roxygen2::rd_roclet(), simple_fenced)[[1]]),
-      "\n\x60\x60\x60"
-    )
-    ```
+becomes:
+
+```{r, echo=FALSE, results="asis"}
+cat(
+  "\x60\x60\x60rd\n",
+  format(roxygen2:::roc_proc_text(roxygen2::rd_roclet(), simple_fenced)[[1]]),
+  "\n\x60\x60\x60"
+)
+```
 
 Code blocks support knitr chunk options, e.g. to keep the output of several expressions together, you can specify `results= "hold"`:
 
@@ -375,31 +364,44 @@ The file names are created from the chunk names.
 ## Gotchas
 
 This feature is powered by the knitr package.
-Every inline or fenced code chunk is evaluated separately as if they were separate R markdown document.
+Every inline or fenced code chunk is evaluated separately as if they were separate R markdown documents.
 
 This causes some limitations and differences to keep in mind:
 
   * Inline and fenced code blocks from the same _roxgen block_ share the same evaluation environment. 
     As a result, variables created in one code block can be reused in another one.
-    So the output of this code:
+    For example:
+    `r code_envs <- brio::read_lines("../tests/testthat/roxygen-block-md-code-envs.R")`
+    
+    ```{r code = code_envs}
+    ```
+    
+    becomes:
+    
+    ```{r, echo=FALSE, results="asis"}
+    cat(
+      "\x60\x60\x60rd\n",
+      format(roxygen2:::roc_proc_text(roxygen2::rd_roclet(), code_envs)[[1]]),
+      format(roxygen2:::roc_proc_text(roxygen2::rd_roclet(), code_envs)[[2]]),
+      "\n\x60\x60\x60"
+    )
+    ```
+    Notice how inside the documentation for `zap()`, `baz` does not exist ("Description `FALSE`").
 
-    ```r
-    ```{r code = brio::read_lines("../tests/testthat/roxygen-block-md-code-envs.R")}
-    ```
-    ```
   * The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting.
     This means that you can call (internal or exported) functions of the package.
     For example, `packageName()` will report the name of the current package:
 
     ```r
-    #' To insert the name of the current package: `r packageName()`.
+    #' To insert the name of the current package: `packageName()`.
     ```
   * The code blocks are run every time you call `roxygenize()` (or `devtools::document()`) to generated the Rd files.
     This potentially makes `roxygenize()` (much) slower.
     You can turn on knitr caching as usual, but make sure to omit the cache from the package.
   * Knitr calls the appropriate `print()` or (if available) `knitr::knit_print()` methods on the result.
-    The resulting markdown from some of these methods may not be supported by roxygens subset of markdown. 
-    You can use `print.default()` or even `cat()` to return compliant markdown.
+    The resulting markdown from some of these methods may not be supported by roxygen's subset of markdown (see `vignette("rd.Rmd")`). 
+    You can always override the automatic methods, and have your R calls return
+    valid markdown as a character vector, wrapped in `knitr::asis_output()`. 
   * Some knitr options might not create meaningful output.
 
 Also recall that everything *outside* of inline or fenced code is *not* handled by rmarkdown, but by roxgen.

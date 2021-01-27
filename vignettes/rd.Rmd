@@ -487,7 +487,7 @@ Your new methods will be organised in one of two ways:
     The method `print.qux()` will be labelled as a normal function, because it extends an unrelated generic `print()`.
     The `zap_helper()` function will, likewise, be displayed as a normal function.
 
-1. If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled "**Methods extending other generics (by generic)**"
+1. If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled "**Methods extending `<destination>` class (by generic)**"
     It will be labelled by the generic which the method extends.
     
     ```{r, code = brio::read_lines("../tests/testthat/roxygen-block-describe-in-method-in-const.R")}

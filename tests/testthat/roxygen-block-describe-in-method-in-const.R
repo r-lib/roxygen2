@@ -16,3 +16,14 @@ format.bar <- function(x) format("I'm a bar.")
 
 #' @describeIn foo Validation for foo objects
 is_foo <- function(x) if (FALSE) stop("I'm not a good foo.")
+
+#' Class constructor with disambiguated class
+#' 
+#' @param x Object to convert to class `roxygen2_baz`.
+baz <- function(x) structure(x, class = "roxygen2_baz")
+
+#' @describeIn baz Pretty printing in the console
+print.roxygen2_baz <- function(x) print("I'm a baz.")
+
+#' @describeIn baz Pretty formatting
+format.quuz_baz <- function(x) print("I don't belong to the above constructor.")

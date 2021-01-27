@@ -158,5 +158,9 @@ test_that(
       out$get_value("minidesc")$label, 
       c("print", "format", "format.bar", "is_foo")
     )
+
+    # more complicated with disambiguated class name "pkg_class"
+    out2 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[2]]
+    expect_equal(out2$get_value("minidesc")$method, c(TRUE, FALSE))
   }
 )

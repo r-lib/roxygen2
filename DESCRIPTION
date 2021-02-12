@@ -61,5 +61,3 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
 RoxygenNote: 7.1.0.9000
 Language: en-GB
-Remotes:
-  r-lib/cpp11

@@ -51,7 +51,7 @@ test_that("% in links are escaped", {
   expect_equal(markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
   expect_equal(markdown("[%][x]"), "\\link[=x]{\\%}")
   expect_equal(markdown("[%%]"), "\\link{\\%\\%}")
-  expect_equal(markdown("[foo::%%]"), "\\link[foo:\\%\\%]{foo::\\%\\%}")
+  expect_equal(markdown("[base::%%]"), "\\link[base:Arithmetic]{base::\\%\\%}")
 })
 
 test_that("commonmark picks up the various link references", {
@@ -94,16 +94,19 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  expect_warning(
+    out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' See [pkg::function()], [pkg::object].
+    #' See [11pkg::function()], [11pkg::object].
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]],
+    "Link to unavailable package"
+  )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' See \\code{\\link[pkg:function]{pkg::function()}}, \\link[pkg:object]{pkg::object}.
+    #' See \\code{\\link[11pkg:function]{11pkg::function()}}, \\link[11pkg:object]{11pkg::object}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
@@ -120,16 +123,19 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  expect_warning(
+    out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description, see [name words][pkg::bar].
+    #' Description, see [name words][stringr::bar111].
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]],
+    "Link to unknown topic: stringr::bar111"
+  )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description, see \\link[pkg:bar]{name words}.
+    #' Description, see \\link[stringr:bar111]{name words}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
@@ -243,7 +249,7 @@ test_that("another markdown link bug is fixed", {
 
 test_that("markdown code as link text is rendered as code", {
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  suppressWarnings(out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [`name`][dest],
@@ -253,7 +259,7 @@ test_that("markdown code as link text is rendered as code", {
     #' [`terms`][terms.object],
     #' [`abc`][abc-class].
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]])
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -366,12 +372,12 @@ test_that("links to S4 classes are OK", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  out1 <- roc_proc_text(rd_roclet(), "
+  suppressWarnings(out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [pkg::linktos4-class] as well.
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}")[[1]])
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -429,4 +435,14 @@ test_that("markup in link text", {
     #' And also \\href{https://external.com}{\\verb{code as well}}.
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
+})
+
+test_that("linking to self is unqualified", {
+  old <- roxy_meta_set("current_package", "myself")
+  on.exit(roxy_meta_set("current_package", old), add = TRUE)
+  rd <- markdown("foo [myself::fun()] and [myself::obj] bar")
+  expect_equal(
+    rd,
+    "foo \\code{\\link[=fun]{fun()}} and \\link{obj} bar"
+  )
 })

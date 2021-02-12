@@ -1,5 +1,20 @@
 # roxygen2 (development version)
 
+* The new `@exmaplesIf` tag can be used to create conditional
+  examples. These examples only run if a specified condition
+  holds (#962).
+
+* roxygen2 is now licensed as MIT (#1163).
+
+# roxygen2 7.1.1
+
+* When processing cross package markdown links (e.g. `[pkg::fun()]`),
+  roxygen2 now looks up the file it needs to link to, instead of linking to
+  the topic, to avoid "Non-file package-anchored links" `R CMD check` warnings.
+
+* R6 methods and re-exported functions are always sorted in the C locale;
+  this ensures they're always sorted the same way in every environment (#1077).
+
 * roxygen2 now supports inline markdown code and code chunks inside
   Rd tags. In particular in `\out{}` (#1115).
 

@@ -25,6 +25,9 @@
 #'
 #' * `current_package` `<string>` (read only): name of package being documented.
 #'
+#' * `rd_family_title` `<list>`: overrides for `@family` titles. See the
+#'    _rd_ vignette for details: `vignette("rd", package = "roxygen2")`
+#'
 #' @section How to set:
 #' Either set in `DESCRIPTION`:
 #'
@@ -56,7 +59,8 @@ load_options <- function(base_path = ".") {
     old_usage = FALSE,
     markdown = FALSE,
     r6 = TRUE,
-    current_package = NA_character_
+    current_package = NA_character_,
+    rd_family_title = list()
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))
@@ -109,7 +113,7 @@ load_options_meta <- function(base_path = ".", path = "man/roxygen/meta.R") {
   value
 }
 
-# Global binding mangaemnet -----------------------------------------------
+# Global binding management -----------------------------------------------
 
 roxy_meta <- new_environment()
 

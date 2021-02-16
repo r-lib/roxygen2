@@ -2,6 +2,10 @@ test_that("href doesn't get extra parens", {
   expect_equal(rd2text(parse_rd("\\href{a}{b}")), "\\href{a}{b}\n")
 })
 
+test_that("ifelse doesn't get extra parens", {
+  expect_equal(rd2text(parse_rd("\\ifelse{a}{b}{c}")), "\\ifelse{a}{b}{c}\n")
+})
+
 test_that("has_topic() works as you'd expect", {
   expect_equal(has_topic("abbreviate", "base"), TRUE)
   expect_equal(has_topic("abbreviateXXXX", "base"), FALSE)

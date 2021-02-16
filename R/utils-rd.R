@@ -135,7 +135,7 @@ make_as_character_rd <- function() {
     return(fn)
   }
 
-  body[[idx]][[3]] <- call_modify(body[[idx]][[3]], "\\href")
+  body[[idx]][[3]] <- call_modify(body[[idx]][[3]], "\\href", "\\ifelse")
   body(fn) <- body
   fn
 }

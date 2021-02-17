@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `\ifelse{}{}{}` tags in external inherited documentation are now inserted 
+  correctly (without additional `{}`) (#1062).
+
 * The new `@exmaplesIf` tag can be used to create conditional
   examples. These examples only run if a specified condition
   holds (#962).

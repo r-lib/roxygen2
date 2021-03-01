@@ -1,6 +1,6 @@
 # roxygen2 (development version)
 
-* The new `@exmaplesIf` tag can be used to create conditional
+* The new `@examplesIf` tag can be used to create conditional
   examples. These examples only run if a specified condition
   holds (#962).
 

@@ -17,6 +17,31 @@ A roxygen __block__ is a sequence of lines starting with `#'` (optionally preced
 
 Text within roxygen blocks can be formatted using markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
 
+Blocks are assumed to continue until a line is `NULL` or no more tags are expected. That is, both `#'` and ` ` on a line will show blank space but continue the block. For example, this code will run:
+```{r}
+#' @import zoo
+NULL
+#' Different name for calling zoo.
+#'
+#' @params ... passed to zoo.
+#' @return zoo object.
+#'
+#' @export 
+zoo2 <- function(...) zoo(...)
+```
+But this code will error because it is read as one block, and now the block starts with the import rather than the title (as described below.
+```{r}
+#' @import zoo
+
+#' Different name for calling zoo.
+#'
+#' @params ... passed to zoo.
+#' @return zoo object.
+#'
+#' @export 
+zoo2 <- function(...) zoo(...)
+```
+
 ## The description block
 
 Each documentation block starts with some text which defines the title, the description, and the details. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:

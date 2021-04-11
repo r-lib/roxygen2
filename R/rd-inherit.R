@@ -108,6 +108,7 @@ topics_process_inherit <- function(topics, env) {
   topics$topo_apply(inherits("examples"), inherit_field, "examples")
   topics$topo_apply(inherits("author"), inherit_field, "author")
   topics$topo_apply(inherits("source"), inherit_field, "source")
+  topics$topo_apply(inherits("note"), inherit_field, "note")
 
   # First inherit individual sections, then all sections.
   topics$topo_apply(function(x) x$inherits_section_from(), inherit_section)

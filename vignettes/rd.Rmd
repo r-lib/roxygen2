@@ -612,7 +612,7 @@ All content in the Rmd file will go either in the details or in new top level se
 
 ### Links
 
-The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting.Rmd")` for details.
+The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting")` for details.
 
 ### Caching and figures
 

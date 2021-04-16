@@ -333,7 +333,10 @@ mdxml_link <- function(xml, state) {
   } else if (dest == "" || dest == xml_text(xml)) {
     paste0("\\url{", escape_comment(xml_text(xml)), "}")
   } else {
-    paste0("\\href{", dest, "}{", mdxml_link_text(contents, state), "}")
+    paste0(
+      "\\href{", escape_comment(dest), "}",
+      "{", mdxml_link_text(contents, state), "}"
+    )
   }
 }
 

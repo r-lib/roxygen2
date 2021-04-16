@@ -1,6 +1,6 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 7.1.1.9000
+Version: 7.1.1.9001
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -29,7 +29,7 @@ License: MIT + file LICENSE
 URL: https://roxygen2.r-lib.org/, https://github.com/r-lib/roxygen2
 BugReports: https://github.com/r-lib/roxygen2/issues
 Depends: 
-    R (>= 3.2)
+    R (>= 3.3)
 Imports: 
     brew,
     commonmark,

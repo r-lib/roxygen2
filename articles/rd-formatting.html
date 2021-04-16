@@ -32,8 +32,6 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -88,22 +86,22 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Release notes</li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/" class="external-link">Version 7.1.0</a>
+      <a href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a>
     </li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/" class="external-link">Version 7.0.0</a>
+      <a href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/">Version 7.0.0</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/" class="external-link">Version 6.0.0</a>
+      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2015/10/29/roxygen2-5-0-0/" class="external-link">Version 5.0.0</a>
+      <a href="https://blog.rstudio.com/2015/10/29/roxygen2-5-0-0/">Version 5.0.0</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2014/05/19/roxygen2-4-0-1/" class="external-link">Version 4.0.1</a>
+      <a href="https://blog.rstudio.com/2014/05/19/roxygen2-4-0-1/">Version 4.0.1</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2013/12/09/roxygen2-3-0-0/" class="external-link">Version 3.0.0</a>
+      <a href="https://blog.rstudio.com/2013/12/09/roxygen2-3-0-0/">Version 3.0.0</a>
     </li>
     <li class="divider">
     <li>
@@ -114,7 +112,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/r-lib/roxygen2/" class="external-link">
+  <a href="https://github.com/r-lib/roxygen2/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -135,7 +133,7 @@
       <h1 data-toc-skip>Rd formatting</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/master/vignettes/rd-formatting.Rmd" class="external-link"><code>vignettes/rd-formatting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/master/vignettes/rd-formatting.Rmd"><code>vignettes/rd-formatting.Rmd</code></a></small>
       <div class="hidden name"><code>rd-formatting.Rmd</code></div>
 
     </div>
@@ -145,7 +143,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <a href="https://github.com/jeroen/commonmark" class="external-link">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="external-link uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports.</p>
+<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <a href="https://github.com/jeroen/commonmark">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports.</p>
 </div>
 <div id="turning-on-markdown-support" class="section level1">
 <h1 class="hasAnchor">
@@ -265,7 +263,7 @@
 <div id="tables" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tables" class="anchor"></a>Tables</h2>
-<p>Use <a href="https://github.github.com/gfm/#tables-extension-" class="external-link">GFM table formatting</a>:</p>
+<p>Use <a href="https://github.github.com/gfm/#tables-extension-">GFM table formatting</a>:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">|</span><span class="st"> </span>foo <span class="op">|</span><span class="st"> </span>bar <span class="op">|</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span><span class="st"> </span><span class="op">---</span><span class="st"> </span><span class="er">|</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="er">|</span><span class="st"> </span>baz <span class="op">|</span><span class="st"> </span>bim <span class="op">|</span></span></code></pre></div>
@@ -459,7 +457,7 @@ or in <code>pkg</code>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' Roxygen created this manual page on `r Sys.Date()` using R version</span>
 <span class="co">#' `r getRversion()`.</span></code></pre></div>
-<p>The value of the R expression is converted to a character string, with <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste(collapse = "\n")</a></code>. So you don’t need explicitly convert to a character value, numeric values or any R object with an <code><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character()</a></code> S3 method is fine. Also, you can insert multiple lines by returning a character vector. If you want to run R code without inserting any output, return an empty string or <code>NULL</code>.</p>
+<p>The value of the R expression is converted to a character string, with <code><a href="https://rdrr.io/r/base/paste.html">paste(collapse = "\n")</a></code>. So you don’t need explicitly convert to a character value, numeric values or any R object with an <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code> S3 method is fine. Also, you can insert multiple lines by returning a character vector. If you want to run R code without inserting any output, return an empty string or <code>NULL</code>.</p>
 <p>The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to <code>.Rd</code> conversion, so you can create markdown markup dynamically:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' The `iris` data set has `r ncol(iris)` columns:</span>
@@ -470,7 +468,7 @@ or in <code>pkg</code>
 <p>And the final result in the <code>.Rd</code> file will look as:</p>
 <pre><code>The \code{iris} data set has 5 columns:
 \code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.</code></pre>
-<p>The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting. This means that you can call (internal or exported) functions of the package. <code><a href="https://rdrr.io/r/utils/packageName.html" class="external-link">packageName()</a></code> will also report the name of the package:</p>
+<p>The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting. This means that you can call (internal or exported) functions of the package. <code><a href="https://rdrr.io/r/utils/packageName.html">packageName()</a></code> will also report the name of the package:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' To insert the name of the current package: `r packageName()`.</span></code></pre></div>
 <p>A new evaluation environment is created for each roxygen <em>block</em>. So the output of this code:</p>
@@ -513,7 +511,7 @@ or in <code>pkg</code>
 <li>Because the code blocks are evaluated individually, they cannot refer to each other.</li>
 <li>Some knitr chunk options are reset at the start of every code block, so if you want to change these, you’ll have to specify them for every chunk. These are currently <code>error</code>, <code>fig.path</code>, <code>fig.process</code>.</li>
 <li>Some knitr options might not create meaningful output.</li>
-<li>The markdown code runs every time you call <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (or <code><a href="https://devtools.r-lib.org//reference/document.html" class="external-link">devtools::document()</a></code>) to generated the Rd files. This potentially makes <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (much) slower. You can turn on knitr caching as usual, but make sure to omit the cache from the package.</li>
+<li>The markdown code runs every time you call <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (or <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code>) to generated the Rd files. This potentially makes <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (much) slower. You can turn on knitr caching as usual, but make sure to omit the cache from the package.</li>
 </ul>
 </div>
 </div>
@@ -552,7 +550,7 @@ or in <code>pkg</code>
 <div id="rd-formatting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rd-formatting" class="anchor"></a>Rd formatting</h2>
-<p>Within roxygen tags, you use <code>.Rd</code> syntax to format text. This vignette shows you examples of the most important commands. The full details are described in <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text" class="external-link">R extensions</a>.</p>
+<p>Within roxygen tags, you use <code>.Rd</code> syntax to format text. This vignette shows you examples of the most important commands. The full details are described in <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text">R extensions</a>.</p>
 <p>Note that <code>\</code> and <code>%</code> are special characters. To insert literals, escape with a backslash: <code>\\</code>, <code>\%</code>.</p>
 <div id="character-formatting" class="section level3">
 <h3 class="hasAnchor">
@@ -579,7 +577,7 @@ or in <code>pkg</code>
 <ul>
 <li><p><code>\url{http://rstudio.com}</code></p></li>
 <li><p><code>\href{http://rstudio.com}{Rstudio}</code></p></li>
-<li><p><code>\email{hadley@@rstudio.com}</code> (note the doubled <code><a href="https://rdrr.io/r/base/slotOp.html" class="external-link">@</a></code>)</p></li>
+<li><p><code>\email{hadley@@rstudio.com}</code> (note the doubled <code><a href="https://rdrr.io/r/base/slotOp.html">@</a></code>)</p></li>
 </ul>
 </div>
 <div id="lists-1" class="section level3">
@@ -632,21 +630,21 @@ or in <code>pkg</code>
 <p>The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with <code>#'</code> for pasting directly into the documentation.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tabular</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">is.data.frame</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>
 
-  <span class="va">align</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="st">"r"</span> <span class="kw">else</span> <span class="st">"l"</span>
-  <span class="va">col_align</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">align</span><span class="op">)</span>
+  <span class="va">align</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="st">"r"</span> <span class="kw">else</span> <span class="st">"l"</span>
+  <span class="va">col_align</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">align</span><span class="op">)</span>
 
-  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">format</span>, <span class="va">...</span><span class="op">)</span>
-  <span class="va">contents</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"paste"</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">cols</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sep <span class="op">=</span> <span class="st">" \\tab "</span>, collapse <span class="op">=</span> <span class="st">"\\cr\n#'   "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">format</span>, <span class="va">...</span><span class="op">)</span>
+  <span class="va">contents</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="st">"paste"</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">cols</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>sep <span class="op">=</span> <span class="st">" \\tab "</span>, collapse <span class="op">=</span> <span class="st">"\\cr\n#'   "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"#' \\tabular{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">col_align</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, <span class="st">"}{\n#'   "</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"\\strong{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="st">"}"</span>, sep <span class="op">=</span> <span class="st">""</span>, collapse <span class="op">=</span> <span class="st">" \\tab "</span><span class="op">)</span>, <span class="st">" \\cr\n#'   "</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"#' \\tabular{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">col_align</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, <span class="st">"}{\n#'   "</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"\\strong{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="st">"}"</span>, sep <span class="op">=</span> <span class="st">""</span>, collapse <span class="op">=</span> <span class="st">" \\tab "</span><span class="op">)</span>, <span class="st">" \\cr\n#'   "</span>,
     <span class="va">contents</span>, <span class="st">"\n#' }\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu">tabular</span><span class="op">(</span><span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu">tabular</span><span class="op">(</span><span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; #' \tabular{rrrrr}{</span>
 <span class="co">#&gt; #'   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span>
 <span class="co">#&gt; #'   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span>
@@ -671,13 +669,11 @@ or in <code>pkg</code>
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by <a href="http://hadley.nz" class="external-link external-link">Hadley Wickham</a>, Peter Danenberg, Gábor Csárdi, Manuel Eugster.</p>
+  <p>Developed by <a href="http://hadley.nz">Hadley Wickham</a>, Peter Danenberg, Gábor Csárdi, Manuel Eugster.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -685,8 +681,6 @@ or in <code>pkg</code>
 
   
 
-
-  
 
   </body>
 </html>

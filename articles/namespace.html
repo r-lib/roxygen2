@@ -32,8 +32,6 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -88,22 +86,22 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Release notes</li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/" class="external-link">Version 7.1.0</a>
+      <a href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a>
     </li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/" class="external-link">Version 7.0.0</a>
+      <a href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/">Version 7.0.0</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/" class="external-link">Version 6.0.0</a>
+      <a href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2015/10/29/roxygen2-5-0-0/" class="external-link">Version 5.0.0</a>
+      <a href="https://blog.rstudio.com/2015/10/29/roxygen2-5-0-0/">Version 5.0.0</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2014/05/19/roxygen2-4-0-1/" class="external-link">Version 4.0.1</a>
+      <a href="https://blog.rstudio.com/2014/05/19/roxygen2-4-0-1/">Version 4.0.1</a>
     </li>
     <li>
-      <a href="https://blog.rstudio.com/2013/12/09/roxygen2-3-0-0/" class="external-link">Version 3.0.0</a>
+      <a href="https://blog.rstudio.com/2013/12/09/roxygen2-3-0-0/">Version 3.0.0</a>
     </li>
     <li class="divider">
     <li>
@@ -114,7 +112,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/r-lib/roxygen2/" class="external-link">
+  <a href="https://github.com/r-lib/roxygen2/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -135,7 +133,7 @@
       <h1 data-toc-skip>NAMESPACE tags</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/master/vignettes/namespace.Rmd" class="external-link"><code>vignettes/namespace.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/master/vignettes/namespace.Rmd"><code>vignettes/namespace.Rmd</code></a></small>
       <div class="hidden name"><code>namespace.Rmd</code></div>
 
     </div>
@@ -207,8 +205,8 @@ D &lt;- setClass("D")
 <h2 class="hasAnchor">
 <a href="#imports" class="anchor"></a>Imports</h2>
 <p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package. Only unique directives are saved to the <code>NAMESPACE</code> file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.</p>
-<p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code><a href="https://rdrr.io/r/base/ns-dblcolon.html" class="external-link">::</a></code>, e.g., <code>pkg::fun()</code>. Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code><a href="https://rdrr.io/r/base/ns-dblcolon.html" class="external-link">::</a></code>.</p>
-<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make available without using <code><a href="https://rdrr.io/r/base/ns-dblcolon.html" class="external-link">::</a></code>.</p>
+<p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code>, e.g., <code>pkg::fun()</code>. Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code>.</p>
+<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make available without using <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code>.</p>
 <p>If you want to add a new method to an S3 generic, import it with <code>@importFrom pkg generic</code>.</p>
 <p>If you are using S4 you may also need:</p>
 <ul>
@@ -235,13 +233,11 @@ D &lt;- setClass("D")
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by <a href="http://hadley.nz" class="external-link external-link">Hadley Wickham</a>, Peter Danenberg, Gábor Csárdi, Manuel Eugster.</p>
+  <p>Developed by <a href="http://hadley.nz">Hadley Wickham</a>, Peter Danenberg, Gábor Csárdi, Manuel Eugster.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -249,8 +245,6 @@ D &lt;- setClass("D")
 
   
 
-
-  
 
   </body>
 </html>

@@ -37,6 +37,6 @@ outside of roxygen2.
 
 You can change the default strategy for your function with roxygen2 \code{load}
 option. Override the default off \code{pkgload} to use the \code{source} or
-\code{installed} strategies:\preformatted{RoxygenNote: list(load = "source")
+\code{installed} strategies:\preformatted{Roxygen: list(load = "source")
 }
 }

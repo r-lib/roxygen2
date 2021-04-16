@@ -40,7 +40,6 @@ Imports:
     pkgload (>= 1.0.2),
     purrr (>= 0.3.3),
     R6 (>= 2.1.2),
-    Rcpp (>= 0.11.0),
     rlang,
     stringi,
     stringr (>= 1.0.0),
@@ -54,10 +53,11 @@ Suggests:
     R.methodsS3,
     R.oo
 LinkingTo: 
-    Rcpp
+    cpp11
 VignetteBuilder: 
     knitr
+SystemRequirements: C++11
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
-RoxygenNote: 7.1.0.9000
+RoxygenNote: 7.1.1.9001
 Language: en-GB

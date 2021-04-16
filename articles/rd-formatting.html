@@ -143,7 +143,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <a href="https://github.com/jeroen/commonmark">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports.</p>
+<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <a href="https://github.com/jeroen/commonmark">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports. You can also still use the <code>.Rd</code> syntax, some of which we will present below in the <a href="#rd-syntax">Rd syntax</a> section.</p>
 </div>
 <div id="turning-on-markdown-support" class="section level1">
 <h1 class="hasAnchor">
@@ -258,7 +258,7 @@
 <span class="co">#' * A one-column matrix with three rows for the red, green</span>
 <span class="co">#'   and blue channels, as returned by [grDevices::col2rgb()]</span></code></pre></div>
 <p>Nested lists are also supported.</p>
-<p>Note that you do not have leave an empty line before the list. This is different from some markdown parsers.</p>
+<p>Note that you do not have to leave an empty line before the list. This is different from some markdown parsers.</p>
 </div>
 <div id="tables" class="section level2">
 <h2 class="hasAnchor">
@@ -547,14 +547,15 @@ or in <code>pkg</code>
 <a href="#links-to-operators" class="anchor"></a>Links to operators</h2>
 <p>Links to operators or objects that contain special characters, do not work currently. E.g. to link to the <code>%&gt;%</code> operator in the <code>magrittr</code> package, instead of <code>[magrittr::%&gt;%]</code>, you will need to use the <code>Rd</code> notation: <code>\code{\link[magrittr]{\%&gt;\%}}</code>.</p>
 </div>
-<div id="rd-formatting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#rd-formatting" class="anchor"></a>Rd formatting</h2>
-<p>Within roxygen tags, you use <code>.Rd</code> syntax to format text. This vignette shows you examples of the most important commands. The full details are described in <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text">R extensions</a>.</p>
+</div>
+<div id="rd-syntax" class="section level1">
+<h1 class="hasAnchor">
+<a href="#rd-syntax" class="anchor"></a>Rd syntax</h1>
+<p>Within roxygen tags, you can use <code>.Rd</code> syntax to format text. Below we show you examples of the most important <code>.Rd</code> markup commands. The full details are described in <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text">R extensions</a>. Before roxygen version 6.0.0 this was the only supported syntax. Now all of the formatting described below can be achived more easily with markdown syntax, with the important exception of <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Mathematics">mathematical expressions</a>.</p>
 <p>Note that <code>\</code> and <code>%</code> are special characters. To insert literals, escape with a backslash: <code>\\</code>, <code>\%</code>.</p>
-<div id="character-formatting" class="section level3">
-<h3 class="hasAnchor">
-<a href="#character-formatting" class="anchor"></a>Character formatting</h3>
+<div id="character-formatting" class="section level2">
+<h2 class="hasAnchor">
+<a href="#character-formatting" class="anchor"></a>Character formatting</h2>
 <ul>
 <li><p><code>\emph{italics}</code></p></li>
 <li><p><code>\strong{bold}</code></p></li>
@@ -562,9 +563,9 @@ or in <code>pkg</code>
 <li><p><code>\pkg{package_name}</code></p></li>
 </ul>
 </div>
-<div id="links-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#links-1" class="anchor"></a>Links</h3>
+<div id="links-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#links-1" class="anchor"></a>Links</h2>
 <p>To other documentation:</p>
 <ul>
 <li><p><code>\code{\link{function}}</code>: function in this package</p></li>
@@ -580,9 +581,9 @@ or in <code>pkg</code>
 <li><p><code>\email{hadley@@rstudio.com}</code> (note the doubled <code><a href="https://rdrr.io/r/base/slotOp.html">@</a></code>)</p></li>
 </ul>
 </div>
-<div id="lists-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#lists-1" class="anchor"></a>Lists</h3>
+<div id="lists-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#lists-1" class="anchor"></a>Lists</h2>
 <ul>
 <li>
 <p>Ordered (numbered) lists:</p>
@@ -610,18 +611,18 @@ or in <code>pkg</code>
 </li>
 </ul>
 </div>
-<div id="mathematics" class="section level3">
-<h3 class="hasAnchor">
-<a href="#mathematics" class="anchor"></a>Mathematics</h3>
+<div id="mathematics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mathematics" class="anchor"></a>Mathematics</h2>
 <p>Standard LaTeX (with no extensions):</p>
 <ul>
 <li><p><code>\eqn{a + b}</code>: inline equation</p></li>
 <li><p><code>\deqn{a + b}</code>: display (block) equation</p></li>
 </ul>
 </div>
-<div id="tables-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#tables-1" class="anchor"></a>Tables</h3>
+<div id="tables-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#tables-1" class="anchor"></a>Tables</h2>
 <p>Tables are created with <code>\tabular{}</code>. It has two arguments:</p>
 <ol style="list-style-type: decimal">
 <li><p>Column alignment, specified by letter for each column (<code>l</code> = left, <code>r</code> = right, <code>c</code> = centre.)</p></li>
@@ -653,7 +654,6 @@ or in <code>pkg</code>
 <span class="co">#&gt; #'   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span>
 <span class="co">#&gt; #'   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span>
 <span class="co">#&gt; #' }</span></code></pre></div>
-</div>
 </div>
 </div>
   </div>

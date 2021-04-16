@@ -151,7 +151,7 @@
 <a href="#the-description-block" class="anchor"></a>The description block</h2>
 <p>Each documentation block starts with some text which defines the title, the description, and the details. Here’s an example showing what the documentation for <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code> might look like if it had been written with roxygen:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' Sum of vector elements.</span>
+<code class="sourceCode R"><span class="co">#' Sum of vector elements</span>
 <span class="co">#'</span>
 <span class="co">#' `sum` returns the sum of all the values present in its arguments.</span>
 <span class="co">#'</span>
@@ -168,7 +168,7 @@
 </ul>
 <p>You can also use explicit <code>@title</code>, <code>@description</code>, and <code>@details</code> tags. This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' Sum of vector elements.</span>
+<code class="sourceCode R"><span class="co">#' Sum of vector elements</span>
 <span class="co">#' </span>
 <span class="co">#' @description</span>
 <span class="co">#' `sum` returns the sum of all the values present in its arguments.</span>
@@ -229,7 +229,7 @@
 </ul>
 <p>We could use these new tags to improve our documentation of <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code> as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' Sum of vector elements.</span>
+<code class="sourceCode R"><span class="co">#' Sum of vector elements</span>
 <span class="co">#'</span>
 <span class="co">#' `sum()` returns the sum of all the values present in its arguments.</span>
 <span class="co">#'</span>
@@ -282,7 +282,7 @@
 <p>S4 <strong>generics</strong> are also functions, so document them as such.</p>
 <p>Document <strong>S4 classes</strong> by adding a roxygen block before <code>setClass()</code>. Use <code>@slot</code> to document the slots of the class. Here’s a simple example:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' An S4 class to represent a bank account.</span>
+<code class="sourceCode R"><span class="co">#' An S4 class to represent a bank account</span>
 <span class="co">#'</span>
 <span class="co">#' @slot balance A length-one numeric vector</span>
 <span class="va">Account</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"Account"</span>,
@@ -368,7 +368,7 @@ public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/bas
 <a href="#datasets" class="anchor"></a>Datasets</h3>
 <p>Datasets are usually stored as <code>.rdata</code> files in <code>data/</code> and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset’s name.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' Prices of 50,000 round cut diamonds.</span>
+<code class="sourceCode R"><span class="co">#' Prices of 50,000 round cut diamonds</span>
 <span class="co">#'</span>
 <span class="co">#' A dataset containing the prices and other attributes of almost 54,000</span>
 <span class="co">#' diamonds.</span>

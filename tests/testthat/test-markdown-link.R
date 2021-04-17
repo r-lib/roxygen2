@@ -446,3 +446,19 @@ test_that("linking to self is unqualified", {
     "foo \\code{\\link[=fun]{fun()}} and \\link{obj} bar"
   )
 })
+
+test_that("percents are escaped in link targets", {
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' [link % text](https://foo.bar/link%20target)
+    #' @md
+    foo <- function() {}")[[1]]
+  out2 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' \\href{https://foo.bar/link%20target}{link % text}
+    #' @md
+    foo <- function() {}")[[1]]
+  expect_equivalent_rd(out1, out2)
+})

@@ -1,5 +1,14 @@
 # roxygen2 (development version)
 
+* Percent signs in markdown link targets, e.g. `[text](https://foo/ba%20r)`
+  are now handled correctly (#1209).
+
+* The new `@examplesIf` tag can be used to create conditional
+  examples. These examples only run if a specified condition
+  holds (#962).
+
+* roxygen2 is now licensed as MIT (#1163).
+
 # roxygen2 7.1.1
 
 * When processing cross package markdown links (e.g. `[pkg::fun()]`),

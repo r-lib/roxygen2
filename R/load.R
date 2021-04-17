@@ -25,7 +25,7 @@
 #' `installed` strategies:
 #'
 #' ```
-#' RoxygenNote: list(load = "source")
+#' Roxygen: list(load = "source")
 #' ```
 #' @name load
 #' @param path Path to source package

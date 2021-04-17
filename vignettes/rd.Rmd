@@ -22,7 +22,7 @@ Text within roxygen blocks can be formatted using markdown or `Rd` commands; see
 Each documentation block starts with some text which defines the title, the description, and the details. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
 
 ```{r}
-#' Sum of vector elements.
+#' Sum of vector elements
 #'
 #' `sum` returns the sum of all the values present in its arguments.
 #'
@@ -51,7 +51,7 @@ This introductory block is broken up as follows:
 You can also use explicit `@title`, `@description`, and `@details` tags. This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.
 
 ```{r}
-#' Sum of vector elements.
+#' Sum of vector elements
 #' 
 #' @description
 #' `sum` returns the sum of all the values present in its arguments.
@@ -97,12 +97,35 @@ Functions are the mostly commonly documented objects. Most functions use three t
     have examples that take a long time to run. The options are summarised
     below.
 
-    Command      | example   | help   | R CMD check
-    ------------ | --------- | ------ | -----------
-    `\dontrun{}` |           | x      |
-    `\dontshow{}`| x         |        | x
-    `\donttest{}`| x         | x      |
+    Command      | example   | help   | R CMD check | R CMD check --as-cran 
+    ------------ | --------- | ------ | ----------- | ---------------------
+    `\dontrun{}` |           | x      |             |
+    `\dontshow{}`| x         |        | x           | x
+    `\donttest{}`| x         | x      |             | x
 
+    Note that `R CMD check --as-cran` is run for incoming CRAN checks but
+    not for regular CRAN checks.
+    
+    For finer control you can use `@examplesIf
+    
+    ```r
+    #' @examplesIf interactive()
+    #' browseURL("https://roxygen2.r-lib.org")
+    ```
+    
+    will generate
+    
+    ```
+    \examples{
+    \dontshow{if (interactive() (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+    gh_organizations(since = 42)
+    \dontshow{\}) # examplesIf}
+    }
+    ```
+    
+    This way the code evaluating whether the example can be run is not 
+    shown to users reading the help, but it still prevents R CMD check failures.
+    
     Instead of including examples directly in the documentation, you can
     put them in separate files and use `@example path/relative/to/package/root`
     to insert them into the documentation.
@@ -115,7 +138,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
 We could use these new tags to improve our documentation of `sum()` as follows:
 
 ```{r}
-#' Sum of vector elements.
+#' Sum of vector elements
 #'
 #' `sum()` returns the sum of all the values present in its arguments.
 #'
@@ -183,7 +206,7 @@ S4 __generics__ are also functions, so document them as such.
 Document __S4 classes__ by adding a roxygen block before `setClass()`. Use `@slot` to document the slots of the class. Here's a simple example:
 
 ```{r}
-#' An S4 class to represent a bank account.
+#' An S4 class to represent a bank account
 #'
 #' @slot balance A length-one numeric vector
 Account <- setClass("Account",
@@ -299,7 +322,7 @@ public = list(
 Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset's name.
 
 ```{r}
-#' Prices of 50,000 round cut diamonds.
+#' Prices of 50,000 round cut diamonds
 #'
 #' A dataset containing the prices and other attributes of almost 54,000
 #' diamonds.
@@ -335,7 +358,7 @@ Note the use of two additional tags that are particularly useful for documenting
 
 As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel `"_PACKAGE"`. We recommend placing package documentation in `{pkgname}-package.R`, and have `@keywords internal`. Here's an example:
 
-```{r}
+```{r, eval = FALSE}
 #' @details
 #' The only function you're likely to need from roxygen2 is [roxygenize()]. 
 #' Otherwise refer to the vignettes to see how to format the documentation.
@@ -612,7 +635,7 @@ All content in the Rmd file will go either in the details or in new top level se
 
 ### Links
 
-The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting.Rmd")` for details.
+The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting")` for details.
 
 ### Caching and figures
 

@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Bug fix for upcoming stringr 2.0.0 release.
+
 * Code blocks with language now add `sourceCode` to the generated div; this
   makes syntax highlighting more consistent across 
   downlit/pandoc/knitr/roxygen2.

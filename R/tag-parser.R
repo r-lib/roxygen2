@@ -91,6 +91,7 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else {
     pieces <- str_split_fixed(str_trim(x$raw), "[[:space:]]+", 2)
+    pieces[is.na(pieces)] <- ""
 
     if (markdown) {
       pieces[,2] <- markdown_if_active(pieces[,2], x)

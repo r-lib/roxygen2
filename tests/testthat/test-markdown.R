@@ -65,7 +65,7 @@ test_that("code block with language creates HTML tag", {
     #'
     #' Description
     #'
-    #' Details with a code block:\\if{html}{\\out{<div class=\"r\">}}\\preformatted{x <- 1:10 \\%>\\%
+    #' Details with a code block:\\if{html}{\\out{<div class=\"sourceCode r\">}}\\preformatted{x <- 1:10 \\%>\\%
     #'   multiply_by(10) \\%>\\%
     #'   add(42)
     #' }\\if{html}{\\out{</div>}}

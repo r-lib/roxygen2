@@ -652,7 +652,7 @@ The included Rmd file can have roxygen markdown style links to other help topics
 ```
 ````
 
-If the Rmd file has links to other help topics, then some care is needed, as those links while not work in Rmd files. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which always links them to the help topics in the manual. Example:
+If the Rmd file contains roxygen (markdown style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which instead always links to the help topics in the manual. Example:
 
 ```
 See also the [roxygen2::roxygenize()] function.
@@ -660,9 +660,9 @@ See also the [roxygen2::roxygenize()] function.
 [roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html
 ```
 
-This example will link to the supplied URLs in html / markdown files and it will link to the `roxygenize` help topic in the manual.
+This example will link to the supplied URLs in HTML / Markdown files and it will link to the `roxygenize` help topic in the manual.
 
-Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in pandoc, and it is harmless.
+Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in Pandoc, and it is harmless.
 
 ## Other tags
 

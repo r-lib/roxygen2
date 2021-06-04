@@ -118,7 +118,7 @@ And generate Rd like this:
 The first step is to define a method for `roxy_tag_parse()` that describes how to turn the parse the tag text.
 The name of the class will be `roxy_tag_{tag}`, which in this case is `roxy_tag_tip`. 
 This function takes a `roxy_tag` as input, and it's job is to set `x$val` to a convenient parsed value that will be used later by the roclet.
-Here we want to process the text using markdown so we can just use `tag_markdown()`:
+Here we want to process the text using Markdown so we can just use `tag_markdown()`:
 
 ```{r}
 roxy_tag_parse.roxy_tag_tip <- function(x) {
@@ -149,7 +149,7 @@ block
 str(block$tags[[2]])
 ```
 
-(Here I explicit turn markdown parsing on using `@md`; it's usually turned on for a package using roxygen options).
+(Here I explicit turn Markdown parsing on using `@md`; it's usually turned on for a package using roxygen options).
 
 Next we define a method for `roxy_tag_rd()`, which must create an `rd_section()`.
 We're going to create a new section called `tip`.

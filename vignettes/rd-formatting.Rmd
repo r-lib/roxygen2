@@ -13,25 +13,25 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 # Introduction
 
-Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the [commonmark package](https://github.com/jeroen/commonmark), which is based on the CommonMark Reference Implementation to parse these tags. See <https://commonmark.org/help/> for more about the parser and the markdown language it supports. 
+Starting from version 6.0.0, roxygen supports Markdown markup within most roxygen tags. Roxygen uses the [commonmark package](https://github.com/jeroen/commonmark), which is based on the CommonMark Reference Implementation to parse these tags. See <https://commonmark.org/help/> for more about the parser and the Markdown language it supports. 
 You can also still use the `.Rd` syntax, some of which we will present
 below in the [Rd syntax](#rd-syntax) section.
 
-# Turning on markdown support
+# Turning on Markdown support
 
-There are two ways to turn on markdown support for a package: globally, at the package level, and locally at the block level.
+There are two ways to turn on Markdown support for a package: globally, at the package level, and locally at the block level.
 
-To turn on markdown for the whole package, insert this entry into the `DESCRIPTION` file of the package:
+To turn on Markdown for the whole package, insert this entry into the `DESCRIPTION` file of the package:
 ```
 Roxygen: list(markdown = TRUE)
 ```
-The position of the entry in the file does not matter. After this, all Roxygen documentation will be parsed as markdown.
+The position of the entry in the file does not matter. After this, all Roxygen documentation will be parsed as Markdown.
 
-Alternatively, you can use the `@md` tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in markdown.
+Alternatively, you can use the `@md` tag to turn on Markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in Markdown.
 
-There is also a new `@noMd` tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.
+There is also a new `@noMd` tag. Use this if you turned on Markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the Markdown parser interferes with more complex Rd syntax.
 
-Here is an example roxygen chunk that uses markdown.
+Here is an example roxygen chunk that uses Markdown.
 
 ```r
 #' Use roxygen to document a package
@@ -53,7 +53,7 @@ Here is an example roxygen chunk that uses markdown.
 
 ## Sections
 
-The usual markdown heading markup creates sections and subsections. Top level headings, i.e. '`#`' create sections, via the `\section{}` Rd tag. '`#`' may only appear after the `@description` and `@details` tags. Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`, if you prefer to place it towards the end of the block, after `@return` for example:
+The usual Markdown heading markup creates sections and subsections. Top level headings, i.e. '`#`' create sections, via the `\section{}` Rd tag. '`#`' may only appear after the `@description` and `@details` tags. Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`, if you prefer to place it towards the end of the block, after `@return` for example:
 
 ```r
 #' @details
@@ -154,7 +154,7 @@ Regular Markdown lists are recognized and converted to `\enumerate{}` or `\itemi
 
 Nested lists are also supported.
 
-Note that you do not have to leave an empty line before the list. This is different from some markdown parsers.
+Note that you do not have to leave an empty line before the list. This is different from some Markdown parsers.
 
 ## Tables
 
@@ -179,7 +179,7 @@ By default, columns are left-aligned. Use colons to generate right and center al
 Markdown hyperlinks work as usual:
 
 ```r
-#' See more about the markdown markup at the
+#' See more about the Markdown markup at the
 #' [Commonmark web site](http://commonmark.org/help)
 ```
 
@@ -271,13 +271,13 @@ Markdown syntax for inline images works. The image files must be in the `man/fig
 
 # Dynamic R code
 
-Similarly to the knitr package, you can use the markdown inline code markup or markdown code blocks to evaluate R code and insert its output into the manual page.
+Similarly to the knitr package, you can use the Markdown inline code markup or Markdown code blocks to evaluate R code and insert its output into the manual page.
 
 ## Inline code
 
 To do this, prefix the code with `r `, i.e. the lowercase letter 'r' and a space character.
 Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value.
-After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.
+After all such substitutions, the text of the whole tag is interpreted as Markdown, as usual.
 
 For example, the following will insert the date and the R version of the roxygen run.
 
@@ -291,7 +291,7 @@ So you don't need explicitly convert to a character value, numeric values or any
 Also, you can insert multiple lines by returning a character vector.
 If you want to run R code without inserting any output, return an empty string or `NULL`.
 
-The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to `.Rd` conversion, so you can create markdown markup dynamically:
+The value of the expression is inserted into the text of the tag without interpreting it, before the Markdown to `.Rd` conversion, so you can create Markdown markup dynamically:
 
 ```r
 #' The `iris` data set has `r "\x60r ncol(iris)\x60"` columns:
@@ -380,21 +380,21 @@ Some of the known limitations:
   * Some knitr chunk options are reset at the start of every code block, so if you want to change these, you'll have to specify them for every chunk.
     These are currently `error`, `fig.path`, `fig.process`.
   * Some knitr options might not create meaningful output.
-  * The markdown code runs every time you call `roxygenize()` (or `devtools::document()`) to generated the Rd files.
+  * The Markdown code runs every time you call `roxygenize()` (or `devtools::document()`) to generated the Rd files.
     This potentially makes `roxygenize()` (much) slower.
     You can turn on knitr caching as usual, but make sure to omit the cache from the package.
 
-# Roxygen and Rd tags *not* parsed as markdown
+# Roxygen and Rd tags *not* parsed as Markdown
 
-Some of the roxygen tags are not parsed as markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without markdown support: `@aliases`, `@backref`, `@docType`, `@encoding`, `@evalRd`, `@example`, `@examples`, `@family`, `@inheritParams`, `@keywords`, `@method` `@name`, `@md`, `@noMd`, `@noRd`, `@rdname`, `@rawRd`, `@usage`.
+Some of the roxygen tags are not parsed as Markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without Markdown support: `@aliases`, `@backref`, `@docType`, `@encoding`, `@evalRd`, `@example`, `@examples`, `@family`, `@inheritParams`, `@keywords`, `@method` `@name`, `@md`, `@noMd`, `@noRd`, `@rdname`, `@rawRd`, `@usage`.
 
-When mixing `Rd` and markdown notation, most `Rd` tags may contain markdown markup, the ones that can *not* are: `r paste0("\x60", roxygen2:::escaped_for_md, "\x60", collapse = ", ")`.
+When mixing `Rd` and Markdown notation, most `Rd` tags may contain Markdown markup, the ones that can *not* are: `r paste0("\x60", roxygen2:::escaped_for_md, "\x60", collapse = ", ")`.
 
 # Possible problems
 
-## Mixing markdown and `Rd` markup
+## Mixing Markdown and `Rd` markup
 
-Note that turning on markdown does *not* turn off the standard `Rd` syntax. We suggest that you use the regular `Rd` tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.
+Note that turning on Markdown does *not* turn off the standard `Rd` syntax. We suggest that you use the regular `Rd` tags in a Markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the Markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.
 
 ## Leading whitespace
 
@@ -417,7 +417,7 @@ Links to operators or objects that contain special characters, do not work curre
 
 Within roxygen tags, you can use `.Rd` syntax to format text. Below we show you examples of the most important `.Rd` markup commands. The full details are described in [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text).
 Before roxygen version 6.0.0 this was the only supported syntax. Now all of
-the formatting described below can be achived more easily with markdown syntax,
+the formatting described below can be achived more easily with Markdown syntax,
 with the important exception of [mathematical expressions](https://cran.r-project.org/doc/manuals/R-exts.html#Mathematics).
 
 Note that `\` and `%` are special characters. To insert literals, escape with a backslash: `\\`, `\%`.

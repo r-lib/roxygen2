@@ -217,7 +217,7 @@ First we explore the simplest form: `[ref]`. The presence of trailing parenthese
 | ``[`pkg::thing`]`` | package or in `pkg`    | mean that it **is** typeset as code.\       |
 |                    |                        | Good for documenting a class.\              |
 |                    |                        | Produces Rd: `\code{\link{thing}}` or\      |
-|                    |                        | `\code{\link[pkg:thing]{pkg::thing}`}       |
+|                    |                        | `\code{\link[pkg:thing]{pkg::thing}}`       |
 +--------------------+------------------------+---------------------------------------------+
 
 Use the second form `[text][ref]` to link to the topic specified by `ref`, but with `text` as the link text.

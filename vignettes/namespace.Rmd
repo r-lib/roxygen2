@@ -32,7 +32,7 @@ Use the following guidelines to decide what to export:
 * S3 generics: the generic is a function so `@export` if you want it to
   be usable outside the package
 
-* S3 methods: every S3 method _must_ be exported, even if the generic is not.
+* S3 methods: every S3 method _must_ use `@export`, even if the generic does not.
   Otherwise the S3 method table will not be generated correctly and internal
   generics will not find the correct method.
   

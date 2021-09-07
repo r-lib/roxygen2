@@ -232,7 +232,7 @@ roxygen2 can now document R6 classes (#922). See `vignette("rd")` for details.
 
 roxygen2 now provides three strategies for loading your code (#822):
 
-* `load_pkgload()`, the default, uses [pkgload](https://www.github.com/r-lib/pkgload). 
+* `load_pkgload()`, the default, uses [pkgload](https://github.com/r-lib/pkgload). 
   Compared to the previous release, this now automatically recompiles your 
   package if needed.
 
@@ -513,7 +513,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
       instead of throwing an utterly useless error (#560).
 
 * `person()` now supports all
-  [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html) role codes
+  [MARC Relator](https://www.loc.gov/marc/relators/relaterm.html) role codes
   (#662, @publicus).
 
 * `topic_add_usage()` now outputs formatted "Usage" section with max

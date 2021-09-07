@@ -356,7 +356,7 @@
 <a href="#code-loading" class="anchor"></a>Code loading</h3>
 <p>roxygen2 now provides three strategies for loading your code (<a href='https://github.com/r-lib/roxygen2/issues/822'>#822</a>):</p>
 <ul>
-<li><p><code><a href="../reference/load.html">load_pkgload()</a></code>, the default, uses <a href="https://www.github.com/r-lib/pkgload">pkgload</a>. Compared to the previous release, this now automatically recompiles your package if needed.</p></li>
+<li><p><code><a href="../reference/load.html">load_pkgload()</a></code>, the default, uses <a href="https://github.com/r-lib/pkgload">pkgload</a>. Compared to the previous release, this now automatically recompiles your package if needed.</p></li>
 <li><p><code><a href="../reference/load.html">load_source()</a></code> attaches required packages and <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>s all files in <code>R/</code>. This is a cruder simulation of package loading than pkgload (and e.g. is unreliable if you use S4 extensively), but it does not require that the package be compiled. Use if the default strategy (used in roxygen2 6.1.0 and above) causes you grief.</p></li>
 <li><p><code><a href="../reference/load.html">load_installed()</a></code> assumes you have installed the package. This is best used as part of a bigger automated workflow.</p></li>
 </ul>
@@ -502,7 +502,7 @@
 <li><p>Unsupported markdown features now generate a mildly helpful warning instead of throwing an utterly useless error (<a href='https://github.com/r-lib/roxygen2/issues/560'>#560</a>).</p></li>
 </ul>
 </li>
-<li><p><code><a href="https://rdrr.io/r/utils/person.html">person()</a></code> now supports all <a href="http://www.loc.gov/marc/relators/relaterm.html">MARC Relator</a> role codes (<a href='https://github.com/r-lib/roxygen2/issues/662'>#662</a>, <a href='https://github.com/publicus'>@publicus</a>).</p></li>
+<li><p><code><a href="https://rdrr.io/r/utils/person.html">person()</a></code> now supports all <a href="https://www.loc.gov/marc/relators/relaterm.html">MARC Relator</a> role codes (<a href='https://github.com/r-lib/roxygen2/issues/662'>#662</a>, <a href='https://github.com/publicus'>@publicus</a>).</p></li>
 <li><p><code>topic_add_usage()</code> now outputs formatted “Usage” section with max width of 80 characters thanks to a now more flexible <code>wrap_string()</code> (<a href='https://github.com/JoshOBrien'>@JoshOBrien</a>, <a href='https://github.com/r-lib/roxygen2/issues/719'>#719</a>).</p></li>
 </ul>
 </div>

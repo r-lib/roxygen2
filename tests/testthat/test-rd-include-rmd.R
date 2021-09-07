@@ -163,7 +163,7 @@ test_that("inline html", {
     "",
     "## Subsection in details",
     "",
-    "Some subsection text with <span>inline html</span>.")
+    "Some subsection text with <span class='x'>inline html</span>.")
   rox <- sprintf("
     #' Title
     #' @includeRmd %s
@@ -174,7 +174,7 @@ test_that("inline html", {
     "Text at the front",
     "\\subsection{Subsection in details}{",
     "Some subsection text with ",
-    "\\if{html}{\\out{<span>}}inline html\\if{html}{\\out{</span>}}.\n}"
+    "\\if{html}{\\out{<span class=\"x\">}}inline html\\if{html}{\\out{</span>}}.\n}"
   )
   expect_equal_strings(out1$get_value("details"), exp_details)
 })

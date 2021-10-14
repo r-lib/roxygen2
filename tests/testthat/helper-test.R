@@ -11,3 +11,7 @@ expect_equal_strings <- function(s1, s2, ignore_ws = TRUE) {
   }
   expect_equal(s1, s2)
 }
+
+expect_roxygen_message <- function(...) {
+  expect_message(..., class = "roxygen_message")
+}

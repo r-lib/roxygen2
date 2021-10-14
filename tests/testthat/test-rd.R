@@ -54,7 +54,7 @@ test_that("documenting NA gives useful error message (#194)", {
     roc_proc_text(rd_roclet(), "
       #' Missing value
       NA"
-      ),
+    ),
     "Missing name"
   )
 })
@@ -144,7 +144,10 @@ test_that("can generate nonASCII document", {
   test_pkg <- temp_copy_pkg(test_path('testNonASCII'))
   on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
 
-  expect_output(roxygenise(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
+  expect_roxygen_message(
+    roxygenise(test_pkg, roclets = "rd"),
+    "printChineseMsg[.]Rd"
+  )
 
   rd_path <- file.path(test_pkg, "man", "printChineseMsg.Rd")
   expect_true(file.exists(rd_path))
@@ -154,14 +157,20 @@ test_that("can generate nonASCII document", {
   expect_true(any(grepl("\u4e2d\u6587\u6ce8\u91ca", rd)))
 
   # Shouldn't change again
-  expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
+  expect_roxygen_message(
+    expect_message(roxygenise(test_pkg, roclets = "rd"), "Loading"),
+    regexp = NA
+  )
 })
 
 test_that("unicode escapes are ok", {
   test_pkg <- temp_copy_pkg(test_path('testUtf8Escape'))
   on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
 
-  expect_output(roxygenise(test_pkg, roclets = "rd"), "a[.]Rd")
+  expect_roxygen_message(
+    roxygenise(test_pkg, roclets = "rd"),
+    "a[.]Rd"
+  )
 
   rd_path <- file.path(test_pkg, "man", "a.Rd")
   expect_true(file.exists(rd_path))
@@ -170,7 +179,10 @@ test_that("unicode escapes are ok", {
   expect_true(any(grepl("7\u00b0C", rd)))
 
   # Shouldn't change again
-  expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
+  expect_roxygen_message(
+    expect_message(roxygenise(test_pkg, roclets = "rd"), "Loading"),
+    regexp = NA
+  )
 })
 
 test_that("write_lines writes unix-style line endings.", {

@@ -39,14 +39,23 @@ test_that("write_if_different and end of line", {
   # line endings
   raw_mix <- charToRaw(paste0(paste0(cnt_mix, collapse = "\r\n"), "\r\n"))
   writeBin(raw_mix, tmp)
-  expect_output(write_if_different(tmp, cnt_unix, check = FALSE), "Writing ")
+  expect_roxygen_message(
+    write_if_different(tmp, cnt_unix, check = FALSE),
+    "Writing "
+  )
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 
   writeBin(raw_mix, tmp)
-  expect_output(write_if_different(tmp, cnt_win, check = FALSE), "Writing ")
+  expect_roxygen_message(
+    write_if_different(tmp, cnt_win, check = FALSE),
+    "Writing "
+  )
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 
   writeBin(raw_mix, tmp)
-  expect_output(write_if_different(tmp, cnt_mix, check = FALSE), "Writing ")
+  expect_roxygen_message(
+    write_if_different(tmp, cnt_mix, check = FALSE),
+    "Writing "
+  )
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 })

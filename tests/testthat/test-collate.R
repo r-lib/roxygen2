@@ -38,9 +38,8 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
   on.exit( file.copy(tmp, desc_path, overwrite = TRUE), add = TRUE)
 
   # load package: this should update the DESCRIPTION file (warning)
-  expect_output(update_collate(pkg_path), "Updating collate directive", info = "update_collate on incomplete package: DESCRIPTION file is updated")
+  expect_roxygen_message(update_collate(pkg_path), "Updating collate directive", info = "update_collate on incomplete package: DESCRIPTION file is updated")
 
   # should not update anymore
-  expect_true(!length(capture.output(update_collate(pkg_path))), info = "update_collate on complete package: DESCRIPTION file is NOT updated")
-
+  expect_roxygen_message(update_collate(pkg_path), regexp = NA, info = "update_collate on incomplete package: DESCRIPTION file is updated")
  })

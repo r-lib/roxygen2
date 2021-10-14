@@ -54,6 +54,12 @@ test_that("% in links are escaped", {
   expect_equal(markdown("[base::%%]"), "\\link[base:Arithmetic]{base::\\%\\%}")
 })
 
+test_that("{ and } in links are escaped (#1259)", {
+  expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo(\\{ bar \\})}")
+  expect_equal(markdown("[`foo({ bar })`][x]"), "\\code{\\link[=x]{foo(\\{ bar \\})}}")
+  expect_equal(markdown("[`{{`][x]"), "\\code{\\link[=x]{\\{\\{}}")
+})
+
 test_that("commonmark picks up the various link references", {
   cases <- list(
     list("foo [func()] bar",            c("R:func()", "func()")),

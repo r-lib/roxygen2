@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Curly braces in markdown links are now escaped (#1259).
+
 # roxygen2 7.1.2
 
 * The new `@examplesIf` tag can be used to create conditional

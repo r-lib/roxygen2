@@ -271,9 +271,11 @@ can_parse <- function(x) {
   }, error = function(x) FALSE)
 }
 
-escape_verb <- function(x) {
+escape_verb <- function(x, percent = TRUE) {
   # Don't need to escape \\ because that's already handled in double_escape_md()
-  x <- gsub("%", "\\%", x, fixed = TRUE)
+  if (percent) {
+    x <- gsub("%", "\\%", x, fixed = TRUE)
+  }
   x <- gsub("{", "\\{", x, fixed = TRUE)
   x <- gsub("}", "\\}", x, fixed = TRUE)
   x

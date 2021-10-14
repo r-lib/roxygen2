@@ -60,8 +60,7 @@ roxygenize <- function(package.dir = ".",
   # Now load code
   load_code <- find_load_strategy(load_code)
   env <- load_code(base_path)
-  roxy_meta_set("env", env)
-  on.exit(roxy_meta_set("env", NULL), add = TRUE)
+  roxy_meta_local(env = env)
 
   # Tokenise each file
   blocks <- parse_package(base_path, env = NULL)

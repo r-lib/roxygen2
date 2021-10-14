@@ -122,7 +122,8 @@ load_options_meta <- function(base_path = ".", path = "man/roxygen/meta.R") {
 roxy_meta <- new_environment(list(
   # These should always be strings by contract
   current_file = "",
-  current_path = ""
+  current_path = "",
+  env = baseenv()
 ))
 
 #' @export

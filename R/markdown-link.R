@@ -99,9 +99,7 @@ parse_link <- function(destination, contents, state) {
     contents <- xml_contents(contents)
     destination <- sub("`$", "", sub("^`", "", destination))
 
-    in_link_code <- state$in_link_code
-    on.exit(state$in_link_code <- in_link_code, add = TRUE)
-    state$in_link_code <- TRUE
+    local_bindings(.env = state, in_link_code = TRUE)
   }
 
   ## If the supplied link text is the same as the reference text,

@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* roxygen2 now uses cli for user feedback (#1262, @malcolmbarrett)
+
 # roxygen2 7.1.2
 
 * The new `@examplesIf` tag can be used to create conditional

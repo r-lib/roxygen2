@@ -55,11 +55,13 @@ test_that("% in links are escaped", {
 })
 
 test_that("{ and } in links are escaped (#1259)", {
-  expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo(\\{ bar \\})}")
   expect_equal(markdown("[`foo({ bar })`][x]"), "\\code{\\link[=x]{foo(\\{ bar \\})}}")
   expect_equal(markdown("[`{{`][x]"), "\\code{\\link[=x]{\\{\\{}}")
 
-  # Non text parts are not escaped (even though this is invalid Rd)
+  # Non code parts are not escaped (invalid Rd)
+  expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo({ bar })}")
+
+  # Nested code parts are escaped (invalid Rd)
   expect_equal(markdown("[`foo` operator][x]"), "\\link[=x]{\\code{foo} operator}")
   expect_equal(markdown("[`foo{}` operator][x]"), "\\link[=x]{\\verb{foo\\{\\}} operator}")
 })

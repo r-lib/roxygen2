@@ -102,6 +102,16 @@ parse_link <- function(destination, contents, state) {
     local_bindings(.env = state, in_link_code = TRUE)
   }
 
+  if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
+    incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
+
+    cli::cli_abort(c(
+      "Links must contain plain text.",
+      x = "Problematic node{?s}: {.var {incorrect}}",
+      i = "Link target: {.var {destination}}"
+    ))
+  }
+
   ## If the supplied link text is the same as the reference text,
   ## then we assume that the link text was automatically generated and
   ## it was not specified explicitly. In this case `()` links are

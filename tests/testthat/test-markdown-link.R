@@ -60,10 +60,19 @@ test_that("{ and } in links are escaped (#1259)", {
 
   # Non code parts are not escaped (invalid Rd)
   expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo({ bar })}")
+})
 
-  # Nested code parts are escaped (invalid Rd)
-  expect_equal(markdown("[`foo` operator][x]"), "\\link[=x]{\\code{foo} operator}")
-  expect_equal(markdown("[`foo{}` operator][x]"), "\\link[=x]{\\verb{foo\\{\\}} operator}")
+# FIXME: Remove after switching to e3
+local({
+testthat::local_edition(3)
+
+test_that("non-text nodes in links fails", {
+  expect_snapshot({
+    (expect_error(markdown("[`foo` bar][x]"), "plain text"))
+    (expect_error(markdown("[`foo{}` bar __baz__][x]"), "plain text"))
+  })
+})
+  
 })
 
 test_that("commonmark picks up the various link references", {

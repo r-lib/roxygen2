@@ -80,8 +80,7 @@ block_create <- function(tokens, call, srcref) {
     pkgenv <- baseenv()
   }
   roxy_meta_local(
-    evalenv = env(pkgenv),
-    current_srcref = srcref
+    evalenv = env(pkgenv)
   )
 
   tags <- parse_tags(tokens)
@@ -213,9 +212,20 @@ parse_tags <- function(tokens) {
 
   out <- vector("list", length(tokens))
   for (i in seq_along(tokens)) {
+    roxy_meta_local(current_lines = token_lines(tokens, i))
     out[[i]] <- roxy_tag_parse(tokens[[i]])
   }
   compact(out)
+}
+
+token_lines <- function(tokens, i) {
+  start <- tokens[[i]]$line
+
+  if (i == length(tokens)) {
+    c(start, Inf)
+  } else {
+    c(start, tokens[[i + 1]]$line)
+  }
 }
 
 #' @export

@@ -13,6 +13,9 @@ expect_equal_strings <- function(s1, s2, ignore_ws = TRUE) {
 }
 
 with_file <- function(expr) {
-  roxy_meta_local(current_file = "test_file.R")
+  roxy_meta_local(
+    current_file = "test_file.R",
+    current_lines = c(0, 1)
+  )
   expr
 }

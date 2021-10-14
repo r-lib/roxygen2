@@ -148,9 +148,6 @@ parse_link <- function(destination, contents, state) {
   } else {
     contents <- mdxml_link_text(contents, state)
 
-    # `%` are already escaped by `mdxml_link_text()`
-    contents <- escape_verb(contents, percent = FALSE)
-
     list(
       paste0(
         if (is_code) "\\code{",

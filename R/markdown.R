@@ -193,7 +193,7 @@ mdxml_node_to_rd <- function(xml, state) {
     unknown = mdxml_children_to_rd(xml, state),
 
     paragraph = paste0("\n\n", mdxml_children_to_rd(xml, state)),
-    text = escape_comment(xml_text(xml)),
+    text = if (is_true(state$inlink)) escape_verb(xml_text(xml)) else escape_comment(xml_text(xml)),
     emph = paste0("\\emph{", mdxml_children_to_rd(xml, state), "}"),
     strong = paste0("\\strong{", mdxml_children_to_rd(xml, state), "}"),
     softbreak = mdxml_break(state),
@@ -271,11 +271,9 @@ can_parse <- function(x) {
   }, error = function(x) FALSE)
 }
 
-escape_verb <- function(x, percent = TRUE) {
+escape_verb <- function(x) {
   # Don't need to escape \\ because that's already handled in double_escape_md()
-  if (percent) {
-    x <- gsub("%", "\\%", x, fixed = TRUE)
-  }
+  x <- gsub("%", "\\%", x, fixed = TRUE)
   x <- gsub("{", "\\{", x, fixed = TRUE)
   x <- gsub("}", "\\}", x, fixed = TRUE)
   x

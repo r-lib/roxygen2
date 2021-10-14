@@ -2,6 +2,9 @@
 
 * DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
   `\doi{}` tag (@ThierryO, #1296).
+* `current_path` and `current_file` are now valid options for
+  `roxy_meta_get()` (#1243).
+
 * Links that contains markup like ``[foo `bar`][target]`` now cause an
   informative error. They would previously generate invalid Rd markup
   that failed at runtime.

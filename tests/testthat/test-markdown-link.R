@@ -69,7 +69,7 @@ testthat::local_edition(3)
 test_that("non-text nodes in links fails", {
   expect_snapshot({
     (expect_error(markdown("[`foo` bar][x]"), "plain text"))
-    (expect_error(markdown("[`foo{}` bar __baz__][x]"), "plain text"))
+    (expect_error(with_file(markdown("[`foo{}` bar __baz__][x]")), "plain text"))
   })
 })
   

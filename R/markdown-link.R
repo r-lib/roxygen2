@@ -105,10 +105,13 @@ parse_link <- function(destination, contents, state) {
   if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
     incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
 
+    file <- roxy_meta_get("current_file")
+
     cli::cli_abort(c(
       "Links must contain plain text.",
       x = "Problematic node{?s}: {.var {incorrect}}",
-      i = "Link target: {.var {destination}}"
+      i = "Link target: {.var {destination}}",
+      i = if (nzchar(file)) "Current file: {.file {file}}"
     ))
   }
 

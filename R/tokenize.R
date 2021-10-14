@@ -1,5 +1,10 @@
 # Returns list of roxy_blocks
 tokenize_file <- function(file, srcref_path = NULL) {
+  roxy_meta_local(
+    current_path = file,
+    current_file = basename(file)
+  )
+
   lines <- read_lines(file)
 
   parsed <- parse(

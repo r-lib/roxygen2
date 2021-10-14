@@ -9,13 +9,14 @@
       x Problematic node: `code`
       i Link target: `x`
     Code
-      (expect_error(markdown("[`foo{}` bar __baz__][x]"), "plain text"))
+      (expect_error(with_file(markdown("[`foo{}` bar __baz__][x]")), "plain text"))
     Output
       <error/rlang_error>
       Error in `parse_link()`:
       ! Links must contain plain text.
       x Problematic nodes: `code` and `strong`
       i Link target: `x`
+      i Current file: 'test_file.R'
 
 # short and sweet links work
 

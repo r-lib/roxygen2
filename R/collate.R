@@ -40,7 +40,7 @@ update_collate <- function(base_path) {
   old <- desc::desc_get_collate(file = desc_path)
 
   if (!identical(old, new)) {
-    cat('Updating collate directive in ', desc_path, "\n")
+    cli_alert_success_roxy("Updating collate directive in {.file {desc_path}}")
     desc::desc_set_collate(new, file = desc_path)
   }
 

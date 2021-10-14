@@ -31,6 +31,7 @@ BugReports: https://github.com/r-lib/roxygen2/issues
 Depends: 
     R (>= 3.3)
 Imports: 
+    cli,
     brew,
     commonmark,
     desc (>= 1.2.0),
@@ -59,5 +60,5 @@ VignetteBuilder:
 SystemRequirements: C++11
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
-RoxygenNote: 7.1.2
+RoxygenNote: 7.1.2.9000
 Language: en-GB

@@ -1,3 +1,19 @@
+cli_alert_success_roxy <- function(..., .envir = parent.frame()) {
+  cli::cli_alert_success(
+    ...,
+    class = "roxygen_message",
+    .envir = .envir
+  )
+}
+
+cli_alert_danger_roxy <- function(..., .envir = parent.frame()) {
+  cli::cli_alert_danger(
+    ...,
+    class = "roxygen_message",
+    .envir = .envir
+  )
+}
+
 internal_f <- function(p, f) {
   stopifnot(is.character(p), length(p) == 1)
   stopifnot(is.character(f), length(f) == 1)
@@ -80,10 +96,10 @@ write_if_different <- function(path, contents, check = TRUE) {
 
   name <- basename(path)
   if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
-    cat("Skipping invalid path: ", name, "\n")
+    cli_alert_danger_roxy("Skipping invalid path: {.file {name}}")
     FALSE
   } else {
-    cat(sprintf('Writing %s\n', name))
+    cli_alert_success_roxy("Writing {.file {name}}")
     writeBin(charToRaw(contents), path)
     TRUE
   }

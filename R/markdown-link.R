@@ -112,7 +112,7 @@ parse_link <- function(destination, contents, state) {
       "Links must contain plain text.",
       x = "Problematic node{?s}: {.var {incorrect}}",
       i = "Link target: {.var {destination}}",
-      i = if (nzchar(file)) "Location: {.file {file}}",
+      i = if (is_string(file) && nzchar(file)) "Location: {.file {file}}",
       i = if (is_integerish(lines, 2)) "Lines: {lines[[1]]} - {lines[[2]]}"
     ))
   }

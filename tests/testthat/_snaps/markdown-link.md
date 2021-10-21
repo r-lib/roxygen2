@@ -17,7 +17,7 @@
       x Problematic nodes: `code` and `strong`
       i Link target: `x`
       i Location: 'test_file.R'
-      i Lines: 0 - 1
+      i Lines: 0-1
 
 # short and sweet links work
 

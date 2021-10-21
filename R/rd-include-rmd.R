@@ -15,6 +15,8 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   if (section == "") section <- "details"
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
 
+  roxy_meta_local(current_file = rmd)
+
   rmd_path <- tempfile(fileext = ".Rmd")
   md_path <- tempfile(fileext = ".md")
   on.exit(unlink(c(rmd_path, md_path), recursive = TRUE), add = TRUE)

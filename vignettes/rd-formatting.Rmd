@@ -147,7 +147,7 @@ Regular Markdown lists are recognized and converted to `\enumerate{}` or `\itemi
 #' * A 6- or 8-digit hexa color string, e.g. `#ff0000` means
 #'   red. Transparency (alpha channel) values are ignored.
 #' * A one-column matrix with three rows for the red, green
-#'   and blue channels, as returned by [grDevices::col2rgb()]
+#'   and blue channels, as returned by [grDevices::col2rgb()].
 ```
 
 Nested lists are also supported.

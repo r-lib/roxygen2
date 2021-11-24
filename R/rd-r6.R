@@ -82,7 +82,7 @@ add_default_methods <- function(methods) {
 
 r6_superclass <- function(block, r6data, env) {
   super <- r6data$super
-  cls <- unique(super$classes$classname)
+  cls <- stats::na.omit(unique(super$classes$classname))
   if (length(cls) == 0) return()
 
   lines <- character()

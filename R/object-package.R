@@ -1,6 +1,7 @@
 package_seealso <- function(desc) {
   if (!is.null(desc$URL)) {
     links <- paste0("\\url{", strsplit(desc$URL, ",\\s+")[[1]], "}")
+    links <- gsub("\\url\\{https://doi.org/", "\\doi{", links)
   } else {
     links <- character()
   }

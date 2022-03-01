@@ -46,6 +46,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 SystemRequirements: C++11
+Config/Needs/website: tidyverse/tidytemplate
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, load = "installed")
 RoxygenNote: 7.1.2

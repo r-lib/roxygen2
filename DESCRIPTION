@@ -1,25 +1,14 @@
 Package: roxygen2
 Title: In-Line Documentation for R
 Version: 7.1.2.9000
-Authors@R: 
-    c(person(given = "Hadley",
-             family = "Wickham",
-             role = c("aut", "cre", "cph"),
-             email = "hadley@rstudio.com",
-             comment = c("ORCID" = "0000-0003-4757-117X")),
-      person(given = "Peter",
-             family = "Danenberg",
-             role = c("aut", "cph"),
-             email = "pcd@roxygen.org"),
-      person(given = "Gábor",
-             family = "Csárdi",
-             role = c("aut"),
-             email = "csardi.gabor@gmail.com"),
-      person(given = "Manuel",
-             family = "Eugster",
-             role = c("aut", "cph")),
-      person(given = "RStudio",
-             role = "cph"))
+Authors@R: c(
+    person("Hadley", "Wickham", , "hadley@rstudio.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0003-4757-117X")),
+    person("Peter", "Danenberg", , "pcd@roxygen.org", role = c("aut", "cph")),
+    person("Gábor", "Csárdi", , "csardi.gabor@gmail.com", role = "aut"),
+    person("Manuel", "Eugster", role = c("aut", "cph")),
+    person("RStudio", role = c("cph", "fnd"))
+  )
 Description: Generate your Rd documentation, 'NAMESPACE' file,
     and collation field using specially formatted comments. Writing
     documentation in-line with code makes it easier to keep your

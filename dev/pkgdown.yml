@@ -1,0 +1,14 @@
+pandoc: 2.14.2
+pkgdown: 2.0.2
+pkgdown_sha: ~
+articles:
+  extending: extending.html
+  namespace: namespace.html
+  rd-formatting: rd-formatting.html
+  rd: rd.html
+  roxygen2: roxygen2.html
+last_built: 2022-03-01T16:24Z
+urls:
+  reference: https://roxygen2.r-lib.org/reference
+  article: https://roxygen2.r-lib.org/articles
+

@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://roxygen2.r-lib.org/404.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/SUPPORT.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/articles/extending.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/articles/namespace.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/articles/rd-formatting.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/articles/rd.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/articles/roxygen2.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/authors.html</loc>
+  </url>
+  <url>
     <loc>https://roxygen2.r-lib.org/index.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/news/index.html</loc>
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/RoxyTopic.html</loc>
@@ -11,6 +47,9 @@
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/escape_examples.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/index.html</loc>
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/is_s3_generic.html</loc>
@@ -80,20 +119,5 @@
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/vignette_roclet.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/extending.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/namespace.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/rd-formatting.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/rd.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/articles/roxygen2.html</loc>
   </url>
 </urlset>

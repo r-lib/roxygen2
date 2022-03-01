@@ -1,5 +1,5 @@
 ---
-title: "Introduction to roxygen2"
+title: "Getting started with roxygen2"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting started with roxygen2}

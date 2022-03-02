@@ -106,7 +106,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
     Note that `R CMD check --as-cran` is run for incoming CRAN checks but
     not for regular CRAN checks.
     
-    For finer control you can use `@examplesIf
+    For finer control you can use `@examplesIf`:
     
     ```r
     #' @examplesIf interactive()

@@ -45,7 +45,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
 
   rmarkdown::render(
     rmd_path,
-    output_format = rmarkdown::github_document(html_preview = FALSE),
+    output_format = rmarkdown::github_document(math_method = NULL, html_preview = FALSE),
     output_file = md_path,
     quiet = TRUE,
     envir = new_environment(parent = global_env())

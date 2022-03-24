@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math support in `github_document()` (#1304).
+
 # roxygen2 7.1.2
 
 * The new `@examplesIf` tag can be used to create conditional

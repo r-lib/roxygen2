@@ -113,7 +113,7 @@ test_that("only % escaped in @examples", {
 
 test_that("multi-line macros in @example", {
   # https://github.com/r-lib/roxygen2/issues/974
-  out <- roxygen2:::roc_proc_text(roxygen2:::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @title a
     #'

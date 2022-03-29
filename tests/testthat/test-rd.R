@@ -61,7 +61,7 @@ test_that("documenting NA gives useful error message (#194)", {
 
 test_that("@description NULL", {
   # Just ignore in this case
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' @description NULL
@@ -71,7 +71,7 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # Still ignore
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @description NULL
     #' @description desc
@@ -81,7 +81,7 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "desc")
 
   # Still ignore for objects as well
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @description NULL
     #' @format NULL
@@ -109,7 +109,7 @@ test_that("@description NULL", {
 
 test_that("@details NULL", {
   # Just ignore in this case
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' @details NULL
@@ -119,7 +119,7 @@ test_that("@details NULL", {
   expect_null(out[[1]]$get_value("details"))
 
   # Still ignore
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @details NULL
     #' @details desc
@@ -129,7 +129,7 @@ test_that("@details NULL", {
   expect_identical(out[[1]]$get_value("details"), "desc")
 
   # Still ignore for objects as well
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @details NULL
     #' @format NULL

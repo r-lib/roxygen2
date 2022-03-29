@@ -125,7 +125,7 @@ parse_rd <- function(x) {
 # Generated in .onLoad()
 as_character_rd <- NULL
 make_as_character_rd <- function() {
-  # "as.character.Rd" appears to be missing \href in TWOARGS
+  # "as.character.Rd" appears to a few commands in TWOARGS
   # this code hacks the body of the function to add it
   fn <- internal_f("tools", "as.character.Rd")
 
@@ -135,7 +135,7 @@ make_as_character_rd <- function() {
     return(fn)
   }
 
-  body[[idx]][[3]] <- call_modify(body[[idx]][[3]], "\\href")
+  body[[idx]][[3]] <- call_modify(body[[idx]][[3]], "\\href", "\\ifelse")
   body(fn) <- body
   fn
 }

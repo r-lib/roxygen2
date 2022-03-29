@@ -90,12 +90,12 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
-  with_mock(
-    `roxygen2::read.description` = function(...)
+  mockr::with_mock(
+    read.description = function(...)
       list(Package = "roxygen_devtest",
            Title = "Package Title",
            Description = "Package description."),
-    out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    out <- roc_proc_text(rd_roclet(), "
       #' Title
       #'
       #' @docType package

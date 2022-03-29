@@ -46,8 +46,8 @@ test_that("@docType class automatically added to reference class objects", {
 # packages -----------------------------------------------------------------
 
 test_that("can create package documentation", {
-  with_mock(
-    `roxygen2::read.description` = function(...)
+  mockr::with_mock(
+    read.description = function(...)
       list(Package = "roxygen_devtest",
            Title = "Package Title",
            Description = "Package description."),

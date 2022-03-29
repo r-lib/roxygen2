@@ -13,13 +13,6 @@ test_that("finds package description", {
   expect_equal(obj$value$desc$Package, "testEagerData")
 })
 
-test_that("Can read UTF-8 DESCRIPTIONS", {
-  expect_equal(
-    read.description(test_path("testNonASCII/DESCRIPTION"))$Author,
-    "Shr\U00EBktan <shrektan@126.com>"
-  )
-})
-
 test_that("finds datasets given by name", {
   obj <- call_to_object({
     df <- data.frame(x = 1, y = 2)

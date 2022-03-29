@@ -37,6 +37,7 @@ Imports:
 Suggests: 
     covr,
     devtools,
+    mockr,
     R.methodsS3,
     R.oo,
     rmarkdown,

@@ -1,7 +1,11 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/list.hpp>
+#include <cpp11/list_of.hpp>
+#include <cpp11/strings.hpp>
+#include <cpp11/protect.hpp>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <string>
 
 class RoxygenLine {
   std::string line_;
@@ -100,9 +104,9 @@ std::string stripTrailingNewline(std::string x) {
   return x;
 }
 
-// [[Rcpp::export]]
-List tokenise_block(CharacterVector lines, std::string file = "",
-                    int offset = 0) {
+[[cpp11::register]]
+cpp11::list tokenise_block(cpp11::strings lines, std::string file,
+                    int offset) {
   std::vector<std::string> tags, vals;
   std::vector<int> rows;
 
@@ -141,30 +145,34 @@ List tokenise_block(CharacterVector lines, std::string file = "",
   }
 
   // Convert to a list
-  int n = rows.size();
-  ListOf<List> out(n);
+  R_xlen_t n = rows.size();
+  cpp11::writable::list out(n);
 
-  for (int i = 0; i < n; ++i) {
-    out[i] = List::create(
-      _["file"] = file,
-      _["line"] = rows[i],
-      _["tag"] = tags[i],
-      // Rcpp::String() necessary to tag string as UTF-8
-      _["raw"] = Rcpp::String(stripTrailingNewline(vals[i])),
-      _["val"] = R_NilValue
-    );
-    out[i].attr("class") = Rcpp::CharacterVector::create("roxy_tag_" + tags[i], "roxy_tag");
+  using namespace cpp11::literals;
+
+  for (R_xlen_t i = 0; i < n; ++i) {
+    cpp11::writable::list x({
+        "file"_nm = file,
+        "line"_nm = rows[i],
+        "tag"_nm = tags[i],
+        "raw"_nm = stripTrailingNewline(vals[i]),
+        "val"_nm = R_NilValue
+        });
+    std::string tag("roxy_tag_");
+    tag += tags[i];
+    x.attr("class") = {tag.c_str(), "roxy_tag"};
+    out[i] = x;
   }
   return out;
 }
 
-// [[Rcpp::export]]
-CharacterVector find_includes(std::string path) {
+[[cpp11::register]]
+cpp11::strings find_includes(std::string path) {
   std::vector<std::string> includes;
 
   std::ifstream file(path.c_str());
   if (!file.good())
-    stop("Failed to open %s", path);
+    cpp11::stop("Failed to open %s", path.c_str());
 
   std::string rawline;
   while (std::getline(file, rawline)) {
@@ -192,5 +200,5 @@ CharacterVector find_includes(std::string path) {
     );
   }
 
-  return wrap(includes);
+  return cpp11::as_sexp(includes);
 }

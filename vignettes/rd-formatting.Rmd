@@ -13,7 +13,9 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 # Introduction
 
-Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the [commonmark package](https://github.com/jeroen/commonmark), which is based on the CommonMark Reference Implementation to parse these tags. See <https://commonmark.org/help/> for more about the parser and the markdown language it supports.
+Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the [commonmark package](https://github.com/r-lib/commonmark), which is based on the CommonMark Reference Implementation to parse these tags. See <https://commonmark.org/help/> for more about the parser and the markdown language it supports. 
+You can also still use the `.Rd` syntax, some of which we will present
+below in the [Rd syntax](#rd-syntax) section.
 
 # Turning on markdown support
 
@@ -152,7 +154,7 @@ Regular Markdown lists are recognized and converted to `\enumerate{}` or `\itemi
 
 Nested lists are also supported.
 
-Note that you do not have leave an empty line before the list. This is different from some markdown parsers.
+Note that you do not have to leave an empty line before the list. This is different from some markdown parsers.
 
 ## Tables
 
@@ -411,13 +413,16 @@ The Commonmark parser does not require an empty line before lists, and this migh
 
 Links to operators or objects that contain special characters, do not work currently. E.g. to link to the `%>%` operator in the `magrittr` package, instead of `[magrittr::%>%]`, you will need to use the `Rd` notation: `\code{\link[magrittr]{\%>\%}}`.
 
-## Rd formatting
+# Rd syntax
 
-Within roxygen tags, you use `.Rd` syntax to format text. This vignette shows you examples of the most important commands. The full details are described in [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text).
+Within roxygen tags, you can use `.Rd` syntax to format text. Below we show you examples of the most important `.Rd` markup commands. The full details are described in [R extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text).
+Before roxygen version 6.0.0 this was the only supported syntax. Now all of
+the formatting described below can be achived more easily with markdown syntax,
+with the important exception of [mathematical expressions](https://cran.r-project.org/doc/manuals/R-exts.html#Mathematics).
 
 Note that `\` and `%` are special characters. To insert literals, escape with a backslash: `\\`, `\%`.
 
-### Character formatting
+## Character formatting
 
 * `\emph{italics}`
 
@@ -427,7 +432,7 @@ Note that `\` and `%` are special characters. To insert literals, escape with a 
 
 * `\pkg{package_name}`
 
-### Links
+## Links
 
 To other documentation:
 
@@ -449,7 +454,7 @@ To the web:
 
 * `\email{hadley@@rstudio.com}` (note the doubled `@`)
 
-### Lists
+## Lists
 
 * Ordered (numbered) lists:
 
@@ -478,7 +483,7 @@ To the web:
     #' }
     ```
 
-### Mathematics
+## Mathematics
 
 Standard LaTeX (with no extensions):
 
@@ -486,7 +491,7 @@ Standard LaTeX (with no extensions):
 
 * `\deqn{a + b}`: display (block) equation
 
-### Tables
+## Tables
 
 Tables are created with `\tabular{}`. It has two arguments:
 

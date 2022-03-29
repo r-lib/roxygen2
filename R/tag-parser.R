@@ -19,7 +19,7 @@ NULL
 tag_value <- function(x) {
   if (x$raw == "") {
     roxy_tag_warning(x, "requires a value")
-  } else if (!rdComplete(x$raw)) {
+  } else if (!rdComplete(x$raw, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else {
     x$val <- str_trim(x$raw)
@@ -32,7 +32,7 @@ tag_value <- function(x) {
 tag_inherit <- function(x) {
   if (x$raw == "") {
     roxy_tag_warning(x, "requires a value")
-  } else if (!rdComplete(x$raw)) {
+  } else if (!rdComplete(x$raw, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else {
     pieces <- str_split(str_trim(x$raw), "\\s+")[[1]]
@@ -66,7 +66,7 @@ tag_inherit <- function(x) {
 tag_name <- function(x) {
   if (x$raw == "") {
     roxy_tag_warning(x, "requires a name")
-  } else if (!rdComplete(x$raw)) {
+  } else if (!rdComplete(x$raw, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else if (str_count(x$raw, "\\s+") > 1) {
     roxy_tag_warning(x, "should have only a single argument")
@@ -87,10 +87,11 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
     roxy_tag_warning(x, "requires a value")
   } else if (required && !str_detect(x$raw, "[[:space:]]+")) {
     roxy_tag_warning(x, "requires ", first, " and ", second)
-  } else if (!rdComplete(x$raw)) {
+  } else if (!rdComplete(x$raw, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else {
     pieces <- str_split_fixed(str_trim(x$raw), "[[:space:]]+", 2)
+    pieces[is.na(pieces)] <- ""
 
     if (markdown) {
       pieces[,2] <- markdown_if_active(pieces[,2], x)
@@ -115,7 +116,7 @@ tag_name_description <- function(x) {
 #' @rdname tag_parsers
 #' @param min,max Minimum and maximum number of words
 tag_words <- function(x, min = 0, max = Inf) {
-  if (!rdComplete(x$raw)) {
+  if (!rdComplete(x$raw, is_code = FALSE)) {
     return(roxy_tag_warning(x, "mismatched braces or quotes"))
   }
 
@@ -137,7 +138,7 @@ tag_words_line <- function(x) {
 
   if (str_detect(x$val, "\n")) {
     roxy_tag_warning(x, "may only span a single line")
-  } else if (!rdComplete(x$val)) {
+  } else if (!rdComplete(x$val, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else {
     x$val <- str_split(x$val, "\\s+")[[1]]
@@ -183,7 +184,7 @@ tag_examples <- function(x) {
   }
 
   x$val <- escape_examples(gsub("^\n", "", x$raw))
-  if (!rdComplete(x$val, TRUE)) {
+  if (!rdComplete(x$val, is_code = TRUE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
   } else {
     x
@@ -206,7 +207,7 @@ tag_markdown_with_sections <- function(x) {
 
   x$val <- markdown_if_active(x$raw, x, sections = TRUE)
   for (i in seq_along(x$val)) {
-    if (!rdComplete(x$val[i])) {
+    if (!rdComplete(x$val[i], is_code = FALSE)) {
       roxy_tag_warning(x, "mismatched braces or quotes")
       x$val[i] <- ""
     } else {
@@ -221,7 +222,7 @@ markdown_if_active <- function(text, tag, sections = FALSE) {
   if (markdown_on()) {
     markdown(text, tag, sections)
   } else {
-    if (!rdComplete(text)) {
+    if (!rdComplete(text, is_code = FALSE)) {
       roxy_tag_warning(tag, "mismatched braces or quotes")
       ""
     } else {

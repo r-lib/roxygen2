@@ -1,7 +1,7 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/strings.hpp>
+#include <string>
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 std::string escapeExamples(std::string x) {
   std::string out;
   out.reserve(x.length() * 1.1);

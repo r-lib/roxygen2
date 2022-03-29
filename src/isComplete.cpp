@@ -1,5 +1,5 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include <cpp11/R.hpp>
+#include <string>
 
 // From http://developer.r-project.org/parseRd.pdf:  The characters \, %, {,
 // and } have special meaning in almost all parts of an Rd file. In code,
@@ -84,12 +84,12 @@ int roxygen_parse_tag(std::string string, bool is_code = false,
   }
 }
 
-// [[Rcpp::export]]
-int findEndOfTag(std::string string, bool is_code = false) {
+[[cpp11::register]]
+int findEndOfTag(std::string string, bool is_code) {
   return roxygen_parse_tag(string, is_code, 1);
 }
 
-// [[Rcpp::export]]
-bool rdComplete(std::string string, bool is_code = false) {
+[[cpp11::register]]
+bool rdComplete(std::string string, bool is_code) {
   return roxygen_parse_tag(string, is_code, 0) == 1 ? true : false;
 }

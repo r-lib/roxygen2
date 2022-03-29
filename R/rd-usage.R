@@ -135,7 +135,7 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
     out <- args_call(format_name(name), args)
   } else if (roxy_meta_get("old_usage", FALSE)) {
     x <- args_call(format_name(name), args)
-    out <- wrapUsage(x, width = as.integer(width))
+    out <- wrapUsage(x, width = as.integer(width), indent = 2)
   } else {
     args <- paste0("  ", args)
     args <- map_chr(args, wrapUsage, width = 90, indent = 4)

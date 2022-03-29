@@ -14,7 +14,10 @@ test_that("finds package description", {
 })
 
 test_that("Can read UTF-8 DESCRIPTIONS", {
-  expect_equal(read.description("testNonASCII/DESCRIPTION")$Author, "Shr\U00EBktan <shrektan@126.com>")
+  expect_equal(
+    read.description(test_path("testNonASCII/DESCRIPTION"))$Author,
+    "Shr\U00EBktan <shrektan@126.com>"
+  )
 })
 
 test_that("finds datasets given by name", {
@@ -30,10 +33,10 @@ test_that("finds datasets given by name", {
 test_that("can document eager data", {
   skip_if_not_installed("devtools")
 
-  test_pkg <- temp_copy_pkg('testEagerData')
+  test_pkg <- temp_copy_pkg(test_path('testEagerData'))
   on.exit(unlink(test_pkg, recursive = TRUE))
 
-  expect_output(devtools::document(test_pkg), "a[.]Rd")
+  suppressMessages(expect_output(devtools::document(test_pkg), "a[.]Rd"))
   expect_true(file.exists(file.path(test_pkg, "man", "a.Rd")))
 })
 
@@ -43,7 +46,7 @@ test_that("can document lazy data", {
   test_pkg <- temp_copy_pkg('testLazyData')
   on.exit(unlink(test_pkg, recursive = TRUE))
 
-  expect_output(devtools::document(test_pkg), "a[.]Rd")
+  suppressMessages(expect_output(devtools::document(test_pkg), "a[.]Rd"))
   expect_true(file.exists(file.path(test_pkg, "man", "a.Rd")))
 })
 

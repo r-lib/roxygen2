@@ -1,7 +1,16 @@
 # short and sweet links work
 
-    [<text>:3] @description Link to unavailable package: 11pkg::function.
-    there is no package called '11pkg'
+    Code
+      out1 <- roc_proc_text(rd_roclet(),
+      "\n    #' Title\n    #'\n    #' See [11pkg::function()], [11pkg::object].\n    #' @md\n    foo <- function() {}")[[
+        1]]
+    Condition
+      Warning:
+      [<text>:3] @description Link to unavailable package: 11pkg::function.
+      there is no package called '11pkg'
+      Warning:
+      [<text>:3] @description Link to unavailable package: 11pkg::object.
+      there is no package called '11pkg'
 
 ---
 

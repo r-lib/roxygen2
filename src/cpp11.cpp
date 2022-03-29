@@ -3,6 +3,7 @@
 
 
 #include "cpp11/declarations.hpp"
+#include <R_ext/Visibility.h>
 
 // escapeExamples.cpp
 std::string escapeExamples(std::string x);
@@ -55,19 +56,10 @@ extern "C" SEXP _roxygen2_wrapUsage(SEXP string, SEXP width, SEXP indent) {
 }
 
 extern "C" {
-/* .Call calls */
-extern SEXP _roxygen2_escapeExamples(SEXP);
-extern SEXP _roxygen2_find_includes(SEXP);
-extern SEXP _roxygen2_findEndOfTag(SEXP, SEXP);
-extern SEXP _roxygen2_leadingSpaces(SEXP);
-extern SEXP _roxygen2_rdComplete(SEXP, SEXP);
-extern SEXP _roxygen2_tokenise_block(SEXP, SEXP, SEXP);
-extern SEXP _roxygen2_wrapUsage(SEXP, SEXP, SEXP);
-
 static const R_CallMethodDef CallEntries[] = {
     {"_roxygen2_escapeExamples", (DL_FUNC) &_roxygen2_escapeExamples, 1},
-    {"_roxygen2_find_includes",  (DL_FUNC) &_roxygen2_find_includes,  1},
     {"_roxygen2_findEndOfTag",   (DL_FUNC) &_roxygen2_findEndOfTag,   2},
+    {"_roxygen2_find_includes",  (DL_FUNC) &_roxygen2_find_includes,  1},
     {"_roxygen2_leadingSpaces",  (DL_FUNC) &_roxygen2_leadingSpaces,  1},
     {"_roxygen2_rdComplete",     (DL_FUNC) &_roxygen2_rdComplete,     2},
     {"_roxygen2_tokenise_block", (DL_FUNC) &_roxygen2_tokenise_block, 3},
@@ -76,7 +68,7 @@ static const R_CallMethodDef CallEntries[] = {
 };
 }
 
-extern "C" void R_init_roxygen2(DllInfo* dll){
+extern "C" attribute_visible void R_init_roxygen2(DllInfo* dll){
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
   R_forceSymbols(dll, TRUE);

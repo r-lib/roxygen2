@@ -9,8 +9,8 @@ Authors@R: c(
     person("Manuel", "Eugster", role = c("aut", "cph")),
     person("RStudio", role = c("cph", "fnd"))
   )
-Description: Generate your Rd documentation, 'NAMESPACE' file,
-    and collation field using specially formatted comments. Writing
+Description: Generate your Rd documentation, 'NAMESPACE' file, and
+    collation field using specially formatted comments. Writing
     documentation in-line with code makes it easier to keep your
     documentation up-to-date as your requirements change. 'Roxygen2' is
     inspired by the 'Doxygen' system for C++.
@@ -37,17 +37,17 @@ Imports:
 Suggests: 
     covr,
     devtools,
-    rmarkdown,
-    testthat (>= 2.1.0),
     R.methodsS3,
-    R.oo
+    R.oo,
+    rmarkdown,
+    testthat (>= 2.1.0)
 LinkingTo: 
     cpp11
 VignetteBuilder: 
     knitr
-SystemRequirements: C++11
 Config/Needs/website: tidyverse/tidytemplate
 Encoding: UTF-8
+Language: en-GB
 Roxygen: list(markdown = TRUE, load = "installed")
 RoxygenNote: 7.1.2.9000
-Language: en-GB
+SystemRequirements: C++11

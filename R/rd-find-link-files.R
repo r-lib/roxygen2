@@ -56,8 +56,8 @@ try_find_topic_in_package <- function(pkg, topic, where = "", tag = NULL) {
     find_topic_in_package(pkg, topic),
     error = function(err) {
       msg <- paste0(
-        "Link to unavailable package", where, ": ", pkg, "::",
-        topic, ". ", err$message
+        "Link to unavailable package", where, ": ", pkg, "::", topic, ".\n",
+        err$message
       )
       if (is.null(tag)) {
         roxy_warning(msg)

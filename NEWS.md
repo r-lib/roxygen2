@@ -3,8 +3,6 @@
 * `\ifelse{}{}{}` tags in external inherited documentation are now inserted 
   correctly (without additional `{}`) (#1062).
 
-* Percent signs in markdown link targets, e.g. `[text](https://foo/ba%20r)`
-  are now handled correctly (#1209).
 * `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math support in `github_document()` (#1304).
 
 # roxygen2 7.1.2

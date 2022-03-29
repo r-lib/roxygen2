@@ -36,7 +36,7 @@ test_that("can escape [ to avoid spurious links", {
 
   expect_equal(
     markdown("\\[ [test] \\]"),
-    "[ \\link{test} ]",
+    "[ \\link{test} ]"
   )
 })
 

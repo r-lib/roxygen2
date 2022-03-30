@@ -36,7 +36,7 @@ test_that("can escape [ to avoid spurious links", {
 
   expect_equal(
     markdown("\\[ [test] \\]"),
-    "[ \\link{test} ]",
+    "[ \\link{test} ]"
   )
 })
 
@@ -94,14 +94,13 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  expect_warning(
+  expect_snapshot(
     out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' See [11pkg::function()], [11pkg::object].
     #' @md
-    foo <- function() {}")[[1]],
-    "Link to unavailable package"
+    foo <- function() {}")[[1]]
   )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -123,14 +122,13 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  expect_warning(
+  expect_snapshot_warning(
     out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [name words][stringr::bar111].
     #' @md
-    foo <- function() {}")[[1]],
-    "Link to unknown topic: stringr::bar111"
+    foo <- function() {}")[[1]]
   )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title

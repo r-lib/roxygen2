@@ -61,7 +61,7 @@ test_that("documenting NA gives useful error message (#194)", {
 
 test_that("@description NULL", {
   # Just ignore in this case
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' @description NULL
@@ -71,7 +71,7 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # Still ignore
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @description NULL
     #' @description desc
@@ -81,7 +81,7 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "desc")
 
   # Still ignore for objects as well
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @description NULL
     #' @format NULL
@@ -90,12 +90,12 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
-  with_mock(
-    `roxygen2::read.description` = function(...)
+  mockr::with_mock(
+    read.description = function(...)
       list(Package = "roxygen_devtest",
            Title = "Package Title",
            Description = "Package description."),
-    out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+    out <- roc_proc_text(rd_roclet(), "
       #' Title
       #'
       #' @docType package
@@ -109,7 +109,7 @@ test_that("@description NULL", {
 
 test_that("@details NULL", {
   # Just ignore in this case
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' @details NULL
@@ -119,7 +119,7 @@ test_that("@details NULL", {
   expect_null(out[[1]]$get_value("details"))
 
   # Still ignore
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @details NULL
     #' @details desc
@@ -129,7 +129,7 @@ test_that("@details NULL", {
   expect_identical(out[[1]]$get_value("details"), "desc")
 
   # Still ignore for objects as well
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @details NULL
     #' @format NULL
@@ -144,7 +144,9 @@ test_that("can generate nonASCII document", {
   test_pkg <- temp_copy_pkg(test_path('testNonASCII'))
   on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
 
-  expect_output(roxygenise(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
+  suppressMessages({
+    expect_output(roxygenise(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
+  })
 
   rd_path <- file.path(test_pkg, "man", "printChineseMsg.Rd")
   expect_true(file.exists(rd_path))
@@ -154,14 +156,18 @@ test_that("can generate nonASCII document", {
   expect_true(any(grepl("\u4e2d\u6587\u6ce8\u91ca", rd)))
 
   # Shouldn't change again
-  expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
+  suppressMessages({
+    expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
+  })
 })
 
 test_that("unicode escapes are ok", {
   test_pkg <- temp_copy_pkg(test_path('testUtf8Escape'))
   on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
 
-  expect_output(roxygenise(test_pkg, roclets = "rd"), "a[.]Rd")
+  suppressMessages({
+    expect_output(roxygenise(test_pkg, roclets = "rd"), "a[.]Rd")
+  })
 
   rd_path <- file.path(test_pkg, "man", "a.Rd")
   expect_true(file.exists(rd_path))
@@ -170,7 +176,9 @@ test_that("unicode escapes are ok", {
   expect_true(any(grepl("7\u00b0C", rd)))
 
   # Shouldn't change again
-  expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
+  suppressMessages({
+    expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
+  })
 })
 
 test_that("write_lines writes unix-style line endings.", {

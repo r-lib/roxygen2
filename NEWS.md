@@ -1,19 +1,28 @@
 # roxygen2 (development version)
 
-* Bug fix for upcoming stringr 2.0.0 release.
+* Problems with the first tag in each block are now reported with the
+  correct line number (#1235).
 
-* Code blocks with language now add `sourceCode` to the generated div; this
-  makes syntax highlighting more consistent across 
-  downlit/pandoc/knitr/roxygen2.
+* `\ifelse{}{}{}` tags in external inherited documentation are now inserted 
+  correctly (without additional `{}`) (#1062).
 
-* Percent signs in markdown link targets, e.g. `[text](https://foo/ba%20r)`
-  are now handled correctly (#1209).
+* `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math support in `github_document()` (#1304).
+
+# roxygen2 7.1.2
 
 * The new `@examplesIf` tag can be used to create conditional
   examples. These examples only run if a specified condition
   holds (#962).
 
 * roxygen2 is now licensed as MIT (#1163).
+
+* Bug fix for upcoming stringr 2.0.0 release.
+
+* Code blocks with language now add `sourceCode` to the generated div; this
+  makes syntax highlighting more consistent across downlit/pandoc/knitr/roxygen2.
+
+* Percent signs in markdown link targets, e.g. `[text](https://foo/ba%20r)`
+  are now handled correctly (#1209).
 
 # roxygen2 7.1.1
 
@@ -233,7 +242,7 @@ roxygen2 can now document R6 classes (#922). See `vignette("rd")` for details.
 
 roxygen2 now provides three strategies for loading your code (#822):
 
-* `load_pkgload()`, the default, uses [pkgload](https://www.github.com/r-lib/pkgload). 
+* `load_pkgload()`, the default, uses [pkgload](https://github.com/r-lib/pkgload). 
   Compared to the previous release, this now automatically recompiles your 
   package if needed.
 
@@ -378,7 +387,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@inheritParams` warns if there are no parameters that require 
   documentation (#836).
 
-* `@param` containing only whitespce gives a clear warning message (#869).
+* `@param` containing only whitespace gives a clear warning message (#869).
 
 * Multiple `@usage` statements in a single block now generate a warning. 
   Previously, the first was used without a warning.
@@ -514,7 +523,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
       instead of throwing an utterly useless error (#560).
 
 * `person()` now supports all
-  [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html) role codes
+  [MARC Relator](https://www.loc.gov/marc/relators/relaterm.html) role codes
   (#662, @publicus).
 
 * `topic_add_usage()` now outputs formatted "Usage" section with max

@@ -10,7 +10,7 @@ test_that("exporting a call to :: produces re-exports documentation", {
   expect_equal(out$get_value("title"), "Objects exported from other packages")
   expect_equal(out$get_value("keyword"), "internal")
 
-  verify_output(test_path("test-object-import.txt"), cat(format(out)))
+  expect_snapshot_output(cat(format(out)))
 })
 
 test_that("multiple re-exports are combined", {

@@ -48,7 +48,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
     output_format = "github_document",
     output_options = c(
       list(html_preview = FALSE),
-      if (packageVersion("rmarkdown") >= "2.12") list(math_method = NULL)
+      if (utils::packageVersion("rmarkdown") >= "2.12") list(math_method = NULL)
     ),
     output_file = md_path,
     quiet = TRUE,

@@ -358,6 +358,44 @@ find_field <- function(topic, field_name) {
   }
 }
 
+tweak_links <- function(x, package) {
+  tag <- attr(x, "Rd_tag")
+
+  if (is.list(x)) {
+    if (!is.null(tag) && tag == "\\link") {
+      opt <- attr(x, "Rd_option")
+      if (is.null(opt)) {
+        if (has_topic(x[[1]], package)) {
+          attr(x, "Rd_option") <- structure(package, Rd_tag = "TEXT")
+        }
+      } else {
+        if (is.character(opt) && length(opt) == 1 && substr(opt, 1, 1) == "=") {
+          topic <- substr(opt, 2, nchar(opt))
+
+          if (has_topic(topic, package)) {
+            file <- find_topic_in_package(package, topic)
+            attr(x, "Rd_option") <- structure(paste0(package, ":", file), Rd_tag = "TEXT")
+          }
+        } else if (grepl(":", opt)) {
+          # need to fix the link to point to a file
+          target <- str_split_fixed(opt, ":", n = 2)
+          file <- try_find_topic_in_package(
+            target[1],
+            target[2],
+            where = " in inherited text"
+          )
+          attr(x, "Rd_option") <- structure(paste0(target[1], ":", file), Rd_tag = "TEXT")
+        }
+      }
+    } else if (length(x) > 0) {
+      x[] <- map(x, tweak_links, package = package)
+    }
+  }
+
+  x
+}
+
+
 # Find info in Rd or topic ------------------------------------------------
 
 get_rd <- function(name, topics) {

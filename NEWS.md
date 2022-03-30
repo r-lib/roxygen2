@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* All tags warn now if you only provide whitespace (#1228).
+
 * Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)
 
 * Problems with the first tag in each block are now reported with the

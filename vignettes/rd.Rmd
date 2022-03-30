@@ -15,7 +15,7 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceded by whitespace). Blocks gain additional structure through the use of __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). 
 
-Text within roxygen blocks can be formatted using markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
+Text within roxygen blocks can be formatted using Markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
 
 ## The description block
 
@@ -349,7 +349,7 @@ Note the use of two additional tags that are particularly useful for documenting
 
 * `@format`, which gives an overview of the structure of the dataset.
   This should include a __definition list__ that describes each variable.
-  There's currently no way to generate this with markdown, so this is 
+  There's currently no way to generate this with Markdown, so this is 
   one of the few places you'll need to Rd markup directly.
 
 * `@source` where you got the data form, often a URL.
@@ -394,7 +394,7 @@ You can add arbitrary sections with the `@section` tag. This is a useful way of 
 #' Do not operate heavy machinery within 8 hours of using this function.
 ```
 
-You can also create sections using the markdown syntax for headers. For example, the previously-defined section can be created with markdown headers like this:
+You can also create sections using the Markdown syntax for headers. For example, the previously-defined section can be created with Markdown headers like this:
 
 ```{r}
 #' @details # Warning
@@ -426,7 +426,7 @@ There is tension between the DRY (do not repeat yourself) principle of programmi
 
 * Document multiple functions in the same topic with `@describeIn` or `@rdname`.
 
-* Run arbitrary R code with the markdown markup for inline code, see section 'Dynamic R code' in `vignette("rd-formatting")`.
+* Run arbitrary R code with the Markdown markup for inline code, see section 'Dynamic R code' in `vignette("rd-formatting")`.
 
 * Run arbitrary R code with `@eval`.
 
@@ -635,7 +635,7 @@ All content in the Rmd file will go either in the details or in new top level se
 
 ### Links
 
-The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting")` for details.
+The included Rmd file can have roxygen Markdown-style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting")` for details.
 
 ### Caching and figures
 
@@ -652,7 +652,7 @@ The included Rmd file can have roxygen markdown style links to other help topics
 ```
 ````
 
-If the Rmd file has links to other help topics, then some care is needed, as those links while not work in Rmd files. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which always links them to the help topics in the manual. Example:
+If the Rmd file contains roxygen (Markdown-style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which instead always links to the help topics in the manual. Example:
 
 ```
 See also the [roxygen2::roxygenize()] function.
@@ -660,9 +660,9 @@ See also the [roxygen2::roxygenize()] function.
 [roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html
 ```
 
-This example will link to the supplied URLs in html / markdown files and it will link to the `roxygenize` help topic in the manual.
+This example will link to the supplied URLs in HTML / Markdown files and it will link to the `roxygenize` help topic in the manual.
 
-Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in pandoc, and it is harmless.
+Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in Pandoc, and it is harmless.
 
 ## Other tags
 

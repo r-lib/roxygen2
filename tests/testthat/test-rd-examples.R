@@ -35,9 +35,7 @@ test_that("@examples and @example interleave", {
     #' @example Rd-example-2.R
     NULL")[[1]]
 
-  verify_output(test_path("test-rd-examples-interleave.txt"), {
-    out$get_section("examples")
-  })
+  expect_snapshot_output(out$get_section("examples"))
 })
 
 test_that("@example does not introduce extra empty lines", {
@@ -87,9 +85,7 @@ test_that("@examplesIf", {
     #' and-this
     NULL")[[1]]
 
-  verify_output(test_path("test-rd-examplesIf.txt"), {
-    out$get_section("examples")
-  })
+  expect_snapshot_output(out$get_section("examples"))
 })
 
 test_that("% in @examples escaped before matching braces test (#213)", {
@@ -113,7 +109,7 @@ test_that("only % escaped in @examples", {
 
 test_that("multi-line macros in @example", {
   # https://github.com/r-lib/roxygen2/issues/974
-  out <- roxygen2:::roc_proc_text(roxygen2:::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' @name a
     #' @title a
     #'

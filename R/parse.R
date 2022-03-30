@@ -58,7 +58,6 @@ parse_text <- function(text, env = env_file(file)) {
   on.exit(unlink(file))
 
   blocks <- parse_file(file, env = env, srcref_path = "<text>")
-  blocks <- order_blocks(blocks)
   blocks
 }
 

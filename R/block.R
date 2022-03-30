@@ -209,7 +209,12 @@ parse_tags <- function(tokens) {
   markdown_activate(tokens)
 
   tokens <- parse_description(tokens)
-  compact(lapply(tokens, roxy_tag_parse))
+
+  out <- vector("list", length(tokens))
+  for (i in seq_along(tokens)) {
+    out[[i]] <- roxy_tag_parse(tokens[[i]])
+  }
+  compact(out)
 }
 
 #' @export

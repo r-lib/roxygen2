@@ -1,7 +1,0 @@
-> # \link{} should include [digest]
-> out$get_section("param")
-\arguments{
-\item{algo}{The hashing algoritm to be used by \code{\link[digest]{digest}}. Defaults to
-"sha1"}
-} 
-

@@ -10,7 +10,7 @@ test_that("has thoughtful print method", {
     f <- function(x, y) x + y
   "
   block <- parse_text(text)[[1]]
-  verify_output(test_path("test-block-print.txt"), block)
+  expect_snapshot_output(block)
 })
 
 # description block -------------------------------------------------------

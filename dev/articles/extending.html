@@ -113,10 +113,10 @@
 <p>Roxygen is extensible with user-defined <strong>roclets</strong>. It means that you can take advantage of Roxygen’s parser and extend it with your own <code>@tags</code>.</p>
 <p>There are two primary ways to extend roxygen2:</p>
 <ul>
-<li><p>Add new tag that generates a new top-level section in <code>.Rd</code> files.</p></li>
+<li><p>Add a new tag that generates a new top-level section in <code>.Rd</code> files.</p></li>
 <li><p>Add a new roclet that does anything you like.</p></li>
 </ul>
-<p>This vignette will introduce you to the key data structures in roxygen2, and then show you how to use these two extension points. This vignette is very rough, so you should expect to have to also read some roxygen2 source code to understand all the extension points. Hopefully it’s useful enough to help you get started, and if you have problems, please <a href="https://github.com/r-lib/roxygen2/issues/new" class="external-link">file an issue</a>!</p>
+<p>This vignette will introduce you to the key data structures in roxygen2, and then show you how to use these two extension points. This vignette is very rough, so you are expected to have also read some roxygen2 source code to understand all the extension points. Hopefully, it’s useful enough to help you get started, and if you have problems, please <a href="https://github.com/r-lib/roxygen2/issues/new" class="external-link">file an issue</a>!</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://roxygen2.r-lib.org/">roxygen2</a></span><span class="op">)</span></code></pre></div>
 </div>
@@ -200,7 +200,7 @@
 <li><p>Define a <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> method that describes how to parse our new tag.</p></li>
 <li><p>Define a <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code> method that describes how to convert the tag into <code>.Rd</code> commands.</p></li>
 </ol>
-<p>To illustrate the basic idea we’ll create a new <code>@tip</code> tag that will create a bulleted list of tips about how to use a function. The idea is to take something like this:</p>
+<p>To illustrate the basic idea, we’ll create a new <code>@tip</code> tag that will create a bulleted list of tips about how to use a function. The idea is to take something like this:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' @tip The mean of a logical vector is the proportion of `TRUE` values.</span>
 <span class="co">#' @tip You can compute means of dates and date-times!</span></code></pre></div>
@@ -211,7 +211,7 @@
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">\item</span> You can compute means of dates and date-times!</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>The first step is to define a method for <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> that describes how to turn the parse the tag text. The name of the class will be <code>roxy_tag_{tag}</code>, which in this case is <code>roxy_tag_tip</code>. This function takes a <code>roxy_tag</code> as input, and it’s job is to set <code>x$val</code> to a convenient parsed value that will be used later by the roclet. Here we want to process the text using markdown so we can just use <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>:</p>
+<p>The first step is to define a method for <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> that describes how to parse the tag text. The name of the class will be <code>roxy_tag_{tag}</code>, which in this case is <code>roxy_tag_tip</code>. This function takes a <code>roxy_tag</code> as input, and it’s job is to set <code>x$val</code> to a convenient parsed value that will be used later by the roclet. Here we want to process the text using markdown so we can just use <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">roxy_tag_parse.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/tag_parsers.html">tag_markdown</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
@@ -252,14 +252,14 @@
 <span class="co">#&gt;  $ raw : chr "The mean of a logical vector is the proportion of `TRUE` values."</span>
 <span class="co">#&gt;  $ val : chr "The mean of a logical vector is the proportion of \\code{TRUE} values."</span>
 <span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_tip" "roxy_tag"</span></code></pre></div>
-<p>(Here I explicit turn markdown parsing on using <code>@md</code>; it’s usually turned on for a package using roxygen options).</p>
-<p>Next we define a method for <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code>, which must create an <code><a href="../reference/rd_section.html">rd_section()</a></code>. We’re going to create a new section called <code>tip</code>. It will contain a character vector of tips:</p>
+<p>(Here I explicitly turn markdown parsing on using <code>@md</code>; it’s usually turned on for a package using roxygen options).</p>
+<p>Next, we define a method for <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code>, which must create an <code><a href="../reference/rd_section.html">rd_section()</a></code>. We’re going to create a new section called <code>tip</code>. It will contain a character vector of tips:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">roxy_tag_rd.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">base_path</span>, <span class="va">env</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/rd_section.html">rd_section</a></span><span class="op">(</span><span class="st">"tip"</span>, <span class="va">x</span><span class="op">$</span><span class="va">val</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>This additional layer is needed because there can multiple tags of the same time in a single block, and multiple blocks can contribute to the same <code>.Rd</code> file. The job of the <code>rd_section</code> is to combine all the tags into a single top-level Rd section. Each tag generates an <code>rd_section</code> which is then combined with any previous section using <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code>. The default <code>merge.rd_section()</code> just concatenates the values together (<code>rd_section(x$type, c(x$value, y$value))</code>); you can override this method if you need more sophisticated behaviour.</p>
-<p>We then need to define a <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> method to converts this object into text for the <code>.Rd</code> file:</p>
+<p>This additional layer is needed because there can be multiple tags of the same type in a single block, and multiple blocks can contribute to the same <code>.Rd</code> file. The job of the <code>rd_section</code> is to combine all the tags into a single top-level Rd section. Each tag generates an <code>rd_section</code> which is then combined with any previous section using <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code>. The default <code>merge.rd_section()</code> just concatenates the values together (<code>rd_section(x$type, c(x$value, y$value))</code>); you can override this method if you need more sophisticated behaviour.</p>
+<p>We then need to define a <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> method to convert this object into text for the <code>.Rd</code> file:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">format.rd_section_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span>
@@ -281,7 +281,7 @@
 <span class="co">#&gt; }</span>
 <span class="co">#&gt; }</span>
 <span class="co">#&gt; </span></code></pre></div>
-<p>Note that there is no namespacing so if you’re defining multiple new tags I recommend using your package name as common prefix.</p>
+<p>Note that there is no namespacing so if you’re defining multiple new tags I recommend using your package name as the common prefix.</p>
 </div>
 <div class="section level2">
 <h2 id="creating-a-new-roclet">Creating a new roclet<a class="anchor" aria-label="anchor" href="#creating-a-new-roclet"></a>
@@ -310,7 +310,7 @@
   <span class="op">)</span>
   <span class="va">x</span>
 <span class="op">}</span></code></pre></div>
-<p>Then check it works with <code><a href="../reference/parse_package.html">parse_text()</a></code>:</p>
+<p>Then check if it works with <code><a href="../reference/parse_package.html">parse_text()</a></code>:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"
   #' @memo [TBI] Remember to implement this!
@@ -347,7 +347,7 @@
 <div class="section level3">
 <h3 id="the-roclet">The roclet<a class="anchor" aria-label="anchor" href="#the-roclet"></a>
 </h3>
-<p>Next we create a constructor for the roclet, which uses <code><a href="../reference/roclet.html">roclet()</a></code>. Our <code>memo</code> roclet doesn’t have any options so this is very simple:</p>
+<p>Next, we create a constructor for the roclet, which uses <code><a href="../reference/roclet.html">roclet()</a></code>. Our <code>memo</code> roclet doesn’t have any options so this is very simple:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">memo_roclet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/roclet.html">roclet</a></span><span class="op">(</span><span class="st">"memo"</span><span class="op">)</span>
@@ -355,7 +355,7 @@
 <p>To give the roclet behaviour, you need to define method. There are two methods that almost every roclet will use:</p>
 <ul>
 <li><p><code><a href="../reference/roclet.html">roclet_process()</a></code> is called with a list of blocks, and returns an object of your choosing.</p></li>
-<li><p><code><a href="../reference/roclet.html">roclet_output()</a></code>: performs side-effects (usually writing to disk) using the result from <code><a href="../reference/roclet.html">roclet_process()</a></code></p></li>
+<li><p><code><a href="../reference/roclet.html">roclet_output()</a></code> produces side-effects (usually writing to disk) using the result from <code><a href="../reference/roclet.html">roclet_process()</a></code>.</p></li>
 </ul>
 <p>For this roclet, we’ll have <code><a href="../reference/roclet.html">roclet_process()</a></code> collect all the memo tags into a named list:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -384,7 +384,7 @@
 
   <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>Then you can test it works by using <code><a href="../reference/roc_proc_text.html">roc_proc_text()</a></code>:</p>
+<p>Then you can test if it works by using <code><a href="../reference/roc_proc_text.html">roc_proc_text()</a></code>:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_proc_text.html">roc_proc_text</a></span><span class="op">(</span><span class="fu">memo_roclet</span><span class="op">(</span><span class="op">)</span>, <span class="st">"
 #' @memo [TBI] Remember to implement this!

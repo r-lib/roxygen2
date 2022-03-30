@@ -111,15 +111,15 @@
 <div class="section level2">
 <h2 id="exports">Exports<a class="anchor" aria-label="anchor" href="#exports"></a>
 </h2>
-<p>For a function to be usable outside of your package, you must <strong>export</strong> it. By default roxygen2 doesn’t export anything from your package. If you want an object to be publicly available, you must explicitly tag it with <code>@export</code>.</p>
+<p>For a function to be usable outside your package, you must <strong>export</strong> it. By default roxygen2 doesn’t export anything from your package. If you want an object to be publicly available, you must explicitly tag it with <code>@export</code>.</p>
 <p>Use the following guidelines to decide what to export:</p>
 <ul>
 <li><p>Functions: export functions that you want to make available. Exported functions must be documented, and you must be cautious when changing their interface.</p></li>
 <li><p>Datasets: all datasets are publicly available. They exist outside of the package namespace and should not be exported.</p></li>
 <li><p>S3 classes: if you want others to be able to create instances of the class <code>@export</code> the constructor function.</p></li>
-<li><p>S3 generics: the generic is a function so <code>@export</code> if you want it to be usable outside the package</p></li>
+<li><p>S3 generics: the generic is a function, so <code>@export</code> if you want it to be usable outside the package.</p></li>
 <li>
-<p>S3 methods: every S3 method <em>must</em> be exported, even if the generic is not. Otherwise the S3 method table will not be generated correctly and internal generics will not find the correct method.</p>
+<p>S3 methods: every S3 method <em>must</em> be exported, even if the generic is not. Otherwise, the S3 method table will not be generated correctly and internal generics will not find the correct method.</p>
 <p>If you are providing a method for a generic defined in another package, you must also import that generic.</p>
 </li>
 <li>
@@ -150,7 +150,7 @@ D &lt;- setClass("D")
 <div class="section level3">
 <h3 id="specialised-exports">Specialised exports<a class="anchor" aria-label="anchor" href="#specialised-exports"></a>
 </h3>
-<p>Generally, roxygen2 can generate the correct namespace directive when <code>@export</code>ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:</p>
+<p>Generally, roxygen2 can generate the correct namespace directive when <code>@export</code>ing a specific object. However, you may want to override the defaults and exercise greater control. In this case, you can use the more specialised tags described below:</p>
 <ul>
 <li>
 <code>@export foo</code> generates <code>export(foo)</code>
@@ -173,7 +173,7 @@ D &lt;- setClass("D")
 </h2>
 <p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package. Only unique directives are saved to the <code>NAMESPACE</code> file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.</p>
 <p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>. Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code>::</code>.</p>
-<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make available without using <code>::</code>.</p>
+<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make them available without using <code>::</code>.</p>
 <p>If you want to add a new method to an S3 generic, import it with <code>@importFrom pkg generic</code>.</p>
 <p>If you are using S4 you may also need:</p>
 <ul>

@@ -110,18 +110,18 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <a href="https://github.com/r-lib/commonmark" class="external-link">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="external-link uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports. You can also still use the <code>.Rd</code> syntax, some of which we will present below in the <a href="#rd-syntax">Rd syntax</a> section.</p>
+<p>Starting from version 6.0.0, roxygen supports Markdown markup within most roxygen tags. Roxygen uses the <a href="https://github.com/r-lib/commonmark" class="external-link">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="external-link uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports. You can also still use the <code>.Rd</code> syntax, some of which we will present below in the <a href="#rd-syntax">Rd syntax</a> section.</p>
 </div>
 <div class="section level2">
-<h2 id="turning-on-markdown-support">Turning on markdown support<a class="anchor" aria-label="anchor" href="#turning-on-markdown-support"></a>
+<h2 id="turning-on-markdown-support">Turning on Markdown support<a class="anchor" aria-label="anchor" href="#turning-on-markdown-support"></a>
 </h2>
-<p>There are two ways to turn on markdown support for a package: globally, at the package level, and locally at the block level.</p>
-<p>To turn on markdown for the whole package, insert this entry into the <code>DESCRIPTION</code> file of the package:</p>
+<p>There are two ways to turn on Markdown support for a package: globally, at the package level, and locally at the block level.</p>
+<p>To turn on Markdown for the whole package, insert this entry into the <code>DESCRIPTION</code> file of the package:</p>
 <pre><code><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>markdown <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre>
-<p>The position of the entry in the file does not matter. After this, all Roxygen documentation will be parsed as markdown.</p>
-<p>Alternatively, you can use the <code>@md</code> tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;If you wish to convert the &lt;code&gt;.Rd&lt;/code&gt; syntax in existing documentation to markdown, you can have a look at &lt;a href="https://roxygen2md.r-lib.org/" class="external-link"&gt;roxygen2md&lt;/a&gt; package.&lt;/p&gt;'><sup>1</sup></a> for existing packages in markdown.</p>
-<p>There is also a new <code>@noMd</code> tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.</p>
-<p>Here is an example roxygen chunk that uses markdown.</p>
+<p>The position of the entry in the file does not matter. After this, all Roxygen documentation will be parsed as Markdown.</p>
+<p>Alternatively, you can use the <code>@md</code> tag to turn on Markdown support for a single documentation chunk. This is a good option to write any new documentation<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;If you wish to convert the &lt;code&gt;.Rd&lt;/code&gt; syntax in existing documentation to markdown, you can have a look at &lt;a href="https://roxygen2md.r-lib.org/" class="external-link"&gt;roxygen2md&lt;/a&gt; package.&lt;/p&gt;'><sup>1</sup></a> for existing packages in markdown.</p>
+<p>There is also a new <code>@noMd</code> tag. Use this if you turned on Markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the Markdown parser interferes with more complex Rd syntax.</p>
+<p>Here is an example roxygen chunk that uses Markdown.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' Use roxygen to document a package</span>
 <span class="co">#'</span>
@@ -143,7 +143,7 @@
 <div class="section level3">
 <h3 id="sections">Sections<a class="anchor" aria-label="anchor" href="#sections"></a>
 </h3>
-<p>The usual markdown heading markup creates sections and subsections. Top level headings, i.e. ‘<code>#</code>’ create sections, via the <code>\section{}</code> Rd tag. ‘<code>#</code>’ may only appear after the <code>@description</code> and <code>@details</code> tags. Since <code>@details</code> can appear multiple times in a block, you can always precede a ‘<code>#</code>’ section with <code>@details</code>, if you prefer to place it towards the end of the block, after <code>@return</code> for example:</p>
+<p>The usual Markdown heading markup creates sections and subsections. Top level headings, i.e. ‘<code>#</code>’ create sections, via the <code>\section{}</code> Rd tag. ‘<code>#</code>’ may only appear after the <code>@description</code> and <code>@details</code> tags. Since <code>@details</code> can appear multiple times in a block, you can always precede a ‘<code>#</code>’ section with <code>@details</code>, if you prefer to place it towards the end of the block, after <code>@return</code> for example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' @details</span>
 <span class="co">#' Trim the leading and trailing whitespace from a character vector.</span>
@@ -225,7 +225,7 @@
 <span class="co">#' * A one-column matrix with three rows for the red, green</span>
 <span class="co">#'   and blue channels, as returned by [grDevices::col2rgb()]</span></code></pre></div>
 <p>Nested lists are also supported.</p>
-<p>Note that you do not have to leave an empty line before the list. This is different from some markdown parsers.</p>
+<p>Note that you do not have to leave an empty line before the list. This is different from some Markdown parsers.</p>
 </div>
 <div class="section level3">
 <h3 id="tables">Tables<a class="anchor" aria-label="anchor" href="#tables"></a>
@@ -244,7 +244,7 @@
 </h3>
 <p>Markdown hyperlinks work as usual:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' See more about the markdown markup at the</span>
+<code class="sourceCode R"><span class="co">#' See more about the Markdown markup at the</span>
 <span class="co">#' [Commonmark web site](http://commonmark.org/help)</span></code></pre></div>
 <p>URLs inside angle brackets are also automatically converted to hyperlinks:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
@@ -416,17 +416,17 @@ or in <code>pkg</code>
 <div class="section level2">
 <h2 id="dynamic-r-code">Dynamic R code<a class="anchor" aria-label="anchor" href="#dynamic-r-code"></a>
 </h2>
-<p>Similarly to the knitr package, you can use the markdown inline code markup or markdown code blocks to evaluate R code and insert its output into the manual page.</p>
+<p>Similarly to the knitr package, you can use the Markdown inline code markup or Markdown code blocks to evaluate R code and insert its output into the manual page.</p>
 <div class="section level3">
 <h3 id="inline-code">Inline code<a class="anchor" aria-label="anchor" href="#inline-code"></a>
 </h3>
-<p>To do this, prefix the code with <code>r</code>, i.e. the lowercase letter ‘r’ and a space character. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.</p>
+<p>To do this, prefix the code with <code>r</code>, i.e. the lowercase letter ‘r’ and a space character. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. After all such substitutions, the text of the whole tag is interpreted as Markdown, as usual.</p>
 <p>For example, the following will insert the date and the R version of the roxygen run.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' Roxygen created this manual page on `r Sys.Date()` using R version</span>
 <span class="co">#' `r getRversion()`.</span></code></pre></div>
 <p>The value of the R expression is converted to a character string, with <code>paste(collapse = "\n")</code>. So you don’t explicitly need to convert to a character value, numeric values or any R object with an <code><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character()</a></code> S3 method is fine. Also, you can insert multiple lines by returning a character vector. If you want to run R code without inserting any output, return an empty string or <code>NULL</code>.</p>
-<p>The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to <code>.Rd</code> conversion, so you can create markdown markup dynamically:</p>
+<p>The value of the expression is inserted into the text of the tag without interpreting it, before the Markdown to <code>.Rd</code> conversion, so you can create Markdown markup dynamically:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' The `iris` data set has `r ncol(iris)` columns:</span>
 <span class="co">#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.</span></code></pre></div>
@@ -479,23 +479,23 @@ or in <code>pkg</code>
 <li>Because the code blocks are evaluated individually, they cannot refer to each other.</li>
 <li>Some knitr chunk options are reset at the start of every code block, so if you want to change these, you’ll have to specify them for every chunk. These are currently <code>error</code>, <code>fig.path</code>, <code>fig.process</code>.</li>
 <li>Some knitr options might not create meaningful output.</li>
-<li>The markdown code runs every time you call <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (or <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code>) to generate the Rd files. This potentially makes <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (much) slower. You can turn on knitr caching as usual, but make sure to omit the cache from the package.</li>
+<li>The Markdown code runs every time you call <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (or <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code>) to generate the Rd files. This potentially makes <code><a href="../reference/roxygenize.html">roxygenize()</a></code> (much) slower. You can turn on knitr caching as usual, but make sure to omit the cache from the package.</li>
 </ul>
 </div>
 </div>
 <div class="section level2">
-<h2 id="roxygen-and-rd-tags-not-parsed-as-markdown">Roxygen and Rd tags <em>not</em> parsed as markdown<a class="anchor" aria-label="anchor" href="#roxygen-and-rd-tags-not-parsed-as-markdown"></a>
+<h2 id="roxygen-and-rd-tags-not-parsed-as-markdown">Roxygen and Rd tags <em>not</em> parsed as Markdown<a class="anchor" aria-label="anchor" href="#roxygen-and-rd-tags-not-parsed-as-markdown"></a>
 </h2>
-<p>Some of the roxygen tags are not parsed as markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without markdown support: <code>@aliases</code>, <code>@backref</code>, <code>@docType</code>, <code>@encoding</code>, <code>@evalRd</code>, <code>@example</code>, <code>@examples</code>, <code>@family</code>, <code>@inheritParams</code>, <code>@keywords</code>, <code>@method</code> <code>@name</code>, <code>@md</code>, <code>@noMd</code>, <code>@noRd</code>, <code>@rdname</code>, <code>@rawRd</code>, <code>@usage</code>.</p>
-<p>When mixing <code>Rd</code> and markdown notation, most <code>Rd</code> tags may contain markdown markup, the ones that can <em>not</em> are: <code>\acronym</code>, <code>\code</code>, <code>\command</code>, <code>\CRANpkg</code>, <code>\deqn</code>, <code>\doi</code>, <code>\dontrun</code>, <code>\dontshow</code>, <code>\donttest</code>, <code>\email</code>, <code>\env</code>, <code>\eqn</code>, <code>\figure</code>, <code>\file</code>, <code>\if</code>, <code>\ifelse</code>, <code>\kbd</code>, <code>\link</code>, <code>\linkS4class</code>, <code>\method</code>, <code>\newcommand</code>, <code>\option</code>, <code>\out</code>, <code>\packageAuthor</code>, <code>\packageDescription</code>, <code>\packageDESCRIPTION</code>, <code>\packageIndices</code>, <code>\packageMaintainer</code>, <code>\packageTitle</code>, <code>\pkg</code>, <code>\PR</code>, <code>\preformatted</code>, <code>\renewcommand</code>, <code>\S3method</code>, <code>\S4method</code>, <code>\samp</code>, <code>\special</code>, <code>\testonly</code>, <code>\url</code>, <code>\var</code>, <code>\verb</code>.</p>
+<p>Some of the roxygen tags are not parsed as Markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without Markdown support: <code>@aliases</code>, <code>@backref</code>, <code>@docType</code>, <code>@encoding</code>, <code>@evalRd</code>, <code>@example</code>, <code>@examples</code>, <code>@family</code>, <code>@inheritParams</code>, <code>@keywords</code>, <code>@method</code> <code>@name</code>, <code>@md</code>, <code>@noMd</code>, <code>@noRd</code>, <code>@rdname</code>, <code>@rawRd</code>, <code>@usage</code>.</p>
+<p>When mixing <code>Rd</code> and Markdown notation, most <code>Rd</code> tags may contain Markdown markup, the ones that can <em>not</em> are: <code>\acronym</code>, <code>\code</code>, <code>\command</code>, <code>\CRANpkg</code>, <code>\deqn</code>, <code>\doi</code>, <code>\dontrun</code>, <code>\dontshow</code>, <code>\donttest</code>, <code>\email</code>, <code>\env</code>, <code>\eqn</code>, <code>\figure</code>, <code>\file</code>, <code>\if</code>, <code>\ifelse</code>, <code>\kbd</code>, <code>\link</code>, <code>\linkS4class</code>, <code>\method</code>, <code>\newcommand</code>, <code>\option</code>, <code>\out</code>, <code>\packageAuthor</code>, <code>\packageDescription</code>, <code>\packageDESCRIPTION</code>, <code>\packageIndices</code>, <code>\packageMaintainer</code>, <code>\packageTitle</code>, <code>\pkg</code>, <code>\PR</code>, <code>\preformatted</code>, <code>\renewcommand</code>, <code>\S3method</code>, <code>\S4method</code>, <code>\samp</code>, <code>\special</code>, <code>\testonly</code>, <code>\url</code>, <code>\var</code>, <code>\verb</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="possible-problems">Possible problems<a class="anchor" aria-label="anchor" href="#possible-problems"></a>
 </h2>
 <div class="section level3">
-<h3 id="mixing-markdown-and-rd-markup">Mixing markdown and <code>Rd</code> markup<a class="anchor" aria-label="anchor" href="#mixing-markdown-and-rd-markup"></a>
+<h3 id="mixing-markdown-and-rd-markup">Mixing Markdown and <code>Rd</code> markup<a class="anchor" aria-label="anchor" href="#mixing-markdown-and-rd-markup"></a>
 </h3>
-<p>Note that turning on markdown does <em>not</em> turn off the standard <code>Rd</code> syntax. We suggest that you use the regular <code>Rd</code> tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.</p>
+<p>Note that turning on Markdown does <em>not</em> turn off the standard <code>Rd</code> syntax. We suggest that you use the regular <code>Rd</code> tags in a Markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the Markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.</p>
 </div>
 <div class="section level3">
 <h3 id="leading-whitespace">Leading whitespace<a class="anchor" aria-label="anchor" href="#leading-whitespace"></a>
@@ -519,7 +519,7 @@ or in <code>pkg</code>
 <div class="section level2">
 <h2 id="rd-syntax">Rd syntax<a class="anchor" aria-label="anchor" href="#rd-syntax"></a>
 </h2>
-<p>Within roxygen tags, you can use <code>.Rd</code> syntax to format text. Below we show you examples of the most important <code>.Rd</code> markup commands. The full details are described in <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text" class="external-link">R extensions</a>. Before roxygen version 6.0.0 this was the only supported syntax. Now all of the formatting described below can be achieved more easily with markdown syntax, with the important exception of <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Mathematics" class="external-link">mathematical expressions</a>.</p>
+<p>Within roxygen tags, you can use <code>.Rd</code> syntax to format text. Below we show you examples of the most important <code>.Rd</code> markup commands. The full details are described in <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text" class="external-link">R extensions</a>. Before roxygen version 6.0.0 this was the only supported syntax. Now all of the formatting described below can be achieved more easily with Markdown syntax, with the important exception of <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Mathematics" class="external-link">mathematical expressions</a>.</p>
 <p>Note that <code>\</code> and <code>%</code> are special characters. To insert literals, escape with a backslash: <code>\\</code>, <code>\%</code>.</p>
 <div class="section level3">
 <h3 id="character-formatting">Character formatting<a class="anchor" aria-label="anchor" href="#character-formatting"></a>

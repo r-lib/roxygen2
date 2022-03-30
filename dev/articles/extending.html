@@ -211,7 +211,7 @@
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">\item</span> You can compute means of dates and date-times!</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>The first step is to define a method for <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> that describes how to parse the tag text. The name of the class will be <code>roxy_tag_{tag}</code>, which in this case is <code>roxy_tag_tip</code>. This function takes a <code>roxy_tag</code> as input, and it’s job is to set <code>x$val</code> to a convenient parsed value that will be used later by the roclet. Here we want to process the text using markdown so we can just use <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>:</p>
+<p>The first step is to define a method for <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> that describes how to parse the tag text. The name of the class will be <code>roxy_tag_{tag}</code>, which in this case is <code>roxy_tag_tip</code>. This function takes a <code>roxy_tag</code> as input, and it’s job is to set <code>x$val</code> to a convenient parsed value that will be used later by the roclet. Here we want to process the text using Markdown so we can just use <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">roxy_tag_parse.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/tag_parsers.html">tag_markdown</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
@@ -252,7 +252,7 @@
 <span class="co">#&gt;  $ raw : chr "The mean of a logical vector is the proportion of `TRUE` values."</span>
 <span class="co">#&gt;  $ val : chr "The mean of a logical vector is the proportion of \\code{TRUE} values."</span>
 <span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_tip" "roxy_tag"</span></code></pre></div>
-<p>(Here I explicitly turn markdown parsing on using <code>@md</code>; it’s usually turned on for a package using roxygen options).</p>
+<p>(Here I explicitly turn Markdown parsing on using <code>@md</code>; it’s usually turned on for a package using roxygen options).</p>
 <p>Next, we define a method for <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code>, which must create an <code><a href="../reference/rd_section.html">rd_section()</a></code>. We’re going to create a new section called <code>tip</code>. It will contain a character vector of tips:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">roxy_tag_rd.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">base_path</span>, <span class="va">env</span><span class="op">)</span> <span class="op">{</span>

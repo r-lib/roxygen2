@@ -111,7 +111,7 @@
 <h2 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
 </h2>
 <p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceded by whitespace). Blocks gain additional structure through the use of <strong>tags</strong> like <code>@tag details</code>. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block).</p>
-<p>Text within roxygen blocks can be formatted using markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>Text within roxygen blocks can be formatted using Markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
 </div>
 <div class="section level2">
 <h2 id="the-description-block">The description block<a class="anchor" aria-label="anchor" href="#the-description-block"></a>
@@ -375,7 +375,7 @@ public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/bas
 <span class="co">#&gt; [1] "diamonds"</span></code></pre></div>
 <p>Note the use of two additional tags that are particularly useful for documenting data:</p>
 <ul>
-<li><p><code>@format</code>, which gives an overview of the structure of the dataset. This should include a <strong>definition list</strong> that describes each variable. There’s currently no way to generate this with markdown, so this is one of the few places you’ll need to Rd markup directly.</p></li>
+<li><p><code>@format</code>, which gives an overview of the structure of the dataset. This should include a <strong>definition list</strong> that describes each variable. There’s currently no way to generate this with Markdown, so this is one of the few places you’ll need to Rd markup directly.</p></li>
 <li><p><code>@source</code> where you got the data form, often a URL.</p></li>
 </ul>
 </div>
@@ -406,7 +406,7 @@ public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/bas
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' @section Warning:</span>
 <span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></code></pre></div>
-<p>You can also create sections using the markdown syntax for headers. For example, the previously-defined section can be created with markdown headers like this:</p>
+<p>You can also create sections using the Markdown syntax for headers. For example, the previously-defined section can be created with Markdown headers like this:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' @details # Warning</span>
 <span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></code></pre></div>
@@ -428,7 +428,7 @@ public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/bas
 <li><p>Cross-link documentation files with <code>@seealso</code> and <code>@family</code>.</p></li>
 <li><p>Inherit documentation from another topic with<br><code>@inherit</code>, <code>@inheritParams</code>, and <code>@inheritSection</code>.</p></li>
 <li><p>Document multiple functions in the same topic with <code>@describeIn</code> or <code>@rdname</code>.</p></li>
-<li><p>Run arbitrary R code with the markdown markup for inline code, see section ‘Dynamic R code’ in <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code>.</p></li>
+<li><p>Run arbitrary R code with the Markdown markup for inline code, see section ‘Dynamic R code’ in <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code>.</p></li>
 <li><p>Run arbitrary R code with <code>@eval</code>.</p></li>
 <li><p>Create reusable templates with <code>@template</code> and <code>@templateVar</code>.</p></li>
 </ul>
@@ -603,7 +603,7 @@ public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/bas
 <div class="section level3">
 <h3 id="links">Links<a class="anchor" aria-label="anchor" href="#links"></a>
 </h3>
-<p>The included Rmd file can have roxygen markdown style links to other help topics. E.g. <code>[roxygen2::roxygenize()]</code> will link to the manual page of the <code>roxygenize</code> function in roxygen2. See <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>The included Rmd file can have roxygen Markdown-style links to other help topics. E.g. <code>[roxygen2::roxygenize()]</code> will link to the manual page of the <code>roxygenize</code> function in roxygen2. See <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
 </div>
 <div class="section level3">
 <h3 id="caching-and-figures">Caching and figures<a class="anchor" aria-label="anchor" href="#caching-and-figures"></a>
@@ -617,12 +617,12 @@ public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/bas
 <p><code>@includeRmd</code> helps avoiding repetition, as you can use the same <code>.Rmd</code> or <code>.md</code> document in the manual and also in the <code>README.md</code> file or in vignettes. One way to include an Rmd file in another one is to use child documents:</p>
 <pre><code>```{r child = "common.Rmd"}
 ```</code></pre>
-<p>If the Rmd file has links to other help topics, then some care is needed, as those links while not work in Rmd files. A workaround is to specify external HTML links for them. These external locations will <em>not</em> be used for <code>@includeRmd</code>, which always links them to the help topics in the manual. Example:</p>
+<p>If the Rmd file contains roxygen (Markdown-style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default. A workaround is to specify external HTML links for them. These external locations will <em>not</em> be used for <code>@includeRmd</code>, which instead always links to the help topics in the manual. Example:</p>
 <pre><code>See also the [roxygen2::roxygenize()] function.
 
 [roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html</code></pre>
-<p>This example will link to the supplied URLs in html / markdown files and it will link to the <code>roxygenize</code> help topic in the manual.</p>
-<p>Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in pandoc, and it is harmless.</p>
+<p>This example will link to the supplied URLs in HTML / Markdown files and it will link to the <code>roxygenize</code> help topic in the manual.</p>
+<p>Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in Pandoc, and it is harmless.</p>
 </div>
 </div>
 <div class="section level2">

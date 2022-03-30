@@ -387,7 +387,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@inheritParams` warns if there are no parameters that require 
   documentation (#836).
 
-* `@param` containing only whitespce gives a clear warning message (#869).
+* `@param` containing only whitespace gives a clear warning message (#869).
 
 * Multiple `@usage` statements in a single block now generate a warning. 
   Previously, the first was used without a warning.

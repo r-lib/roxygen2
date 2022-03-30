@@ -244,15 +244,13 @@ test_that("can convert table to Rd", {
   txt <- gsub("\n    ", "\n", txt)
   tables <- strsplit(txt, "\n\n")[[1]]
 
-  verify_output(
-    test_path("test-markdown-table.txt"), {
-      for (table in tables) {
-        cat_line(table)
-        cat_line(markdown(table))
-        cat_line()
-      }
+  expect_snapshot({
+    for (table in tables) {
+      cat_line(table)
+      cat_line(markdown(table))
+      cat_line()
     }
-  )
+  })
 })
 
 # inline formatting -------------------------------------------------------

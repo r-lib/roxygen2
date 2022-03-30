@@ -29,7 +29,7 @@ Imports:
     pkgload (>= 1.0.2),
     purrr (>= 0.3.3),
     R6 (>= 2.1.2),
-    rlang,
+    rlang (>= 1.0.0),
     stringi,
     stringr (>= 1.0.0),
     utils,
@@ -37,15 +37,17 @@ Imports:
 Suggests: 
     covr,
     devtools,
+    mockr,
     R.methodsS3,
     R.oo,
     rmarkdown,
-    testthat (>= 2.1.0)
+    testthat (>= 3.0.0)
 LinkingTo: 
     cpp11
 VignetteBuilder: 
     knitr
 Config/Needs/website: tidyverse/tidytemplate
+Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE, load = "installed")

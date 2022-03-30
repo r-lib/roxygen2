@@ -166,12 +166,11 @@ tag_code <- function(x) {
   } else {
     tryCatch({
       parse(text = x$raw)
+      x$val <- x$raw
+      x
     }, error = function(e) {
       roxy_tag_warning(x, "code failed to parse.\n", e$message)
     })
-
-    x$val <- x$raw
-    x
   }
 }
 

@@ -22,13 +22,8 @@ test_that("\\links are transformed", {
     wrapper <- function(algo) {}"
   )[[1]]
 
-  verify_output(
-    test_path("test-rd-inherit-link.txt"),
-    {
-      "\\link{} should include [digest]"
-      out$get_section("param")
-    }
-  )
+  # \\link{} should include [digest]
+  expect_snapshot_output(out$get_section("param"))
 })
 
 # tag parsing -------------------------------------------------------------
@@ -486,10 +481,7 @@ test_that("can inherit all from single function", {
     bar <- function(...) {}
   ")[[2]]
 
-  verify_output(
-    test_path("test-rd-inherit-dots.txt"),
-    out$get_section("param")
-  )
+  expect_snapshot_output(test_path("test-rd-inherit-dots.txt"))
 })
 
 test_that("does not produce multiple ... args", {
@@ -513,10 +505,7 @@ test_that("does not produce multiple ... args", {
     baz <- function(y, z) {}
   ")[[1]]
 
-  verify_output(
-    test_path("test-rd-inherit-dots-inherit.txt"),
-    out$get_section("param")
-  )
+  expect_snapshot_output(test_path("test-rd-inherit-dots-inherit.txt"))
 })
 
 test_that("can inherit dots from several functions", {
@@ -540,10 +529,7 @@ test_that("can inherit dots from several functions", {
     foobar <- function(...) {}
   ")[[3]]
 
-  verify_output(
-    test_path("test-rd-inherit-dots-multi.txt"),
-    out$get_section("param")
-  )
+  expect_snapshot_output(out$get_section("param"))
 })
 
 test_that("inheritDotParams does not add already-documented params", {

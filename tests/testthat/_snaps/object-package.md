@@ -24,3 +24,24 @@
     Output
       [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID}) (extra)"
 
+# can autolink urls on package Description
+
+    Code
+      parsed
+    Output
+      [1] "\\url{https://github.com/} Secured \\url{https://github.com/}. No link <www.github.com/>."
+
+# can autolink dois on package Description
+
+    Code
+      parsed
+    Output
+      [1] "\\doi{10.000/ret.234} With ampersands \\doi{aaa&.bbb.&c12}. No link <doi.baddoi>."
+
+# can autolink arxiv on package Description
+
+    Code
+      parsed
+    Output
+      [1] "\\href{https://arxiv.org/abs/somecode}{arxiv:somecode} With upper \\href{https://arxiv.org/abs/somecode}{arxiv:somecode}."
+

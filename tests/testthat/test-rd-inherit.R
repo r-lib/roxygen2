@@ -48,7 +48,7 @@ test_that("no options gives default values", {
     block_get_tag_value(block, "inherit")$fields,
     c(
       "params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples", "author", "source"
+      "sections", "references", "examples", "author", "source", "note"
     )
   )
 })
@@ -575,6 +575,7 @@ test_that("can inherit all from single function", {
     #' @param y y
     #' @author Hadley
     #' @source my mind
+    #' @note my note
     #' @examples
     #' x <- 1
     foo <- function(x, y) {}
@@ -590,6 +591,7 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_value("examples"), rd("x <- 1"))
   expect_equal(out$get_value("author"), "Hadley")
   expect_equal(out$get_value("source"), "my mind")
+  expect_equal(out$get_value("note"), "my note")
 })
 
 

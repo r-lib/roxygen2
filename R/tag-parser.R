@@ -40,7 +40,7 @@ tag_inherit <- function(x) {
 
     # Also recorded in `rd.Rmd`
     all <- c("params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples", "author", "source")
+      "sections", "references", "examples", "author", "source", "note")
     if (length(fields) == 0) {
       fields <- all
     } else {

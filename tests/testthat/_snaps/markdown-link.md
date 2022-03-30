@@ -6,13 +6,13 @@
         1]]
     Condition
       Warning:
-      [<text>:3] @description Link to unavailable package: 11pkg::function.
+      [<text>:4] @description Link to unavailable package: 11pkg::function.
       there is no package called '11pkg'
       Warning:
-      [<text>:3] @description Link to unavailable package: 11pkg::object.
+      [<text>:4] @description Link to unavailable package: 11pkg::object.
       there is no package called '11pkg'
 
 ---
 
-    [<text>:3] @description Link to unknown topic: stringr::bar111
+    [<text>:4] @description Link to unknown topic: stringr::bar111
 

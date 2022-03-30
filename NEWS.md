@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Problems with the first tag in each block are now reported with the
+  correct line number (#1235).
+
 * `\ifelse{}{}{}` tags in external inherited documentation are now inserted 
   correctly (without additional `{}`) (#1062).
 

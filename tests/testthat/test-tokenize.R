@@ -146,4 +146,18 @@ test_that("Line numbers are ok", {
   block <- parse_text(text)[[1]]
   ls <- c(title = 1, description = 3, details = 5, param = 7, export = 10)
   check_line_nums(block, ls)
+
+  text <-
+    "# 1
+     # 2
+     #' foo
+     #'
+     #' Description
+     # 6
+     # 7
+     #' @param x xyz
+     NULL"
+  block <- parse_text(text)[[1]]
+  ls <- c(title = 3, description = 5, param = 8)
+  check_line_nums(block, ls)
 })

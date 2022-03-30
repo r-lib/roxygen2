@@ -2,8 +2,6 @@
 
 * Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)
 
-* Percent signs in markdown link targets, e.g. `[text](https://foo/ba%20r)`
-  are now handled correctly (#1209).
 * Problems with the first tag in each block are now reported with the
   correct line number (#1235).
 

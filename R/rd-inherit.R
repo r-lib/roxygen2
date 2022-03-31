@@ -136,7 +136,7 @@ inherit_params <- function(topic, topics) {
     cli::cli_warn(
       c(
         "@inheritParams failed in topic {.str {topic$get_name()}}.",
-        x = "No parameters remain to be inherited from with @inheritParams."
+        x = "All parameteres are already documented; none remain to be inherited."
       ),
       call = NULL
     )

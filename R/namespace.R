@@ -39,6 +39,7 @@ roclet_preprocess.roclet_namespace <- function(x, blocks, base_path) {
     return(x)
   }
 
+  lines <- sort_c(c(lines, namespace_exports(NAMESPACE)))
   results <- c(made_by("#"), lines)
   write_if_different(NAMESPACE, results, check = TRUE)
 
@@ -289,4 +290,15 @@ one_per_line <- function(name, x) {
 }
 repeat_first <- function(name, x) {
   paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
+}
+
+namespace_exports <- function(path) {
+  if (!file.exists(path)) {
+    return(character())
+  }
+
+  parsed <- parse(path, keep.source = TRUE)
+  is_import <- function(x) is_call(x, c("import", "importFrom", "importClassesFrom", "importMethodsFrom", "useDynLib"))
+  export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import)]
+  unlist(lapply(export_lines, as.character))
 }

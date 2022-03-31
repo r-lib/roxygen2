@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* The NAMESPACE roclet now preserves all existing non-import directives during
+  it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
+  messages and reduces the incidence of namespace borking (#1254).
+
 * Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)
 
 * Problems with the first tag in each block are now reported with the

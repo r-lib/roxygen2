@@ -21,6 +21,7 @@ Depends:
     R (>= 3.3)
 Imports: 
     brew,
+    cli,
     commonmark,
     desc (>= 1.2.0),
     digest,

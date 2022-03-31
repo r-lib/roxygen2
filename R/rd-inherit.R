@@ -239,23 +239,22 @@ find_params <- function(name, topics) {
   setNames(rep.int(params, reps), unlist(individual_names))
 }
 
-topic_params <- function(x) UseMethod("topic_params")
-topic_params.Rd <- function(x) {
-  arguments <- get_tags(x, "\\arguments")
-  if (length(arguments) != 1) {
-    return(list())
+topic_params <- function(x) {
+  if (inherits(x, "Rd")) {
+    arguments <- get_tags(x, "\\arguments")
+    if (length(arguments) != 1) {
+      return(list())
+    }
+    items <- get_tags(arguments[[1]], "\\item")
+
+    values <- map_chr(items, function(y) rd2text(y[[2]], attr(x, "package")))
+    params <- map_chr(items, function(y) rd2text(y[[1]], attr(x, "package")))
+
+    setNames(values, params)
+  } else {
+    x$get_value("param")
   }
-  items <- get_tags(arguments[[1]], "\\item")
-
-  values <- map_chr(items, function(x) rd2text(x[[2]]))
-  params <- map_chr(items, function(x) rd2text(x[[1]]))
-
-  setNames(values, params)
 }
-topic_params.RoxyTopic <- function(x) {
-  x$get_value("param")
-}
-
 
 # Inherit sections --------------------------------------------------------
 
@@ -310,8 +309,8 @@ find_sections <- function(topic) {
   if (inherits(topic, "Rd")) {
     tag <- get_tags(topic, "\\section")
 
-    titles <- map_chr(map(tag, 1), rd2text)
-    contents <- map_chr(map(tag, 2), rd2text)
+    titles <- map_chr(map(tag, 1), rd2text, package = attr(topic, "package"))
+    contents <- map_chr(map(tag, 2), rd2text, package = attr(topic, "package"))
 
     list(title = titles, content = contents)
   } else {
@@ -352,12 +351,19 @@ find_field <- function(topic, field_name) {
     value <- tag[[1]]
     attr(value, "Rd_tag") <- NULL
 
-    str_trim(rd2text(value))
+    str_trim(rd2text(value, attr(topic, "package")))
   } else {
     topic$get_value(field_name)
   }
 }
 
+rd2text <- function(x, package) {
+  x <- tweak_links(x, package)
+  chr <- as_character_rd(structure(x, class = "Rd"), deparse = TRUE)
+  paste(chr, collapse = "")
+}
+
+# Convert relative to absolute links
 tweak_links <- function(x, package) {
   tag <- attr(x, "Rd_tag")
 
@@ -368,23 +374,11 @@ tweak_links <- function(x, package) {
         if (has_topic(x[[1]], package)) {
           attr(x, "Rd_option") <- structure(package, Rd_tag = "TEXT")
         }
-      } else {
-        if (is.character(opt) && length(opt) == 1 && substr(opt, 1, 1) == "=") {
-          topic <- substr(opt, 2, nchar(opt))
+      } else if (is_string(opt) && substr(opt, 1, 1) == "=") {
+        topic <- substr(opt, 2, nchar(opt))
 
-          if (has_topic(topic, package)) {
-            file <- find_topic_in_package(package, topic)
-            attr(x, "Rd_option") <- structure(paste0(package, ":", file), Rd_tag = "TEXT")
-          }
-        } else if (grepl(":", opt)) {
-          # need to fix the link to point to a file
-          target <- str_split_fixed(opt, ":", n = 2)
-          file <- try_find_topic_in_package(
-            target[1],
-            target[2],
-            where = " in inherited text"
-          )
-          attr(x, "Rd_option") <- structure(paste0(target[1], ":", file), Rd_tag = "TEXT")
+        if (has_topic(topic, package)) {
+          attr(x, "Rd_option") <- structure(paste0(package, ":", topic), Rd_tag = "TEXT")
         }
       }
     } else if (length(x) > 0) {
@@ -405,7 +399,7 @@ get_rd <- function(name, topics) {
     pkg <- as.character(parsed[[2]])
     fun <- as.character(parsed[[3]])
 
-    tweak_links(get_rd_from_help(pkg, fun), package = pkg)
+    get_rd_from_help(pkg, fun)
   } else {
     # Current package
     rd_name <- topics$find_filename(name)
@@ -422,15 +416,16 @@ get_rd_from_help <- function(package, alias) {
     return()
   }
 
-  help <- eval(expr(help(!!alias, !!package)))
+  help <- utils::help((alias), (package))
   if (length(help) == 0) {
     warn(paste0("Can't find help topic '", alias, "' in '", package, "' package"))
     return()
   }
 
-  internal_f("utils", ".getHelpFile")(help)
+  out <- internal_f("utils", ".getHelpFile")(help)
+  attr(out, "package") <- package
+  out
 }
-
 
 # helpers -----------------------------------------------------------------
 

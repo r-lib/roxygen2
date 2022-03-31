@@ -26,6 +26,39 @@ test_that("\\links are transformed", {
   expect_snapshot_output(out$get_section("param"))
 })
 
+test_that("href doesn't get extra parens", {
+  expect_equal(rd2text(parse_rd("\\href{a}{b}")), "\\href{a}{b}\n")
+})
+
+test_that("ifelse doesn't get extra parens", {
+  expect_equal(rd2text(parse_rd("\\ifelse{a}{b}{c}")), "\\ifelse{a}{b}{c}\n")
+})
+
+test_that("relative links converted to absolute", {
+  link_to_base <- function(x) {
+    rd2text(parse_rd(x), package = "base")
+  }
+
+  expect_equal(
+    link_to_base("\\link{abbreviate}"),
+    "\\link[base]{abbreviate}\n"
+  )
+  expect_equal(
+    link_to_base("\\link[=abbreviate]{abbr}"),
+    "\\link[base:abbreviate]{abbr}\n"
+  )
+
+  # Doesn't affect links that already have
+  expect_equal(
+    link_to_base("\\link[foo]{abbreviate}"),
+    "\\link[foo]{abbreviate}\n"
+  )
+  expect_equal(
+    link_to_base("\\link[foo::abbreviate]{abbr}"),
+    "\\link[foo::abbreviate]{abbr}\n"
+  )
+})
+
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {

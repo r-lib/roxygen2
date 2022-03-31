@@ -68,11 +68,6 @@ get_tags <- function(rd, tag) {
   Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)
 }
 
-rd2text <- function(x) {
-  chr <- as_character_rd(structure(x, class = "Rd"), deparse = TRUE)
-  paste(chr, collapse = "")
-}
-
 # helpers -----------------------------------------------------------------
 
 parse_rd <- function(x) {

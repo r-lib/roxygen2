@@ -18,7 +18,6 @@ test_that("person turned into meaningful text", {
   })
 })
 
-
 test_that("can autolink urls on package Description", {
   urls <- paste(
     "<https://github.com/>",
@@ -43,7 +42,9 @@ test_that("can autolink dois on package Description", {
   doi <- paste(
     "<doi:10.000/ret.234>",
     "With ampersands <DOI:aaa&.bbb.&c12>.",
-    "No link <doi.baddoi>."
+    "No link <doi.baddoi>.",
+    "I can use encoded dois",
+    "<doi:10.1175/1520-0469(1981)038%3C1179:TSLROA%3E2.0.CO;2>"
   )
 
   parsed <- package_description_urls(doi)
@@ -53,7 +54,9 @@ test_that("can autolink dois on package Description", {
     paste(
       "\\doi{10.000/ret.234}",
       "With ampersands \\doi{aaa&.bbb.&c12}.",
-      "No link <doi.baddoi>."
+      "No link <doi.baddoi>.",
+      "I can use encoded dois",
+      "\\doi{10.1175/1520-0469(1981)038<1179:TSLROA>2.0.CO;2}"
     )
   )
   expect_snapshot(parsed)
@@ -71,8 +74,8 @@ test_that("can autolink arxiv on package Description", {
   expect_equal(
     parsed,
     paste(
-      "\\href{https://arxiv.org/abs/somecode}{arxiv:somecode}",
-      "With upper \\href{https://arxiv.org/abs/somecode}{arxiv:somecode}."
+      "\\href{https://arxiv.org/abs/somecode}{arXiv:somecode}",
+      "With upper \\href{https://arxiv.org/abs/somecode}{arXiv:somecode}."
     )
   )
   expect_snapshot(parsed)

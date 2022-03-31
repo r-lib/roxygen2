@@ -36,12 +36,12 @@
     Code
       parsed
     Output
-      [1] "\\doi{10.000/ret.234} With ampersands \\doi{aaa&.bbb.&c12}. No link <doi.baddoi>."
+      [1] "\\doi{10.000/ret.234} With ampersands \\doi{aaa&.bbb.&c12}. No link <doi.baddoi>. I can use encoded dois \\doi{10.1175/1520-0469(1981)038<1179:TSLROA>2.0.CO;2}"
 
 # can autolink arxiv on package Description
 
     Code
       parsed
     Output
-      [1] "\\href{https://arxiv.org/abs/somecode}{arxiv:somecode} With upper \\href{https://arxiv.org/abs/somecode}{arxiv:somecode}."
+      [1] "\\href{https://arxiv.org/abs/somecode}{arXiv:somecode} With upper \\href{https://arxiv.org/abs/somecode}{arXiv:somecode}."
 

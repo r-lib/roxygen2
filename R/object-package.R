@@ -372,97 +372,89 @@ itemize <- function(header, x) {
 
 
 package_description_urls <- function(x) {
+  # On DOIs and ArXiv casing (i.e, <doi:x> or <DOI:x> are both valid)
+  # target: from <doi:XX.XXX> to \doi{XX.XXX} to avoid CRAN Notes, etc.
 
   # DOIs handling
-  # On DOIs and ArXiv casing (i.e, <doi:x> or <DOI:x> are both valid), Use
-  # ignore_case = TRUE
-  # target: from <doi:XX.XXX> to \doi{XX.XXX} to avoid CRAN Notes, etc.
+  dois <- character()
+
+  pattern_doi <- "<(DOI:|doi:)(.*?)>"
   extract_dois <- unlist(str_extract_all(
     x,
-    regex("<doi:(.*?)>", # This does not handle dois ids with <> (#1164)
-      ignore_case = TRUE
-    )
+    pattern = pattern_doi
   ))
 
-  # Replace patterns
-  if (length(extract_dois) > 0) {
+  dois <- c(dois, extract_dois)
 
-    # Without leading backslash, would be added later
-    replace_dois <- gsub("^<doi:", "newgendoi{", extract_dois, ignore.case = TRUE)
-    replace_dois <- gsub(">$", "}", replace_dois)
+  # Create replacement:
+  replaced_dois <- dois
+  if (length(replaced_dois) > 0) {
+    replaced_dois <- gsub("^<(DOI|doi):", "\\\\doi{", replaced_dois)
+    replaced_dois <- gsub(">$", "}", replaced_dois)
 
-    # Backlashes not accepted for naming vars
-    names(replace_dois) <- extract_dois
-
-    # Substitute safeguard and add backlash
-    x <- gsub("newgendoi{", "\\doi{",
-      str_replace_all(x, replace_dois),
-      fixed = TRUE
-    )
+    # Decode urls for documentation (see #1164)
+    replaced_dois <- URLdecode(replaced_dois)
   }
 
   # http(s) handling
   # target: from <http:XX.XXX> to \url{http:XX.XXX}
-  extract_urls <- unlist(str_extract_all(
+  urls <- character()
+
+  pattern_url <- "<(http|https):\\/\\/(.*?)>"
+  extract_url <- unlist(str_extract_all(
     x,
-    # Just need the http, this includes https
-    regex("<http(.*?)>",
-      ignore_case = TRUE
-    )
+    pattern = pattern_url
   ))
 
-  if (length(extract_urls) > 0) {
-    # Safeguard new indicators
-    replace_urls <- gsub("^<http", "newgenurl{http",
-      extract_urls,
-      ignore.case = TRUE
-    )
-    replace_urls <- gsub(">$", "}", replace_urls)
+  urls <- c(urls, extract_url)
 
-    names(replace_urls) <- extract_urls
+  # Create replacement:
+  replaced_urls <- urls
+  if (length(replaced_urls) > 0) {
+    replaced_urls <- gsub("^<|>$", "", replaced_urls)
+    replaced_urls <- paste0("\\url{", replaced_urls, "}")
+  }
+  # ArXiv
+  # target: from <arxiv:XXX> to \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
+  # This is how CRAN parses it: https://CRAN.R-project.org/package=alpaca
+  # See https://github.com/wch/r-source/blob/29d870a0ee34ae3552a93ed7a2790a2662742f0b/src/library/tools/R/Rd2pdf.R#L149
 
-    # Add leading backslashes
-    x <- gsub("newgenurl{", "\\url{",
-      str_replace_all(x, replace_urls),
-      fixed = TRUE
+  arxivs <- character()
+
+  # Pattern from https://github.com/wch/r-source, see previous link
+  pattern_arxiv <- "<(arXiv:|arxiv:)([[:alnum:]/.-]+)([[:space:]]*\\[[^]]+\\])?>"
+  extract_arxiv <- unlist(str_extract_all(
+    x,
+    pattern = pattern_arxiv
+  ))
+
+  arxivs <- c(arxivs, extract_arxiv)
+
+  # Create replacement:
+  replaced_arxivs <- arxivs
+  if (length(replaced_arxivs) > 0) {
+    replaced_arxivs <- gsub("^<(arXiv:|arxiv:)|>$", "", replaced_arxivs)
+    replaced_arxivs <- paste0(
+      "\\href{https://arxiv.org/abs/",
+      replaced_arxivs,
+      "}{arXiv:",
+      replaced_arxivs, "}"
     )
   }
 
-  # ArXiv
-  # target: from <arxiv:XXX> to \href{https://arxiv.org/abs/XXX}{arxiv:XXX}
-  # This is how CRAN parses it: https://CRAN.R-project.org/package=alpaca
-  extract_arxiv <- unlist(str_extract_all(
-    x,
-    regex("<arxiv:(.*?)>",
-      ignore_case = TRUE
-    )
-  ))
+  # Final step: replace all
+  inits <- c(dois, urls, arxivs)
+  replace <- c(
+    replaced_dois,
+    replaced_urls,
+    replaced_arxivs
+  )
 
-  if (length(extract_arxiv) > 0) {
-
-    # Without leading backslash, would be added later
-
-    # Pattern changes a bit
-    replace_arxiv <- gsub("^<arxiv:|>$", "", extract_arxiv, ignore.case = TRUE)
-
-    # Safeguard
-    replace_arxiv <- paste0(
-      # Specific pattern to safeguard other possible pre-existing href, just in
-      # case
-      "newgenhref{https://arxiv.org/abs/",
-      replace_arxiv,
-      "}{arxiv:",
-      replace_arxiv, "}"
-    )
-
-    names(replace_arxiv) <- extract_arxiv
-
-    # Add leading backslashes
-    # gsub the safeguard
-    x <- gsub("newgenhref{", "\\href{",
-      str_replace_all(x, replace_arxiv),
-      fixed = TRUE
-    )
+  # Yes, a loop
+  if (length(inits) > 0 & length(inits) == length(replace)) {
+    for (i in seq_len(length(inits))) {
+      x <- gsub(inits[i], replace[i], x, fixed = TRUE)
+    }
   }
 
   return(x)

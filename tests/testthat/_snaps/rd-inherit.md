@@ -5,6 +5,16 @@
     "sha1"}
     } 
 
+# warns if can't find section
+
+    @inheritSection failed in topic "b".
+    x Can't find section "A" in topic a.
+
+# warned if no params need documentation
+
+    @inheritParams failed in topic "x".
+    x No parameters remain to be inherited from with @inheritParams.
+
 # can inherit all from single function
 
     [1] "test-rd-inherit-dots.txt"
@@ -24,4 +34,31 @@
         \item{\code{z}}{z}
       }}
     } 
+
+# useful warnings if can't find topics
+
+    Code
+      get_rd("base2::attach", source = "source")
+    Condition
+      Warning:
+      @inherits failed in topic "source".
+      x Package base2 is not installed.
+    Output
+      NULL
+    Code
+      get_rd("base::function_not_found", source = "source")
+    Condition
+      Warning:
+      @inherits failed in topic "source".
+      x Can't find topic base::function_not_found.
+    Output
+      NULL
+    Code
+      get_rd("function", RoxyTopics$new(), source = "source")
+    Condition
+      Warning:
+      @inherits failed in topic "source".
+      x Can't find topic "function".
+    Output
+      NULL
 

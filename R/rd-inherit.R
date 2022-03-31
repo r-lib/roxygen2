@@ -133,15 +133,18 @@ inherit_params <- function(topic, topics) {
   needed <- topic$get_value("formals")
   missing <- setdiff(needed, documented)
   if (length(missing) == 0) {
-    warn(paste0(
-      "Topic '", topic$get_name(), "': ",
-      "no parameters to inherit with @inheritParams"
-    ))
+    cli::cli_warn(
+      c(
+        "@inheritParams failed in topic {.str {topic$get_name()}}.",
+        x = "No parameters remain to be inherited from with @inheritParams."
+      ),
+      call = NULL
+    )
     return()
   }
 
   for (inheritor in inheritors) {
-    inherited <- find_params(inheritor, topics)
+    inherited <- find_params(inheritor, topics, source = topic$get_name())
 
     matches <- map_chr(missing, match_param, names(inherited))
     new_match <- !is.na(matches)
@@ -219,8 +222,8 @@ get_documented_params <- function(topic, only_first = FALSE) {
   documented
 }
 
-find_params <- function(name, topics) {
-  topic <- get_rd(name, topics)
+find_params <- function(name, topics, source) {
+  topic <- get_rd(name, topics, source = source)
   if (is.null(topic)) {
     return()
   }
@@ -293,10 +296,14 @@ inherit_section <- function(topic, topics) {
     selected <- new_section$title %in% titles[[i]]
 
     if (sum(selected) != 1) {
-      warning(
-        "Can't find section '", titles[[i]], "' in ?",
-        sources[[i]], call. = FALSE
+      cli::cli_warn(
+        c(
+          "@inheritSection failed in topic {.str {topic$get_name()}}.",
+          x = "Can't find section {.str {titles[[i]]}} in topic {sources[[i]]}."
+        ),
+        call = NULL
       )
+      return()
     }
 
     topic$add(
@@ -328,7 +335,7 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
 
   # Otherwise, try each try function listed in inherits
   for (inherit_from in topic$inherits_from(roxy_name)) {
-    inherit_topic <- get_rd(inherit_from, topics)
+    inherit_topic <- get_rd(inherit_from, topics, source = topic$get_name())
     if (is.null(inherit_topic)) {
       next
     }
@@ -392,33 +399,51 @@ tweak_links <- function(x, package) {
 
 # Find info in Rd or topic ------------------------------------------------
 
-get_rd <- function(name, topics) {
+get_rd <- function(name, topics, source) {
   if (has_colons(name)) {
     # External package
     parsed <- parse_expr(name)
     pkg <- as.character(parsed[[2]])
     fun <- as.character(parsed[[3]])
 
-    get_rd_from_help(pkg, fun)
+    get_rd_from_help(pkg, fun, source)
   } else {
     # Current package
     rd_name <- topics$find_filename(name)
     if (identical(rd_name, NA_character_)) {
-      warn(paste0("Can't find help topic '", name, "' in current package"))
+      cli::cli_warn(
+        c(
+          "@inherits failed in topic {.str {source}}.",
+          x = "Can't find topic {.str {name}}."
+        ),
+        call = NULL
+      )
     }
     topics$get(rd_name)
   }
 }
 
-get_rd_from_help <- function(package, alias) {
+get_rd_from_help <- function(package, alias, source) {
   if (!is_installed(package)) {
-    warn(paste0("Can't find package '", package, "'"))
+    cli::cli_warn(
+      c(
+        "@inherits failed in topic {.str {source}}.",
+        x = "Package {package} is not installed."
+      ),
+      call = NULL
+    )
     return()
   }
 
   help <- utils::help((alias), (package))
   if (length(help) == 0) {
-    warn(paste0("Can't find help topic '", alias, "' in '", package, "' package"))
+    cli::cli_warn(
+      c(
+        "@inherits failed in topic {.str {source}}.",
+        x = "Can't find topic {package}::{alias}."
+      ),
+      call = NULL
+    )
     return()
   }
 

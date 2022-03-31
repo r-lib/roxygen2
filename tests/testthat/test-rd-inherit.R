@@ -268,6 +268,20 @@ test_that("can inherit single section", {
   expect_equal(section$content, "1")
 })
 
+
+test_that("warns if can't find section", {
+  code <- "
+    #' a
+    a <- function(x) {}
+
+    #' b
+    #'
+    #' @inheritSection a A
+    b <- function(y) {}
+  "
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
+})
+
 # Inherit parameters ------------------------------------------------------
 
 test_that("multiple @inheritParam tags gathers all params", {
@@ -395,7 +409,7 @@ test_that("warned if no params need documentation", {
     #' @inheritParams foo
     x <- function(x, y) {}
   "
-  expect_warning(roc_proc_text(rd_roclet(), code), "no parameters to inherit")
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
 })
 
 test_that("argument order, also for incomplete documentation", {
@@ -631,9 +645,11 @@ test_that("can inherit all from single function", {
 # get_rd() -----------------------------------------------------------------
 
 test_that("useful warnings if can't find topics", {
-  expect_warning(get_rd("base2::attach"), "Can't find package")
-  expect_warning(get_rd("base::function_not_found"), "Can't find help topic")
-  expect_warning(get_rd("function", RoxyTopics$new()), "Can't find help topic")
+  expect_snapshot({
+    get_rd("base2::attach", source = "source")
+    get_rd("base::function_not_found", source = "source")
+    get_rd("function", RoxyTopics$new(), source = "source")
+  })
 })
 
 test_that("can find section in existing docs", {

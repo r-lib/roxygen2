@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* `@inherit` and friends perform less aggressive link tweaking, eliminating
+  many spurious warnings. Additionally, when you do get a warning, you'll 
+  now always learn which topic it's coming from (#1135).
+
 * Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)
 
 * Problems with the first tag in each block are now reported with the

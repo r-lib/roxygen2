@@ -41,7 +41,7 @@ Suggests:
     R.methodsS3,
     R.oo,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.1.2)
 LinkingTo: 
     cpp11
 VignetteBuilder: 

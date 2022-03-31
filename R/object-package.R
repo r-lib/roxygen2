@@ -393,7 +393,8 @@ package_description_urls <- function(x) {
     replaced_dois <- gsub(">$", "}", replaced_dois)
 
     # Decode urls for documentation (see #1164)
-    replaced_dois <- URLdecode(replaced_dois)
+    # Use apply for compatibility with older R versions
+    replaced_dois <- unlist(lapply(replaced_dois, URLdecode))
   }
 
   # http(s) handling

@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* The NAMESPACE roclet now preserves all existing non-import directives during
+  it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
+  messages and reduces the incidence of namespace borking (#1254).
+
 * `@inheritParams` now only inherits exact multiparameter matches, so if you're
   inheriting from a function with `@param x,y` you'll only get the parameter
   documentation if your function needs docs for both x and y (#950).

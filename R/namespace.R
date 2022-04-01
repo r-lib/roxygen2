@@ -39,8 +39,8 @@ roclet_preprocess.roclet_namespace <- function(x, blocks, base_path) {
     return(x)
   }
 
-  lines <- sort_c(c(lines, namespace_exports(NAMESPACE)))
-  results <- c(made_by("#"), lines)
+  lines <- c(lines, namespace_exports(NAMESPACE))
+  results <- c(made_by("#"), sort_c(unique(lines)))
   write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible(x)

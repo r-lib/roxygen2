@@ -4,6 +4,10 @@
   it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
   messages and reduces the incidence of namespace borking (#1254).
 
+* `@inheritParams` now only inherits exact multiparameter matches, so if you're
+  inheriting from a function with `@param x,y` you'll only get the parameter
+  documentation if your function needs docs for both x and y (#950).
+
 * All tags warn now if you only provide whitespace (#1228).
 
 * Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)

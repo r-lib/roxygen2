@@ -26,6 +26,39 @@ test_that("\\links are transformed", {
   expect_snapshot_output(out$get_section("param"))
 })
 
+test_that("href doesn't get extra parens", {
+  expect_equal(rd2text(parse_rd("\\href{a}{b}")), "\\href{a}{b}\n")
+})
+
+test_that("ifelse doesn't get extra parens", {
+  expect_equal(rd2text(parse_rd("\\ifelse{a}{b}{c}")), "\\ifelse{a}{b}{c}\n")
+})
+
+test_that("relative links converted to absolute", {
+  link_to_base <- function(x) {
+    rd2text(parse_rd(x), package = "base")
+  }
+
+  expect_equal(
+    link_to_base("\\link{abbreviate}"),
+    "\\link[base]{abbreviate}\n"
+  )
+  expect_equal(
+    link_to_base("\\link[=abbreviate]{abbr}"),
+    "\\link[base:abbreviate]{abbr}\n"
+  )
+
+  # Doesn't affect links that already have
+  expect_equal(
+    link_to_base("\\link[foo]{abbreviate}"),
+    "\\link[foo]{abbreviate}\n"
+  )
+  expect_equal(
+    link_to_base("\\link[foo::abbreviate]{abbr}"),
+    "\\link[foo::abbreviate]{abbr}\n"
+  )
+})
+
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {
@@ -235,6 +268,20 @@ test_that("can inherit single section", {
   expect_equal(section$content, "1")
 })
 
+
+test_that("warns if can't find section", {
+  code <- "
+    #' a
+    a <- function(x) {}
+
+    #' b
+    #'
+    #' @inheritSection a A
+    b <- function(y) {}
+  "
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
+})
+
 # Inherit parameters ------------------------------------------------------
 
 test_that("multiple @inheritParam tags gathers all params", {
@@ -393,7 +440,7 @@ test_that("warned if no params need documentation", {
     #' @inheritParams foo
     x <- function(x, y) {}
   "
-  expect_warning(roc_proc_text(rd_roclet(), code), "no parameters to inherit")
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
 })
 
 test_that("argument order, also for incomplete documentation", {
@@ -629,9 +676,11 @@ test_that("can inherit all from single function", {
 # get_rd() -----------------------------------------------------------------
 
 test_that("useful warnings if can't find topics", {
-  expect_warning(get_rd("base2::attach"), "Can't find package")
-  expect_warning(get_rd("base::function_not_found"), "Can't find help topic")
-  expect_warning(get_rd("function", RoxyTopics$new()), "Can't find help topic")
+  expect_snapshot({
+    get_rd("base2::attach", source = "source")
+    get_rd("base::function_not_found", source = "source")
+    get_rd("function", RoxyTopics$new(), source = "source")
+  })
 })
 
 test_that("can find section in existing docs", {

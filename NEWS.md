@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* `@inherit` and friends perform less aggressive link tweaking, eliminating
+  many spurious warnings. Additionally, when you do get a warning, you'll 
+  now always learn which topic it's coming from (#1135).
+
 * The NAMESPACE roclet now preserves all existing non-import directives during
   it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
   messages and reduces the incidence of namespace borking (#1254).

@@ -337,6 +337,19 @@ test_that("@inheritParam can inherit multivariable arguments", {
     B <- function(x, y) {}"
   )[[2]]
   expect_equal(out$get_value("param"), c("x,y" = "X and Y"))
+
+  # Even when the names only match without .
+  out <- roc_proc_text(rd_roclet(), "
+    #' A
+    #' @param x,y X and Y
+    A <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams A
+    B <- function(.x, .y) {}"
+  )[[2]]
+  expect_equal(out$get_value("param"), c(".x,.y" = "X and Y"))
 })
 
 test_that("@inheritParam only inherits exact multiparam matches", {

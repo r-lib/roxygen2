@@ -372,16 +372,47 @@ test_that("multiple @inheritParam inherits from existing topics", {
 })
 
 
-test_that("@inheritParam can cope with multivariable argument definitions", {
+test_that("@inheritParam can inherit multivariable arguments", {
   out <- roc_proc_text(rd_roclet(), "
-                       #' My merge
-                       #'
-                       #' @inheritParams base::merge
-                       mymerge <- function(x, y) {}")[[1]]
-  params <- out$get_value("param")
-  expect_equal(length(params), 2)
-  expect_equal(sort(names(params)), c("x", "y"))
+    #' A
+    #' @param x,y X and Y
+    A <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams A
+    B <- function(x, y) {}"
+  )[[2]]
+  expect_equal(out$get_value("param"), c("x,y" = "X and Y"))
+
+  # Even when the names only match without .
+  out <- roc_proc_text(rd_roclet(), "
+    #' A
+    #' @param x,y X and Y
+    A <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams A
+    B <- function(.x, .y) {}"
+  )[[2]]
+  expect_equal(out$get_value("param"), c(".x,.y" = "X and Y"))
 })
+
+test_that("@inheritParam only inherits exact multiparam matches", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A
+    #' @param x,y X and Y
+    A <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams A
+    B <- function(x) {}"
+  )[[2]]
+  expect_equal(out$get_value("param"), NULL)
+})
+
 
 test_that("@inheritParam understands compound docs", {
   out <- roc_proc_text(rd_roclet(), "
@@ -656,12 +687,3 @@ test_that("can find section in existing docs", {
   out <- find_sections(get_rd("base::attach"))
   expect_equal(out$title, "Good practice")
 })
-
-# find_params -------------------------------------------------------------
-
-test_that("find_params parses input", {
-  params <- find_params("utils::`?`", NULL)
-  expect_equal(names(params), c("topic", "type"))
-})
-
-

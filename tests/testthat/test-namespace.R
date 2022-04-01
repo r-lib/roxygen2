@@ -332,3 +332,24 @@ test_that("auto_quote behaves as needed", {
   expect_equal(auto_quote("if"), '"if"') # quotes non-syntactic
   expect_equal(auto_quote("'if'"), "'if'") # unless already quoted
 })
+
+test_that("can extract non-imports from namespace preserving source", {
+  path <- withr::local_tempfile(lines = c(
+    "export(x)",
+    "import(y)"
+  ))
+  expect_equal(namespace_exports(path), "export(x)")
+
+  path <- withr::local_tempfile(lines = "export(x, y, z)")
+  expect_equal(namespace_exports(path), "export(x, y, z)")
+
+  lines <- c(
+    "if (TRUE) {",
+    "  import(x, y, z)",
+    "}",
+    "import(a)",
+    "export(b)"
+  )
+  path <- withr::local_tempfile(lines = lines)
+  expect_equal(namespace_exports(path), lines[c(1:3, 5)])
+})

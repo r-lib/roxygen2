@@ -144,24 +144,26 @@ inherit_params <- function(topic, topics) {
   }
 
   for (inheritor in inheritors) {
-    inherited <- find_params(inheritor, topics, source = topic$get_name())
+    inherited_params <- find_params(inheritor, topics, source = topic$get_name())
 
-    matches <- map_chr(missing, match_param, names(inherited))
-    new_match <- !is.na(matches)
-
-    if (!any(new_match)) {
-      # Can't warn here because @inherit inherits parameters
-      next
+    for (param in inherited_params) {
+      match <- match_param(param$name, missing)
+      if (all(!is.na(match))) {
+        param_val <- setNames(param$value, paste(match, collapse = ","))
+        topic$add(rd_section("param", param_val))
+        missing <- setdiff(missing, match)
+      }
     }
-
-    topic$add(
-      rd_section(
-        "param",
-        setNames(inherited[matches[new_match]], missing[new_match])
-      )
-    )
-    missing <- missing[!new_match]
   }
+}
+
+# Ignore . prefix since it's sometimes necessary to add because a
+# function uses ...
+match_param <- function(needle, haystack) {
+  needle_std <- gsub("^\\.", "", needle)
+  haystack_std <- gsub("^\\.", "", haystack)
+
+  haystack[match(needle_std, haystack_std)]
 }
 
 inherit_dot_params <- function(topic, topics, env) {
@@ -176,9 +178,12 @@ inherit_dot_params <- function(topic, topics, env) {
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
   arg_matches <- function(args, docs) {
-    doc_args <- str_split(names(docs), ", ?")
-    match <- map_lgl(doc_args, function(x) x %in% args)
-    docs[match]
+    match <- map_lgl(docs, function(x) x$name %in% args)
+    matched <- docs[match]
+    setNames(
+      lapply(matched, "[[", "value"),
+      map_chr(matched, function(x) paste(x$name, collapse = ","))
+    )
   }
   docs_selected <- unlist(map2(args, docs, arg_matches))
 
@@ -235,11 +240,10 @@ find_params <- function(name, topics, source) {
   param_names <- str_trim(names(params))
   param_names[param_names == "\\dots"] <- "..."
 
-  # Split up compound names on , (swallowing spaces) duplicating their contents
-  individual_names <- strsplit(param_names, ",\\s*")
-  reps <- map_int(individual_names, length)
-
-  setNames(rep.int(params, reps), unlist(individual_names))
+  Map(list,
+    name = strsplit(param_names, ",\\s*"),
+    value = unlist(params)
+  )
 }
 
 topic_params <- function(x) {
@@ -451,25 +455,3 @@ get_rd_from_help <- function(package, alias, source) {
   attr(out, "package") <- package
   out
 }
-
-# helpers -----------------------------------------------------------------
-
-# Returns matching parameter name in haystack
-match_param <- function(needle, haystack) {
-  if (needle %in% haystack) {
-    return(needle)
-  }
-
-  if (substr(needle, 1, 1) == ".") {
-    if (needle %in% paste0(".", haystack)) {
-      return(substr(needle, 2, nchar(needle)))
-    }
-  } else {
-    if (paste0(".", needle) %in% haystack) {
-      return(paste0(".", needle))
-    }
-  }
-
-  NA
-}
-

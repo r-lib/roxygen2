@@ -372,12 +372,12 @@ itemize <- function(header, x) {
 
 
 package_description_urls <- function(x) {
-  # On DOIs and ArXiv casing (i.e, <doi:x> or <DOI:x> are both valid)
-  # target: from <doi:XX.XXX> to \doi{XX.XXX} to avoid CRAN Notes, etc.
 
   # DOIs handling
+  # target: from <doi:XX.XXX> to \doi{XX.XXX} to avoid CRAN Notes, etc.
   dois <- character()
 
+  # Both structures are valid
   pattern_doi <- "<(DOI:|doi:)(.*?)>"
   extract_dois <- unlist(str_extract_all(
     x,
@@ -389,12 +389,13 @@ package_description_urls <- function(x) {
   # Create replacement:
   replaced_dois <- dois
   if (length(replaced_dois) > 0) {
-    replaced_dois <- gsub("^<(DOI|doi):", "\\\\doi{", replaced_dois)
-    replaced_dois <- gsub(">$", "}", replaced_dois)
+    replaced_dois <- gsub("^<(DOI|doi):|>$", "", replaced_dois)
 
     # Decode urls for documentation (see #1164)
     # Use apply for compatibility with older R versions
     replaced_dois <- unlist(lapply(replaced_dois, URLdecode))
+
+    replaced_dois <- paste0("\\doi{", replaced_dois, "}")
   }
 
   # http(s) handling
@@ -413,12 +414,17 @@ package_description_urls <- function(x) {
   replaced_urls <- urls
   if (length(replaced_urls) > 0) {
     replaced_urls <- gsub("^<|>$", "", replaced_urls)
+    # Decode urls for documentation
+    replaced_urls <- unlist(lapply(replaced_urls, URLdecode))
+
+    # Additionally, encode just the spaces (CRAN Error if not) and mask the %
+    replaced_urls <- gsub(" ", "\\%20", replaced_urls, fixed = TRUE)
     replaced_urls <- paste0("\\url{", replaced_urls, "}")
   }
   # ArXiv
   # target: from <arxiv:XXX> to \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
-  # This is how CRAN parses it: https://CRAN.R-project.org/package=alpaca
-  # See https://github.com/wch/r-source/blob/29d870a0ee34ae3552a93ed7a2790a2662742f0b/src/library/tools/R/Rd2pdf.R#L149
+  # This is how CRAN parses it, see: https://CRAN.R-project.org/package=alpaca
+  # See https://github.com/wch/r-source/blob/trunk/src/library/tools/R/Rd2pdf.R
 
   arxivs <- character()
 
@@ -435,9 +441,16 @@ package_description_urls <- function(x) {
   replaced_arxivs <- arxivs
   if (length(replaced_arxivs) > 0) {
     replaced_arxivs <- gsub("^<(arXiv:|arxiv:)|>$", "", replaced_arxivs)
+
+    # Some special cases has a format <arxiv:id [code]>. This is accepted on
+    # CRAN, see https://CRAN.R-project.org/package=ciccr
+    # Extract arxiv id, split by space
+    arxiv_id <- strsplit(replaced_arxivs, " ")
+    arxiv_id <- as.vector(lapply(arxiv_id, "[[", 1))
+
     replaced_arxivs <- paste0(
       "\\href{https://arxiv.org/abs/",
-      replaced_arxivs,
+      arxiv_id,
       "}{arXiv:",
       replaced_arxivs, "}"
     )

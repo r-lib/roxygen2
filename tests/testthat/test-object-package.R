@@ -18,11 +18,27 @@ test_that("person turned into meaningful text", {
   })
 })
 
+test_that("package description not affected if no links", {
+  text <- "A simple description with no links."
+
+  parsed <- package_description_urls(text)
+
+  expect_equal(
+    parsed,
+    text
+  )
+  expect_snapshot(parsed)
+})
+
 test_that("can autolink urls on package Description", {
   urls <- paste(
     "<https://github.com/>",
     "Secured <https://github.com/>.",
-    "No link <www.github.com/>."
+    "No link <www.github.com/>.",
+    "url masked with spaces",
+    "<https://database.ich.org/sites/default/files/Q1E%20Guideline.pdf>",
+    "url fully masked",
+    "<https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ%3AL%3A2015%3A012%3ATOC>"
   )
 
   parsed <- package_description_urls(urls)
@@ -32,7 +48,11 @@ test_that("can autolink urls on package Description", {
     paste(
       "\\url{https://github.com/}",
       "Secured \\url{https://github.com/}.",
-      "No link <www.github.com/>."
+      "No link <www.github.com/>.",
+      "url masked with spaces",
+      "\\url{https://database.ich.org/sites/default/files/Q1E\\%20Guideline.pdf}",
+      "url fully masked",
+      "\\url{https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2015:012:TOC}"
     )
   )
   expect_snapshot(parsed)
@@ -66,7 +86,11 @@ test_that("can autolink dois on package Description", {
 test_that("can autolink arxiv on package Description", {
   arxiv <- paste(
     "<arxiv:somecode>",
-    "With upper <arXiv:somecode>."
+    "With upper <arXiv:somecode2>.",
+    "Strange arxiv",
+    "<arXiv:2004.08318 [econ.EM]>",
+    "Old-style arxiv",
+    "<arXiv:quant-ph/0208069>"
   )
 
   parsed <- package_description_urls(arxiv)
@@ -75,7 +99,11 @@ test_that("can autolink arxiv on package Description", {
     parsed,
     paste(
       "\\href{https://arxiv.org/abs/somecode}{arXiv:somecode}",
-      "With upper \\href{https://arxiv.org/abs/somecode}{arXiv:somecode}."
+      "With upper \\href{https://arxiv.org/abs/somecode2}{arXiv:somecode2}.",
+      "Strange arxiv",
+      "\\href{https://arxiv.org/abs/2004.08318}{arXiv:2004.08318 [econ.EM]}",
+      "Old-style arxiv",
+      "\\href{https://arxiv.org/abs/quant-ph/0208069}{arXiv:quant-ph/0208069}"
     )
   )
   expect_snapshot(parsed)

@@ -3,6 +3,10 @@
 * DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
   `\doi{}` tag (@ThierryO, #1296).
 
+* Links that contains markup like ``[foo `bar`][target]`` now cause an
+  informative warning. They would previously generate invalid Rd markup
+  that failed at runtime.
+
 * Curly braces in markdown links are now escaped (#1259).
 
 * `@inherit` and friends perform less aggressive link tweaking, eliminating

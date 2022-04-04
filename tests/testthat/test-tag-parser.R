@@ -1,8 +1,4 @@
 test_that("tags containing only whitespace generate warning", {
-  expect_parse_failure <- function(code)  {
-    (expect_warning(expect_null(code)))
-  }
-
   expect_snapshot({
     tag <- roxy_test_tag(" ")
     expect_parse_failure(tag_value(tag))
@@ -18,10 +14,6 @@ test_that("tags containing only whitespace generate warning", {
 })
 
 test_that("tags check for mismatched parents gives useful warnings", {
-  expect_parse_failure <- function(code)  {
-    (expect_warning(expect_null(code)))
-  }
-
   expect_snapshot({
     tag <- roxy_test_tag("a {")
     expect_parse_failure(tag_value(tag))
@@ -51,5 +43,52 @@ test_that("tag_inhert checks for valid inherits", {
   expect_snapshot({
     tag <- roxy_test_tag("foo params sction")
     . <- tag_inherit(tag)
+  })
+})
+
+test_that("tag_name() checks for valid names", {
+  expect_snapshot({
+    tag <- roxy_test_tag("a b c")
+    expect_parse_failure(tag_name(tag))
+  })
+})
+
+test_that("tag_two_part() gives useful warnings", {
+  local_markdown()
+  expect_snapshot({
+    tag <- roxy_test_tag("a")
+    expect_parse_failure(tag_two_part(tag, "name", "value"))
+
+    tag <- roxy_test_tag("{ }")
+    (expect_warning(tag_two_part(tag, "name", "value")))
+  })
+})
+
+test_that("tag_words() gives useful warnings", {
+  expect_snapshot({
+    tag <- roxy_test_tag("a b")
+    expect_parse_failure(tag_words(tag, 3, 3))
+    expect_parse_failure(tag_words(tag, 1, 1))
+  })
+})
+
+test_that("tag_words_line() gives useful warnings", {
+  expect_snapshot({
+    tag <- roxy_test_tag("a\nb\n2")
+    expect_parse_failure(tag_words_line(tag))
+  })
+})
+
+test_that("tag_toggle() gives useful warnings", {
+  expect_snapshot({
+    tag <- roxy_test_tag("x")
+    expect_parse_failure(tag_toggle(tag))
+  })
+})
+
+test_that("tag_code() gives useful warnings", {
+  expect_snapshot({
+    tag <- roxy_test_tag("a + ")
+    expect_parse_failure(tag_code(tag))
   })
 })

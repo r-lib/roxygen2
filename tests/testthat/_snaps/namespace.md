@@ -1,6 +1,6 @@
 # poorly formed importFrom throws error
 
-    [<text>:2] @importFrom must have at least 2 words
+    [<text>:2] @importFrom must have at least 2 words, not 1
 
 # rawNamespace must be valid code
 

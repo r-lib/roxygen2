@@ -18,7 +18,7 @@
     Output
       <warning/rlang_warning>
       Warning:
-      [test.R:1] @test requires a name
+      [test.R:1] @test requires a value
     Code
       expect_parse_failure(tag_two_part(tag))
     Output
@@ -144,4 +144,81 @@
     Condition
       Warning:
       [test.R:1] @test attempts to inherit from unknown type "sction"
+
+# tag_name() checks for valid names
+
+    Code
+      tag <- roxy_test_tag("a b c")
+      expect_parse_failure(tag_name(tag))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must have only one argument, not 2
+
+# tag_two_part() gives useful warnings
+
+    Code
+      tag <- roxy_test_tag("a")
+      expect_parse_failure(tag_two_part(tag, "name", "value"))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test requires name and value
+    Code
+      tag <- roxy_test_tag("{ }")
+      (expect_warning(tag_two_part(tag, "name", "value")))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test has mismatched braces or quotes
+
+# tag_words() gives useful warnings
+
+    Code
+      tag <- roxy_test_tag("a b")
+      expect_parse_failure(tag_words(tag, 3, 3))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must have at least 3 words, not 2
+    Code
+      expect_parse_failure(tag_words(tag, 1, 1))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must have at most 1 word, not 2
+
+# tag_words_line() gives useful warnings
+
+    Code
+      tag <- roxy_test_tag("a\nb\n2")
+      expect_parse_failure(tag_words_line(tag))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must only span a single line, not 2
+
+# tag_toggle() gives useful warnings
+
+    Code
+      tag <- roxy_test_tag("x")
+      expect_parse_failure(tag_toggle(tag))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must not be followed by any text
+
+# tag_code() gives useful warnings
+
+    Code
+      tag <- roxy_test_tag("a + ")
+      expect_parse_failure(tag_code(tag))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test failed to parse
+      Caused by error in `parse()`:
+      ! <text>:2:0: unexpected end of input
+      1: a + 
+         ^
 

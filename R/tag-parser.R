@@ -68,17 +68,20 @@ tag_inherit <- function(x) {
 #' @rdname tag_parsers
 tag_name <- function(x) {
   if (str_trim(x$raw) == "") {
-    warn_roxy_tag(x, "requires a name")
+    warn_roxy_tag(x, "requires a value")
     NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
-  } else if (str_count(x$raw, "\\s+") > 1) {
-    warn_roxy_tag(x, "must have only one argument")
-    NULL
   } else {
-    x$val <- str_trim(x$raw)
-    x
+    n <- str_count(x$raw, "\\s+")
+    if (n > 1) {
+      warn_roxy_tag(x, "must have only one argument, not {n}")
+      NULL
+    } else {
+      x$val <- str_trim(x$raw)
+      x
+    }
   }
 }
 
@@ -132,10 +135,10 @@ tag_words <- function(x, min = 0, max = Inf) {
 
   words <- str_split(str_trim(x$raw), "\\s+")[[1]]
   if (length(words) < min) {
-    warn_roxy_tag(x, "must have at least {min} words")
+    warn_roxy_tag(x, "must have at least {min} word{?s}, not {length(words)}")
     NULL
   } else if (length(words) > max) {
-    warn_roxy_tag(x, "must have at most {max} words")
+    warn_roxy_tag(x, "must have at most {max} word{?s}, not {length(words)}")
     NULL
   } else {
     x$val <- words
@@ -148,8 +151,9 @@ tag_words <- function(x, min = 0, max = Inf) {
 tag_words_line <- function(x) {
   x$val <- str_trim(x$raw)
 
-  if (str_detect(x$val, "\n")) {
-    warn_roxy_tag(x, "may only span a single line")
+  n_lines <- str_count(x$val, "\n")
+    if (n_lines > 1) {
+    warn_roxy_tag(x, "must only span a single line, not {n_lines}")
     NULL
   } else if (!rdComplete(x$val, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
@@ -166,7 +170,7 @@ tag_toggle <- function(x) {
   x$val <- str_trim(x$raw)
 
   if (x$val != "") {
-    warn_roxy_tag(x, "has no parameters")
+    warn_roxy_tag(x, "must not be followed by any text")
     NULL
   } else {
     x

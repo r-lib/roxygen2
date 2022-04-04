@@ -13,9 +13,10 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 ## Basics
 
-A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceded by whitespace). Blocks gain additional structure through the use of __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). 
+A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceded by whitespace). 
+The first lines of the block forms the __description__, described next. The description continues until the first __tag__. Tags start with `@`, like `@details` or `@param` , and must appear at the beginning of a line. The content of a tag extends to the start of the next tag or the end of the block. Text within the description or tags can be formatted using Markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
 
-Text within roxygen blocks can be formatted using Markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
+A block continues until it hits R code, typically a function or object assignment. Blocks ignore empty lines, including lines made up of non-roxygen comments. If you need to separate two blocks, use `NULL`. 
 
 ## The description block
 

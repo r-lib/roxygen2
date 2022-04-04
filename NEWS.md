@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Curly braces in markdown links are now escaped (#1259).
+
 * `@inherit` and friends perform less aggressive link tweaking, eliminating
   many spurious warnings. Additionally, when you do get a warning, you'll 
   now always learn which topic it's coming from (#1135).

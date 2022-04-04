@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
+  `\doi{}` tag (@ThierryO, #1296).
+
 * Curly braces in markdown links are now escaped (#1259).
 
 * `@inherit` and friends perform less aggressive link tweaking, eliminating

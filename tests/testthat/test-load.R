@@ -5,7 +5,7 @@ test_that("load_installed retrieves installed package", {
 })
 
 test_that("can load simple package with load_pkgload()", {
-  env <- load_pkgload(test_path("testRbuildignore"))
+  suppressMessages(env <- load_pkgload(test_path("testRbuildignore")))
   expect_equal(env_get(env, "a"), 1)
 })
 

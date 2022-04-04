@@ -15,7 +15,7 @@ The package `NAMESPACE` is one of the most confusing parts of building a package
 
 ## Exports
 
-For a function to be usable outside of your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publicly available, you must explicitly tag it with `@export`.
+For a function to be usable outside your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publicly available, you must explicitly tag it with `@export`.
 
 Use the following guidelines to decide what to export:
 
@@ -29,11 +29,11 @@ Use the following guidelines to decide what to export:
 * S3 classes: if you want others to be able to create instances of the class
   `@export` the constructor function.
 
-* S3 generics: the generic is a function so `@export` if you want it to
-  be usable outside the package
+* S3 generics: the generic is a function, so `@export` if you want it to
+  be usable outside the package.
 
 * S3 methods: every S3 method _must_ be exported, even if the generic is not.
-  Otherwise the S3 method table will not be generated correctly and internal
+  Otherwise, the S3 method table will not be generated correctly and internal
   generics will not find the correct method.
   
     If you are providing a method for a generic defined in another package,
@@ -72,7 +72,7 @@ Use the following guidelines to decide what to export:
 
 ### Specialised exports
 
-Generally, roxygen2 can generate the correct namespace directive when `@export`ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:
+Generally, roxygen2 can generate the correct namespace directive when `@export`ing a specific object. However, you may want to override the defaults and exercise greater control. In this case, you can use the more specialised tags described below:
 
 * `@export foo` generates `export(foo)`
 * `@exportClass foo` generates `exportClasses(foo)`
@@ -87,7 +87,7 @@ The `NAMESPACE` also controls which functions from other packages are made avail
 
 If you are using just a few functions from another package, the recommended option is to note the package name in the `Imports:` field of the `DESCRIPTION` file and call the function(s) explicitly using `::`, e.g., `pkg::fun()`.  Alternatively, though no longer recommended due to its poorer readability, use `@importFrom`, e.g., `@importFrom pgk fun`, and call the function(s) without `::`.
 
-If you are using many functions from another package, use `@import package` to import them all and make available without using `::`.
+If you are using many functions from another package, use `@import package` to import them all and make them available without using `::`.
 
 If you want to add a new method to an S3 generic, import it with `@importFrom pkg generic`.
 

@@ -95,8 +95,11 @@ parse_link <- function(destination, contents, state) {
   is_code <- FALSE
   if (length(contents) == 1 && xml_name(contents) == "code") {
     is_code <- TRUE
+
     contents <- xml_contents(contents)
     destination <- sub("`$", "", sub("^`", "", destination))
+
+    local_bindings(.env = state, in_link_code = TRUE)
   }
 
   ## If the supplied link text is the same as the reference text,

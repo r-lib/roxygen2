@@ -17,7 +17,7 @@ NULL
 #' @export
 #' @rdname tag_parsers
 tag_value <- function(x) {
-  if (x$raw == "") {
+  if (str_trim(x$raw) == "") {
     roxy_tag_warning(x, "requires a value")
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
@@ -30,7 +30,7 @@ tag_value <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_inherit <- function(x) {
-  if (x$raw == "") {
+  if (str_trim(x$raw) == "") {
     roxy_tag_warning(x, "requires a value")
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
@@ -40,7 +40,7 @@ tag_inherit <- function(x) {
 
     # Also recorded in `rd.Rmd`
     all <- c("params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples", "author", "source")
+      "sections", "references", "examples", "author", "source", "note")
     if (length(fields) == 0) {
       fields <- all
     } else {
@@ -64,7 +64,7 @@ tag_inherit <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_name <- function(x) {
-  if (x$raw == "") {
+  if (str_trim(x$raw) == "") {
     roxy_tag_warning(x, "requires a name")
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     roxy_tag_warning(x, "mismatched braces or quotes")
@@ -161,17 +161,16 @@ tag_toggle <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_code <- function(x) {
-  if (x$raw == "") {
+  if (str_trim(x$raw) == "") {
     roxy_tag_warning(x, "requires a value")
   } else {
     tryCatch({
       parse(text = x$raw)
+      x$val <- x$raw
+      x
     }, error = function(e) {
       roxy_tag_warning(x, "code failed to parse.\n", e$message)
     })
-
-    x$val <- x$raw
-    x
   }
 }
 
@@ -179,7 +178,7 @@ tag_code <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_examples <- function(x) {
-  if (x$raw == "") {
+  if (str_trim(x$raw) == "") {
     return(roxy_tag_warning(x, "requires a value"))
   }
 
@@ -194,6 +193,10 @@ tag_examples <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_markdown <- function(x) {
+  if (str_trim(x$raw) == "") {
+    return(roxy_tag_warning(x, "requires a value"))
+  }
+
   x$val <- markdown_if_active(x$raw, x)
   x
 }
@@ -201,7 +204,7 @@ tag_markdown <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_markdown_with_sections <- function(x) {
-  if (x$raw == "") {
+  if (str_trim(x$raw) == "") {
     return(roxy_tag_warning(x, "requires a value"))
   }
 

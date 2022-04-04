@@ -36,7 +36,7 @@ test_that("can escape [ to avoid spurious links", {
 
   expect_equal(
     markdown("\\[ [test] \\]"),
-    "[ \\link{test} ]",
+    "[ \\link{test} ]"
   )
 })
 
@@ -52,6 +52,18 @@ test_that("% in links are escaped", {
   expect_equal(markdown("[%][x]"), "\\link[=x]{\\%}")
   expect_equal(markdown("[%%]"), "\\link{\\%\\%}")
   expect_equal(markdown("[base::%%]"), "\\link[base:Arithmetic]{base::\\%\\%}")
+})
+
+test_that("{ and } in links are escaped (#1259)", {
+  expect_equal(markdown("[`foo({ bar })`][x]"), "\\code{\\link[=x]{foo(\\{ bar \\})}}")
+  expect_equal(markdown("[`{{`][x]"), "\\code{\\link[=x]{\\{\\{}}")
+
+  # Non code parts are not escaped (invalid Rd)
+  expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo({ bar })}")
+
+  # Nested code parts are escaped (invalid Rd)
+  expect_equal(markdown("[`foo` operator][x]"), "\\link[=x]{\\code{foo} operator}")
+  expect_equal(markdown("[`foo{}` operator][x]"), "\\link[=x]{\\verb{foo\\{\\}} operator}")
 })
 
 test_that("commonmark picks up the various link references", {
@@ -94,14 +106,13 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  expect_warning(
+  expect_snapshot(
     out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' See [11pkg::function()], [11pkg::object].
     #' @md
-    foo <- function() {}")[[1]],
-    "Link to unavailable package"
+    foo <- function() {}")[[1]]
   )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -123,14 +134,13 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  expect_warning(
+  expect_snapshot_warning(
     out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' Description, see [name words][stringr::bar111].
     #' @md
-    foo <- function() {}")[[1]],
-    "Link to unknown topic: stringr::bar111"
+    foo <- function() {}")[[1]]
   )
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title

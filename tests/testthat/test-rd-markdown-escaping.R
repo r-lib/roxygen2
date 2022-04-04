@@ -100,7 +100,7 @@ test_that("str_sub_same", {
       data.frame(start = c(1,8), end = c(7,10), argend = c(7,10)),
       "xxx"
     ),
-    "xxx-1-xxx-2-b",
+    "xxx-1-xxx-2-b"
   )
 
   expect_equal(

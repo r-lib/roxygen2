@@ -15,7 +15,7 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceded by whitespace). Blocks gain additional structure through the use of __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). 
 
-Text within roxygen blocks can be formatted using markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
+Text within roxygen blocks can be formatted using Markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
 
 ## The description block
 
@@ -72,8 +72,8 @@ Further details of roxygen2 depend on what you're documenting. The following sec
 Functions are the mostly commonly documented objects. Most functions use three tags:
 
 *   `@param name description` describes the inputs to the function.
-    The description should provide a succinct summary of the type of the
-    parameter (e.g. a string, a numeric vector), and if not obvious from
+    The description should provide a succinct summary of parameter type
+    (e.g. a string, a numeric vector), and if not obvious from
     the name, what the parameter does. The description should start with a
     capital letter and end with a full stop. It can span multiple lines (or
     even paragraphs) if necessary. All parameters must be documented.
@@ -88,7 +88,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
     must work without errors as it is run automatically as part of `R CMD
     check`.
 
-    However for the purpose of illustration, it's often useful to include code
+    However, for the purpose of illustration, it's often useful to include code
     that causes an error. `\dontrun{}` allows you to include code in the
     example that is never used. There are two other special commands.
     `\dontshow{}` is run, but not shown in the help page: this can
@@ -106,7 +106,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
     Note that `R CMD check --as-cran` is run for incoming CRAN checks but
     not for regular CRAN checks.
     
-    For finer control you can use `@examplesIf
+    For finer control, you can use `@examplesIf`
     
     ```r
     #' @examplesIf interactive()
@@ -123,7 +123,7 @@ Functions are the mostly commonly documented objects. Most functions use three t
     }
     ```
     
-    This way the code evaluating whether the example can be run is not 
+    This way, the code evaluating whether the example can be run is not 
     shown to users reading the help, but it still prevents R CMD check failures.
     
     Instead of including examples directly in the documentation, you can
@@ -219,7 +219,7 @@ S4 __methods__ are a little more complicated. Unlike S3 methods, all S4 methods 
 * In the class. Most appropriate if the corresponding generic uses single
   dispatch and you created the class.
 
-* In the generic. Most appropriate if the generic uses multiple dispatch
+* In the generic. Most appropriate if the generic uses multiple dispatches
   and you control it.
 
 * In its own file. Most appropriate if the method is complex. or the
@@ -349,7 +349,7 @@ Note the use of two additional tags that are particularly useful for documenting
 
 * `@format`, which gives an overview of the structure of the dataset.
   This should include a __definition list__ that describes each variable.
-  There's currently no way to generate this with markdown, so this is 
+  There's currently no way to generate this with Markdown, so this is 
   one of the few places you'll need to Rd markup directly.
 
 * `@source` where you got the data form, often a URL.
@@ -394,7 +394,7 @@ You can add arbitrary sections with the `@section` tag. This is a useful way of 
 #' Do not operate heavy machinery within 8 hours of using this function.
 ```
 
-You can also create sections using the markdown syntax for headers. For example, the previously-defined section can be created with markdown headers like this:
+You can also create sections using the Markdown syntax for headers. For example, the previously-defined section can be created with Markdown headers like this:
 
 ```{r}
 #' @details # Warning
@@ -417,7 +417,7 @@ If you find yourself adding a lot of sections, you might consider using a vignet
 
 ## Do repeat yourself
 
-There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
+There is tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files to pull together all the pieces you need. Roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
 * Cross-link documentation files with `@seealso` and `@family`.
 
@@ -426,7 +426,7 @@ There is a tension between the DRY (do not repeat yourself) principle of program
 
 * Document multiple functions in the same topic with `@describeIn` or `@rdname`.
 
-* Run arbitrary R code with the markdown markup for inline code, see section 'Dynamic R code' in `vignette("rd-formatting")`.
+* Run arbitrary R code with the Markdown markup for inline code, see section 'Dynamic R code' in `vignette("rd-formatting")`.
 
 * Run arbitrary R code with `@eval`.
 
@@ -434,7 +434,7 @@ There is a tension between the DRY (do not repeat yourself) principle of program
 
 ### Cross-references
 
-There are two tags that make it easier for people to navigate around your documentation: `@seealso` and `@family`.  `@seealso` allows you to point to other useful resources, either on the web `<http://www.r-project.org>` or to other documentation with `[function_name()]`. If you have a family of related functions, you can use `@family {family}` to cross-reference each function to every other function within the family. A function can be a member of multiple families.
+There are two tags that make it easier for people to navigate your documentation: `@seealso` and `@family`.  `@seealso` allows you to point to other useful resources, either on the web `<http://www.r-project.org>` or to other documentation with `[function_name()]`. If you have a family of related functions, you can use `@family {family}` to cross-reference each function to every other function within the family. A function can be a member of multiple families.
 
 For `sum()`, this might look like:
 
@@ -484,7 +484,7 @@ You can document multiple functions in the same file by using either `@rdname` o
 * documenting methods in a class
 * documenting functions with the same (or similar arguments)
 
-It generates a new section, named either "Methods (by class)", "Methods (by generic)" or "Functions". The section contains a bulleted list describing each function, labelled so that you know what function or method it's talking about. Here's an example, documenting an imaginary new generic:
+It generates a new section, named either "Methods (by class)", "Methods (by generic)" or "Functions". The section contains a bulleted list describing each function, labelled so that you know what function or method it's talking about. Here's an example documenting an imaginary new generic:
 
 ```{r}
 #' Foo bar generic
@@ -501,7 +501,7 @@ foobar.character <- function(x) paste0(x[1], "-", x[length(x)])
 
 #### `@rdname`
 
-`@rdname` is a more general purpose tool. It overrides the default file name generated by roxygen and merges documentation for multiple objects into one file. This gives you complete freedom to combine documentation however you see fit. There are two ways to use `@rdname`. You can add documentation to an existing function:
+`@rdname` is a more general-purpose tool. It overrides the default file name generated by roxygen and merges documentation for multiple objects into one file. This gives you complete freedom to combine documentation however you see fit. There are two ways to use `@rdname`. You can add documentation to an existing function:
 
 ```{r}
 #' Basic arithmetic
@@ -635,7 +635,7 @@ All content in the Rmd file will go either in the details or in new top level se
 
 ### Links
 
-The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting")` for details.
+The included Rmd file can have roxygen Markdown-style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting")` for details.
 
 ### Caching and figures
 
@@ -652,7 +652,7 @@ The included Rmd file can have roxygen markdown style links to other help topics
 ```
 ````
 
-If the Rmd file has links to other help topics, then some care is needed, as those links while not work in Rmd files. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which always links them to the help topics in the manual. Example:
+If the Rmd file contains roxygen (Markdown-style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which instead always links to the help topics in the manual. Example:
 
 ```
 See also the [roxygen2::roxygenize()] function.
@@ -660,9 +660,9 @@ See also the [roxygen2::roxygenize()] function.
 [roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html
 ```
 
-This example will link to the supplied URLs in html / markdown files and it will link to the `roxygenize` help topic in the manual.
+This example will link to the supplied URLs in HTML / Markdown files and it will link to the `roxygenize` help topic in the manual.
 
-Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in pandoc, and it is harmless.
+Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in Pandoc, and it is harmless.
 
 ## Other tags
 

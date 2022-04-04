@@ -2,6 +2,30 @@
 
 * Curly braces in markdown links are now escaped (#1259).
 
+* `@inherit` and friends perform less aggressive link tweaking, eliminating
+  many spurious warnings. Additionally, when you do get a warning, you'll 
+  now always learn which topic it's coming from (#1135).
+
+* The NAMESPACE roclet now preserves all existing non-import directives during
+  it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
+  messages and reduces the incidence of namespace borking (#1254).
+
+* `@inheritParams` now only inherits exact multiparameter matches, so if you're
+  inheriting from a function with `@param x,y` you'll only get the parameter
+  documentation if your function needs docs for both x and y (#950).
+
+* All tags warn now if you only provide whitespace (#1228).
+
+* Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)
+
+* Problems with the first tag in each block are now reported with the
+  correct line number (#1235).
+
+* `\ifelse{}{}{}` tags in external inherited documentation are now inserted 
+  correctly (without additional `{}`) (#1062).
+
+* `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math support in `github_document()` (#1304).
+
 # roxygen2 7.1.2
 
 * The new `@examplesIf` tag can be used to create conditional
@@ -381,7 +405,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@inheritParams` warns if there are no parameters that require 
   documentation (#836).
 
-* `@param` containing only whitespce gives a clear warning message (#869).
+* `@param` containing only whitespace gives a clear warning message (#869).
 
 * Multiple `@usage` statements in a single block now generate a warning. 
   Previously, the first was used without a warning.

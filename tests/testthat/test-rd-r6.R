@@ -342,10 +342,7 @@ test_that("integration test", {
   )
 
   # Warnings
-  verify_output(
-    test_path(paste0("roxygen-block-3-warnings.txt")),
-    sort(roxy_warnings)
-  )
+  expect_snapshot_output(sort(roxy_warnings))
 
   tmp <- tempfile()
   on.exit(unlink(tmp), add = TRUE)

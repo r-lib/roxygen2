@@ -111,7 +111,7 @@ test_that("Line numbers are ok", {
      #' @param x xyz
      #' @export
      NULL"
-  block <- roxygen2::parse_text(text)[[1]]
+  block <- parse_text(text)[[1]]
   ls <- c(title = 1, description = 4, details = 7, param = 10, export = 11)
   check_line_nums(block, ls)
 
@@ -127,7 +127,7 @@ test_that("Line numbers are ok", {
      #'
      #' @export
      NULL"
-  block <- roxygen2::parse_text(text)[[1]]
+  block <- parse_text(text)[[1]]
   ls <- c(title = 1, description = 3, details = 5, param = 7, export = 10)
   check_line_nums(block, ls)
 
@@ -143,7 +143,21 @@ test_that("Line numbers are ok", {
      quote(neither - is -
      #' @export
      this)"
-  block <- roxygen2::parse_text(text)[[1]]
+  block <- parse_text(text)[[1]]
   ls <- c(title = 1, description = 3, details = 5, param = 7, export = 10)
+  check_line_nums(block, ls)
+
+  text <-
+    "# 1
+     # 2
+     #' foo
+     #'
+     #' Description
+     # 6
+     # 7
+     #' @param x xyz
+     NULL"
+  block <- parse_text(text)[[1]]
+  ls <- c(title = 3, description = 5, param = 8)
   check_line_nums(block, ls)
 })

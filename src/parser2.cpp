@@ -110,14 +110,18 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
   std::vector<std::string> tags, vals;
   std::vector<int> rows;
 
-  int curRow = 1;
+  int curRow = 0;
   std::string curTag(""), curVal("");
 
   for (int i = 0; i < lines.size(); ++i) {
     RoxygenLine line((std::string(lines[i])));
 
-    if (!line.consumeRoxygenComment())
+    if (!line.consumeRoxygenComment()) {
+      // Incremenet curRow for non-roxygen comments at start of block
+      if (curVal == "")
+        curRow++;
       continue;
+    }
 
     std::string tag;
     if (line.consumeTag(&tag)) {
@@ -129,7 +133,7 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
         vals.push_back(curVal);
       }
 
-      curRow = i + offset;
+      curRow = i;
       curTag.assign(tag);
       curVal.assign("");
     }
@@ -153,7 +157,7 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
   for (R_xlen_t i = 0; i < n; ++i) {
     cpp11::writable::list x({
         "file"_nm = file,
-        "line"_nm = rows[i],
+        "line"_nm = rows[i] + offset,
         "tag"_nm = tags[i],
         "raw"_nm = stripTrailingNewline(vals[i]),
         "val"_nm = R_NilValue

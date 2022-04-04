@@ -117,6 +117,37 @@ Note the use of `NULL` here: you must provide something for roxygen2 to document
 
 It is possible, but not generally recommended to import all functions from a package with `@import package`. This is risky if you import functions from more than one package, because while it might be ok today, in the future the packages might end up with a function having the same name, and your users will get a warning every time your package is loaded.
 
+### Beware
+
+Be careful when mixing `NAMESPACE` directives with regular code. The following example won't work because roxygen ignores empty lines in blocks. It will generate a namespace directive `import(zoo, Different name for calling zoo.)`, which will error.
+
+```{r}
+#' @import zoo
+
+#' Different name for calling zoo.
+#'
+#' @params ... passed to zoo.
+#' @return zoo object.
+#'
+#' @export 
+zoo2 <- function(...) zoo(...)
+```
+
+Instead you need to add an explicit `NULL`:
+
+```{r}
+#' @import zoo
+NULL
+
+#' Different name for calling zoo.
+#'
+#' @params ... passed to zoo.
+#' @return zoo object.
+#'
+#' @export 
+zoo2 <- function(...) zoo(...)
+```
+
 ### S3
 
 If you're adding a method to an S3 generic defined in another package, you must import it with `@importFrom pkg generic`. Otherwise roxygen2 can't tell that your function is a method, and will not document it correctly.

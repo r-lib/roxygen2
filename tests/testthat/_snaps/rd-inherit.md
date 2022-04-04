@@ -7,7 +7,7 @@
 
 # warns on unknown inherit type
 
-    [<text>:2] @inherit inherits from unknown type "unknown"
+    [<text>:2] @inherit attempts to inherit from unknown type "blah"
 
 # warns if can't find section
 

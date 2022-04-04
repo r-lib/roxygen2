@@ -50,7 +50,7 @@ tag_inherit <- function(x) {
     } else {
       unknown <- setdiff(fields, all)
       if (length(unknown) > 0) {
-        warn_roxy_tag(x, "inherits from unknown type {.str unknown}")
+        warn_roxy_tag(x, "attempts to inherit from unknown type {.str {unknown}}")
         fields <- intersect(fields, all)
       }
     }

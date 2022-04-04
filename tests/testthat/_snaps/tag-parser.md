@@ -136,3 +136,12 @@
       Warning:
       [test.R:1] @test has mismatched braces or quotes
 
+# tag_inhert checks for valid inherits
+
+    Code
+      tag <- roxy_test_tag("foo params sction")
+      . <- tag_inherit(tag)
+    Condition
+      Warning:
+      [test.R:1] @test attempts to inherit from unknown type "sction"
+

@@ -46,3 +46,10 @@ test_that("tags check for mismatched parents gives useful warnings", {
     (expect_warning(tag_markdown_with_sections(tag)))
   })
 })
+
+test_that("tag_inhert checks for valid inherits", {
+  expect_snapshot({
+    tag <- roxy_test_tag("foo params sction")
+    . <- tag_inherit(tag)
+  })
+})

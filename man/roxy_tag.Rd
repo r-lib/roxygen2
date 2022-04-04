@@ -4,6 +4,7 @@
 \alias{roxy_tag}
 \alias{roxy_tag_parse}
 \alias{roxy_tag_warning}
+\alias{warn_roxy_tag}
 \title{\code{roxy_tag} S3 constructor}
 \usage{
 roxy_tag(tag, raw, val = NULL, file = NA_character_, line = NA_integer_)
@@ -11,6 +12,8 @@ roxy_tag(tag, raw, val = NULL, file = NA_character_, line = NA_integer_)
 roxy_tag_parse(x)
 
 roxy_tag_warning(x, ...)
+
+warn_roxy_tag(tag, message, ...)
 }
 \arguments{
 \item{tag}{Tag name. Arguments starting with \code{.} are reserved for internal

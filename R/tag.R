@@ -28,6 +28,10 @@ roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_integ
   )
 }
 
+roxy_test_tag <- function(raw = "", val = NULL) {
+  roxy_tag("test", raw = raw, val = val, file = "test.R", line = 1)
+}
+
 #' @rdname roxy_tag
 #' @param x A tag
 #' @export
@@ -90,4 +94,11 @@ print.roxy_tag <- function(x, ...) {
 #' @rdname roxy_tag
 roxy_tag_warning <- function(x, ...) {
   roxy_warning(file = x$file, line = x$line, "@", x$tag, " ", ...)
+}
+
+#' @export
+#' @rdname roxy_tag
+warn_roxy_tag <- function(tag, message, ...) {
+  message[[1]] <- paste0("[", tag$file, ":", tag$line, "] @", tag$tag, " ", message[[1]])
+  cli::cli_warn(message, ..., .envir = parent.frame())
 }

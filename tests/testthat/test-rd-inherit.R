@@ -62,12 +62,11 @@ test_that("relative links converted to absolute", {
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {
-  expect_warning(
+  expect_snapshot_warning(
     parse_text("
       #' @inherit fun blah
       NULL
-    "),
-    "Unknown inherit type: blah"
+    ")
   )
 })
 

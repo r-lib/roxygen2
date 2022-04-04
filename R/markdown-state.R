@@ -16,6 +16,12 @@ markdown_on <- function(value = NULL) {
   return(isTRUE(markdown_env$`markdown-support`))
 }
 
+local_markdown <- function(env = parent.frame()) {
+  old <- markdown_env$`markdown-support`
+  markdown_on(TRUE)
+  withr::defer(markdown_on(FALSE), envir = env)
+}
+
 markdown_activate <- function(tags) {
   ## markdown on/off based on global flag and presence of @md & @nomd
 

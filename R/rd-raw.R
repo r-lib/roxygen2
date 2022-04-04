@@ -29,6 +29,6 @@ roxy_tag_eval <- function(tag, env) {
       out
     }
   }, error = function(e) {
-    roxy_tag_warning(tag, "failed with error:\n", e$message)
+    warn_roxy_tag(tag, "failed to execute", parent = e)
   })
 }

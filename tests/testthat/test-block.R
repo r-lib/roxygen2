@@ -237,33 +237,31 @@ test_that("evaluation occurs during parsing", {
 })
 
 test_that("errors are propagated", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       foo <- function() stop('Uhoh')
+      #' @name foo
       #' @eval foo()
       NULL"
-    ),
-    "failed with error"
+    )
   )
 })
 
 test_that("must return non-NA string", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       foo <- function() NA
       #' @eval foo()
       NULL"
-    ),
-    "did not evaluate to a string"
+    )
   )
 
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       foo <- function() NA_character_
       #' @eval foo()
       NULL"
-    ),
-    "result contained NA"
+    )
   )
 })
 

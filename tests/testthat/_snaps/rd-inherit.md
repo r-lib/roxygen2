@@ -5,6 +5,10 @@
     "sha1"}
     } 
 
+# warns on unknown inherit type
+
+    [<text>:2] @inherit inherits from unknown type "unknown"
+
 # warns if can't find section
 
     @inheritSection failed in topic "b".

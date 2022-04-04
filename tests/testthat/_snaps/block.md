@@ -13,3 +13,17 @@
         $topic f
         $alias f
 
+# errors are propagated
+
+    [<text>:4] @eval failed to execute
+    Caused by error in `foo()`:
+    ! Uhoh
+
+# must return non-NA string
+
+    [<text>:3] @eval did not evaluate to a string
+
+---
+
+    [<text>:3] @eval result contained NA
+

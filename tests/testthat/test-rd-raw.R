@@ -10,24 +10,22 @@ test_that("rawRd inserted unchanged", {
 })
 
 test_that("evalRd must be valid code", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' @evalRd a +
       #' @name a
       #' @title a
-      NULL"),
-    "code failed to parse"
+      NULL")
   )
 })
 
 test_that("error-ful evalRd generates warning", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
-      #' @evalRd stop('!')
+      #' @evalRd stop('Uhoh')
       #' @name a
       #' @title a
-      NULL"),
-    "failed with error"
+      NULL")
   )
 })
 

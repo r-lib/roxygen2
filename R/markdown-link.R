@@ -105,16 +105,10 @@ parse_link <- function(destination, contents, state) {
   if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
     incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
 
-    file <- roxy_meta_get("current_file")
-    lines <- roxy_meta_get("current_lines")
-
-    cli::cli_abort(c(
-      "Links must contain plain text.",
-      x = "Problematic node{?s}: {.var {incorrect}}",
-      i = "Link target: {.var {destination}}",
-      i = if (is_string(file) && nzchar(file)) "Location: {.file {file}}",
-      i = if (is_integerish(lines, 2)) "Lines: {lines[[1]]}-{lines[[2]]}"
-    ))
+    roxy_tag_warning(state$tag,
+      "Links must contain plain text. Problematic link: ", destination
+    )
+    return("")
   }
 
   ## If the supplied link text is the same as the reference text,

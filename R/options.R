@@ -25,10 +25,6 @@
 #'
 #' * `current_package` `<string>` (read only): name of package being documented.
 #'
-#' * `current_path` `<string>` (read only): full path of file being documented.
-#'
-#' * `current_file` `<string>` (read only): name of file being documented.
-#'
 #' * `rd_family_title` `<list>`: overrides for `@family` titles. See the
 #'    _rd_ vignette for details: `vignette("rd", package = "roxygen2")`
 #'
@@ -119,12 +115,7 @@ load_options_meta <- function(base_path = ".", path = "man/roxygen/meta.R") {
 
 # Global binding management -----------------------------------------------
 
-roxy_meta <- new_environment(list(
-  # These should always be strings by contract
-  current_file = "",
-  current_path = "",
-  env = baseenv()
-))
+roxy_meta <- new_environment()
 
 #' @export
 #' @rdname load_options
@@ -145,6 +136,3 @@ roxy_meta_load <- function(base_path = getwd()) {
   env_bind(roxy_meta, !!!load_options(base_path))
 }
 
-roxy_meta_local <- function(..., .frame = caller_env()) {
-  local_bindings(..., .env = roxy_meta, .frame = .frame)
-}

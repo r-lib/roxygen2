@@ -88,6 +88,15 @@ test_that("@examplesIf", {
   expect_snapshot_output(out$get_section("examples"))
 })
 
+test_that("@examplesIf warns about unparseable condition", {
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), "
+    #' @name a
+    #' @title a
+    #' @examplesIf 1 +
+    #' maybe-run-this-code
+    NULL"))
+})
+
 test_that("% in @examples escaped before matching braces test (#213)", {
   out <- roc_proc_text(rd_roclet(), "
     #' @name a

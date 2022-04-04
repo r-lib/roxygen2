@@ -10,7 +10,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   tryCatch(
     suppressWarnings(parse(text = condition)),
     error = function(err) {
-      roxy_tag_warning(x, "failed to parse condition of @examplesIf")
+      roxy_tag_warning(x, "failed to parse condition")
     }
   )
 
@@ -25,7 +25,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
     collapse = "\n"
   )
 
-  x <- tag_examples(x)
+  tag_examples(x)
 }
 #' @export
 roxy_tag_parse.roxy_tag_example <- function(x) {

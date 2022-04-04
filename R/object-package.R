@@ -1,4 +1,7 @@
 package_seealso <- function(desc) {
+  itemize("Useful links:", package_seealso_urls(desc))
+}
+package_seealso_urls <- function(desc) {
   if (!is.null(desc$URL)) {
     links <- paste0("\\url{", strsplit(desc$URL, ",\\s+")[[1]], "}")
     links <- gsub("\\url\\{https://doi.org/", "\\doi{", links)
@@ -9,8 +12,9 @@ package_seealso <- function(desc) {
     links <- c(links, paste0("Report bugs at \\url{", desc$BugReports, "}"))
   }
 
-  itemize("Useful links:", links)
+  links
 }
+
 
 package_authors <- function(desc) {
   authors <- tryCatch(eval(parse(text = desc$`Authors@R` %||% "")),

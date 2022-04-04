@@ -193,7 +193,7 @@ mdxml_node_to_rd <- function(xml, state) {
     unknown = mdxml_children_to_rd(xml, state),
 
     paragraph = paste0("\n\n", mdxml_children_to_rd(xml, state)),
-    text = escape_comment(xml_text(xml)),
+    text = if (is_true(state$in_link_code)) escape_verb(xml_text(xml)) else escape_comment(xml_text(xml)),
     emph = paste0("\\emph{", mdxml_children_to_rd(xml, state), "}"),
     strong = paste0("\\strong{", mdxml_children_to_rd(xml, state), "}"),
     softbreak = mdxml_break(state),
@@ -256,7 +256,7 @@ mdxml_code_block <- function(xml, state) {
   info <- xml_attr(xml, "info")[1]
   if (is.na(info) || nchar(info[1]) == 0) info <- NA_character_
   paste0(
-    if (!is.na(info)) paste0("\\if{html}{\\out{<div class=\"", info, "\">}}"),
+    if (!is.na(info)) paste0("\\if{html}{\\out{<div class=\"sourceCode ", info, "\">}}"),
     "\\preformatted{",
     escape_verb(xml_text(xml)),
     "}",

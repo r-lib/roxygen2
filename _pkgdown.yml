@@ -1,5 +1,16 @@
 url: https://roxygen2.r-lib.org
 
+template:
+  package: tidytemplate
+  bootstrap: 5
+
+  includes:
+    in_header: |
+      <script defer data-domain="roxygen2.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+
+development:
+  mode: auto
+
 home:
   links:
   - text: Learn more
@@ -23,29 +34,17 @@ reference:
   - object_format
   - roclet_find
 
-navbar:
-  components:
-    home: ~
-    news:
-      text: News
-      menu:
-      - text: "Release notes"
-      - text: "Version 7.1.0"
-        href: https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/
-      - text: "Version 7.0.0"
-        href: https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/
-      - text: "Version 6.0.0"
-        href: https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/
-      - text: "Version 5.0.0"
-        href: https://blog.rstudio.com/2015/10/29/roxygen2-5-0-0/
-      - text: "Version 4.0.1"
-        href: https://blog.rstudio.com/2014/05/19/roxygen2-4-0-1/
-      - text: "Version 3.0.0"
-        href: https://blog.rstudio.com/2013/12/09/roxygen2-3-0-0/
-      - text: "------------------"
-      - text: "Change log"
-        href: news/index.html
-
-template:
-  params:
-    ganalytics: UA-115082821-1
+news:
+  releases:
+  - text: "Version 7.1.0"
+    href: https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/
+  - text: "Version 7.0.0"
+    href: https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/
+  - text: "Version 6.0.0"
+    href: https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/
+  - text: "Version 5.0.0"
+    href: https://blog.rstudio.com/2015/10/29/roxygen2-5-0-0/
+  - text: "Version 4.0.1"
+    href: https://blog.rstudio.com/2014/05/19/roxygen2-4-0-1/
+  - text: "Version 3.0.0"
+    href: https://blog.rstudio.com/2013/12/09/roxygen2-3-0-0/

@@ -1,9 +1,0 @@
-> out$get_section("examples")
-\examples{
-mtcars \%>\% identity()
-
-\dontrun{
-mtcars \%>\% identity()
-}
-} 
-

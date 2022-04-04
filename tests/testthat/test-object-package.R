@@ -4,7 +4,7 @@ test_that("person turned into meaningful text", {
     author_desc(unclass(out)[[1]])
   }
 
-  verify_output(test_path("test-object-package-author.txt"), {
+  expect_snapshot({
     "Multiple given/family names"
     person_desc(c("First", "Second"), c("Family1", "Family2"))
 

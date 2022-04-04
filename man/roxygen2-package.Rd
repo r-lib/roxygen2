@@ -8,11 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Generate your Rd documentation, 'NAMESPACE' file,
-    and collation field using specially formatted comments. Writing
-    documentation in-line with code makes it easier to keep your
-    documentation up-to-date as your requirements change. 'Roxygen2' is
-    inspired by the 'Doxygen' system for C++.
+Generate your Rd documentation, 'NAMESPACE' file, and collation field using specially formatted comments. Writing documentation in-line with code makes it easier to keep your documentation up-to-date as your requirements change. 'Roxygen2' is inspired by the 'Doxygen' system for C++.
 }
 \details{
 See \code{vignette("roxygen2", package = "roxygen2")} for an overview
@@ -44,7 +40,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item RStudio [copyright holder]
+  \item RStudio [copyright holder, funder]
 }
 
 }

@@ -1,5 +1,7 @@
 test_that("end-to-end NAMESPACE generation works", {
-  expect_output(roxygenise(test_path("testNamespace"), "namespace", clean = TRUE))
+  suppressMessages({
+    expect_output(roxygenise(test_path("testNamespace"), "namespace", clean = TRUE))
+  })
 
   ns <- read_lines(test_path("testNamespace/NAMESPACE"))
   expect_length(ns, 4)
@@ -213,7 +215,7 @@ test_that("useDynLib doesn't quote if comma present", {
 test_that("empty NAMESPACE generates zero-length vector", {
   base_path <- test_path("empty")
 
-  env <- pkgload::load_all(base_path)$env
+  env <- pkgload::load_all(base_path, quiet = TRUE)$env
   blocks <- parse_package(base_path, env = env)
 
   results <- roclet_process(namespace_roclet(), blocks, env = env, base_path)
@@ -329,4 +331,25 @@ test_that("auto_quote behaves as needed", {
   expect_equal(auto_quote("x"), "x")
   expect_equal(auto_quote("if"), '"if"') # quotes non-syntactic
   expect_equal(auto_quote("'if'"), "'if'") # unless already quoted
+})
+
+test_that("can extract non-imports from namespace preserving source", {
+  path <- withr::local_tempfile(lines = c(
+    "export(x)",
+    "import(y)"
+  ))
+  expect_equal(namespace_exports(path), "export(x)")
+
+  path <- withr::local_tempfile(lines = "export(x, y, z)")
+  expect_equal(namespace_exports(path), "export(x, y, z)")
+
+  lines <- c(
+    "if (TRUE) {",
+    "  import(x, y, z)",
+    "}",
+    "import(a)",
+    "export(b)"
+  )
+  path <- withr::local_tempfile(lines = lines)
+  expect_equal(namespace_exports(path), lines[c(1:3, 5)])
 })

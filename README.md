@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/roxygen2)](https://CRAN.R-project.org/package=roxygen2)
-[![R build status](https://github.com/r-lib/roxygen2/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/roxygen2/actions)
+[![R-CMD-check](https://github.com/r-lib/roxygen2/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/roxygen2/actions)
 [![Codecov test coverage](https://codecov.io/gh/r-lib/roxygen2/branch/master/graph/badge.svg)](https://codecov.io/gh/r-lib/roxygen2?branch=master)
 <!-- badges: end -->
 

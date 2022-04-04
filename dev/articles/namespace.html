@@ -124,24 +124,23 @@
 </li>
 <li>
 <p>S4 classes: if you want others to be able to extend your class, <code>@export</code> it. If you want others to create instances of your class, but not extend it, <code>@export</code> the constructor function, but not the class.</p>
-<pre><code>```R
-# Can extend and create
-#' @export
-setClass("A")
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Can extend and create</span>
+<span class="co">#' @export</span>
+<span class="kw">setClass</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>
 
-# Can extend, but constructor not exported
-#' @export
-B &lt;- setClass("B")
+<span class="co"># Can extend, but constructor not exported</span>
+<span class="co">#' @export</span>
+<span class="va">B</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"B"</span><span class="op">)</span>
 
-# Can create, but not extend
-#' @export C
-C &lt;- setClass("C")
+<span class="co"># Can create, but not extend</span>
+<span class="co">#' @export C</span>
+<span class="va">C</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span>
 
-# Can create and extend
-#' @export D
-#' @exportClass D
-D &lt;- setClass("D")
-```</code></pre>
+<span class="co"># Can create and extend</span>
+<span class="co">#' @export D</span>
+<span class="co">#' @exportClass D</span>
+<span class="va">D</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"D"</span><span class="op">)</span></code></pre></div>
 </li>
 <li><p>S4 generics: <code>@export</code> if you want the generic to be publicly usable.</p></li>
 <li><p>S4 methods: you only need to <code>@export</code> methods for generics that you did not define.</p></li>
@@ -172,20 +171,82 @@ D &lt;- setClass("D")
 <h2 id="imports">Imports<a class="anchor" aria-label="anchor" href="#imports"></a>
 </h2>
 <p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package. Only unique directives are saved to the <code>NAMESPACE</code> file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.</p>
-<p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>. Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code>::</code>.</p>
-<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make them available without using <code>::</code>.</p>
-<p>If you want to add a new method to an S3 generic, import it with <code>@importFrom pkg generic</code>.</p>
+<div class="section level3">
+<h3 id="importing-functions">Importing functions<a class="anchor" aria-label="anchor" href="#importing-functions"></a>
+</h3>
+<p>If you are using just a few functions from another package, the recommended option is to add the package name to the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the functions explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu">pkg</span><span class="fu">::</span><span class="fu">fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="va">y</span>
+<span class="op">}</span></code></pre></div>
+<p>If the repetition of the package name becomes annoying you can <code>@importFrom</code> and drop the <code>::</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @importFrom pkg fun </span>
+<span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu">fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="va">y</span>
+<span class="op">}</span></code></pre></div>
+<p>Imports affect every function in a package, so it’s common to collect them in a central place, like <code>{packagename}-package.R</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @importFrom pkg fun1 fun2</span>
+<span class="co">#' @importFrom pkg2 fun3</span>
+<span class="co">#' @importFrom pkg3 fun4</span>
+<span class="cn">NULL</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
+<p>Note the use of <code>NULL</code> here: you must provide something for roxygen2 to document, so we use <code>NULL</code> as place holder.</p>
+<p>It is possible, but not generally recommended to import all functions from a package with <code>@import package</code>. This is risky if you import functions from more than one package, because while it might be ok today, in the future the packages might end up with a function having the same name, and your users will get a warning every time your package is loaded.</p>
+</div>
+<div class="section level3">
+<h3 id="beware">Beware<a class="anchor" aria-label="anchor" href="#beware"></a>
+</h3>
+<p>Be careful when mixing <code>NAMESPACE</code> directives with regular code. The following example won’t work because roxygen ignores empty lines in blocks. It will generate a namespace directive <code>import(zoo, Different name for calling zoo.)</code>, which will error.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @import zoo</span>
+
+<span class="co">#' Different name for calling zoo.</span>
+<span class="co">#'</span>
+<span class="co">#' @params ... passed to zoo.</span>
+<span class="co">#' @return zoo object.</span>
+<span class="co">#'</span>
+<span class="co">#' @export </span>
+<span class="va">zoo2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">zoo</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
+<p>Instead you need to add an explicit <code>NULL</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' @import zoo</span>
+<span class="cn">NULL</span>
+<span class="co">#&gt; NULL</span>
+
+<span class="co">#' Different name for calling zoo.</span>
+<span class="co">#'</span>
+<span class="co">#' @params ... passed to zoo.</span>
+<span class="co">#' @return zoo object.</span>
+<span class="co">#'</span>
+<span class="co">#' @export </span>
+<span class="va">zoo2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">zoo</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>
+</h3>
+<p>If you’re adding a method to an S3 generic defined in another package, you must import it with <code>@importFrom pkg generic</code>. Otherwise roxygen2 can’t tell that your function is a method, and will not document it correctly.</p>
+</div>
+<div class="section level3">
+<h3 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
+</h3>
 <p>If you are using S4 you may also need:</p>
 <ul>
 <li><p><code>@importClassesFrom package classa classb ...</code> to import selected S4 classes.</p></li>
 <li><p><code>@importMethodsFrom package methoda methodb ...</code> to import selected S4 methods.</p></li>
 </ul>
+</div>
+<div class="section level3">
+<h3 id="compiled-code">Compiled code<a class="anchor" aria-label="anchor" href="#compiled-code"></a>
+</h3>
 <p>To import compiled code from another package, use <code>@useDynLib</code></p>
 <ul>
 <li><p><code>@useDynLib package</code> imports all compiled functions.</p></li>
 <li><p><code>@useDynLib package routinea routineb</code> imports selected compiled functions.</p></li>
 <li><p>Any <code>@useDynLib</code> specification containing a comma, e.g. <code>@useDynLib mypackage, .registration = TRUE</code> will be inserted as is into the the NAMESPACE, e.g. <code>useDynLib(mypackage, .registration = TRUE)</code></p></li>
 </ul>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

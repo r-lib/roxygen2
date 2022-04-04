@@ -110,8 +110,8 @@
 <div class="section level2">
 <h2 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
 </h2>
-<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceded by whitespace). Blocks gain additional structure through the use of <strong>tags</strong> like <code>@tag details</code>. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block).</p>
-<p>Text within roxygen blocks can be formatted using Markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceded by whitespace). The first lines of the block forms the <strong>description</strong>, described next. The description continues until the first <strong>tag</strong>. Tags start with <code>@</code>, like <code>@details</code> or <code>@param</code> , and must appear at the beginning of a line. The content of a tag extends to the start of the next tag or the end of the block. Text within the description or tags can be formatted using Markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>A block continues until it hits R code, typically a function or object assignment. Blocks ignore empty lines, including lines made up of non-roxygen comments. If you need to separate two blocks, use <code>NULL</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="the-description-block">The description block<a class="anchor" aria-label="anchor" href="#the-description-block"></a>

@@ -379,18 +379,13 @@ package_url_parse <- function(x) {
   # <doi:XX.XXX> -> \doi{XX.XXX} to avoid CRAN Notes, etc.
   x <- str_replace_all(x, "<(doi|DOI):(.*?)>", function(match) {
     match <- str_remove_all(match, "^<(doi|DOI):|>$")
-    paste0("\\doi{", URLdecode(match), "}")
+    paste0("\\doi{", rd_url_decode(match), "}")
   })
 
   # <http:XX.XXX> -> \url{http:XX.XXX}
   x <- str_replace_all(x, "<(http|https):\\/\\/(.*?)>", function(match) {
     match <- str_remove_all(match, "^<|>$")
-    match <- URLdecode(match)
-    # Additionally, encode just the spaces (CRAN Error if not) and mask the %
-    match <- str_replace_all(match, " ", "%20")
-    match <- str_replace_all(match, "([%{}])", "\\$1")
-
-    paste0("\\url{", match, "}")
+    paste0("\\url{", rd_url_decode(match), "}")
   })
 
   # <arxiv:XXX> -> \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
@@ -403,8 +398,21 @@ package_url_parse <- function(x) {
     # Extract arxiv id, split by space
     arxiv_id <- str_split_fixed(match, " ", n = 2)[, 1]
 
-    paste0("\\href{https://arxiv.org/abs/", arxiv_id, "}{arXiv:", match, "}")
+    paste0("\\href{https://arxiv.org/abs/", rd_url_decode(arxiv_id), "}{arXiv:", match, "}")
   })
 
+  x
+}
+
+rd_url_decode <- function(x) {
+  # From R-exts:
+  # > Note that RFC3986-encoded URLs (e.g. using ‘%28VS.85%29’ in place of
+  # > ‘(VS.85)’) may not work correctly in versions of R before 3.1.3 and
+  # > are best avoided --- use URLdecode() to decode them.
+  x <- URLdecode(x)
+  # except for spaces
+  x <- str_replace_all(x, " ", "%20")
+  # and escape
+  x <- str_replace_all(x, "([%{}\\\\])", "\\$1")
   x
 }

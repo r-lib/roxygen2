@@ -23,6 +23,14 @@
       c = "aaaaaaaaaaaaaaaa"
     ) <- value 
     
+    function_name(
+      x,
+      y,
+      xy = "abcdef",
+      xyz = c(`word word word word` = "abcdef", `word word word` = "abcdef", `word word
+        word` = "abcdef", `word word word` = "abcdef")
+    ) 
+    
 
 # old wrapping style doesn't change unexpectedly
 

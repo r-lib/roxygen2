@@ -21,6 +21,7 @@ Depends:
     R (>= 3.3)
 Imports: 
     brew,
+    cli,
     commonmark,
     desc (>= 1.2.0),
     digest,
@@ -41,7 +42,8 @@ Suggests:
     R.methodsS3,
     R.oo,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.1.2),
+    withr
 LinkingTo: 
     cpp11
 VignetteBuilder: 

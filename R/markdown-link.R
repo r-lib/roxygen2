@@ -95,8 +95,20 @@ parse_link <- function(destination, contents, state) {
   is_code <- FALSE
   if (length(contents) == 1 && xml_name(contents) == "code") {
     is_code <- TRUE
+
     contents <- xml_contents(contents)
     destination <- sub("`$", "", sub("^`", "", destination))
+
+    local_bindings(.env = state, in_link_code = TRUE)
+  }
+
+  if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
+    incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
+
+    roxy_tag_warning(state$tag,
+      "Links must contain plain text. Problematic link: ", destination
+    )
+    return("")
   }
 
   ## If the supplied link text is the same as the reference text,

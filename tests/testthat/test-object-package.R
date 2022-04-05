@@ -18,6 +18,14 @@ test_that("person turned into meaningful text", {
   })
 })
 
+
+test_that("can convert DOIs in url", {
+  expect_equal(
+    package_seealso_urls(list(URL = "https://doi.org/10.5281/zenodo.1485309")),
+    "\\doi{10.5281/zenodo.1485309}"
+  )
+})
+
 test_that("package description not affected if no links", {
   text <- "A simple description with no links."
 

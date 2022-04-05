@@ -54,6 +54,23 @@ test_that("% in links are escaped", {
   expect_equal(markdown("[base::%%]"), "\\link[base:Arithmetic]{base::\\%\\%}")
 })
 
+test_that("{ and } in links are escaped (#1259)", {
+  expect_equal(markdown("[`foo({ bar })`][x]"), "\\code{\\link[=x]{foo(\\{ bar \\})}}")
+  expect_equal(markdown("[`{{`][x]"), "\\code{\\link[=x]{\\{\\{}}")
+
+  # Non code parts are not escaped (invalid Rd)
+  expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo({ bar })}")
+})
+
+test_that("non-text nodes in links fails", {
+  tag <- roxy_tag("title", NULL, file = "foo.R", line = 10)
+
+  expect_snapshot({
+    markdown("[`foo` bar][x]", tag = tag)
+    markdown("[`foo{}` bar __baz__][x]", tag = tag)
+  })
+})
+
 test_that("commonmark picks up the various link references", {
   cases <- list(
     list("foo [func()] bar",            c("R:func()", "func()")),

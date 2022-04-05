@@ -1,3 +1,20 @@
+# non-text nodes in links fails
+
+    Code
+      markdown("[`foo` bar][x]", tag = tag)
+    Condition
+      Warning:
+      [foo.R:10] @title Links must contain plain text. Problematic link: x
+    Output
+      [1] ""
+    Code
+      markdown("[`foo{}` bar __baz__][x]", tag = tag)
+    Condition
+      Warning:
+      [foo.R:10] @title Links must contain plain text. Problematic link: x
+    Output
+      [1] ""
+
 # short and sweet links work
 
     Code

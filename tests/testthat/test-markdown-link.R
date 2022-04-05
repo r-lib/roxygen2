@@ -67,7 +67,7 @@ test_that("non-text nodes in links fails", {
 
   expect_snapshot({
     markdown("[`foo` bar][x]", tag = tag)
-    markdown("[`foo{}` bar __baz__][x]", tag = tag)
+    markdown("[__baz__][x]", tag = tag)
   })
 })
 

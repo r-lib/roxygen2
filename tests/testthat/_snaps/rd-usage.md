@@ -32,7 +32,10 @@
     ) 
     
     function_name(
-      f = function(x) {     1     2 }
+      f = function(x) {
+         1
+         2
+     }
     ) 
     
 

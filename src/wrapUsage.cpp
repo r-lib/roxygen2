@@ -25,6 +25,7 @@ std::vector<std::string> splitByWhitespace(std::string string) {
       }
 
     } else if (*cur == ' ' || *cur == '\t' || *cur == '\n') {
+      if (*cur == '\n') acc += *cur; // newlines are significant whitespace
       out.push_back(acc);
       acc = "";
     } else if (*cur == '"' || *cur == '\'' || *cur == '`') {

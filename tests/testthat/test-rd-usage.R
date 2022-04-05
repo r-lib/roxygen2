@@ -297,6 +297,14 @@ test_that("new wrapping style doesn't change unexpectedly", {
        xyz = c(`word word word word` = "abcdef", `word word word` = "abcdef",
                `word word word` = "abcdef", `word word word` = "abcdef")) {}
     }), "\n\n")
+
+    cat(call_to_usage({
+      function_name <- function(
+        f = function(x) {
+          1
+          2
+      }) {}
+    }), "\n\n")
   })
 })
 

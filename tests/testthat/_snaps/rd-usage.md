@@ -31,6 +31,10 @@
         `word word word` = "abcdef", `word word word` = "abcdef")
     ) 
     
+    function_name(
+      f = function(x) {     1     2 }
+    ) 
+    
 
 # old wrapping style doesn't change unexpectedly
 

@@ -41,14 +41,13 @@ Class B details.
 \item \href{#method-clone}{\code{B$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth2">}\href{../../roxygen2/html/A.html#method-meth2}{\code{roxygen2::A$meth2()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3">}\href{../../roxygen2/html/A.html#method-meth3}{\code{roxygen2::A$meth3()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<ul>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth2"><a href='../../roxygen2/html/A.html#method-meth2'><code>roxygen2::A$meth2()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-meth3'><code>roxygen2::A$meth3()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth1"></a>}}
 \if{latex}{\out{\hypertarget{method-meth1}{}}}

@@ -51,15 +51,14 @@ Classs C details.
 \item \href{#method-undocumented_method}{\code{C$undocumented_method()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3">}\href{../../roxygen2/html/A.html#method-meth3}{\code{roxygen2::A$meth3()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth1">}\href{../../roxygen2/html/B.html#method-meth1}{\code{roxygen2::B$meth1()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth4">}\href{../../roxygen2/html/B.html#method-meth4}{\code{roxygen2::B$meth4()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<ul>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-meth3'><code>roxygen2::A$meth3()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth1"><a href='../../roxygen2/html/B.html#method-meth1'><code>roxygen2::B$meth1()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth4"><a href='../../roxygen2/html/B.html#method-meth4'><code>roxygen2::B$meth4()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meth2"></a>}}
 \if{latex}{\out{\hypertarget{method-meth2}{}}}

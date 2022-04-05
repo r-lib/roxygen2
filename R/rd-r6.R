@@ -249,15 +249,14 @@ r6_inherited_method_list <- function(block, r6data) {
     "><summary>Inherited methods</summary>"
   )
 
-  c("\\if{html}{",
-    paste0("\\out{", details, "}"),
-    "\\itemize{",
+  c("\\if{html}{\\out{",
+    "<ul>",
     sprintf(
       paste0(
-        "\\item \\out{<span class=\"pkg-link\" data-pkg=\"%s\" ",
-        "data-topic=\"%s\" data-id=\"%s\">}",
-        "\\href{../../%s/html/%s.html#method-%s}{\\code{%s::%s$%s()}}",
-        "\\out{</span>}"
+        "<li>",
+        "<span class=\"pkg-link\" data-pkg=\"%s\" data-topic=\"%s\" data-id=\"%s\">",
+        "<a href='../../%s/html/%s.html#method-%s'><code>%s::%s$%s()</code></a>",
+        "</li>"
       ),
       super_meth$package,
       super_meth$classname,
@@ -269,9 +268,9 @@ r6_inherited_method_list <- function(block, r6data) {
       super_meth$classname,
       super_meth$name
     ),
-    "}",
-    "\\out{</details>}",
-    "}"
+    "</ul>",
+    "</details>",
+    "}}"
   )
 }
 

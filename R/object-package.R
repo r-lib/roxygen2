@@ -376,37 +376,26 @@ itemize <- function(header, x) {
 }
 
 package_url_parse <- function(x) {
-
-  # DOIs handling
-  # target: from <doi:XX.XXX> to \doi{XX.XXX} to avoid CRAN Notes, etc.
+  # <doi:XX.XXX> -> \doi{XX.XXX} to avoid CRAN Notes, etc.
   x <- str_replace_all(x, "<(doi|DOI):(.*?)>", function(match) {
     match <- str_remove_all(match, "^<(doi|DOI):|>$")
-    # Decode for docs
-    match <- URLdecode(match)
-
-    paste0("\\doi{", match, "}")
+    paste0("\\doi{", URLdecode(match), "}")
   })
 
-  # http(s) handling
-  # target: from <http:XX.XXX> to \url{http:XX.XXX}
+  # <http:XX.XXX> -> \url{http:XX.XXX}
   x <- str_replace_all(x, "<(http|https):\\/\\/(.*?)>", function(match) {
     match <- str_remove_all(match, "^<|>$")
-    # Decode for docs
     match <- URLdecode(match)
     # Additionally, encode just the spaces (CRAN Error if not) and mask the %
-    match <- str_replace_all(match, " ", "\\\\%20")
+    match <- str_replace_all(match, " ", "%20")
+    match <- str_replace_all(match, "([%{}])", "\\$1")
 
     paste0("\\url{", match, "}")
   })
 
-  # ArXiv
-  # target: from <arxiv:XXX> to \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
-  # This is how CRAN parses it, see: https://CRAN.R-project.org/package=alpaca
-  # See https://github.com/wch/r-source/blob/trunk/src/library/tools/R/Rd2pdf.R
-
-  # Pattern from https://github.com/wch/r-source, see previous link
+  # <arxiv:XXX> -> \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
+  # https://github.com/wch/r-source/blob/trunk/src/library/tools/R/Rd2pdf.R#L149-L151
   patt_arxiv <- "<(arXiv:|arxiv:)([[:alnum:]/.-]+)([[:space:]]*\\[[^]]+\\])?>"
-
   x <- str_replace_all(x, patt_arxiv, function(match) {
     match <- str_remove_all(match, "^<(arXiv:|arxiv:)|>$")
     # Special cases has <arxiv:id [code]>.
@@ -417,5 +406,5 @@ package_url_parse <- function(x) {
     paste0("\\href{https://arxiv.org/abs/", arxiv_id, "}{arXiv:", match, "}")
   })
 
-  return(x)
+  x
 }

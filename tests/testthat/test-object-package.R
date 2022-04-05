@@ -26,16 +26,43 @@ test_that("can convert DOIs in url", {
   )
 })
 
-test_that("package description not affected if no links", {
-  
+test_that("can autolink urls on package Description", {
   expect_equal(
-    package_url_parse("Simple description with no links."),
-    "Simple description with no links."
+    package_url_parse("x <https://x.com> y"),
+    "x \\url{https://x.com} y"
+  )
+  expect_equal(
+    package_url_parse("x <https://x.com/%3C-%3E> y"),
+    "x \\url{https://x.com/<->} y"
+  )
+  expect_equal(
+    package_url_parse("x <https://x.com/%20> y"),
+    "x \\url{https://x.com/\\%20} y"
   )
 })
 
-test_that("Autolink several matching patterns", {
+test_that("can autolink DOIs", {
+  expect_equal(package_url_parse("x <doi:abcdef> y"), "x \\doi{abcdef} y")
+  expect_equal(package_url_parse("x <DOI:abcdef> y"), "x \\doi{abcdef} y")
+  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{<->} y")
+})
 
+test_that("can autolink arxiv", {
+  expect_equal(
+    package_url_parse("x <arXiv:abc> y"),
+    "x \\href{https://arxiv.org/abs/abc}{arXiv:abc} y"
+  )
+  expect_equal(
+    package_url_parse("x <arxiv:abc> y"),
+    "x \\href{https://arxiv.org/abs/abc}{arXiv:abc} y"
+  )
+  expect_equal(
+    package_url_parse("x <arxiv:abc [def]> y"),
+    "x \\href{https://arxiv.org/abs/abc}{arXiv:abc [def]} y"
+  )
+})
+
+test_that("autolink several matching patterns", {
   text <- "url <http://a.com> doi <doi:xx> arxiv <arXiv:xx>"
   expect_equal(
     package_url_parse(text),
@@ -45,101 +72,4 @@ test_that("Autolink several matching patterns", {
       "arxiv \\href{https://arxiv.org/abs/xx}{arXiv:xx}"
     )
   )
-})
-
-test_that("can autolink urls on package Description", {
-
-  # http and https
-  expect_equal(
-    package_url_parse(
-      "<http://service.iris.edu/> and <https://abj.org.br/>"
-    ),
-    "\\url{http://service.iris.edu/} and \\url{https://abj.org.br/}"
-  )
-
-  # Decode URL
-  expect_equal(
-    package_url_parse(
-      "<https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ%3AL%3A2015%3A012%3ATOC>"
-    ),
-    "\\url{https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2015:012:TOC}"
-  )
-
-  # Decode URL with spaces
-  expect_equal(
-    package_url_parse(
-      "<https://www.sibm.it/SITO%20MEDITS/principaleprogramme.htm>>"
-    ),
-    "\\url{https://www.sibm.it/SITO\\%20MEDITS/principaleprogramme.htm}>"
-  )
-})
-
-test_that("can autolink dois on package Description", {
-
-  # Regular DOI
-  expect_equal(
-    package_url_parse(
-      "A DOI: <doi:10.1093/biomet/asu017>"
-    ),
-    "A DOI: \\doi{10.1093/biomet/asu017}"
-  )
-
-  # With upcase
-  expect_equal(
-    package_url_parse(
-      "Another DOI: <DOI:10.1086/160554>"
-    ),
-    "Another DOI: \\doi{10.1086/160554}"
-  )
-  # An encoded DOI
-  expect_equal(
-    package_url_parse(
-      "Encoded doi: <doi:10.1175/1520-0469(1981)038%3C1179:TSLROA%3E2.0.CO;2>"
-    ),
-    "Encoded doi: \\doi{10.1175/1520-0469(1981)038<1179:TSLROA>2.0.CO;2}"
-  )
-})
-
-
-test_that("can autolink arxiv on package Description", {
-
-  # Regular arXiv
-  expect_equal(
-    package_url_parse(
-      "'abess' <arXiv:1702.04690>"
-    ),
-    "'abess' \\href{https://arxiv.org/abs/1702.04690}{arXiv:1702.04690}"
-  )
-
-  # Different casing: arxiv:
-  expect_equal(
-    package_url_parse("'DLL' <arxiv:1907.12732>"),
-    "'DLL' \\href{https://arxiv.org/abs/1907.12732}{arXiv:1907.12732}"
-  )
-
-  # Another valid format
-  expect_equal(
-    package_url_parse("<arXiv:1602.03990v2 [stat.ME]>"),
-    "\\href{https://arxiv.org/abs/1602.03990v2}{arXiv:1602.03990v2 [stat.ME]}"
-  )
-
-  # Old-style format
-  expect_equal(
-    package_url_parse("<arXiv:quant-ph/0208069>"),
-    "\\href{https://arxiv.org/abs/quant-ph/0208069}{arXiv:quant-ph/0208069}"
-  )
-})
-
-test_that("No autolinking if wrong pattern", {
-  badurl <- "<www.a.org> and <http:r.com"
-  expect_equal(package_url_parse(badurl), badurl)
-
-  ftpurl <- "<ftp://cran.r-project.org/incoming/>"
-  expect_equal(package_url_parse(ftpurl), ftpurl)
-
-  baddoi <- "<doi.109/10sm> and <dOi:10.20290>"
-  expect_equal(package_url_parse(baddoi), baddoi)
-
-  badarxiv <- "<ARXIV:1907.12732>"
-  expect_equal(package_url_parse(badarxiv), badarxiv)
 })

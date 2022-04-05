@@ -27,15 +27,15 @@ test_that("can convert DOIs in url", {
 })
 
 test_that("package description not affected if no links", {
-  text <- "A simple description with no links."
-
+  
   expect_equal(
-    package_url_parse(text),
-    text
+    package_url_parse("Simple description with no links."),
+    "Simple description with no links."
   )
 })
 
 test_that("Autolink several matching patterns", {
+
   text <- "url <http://a.com> doi <doi:xx> arxiv <arXiv:xx>"
   expect_equal(
     package_url_parse(text),

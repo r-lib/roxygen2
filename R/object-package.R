@@ -387,14 +387,12 @@ package_url_parse <- function(x) {
     paste0("\\doi{", match, "}")
   })
 
-
   # http(s) handling
   # target: from <http:XX.XXX> to \url{http:XX.XXX}
   x <- str_replace_all(x, "<(http|https):\\/\\/(.*?)>", function(match) {
     match <- str_remove_all(match, "^<|>$")
     # Decode for docs
     match <- URLdecode(match)
-
     # Additionally, encode just the spaces (CRAN Error if not) and mask the %
     match <- str_replace_all(match, " ", "\\\\%20")
 
@@ -411,12 +409,10 @@ package_url_parse <- function(x) {
 
   x <- str_replace_all(x, patt_arxiv, function(match) {
     match <- str_remove_all(match, "^<(arXiv:|arxiv:)|>$")
-
-    # Some special cases has a format <arxiv:id [code]>. This is accepted on
-    # CRAN, see https://CRAN.R-project.org/package=ciccr
+    # Special cases has <arxiv:id [code]>.
+    # See https://CRAN.R-project.org/package=ciccr
     # Extract arxiv id, split by space
     arxiv_id <- str_split_fixed(match, " ", n = 2)[, 1]
-
 
     paste0("\\href{https://arxiv.org/abs/", arxiv_id, "}{arXiv:", match, "}")
   })

@@ -277,3 +277,17 @@ test_that("also works with namespace roclet", {
   expect_equal(out, "export(a)")
 })
 
+
+# other -------------------------------------------------------------------
+
+
+test_that("warns about duplicate tags", {
+  expect_snapshot_warning({
+    roc_proc_text(rd_roclet(), "
+      #' Foo
+      #' @rdname foo
+      #' @rdname bar
+      foo <- function() {}
+    ")
+  })
+})

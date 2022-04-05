@@ -27,3 +27,7 @@
 
     [<text>:3] @eval must not contain any missing values
 
+# warns about duplicate tags
+
+    [<text>:5] Block must contain only one @rdname
+

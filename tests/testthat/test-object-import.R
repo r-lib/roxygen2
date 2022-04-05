@@ -39,19 +39,6 @@ test_that("description generated correctly", {
   expect_null(out$get_section("description"))
 })
 
-test_that("can't set description and re-export", {
-  expect_warning(
-    out <- roc_proc_text(rd_roclet(), "
-      #' @description NOPE
-      #' @export
-      magrittr::`%>%`
-      "),
-    "Can't use description when re-exporting"
-  )
-
-  expect_length(out, 0)
-})
-
 test_that("warnings for unknown packages and objects", {
   expect_warning(
     format(rd_section_reexport("11papaya", "fun")),

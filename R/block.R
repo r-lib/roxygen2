@@ -181,7 +181,7 @@ block_get_tag <- function(block, tag) {
   } else if (n == 1) {
     block$tags[[matches]]
   } else {
-    roxy_tag_warning(block$tags[[matches[[2]]]], "May only use one @", tag, " per block")
+    warn_roxy_block(block, "Block must contain only one @{tag}")
     block$tags[[matches[[1]]]]
   }
 }
@@ -288,4 +288,9 @@ parse_description <- function(tags) {
   }
 
   c(compact(list(title, description, details)), tags)
+}
+
+warn_roxy_block <- function(block, message, ...) {
+  message[[1]] <- paste0("[", block$file, ":", block$line, "] ", message[[1]])
+  cli::cli_warn(message, ..., .envir = parent.frame())
 }

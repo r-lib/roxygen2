@@ -461,7 +461,7 @@ test_that("unhandled markdown generates warning", {
     #' @name x
     NULL
   "
-  expect_warning(roc_proc_text(rd_roclet(), text), "block quotes")
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
 })
 
 test_that("level 1 heading in markdown generates warning in some tags", {

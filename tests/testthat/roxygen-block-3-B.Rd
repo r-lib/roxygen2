@@ -36,21 +36,21 @@ Class B details.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-meth1}{\code{B$meth1()}}
-\item \href{#method-meth4}{\code{B$meth4()}}
-\item \href{#method-clone}{\code{B$clone()}}
+\item \href{#method-B-meth1}{\code{B$meth1()}}
+\item \href{#method-B-meth4}{\code{B$meth4()}}
+\item \href{#method-B-clone}{\code{B$clone()}}
 }
 }
 \if{html}{\out{
 <ul>
-<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth2"><a href='../../roxygen2/html/A.html#method-meth2'><code>roxygen2::A$meth2()</code></a></li>
-<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-meth3'><code>roxygen2::A$meth3()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth2"><a href='../../roxygen2/html/A.html#method-A-meth2'><code>roxygen2::A$meth2()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-A-meth3'><code>roxygen2::A$meth3()</code></a></li>
 </ul>
 </details>
 }}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meth1"></a>}}
-\if{latex}{\out{\hypertarget{method-meth1}{}}}
+\if{html}{\out{<a id="method-B-meth1"></a>}}
+\if{latex}{\out{\hypertarget{method-B-meth1}{}}}
 \subsection{Method \code{meth1()}}{
 B method 1.
 \subsection{Usage}{
@@ -66,8 +66,8 @@ B method 1.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meth4"></a>}}
-\if{latex}{\out{\hypertarget{method-meth4}{}}}
+\if{html}{\out{<a id="method-B-meth4"></a>}}
+\if{latex}{\out{\hypertarget{method-B-meth4}{}}}
 \subsection{Method \code{meth4()}}{
 A method 4.
 \subsection{Usage}{
@@ -76,8 +76,8 @@ A method 4.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-B-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-B-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

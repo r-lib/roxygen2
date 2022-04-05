@@ -68,6 +68,7 @@ extract_r6_methods <- function(x) {
   methods <- data.frame(
     stringsAsFactors = FALSE,
     type = if (length(method_loc)) "method" else character(),
+    class = if (length(method_loc)) x$classname %||% NA_character_ else character(),
     name = unname(method_nms),
     file = unname(method_fnm),
     line = unname(method_loc),
@@ -91,6 +92,7 @@ add_default_method_data <- function(obj, methods) {
     rec <- data.frame(
       stringsAsFactors = FALSE,
       type = defaults[[mname]]$type %||% "method",
+      class = defaults[[mname]]$class %||% obj$classname %||% "unknown",
       name = defaults[[mname]]$name %||% mname,
       file = defaults[[mname]]$file %||% NA_character_,
       line = defaults[[mname]]$line %||% NA_integer_,
@@ -108,6 +110,7 @@ extract_r6_fields <- function(x) {
     stringsAsFactors = FALSE,
     type = rep("field", length(field_nms)),
     name = as.character(field_nms),
+    class = rep(x$classname %||% NA_character_, length(field_nms)),
     file = rep(NA, length(field_nms)),
     line = rep(NA, length(field_nms)),
     formals = I(replicate(length(field_nms), NULL))
@@ -120,6 +123,7 @@ extract_r6_bindings <- function(x) {
     stringsAsFactors = FALSE,
     type = if (length(bind_nms)) "active" else character(),
     name = as.character(bind_nms),
+    class = rep(x$classname %||% NA_character_, length(bind_nms)),
     file = rep(NA, length(bind_nms)),
     line = rep(NA, length(bind_nms)),
     formals = I(replicate(length(bind_nms), NULL))

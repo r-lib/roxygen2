@@ -27,7 +27,7 @@ std::vector<std::string> splitByWhitespace(std::string string) {
     } else if (*cur == ' ' || *cur == '\t' || *cur == '\n') {
       out.push_back(acc);
       acc = "";
-    } else if (*cur == '"' || *cur == '\'') {
+    } else if (*cur == '"' || *cur == '\'' || *cur == '`') {
       in_string = *cur;
       acc += *cur;
     } else {

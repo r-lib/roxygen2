@@ -241,7 +241,7 @@ test_that("R6 edge cases, class without (documented) fields", {
   block <- parse_text(text)[[1]]
   rd <- RoxyTopic$new()
 
-  expect_warning(topic_add_r6_methods(rd, block, environment()))
+  expect_snapshot(topic_add_r6_methods(rd, block, environment()))
   expect_false(grepl("field", format(rd), ignore.case = TRUE))
 })
 
@@ -308,10 +308,7 @@ test_that("warning if no method comes after the docs", {
   block <- parse_text(text, env = environment())[[1]]
   rd <- RoxyTopic$new()
 
-  expect_warning(
-    topic_add_r6_methods(rd, block, environment()),
-    "Cannot find matching R6 method"
-  )
+  expect_snapshot(topic_add_r6_methods(rd, block, environment()))
   doc <- format(rd)
 })
 
@@ -331,19 +328,13 @@ test_that("integration test", {
 
   roc <- roclet_preprocess(roclet_find("rd"))
 
-  roxy_warnings <- character()
-
-  withCallingHandlers(
-    res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path()),
-    warning = function(w) {
-      roxy_warnings <<- c(roxy_warnings, w$message)
-      invokeRestart("muffleWarning")
-    }
+  expect_snapshot(
+    res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path())
   )
 
-  # Warnings
-  expect_snapshot_output(sort(roxy_warnings))
-
+  # # Warnings
+  # expect_snapshot_output(sort(roxy_warnings))
+  #
   tmp <- tempfile()
   on.exit(unlink(tmp), add = TRUE)
   for (n in names(res)) {

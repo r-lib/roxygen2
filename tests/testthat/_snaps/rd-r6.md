@@ -1,12 +1,42 @@
+# R6 edge cases, class without (documented) fields
+
+    Code
+      topic_add_r6_methods(rd, block, environment())
+    Condition
+      Warning:
+      [<text>:7] Undocumented R6 field[s]: undocumented_field
+
+# warning if no method comes after the docs
+
+    Code
+      topic_add_r6_methods(rd, block, environment())
+    Condition
+      Warning:
+      [<text>:10] @description Cannot find matching R6 method
+
 # integration test
 
-    [1] "[roxygen-block-3.R:35] @return May only use one @return per R6 method"                      
-    [2] "[roxygen-block-3.R:36] argument `duplicate` documented multiple times for R6 method `meth3`"
-    [3] "[roxygen-block-3.R:36] argument `missing` undocumented for R6 method `meth3()`"             
-    [4] "[roxygen-block-3.R:92] R6 active binding documented multiple times: `duplicate_binding`"    
-    [5] "[roxygen-block-3.R:92] R6 field documented multiple times: `duplicatefield`"                
-    [6] "[roxygen-block-3.R:92] undocumented R6 active binding: `undocumented_binding`"              
-    [7] "[roxygen-block-3.R:92] undocumented R6 fields: `field2`, `undocumented_field`"              
-    [8] "[roxygen-block-3.R:92] undocumented R6 method: `undocumented_method`"                       
-    [9] "[roxygen-block-3.R:92] unknown R6 field: `nosuchfield`"                                     
+    Code
+      res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path())
+    Condition
+      Warning:
+      [roxygen-block-3.R:13] Must use one @param for each argument
+      x $meth3(duplicate) is documented multiple times
+      Warning:
+      [roxygen-block-3.R:13] Must use one @param for each argument
+      x $meth3(missing) is not documented
+      Warning:
+      [roxygen-block-3.R:13] Must use one @return per R6 method
+      Warning:
+      [roxygen-block-3.R:92] Undocumented R6 method[s]: undocumented_method
+      Warning:
+      [roxygen-block-3.R:92] Undocumented R6 field[s]: field2 and undocumented_field
+      Warning:
+      [roxygen-block-3.R:92] R6 field[s] documented multiple times: duplicatefield
+      Warning:
+      [roxygen-block-3.R:92] Unknown R6 field[s]: nosuchfield
+      Warning:
+      [roxygen-block-3.R:92] Undocumented R6 active binding[s]: undocumented_binding
+      Warning:
+      [roxygen-block-3.R:92] R6 active binding[s] documented multiple times: duplicate_binding
 

@@ -108,14 +108,3 @@ roxygen_setup <- function(base_path) {
 
   is_first
 }
-
-roxy_warning <- function(..., file = NA, line = NA) {
-  message <- paste0(
-    if (!is.na(file)) paste0("[", file, ":", line, "] "),
-    ...,
-    collapse = " "
-  )
-
-  warning(message, call. = FALSE, immediate. = TRUE)
-  NULL
-}

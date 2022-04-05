@@ -4,7 +4,7 @@
       markdown("[`foo` bar][x]", tag = tag)
     Condition
       Warning:
-      [foo.R:10] @title markdown: links must contain plain text
+      [foo.R:10] @title (automatically generated) markdown: links must contain plain text
       Problematic link: x
     Output
       [1] ""
@@ -12,7 +12,7 @@
       markdown("[__baz__][x]", tag = tag)
     Condition
       Warning:
-      [foo.R:10] @title markdown: links must contain plain text
+      [foo.R:10] @title (automatically generated) markdown: links must contain plain text
       Problematic link: x
     Output
       [1] ""
@@ -25,13 +25,15 @@
         1]]
     Condition
       Warning:
-      [<text>:4] @description Link to unavailable package: 11pkg::function.
-      there is no package called '11pkg'
+      [<text>:4] @description refers to unavailable topic 11pkg::function
+      Caused by error in `find.package()`:
+      ! there is no package called '11pkg'
       Warning:
-      [<text>:4] @description Link to unavailable package: 11pkg::object.
-      there is no package called '11pkg'
+      [<text>:4] @description refers to unavailable topic 11pkg::object
+      Caused by error in `find.package()`:
+      ! there is no package called '11pkg'
 
 ---
 
-    [<text>:4] @description Link to unknown topic: stringr::bar111
+    [<text>:4] @description refers to unavailable topic stringr::bar111
 

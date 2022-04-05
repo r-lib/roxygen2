@@ -143,8 +143,8 @@ block_find_object <- function(block, env) {
   ))
 
   # Add in defaults generated from the object
-  defaults <- object_defaults(object)
-  defaults <- c(defaults, list(roxy_tag("backref", block$file, block$file)))
+  defaults <- object_defaults(object, block)
+  defaults <- c(defaults, list(roxy_generated_tag(block, "backref", block$file)))
 
   default_tags <- map_chr(defaults, "tag")
   defaults <- defaults[!default_tags %in% block_tags(block)]

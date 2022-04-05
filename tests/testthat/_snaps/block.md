@@ -5,9 +5,9 @@
         [line:  1] @title 'This is a title' {parsed}
         [line:  3] @param 'x,y A number' {parsed}
         [line:  4] @export '' {parsed}
-        [????:???] @usage '<generated>' {parsed}
-        [????:???] @.formals '<generated>' {parsed}
-        [????:???] @backref '<text>' {parsed}
+        [line:  5] @usage '<generated>' {parsed}
+        [line:  5] @.formals '<generated>' {parsed}
+        [line:  5] @backref '<generated>' {parsed}
       $call   f <- function(x, y) x + y
       $object <function> 
         $topic f

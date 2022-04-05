@@ -1,7 +1,8 @@
 #' `roxy_tag` S3 constructor
 #'
 #' `roxy_tag()` is the constructor for tag objects.
-#' `roxy_tag_warning()` generates a warning that gives the location of the tag.
+#' `roxy_tag_warning()` is superseded by `warn_roxy_tag()`; use to generate a
+#' warning that includes the location of the tag.
 #'
 #' @section Methods:
 #' Define a method for `roxy_tag_parse` to support new tags. See [tag_parsers]
@@ -15,7 +16,7 @@
 #' @param val Parsed tag value, typically a character vector, but sometimes
 #'   a list. Usually filled in by `tag_parsers`
 #' @param file,line Location of the tag
-roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_integer_) {
+roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_character_) {
   structure(
     list(
       file = file,
@@ -25,6 +26,16 @@ roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_integ
       val = val
     ),
     class = c(paste0("roxy_tag_", tag), "roxy_tag")
+  )
+}
+
+roxy_generated_tag <- function(block, tag, val) {
+  roxy_tag(
+    tag = tag,
+    raw = NULL,
+    val = val,
+    file = block$file,
+    line = block$line
   )
 }
 
@@ -94,12 +105,26 @@ print.roxy_tag <- function(x, ...) {
 #' @export
 #' @rdname roxy_tag
 roxy_tag_warning <- function(x, ...) {
-  roxy_warning(file = x$file, line = x$line, "@", x$tag, " ", ...)
+  # Should no longer be used internally
+
+  message <- paste0(
+    if (!is.na(x$file)) paste0("[", x$file, ":", x$line, "] "),
+    ...,
+    collapse = " "
+  )
+
+  warning(message, call. = FALSE, immediate. = TRUE)
+  NULL
 }
 
 #' @export
 #' @rdname roxy_tag
 warn_roxy_tag <- function(tag, message, ...) {
-  message[[1]] <- paste0("[", tag$file, ":", tag$line, "] @", tag$tag, " ", message[[1]])
+  message[[1]] <- paste0(
+    "[", tag$file, ":", tag$line, "] ",
+    "@", tag$tag, " ",
+    if (is.null(tag$raw)) ("(automatically generated) "),
+    message[[1]]
+  )
   cli::cli_warn(message, ..., .envir = parent.frame())
 }

@@ -26,7 +26,7 @@ topic_add_r6_methods <- function(rd, block, env) {
     del <- c(del, i)
   }
 
-  methods <- add_default_methods(methods)
+  methods <- add_default_methods(methods, block)
 
   nodoc <- map_int(methods$tags, length) == 0
   if (any(nodoc)) {
@@ -61,14 +61,19 @@ topic_add_r6_methods <- function(rd, block, env) {
   }
 }
 
-add_default_methods <- function(methods) {
+add_default_methods <- function(methods, block) {
   defaults <- list(
     clone = list(
-      roxy_tag_parse(roxy_tag(
+      roxy_generated_tag(
+        block,
         "description",
         "The objects of this class are cloneable with this method."
-      )),
-      roxy_tag_parse(roxy_tag("param", "deep Whether to make a deep clone."))
+      ),
+      roxy_generated_tag(
+        block,
+        "param",
+        list(name = "deep", description = "Whether to make a deep clone.")
+      )
     )
   )
 

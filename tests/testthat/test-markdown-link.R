@@ -63,7 +63,7 @@ test_that("{ and } in links are escaped (#1259)", {
 })
 
 test_that("non-text nodes in links fails", {
-  tag <- roxy_tag("title", NULL, file = "foo.R", line = 10)
+  tag <- roxy_tag("title", NULL, NULL, file = "foo.R", line = 10)
 
   expect_snapshot({
     markdown("[`foo` bar][x]", tag = tag)

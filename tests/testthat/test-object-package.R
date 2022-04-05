@@ -33,18 +33,14 @@ test_that("can autolink urls on package Description", {
   )
   expect_equal(
     package_url_parse("x <https://x.com/%3C-%3E> y"),
-    "x \\url{https://x.com/<->} y"
-  )
-  expect_equal(
-    package_url_parse("x <https://x.com/%20> y"),
-    "x \\url{https://x.com/\\%20} y"
+    "x \\url{https://x.com/\\%3C-\\%3E} y"
   )
 })
 
 test_that("can autolink DOIs", {
   expect_equal(package_url_parse("x <doi:abcdef> y"), "x \\doi{abcdef} y")
   expect_equal(package_url_parse("x <DOI:abcdef> y"), "x \\doi{abcdef} y")
-  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{<->} y")
+  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{\\%3C-\\%3E} y")
 })
 
 test_that("can autolink arxiv", {

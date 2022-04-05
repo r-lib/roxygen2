@@ -256,6 +256,7 @@ mdxml_code_block <- function(xml, state) {
   info <- xml_attr(xml, "info")[1]
   if (is.na(info) || nchar(info[1]) == 0) info <- NA_character_
   paste0(
+    "\n\n",
     if (!is.na(info)) paste0("\\if{html}{\\out{<div class=\"sourceCode ", info, "\">}}"),
     "\\preformatted{",
     escape_verb(xml_text(xml)),

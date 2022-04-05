@@ -41,7 +41,8 @@ roxy_tag_parse <- function(x) {
 
 #' @export
 roxy_tag_parse.default <- function(x) {
-  roxy_tag_warning(x, "unknown tag")
+  warn_roxy_tag(x, "is not a known tag")
+  NULL
 }
 
 is.roxy_tag <- function(x) inherits(x, "roxy_tag")

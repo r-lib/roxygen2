@@ -185,8 +185,7 @@ tag_code <- function(x) {
     NULL
   } else {
     tryCatch({
-      parse(text = x$raw)
-      x$val <- x$raw
+      x$val <- parse(text = x$raw)
       x
     }, error = function(e) {
       warn_roxy_tag(x, "failed to parse", parent = e)

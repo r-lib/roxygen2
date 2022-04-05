@@ -15,15 +15,15 @@
 
 # errors are propagated
 
-    [<text>:4] @eval failed to execute
+    [<text>:5] @eval failed to evaluate
     Caused by error in `foo()`:
     ! Uhoh
 
 # must return non-NA string
 
-    [<text>:3] @eval did not evaluate to a string
+    [<text>:3] @eval must evaluate to a character vector
 
 ---
 
-    [<text>:3] @eval result contained NA
+    [<text>:3] @eval must not contain any missing values
 

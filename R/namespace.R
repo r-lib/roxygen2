@@ -234,7 +234,7 @@ roxy_tag_parse.roxy_tag_rawNamespace <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_rawNamespace  <- function(x, block, env, import_only = FALSE) {
-  x$val
+  x$raw
 }
 
 #' @export

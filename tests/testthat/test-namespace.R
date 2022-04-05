@@ -247,7 +247,7 @@ test_that("rawNamespace inserted unchanged", {
 
 # @evalNamespace ----------------------------------------------------------
 
-test_that("evalNamespace generates warning when code is invalid", {
+test_that("evalNamespace warns for bad code", {
   expect_snapshot_warning(
     roc_proc_text(namespace_roclet(), "
       #' @evalNamespace a +
@@ -255,9 +255,7 @@ test_that("evalNamespace generates warning when code is invalid", {
       #' @title a
       NULL")
   )
-})
 
-test_that("evalNamespace generates warning when code raises error", {
   expect_snapshot_warning(
     roc_proc_text(namespace_roclet(), "
       #' @evalNamespace stop('Uhoh')
@@ -265,29 +263,13 @@ test_that("evalNamespace generates warning when code raises error", {
       #' @title a
       NULL")
   )
-})
 
-test_that("evalNamespace generates warning when code doesn't eval to string", {
-  # Not character
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(namespace_roclet(), "
-      z <- 10
-      #' @evalNamespace z * 2
+      #' @evalNamespace 1
       #' @name a
       #' @title a
-      NULL"),
-    "did not evaluate to a string"  # From block_eval
-  )
-
-  # NA_character_ not allowed
-  expect_warning(
-    roc_proc_text(namespace_roclet(), "
-      nms <- NA_character_
-      #' @evalNamespace nms
-      #' @name a
-      #' @title a
-      NULL"),
-    "result contained NA"  # From block_eval
+      NULL")
   )
 })
 

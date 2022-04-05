@@ -1,14 +1,23 @@
-# evalRd must be valid code
-
-    [<text>:2] @evalRd failed to parse
-    Caused by error in `parse()`:
-    ! <text>:2:0: unexpected end of input
-    1: a +
-       ^
-
 # error-ful evalRd generates warning
 
-    [<text>:2] @evalRd failed to execute
-    Caused by error:
-    ! Uhoh
+    Code
+      expect_parse_failure(roxy_tag_eval(roxy_test_tag(val = 1)))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must evaluate to a character vector
+    Code
+      expect_parse_failure(roxy_tag_eval(roxy_test_tag(val = NA_character_)))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must not contain any missing values
+    Code
+      expect_parse_failure(roxy_tag_eval(roxy_test_tag(val = quote(stop("Uhoh")))))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test failed to evaluate
+      Caused by error:
+      ! Uhoh
 

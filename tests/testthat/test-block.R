@@ -240,6 +240,7 @@ test_that("errors are propagated", {
   expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       foo <- function() stop('Uhoh')
+      #' Title
       #' @name foo
       #' @eval foo()
       NULL"

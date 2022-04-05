@@ -10,7 +10,7 @@
     1: a +
        ^
 
-# evalNamespace generates warning when code is invalid
+# evalNamespace warns for bad code
 
     [<text>:2] @evalNamespace failed to parse
     Caused by error in `parse()`:
@@ -18,9 +18,13 @@
     1: a +
        ^
 
-# evalNamespace generates warning when code raises error
+---
 
-    [<text>:2] @evalNamespace failed to execute
+    [<text>:2] @evalNamespace failed to evaluate
     Caused by error:
     ! Uhoh
+
+---
+
+    [<text>:2] @evalNamespace must evaluate to a character vector
 

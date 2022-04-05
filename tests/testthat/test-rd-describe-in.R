@@ -116,3 +116,40 @@ test_that("function names are escaped", {
     ")[[1]]
   expect_match(out$get_rd("minidesc"), "\\\\%foo\\\\%")
 })
+
+
+test_that("complains about bad usage", {
+  expect_snapshot_warning(
+    roc_proc_text(rd_roclet(), "
+      #' bar
+      bar <- 100
+
+      #' @name bar
+      #' @describeIn foo shortcut for foo
+      NULL
+      "
+    )
+  )
+  expect_snapshot_warning(
+    roc_proc_text(rd_roclet(), "
+      #' bar
+      bar <- 100
+
+      #' @name bar
+      #' @describeIn foo shortcut for foo
+      foo <- 10
+      "
+    )
+  )
+  expect_snapshot_warning(
+    roc_proc_text(rd_roclet(), "
+      #' bar
+      bar <- 100
+
+      #' @rdname bar
+      #' @describeIn foo shortcut for foo
+      foo <- 10
+      "
+    )
+  )
+})

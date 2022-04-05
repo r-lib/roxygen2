@@ -175,9 +175,7 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env, import_only = FAL
 
   obj <- block$object
   if (length(x$val) < 2 && !inherits(obj, "s3method")) {
-    roxy_tag_warning(x,
-      "`@exportS3Method` and `@exportS3Method generic` must be used with an S3 method"
-    )
+    warn_roxy_tag(x, "must be used with an S3 method when it has 0 or 1 values")
     return()
   }
 

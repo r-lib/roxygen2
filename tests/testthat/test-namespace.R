@@ -88,12 +88,11 @@ test_that("@exportS3method generatedsS3method()", {
   ")
   expect_equal(out, "S3method(base::mean,foo)")
 
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(namespace_roclet(),
       "#' @exportS3Method base::mean
       NULL
-    "),
-    "an S3 method"
+    ")
   )
 
   out <- roc_proc_text(namespace_roclet(),

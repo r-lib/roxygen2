@@ -1,3 +1,7 @@
+# @exportS3method generatedsS3method()
+
+    [<text>:1] @exportS3Method must be used with an S3 method when it has 0 or 1 values
+
 # poorly formed importFrom throws error
 
     [<text>:2] @importFrom must have at least 2 words, not 1

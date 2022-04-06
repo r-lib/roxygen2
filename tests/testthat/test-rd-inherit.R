@@ -26,12 +26,10 @@ test_that("\\links are transformed", {
   expect_snapshot_output(out$get_section("param"))
 })
 
-test_that("href doesn't get extra parens", {
+test_that("markdown doesn't get get extra parens", {
   expect_equal(rd2text(parse_rd("\\href{a}{b}")), "\\href{a}{b}\n")
-})
-
-test_that("ifelse doesn't get extra parens", {
   expect_equal(rd2text(parse_rd("\\ifelse{a}{b}{c}")), "\\ifelse{a}{b}{c}\n")
+  expect_equal(rd2text(parse_rd("\\if{a}{b}")), "\\if{a}{b}\n")
 })
 
 test_that("relative links converted to absolute", {

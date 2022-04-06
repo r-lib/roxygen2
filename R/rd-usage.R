@@ -131,7 +131,7 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
 
   # Do we need any wrapping?
   bare <- args_call(name, args)
-  if (nchar(bare, type = "width") < width) {
+  if (!str_detect(bare, "\n") && nchar(bare, type = "width") < width) {
     out <- args_call(format_name(name), args)
   } else if (roxy_meta_get("old_usage", FALSE)) {
     x <- args_call(format_name(name), args)

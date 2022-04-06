@@ -1,5 +1,11 @@
 # roxygen2 (development version)
 
+* Arguments containing syntactically significant whitespace (e.g anonymous
+  functions) are now wrapped correctly (#1281).
+
+* Arguments containing non-syntactic values surrounded by back ticks are now 
+  wrapped correctly (#1257).
+  
 * DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
   `\doi{}` tag (@ThierryO, #1296).
 

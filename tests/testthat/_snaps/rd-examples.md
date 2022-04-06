@@ -17,3 +17,7 @@
     \dontshow{\}) # examplesIf}
     } 
 
+# @examplesIf warns about unparseable condition
+
+    [<text>:4] @examplesIf failed to parse condition
+

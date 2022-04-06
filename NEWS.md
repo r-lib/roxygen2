@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
+  are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).
+
 * Arguments containing syntactically significant whitespace (e.g anonymous
   functions) are now wrapped correctly (#1281).
 

@@ -374,3 +374,32 @@ itemize <- function(header, x) {
     "}\n"
   )
 }
+
+package_url_parse <- function(x) {
+  # <doi:XX.XXX> -> \doi{XX.XXX} to avoid CRAN Notes, etc.
+  x <- str_replace_all(x, "<(doi|DOI):(.*?)>", function(match) {
+    match <- str_remove_all(match, "^<(doi|DOI):|>$")
+    paste0("\\doi{", escape(match), "}")
+  })
+
+  # <http:XX.XXX> -> \url{http:XX.XXX}
+  x <- str_replace_all(x, "<(http|https):\\/\\/(.*?)>", function(match) {
+    match <- str_remove_all(match, "^<|>$")
+    paste0("\\url{", escape(match), "}")
+  })
+
+  # <arxiv:XXX> -> \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
+  # https://github.com/wch/r-source/blob/trunk/src/library/tools/R/Rd2pdf.R#L149-L151
+  patt_arxiv <- "<(arXiv:|arxiv:)([[:alnum:]/.-]+)([[:space:]]*\\[[^]]+\\])?>"
+  x <- str_replace_all(x, patt_arxiv, function(match) {
+    match <- str_remove_all(match, "^<(arXiv:|arxiv:)|>$")
+    # Special cases has <arxiv:id [code]>.
+    # See https://CRAN.R-project.org/package=ciccr
+    # Extract arxiv id, split by space
+    arxiv_id <- str_split_fixed(match, " ", n = 2)[, 1]
+
+    paste0("\\href{https://arxiv.org/abs/", escape(arxiv_id), "}{arXiv:", match, "}")
+  })
+
+  x
+}

@@ -4,16 +4,16 @@
       markdown("[`foo` bar][x]", tag = tag)
     Condition
       Warning:
-      [foo.R:10] @title (automatically generated) markdown: links must contain plain text
-      Problematic link: x
+      [foo.R:10] @title (automatically generated) markdown links must contain plain text
+      i Problematic link: x
     Output
       [1] ""
     Code
       markdown("[__baz__][x]", tag = tag)
     Condition
       Warning:
-      [foo.R:10] @title (automatically generated) markdown: links must contain plain text
-      Problematic link: x
+      [foo.R:10] @title (automatically generated) markdown links must contain plain text
+      i Problematic link: x
     Output
       [1] ""
 

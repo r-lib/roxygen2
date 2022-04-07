@@ -332,9 +332,6 @@ test_that("integration test", {
     res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path())
   )
 
-  # # Warnings
-  # expect_snapshot_output(sort(roxy_warnings))
-  #
   tmp <- tempfile()
   on.exit(unlink(tmp), add = TRUE)
   for (n in names(res)) {

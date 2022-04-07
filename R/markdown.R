@@ -185,7 +185,8 @@ mdxml_node_to_rd <- function(xml, state) {
       ! xml_type(xml) %in% c("text", "element")) {
     warn_roxy_tag(state$tag, c(
       "markdown translation failed",
-      "internal error"
+      x = "Unexpected internal error",
+      i = "Please file an issue at https://github.com/r-lib/roxygen2/issues"
     ))
     return("")
   }
@@ -226,7 +227,8 @@ mdxml_node_to_rd <- function(xml, state) {
 mdxml_unknown <- function(xml, tag) {
   warn_roxy_tag(tag, c(
     "markdown translation failed",
-    x = "Internal error: unknown xml node {xml_name(xml)}"
+    x = "Internal error: unknown xml node {xml_name(xml)}",
+    i = "Please file an issue at https://github.com/r-lib/roxygen2/issues"
   ))
   escape_comment(xml_text(xml))
 }

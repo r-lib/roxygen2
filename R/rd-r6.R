@@ -30,7 +30,7 @@ topic_add_r6_methods <- function(rd, block, env) {
 
   nodoc <- map_int(methods$tags, length) == 0
   if (any(nodoc)) {
-    warn_roxy_block(block, "Undocumented R6 method[s]: {methods$name[nodoc]}")
+    warn_roxy_block(block, "Undocumented R6 method{?s}: {methods$name[nodoc]}")
   }
 
   block$tags[del] <- NULL
@@ -124,19 +124,19 @@ r6_fields <- function(block, r6data) {
   # Check for missing fields
   miss <- setdiff(fields, docd)
   if (length(miss) > 0) {
-    warn_roxy_block(block, "Undocumented R6 field[s]: {miss}")
+    warn_roxy_block(block, "Undocumented R6 field{?s}: {miss}")
   }
 
   # Check for duplicate fields
   dup <- unique(docd[duplicated(docd)])
   if (length(dup) > 0) {
-    warn_roxy_block(block, "R6 field[s] documented multiple times: {dup}")
+    warn_roxy_block(block, "R6 field{?s} documented multiple times: {dup}")
   }
 
   # Check for extra fields
   xtra <- setdiff(docd, fields)
   if (length(xtra) > 0) {
-    warn_roxy_block(block, "Unknown R6 field[s]: {xtra}")
+    warn_roxy_block(block, "Unknown R6 field{?s}: {xtra}")
   }
 
   if (length(docd) == 0) return()
@@ -170,13 +170,13 @@ r6_active_bindings <- function(block, r6data) {
   # Check for missing bindings
   miss <- setdiff(active, docd)
   if (length(miss) > 0) {
-    warn_roxy_block(block, "Undocumented R6 active binding[s]: {miss}")
+    warn_roxy_block(block, "Undocumented R6 active binding{?s}: {miss}")
   }
 
   # Check for duplicate bindings
   dup <- unique(docd[duplicated(docd)])
   if (length(dup) > 0) {
-    warn_roxy_block(block, "R6 active binding[s] documented multiple times: {dup}")
+    warn_roxy_block(block, "R6 active binding{?s} documented multiple times: {dup}")
   }
 
   if (length(docd) == 0) return()

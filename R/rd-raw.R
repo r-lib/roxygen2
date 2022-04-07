@@ -16,7 +16,7 @@ format.rd_section_rawRd <- function(x, ...) {
   paste(x$value, collapse = "\n")
 }
 
-roxy_tag_eval <- function(tag, env = new.env(emptyenv())) {
+roxy_tag_eval <- function(tag, env = new.env(parent = baseenv())) {
   tryCatch({
     out <- eval(tag$val, envir = env)
 

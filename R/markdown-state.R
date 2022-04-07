@@ -19,7 +19,7 @@ markdown_on <- function(value = NULL) {
 local_markdown <- function(env = parent.frame()) {
   old <- markdown_env$`markdown-support`
   markdown_on(TRUE)
-  withr::defer(markdown_on(FALSE), envir = env)
+  withr::defer(markdown_on(old), envir = env)
 }
 
 markdown_activate <- function(tags) {

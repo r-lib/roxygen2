@@ -4,7 +4,7 @@
       topic_add_r6_methods(rd, block, environment())
     Condition
       Warning:
-      [<text>:7] Undocumented R6 field[s]: undocumented_field
+      [<text>:7] Undocumented R6 field: undocumented_field
 
 # warning if no method comes after the docs
 
@@ -28,15 +28,15 @@
       Warning:
       [roxygen-block-3.R:13] Must use one @return per R6 method
       Warning:
-      [roxygen-block-3.R:92] Undocumented R6 method[s]: undocumented_method
+      [roxygen-block-3.R:92] Undocumented R6 method: undocumented_method
       Warning:
-      [roxygen-block-3.R:92] Undocumented R6 field[s]: field2 and undocumented_field
+      [roxygen-block-3.R:92] Undocumented R6 fields: field2 and undocumented_field
       Warning:
-      [roxygen-block-3.R:92] R6 field[s] documented multiple times: duplicatefield
+      [roxygen-block-3.R:92] R6 field documented multiple times: duplicatefield
       Warning:
-      [roxygen-block-3.R:92] Unknown R6 field[s]: nosuchfield
+      [roxygen-block-3.R:92] Unknown R6 field: nosuchfield
       Warning:
-      [roxygen-block-3.R:92] Undocumented R6 active binding[s]: undocumented_binding
+      [roxygen-block-3.R:92] Undocumented R6 active binding: undocumented_binding
       Warning:
-      [roxygen-block-3.R:92] R6 active binding[s] documented multiple times: duplicate_binding
+      [roxygen-block-3.R:92] R6 active binding documented multiple times: duplicate_binding
 

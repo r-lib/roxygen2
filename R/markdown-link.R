@@ -106,8 +106,8 @@ parse_link <- function(destination, contents, state) {
     incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
 
     warn_roxy_tag(state$tag, c(
-      "markdown: links must contain plain text",
-      "Problematic link: {destination}"
+      "markdown links must contain plain text",
+      i = "Problematic link: {destination}"
     ))
     return("")
   }

@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* All warning messages have been reviewed to hopefully be more informative
+  and actionable (#1317).
+
 * DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
   `\doi{}` tag (@ThierryO, #1296).
 

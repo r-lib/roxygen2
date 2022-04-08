@@ -245,12 +245,12 @@ r6_inherited_method_list <- function(block, r6data) {
   super_meth <- super_meth[rev(seq_len(nrow(super_meth))), ]
 
   details <- paste0(
-    "<details ",
-    if (nrow(super_meth) <= 5) "open ",
+    "<details",
+    if (nrow(super_meth) <= 5) " open",
     "><summary>Inherited methods</summary>"
   )
 
-  c("\\if{html}{\\out{",
+  c("\\if{html}{\\out{", details,
     "<ul>",
     sprintf(
       paste0(

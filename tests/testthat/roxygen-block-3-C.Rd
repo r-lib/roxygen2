@@ -52,6 +52,7 @@ Classs C details.
 }
 }
 \if{html}{\out{
+<details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-A-meth3'><code>roxygen2::A$meth3()</code></a></li>
 <li><span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth1"><a href='../../roxygen2/html/B.html#method-B-meth1'><code>roxygen2::B$meth1()</code></a></li>

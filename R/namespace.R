@@ -174,15 +174,39 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env, import_only = FAL
   }
 
   obj <- block$object
-  if (length(x$val) < 2 && !inherits(obj, "s3method")) {
-    warn_roxy_tag(x, "must be used with an S3 method when it has 0 or 1 values")
-    return()
-  }
 
   if (identical(x$val, "")) {
+    if (!inherits(obj, "s3method")) {
+      warn_roxy_tag(x, "must be used with an known S3 method")
+      return()
+    }
+
     method <- attr(obj$value, "s3method")
   } else if (length(x$val) == 1) {
-    method <- c(x$val, attr(obj$value, "s3method")[[2]])
+    if (!inherits(obj, "function")) {
+      warn_roxy_tag(x, "must be used with a function")
+      return()
+    }
+
+    if (!str_detect(x$val, "::")) {
+      warn_roxy_tag(x, "must have form package::generic")
+      return()
+    }
+
+    generic <- str_split(x$val, "::")[[1]]
+    generic_re <- paste0("^", generic[[2]], "\\.")
+
+    if (!str_detect(obj$alias, generic_re)) {
+      warn_roxy_tag(x, c(
+        "doesn't match function name",
+        x = "Expected to see {.str {generic[[2]]}} to match {.str {x$val}}",
+        i = "Function name is {.str {obj$alias}}"
+      ))
+      return()
+    }
+
+    class <- str_remove(obj$alias, generic_re)
+    method <- c(x$val, class)
   } else {
     method <- x$val
   }

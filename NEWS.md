@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 
+  imported by your package (#1085).
+
 * roxygen2 no longer generates invalid HTML (#1290).
 
 * All warning messages have been reviewed to hopefully be more informative

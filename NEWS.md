@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* All warning messages have been reviewed to hopefully be more informative
+  and actionable (#1317).
+
 * DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
   are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).
 

@@ -1,3 +1,13 @@
+test_that("warn about unknown tags", {
+  block <- "
+    #' @unknown
+    foo <- function() {}
+  "
+  expect_snapshot_warning(
+    roc_proc_text(rd_roclet(), block)
+  )
+})
+
 # Test low-level behaviour ----------------------------------------------------
 
 test_that("braces must balance", {

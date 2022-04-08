@@ -16,6 +16,12 @@ markdown_on <- function(value = NULL) {
   return(isTRUE(markdown_env$`markdown-support`))
 }
 
+local_markdown <- function(env = parent.frame()) {
+  old <- markdown_env$`markdown-support`
+  markdown_on(TRUE)
+  withr::defer(markdown_on(old), envir = env)
+}
+
 markdown_activate <- function(tags) {
   ## markdown on/off based on global flag and presence of @md & @nomd
 
@@ -24,12 +30,15 @@ markdown_activate <- function(tags) {
   has_nomd <- "noMd" %in% names
 
   if (has_md && has_nomd) {
-    roxy_tag_warning(tags[[1]], "Both @md and @noMd, no markdown parsing")
-  }
+    md_tag <- tags[names == "md"][[1]]
+    warn_roxy_tag(md_tag, "conflicts with @noMd; turning markdown parsing off")
 
-  md <- roxy_meta_get("markdown", FALSE)
-  if (has_md) md <- TRUE
-  if (has_nomd) md <- FALSE
+    md <- FALSE
+  } else {
+    md <- roxy_meta_get("markdown", FALSE)
+    if (has_md) md <- TRUE
+    if (has_nomd) md <- FALSE
+  }
 
   markdown_on(md)
 }

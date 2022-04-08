@@ -1,10 +1,10 @@
 #' @export
-object_defaults.r6class <- function(x) {
+object_defaults.r6class <- function(x, block) {
   r6on <- roxy_meta_get("r6", TRUE)
   if (isTRUE(r6on)) {
     list(
-      roxy_tag("docType", NULL, NULL),
-      roxy_tag(".r6data", NULL, extract_r6_data(x$value))
+      roxy_generated_tag(block, "docType", NULL),
+      roxy_generated_tag(block, ".r6data", extract_r6_data(x$value))
     )
   } else {
     NextMethod()

@@ -37,25 +37,36 @@ test_that("deleted objects not documented", {
 })
 
 test_that("documenting unknown function requires name", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' Virtual Class To Enforce Max Slot Length
       setClass('A')
 
       #' Validity function.
       setValidity('A', function(object) TRUE)"
-    ),
-    "Missing name"
+    )
   )
 })
 
+test_that("can't set description and re-export", {
+  expect_snapshot_warning(
+    out <- roc_proc_text(rd_roclet(), "
+      #' @description NOPE
+      #' @export
+      magrittr::`%>%`
+      ")
+  )
+
+  expect_length(out, 0)
+})
+
+
 test_that("documenting NA gives useful error message (#194)", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' Missing value
       NA"
-      ),
-    "Missing name"
+    )
   )
 })
 
@@ -91,18 +102,23 @@ test_that("@description NULL", {
 
   # But drop for package docs
   mockr::with_mock(
-    read.description = function(...)
-      list(Package = "roxygen_devtest",
-           Title = "Package Title",
-           Description = "Package description."),
-    out <- roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' @docType package
-      #' @description NULL
-      #' @name pkg
-      '_PACKAGE'
-    ")
+    read.description = function(...) {
+      list(
+        Package = "roxygen_devtest",
+        Title = "Package Title",
+        Description = "Package description."
+      )
+    },
+    {
+      out <- roc_proc_text(rd_roclet(), "
+        #' Title
+        #'
+        #' @docType package
+        #' @description NULL
+        #' @name pkg
+        '_PACKAGE'
+      ")
+    }
   )
   expect_null(out[[1]]$get_value("description"))
 })

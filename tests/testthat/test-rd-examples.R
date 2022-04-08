@@ -49,29 +49,26 @@ test_that("@example does not introduce extra empty lines", {
 })
 
 test_that("@example gives warning if used instead of @examples", {
-  expect_warning(
+  expect_snapshot_warning(
     out <- roc_proc_text(rd_roclet(), "
       #' @name a
       #' @title a
       #' @example
       #' a <- 1
       #' a + b
-      NULL")[[1]],
-    "spans multiple lines"
+      NULL")[[1]]
   )
-
   expect_null(out$get_value("examples"))
 })
 
 test_that("warns if path doesn't exist", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' @name a
       #' @title a
       #' @example this-path-doesnt-exist.R
       NULL
-    "),
-    "doesn't exist"
+    ")
   )
 })
 

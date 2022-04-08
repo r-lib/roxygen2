@@ -183,7 +183,11 @@ mdxml_children_to_rd <- function(xml, state) {
 mdxml_node_to_rd <- function(xml, state) {
   if (!inherits(xml, "xml_node") ||
       ! xml_type(xml) %in% c("text", "element")) {
-    roxy_tag_warning(state$tag, "Internal markdown translation failure")
+    warn_roxy_tag(state$tag, c(
+      "markdown translation failed",
+      x = "Unexpected internal error",
+      i = "Please file an issue at https://github.com/r-lib/roxygen2/issues"
+    ))
     return("")
   }
 
@@ -221,11 +225,18 @@ mdxml_node_to_rd <- function(xml, state) {
 }
 
 mdxml_unknown <- function(xml, tag) {
-  roxy_tag_warning(tag, "Unknown xml node: ", xml_name(xml))
+  warn_roxy_tag(tag, c(
+    "markdown translation failed",
+    x = "Internal error: unknown xml node {xml_name(xml)}",
+    i = "Please file an issue at https://github.com/r-lib/roxygen2/issues"
+  ))
   escape_comment(xml_text(xml))
 }
 mdxml_unsupported <- function(xml, tag, feature) {
-  roxy_tag_warning(tag, "Use of ", feature, " is not currently supported")
+  warn_roxy_tag(tag, c(
+    "markdown translation failed",
+    x = "{feature} are not currently supported"
+  ))
   escape_comment(xml_text(xml))
 }
 
@@ -398,7 +409,7 @@ mdxml_html_block <- function(xml, state) {
 
 mdxml_html_inline <- function(xml, state) {
   if (state$tag$tag != "includeRmd") {
-    return(mdxml_unsupported(xml, state$tag, "inline HTML"))
+    return(mdxml_unsupported(xml, state$tag, "inline HTML components"))
   }
   paste0(
     "\\if{html}{\\out{",

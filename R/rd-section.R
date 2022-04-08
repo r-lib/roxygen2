@@ -9,9 +9,9 @@ roxy_tag_rd.roxy_tag_section <- function(x, base_path, env) {
   title <- str_split(pieces[1], "\n")[[1]]
 
   if (length(title) > 1) {
-    roxy_tag_warning(x, paste0(
-      "Section title spans multiple lines.\n",
-      "Did you forget a colon (:) at the end of the title?"
+    warn_roxy_tag(x, c(
+      "title spans multiple lines.",
+      i = "Did you forget a colon (:) at the end of the title?"
     ))
     return()
   }

@@ -34,3 +34,8 @@
       }
       
 
+# unhandled markdown generates warning
+
+    [<text>:4] @description markdown translation failed
+    x block quotes are not currently supported
+

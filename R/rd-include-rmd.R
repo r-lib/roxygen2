@@ -1,7 +1,7 @@
 #' @export
 roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
   if (!is_installed("rmarkdown")) {
-    roxy_tag_warning(x, "Needs the rmarkdown package")
+    warn_roxy_tag(x, "requires the rmarkdown package")
     return()
   }
 

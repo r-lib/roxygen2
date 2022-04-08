@@ -47,13 +47,18 @@ test_that("@docType class automatically added to reference class objects", {
 
 test_that("can create package documentation", {
   mockr::with_mock(
-    read.description = function(...)
-      list(Package = "roxygen_devtest",
-           Title = "Package Title",
-           Description = "Package description."),
-    out <- roc_proc_text(rd_roclet(), "
-    #' @details Details.
-    '_PACKAGE'")[[1]]
+    read.description = function(...) {
+      list(
+        Package = "roxygen_devtest",
+        Title = "Package Title",
+        Description = "Package description."
+      )
+    },
+    {
+      out <- roc_proc_text(rd_roclet(), "
+      #' @details Details.
+      '_PACKAGE'")[[1]]
+    }
   )
   expect_equal(out$get_value("name"), "roxygen_devtest-package")
   expect_equal(out$get_value("alias"), c("roxygen_devtest", "roxygen_devtest-package"))

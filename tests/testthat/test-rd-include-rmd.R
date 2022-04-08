@@ -140,7 +140,7 @@ test_that("links to functions, with anchors", {
 test_that("empty Rmd", {
   tmp <- tempfile()
   on.exit(unlink(tmp), add = TRUE)
-  tag <- roxy_tag("includeRmd", tmp)
+  tag <- roxy_test_tag()
 
   cat("", sep = "", file = tmp)
   expect_equal(rmd_eval_rd(tmp, tag), structure("", names = ""))

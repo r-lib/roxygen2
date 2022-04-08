@@ -143,8 +143,8 @@ block_find_object <- function(block, env) {
   ))
 
   # Add in defaults generated from the object
-  defaults <- object_defaults(object)
-  defaults <- c(defaults, list(roxy_tag("backref", block$file, block$file)))
+  defaults <- object_defaults(object, block)
+  defaults <- c(defaults, list(roxy_generated_tag(block, "backref", block$file)))
 
   default_tags <- map_chr(defaults, "tag")
   defaults <- defaults[!default_tags %in% block_tags(block)]
@@ -181,7 +181,7 @@ block_get_tag <- function(block, tag) {
   } else if (n == 1) {
     block$tags[[matches]]
   } else {
-    roxy_tag_warning(block$tags[[matches[[2]]]], "May only use one @", tag, " per block")
+    warn_roxy_block(block, "Block must contain only one @{tag}")
     block$tags[[matches[[1]]]]
   }
 }
@@ -288,4 +288,9 @@ parse_description <- function(tags) {
   }
 
   c(compact(list(title, description, details)), tags)
+}
+
+warn_roxy_block <- function(block, message, ...) {
+  message[[1]] <- paste0("[", block$file, ":", block$line, "] ", message[[1]])
+  cli::cli_warn(message, ..., .envir = parent.frame())
 }

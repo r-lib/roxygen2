@@ -33,6 +33,10 @@
 #' @export
 #' @aliases @@include
 update_collate <- function(base_path) {
+  if (!file.exists(base_path)) {
+    cli::cli_abort("{.path {base_path}} doesn't exist")
+  }
+
   new <- generate_collate(file.path(base_path, "R"))
   if (is.null(new)) return(invisible())
 

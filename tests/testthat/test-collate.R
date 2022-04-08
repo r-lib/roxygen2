@@ -1,6 +1,5 @@
 test_that("collation as expected", {
-  results <- generate_collate(test_path("collate"))
-  names <- str_replace(basename(results), "\\..*$", "")
+  names <- generate_collate(test_path("collate"))
 
   before <- function(a, b) {
     all(which(names %in% a) < which(names %in% b))
@@ -9,28 +8,24 @@ test_that("collation as expected", {
   expect_true(before("undershorts", "pants"))
   expect_true(before(c("tie", "belt"), "jacket"))
   expect_true(before(c("socks", "undershorts", "pants"), "shoes"))
+})
 
-  expected <- c('shirt.R', 'undershorts.R','pants.R', 'belt.R', 'tie.R',
-    'jacket.R', 'socks.R', 'shoes.R', 'watch.R')
-
-  expect_equal(results, expected)
+test_that("update_collate() checks that directory exists", {
+  expect_snapshot(update_collate("doesn't-exist"), error = TRUE)
 })
 
 test_that("Collate field unchanged when no @includes", {
-  test_pkg <- temp_copy_pkg(test_path('testCollateNoIncludes'))
-  on.exit(unlink(test_pkg, recursive = TRUE))
+  test_pkg <- local_package_copy(test_path('testCollateNoIncludes'))
 
   old_desc <- read.description(file.path(test_pkg, "DESCRIPTION"))
   update_collate(test_pkg)
   new_desc <- read.description(file.path(test_pkg, "DESCRIPTION"))
 
-  expect_equal(names(old_desc), names(new_desc))
-  expect_identical(old_desc$Collate,new_desc$Collate)
-
+  expect_equal(old_desc, new_desc)
 })
 
 test_that("DESCRIPTION file is re-written only if collate changes", {
-  pkg_path <- temp_copy_pkg(test_path("testCollateOverwrite"))
+  pkg_path <- local_package_copy(test_path("testCollateOverwrite"))
   withr::local_dir(pkg_path)
 
   # load package: this should update the DESCRIPTION once

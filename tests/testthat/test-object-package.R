@@ -25,3 +25,47 @@ test_that("can convert DOIs in url", {
     "\\doi{10.5281/zenodo.1485309}"
   )
 })
+
+test_that("can autolink urls on package Description", {
+  expect_equal(
+    package_url_parse("x <https://x.com> y"),
+    "x \\url{https://x.com} y"
+  )
+  expect_equal(
+    package_url_parse("x <https://x.com/%3C-%3E> y"),
+    "x \\url{https://x.com/\\%3C-\\%3E} y"
+  )
+})
+
+test_that("can autolink DOIs", {
+  expect_equal(package_url_parse("x <doi:abcdef> y"), "x \\doi{abcdef} y")
+  expect_equal(package_url_parse("x <DOI:abcdef> y"), "x \\doi{abcdef} y")
+  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{\\%3C-\\%3E} y")
+})
+
+test_that("can autolink arxiv", {
+  expect_equal(
+    package_url_parse("x <arXiv:abc> y"),
+    "x \\href{https://arxiv.org/abs/abc}{arXiv:abc} y"
+  )
+  expect_equal(
+    package_url_parse("x <arxiv:abc> y"),
+    "x \\href{https://arxiv.org/abs/abc}{arXiv:abc} y"
+  )
+  expect_equal(
+    package_url_parse("x <arxiv:abc [def]> y"),
+    "x \\href{https://arxiv.org/abs/abc}{arXiv:abc [def]} y"
+  )
+})
+
+test_that("autolink several matching patterns", {
+  text <- "url <http://a.com> doi <doi:xx> arxiv <arXiv:xx>"
+  expect_equal(
+    package_url_parse(text),
+    paste(
+      "url \\url{http://a.com}",
+      "doi \\doi{xx}",
+      "arxiv \\href{https://arxiv.org/abs/xx}{arXiv:xx}"
+    )
+  )
+})

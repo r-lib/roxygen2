@@ -3,6 +3,15 @@
 * All warning messages have been reviewed to hopefully be more informative
   and actionable (#1317).
 
+* DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
+  are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).
+
+* Arguments containing syntactically significant whitespace (e.g anonymous
+  functions) are now wrapped correctly (#1281).
+
+* Arguments containing non-syntactic values surrounded by back ticks are now 
+  wrapped correctly (#1257).
+  
 * DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
   `\doi{}` tag (@ThierryO, #1296).
 

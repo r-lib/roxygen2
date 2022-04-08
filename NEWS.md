@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* roxygen2 no longer generates invalid HTML (#1290).
+
 * All warning messages have been reviewed to hopefully be more informative
   and actionable (#1317). `@title` now checks for multiple paragraphs.
   `@export` gives a more informative warning if it contains too many lines. 

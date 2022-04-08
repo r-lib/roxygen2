@@ -238,7 +238,8 @@ r6_method_list <- function(block, methods) {
   c("\\subsection{Public methods}{",
     "\\itemize{",
     sprintf(
-      "\\item \\href{#method-%s}{\\code{%s$%s()}}",
+      "\\item \\href{#method-%s-%s}{\\code{%s$%s()}}",
+      methods$class,
       nms,
       block$object$alias,
       nms
@@ -261,34 +262,34 @@ r6_inherited_method_list <- function(block, r6data) {
   super_meth <- super_meth[rev(seq_len(nrow(super_meth))), ]
 
   details <- paste0(
-    "<details ",
-    if (nrow(super_meth) <= 5) "open ",
+    "<details",
+    if (nrow(super_meth) <= 5) " open",
     "><summary>Inherited methods</summary>"
   )
 
-  c("\\if{html}{",
-    paste0("\\out{", details, "}"),
-    "\\itemize{",
+  c("\\if{html}{\\out{", details,
+    "<ul>",
     sprintf(
       paste0(
-        "\\item \\out{<span class=\"pkg-link\" data-pkg=\"%s\" ",
-        "data-topic=\"%s\" data-id=\"%s\">}",
-        "\\href{../../%s/html/%s.html#method-%s}{\\code{%s::%s$%s()}}",
-        "\\out{</span>}"
+        "<li>",
+        "<span class=\"pkg-link\" data-pkg=\"%s\" data-topic=\"%s\" data-id=\"%s\">",
+        "<a href='../../%s/html/%s.html#method-%s-%s'><code>%s::%s$%s()</code></a>",
+        "</li>"
       ),
       super_meth$package,
       super_meth$classname,
       super_meth$name,
       super_meth$package,
       super_meth$classname,
+      super_meth$classname,
       super_meth$name,
       super_meth$package,
       super_meth$classname,
       super_meth$name
     ),
-    "}",
-    "\\out{</details>}",
-    "}"
+    "</ul>",
+    "</details>",
+    "}}"
   )
 }
 
@@ -296,8 +297,8 @@ r6_method_begin <- function(block, method) {
   nm <- r6_show_name(method$name)
   c(
     "\\if{html}{\\out{<hr>}}",
-    paste0("\\if{html}{\\out{<a id=\"method-", nm, "\"></a>}}"),
-    paste0("\\if{latex}{\\out{\\hypertarget{method-", nm, "}{}}}"),
+    paste0("\\if{html}{\\out{<a id=\"method-", method$class, "-", nm, "\"></a>}}"),
+    paste0("\\if{latex}{\\out{\\hypertarget{method-", method$class, "-", nm, "}{}}}"),
     paste0("\\subsection{Method \\code{", nm, "()}}{")
   )
 }

@@ -1,3 +1,21 @@
+# code blocks work
+
+    Before
+    
+    \preformatted{x \%in\% 1:10
+    }
+    
+    After
+
+# code block with language creates HTML tag
+
+    Before
+    
+    \if{html}{\out{<div class="sourceCode r">}}\preformatted{x \%in\% 1:10
+    }\if{html}{\out{</div>}}
+    
+    After
+
 # can convert table to Rd
 
     Code

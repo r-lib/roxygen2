@@ -49,15 +49,15 @@ Class A details
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-meth1}{\code{A$meth1()}}
-\item \href{#method-meth2}{\code{A$meth2()}}
-\item \href{#method-meth3}{\code{A$meth3()}}
-\item \href{#method-clone}{\code{A$clone()}}
+\item \href{#method-A-meth1}{\code{A$meth1()}}
+\item \href{#method-A-meth2}{\code{A$meth2()}}
+\item \href{#method-A-meth3}{\code{A$meth3()}}
+\item \href{#method-A-clone}{\code{A$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meth1"></a>}}
-\if{latex}{\out{\hypertarget{method-meth1}{}}}
+\if{html}{\out{<a id="method-A-meth1"></a>}}
+\if{latex}{\out{\hypertarget{method-A-meth1}{}}}
 \subsection{Method \code{meth1()}}{
 A method 1.
 \subsection{Usage}{
@@ -81,8 +81,8 @@ A method 1.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meth2"></a>}}
-\if{latex}{\out{\hypertarget{method-meth2}{}}}
+\if{html}{\out{<a id="method-A-meth2"></a>}}
+\if{latex}{\out{\hypertarget{method-A-meth2}{}}}
 \subsection{Method \code{meth2()}}{
 Method 2 description.
 \subsection{Usage}{
@@ -112,8 +112,8 @@ Method 2 details.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meth3"></a>}}
-\if{latex}{\out{\hypertarget{method-meth3}{}}}
+\if{html}{\out{<a id="method-A-meth3"></a>}}
+\if{latex}{\out{\hypertarget{method-A-meth3}{}}}
 \subsection{Method \code{meth3()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{A$meth3(duplicate, missing)}\if{html}{\out{</div>}}
@@ -137,8 +137,8 @@ twice.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-A-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-A-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -44,7 +44,7 @@ object_defaults.package <- function(x, block) {
   description <- package_url_parse(description)
   logo_path <- file.path(x$value$path, "man", "figures", "logo.png")
   if (file.exists(logo_path)) {
-    fig <- "\\if{html}{\\figure{logo.png}{options: align='right' alt='logo' width='120'}}"
+    fig <- "\\if{html}{\\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}"
     description <- paste0(fig, "\n\n", description)
   }
 

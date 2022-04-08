@@ -44,3 +44,11 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
   expect_true(!length(capture.output(update_collate(pkg_path))), info = "update_collate on complete package: DESCRIPTION file is NOT updated")
 
  })
+
+test_that("can read from file name with utf-8 path", {
+  path <- withr::local_tempfile(
+    pattern = "Universit\u00e0-",
+    lines = c("#' @include foo.R", NULL)
+  )
+  expect_equal(find_includes(path), "foo.R")
+})

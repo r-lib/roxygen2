@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* roxygen2 can once again read UTF-8 paths on windows (#1277).
+
 * roxygen2 no longer generates invalid HTML (#1290).
 
 * All warning messages have been reviewed to hopefully be more informative

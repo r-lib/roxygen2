@@ -1,5 +1,5 @@
 test_that("collation as expected", {
-  results <- generate_collate("collate")
+  results <- generate_collate(test_path("collate"))
   names <- str_replace(basename(results), "\\..*$", "")
 
   before <- function(a, b) {
@@ -17,7 +17,7 @@ test_that("collation as expected", {
 })
 
 test_that("Collate field unchanged when no @includes", {
-  test_pkg <- temp_copy_pkg('testCollateNoIncludes')
+  test_pkg <- temp_copy_pkg(test_path('testCollateNoIncludes'))
   on.exit(unlink(test_pkg, recursive = TRUE))
 
   old_desc <- read.description(file.path(test_pkg, "DESCRIPTION"))
@@ -30,17 +30,12 @@ test_that("Collate field unchanged when no @includes", {
 })
 
 test_that("DESCRIPTION file is re-written only if collate changes", {
-  pkg_path <- "testCollateOverwrite"
-  desc_path <- file.path(pkg_path, 'DESCRIPTION')
+  pkg_path <- temp_copy_pkg(test_path("testCollateOverwrite"))
+  withr::local_dir(pkg_path)
 
-  # make backup copy of incomplete DESCRIPTION file (restored on exit)
-  file.copy(desc_path, tmp <- tempfile())
-  on.exit( file.copy(tmp, desc_path, overwrite = TRUE), add = TRUE)
-
-  # load package: this should update the DESCRIPTION file (warning)
-  expect_output(update_collate(pkg_path), "Updating collate directive", info = "update_collate on incomplete package: DESCRIPTION file is updated")
-
-  # should not update anymore
-  expect_true(!length(capture.output(update_collate(pkg_path))), info = "update_collate on complete package: DESCRIPTION file is NOT updated")
-
- })
+  # load package: this should update the DESCRIPTION once
+  expect_snapshot({
+    update_collate(".")
+    update_collate(".")
+  })
+})

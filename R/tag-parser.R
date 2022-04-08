@@ -152,10 +152,14 @@ tag_words_line <- function(x) {
   x$val <- str_trim(x$raw)
 
   n_lines <- str_count(x$val, "\n")
-    if (n_lines > 1) {
-    warn_roxy_tag(x, "must only span a single line, not {n_lines}")
+  if (n_lines >= 1) {
+    first_line <- str_split(x$val, "\n")[[1]][[1]]
+    warn_roxy_tag(x, c(
+      "must be a single line, not {n_lines + 1}",
+      i = "The first line is {.str {first_line}}"
+    ))
     NULL
-  } else if (!rdComplete(x$val, is_code = FALSE)) {
+  } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {

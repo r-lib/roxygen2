@@ -2,6 +2,8 @@
 
 * All warning messages have been reviewed to hopefully be more informative
   and actionable (#1317). `@title` now checks for multiple paragraphs.
+  `@export` gives a more informative warning if it contains too many lines. 
+  (#1074).
 
 * DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
   are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).

@@ -74,6 +74,9 @@ test_that("tag_words() gives useful warnings", {
 
 test_that("tag_words_line() gives useful warnings", {
   expect_snapshot({
+    tag <- roxy_test_tag("a\nb")
+    expect_parse_failure(tag_words_line(tag))
+
     tag <- roxy_test_tag("a\nb\n2")
     expect_parse_failure(tag_words_line(tag))
   })

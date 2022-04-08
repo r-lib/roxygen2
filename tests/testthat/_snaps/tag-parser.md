@@ -191,12 +191,21 @@
 # tag_words_line() gives useful warnings
 
     Code
+      tag <- roxy_test_tag("a\nb")
+      expect_parse_failure(tag_words_line(tag))
+    Output
+      <warning/rlang_warning>
+      Warning:
+      [test.R:1] @test must be a single line, not 2
+      i The first line is "a"
+    Code
       tag <- roxy_test_tag("a\nb\n2")
       expect_parse_failure(tag_words_line(tag))
     Output
       <warning/rlang_warning>
       Warning:
-      [test.R:1] @test must only span a single line, not 2
+      [test.R:1] @test must be a single line, not 3
+      i The first line is "a"
 
 # tag_toggle() gives useful warnings
 

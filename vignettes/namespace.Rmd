@@ -89,7 +89,7 @@ The `NAMESPACE` also controls which functions from other packages are made avail
 
 If you are using just a few functions from another package, the recommended option is to add the package name to the `Imports:` field of the `DESCRIPTION` file and call the functions explicitly using `::`, e.g., `pkg::fun()`.
 
-```{r}
+```{r, eval = FALSE}
 my_function <- function(x, y) {
   pkg::fun(x) * y
 }

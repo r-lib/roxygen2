@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 
+  imported by your package (#1085).
+
 * Markdown code blocks are always wrapped in `<div class="sourceCode">`
   even if the language is unknown (#1234).
 

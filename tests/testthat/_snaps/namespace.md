@@ -1,6 +1,20 @@
-# @exportS3method generatedsS3method()
+# @exportS3method generates fully automatically
 
-    [<text>:1] @exportS3Method must be used with an S3 method when it has 0 or 1 values
+    [<text>:2] @exportS3Method must be used with an known S3 method
+
+# @exportS3method can extract class from generic
+
+    [<text>:2] @exportS3Method must have form package::generic
+
+---
+
+    [<text>:2] @exportS3Method must be used with a function
+
+---
+
+    [<text>:2] @exportS3Method doesn't match function name
+    x Expected to see "foo" to match "pkg::foo"
+    i Function name is "foo1.bar"
 
 # poorly formed importFrom throws error
 

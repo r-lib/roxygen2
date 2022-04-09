@@ -92,19 +92,19 @@
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-format"><code>RoxyTopic$format()</code></a></p></li>
-<li><p><a href="#method-is_valid"><code>RoxyTopic$is_valid()</code></a></p></li>
-<li><p><a href="#method-has_section"><code>RoxyTopic$has_section()</code></a></p></li>
-<li><p><a href="#method-get_section"><code>RoxyTopic$get_section()</code></a></p></li>
-<li><p><a href="#method-get_value"><code>RoxyTopic$get_value()</code></a></p></li>
-<li><p><a href="#method-get_rd"><code>RoxyTopic$get_rd()</code></a></p></li>
-<li><p><a href="#method-get_name"><code>RoxyTopic$get_name()</code></a></p></li>
-<li><p><a href="#method-inherits_from"><code>RoxyTopic$inherits_from()</code></a></p></li>
-<li><p><a href="#method-inherits_section_from"><code>RoxyTopic$inherits_section_from()</code></a></p></li>
-<li><p><a href="#method-add"><code>RoxyTopic$add()</code></a></p></li>
-<li><p><a href="#method-add_section"><code>RoxyTopic$add_section()</code></a></p></li>
-<li><p><a href="#method-clone"><code>RoxyTopic$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-format"></a><div class="section">
+<ul><li><p><a href="#method-RoxyTopic-format"><code>RoxyTopic$format()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-is_valid"><code>RoxyTopic$is_valid()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-has_section"><code>RoxyTopic$has_section()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-get_section"><code>RoxyTopic$get_section()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-get_value"><code>RoxyTopic$get_value()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-get_rd"><code>RoxyTopic$get_rd()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-get_name"><code>RoxyTopic$get_name()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-inherits_from"><code>RoxyTopic$inherits_from()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-inherits_section_from"><code>RoxyTopic$inherits_section_from()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-add"><code>RoxyTopic$add()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-add_section"><code>RoxyTopic$add_section()</code></a></p></li>
+<li><p><a href="#method-RoxyTopic-clone"><code>RoxyTopic$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-RoxyTopic-format"></a><div class="section">
 <h3 id="method-format-">Method <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code><a class="anchor" aria-label="anchor" href="#method-format-"></a></h3>
 <p>Format the <code>.Rd</code> file. It considers the sections in
 particular order, even though Rd tools will reorder them again.</p><div class="section">
@@ -126,7 +126,7 @@ objects, the sections.</p></dd>
 <p>Character string.</p>
 </div>
 
-</div><p></p><hr><a id="method-is_valid"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-is_valid"></a><div class="section">
 <h3 id="method-is-valid-">Method <code>is_valid()</code><a class="anchor" aria-label="anchor" href="#method-is-valid-"></a></h3>
 <p>Check if an <code>.Rd</code> file is valid</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -138,7 +138,7 @@ objects, the sections.</p></dd>
 <p>Logical flag, <code>TRUE</code> for valid <code>.Rd</code> files</p>
 </div>
 
-</div><p></p><hr><a id="method-has_section"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-has_section"></a><div class="section">
 <h3 id="method-has-section-">Method <code>has_section()</code><a class="anchor" aria-label="anchor" href="#method-has-section-"></a></h3>
 <p>Check if an <code>.Rd</code> file has a certain section.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -158,7 +158,7 @@ objects, the sections.</p></dd>
 <p>Logical flag.</p>
 </div>
 
-</div><p></p><hr><a id="method-get_section"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-get_section"></a><div class="section">
 <h3 id="method-get-section-">Method <code>get_section()</code><a class="anchor" aria-label="anchor" href="#method-get-section-"></a></h3>
 <p>Query a section.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
@@ -179,7 +179,7 @@ objects, the sections.</p></dd>
 if the topic has no such section.</p>
 </div>
 
-</div><p></p><hr><a id="method-get_value"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-get_value"></a><div class="section">
 <h3 id="method-get-value-">Method <code>get_value()</code><a class="anchor" aria-label="anchor" href="#method-get-value-"></a></h3>
 <p>Query the value of a section. This is the value of
 the <a href="rd_section.html">rd_section</a> object.</p><div class="section">
@@ -200,7 +200,7 @@ the <a href="rd_section.html">rd_section</a> object.</p><div class="section">
 <p>Value.</p>
 </div>
 
-</div><p></p><hr><a id="method-get_rd"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-get_rd"></a><div class="section">
 <h3 id="method-get-rd-">Method <code>get_rd()</code><a class="anchor" aria-label="anchor" href="#method-get-rd-"></a></h3>
 <p>Get the Rd code of a section.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
@@ -220,7 +220,7 @@ the <a href="rd_section.html">rd_section</a> object.</p><div class="section">
 <p>Character vector, one element per line.</p>
 </div>
 
-</div><p></p><hr><a id="method-get_name"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-get_name"></a><div class="section">
 <h3 id="method-get-name-">Method <code>get_name()</code><a class="anchor" aria-label="anchor" href="#method-get-name-"></a></h3>
 <p>Get the value of the <code>name</code> section. This is the name
 of the Rd topic.</p><div class="section">
@@ -233,7 +233,7 @@ of the Rd topic.</p><div class="section">
 <p>Character scalar.</p>
 </div>
 
-</div><p></p><hr><a id="method-inherits_from"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-inherits_from"></a><div class="section">
 <h3 id="method-inherits-from-">Method <code>inherits_from()</code><a class="anchor" aria-label="anchor" href="#method-inherits-from-"></a></h3>
 <p>Query the topics this topic inherits <code>type</code> from.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
@@ -253,7 +253,7 @@ of the Rd topic.</p><div class="section">
 <p>A character vector of topic names.</p>
 </div>
 
-</div><p></p><hr><a id="method-inherits_section_from"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-inherits_section_from"></a><div class="section">
 <h3 id="method-inherits-section-from-">Method <code>inherits_section_from()</code><a class="anchor" aria-label="anchor" href="#method-inherits-section-from-"></a></h3>
 <p>Query the topics this topic inherits sections from.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
@@ -265,7 +265,7 @@ of the Rd topic.</p><div class="section">
 <p>A character vector of topic names.</p>
 </div>
 
-</div><p></p><hr><a id="method-add"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-add"></a><div class="section">
 <h3 id="method-add-">Method <code>add()</code><a class="anchor" aria-label="anchor" href="#method-add-"></a></h3>
 <p>Add one or more sections to the topic.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
@@ -289,7 +289,7 @@ then the two sections will be merged.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-add_section"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-add_section"></a><div class="section">
 <h3 id="method-add-section-">Method <code>add_section()</code><a class="anchor" aria-label="anchor" href="#method-add-section-"></a></h3>
 <p>Add a section.</p><div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
@@ -316,7 +316,7 @@ once in <code>self$sections</code>. This method if for internal use only.</p>
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-RoxyTopic-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>

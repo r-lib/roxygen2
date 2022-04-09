@@ -245,6 +245,7 @@ gh_organizations(since = 42)
 <span class="co">#' }</span>
 <span class="va">sum</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span>, <span class="va">na.rm</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></code></pre></div>
 <p>Indent the second and subsequent lines of a tag so that when scanning the documentation so it’s easy to see where one tag ends and the next begins. Tags that always span multiple lines (like <code>@example</code>) should start on a new line and don’t need to be indented.</p>
+<p>In most case, the function usage will be automatically derived from the function specification. For the cases where it is not, please <a href="https://github.com/r-lib/roxygen2/issues" class="external-link">file an issue</a> and use <code>@usage</code> to override the default with you want. If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use <code>@usage NULL</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>

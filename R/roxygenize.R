@@ -30,16 +30,10 @@ roxygenize <- function(package.dir = ".",
                        load_code = NULL,
                        clean = FALSE) {
 
-  base_path <- normalizePath(package.dir, mustWork = TRUE)
+  base_path <- package.dir
   is_first <- roxygen_setup(base_path)
 
-  encoding <- desc::desc_get("Encoding", file = base_path)[[1]]
-  if (!identical(encoding, "UTF-8")) {
-    warning("roxygen2 requires Encoding: UTF-8", call. = FALSE)
-  }
-
   roxy_meta_load(base_path)
-
   # Load required packages for method registration
   packages <- roxy_meta_get("packages")
   lapply(packages, loadNamespace)
@@ -95,16 +89,3 @@ roxygenize <- function(package.dir = ".",
 #' @rdname roxygenize
 #' @export
 roxygenise <- roxygenize
-
-roxygen_setup <- function(base_path) {
-  is_first <- first_time(base_path)
-  if (is_first) {
-    message("First time using roxygen2. Upgrading automatically...")
-  }
-
-  man_path <- file.path(base_path, "man")
-  dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
-  update_roxygen_version(base_path)
-
-  is_first
-}

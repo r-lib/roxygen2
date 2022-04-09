@@ -18,8 +18,8 @@
       roxygenise(roclets = "rd")
     Message
       i Loading testNonASCII
-    Output
-      Writing printChineseMsg.Rd
+      
+      Writing 'printChineseMsg.Rd'
     Code
       # Second run should be idempotent
       roxygenise(roclets = "rd")
@@ -36,8 +36,8 @@
       
       Setting `RoxygenNote` to 7.1.2.9000
       i Loading testUtf8Escape
-    Output
-      Writing a.Rd
+      
+      Writing 'a.Rd'
     Code
       # Second run should be idempotent
       roxygenise(roclets = "rd")

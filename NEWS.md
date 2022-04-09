@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Markdown code blocks are always wrapped in `<div class="sourceCode">`
+  even if the language is unknown (#1234).
+
 * roxygen2 no longer generates invalid HTML (#1290).
 
 * All warning messages have been reviewed to hopefully be more informative

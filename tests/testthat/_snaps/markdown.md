@@ -2,8 +2,8 @@
 
     Before
     
-    \preformatted{x \%in\% 1:10
-    }
+    \if{html}{\out{<div class="sourceCode">}}\preformatted{x \%in\% 1:10
+    }\if{html}{\out{</div>}}
     
     After
 

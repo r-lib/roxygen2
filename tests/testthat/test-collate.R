@@ -15,18 +15,17 @@ test_that("update_collate() checks that directory exists", {
 })
 
 test_that("Collate field unchanged when no @includes", {
-  test_pkg <- local_package_copy(test_path('testCollateNoIncludes'))
+  local_package_copy(test_path('testCollateNoIncludes'))
 
-  old_desc <- read.description(file.path(test_pkg, "DESCRIPTION"))
-  update_collate(test_pkg)
-  new_desc <- read.description(file.path(test_pkg, "DESCRIPTION"))
+  old_desc <- read.description("DESCRIPTION")
+  update_collate(".")
+  new_desc <- read.description("DESCRIPTION")
 
   expect_equal(old_desc, new_desc)
 })
 
 test_that("DESCRIPTION file is re-written only if collate changes", {
-  pkg_path <- local_package_copy(test_path("testCollateOverwrite"))
-  withr::local_dir(pkg_path)
+  local_package_copy(test_path("testCollateOverwrite"))
 
   # load package: this should update the DESCRIPTION once
   expect_snapshot({

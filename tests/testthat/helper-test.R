@@ -20,5 +20,5 @@ local_package_copy <- function(path, env = caller_env()) {
   temp_path <- withr::local_tempdir(.local_envir = env)
 
   file.copy(path, temp_path, recursive = TRUE)
-  file.path(temp_path, basename(path))
+  withr::local_dir(file.path(temp_path, basename(path)), .local_envir = env)
 }

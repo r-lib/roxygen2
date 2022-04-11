@@ -54,6 +54,22 @@ test_that("NULL creates no text", {
 })
 
 
+test_that("multi-line inline code gives useful warning", {
+  block <- "
+    #' Title
+    #'
+    #' `r 1 +
+    #' 1`
+    #' @md
+    foo <- function() {}
+  "
+
+  expect_snapshot(
+    out <- roc_proc_text(rd_roclet(), block)[[1]]
+  )
+  expect_equal(out$get_value("description"), "\\verb{r 1 + 1}")
+})
+
 test_that("inline code gives useful warning", {
   block <- "
     #' Title

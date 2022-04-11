@@ -188,3 +188,12 @@ test_that("unicode escapes are ok", {
 
   expect_true(any(grepl("7\u00b0C", rd)))
 })
+
+test_that("automatically deletes unused files", {
+  local_package_copy(test_path("empty"))
+  dir.create("man")
+  suppressMessages(roxygenise())
+
+  write_lines(made_by("%"), "man/test.Rd")
+  expect_snapshot(roxygenise())
+})

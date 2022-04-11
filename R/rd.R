@@ -70,7 +70,7 @@ roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE
     old_paths <- old_paths[!file.info(old_paths)$isdir]
     old_roxygen <- Filter(made_by_roxygen, old_paths)
     if (length(old_roxygen) > 0) {
-      message(paste0("Deleting ", basename(old_roxygen), collapse = "\n"))
+      cli::cli_inform("Deleting {.file {basename(old_roxygen)}}")
       unlink(old_roxygen)
     }
   }

@@ -1,11 +1,11 @@
 test_that("useful error if no DESCRIPTION", {
-  local_package_copy(test_path("no-desc"))
+  local_package_copy(test_path("no-desc"), set_version = FALSE)
 
   expect_snapshot(roxygen_setup(), error = TRUE)
 })
 
 test_that("informs about initial setup", {
-  local_package_copy(test_path("empty"))
+  local_package_copy(test_path("empty"), set_version = FALSE)
 
   expect_snapshot(roxygen_setup(cur_version = "8.0.0"))
 })

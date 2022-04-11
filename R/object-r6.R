@@ -45,13 +45,18 @@ extract_r6_methods <- function(x) {
     function(m) {
       ref <- utils::getSrcref(m)
       if (is.null(ref)) {
-        name <- x$classname %||% NA
-        stop(
-          "R6 class ", if (!is.na(name)) paste0("(", name, ") "),
-          "without source references. ",
-          "If you use the `installed` load method in `DESCRIPTION`, then ",
-          "try re-installing the package with option '--with-keep.source'. ",
-          "E.g. `install.packages(..., INSTALL_OPTS = \"--with-keep.source\")`."
+        name <- x$classname %||% "unknown"
+
+        cli::cli_abort(
+          c(
+            "R6 class {.cls {name}} lacks source references.",
+            i = paste0(
+              "If you are using the `installed` load method in `DESCRIPTION`, then ",
+              "try re-installing the package with option '--with-keep.source', e.g. ",
+              "{.code install.packages(..., INSTALL_OPTS = \"--with-keep.source\")}."
+            )
+          ),
+          call = NULL
         )
       }
       utils::getSrcLocation(ref)

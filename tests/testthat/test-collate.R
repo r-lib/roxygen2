@@ -27,9 +27,9 @@ test_that("Collate field unchanged when no @includes", {
 test_that("DESCRIPTION file is re-written only if collate changes", {
   local_package_copy(test_path("testCollateOverwrite"))
 
-  # load package: this should update the DESCRIPTION once
   expect_snapshot({
     update_collate(".")
+    "Second run should be idempotent"
     update_collate(".")
   })
 })

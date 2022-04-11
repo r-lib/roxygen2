@@ -14,5 +14,6 @@
       
       Updating collate directive in './DESCRIPTION'
     Code
+      # Second run should be idempotent
       update_collate(".")
 

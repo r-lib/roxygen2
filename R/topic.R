@@ -136,7 +136,10 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
     } else if (is.null(x)) {
       # skip
     } else {
-      stop("Don't know how to add object of type ", class(x)[1])
+      cli::cli_abort(
+        "Don't know how to add object of type {.cls {class(x)[1]}}",
+        .internal = TRUE
+      )
     }
     invisible()
   },

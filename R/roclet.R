@@ -108,7 +108,7 @@ roclet_find <- function(x) {
   }
 
   if (!is.roclet(res)) {
-    stop("Must return a roclet", call. = FALSE)
+    cli::cli_abort("Must return a roclet")
   }
 
   res

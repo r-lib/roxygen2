@@ -1,6 +1,10 @@
 package_seealso <- function(desc) {
+  itemize("Useful links:", package_seealso_urls(desc))
+}
+package_seealso_urls <- function(desc) {
   if (!is.null(desc$URL)) {
     links <- paste0("\\url{", strsplit(desc$URL, ",\\s+")[[1]], "}")
+    links <- gsub("\\url\\{https://doi.org/", "\\doi{", links)
   } else {
     links <- character()
   }
@@ -8,8 +12,9 @@ package_seealso <- function(desc) {
     links <- c(links, paste0("Report bugs at \\url{", desc$BugReports, "}"))
   }
 
-  itemize("Useful links:", links)
+  links
 }
+
 
 package_authors <- function(desc) {
   authors <- tryCatch(eval(parse(text = desc$`Authors@R` %||% "")),
@@ -368,4 +373,33 @@ itemize <- function(header, x) {
     paste0("  \\item ", x, "\n", collapse = ""),
     "}\n"
   )
+}
+
+package_url_parse <- function(x) {
+  # <doi:XX.XXX> -> \doi{XX.XXX} to avoid CRAN Notes, etc.
+  x <- str_replace_all(x, "<(doi|DOI):(.*?)>", function(match) {
+    match <- str_remove_all(match, "^<(doi|DOI):|>$")
+    paste0("\\doi{", escape(match), "}")
+  })
+
+  # <http:XX.XXX> -> \url{http:XX.XXX}
+  x <- str_replace_all(x, "<(http|https):\\/\\/(.*?)>", function(match) {
+    match <- str_remove_all(match, "^<|>$")
+    paste0("\\url{", escape(match), "}")
+  })
+
+  # <arxiv:XXX> -> \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
+  # https://github.com/wch/r-source/blob/trunk/src/library/tools/R/Rd2pdf.R#L149-L151
+  patt_arxiv <- "<(arXiv:|arxiv:)([[:alnum:]/.-]+)([[:space:]]*\\[[^]]+\\])?>"
+  x <- str_replace_all(x, patt_arxiv, function(match) {
+    match <- str_remove_all(match, "^<(arXiv:|arxiv:)|>$")
+    # Special cases has <arxiv:id [code]>.
+    # See https://CRAN.R-project.org/package=ciccr
+    # Extract arxiv id, split by space
+    arxiv_id <- str_split_fixed(match, " ", n = 2)[, 1]
+
+    paste0("\\href{https://arxiv.org/abs/", escape(arxiv_id), "}{arXiv:", match, "}")
+  })
+
+  x
 }

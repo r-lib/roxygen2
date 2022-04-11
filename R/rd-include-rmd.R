@@ -1,7 +1,7 @@
 #' @export
 roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
   if (!is_installed("rmarkdown")) {
-    roxy_tag_warning(x, "Needs the rmarkdown package")
+    warn_roxy_tag(x, "requires the rmarkdown package")
     return()
   }
 
@@ -45,7 +45,11 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
 
   rmarkdown::render(
     rmd_path,
-    output_format = rmarkdown::github_document(),
+    output_format = "github_document",
+    output_options = c(
+      list(html_preview = FALSE),
+      if (utils::packageVersion("rmarkdown") >= "2.12") list(math_method = NULL)
+    ),
     output_file = md_path,
     quiet = TRUE,
     envir = new_environment(parent = global_env())

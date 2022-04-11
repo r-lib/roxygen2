@@ -140,7 +140,7 @@ test_that("links to functions, with anchors", {
 test_that("empty Rmd", {
   tmp <- tempfile()
   on.exit(unlink(tmp), add = TRUE)
-  tag <- roxy_tag("includeRmd", tmp)
+  tag <- roxy_test_tag()
 
   cat("", sep = "", file = tmp)
   expect_equal(rmd_eval_rd(tmp, tag), structure("", names = ""))
@@ -163,7 +163,7 @@ test_that("inline html", {
     "",
     "## Subsection in details",
     "",
-    "Some subsection text with <span>inline html</span>.")
+    "Some subsection text with <span class='x'>inline html</span>.")
   rox <- sprintf("
     #' Title
     #' @includeRmd %s
@@ -174,7 +174,7 @@ test_that("inline html", {
     "Text at the front",
     "\\subsection{Subsection in details}{",
     "Some subsection text with ",
-    "\\if{html}{\\out{<span>}}inline html\\if{html}{\\out{</span>}}.\n}"
+    "\\if{html}{\\out{<span class=\"x\">}}inline html\\if{html}{\\out{</span>}}.\n}"
   )
   expect_equal_strings(out1$get_value("details"), exp_details)
 })

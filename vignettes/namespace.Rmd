@@ -15,7 +15,7 @@ The package `NAMESPACE` is one of the most confusing parts of building a package
 
 ## Exports
 
-For a function to be usable outside of your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publicly available, you must explicitly tag it with `@export`.
+For a function to be usable outside your package, you must __export__ it. By default roxygen2 doesn't export anything from your package. If you want an object to be publicly available, you must explicitly tag it with `@export`.
 
 Use the following guidelines to decide what to export:
 
@@ -29,11 +29,11 @@ Use the following guidelines to decide what to export:
 * S3 classes: if you want others to be able to create instances of the class
   `@export` the constructor function.
 
-* S3 generics: the generic is a function so `@export` if you want it to
-  be usable outside the package
+* S3 generics: the generic is a function, so `@export` if you want it to
+  be usable outside the package.
 
 * S3 methods: every S3 method _must_ be exported, even if the generic is not.
-  Otherwise the S3 method table will not be generated correctly and internal
+  Otherwise, the S3 method table will not be generated correctly and internal
   generics will not find the correct method.
   
     If you are providing a method for a generic defined in another package,
@@ -43,24 +43,24 @@ Use the following guidelines to decide what to export:
   If you want others to create instances of your class, but not extend it,
   `@export` the constructor function, but not the class.
 
-      ```R
-      # Can extend and create
-      #' @export
-      setClass("A")
+    ```R
+    # Can extend and create
+    #' @export
+    setClass("A")
 
-      # Can extend, but constructor not exported
-      #' @export
-      B <- setClass("B")
+    # Can extend, but constructor not exported
+    #' @export
+    B <- setClass("B")
 
-      # Can create, but not extend
-      #' @export C
-      C <- setClass("C")
+    # Can create, but not extend
+    #' @export C
+    C <- setClass("C")
 
-      # Can create and extend
-      #' @export D
-      #' @exportClass D
-      D <- setClass("D")
-      ```
+    # Can create and extend
+    #' @export D
+    #' @exportClass D
+    D <- setClass("D")
+    ```
 
 * S4 generics: `@export` if you want the generic to be publicly usable.
 
@@ -72,7 +72,7 @@ Use the following guidelines to decide what to export:
 
 ### Specialised exports
 
-Generally, roxygen2 can generate the correct namespace directive when `@export`ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:
+Generally, roxygen2 can generate the correct namespace directive when `@export`ing a specific object. However, you may want to override the defaults and exercise greater control. In this case, you can use the more specialised tags described below:
 
 * `@export foo` generates `export(foo)`
 * `@exportClass foo` generates `exportClasses(foo)`
@@ -85,11 +85,74 @@ For even more specialised cases you can use `@rawNamespace code` which inserts `
 
 The `NAMESPACE` also controls which functions from other packages are made available to your package. Only unique directives are saved to the `NAMESPACE` file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.
 
-If you are using just a few functions from another package, the recommended option is to note the package name in the `Imports:` field of the `DESCRIPTION` file and call the function(s) explicitly using `::`, e.g., `pkg::fun()`.  Alternatively, though no longer recommended due to its poorer readability, use `@importFrom`, e.g., `@importFrom pgk fun`, and call the function(s) without `::`.
+### Importing functions
 
-If you are using many functions from another package, use `@import package` to import them all and make available without using `::`.
+If you are using just a few functions from another package, the recommended option is to add the package name to the `Imports:` field of the `DESCRIPTION` file and call the functions explicitly using `::`, e.g., `pkg::fun()`.
 
-If you want to add a new method to an S3 generic, import it with `@importFrom pkg generic`.
+```{r, eval = FALSE}
+my_function <- function(x, y) {
+  pkg::fun(x) * y
+}
+```
+
+If the repetition of the package name becomes annoying you can `@importFrom` and drop the `::`:
+
+```{r}
+#' @importFrom pkg fun 
+my_function <- function(x, y) {
+  fun(x) * y
+}
+```
+
+Imports affect every function in a package, so it's common to collect them in a central place, like `{packagename}-package.R`. 
+
+```{r}
+#' @importFrom pkg fun1 fun2
+#' @importFrom pkg2 fun3
+#' @importFrom pkg3 fun4
+NULL
+```
+
+Note the use of `NULL` here: you must provide something for roxygen2 to document, so we use `NULL` as place holder.
+
+It is possible, but not generally recommended to import all functions from a package with `@import package`. This is risky if you import functions from more than one package, because while it might be ok today, in the future the packages might end up with a function having the same name, and your users will get a warning every time your package is loaded.
+
+### Beware
+
+Be careful when mixing `NAMESPACE` directives with regular code. The following example won't work because roxygen ignores empty lines in blocks. It will generate a namespace directive `import(zoo, Different name for calling zoo.)`, which will error.
+
+```{r}
+#' @import zoo
+
+#' Different name for calling zoo.
+#'
+#' @params ... passed to zoo.
+#' @return zoo object.
+#'
+#' @export 
+zoo2 <- function(...) zoo(...)
+```
+
+Instead you need to add an explicit `NULL`:
+
+```{r}
+#' @import zoo
+NULL
+
+#' Different name for calling zoo.
+#'
+#' @params ... passed to zoo.
+#' @return zoo object.
+#'
+#' @export 
+zoo2 <- function(...) zoo(...)
+```
+
+### S3
+
+If you're adding a method to an S3 generic defined in another package, you must import it with `@importFrom pkg generic`. Otherwise roxygen2 can't tell that your function is a method, and will not document it correctly.
+
+### S4
 
 If you are using S4 you may also need:
 
@@ -97,6 +160,8 @@ If you are using S4 you may also need:
 
 * `@importMethodsFrom package methoda methodb ...` to import selected S4 
   methods.
+
+### Compiled code
 
 To import compiled code from another package, use `@useDynLib`
 

@@ -46,23 +46,23 @@ Classs C details.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-meth2}{\code{C$meth2()}}
-\item \href{#method-meth5}{\code{C$meth5()}}
-\item \href{#method-undocumented_method}{\code{C$undocumented_method()}}
+\item \href{#method-C-meth2}{\code{C$meth2()}}
+\item \href{#method-C-meth5}{\code{C$meth5()}}
+\item \href{#method-C-undocumented_method}{\code{C$undocumented_method()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3">}\href{../../roxygen2/html/A.html#method-meth3}{\code{roxygen2::A$meth3()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth1">}\href{../../roxygen2/html/B.html#method-meth1}{\code{roxygen2::B$meth1()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth4">}\href{../../roxygen2/html/B.html#method-meth4}{\code{roxygen2::B$meth4()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-A-meth3'><code>roxygen2::A$meth3()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth1"><a href='../../roxygen2/html/B.html#method-B-meth1'><code>roxygen2::B$meth1()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="B" data-id="meth4"><a href='../../roxygen2/html/B.html#method-B-meth4'><code>roxygen2::B$meth4()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meth2"></a>}}
-\if{latex}{\out{\hypertarget{method-meth2}{}}}
+\if{html}{\out{<a id="method-C-meth2"></a>}}
+\if{latex}{\out{\hypertarget{method-C-meth2}{}}}
 \subsection{Method \code{meth2()}}{
 C method 2.
 \subsection{Usage}{
@@ -80,8 +80,8 @@ C method 2.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meth5"></a>}}
-\if{latex}{\out{\hypertarget{method-meth5}{}}}
+\if{html}{\out{<a id="method-C-meth5"></a>}}
+\if{latex}{\out{\hypertarget{method-C-meth5}{}}}
 \subsection{Method \code{meth5()}}{
 C method 5.
 \subsection{Usage}{
@@ -90,8 +90,8 @@ C method 5.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-undocumented_method"></a>}}
-\if{latex}{\out{\hypertarget{method-undocumented_method}{}}}
+\if{html}{\out{<a id="method-C-undocumented_method"></a>}}
+\if{latex}{\out{\hypertarget{method-C-undocumented_method}{}}}
 \subsection{Method \code{undocumented_method()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{C$undocumented_method()}\if{html}{\out{</div>}}

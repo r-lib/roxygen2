@@ -1,4 +1,4 @@
-package_files <- function(path) {
+package_files <- function(path = ".") {
   all <- normalizePath(r_files(path))
 
   collate <- desc::desc_get_collate(file = file.path(path, "DESCRIPTION"))

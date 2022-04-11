@@ -18,13 +18,13 @@ It means that you can take advantage of Roxygen's parser and extend it with your
 
 There are two primary ways to extend roxygen2:
 
-* Add new tag that generates a new top-level section in `.Rd` files.
+* Add a new tag that generates a new top-level section in `.Rd` files.
 
 * Add a new roclet that does anything you like.
 
 This vignette will introduce you to the key data structures in roxygen2, and then show you how to use these two extension points.
-This vignette is very rough, so you should expect to have to also read some roxygen2 source code to understand all the extension points.
-Hopefully it's useful enough to help you get started, and if you have problems, please [file an issue](https://github.com/r-lib/roxygen2/issues/new)!
+This vignette is very rough, so you are expected to have also read some roxygen2 source code to understand all the extension points.
+Hopefully, it's useful enough to help you get started, and if you have problems, please [file an issue](https://github.com/r-lib/roxygen2/issues/new)!
 
 ```{r setup}
 library(roxygen2)
@@ -96,7 +96,7 @@ This requires two steps:
 1.  Define a `roxy_tag_rd()` method that describes how to convert the tag
     into `.Rd` commands. 
     
-To illustrate the basic idea we'll create a new `@tip` tag that will create a bulleted list of tips about how to use a function. 
+To illustrate the basic idea, we'll create a new `@tip` tag that will create a bulleted list of tips about how to use a function. 
 The idea is to take something like this: 
 
 ```{r}
@@ -115,10 +115,10 @@ And generate Rd like this:
 }
 ```
 
-The first step is to define a method for `roxy_tag_parse()` that describes how to turn the parse the tag text.
-The name of the class will be `roxy_tag_{tag}`, which in this case is `roxy_tag_tip`. 
+The first step is to define a method for `roxy_tag_parse()` that describes how to parse the tag text.
+The name of the class will be `roxy_tag_{tag}`, which in this case is `roxy_tag_tip`.
 This function takes a `roxy_tag` as input, and it's job is to set `x$val` to a convenient parsed value that will be used later by the roclet.
-Here we want to process the text using markdown so we can just use `tag_markdown()`:
+Here we want to process the text using Markdown so we can just use `tag_markdown()`:
 
 ```{r}
 roxy_tag_parse.roxy_tag_tip <- function(x) {
@@ -149,9 +149,9 @@ block
 str(block$tags[[2]])
 ```
 
-(Here I explicit turn markdown parsing on using `@md`; it's usually turned on for a package using roxygen options).
+(Here I explicitly turn Markdown parsing on using `@md`; it's usually turned on for a package using roxygen options).
 
-Next we define a method for `roxy_tag_rd()`, which must create an `rd_section()`.
+Next, we define a method for `roxy_tag_rd()`, which must create an `rd_section()`.
 We're going to create a new section called `tip`.
 It will contain a character vector of tips:
 
@@ -165,12 +165,12 @@ roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
 registerS3method("roxy_tag_rd", "roxy_tag_tip", roxy_tag_rd.roxy_tag_tip)
 ```
 
-This additional layer is needed because there can multiple tags of the same time in a single block, and multiple blocks can contribute to the same `.Rd` file.
+This additional layer is needed because there can be multiple tags of the same type in a single block, and multiple blocks can contribute to the same `.Rd` file.
 The job of the `rd_section` is to combine all the tags into a single top-level Rd section.
 Each tag generates an `rd_section` which is then combined with any previous section using `merge()`.
 The default `merge.rd_section()` just concatenates the values together (`rd_section(x$type, c(x$value, y$value))`); you can override this method if you need more sophisticated behaviour.
 
-We then need to define a `format()` method to converts this object into text for the `.Rd` file:
+We then need to define a `format()` method to convert this object into text for the `.Rd` file:
 
 ```{r}
 format.rd_section_tip <- function(x, ...) {
@@ -195,7 +195,7 @@ topic <- roc_proc_text(rd_roclet(), text)[[1]]
 topic$get_section("tip")
 ```
 
-Note that there is no namespacing so if you're defining multiple new tags I recommend using your package name as common prefix.
+Note that there is no namespacing so if you're defining multiple new tags I recommend using your package name as the common prefix.
 
 ## Creating a new roclet
 
@@ -242,7 +242,7 @@ roxy_tag_parse.roxy_tag_memo <- function(x) {
 registerS3method("roxy_tag_parse", "roxy_tag_memo", roxy_tag_parse.roxy_tag_memo)
 ```
 
-Then check it works with `parse_text()`:
+Then check if it works with `parse_text()`:
 
 ```{r}
 text <- "
@@ -260,7 +260,7 @@ str(block$tags[[1]])
 
 ### The roclet
 
-Next we create a constructor for the roclet, which uses `roclet()`.
+Next, we create a constructor for the roclet, which uses `roclet()`.
 Our `memo` roclet doesn't have any options so this is very simple:
 
 ```{r}
@@ -275,8 +275,8 @@ There are two methods that almost every roclet will use:
 * `roclet_process()` is called with a list of blocks, and returns an
   object of your choosing.
   
-* `roclet_output()`: performs side-effects (usually writing to disk)
-  using the result from `roclet_process()`
+* `roclet_output()` produces side-effects (usually writing to disk)
+  using the result from `roclet_process()`.
 
 For this roclet, we'll have `roclet_process()` collect all the memo tags into a named list:
 
@@ -317,7 +317,7 @@ registerS3method("roclet_process", "roclet_memo", roclet_process.roclet_memo)
 registerS3method("roclet_output", "roclet_memo", roclet_output.roclet_memo)
 ```
 
-Then you can test it works by using `roc_proc_text()`:
+Then you can test if it works by using `roc_proc_text()`:
 
 ```{r}
 results <- roc_proc_text(memo_roclet(), "

@@ -16,19 +16,21 @@ format.rd_section_rawRd <- function(x, ...) {
   paste(x$value, collapse = "\n")
 }
 
-roxy_tag_eval <- function(tag, env) {
+roxy_tag_eval <- function(tag, env = new.env(parent = baseenv())) {
   tryCatch({
-    expr <- parse(text = tag$val)
-    out <- eval(expr, envir = env)
+    out <- eval(tag$val, envir = env)
 
     if (!is.character(out)) {
-      roxy_tag_warning(tag, "did not evaluate to a string")
+      warn_roxy_tag(tag, "must evaluate to a character vector")
+      NULL
     } else if (anyNA(out)) {
-      roxy_tag_warning(tag, "result contained NA")
+      warn_roxy_tag(tag, "must not contain any missing values")
+      NULL
     } else {
       out
     }
   }, error = function(e) {
-    roxy_tag_warning(tag, "failed with error:\n", e$message)
+    warn_roxy_tag(tag, "failed to evaluate", parent = e)
+    NULL
   })
 }

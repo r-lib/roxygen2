@@ -47,7 +47,7 @@ test_that("usage escaping preserved when combined", {
     bar <- function(y = '%') y
   ")[[1]]
 
-  expect_is(out$get_value("usage"), "rd")
+  expect_s3_class(out$get_value("usage"), "rd")
 })
 
 test_that("default usage not double escaped", {
@@ -266,7 +266,7 @@ test_that("non-syntactic S4 class names are escaped in usage", {
 # Wrapping --------------------------------------------------------------------
 
 test_that("new wrapping style doesn't change unexpectedly", {
-  expect_known_output(file = test_path("test-object-usage-wrap-new.txt"), {
+  expect_snapshot_output({
     cat(call_to_usage({
       f <- function(a = '                                    a',
                     b = '                                    b',
@@ -291,6 +291,20 @@ test_that("new wrapping style doesn't change unexpectedly", {
           c = 'aaaaaaaaaaaaaaaa',
           value) {}
     }), "\n\n")
+
+    cat(call_to_usage({
+      function_name <- function(x, y, xy = "abcdef",
+       xyz = c(`word word word word` = "abcdef", `word word word` = "abcdef",
+               `word word word` = "abcdef", `word word word` = "abcdef")) {}
+    }), "\n\n")
+
+    cat(call_to_usage({
+      function_name <- function(
+        f = function(x) {
+          1
+          2
+      }) {}
+    }), "\n\n")
   })
 })
 
@@ -298,7 +312,7 @@ test_that("old wrapping style doesn't change unexpectedly", {
   old <- roxy_meta_set("old_usage", TRUE)
   on.exit(roxy_meta_set("old_usage", old))
 
-  expect_known_output(file = test_path("test-object-usage-wrap-old.txt"), {
+  expect_snapshot_output({
     cat(call_to_usage({
       f <- function(a = '                                    a',
                     b = '                                    b',

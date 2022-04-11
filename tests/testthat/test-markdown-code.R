@@ -80,7 +80,7 @@ test_that("NULL creates no text", {
 })
 
 test_that("various errors", {
-  verify_output(test_path("markdown-code-errors.txt"), {
+  expect_snapshot(error = TRUE, {
 
     # multi-line inline code block
     roc_proc_text(rd_roclet(), "

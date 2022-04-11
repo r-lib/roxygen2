@@ -10,7 +10,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   tryCatch(
     suppressWarnings(parse(text = condition)),
     error = function(err) {
-      roxy_tag_warning(x, "failed to parse condition of @examplesIf")
+      warn_roxy_tag(x, "condition failed to parse", parent = err)
     }
   )
 
@@ -25,7 +25,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
     collapse = "\n"
   )
 
-  x <- tag_examples(x)
+  tag_examples(x)
 }
 #' @export
 roxy_tag_parse.roxy_tag_example <- function(x) {
@@ -33,7 +33,10 @@ roxy_tag_parse.roxy_tag_example <- function(x) {
 
   nl <- str_count(x$val, "\n")
   if (any(nl) > 0) {
-    roxy_tag_warning(x, "spans multiple lines. Do you want @examples?")
+    warn_roxy_tag(x, c(
+      "must be a single line",
+      i = "Do you want @examples?"
+    ))
     return()
   }
 
@@ -52,7 +55,7 @@ roxy_tag_rd.roxy_tag_examplesIf <- function(x, base_path, env) {
 roxy_tag_rd.roxy_tag_example <- function(x, base_path, env) {
   path <- file.path(base_path, x$val)
   if (!file.exists(path)) {
-    roxy_tag_warning(x, "'", path, "' doesn't exist")
+    warn_roxy_tag(x, "{.path {path}} doesn't exist")
     return()
   }
 

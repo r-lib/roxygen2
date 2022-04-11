@@ -24,7 +24,7 @@ rc_methods <- function(obj) {
   parent_methods <- unlist(lapply(parents, function(x) {
     methods::getRefClass(x)$methods()
   }))
-  method_names <- setdiff(ls(envir = obj@refMethods), parent_methods)
+  method_names <- sort_c(setdiff(ls(envir = obj@refMethods), parent_methods))
   methods <- mget(method_names, envir = obj@refMethods)
 
   lapply(methods, object, alias = NULL, type = "rcmethod")

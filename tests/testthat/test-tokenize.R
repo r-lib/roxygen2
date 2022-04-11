@@ -1,7 +1,7 @@
 # tokenise_block ----------------------------------------------------------
 
 test_that("parses into tag and value", {
-  x <- tokenise_block("#' @xyz abc")
+  x <- tokenise_block("#' @xyz abc", file = "", offset = 0)
   expect_equal(length(x), 1)
 
   expect_equal(x[[1]]$tag, "xyz")
@@ -9,7 +9,7 @@ test_that("parses into tag and value", {
 })
 
 test_that("description block gets empty tag", {
-  x <- tokenise_block("#' abc")
+  x <- tokenise_block("#' abc", file = "", offset = 0L)
   expect_equal(length(x), 1)
 
   expect_equal(x[[1]]$tag, "")
@@ -19,8 +19,8 @@ test_that("description block gets empty tag", {
 test_that("multi line tags collapsed into one", {
   x <- tokenise_block(c(
     "#' @tag abc",
-    "#'   def"
-  ))
+    "#'   def"),
+    file = "", offset = 0L)
   expect_equal(length(x), 1)
   expect_equal(x[[1]]$raw, "abc\n  def")
 })
@@ -28,8 +28,8 @@ test_that("multi line tags collapsed into one", {
 test_that("description block gets empty tag when followed by tag", {
   x <- tokenise_block(c(
     "#' abc",
-    "#' @xyz abc"
-  ))
+    "#' @xyz abc"),
+    file = "", offset = 0L)
   expect_equal(length(x), 2)
 
   expect_equal(x[[1]]$tag, "")
@@ -40,20 +40,20 @@ test_that("description block gets empty tag when followed by tag", {
 })
 
 test_that("leading whitespace is ignored", {
-  ref <- tokenise_block("#' abc")
+  ref <- tokenise_block("#' abc", file = "", offset = 0L)
 
-  expect_equal(tokenise_block("   #' abc"), ref)
+  expect_equal(tokenise_block("   #' abc", file = "", offset = 0L), ref)
 })
 
 test_that("need one or more #", {
-  ref <- tokenise_block("#' abc")
+  ref <- tokenise_block("#' abc", file = "", offset = 0L)
 
-  expect_equal(tokenise_block("##' abc"), ref)
-  expect_equal(tokenise_block("###' abc"), ref)
+  expect_equal(tokenise_block("##' abc", file = "", offset = 0L), ref)
+  expect_equal(tokenise_block("###' abc", file = "", offset = 0L), ref)
 })
 
 test_that("@@ becomes @", {
-  expect_equal(tokenise_block("#' @tag @@")[[1]]$raw, "@")
+  expect_equal(tokenise_block("#' @tag @@", file = "", offset = 0L)[[1]]$raw, "@")
 })
 
 # Inline comments ---------------------------------------------------------
@@ -111,7 +111,7 @@ test_that("Line numbers are ok", {
      #' @param x xyz
      #' @export
      NULL"
-  block <- roxygen2::parse_text(text)[[1]]
+  block <- parse_text(text)[[1]]
   ls <- c(title = 1, description = 4, details = 7, param = 10, export = 11)
   check_line_nums(block, ls)
 
@@ -127,7 +127,7 @@ test_that("Line numbers are ok", {
      #'
      #' @export
      NULL"
-  block <- roxygen2::parse_text(text)[[1]]
+  block <- parse_text(text)[[1]]
   ls <- c(title = 1, description = 3, details = 5, param = 7, export = 10)
   check_line_nums(block, ls)
 
@@ -143,7 +143,21 @@ test_that("Line numbers are ok", {
      quote(neither - is -
      #' @export
      this)"
-  block <- roxygen2::parse_text(text)[[1]]
+  block <- parse_text(text)[[1]]
   ls <- c(title = 1, description = 3, details = 5, param = 7, export = 10)
+  check_line_nums(block, ls)
+
+  text <-
+    "# 1
+     # 2
+     #' foo
+     #'
+     #' Description
+     # 6
+     # 7
+     #' @param x xyz
+     NULL"
+  block <- parse_text(text)[[1]]
+  ls <- c(title = 3, description = 5, param = 8)
   check_line_nums(block, ls)
 })

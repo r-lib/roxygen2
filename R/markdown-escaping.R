@@ -39,6 +39,7 @@ escaped_for_md <- paste0("\\", c(
   "acronym", "code", "command", "CRANpkg", "deqn", "doi", "dontrun",
   "dontshow", "donttest", "email", "env", "eqn", "figure", "file",
   "if", "ifelse", "kbd", "link", "linkS4class", "method",
+  "mjeqn", "mjdeqn", "mjseqn", "mjsdeqn", "mjteqn", "mjtdeqn",
   "newcommand", "option", "out", "packageAuthor",
   "packageDescription", "packageDESCRIPTION", "packageIndices",
   "packageMaintainer", "packageTitle", "pkg", "PR", "preformatted",

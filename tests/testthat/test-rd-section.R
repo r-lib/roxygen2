@@ -1,5 +1,5 @@
 test_that("warn if forgotton colom", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' Foo
       #'
@@ -7,8 +7,7 @@ test_that("warn if forgotton colom", {
       #' Here.
       #' There
       foo <- function(x = '%') x
-    "),
-    "Section title spans multiple lines"
+    ")
   )
 })
 

@@ -85,35 +85,20 @@ test_that("turning on/off markdown locally", {
 })
 
 test_that("warning for both @md and @noMd", {
-  expect_warning(
-    out1 <- roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' Description with some `code` included. `More code.`
-      #' @md
-      #' @noMd
-      foo <- function() {}")[[1]],
-    "Both @md and @noMd, no markdown parsing"
-  )
-  expect_equal(
-    out1$get_value("description"),
-    "Description with some `code` included. `More code.`"
-  )
+  block <- "
+    #' Title
+    #'
+    #' `code`
+    #' @md
+    #' @noMd
+    foo <- function() {}
+  "
 
-  old <- roxy_meta_set("markdown", TRUE)
-  on.exit(roxy_meta_set("markdown", old))
-  expect_warning(
-    out1 <- roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' Description with some `code` included. `More code.`
-      #' @md
-      #' @noMd
-      foo <- function() {}")[[1]],
-    "Both @md and @noMd, no markdown parsing"
-  )
-  expect_equal(
-    out1$get_value("description"),
-    "Description with some `code` included. `More code.`"
-  )
+  expect_snapshot_warning(out1 <- roc_proc_text(rd_roclet(), block))
+  expect_equal(out1[[1]]$get_value("description"), "`code`")
+
+  # No translation even if markdown on generally
+  local_markdown()
+  suppressWarnings(out2 <- roc_proc_text(rd_roclet(), block))
+  expect_equal(out2[[1]]$get_value("description"), "`code`")
 })

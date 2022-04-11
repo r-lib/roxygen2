@@ -11,3 +11,14 @@ expect_equal_strings <- function(s1, s2, ignore_ws = TRUE) {
   }
   expect_equal(s1, s2)
 }
+
+expect_parse_failure <- function(code)  {
+  (expect_warning(expect_null(code)))
+}
+
+local_package_copy <- function(path, env = caller_env()) {
+  temp_path <- withr::local_tempdir(.local_envir = env)
+
+  file.copy(path, temp_path, recursive = TRUE)
+  withr::local_dir(file.path(temp_path, basename(path)), .local_envir = env)
+}

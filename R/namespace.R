@@ -39,7 +39,8 @@ roclet_preprocess.roclet_namespace <- function(x, blocks, base_path) {
     return(x)
   }
 
-  results <- c(made_by("#"), lines)
+  lines <- c(lines, namespace_exports(NAMESPACE))
+  results <- c(made_by("#"), sort_c(unique(lines)))
   write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible(x)
@@ -173,17 +174,39 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env, import_only = FAL
   }
 
   obj <- block$object
-  if (length(x$val) < 2 && !inherits(obj, "s3method")) {
-    roxy_tag_warning(x,
-      "`@exportS3Method` and `@exportS3Method generic` must be used with an S3 method"
-    )
-    return()
-  }
 
   if (identical(x$val, "")) {
+    if (!inherits(obj, "s3method")) {
+      warn_roxy_tag(x, "must be used with an known S3 method")
+      return()
+    }
+
     method <- attr(obj$value, "s3method")
   } else if (length(x$val) == 1) {
-    method <- c(x$val, attr(obj$value, "s3method")[[2]])
+    if (!inherits(obj, "function")) {
+      warn_roxy_tag(x, "must be used with a function")
+      return()
+    }
+
+    if (!str_detect(x$val, "::")) {
+      warn_roxy_tag(x, "must have form package::generic")
+      return()
+    }
+
+    generic <- str_split(x$val, "::")[[1]]
+    generic_re <- paste0("^", generic[[2]], "\\.")
+
+    if (!str_detect(obj$alias, generic_re)) {
+      warn_roxy_tag(x, c(
+        "doesn't match function name",
+        x = "Expected to see {.str {generic[[2]]}} to match {.str {x$val}}",
+        i = "Function name is {.str {obj$alias}}"
+      ))
+      return()
+    }
+
+    class <- str_remove(obj$alias, generic_re)
+    method <- c(x$val, class)
   } else {
     method <- x$val
   }
@@ -233,7 +256,7 @@ roxy_tag_parse.roxy_tag_rawNamespace <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_rawNamespace  <- function(x, block, env, import_only = FALSE) {
-  x$val
+  x$raw
 }
 
 #' @export
@@ -289,4 +312,15 @@ one_per_line <- function(name, x) {
 }
 repeat_first <- function(name, x) {
   paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
+}
+
+namespace_exports <- function(path) {
+  if (!file.exists(path)) {
+    return(character())
+  }
+
+  parsed <- parse(path, keep.source = TRUE)
+  is_import <- function(x) is_call(x, c("import", "importFrom", "importClassesFrom", "importMethodsFrom", "useDynLib"))
+  export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import)]
+  unlist(lapply(export_lines, as.character))
 }

@@ -37,31 +37,42 @@ test_that("deleted objects not documented", {
 })
 
 test_that("documenting unknown function requires name", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' Virtual Class To Enforce Max Slot Length
       setClass('A')
 
       #' Validity function.
       setValidity('A', function(object) TRUE)"
-    ),
-    "Missing name"
+    )
   )
 })
 
+test_that("can't set description and re-export", {
+  expect_snapshot_warning(
+    out <- roc_proc_text(rd_roclet(), "
+      #' @description NOPE
+      #' @export
+      magrittr::`%>%`
+      ")
+  )
+
+  expect_length(out, 0)
+})
+
+
 test_that("documenting NA gives useful error message (#194)", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' Missing value
       NA"
-      ),
-    "Missing name"
+    )
   )
 })
 
 test_that("@description NULL", {
   # Just ignore in this case
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' @description NULL
@@ -71,7 +82,7 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # Still ignore
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @description NULL
     #' @description desc
@@ -81,7 +92,7 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "desc")
 
   # Still ignore for objects as well
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @description NULL
     #' @format NULL
@@ -90,26 +101,31 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
-  with_mock(
-    `roxygen2::read.description` = function(...)
-      list(Package = "roxygen_devtest",
-           Title = "Package Title",
-           Description = "Package description."),
-    out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
-      #' Title
-      #'
-      #' @docType package
-      #' @description NULL
-      #' @name pkg
-      '_PACKAGE'
-    ")
+  mockr::with_mock(
+    read.description = function(...) {
+      list(
+        Package = "roxygen_devtest",
+        Title = "Package Title",
+        Description = "Package description."
+      )
+    },
+    {
+      out <- roc_proc_text(rd_roclet(), "
+        #' Title
+        #'
+        #' @docType package
+        #' @description NULL
+        #' @name pkg
+        '_PACKAGE'
+      ")
+    }
   )
   expect_null(out[[1]]$get_value("description"))
 })
 
 test_that("@details NULL", {
   # Just ignore in this case
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
     #' @details NULL
@@ -119,7 +135,7 @@ test_that("@details NULL", {
   expect_null(out[[1]]$get_value("details"))
 
   # Still ignore
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @details NULL
     #' @details desc
@@ -129,7 +145,7 @@ test_that("@details NULL", {
   expect_identical(out[[1]]$get_value("details"), "desc")
 
   # Still ignore for objects as well
-  out <- roxygen2::roc_proc_text(roxygen2::rd_roclet(), "
+  out <- roc_proc_text(rd_roclet(), "
     #' Title
     #' @details NULL
     #' @format NULL
@@ -141,36 +157,38 @@ test_that("@details NULL", {
 # UTF-8 -------------------------------------------------------------------
 
 test_that("can generate nonASCII document", {
-  test_pkg <- temp_copy_pkg(test_path('testNonASCII'))
-  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
+  local_package_copy(test_path('testNonASCII'))
+  desc::desc_set(RoxygenNote = as.character(packageVersion("roxygen2")))
 
-  expect_output(roxygenise(test_pkg, roclets = "rd"), "printChineseMsg[.]Rd")
+  expect_snapshot({
+    roxygenise(roclets = "rd")
+    "Second run should be idempotent"
+    roxygenise(roclets = "rd")
+  })
 
-  rd_path <- file.path(test_pkg, "man", "printChineseMsg.Rd")
+  rd_path <- file.path("man", "printChineseMsg.Rd")
   expect_true(file.exists(rd_path))
   rd <- read_lines(rd_path)
 
   expect_true(any(grepl("\u6211\u7231\u4e2d\u6587", rd)))
   expect_true(any(grepl("\u4e2d\u6587\u6ce8\u91ca", rd)))
-
-  # Shouldn't change again
-  expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
 })
 
 test_that("unicode escapes are ok", {
-  test_pkg <- temp_copy_pkg(test_path('testUtf8Escape'))
-  on.exit(unlink(test_pkg, recursive = TRUE), add = TRUE)
+  local_package_copy(test_path('testUtf8Escape'))
+  desc::desc_set(RoxygenNote = as.character(packageVersion("roxygen2")))
 
-  expect_output(roxygenise(test_pkg, roclets = "rd"), "a[.]Rd")
+  expect_snapshot({
+    roxygenise(roclets = "rd")
+    "Second run should be idempotent"
+    roxygenise(roclets = "rd")
+  })
 
-  rd_path <- file.path(test_pkg, "man", "a.Rd")
+  rd_path <- file.path("man", "a.Rd")
   expect_true(file.exists(rd_path))
   rd <- read_lines(rd_path)
 
   expect_true(any(grepl("7\u00b0C", rd)))
-
-  # Shouldn't change again
-  expect_output(roxygenise(test_pkg, roclets = "rd"), NA)
 })
 
 test_that("write_lines writes unix-style line endings.", {

@@ -10,7 +10,7 @@ test_that("has thoughtful print method", {
     f <- function(x, y) x + y
   "
   block <- parse_text(text)[[1]]
-  verify_output(test_path("test-block-print.txt"), block)
+  expect_snapshot_output(block)
 })
 
 # description block -------------------------------------------------------
@@ -237,33 +237,32 @@ test_that("evaluation occurs during parsing", {
 })
 
 test_that("errors are propagated", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       foo <- function() stop('Uhoh')
+      #' Title
+      #' @name foo
       #' @eval foo()
       NULL"
-    ),
-    "failed with error"
+    )
   )
 })
 
 test_that("must return non-NA string", {
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       foo <- function() NA
       #' @eval foo()
       NULL"
-    ),
-    "did not evaluate to a string"
+    )
   )
 
-  expect_warning(
+  expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       foo <- function() NA_character_
       #' @eval foo()
       NULL"
-    ),
-    "result contained NA"
+    )
   )
 })
 
@@ -278,3 +277,17 @@ test_that("also works with namespace roclet", {
   expect_equal(out, "export(a)")
 })
 
+
+# other -------------------------------------------------------------------
+
+
+test_that("warns about duplicate tags", {
+  expect_snapshot_warning({
+    roc_proc_text(rd_roclet(), "
+      #' Foo
+      #' @rdname foo
+      #' @rdname bar
+      foo <- function() {}
+    ")
+  })
+})

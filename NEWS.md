@@ -6,10 +6,76 @@
   into the resulting documentation, but `x <- "foo"; x` will.
 
 * The new `@exmaplesIf` tag can be used to create conditional
+* `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 
+  imported by your package (#1085).
+
+* Markdown code blocks are always wrapped in `<div class="sourceCode">`
+  even if the language is unknown (#1234).
+
+* roxygen2 no longer generates invalid HTML (#1290).
+
+* All warning messages have been reviewed to hopefully be more informative
+  and actionable (#1317). `@title` now checks for multiple paragraphs.
+  `@export` gives a more informative warning if it contains too many lines. 
+  (#1074).
+
+* DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
+  are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).
+
+* Arguments containing syntactically significant whitespace (e.g anonymous
+  functions) are now wrapped correctly (#1281).
+
+* Arguments containing non-syntactic values surrounded by back ticks are now 
+  wrapped correctly (#1257).
+  
+* DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
+  `\doi{}` tag (@ThierryO, #1296).
+
+* Links that contains markup like ``[foo `bar`][target]`` now cause an
+  informative warning. They would previously generate invalid Rd markup
+  that failed at runtime.
+
+* Curly braces in markdown links are now escaped (#1259).
+
+* `@inherit` and friends perform less aggressive link tweaking, eliminating
+  many spurious warnings. Additionally, when you do get a warning, you'll 
+  now always learn which topic it's coming from (#1135).
+
+* The NAMESPACE roclet now preserves all existing non-import directives during
+  it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
+  messages and reduces the incidence of namespace borking (#1254).
+
+* `@inheritParams` now only inherits exact multiparameter matches, so if you're
+  inheriting from a function with `@param x,y` you'll only get the parameter
+  documentation if your function needs docs for both x and y (#950).
+
+* All tags warn now if you only provide whitespace (#1228).
+
+* Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)
+
+* Problems with the first tag in each block are now reported with the
+  correct line number (#1235).
+
+* `\ifelse{}{}{}` tags in external inherited documentation are now inserted 
+  correctly (without additional `{}`) (#1062).
+
+* `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math support in `github_document()` (#1304).
+
+# roxygen2 7.1.2
+
+* The new `@examplesIf` tag can be used to create conditional
   examples. These examples only run if a specified condition
   holds (#962).
 
 * roxygen2 is now licensed as MIT (#1163).
+
+* Bug fix for upcoming stringr 2.0.0 release.
+
+* Code blocks with language now add `sourceCode` to the generated div; this
+  makes syntax highlighting more consistent across downlit/pandoc/knitr/roxygen2.
+
+* Percent signs in markdown link targets, e.g. `[text](https://foo/ba%20r)`
+  are now handled correctly (#1209).
 
 # roxygen2 7.1.1
 
@@ -229,7 +295,7 @@ roxygen2 can now document R6 classes (#922). See `vignette("rd")` for details.
 
 roxygen2 now provides three strategies for loading your code (#822):
 
-* `load_pkgload()`, the default, uses [pkgload](https://www.github.com/r-lib/pkgload). 
+* `load_pkgload()`, the default, uses [pkgload](https://github.com/r-lib/pkgload). 
   Compared to the previous release, this now automatically recompiles your 
   package if needed.
 
@@ -374,7 +440,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@inheritParams` warns if there are no parameters that require 
   documentation (#836).
 
-* `@param` containing only whitespce gives a clear warning message (#869).
+* `@param` containing only whitespace gives a clear warning message (#869).
 
 * Multiple `@usage` statements in a single block now generate a warning. 
   Previously, the first was used without a warning.
@@ -510,7 +576,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
       instead of throwing an utterly useless error (#560).
 
 * `person()` now supports all
-  [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html) role codes
+  [MARC Relator](https://www.loc.gov/marc/relators/relaterm.html) role codes
   (#662, @publicus).
 
 * `topic_add_usage()` now outputs formatted "Usage" section with max

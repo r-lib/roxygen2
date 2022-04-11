@@ -38,10 +38,14 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 
 \section{How to set}{
 
-Either set in \code{DESCRIPTION}:\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
+Either set in \code{DESCRIPTION}:
+
+\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
 }
 
-Or if longer, you can put in \verb{/man/roxygen/meta.R}:\preformatted{list(
+Or if longer, you can put in \verb{/man/roxygen/meta.R}:
+
+\preformatted{list(
   markdown = TRUE,
   load = "installed"
 )

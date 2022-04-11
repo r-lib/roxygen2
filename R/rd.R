@@ -121,7 +121,10 @@ block_to_rd.roxy_block <- function(block, base_path, env) {
 
   name <- block_get_tag(block, "name")$val %||% block$object$topic
   if (is.null(name)) {
-    roxy_tag_warning(block$tags[[1]], "Missing name")
+    warn_roxy_block(block, c(
+      "Block must have a @name",
+      i = "Either document an existing object or manually specify with @name"
+    ))
     return()
   }
 
@@ -132,7 +135,7 @@ block_to_rd.roxy_block <- function(block, base_path, env) {
   }
 
   if (rd$has_section("description") && rd$has_section("reexport")) {
-    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
+    warn_roxy_block(block, "Block must not include a description when re-exporting a function")
     return()
   }
 
@@ -159,7 +162,7 @@ block_to_rd.roxy_block_r6class <- function(block, base_path, env) {
 
   name <- block_get_tag(block, "name")$val %||% block$object$topic
   if (is.null(name)) {
-    roxy_tag_warning(block$tags[[1]], "Missing name")
+    warn_roxy_block(block, "must have a @name")
     return()
   }
 
@@ -170,7 +173,7 @@ block_to_rd.roxy_block_r6class <- function(block, base_path, env) {
   rd$add(roxy_tag_rd(block_get_tag(block, "title"), env = env, base_path = base_path))
 
   if (rd$has_section("description") && rd$has_section("reexport")) {
-    roxy_tag_warning(block$tags[[1]], "Can't use description when re-exporting")
+    warn_roxy_block(block, "Block must not include a description when re-exporting a function")
     return()
   }
 

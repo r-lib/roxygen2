@@ -176,6 +176,7 @@ test_that("can generate nonASCII document", {
 
 test_that("unicode escapes are ok", {
   local_package_copy(test_path('testUtf8Escape'))
+  desc::desc_set(RoxygenNote = as.character(packageVersion("roxygen2")))
 
   expect_snapshot({
     roxygenise(roclets = "rd")

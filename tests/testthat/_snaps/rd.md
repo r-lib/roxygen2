@@ -31,10 +31,6 @@
     Code
       roxygenise(roclets = "rd")
     Message
-      
-      First time using roxygen2. Upgrading automatically...
-      
-      Setting `RoxygenNote` to 7.1.2.9000
       i Loading testUtf8Escape
       
       Writing 'a.Rd'

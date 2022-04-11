@@ -116,7 +116,7 @@ str_set_all_pos <- function(text, pos, value, nodes) {
   # for now we just simply error for multi-line inline code.
   types <- xml_name(nodes)
   if (any(types == "code" & pos$start_line != pos$end_line)) {
-    abort("multi-line `r ` markup is not supported", call = NULL)
+    cli::cli_abort("multi-line `r ` markup is not supported", call = NULL)
   }
 
   # Need to split the string, because of the potential multi-line

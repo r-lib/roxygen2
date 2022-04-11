@@ -18,6 +18,12 @@ test_that("person turned into meaningful text", {
   })
 })
 
+test_that("useful message if Authors@R is corrupted", {
+  expect_snapshot({
+    package_authors(list(`Authors@R` = "1 + "))
+    package_authors(list(`Authors@R` = "stop('Uhoh')"))
+  })
+})
 
 test_that("can convert DOIs in url", {
   expect_equal(

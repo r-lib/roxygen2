@@ -46,7 +46,7 @@ update_roxygen_version <- function(path, cur_version = NULL) {
       cli::cli_rule()
     }
 
-    cli::cli_inform("Setting {.var RoxygenNote} to {cur}")
+    cli::cli_inform("Setting {.var RoxygenNote} to {.str {cur}}")
     desc::desc_set(RoxygenNote = cur, file = path)
   }
 }

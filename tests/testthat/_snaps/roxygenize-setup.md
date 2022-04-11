@@ -14,7 +14,7 @@
       
       First time using roxygen2. Upgrading automatically...
       
-      Setting `RoxygenNote` to 8.0.0
+      Setting `RoxygenNote` to "8.0.0"
     Output
       [1] TRUE
 
@@ -22,9 +22,6 @@
 
     Code
       roxygen_setup(cur_version = "8.0.0")
-    Message
-      
-      Setting `RoxygenNote` to 8.0.0
     Condition
       Warning:
       roxygen2 requires Encoding: "UTF-8"
@@ -55,7 +52,7 @@
       Please carefully check .Rd files for changes
       --------------------------------------------------------------------------------
       
-      Setting `RoxygenNote` to 8.0.0
+      Setting `RoxygenNote` to "8.0.0"
     Output
       [1] FALSE
 

@@ -24,19 +24,15 @@ test_that("finds datasets given by name", {
 })
 
 test_that("can document eager data", {
-  skip_if_not_installed("devtools")
-
   local_package_copy(test_path('testEagerData'))
-  suppressMessages(devtools::document())
+  suppressMessages(roxygenise())
 
   expect_true(file.exists("man/a.Rd"))
 })
 
 test_that("can document lazy data", {
-  skip_if_not_installed("devtools")
-
   local_package_copy(test_path('testLazyData'))
-  suppressMessages(devtools::document())
+  suppressMessages(roxygenise())
 
   expect_true(file.exists("man/a.Rd"))
 })

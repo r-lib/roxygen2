@@ -1,4 +1,5 @@
 # code --------------------------------------------------------------------
+# see test-markdown-code.R for evaluated code
 
 test_that("backticks are converted to \\code & \\verb", {
   out1 <- roc_proc_text(rd_roclet(), "

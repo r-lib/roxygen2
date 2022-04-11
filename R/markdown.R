@@ -1,14 +1,11 @@
 
 markdown <- function(text, tag = NULL, sections = FALSE) {
   tag <- tag %||% list(file = NA, line = NA)
-  tryCatch(
-    expanded_text <- markdown_pass1(text),
+  expanded_text <- tryCatch(
+    markdown_pass1(text),
     error = function(e) {
-      message <- paste0(
-        if (!is.na(tag$file)) paste0("[", tag$file, ":", tag$line, "] "),
-        "@", tag$tag, " in inline code: ", e$message
-      )
-      stop(message, call. = FALSE)
+      warn_roxy_tag(tag, "failed to evaluate inline markdown code", parent = e)
+      text
     }
   )
   escaped_text <- escape_rd_for_md(expanded_text)

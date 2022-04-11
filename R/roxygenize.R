@@ -30,7 +30,7 @@ roxygenize <- function(package.dir = ".",
                        load_code = NULL,
                        clean = FALSE) {
 
-  base_path <- package.dir
+  base_path <- normalizePath(package.dir)
   is_first <- roxygen_setup(base_path)
 
   roxy_meta_load(base_path)

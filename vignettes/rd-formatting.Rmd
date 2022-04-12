@@ -370,7 +370,7 @@ This feature is powered by the knitr package.
 
 This causes some limitations and differences to keep in mind:
 
-  * Inline and fenced code blocks from the same _roxgen block_ share the same evaluation environment. 
+  * Inline and fenced code blocks from the same _roxygen block_ share the same evaluation environment. 
     As a result, variables created in one code block can be reused in another one.
     For example:
     `r code_envs <- brio::read_lines("../tests/testthat/roxygen-block-md-code-envs.R")`

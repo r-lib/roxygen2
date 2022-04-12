@@ -2,6 +2,12 @@
 
 * roxygen2 can once again read UTF-8 paths on windows (#1277).
 
+* `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 
+  imported by your package (#1085).
+
+* Markdown code blocks are always wrapped in `<div class="sourceCode">`
+  even if the language is unknown (#1234).
+
 * roxygen2 no longer generates invalid HTML (#1290).
 
 * All warning messages have been reviewed to hopefully be more informative

@@ -168,6 +168,10 @@ sum <- function(..., na.rm = TRUE) {}
 Indent the second and subsequent lines of a tag so that when scanning the documentation so it's easy to see where one tag ends and the next begins.
 Tags that always span multiple lines (like `@example`) should start on a new line and don't need to be indented.
 
+In most case, the function usage will be automatically derived from the function specification.
+For the cases where it is not, please [file an issue](https://github.com/r-lib/roxygen2/issues) and use `@usage` to override the default with you want.
+If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use `@usage NULL`.
+
 ### S3
 
 -   S3 **generics** are regular functions, so document them as such.
@@ -707,3 +711,4 @@ Use one tag per source file:
 #' @backref src/file.cpp
 #' @backref src/file.h
 ```
+

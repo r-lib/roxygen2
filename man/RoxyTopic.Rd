@@ -20,23 +20,23 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-format}{\code{RoxyTopic$format()}}
-\item \href{#method-is_valid}{\code{RoxyTopic$is_valid()}}
-\item \href{#method-has_section}{\code{RoxyTopic$has_section()}}
-\item \href{#method-get_section}{\code{RoxyTopic$get_section()}}
-\item \href{#method-get_value}{\code{RoxyTopic$get_value()}}
-\item \href{#method-get_rd}{\code{RoxyTopic$get_rd()}}
-\item \href{#method-get_name}{\code{RoxyTopic$get_name()}}
-\item \href{#method-inherits_from}{\code{RoxyTopic$inherits_from()}}
-\item \href{#method-inherits_section_from}{\code{RoxyTopic$inherits_section_from()}}
-\item \href{#method-add}{\code{RoxyTopic$add()}}
-\item \href{#method-add_section}{\code{RoxyTopic$add_section()}}
-\item \href{#method-clone}{\code{RoxyTopic$clone()}}
+\item \href{#method-RoxyTopic-format}{\code{RoxyTopic$format()}}
+\item \href{#method-RoxyTopic-is_valid}{\code{RoxyTopic$is_valid()}}
+\item \href{#method-RoxyTopic-has_section}{\code{RoxyTopic$has_section()}}
+\item \href{#method-RoxyTopic-get_section}{\code{RoxyTopic$get_section()}}
+\item \href{#method-RoxyTopic-get_value}{\code{RoxyTopic$get_value()}}
+\item \href{#method-RoxyTopic-get_rd}{\code{RoxyTopic$get_rd()}}
+\item \href{#method-RoxyTopic-get_name}{\code{RoxyTopic$get_name()}}
+\item \href{#method-RoxyTopic-inherits_from}{\code{RoxyTopic$inherits_from()}}
+\item \href{#method-RoxyTopic-inherits_section_from}{\code{RoxyTopic$inherits_section_from()}}
+\item \href{#method-RoxyTopic-add}{\code{RoxyTopic$add()}}
+\item \href{#method-RoxyTopic-add_section}{\code{RoxyTopic$add_section()}}
+\item \href{#method-RoxyTopic-clone}{\code{RoxyTopic$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-format"></a>}}
-\if{latex}{\out{\hypertarget{method-format}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-format"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-format}{}}}
 \subsection{Method \code{format()}}{
 Format the \code{.Rd} file. It considers the sections in
 particular order, even though Rd tools will reorder them again.
@@ -57,8 +57,8 @@ Character string.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_valid"></a>}}
-\if{latex}{\out{\hypertarget{method-is_valid}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-is_valid"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-is_valid}{}}}
 \subsection{Method \code{is_valid()}}{
 Check if an \code{.Rd} file is valid
 \subsection{Usage}{
@@ -70,8 +70,8 @@ Logical flag, \code{TRUE} for valid \code{.Rd} files
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-has_section"></a>}}
-\if{latex}{\out{\hypertarget{method-has_section}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-has_section"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-has_section}{}}}
 \subsection{Method \code{has_section()}}{
 Check if an \code{.Rd} file has a certain section.
 \subsection{Usage}{
@@ -90,8 +90,8 @@ Logical flag.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_section"></a>}}
-\if{latex}{\out{\hypertarget{method-get_section}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-get_section"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-get_section}{}}}
 \subsection{Method \code{get_section()}}{
 Query a section.
 \subsection{Usage}{
@@ -111,8 +111,8 @@ if the topic has no such section.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_value"></a>}}
-\if{latex}{\out{\hypertarget{method-get_value}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-get_value"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-get_value}{}}}
 \subsection{Method \code{get_value()}}{
 Query the value of a section. This is the value of
 the \link{rd_section} object.
@@ -132,8 +132,8 @@ Value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_rd"></a>}}
-\if{latex}{\out{\hypertarget{method-get_rd}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-get_rd"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-get_rd}{}}}
 \subsection{Method \code{get_rd()}}{
 Get the Rd code of a section.
 \subsection{Usage}{
@@ -152,8 +152,8 @@ Character vector, one element per line.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_name"></a>}}
-\if{latex}{\out{\hypertarget{method-get_name}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-get_name"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-get_name}{}}}
 \subsection{Method \code{get_name()}}{
 Get the value of the \code{name} section. This is the name
 of the Rd topic.
@@ -166,8 +166,8 @@ Character scalar.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-inherits_from"></a>}}
-\if{latex}{\out{\hypertarget{method-inherits_from}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-inherits_from"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-inherits_from}{}}}
 \subsection{Method \code{inherits_from()}}{
 Query the topics this topic inherits \code{type} from.
 \subsection{Usage}{
@@ -186,8 +186,8 @@ A character vector of topic names.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-inherits_section_from"></a>}}
-\if{latex}{\out{\hypertarget{method-inherits_section_from}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-inherits_section_from"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-inherits_section_from}{}}}
 \subsection{Method \code{inherits_section_from()}}{
 Query the topics this topic inherits sections from.
 \subsection{Usage}{
@@ -199,8 +199,8 @@ A character vector of topic names.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add"></a>}}
-\if{latex}{\out{\hypertarget{method-add}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-add"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-add}{}}}
 \subsection{Method \code{add()}}{
 Add one or more sections to the topic.
 \subsection{Usage}{
@@ -222,8 +222,8 @@ then the two sections will be merged.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_section"></a>}}
-\if{latex}{\out{\hypertarget{method-add_section}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-add_section"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-add_section}{}}}
 \subsection{Method \code{add_section()}}{
 Add a section.
 \subsection{Usage}{
@@ -247,8 +247,8 @@ once in \code{self$sections}. This method if for internal use only.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RoxyTopic-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RoxyTopic-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

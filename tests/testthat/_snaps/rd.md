@@ -12,3 +12,31 @@
     [<text>:3] Block must have a @name
     i Either document an existing object or manually specify with @name
 
+# can generate nonASCII document
+
+    Code
+      roxygenise(roclets = "rd")
+    Message
+      i Loading testNonASCII
+      
+      Writing 'printChineseMsg.Rd'
+    Code
+      # Second run should be idempotent
+      roxygenise(roclets = "rd")
+    Message
+      i Loading testNonASCII
+
+# unicode escapes are ok
+
+    Code
+      roxygenise(roclets = "rd")
+    Message
+      i Loading testUtf8Escape
+      
+      Writing 'a.Rd'
+    Code
+      # Second run should be idempotent
+      roxygenise(roclets = "rd")
+    Message
+      i Loading testUtf8Escape
+

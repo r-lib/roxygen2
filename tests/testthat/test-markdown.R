@@ -77,13 +77,6 @@ test_that("special operators get \\code{}, not \\verb{}", {
   expect_equal(markdown("`if`"), "\\code{if}")
 })
 
-test_that("code blocks escape %", {
-  expect_equal(
-    markdown("```\n1:10 %>% mean()\n```"),
-    "\\preformatted{1:10 \\%>\\% mean()\n}"
-  )
-})
-
 test_that("inline code works with < and >", {
   out <- roc_proc_text(rd_roclet(), "
     #' `SELECT <name> FROM <table>`

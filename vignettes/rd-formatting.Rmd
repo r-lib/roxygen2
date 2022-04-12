@@ -350,9 +350,6 @@ Code blocks support knitr chunk options, e.g. to keep the output of several expr
 #' ```
 ```
 
-Some knitr chunk options are reset at the start of every code block, so if you want to change these, you'll have to specify them for every chunk.
-These are currently `r paste0("\x60", names(roxygen2:::knitr_chunk_defaults), "\x60")`.
-
 Plots will create `.png` files in the `man/figures` directory.
 Note that plots in `man/figures` may quickly increase the size of your package.
 The file names are created from the chunk names.
@@ -399,7 +396,7 @@ This causes some limitations and differences to keep in mind:
     ```
   * The code blocks are run every time you call `roxygenize()` (or `devtools::document()`) to generated the Rd files.
   * Some knitr chunk options are reset at the start of every code block, so if you want to change these, you'll have to specify them for every chunk.
-    These are currently `error`, `fig.path`, `fig.process`.
+    These are currently `r paste0("\x60", names(roxygen2:::knitr_chunk_defaults), "\x60")`.
   * Some knitr options might not create meaningful output.
   * The Markdown code runs every time you call `roxygenize()` (or `devtools::document()`) to generate the Rd files.
     This potentially makes `roxygenize()` (much) slower.
@@ -408,7 +405,6 @@ This causes some limitations and differences to keep in mind:
     The resulting markdown from some of these methods may not be supported by roxygen's subset of markdown (see `vignette("rd.Rmd")`). 
     You can always override the automatic methods, and have your R calls return
     valid markdown as a character vector, wrapped in `knitr::asis_output()`. 
-  * Some knitr options might not create meaningful output.
 
 Also recall that everything *outside* of inline or fenced code is *not* handled by rmarkdown, but by roxgen.
 Not all features from rmarkdown are available.

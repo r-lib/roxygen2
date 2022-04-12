@@ -76,7 +76,7 @@ eval_code_node <- function(node, env) {
   }
   old_opts <- knitr::opts_chunk$get()
   purrr::exec(opts_chunk$set, knitr_chunk_defaults)
-  on.exit(purrr::exec(opts_chunk$set, old_opts), add = TRUE, after = FALSE)
+  withr::defer(purrr::exec(opts_chunk$set, old_opts))
   knit(text = text, quiet = TRUE, envir = env)
 }
 

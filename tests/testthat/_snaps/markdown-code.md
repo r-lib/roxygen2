@@ -1,26 +1,22 @@
-# various errors
+# multi-line inline code gives useful warning
 
     Code
-      roc_proc_text(rd_roclet(),
-      "\n      #' Title\n      #'\n      #' Description --`r 1 +\n      #'   1`--\n      #' @md\n      #' @name dummy\n      NULL")[[
-        1]]
+      out <- roc_proc_text(rd_roclet(), block)[[1]]
     Condition
-      Error:
-      ! [<text>:4] @description in inline code: multi-line `r ` markup is not supported
+      Warning:
+      [<text>:4] @description failed to evaluate inline markdown code
+      Caused by error:
+      ! multi-line `r ` markup is not supported
+
+# inline code gives useful warning
+
     Code
-      roc_proc_text(rd_roclet(),
-      "\n      #' Title\n      #'\n      #' Description --`r 1 + 'a'`--\n      #' @md\n      #' @name dummy\n      NULL")[[
-        1]]
+      out <- roc_proc_text(rd_roclet(), block)[[1]]
     Condition
-      Error:
-      ! [<text>:4] @description in inline code: non-numeric argument to binary operator
-    Code
-      roc_proc_text(rd_roclet(),
-      "\n      #' Title\n      #'\n      #' Description --`r 1 + `--\n      #' @md\n      #' @name dummy\n      NULL")[[
-        1]]
-    Condition
-      Error:
-      ! [<text>:4] @description in inline code: <text>:2:0: unexpected end of input
+      Warning:
+      [<text>:4] @description failed to evaluate inline markdown code
+      Caused by error in `parse()`:
+      ! <text>:2:0: unexpected end of input
       1: 1 + 
          ^
 

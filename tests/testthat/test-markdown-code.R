@@ -53,38 +53,36 @@ test_that("NULL creates no text", {
   )
 })
 
-test_that("various errors", {
-  expect_snapshot(error = TRUE, {
 
-    # multi-line inline code block
-    roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' Description --`r 1 +
-      #'   1`--
-      #' @md
-      #' @name dummy
-      NULL"
-      )[[1]]
+test_that("multi-line inline code gives useful warning", {
+  block <- "
+    #' Title
+    #'
+    #' `r 1 +
+    #' 1`
+    #' @md
+    foo <- function() {}
+  "
 
-    # evaluation errors are reported nicely
-    roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' Description --`r 1 + 'a'`--
-      #' @md
-      #' @name dummy
-      NULL")[[1]]
+  expect_snapshot(
+    out <- roc_proc_text(rd_roclet(), block)[[1]]
+  )
+  expect_equal(out$get_value("description"), "\\verb{r 1 + 1}")
+})
 
-    # parse errors are reported nicely
-    roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' Description --`r 1 + `--
-      #' @md
-      #' @name dummy
-      NULL")[[1]]
-  })
+test_that("inline code gives useful warning", {
+  block <- "
+    #' Title
+    #'
+    #' `r 1 + `
+    #' @md
+    foo <- function() {}
+  "
+
+  expect_snapshot(
+    out <- roc_proc_text(rd_roclet(), block)[[1]]
+  )
+  expect_equal(out$get_value("description"), "\\verb{r 1 + }")
 })
 
 test_that("interleaving fences and inline code", {

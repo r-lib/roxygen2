@@ -284,7 +284,7 @@ object_topic <- function(value, alias, type) {
     `function` = alias,
     package = alias,
     data = alias,
-    stop("Unsupported type '", type, "'", call. = FALSE)
+    cli::cli_abort("Unsupported type {.str {type}}", .internal = TRUE)
   )
 }
 

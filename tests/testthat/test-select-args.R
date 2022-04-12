@@ -1,9 +1,11 @@
-test_that("errors on invalid input", {
-  expect_error(select_args_text(sum, "-xlab:"), "Failed to parse")
-  expect_error(select_args_text(sum, '"a"'), "numbers")
+test_that("warns on invalid input", {
+  tag <- roxy_test_tag()
 
-  f <- function(x, y, z) {}
-  expect_error(select_args_text(f, "-x:z"), "numbers")
+  expect_snapshot({
+    select_args_text(sum, "-xlab:", tag)
+    select_args_text(sum, '"a"', tag)
+    select_args_text(function(x, y, z) {}, "-x:z", tag)
+  })
 })
 
 test_that("positive initial values starts from nothing", {

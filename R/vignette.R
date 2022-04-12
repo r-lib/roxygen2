@@ -43,7 +43,7 @@ vign_outdated <- function(vign) {
 vign_update <- function(vign) {
   if (!vign_outdated(vign)) return(FALSE)
 
-  message("Rebuilding ", basename(vign))
+  cli::cli_inform("Rebuilding {.file {basename(vign)}}")
   output <- tools::buildVignette(vign, dirname(vign), tangle = FALSE,
     clean = FALSE)
 
@@ -55,7 +55,7 @@ vign_update_all <- function(pkg_path) {
   if (!file.exists(vig_path)) return()
 
   if (file.exists(file.path(vig_path, "Makefile"))) {
-    message("Updating vignettes with make")
+    cli::cli_inform("Updating vignettes with make")
 
     make <- Sys.getenv("MAKE", "make")
     old <- setwd(vig_path)
@@ -63,7 +63,7 @@ vign_update_all <- function(pkg_path) {
 
     system(make)
   } else {
-    message("Updating vignettes")
+    cli::cli_inform("Updating vignettes")
 
     vigs <- tools::pkgVignettes(dir = pkg_path)
     invisible(map_lgl(vigs$docs, vign_update))

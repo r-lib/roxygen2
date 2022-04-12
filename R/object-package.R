@@ -19,7 +19,7 @@ package_seealso_urls <- function(desc) {
 package_authors <- function(desc) {
   authors <- tryCatch(eval(parse(text = desc$`Authors@R` %||% "")),
     error = function(e) {
-      warning(e)
+      cli::cli_warn("Failed to evaluate Authors@R.", parent = e)
       NULL
     }
   )
@@ -42,7 +42,7 @@ package_authors <- function(desc) {
 
 author_desc <- function(x) {
   if (inherits(x, "person")) {
-    stop("person class must be stripped", call. = FALSE)
+    cli::cli_abort("Person class must be stripped", .internal = FALSE)
   }
 
   desc <- paste0(x$given, collapse = " ")

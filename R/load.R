@@ -82,11 +82,11 @@ find_load_strategy <- function(x, option = roxy_meta_get("load", "pkgload")) {
   if (is.null(x)) {
     x <- option
     if (!is.character(x) || length(x) != 1) {
-      abort("roxygen2 `load` option must be a string")
+      cli::cli_abort("roxygen2 {.code load} option must be a string")
     }
   } else {
     if (!is.character(x) || length(x) != 1) {
-      abort("`load_code` must be a string or function")
+      cli::cli_abort("{.code load_code} must be a string or function")
     }
   }
 
@@ -94,6 +94,6 @@ find_load_strategy <- function(x, option = roxy_meta_get("load", "pkgload")) {
     pkgload = load_pkgload,
     source = load_source,
     installed = load_installed,
-    abort("Unknown value of `load` option")
+    cli::cli_abort("Unknown value of {.code load} option")
   )
 }

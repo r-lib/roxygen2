@@ -40,16 +40,16 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 
 Either set in \code{DESCRIPTION}:
 
-\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
-}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
+}\if{html}{\out{</div>}}
 
 Or if longer, you can put in \verb{/man/roxygen/meta.R}:
 
-\preformatted{list(
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(
   markdown = TRUE,
   load = "installed"
 )
-}
+}\if{html}{\out{</div>}}
 }
 
 \keyword{internal}

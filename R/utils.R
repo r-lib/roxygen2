@@ -111,14 +111,6 @@ compact <- function(x) {
   x[!map_lgl(x, is.null)]
 }
 
-# Parse DESCRIPTION into convenient format
-read.description <- function(file) {
-  dcf <- desc::desc(file = file)
-
-  fields <- dcf$fields()
-  purrr::map(purrr::set_names(fields), ~ dcf$get_field(.x))
-}
-
 invert <- function(x) {
   if (length(x) == 0) return()
   stacked <- utils::stack(x)

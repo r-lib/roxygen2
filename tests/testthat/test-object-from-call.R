@@ -10,7 +10,7 @@ test_that("finds package description", {
   obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
   expect_s3_class(obj, "package")
   expect_equal(obj$alias, "_PACKAGE")
-  expect_equal(obj$value$desc$Package, "testEagerData")
+  expect_equal(obj$value$desc$get_field("Package"), "testEagerData")
 })
 
 test_that("finds datasets given by name", {

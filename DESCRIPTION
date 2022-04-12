@@ -37,7 +37,6 @@ Imports:
     xml2
 Suggests: 
     covr,
-    mockr,
     R.methodsS3,
     R.oo,
     rmarkdown,

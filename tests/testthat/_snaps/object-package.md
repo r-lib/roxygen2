@@ -27,7 +27,7 @@
 # useful message if Authors@R is corrupted
 
     Code
-      package_authors(list(`Authors@R` = "1 + "))
+      package_authors("1 + ")
     Condition
       Warning:
       Failed to evaluate Authors@R.
@@ -38,7 +38,7 @@
     Output
       NULL
     Code
-      package_authors(list(`Authors@R` = "stop('Uhoh')"))
+      package_authors("stop('Uhoh')")
     Condition
       Warning:
       Failed to evaluate Authors@R.

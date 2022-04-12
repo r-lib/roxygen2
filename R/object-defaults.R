@@ -40,23 +40,35 @@ object_defaults.data <- function(x, block) {
 object_defaults.package <- function(x, block) {
   desc <- x$value$desc
 
-  description <- as.character(desc$Description)
-  description <- package_url_parse(description)
   logo_path <- file.path(x$value$path, "man", "figures", "logo.png")
   if (file.exists(logo_path)) {
-    fig <- "\\if{html}{\\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}"
-    description <- paste0(fig, "\n\n", description)
+    fig <- "\\if{html}{\\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}\n\n"
+  } else {
+    fig <- ""
   }
+
+  name <- desc$get_field("Package")
+  title <- desc$get_field("Title")
+
+  description <- desc$get_field("Description")
+  description <- package_url_parse(description)
+  description <- paste0(fig, description)
+
+  seealso <- package_seealso(
+    desc$get_field("URL", NULL),
+    desc$get_field("BugReports", NULL)
+  )
+  authors <- package_authors(desc$get_field("Authors@R", NULL))
 
   list(
     roxy_generated_tag(block, "docType", "package"),
-    roxy_generated_tag(block, "name", package_suffix(desc$Package)),
+    roxy_generated_tag(block, "name", package_suffix(name)),
     # "NULL" prevents addition of default aliases, see also #202
-    roxy_generated_tag(block, "aliases", paste("NULL", desc$Package, package_suffix(desc$Package))),
-    roxy_generated_tag(block, "title", paste0(desc$Package, ": ", desc$Title)),
+    roxy_generated_tag(block, "aliases", paste("NULL", name, package_suffix(name))),
+    roxy_generated_tag(block, "title", paste0(name, ": ", title)),
     roxy_generated_tag(block, "description", description),
-    roxy_generated_tag(block, "seealso", package_seealso(desc)),
-    roxy_generated_tag(block, "author", package_authors(desc))
+    roxy_generated_tag(block, "seealso", seealso),
+    roxy_generated_tag(block, "author", authors)
   )
 }
 

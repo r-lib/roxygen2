@@ -24,8 +24,7 @@ test_that("appropriate knit print method for fenced and inline is applied", {
   knit_print.foo <- function(x, inline = FALSE, ...) {
     knitr::asis_output(ifelse(inline, "inline", "fenced"))
   }
-  library(knitr)
-  on.exit(detach(package:knitr), add = TRUE, after = FALSE)
+  withr::local_package("knitr")
   registerS3method(
     genname = "knit_print", 
     class = "foo", 

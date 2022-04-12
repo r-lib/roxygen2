@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* roxygen2 can once again read UTF-8 paths on windows (#1277).
+
 * `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 
   imported by your package (#1085).
 

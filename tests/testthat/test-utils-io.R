@@ -63,12 +63,11 @@ test_that("write_lines writes windows newlines for files with windows newlines, 
   expect_equal(readChar(empty_file, 100), "baz\n")
 })
 
-
 test_that("write_lines writes unix-style line endings.", {
+  path <- test_path("escapes.Rd")
   # skip if checked on windows with autocrlf = true
   skip_if(detect_line_ending(path) == "\r\n")
 
-  path <- test_path("escapes.Rd")
   temp <- withr::local_tempfile()
   write_lines(read_lines(path), temp)
 

@@ -5,7 +5,6 @@
   with console and R markdown behavior. `x <- "foo"` no longer inserts anything
   into the resulting documentation, but `x <- "foo"; x` will.
 
-* The new `@exmaplesIf` tag can be used to create conditional
 * `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 
   imported by your package (#1085).
 

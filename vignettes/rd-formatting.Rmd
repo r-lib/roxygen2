@@ -341,10 +341,10 @@ cat(
 )
 ```
 
-Code blocks support knitr chunk options, e.g. to keep the output of several expressions together, you can specify `results= "hold"`:
+Code blocks support knitr chunk options, e.g. to keep the output of several expressions together, you can specify `results="hold"`:
 
 ```r
-#' ```{r results = "hold"}
+#' ```{r results="hold"}
 #' names(mtcars)
 #' nrow(mtcars)
 #' ```

@@ -3,7 +3,6 @@
     Code
       write_if_different(path, "a <- 2")
     Message
-      
       Writing 'test.R'
     Output
       [1] TRUE

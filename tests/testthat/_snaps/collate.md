@@ -11,7 +11,6 @@
     Code
       update_collate(".")
     Message
-      
       Updating collate directive in './DESCRIPTION'
     Code
       # Second run should be idempotent

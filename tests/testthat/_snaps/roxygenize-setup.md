@@ -11,9 +11,7 @@
     Code
       roxygen_setup(cur_version = "8.0.0")
     Message
-      
       First time using roxygen2. Upgrading automatically...
-      
       Setting `RoxygenNote` to "8.0.0"
     Output
       [1] TRUE
@@ -46,12 +44,10 @@
       roxygen_setup(cur_version = "8.0.0")
     Message
       --------------------------------------------------------------------------------
-      
       Changes in roxygen2 7.0.0:
       * `%` is now escaped automatically in Markdown mode.
       Please carefully check .Rd files for changes
       --------------------------------------------------------------------------------
-      
       Setting `RoxygenNote` to "8.0.0"
     Output
       [1] FALSE

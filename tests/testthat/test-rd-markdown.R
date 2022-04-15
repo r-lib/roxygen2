@@ -13,6 +13,26 @@ test_that("generic keys produce expected output", {
   expect_equal(out$get_value("author"), "test")
 })
 
+
+test_that("author duplicated get removed", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' @name a
+    #' @title a
+    #' @author A
+    NULL
+
+    #' @name b
+    #' @rdname a
+    #' @author A
+    NULL
+
+    #' @name c
+    #' @rdname a
+    #' @author B
+    NULL")[[1]]
+  expect_equal(out$get_value("author"), c("A", "B"))
+})
+
 test_that("@format overrides defaults", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title

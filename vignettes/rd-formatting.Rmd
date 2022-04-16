@@ -361,7 +361,7 @@ The file names are created from the chunk names.
 #' ```
 ```
 
-## Gotchas
+## Details
 
 This feature is powered by the knitr package.
 

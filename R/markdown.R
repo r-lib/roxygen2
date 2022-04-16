@@ -14,10 +14,42 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
   markdown_pass2(escaped_text, tag = tag, sections = sections)
 }
 
-#' Expand R code
+#' Expand the embedded inline code
 #'
 #' @details
-#' See `vignette("rd-formatting")`.
+#' For example this becomes two: `r 1+1`.
+#' Variables can be set and then reused, within the same
+#' tag: `r x <- 100; NULL`
+#' The value of `x` is `r x`.
+#'
+#' We have access to the internal functions of the package, e.g.
+#' since this is _roxygen2_, we can refer to the internal `markdown`
+#' function, and this is `TRUE`: `r is.function(markdown)`.
+#'
+#' To insert the name of the current package: `r packageName()`.
+#'
+#' The `iris` data set has `r ncol(iris)` columns:
+#' `r paste0("\x60\x60", colnames(iris), "\x60\x60", collapse = ", ")`.
+#'
+#' ```{r}
+#' # Code block demo
+#' x + 1
+#' ```
+#'
+#' Chunk options:
+#'
+#' ```{r results = "hold"}
+#' names(mtcars)
+#' nrow(mtcars)
+#' ```
+#'
+#' Plots:
+#'
+#' ```{r test-figure}
+#' plot(1:10)
+#' ```
+#' 
+#' Also see `vignette("rd-formatting")`.
 #' 
 #' @param text Input text.
 #' @return 

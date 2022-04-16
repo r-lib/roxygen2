@@ -2,7 +2,7 @@
 % Please edit documentation in R/markdown.R
 \name{markdown_pass1}
 \alias{markdown_pass1}
-\title{Expand R code}
+\title{Expand the embedded inline code}
 \usage{
 markdown_pass1(text)
 }
@@ -14,9 +14,49 @@ Text with R code expanded.
 A character vector of the same length as the input \code{text}.
 }
 \description{
-Expand R code
+Expand the embedded inline code
 }
 \details{
-See \code{vignette("rd-formatting")}.
+For example this becomes two: 2.
+Variables can be set and then reused, within the same
+tag:
+The value of \code{x} is 100.
+
+We have access to the internal functions of the package, e.g.
+since this is \emph{roxygen2}, we can refer to the internal \code{markdown}
+function, and this is \code{TRUE}: TRUE.
+
+To insert the name of the current package: roxygen2.
+
+The \code{iris} data set has 5 columns:
+\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Code block demo
+x + 1
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] 101
+}\if{html}{\out{</div>}}
+
+Chunk options:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{names(mtcars)
+nrow(mtcars)
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat"
+##  [6] "wt"   "qsec" "vs"   "am"   "gear"
+## [11] "carb"
+## [1] 32
+}\if{html}{\out{</div>}}
+
+Plots:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{plot(1:10)
+}\if{html}{\out{</div>}}
+
+\figure{test-figure-1.png}
+
+Also see \code{vignette("rd-formatting")}.
 }
 \keyword{internal}

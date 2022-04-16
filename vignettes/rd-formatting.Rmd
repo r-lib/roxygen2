@@ -401,7 +401,7 @@ This causes some limitations and differences to keep in mind:
   * The Markdown code runs every time you call `roxygenize()` (or `devtools::document()`) to generate the Rd files.
     This potentially makes `roxygenize()` (much) slower.
     You can turn on knitr caching as usual, but make sure to omit the cache from the package.
-  * Knitr calls the appropriate `print()` or (if available) `knitr::knit_print()` methods on the result.
+  * knitr calls the appropriate `print()` or (if available) `knitr::knit_print()` methods on the result.
     The resulting markdown from some of these methods may not be supported by roxygen's subset of markdown (see `vignette("rd.Rmd")`). 
     You can always override the automatic methods, and have your R calls return
     valid markdown as a character vector, wrapped in `knitr::asis_output()`. 

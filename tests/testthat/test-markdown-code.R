@@ -21,14 +21,11 @@ test_that("use same env within, but not across blocks", {
 })
 
 test_that("appropriate knit print method for fenced and inline is applied", {
-  knit_print.foo <- function(x, inline = FALSE, ...) {
-    knitr::asis_output(ifelse(inline, "inline", "fenced"))
-  }
-  withr::local_package("knitr")
-  registerS3method(
-    genname = "knit_print", 
-    class = "foo", 
-    method = "knit_print.foo"
+  rlang::local_bindings(
+    knit_print.foo = function(x, inline = FALSE, ...) {
+      knitr::asis_output(ifelse(inline, "inline", "fenced"))
+    },
+    .env = globalenv()
   )
   out1 <- roc_proc_text(rd_roclet(), "
     #' @title Title `r structure('default', class = 'foo')`

@@ -323,7 +323,7 @@ foo <- function() NULL
     ```{r code = roxygen2:::markdown(backtick)}
     ```
     
-3. is finally turned into Rd documentation using roxgen, yielding:
+3. is finally turned into Rd documentation using roxygen, yielding:
 
     ```{r, echo=FALSE, results="asis"}
     cat(
@@ -443,7 +443,7 @@ This causes some limitations and differences to keep in mind:
     You can always override the automatic methods, and have your R calls return
     valid markdown as a character vector, wrapped in `knitr::asis_output()`. 
 
-Also recall that everything *outside* of inline or fenced code is *not* handled by rmarkdown, but by roxgen.
+Also recall that everything *outside* of inline or fenced code is *not* handled by rmarkdown, but by roxygen.
 Not all features from rmarkdown are available.
 
 # Roxygen and Rd tags *not* parsed as Markdown

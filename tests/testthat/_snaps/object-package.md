@@ -24,3 +24,26 @@
     Output
       [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID}) (extra)"
 
+# useful message if Authors@R is corrupted
+
+    Code
+      package_authors("1 + ")
+    Condition
+      Warning:
+      Failed to evaluate Authors@R.
+      Caused by error in `parse()`:
+      ! <text>:2:0: unexpected end of input
+      1: 1 + 
+         ^
+    Output
+      NULL
+    Code
+      package_authors("stop('Uhoh')")
+    Condition
+      Warning:
+      Failed to evaluate Authors@R.
+      Caused by error:
+      ! Uhoh
+    Output
+      NULL
+

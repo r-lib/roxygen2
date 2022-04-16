@@ -21,7 +21,7 @@ Depends:
     R (>= 3.3)
 Imports: 
     brew,
-    cli,
+    cli (>= 3.2.0.9000),
     commonmark,
     desc (>= 1.2.0),
     digest,
@@ -37,7 +37,6 @@ Imports:
     xml2
 Suggests: 
     covr,
-    mockr,
     R.methodsS3,
     R.oo,
     rmarkdown,
@@ -54,3 +53,5 @@ Language: en-GB
 Roxygen: list(markdown = TRUE, load = "installed")
 RoxygenNote: 7.1.2.9000
 SystemRequirements: C++11
+Remotes:  
+    r-lib/cli

@@ -1,64 +1,40 @@
-test_that("detect_line_ending works", {
-  # write files with various newlines
-  win_nl <- tempfile()
-  win_nl_con <- file(win_nl, "wb")
+test_that("write_lines uses specified line_ending", {
+  win_nl <- withr::local_tempfile()
+  write_lines("baz", win_nl, line_ending = "\r\n")
+  expect_equal(readChar(win_nl, 100), "baz\r\n")
 
-  unix_nl <- tempfile()
-  unix_nl_con <- file(unix_nl, "wb")
+  unix_nl <- withr::local_tempfile()
+  write_lines("baz", unix_nl, line_ending = "\n")
+  expect_equal(readChar(unix_nl, 100), "baz\n")
+})
 
-  non_existent_file <- tempfile()
-
-  empty_file <- tempfile()
-  file.create(empty_file)
-
-  on.exit({
-    unlink(c(win_nl, unix_nl, empty_file))
-  })
-
-  base::writeLines(c("foo", "bar"), win_nl_con, sep = "\r\n")
-  close(win_nl_con)
-
-  base::writeLines(c("foo", "bar"), unix_nl_con, sep = "\n")
-  close(unix_nl_con)
-
+test_that("detect_line_ending captures existing line ending", {
+  win_nl <- withr::local_tempfile()
+  write_lines("baz", win_nl, line_ending = "\r\n")
   expect_equal(detect_line_ending(win_nl), "\r\n")
+
+  unix_nl <- withr::local_tempfile()
+  write_lines("baz", unix_nl, line_ending = "\n")
   expect_equal(detect_line_ending(unix_nl), "\n")
+})
+
+test_that("detect_line_ending defaults to unix", {
+  non_existent_file <- withr::local_tempfile()
   expect_equal(detect_line_ending(non_existent_file), "\n")
+
+  empty_file <- withr::local_tempfile()
+  file.create(empty_file)
   expect_equal(detect_line_ending(empty_file), "\n")
 })
 
-test_that("write_lines writes windows newlines for files with windows newlines, and unix newlines otherwise", {
-  # write files with various newlines
-  win_nl <- tempfile()
-  win_nl_con <- file(win_nl, "wb")
-
-  unix_nl <- tempfile()
-  unix_nl_con <- file(unix_nl, "wb")
-
-  non_existent_file <- tempfile()
-
-  empty_file <- tempfile()
-  file.create(empty_file)
-
-  on.exit({
-    unlink(c(win_nl, unix_nl, empty_file, non_existent_file))
-  })
-
-  base::writeLines(c("foo", "bar"), win_nl_con, sep = "\r\n")
-  close(win_nl_con)
-
-  base::writeLines(c("foo", "bar"), unix_nl_con, sep = "\n")
-  close(unix_nl_con)
-
+test_that("write_lines preserves existing line ending", {
+  win_nl <- withr::local_tempfile()
+  write_lines("baz", win_nl, line_ending = "\r\n")
   write_lines("baz", win_nl)
   expect_equal(readChar(win_nl, 100), "baz\r\n")
 
+  unix_nl <- withr::local_tempfile()
+  write_lines("baz", unix_nl, line_ending = "\n")
   write_lines("baz", unix_nl)
   expect_equal(readChar(unix_nl, 100), "baz\n")
-
-  write_lines("baz", non_existent_file)
-  expect_equal(readChar(non_existent_file, 100), "baz\n")
-
-  write_lines("baz", empty_file)
-  expect_equal(readChar(empty_file, 100), "baz\n")
 })

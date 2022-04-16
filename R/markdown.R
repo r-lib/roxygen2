@@ -1,13 +1,10 @@
 markdown <- function(text, tag = NULL, sections = FALSE) {
   tag <- tag %||% list(file = NA, line = NA)
-  tryCatch(
-    expanded_text <- markdown_pass1(text),
+  expanded_text <- tryCatch(
+    markdown_pass1(text),
     error = function(e) {
-      message <- paste0(
-        if (!is.na(tag$file)) paste0("[", tag$file, ":", tag$line, "] "),
-        "@", tag$tag, " in inline code: ", e$message
-      )
-      stop(message, call. = FALSE)
+      warn_roxy_tag(tag, "failed to evaluate inline markdown code", parent = e)
+      text
     }
   )
   escaped_text <- escape_rd_for_md(expanded_text)
@@ -124,7 +121,7 @@ str_set_all_pos <- function(text, pos, value, nodes) {
   # for now we just simply error for multi-line inline code.
   types <- xml_name(nodes)
   if (any(types == "code" & pos$start_line != pos$end_line)) {
-    stop("multi-line `r ` markup is not supported")
+    cli::cli_abort("multi-line `r ` markup is not supported", call = NULL)
   }
 
   # Need to split the string, because of the potential multi-line

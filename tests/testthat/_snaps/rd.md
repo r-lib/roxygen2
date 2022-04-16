@@ -18,7 +18,6 @@
       roxygenise(roclets = "rd")
     Message
       i Loading testNonASCII
-      
       Writing 'printChineseMsg.Rd'
     Code
       # Second run should be idempotent
@@ -32,11 +31,18 @@
       roxygenise(roclets = "rd")
     Message
       i Loading testUtf8Escape
-      
       Writing 'a.Rd'
     Code
       # Second run should be idempotent
       roxygenise(roclets = "rd")
     Message
       i Loading testUtf8Escape
+
+# automatically deletes unused files
+
+    Code
+      roxygenise()
+    Message
+      i Loading empty
+      Deleting 'test.Rd'
 

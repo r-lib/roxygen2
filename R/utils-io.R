@@ -1,5 +1,5 @@
-readLines <- function(...) stop("Use read_lines!")
-writeLines <- function(...) stop("Use write_lines!")
+readLines <- function(...) cli::cli_abort("Use read_lines!", .internal = TRUE)
+writeLines <- function(...) cli::cli_abort("Use write_lines!", .internal = TRUE)
 
 read_lines <- function(path, n = -1L) {
   base::readLines(path, n = n, encoding = "UTF-8", warn = FALSE)

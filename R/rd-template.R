@@ -42,7 +42,9 @@ template_find <- function(base_path, template_name) {
   path_exists <- file.exists(path)
 
   if (!any(path_exists)) {
-    stop("Can't find template '", template_name, "'", call. = FALSE)
+    # This should really use warn_roxy_tag() but it's not worth refactoring
+    # for this rarely used feature
+    cli::cli_abort("Can't find template {.str {template_name}}", call = NULL)
   }
 
   path[path_exists][[1]]

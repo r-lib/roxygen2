@@ -186,7 +186,7 @@ str_sub_same <- function(str, repl, id) {
   repl <- repl[ order(repl$start), ]
 
   if (is.unsorted(repl$end) || is.unsorted(repl$argend)) {
-    stop("Replacement intervals must not overlap")
+    cli::cli_abort("Replacement intervals must not overlap", .internal = TRUE)
   }
 
   for (i in seq_len(nrow(repl))) {

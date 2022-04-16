@@ -95,7 +95,7 @@ write_if_different <- function(path, contents, check = TRUE) {
 
 same_contents <- function(path, contents) {
   if (length(contents) != 1) {
-    stop("Internal roxygen error: `contents` must be character(1)")
+    cli::cli_abort("`contents` must be character(1)", .internal = TRUE)
   }
   if (!file.exists(path)) return(FALSE)
 
@@ -109,14 +109,6 @@ same_contents <- function(path, contents) {
 
 compact <- function(x) {
   x[!map_lgl(x, is.null)]
-}
-
-# Parse DESCRIPTION into convenient format
-read.description <- function(file) {
-  dcf <- desc::desc(file = file)
-
-  fields <- dcf$fields()
-  purrr::map(purrr::set_names(fields), ~ dcf$get_field(.x))
 }
 
 invert <- function(x) {

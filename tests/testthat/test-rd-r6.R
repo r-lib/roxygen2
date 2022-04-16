@@ -1,19 +1,3 @@
-
-test_that("extract_r6_data without source refs", {
-  txt <-
-    "R6::R6Class(
-       public = list(
-         field1 = NULL,
-         meth1 = function(Z) { },
-         meth2 = function(Z = 10, ...) { },
-         field2 = \"foobar\",
-         meth3 = function() { }
-       )
-     )"
-  C <- eval(parse(text = txt, keep.source = FALSE))
-  expect_error(extract_r6_data(C), "without source references")
-})
-
 test_that("extract_r6_methods", {
   txt <-
     "R6::R6Class(

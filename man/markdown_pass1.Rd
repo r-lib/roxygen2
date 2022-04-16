@@ -44,8 +44,7 @@ Chunk options:
 nrow(mtcars)
 }\if{html}{\out{</div>}}
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat"
-##  [6] "wt"   "qsec" "vs"   "am"   "gear"
+\if{html}{\out{<div class="sourceCode">}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
 ## [11] "carb"
 ## [1] 32
 }\if{html}{\out{</div>}}

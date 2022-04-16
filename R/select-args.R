@@ -1,16 +1,16 @@
-select_args_text <- function(fun, select = "") {
+select_args_text <- function(fun, select = "", topic) {
   pieces <- strsplit(select, " +")[[1]]
 
   tryCatch(
     {
       parsed <- lapply(pieces, function(x) parse(text = x)[[1]])
+      select_args(fun, parsed)
     },
     error = function(e) {
-      stop("Failed to parse: '", select, "'", call. = FALSE)
+      warn_roxy_tag(topic, "failed to parse argument specification", parent = e)
+      character()
     }
   )
-
-  select_args(fun, parsed)
 }
 
 # Figure out which arguments that the user wants given a function and
@@ -50,14 +50,24 @@ select_args <- function(fun, select = list()) {
 }
 
 select_check <- function(x, call) {
-  if (is.numeric(x) && (all(x > 0) || all(x < 0)))
-    return()
+  if (!is.numeric(x)) {
+    cli::cli_abort(c(
+      "Argument specification must evaluate to a numeric vector",
+      "Problem in {.code {deparse(call)}}"
+    ))
+  }
 
-  stop(
-    "Arguments must evaluate to all positive or negative numbers.\n",
-    "Problem: ", paste(deparse(call), collapse = ""),
-    call. = FALSE
-  )
+  if (!(all(x > 0) || all(x < 0))) {
+    cli::cli_abort(
+      c(
+        "Argument specification must be all positive or all negative, not a mixture",
+        i = "Problem in {.code {deparse(call)}}"
+      ),
+      call = NULL
+    )
+  }
+
+  invisible()
 }
 
 select_sign <- function(x) {

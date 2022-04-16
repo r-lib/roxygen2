@@ -174,7 +174,8 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
 cpp11::strings find_includes(std::string path) {
   std::vector<std::string> includes;
 
-  std::ifstream file(path.c_str());
+  std::string path_native = Rf_translateChar(cpp11::r_string(path));
+  std::ifstream file(path_native.c_str());
   if (!file.good())
     cpp11::stop("Failed to open %s", path.c_str());
 

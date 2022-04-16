@@ -17,11 +17,8 @@ test_that("update_collate() checks that directory exists", {
 test_that("Collate field unchanged when no @includes", {
   local_package_copy(test_path('testCollateNoIncludes'))
 
-  old_desc <- read.description("DESCRIPTION")
   update_collate(".")
-  new_desc <- read.description("DESCRIPTION")
-
-  expect_equal(old_desc, new_desc)
+  expect_equal(desc::desc_get_field("Collate"), "b.r a.r")
 })
 
 test_that("DESCRIPTION file is re-written only if collate changes", {
@@ -32,4 +29,12 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
     "Second run should be idempotent"
     update_collate(".")
   })
+})
+
+test_that("can read from file name with utf-8 path", {
+  path <- withr::local_tempfile(
+    pattern = "Universit\u00e0-",
+    lines = c("#' @include foo.R", NULL)
+  )
+  expect_equal(find_includes(path), "foo.R")
 })

@@ -173,7 +173,7 @@ inherit_dot_params <- function(topic, topics, env) {
 
   # Need to find formals for each source
   funs <- lapply(inheritors$source, function(x) eval(parse(text = x), envir = env))
-  args <- map2(funs, inheritors$args, select_args_text)
+  args <- map2(funs, inheritors$args, select_args_text, topic = topic)
 
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)

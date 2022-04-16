@@ -62,10 +62,3 @@ test_that("write_if_different and end of line", {
   expect_message(write_if_different(tmp, cnt_mix, check = FALSE), "Writing ")
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 })
-
-test_that("Can read UTF-8 DESCRIPTIONS", {
-  expect_equal(
-    read.description(test_path("testNonASCII/DESCRIPTION"))$Author,
-    "Shr\U00EBktan <shrektan@126.com>"
-  )
-})

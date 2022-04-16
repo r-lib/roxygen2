@@ -101,25 +101,14 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
-  mockr::with_mock(
-    read.description = function(...) {
-      list(
-        Package = "roxygen_devtest",
-        Title = "Package Title",
-        Description = "Package description."
-      )
-    },
-    {
-      out <- roc_proc_text(rd_roclet(), "
-        #' Title
-        #'
-        #' @docType package
-        #' @description NULL
-        #' @name pkg
-        '_PACKAGE'
-      ")
-    }
-  )
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' @docType package
+    #' @description NULL
+    #' @name pkg
+    '_PACKAGE'
+  ")
   expect_null(out[[1]]$get_value("description"))
 })
 
@@ -158,7 +147,6 @@ test_that("@details NULL", {
 
 test_that("can generate nonASCII document", {
   local_package_copy(test_path('testNonASCII'))
-  desc::desc_set(RoxygenNote = as.character(packageVersion("roxygen2")))
 
   expect_snapshot({
     roxygenise(roclets = "rd")
@@ -176,7 +164,6 @@ test_that("can generate nonASCII document", {
 
 test_that("unicode escapes are ok", {
   local_package_copy(test_path('testUtf8Escape'))
-  desc::desc_set(RoxygenNote = as.character(packageVersion("roxygen2")))
 
   expect_snapshot({
     roxygenise(roclets = "rd")
@@ -191,17 +178,11 @@ test_that("unicode escapes are ok", {
   expect_true(any(grepl("7\u00b0C", rd)))
 })
 
-test_that("write_lines writes unix-style line endings.", {
-  path <- test_path("escapes.Rd")
+test_that("automatically deletes unused files", {
+  local_package_copy(test_path("empty"))
+  dir.create("man")
+  suppressMessages(roxygenise())
 
-  # skip if checked on windows with autocrlf = true
-  skip_if(detect_line_ending(path) == "\r\n")
-
-  temp_filename <- tempfile()
-  old_binary <- readBin(path, "raw", n = file.info(path)$size)
-  old_text <- read_lines(path)
-  write_lines(old_text, temp_filename)
-  on.exit(unlink(temp_filename), add = TRUE)
-  new_binary <- readBin(temp_filename, "raw", n = file.info(temp_filename)$size)
-  expect_identical(new_binary, old_binary)
+  write_lines(made_by("%"), "man/test.Rd")
+  expect_snapshot(roxygenise())
 })

@@ -36,7 +36,6 @@ Imports:
     utils,
     xml2
 Suggests: 
-    brio,
     covr,
     mockr,
     R.methodsS3,

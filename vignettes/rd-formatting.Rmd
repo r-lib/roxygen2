@@ -278,9 +278,16 @@ Roxygen will interpret the rest of the text within backticks as R code and evalu
 After all such substitutions, the text of the whole tag is interpreted as Markdown, as usual.
 
 A simple example:
-`r simple_inline <- brio::read_lines("../tests/testthat/roxygen-block-md-code-simple-inline.R")`
 
-```{r code = simple_inline}
+```{r echo=FALSE}
+simple_inline <- "#' @title Title `r 1 + 1`
+#' @description Description `r 2 + 2`
+#' @md
+foo <- function() NULL
+"
+```
+
+```{r code=simple_inline}
 ```
 
 will be turned into:
@@ -295,7 +302,13 @@ To markup something as code from within R, you must replace the inner backticks 
 The interpretation from the source all the way to the final Rd documentation goes through three steps.
 For example:
 
-`r backtick <- brio::read_lines("../tests/testthat/roxygen-block-md-code-backtick.R")`
+```{r echo=FALSE}
+backtick <- "#' Title
+#' Description `r paste0('\\x60', 'bar', '\\x60')`
+#' @md
+foo <- function() NULL
+"
+```
 
 ```{r code = backtick}
 ```
@@ -326,9 +339,19 @@ To insert entire blocks of code, enclose them in ` ```{r} `, just like in knitr 
 They go through the same three steps described above for inline code.
 
 For example:
-`r simple_fenced <- brio::read_lines("../tests/testthat/roxygen-block-md-code-simple-fenced.R")`
 
-```{r code = simple_fenced}
+```{r echo=FALSE}
+simple_fenced <- "#' @title Title
+#' @details Details
+#' ```{r lorem}
+#' 1+1
+#' ```
+#' @md
+foo <- function() NULL
+"
+```
+
+```{r code=simple_fenced}
 ```
 
 becomes:
@@ -370,9 +393,23 @@ This causes some limitations and differences to keep in mind:
   * Inline and fenced code blocks from the same _roxygen block_ share the same evaluation environment. 
     As a result, variables created in one code block can be reused in another one.
     For example:
-    `r code_envs <- brio::read_lines("../tests/testthat/roxygen-block-md-code-envs.R")`
     
-    ```{r code = code_envs}
+    ```{r include=FALSE}
+    code_envs <- "#' Title `r baz <- 420` `r baz`
+    #'
+    #' Description `r exists('baz', inherits = FALSE)`
+    #' @md
+    bar <- function() NULL
+
+    #' Title
+    #' 
+    #' Description `r exists('baz', inherits = FALSE)`
+    #' @md
+    zap <- function() NULL
+    "
+    ```
+
+    ```{r code=code_envs}
     ```
     
     becomes:

@@ -1,20 +1,47 @@
 test_that("can eval inline code", {
-  example <- test_path("roxygen-block-md-code-simple-inline.R")
-  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+  out1 <- roc_proc_text(rd_roclet(), "
+
+    #' @title Title `r 1 + 1`
+    #' @description Description `r 2 + 2`
+    #' @md
+    foo <- function() NULL
+    
+  ")[[1]]
   expect_equal(out1$get_value("title"), "Title 2")
   expect_equal(out1$get_value("description"), "Description 4")
 })
 
 test_that("can eval fenced code", {
-  example <- test_path("roxygen-block-md-code-simple-fenced.R")
-  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+  out1 <- roc_proc_text(rd_roclet(), "
+
+    #' @title Title
+    #' @details Details
+    #' ```{r lorem}
+    #' 1+1
+    #' ```
+    #' @md
+    foo <- function() NULL
+    
+  ")[[1]]
   expect_match(out1$get_value("details"), "2")
 })
 
 test_that("use same env within, but not across blocks", {
-  example <- test_path("roxygen-block-md-code-envs.R")
-  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
-  out2 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[2]]
+  example <- "
+    #' Title `r baz <- 420` `r baz`
+    #'
+    #' Description `r exists('baz', inherits = FALSE)`
+    #' @md
+    bar <- function() NULL
+
+    #' Title
+    #' 
+    #' Description `r exists('baz', inherits = FALSE)`
+    #' @md
+    zap <- function() NULL
+  "
+  out1 <- roc_proc_text(rd_roclet(), example)[[1]]
+  out2 <- roc_proc_text(rd_roclet(), example)[[2]]
   expect_equal(out1$get_value("title"), "Title  420")
   expect_equal(out1$get_value("description"), "Description TRUE")
   expect_equal(out2$get_value("description"), "Description FALSE")
@@ -63,8 +90,12 @@ test_that("can create markdown markup piecewise", {
 test_that("can create escaped markdown markup", {
   # this workaround is recommended by @yihui
   # "proper" escaping for inline knitr tracked in https://github.com/yihui/knitr/issues/1704
-  example <- test_path("roxygen-block-md-code-backtick.R")
-  out1 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #' Description `r paste0('\\x60', 'bar', '\\x60')`
+    #' @md
+    foo <- function() NULL
+  ")[[1]]
   expect_match(out1$get_value("title"), "\\code{bar}", fixed = TRUE)
 })
 

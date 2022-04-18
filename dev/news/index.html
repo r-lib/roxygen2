@@ -69,7 +69,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li><p>roxygen2 can once again read UTF-8 paths on windows (<a href="https://github.com/r-lib/roxygen2/issues/1277" class="external-link">#1277</a>).</p></li>
+<ul><li><p>Inline R code is now powered by knitr. Where available, (knit) print methods are applied (<a href="https://github.com/r-lib/roxygen2/issues/1179" class="external-link">#1179</a>). This change alters outputs and brings roxygen in line with console and R markdown behavior. <code>x &lt;- "foo"</code> no longer inserts anything into the resulting documentation, but <code>x &lt;- "foo"; x</code> will.</p></li>
+<li><p>roxygen2 can once again read UTF-8 paths on windows (<a href="https://github.com/r-lib/roxygen2/issues/1277" class="external-link">#1277</a>).</p></li>
 <li><p><code>@exportS3method pkg::generic</code> now works even when <code>pkg::generic</code> isn’t imported by your package (<a href="https://github.com/r-lib/roxygen2/issues/1085" class="external-link">#1085</a>).</p></li>
 <li><p>Markdown code blocks are always wrapped in <code>&lt;div class="sourceCode"&gt;</code> even if the language is unknown (<a href="https://github.com/r-lib/roxygen2/issues/1234" class="external-link">#1234</a>).</p></li>
 <li><p>roxygen2 no longer generates invalid HTML (<a href="https://github.com/r-lib/roxygen2/issues/1290" class="external-link">#1290</a>).</p></li>

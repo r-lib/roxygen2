@@ -1,33 +1,74 @@
-
-test_that("can eval", {
+test_that("can eval inline code", {
   out1 <- roc_proc_text(rd_roclet(), "
+
     #' @title Title `r 1 + 1`
     #' @description Description `r 2 + 2`
     #' @md
-    foo <- function() {}")[[1]]
-
+    foo <- function() NULL
+    
+  ")[[1]]
   expect_equal(out1$get_value("title"), "Title 2")
   expect_equal(out1$get_value("description"), "Description 4")
 })
 
-test_that("uses the same env for a block, but not across blocks", {
+test_that("can eval fenced code", {
   out1 <- roc_proc_text(rd_roclet(), "
-    #' Title `r foobarxxx123 <- 420` `r foobarxxx123`
-    #'
-    #' Description `r exists('foobarxxx123', inherits = FALSE)`
-    #' @md
-    #' @name dummy
-    NULL
 
-    #' Title another
-    #'
-    #' Description `r exists('foobarxxx123', inherits = FALSE)`
+    #' @title Title
+    #' @details Details
+    #' ```{r lorem}
+    #' 1+1
+    #' ```
     #' @md
-    #' @name dummy2
-    NULL")
-  expect_equal(out1$dummy.Rd$get_value("title"), "Title 420 420")
-  expect_equal(out1$dummy.Rd$get_value("description"), "Description TRUE")
-  expect_equal(out1$dummy2.Rd$get_value("description"), "Description FALSE")
+    foo <- function() NULL
+    
+  ")[[1]]
+  expect_match(out1$get_value("details"), "2")
+})
+
+test_that("use same env within, but not across blocks", {
+  example <- "
+    #' Title `r baz <- 420` `r baz`
+    #'
+    #' Description `r exists('baz', inherits = FALSE)`
+    #' @md
+    bar <- function() NULL
+
+    #' Title
+    #' 
+    #' Description `r exists('baz', inherits = FALSE)`
+    #' @md
+    zap <- function() NULL
+  "
+  out1 <- roc_proc_text(rd_roclet(), example)[[1]]
+  out2 <- roc_proc_text(rd_roclet(), example)[[2]]
+  expect_equal(out1$get_value("title"), "Title  420")
+  expect_equal(out1$get_value("description"), "Description TRUE")
+  expect_equal(out2$get_value("description"), "Description FALSE")
+})
+
+test_that("appropriate knit print method for fenced and inline is applied", {
+  rlang::local_bindings(
+    knit_print.foo = function(x, inline = FALSE, ...) {
+      knitr::asis_output(ifelse(inline, "inline", "fenced"))
+    },
+    .env = globalenv()
+  )
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' @title Title `r structure('default', class = 'foo')`
+    #' 
+    #' @details Details
+    #'
+    #' ```{r}
+    #' structure('default', class = 'foo')
+    #' ```
+    #'
+    #' @md
+    #' @name bar
+    NULL
+  ")
+  expect_match(out1$bar.Rd$get_value("details"), "fenced", fixed = TRUE)
+  expect_match(out1$bar.Rd$get_value("title"), "inline", fixed = TRUE)
 })
 
 test_that("can create markdown markup", {
@@ -40,10 +81,22 @@ test_that("can create markdown markup", {
 test_that("can create markdown markup piecewise", {
   expect_identical(
     markdown(
-      "Description [`r paste0('https://url]')`](`r paste0('link text')`)"
+      "Description [`r paste0('https://url')`](`r paste0('link text')`)"
     ),
-    "Description \\link{https://url}](link text)"
+    "Description \\link{https://url}(link text)"
   )
+})
+
+test_that("can create escaped markdown markup", {
+  # this workaround is recommended by @yihui
+  # "proper" escaping for inline knitr tracked in https://github.com/yihui/knitr/issues/1704
+  out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #' Description `r paste0('\\x60', 'bar', '\\x60')`
+    #' @md
+    foo <- function() NULL
+  ")[[1]]
+  expect_match(out1$get_value("title"), "\\code{bar}", fixed = TRUE)
 })
 
 test_that("NULL creates no text", {
@@ -89,7 +142,7 @@ test_that("interleaving fences and inline code", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' @details Details `r x <- 10`
+    #' @details Details `r x <- 10; x`
     #'
     #' ```{r}
     #' y <- x + 10

@@ -12,6 +12,10 @@
 
     Code
       out <- roc_proc_text(rd_roclet(), block)[[1]]
+    Output
+      
+    Message
+      Quitting from lines 1-1 () 
     Condition
       Warning:
       [<text>:4] @description failed to evaluate inline markdown code

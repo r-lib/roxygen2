@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* Inline R code is now powered by knitr. Where available, (knit) print methods 
+  are applied (#1179). This change alters outputs and brings roxygen in line
+  with console and R markdown behavior. `x <- "foo"` no longer inserts anything
+  into the resulting documentation, but `x <- "foo"; x` will.
 * roxygen2 can once again read UTF-8 paths on windows (#1277).
 
 * `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 

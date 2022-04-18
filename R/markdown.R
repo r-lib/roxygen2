@@ -1,4 +1,3 @@
-
 markdown <- function(text, tag = NULL, sections = FALSE) {
   tag <- tag %||% list(file = NA, line = NA)
   expanded_text <- tryCatch(
@@ -27,7 +26,7 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' To insert the name of the current package: `r packageName()`.
 #'
 #' The `iris` data set has `r ncol(iris)` columns:
-#' `r paste0("``", colnames(iris), "``", collapse = ", ")`.
+#' `r paste0("\x60\x60", colnames(iris), "\x60\x60", collapse = ", ")`.
 #'
 #' ```{r}
 #' # Code block demo
@@ -46,10 +45,13 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' ```{r test-figure}
 #' plot(1:10)
 #' ```
-#'
+#' 
+#' Also see `vignette("rd-formatting")`.
+#' 
 #' @param text Input text.
-#' @return Text with the inline code expanded. A character vector of the
-#' same length as the input `text`.
+#' @return 
+#' Text with R code expanded. 
+#' A character vector of the same length as the input `text`.
 #'
 #' @importFrom xml2 xml_ns_strip xml_find_all xml_attr
 #' @importFrom purrr keep
@@ -95,19 +97,22 @@ eval_code_nodes <- function(nodes) {
 
 eval_code_node <- function(node, env) {
   if (xml_name(node) == "code") {
-    text <- str_replace(xml_text(node), "^r ", "")
-    paste(eval(parse(text = text), envir = env), collapse = "\n")
-
+    # write knitr markup for inline code
+    text <- paste0("`", xml_text(node), "`")
   } else {
+    # write knitr markup for fenced code
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
-    opts_chunk$set(
-      error = FALSE,
-      fig.path = "man/figures/",
-      fig.process = function(path) basename(path)
-    )
-    knit(text = text, quiet = TRUE, envir = env)
   }
+  old_opts <- purrr::exec(opts_chunk$set, knitr_chunk_defaults)
+  withr::defer(purrr::exec(opts_chunk$set, old_opts))
+  knit(text = text, quiet = TRUE, envir = env)
 }
+
+knitr_chunk_defaults <- list(
+  error = FALSE,
+  fig.path = "man/figures/",
+  fig.process = function(path) basename(path)
+)
 
 str_set_all_pos <- function(text, pos, value, nodes) {
   # Cmark has a bug when reporting source positions for multi-line

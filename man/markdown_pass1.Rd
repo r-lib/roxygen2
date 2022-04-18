@@ -10,8 +10,8 @@ markdown_pass1(text)
 \item{text}{Input text.}
 }
 \value{
-Text with the inline code expanded. A character vector of the
-same length as the input \code{text}.
+Text with R code expanded.
+A character vector of the same length as the input \code{text}.
 }
 \description{
 Expand the embedded inline code
@@ -55,5 +55,7 @@ Plots:
 }\if{html}{\out{</div>}}
 
 \figure{test-figure-1.png}
+
+Also see \code{vignette("rd-formatting")}.
 }
 \keyword{internal}

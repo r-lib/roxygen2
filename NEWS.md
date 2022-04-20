@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* If you have a daily build of RStudio, roxygen2 warnings will now include a 
+  clickable hyperlink that will take you directly to the problem (#1323).
+
 * Inline R code is now powered by knitr. Where available, (knit) print methods 
   are applied (#1179). This change alters outputs and brings roxygen in line
   with console and R markdown behavior. `x <- "foo"` no longer inserts anything

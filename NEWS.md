@@ -61,6 +61,8 @@
 
 * `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math support in `github_document()` (#1304).
 
+* Authors are now only counted only once if mentioned in merged documentations (@DanChaltiel #1333).
+
 # roxygen2 7.1.2
 
 * The new `@examplesIf` tag can be used to create conditional

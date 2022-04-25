@@ -45,12 +45,12 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' ```{r test-figure}
 #' plot(1:10)
 #' ```
-#' 
+#'
 #' Also see `vignette("rd-formatting")`.
-#' 
+#'
 #' @param text Input text.
-#' @return 
-#' Text with R code expanded. 
+#' @return
+#' Text with R code expanded.
 #' A character vector of the same length as the input `text`.
 #'
 #' @importFrom xml2 xml_ns_strip xml_find_all xml_attr
@@ -89,6 +89,8 @@ eval_code_nodes <- function(nodes) {
   evalenv <- roxy_meta_get("evalenv")
   # This should only happen in our test cases
   if (is.null(evalenv)) evalenv <- new.env(parent = baseenv())
+
+  withr::local_options(width = 80)
   map_chr(nodes, eval_code_node, env = evalenv)
 }
 

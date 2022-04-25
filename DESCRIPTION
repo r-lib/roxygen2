@@ -34,6 +34,7 @@ Imports:
     stringi,
     stringr (>= 1.0.0),
     utils,
+    withr,
     xml2
 Suggests: 
     covr,
@@ -41,7 +42,6 @@ Suggests:
     R.oo,
     rmarkdown,
     testthat (>= 3.1.2),
-    withr
 LinkingTo: 
     cpp11
 VignetteBuilder: 

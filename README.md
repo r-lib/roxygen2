@@ -3,7 +3,7 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/roxygen2)](https://CRAN.R-project.org/package=roxygen2)
 [![R-CMD-check](https://github.com/r-lib/roxygen2/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/roxygen2/actions)
-[![Codecov test coverage](https://codecov.io/gh/r-lib/roxygen2/branch/master/graph/badge.svg)](https://codecov.io/gh/r-lib/roxygen2?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/roxygen2/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/roxygen2?branch=main)
 <!-- badges: end -->
 
 The premise of roxygen2 is simple: describe your functions in comments next to their definitions and roxygen2 will process your source code and comments to automatically generate `.Rd` files in `man/`, `NAMESPACE`, and, if needed, the `Collate` field in `DESCRIPTION`.

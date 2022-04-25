@@ -178,7 +178,7 @@ inherit_dot_params <- function(topic, topics, env) {
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
   arg_matches <- function(args, docs) {
-    match <- map_lgl(docs, function(x) x$name %in% args)
+    match <- map_lgl(docs, function(x) all(x$name %in% args))
     matched <- docs[match]
     setNames(
       lapply(matched, "[[", "value"),

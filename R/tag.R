@@ -121,10 +121,17 @@ roxy_tag_warning <- function(x, ...) {
 #' @rdname roxy_tag
 warn_roxy_tag <- function(tag, message, ...) {
   message[[1]] <- paste0(
-    "[", tag$file, ":", tag$line, "] ",
-    "@", tag$tag, " ",
+    link_to(tag$file, tag$line), " @", tag$tag, " ",
     if (is.null(tag$raw)) ("(automatically generated) "),
     message[[1]]
   )
   cli::cli_warn(message, ..., .envir = parent.frame())
+}
+
+link_to <- function(file, line) {
+  paste0("[", cli::style_hyperlink(
+    paste0(basename(file), ":", line),
+    paste0("file://", file),
+    params = c(line = line, col = 1)
+  ), "]")
 }

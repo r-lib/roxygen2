@@ -291,6 +291,6 @@ parse_description <- function(tags) {
 }
 
 warn_roxy_block <- function(block, message, ...) {
-  message[[1]] <- paste0("[", block$file, ":", block$line, "] ", message[[1]])
+  message[[1]] <- paste0(link_to(block$file, block$line), " ", message[[1]])
   cli::cli_warn(message, ..., .envir = parent.frame())
 }

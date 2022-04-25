@@ -1,48 +1,6 @@
 # roxygen2 (development version)
 
-* If you have a daily build of RStudio, roxygen2 warnings will now include a 
-  clickable hyperlink that will take you directly to the problem (#1323).
-
-* Inline R code is now powered by knitr. Where available, (knit) print methods 
-  are applied (#1179). This change alters outputs and brings roxygen in line
-  with console and R markdown behavior. `x <- "foo"` no longer inserts anything
-  into the resulting documentation, but `x <- "foo"; x` will.
-* roxygen2 can once again read UTF-8 paths on windows (#1277).
-
-* `@exportS3method pkg::generic` now works even when `pkg::generic` isn't 
-  imported by your package (#1085).
-
-* Markdown code blocks are always wrapped in `<div class="sourceCode">`
-  even if the language is unknown (#1234).
-
-* roxygen2 no longer generates invalid HTML (#1290).
-
-* All warning messages have been reviewed to hopefully be more informative
-  and actionable (#1317). `@title` now checks for multiple paragraphs.
-  `@export` gives a more informative warning if it contains too many lines. 
-  (#1074).
-
-* DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
-  are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).
-
-* Arguments containing syntactically significant whitespace (e.g anonymous
-  functions) are now wrapped correctly (#1281).
-
-* Arguments containing non-syntactic values surrounded by back ticks are now 
-  wrapped correctly (#1257).
-  
-* DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's special
-  `\doi{}` tag (@ThierryO, #1296).
-
-* Links that contains markup like ``[foo `bar`][target]`` now cause an
-  informative warning. They would previously generate invalid Rd markup
-  that failed at runtime.
-
-* Curly braces in markdown links are now escaped (#1259).
-
-* `@inherit` and friends perform less aggressive link tweaking, eliminating
-  many spurious warnings. Additionally, when you do get a warning, you'll 
-  now always learn which topic it's coming from (#1135).
+## New features
 
 * The NAMESPACE roclet now preserves all existing non-import directives during
   it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
@@ -52,19 +10,65 @@
   inheriting from a function with `@param x,y` you'll only get the parameter
   documentation if your function needs docs for both x and y (#950).
 
-* All tags warn now if you only provide whitespace (#1228).
+* All warning messages have been reviewed to be more informative and 
+  actionable (#1317). `@title` now checks for multiple paragraphs.
+  `@export` gives a more informative warning if it contains too many lines. 
+  (#1074). All tags warn now if only provide whitespace (#1228), and 
+  problems with the first tag in each block arereported with the correct line 
+  number (#1235).
 
-* Add support for inheriting 'note' fields via `@inherit pkg::fun note` (@pat-s, #1218)
+* If you have a daily build of RStudio, roxygen2 warnings will now include a 
+  clickable hyperlink that will take you directly to the problem (#1323).
+  This technology is under active development across the IDE and the cli 
+  package but is extremely exciting.
 
-* Problems with the first tag in each block are now reported with the
-  correct line number (#1235).
+## Minor improvements and bug fixes
 
-* `\ifelse{}{}{}` tags in external inherited documentation are now inserted 
-  correctly (without additional `{}`) (#1062).
+* roxygen2 can once again read UTF-8 paths on windows (#1277).
 
-* `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math support in `github_document()` (#1304).
+* `@author`s are de-duplicated in merged documentation (@DanChaltiel, #1333).
 
-* Authors are now only counted only once if mentioned in merged documentations (@DanChaltiel #1333).
+* `@exportS3method pkg::generic` now works when `pkg::generic` isn't 
+  imported by your package (#1085).
+
+* `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math 
+  support in `github_document()` (#1304).
+
+* `@inherit` and friends perform less aggressive link tweaking, eliminating
+  many spurious warnings. Additionally, when you do get a warning, you'll 
+  now always learn which topic it's coming from (#1135). Inherited 
+  `\ifelse{}{}{}` tags are now inserted correctly (without additional `{}`) 
+  (#1062).
+
+* `@inhert` now supports inheriting "Notes" with `@inherit pkg::fun note` 
+  (@pat-s, #1218)
+
+* Automatic `@usage` now correctly wraps arguments containing syntactically 
+  significant whitespace (e.g anonymous functions) (#1281) and non-syntactic 
+  values surrounded by backticks (#1257).
+
+* Markdown:
+  
+    * Code blocks are always wrapped in `<div class="sourceCode">`
+      even if the language is unknown (#1234).
+
+    * Links with markup (e.g. ``[foo `bar`][target]``) now cause an informative 
+      warning instead of generating invalid Rd.
+      
+    * Curly braces in links are now escaped (#1259).
+
+    * Inline R code is now powered by knitr. Where available, (knit) print 
+      methods are applied (#1179). This change alters outputs and brings roxygen
+      in line with console and R markdown behavior. `x <- "foo"` no longer 
+      inserts anything into the resulting documentation, but `x <- "foo"; x` 
+      will.
+
+* roxygen2 no longer generates invalid HTML (#1290).
+
+* DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
+  are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).
+  DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's 
+  special `\doi{}` tag (@ThierryO, #1296).
 
 # roxygen2 7.1.2
 

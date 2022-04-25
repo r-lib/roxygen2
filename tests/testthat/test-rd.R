@@ -101,6 +101,12 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
+  local_package_copy(test_path("empty"))
+  desc::desc_set(
+    Package = "roxygendevtest",
+    Title = "Package Title",
+    Description = "Package description."
+  )
   out <- roc_proc_text(rd_roclet(), "
     #' Title
     #'

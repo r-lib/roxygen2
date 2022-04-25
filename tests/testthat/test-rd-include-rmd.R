@@ -1,5 +1,5 @@
 test_that("markdown file can be included", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -29,7 +29,7 @@ test_that("markdown file can be included", {
 })
 
 test_that("markdown with headers", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -66,7 +66,7 @@ test_that("markdown with headers", {
 })
 
 test_that("subsection within details", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -91,7 +91,7 @@ test_that("subsection within details", {
 })
 
 test_that("links to functions", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -113,7 +113,7 @@ test_that("links to functions", {
 })
 
 test_that("links to functions, with anchors", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -153,7 +153,7 @@ test_that("empty Rmd", {
 })
 
 test_that("inline html", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -180,7 +180,7 @@ test_that("inline html", {
 })
 
 test_that("html block", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -205,7 +205,7 @@ test_that("html block", {
 })
 
 test_that("include as another section", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
@@ -235,7 +235,7 @@ test_that("include as another section", {
 })
 
 test_that("order of sections is correct", {
-  skip_if_not(rmarkdown::pandoc_available())
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)

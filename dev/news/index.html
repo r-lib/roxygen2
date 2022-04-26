@@ -69,29 +69,33 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li><p>If you have a daily build of RStudio, roxygen2 warnings will now include a clickable hyperlink that will take you directly to the problem (<a href="https://github.com/r-lib/roxygen2/issues/1323" class="external-link">#1323</a>).</p></li>
-<li><p>Inline R code is now powered by knitr. Where available, (knit) print methods are applied (<a href="https://github.com/r-lib/roxygen2/issues/1179" class="external-link">#1179</a>). This change alters outputs and brings roxygen in line with console and R markdown behavior. <code>x &lt;- "foo"</code> no longer inserts anything into the resulting documentation, but <code>x &lt;- "foo"; x</code> will.</p></li>
-<li><p>roxygen2 can once again read UTF-8 paths on windows (<a href="https://github.com/r-lib/roxygen2/issues/1277" class="external-link">#1277</a>).</p></li>
-<li><p><code>@exportS3method pkg::generic</code> now works even when <code>pkg::generic</code> isn’t imported by your package (<a href="https://github.com/r-lib/roxygen2/issues/1085" class="external-link">#1085</a>).</p></li>
-<li><p>Markdown code blocks are always wrapped in <code>&lt;div class="sourceCode"&gt;</code> even if the language is unknown (<a href="https://github.com/r-lib/roxygen2/issues/1234" class="external-link">#1234</a>).</p></li>
-<li><p>roxygen2 no longer generates invalid HTML (<a href="https://github.com/r-lib/roxygen2/issues/1290" class="external-link">#1290</a>).</p></li>
-<li><p>All warning messages have been reviewed to hopefully be more informative and actionable (<a href="https://github.com/r-lib/roxygen2/issues/1317" class="external-link">#1317</a>). <code>@title</code> now checks for multiple paragraphs. <code>@export</code> gives a more informative warning if it contains too many lines. (<a href="https://github.com/r-lib/roxygen2/issues/1074" class="external-link">#1074</a>).</p></li>
-<li><p>DOIs, arXiv links, and urls in the <code>Description</code> field of the <code>DESCRIPTION</code> are now converted to the appropriate Rd markup (<a href="https://github.com/dieghernan" class="external-link">@dieghernan</a>, <a href="https://github.com/r-lib/roxygen2/issues/1265" class="external-link">#1265</a>, <a href="https://github.com/r-lib/roxygen2/issues/1164" class="external-link">#1164</a>).</p></li>
-<li><p>Arguments containing syntactically significant whitespace (e.g anonymous functions) are now wrapped correctly (<a href="https://github.com/r-lib/roxygen2/issues/1281" class="external-link">#1281</a>).</p></li>
-<li><p>Arguments containing non-syntactic values surrounded by back ticks are now wrapped correctly (<a href="https://github.com/r-lib/roxygen2/issues/1257" class="external-link">#1257</a>).</p></li>
-<li><p>DOIs in the <code>URL</code> field of the <code>DESCRIPTION</code> are now converted to Rd’s special <code>\doi{}</code> tag (<a href="https://github.com/ThierryO" class="external-link">@ThierryO</a>, <a href="https://github.com/r-lib/roxygen2/issues/1296" class="external-link">#1296</a>).</p></li>
-<li><p>Links that contains markup like <code>[foo `bar`][target]</code> now cause an informative warning. They would previously generate invalid Rd markup that failed at runtime.</p></li>
-<li><p>Curly braces in markdown links are now escaped (<a href="https://github.com/r-lib/roxygen2/issues/1259" class="external-link">#1259</a>).</p></li>
-<li><p><code>@inherit</code> and friends perform less aggressive link tweaking, eliminating many spurious warnings. Additionally, when you do get a warning, you’ll now always learn which topic it’s coming from (<a href="https://github.com/r-lib/roxygen2/issues/1135" class="external-link">#1135</a>).</p></li>
-<li><p>The NAMESPACE roclet now preserves all existing non-import directives during it’s first pre-processing pass. This eliminates the “NAMESPACE has changed” messages and reduces the incidence of namespace borking (<a href="https://github.com/r-lib/roxygen2/issues/1254" class="external-link">#1254</a>).</p></li>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p>The NAMESPACE roclet now preserves all existing non-import directives during it’s first pre-processing pass. This eliminates the “NAMESPACE has changed” messages and reduces the incidence of namespace borking (<a href="https://github.com/r-lib/roxygen2/issues/1254" class="external-link">#1254</a>).</p></li>
 <li><p><code>@inheritParams</code> now only inherits exact multiparameter matches, so if you’re inheriting from a function with <code>@param x,y</code> you’ll only get the parameter documentation if your function needs docs for both x and y (<a href="https://github.com/r-lib/roxygen2/issues/950" class="external-link">#950</a>).</p></li>
-<li><p>All tags warn now if you only provide whitespace (<a href="https://github.com/r-lib/roxygen2/issues/1228" class="external-link">#1228</a>).</p></li>
-<li><p>Add support for inheriting ‘note’ fields via <code>@inherit pkg::fun note</code> (<a href="https://github.com/pat-s" class="external-link">@pat-s</a>, <a href="https://github.com/r-lib/roxygen2/issues/1218" class="external-link">#1218</a>)</p></li>
-<li><p>Problems with the first tag in each block are now reported with the correct line number (<a href="https://github.com/r-lib/roxygen2/issues/1235" class="external-link">#1235</a>).</p></li>
-<li><p><code>\ifelse{}{}{}</code> tags in external inherited documentation are now inserted correctly (without additional <code><a href="https://rdrr.io/r/base/Paren.html" class="external-link">{}</a></code>) (<a href="https://github.com/r-lib/roxygen2/issues/1062" class="external-link">#1062</a>).</p></li>
-<li><p><code>@includeRmd</code> is now adapted to change in rmarkdown 2.12 regarding math support in <code>github_document()</code> (<a href="https://github.com/r-lib/roxygen2/issues/1304" class="external-link">#1304</a>).</p></li>
-<li><p>Authors are now only counted only once if mentioned in merged documentations (<a href="https://github.com/DanChaltiel" class="external-link">@DanChaltiel</a> <a href="https://github.com/r-lib/roxygen2/issues/1333" class="external-link">#1333</a>).</p></li>
+<li><p>All warning messages have been reviewed to be more informative and actionable (<a href="https://github.com/r-lib/roxygen2/issues/1317" class="external-link">#1317</a>). <code>@title</code> now checks for multiple paragraphs. <code>@export</code> gives a more informative warning if it contains too many lines. (<a href="https://github.com/r-lib/roxygen2/issues/1074" class="external-link">#1074</a>). All tags warn now if only provide whitespace (<a href="https://github.com/r-lib/roxygen2/issues/1228" class="external-link">#1228</a>), and problems with the first tag in each block arereported with the correct line number (<a href="https://github.com/r-lib/roxygen2/issues/1235" class="external-link">#1235</a>).</p></li>
+<li><p>If you have a daily build of RStudio, roxygen2 warnings will now include a clickable hyperlink that will take you directly to the problem (<a href="https://github.com/r-lib/roxygen2/issues/1323" class="external-link">#1323</a>). This technology is under active development across the IDE and the cli package but is extremely exciting.</p></li>
 </ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
+<ul><li><p>roxygen2 can once again read UTF-8 paths on windows (<a href="https://github.com/r-lib/roxygen2/issues/1277" class="external-link">#1277</a>).</p></li>
+<li><p><code>@author</code>s are de-duplicated in merged documentation (<a href="https://github.com/DanChaltiel" class="external-link">@DanChaltiel</a>, <a href="https://github.com/r-lib/roxygen2/issues/1333" class="external-link">#1333</a>).</p></li>
+<li><p><code>@exportS3method pkg::generic</code> now works when <code>pkg::generic</code> isn’t imported by your package (<a href="https://github.com/r-lib/roxygen2/issues/1085" class="external-link">#1085</a>).</p></li>
+<li><p><code>@includeRmd</code> is now adapted to change in rmarkdown 2.12 regarding math support in <code>github_document()</code> (<a href="https://github.com/r-lib/roxygen2/issues/1304" class="external-link">#1304</a>).</p></li>
+<li><p><code>@inherit</code> and friends perform less aggressive link tweaking, eliminating many spurious warnings. Additionally, when you do get a warning, you’ll now always learn which topic it’s coming from (<a href="https://github.com/r-lib/roxygen2/issues/1135" class="external-link">#1135</a>). Inherited <code>\ifelse{}{}{}</code> tags are now inserted correctly (without additional <code><a href="https://rdrr.io/r/base/Paren.html" class="external-link">{}</a></code>) (<a href="https://github.com/r-lib/roxygen2/issues/1062" class="external-link">#1062</a>).</p></li>
+<li><p><code>@inhert</code> now supports inheriting “Notes” with <code>@inherit pkg::fun note</code> (<a href="https://github.com/pat-s" class="external-link">@pat-s</a>, <a href="https://github.com/r-lib/roxygen2/issues/1218" class="external-link">#1218</a>)</p></li>
+<li><p>Automatic <code>@usage</code> now correctly wraps arguments containing syntactically significant whitespace (e.g anonymous functions) (<a href="https://github.com/r-lib/roxygen2/issues/1281" class="external-link">#1281</a>) and non-syntactic values surrounded by backticks (<a href="https://github.com/r-lib/roxygen2/issues/1257" class="external-link">#1257</a>).</p></li>
+<li>
+<p>Markdown:</p>
+<ul><li><p>Code blocks are always wrapped in <code>&lt;div class="sourceCode"&gt;</code> even if the language is unknown (<a href="https://github.com/r-lib/roxygen2/issues/1234" class="external-link">#1234</a>).</p></li>
+<li><p>Links with markup (e.g. <code>[foo `bar`][target]</code>) now cause an informative warning instead of generating invalid Rd.</p></li>
+<li><p>Curly braces in links are now escaped (<a href="https://github.com/r-lib/roxygen2/issues/1259" class="external-link">#1259</a>).</p></li>
+<li><p>Inline R code is now powered by knitr. Where available, (knit) print methods are applied (<a href="https://github.com/r-lib/roxygen2/issues/1179" class="external-link">#1179</a>). This change alters outputs and brings roxygen in line with console and R markdown behavior. <code>x &lt;- "foo"</code> no longer inserts anything into the resulting documentation, but <code>x &lt;- "foo"; x</code> will.</p></li>
+</ul></li>
+<li><p>roxygen2 no longer generates invalid HTML (<a href="https://github.com/r-lib/roxygen2/issues/1290" class="external-link">#1290</a>).</p></li>
+<li><p>DOIs, arXiv links, and urls in the <code>Description</code> field of the <code>DESCRIPTION</code> are now converted to the appropriate Rd markup (<a href="https://github.com/dieghernan" class="external-link">@dieghernan</a>, <a href="https://github.com/r-lib/roxygen2/issues/1265" class="external-link">#1265</a>, <a href="https://github.com/r-lib/roxygen2/issues/1164" class="external-link">#1164</a>). DOIs in the <code>URL</code> field of the <code>DESCRIPTION</code> are now converted to Rd’s special <code>\doi{}</code> tag (<a href="https://github.com/ThierryO" class="external-link">@ThierryO</a>, <a href="https://github.com/r-lib/roxygen2/issues/1296" class="external-link">#1296</a>).</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.1.2" id="roxygen2-712">roxygen2 7.1.2<a class="anchor" aria-label="anchor" href="#roxygen2-712"></a></h2><p class="text-muted">CRAN release: 2021-09-08</p>
 <ul><li><p>The new <code>@examplesIf</code> tag can be used to create conditional examples. These examples only run if a specified condition holds (<a href="https://github.com/r-lib/roxygen2/issues/962" class="external-link">#962</a>).</p></li>
@@ -145,8 +149,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.0.2" id="roxygen2-702">roxygen2 7.0.2<a class="anchor" aria-label="anchor" href="#roxygen2-702"></a></h2><p class="text-muted">CRAN release: 2019-12-02</p>
 <ul><li>
-<code>\example{}</code> escaping has been improved (again!) so that special escapes within strings are correctly escaped (<a href="https://github.com/r-lib/roxygen2/issues/990" class="external-link">#990</a>).</li>
-</ul></div>
+<code>\example{}</code> escaping has been improved (again!) so that special escapes within strings are correctly escaped (<a href="https://github.com/r-lib/roxygen2/issues/990" class="external-link">#990</a>).</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.0.1" id="roxygen2-701">roxygen2 7.0.1<a class="anchor" aria-label="anchor" href="#roxygen2-701"></a></h2><p class="text-muted">CRAN release: 2019-11-22</p>
 <ul><li><p><code>@includeRmd</code> has now an optional second argument, the top level section the included file will go to. It defaults to the details section (<a href="https://github.com/r-lib/roxygen2/issues/970" class="external-link">#970</a>). Code chunks are now evaluated in a child of the global environment (<a href="https://github.com/r-lib/roxygen2/issues/972" class="external-link">#972</a>).</p></li>
@@ -225,8 +228,7 @@
 <span class="op">)</span></code></pre></div>
 <p>If you prefer the old behaviour you can put the following in your <code>DESCRIPTION</code>:</p>
 <pre><code><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>old_usage <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre>
-</li>
-</ul></div>
+</li></ul></div>
 <div class="section level4">
 <h4 id="code-loading-7-0-0">Code loading<a class="anchor" aria-label="anchor" href="#code-loading-7-0-0"></a></h4>
 <p>roxygen2 now provides three strategies for loading your code (<a href="https://github.com/r-lib/roxygen2/issues/822" class="external-link">#822</a>):</p>
@@ -358,8 +360,7 @@
 <h2 class="pkg-version" data-toc-text="6.0.0" id="roxygen2-600">roxygen2 6.0.0<a class="anchor" aria-label="anchor" href="#roxygen2-600"></a></h2><p class="text-muted">CRAN release: 2017-01-31</p>
 <div class="section level3">
 <h3 id="markdown-6-0-0">Markdown<a class="anchor" aria-label="anchor" href="#markdown-6-0-0"></a></h3>
-<ul><li>Most fields can now be written using Markdown markup instead of the traditional Rd language. You can turn on Markdown globally by adding <code>Roxygen: list(markdown = TRUE)</code> to <code>DESCRIPTION</code>. The <code>@md</code> / <code>@noMd</code> tags turn Markdown parsing on / off for the given block. See <code>vignette("markdown")</code> for more details (<a href="https://github.com/r-lib/roxygen2/issues/364" class="external-link">#364</a>, <a href="https://github.com/r-lib/roxygen2/issues/431" class="external-link">#431</a>, <a href="https://github.com/r-lib/roxygen2/issues/499" class="external-link">#499</a>, <a href="https://github.com/r-lib/roxygen2/issues/506" class="external-link">#506</a>, <a href="https://github.com/r-lib/roxygen2/issues/507" class="external-link">#507</a>), by <a href="https://github.com/gaborcsardi" class="external-link">@gaborcsardi</a></li>
-</ul></div>
+<ul><li>Most fields can now be written using Markdown markup instead of the traditional Rd language. You can turn on Markdown globally by adding <code>Roxygen: list(markdown = TRUE)</code> to <code>DESCRIPTION</code>. The <code>@md</code> / <code>@noMd</code> tags turn Markdown parsing on / off for the given block. See <code>vignette("markdown")</code> for more details (<a href="https://github.com/r-lib/roxygen2/issues/364" class="external-link">#364</a>, <a href="https://github.com/r-lib/roxygen2/issues/431" class="external-link">#431</a>, <a href="https://github.com/r-lib/roxygen2/issues/499" class="external-link">#499</a>, <a href="https://github.com/r-lib/roxygen2/issues/506" class="external-link">#506</a>, <a href="https://github.com/r-lib/roxygen2/issues/507" class="external-link">#507</a>), by <a href="https://github.com/gaborcsardi" class="external-link">@gaborcsardi</a></li></ul></div>
 <div class="section level3">
 <h3 id="improved-inheritance-6-0-0">Improved inheritance<a class="anchor" aria-label="anchor" href="#improved-inheritance-6-0-0"></a></h3>
 <ul><li>
@@ -706,7 +707,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
   </div></footer></body></html>

@@ -281,6 +281,16 @@ test_that("warns if can't find section", {
 
 # Inherit parameters ------------------------------------------------------
 
+test_that("match_params can ignore . prefix", {
+  expect_equal(match_param("a", c("x", "y", "z")), NULL)
+  expect_equal(match_param("x", c("x", "y", "z")), "x")
+  expect_equal(match_param(".x", c("x", "y", "z")), "x")
+  expect_equal(match_param("x", c(".x", ".y", ".z")), ".x")
+  expect_equal(match_param(".x", c(".x", ".y", ".z")), ".x")
+  expect_equal(match_param(c(".x", "y"), c(".x", ".y", ".z")), c(".x", ".y"))
+  expect_equal(match_param(c(".x", "x"), c("x", ".x")), c(".x", "x"))
+})
+
 test_that("multiple @inheritParam tags gathers all params", {
   out <- roc_proc_text(rd_roclet(), "
     #' A.
@@ -315,7 +325,6 @@ test_that("multiple @inheritParam tags gathers all params", {
     #' @param x X
     a <- function(x) {}
 
-
     #' B
     #'
     #' @param .y Y
@@ -326,15 +335,23 @@ test_that("multiple @inheritParam tags gathers all params", {
     #' @inheritParams a
     #' @inheritParams b
     c <- function(.x, y) {}
-    ")
-
-  params <- out[["c.Rd"]]$get_value("param")
-  expect_equal(length(params), 2)
-
-  expect_equal(params[[".x"]], "X")
-  expect_equal(params[["y"]], "Y")
+    ")[[3]]
+  expect_equal(out$get_value("param"), c(.x = "X", y = "Y"))
 })
 
+test_that("@inheritParam preserves mixed names", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #' @param .x,x X
+    a <- function(x, .x) {}
+
+    #' B
+    #' @inheritParams a
+    b <- function(x, .x) {}
+  ")[[2]]
+
+  expect_equal(out$get_value("param"), c(".x,x" = "X"))
+})
 
 test_that("@inheritParams can inherit from inherited params", {
   out <- roc_proc_text(rd_roclet(), "

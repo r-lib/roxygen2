@@ -136,34 +136,47 @@ inherit_params <- function(topic, topics) {
     cli::cli_warn(
       c(
         "@inheritParams failed in topic {.str {topic$get_name()}}.",
-        x = "All parameteres are already documented; none remain to be inherited."
+        x = "All parameters are already documented; none remain to be inherited."
       ),
       call = NULL
     )
     return()
   }
 
+  # Work through inherited params seeing if any match the parameters
+  # we're missing
   for (inheritor in inheritors) {
     inherited_params <- find_params(inheritor, topics, source = topic$get_name())
 
     for (param in inherited_params) {
       match <- match_param(param$name, missing)
-      if (all(!is.na(match))) {
+      if (!is.null(match)) {
         param_val <- setNames(param$value, paste(match, collapse = ","))
         topic$add(rd_section("param", param_val))
         missing <- setdiff(missing, match)
       }
     }
+    if (length(missing) == 0) break
   }
+
 }
 
 # Ignore . prefix since it's sometimes necessary to add because a
 # function uses ...
-match_param <- function(needle, haystack) {
-  needle_std <- gsub("^\\.", "", needle)
-  haystack_std <- gsub("^\\.", "", haystack)
 
-  haystack[match(needle_std, haystack_std)]
+# Match parameters ignoring dots
+match_param <- function(from, to) {
+  flip_dot <- function(x) {
+    has_dot <- grepl("^\\.", x)
+    ifelse(has_dot, gsub("^\\.", "", x), paste0(".", x))
+  }
+
+  to_std <- c(to, flip_dot(to))
+  if (!all(from %in% to_std)) {
+    return(NULL)
+  }
+
+  c(to, to)[match(from, to_std)]
 }
 
 inherit_dot_params <- function(topic, topics, env) {

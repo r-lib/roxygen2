@@ -17,7 +17,7 @@
 # warned if no params need documentation
 
     @inheritParams failed in topic "x".
-    x All parameteres are already documented; none remain to be inherited.
+    x All parameters are already documented; none remain to be inherited.
 
 # can inherit all from single function
 

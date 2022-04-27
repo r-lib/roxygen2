@@ -122,13 +122,6 @@
     Output
       [1] TRUE
     Code
-      tag <- roxy_test_tag("{")
-      (expect_warning(tag_markdown(tag)))
-    Output
-      <warning/rlang_warning>
-      Warning:
-      [test.R:1] @test has mismatched braces or quotes
-    Code
       tag <- roxy_test_tag("# one\ntwo\n# three\nfour {")
       (expect_warning(tag_markdown_with_sections(tag)))
     Output
@@ -164,13 +157,6 @@
       <warning/rlang_warning>
       Warning:
       [test.R:1] @test requires name and value
-    Code
-      tag <- roxy_test_tag("{ }")
-      (expect_warning(tag_two_part(tag, "name", "value")))
-    Output
-      <warning/rlang_warning>
-      Warning:
-      [test.R:1] @test has mismatched braces or quotes
 
 # tag_words() gives useful warnings
 

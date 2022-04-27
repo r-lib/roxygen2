@@ -32,8 +32,6 @@ test_that("tags check for mismatched parents gives useful warnings", {
   local_markdown()
   expect_snapshot({
     markdown_on()
-    tag <- roxy_test_tag("{")
-    (expect_warning(tag_markdown(tag)))
     tag <- roxy_test_tag("# one\ntwo\n# three\nfour {")
     (expect_warning(tag_markdown_with_sections(tag)))
   })
@@ -58,9 +56,6 @@ test_that("tag_two_part() gives useful warnings", {
   expect_snapshot({
     tag <- roxy_test_tag("a")
     expect_parse_failure(tag_two_part(tag, "name", "value"))
-
-    tag <- roxy_test_tag("{ }")
-    (expect_warning(tag_two_part(tag, "name", "value")))
   })
 })
 

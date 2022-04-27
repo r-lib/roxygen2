@@ -245,7 +245,7 @@ markdown_if_active <- function(text, tag, sections = FALSE) {
     out <- markdown(text, tag, sections)
 
     for (i in seq_along(out)) {
-      if (!rdComplete(out[[i]], is_code = FALSE)) {
+      if (sections && !rdComplete(out[[i]], is_code = FALSE)) {
         warn_roxy_tag(tag, "has mismatched braces or quotes")
         out[[i]] <- ""
       } else {

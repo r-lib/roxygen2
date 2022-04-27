@@ -289,6 +289,7 @@ test_that("match_params can ignore . prefix", {
   expect_equal(match_param(".x", c(".x", ".y", ".z")), ".x")
   expect_equal(match_param(c(".x", "y"), c(".x", ".y", ".z")), c(".x", ".y"))
   expect_equal(match_param(c(".x", "x"), c("x", ".x")), c(".x", "x"))
+  expect_equal(match_param(c(".x", "x"), "x"), "x")
 })
 
 test_that("multiple @inheritParam tags gathers all params", {

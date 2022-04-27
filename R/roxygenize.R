@@ -51,6 +51,10 @@ roxygenize <- function(package.dir = ".",
 
   roclets <- lapply(roclets, roclet_find)
 
+  if (!is_interactive()) {
+    withr::local_options(warn = 1)
+  }
+
   # Now load code
   load_code <- find_load_strategy(load_code)
   env <- load_code(base_path)

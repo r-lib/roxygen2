@@ -38,7 +38,7 @@ format.rd_section_reexport <- function(x, ...) {
       ifelse(pkg$file == pkg$fun, "", paste0(":", pkg$file)),
       "]{", escape(pkg$fun), "}}",
       collapse = ", ")
-    paste0("\\item{", pkg$pkg, "}{", links, "}")
+    paste0("\\item{", pkg$pkg[[1]], "}{", links, "}")
   })
 
   paste0(

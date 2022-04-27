@@ -14,7 +14,7 @@
   actionable (#1317). `@title` now checks for multiple paragraphs.
   `@export` gives a more informative warning if it contains too many lines. 
   (#1074). All tags warn now if only provide whitespace (#1228), and 
-  problems with the first tag in each block arereported with the correct line 
+  problems with the first tag in each block are reported with the correct line 
   number (#1235).
 
 * If you have a daily build of RStudio, roxygen2 warnings will now include a 

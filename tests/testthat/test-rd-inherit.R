@@ -290,6 +290,7 @@ test_that("match_params can ignore . prefix", {
   expect_equal(match_param(c(".x", "y"), c(".x", ".y", ".z")), c(".x", ".y"))
   expect_equal(match_param(c(".x", "x"), c("x", ".x")), c(".x", "x"))
   expect_equal(match_param(c(".x", "x"), "x"), "x")
+  expect_equal(match_param("x", c(".x", "x")), c("x", ".x"))
 })
 
 test_that("multiple @inheritParam tags gathers all params", {
@@ -298,7 +299,6 @@ test_that("multiple @inheritParam tags gathers all params", {
     #'
     #' @param x X
     a <- function(x) {}
-
 
     #' B
     #'
@@ -352,6 +352,27 @@ test_that("@inheritParam preserves mixed names", {
   ")[[2]]
 
   expect_equal(out$get_value("param"), c(".x,x" = "X"))
+})
+
+test_that("can inherit from same arg twice", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #'
+    #' @param x X
+    a <- function(x) {}
+
+    #' B
+    #'
+    #' @inheritParams a
+    b <- function(x) {}
+
+    #' C
+    #'
+    #' @inheritParams a
+    #' @rdname b
+    c <- function(.x) {}
+    ")[[2]]
+  expect_equal(out$get_value("param"), c("x,.x" = "X"))
 })
 
 test_that("@inheritParams can inherit from inherited params", {

@@ -176,7 +176,10 @@ match_param <- function(from, to) {
     return(NULL)
   }
 
-  unique(c(to, to)[match(from, to_std)])
+  union(
+    setdiff(to[match(from, to)], NA),
+    setdiff(to[match(from, flip_dot(to))], NA)
+  )
 }
 
 inherit_dot_params <- function(topic, topics, env) {

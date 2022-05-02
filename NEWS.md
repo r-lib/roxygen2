@@ -70,6 +70,9 @@
   DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's 
   special `\doi{}` tag (@ThierryO, #1296).
 
+* Non-breaking spaces in default argument values are preserved in
+  Rd's usage (#1342, @zeehio).
+
 # roxygen2 7.1.2
 
 * The new `@examplesIf` tag can be used to create conditional

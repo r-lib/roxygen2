@@ -133,16 +133,18 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
   bare <- args_call(name, args)
   if (!str_detect(bare, "\n") && nchar(bare, type = "width") < width) {
     out <- args_call(format_name(name), args)
+    out <- gsub("\u{A0}", " ", out, useBytes = TRUE)
   } else if (roxy_meta_get("old_usage", FALSE)) {
     x <- args_call(format_name(name), args)
     out <- wrapUsage(x, width = as.integer(width), indent = 2)
+    out <- gsub("\u{A0}", " ", out, useBytes = TRUE)
   } else {
     args <- paste0("  ", args)
     args <- map_chr(args, wrapUsage, width = 90, indent = 4)
+    args <- map_chr(args, ~sub("\u{A0}=\u{A0}", " = ", ., fixed = TRUE))
     out <- paste0(format_name(name), "(\n", paste0(args, collapse = ",\n"), "\n)")
   }
 
-  out <- gsub("\u{A0}", " ", out, useBytes = TRUE)
   Encoding(out) <- "UTF-8"
 
   rd(paste0(out, suffix))

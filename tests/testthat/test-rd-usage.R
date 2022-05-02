@@ -104,6 +104,30 @@ test_that("usage captured from formals", {
   )
 })
 
+
+test_that("usage preserves non-breaking-space", {
+  expect_equal(
+    call_to_usage(f <- function(a = "x\u{A0}=\u{A0}1") {}),
+    "f(a = \"x\u{A0}=\u{A0}1\")"
+  )
+  expect_equal(
+    call_to_usage(f <- function(
+    a = "x\u{A0}=\u{A0}1",
+    b = "looooooooooooooooooooooooooooooooooooooong",
+    c = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarg") {}
+    ),
+    paste(
+      "f(",
+      "  a = \"x\u{A0}=\u{A0}1\",",
+      "  b = \"looooooooooooooooooooooooooooooooooooooong\",",
+      "  c = \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarg\"",
+      ")",
+      sep = "\n"
+    )
+  )
+})
+
+
 test_that("argument containing function is generates correct usage", {
   expect_equal(
     call_to_usage(f <- function(a = function(x) 1) {}),

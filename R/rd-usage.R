@@ -154,5 +154,5 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
 # used for testing
 call_to_usage <- function(code, env = pkg_env()) {
   obj <- call_to_object(!!enexpr(code), env)
-  gsub("\u{A0}", " ", as.character(object_usage(obj)))
+  as.character(object_usage(obj))
 }

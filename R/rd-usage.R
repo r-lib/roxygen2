@@ -111,8 +111,8 @@ usage_args <- function(args) {
   map_chr(args, arg_to_text)
 }
 
-args_string <- function(x) {
-  sep <- ifelse(x != "", "\u{A0}=\u{A0}", "")
+args_string <- function(x, space = "\u{A0}") {
+  sep <- ifelse(x != "", paste0(space, "=", space), "")
   arg_names <- escape(auto_backtick(names(x)))
   paste0(arg_names, sep, escape(x))
 }
@@ -132,8 +132,7 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
   # Do we need any wrapping?
   bare <- args_call(name, args)
   if (!str_detect(bare, "\n") && nchar(bare, type = "width") < width) {
-    out <- args_call(format_name(name), args)
-    out <- gsub("\u{A0}", " ", out, useBytes = TRUE)
+    out <- args_call(format_name(name), args_string(usage_args(formals), space = " "))
   } else if (roxy_meta_get("old_usage", FALSE)) {
     x <- args_call(format_name(name), args)
     out <- wrapUsage(x, width = as.integer(width), indent = 2)

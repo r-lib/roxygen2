@@ -52,7 +52,7 @@ update_roxygen_version <- function(path, cur_version = NULL) {
 }
 
 first_time <- function(path) {
-  if (!is.na(roxygen_version())) {
+  if (!is.na(roxygen_version(path))) {
     return(FALSE)
   }
 

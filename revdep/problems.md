@@ -22,7 +22,7 @@ Run `cloud_details(, "attachment")` for more info
       [-] 3 package(s) removed: magrittr, utils, testthat.
       [+] 4 package(s) added: bookdown, fakeinstalled, glue, pagedown.
       Package(s) Rcpp is(are) in category 'LinkingTo'. Check your Description file to be sure it is really what you want.
-      [ FAIL 1 | WARN 0 | SKIP 1 | PASS 116 ]
+      [ FAIL 1 | WARN 1 | SKIP 1 | PASS 116 ]
       
       ══ Skipped tests ═══════════════════════════════════════════════════════════════
       • On CRAN (1)
@@ -31,7 +31,7 @@ Run `cloud_details(, "attachment")` for more info
       ── Failure (test-att_from_namespace.R:88:3): bad namespace can be corrected ────
       `att_from_namespace(...)` did not throw the expected error.
       
-      [ FAIL 1 | WARN 0 | SKIP 1 | PASS 116 ]
+      [ FAIL 1 | WARN 1 | SKIP 1 | PASS 116 ]
       Error: Test failures
       Execution halted
     ```
@@ -91,64 +91,39 @@ Run `cloud_details(, "roclang")` for more info
 
 ## Newly broken
 
-*   checking examples ... ERROR
-    ```
-    Running examples in ‘roclang-Ex.R’ failed
-    The error most likely occurred in:
-    
-    > ### Name: extract_roc_text
-    > ### Title: Extract a section, parameter or set of dot-parameters from a
-    > ###   function documentation
-    > ### Aliases: extract_roc_text
-    > 
-    > ### ** Examples
-    > 
-    ...
-     11. │           ├─base::unlist(map2(args, docs, arg_matches))
-     12. │           └─purrr::map2(args, docs, arg_matches)
-     13. │             └─roxygen2 .f(.x[[1L]], .y[[1L]], ...)
-     14. │               └─purrr::map_lgl(docs, function(x) x$name %in% args)
-     15. ├─purrr::pluck(., "my_fun.Rd")
-     16. └─purrr:::stop_bad_element_vector(...)
-     17.   └─purrr:::stop_bad_vector(...)
-     18.     └─purrr:::stop_bad_type(...)
-     19.       └─rlang::abort(...)
-    Execution halted
-    ```
-
 *   checking tests ... ERROR
     ```
       Running ‘testthat.R’
     Running the tests in ‘tests/testthat.R’ failed.
     Last 13 lines of output:
-       13. │       └─topics$apply(inherit_dot_params, env = env)
-       14. │         └─roxygen2 fun(topic, self, ...)
-       15. │           ├─base::unlist(map2(args, docs, arg_matches))
-       16. │           └─purrr::map2(args, docs, arg_matches)
-       17. │             └─roxygen2 .f(.x[[1L]], .y[[1L]], ...)
-       18. │               └─purrr::map_lgl(docs, function(x) x$name %in% args)
-       19. ├─purrr::pluck(., "my_fun.Rd")
-       20. └─purrr:::stop_bad_element_vector(...)
-       21.   └─purrr:::stop_bad_vector(...)
-       22.     └─purrr:::stop_bad_type(...)
-       23.       └─rlang::abort(...)
       
-      [ FAIL 5 | WARN 0 | SKIP 0 | PASS 38 ]
+      [ FAIL 1 | WARN 0 | SKIP 0 | PASS 43 ]
+      
+      ══ Failed tests ════════════════════════════════════════════════════════════════
+      ── Failure (test-extract_roc_text.R:44:3): extract_roc_text uses character function name input ──
+      extract_roc_text\("library", "param", "package", NA\) does not match "^the name of a package".
+      Actual value: "<NA>"
+      Backtrace:
+          ▆
+       1. └─testthat::expect_match(...) at test-extract_roc_text.R:44:2
+       2.   └─testthat:::expect_match_(...)
+      
+      [ FAIL 1 | WARN 0 | SKIP 0 | PASS 43 ]
       Error: Test failures
       Execution halted
     ```
 
-# zmisc
+# tidyHeatmap
 
 <details>
 
-* Version: 0.2.1
-* GitHub: NA
-* Source code: https://github.com/cran/zmisc
-* Date/Publication: 2022-02-02 08:30:02 UTC
-* Number of recursive dependencies: 56
+* Version: 1.6.0
+* GitHub: https://github.com/stemangiola/tidyHeatmap
+* Source code: https://github.com/cran/tidyHeatmap
+* Date/Publication: 2022-01-28 17:20:02 UTC
+* Number of recursive dependencies: 109
 
-Run `cloud_details(, "zmisc")` for more info
+Run `cloud_details(, "tidyHeatmap")` for more info
 
 </details>
 
@@ -157,15 +132,23 @@ Run `cloud_details(, "zmisc")` for more info
 *   checking re-building of vignette outputs ... WARNING
     ```
     Error(s) in re-building vignettes:
-      ...
-    --- re-building ‘zmisc.Rmd’ using rmarkdown
-    Quitting from lines 57-69 (zmisc.Rmd) 
-    Error: processing vignette 'zmisc.Rmd' failed with diagnostics:
-    cannot unclass an environment
-    --- failed re-building ‘zmisc.Rmd’
+    --- re-building ‘introduction.Rmd’ using rmarkdown
+    Could not fetch https://joss.theoj.org/papers/10.21105/joss.02472/status.svg
+    HttpExceptionRequest Request {
+      host                 = "joss.theoj.org"
+      port                 = 443
+      secure               = True
+      requestHeaders       = []
+      path                 = "/papers/10.21105/joss.02472/status.svg"
+      queryString          = ""
+    ...
+     ConnectionTimeout
+    Error: processing vignette 'introduction.Rmd' failed with diagnostics:
+    pandoc document conversion failed with error 61
+    --- failed re-building ‘introduction.Rmd’
     
     SUMMARY: processing the following file failed:
-      ‘zmisc.Rmd’
+      ‘introduction.Rmd’
     
     Error: Vignette re-building failed.
     Execution halted

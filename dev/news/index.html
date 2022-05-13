@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">7.1.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">7.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,17 +67,18 @@
       <small>Source: <a href="https://github.com/r-lib/roxygen2/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2"><h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="7.2.0" id="roxygen2-720">roxygen2 7.2.0<a class="anchor" aria-label="anchor" href="#roxygen2-720"></a></h2><p class="text-muted">CRAN release: 2022-05-13</p>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-7-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-7-2-0"></a></h3>
 <ul><li><p>The NAMESPACE roclet now preserves all existing non-import directives during it’s first pre-processing pass. This eliminates the “NAMESPACE has changed” messages and reduces the incidence of namespace borking (<a href="https://github.com/r-lib/roxygen2/issues/1254" class="external-link">#1254</a>).</p></li>
 <li><p><code>@inheritParams</code> now only inherits exact multiparameter matches, so if you’re inheriting from a function with <code>@param x,y</code> you’ll only get the parameter documentation if your function needs docs for both x and y (<a href="https://github.com/r-lib/roxygen2/issues/950" class="external-link">#950</a>).</p></li>
 <li><p>All warning messages have been reviewed to be more informative and actionable (<a href="https://github.com/r-lib/roxygen2/issues/1317" class="external-link">#1317</a>). <code>@title</code> now checks for multiple paragraphs. <code>@export</code> gives a more informative warning if it contains too many lines. (<a href="https://github.com/r-lib/roxygen2/issues/1074" class="external-link">#1074</a>). All tags warn now if only provide whitespace (<a href="https://github.com/r-lib/roxygen2/issues/1228" class="external-link">#1228</a>), and problems with the first tag in each block are reported with the correct line number (<a href="https://github.com/r-lib/roxygen2/issues/1235" class="external-link">#1235</a>).</p></li>
 <li><p>If you have a daily build of RStudio, roxygen2 warnings will now include a clickable hyperlink that will take you directly to the problem (<a href="https://github.com/r-lib/roxygen2/issues/1323" class="external-link">#1323</a>). This technology is under active development across the IDE and the cli package but is extremely exciting.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
+<h3 id="minor-improvements-and-bug-fixes-7-2-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-7-2-0"></a></h3>
 <ul><li><p>roxygen2 can once again read UTF-8 paths on windows (<a href="https://github.com/r-lib/roxygen2/issues/1277" class="external-link">#1277</a>).</p></li>
 <li><p><code>@author</code>s are de-duplicated in merged documentation (<a href="https://github.com/DanChaltiel" class="external-link">@DanChaltiel</a>, <a href="https://github.com/r-lib/roxygen2/issues/1333" class="external-link">#1333</a>).</p></li>
 <li><p><code>@exportS3method pkg::generic</code> now works when <code>pkg::generic</code> isn’t imported by your package (<a href="https://github.com/r-lib/roxygen2/issues/1085" class="external-link">#1085</a>).</p></li>

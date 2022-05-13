@@ -36,6 +36,8 @@ reference:
 
 news:
   releases:
+  - text: "Version 7.2.0"
+    href: https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/
   - text: "Version 7.1.0"
     href: https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/
   - text: "Version 7.0.0"

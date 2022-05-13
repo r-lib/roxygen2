@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="roxygen2">
-<title>Introduction to roxygen2 • roxygen2</title>
+<title>Getting started with roxygen2 • roxygen2</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,11 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Source%20Sans%20Pro-0.4.0/font.css" rel="stylesheet">
-<link href="../deps/_Source%20Code%20Pro-0.4.0/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Source%20Sans%20Pro-0.4.1/font.css" rel="stylesheet">
+<link href="../deps/_Source%20Code%20Pro-0.4.1/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to roxygen2">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting started with roxygen2">
 <meta property="og:description" content="roxygen2">
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@
 
 <div class="row">
   <main id="main"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Introduction to roxygen2</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Getting started with roxygen2</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/HEAD/vignettes/roxygen2.Rmd" class="external-link"><code>vignettes/roxygen2.Rmd</code></a></small>
@@ -106,16 +106,16 @@
 
     
     
-<p>Documentation is one of the most important aspects of good code. Without it, users won’t know how to use your package, and are unlikely to do so. Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package. The goal of roxygen2 is to make documenting your code as easy as possible. R provides a standard way of documenting packages: you write <code>.Rd</code> files in the <code>man/</code> directory. These files use a custom syntax, loosely based on latex. Roxygen2 provides a number of advantages over writing <code>.Rd</code> files by hand:</p>
+<p>Documentation is one of the most important aspects of good code. Without it, users won’t know how to use your package, and are unlikely to do so. Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package. The goal of roxygen2 is to make documenting your code as easy as possible. R provides a standard way of documenting packages: you write <code>.Rd</code> files in the <code>man/</code> directory. These files use a custom syntax, loosely based on LaTeX Roxygen2 provides a number of advantages over writing <code>.Rd</code> files by hand:</p>
 <ul>
 <li><p>Code and documentation are adjacent so when you modify your code, it’s easy to remember that you need to update the documentation.</p></li>
 <li><p>Roxygen2 dynamically inspects the objects that it’s documenting, so it can automatically add data that you’d otherwise have to write by hand.</p></li>
-<li><p>It abstracts over the differences in documenting S3 and S4 methods, generics and classes so you need to learn fewer details.</p></li>
+<li><p>It abstracts over the differences in documenting S3 and S4 methods, generics and classes, so you need to learn fewer details.</p></li>
 </ul>
 <p>As well as generating <code>.Rd</code> files, roxygen will also create a <code>NAMESPACE</code> for you, and will manage the <code>Collate</code> field in <code>DESCRIPTION</code>.</p>
 <p>This vignette provides a high-level description of roxygen2 and how the three main components work. The other vignettes provide more detail on the most important individual components:</p>
 <ul>
-<li><p><a href="rd.html">Generating .Rd files</a> and <a href="rd-formatting.html">text formatting</a> describe how to generate function documentation via <code>.Rd</code> files</p></li>
+<li><p><a href="rd.html">Generating .Rd files</a> and <a href="rd-formatting.html">text formatting</a> describe how to generate function documentation via <code>.Rd</code> files.</p></li>
 <li><p><a href="namespace.html">Managing your <code>NAMESPACE</code></a> describes how to generate a <code>NAMESPACE</code> file, how namespacing works in R, and how you can use Roxygen2 to be specific about what your package needs and supplies.</p></li>
 <li><p>See [update_collate()] for the details of <code>@include</code>, which for complicated reasons is not implemented as a roclet.</p></li>
 </ul>
@@ -125,7 +125,7 @@
 <p>There are three main ways to run roxygen:</p>
 <ul>
 <li><p><code><a href="../reference/roxygenize.html">roxygen2::roxygenise()</a></code>.</p></li>
-<li><p><code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code>.</p></li>
+<li><p><code>devtools::document()</code>.</p></li>
 <li><p><code>Ctrl + Shift + D</code>, if you’re using RStudio.</p></li>
 </ul>
 <p>You can mix handwritten Rd and roxygen2; roxygen2 will never overwrite a file it didn’t create.</p>
@@ -153,7 +153,7 @@
 <span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">x</span> <span class="op">+</span> <span class="va">y</span>
 <span class="op">}</span></code></pre></div>
-<p>For the example, above, this will generate <code>man/add.Rd</code> that looks like:</p>
+<p>For the example above, this will generate <code>man/add.Rd</code> that looks like:</p>
 <pre><code>% Generated by roxygen2 (3.2.0): do not edit by hand
 \name{add}
 \alias{add}
@@ -177,7 +177,7 @@ add(1, 1)
 add(10, 1)
 }</code></pre>
 <p>Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Rd-format" class="external-link">R extensions</a> manual. With roxygen2, there are few reasons to know about Rd files, so here I’ll avoid discussing them as much as possible, focussing instead on what you need to know about roxygen2.</p>
-<p>When you use <code>?x</code>, <code>help("x")</code> or <code>example("x")</code> R looks for an Rd file containing <code>\alias{x}</code>. It then parses the file, converts it into html and displays it. These functions look for an Rd file in <em>installed</em> packages. This isn’t very useful for package development, because you want to use the <code>.Rd</code> files in the <em>source</em> package. For this reason, we recommend that you use roxygen2 in conjunction with devtools: <code><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">devtools::load_all()</a></code> automatically adds shims so that <code>?</code> and friends will look in the development package. Note, however, that this preview does not work with intra-package links. To preview those, you’ll need to install the package. If you use RStudio, the easiest way to do this is to click the “Build &amp; Reload button”.</p>
+<p>When you use <code>?x</code>, <code>help("x")</code> or <code>example("x")</code> R looks for an Rd file containing <code>\alias{x}</code>. It then parses the file, converts it into HTML and displays it. These functions look for an Rd file in <em>installed</em> packages. This isn’t very useful for package development, because you want to use the <code>.Rd</code> files in the <em>source</em> package. For this reason, we recommend that you use roxygen2 in conjunction with devtools: <code>devtools::load_all()</code> automatically adds shims so that <code>?</code> and friends will look in the development package. Note, however, that this preview does not work with intra-package links. To preview those, you’ll need to install the package. If you use RStudio, the easiest way to do this is to click the “Build &amp; Reload button”.</p>
 <div class="section level3">
 <h3 id="rcpp">Rcpp<a class="anchor" aria-label="anchor" href="#rcpp"></a>
 </h3>
@@ -230,12 +230,12 @@ add(10, 1)
   <footer><div class="container">
   <div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Peter Danenberg, <a href="https://github.com/gaborcsardi" class="external-link">Gábor Csárdi</a>, Manuel Eugster.</p>
+<p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Peter Danenberg, <a href="https://github.com/gaborcsardi" class="external-link">Gábor Csárdi</a>, Manuel Eugster, <a href="https://www.rstudio.com" class="external-link"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" width="72"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
   </div></footer>

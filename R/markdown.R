@@ -8,7 +8,13 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
     }
   )
   escaped_text <- escape_rd_for_md(expanded_text)
-  markdown_pass2(escaped_text, tag = tag, sections = sections)
+  tryCatch(
+    markdown_pass2(escaped_text, tag = tag, sections = sections),
+    error = function(e) {
+      warn_roxy_tag(tag, "markdown failed to process", parent = e)
+      text
+    }
+  )
 }
 
 #' Expand the embedded inline code

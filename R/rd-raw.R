@@ -18,7 +18,7 @@ format.rd_section_rawRd <- function(x, ...) {
 
 roxy_tag_eval <- function(tag, env = new.env(parent = baseenv())) {
   tryCatch({
-    out <- eval(tag$val, envir = env)
+    out <- roxy_eval(tag$val, env)
 
     if (!is.character(out)) {
       warn_roxy_tag(tag, "must evaluate to a character vector")

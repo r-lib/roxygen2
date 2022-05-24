@@ -96,7 +96,6 @@ eval_code_nodes <- function(nodes) {
   # This should only happen in our test cases
   if (is.null(evalenv)) evalenv <- new.env(parent = baseenv())
 
-  withr::local_options(width = 80)
   map_chr(nodes, eval_code_node, env = evalenv)
 }
 
@@ -111,9 +110,7 @@ eval_code_node <- function(node, env) {
     # write knitr markup for fenced code
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
   }
-  old_opts <- purrr::exec(opts_chunk$set, knitr_chunk_defaults)
-  withr::defer(purrr::exec(opts_chunk$set, old_opts))
-  knit(text = text, quiet = TRUE, envir = env)
+  roxy_knit(text, env, knitr_chunk_defaults)
 }
 
 knitr_chunk_defaults <- list(

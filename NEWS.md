@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* Code evaluated in inline markdown code chunks and `@eval`/`@evalRd`/
+  `@evalNamespace` is now evaluated in an environment designed to be more
+  reproducible and to suppress output that won't work in Rd (e.g. turning
+  off colour and unicode support in cli) (#1351).
+
 # roxygen2 7.2.0
 
 ## New features

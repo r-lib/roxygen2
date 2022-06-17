@@ -44,8 +44,8 @@ Class B details.
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth2"><a href='../../roxygen2/html/A.html#method-A-meth2'><code>roxygen2::A$meth2()</code></a></li>
-<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-A-meth3'><code>roxygen2::A$meth3()</code></a></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth2"><a href='../../roxygen2/html/A.html#method-A-meth2'><code>roxygen2::A$meth2()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="roxygen2" data-topic="A" data-id="meth3"><a href='../../roxygen2/html/A.html#method-A-meth3'><code>roxygen2::A$meth3()</code></a></span></li>
 </ul>
 </details>
 }}

@@ -274,6 +274,7 @@ r6_inherited_method_list <- function(block, r6data) {
         "<li>",
         "<span class=\"pkg-link\" data-pkg=\"%s\" data-topic=\"%s\" data-id=\"%s\">",
         "<a href='../../%s/html/%s.html#method-%s-%s'><code>%s::%s$%s()</code></a>",
+        "</span>",
         "</li>"
       ),
       super_meth$package,

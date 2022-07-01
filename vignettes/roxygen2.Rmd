@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
-Documentation is one of the most important aspects of good code. Without it, users won't know how to use your package, and are unlikely to do so. Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package. The goal of roxygen2 is to make documenting your code as easy as possible. R provides a standard way of documenting packages: you write `.Rd` files in the `man/` directory. These files use a custom syntax, loosely based on LaTeX Roxygen2 provides a number of advantages over writing `.Rd` files by hand:
+Documentation is one of the most important aspects of good code. Without it, users won't know how to use your package, and are unlikely to do so. Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package. The goal of roxygen2 is to make documenting your code as easy as possible. R provides a standard way of documenting packages: you write `.Rd` files in the `man/` directory. These files use a custom syntax, loosely based on LaTeX. Roxygen2 provides a number of advantages over writing `.Rd` files by hand:
 
 * Code and documentation are adjacent so when you modify your code, it's easy
   to remember that you need to update the documentation.

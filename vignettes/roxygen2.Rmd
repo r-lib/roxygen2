@@ -30,7 +30,7 @@ This vignette provides a high-level description of roxygen2 and how the three ma
   describe how to generate function documentation via `.Rd` files.
 
 * [Managing your `NAMESPACE`](namespace.html) describes how to generate
-  a `NAMESPACE` file, how namespacing works in R, and how you can use Roxygen2 to be
+  a `NAMESPACE` file, how namespacing works in R, and how you can use roxygen2 to be
   specific about what your package needs and supplies.
 
 * See [update_collate()] for the details of `@include`, which for complicated

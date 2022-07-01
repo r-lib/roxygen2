@@ -61,9 +61,9 @@ The process starts when you add specially formatted roxygen comments to your sou
 ```{r}
 #' Add together two numbers
 #'
-#' @param x A number
-#' @param y A number
-#' @return The sum of \code{x} and \code{y}
+#' @param x A number.
+#' @param y A number.
+#' @return The sum of \code{x} and \code{y}.
 #' @examples
 #' add(1, 1)
 #' add(10, 1)
@@ -83,12 +83,12 @@ For the example above, this will generate `man/add.Rd` that looks like:
 add(x, y)
 }
 \arguments{
-  \item{x}{A number}
+  \item{x}{A number.}
 
-  \item{y}{A number}
+  \item{y}{A number.}
 }
 \value{
-The sum of \code{x} and \code{y}
+The sum of \code{x} and \code{y}.
 }
 \description{
 Add together two numbers
@@ -116,8 +116,8 @@ For example, dplyr has `between.cpp` which starts:
 //' efficiently in C++ for local values, and translated to the
 //' appropriate SQL for remote tables.
 //'
-//' @param x A numeric vector of values
-//' @param left,right Boundary values
+//' @param x A numeric vector of values.
+//' @param left,right Boundary values.
 //' @export
 //' @examples
 //' between(1:12, 7, 9)
@@ -138,8 +138,8 @@ This is automatically translated to the following R code in `RcppExports.R`:
 #' efficiently in C++ for local values, and translated to the
 #' appropriate SQL for remote tables.
 #'
-#' @param x A numeric vector of values
-#' @param left,right Boundary values
+#' @param x A numeric vector of values.
+#' @param left,right Boundary values.
 #' @export
 #' @examples
 #' between(1:12, 7, 9)

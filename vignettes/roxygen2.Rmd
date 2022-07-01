@@ -33,7 +33,7 @@ This vignette provides a high-level description of roxygen2 and how the three ma
   a `NAMESPACE` file, how namespacing works in R, and how you can use roxygen2 to be
   specific about what your package needs and supplies.
 
-* See [update_collate()] for the details of `@include`, which for complicated
+* See `update_collate()` for the details of `@include`, which for complicated
   reasons is not implemented as a roclet.
 
 ## Running roxygen

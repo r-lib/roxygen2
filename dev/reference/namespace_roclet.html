@@ -41,10 +41,12 @@ See vignette("namespace") for details.'><meta property="og:image" content="https
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/rd.html">Documentation topics</a>
+    <a class="dropdown-item" href="../articles/rd-formatting.html">Markdown formatting</a>
+    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="../articles/extending.html">Extending roxygen2</a>
-    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE tags</a>
-    <a class="dropdown-item" href="../articles/rd-formatting.html">Rd formatting</a>
-    <a class="dropdown-item" href="../articles/rd.html">Rd (documentation) tags</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -96,7 +98,7 @@ loaded).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">namespace_roclet</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">namespace_roclet</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -108,17 +110,17 @@ loaded).</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># The most common namespace tag is @export, which declares that a function</span></span>
-<span class="r-in"><span class="co"># is part of the external interface of your package</span></span>
-<span class="r-in"><span class="co">#' @export</span></span>
-<span class="r-in"><span class="va">foofy</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># You'll also often find global imports living in a file called</span></span>
-<span class="r-in"><span class="co"># R/{package}-package.R.</span></span>
-<span class="r-in"><span class="co">#' @importFrom magrittr %&gt;%</span></span>
-<span class="r-in"><span class="co">#' @import rlang</span></span>
-<span class="r-in"><span class="cn">NULL</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The most common namespace tag is @export, which declares that a function</span></span></span>
+<span class="r-in"><span><span class="co"># is part of the external interface of your package</span></span></span>
+<span class="r-in"><span><span class="co">#' @export</span></span></span>
+<span class="r-in"><span><span class="va">foofy</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># You'll also often find global imports living in a file called</span></span></span>
+<span class="r-in"><span><span class="co"># R/{package}-package.R.</span></span></span>
+<span class="r-in"><span><span class="co">#' @importFrom magrittr %&gt;%</span></span></span>
+<span class="r-in"><span><span class="co">#' @import rlang</span></span></span>
+<span class="r-in"><span><span class="cn">NULL</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 </code></pre></div>
     </div>
@@ -133,7 +135,7 @@ loaded).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

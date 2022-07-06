@@ -33,10 +33,12 @@ by R core."><meta property="og:image" content="https://roxygen2.r-lib.org/logo.p
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/rd.html">Documentation topics</a>
+    <a class="dropdown-item" href="../articles/rd-formatting.html">Markdown formatting</a>
+    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="../articles/extending.html">Extending roxygen2</a>
-    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE tags</a>
-    <a class="dropdown-item" href="../articles/rd-formatting.html">Rd formatting</a>
-    <a class="dropdown-item" href="../articles/rd.html">Rd (documentation) tags</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -84,45 +86,45 @@ by R core.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">escape_examples</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">escape_examples</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># In examples we automatically escape Rd comments (%):</span></span>
-<span class="r-in"><span class="fl">100</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">30</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># In examples we automatically escape Rd comments (%):</span></span></span>
+<span class="r-in"><span><span class="fl">100</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">30</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-in"><span class="co"># even if they are in strings</span></span>
-<span class="r-in"><span class="st">"50%"</span></span>
+<span class="r-in"><span><span class="co"># even if they are in strings</span></span></span>
+<span class="r-in"><span><span class="st">"50%"</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "50%"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># and \ and \v inside of strings and symbols</span></span>
-<span class="r-in"><span class="st">"\v"</span> <span class="co"># vertical tab</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># and \ and \v inside of strings and symbols</span></span></span>
+<span class="r-in"><span><span class="st">"\v"</span> <span class="co"># vertical tab</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "\v"</span>
-<span class="r-in"><span class="st">"\\"</span></span>
+<span class="r-in"><span><span class="st">"\\"</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "\\"</span>
-<span class="r-in"><span class="co"># but not comments: \l \v</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># other string escapes are left as is</span></span>
-<span class="r-in"><span class="st">"\""</span></span>
+<span class="r-in"><span><span class="co"># but not comments: \l \v</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># other string escapes are left as is</span></span></span>
+<span class="r-in"><span><span class="st">"\""</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "\""</span>
-<span class="r-in"><span class="st">"\n"</span></span>
+<span class="r-in"><span><span class="st">"\n"</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "\n"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Otherwise, backslashes and parentheses are left as is. This</span></span>
-<span class="r-in"><span class="co"># means that you need to escape unbalanced parentheses, which typically only</span></span>
-<span class="r-in"><span class="co"># occur in \dontshow{}:</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Hello"</span><span class="op">)</span></span>
-<span class="r-in"> <span class="op">}</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># You also need to escape backslashes in infix operators and comments</span></span>
-<span class="r-in"><span class="co"># (this is generally rare)</span></span>
-<span class="r-in"><span class="va">`%\\%`</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
-<span class="r-in"><span class="fl">10</span> <span class="op">%\%</span> <span class="fl">20</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Otherwise, backslashes and parentheses are left as is. This</span></span></span>
+<span class="r-in"><span><span class="co"># means that you need to escape unbalanced parentheses, which typically only</span></span></span>
+<span class="r-in"><span><span class="co"># occur in \dontshow{}:</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Hello"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">}</span> </span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># You also need to escape backslashes in infix operators and comments</span></span></span>
+<span class="r-in"><span><span class="co"># (this is generally rare)</span></span></span>
+<span class="r-in"><span><span class="va">`%\\%`</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span></span>
+<span class="r-in"><span><span class="fl">10</span> <span class="op">%\%</span> <span class="fl">20</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
-<span class="r-in"><span class="co"># \\ (renders as two backslashes)</span></span>
+<span class="r-in"><span><span class="co"># \\ (renders as two backslashes)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -136,7 +138,7 @@ by R core.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

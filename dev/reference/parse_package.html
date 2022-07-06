@@ -35,10 +35,12 @@ associate each block with the corresponding live object."><meta property="og:ima
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/rd.html">Documentation topics</a>
+    <a class="dropdown-item" href="../articles/rd-formatting.html">Markdown formatting</a>
+    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="../articles/extending.html">Extending roxygen2</a>
-    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE tags</a>
-    <a class="dropdown-item" href="../articles/rd-formatting.html">Rd formatting</a>
-    <a class="dropdown-item" href="../articles/rd.html">Rd (documentation) tags</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -87,15 +89,15 @@ associate each block with the corresponding live object.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">parse_package</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"."</span>, env <span class="op">=</span> <span class="fu">env_package</span><span class="op">(</span><span class="va">path</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">parse_file</span><span class="op">(</span><span class="va">file</span>, env <span class="op">=</span> <span class="fu">env_file</span><span class="op">(</span><span class="va">file</span><span class="op">)</span>, srcref_path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">parse_text</span><span class="op">(</span><span class="va">text</span>, env <span class="op">=</span> <span class="fu">env_file</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">env_file</span><span class="op">(</span><span class="va">file</span><span class="op">)</span>
-
-<span class="fu">env_package</span><span class="op">(</span><span class="va">path</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parse_package</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"."</span>, env <span class="op">=</span> <span class="fu">env_package</span><span class="op">(</span><span class="va">path</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">parse_file</span><span class="op">(</span><span class="va">file</span>, env <span class="op">=</span> <span class="fu">env_file</span><span class="op">(</span><span class="va">file</span><span class="op">)</span>, srcref_path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">parse_text</span><span class="op">(</span><span class="va">text</span>, env <span class="op">=</span> <span class="fu">env_file</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">env_file</span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">env_package</span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -132,7 +134,7 @@ find the code object associated with each block.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

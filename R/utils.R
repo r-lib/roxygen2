@@ -157,6 +157,11 @@ uuid <- function(nchar = 8) {
   )
 }
 
+# https://github.com/r-lib/rlang/issues/1434
+is_installed <- function(x) {
+  !identical(system.file(package = x), "")
+}
+
 # quoting -----------------------------------------------------------------
 auto_backtick <- function(x) {
   needs_backtick <- !has_quotes(x) & !is_syntactic(x)

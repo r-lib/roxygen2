@@ -156,16 +156,16 @@ test_that("complains about bad usage", {
 
 test_that("useful error if can't combine", {
   expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), r"(
+    roc_proc_text(rd_roclet(), "
       #' Class
-      setClass("describeInfoo")
+      setClass('describeInfoo')
 
       #' @describeIn describeInfoo generic
-      setGeneric("bar", function(x) standardGeneric("bar"))
+      setGeneric('bar', function(x) standardGeneric('bar'))
 
       #' @describeIn describeInfoo method
-      setMethod("bar","describeInfoo", function(x) 1)
-    )")
+      setMethod('bar','describeInfoo', function(x) 1)
+    ")
   )
 
 })

@@ -285,7 +285,7 @@ inherit_sections <- function(topic, topics) {
   current_secs <- topic$get_value("section")$title
 
   for (inheritor in topic$inherits_from("sections")) {
-    inheritor <- get_rd(inheritor, topics)
+    inheritor <- get_rd(inheritor, topics, source = topic$get_name())
     if (is.null(inheritor)) {
       return()
     }
@@ -307,7 +307,7 @@ inherit_section <- function(topic, topics) {
   titles <- sections$title
 
   for (i in seq_along(sources)) {
-    inheritor <- get_rd(sources[[i]], topics)
+    inheritor <- get_rd(sources[[i]], topics, source = topic$get_name())
     if (is.null(inheritor)) {
       return()
     }

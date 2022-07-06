@@ -13,14 +13,14 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 
 ## Basics
 
-Roxygen is extensible with user-defined __roclets__. 
+Roxygen is extensible with user-defined **roclets**.
 It means that you can take advantage of Roxygen's parser and extend it with your own `@tags`.
 
 There are two primary ways to extend roxygen2:
 
-* Add a new tag that generates a new top-level section in `.Rd` files.
+-   Add a new tag that generates a new top-level section in `.Rd` files.
 
-* Add a new roclet that does anything you like.
+-   Add a new roclet that does anything you like.
 
 This vignette will introduce you to the key data structures in roxygen2, and then show you how to use these two extension points.
 This vignette is very rough, so you are expected to have also read some roxygen2 source code to understand all the extension points.
@@ -36,20 +36,19 @@ Before we talk about extending roxygen2, we need to first discuss two important 
 
 ### Tags
 
-A tag (a list with S3 class `roxy_tag`) represents a single tag. 
+A tag (a list with S3 class `roxy_tag`) represents a single tag.
 It has the following fields:
 
-* `tag`: the name of the tag.
+-   `tag`: the name of the tag.
 
-* `raw`: the raw contents of the tag (i.e. everything from the end of 
-  this tag to the beginning of the next).
-  
-* `val`: the parsed value, which we'll come back to shortly.
+-   `raw`: the raw contents of the tag (i.e. everything from the end of this tag to the beginning of the next).
 
-* `file` and `line`: the location of the tag in the package. Used
-  with `roxy_tag_warning()` to produce informative error messages.
+-   `val`: the parsed value, which we'll come back to shortly.
 
-You _can_ construct tag objects by hand with `roxy_tag()`:
+-   `file` and `line`: the location of the tag in the package.
+    Used with `roxy_tag_warning()` to produce informative error messages.
+
+You *can* construct tag objects by hand with `roxy_tag()`:
 
 ```{r}
 roxy_tag("name", "Hadley")
@@ -60,12 +59,13 @@ However, you should rarely need to do so, because you'll typically have them giv
 
 ### Blocks
 
-A block (a list with S3 class `roxy_block`) represents a single roxygen block. It has the following fields:
+A block (a list with S3 class `roxy_block`) represents a single roxygen block.
+It has the following fields:
 
-* `tags`: a list of `roxy_tags`.
-* `call`: the R code associated with the block (usually a function call).
-* `file` and `line`: the location of the R code.
-* `object`: the evaluated R object associated with the code.
+-   `tags`: a list of `roxy_tags`.
+-   `call`: the R code associated with the block (usually a function call).
+-   `file` and `line`: the location of the R code.
+-   `object`: the evaluated R object associated with the code.
 
 The easiest way to see the basic structure of a `roxy_block()` is to generate one by parsing a roxygen block with `parse_text()`:
 
@@ -87,17 +87,15 @@ block
 
 ## Adding a new `.Rd` tag
 
-The easiest way to extend roxygen2 is to create a new tag that adds output to `.Rd` files. 
+The easiest way to extend roxygen2 is to create a new tag that adds output to `.Rd` files.
 This requires two steps:
 
-1.  Define a `roxy_tag_parse()` method that describes how to parse our new
-    tag.
-   
-1.  Define a `roxy_tag_rd()` method that describes how to convert the tag
-    into `.Rd` commands. 
-    
-To illustrate the basic idea, we'll create a new `@tip` tag that will create a bulleted list of tips about how to use a function. 
-The idea is to take something like this: 
+1.  Define a `roxy_tag_parse()` method that describes how to parse our new tag.
+
+2.  Define a `roxy_tag_rd()` method that describes how to convert the tag into `.Rd` commands.
+
+To illustrate the basic idea, we'll create a new `@tip` tag that will create a bulleted list of tips about how to use a function.
+The idea is to take something like this:
 
 ```{r}
 #' @tip The mean of a logical vector is the proportion of `TRUE` values.
@@ -106,7 +104,7 @@ The idea is to take something like this:
 
 And generate Rd like this:
 
-```latex
+``` latex
 \section{Tips and tricks}{
 \itemize{
   \item The mean of a logical vector is the proportion of \code{TRUE} values.
@@ -125,6 +123,7 @@ roxy_tag_parse.roxy_tag_tip <- function(x) {
   tag_markdown(x)
 }
 ```
+
 ```{r, include = FALSE}
 # Needed for vignette
 registerS3method("roxy_tag_parse", "roxy_tag_tip", roxy_tag_parse.roxy_tag_tip)
@@ -160,6 +159,7 @@ roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
   rd_section("tip", x$val)
 }
 ```
+
 ```{r, include = FALSE}
 # Needed for vignette
 registerS3method("roxy_tag_rd", "roxy_tag_tip", roxy_tag_rd.roxy_tag_tip)
@@ -183,6 +183,7 @@ format.rd_section_tip <- function(x, ...) {
   )
 }
 ```
+
 ```{r, include = FALSE}
 # Needed for vignette
 registerS3method("format", "rd_section_tip", format.rd_section_tip)
@@ -208,15 +209,11 @@ Second, you define a roclet that tells roxygen how to process an entire package.
 In this example we will make a new `@memo` tag to enable printing the memos at the console when the roclet runs.
 We choose that the `@memo` has this syntax:
 
-```
-@memo [Headline] Description
-```
+    @memo [Headline] Description
 
 As an example:
 
-```
-@memo [EFFICIENCY] Currently brute-force; find better algorithm.
-```
+    @memo [EFFICIENCY] Currently brute-force; find better algorithm.
 
 As above, we first define a parse method:
 
@@ -272,11 +269,9 @@ memo_roclet <- function() {
 To give the roclet behaviour, you need to define method.
 There are two methods that almost every roclet will use:
 
-* `roclet_process()` is called with a list of blocks, and returns an
-  object of your choosing.
-  
-* `roclet_output()` produces side-effects (usually writing to disk)
-  using the result from `roclet_process()`.
+-   `roclet_process()` is called with a list of blocks, and returns an object of your choosing.
+
+-   `roclet_output()` produces side-effects (usually writing to disk) using the result from `roclet_process()`.
 
 For this roclet, we'll have `roclet_process()` collect all the memo tags into a named list:
 
@@ -334,4 +329,3 @@ g <- function(x, y) {
 ")
 roclet_output(memo_roclet(), results)
 ```
-

@@ -3,14 +3,14 @@
 RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
   topics = list(),
 
-  add = function(topic) {
+  add = function(topic, block) {
     if (is.null(topic))
       return()
     stopifnot(inherits(topic, "RoxyTopic"))
 
     filename <- topic$filename
     if (filename %in% names(self$topics)) {
-      self$topics[[filename]]$add(topic)
+      self$topics[[filename]]$add(topic, block)
     } else {
       self$topics[[filename]] <- topic
     }

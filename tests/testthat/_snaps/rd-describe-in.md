@@ -10,3 +10,7 @@
 
     [<text>:6] @describeIn can not be used with @rdname
 
+# useful error if can't combine
+
+    [<text>:9] Don't know how to combine @describeIn types "function" and "class"
+

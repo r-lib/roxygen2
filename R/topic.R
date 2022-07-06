@@ -124,14 +124,14 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' or an [rd_section] object;
   #' or a list of [rd_section] objects to add.
 
-  add = function(x, overwrite = FALSE) {
+  add = function(x, block, overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
-      self$add(x$sections, overwrite = overwrite)
+      self$add(x$sections, block, overwrite = overwrite)
     } else if (inherits(x, "rd_section")) {
-      self$add_section(x, overwrite = overwrite)
+      self$add_section(x, block, overwrite = overwrite)
     } else if (is.list(x)) {
       for (section in x) {
-        self$add_section(section, overwrite = overwrite)
+        self$add_section(section, block, overwrite = overwrite)
       }
     } else if (is.null(x)) {
       # skip
@@ -150,11 +150,11 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' once in `self$sections`. This method if for internal use only.
   #' @param section [rd_section] object to add.
 
-  add_section = function(section, overwrite = FALSE) {
+  add_section = function(section, block, overwrite = FALSE) {
     if (is.null(section)) return()
     type <- section$type
     if (self$has_section(type) && !overwrite) {
-      section <- merge(self$get_section(type), section)
+      section <- merge(self$get_section(type), section, block = block)
     }
 
     self$sections[[type]] <- section

@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Give useful error if `@describeIn` can't combine docs (#1366).
+
 * Code evaluated in inline markdown code chunks and `@eval`/`@evalRd`/
   `@evalNamespace` is now evaluated in an environment designed to be more
   reproducible and to suppress output that won't work in Rd (e.g. turning

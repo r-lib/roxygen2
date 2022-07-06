@@ -40,7 +40,7 @@ roclet_process.roclet_rd <- function(x, blocks, env, base_path) {
 
   for (block in blocks) {
     rd <- block_to_rd(block, base_path, env)
-    topics$add(rd)
+    topics$add(rd, block)
   }
   topics_process_family(topics, env)
   topics_process_inherit(topics, env)

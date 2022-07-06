@@ -45,14 +45,19 @@ rd_section_minidesc <- function(type, label, desc) {
 }
 
 #' @export
-merge.rd_section_minidesc <- function(x, y, ...) {
+merge.rd_section_minidesc <- function(x, y, ..., block) {
   stopifnot(identical(class(x), class(y)))
-  stopifnot(identical(x$value$type, y$value$type))
-  rd_section_minidesc(
-    x$value$type,
-    label = c(x$value$label, y$value$label),
-    desc = c(x$value$desc, y$value$desc)
-  )
+
+  if (!identical(x$value$type, y$value$type)) {
+    warn_roxy_block(block, "Don't know how to combine @describeIn types {.str {x$value$type}} and {.str {y$value$type}}")
+    x
+  } else {
+    rd_section_minidesc(
+      x$value$type,
+      label = c(x$value$label, y$value$label),
+      desc = c(x$value$desc, y$value$desc)
+    )
+  }
 }
 
 #' @export

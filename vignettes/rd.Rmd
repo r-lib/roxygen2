@@ -1,8 +1,8 @@
 ---
-title: "Rd (documentation) tags"
+title: "Documentation topics"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Rd (documentation) tags}
+  %\VignetteIndexEntry{Documentation topics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

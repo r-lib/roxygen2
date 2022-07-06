@@ -1,8 +1,8 @@
 ---
-title: "Rd formatting"
+title: "Markdown formatting"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Rd formatting}
+  %\VignetteIndexEntry{Markdown formatting}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -270,16 +270,16 @@ It is never appropriate to use backticks around the `ref` in this form.
 
 S3 and S4 class *not done yet*
 
-+--------------------+------------------------+----------------------------------+
-| Examples           | Help topic\            | Notes                            |
-|                    | for what?              |                                  |
-+:===================+:=======================+:=================================+
-| `[abc-class]`\     | an S4 class named\     | In Rd: `\linkS4class{abc}` or\   |
-| `[pkg::abc-class]` | "abc" in same package\ | `\link[pkg:abc-class]{pkg::abc}` |
-|                    | or in `pkg`            |                                  |
-+--------------------+------------------------+----------------------------------+
-| `[abc][abc-class]` | \*is this a thing?     | ??? `\link[=abc-class]{abc}`     |
-+--------------------+------------------------+----------------------------------+
++---------------------+------------------------+----------------------------------+
+| Examples            | Help topic\            | Notes                            |
+|                     | for what?              |                                  |
++:====================+:=======================+:=================================+
+| `[abc-class]`\      | an S4 class named\     | In Rd: `\linkS4class{abc}` or\   |
+| `[pkg::abc-class]`  | "abc" in same package\ | `\link[pkg:abc-class]{pkg::abc}` |
+|                     | or in `pkg`            |                                  |
++---------------------+------------------------+----------------------------------+
+| `[abc][abc-class]`  | \*is this a thing?     | ??? `\link[=abc-class]{abc}`     |
++---------------------+------------------------+----------------------------------+
 
 ## Images
 

@@ -34,6 +34,20 @@ reference:
   - object_format
   - roclet_find
 
+articles:
+- title: roxygen2 tags
+  navbar: ~
+  contents:
+  - roxygen2
+  - rd
+  - rd-formatting
+  - namespace
+
+- title: developer
+  navbar: Developer
+  contents:
+  - extending
+
 news:
   releases:
   - text: "Version 7.2.0"

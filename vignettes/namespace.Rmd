@@ -1,8 +1,8 @@
 ---
-title: "NAMESPACE tags"
+title: "NAMESPACE"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{NAMESPACE tags}
+  %\VignetteIndexEntry{NAMESPACE}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

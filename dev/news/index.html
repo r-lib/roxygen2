@@ -72,7 +72,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li><p>Give useful error if <code>@describeIn</code> can’t combine docs (<a href="https://github.com/r-lib/roxygen2/issues/1366" class="external-link">#1366</a>).</p></li>
+<ul><li><p>Automated usage no longer mangles nbsp in default arguments (<a href="https://github.com/r-lib/roxygen2/issues/1342" class="external-link">#1342</a>).</p></li>
+<li><p>Give useful error if <code>@describeIn</code> can’t combine docs (<a href="https://github.com/r-lib/roxygen2/issues/1366" class="external-link">#1366</a>).</p></li>
 <li><p>Code evaluated in inline markdown code chunks and <code>@eval</code>/<code>@evalRd</code>/ <code>@evalNamespace</code> is now evaluated in an environment designed to be more reproducible and to suppress output that won’t work in Rd (e.g. turning off colour and unicode support in cli) (<a href="https://github.com/r-lib/roxygen2/issues/1351" class="external-link">#1351</a>). They now also set knitr options <code>comment = #&gt;</code> (<a href="https://github.com/r-lib/roxygen2/issues/1380" class="external-link">#1380</a>) and <code>collapse = TRUE</code> (<a href="https://github.com/r-lib/roxygen2/issues/1376" class="external-link">#1376</a>).</p></li>
 </ul></div>
     <div class="section level2">

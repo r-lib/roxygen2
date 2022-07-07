@@ -5,7 +5,7 @@ test_that("can eval inline code", {
     #' @description Description `r 2 + 2`
     #' @md
     foo <- function() NULL
-    
+
   ")[[1]]
   expect_equal(out1$get_value("title"), "Title 2")
   expect_equal(out1$get_value("description"), "Description 4")
@@ -21,7 +21,7 @@ test_that("can eval fenced code", {
     #' ```
     #' @md
     foo <- function() NULL
-    
+
   ")[[1]]
   expect_match(out1$get_value("details"), "2")
 })
@@ -35,7 +35,7 @@ test_that("use same env within, but not across blocks", {
     bar <- function() NULL
 
     #' Title
-    #' 
+    #'
     #' Description `r exists('baz', inherits = FALSE)`
     #' @md
     zap <- function() NULL
@@ -56,7 +56,7 @@ test_that("appropriate knit print method for fenced and inline is applied", {
   )
   out1 <- roc_proc_text(rd_roclet(), "
     #' @title Title `r structure('default', class = 'foo')`
-    #' 
+    #'
     #' @details Details
     #'
     #' ```{r}
@@ -153,9 +153,30 @@ test_that("interleaving fences and inline code", {
     #' @name dummy
     NULL")[[1]]
 
-  details <- out1$get_value("details")
-  expect_match(details, "Details 10", fixed = TRUE)
-  expect_match(details, "## [1] 20", fixed = TRUE)
+  expect_snapshot(cat(out1$get_value("details")))
+})
+
+test_that("preserves white space", {
+    out1 <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' @details
+    #'
+    #' ```{r}
+    #' a <- 1
+    #'
+    #' b <- 2
+    #' ```
+    #'
+    #' ```{r}
+    #' c <- 3
+    #' ```
+    #'
+    #' @md
+    #' @name dummy
+    NULL")[[1]]
+
+  expect_snapshot(cat(out1$get_value("details")))
 })
 
 test_that("fence options are used", {

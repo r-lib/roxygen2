@@ -17,8 +17,11 @@ print.rd <- function(x, ...) {
 }
 
 escape <- function(x) UseMethod("escape")
+#' @export
 escape.NULL <- function(x) NULL
+#' @export
 escape.rd <- function(x) x
+#' @export
 escape.character <- function(x) {
   # wrap_usage uses \u{A0}, the unicode non-breaking space, which
   # is not necessarily valid in windows locales. useBytes is a quick

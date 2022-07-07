@@ -204,7 +204,7 @@ A character vector of topic names.
 \subsection{Method \code{add()}}{
 Add one or more sections to the topic.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$add(x, overwrite = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$add(x, block = "???", overwrite = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -214,6 +214,8 @@ Add one or more sections to the topic.
 another \code{RoxyTopic} object, all of its sections will be added;
 or an \link{rd_section} object;
 or a list of \link{rd_section} objects to add.}
+
+\item{\code{block}}{Name of block to use in error messages.}
 
 \item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
 then the two sections will be merged.}
@@ -227,13 +229,15 @@ then the two sections will be merged.}
 \subsection{Method \code{add_section()}}{
 Add a section.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$add_section(section, overwrite = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RoxyTopic$add_section(section, block = "???", overwrite = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{section}}{\link{rd_section} object to add.}
+
+\item{\code{block}}{Name of block to use in error messages.}
 
 \item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
 then the two sections will be merged.}

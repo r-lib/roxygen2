@@ -354,4 +354,9 @@ test_that("old wrapping style doesn't change unexpectedly", {
   })
 })
 
-
+test_that("preserves non-breaking-space", {
+   expect_equal(
+     call_to_usage(f <- function(a = "\u{A0}") {}),
+     'f(a = "\u{A0}")'
+   )
+})

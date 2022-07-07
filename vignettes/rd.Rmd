@@ -681,6 +681,11 @@ This warning originates in Pandoc, and it is harmless.
 
 ## Other tags
 
+### Suppress documentation
+
+It's sometimes useful to include roxygen2 documentation tags without generating an `.Rd` file.
+You can use `@noRd` to suppress file generation for a given topic.
+
 ### Indexing
 
 Three other tags make it easier for the user to find documentation within R's help system:
@@ -711,3 +716,4 @@ Use one tag per source file:
 #' @backref src/file.cpp
 #' @backref src/file.h
 ```
+

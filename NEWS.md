@@ -50,7 +50,7 @@
   `\ifelse{}{}{}` tags are now inserted correctly (without additional `{}`) 
   (#1062).
 
-* `@inhert` now supports inheriting "Notes" with `@inherit pkg::fun note` 
+* `@inherit` now supports inheriting "Notes" with `@inherit pkg::fun note` 
   (@pat-s, #1218)
 
 * Automatic `@usage` now correctly wraps arguments containing syntactically 

@@ -116,7 +116,9 @@ eval_code_node <- function(node, env) {
 knitr_chunk_defaults <- list(
   error = FALSE,
   fig.path = "man/figures/",
-  fig.process = function(path) basename(path)
+  fig.process = function(path) basename(path),
+  comment = "#>",
+  collapse = TRUE
 )
 
 str_set_all_pos <- function(text, pos, value, nodes) {

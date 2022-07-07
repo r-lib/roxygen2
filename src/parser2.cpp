@@ -118,7 +118,7 @@ cpp11::list tokenise_block(cpp11::strings lines, std::string file,
 
     if (!line.consumeRoxygenComment()) {
       // Incremenet curRow for non-roxygen comments at start of block
-      if (curVal == "")
+      if (curVal.empty())
         curRow++;
       continue;
     }

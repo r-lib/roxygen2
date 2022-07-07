@@ -27,8 +27,8 @@
       x,
       y,
       xy = "abcdef",
-      xyz = c(`word word word word` = "abcdef", `word word word` = "abcdef",
-        `word word word` = "abcdef", `word word word` = "abcdef")
+      xyz = c(`word word word word` = "abcdef", `word word word` = "abcdef", `word word word`
+        = "abcdef", `word word word` = "abcdef")
     ) 
     
     function_name(

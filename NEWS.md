@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Automated usage no longer mangles nbsp in default arguments (#1342).
+
 * Give useful error if `@describeIn` can't combine docs (#1366).
 
 * Code evaluated in inline markdown code chunks and `@eval`/`@evalRd`/

@@ -73,7 +73,8 @@
       methods are applied (#1179). This change alters outputs and brings roxygen
       in line with console and R markdown behavior. `x <- "foo"` no longer 
       inserts anything into the resulting documentation, but `x <- "foo"; x` 
-      will.
+      will. This also means that returning a character vector will insert
+      commas between components, not newlines.
 
 * roxygen2 no longer generates invalid HTML (#1290).
 

@@ -1,5 +1,5 @@
 ---
-title: "Markdown support"
+title: "(R)Markdown support"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Markdown support}
@@ -11,12 +11,9 @@ vignette: >
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
-We expect most roxygen2 user will write documentation using markdown since it's familiar, and doesn't require learning any new syntax.
+We expect most roxygen2 users will write documentation using markdown rather than Rd syntax, since it's familiar, and doesn't require learning any new syntax.
 In most cases, you can just use your existing RMarkdown knowledge and it'll work as you expect.
 When it doesn't, you can read this vignette to figure out what's going on and how to fix it.
-
-roxygen uses the [commonmark package](https://github.com/r-lib/commonmark), based on the "CommonMark Reference Implementation".
-See <https://commonmark.org/help/> for more about the parser and the markdown language it supports.
 
 ## Enabling markdown support
 
@@ -47,6 +44,10 @@ Here is an example roxygen chunk that uses Markdown.
 ```
 
 ## Basic syntax
+
+roxygen uses the [commonmark package](https://github.com/r-lib/commonmark), based on the "CommonMark Reference Implementation".
+See <https://commonmark.org/help/> for more about the parser and the markdown language it supports.
+The most important details are described below.
 
 ### Sections and subsections
 
@@ -295,6 +296,10 @@ This code is run every time you call `roxygenize()` (or `devtools::document()`) 
 This potentially makes `roxygenize()` (much) slower.
 Either avoid expensive computations, or turn on knitr caching with `cache = TRUE`.
 Make sure to omit the cache from the package with `usethis::use_build_ignore()`.
+
+Note that knitr will call the appropriate `print()` or (if available) `knitr::knit_print()` method on the result.
+This may geenrate markdown not supported by roxygen2.
+If needed, override the automatic methods to have your R calls return your own markdown as a character vector, wrapped in `knitr::asis_output()`.
 
 ### Chunk options
 

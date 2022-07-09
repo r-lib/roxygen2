@@ -40,6 +40,8 @@ articles:
   contents:
   - roxygen2
   - rd
+  - rd-other
+  - reuse
   - rd-formatting
   - namespace
 

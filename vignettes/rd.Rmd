@@ -1,8 +1,8 @@
 ---
-title: "Documentation topics"
+title: "Documenting functions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Documentation topics}
+  %\VignetteIndexEntry{Documenting functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -11,16 +11,21 @@ vignette: >
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
+This vignette introduces the basics of roxygen2 for documenting functions.
+See `vignette("rd-other")` for documenting other types of objects and `vignette("reuse")` for reusing documentation across topics.
+
 ## Basics
 
-A roxygen **block** is a sequence of lines starting with `#'` (optionally preceded by whitespace).
-The first lines of the block is called the **introduction** and forms the title, description, and details, as described next.
+A roxygen **block** is a sequence of lines starting with `#'` (optionally preceded by white space).
+
+The first lines of the block is called the **introduction** and forms the title, description, and details, as described below.
 The introduction continues until the first **tag**.
+
 Tags start with `@`, like `@details` or `@param`.
 Tags must appear at the beginning of a line and their content extends to the start of the next tag or the end of the block.
 Text within the description or tags can be formatted using Markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
 
-A block continues until it hits R code, typically a function or object assignment.
+A block ends when it hits R code, usually a function or object assignment.
 Blocks ignore empty lines, including lines made up of non-roxygen comments.
 If you need to separate two blocks, use `NULL`.
 
@@ -125,199 +130,6 @@ All functions must have a documented return value for initial CRAN submission.
 In most case, the function usage (which appears beneath the description in the generates docs) will be automatically derived from the function specification.
 For the cases where it is not, please [file an issue](https://github.com/r-lib/roxygen2/issues) and use `@usage` to override the default with you want.
 If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use `@usage NULL`.
-
-## Datasets
-
-Datasets are stored in `data/`, not as regular R objects in the package.
-This means you need to document them in a slightly different way: instead of documenting the data directly, you quote the dataset's name.
-
-```{r}
-#' Prices of over 50,000 round cut diamonds
-#'
-#' A dataset containing the prices and other attributes of almost 54,000
-#'  diamonds. The variables are as follows:
-#'
-#' @format A data frame with 53940 rows and 10 variables:
-#' \describe{
-#'   \item{price}{price in US dollars ($326--$18,823)}
-#'   \item{carat}{weight of the diamond (0.2--5.01)}
-#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}
-#'   \item{color}{diamond colour, from D (best) to J (worst)}
-#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,
-#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}
-#'   \item{x}{length in mm (0--10.74)}
-#'   \item{y}{width in mm (0--58.9)}
-#'   \item{z}{depth in mm (0--31.8)}
-#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
-#'   \item{table}{width of top of diamond relative to widest point (43--95)}
-#' }
-```
-
-Note the use of two additional tags that are particularly useful for documenting data:
-
--   `@format`, which gives an overview of the structure of the dataset.
-    This should include a **definition list** that describes each variable.
-    There's currently no way to generate this with Markdown, so this is one of the few places you'll need to Rd markup directly.
-
--   `@source` where you got the data form, often a URL.
-
-## Packages
-
-As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel `"_PACKAGE"`.
-This automatically include information parsed from the `DESCRIPTION`, including title, description, list of authors, and useful URLs.
-
-We recommend placing package documentation in `{pkgname}-package.R`, and have `@keywords internal`.
-Use `usethis::use_package_doc()` to set up automatically.
-
-Here's an example:
-
-```{r, eval = FALSE}
-#' @keywords internal 
-"_PACKAGE"
-```
-
-Package documentation is a good place to put `# Package options` that documents options used by the package.
-
-Some notes:
-
--   By default, aliases will be added so that both `?pkgname` and `package?pkgname` will find the package help.
-    If there's an existing function called `pkgname`, use `@aliases {pkgname}-package` to override the default.
-
--   Use `@references` to point to published material about the package that users might find helpful.
-
-## Object-oriented programming
-
-The following sections describe the most commonly used tags for the various OOPS systems supported by roxygen2: S3, S4, and R6
-
-### S3
-
--   S3 **generics** are regular functions, so document them as such.
-    If necessary, include a `@section` that provides additional details for developers implementing methods.
-
--   S3 **classes** have no formal definition, so document the [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
-
--   It is your choice whether or not to document S3 **methods**.
-    Generally, it's not necessary to document straightforward methods for common generics like `print()`.
-    (You should, however, always `@export` S3 methods).
-
-    If your method is more complicated, you should document it by setting `@rdname`.
-    Typically you will document methods with their generic, so you'd document `foofy.data.frame` by setting `@rdname`.
-    In base R, you can find documentation for more complex methods like `?predict.lm`, `?predict.glm`, and `?anova.glm`.
-
--   Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use `@method` if there is ambiguity.
-    For example, is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, or the `data.frame` method for `all.equal()`?.
-    If this happens to you, disambiguate with (e.g.) `@method all.equal data.frame`.
-
-### S4
-
-S4 **generics** are also functions, so document them as such.
-
-Document **S4 classes** by adding a roxygen block before `setClass()`.
-Use `@slot` to document the slots of the class.
-Here's a simple example:
-
-```{r}
-#' An S4 class to represent a bank account
-#'
-#' @slot balance A length-one numeric vector
-Account <- setClass("Account",
-  slots = list(balance = "numeric")
-)
-```
-
-S4 **methods** are a little more complicated.
-Unlike S3 methods, all S4 methods must be documented.
-You can document them in three places:
-
--   In the class.
-    Most appropriate if the corresponding generic uses single dispatch and you created the class.
-
--   In the generic.
-    Most appropriate if the generic uses multiple dispatches and you control it.
-
--   In its own file.
-    Most appropriate if the method is complex.
-    or the either two options don't apply.
-
-Use either `@rdname` or `@describeIn` to control where method documentation goes.
-See the next section for more details.
-
-### R6
-
--   R6 methods can be documented in-line, i.e. the method's documentation comments come right before the definition of the method.
-
--   Method documentation can use the `@description`, `@details`, `@param`, `@return` and `@examples` tags.
-    These are used to create a subsection for the method, within a separate 'Methods' section.
-    All roxygen comment lines of a method documentation must appear after a tag.
-
--   `@param` tags that appear before the class definition are automatically inherited by all methods, if needed.
-
--   R6 fields and active bindings can make use of the `@field` tag.
-    Their documentation should also be in-line.
-
--   roxygen2 checks that all public methods, public fields, active bindings and all method arguments are documented, and issues warnings otherwise.
-
--   To turn off the special handling of R6 classes and go back to the roxygen2 6.x.x behavior, use the `r6 = FALSE` option in `DESCRIPTION`, in the `Roxygen` entry: `Roxygen: list(r6 = FALSE)`.
-
-roxygen2 automatically generates additional sections for an R6 class:
-
--   A section with information about the superclass(es) of the class, with links.
-    In HTML this includes a list of all inherited methods, with links.
-
--   An 'Examples' section that contains all class and method examples.
-    This section is run by `R CMD check`, so method examples must work without errors.
-
-An example from the R6 tutorial:
-
-```{r}
-#' R6 Class Representing a Person
-#'
-#' @description
-#' A person has a name and a hair color.
-#'
-#' @details
-#' A person can also greet you.
-
-Person <- R6::R6Class("Person",
-public = list(
-
-    #' @field name First or full name of the person.
-    name = NULL,
-
-    #' @field hair Hair color of the person.
-    hair = NULL,
-
-    #' @description
-    #' Create a new person object.
-    #' @param name Name.
-    #' @param hair Hair color.
-    #' @return A new `Person` object.
-    initialize = function(name = NA, hair = NA) {
-      self$name <- name
-      self$hair <- hair
-      self$greet()
-    },
-
-    #' @description
-    #' Change hair color.
-    #' @param val New hair color.
-    #' @examples
-    #' P <- Person("Ann", "black")
-    #' P$hair
-    #' P$set_hair("red")
-    #' P$hair
-    set_hair = function(val) {
-      self$hair <- val
-    },
-
-    #' @description
-    #' Say hi.
-    greet = function() {
-      cat(paste0("Hello, my name is ", self$name, ".\n"))
-    }
-  )
-)
-```
 
 ## Other tags
 

@@ -27,9 +27,14 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/rd.html">Documentation topics</a>
-    <a class="dropdown-item" href="../articles/rd-formatting.html">Markdown formatting</a>
-    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE</a>
+    <h6 class="dropdown-header" data-toc-skip>Documentation</h6>
+    <a class="dropdown-item" href="../articles/rd.html">Documenting functions</a>
+    <a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a>
+    <a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a>
+    <a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>NAMESPACE</h6>
+    <a class="dropdown-item" href="../articles/namespace.html">Managing imports and exports</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="../articles/extending.html">Extending roxygen2</a>
@@ -70,20 +75,29 @@
     </div>
 
     <div class="section ">
-      <h3>roxygen2 tags</h3>
+      <h3>Documentation</h3>
       <p class="section-desc"></p>
 
-      <dl><dt><a href="roxygen2.html">Getting started with roxygen2</a></dt>
-        <dd>
-        </dd><dt><a href="rd.html">Documentation topics</a></dt>
-        <dd>
-        </dd><dt><a href="rd-formatting.html">Markdown formatting</a></dt>
-        <dd>
-        </dd><dt><a href="namespace.html">NAMESPACE</a></dt>
-        <dd>
+      <dl><dt><a href="roxygen2.html">Get started with roxygen2</a></dt>
+        <dd><p>Learn the big picture of roxygen2 and the basic workflow you’ll use with it.</p>
+        </dd><dt><a href="rd.html">Documenting functions</a></dt>
+        <dd><p>The basics of roxygen2 tags and how to use them for documenting functions.</p>
+        </dd><dt><a href="rd-other.html">Documenting other objects</a></dt>
+        <dd><p>How to document datasets, packages, and the classes, generics, and methods of S3, S4, and R6.</p>
+        </dd><dt><a href="reuse.html">Reusing documentation</a></dt>
+        <dd><p>Tools for reusing documentation across topics, and between documentation and vignettes.</p>
+        </dd><dt><a href="rd-formatting.html">(R)Markdown support</a></dt>
+        <dd><p>The details of the (R)Markdown support provided by roxygen2.</p>
       </dd></dl></div>
     <div class="section ">
-      <h3>developer</h3>
+      <h3>NAMESPACE</h3>
+      <p class="section-desc"></p>
+
+      <dl><dt><a href="namespace.html">Managing imports and exports</a></dt>
+        <dd><p>Generating the <code>NAMESPACE</code> file with roxygen2.</p>
+      </dd></dl></div>
+    <div class="section ">
+      <h3>Developer resources</h3>
       <p class="section-desc"></p>
 
       <dl><dt><a href="extending.html">Extending roxygen2</a></dt>

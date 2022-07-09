@@ -27,9 +27,14 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/rd.html">Documentation topics</a>
-    <a class="dropdown-item" href="../articles/rd-formatting.html">Markdown formatting</a>
-    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE</a>
+    <h6 class="dropdown-header" data-toc-skip>Documentation</h6>
+    <a class="dropdown-item" href="../articles/rd.html">Documenting functions</a>
+    <a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a>
+    <a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a>
+    <a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>NAMESPACE</h6>
+    <a class="dropdown-item" href="../articles/namespace.html">Managing imports and exports</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="../articles/extending.html">Extending roxygen2</a>
@@ -457,7 +462,7 @@
 <p>The title and description will be automatically filled in from the <code>DESCRIPTION</code>.</p>
 </li>
 <li><p>New tags <code>@rawRd</code> and <code>@rawNamespace</code> allow you to insert raw (unescaped) in Rd and the <code>NAMESPACE</code> (this is useful for conditional imports). <code>@evalRd()</code> is similar, but instead of literal Rd, you give it R code that produces literal Rd code when run. This should make it easier to experiment with new types of output (<a href="https://github.com/r-lib/roxygen2/issues/385" class="external-link">#385</a>).</p></li>
-<li><p>Roxygen2 now parses the source code files in the order specified in the <code>Collate</code> field in <code>DESCRIPTION</code>. This improves the ordering of the generated documentation when using <code>@describeIn</code> and/or <code>@rdname</code> split across several <code>.R</code> files, as often happens when working with S4 (<a href="https://github.com/r-lib/roxygen2/issues/323" class="external-link">#323</a>, <a href="https://github.com/r-lib/roxygen2/issues/324" class="external-link">#324</a>).</p></li>
+<li><p>roxygen2 now parses the source code files in the order specified in the <code>Collate</code> field in <code>DESCRIPTION</code>. This improves the ordering of the generated documentation when using <code>@describeIn</code> and/or <code>@rdname</code> split across several <code>.R</code> files, as often happens when working with S4 (<a href="https://github.com/r-lib/roxygen2/issues/323" class="external-link">#323</a>, <a href="https://github.com/r-lib/roxygen2/issues/324" class="external-link">#324</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-features-and-bug-fixes-5-0-0">Minor features and bug fixes<a class="anchor" aria-label="anchor" href="#minor-features-and-bug-fixes-5-0-0"></a></h3>
@@ -522,7 +527,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="4.0.0" id="roxygen2-400">roxygen2 4.0.0<a class="anchor" aria-label="anchor" href="#roxygen2-400"></a></h2><p class="text-muted">CRAN release: 2014-05-02</p>
-<p>Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you’ll need to run <code>roxygen2::upgradeRoxygen()</code>. That will flag all existing files as being created by roxygen2.</p>
+<p>roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you’ll need to run <code>roxygen2::upgradeRoxygen()</code>. That will flag all existing files as being created by roxygen2.</p>
 <div class="section level3">
 <h3 id="new-features-4-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-4-0-0"></a></h3>
 <ul><li><p>Six vignettes provide a comprehensive overview of using roxygen2 in practice. Run <code>browseVignettes("roxygen2")</code> to access.</p></li>
@@ -537,13 +542,13 @@
 <span><span class="co">#' Some data I collected about myself</span></span>
 <span><span class="st">"mydata"</span></span></code></pre></div>
 </li>
-<li><p>Roxygen2 now adds a comment to all generated files so that you know they’ve been generated, and should not be hand edited.</p></li>
-<li><p>Roxygen2 no longer wraps the text in Rd files by default, i.e. the default option is <code>wrap = FALSE</code> now. To override it, you have to specify a field <code>Roxygen: list(wrap = TRUE)</code> in <code>DESCRIPTION</code> (<a href="https://github.com/r-lib/roxygen2/issues/178" class="external-link">#178</a>).</p></li>
+<li><p>roxygen2 now adds a comment to all generated files so that you know they’ve been generated, and should not be hand edited.</p></li>
+<li><p>roxygen2 no longer wraps the text in Rd files by default, i.e. the default option is <code>wrap = FALSE</code> now. To override it, you have to specify a field <code>Roxygen: list(wrap = TRUE)</code> in <code>DESCRIPTION</code> (<a href="https://github.com/r-lib/roxygen2/issues/178" class="external-link">#178</a>).</p></li>
 <li><p>Roxygenise automatically deletes out-of-date Rd files in <code>man/</code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="improved-error-handling-4-0-0">Improved error handling<a class="anchor" aria-label="anchor" href="#improved-error-handling-4-0-0"></a></h3>
-<ul><li><p>Roxygen2 will never overwrite a file that was not generated by roxygen2. This means that the first time you use this version of roxygen, you’ll need to delete all existing Rd files. <code><a href="../reference/roxygenize.html">roxygenise()</a></code> gains a clean argument that will automatically remove any files previously created by roxygen2.</p></li>
+<ul><li><p>roxygen2 will never overwrite a file that was not generated by roxygen2. This means that the first time you use this version of roxygen, you’ll need to delete all existing Rd files. <code><a href="../reference/roxygenize.html">roxygenise()</a></code> gains a clean argument that will automatically remove any files previously created by roxygen2.</p></li>
 <li><p>Parsing is stricter: many issues that were previously warnings are now errors. All errors should now give you the line number of the roxygen block associated with the error.</p></li>
 <li><p>Every input is now checked to make sure that you have matching braces (e.g. every <code>{</code> has a matching <code>}</code>). This should prevent frustrating errors that require careful reading of <code>.Rd</code> files (<a href="https://github.com/r-lib/roxygen2/issues/183" class="external-link">#183</a>).</p></li>
 <li><p><code>@section</code> titles and <code>@export</code> tags can now only span a single line to prevent common bugs.</p></li>
@@ -592,7 +597,7 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.0.0" id="roxygen2-300">roxygen2 3.0.0<a class="anchor" aria-label="anchor" href="#roxygen2-300"></a></h2><p class="text-muted">CRAN release: 2013-12-06</p>
-<p>Roxygen2 now fully supports S4 and RC (reference classes) - you should no longer need to manually add <code>@alias</code> or <code>@usage</code> tags for S4 classes, methods and generics, or for RC classes.</p>
+<p>roxygen2 now fully supports S4 and RC (reference classes) - you should no longer need to manually add <code>@alias</code> or <code>@usage</code> tags for S4 classes, methods and generics, or for RC classes.</p>
 <ul><li><p>The default usage definitions are much better, generating the correct usage for data sets (<a href="https://github.com/r-lib/roxygen2/issues/122" class="external-link">#122</a>), S3 methods (without additional <code>@method</code> tag), S4 generics, S4 methods, and for replacement (<a href="https://github.com/r-lib/roxygen2/issues/119" class="external-link">#119</a>) and infix functions. Backslashes in function arguments in are correctly escaped. Usage statements also use a more sophisticated line wrapping algorithm so that they should cause fewer problems with the R CMD check line limit. (<a href="https://github.com/r-lib/roxygen2/issues/89" class="external-link">#89</a>, <a href="https://github.com/r-lib/roxygen2/issues/125" class="external-link">#125</a>).</p></li>
 <li><p>S4 classes, S4 methods, and RC classes are given better default topics, and the file names corresponding to those topics are shorter.</p></li>
 <li><p>S4 methods will automatically inherit parameter documentation from their generic.</p></li>

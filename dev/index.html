@@ -8,7 +8,7 @@
 <meta name="description" content="Generate your Rd documentation, NAMESPACE file, and
     collation field using specially formatted comments. Writing
     documentation in-line with code makes it easier to keep your
-    documentation up-to-date as your requirements change. Roxygen2 is
+    documentation up-to-date as your requirements change. roxygen2 is
     inspired by the Doxygen system for C++.">
 <title>In-Line Documentation for R • roxygen2</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -27,7 +27,7 @@
 <meta property="og:description" content="Generate your Rd documentation, NAMESPACE file, and
     collation field using specially formatted comments. Writing
     documentation in-line with code makes it easier to keep your
-    documentation up-to-date as your requirements change. Roxygen2 is
+    documentation up-to-date as your requirements change. roxygen2 is
     inspired by the Doxygen system for C++.">
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png">
 <meta name="robots" content="noindex">
@@ -62,9 +62,14 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/rd.html">Documentation topics</a>
-    <a class="dropdown-item" href="articles/rd-formatting.html">Markdown formatting</a>
-    <a class="dropdown-item" href="articles/namespace.html">NAMESPACE</a>
+    <h6 class="dropdown-header" data-toc-skip>Documentation</h6>
+    <a class="dropdown-item" href="articles/rd.html">Documenting functions</a>
+    <a class="dropdown-item" href="articles/rd-other.html">Documenting other objects</a>
+    <a class="dropdown-item" href="articles/reuse.html">Reusing documentation</a>
+    <a class="dropdown-item" href="articles/rd-formatting.html">(R)Markdown support</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>NAMESPACE</h6>
+    <a class="dropdown-item" href="articles/namespace.html">Managing imports and exports</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="articles/extending.html">Extending roxygen2</a>
@@ -153,9 +158,12 @@
 </h2>
 <p>To get started, first read <code><a href="articles/roxygen2.html">vignette("roxygen2")</a></code>. Then read more about the specific package component that you want to generate:</p>
 <ul>
-<li>For <code>.Rd</code> documentation files, read <code><a href="articles/rd.html">vignette("rd")</a></code>.</li>
-<li>For the <code>NAMESPACE</code>, read <code><a href="articles/namespace.html">vignette("namespace")</a></code>.</li>
-<li>For the <code>Collate</code> field in the <code>DESCRIPTION</code>, read <code><a href="reference/update_collate.html">update_collate()</a></code>.</li>
+<li><p>Start with <code><a href="articles/rd.html">vignette("rd")</a></code> to learn how document your functions with roxygen2.</p></li>
+<li><p><code><a href="articles/rd-other.html">vignette("rd-other")</a></code> discusses how to document other things like datasets, the package itself, and the various pieces used by R’s OOP systems.</p></li>
+<li><p><code><a href="articles/rd-formatting.html">vignette("rd-formatting")</a></code> gives the details of roxygen2’s rmarkdown support.</p></li>
+<li><p><code><a href="articles/reuse.html">vignette("reuse")</a></code> demonstrates the tools available to reuse documentation in multiple places.</p></li>
+<li><p><code><a href="articles/namespace.html">vignette("namespace")</a></code> describes how to generate a <code>NAMESPACE</code> file, how namespacing works in R, and how you can use roxygen2 to be specific about what your package needs and supplies.</p></li>
+<li><p>For the <code>Collate</code> field in the <code>DESCRIPTION</code>, see <code>?update_collate()</code>.</p></li>
 </ul>
 </div>
 </div>

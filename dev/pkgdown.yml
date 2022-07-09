@@ -5,9 +5,11 @@ articles:
   extending: extending.html
   namespace: namespace.html
   rd-formatting: rd-formatting.html
+  rd-other: rd-other.html
   rd: rd.html
+  reuse: reuse.html
   roxygen2: roxygen2.html
-last_built: 2022-07-08T19:15Z
+last_built: 2022-07-09T23:22Z
 urls:
   reference: https://roxygen2.r-lib.org/reference
   article: https://roxygen2.r-lib.org/articles

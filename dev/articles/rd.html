@@ -5,8 +5,9 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="roxygen2">
-<title>Documentation topics • roxygen2</title>
+<meta name="description" content="The basics of roxygen2 tags and how to use them for  documenting functions.
+">
+<title>Documenting functions • roxygen2</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -19,8 +20,9 @@
 <link href="../deps/_Source%20Code%20Pro-0.4.1/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Documentation topics">
-<meta property="og:description" content="roxygen2">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Documenting functions">
+<meta property="og:description" content="The basics of roxygen2 tags and how to use them for  documenting functions.
+">
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -54,9 +56,14 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/rd.html">Documentation topics</a>
-    <a class="dropdown-item" href="../articles/rd-formatting.html">Markdown formatting</a>
-    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE</a>
+    <h6 class="dropdown-header" data-toc-skip>Documentation</h6>
+    <a class="dropdown-item" href="../articles/rd.html">Documenting functions</a>
+    <a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a>
+    <a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a>
+    <a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>NAMESPACE</h6>
+    <a class="dropdown-item" href="../articles/namespace.html">Managing imports and exports</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="../articles/extending.html">Extending roxygen2</a>
@@ -101,7 +108,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Documentation topics</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Documenting functions</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/r-lib/roxygen2/blob/HEAD/vignettes/rd.Rmd" class="external-link"><code>vignettes/rd.Rmd</code></a></small>
@@ -110,14 +117,17 @@
 
     
     
+<p>This vignette introduces the basics of roxygen2 for documenting functions. See <code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> for documenting other types of objects and <code><a href="../articles/reuse.html">vignette("reuse")</a></code> for reusing documentation across topics.</p>
 <div class="section level2">
 <h2 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
 </h2>
-<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceded by whitespace). The first lines of the block forms the <strong>description</strong>, described next. The description continues until the first <strong>tag</strong>. Tags start with <code>@</code>, like <code>@details</code> or <code>@param</code> , and must appear at the beginning of a line. The content of a tag extends to the start of the next tag or the end of the block. Text within the description or tags can be formatted using Markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
-<p>A block continues until it hits R code, typically a function or object assignment. Blocks ignore empty lines, including lines made up of non-roxygen comments. If you need to separate two blocks, use <code>NULL</code>.</p>
+<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceded by white space).</p>
+<p>The first lines of the block is called the <strong>introduction</strong> and forms the title, description, and details, as described below. The introduction continues until the first <strong>tag</strong>.</p>
+<p>Tags start with <code>@</code>, like <code>@details</code> or <code>@param</code>. Tags must appear at the beginning of a line and their content extends to the start of the next tag or the end of the block. Text within the description or tags can be formatted using Markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>A block ends when it hits R code, usually a function or object assignment. Blocks ignore empty lines, including lines made up of non-roxygen comments. If you need to separate two blocks, use <code>NULL</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="the-description-block">The description block<a class="anchor" aria-label="anchor" href="#the-description-block"></a>
+<h2 id="the-introduction">The introduction<a class="anchor" aria-label="anchor" href="#the-introduction"></a>
 </h2>
 <p>Each documentation block starts with some text which defines the title, the description, and the details. Here’s an example showing what the documentation for <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code> might look like if it had been written with roxygen:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -150,59 +160,31 @@
 <span><span class="co">#' first argument.</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="object-specifics">Object specifics<a class="anchor" aria-label="anchor" href="#object-specifics"></a>
+<h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h2>
-<p>Further details of roxygen2 depend on what you’re documenting. The following sections describe the most commonly used tags for functions, S3, S4, datasets, and packages.</p>
+<p>Functions are the mostly commonly documented objects. Functions require three tags: <code>@param</code>, <code>@returns</code>, and <code>@examples</code>.</p>
 <div class="section level3">
-<h3 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
+<h3 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
 </h3>
-<p>Functions are the mostly commonly documented objects. Most functions use three tags:</p>
-<ul>
-<li>
-<p><code>@param name description</code> describes the inputs to the function. The description should provide a succinct summary of parameter type (e.g. a string, a numeric vector), and if not obvious from the name, what the parameter does. The description should start with a capital letter and end with a full stop. It can span multiple lines (or even paragraphs) if necessary. All parameters must be documented.</p>
-<p>You can document multiple arguments in one place by separating the names with commas (no spaces). For example, to document both <code>x</code> and <code>y</code>, you can say <code>@param x,y Numeric vectors</code>.</p>
-</li>
-<li>
-<p><code>@examples</code> provides executable R code showing how to use the function in practice. This is a very important part of the documentation because many people look at the examples before reading anything. Example code must work without errors as it is run automatically as part of <code>R CMD     check</code>.</p>
-<p>However, for the purpose of illustration, it’s often useful to include code that causes an error. <code>\dontrun{}</code> allows you to include code in the example that is never used. There are two other special commands. <code>\dontshow{}</code> is run, but not shown in the help page: this can be useful for informal tests. <code>\donttest{}</code> is run in examples, but not run automatically in <code>R CMD check</code>. This is useful if you have examples that take a long time to run. The options are summarised below.</p>
-<table class="table">
-<thead><tr class="header">
-<th>Command</th>
-<th>example</th>
-<th>help</th>
-<th>R CMD check</th>
-<th>R CMD check –as-cran</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>\dontrun{}</code></td>
-<td></td>
-<td>x</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td><code>\dontshow{}</code></td>
-<td>x</td>
-<td></td>
-<td>x</td>
-<td>x</td>
-</tr>
-<tr class="odd">
-<td><code>\donttest{}</code></td>
-<td>x</td>
-<td>x</td>
-<td></td>
-<td>x</td>
-</tr>
-</tbody>
-</table>
-<p>Note that <code>R CMD check --as-cran</code> is run for incoming CRAN checks but not for regular CRAN checks.</p>
-<p>For finer control, you can use <code>@examplesIf</code></p>
+<p>Use <code>@param name description</code> to describe each input to the function. The description should provide a succinct summary of parameter type (e.g. a string, a numeric vector), and if not obvious from the name, what the parameter does. The description is a sentence so should start with a capital letter and end with a full stop. It can span multiple lines (or even paragraphs) if necessary. All parameters must be documented.</p>
+<p>If two or more arguments are tightly coupled, you can document them in one place by separating the names with commas (no spaces). For example, to document both <code>x</code> and <code>y</code>, you can say <code>@param x,y Numeric vectors</code>.</p>
+</div>
+<div class="section level3">
+<h3 id="outputs">Outputs<a class="anchor" aria-label="anchor" href="#outputs"></a>
+</h3>
+<p><code>@returns description</code> describes the output from the function. Briefly describe the type/shape of the output, not the details.</p>
+<p>All functions must have a documented return value for initial CRAN submission.</p>
+</div>
+<div class="section level3">
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h3>
+<p><code>@examples</code> provides executable R code showing how to use the function in practice. This is a very important part of the documentation because many people look at the examples before reading anything. Example code must work without errors as it is run automatically as part of <code>R CMD check</code>.</p>
+<p>For the purpose of illustration, it’s often useful to include code that causes an error. You can do this by wrapping the code in <code><a href="https://rdrr.io/r/base/try.html" class="external-link">try()</a></code> or using <code>\dontrun{}</code> to exclude from the executed example code.</p>
+<p>For finer control, you can use <code>@examplesIf</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @examplesIf interactive()</span></span>
 <span><span class="co">#' browseURL("https://roxygen2.r-lib.org")</span></span></code></pre></div>
-<p>will generate</p>
+<p>This generates</p>
 <pre><code>\examples{
 \dontshow{if (interactive() (if (getRversion() &gt;= "3.4") withAutoprint else force)(\{ # examplesIf}
 gh_organizations(since = 42)
@@ -210,428 +192,32 @@ gh_organizations(since = 42)
 }</code></pre>
 <p>This way, the code evaluating whether the example can be run is not shown to users reading the help, but it still prevents R CMD check failures.</p>
 <p>Instead of including examples directly in the documentation, you can put them in separate files and use <code>@example path/relative/to/package/root</code> to insert them into the documentation.</p>
-</li>
-<li><p><code>@return description</code> describes the output from the function. This is not always necessary, but is a good idea if you return different types of outputs depending on the input, or you’re returning an S3, S4 or RC object.</p></li>
-</ul>
-<p>We could use these new tags to improve our documentation of <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code> as follows:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Sum of vector elements</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' `sum()` returns the sum of all the values present in its arguments.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' This is a generic function: methods can be defined for it directly</span></span>
-<span><span class="co">#' or via the [Summary] group generic. For this to work properly,</span></span>
-<span><span class="co">#' the arguments `...` should be unnamed, and dispatch is on the</span></span>
-<span><span class="co">#' first argument.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param ... Numeric, complex, or logical vectors.</span></span>
-<span><span class="co">#' @param na.rm A logical scalar. Should missing values (including `NaN`)</span></span>
-<span><span class="co">#'   be removed?</span></span>
-<span><span class="co">#' @return If all inputs are integer and logical, then the output</span></span>
-<span><span class="co">#'   will be an integer. If integer overflow </span></span>
-<span><span class="co">#'   (&lt;http://en.wikipedia.org/wiki/Integer_overflow&gt;) occurs, the output</span></span>
-<span><span class="co">#'   will be NA with a warning. Otherwise it will be a length-one numeric or</span></span>
-<span><span class="co">#'   complex vector.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#'   Zero-length vectors have sum 0 by definition. See</span></span>
-<span><span class="co">#'   &lt;http://en.wikipedia.org/wiki/Empty_sum&gt; for more details.</span></span>
-<span><span class="co">#' @examples</span></span>
-<span><span class="co">#' sum(1:10)</span></span>
-<span><span class="co">#' sum(1:5, 6:10)</span></span>
-<span><span class="co">#' sum(F, F, F, T, T)</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' sum(.Machine$integer.max, 1L)</span></span>
-<span><span class="co">#' sum(.Machine$integer.max, 1)</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' \dontrun{</span></span>
-<span><span class="co">#' sum("a")</span></span>
-<span><span class="co">#' }</span></span>
-<span><span class="va">sum</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span>, <span class="va">na.rm</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span></code></pre></div>
-<p>Indent the second and subsequent lines of a tag so that when scanning the documentation so it’s easy to see where one tag ends and the next begins. Tags that always span multiple lines (like <code>@example</code>) should start on a new line and don’t need to be indented.</p>
-<p>In most case, the function usage will be automatically derived from the function specification. For the cases where it is not, please <a href="https://github.com/r-lib/roxygen2/issues" class="external-link">file an issue</a> and use <code>@usage</code> to override the default with you want. If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use <code>@usage NULL</code>.</p>
+<p>All functions must have a documented return value for initial CRAN submission.</p>
 </div>
 <div class="section level3">
-<h3 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>
+<h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h3>
-<ul>
-<li><p>S3 <strong>generics</strong> are regular functions, so document them as such. If necessary, include a <code>@section</code> that provides additional details for method implementors</p></li>
-<li><p>S3 <strong>classes</strong> have no formal definition, so document the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor" class="external-link">constructor</a>.</p></li>
-<li>
-<p>It is your choice whether or not to document S3 <strong>methods</strong>. Generally, it’s not necessary to document straightforward methods for common generics like <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>. (You should, however, always <code>@export</code> S3 methods).</p>
-<p>If your method is more complicated, you should document it by setting <code>@rdname</code>. Typically you will document methods with their generic, so you’d document <code>foofy.data.frame</code> by setting <code>@rdname</code>. In base R, you can find documentation for more complex methods like <code><a href="https://rdrr.io/r/stats/predict.lm.html" class="external-link">?predict.lm</a></code>, <code><a href="https://rdrr.io/r/stats/predict.glm.html" class="external-link">?predict.glm</a></code>, and <code><a href="https://rdrr.io/r/stats/anova.glm.html" class="external-link">?anova.glm</a></code>.</p>
-<p>Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use <code>@method</code> if there is ambiguity. For example, is <code>all.equal.data.frame()</code> the <code>equal.data.frame</code> method for <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code>, or the <code>data.frame</code> method for <code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal()</a></code>?. If this happens to you, disambiguate with (e.g.) <code>@method all.equal data.frame</code>.</p>
-</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
-</h3>
-<p>S4 <strong>generics</strong> are also functions, so document them as such.</p>
-<p>Document <strong>S4 classes</strong> by adding a roxygen block before <code>setClass()</code>. Use <code>@slot</code> to document the slots of the class. Here’s a simple example:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' An S4 class to represent a bank account</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @slot balance A length-one numeric vector</span></span>
-<span><span class="va">Account</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"Account"</span>,</span>
-<span>  slots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>balance <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>S4 <strong>methods</strong> are a little more complicated. Unlike S3 methods, all S4 methods must be documented. You can document them in three places:</p>
-<ul>
-<li><p>In the class. Most appropriate if the corresponding generic uses single dispatch and you created the class.</p></li>
-<li><p>In the generic. Most appropriate if the generic uses multiple dispatches and you control it.</p></li>
-<li><p>In its own file. Most appropriate if the method is complex. or the either two options don’t apply.</p></li>
-</ul>
-<p>Use either <code>@rdname</code> or <code>@describeIn</code> to control where method documentation goes. See the next section for more details.</p>
-</div>
-<div class="section level3">
-<h3 id="r6">R6<a class="anchor" aria-label="anchor" href="#r6"></a>
-</h3>
-<p>Starting from version 7.0.0 roxygen treats documentation for R6 classes specially:</p>
-<ul>
-<li><p>R6 methods can be documented in-line, i.e. the method’s documentation comments come right before the definition of the method.</p></li>
-<li><p>Method documentation can use the <code>@description</code>, <code>@details</code>, <code>@param</code>, <code>@return</code> and <code>@examples</code> tags. These are used to create a subsection for the method, within a separate ‘Methods’ section. All roxygen comment lines of a method documentation must appear after a tag.</p></li>
-<li><p><code>@param</code> tags that appear before the class definition are automatically inherited by all methods, if needed.</p></li>
-<li><p>R6 fields and active bindings can make use of the <code>@field</code> tag. Their documentation should also be in-line.</p></li>
-<li><p>Roxygen2 checks that all public methods, public fields, active bindings and all method arguments are documented, and issues warnings otherwise.</p></li>
-<li><p>To turn off the special handling of R6 classes and go back to the roxygen2 6.x.x behavior, use the <code>r6 = FALSE</code> option in <code>DESCRIPTION</code>, in the <code>Roxygen</code> entry: <code>Roxygen: list(r6 = FALSE)</code>.</p></li>
-</ul>
-<p>Roxygen2 automatically generates additional sections for an R6 class:</p>
-<ul>
-<li><p>A section with information about the superclass(es) of the class, with links. In HTML this includes a list of all inherited methods, with links.</p></li>
-<li><p>An ‘Examples’ section that contains all class and method examples. This section is run by <code>R CMD check</code>, so method examples must work without errors.</p></li>
-</ul>
-<p>An example from the R6 tutorial:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' R6 Class Representing a Person</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @description</span></span>
-<span><span class="co">#' A person has a name and a hair color.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @details</span></span>
-<span><span class="co">#' A person can also greet you.</span></span>
-<span></span>
-<span><span class="va">Person</span> <span class="op">&lt;-</span> <span class="fu">R6</span><span class="fu">::</span><span class="kw"><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></span><span class="op">(</span><span class="st">"Person"</span>,</span>
-<span>public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span></span>
-<span>    <span class="co">#' @field name First or full name of the person.</span></span>
-<span>    name <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span></span>
-<span>    <span class="co">#' @field hair Hair color of the person.</span></span>
-<span>    hair <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span></span>
-<span>    <span class="co">#' @description</span></span>
-<span>    <span class="co">#' Create a new person object.</span></span>
-<span>    <span class="co">#' @param name Name.</span></span>
-<span>    <span class="co">#' @param hair Hair color.</span></span>
-<span>    <span class="co">#' @return A new `Person` object.</span></span>
-<span>    initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span> <span class="op">=</span> <span class="cn">NA</span>, <span class="va">hair</span> <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">self</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="va">name</span></span>
-<span>      <span class="va">self</span><span class="op">$</span><span class="va">hair</span> <span class="op">&lt;-</span> <span class="va">hair</span></span>
-<span>      <span class="va">self</span><span class="op">$</span><span class="fu">greet</span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="op">}</span>,</span>
-<span></span>
-<span>    <span class="co">#' @description</span></span>
-<span>    <span class="co">#' Change hair color.</span></span>
-<span>    <span class="co">#' @param val New hair color.</span></span>
-<span>    <span class="co">#' @examples</span></span>
-<span>    <span class="co">#' P &lt;- Person("Ann", "black")</span></span>
-<span>    <span class="co">#' P$hair</span></span>
-<span>    <span class="co">#' P$set_hair("red")</span></span>
-<span>    <span class="co">#' P$hair</span></span>
-<span>    set_hair <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">val</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">self</span><span class="op">$</span><span class="va">hair</span> <span class="op">&lt;-</span> <span class="va">val</span></span>
-<span>    <span class="op">}</span>,</span>
-<span></span>
-<span>    <span class="co">#' @description</span></span>
-<span>    <span class="co">#' Say hi.</span></span>
-<span>    greet <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Hello, my name is "</span>, <span class="va">self</span><span class="op">$</span><span class="va">name</span>, <span class="st">".\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a>
-</h3>
-<p>Datasets are usually stored as <code>.rdata</code> files in <code>data/</code> and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset’s name.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Prices of 50,000 round cut diamonds</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' A dataset containing the prices and other attributes of almost 54,000</span></span>
-<span><span class="co">#' diamonds.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @format A data frame with 53940 rows and 10 variables</span></span>
-<span><span class="co">#' \describe{</span></span>
-<span><span class="co">#'   \item{price}{price in US dollars (\$326--\$18,823)}</span></span>
-<span><span class="co">#'   \item{carat}{weight of the diamond (0.2--5.01)}</span></span>
-<span><span class="co">#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}</span></span>
-<span><span class="co">#'   \item{color}{diamond colour, from D (best) to J (worst)}</span></span>
-<span><span class="co">#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,</span></span>
-<span><span class="co">#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}</span></span>
-<span><span class="co">#'   \item{x}{length in mm (0--10.74)}</span></span>
-<span><span class="co">#'   \item{y}{width in mm (0--58.9)}</span></span>
-<span><span class="co">#'   \item{z}{depth in mm (0--31.8)}</span></span>
-<span><span class="co">#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}</span></span>
-<span><span class="co">#'   \item{table}{width of top of diamond relative to widest point (43--95)}</span></span>
-<span><span class="co">#' }</span></span>
-<span><span class="co">#' @source &lt;http://www.diamondse.info/&gt;</span></span>
-<span><span class="st">"diamonds"</span></span>
-<span><span class="co">#&gt; [1] "diamonds"</span></span></code></pre></div>
-<p>Note the use of two additional tags that are particularly useful for documenting data:</p>
-<ul>
-<li><p><code>@format</code>, which gives an overview of the structure of the dataset. This should include a <strong>definition list</strong> that describes each variable. There’s currently no way to generate this with Markdown, so this is one of the few places you’ll need to Rd markup directly.</p></li>
-<li><p><code>@source</code> where you got the data form, often a URL.</p></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="packages">Packages<a class="anchor" aria-label="anchor" href="#packages"></a>
-</h3>
-<p>As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel <code>"_PACKAGE"</code>. We recommend placing package documentation in <code>{pkgname}-package.R</code>, and have <code>@keywords internal</code>. Here’s an example:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @details</span></span>
-<span><span class="co">#' The only function you're likely to need from roxygen2 is [roxygenize()]. </span></span>
-<span><span class="co">#' Otherwise refer to the vignettes to see how to format the documentation.</span></span>
-<span><span class="co">#' @keywords internal</span></span>
-<span><span class="st">"_PACKAGE"</span></span></code></pre></div>
-<p>Package documentation is a good place to put <code>@section Package options:</code> that documents options used by the package.</p>
-<p>Some notes:</p>
-<ul>
-<li><p>Package documentation will automatically include information parsed from the <code>DESCRIPTION</code>, including title, description, list of authors, and useful URLs.</p></li>
-<li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, use <code>@aliases {pkgname}-package</code> to override the default.</p></li>
-<li><p><code>usethis::use_package_doc()</code> will generate a basic template to get you started.</p></li>
-<li><p>Use <code>@references</code> to point to published material about the package that users might find helpful.</p></li>
-</ul>
-</div>
-</div>
-<div class="section level2">
-<h2 id="sections">Sections<a class="anchor" aria-label="anchor" href="#sections"></a>
-</h2>
-<p>You can add arbitrary sections with the <code>@section</code> tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case, must fit on one line, and must be followed by a colon.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @section Warning:</span></span>
-<span><span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></span></code></pre></div>
-<p>You can also create sections using the Markdown syntax for headers. For example, the previously-defined section can be created with Markdown headers like this:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @details # Warning</span></span>
-<span><span class="co">#' Do not operate heavy machinery within 8 hours of using this function.</span></span></code></pre></div>
-<p>Note that ‘<code>#</code>’ may only appear after the <code>@description</code> and <code>@details</code> tags. Since <code>@details</code> can appear multiple times in a block, you can always precede a ‘<code>#</code>’ section with <code>@details</code>.</p>
-<p>To add a subsection, use level two or greater headings:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @details # Warning</span></span>
-<span><span class="co">#' You must not call this function unless ...</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' ## Exceptions</span></span>
-<span><span class="co">#' Apart from the following special cases...</span></span></code></pre></div>
-<p>If you find yourself adding a lot of sections, you might consider using a vignette instead.</p>
-</div>
-<div class="section level2">
-<h2 id="do-repeat-yourself">Do repeat yourself<a class="anchor" aria-label="anchor" href="#do-repeat-yourself"></a>
-</h2>
-<p>There is tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It’s frustrating to have to navigate through multiple help files to pull together all the pieces you need. Roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:</p>
-<ul>
-<li><p>Cross-link documentation files with <code>@seealso</code> and <code>@family</code>.</p></li>
-<li><p>Inherit documentation from another topic with<br><code>@inherit</code>, <code>@inheritParams</code>, and <code>@inheritSection</code>.</p></li>
-<li><p>Document multiple functions in the same topic with <code>@describeIn</code> or <code>@rdname</code>.</p></li>
-<li><p>Run arbitrary R code with the Markdown markup for inline code, see section ‘Dynamic R code’ in <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code>.</p></li>
-<li><p>Run arbitrary R code with <code>@eval</code>.</p></li>
-<li><p>Create reusable templates with <code>@template</code> and <code>@templateVar</code>.</p></li>
-</ul>
-<div class="section level3">
-<h3 id="cross-references">Cross-references<a class="anchor" aria-label="anchor" href="#cross-references"></a>
-</h3>
-<p>There are two tags that make it easier for people to navigate your documentation: <code>@seealso</code> and <code>@family</code>. <code>@seealso</code> allows you to point to other useful resources, either on the web <code>&lt;http://www.r-project.org&gt;</code> or to other documentation with <code>[function_name()]</code>. If you have a family of related functions, you can use <code>@family {family}</code> to cross-reference each function to every other function within the family. A function can be a member of multiple families.</p>
-<p>For <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code>, this might look like:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @family aggregations</span></span>
-<span><span class="co">#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and</span></span>
-<span><span class="co">#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.</span></span></code></pre></div>
-<p>By default <code>@family {family}</code>, will generate the see also text “Other {family}:”, so the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can override the default title by providing a <code>rd_family_title</code> list in <code>man/roxygen/meta.R</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  rd_family_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aggregations <span class="op">=</span> <span class="st">"Aggregation functions"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="inheriting-documentation-from-other-topics">Inheriting documentation from other topics<a class="anchor" aria-label="anchor" href="#inheriting-documentation-from-other-topics"></a>
-</h3>
-<p>You can inherit documentation from other functions in a few ways:</p>
-<ul>
-<li><p><code>@inherit source_function</code> will inherit parameters, return, references, description, details, sections, and seealso from <code>source_function()</code>.</p></li>
-<li><p><code>@inherit source_function return details</code> will inherit selected components from <code>source_function()</code></p></li>
-<li><p><code>@inheritParams source_function</code> inherits just the parameter documentation from <code>source_function()</code>.</p></li>
-<li><p><code>@inheritSection source_function Section title</code> will inherit the single <code>@section</code> called “Section title” from <code>source_function()</code>.</p></li>
-</ul>
-<p>All of these work recursively so you can inherit documentation from a function that has inherited it from elsewhere.</p>
-<p>You can also inherit documentation from functions provided by another package by using <code>pkg::source_function</code>.</p>
-</div>
-<div class="section level3">
-<h3 id="documenting-multiple-functions-in-the-same-file">Documenting multiple functions in the same file<a class="anchor" aria-label="anchor" href="#documenting-multiple-functions-in-the-same-file"></a>
-</h3>
-<p>You can document multiple functions in the same file by using either <code>@rdname</code> or <code>@describeIn</code> tag. It’s a technique best used with care: documenting too many functions in one place leads to confusion. Use it when all functions have the same (or very similar) arguments.</p>
-<div class="section level4">
-<h4 id="describein">
-<code>@describeIn</code><a class="anchor" aria-label="anchor" href="#describein"></a>
-</h4>
-<p><code>@describeIn</code> is designed for the most common cases:</p>
-<ul>
-<li>documenting methods in a generic</li>
-<li>documenting methods in a class</li>
-<li>documenting functions with the same (or similar arguments)</li>
-</ul>
-<p>It generates a new section, named either “Methods (by class)”, “Methods (by generic)” or “Functions”. The section contains a bulleted list describing each function, labelled so that you know what function or method it’s talking about. Here’s an example documenting an imaginary new generic:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Foo bar generic</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x Object to foo.</span></span>
-<span><span class="va">foobar</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"x"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#' @describeIn foobar Difference between the mean and the median</span></span>
-<span><span class="va">foobar.numeric</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#' @describeIn foobar First and last values pasted together in a string.</span></span>
-<span><span class="va">foobar.character</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"-"</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="rdname">
-<code>@rdname</code><a class="anchor" aria-label="anchor" href="#rdname"></a>
-</h4>
-<p><code>@rdname</code> is a more general-purpose tool. It overrides the default file name generated by roxygen and merges documentation for multiple objects into one file. This gives you complete freedom to combine documentation however you see fit. There are two ways to use <code>@rdname</code>. You can add documentation to an existing function:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Basic arithmetic</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x,y numeric vectors.</span></span>
-<span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
-<span></span>
-<span><span class="co">#' @rdname add</span></span>
-<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="va">y</span></span></code></pre></div>
-<p>Or, you can create a dummy documentation file by documenting <code>NULL</code> and setting an informative <code>@name</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Basic arithmetic</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x,y numeric vectors.</span></span>
-<span><span class="co">#' @name arith</span></span>
-<span><span class="cn">NULL</span></span>
-<span><span class="co">#&gt; NULL</span></span>
-<span></span>
-<span><span class="co">#' @rdname arith</span></span>
-<span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
-<span></span>
-<span><span class="co">#' @rdname arith</span></span>
-<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="va">y</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="order-of-includes">Order of includes<a class="anchor" aria-label="anchor" href="#order-of-includes"></a>
-</h3>
-<p>By default, roxygen blocks are processed in the order in which they appear in the file. When you’re combining multiple files, this can sometimes cause the function usage to appear in a suboptimal order. You can override the default ordering with <code>@order</code>. For example, the following the block would place <code>times</code> first in <code>arith.Rd</code> because 1 comes before 2.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @rdname arith</span></span>
-<span><span class="co">#' @order 2</span></span>
-<span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
-<span></span>
-<span><span class="co">#' @rdname arith</span></span>
-<span><span class="co">#' @order 1</span></span>
-<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="va">y</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="evaluating-arbitrary-code">Evaluating arbitrary code<a class="anchor" aria-label="anchor" href="#evaluating-arbitrary-code"></a>
-</h3>
-<p>Another technique is the <code>@eval</code> tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading <code>#'</code>).</p>
-<p>For example, this code + roxygen block:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"@param x An integer vector"</span>,</span>
-<span>    <span class="st">"@param y A character vector"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' A title</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' @eval my_params()</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>Is equivalent to:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' A title</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' @param x An integer vector</span></span>
-<span><span class="co">#' @param y A character vector</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>Note that <code>@eval</code> cannot be embedded into another roxygen tag. If you want to dynamically generate part of a roxygen tag, see section ‘Dynamic R code’ in <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code>.</p>
-<p>A related function is <code>@evalRd</code>. It works in the same way as <code>@eval</code> (i.e. it’s evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated <code>.Rd</code> file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.</p>
-<p>For example, this block:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_note</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"\\note{"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"\n"</span>, collapse <span class="op">=</span><span class="st">""</span><span class="op">)</span>, <span class="st">"}"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' @evalRd my_note(c(</span></span>
-<span><span class="co">#'   "This is the first line",</span></span>
-<span><span class="co">#'   "This is the second line"</span></span>
-<span><span class="co">#' ))</span></span>
-<span><span class="cn">NULL</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
-<p>Would generate this Rd:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">\note</span>{</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>This is the first line</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>This is the second line</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="roxygen-templates">Roxygen templates<a class="anchor" aria-label="anchor" href="#roxygen-templates"></a>
-</h3>
-<p>Roxygen templates are R files that contain only roxygen comments and that live in the <code>man-roxygen</code> directory. Use <code>@template file-name</code> (without extension) to insert the contents of a template into the current documentation.</p>
-<p>You can make templates more flexible by using template variables defined with <code>@templateVar name value</code>. Template files are run with brew, so you can retrieve values (or execute any other arbitrary R code) with <code>&lt;%= name %&gt;</code>.</p>
-<p>Note that templates are parsed a little differently to regular blocks, so you’ll need to explicitly set the title, description and details with <code>@title</code>, <code>@description</code> and <code>@details</code>.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="including-external--rmd-md-files">Including external <code>.Rmd</code>/<code>.md</code> files<a class="anchor" aria-label="anchor" href="#including-external--rmd-md-files"></a>
-</h2>
-<p>Starting from roxygen2 7.0.0, you can use <code>@includeRmd path/to/file.Rmd</code> to include an external <code>.Rmd</code> or <code>.md</code> document into a manual page (the path is relative from the source package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.</p>
-<div class="section level3">
-<h3 id="sections-1">Sections<a class="anchor" aria-label="anchor" href="#sections-1"></a>
-</h3>
-<p><code>@includeRmd</code> supports headings in the external Rmd. The rules are as follows:</p>
-<ul>
-<li><p>All text before the first level 1 heading (i.e. <code>#</code>), is added to the details section. If you prefer a different section, then write the name of the section after the path in the <code>@includeRmd</code> tag, in all lowercase. Example: <code>@includeRmd path description</code>. This currently does not work with user defined sections (created with <code>@section</code>).</p></li>
-<li><p>Level 1 headings generate their own section (<code>\section{}</code>).</p></li>
-<li><p>Other headings (level 2 and so on) create subsections (<code>\subsection{}</code>) within the section they appear in.</p></li>
-</ul>
-<p>All content in the Rmd file will go either in the details or in new top level sections. It is currently not possible to document function arguments, return values, etc. in external Rmd documents.</p>
-</div>
-<div class="section level3">
-<h3 id="links">Links<a class="anchor" aria-label="anchor" href="#links"></a>
-</h3>
-<p>The included Rmd file can have roxygen Markdown-style links to other help topics. E.g. <code>[roxygen2::roxygenize()]</code> will link to the manual page of the <code>roxygenize</code> function in roxygen2. See <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
-</div>
-<div class="section level3">
-<h3 id="caching-and-figures">Caching and figures<a class="anchor" aria-label="anchor" href="#caching-and-figures"></a>
-</h3>
-<p><code>@includeRmd</code> tries to set up knitr to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. <code>foo/bar/file_cache/</code> for <code>foo/bar/file.Rmd</code>), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to <code>.gitignore</code> and <code>.Rbuildignore</code>.</p>
-<p><code>@includeRmd</code> also sets the knitr figure path of the (<code>fig.path</code>) to the default figure path of the included Rmd. Overriding this default is unlikely to work.</p>
-</div>
-<div class="section level3">
-<h3 id="sharing-text-between-vignettes-and-the-manual">Sharing text between vignettes and the manual<a class="anchor" aria-label="anchor" href="#sharing-text-between-vignettes-and-the-manual"></a>
-</h3>
-<p><code>@includeRmd</code> helps avoiding repetition, as you can use the same <code>.Rmd</code> or <code>.md</code> document in the manual and also in the <code>README.md</code> file or in vignettes. One way to include an Rmd file in another one is to use child documents:</p>
-<pre><code>```{r child = "common.Rmd"}
-```</code></pre>
-<p>If the Rmd file contains roxygen (Markdown-style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default. A workaround is to specify external HTML links for them. These external locations will <em>not</em> be used for <code>@includeRmd</code>, which instead always links to the help topics in the manual. Example:</p>
-<pre><code>See also the [roxygen2::roxygenize()] function.
-
-[roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html</code></pre>
-<p>This example will link to the supplied URLs in HTML / Markdown files and it will link to the <code>roxygenize</code> help topic in the manual.</p>
-<p>Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in Pandoc, and it is harmless.</p>
+<p>In most case, the function usage (which appears beneath the description in the generates docs) will be automatically derived from the function specification. For the cases where it is not, please <a href="https://github.com/r-lib/roxygen2/issues" class="external-link">file an issue</a> and use <code>@usage</code> to override the default with you want. If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use <code>@usage NULL</code>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="other-tags">Other tags<a class="anchor" aria-label="anchor" href="#other-tags"></a>
 </h2>
+<div class="section level3">
+<h3 id="cross-references">Cross-references<a class="anchor" aria-label="anchor" href="#cross-references"></a>
+</h3>
+<p>There are two tags that make it easier for people to navigate your documentation: <code>@seealso</code> and <code>@family</code>. <code>@seealso</code> allows you to point to other useful resources, either on the web <code>&lt;http://www.r-project.org&gt;</code> or to other documentation with <code>[function_name()]</code>. If you have a family of related functions, you can use <code>@family {family}</code> to cross-reference each function to every other function within the family. A function can be a member of multiple families.</p>
+<p>For <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code>, this might look like:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @family aggregations</span></span>
+<span><span class="co">#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and</span></span>
+<span><span class="co">#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.</span></span></code></pre></div>
+<p>By default <code>@family {family}</code>, will generate the see also text “Other {family}:”, so the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can override the default title by providing a <code>rd_family_title</code> list in <code>man/roxygen/meta.R</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  rd_family_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aggregations <span class="op">=</span> <span class="st">"Aggregation functions"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="suppress-documentation">Suppress documentation<a class="anchor" aria-label="anchor" href="#suppress-documentation"></a>
 </h3>
@@ -654,7 +240,7 @@ gh_organizations(since = 42)
 <p>The original source location is added as a comment to the second line of each generated <code>.Rd</code> file in the following form:</p>
 <pre><code>% Please edit documentation in ...</code></pre>
 <p><code>roxygen2</code> tries to capture all locations from which the documentation is assembled. For code that <em>generates</em> R code with Roxygen comments (e.g., the Rcpp package), the <code>@backref</code> tag is provided. This allows specifying the “true” source of the documentation, and will substitute the default list of source files. Use one tag per source file:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @backref src/file.cpp</span></span>
 <span><span class="co">#' @backref src/file.h</span></span></code></pre></div>
 </div>

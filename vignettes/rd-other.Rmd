@@ -1,8 +1,11 @@
 ---
 title: "Documenting other objects"
+description: > 
+  How to document datasets, packages, and the classes,
+  generics, and methods of S3, S4, and R6.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Other objects}
+  %\VignetteIndexEntry{Documenting other objects}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

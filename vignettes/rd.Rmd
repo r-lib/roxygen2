@@ -1,5 +1,8 @@
 ---
 title: "Documenting functions"
+description: >
+  The basics of roxygen2 tags and how to use them for 
+  documenting functions.
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Documenting functions}
@@ -192,3 +195,4 @@ Use one tag per source file:
 #' @backref src/file.cpp
 #' @backref src/file.h
 ```
+

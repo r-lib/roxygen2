@@ -1,8 +1,10 @@
 ---
-title: "NAMESPACE"
+title: "Managing imports and exports"
+description: >
+  Generating the `NAMESPACE` file with roxygen2.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{NAMESPACE}
+  %\VignetteIndexEntry{Managing imports and exports}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

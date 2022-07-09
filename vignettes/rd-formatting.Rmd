@@ -1,8 +1,10 @@
 ---
 title: "(R)Markdown support"
+description: >
+  The details of the (R)Markdown support provided by roxygen2.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Markdown support}
+  %\VignetteIndexEntry{(R)Markdown support}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

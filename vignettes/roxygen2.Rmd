@@ -1,8 +1,11 @@
 ---
 title: "Get started with roxygen2"
+description: >
+  Learn the big picture of roxygen2 and the basic workflow
+  you'll use with it.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting started with roxygen2}
+  %\VignetteIndexEntry{Get started with roxygen2}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -26,6 +29,8 @@ These files use a custom syntax, loosely based on LaTeX Roxygen2 provides a numb
 
 As well as generating `.Rd` files, roxygen will also create a `NAMESPACE` for you, and will manage the `Collate` field in `DESCRIPTION`.
 
+## Learn more
+
 This vignette provides a high-level description of roxygen2 and the overall workflow you'll use with it.
 The other vignettes provide more detail on the most important individual components:
 
@@ -37,7 +42,7 @@ The other vignettes provide more detail on the most important individual compone
 
 -   `vignette("reuse")` demonstrates the tools available to reuse documentation in multiple places.
 
--   `vignette("NAMESPACE")` describes how to generate a `NAMESPACE` file, how namespacing works in R, and how you can use Roxygen2 to be specific about what your package needs and supplies.
+-   `vignette("namespace")` describes how to generate a `NAMESPACE` file, how namespacing works in R, and how you can use Roxygen2 to be specific about what your package needs and supplies.
 
 ## Running roxygen
 

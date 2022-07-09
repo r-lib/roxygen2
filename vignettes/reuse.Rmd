@@ -1,5 +1,8 @@
 ---
 title: "Reusing documentation"
+description: >
+  Tools for reusing documentation across topics, and between
+  documentation and vignettes.
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Reusing documentation}

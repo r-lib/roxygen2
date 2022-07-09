@@ -35,15 +35,21 @@ reference:
   - roclet_find
 
 articles:
-- title: roxygen2 tags
-  navbar: ~
+- title: Documentation
+  navbar: Documentation
   contents:
   - roxygen2
   - rd
+  - rd-other
+  - reuse
   - rd-formatting
+
+- title: NAMESPACE
+  navbar: NAMESPACE
+  contents:
   - namespace
 
-- title: developer
+- title: Developer resources
   navbar: Developer
   contents:
   - extending

@@ -51,6 +51,14 @@ When you `roxygenise()` (or `devtools::document()`) your package these comments 
 
 To get started, first read `vignette("roxygen2")`. Then read more about the specific package component that you want to generate:
 
-* For `.Rd` documentation files, read `vignette("rd")`.
-* For the `NAMESPACE`, read `vignette("namespace")`.
-* For the `Collate` field in the `DESCRIPTION`, read `update_collate()`.
+* Start with `vignette("rd")` to learn how document your functions with roxygen2.
+
+* `vignette("rd-other")` discusses how to document other things like datasets, the package itself, and the various pieces used by R's OOP systems.
+
+* `vignette("rd-formatting")` gives the details of roxygen2's rmarkdown support.
+
+* `vignette("reuse")` demonstrates the tools available to reuse documentation in multiple places.
+
+* `vignette("namespace")` describes how to generate a `NAMESPACE` file, how namespacing works in R, and how you can use roxygen2 to be specific about what your package needs and supplies.
+
+* For the `Collate` field in the `DESCRIPTION`, see `?update_collate()`.

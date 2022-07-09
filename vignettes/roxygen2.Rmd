@@ -18,8 +18,10 @@ Documentation is one of the most important aspects of good code.
 Without it, users won't know how to use your package, and are unlikely to do so.
 Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package.
 The goal of roxygen2 is to make documenting your code as easy as possible.
+
 R provides a standard way of documenting packages: you write `.Rd` files in the `man/` directory.
-These files use a custom syntax, loosely based on LaTeX Roxygen2 provides a number of advantages over writing `.Rd` files by hand:
+These files use a custom syntax, loosely based on LaTeX.
+roxygen2 provides a number of advantages over writing `.Rd` files by hand:
 
 -   Code and documentation are adjacent so when you modify your code, it's easy to remember that you need to update the documentation.
 
@@ -42,7 +44,7 @@ The other vignettes provide more detail on the most important individual compone
 
 -   `vignette("reuse")` demonstrates the tools available to reuse documentation in multiple places.
 
--   `vignette("namespace")` describes how to generate a `NAMESPACE` file, how namespacing works in R, and how you can use Roxygen2 to be specific about what your package needs and supplies.
+-   `vignette("namespace")` describes how to generate a `NAMESPACE` file, how namespacing works in R, and how you can use roxygen2 to be specific about what your package needs and supplies.
 
 ## Running roxygen
 

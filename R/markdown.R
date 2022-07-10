@@ -52,6 +52,12 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' plot(1:10)
 #' ```
 #'
+#' Alternative knitr engines:
+#'
+#' ```{verbatim}
+#' #| file = "tests/testthat/example.Rmd"
+#' ```
+#'
 #' Also see `vignette("rd-formatting")`.
 #'
 #' @param text Input text.
@@ -71,14 +77,51 @@ markdown_pass1 <- function(text) {
   rcode_nodes <- keep(code_nodes, is_markdown_code_node)
   if (length(rcode_nodes) == 0) return(text)
   rcode_pos <- parse_md_pos(map_chr(rcode_nodes, xml_attr, "sourcepos"))
+  rcode_pos <- work_around_cmark_sourcepos_bug(text, rcode_pos)
   out <- eval_code_nodes(rcode_nodes)
   str_set_all_pos(text, rcode_pos, out, rcode_nodes)
 }
 
+# Work around commonmark sourcepos bug for inline R code
+# https://github.com/r-lib/roxygen2/issues/1353
+work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
+  if (Sys.getenv("ROXYGEN2_NO_SOURCEPOS_WORKAROUND", "") != "") {
+    return(rcode_pos)
+  }
+
+  lines <- str_split(text, fixed("\n"))[[1]]
+
+  for (l in seq_len(nrow(rcode_pos))) {
+    # Do not try to fix multi-line code, we error for that (below)
+    if (rcode_pos$start_line[l] != rcode_pos$end_line[l]) next
+    line <- lines[rcode_pos$start_line[l]]
+    start <- rcode_pos$start_column[l]
+
+    # Maybe correct? At some point this will be fixed upstream, hopefully.
+    if (str_sub(line, start - 1, start + 1) == "`r ") next
+
+    # Maybe indented and we can shift it?
+    # It is possible that the shift that we try accidentally matches
+    # "`r ", but it seems to be extremely unlikely. An example is this:
+    # #'       ``1`r `` `r 22*10`
+    # (seven spaces after the #', so an indent of six spaces. If we shift
+    # the real "`r " left by six characters, there happens to be another
+    # "`r " there.
+
+    indent <- nchar(str_extract(line, "^[ ]+"))
+    if (str_sub(line, start - 1 + indent, start + 1 + indent) == "`r ") {
+      rcode_pos$start_column[l] <- rcode_pos$start_column[l] + indent
+      rcode_pos$end_column[l] <- rcode_pos$end_column[l] + indent
+    }
+  }
+
+  rcode_pos
+}
+
 is_markdown_code_node <- function(x) {
-  info <- str_sub(xml_attr(x, "info"), 1, 3)
+  info <- xml_attr(x, "info")
   str_sub(xml_text(x), 1, 2) == "r " ||
-    (!is.na(info) && info %in% c("{r ", "{r}", "{r,"))
+    (!is.na(info) && grepl("^[{][a-zA-z]+[}, ]", info))
 }
 
 parse_md_pos <- function(text) {
@@ -130,8 +173,7 @@ knitr_chunk_defaults <- list(
 str_set_all_pos <- function(text, pos, value, nodes) {
   # Cmark has a bug when reporting source positions for multi-line
   # code tags, and it does not count the indenting space in the
-  # continuation lines. However, the bug might get fixed later, so
-  # for now we just simply error for multi-line inline code.
+  # continuation lines: https://github.com/commonmark/cmark/issues/296
   types <- xml_name(nodes)
   if (any(types == "code" & pos$start_line != pos$end_line)) {
     cli::cli_abort("multi-line `r ` markup is not supported", call = NULL)

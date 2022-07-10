@@ -1,5 +1,12 @@
 # roxygen2 (development version)
 
+* You can now use alternative knitr engines in markdown code blocks (#1149).
+
+* Fix bug interpolating the results of indented inline RMarkdown (#1353).
+
+* R6 documentation no longer shows inherited methods if there aren't any 
+  (#1371).
+
 * If you have a daily build of RStudio, the lists of changed Rd files are
   now clickable so you can immediately see the rendered development
   documentation (#1354).

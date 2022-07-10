@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* R6 documentation no longer shows inherited methods if there aren't any 
+  (#1371).
+
 * If you have a daily build of RStudio, the lists of changed Rd files are
   now clickable so you can immediately see the rendered development
   documentation (#1354).

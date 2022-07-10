@@ -281,9 +281,16 @@ roxy_tag_ns.roxy_tag_useDynLib <- function(x, block, env, import_only = FALSE) {
 
 # Default export methods --------------------------------------------------
 
-default_export <- function(x, block) UseMethod("default_export")
+default_export <- function(x, block) {
+  UseMethod("default_export")
+}
 #' @export
-default_export.s4class   <- function(x, block) export_class(x$value@className)
+default_export.s4class   <- function(x, block) {
+  c(
+    if (!is.null(block$object$alias)) export(block$object$alias),
+    export_class(x$value@className)
+  )
+}
 #' @export
 default_export.s4generic <- function(x, block) export(x$value@generic)
 #' @export

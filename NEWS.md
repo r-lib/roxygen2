@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Fix bug interpolating the results of indented inline RMarkdown (#1353).
+
 * R6 documentation no longer shows inherited methods if there aren't any 
   (#1371).
 

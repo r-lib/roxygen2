@@ -110,7 +110,13 @@ eval_code_node <- function(node, env) {
     # write knitr markup for fenced code
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
   }
-  roxy_knit(text, env, knitr_chunk_defaults)
+
+  chunk_opts <- modifyList(
+    knitr_chunk_defaults,
+    roxy_meta_get("knitr_chunk_options", NULL)
+  )
+
+  roxy_knit(text, env, chunk_opts)
 }
 
 knitr_chunk_defaults <- list(

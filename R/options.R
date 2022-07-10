@@ -28,6 +28,8 @@
 #' * `rd_family_title` `<list>`: overrides for `@family` titles. See the
 #'    _rd_ vignette for details: `vignette("rd", package = "roxygen2")`
 #'
+#' * `knitr_chunk_options`: default chunk options used for knitr.
+#'
 #' @section How to set:
 #' Either set in `DESCRIPTION`:
 #'
@@ -60,7 +62,8 @@ load_options <- function(base_path = ".") {
     markdown = FALSE,
     r6 = TRUE,
     current_package = NA_character_,
-    rd_family_title = list()
+    rd_family_title = list(),
+    knitr_chunk_options = NULL
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))

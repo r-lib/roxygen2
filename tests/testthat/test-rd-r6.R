@@ -296,6 +296,33 @@ test_that("warning if no method comes after the docs", {
   doc <- format(rd)
 })
 
+test_that("class with no inherited methods", {
+  text <- "
+    C1 <- R6::R6Class('C1', cloneable = FALSE)
+
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    C2 <- R6::R6Class('C2',
+      inherit = C1,
+      cloneable = FALSE,
+      public = list(
+        #' @description method1
+        meth1 = function() 1
+      )
+    )"
+
+  env <- new.env(parent = globalenv())
+
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
+  rd <- RoxyTopic$new()
+
+  topic_add_r6_methods(rd, block, env)
+  expect_snapshot(cat(format(rd$get_section("rawRd"))))
+})
+
+
 test_that("integration test", {
 
   wd <- getwd()

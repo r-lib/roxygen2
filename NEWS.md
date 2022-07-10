@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* The new `knitr_chunk_options` option (in the `Roxygen` entry of
+  `DESCRIPTION` or in `man/roxygen/meta.R`) is added to the knitr chunk
+  options that roxygen2 uses for markdown code blocks and inline
+  code (#1390).
+
 * You can now use alternative knitr engines in markdown code blocks (#1149).
 
 * Fix bug interpolating the results of indented inline RMarkdown (#1353).

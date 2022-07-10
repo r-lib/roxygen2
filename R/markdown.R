@@ -433,8 +433,14 @@ escape_comment <- function(x) {
 mdxml_heading <- function(xml, state) {
   level <- xml_attr(xml, "level")
   if (! state$has_sections && level == 1) {
-    return(mdxml_unsupported(xml, state$tag, "level 1 markdown headings"))
+    warn_roxy_tag(state$tag, c(
+      "markdown translation failed",
+      x = "Level 1 headings are not supported in @{state$tag$tag}",
+      i = "Do you want to put the heading in @description or @details?"
+    ))
+    return(escape_comment(xml_text(xml)))
   }
+
   txt <- map_chr(xml_contents(xml), mdxml_node_to_rd, state)
   if (level == 1) {
     state$titles <- c(state$titles, paste(txt, collapse = ""))

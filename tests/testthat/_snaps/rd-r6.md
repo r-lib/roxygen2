@@ -14,6 +14,38 @@
       Warning:
       [<text>:10] @description Cannot find matching R6 method
 
+# class with no inherited methods
+
+    Code
+      cat(format(rd$get_section("rawRd")))
+    Output
+      \section{Super class}{
+      \code{\link[R_GlobalEnv:C1]{R_GlobalEnv::C1}} -> \code{C2}
+      }
+      \section{Methods}{
+      \subsection{Public methods}{
+      \itemize{
+      \item \href{#method-C2-meth1}{\code{C2$meth1()}}
+      }
+      }
+      \if{html}{\out{
+      <details open><summary>Inherited methods</summary>
+      <ul>
+      </ul>
+      </details>
+      }}
+      \if{html}{\out{<hr>}}
+      \if{html}{\out{<a id="method-C2-meth1"></a>}}
+      \if{latex}{\out{\hypertarget{method-C2-meth1}{}}}
+      \subsection{Method \code{meth1()}}{
+      method1
+      \subsection{Usage}{
+      \if{html}{\out{<div class="r">}}\preformatted{C2$meth1()}\if{html}{\out{</div>}}
+      }
+      
+      }
+      }
+
 # integration test
 
     Code

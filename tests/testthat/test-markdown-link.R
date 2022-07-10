@@ -183,8 +183,8 @@ test_that("short and sweet links work", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title.
     #'
-    #' In another package: [and this one][devtools::document].
-    #' [name words][devtools::document].
+    #' In another package: [and this one][desc::desc].
+    #' [name words][desc::desc].
     #'
     #' @md
     #' @name markdown-test
@@ -192,8 +192,8 @@ test_that("short and sweet links work", {
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title.
     #'
-    #' In another package: \\link[devtools:document]{and this one}.
-    #' \\link[devtools:document]{name words}.
+    #' In another package: \\link[desc:desc]{and this one}.
+    #' \\link[desc:desc]{name words}.
     #'
     #' @name markdown-test
     foo <- function() {}")[[1]]
@@ -209,13 +209,13 @@ test_that("a weird markdown link bug is fixed", {
     #' Link to a function: [roxygenize()].
     #' Link to an object: [roxygenize] (we just treat it like an object here).
     #'
-    #' Link to another package, function: [devtools::document()].
-    #' Link to another package, non-function: [devtools::document].
+    #' Link to another package, function: [desc::desc()].
+    #' Link to another package, non-function: [desc::desc].
     #'
     #' Link with link text: [this great function][roxygenize()],
     #' [`roxygenize`][roxygenize()], or [that great function][roxygenize].
     #'
-    #' In another package: [and this one][devtools::document].
+    #' In another package: [and this one][desc::desc].
     #'
     #' @md
     #' @name markdown-test
@@ -228,13 +228,13 @@ test_that("a weird markdown link bug is fixed", {
     #' Link to a function: \\code{\\link[=roxygenize]{roxygenize()}}.
     #' Link to an object: \\link{roxygenize} (we just treat it like an object here).
     #'
-    #' Link to another package, function: \\code{\\link[devtools:document]{devtools::document()}}.
-    #' Link to another package, non-function: \\link[devtools:document]{devtools::document}.
+    #' Link to another package, function: \\code{\\link[desc:desc]{desc::desc()}}.
+    #' Link to another package, non-function: \\link[desc:desc]{desc::desc}.
     #'
     #' Link with link text: \\link[=roxygenize]{this great function},
     #' \\code{\\link[=roxygenize]{roxygenize}}, or \\link[=roxygenize]{that great function}.
     #'
-    #' In another package: \\link[devtools:document]{and this one}.
+    #' In another package: \\link[desc:desc]{and this one}.
     #'
     #' @name markdown-test
     #' @keywords internal

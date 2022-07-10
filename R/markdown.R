@@ -52,6 +52,12 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' plot(1:10)
 #' ```
 #'
+#' Alternative knitr engines:
+#'
+#' ```{verbatim}
+#' #| file = "tests/testthat/example.Rmd"
+#' ```
+#'
 #' Also see `vignette("rd-formatting")`.
 #'
 #' @param text Input text.
@@ -76,9 +82,9 @@ markdown_pass1 <- function(text) {
 }
 
 is_markdown_code_node <- function(x) {
-  info <- str_sub(xml_attr(x, "info"), 1, 3)
+  info <- xml_attr(x, "info")
   str_sub(xml_text(x), 1, 2) == "r " ||
-    (!is.na(info) && info %in% c("{r ", "{r}", "{r,"))
+    (!is.na(info) && grepl("^[{][a-zA-z]+[}, ]", info))
 }
 
 parse_md_pos <- function(text) {

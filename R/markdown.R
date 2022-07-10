@@ -76,8 +76,8 @@ markdown_pass1 <- function(text) {
   str_set_all_pos(text, rcode_pos, out, rcode_nodes)
 }
 
+# Work around commonmark sourcepos bug for inline R code
 # https://github.com/r-lib/roxygen2/issues/1353
-
 work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
   if (Sys.getenv("ROXYGEN2_NO_SOURCEPOS_WORKAROUND", "") != "") {
     return(rcode_pos)
@@ -161,8 +161,7 @@ knitr_chunk_defaults <- list(
 str_set_all_pos <- function(text, pos, value, nodes) {
   # Cmark has a bug when reporting source positions for multi-line
   # code tags, and it does not count the indenting space in the
-  # continuation lines. However, the bug might get fixed later, so
-  # for now we just simply error for multi-line inline code.
+  # continuation lines: https://github.com/commonmark/cmark/issues/296
   types <- xml_name(nodes)
   if (any(types == "code" & pos$start_line != pos$end_line)) {
     cli::cli_abort("multi-line `r ` markup is not supported", call = NULL)

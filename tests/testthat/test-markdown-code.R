@@ -216,16 +216,17 @@ test_that("fragile tags in generated code", {
 })
 
 test_that("workaround for cmark sourcepos bug (#1353) works", {
-  expect_snapshot(
-    roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' line1
-      #'    pre `r \"string\"` 333 `r 1+1` post
-      #'
-      #' no workaround needed here `r LETTERS[1]`
-      #' @md
-      foo <- function() {}
-    ")[[1]]
-  )
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' line1
+    #'    pre `r \"1\"` 2 `r 1+2` post
+    #'
+    #' no workaround needed `r 'here'`
+    #' @md
+    foo <- function() {}
+  ")[[1]]
+
+  expect_equal(out$get_section("description")$value, "line1\npre 1 2 3 post")
+  expect_equal(out$get_section("details")$value, "no workaround needed here")
 })

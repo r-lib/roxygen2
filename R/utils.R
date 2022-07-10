@@ -61,7 +61,7 @@ nice_name <- function(x) {
   x
 }
 
-write_if_different <- function(path, contents, check = TRUE) {
+write_if_different <- function(path, contents, href = NULL, check = TRUE) {
   if (!file.exists(dirname(path))) {
     dir.create(dirname(path), showWarnings = FALSE)
   }
@@ -87,7 +87,11 @@ write_if_different <- function(path, contents, check = TRUE) {
     ))
     FALSE
   } else {
+    if (!is.null(href)) {
+      name <- cli::style_hyperlink(name, href)
+    }
     cli::cli_inform("Writing {.path {name}}")
+
     writeBin(charToRaw(contents), path)
     TRUE
   }

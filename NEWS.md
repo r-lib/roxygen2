@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* If you have a daily build of RStudio, the lists of changed Rd files are
+  now clickable so you can immediately see the rendered development
+  documentation (#1354).
+
 * Automated usage no longer mangles nbsp in default arguments (#1342).
 
 * Give useful error if `@describeIn` can't combine docs (#1366).

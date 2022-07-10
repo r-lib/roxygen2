@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* R6 documentation no longer shows inherited methods if there aren't any 
+  (#1371).
+
 * Automated usage no longer mangles nbsp in default arguments (#1342).
 
 * Give useful error if `@describeIn` can't combine docs (#1366).

@@ -24,6 +24,6 @@ test_that("default knitr chunk options are used", {
 
   expect_snapshot_file(
     "man/foo.Rd",
-    transform = function(x) str_replace_all(x, fixed("\r\n"), "\n")
+    variant = .Platform$OS.type
   )
 })

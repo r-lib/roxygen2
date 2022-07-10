@@ -214,3 +214,19 @@ test_that("fragile tags in generated code", {
   expect_silent(out2 <- markdown("foo `r '\\\\out{<span></span>}'` bar"))
   expect_equal(out2, "foo \\out{<span></span>} bar")
 })
+
+test_that("workaround for cmark sourcepos bug (#1353) works", {
+  expect_snapshot(
+  roc_proc_text(rd_roclet(), r"(
+#' Title
+#'
+#' line1
+#'    pre `r "string"` 333 `r 1+1` post
+#'
+#' no workaround needed here `r LETTERS[1]`
+#' @md
+foo <- function() {}
+)")[[1]]
+)
+
+})

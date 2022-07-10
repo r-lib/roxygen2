@@ -1,1 +1,4 @@
+Package: testOptions
+Version: 1.0.0
 Roxygen: list(old_usage = TRUE)
+Encoding: UTF-8

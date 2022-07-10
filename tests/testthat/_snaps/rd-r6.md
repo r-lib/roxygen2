@@ -20,7 +20,7 @@
       cat(format(rd$get_section("rawRd")))
     Output
       \section{Super class}{
-      \code{\link[R_GlobalEnv:C1]{R_GlobalEnv::C1}} -> \code{C2}
+      \code{R_GlobalEnv::C1} -> \code{C2}
       }
       \section{Methods}{
       \subsection{Public methods}{

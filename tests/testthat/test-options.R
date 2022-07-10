@@ -18,12 +18,13 @@ test_that("warns on invalid meta.R files", {
 })
 
 test_that("default knitr chunk options are used", {
+  # Line endings are either \r\n or \n on Windows, in the stored
+  # snapshot, so we'll skip for now.
+  skip_on_os("windows")
+
   local_package_copy(test_path('test-options'))
 
   callr::r(function() roxygen2::roxygenise(roclets = "rd"))
-
-  expect_snapshot_file(
-    "man/foo.Rd",
-    variant = .Platform$OS.type
-  )
+  
+  expect_snapshot(read_lines("man/foo.Rd"))
 })

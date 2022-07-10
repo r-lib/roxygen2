@@ -52,7 +52,7 @@ Plots:
 
 \figure{test-figure-1.png}
 
-Also see \code{vignette("rd-formatting")}.
+Alternative knitr engines:
 
 \if{html}{\out{<div class="sourceCode default">}}\preformatted{```\{r\}
 # comment
@@ -60,5 +60,7 @@ this <- 10
 is <- this + 10
 good <- this + is
 }\if{html}{\out{</div>}}
+
+Also see \code{vignette("rd-formatting")}.
 }
 \keyword{internal}

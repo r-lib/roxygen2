@@ -4,6 +4,7 @@
   `DESCRIPTION` or in `man/roxygen/meta.R`) is added to the knitr chunk
   options that roxygen2 uses for markdown code blocks and inline
   code (#1390).
+* R6 only links to superclass docs if they're actually available (#1236).
 
 * You can now use alternative knitr engines in markdown code blocks (#1149).
 

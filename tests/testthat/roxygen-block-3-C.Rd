@@ -11,7 +11,7 @@ Class C Description.
 Classs C details.
 }
 \section{Super classes}{
-\code{\link[roxygen2:A]{roxygen2::A}} -> \code{\link[roxygen2:B]{roxygen2::B}} -> \code{C}
+\code{roxygen2::A} -> \code{roxygen2::B} -> \code{C}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

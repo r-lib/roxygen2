@@ -11,7 +11,7 @@ Class B Description.
 Class B details.
 }
 \section{Super class}{
-\code{\link[roxygen2:A]{roxygen2::A}} -> \code{B}
+\code{roxygen2::A} -> \code{B}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

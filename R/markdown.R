@@ -150,8 +150,9 @@ eval_code_node <- function(node, env) {
     # write knitr markup for inline code
     text <- paste0("`", xml_text(node), "`")
   } else {
+    lang <- xml_attr(node, "info")
     # write knitr markup for fenced code
-    text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
+    text <- paste0("```", if (!is.na(lang)) lang, "\n", xml_text(node), "```\n")
   }
   roxy_knit(text, env, knitr_chunk_defaults)
 }
@@ -315,8 +316,8 @@ special <- c(
 )
 
 mdxml_code_block <- function(xml, state) {
-  info <- xml_attr(xml, "info")[1]
-  if (is.na(info) || nchar(info[1]) == 0) info <- NA_character_
+  info <- xml_attr(xml, "info", default = "")[1]
+  if (nchar(info[1]) == 0) info <- NA_character_
   paste0(
     "\n\n",
     "\\if{html}{\\out{<div class=\"sourceCode",

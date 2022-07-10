@@ -2,6 +2,9 @@
 
 * Generated HTML for code blocks never includes "NA" for language (#1251). 
 
+* Using a level 1 heading in the wrong tag now gives a more useful warning 
+  (#1374).
+
 * R6 only links to superclass docs if they're actually available (#1236).
 
 * You can now use alternative knitr engines in markdown code blocks (#1149).

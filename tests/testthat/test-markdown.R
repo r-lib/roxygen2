@@ -456,10 +456,7 @@ test_that("level 1 heading in markdown generates warning in some tags", {
     #' @name x
     NULL
   "
-  expect_warning(
-    roc_proc_text(rd_roclet(), text),
-    "level 1 markdown headings"
-  )
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
 })
 
 test_that("level >2 markdown headings work in @description", {

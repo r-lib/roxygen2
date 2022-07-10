@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* R6 only links to superclass docs if they're actually available (#1236).
+
 * You can now use alternative knitr engines in markdown code blocks (#1149).
 
 * Fix bug interpolating the results of indented inline RMarkdown (#1353).

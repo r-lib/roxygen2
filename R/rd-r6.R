@@ -99,7 +99,13 @@ r6_superclass <- function(block, r6data, env) {
   push(paste0("\\section{", title, "}{"))
 
   pkgs <- super$classes$package[match(cls, super$classes$classname)]
-  path <- sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls)
+  has_topic <- purrr::map2_lgl(cls, pkgs, has_topic)
+
+  path <- ifelse(
+    has_topic,
+    sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls),
+    sprintf("\\code{%s::%s}", pkgs, cls)
+  )
   me <- sprintf("\\code{%s}", block$object$value$classname)
   push(paste(c(rev(path), me), collapse = " -> "))
 

@@ -51,6 +51,11 @@ test_that("export detects S4 class", {
   expect_equal(out, 'exportClasses(a)')
 })
 
+test_that("exports constructor function if created", {
+  out <- roc_proc_text(namespace_roclet(), "#' @export\na <- setClass('a')")
+  expect_equal(out, c('export(a)', 'exportClasses(a)'))
+})
+
 test_that("export detects S4 generic", {
   out <- roc_proc_text(namespace_roclet(), "
     #' @export

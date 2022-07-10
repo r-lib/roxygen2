@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Generated HTML for code blocks never includes "NA" for language (#1251). 
+
 * Using a level 1 heading in the wrong tag now gives a more useful warning 
   (#1374).
 

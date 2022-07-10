@@ -230,3 +230,16 @@ test_that("workaround for cmark sourcepos bug (#1353) works", {
   expect_equal(out$get_section("description")$value, "line1\npre 1 2 3 post")
   expect_equal(out$get_section("details")$value, "no workaround needed here")
 })
+
+
+test_that("doesn't generate NA language", {
+  out <- roc_proc_text(rd_roclet(), "
+  #' Title
+  #'
+  #' ```
+  #' r <- 1:10
+  #' ```
+  #' @md
+  foo <- function() {}")[[1]]
+  expect_false(grepl("NA", out$get_section("description")$value))
+})

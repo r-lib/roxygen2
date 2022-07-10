@@ -312,11 +312,13 @@ test_that("class with no inherited methods", {
       )
     )"
 
-  eval(parse(text = text, keep.source = TRUE))
-  block <- parse_text(text, env = environment())[[1]]
+  env <- new.env(parent = globalenv())
+
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
   rd <- RoxyTopic$new()
 
-  topic_add_r6_methods(rd, block, environment())
+  topic_add_r6_methods(rd, block, env)
   expect_snapshot(cat(format(rd$get_section("rawRd"))))
 })
 

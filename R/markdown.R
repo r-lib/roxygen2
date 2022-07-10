@@ -154,7 +154,7 @@ eval_code_node <- function(node, env) {
     text <- paste0("```", xml_attr(node, "info"), "\n", xml_text(node), "```\n")
   }
 
-  chunk_opts <- modifyList(
+  chunk_opts <- utils::modifyList(
     knitr_chunk_defaults,
     as.list(roxy_meta_get("knitr_chunk_options", NULL))
   )

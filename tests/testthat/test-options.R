@@ -20,9 +20,7 @@ test_that("warns on invalid meta.R files", {
 test_that("default knitr chunk options are used", {
   local_package_copy(test_path('test-options'))
 
-  suppressMessages(
-    roxygenise(roclets = "rd")
-  )
+  callr::r(function() roxygen2::roxygenise(roclets = "rd"))
 
   expect_snapshot_file("man/foo.Rd")
 })

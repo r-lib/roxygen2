@@ -37,6 +37,7 @@ Imports:
     withr,
     xml2
 Suggests: 
+    callr,
     covr,
     R.methodsS3,
     R.oo,

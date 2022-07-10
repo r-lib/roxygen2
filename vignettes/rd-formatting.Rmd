@@ -38,7 +38,7 @@ Here is an example roxygen chunk that uses Markdown.
 #' that package to learn how to use roxygen.
 #'
 #' @param pkg package description, can be path or package name.  See
-#'   [as.package()] for more information
+#'   [as.package()] for more information.
 #' @param clean,reload Deprecated.
 #' @inheritParams roxygen2::roxygenise
 #' @seealso [roxygen2::roxygenize()], `browseVignettes("roxygen2")`
@@ -148,8 +148,8 @@ Regular Markdown lists are recognized and converted to `\enumerate{}` or `\itemi
 #' * An R color name, see `colors()`.
 #' * A 6- or 8-digit hexa color string, e.g. `#ff0000` means
 #'   red. Transparency (alpha channel) values are ignored.
-#' * A one-column matrix with three rows for the red, green
-#'   and blue channels, as returned by [grDevices::col2rgb()]
+#' * A one-column matrix with three rows for the red, green,
+#'   and blue channels, as returned by [grDevices::col2rgb()].
 ```
 
 Note that you do not have to leave an empty line before the list.

@@ -258,9 +258,11 @@ r6_inherited_method_list <- function(block, r6data) {
   self <- r6data$self
   super_meth <- super_meth[! super_meth$name %in% self$name, ]
   super_meth <- super_meth[! duplicated(super_meth$name), ]
+  if (nrow(super_meth) == 0) {
+    return()
+  }
 
   super_meth <- super_meth[rev(seq_len(nrow(super_meth))), ]
-
   details <- paste0(
     "<details",
     if (nrow(super_meth) <= 5) " open",

@@ -28,12 +28,6 @@
       \item \href{#method-C2-meth1}{\code{C2$meth1()}}
       }
       }
-      \if{html}{\out{
-      <details open><summary>Inherited methods</summary>
-      <ul>
-      </ul>
-      </details>
-      }}
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C2-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-C2-meth1}{}}}

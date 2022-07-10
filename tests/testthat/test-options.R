@@ -22,5 +22,8 @@ test_that("default knitr chunk options are used", {
 
   callr::r(function() roxygen2::roxygenise(roclets = "rd"))
 
-  expect_snapshot_file("man/foo.Rd")
+  expect_snapshot_file(
+    "man/foo.Rd",
+    transform = function(x) str_replace_all(x, fixed("\r\n"), "\n")
+  )
 })

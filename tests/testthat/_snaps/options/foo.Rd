@@ -8,6 +8,6 @@ foo()
 }
 \description{
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{knitr::opts_chunk$get("myoption")
-#>  [1]  1  2  3  4  5  6  7  8  9 10
+###  [1]  1  2  3  4  5  6  7  8  9 10
 }\if{html}{\out{</div>}}
 }

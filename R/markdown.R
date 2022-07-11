@@ -438,7 +438,7 @@ mdxml_image <- function(xml) {
 }
 
 get_image_format <- function(path) {
-  should_restrict <- roxy_meta_get("restrict_image_formats") %||% FALSE
+  should_restrict <- roxy_meta_get("restrict_image_formats") %||% TRUE
   if (!should_restrict) {
     return("all")
   }

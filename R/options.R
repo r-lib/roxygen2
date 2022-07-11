@@ -64,7 +64,7 @@ load_options <- function(base_path = ".") {
     current_package = NA_character_,
     rd_family_title = list(),
     knitr_chunk_options = NULL,
-    restrict_image_formats = FALSE
+    restrict_image_formats = TRUE
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))

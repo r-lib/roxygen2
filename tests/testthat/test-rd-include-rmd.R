@@ -255,3 +255,27 @@ test_that("order of sections is correct", {
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   expect_match(format(out1), "Rmd.*After.*After2")
 })
+
+test_that("useful warnings", {
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
+
+  text <- "
+    #' Title
+    #' @includeRmd path
+    #' @name foobar
+    NULL"
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
+
+  path <- withr::local_tempfile(fileext = ".Rmd", lines = c(
+    "```{r}",
+    "stop('Error')",
+    "```"
+  ))
+  text <- sprintf("
+    #' Title
+    #' @includeRmd %s
+    #' @name foobar
+    NULL", path
+  )
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
+})

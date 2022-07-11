@@ -104,7 +104,7 @@ make_as_character_rd <- function() {
 has_topic <- function(topic, package) {
   tryCatch(
     {
-      out <- inject(help(!!topic, !!package), global_env())
+      out <- exec("help", topic, package, .env = global_env())
       inherits(out, "dev_topic") ||
         (inherits(out, "help_files_with_topic") && length(out) == 1)
     },

@@ -156,20 +156,22 @@ eval_code_node <- function(node, env) {
   }
 
   chunk_opts <- utils::modifyList(
-    knitr_chunk_defaults,
+    knitr_chunk_defaults(),
     as.list(roxy_meta_get("knitr_chunk_options", NULL))
   )
 
   roxy_knit(text, env, chunk_opts)
 }
 
-knitr_chunk_defaults <- list(
-  error = FALSE,
-  fig.path = "man/figures/",
-  fig.process = function(path) basename(path),
-  comment = "#>",
-  collapse = TRUE
-)
+knitr_chunk_defaults <- function() {
+  list(
+    error = FALSE,
+    fig.path = "man/figures/",
+    fig.process = basename,
+    comment = "#>",
+    collapse = TRUE
+  )
+}
 
 str_set_all_pos <- function(text, pos, value, nodes) {
   # Cmark has a bug when reporting source positions for multi-line

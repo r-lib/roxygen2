@@ -77,7 +77,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li><p>The new <code>knitr_chunk_options</code> option (in the <code>Roxygen</code> entry of <code>DESCRIPTION</code> or in <code>man/roxygen/meta.R</code>) is added to the knitr chunk options that roxygen2 uses for markdown code blocks and inline code (<a href="https://github.com/r-lib/roxygen2/issues/1390" class="external-link">#1390</a>).</p></li>
+<ul><li><p>roxygen2 now only only includes PDF figures generated via markdown in the PDF manual, and only includes SVG figures generated via markdown in the HTML manual (<a href="https://github.com/r-lib/roxygen2/issues/1399" class="external-link">#1399</a>).</p></li>
+<li><p>The new <code>knitr_chunk_options</code> option (in the <code>Roxygen</code> entry of <code>DESCRIPTION</code> or in <code>man/roxygen/meta.R</code>) is added to the knitr chunk options that roxygen2 uses for markdown code blocks and inline code (<a href="https://github.com/r-lib/roxygen2/issues/1390" class="external-link">#1390</a>).</p></li>
 <li><p><code>@includeRmd</code> now gives better feedback when it fails (<a href="https://github.com/r-lib/roxygen2/issues/1089" class="external-link">#1089</a>).</p></li>
 <li><p><code>@export</code> will now export both the class and constructor function when applied to expressions like <code>foo &lt;- setClass("foo")</code> (<a href="https://github.com/r-lib/roxygen2/issues/1216" class="external-link">#1216</a>).</p></li>
 <li><p>Generated HTML for code blocks never includes “NA” for language (<a href="https://github.com/r-lib/roxygen2/issues/1251" class="external-link">#1251</a>).</p></li>

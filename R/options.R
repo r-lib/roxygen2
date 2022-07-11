@@ -30,6 +30,10 @@
 #'
 #' * `knitr_chunk_options`: default chunk options used for knitr.
 #'
+#' * `restrict_image_formats`: if `TRUE` then PDF images are only included in the
+#'   PDF manual, and SVG images are only included in the HTML manual.
+#'   (This only applies to images generated via markdown.)
+#'
 #' @section How to set:
 #' Either set in `DESCRIPTION`:
 #'
@@ -146,4 +150,3 @@ local_roxy_meta_set <- function(key, value, envir = caller_env()) {
 
   roxy_meta_set(key, value)
 }
-

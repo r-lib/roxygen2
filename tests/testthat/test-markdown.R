@@ -650,8 +650,6 @@ test_that("can override default options", {
 })
 
 test_that("image formats work", {
-  local_roxy_meta_set("restrict_image_formats", TRUE)
-
   expect_snapshot(
     roc_proc_text(rd_roclet(), "
       #' Title
@@ -661,6 +659,6 @@ test_that("image formats work", {
       #' ![](example.PNG \"Plot title 3\")
       #' @md
       foo <- function() { }
-    ")
+    ")[[1]]
   )
 })

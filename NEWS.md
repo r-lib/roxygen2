@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* The new `knitr_chunk_options` option (in the `Roxygen` entry of
+  `DESCRIPTION` or in `man/roxygen/meta.R`) is added to the knitr chunk
+  options that roxygen2 uses for markdown code blocks and inline
+  code (#1390).
+  
 * `@includeRmd` now gives better feedback when it fails (#1089).
 
 * `@export` will now export both the class and constructor function when

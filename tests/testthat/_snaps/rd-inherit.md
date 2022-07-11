@@ -65,4 +65,12 @@
       x Can't find topic "function".
     Output
       NULL
+    Code
+      get_rd("foo::bar()", RoxyTopics$new(), source = "source")
+    Condition
+      Warning:
+      @inherits failed in topic "source".
+      x Can't find topic "foo::bar()".
+    Output
+      NULL
 

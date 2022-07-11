@@ -149,9 +149,6 @@ build_minidesc_metadata <- function(src, dest) {
   dest_type <- class(dest)[1]
   dest_name <- as.character(dest$topic)
 
-  # fallback defaults
-  extends <- class <- generic <- ""
-
   if (src_type == "s3method") {
     generic <- attr(src$value, "s3method")[1]
     class <- attr(src$value, "s3method")[2]
@@ -161,6 +158,8 @@ build_minidesc_metadata <- function(src, dest) {
     } else if (fits_constructor(dest_name, src)) {
       # src method fits informal dest constructor (heuristically)
       extends <- "class"
+    } else {
+      extends <- ""
     }
   } else if (src_type == "s4method") {
     generic <- as.character(src$value@generic)
@@ -171,49 +170,38 @@ build_minidesc_metadata <- function(src, dest) {
     } else if (dest_type == "s4class") {
       extends <- "class"
       # TODO must test whether src method fits dest constructor
+    } else {
+      extends <- ""
     }
+  } else {
+    generic <- ""
+    class <- ""
+    extends <- ""
   }
   list(extends = extends, generic = generic, class = class)
 }
 
-#' Turn S4 signatures into a character scalar
-#' @noRd
+# Turn S4 signature into a string
 sig2class <- function(sig) {
   if (length(sig) == 1) {
-    class <- sig
+    as.character(sig)
   } else {
-    class <- paste0(names(sig), " = ", sig, collapse = ",")
+    paste0(names(sig), " = ", sig, collapse = ",")
   }
-  as.character(class)
 }
 
-#' Tests if destination is a constructor for class of src
-#'
-#' No formal test is possible, these are heuristics.
-#' @noRd
+# Is destination is probably constructor for src?
 fits_constructor <- function(dest_name, src) {
   src_class <- attr(src$value, "s3method")[2]
-  # assuming that dest is class constructor, when class == dest name
-  if (src_class == dest_name) TRUE
-  else fits_constructor_disambig_class(src_class, dest_name)
-}
 
-#' Test if class of src is a disambiguated version of dest
-#'
-#' Tests if `dest_name` and pkg are in `src_class`.
-#'
-#' [Advanced R](https://adv-r.hadley.nz/s3.html#s3-classes) recommends to add
-#' the pkg name to the class name, to avoid namespace clashes.
-#' In this case, the actual class may be called "pkg_baz", but the exported
-#' "S3 constructor" may still called "pkg::baz()", because "pkg::pkg_baz()"
-#' would be redundant.
-#' This function checks for these kinds of heuristic matches between src_class
-#' and dest_name.
-#' @noRd
-fits_constructor_disambig_class <- function(src_class, dest_name, pkg_name) {
-  evalenv <- roxy_meta_get("env")
-  # This should only happen in our test cases
-  if (is.null(evalenv)) evalenv <- parent.frame()
-  stringr::str_detect(src_class, dest_name) &&
-  stringr::str_detect(src_class, utils::packageName(env = evalenv))
+  # simple case where class name is the same as the constructor name
+  if (src_class == dest_name) {
+    return(TRUE)
+  }
+
+  # more complex case where class name = package name + constructor name
+  evalenv <- roxy_meta_get("env") %||% parent.frame() # needed for tests
+  pkg_name <- utils::packageName(evalenv) %||% ""
+
+  src_class == paste0(pkg_name, "_", dest_name)
 }

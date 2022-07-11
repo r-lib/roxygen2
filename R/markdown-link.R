@@ -95,8 +95,21 @@ parse_link <- function(destination, contents, state) {
   is_code <- FALSE
   if (length(contents) == 1 && xml_name(contents) == "code") {
     is_code <- TRUE
+
     contents <- xml_contents(contents)
     destination <- sub("`$", "", sub("^`", "", destination))
+
+    local_bindings(.env = state, in_link_code = TRUE)
+  }
+
+  if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
+    incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
+
+    warn_roxy_tag(state$tag, c(
+      "markdown links must contain plain text",
+      i = "Problematic link: {destination}"
+    ))
+    return("")
   }
 
   ## If the supplied link text is the same as the reference text,
@@ -169,13 +182,13 @@ parse_link <- function(destination, contents, state) {
 #' Link to a function: [roxygenize()].
 #' Link to an object: [roxygenize] (we just treat it like an object here.
 #'
-#' Link to another package, function: [devtools::document()].
-#' Link to another package, non-function: [devtools::document].
+#' Link to another package, function: [desc::desc()].
+#' Link to another package, non-function: [desc::desc].
 #'
 #' Link with link text: [this great function][roxygenize()],
 #' [`roxygenize`][roxygenize()], or [that great function][roxygenize].
 #'
-#' In another package: [and this one][devtools::document].
+#' In another package: [and this one][desc::desc].
 #'
 #' This is a table:
 #'

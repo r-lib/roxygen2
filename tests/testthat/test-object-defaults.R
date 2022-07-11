@@ -46,18 +46,23 @@ test_that("@docType class automatically added to reference class objects", {
 # packages -----------------------------------------------------------------
 
 test_that("can create package documentation", {
-  with_mock(
-    `roxygen2::read.description` = function(...)
-      list(Package = "roxygen_devtest",
-           Title = "Package Title",
-           Description = "Package description."),
-    out <- roc_proc_text(rd_roclet(), "
-    #' @details Details.
-    '_PACKAGE'")[[1]]
+  local_package_copy(test_path("empty"))
+  desc::desc_set(
+    Package = "roxygendevtest",
+    Title = "Package Title",
+    Description = "Package description."
   )
-  expect_equal(out$get_value("name"), "roxygen_devtest-package")
-  expect_equal(out$get_value("alias"), c("roxygen_devtest", "roxygen_devtest-package"))
-  expect_equal(out$get_value("title"), "roxygen_devtest: Package Title")
+
+  block <- "
+    #' @details Details.
+  '_PACKAGE'
+  "
+  blocks <- parse_text(block, env = new.env())
+  out <- roclet_process(rd_roclet(), blocks, env = new.env(), base_path = ".")[[1]]
+
+  expect_equal(out$get_value("name"), "roxygendevtest-package")
+  expect_equal(out$get_value("alias"), c("roxygendevtest", "roxygendevtest-package"))
+  expect_equal(out$get_value("title"), "roxygendevtest: Package Title")
   expect_equal(out$get_value("description"), "Package description.")
   expect_equal(out$get_value("docType"), "package")
   expect_equal(out$get_value("details"), "Details.")

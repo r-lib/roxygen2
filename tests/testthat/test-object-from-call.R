@@ -10,11 +10,7 @@ test_that("finds package description", {
   obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
   expect_s3_class(obj, "package")
   expect_equal(obj$alias, "_PACKAGE")
-  expect_equal(obj$value$desc$Package, "testEagerData")
-})
-
-test_that("Can read UTF-8 DESCRIPTIONS", {
-  expect_equal(read.description("testNonASCII/DESCRIPTION")$Author, "Shr\U00EBktan <shrektan@126.com>")
+  expect_equal(obj$value$desc$get_field("Package"), "testEagerData")
 })
 
 test_that("finds datasets given by name", {
@@ -28,25 +24,18 @@ test_that("finds datasets given by name", {
 })
 
 test_that("can document eager data", {
-  skip_if_not_installed("devtools")
+  local_package_copy(test_path('testEagerData'))
+  suppressMessages(roxygenise())
 
-  test_pkg <- temp_copy_pkg('testEagerData')
-  on.exit(unlink(test_pkg, recursive = TRUE))
-
-  expect_output(devtools::document(test_pkg), "a[.]Rd")
-  expect_true(file.exists(file.path(test_pkg, "man", "a.Rd")))
+  expect_true(file.exists("man/a.Rd"))
 })
 
 test_that("can document lazy data", {
-  skip_if_not_installed("devtools")
+  local_package_copy(test_path('testLazyData'))
+  suppressMessages(roxygenise())
 
-  test_pkg <- temp_copy_pkg('testLazyData')
-  on.exit(unlink(test_pkg, recursive = TRUE))
-
-  expect_output(devtools::document(test_pkg), "a[.]Rd")
-  expect_true(file.exists(file.path(test_pkg, "man", "a.Rd")))
+  expect_true(file.exists("man/a.Rd"))
 })
-
 
 # imports -----------------------------------------------------------------
 

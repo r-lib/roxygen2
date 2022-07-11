@@ -4,13 +4,16 @@
 \alias{roxy_tag}
 \alias{roxy_tag_parse}
 \alias{roxy_tag_warning}
+\alias{warn_roxy_tag}
 \title{\code{roxy_tag} S3 constructor}
 \usage{
-roxy_tag(tag, raw, val = NULL, file = NA_character_, line = NA_integer_)
+roxy_tag(tag, raw, val = NULL, file = NA_character_, line = NA_character_)
 
 roxy_tag_parse(x)
 
 roxy_tag_warning(x, ...)
+
+warn_roxy_tag(tag, message, ...)
 }
 \arguments{
 \item{tag}{Tag name. Arguments starting with \code{.} are reserved for internal
@@ -27,7 +30,8 @@ a list. Usually filled in by \code{tag_parsers}}
 }
 \description{
 \code{roxy_tag()} is the constructor for tag objects.
-\code{roxy_tag_warning()} generates a warning that gives the location of the tag.
+\code{roxy_tag_warning()} is superseded by \code{warn_roxy_tag()}; use to generate a
+warning that includes the location of the tag.
 }
 \section{Methods}{
 

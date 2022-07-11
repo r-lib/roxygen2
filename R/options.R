@@ -28,6 +28,8 @@
 #' * `rd_family_title` `<list>`: overrides for `@family` titles. See the
 #'    _rd_ vignette for details: `vignette("rd", package = "roxygen2")`
 #'
+#' * `knitr_chunk_options`: default chunk options used for knitr.
+#'
 #' @section How to set:
 #' Either set in `DESCRIPTION`:
 #'
@@ -60,7 +62,8 @@ load_options <- function(base_path = ".") {
     markdown = FALSE,
     r6 = TRUE,
     current_package = NA_character_,
-    rd_family_title = list()
+    rd_family_title = list(),
+    knitr_chunk_options = NULL
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))
@@ -134,5 +137,12 @@ roxy_meta_clear <- function() {
 roxy_meta_load <- function(base_path = getwd()) {
   roxy_meta_clear()
   env_bind(roxy_meta, !!!load_options(base_path))
+}
+
+local_roxy_meta_set <- function(key, value, envir = caller_env()) {
+  old_value <- roxy_meta_get(key)
+  withr::defer(roxy_meta_set(key, old_value), envir = envir)
+
+  roxy_meta_set(key, value)
 }
 

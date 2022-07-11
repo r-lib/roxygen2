@@ -1,7 +1,8 @@
 #' `roxy_tag` S3 constructor
 #'
 #' `roxy_tag()` is the constructor for tag objects.
-#' `roxy_tag_warning()` generates a warning that gives the location of the tag.
+#' `roxy_tag_warning()` is superseded by `warn_roxy_tag()`; use to generate a
+#' warning that includes the location of the tag.
 #'
 #' @section Methods:
 #' Define a method for `roxy_tag_parse` to support new tags. See [tag_parsers]
@@ -15,7 +16,7 @@
 #' @param val Parsed tag value, typically a character vector, but sometimes
 #'   a list. Usually filled in by `tag_parsers`
 #' @param file,line Location of the tag
-roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_integer_) {
+roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_character_) {
   structure(
     list(
       file = file,
@@ -28,6 +29,20 @@ roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_integ
   )
 }
 
+roxy_generated_tag <- function(block, tag, val) {
+  roxy_tag(
+    tag = tag,
+    raw = NULL,
+    val = val,
+    file = block$file,
+    line = block$line
+  )
+}
+
+roxy_test_tag <- function(raw = "", val = NULL) {
+  roxy_tag("test", raw = raw, val = val, file = "test.R", line = 1)
+}
+
 #' @rdname roxy_tag
 #' @param x A tag
 #' @export
@@ -37,7 +52,8 @@ roxy_tag_parse <- function(x) {
 
 #' @export
 roxy_tag_parse.default <- function(x) {
-  roxy_tag_warning(x, "unknown tag")
+  warn_roxy_tag(x, "is not a known tag")
+  NULL
 }
 
 is.roxy_tag <- function(x) inherits(x, "roxy_tag")
@@ -89,5 +105,33 @@ print.roxy_tag <- function(x, ...) {
 #' @export
 #' @rdname roxy_tag
 roxy_tag_warning <- function(x, ...) {
-  roxy_warning(file = x$file, line = x$line, "@", x$tag, " ", ...)
+  # Should no longer be used internally
+
+  message <- paste0(
+    if (!is.na(x$file)) paste0("[", x$file, ":", x$line, "] "),
+    ...,
+    collapse = " "
+  )
+
+  warning(message, call. = FALSE, immediate. = TRUE)
+  NULL
+}
+
+#' @export
+#' @rdname roxy_tag
+warn_roxy_tag <- function(tag, message, ...) {
+  message[[1]] <- paste0(
+    link_to(tag$file, tag$line), " @", tag$tag, " ",
+    if (is.null(tag$raw)) ("(automatically generated) "),
+    message[[1]]
+  )
+  cli::cli_warn(message, ..., .envir = parent.frame())
+}
+
+link_to <- function(file, line) {
+  paste0("[", cli::style_hyperlink(
+    paste0(basename(file), ":", line),
+    paste0("file://", file),
+    params = c(line = line, col = 1)
+  ), "]")
 }

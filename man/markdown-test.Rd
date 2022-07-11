@@ -9,13 +9,13 @@ Link to a function: \code{\link[=roxygenize]{roxygenize()}}.
 Link to an object: \link{roxygenize} (we just treat it like an object here.
 }
 \details{
-Link to another package, function: \code{\link[devtools:document]{devtools::document()}}.
-Link to another package, non-function: \link[devtools:document]{devtools::document}.
+Link to another package, function: \code{\link[desc:desc]{desc::desc()}}.
+Link to another package, non-function: \link[desc:desc]{desc::desc}.
 
 Link with link text: \link[=roxygenize]{this great function},
 \code{\link[=roxygenize]{roxygenize}}, or \link[=roxygenize]{that great function}.
 
-In another package: \link[devtools:document]{and this one}.
+In another package: \link[desc:desc]{and this one}.
 
 This is a table:\tabular{lr}{
    \strong{foo} \tab \strong{bar} \cr

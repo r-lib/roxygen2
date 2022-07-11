@@ -1,20 +1,24 @@
-package_seealso <- function(desc) {
-  if (!is.null(desc$URL)) {
-    links <- paste0("\\url{", strsplit(desc$URL, ",\\s+")[[1]], "}")
+package_seealso <- function(URL, BugReports) {
+  itemize("Useful links:", package_seealso_urls(URL, BugReports))
+}
+package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
+  if (!is.null(URL)) {
+    links <- paste0("\\url{", strsplit(URL, ",\\s+")[[1]], "}")
+    links <- gsub("\\url\\{https://doi.org/", "\\doi{", links)
   } else {
     links <- character()
   }
-  if (!is.null(desc$BugReports)) {
-    links <- c(links, paste0("Report bugs at \\url{", desc$BugReports, "}"))
+  if (!is.null(BugReports)) {
+    links <- c(links, paste0("Report bugs at \\url{", BugReports, "}"))
   }
 
-  itemize("Useful links:", links)
+  links
 }
 
-package_authors <- function(desc) {
-  authors <- tryCatch(eval(parse(text = desc$`Authors@R` %||% "")),
+package_authors <- function(authors) {
+  authors <- tryCatch(eval(parse(text = authors %||% "")),
     error = function(e) {
-      warning(e)
+      cli::cli_warn("Failed to evaluate Authors@R.", parent = e)
       NULL
     }
   )
@@ -37,7 +41,7 @@ package_authors <- function(desc) {
 
 author_desc <- function(x) {
   if (inherits(x, "person")) {
-    stop("person class must be stripped", call. = FALSE)
+    cli::cli_abort("Person class must be stripped", .internal = FALSE)
   }
 
   desc <- paste0(x$given, collapse = " ")
@@ -368,4 +372,33 @@ itemize <- function(header, x) {
     paste0("  \\item ", x, "\n", collapse = ""),
     "}\n"
   )
+}
+
+package_url_parse <- function(x) {
+  # <doi:XX.XXX> -> \doi{XX.XXX} to avoid CRAN Notes, etc.
+  x <- str_replace_all(x, "<(doi|DOI):(.*?)>", function(match) {
+    match <- str_remove_all(match, "^<(doi|DOI):|>$")
+    paste0("\\doi{", escape(match), "}")
+  })
+
+  # <http:XX.XXX> -> \url{http:XX.XXX}
+  x <- str_replace_all(x, "<(http|https):\\/\\/(.*?)>", function(match) {
+    match <- str_remove_all(match, "^<|>$")
+    paste0("\\url{", escape(match), "}")
+  })
+
+  # <arxiv:XXX> -> \href{https://arxiv.org/abs/XXX}{arXiv:XXX}
+  # https://github.com/wch/r-source/blob/trunk/src/library/tools/R/Rd2pdf.R#L149-L151
+  patt_arxiv <- "<(arXiv:|arxiv:)([[:alnum:]/.-]+)([[:space:]]*\\[[^]]+\\])?>"
+  x <- str_replace_all(x, patt_arxiv, function(match) {
+    match <- str_remove_all(match, "^<(arXiv:|arxiv:)|>$")
+    # Special cases has <arxiv:id [code]>.
+    # See https://CRAN.R-project.org/package=ciccr
+    # Extract arxiv id, split by space
+    arxiv_id <- str_split_fixed(match, " ", n = 2)[, 1]
+
+    paste0("\\href{https://arxiv.org/abs/", escape(arxiv_id), "}{arXiv:", match, "}")
+  })
+
+  x
 }

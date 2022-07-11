@@ -18,7 +18,7 @@ topic_add_r6_methods <- function(rd, block, env) {
     del <- c(del, i)
     meth <- find_method_for_tag(methods, tag)
     if (is.na(meth)) {
-      roxy_tag_warning(tag, "Cannot find matching R6 method")
+      warn_roxy_tag(tag, "Cannot find matching R6 method")
       next
     }
     midx <- which(meth == methods$name)
@@ -26,10 +26,12 @@ topic_add_r6_methods <- function(rd, block, env) {
     del <- c(del, i)
   }
 
-  methods <- add_default_methods(methods)
+  methods <- add_default_methods(methods, block)
 
   nodoc <- map_int(methods$tags, length) == 0
-  r6_warning(block, "undocumented R6 method[s]: %s", methods$name[nodoc])
+  if (any(nodoc)) {
+    warn_roxy_block(block, "Undocumented R6 method{?s}: {methods$name[nodoc]}")
+  }
 
   block$tags[del] <- NULL
 
@@ -59,14 +61,19 @@ topic_add_r6_methods <- function(rd, block, env) {
   }
 }
 
-add_default_methods <- function(methods) {
+add_default_methods <- function(methods, block) {
   defaults <- list(
     clone = list(
-      roxy_tag_parse(roxy_tag(
+      roxy_generated_tag(
+        block,
         "description",
         "The objects of this class are cloneable with this method."
-      )),
-      roxy_tag_parse(roxy_tag("param", "deep Whether to make a deep clone."))
+      ),
+      roxy_generated_tag(
+        block,
+        "param",
+        list(name = "deep", description = "Whether to make a deep clone.")
+      )
     )
   )
 
@@ -92,7 +99,13 @@ r6_superclass <- function(block, r6data, env) {
   push(paste0("\\section{", title, "}{"))
 
   pkgs <- super$classes$package[match(cls, super$classes$classname)]
-  path <- sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls)
+  has_topic <- purrr::map2_lgl(cls, pkgs, has_topic)
+
+  path <- ifelse(
+    has_topic,
+    sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls),
+    sprintf("\\code{%s::%s}", pkgs, cls)
+  )
   me <- sprintf("\\code{%s}", block$object$value$classname)
   push(paste(c(rev(path), me), collapse = " -> "))
 
@@ -116,15 +129,21 @@ r6_fields <- function(block, r6data) {
 
   # Check for missing fields
   miss <- setdiff(fields, docd)
-  r6_warning(block, "undocumented R6 field[s]: %s", miss)
+  if (length(miss) > 0) {
+    warn_roxy_block(block, "Undocumented R6 field{?s}: {miss}")
+  }
 
   # Check for duplicate fields
   dup <- unique(docd[duplicated(docd)])
-  r6_warning(block, "R6 field[s] documented multiple times: %s", dup)
+  if (length(dup) > 0) {
+    warn_roxy_block(block, "R6 field{?s} documented multiple times: {dup}")
+  }
 
   # Check for extra fields
   xtra <- setdiff(docd, fields)
-  r6_warning(block, "unknown R6 field[s]: %s", xtra)
+  if (length(xtra) > 0) {
+    warn_roxy_block(block, "Unknown R6 field{?s}: {xtra}")
+  }
 
   if (length(docd) == 0) return()
 
@@ -156,11 +175,15 @@ r6_active_bindings <- function(block, r6data) {
 
   # Check for missing bindings
   miss <- setdiff(active, docd)
-  r6_warning(block, "undocumented R6 active binding[s]: %s", miss)
+  if (length(miss) > 0) {
+    warn_roxy_block(block, "Undocumented R6 active binding{?s}: {miss}")
+  }
 
   # Check for duplicate bindings
   dup <- unique(docd[duplicated(docd)])
-  r6_warning(block, "R6 active binding[s] documented multiple times: %s", dup)
+  if (length(dup) > 0) {
+    warn_roxy_block(block, "R6 active binding{?s} documented multiple times: {dup}")
+  }
 
   if (length(docd) == 0) return()
 
@@ -221,7 +244,8 @@ r6_method_list <- function(block, methods) {
   c("\\subsection{Public methods}{",
     "\\itemize{",
     sprintf(
-      "\\item \\href{#method-%s}{\\code{%s$%s()}}",
+      "\\item \\href{#method-%s-%s}{\\code{%s$%s()}}",
+      methods$class,
       nms,
       block$object$alias,
       nms
@@ -240,38 +264,41 @@ r6_inherited_method_list <- function(block, r6data) {
   self <- r6data$self
   super_meth <- super_meth[! super_meth$name %in% self$name, ]
   super_meth <- super_meth[! duplicated(super_meth$name), ]
+  if (nrow(super_meth) == 0) {
+    return()
+  }
 
   super_meth <- super_meth[rev(seq_len(nrow(super_meth))), ]
-
   details <- paste0(
-    "<details ",
-    if (nrow(super_meth) <= 5) "open ",
+    "<details",
+    if (nrow(super_meth) <= 5) " open",
     "><summary>Inherited methods</summary>"
   )
 
-  c("\\if{html}{",
-    paste0("\\out{", details, "}"),
-    "\\itemize{",
+  c("\\if{html}{\\out{", details,
+    "<ul>",
     sprintf(
       paste0(
-        "\\item \\out{<span class=\"pkg-link\" data-pkg=\"%s\" ",
-        "data-topic=\"%s\" data-id=\"%s\">}",
-        "\\href{../../%s/html/%s.html#method-%s}{\\code{%s::%s$%s()}}",
-        "\\out{</span>}"
+        "<li>",
+        "<span class=\"pkg-link\" data-pkg=\"%s\" data-topic=\"%s\" data-id=\"%s\">",
+        "<a href='../../%s/html/%s.html#method-%s-%s'><code>%s::%s$%s()</code></a>",
+        "</span>",
+        "</li>"
       ),
       super_meth$package,
       super_meth$classname,
       super_meth$name,
       super_meth$package,
       super_meth$classname,
+      super_meth$classname,
       super_meth$name,
       super_meth$package,
       super_meth$classname,
       super_meth$name
     ),
-    "}",
-    "\\out{</details>}",
-    "}"
+    "</ul>",
+    "</details>",
+    "}}"
   )
 }
 
@@ -279,8 +306,8 @@ r6_method_begin <- function(block, method) {
   nm <- r6_show_name(method$name)
   c(
     "\\if{html}{\\out{<hr>}}",
-    paste0("\\if{html}{\\out{<a id=\"method-", nm, "\"></a>}}"),
-    paste0("\\if{latex}{\\out{\\hypertarget{method-", nm, "}{}}}"),
+    paste0("\\if{html}{\\out{<a id=\"method-", method$class, "-", nm, "\"></a>}}"),
+    paste0("\\if{latex}{\\out{\\hypertarget{method-", method$class, "-", nm, "}{}}}"),
     paste0("\\subsection{Method \\code{", nm, "()}}{")
   )
 }
@@ -334,10 +361,10 @@ r6_method_params <- function(block, method) {
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   dup <- unique(mnames[duplicated(mnames)])
   for (m in dup) {
-    roxy_warning(
-      sprintf("argument `%s` documented multiple times for R6 method `%s`", m, method$name),
-      file = block$file, line = method$line
-    )
+    warn_roxy_block(block, c(
+      "Must use one @param for each argument",
+      x = "${method$name}({m}) is documented multiple times"
+    ))
   }
 
   # Now add the missing ones from the class
@@ -357,10 +384,10 @@ r6_method_params <- function(block, method) {
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   miss <- setdiff(fnames, mnames)
   for (m in miss) {
-    roxy_warning(
-      sprintf("argument `%s` undocumented for R6 method `%s()`", m, method$name),
-      file = block$file, line = method$line
-    )
+    warn_roxy_block(block, c(
+      "Must use one @param for each argument",
+      x = "${method$name}({m}) is not documented"
+    ))
   }
 
   if (length(par) == 0) return()
@@ -390,7 +417,7 @@ r6_method_return <- function(block, method) {
   ret <- purrr::keep(method$tags[[1]], function(t) t$tag == "return")
   if (length(ret) == 0) return()
   if (length(ret) > 1) {
-    roxy_tag_warning(ret[[2]], "May only use one @return per R6 method")
+    warn_roxy_block(block, "Must use one @return per R6 method")
   }
   ret <- ret[[1]]
   c(
@@ -444,11 +471,4 @@ first_five <- function(x) {
   x <- encodeString(x, quote = "`")
   if (length(x) > 5) x <- c(x[1:5], "...")
   paste(x, collapse = ", ")
-}
-
-r6_warning <- function(block, template, bad) {
-  if (length(bad) == 0) return()
-  badlist <- first_five(bad)
-  template <- gsub("[s]", if (length(bad) == 1) "" else "s", template, fixed = TRUE)
-  roxy_warning(sprintf(template, badlist), file = block$file, line = block$line)
 }

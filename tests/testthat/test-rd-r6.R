@@ -1,19 +1,3 @@
-
-test_that("extract_r6_data without source refs", {
-  txt <-
-    "R6::R6Class(
-       public = list(
-         field1 = NULL,
-         meth1 = function(Z) { },
-         meth2 = function(Z = 10, ...) { },
-         field2 = \"foobar\",
-         meth3 = function() { }
-       )
-     )"
-  C <- eval(parse(text = txt, keep.source = FALSE))
-  expect_error(extract_r6_data(C), "without source references")
-})
-
 test_that("extract_r6_methods", {
   txt <-
     "R6::R6Class(
@@ -241,7 +225,7 @@ test_that("R6 edge cases, class without (documented) fields", {
   block <- parse_text(text)[[1]]
   rd <- RoxyTopic$new()
 
-  expect_warning(topic_add_r6_methods(rd, block, environment()))
+  expect_snapshot(topic_add_r6_methods(rd, block, environment()))
   expect_false(grepl("field", format(rd), ignore.case = TRUE))
 })
 
@@ -308,12 +292,36 @@ test_that("warning if no method comes after the docs", {
   block <- parse_text(text, env = environment())[[1]]
   rd <- RoxyTopic$new()
 
-  expect_warning(
-    topic_add_r6_methods(rd, block, environment()),
-    "Cannot find matching R6 method"
-  )
+  expect_snapshot(topic_add_r6_methods(rd, block, environment()))
   doc <- format(rd)
 })
+
+test_that("class with no inherited methods", {
+  text <- "
+    C1 <- R6::R6Class('C1', cloneable = FALSE)
+
+    #' @title Title
+    #' @description Description.
+    #' @details Details.
+    C2 <- R6::R6Class('C2',
+      inherit = C1,
+      cloneable = FALSE,
+      public = list(
+        #' @description method1
+        meth1 = function() 1
+      )
+    )"
+
+  env <- new.env(parent = globalenv())
+
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
+  rd <- RoxyTopic$new()
+
+  topic_add_r6_methods(rd, block, env)
+  expect_snapshot(cat(format(rd$get_section("rawRd"))))
+})
+
 
 test_that("integration test", {
 
@@ -331,20 +339,8 @@ test_that("integration test", {
 
   roc <- roclet_preprocess(roclet_find("rd"))
 
-  roxy_warnings <- character()
-
-  withCallingHandlers(
-    res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path()),
-    warning = function(w) {
-      roxy_warnings <<- c(roxy_warnings, w$message)
-      invokeRestart("muffleWarning")
-    }
-  )
-
-  # Warnings
-  verify_output(
-    test_path(paste0("roxygen-block-3-warnings.txt")),
-    sort(roxy_warnings)
+  expect_snapshot(
+    res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path())
   )
 
   tmp <- tempfile()

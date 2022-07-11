@@ -86,11 +86,10 @@ parser_data <- function(call, env, block) {
 }
 
 parser_package <- function(call, env, block, file) {
-  pkg_path <- dirname(dirname(file))
-  desc <- read.description(file.path(pkg_path, "DESCRIPTION"))
 
+  pkg_path <- dirname(dirname(file))
   value <- list(
-    desc = desc,
+    desc = desc::desc(file = pkg_path),
     path = pkg_path
   )
   object(value, call, type = "package")
@@ -284,7 +283,7 @@ object_topic <- function(value, alias, type) {
     `function` = alias,
     package = alias,
     data = alias,
-    stop("Unsupported type '", type, "'", call. = FALSE)
+    cli::cli_abort("Unsupported type {.str {type}}", .internal = TRUE)
   )
 }
 

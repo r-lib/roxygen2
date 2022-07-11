@@ -10,8 +10,8 @@ markdown_pass1(text)
 \item{text}{Input text.}
 }
 \value{
-Text with the inline code expanded. A character vector of the
-same length as the input \code{text}.
+Text with R code expanded.
+A character vector of the same length as the input \code{text}.
 }
 \description{
 Expand the embedded inline code
@@ -29,20 +29,38 @@ function, and this is \code{TRUE}: TRUE.
 To insert the name of the current package: roxygen2.
 
 The \code{iris} data set has 5 columns:
-\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.\if{html}{\out{<div class="r">}}\preformatted{# Code block demo
+\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Code block demo
 x + 1
-}\if{html}{\out{</div>}}\preformatted{## [1] 101
-}
+#> [1] 101
+}\if{html}{\out{</div>}}
 
-Chunk options:\if{html}{\out{<div class="r">}}\preformatted{names(mtcars)
+Chunk options:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{names(mtcars)
 nrow(mtcars)
-}\if{html}{\out{</div>}}\preformatted{##  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear" "carb"
-## [1] 32
-}
+#>  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
+#> [11] "carb"
+#> [1] 32
+}\if{html}{\out{</div>}}
 
-Plots:\if{html}{\out{<div class="r">}}\preformatted{plot(1:10)
+Plots:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{plot(1:10)
 }\if{html}{\out{</div>}}
 
 \figure{test-figure-1.png}
+
+Alternative knitr engines:
+
+\if{html}{\out{<div class="sourceCode default">}}\preformatted{```\{r\}
+# comment
+this <- 10
+is <- this + 10
+good <- this + is
+}\if{html}{\out{</div>}}
+
+Also see \code{vignette("rd-formatting")}.
 }
 \keyword{internal}

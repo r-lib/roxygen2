@@ -23,8 +23,7 @@ topics_process_family_prefix <- function(family) {
   # validate meta structure
   valid <- is.character(meta) || is.list(meta)
   if (!valid) {
-    message <- "rd_family_title is set, but is not a named list / vector"
-    abort(message)
+    cli::cli_abort("{.code rd_family_title} is set, but is not a named list / vector")
   }
 
   # extract element

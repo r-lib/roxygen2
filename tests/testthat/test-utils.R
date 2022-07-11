@@ -1,5 +1,3 @@
-# nice_names --------------------------------------------------------------
-
 test_that("nice_name leaves ok chars unchanged", {
   expect_equal(nice_name("abc"), "abc")
   expect_equal(nice_name("a_b-c.R"), "a_b-c.R")
@@ -8,6 +6,20 @@ test_that("nice_name leaves ok chars unchanged", {
 test_that("nice_name protects against invalid characters", {
   expect_equal(nice_name("a<-"), "a-set")
   expect_equal(nice_name("[.a"), "sub-.a")
+})
+
+test_that("write_if_different produces informative messages", {
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "test.R")
+
+  write_lines(made_by("#"), path)
+  expect_snapshot(write_if_different(path, "a <- 2"))
+
+  write_lines("a <- 1", path)
+  expect_snapshot(write_if_different(path, "a <- 2"))
+
+  path <- file.path(dir, "+.R")
+  expect_snapshot(write_if_different(path, "a <- 2"))
 })
 
 test_that("write_if_different and end of line", {
@@ -20,15 +32,15 @@ test_that("write_if_different and end of line", {
 
   # do not change unix le
   write_lines(cnt_unix, tmp, line_ending = "\n")
-  expect_silent(write_if_different(tmp, cnt_unix, check = FALSE))
-  expect_silent(write_if_different(tmp, cnt_win,  check = FALSE))
-  expect_silent(write_if_different(tmp, cnt_mix,  check = FALSE))
+  expect_message(write_if_different(tmp, cnt_unix, check = FALSE), NA)
+  expect_message(write_if_different(tmp, cnt_win,  check = FALSE), NA)
+  expect_message(write_if_different(tmp, cnt_mix,  check = FALSE), NA)
 
   # do not change windows le
   write_lines(cnt_win, tmp, line_ending = "\r\n")
-  expect_silent(write_if_different(tmp, cnt_unix, check = FALSE))
-  expect_silent(write_if_different(tmp, cnt_win,  check = FALSE))
-  expect_silent(write_if_different(tmp, cnt_mix,  check = FALSE))
+  expect_message(write_if_different(tmp, cnt_unix, check = FALSE), NA)
+  expect_message(write_if_different(tmp, cnt_win,  check = FALSE), NA)
+  expect_message(write_if_different(tmp, cnt_mix,  check = FALSE), NA)
 
   # change mixed le to windows
   tmp_win <- tempfile("roxy-", fileext = ".Rd")
@@ -39,14 +51,14 @@ test_that("write_if_different and end of line", {
   # line endings
   raw_mix <- charToRaw(paste0(paste0(cnt_mix, collapse = "\r\n"), "\r\n"))
   writeBin(raw_mix, tmp)
-  expect_output(write_if_different(tmp, cnt_unix, check = FALSE), "Writing ")
+  expect_message(write_if_different(tmp, cnt_unix, check = FALSE), "Writing ")
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 
   writeBin(raw_mix, tmp)
-  expect_output(write_if_different(tmp, cnt_win, check = FALSE), "Writing ")
+  expect_message(write_if_different(tmp, cnt_win, check = FALSE), "Writing ")
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 
   writeBin(raw_mix, tmp)
-  expect_output(write_if_different(tmp, cnt_mix, check = FALSE), "Writing ")
+  expect_message(write_if_different(tmp, cnt_mix, check = FALSE), "Writing ")
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 })

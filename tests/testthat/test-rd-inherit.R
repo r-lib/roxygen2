@@ -22,24 +22,49 @@ test_that("\\links are transformed", {
     wrapper <- function(algo) {}"
   )[[1]]
 
-  verify_output(
-    test_path("test-rd-inherit-link.txt"),
-    {
-      "\\link{} should include [digest]"
-      out$get_section("param")
-    }
+  # \\link{} should include [digest]
+  expect_snapshot_output(out$get_section("param"))
+})
+
+test_that("markdown doesn't get get extra parens", {
+  expect_equal(rd2text(parse_rd("\\href{a}{b}")), "\\href{a}{b}\n")
+  expect_equal(rd2text(parse_rd("\\ifelse{a}{b}{c}")), "\\ifelse{a}{b}{c}\n")
+  expect_equal(rd2text(parse_rd("\\if{a}{b}")), "\\if{a}{b}\n")
+})
+
+test_that("relative links converted to absolute", {
+  link_to_base <- function(x) {
+    rd2text(parse_rd(x), package = "base")
+  }
+
+  expect_equal(
+    link_to_base("\\link{abbreviate}"),
+    "\\link[base]{abbreviate}\n"
+  )
+  expect_equal(
+    link_to_base("\\link[=abbreviate]{abbr}"),
+    "\\link[base:abbreviate]{abbr}\n"
+  )
+
+  # Doesn't affect links that already have
+  expect_equal(
+    link_to_base("\\link[foo]{abbreviate}"),
+    "\\link[foo]{abbreviate}\n"
+  )
+  expect_equal(
+    link_to_base("\\link[foo::abbreviate]{abbr}"),
+    "\\link[foo::abbreviate]{abbr}\n"
   )
 })
 
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {
-  expect_warning(
+  expect_snapshot_warning(
     parse_text("
       #' @inherit fun blah
       NULL
-    "),
-    "Unknown inherit type: blah"
+    ")
   )
 })
 
@@ -53,7 +78,7 @@ test_that("no options gives default values", {
     block_get_tag_value(block, "inherit")$fields,
     c(
       "params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples", "author", "source"
+      "sections", "references", "examples", "author", "source", "note"
     )
   )
 })
@@ -240,7 +265,33 @@ test_that("can inherit single section", {
   expect_equal(section$content, "1")
 })
 
+
+test_that("warns if can't find section", {
+  code <- "
+    #' a
+    a <- function(x) {}
+
+    #' b
+    #'
+    #' @inheritSection a A
+    b <- function(y) {}
+  "
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
+})
+
 # Inherit parameters ------------------------------------------------------
+
+test_that("match_params can ignore . prefix", {
+  expect_equal(match_param("a", c("x", "y", "z")), NULL)
+  expect_equal(match_param("x", c("x", "y", "z")), "x")
+  expect_equal(match_param(".x", c("x", "y", "z")), "x")
+  expect_equal(match_param("x", c(".x", ".y", ".z")), ".x")
+  expect_equal(match_param(".x", c(".x", ".y", ".z")), ".x")
+  expect_equal(match_param(c(".x", "y"), c(".x", ".y", ".z")), c(".x", ".y"))
+  expect_equal(match_param(c(".x", "x"), c("x", ".x")), c(".x", "x"))
+  expect_equal(match_param(c(".x", "x"), "x"), "x")
+  expect_equal(match_param("x", c(".x", "x")), c("x", ".x"))
+})
 
 test_that("multiple @inheritParam tags gathers all params", {
   out <- roc_proc_text(rd_roclet(), "
@@ -248,7 +299,6 @@ test_that("multiple @inheritParam tags gathers all params", {
     #'
     #' @param x X
     a <- function(x) {}
-
 
     #' B
     #'
@@ -276,7 +326,6 @@ test_that("multiple @inheritParam tags gathers all params", {
     #' @param x X
     a <- function(x) {}
 
-
     #' B
     #'
     #' @param .y Y
@@ -287,15 +336,44 @@ test_that("multiple @inheritParam tags gathers all params", {
     #' @inheritParams a
     #' @inheritParams b
     c <- function(.x, y) {}
-    ")
-
-  params <- out[["c.Rd"]]$get_value("param")
-  expect_equal(length(params), 2)
-
-  expect_equal(params[[".x"]], "X")
-  expect_equal(params[["y"]], "Y")
+    ")[[3]]
+  expect_equal(out$get_value("param"), c(.x = "X", y = "Y"))
 })
 
+test_that("@inheritParam preserves mixed names", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #' @param .x,x X
+    a <- function(x, .x) {}
+
+    #' B
+    #' @inheritParams a
+    b <- function(x, .x) {}
+  ")[[2]]
+
+  expect_equal(out$get_value("param"), c(".x,x" = "X"))
+})
+
+test_that("can inherit from same arg twice", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A.
+    #'
+    #' @param x X
+    a <- function(x) {}
+
+    #' B
+    #'
+    #' @inheritParams a
+    b <- function(x) {}
+
+    #' C
+    #'
+    #' @inheritParams a
+    #' @rdname b
+    c <- function(.x) {}
+    ")[[2]]
+  expect_equal(out$get_value("param"), c("x,.x" = "X"))
+})
 
 test_that("@inheritParams can inherit from inherited params", {
   out <- roc_proc_text(rd_roclet(), "
@@ -330,16 +408,47 @@ test_that("multiple @inheritParam inherits from existing topics", {
 })
 
 
-test_that("@inheritParam can cope with multivariable argument definitions", {
+test_that("@inheritParam can inherit multivariable arguments", {
   out <- roc_proc_text(rd_roclet(), "
-                       #' My merge
-                       #'
-                       #' @inheritParams base::merge
-                       mymerge <- function(x, y) {}")[[1]]
-  params <- out$get_value("param")
-  expect_equal(length(params), 2)
-  expect_equal(sort(names(params)), c("x", "y"))
+    #' A
+    #' @param x,y X and Y
+    A <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams A
+    B <- function(x, y) {}"
+  )[[2]]
+  expect_equal(out$get_value("param"), c("x,y" = "X and Y"))
+
+  # Even when the names only match without .
+  out <- roc_proc_text(rd_roclet(), "
+    #' A
+    #' @param x,y X and Y
+    A <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams A
+    B <- function(.x, .y) {}"
+  )[[2]]
+  expect_equal(out$get_value("param"), c(".x,.y" = "X and Y"))
 })
+
+test_that("@inheritParam only inherits exact multiparam matches", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' A
+    #' @param x,y X and Y
+    A <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams A
+    B <- function(x) {}"
+  )[[2]]
+  expect_equal(out$get_value("param"), NULL)
+})
+
 
 test_that("@inheritParam understands compound docs", {
   out <- roc_proc_text(rd_roclet(), "
@@ -367,7 +476,7 @@ test_that("warned if no params need documentation", {
     #' @inheritParams foo
     x <- function(x, y) {}
   "
-  expect_warning(roc_proc_text(rd_roclet(), code), "no parameters to inherit")
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
 })
 
 test_that("argument order, also for incomplete documentation", {
@@ -486,10 +595,7 @@ test_that("can inherit all from single function", {
     bar <- function(...) {}
   ")[[2]]
 
-  verify_output(
-    test_path("test-rd-inherit-dots.txt"),
-    out$get_section("param")
-  )
+  expect_snapshot_output(test_path("test-rd-inherit-dots.txt"))
 })
 
 test_that("does not produce multiple ... args", {
@@ -513,10 +619,7 @@ test_that("does not produce multiple ... args", {
     baz <- function(y, z) {}
   ")[[1]]
 
-  verify_output(
-    test_path("test-rd-inherit-dots-inherit.txt"),
-    out$get_section("param")
-  )
+  expect_snapshot_output(test_path("test-rd-inherit-dots-inherit.txt"))
 })
 
 test_that("can inherit dots from several functions", {
@@ -540,10 +643,7 @@ test_that("can inherit dots from several functions", {
     foobar <- function(...) {}
   ")[[3]]
 
-  verify_output(
-    test_path("test-rd-inherit-dots-multi.txt"),
-    out$get_section("param")
-  )
+  expect_snapshot_output(out$get_section("param"))
 })
 
 test_that("inheritDotParams does not add already-documented params", {
@@ -589,6 +689,7 @@ test_that("can inherit all from single function", {
     #' @param y y
     #' @author Hadley
     #' @source my mind
+    #' @note my note
     #' @examples
     #' x <- 1
     foo <- function(x, y) {}
@@ -604,27 +705,21 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_value("examples"), rd("x <- 1"))
   expect_equal(out$get_value("author"), "Hadley")
   expect_equal(out$get_value("source"), "my mind")
+  expect_equal(out$get_value("note"), "my note")
 })
 
 
 # get_rd() -----------------------------------------------------------------
 
 test_that("useful warnings if can't find topics", {
-  expect_warning(get_rd("base2::attach"), "Can't find package")
-  expect_warning(get_rd("base::function_not_found"), "Can't find help topic")
-  expect_warning(get_rd("function", RoxyTopics$new()), "Can't find help topic")
+  expect_snapshot({
+    get_rd("base2::attach", source = "source")
+    get_rd("base::function_not_found", source = "source")
+    get_rd("function", RoxyTopics$new(), source = "source")
+  })
 })
 
 test_that("can find section in existing docs", {
   out <- find_sections(get_rd("base::attach"))
   expect_equal(out$title, "Good practice")
 })
-
-# find_params -------------------------------------------------------------
-
-test_that("find_params parses input", {
-  params <- find_params("utils::`?`", NULL)
-  expect_equal(names(params), c("topic", "type"))
-})
-
-

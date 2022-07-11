@@ -6,11 +6,130 @@
   Methods are recognized only if they extend the generic in the destination,
   or if the destination can heuristically be identified as a constructor.
 
-* The new `@exmaplesIf` tag can be used to create conditional
+* The new `knitr_chunk_options` option (in the `Roxygen` entry of
+  `DESCRIPTION` or in `man/roxygen/meta.R`) is added to the knitr chunk
+  options that roxygen2 uses for markdown code blocks and inline
+  code (#1390).
+  
+* `@includeRmd` now gives better feedback when it fails (#1089).
+
+* `@export` will now export both the class and constructor function when
+  applied to expressions like `foo <- setClass("foo")` (#1216).
+
+* Generated HTML for code blocks never includes "NA" for language (#1251). 
+
+* Using a level 1 heading in the wrong tag now gives a more useful warning 
+  (#1374).
+
+* R6 only links to superclass docs if they're actually available (#1236).
+
+* You can now use alternative knitr engines in markdown code blocks (#1149).
+
+* Fix bug interpolating the results of indented inline RMarkdown (#1353).
+
+* R6 documentation no longer shows inherited methods if there aren't any 
+  (#1371).
+
+* If you have a daily build of RStudio, the lists of changed Rd files are
+  now clickable so you can immediately see the rendered development
+  documentation (#1354).
+
+* Automated usage no longer mangles nbsp in default arguments (#1342).
+
+* Code evaluated in inline markdown code chunks and `@eval`/`@evalRd`/
+  `@evalNamespace` is now evaluated in an environment designed to be more
+  reproducible and to suppress output that won't work in Rd (e.g. turning
+  off colour and unicode support in cli) (#1351). They now also set 
+  knitr options `comment = #>` (#1380) and `collapse = TRUE` (#1376).
+
+# roxygen2 7.2.0
+
+## New features
+
+* The NAMESPACE roclet now preserves all existing non-import directives during
+  it's first pre-processing pass. This eliminates the "NAMESPACE has changed"
+  messages and reduces the incidence of namespace borking (#1254).
+
+* `@inheritParams` now only inherits exact multiparameter matches, so if you're
+  inheriting from a function with `@param x,y` you'll only get the parameter
+  documentation if your function needs docs for both x and y (#950).
+
+* All warning messages have been reviewed to be more informative and 
+  actionable (#1317). `@title` now checks for multiple paragraphs.
+  `@export` gives a more informative warning if it contains too many lines. 
+  (#1074). All tags warn now if only provide whitespace (#1228), and 
+  problems with the first tag in each block are reported with the correct line 
+  number (#1235).
+
+* If you have a daily build of RStudio, roxygen2 warnings will now include a 
+  clickable hyperlink that will take you directly to the problem (#1323).
+  This technology is under active development across the IDE and the cli 
+  package but is extremely exciting.
+
+## Minor improvements and bug fixes
+
+* roxygen2 can once again read UTF-8 paths on windows (#1277).
+
+* `@author`s are de-duplicated in merged documentation (@DanChaltiel, #1333).
+
+* `@exportS3method pkg::generic` now works when `pkg::generic` isn't 
+  imported by your package (#1085).
+
+* `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math 
+  support in `github_document()` (#1304).
+
+* `@inherit` and friends perform less aggressive link tweaking, eliminating
+  many spurious warnings. Additionally, when you do get a warning, you'll 
+  now always learn which topic it's coming from (#1135). Inherited 
+  `\ifelse{}{}{}` tags are now inserted correctly (without additional `{}`) 
+  (#1062).
+
+* `@inherit` now supports inheriting "Notes" with `@inherit pkg::fun note` 
+  (@pat-s, #1218)
+
+* Automatic `@usage` now correctly wraps arguments containing syntactically 
+  significant whitespace (e.g anonymous functions) (#1281) and non-syntactic 
+  values surrounded by backticks (#1257).
+
+* Markdown:
+  
+    * Code blocks are always wrapped in `<div class="sourceCode">`
+      even if the language is unknown (#1234).
+
+    * Links with markup (e.g. ``[foo `bar`][target]``) now cause an informative 
+      warning instead of generating invalid Rd.
+      
+    * Curly braces in links are now escaped (#1259).
+
+    * Inline R code is now powered by knitr. Where available, (knit) print 
+      methods are applied (#1179). This change alters outputs and brings roxygen
+      in line with console and R markdown behavior. `x <- "foo"` no longer 
+      inserts anything into the resulting documentation, but `x <- "foo"; x` 
+      will. This also means that returning a character vector will insert
+      commas between components, not newlines.
+
+* roxygen2 no longer generates invalid HTML (#1290).
+
+* DOIs, arXiv links, and urls in the `Description` field of the `DESCRIPTION`
+  are now converted to the appropriate Rd markup (@dieghernan, #1265, #1164).
+  DOIs in the `URL` field of the `DESCRIPTION` are now converted to Rd's 
+  special `\doi{}` tag (@ThierryO, #1296).
+
+# roxygen2 7.1.2
+
+* The new `@examplesIf` tag can be used to create conditional
   examples. These examples only run if a specified condition
   holds (#962).
 
 * roxygen2 is now licensed as MIT (#1163).
+
+* Bug fix for upcoming stringr 2.0.0 release.
+
+* Code blocks with language now add `sourceCode` to the generated div; this
+  makes syntax highlighting more consistent across downlit/pandoc/knitr/roxygen2.
+
+* Percent signs in markdown link targets, e.g. `[text](https://foo/ba%20r)`
+  are now handled correctly (#1209).
 
 # roxygen2 7.1.1
 
@@ -230,7 +349,7 @@ roxygen2 can now document R6 classes (#922). See `vignette("rd")` for details.
 
 roxygen2 now provides three strategies for loading your code (#822):
 
-* `load_pkgload()`, the default, uses [pkgload](https://www.github.com/r-lib/pkgload). 
+* `load_pkgload()`, the default, uses [pkgload](https://github.com/r-lib/pkgload). 
   Compared to the previous release, this now automatically recompiles your 
   package if needed.
 
@@ -375,7 +494,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 * `@inheritParams` warns if there are no parameters that require 
   documentation (#836).
 
-* `@param` containing only whitespce gives a clear warning message (#869).
+* `@param` containing only whitespace gives a clear warning message (#869).
 
 * Multiple `@usage` statements in a single block now generate a warning. 
   Previously, the first was used without a warning.
@@ -511,7 +630,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
       instead of throwing an utterly useless error (#560).
 
 * `person()` now supports all
-  [MARC Relator](http://www.loc.gov/marc/relators/relaterm.html) role codes
+  [MARC Relator](https://www.loc.gov/marc/relators/relaterm.html) role codes
   (#662, @publicus).
 
 * `topic_add_usage()` now outputs formatted "Usage" section with max
@@ -694,7 +813,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
   produces literal Rd code when run. This should make it easier to experiment
   with new types of output (#385).
 
-* Roxygen2 now parses the source code files in the order specified in the
+* roxygen2 now parses the source code files in the order specified in the
   `Collate` field in `DESCRIPTION`. This improves the ordering of the generated
   documentation when using `@describeIn` and/or `@rdname` split across several
   `.R` files, as often happens when working with S4 (#323, #324).
@@ -839,7 +958,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 
 # roxygen2 4.0.0
 
-Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you'll need to run `roxygen2::upgradeRoxygen()`. That will flag all existing files as being created by roxygen2.
+roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error handling and considerably safer default behaviour. Now, roxygen2 will never overwrite a file that it did not create. This means that before you run it for the first time, you'll need to run `roxygen2::upgradeRoxygen()`. That will flag all existing files as being created by roxygen2.
 
 ## New features
 
@@ -865,10 +984,10 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
     "mydata"
     ```
 
-* Roxygen2 now adds a comment to all generated files so that you know
+* roxygen2 now adds a comment to all generated files so that you know
   they've been generated, and should not be hand edited.
 
-* Roxygen2 no longer wraps the text in Rd files by default, i.e. the default
+* roxygen2 no longer wraps the text in Rd files by default, i.e. the default
   option is `wrap = FALSE` now. To override it, you have to specify a field
   `Roxygen: list(wrap = TRUE)` in `DESCRIPTION` (#178).
 
@@ -876,7 +995,7 @@ Roxygen2 4.0.0 is a major update to roxygen2 that makes provides enhanced error 
 
 ## Improved error handling
 
-* Roxygen2 will never overwrite a file that was not generated by
+* roxygen2 will never overwrite a file that was not generated by
   roxygen2. This means that the first time you use this version of
   roxygen, you'll need to delete all existing Rd files. `roxygenise()`
   gains a clean argument that will automatically remove any files
@@ -980,7 +1099,7 @@ method usage will be automatically prepended to the docstring.
 
 # roxygen2 3.0.0
 
-Roxygen2 now fully supports S4 and RC (reference classes) - you should no
+roxygen2 now fully supports S4 and RC (reference classes) - you should no
 longer need to manually add `@alias` or `@usage` tags for S4 classes, methods
 and generics, or for RC classes.
 

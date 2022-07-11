@@ -33,19 +33,24 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 \item \code{current_package} \verb{<string>} (read only): name of package being documented.
 \item \code{rd_family_title} \verb{<list>}: overrides for \verb{@family} titles. See the
 \emph{rd} vignette for details: \code{vignette("rd", package = "roxygen2")}
+\item \code{knitr_chunk_options}: default chunk options used for knitr.
 }
 }
 
 \section{How to set}{
 
-Either set in \code{DESCRIPTION}:\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
-}
+Either set in \code{DESCRIPTION}:
 
-Or if longer, you can put in \verb{/man/roxygen/meta.R}:\preformatted{list(
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
+}\if{html}{\out{</div>}}
+
+Or if longer, you can put in \verb{/man/roxygen/meta.R}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(
   markdown = TRUE,
   load = "installed"
 )
-}
+}\if{html}{\out{</div>}}
 }
 
 \keyword{internal}

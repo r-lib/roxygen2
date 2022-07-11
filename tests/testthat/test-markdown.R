@@ -1,4 +1,5 @@
 # code --------------------------------------------------------------------
+# see test-markdown-code.R for evaluated code
 
 test_that("backticks are converted to \\code & \\verb", {
   out1 <- roc_proc_text(rd_roclet(), "
@@ -19,60 +20,46 @@ test_that("code blocks work", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description
-    #'
-    #' Details with a code block:
+    #' @description
+    #' Before
     #' ```
-    #' x <- 1:10 %>%
-    #'   multiply_by(10) %>%
-    #'   add(42)
+    #' x %in% 1:10
     #' ```
-    #' Normal text again.
+    #' After
     #' @md
     foo <- function() {}")[[1]]
+  expect_snapshot_output(cat(out1$get_value("description")))
+
+  # And check that extra empty paragraphs don't affect the output
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description
+    #' @description
+    #' Before
     #'
-    #' Details with a code block:\\preformatted{x <- 1:10 \\%>\\%
-    #'   multiply_by(10) \\%>\\%
-    #'   add(42)
-    #' }
+    #' ```
+    #' x %in% 1:10
+    #' ```
     #'
-    #' Normal text again.
+    #' After
+    #' @md
     foo <- function() {}")[[1]]
-  expect_equivalent_rd(out1, out2)
+  expect_equal(out1$get_value("description"), out2$get_value("description"))
 })
 
 test_that("code block with language creates HTML tag", {
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
-    #' Description
-    #'
-    #' Details with a code block:
+    #' @description
+    #' Before
     #' ```r
-    #' x <- 1:10 %>%
-    #'   multiply_by(10) %>%
-    #'   add(42)
+    #' x %in% 1:10
     #' ```
-    #' Normal text again.
+    #' After
     #' @md
     foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' Description
-    #'
-    #' Details with a code block:\\if{html}{\\out{<div class=\"r\">}}\\preformatted{x <- 1:10 \\%>\\%
-    #'   multiply_by(10) \\%>\\%
-    #'   add(42)
-    #' }\\if{html}{\\out{</div>}}
-    #'
-    #' Normal text again.
-    foo <- function() {}")[[1]]
-  expect_equivalent_rd(out1, out2)
+  expect_snapshot_output(cat(out1$get_value("description")))
 })
 
 test_that("inline code escapes %", {
@@ -89,13 +76,6 @@ test_that("inline verbatim escapes Rd special chars", {
 
 test_that("special operators get \\code{}, not \\verb{}", {
   expect_equal(markdown("`if`"), "\\code{if}")
-})
-
-test_that("code blocks escape %", {
-  expect_equal(
-    markdown("```\n1:10 %>% mean()\n```"),
-    "\\preformatted{1:10 \\%>\\% mean()\n}"
-  )
 })
 
 test_that("inline code works with < and >", {
@@ -244,15 +224,13 @@ test_that("can convert table to Rd", {
   txt <- gsub("\n    ", "\n", txt)
   tables <- strsplit(txt, "\n\n")[[1]]
 
-  verify_output(
-    test_path("test-markdown-table.txt"), {
-      for (table in tables) {
-        cat_line(table)
-        cat_line(markdown(table))
-        cat_line()
-      }
+  expect_snapshot({
+    for (table in tables) {
+      cat_line(table)
+      cat_line(markdown(table))
+      cat_line()
     }
-  )
+  })
 })
 
 # inline formatting -------------------------------------------------------
@@ -463,7 +441,7 @@ test_that("unhandled markdown generates warning", {
     #' @name x
     NULL
   "
-  expect_warning(roc_proc_text(rd_roclet(), text), "block quotes")
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
 })
 
 test_that("level 1 heading in markdown generates warning in some tags", {
@@ -478,10 +456,7 @@ test_that("level 1 heading in markdown generates warning in some tags", {
     #' @name x
     NULL
   "
-  expect_warning(
-    roc_proc_text(rd_roclet(), text),
-    "level 1 markdown headings"
-  )
+  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
 })
 
 test_that("level >2 markdown headings work in @description", {
@@ -640,4 +615,36 @@ test_that("markup in headings", {
       )
     )
   )
+})
+
+test_that("alternative knitr engines", {
+  expect_snapshot(
+    print(out1 <- roc_proc_text(rd_roclet(), "
+      #' Title
+      #'
+      #' Description.
+      #'
+      #' ```{verbatim}
+      #' #| file = testthat::test_path(\"example.Rmd\")
+      #' ```
+      #' @md
+      #' @name x
+      NULL
+    "))
+  )
+})
+
+test_that("can override default options", {
+  local_roxy_meta_set("knitr_chunk_options", list(comment = "###"))
+
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' ```{r}
+    #' 1+1
+    #' ```
+    #' @md
+    foo <- function() { }
+  ")[[1]]
+  expect_match(out$get_section("description")$value, "###", fixed = TRUE)
 })

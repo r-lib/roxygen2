@@ -10,15 +10,15 @@ topic_add_describe_in <- function(topic, block, env) {
   }
 
   if (is.null(block$object)) {
-    roxy_tag_warning(tag, "must be used with an object")
+    warn_roxy_tag(tag, "must be used with an object")
     return()
   }
-  if (block_has_tags(block,  "name")) {
-    roxy_tag_warning(tag, "can not be used with @name")
+  if (block_has_tags(block, "name")) {
+    warn_roxy_tag(tag, "can not be used with @name")
     return()
   }
   if (block_has_tags(block, "rdname")) {
-    roxy_tag_warning(tag, "can not be used with @rdname")
+    warn_roxy_tag(tag, "can not be used with @rdname")
     return()
   }
 
@@ -36,7 +36,7 @@ topic_add_describe_in <- function(topic, block, env) {
 # Field -------------------------------------------------------------------
 
 #' Record data for minidescription sections from `@describeIn`
-#' 
+#'
 #' @param name name of the source function.
 #' @param desc description passed to `@describeIn`.
 #' @param extends how the source function extends the destination function:
@@ -46,9 +46,9 @@ topic_add_describe_in <- function(topic, block, env) {
 #'    For S3, there is always only *one* class.
 #'    For S4, the methods' signature is used instead, to cover multiple dispatch.
 #' - `""` (default) otherwise.
-#' @param generic,class name of the generic and class that is being extended by 
+#' @param generic,class name of the generic and class that is being extended by
 #' the method, otherwise empty string (`""`).
-#' @return a dataframe with one row for each `@describeIn`, wrapped inside 
+#' @return a dataframe with one row for each `@describeIn`, wrapped inside
 #' `rd_section()`
 #' @noRd
 rd_section_minidesc <- function(name,
@@ -76,8 +76,9 @@ rd_section_minidesc <- function(name,
 }
 
 #' @export
-merge.rd_section_minidesc <- function(x, y, ...) {
+merge.rd_section_minidesc <- function(x, y, ..., block) {
   stopifnot(identical(class(x), class(y)))
+
   rd_section(
     "minidesc",
     rbind(x$value, y$value, stringsAsFactors = FALSE)
@@ -89,11 +90,11 @@ merge.rd_section_minidesc <- function(x, y, ...) {
 #' @export
 format.rd_section_minidesc <- function(x, ...) {
   section_title <- "Related Functions and Methods"
-  
+
   df <- x$value
   subsection_by <- unique(df[, "extends"])
   section_body <- purrr::map_chr(subsection_by, format_subsections, df)
-  
+
   paste0(
     "\\section{", section_title, "}{\n",
     paste0(section_body, collapse = "\n"),
@@ -170,7 +171,7 @@ build_minidesc_metadata <- function(src, dest) {
 
   # fallback defaults
   extends <- class <- generic <- ""
-  
+
   if (src_type == "s3method") {
     generic <- attr(src$value, "s3method")[1]
     class <- attr(src$value, "s3method")[2]
@@ -207,7 +208,7 @@ sig2class <- function(sig) {
 }
 
 #' Tests if destination is a constructor for class of src
-#' 
+#'
 #' No formal test is possible, these are heuristics.
 #' @noRd
 fits_constructor <- function(dest_name, src) {
@@ -218,12 +219,12 @@ fits_constructor <- function(dest_name, src) {
 }
 
 #' Test if class of src is a disambiguated version of dest
-#' 
+#'
 #' Tests if `dest_name` and pkg are in `src_class`.
-#' 
-#' [Advanced R](https://adv-r.hadley.nz/s3.html#s3-classes) recommends to add 
+#'
+#' [Advanced R](https://adv-r.hadley.nz/s3.html#s3-classes) recommends to add
 #' the pkg name to the class name, to avoid namespace clashes.
-#' In this case, the actual class may be called "pkg_baz", but the exported 
+#' In this case, the actual class may be called "pkg_baz", but the exported
 #' "S3 constructor" may still called "pkg::baz()", because "pkg::pkg_baz()"
 #' would be redundant.
 #' This function checks for these kinds of heuristic matches between src_class

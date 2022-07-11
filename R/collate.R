@@ -33,14 +33,18 @@
 #' @export
 #' @aliases @@include
 update_collate <- function(base_path) {
+  if (!file.exists(base_path)) {
+    cli::cli_abort("{.path {base_path}} doesn't exist")
+  }
+
   new <- generate_collate(file.path(base_path, "R"))
-  if (is.null(new)) return()
+  if (is.null(new)) return(invisible())
 
   desc_path <- file.path(base_path, "DESCRIPTION")
   old <- desc::desc_get_collate(file = desc_path)
 
   if (!identical(old, new)) {
-    cat('Updating collate directive in ', desc_path, "\n")
+    cli::cli_inform("Updating collate directive in {.path {desc_path}}")
     desc::desc_set_collate(new, file = desc_path)
   }
 

@@ -118,7 +118,7 @@ test_that(
     )
     expect_equal(out$get_value("minidesc")$generic, c("zap", "zap", "print", ""))
     expect_equal(
-      out$get_value("minidesc")$class, 
+      out$get_value("minidesc")$class,
       c("numeric", "character", "qux", "")
     )
   }
@@ -149,4 +149,41 @@ test_that("function names are escaped", {
     ")[[1]]
   out
   expect_match(out$get_rd("minidesc"), "\\\\%foo\\\\%")
+})
+
+
+test_that("complains about bad usage", {
+  expect_snapshot_warning(
+    roc_proc_text(rd_roclet(), "
+      #' bar
+      bar <- 100
+
+      #' @name bar
+      #' @describeIn foo shortcut for foo
+      NULL
+      "
+    )
+  )
+  expect_snapshot_warning(
+    roc_proc_text(rd_roclet(), "
+      #' bar
+      bar <- 100
+
+      #' @name bar
+      #' @describeIn foo shortcut for foo
+      foo <- 10
+      "
+    )
+  )
+  expect_snapshot_warning(
+    roc_proc_text(rd_roclet(), "
+      #' bar
+      bar <- 100
+
+      #' @rdname bar
+      #' @describeIn foo shortcut for foo
+      foo <- 10
+      "
+    )
+  )
 })

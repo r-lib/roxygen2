@@ -10,6 +10,13 @@ roxy_tag_rd.roxy_tag_author <- function(x, base_path, env) {
 format.rd_section_author <- function(x, ...) {
   format_collapse(x, ...)
 }
+#' @export
+merge.rd_section_author <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  # Remove duplicated authors, e.g. when using @rdname
+  rd_section(x$type, unique(c(x$value, y$value)))
+}
+
 
 #' @export
 roxy_tag_parse.roxy_tag_format <- function(x) tag_markdown(x)
@@ -82,7 +89,14 @@ format.rd_section_source <- function(x, ...) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_title <- function(x) tag_markdown(x)
+roxy_tag_parse.roxy_tag_title <- function(x) {
+
+  if (str_count(x$raw, "\n\n") >= 1) {
+    warn_roxy_tag(x, "must be a single paragraph")
+  }
+
+  tag_markdown(x)
+}
 #' @export
 roxy_tag_rd.roxy_tag_title <- function(x, base_path, env) {
   rd_section(x$tag, x$val)

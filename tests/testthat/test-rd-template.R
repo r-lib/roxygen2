@@ -23,6 +23,14 @@ test_that("can find template from name", {
   )
 })
 
+test_that("templates gives useful error if not found", {
+  block <- "
+    #' @template doesn't-exist
+    x <- 10
+  "
+  expect_snapshot(roc_proc_text(rd_roclet(), block), error = TRUE)
+})
+
 test_that("templates replace variables with their values", {
   out <- roc_proc_text(rd_roclet(), "
     #' @template values

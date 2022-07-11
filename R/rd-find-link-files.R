@@ -24,7 +24,7 @@ find_topic_filename <- function(pkg, topic, tag = NULL) {
   if (is.na(pkg) || identical(roxy_meta_get("current_package"), pkg)) {
     topic
   } else {
-    try_find_topic_in_package(pkg, topic, tag = tag)
+    try_find_topic_in_package(pkg, topic, tag)
   }
 }
 
@@ -51,30 +51,17 @@ find_topic_in_package <- function(pkg, topic) {
   basename(utils::help((raw_topic), (pkg))[1])
 }
 
-try_find_topic_in_package <- function(pkg, topic, where = "", tag = NULL) {
+try_find_topic_in_package <- function(pkg, topic, tag) {
   path <- tryCatch(
     find_topic_in_package(pkg, topic),
     error = function(err) {
-      msg <- paste0(
-        "Link to unavailable package", where, ": ", pkg, "::",
-        topic, ". ", err$message
-      )
-      if (is.null(tag)) {
-        roxy_warning(msg)
-      } else {
-        roxy_tag_warning(tag, msg)
-      }
+      warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}", parent = err)
       topic
     }
   )
 
   if (is.na(path)) {
-    msg <- paste0("Link to unknown topic", where, ": ", pkg, "::", topic)
-    if (is.null(tag)) {
-      roxy_warning(msg)
-    } else {
-      roxy_tag_warning(tag, msg)
-    }
+    warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}")
     topic
   } else {
     path

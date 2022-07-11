@@ -123,20 +123,24 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' another `RoxyTopic` object, all of its sections will be added;
   #' or an [rd_section] object;
   #' or a list of [rd_section] objects to add.
+  #' @param block Name of block to use in error messages.
 
-  add = function(x, overwrite = FALSE) {
+  add = function(x, block = "???", overwrite = FALSE) {
     if (inherits(x, "RoxyTopic")) {
-      self$add(x$sections, overwrite = overwrite)
+      self$add(x$sections, block, overwrite = overwrite)
     } else if (inherits(x, "rd_section")) {
-      self$add_section(x, overwrite = overwrite)
+      self$add_section(x, block, overwrite = overwrite)
     } else if (is.list(x)) {
       for (section in x) {
-        self$add_section(section, overwrite = overwrite)
+        self$add_section(section, block, overwrite = overwrite)
       }
     } else if (is.null(x)) {
       # skip
     } else {
-      stop("Don't know how to add object of type ", class(x)[1])
+      cli::cli_abort(
+        "Don't know how to add object of type {.cls {class(x)[1]}}",
+        .internal = TRUE
+      )
     }
     invisible()
   },
@@ -146,12 +150,13 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' Ensures that each type of name (as given by its name), only appears
   #' once in `self$sections`. This method if for internal use only.
   #' @param section [rd_section] object to add.
+  #' @param block Name of block to use in error messages.
 
-  add_section = function(section, overwrite = FALSE) {
+  add_section = function(section, block = "???", overwrite = FALSE) {
     if (is.null(section)) return()
     type <- section$type
     if (self$has_section(type) && !overwrite) {
-      section <- merge(self$get_section(type), section)
+      section <- merge(self$get_section(type), section, block = block)
     }
 
     self$sections[[type]] <- section

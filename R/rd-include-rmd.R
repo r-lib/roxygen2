@@ -1,7 +1,7 @@
 #' @export
 roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
   if (!is_installed("rmarkdown")) {
-    roxy_tag_warning(x, "Needs the rmarkdown package")
+    warn_roxy_tag(x, "requires the rmarkdown package")
     return()
   }
 
@@ -12,6 +12,12 @@ roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
 roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   rmd <- x$val$path
   section <- x$val$section
+
+  if (!file.exists(rmd)) {
+    warn_roxy_tag(x, "Can't find Rmd {.path {rmd}}")
+    return(NULL)
+  }
+
   if (section == "") section <- "details"
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
 
@@ -43,13 +49,26 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   )
   cat(txt, file = rmd_path)
 
-  rmarkdown::render(
-    rmd_path,
-    output_format = rmarkdown::github_document(),
-    output_file = md_path,
-    quiet = TRUE,
-    envir = new_environment(parent = global_env())
+  tryCatch(
+    rmarkdown::render(
+      rmd_path,
+      output_format = "github_document",
+      output_options = c(
+        list(html_preview = FALSE),
+        if (utils::packageVersion("rmarkdown") >= "2.12") list(math_method = NULL)
+      ),
+      output_file = md_path,
+      quiet = TRUE,
+      envir = new_environment(parent = global_env())
+    ),
+    error = function(e) {
+      warn_roxy_tag(x, "failed to evaluate Rmd", parent = e)
+    }
   )
+
+  if (!file.exists(md_path)) {
+    return(NULL)
+  }
 
   value <- rmd_eval_rd(md_path, x)
   rd_section_markdown(section, value)

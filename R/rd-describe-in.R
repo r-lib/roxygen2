@@ -61,6 +61,7 @@ rd_section_minidesc <- function(name,
   rlang::arg_match(extends)
   stopifnot(is_scalar_character(generic))
   stopifnot(is_scalar_character(class))
+
   data <- data.frame(
     name = name,
     desc = desc,
@@ -69,20 +70,14 @@ rd_section_minidesc <- function(name,
     class = class,
     stringsAsFactors = FALSE
   )
-  rd_section(
-    "minidesc",
-    data
-  )
+  rd_section("minidesc", data)
 }
 
 #' @export
 merge.rd_section_minidesc <- function(x, y, ..., block) {
   stopifnot(identical(class(x), class(y)))
 
-  rd_section(
-    "minidesc",
-    rbind(x$value, y$value, stringsAsFactors = FALSE)
-  )
+  rd_section("minidesc", rbind(x$value, y$value))
 }
 
 # Rd Output -------------------------------------------------------------------

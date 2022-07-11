@@ -89,60 +89,41 @@ merge.rd_section_minidesc <- function(x, y, ..., block) {
 
 #' @export
 format.rd_section_minidesc <- function(x, ...) {
-  section_title <- "Related Functions and Methods"
-
   df <- x$value
-  subsection_by <- unique(df[, "extends"])
-  section_body <- purrr::map_chr(subsection_by, format_subsections, df)
+  subsections <- split(df, df$extends)
+  body <- purrr::map2_chr(subsections, names(subsections), format_subsection)
 
   paste0(
-    "\\section{", section_title, "}{\n",
-    paste0(section_body, collapse = "\n"),
+    "\\section{Related functions and methods}{\n",
+    paste0(body, collapse = "\n"),
     "}\n"
   )
 }
 
-format_subsections <- function(extends, df) {
-  class <- unique(df[df$extends == extends, "class"])
-  generic <- unique(df[df$extends == extends, "generic"])
-  subsection_title <- switch(
-    extends,
-    class = paste0(
-      "Methods extending \\code{", escape(class), "} class (by generic):"
-    ),
-    generic = paste0(
-      "Methods extending \\code{", escape(generic), "} generic (by class):"
-    ),
-    "Functions"
+format_subsection <- function(df, extends) {
+  if (extends == "class") {
+    title <- paste0(
+      "Methods extending \\code{", escape(df$class[[1]]), "} class (by generic)"
+    )
+    label <- df$generic
+  } else if (extends == "generic") {
+    title <- paste0(
+      "Methods extending \\code{", escape(df$generic[[1]]), "} generic (by class)"
+    )
+    label <- df$class
+  } else {
+    title <- "Functions"
+    label <- df$name
+  }
+
+  bullets <- paste0("\\code{", escape(label), "}: ", df$desc)
+  body <- paste0(
+    "\\itemize{\n",
+    paste0("  \\item ", bullets, "\n", collapse = ""),
+    "}\n"
   )
 
-  list_by <- unique(df[df$extends == extends, , drop = FALSE])
-  subsection_body <- purrr::pmap_chr(list_by, format_subsection)
-  subsection_body <- paste0(subsection_body, collapse = "\n")
-
-  paste0(
-    "\\subsection{", subsection_title, "}{\n", subsection_body, "}",
-    collapse = "\n"
-  )
-}
-
-format_subsection <- function(name, desc, extends, generic, class) {
-  label <- switch(
-    extends,
-    "class" = generic,
-    "generic" = class,
-    name
-  )
-  paste0(
-  "\\itemize{\n",
-    paste0(
-      "\\item \\code{",
-      escape(label),
-      "}: ", desc,
-      collapse = "\n"
-    ),
-    "\n}"
-  )
+  paste0("\\subsection{", title, "}{\n", body, "}")
 }
 
 # Helpers -----------------------------------------------------------------

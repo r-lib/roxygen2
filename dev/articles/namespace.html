@@ -124,45 +124,37 @@
 <p>For a function to be usable outside your package, you must <strong>export</strong> it. By default roxygen2 doesn’t export anything from your package. If you want an object to be publicly available, you must explicitly tag it with <code>@export</code>.</p>
 <p>Use the following guidelines to decide what to export:</p>
 <ul>
-<li><p>Functions: export functions that you want to make available. Exported functions must be documented, and you must be cautious when changing their interface.</p></li>
-<li><p>Datasets: all datasets are publicly available. They exist outside of the package namespace and should not be exported.</p></li>
-<li><p>S3 classes: if you want others to be able to create instances of the class <code>@export</code> the constructor function.</p></li>
-<li><p>S3 generics: the generic is a function, so <code>@export</code> if you want it to be usable outside the package.</p></li>
-<li>
-<p>S3 methods: every S3 method <em>must</em> be exported, even if the generic is not. Otherwise, the S3 method table will not be generated correctly and internal generics will not find the correct method.</p>
-<p>If you are providing a method for a generic defined in another package, you must also import that generic.</p>
-</li>
-<li>
-<p>S4 classes: if you want others to be able to extend your class, <code>@export</code> it. If you want others to create instances of your class, but not extend it, <code>@export</code> the constructor function, but not the class.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Can extend and create</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="kw">setClass</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Can extend, but constructor not exported</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">B</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"B"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Can create, but not extend</span></span>
-<span><span class="co">#' @export C</span></span>
-<span><span class="va">C</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Can create and extend</span></span>
-<span><span class="co">#' @export D</span></span>
-<span><span class="co">#' @exportClass D</span></span>
-<span><span class="va">D</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"D"</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li><p>S4 generics: <code>@export</code> if you want the generic to be publicly usable.</p></li>
-<li><p>S4 methods: you only need to <code>@export</code> methods for generics that you did not define.</p></li>
-<li><p>RC classes: the same principles apply as for S4 classes. <code>@export</code> will only export the class.</p></li>
+<li><p><strong>Functions</strong>: export functions that you want to make available. Exported functions must be documented, and you must be cautious when changing their interface.</p></li>
+<li><p><strong>Datasets</strong>: all datasets are publicly available. They exist outside of the package namespace and must not be exported.</p></li>
+<li><p><strong>S3 classes</strong>: if you want others to be able to create instances of the class <code>@export</code> the constructor function.</p></li>
+<li><p><strong>S3 generics</strong>: the generic is a function, so <code>@export</code> if you want it to be usable outside the package.</p></li>
+<li><p><strong>S3 methods</strong>: every S3 method <em>must</em> be exported, even if the generic is not. Otherwise, the S3 method table will not be generated correctly and internal generics will not find the correct method. See below for instructions on how to export a method for a generic in a suggested package.</p></li>
+<li><p><strong>S4 classes</strong>: export S4 classes if you want others to be able to extend them.</p></li>
+<li><p><strong>S4 generics:</strong> <code>@export</code> if you want the generic to be publicly usable.</p></li>
+<li><p><strong>S4 methods</strong>: you only need to <code>@export</code> methods for generics in other packages.</p></li>
 </ul>
 <div class="section level3">
-<h3 id="specialised-exports">Specialised exports<a class="anchor" aria-label="anchor" href="#specialised-exports"></a>
+<h3 id="s3-methods-for-generics-in-suggested-packages">S3 methods for generics in suggested packages<a class="anchor" aria-label="anchor" href="#s3-methods-for-generics-in-suggested-packages"></a>
 </h3>
-<p>Generally, roxygen2 can generate the correct namespace directive when <code>@export</code>ing a specific object. However, you may want to override the defaults and exercise greater control. In this case, you can use the more specialised tags described below:</p>
+<p><code>@exportS3Method</code> tag allows you to generate <code>S3method()</code> namespace directives. Its primary use is for “delayed” method registration, which allows you to define methods for generics found in suggested packages (R &gt;= 3.6). For example,</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @exportS3Method pkg::generic</span></span>
+<span><span class="va">generic.foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>will generate</p>
+<pre><code><span><span class="fu">S3method</span><span class="op">(</span><span class="fu">pkg</span><span class="fu">::</span><span class="va">generic</span>, <span class="va">foo</span><span class="op">)</span></span></code></pre>
+<p>Which will cause the method to be registered only when pkg is loaded.</p>
+</div>
+<div class="section level3">
+<h3 id="manual-exports">Manual exports<a class="anchor" aria-label="anchor" href="#manual-exports"></a>
+</h3>
+<p>If <code>@export</code> does not automatically generate the correct directive when, you can use one of the tags below to exercise greater control:</p>
 <ul>
 <li>
 <code>@export foo</code> generates <code>export(foo)</code>
+</li>
+<li>
+<code>@exportS3Method generic method</code> generates <code>S3method(generic, method)</code>
 </li>
 <li>
 <code>@exportClass foo</code> generates <code>exportClasses(foo)</code>
@@ -174,29 +166,29 @@
 <code>@exportPattern foo</code> generates <code>exportPattern(foo)</code>
 </li>
 </ul>
-<p>For even more specialised cases you can use <code>@rawNamespace code</code> which inserts <code>code</code> literally into the <code>NAMESPACE</code>. If you need to automate this, <code>@evalNamespace foo()</code> will evaluate the <code>foo()</code> in the package environment and insert the results into <code>NAMESPACE</code>. Because <code>evalNamespace()</code> is run in the package environment, it can only generate exports, not imports.</p>
+<p>For even more specialised cases you can use <code>@rawNamespace code</code> which inserts <code>code</code> literally into the <code>NAMESPACE</code>. If you need to automate this, <code>@evalNamespace fun()</code> will evaluate <code>fun()</code> in the package environment and insert the results into <code>NAMESPACE</code>. Because <code>evalNamespace()</code> is run in the package environment, it can only generate exports, not imports.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="imports">Imports<a class="anchor" aria-label="anchor" href="#imports"></a>
 </h2>
-<p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package. Only unique directives are saved to the <code>NAMESPACE</code> file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.</p>
+<p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package.</p>
 <div class="section level3">
-<h3 id="importing-functions">Importing functions<a class="anchor" aria-label="anchor" href="#importing-functions"></a>
+<h3 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h3>
-<p>If you are using just a few functions from another package, the recommended option is to add the package name to the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the functions explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>If you are using just a few functions from another package, we recommending adding the package to the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and calling the functions explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">pkg</span><span class="fu">::</span><span class="fu">fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="va">y</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>If the repetition of the package name becomes annoying you can <code>@importFrom</code> and drop the <code>::</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @importFrom pkg fun </span></span>
 <span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="va">y</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Imports affect every function in a package, so it’s common to collect them in a central place, like <code>{packagename}-package.R</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Imports affect every function in a package, so it’s common to collect them in a central place, like <code>{packagename}-package.R</code>. This is automated by <code>usethis::use_import_from()</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @importFrom pkg fun1 fun2</span></span>
 <span><span class="co">#' @importFrom pkg2 fun3</span></span>
 <span><span class="co">#' @importFrom pkg3 fun4</span></span>
@@ -206,45 +198,16 @@
 <p>It is possible, but not generally recommended to import all functions from a package with <code>@import package</code>. This is risky if you import functions from more than one package, because while it might be ok today, in the future the packages might end up with a function having the same name, and your users will get a warning every time your package is loaded.</p>
 </div>
 <div class="section level3">
-<h3 id="beware">Beware<a class="anchor" aria-label="anchor" href="#beware"></a>
-</h3>
-<p>Be careful when mixing <code>NAMESPACE</code> directives with regular code. The following example won’t work because roxygen ignores empty lines in blocks. It will generate a namespace directive <code>import(zoo, Different name for calling zoo.)</code>, which will error.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @import zoo</span></span>
-<span></span>
-<span><span class="co">#' Different name for calling zoo.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @params ... passed to zoo.</span></span>
-<span><span class="co">#' @return zoo object.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @export </span></span>
-<span><span class="va">zoo2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">zoo</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
-<p>Instead you need to add an explicit <code>NULL</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @import zoo</span></span>
-<span><span class="cn">NULL</span></span>
-<span><span class="co">#&gt; NULL</span></span>
-<span></span>
-<span><span class="co">#' Different name for calling zoo.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @params ... passed to zoo.</span></span>
-<span><span class="co">#' @return zoo object.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @export </span></span>
-<span><span class="va">zoo2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">zoo</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
 <h3 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>
 </h3>
-<p>If you’re adding a method to an S3 generic defined in another package, you must import it with <code>@importFrom pkg generic</code>. Otherwise roxygen2 can’t tell that your function is a method, and will not document it correctly.</p>
+<p>S3 generics are just functions, so the same rules for functions apply. S3 methods always accompany the generic, so as long as you can access the generic (either implicitly or explicitly), the methods will also be available. In other words, you don’t need to do anything special for S3 methods. As long as you’ve imported the generic, all the methods will also be available.</p>
 </div>
 <div class="section level3">
 <h3 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
 </h3>
-<p>If you are using S4 you may also need:</p>
 <ul>
-<li><p><code>@importClassesFrom package classa classb ...</code> to import selected S4 classes.</p></li>
-<li><p><code>@importMethodsFrom package methoda methodb ...</code> to import selected S4 methods.</p></li>
+<li>To use classes defined in another package, place <code>@importClassesFrom package ClassA ClassB ...</code> next to the classes that inherit from the imported classes, or next to the methods that implement a generic for the imported classes.</li>
+<li>To use generics defined in another package, place <code>@importMethodsFrom package GenericA GenericB ...</code> next to the methods that use the imported generics.</li>
 </ul>
 </div>
 <div class="section level3">

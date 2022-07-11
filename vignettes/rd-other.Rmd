@@ -72,7 +72,7 @@ Package documentation is a good place to put `# Package options` that documents 
 Some notes:
 
 -   By default, aliases will be added so that both `?pkgname` and `package?pkgname` will find the package help.
-    If there's an existing function called `pkgname`, use `@aliases {pkgname}-package` to override the default.
+    If there's an existing function called `pkgname`, use `@aliases {pkgname}-package NULL` to override the default.
 
 -   Use `@references` to point to published material about the package that users might find helpful.
 

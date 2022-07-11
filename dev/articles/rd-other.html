@@ -159,7 +159,7 @@
 <p>Package documentation is a good place to put <code># Package options</code> that documents options used by the package.</p>
 <p>Some notes:</p>
 <ul>
-<li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, use <code>@aliases {pkgname}-package</code> to override the default.</p></li>
+<li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, use <code>@aliases {pkgname}-package NULL</code> to override the default.</p></li>
 <li><p>Use <code>@references</code> to point to published material about the package that users might find helpful.</p></li>
 </ul>
 </div>

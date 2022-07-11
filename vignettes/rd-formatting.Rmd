@@ -332,6 +332,9 @@ Be aware that plots can quickly increase the size of your package leading to cha
 #' ```
 ```
 
+By default roxygen2 only includes PDF images in the PDF manual, and SVG images in the HTML manual.
+If you want to avoid this restriction, set the `restrict_image_formats` roxygen2 option to `FALSE`, see `?load_options`.
+
 ## Possible problems
 
 ### Some Rd tags can't contain markdown

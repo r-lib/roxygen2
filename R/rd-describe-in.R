@@ -25,10 +25,12 @@ topic_add_describe_in <- function(topic, block, env) {
   dest <- find_object(tag$val$name, env)
   metadata <- build_minidesc_metadata(block$object, dest)
 
-  topic$add(exec(rd_section_minidesc,
+  topic$add(rd_section_minidesc(
     name = block$object$topic,
     desc = tag$val$description,
-    !!!metadata
+    extends = metadata$extends,
+    generic = metadata$generic,
+    class = metadata$class
   ))
   dest$topic
 }
@@ -56,11 +58,11 @@ rd_section_minidesc <- function(name,
                                 extends = c("", "generic", "class"),
                                 generic = "",
                                 class = "") {
-  stopifnot(is_scalar_character(name))
+  stopifnot(is_string(name))
   stopifnot(is_character(desc))
   rlang::arg_match(extends)
-  stopifnot(is_scalar_character(generic))
-  stopifnot(is_scalar_character(class))
+  stopifnot(is_string(generic))
+  stopifnot(is_string(class))
 
   data <- data.frame(
     name = name,
@@ -84,7 +86,9 @@ merge.rd_section_minidesc <- function(x, y, ..., block) {
 
 #' @export
 format.rd_section_minidesc <- function(x, ...) {
-  subsections <- split(x$value, x$value$extends)
+  order <- intersect(c("generic", "class", ""), unique(x$value$extends))
+  by <- factor(x$value$extends, levels = order)
+  subsections <- split(x$value, by)
   body <- purrr::map2_chr(subsections, names(subsections), format_section)
 
   paste0(body, collapse = "\n")

@@ -15,16 +15,16 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions}{
-      \itemize{
-        \item \code{print.qux}: function (method for different generic)
-        \item \code{zap_helper}: function
-      }
-      }
       \section{Methods for generic \code{zap()}}{
       \itemize{
         \item \code{zap.numeric}: method
         \item \code{zap.character}: method
+      }
+      }
+      \section{Related functions}{
+      \itemize{
+        \item \code{print.qux}: function (method for different generic)
+        \item \code{zap_helper}: function
       }
       } 
 
@@ -33,16 +33,16 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions}{
-      \itemize{
-        \item \code{format.bar}: function (method for different class)
-        \item \code{is_foo}: function
-      }
-      }
       \section{Methods for class \code{foo}}{
       \itemize{
         \item \code{print.foo}: method
         \item \code{format.foo}: method
+      }
+      }
+      \section{Related functions}{
+      \itemize{
+        \item \code{format.bar}: function (method for different class)
+        \item \code{is_foo}: function
       }
       } 
 
@@ -51,14 +51,14 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions}{
-      \itemize{
-        \item \code{format.quuz_baz}: function (method for another class)
-      }
-      }
       \section{Methods for class \code{roxygen2_baz}}{
       \itemize{
         \item \code{print.roxygen2_baz}: method
+      }
+      }
+      \section{Related functions}{
+      \itemize{
+        \item \code{format.quuz_baz}: function (method for another class)
       }
       } 
 

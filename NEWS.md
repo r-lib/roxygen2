@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `@includeRmd` now gives better feedback when it fails (#1089).
+
 * `@export` will now export both the class and constructor function when
   applied to expressions like `foo <- setClass("foo")` (#1216).
 

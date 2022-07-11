@@ -6,6 +6,10 @@
   Methods are recognized only if they extend the generic in the destination,
   or if the destination can heuristically be identified as a constructor.
 
+* roxygen2 now only only includes PDF figures generated via markdown in
+  the PDF manual, and only includes SVG figures generated via markdown
+  in the HTML manual (#1399).
+
 * The new `knitr_chunk_options` option (in the `Roxygen` entry of
   `DESCRIPTION` or in `man/roxygen/meta.R`) is added to the knitr chunk
   options that roxygen2 uses for markdown code blocks and inline

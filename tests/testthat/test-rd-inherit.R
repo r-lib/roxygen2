@@ -716,6 +716,7 @@ test_that("useful warnings if can't find topics", {
     get_rd("base2::attach", source = "source")
     get_rd("base::function_not_found", source = "source")
     get_rd("function", RoxyTopics$new(), source = "source")
+    get_rd("foo::bar()", RoxyTopics$new(), source = "source")
   })
 })
 

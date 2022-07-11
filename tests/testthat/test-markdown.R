@@ -648,3 +648,17 @@ test_that("can override default options", {
   ")[[1]]
   expect_match(out$get_section("description")$value, "###", fixed = TRUE)
 })
+
+test_that("image formats work", {
+  expect_snapshot(
+    roc_proc_text(rd_roclet(), "
+      #' Title
+      #'
+      #' ![](example.svg \"Plot title 1\")
+      #' ![](example.pdf \"Plot title 2\")
+      #' ![](example.PNG \"Plot title 3\")
+      #' @md
+      foo <- function() { }
+    ")[[1]]
+  )
+})

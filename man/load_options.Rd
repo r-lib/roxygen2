@@ -34,6 +34,9 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 \item \code{rd_family_title} \verb{<list>}: overrides for \verb{@family} titles. See the
 \emph{rd} vignette for details: \code{vignette("rd", package = "roxygen2")}
 \item \code{knitr_chunk_options}: default chunk options used for knitr.
+\item \code{restrict_image_formats}: if \code{TRUE} then PDF images are only included in the
+PDF manual, and SVG images are only included in the HTML manual.
+(This only applies to images generated via markdown.)
 }
 }
 

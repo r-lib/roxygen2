@@ -420,7 +420,7 @@ tweak_links <- function(x, package) {
 # Find info in Rd or topic ------------------------------------------------
 
 get_rd <- function(name, topics, source) {
-  if (has_colons(name)) {
+  if (is_namespaced(name)) {
     # External package
     parsed <- parse_expr(name)
     pkg <- as.character(parsed[[2]])

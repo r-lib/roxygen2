@@ -69,7 +69,7 @@ try_find_topic_in_package <- function(pkg, topic, tag) {
 }
 
 resolve_qualified_link <- function(topic) {
-  if (has_colons(topic)) {
+  if (is_namespaced(topic)) {
     target <- str_split_fixed(topic, "::", n = 2)
     file <- find_topic_in_package(target[1], target[2])
     paste0(target[1], ":", file)

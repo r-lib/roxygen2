@@ -8,6 +8,12 @@ test_that("nice_name protects against invalid characters", {
   expect_equal(nice_name("[.a"), "sub-.a")
 })
 
+test_that("is_namespaced works as expected", {
+  expect_true(is_namespaced("a::b"))
+  expect_false(is_namespaced("b::"))
+  expect_false(is_namespaced("'::'"))
+})
+
 test_that("write_if_different produces informative messages", {
   dir <- withr::local_tempdir()
   path <- file.path(dir, "test.R")

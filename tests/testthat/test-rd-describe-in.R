@@ -99,45 +99,83 @@ test_that("@describeIn class captures function description", {
 })
 
 test_that("Multiple @describeIn functions combined into one", {
-  example <- test_path("roxygen-block-describe-in-functions.R")
-  out <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+  out <- roc_proc_text(rd_roclet(), "
+    #' Power
+    #' @param x base
+    #' @param exp exponent
+    power <- function(x, exp) x ^ exp
 
-  expect_equal(out$get_value("minidesc")$name, c("square", "cube"))
-  expect_equal(out$get_value("minidesc")$extends, c("", ""))
-  expect_equal(out$get_value("minidesc")$generic, c("", ""))
-  expect_equal(out$get_value("minidesc")$class, c("", ""))
+    #' @describeIn power Square a number
+    square <- function(x) power(x, 2)
+
+    #' @describeIn power Cube a number
+    cube <- function(x) power(x, 3)
+    "
+  )[[1]]
+
+  expect_snapshot(out$get_section("minidesc"))
 })
 
-test_that(
-  "Multiple @describeIn methods and others are combined into a generic", {
-    example <- test_path("roxygen-block-describe-in-method-in-gen.R")
-    out <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
-    expect_equal(
-      out$get_value("minidesc")$extends,
-      c("generic", "generic", "", "")
-    )
-    expect_equal(out$get_value("minidesc")$generic, c("zap", "zap", "print", ""))
-    expect_equal(
-      out$get_value("minidesc")$class,
-      c("numeric", "character", "qux", "")
-    )
-  }
-)
+test_that("multiple methods and others are combined into a generic", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Zap generic
+    #'
+    #' @param x Object to zap.
+    zap <- function(x) UseMethod('zap')
 
-test_that(
-  "Multiple @describeIn methods and others are combined into a class constructor",
-  {
-    example <- test_path("roxygen-block-describe-in-method-in-const.R")
-    out <- roc_proc_text(rd_roclet(), brio::read_file(example))[[1]]
+    #' @describeIn zap method
+    zap.numeric <- function(x) {}
 
-    expect_equal(out$get_value("minidesc")$extends, c("class", "class", "", ""))
+    #' @describeIn zap method
+    zap.character <- function(x) {}
 
-    # more complicated with disambiguated class name "pkg_class"
-    out2 <- roc_proc_text(rd_roclet(), brio::read_file(example))[[2]]
-    expect_equal(out2$get_value("minidesc")$extends, c("class", ""))
-  }
-)
+    #' @describeIn zap function (method for different generic)
+    print.qux <- function(x) {}
 
+    #' @describeIn zap function
+    zap_helper <- function(x) {}
+    "
+  )[[1]]
+
+  expect_snapshot(out$get_section("minidesc"))
+})
+
+test_that("multiple methods and others are combined into a class constructor", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Class constructor
+    #'
+    #' @param x x
+    foo <- function(x) {}
+
+    #' @describeIn foo method
+    print.foo <- function(x) {}
+
+    #' @describeIn foo method
+    format.foo <- function(x) {}
+
+    #' @describeIn foo function (method for different class)
+    format.bar <- function(x) {}
+
+    #' @describeIn foo function
+    is_foo <- function(x) {}
+  ")[[1]]
+  expect_snapshot(out$get_section("minidesc"))
+
+  # more complicated with disambiguated class name "pkg_class"
+  out <- roc_proc_text(rd_roclet(), "
+    #' Class constructor with disambiguated class
+    #'
+    #' @param x x
+    baz <- function(x) {}
+
+    #' @describeIn baz method
+    print.roxygen2_baz <- function(x) {}
+
+    #' @describeIn baz function (method for another class)
+    format.quuz_baz <- function(x) {}"
+  )[[1]]
+  expect_snapshot(out$get_section("minidesc"))
+})
 
 test_that("function names are escaped", {
   out <- roc_proc_text(rd_roclet(), "
@@ -150,7 +188,6 @@ test_that("function names are escaped", {
   out
   expect_match(out$get_rd("minidesc"), "\\\\%foo\\\\%")
 })
-
 
 test_that("complains about bad usage", {
   expect_snapshot_warning(

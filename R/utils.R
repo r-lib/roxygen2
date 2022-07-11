@@ -121,8 +121,11 @@ invert <- function(x) {
   tapply(as.character(stacked$ind), stacked$values, list)
 }
 
-has_colons <- function(x) {
-   grepl("::", x, fixed = TRUE)
+is_namespaced <- function(x) {
+  tryCatch({
+    expr <- parse_expr(x)
+    is_call(expr, "::", n = 2)
+  }, error = function(err) FALSE)
 }
 
 # Collapse the values associated with duplicated keys

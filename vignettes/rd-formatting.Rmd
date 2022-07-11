@@ -315,7 +315,7 @@ Code blocks support some knitr chunk options, e.g. to keep the output of several
 ```
 
 Some knitr chunk options are reset at the start of every code block, so if you want to change these, you'll have to specify them for every chunk.
-These are currently `r paste0("\x60", names(roxygen2:::knitr_chunk_defaults), "\x60")`.
+These are currently `r paste0("\x60", names(roxygen2:::knitr_chunk_defaults()), "\x60")`.
 
 Alternatively, you can set the `knitr_chunk_options` option to override these defaults, or add new chunk options that are used for the whole package.
 See `?load_options` for specifying roxygen2 options.

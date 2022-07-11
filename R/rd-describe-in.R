@@ -23,13 +23,13 @@ topic_add_describe_in <- function(topic, block, env) {
   }
 
   dest <- find_object(tag$val$name, env)
-  metadata <- build_minidesc_metadata(src = block$object, dest = dest)
+  metadata <- build_minidesc_metadata(block$object, dest)
 
-  topic$add(rlang::exec(rd_section_minidesc, !!!c(
+  topic$add(exec(rd_section_minidesc,
     name = block$object$topic,
     desc = tag$val$description,
-    metadata
-  )))
+    !!!metadata
+  ))
   dest$topic
 }
 
@@ -89,8 +89,7 @@ merge.rd_section_minidesc <- function(x, y, ..., block) {
 
 #' @export
 format.rd_section_minidesc <- function(x, ...) {
-  df <- x$value
-  subsections <- split(df, df$extends)
+  subsections <- split(x$value, x$value$extends)
   body <- purrr::map2_chr(subsections, names(subsections), format_subsection)
 
   paste0(

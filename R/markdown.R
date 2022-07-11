@@ -424,12 +424,44 @@ mdxml_link_text <- function(xml_contents, state) {
   paste0(text, collapse = "")
 }
 
-mdxml_image = function(xml) {
+mdxml_image <- function(xml) {
   dest <- xml_attr(xml, "destination")
   title <- xml_attr(xml, "title")
+  fmt <- get_image_format(dest)
   paste0(
+    if (fmt == "html") "\\if{html}{",
+    if (fmt == "pdf") "\\if{pdf}{",
     "\\figure{", dest, "}",
-    if (nchar(title)) paste0("{", title, "}")
+    if (nchar(title)) paste0("{", title, "}"),
+    if (fmt %in% c("html", "pdf")) "}"
+  )
+}
+
+get_image_format <- function(path) {
+  should_restrict <- roxy_meta_get("restrict_image_formats") %||% FALSE
+  if (!should_restrict) {
+    return("all")
+  }
+
+  path <- tolower(path)
+  rx <- default_image_formats()
+  html <- grepl(rx$html, path)
+  pdf <- grepl(rx$pdf, path)
+  if (html && pdf) {
+    "all"
+  } else if (html) {
+    "html"
+  } else if (pdf) {
+    "pdf"
+  } else {
+    "all"
+  }
+}
+
+default_image_formats <- function() {
+  list(
+    html = "[.](jpg|jpeg|gif|png|svg)$",
+    pdf = "[.](jpg|jpeg|gif|png|pdf)$"
   )
 }
 

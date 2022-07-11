@@ -3,72 +3,64 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions and methods}{
-      \subsection{Functions}{
+      \section{Related functions}{
       \itemize{
         \item \code{square}: Square a number
         \item \code{cube}: Cube a number
       }
-      }}
-       
+      } 
 
 # multiple methods and others are combined into a generic
 
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions and methods}{
-      \subsection{Functions}{
+      \section{Related functions}{
       \itemize{
         \item \code{print.qux}: function (method for different generic)
         \item \code{zap_helper}: function
       }
       }
-      \subsection{Methods extending \code{zap} generic (by class)}{
+      \section{Methods for generic \code{zap()}}{
       \itemize{
-        \item \code{numeric}: method
-        \item \code{character}: method
+        \item \code{zap.numeric}: method
+        \item \code{zap.character}: method
       }
-      }}
-       
+      } 
 
 # multiple methods and others are combined into a class constructor
 
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions and methods}{
-      \subsection{Functions}{
+      \section{Related functions}{
       \itemize{
         \item \code{format.bar}: function (method for different class)
         \item \code{is_foo}: function
       }
       }
-      \subsection{Methods extending \code{foo} class (by generic)}{
+      \section{Methods for class \code{foo}}{
       \itemize{
-        \item \code{print}: method
-        \item \code{format}: method
+        \item \code{print.foo}: method
+        \item \code{format.foo}: method
       }
-      }}
-       
+      } 
 
 ---
 
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions and methods}{
-      \subsection{Functions}{
+      \section{Related functions}{
       \itemize{
         \item \code{format.quuz_baz}: function (method for another class)
       }
       }
-      \subsection{Methods extending \code{roxygen2_baz} class (by generic)}{
+      \section{Methods for class \code{roxygen2_baz}}{
       \itemize{
-        \item \code{print}: method
+        \item \code{print.roxygen2_baz}: method
       }
-      }}
-       
+      } 
 
 # complains about bad usage
 

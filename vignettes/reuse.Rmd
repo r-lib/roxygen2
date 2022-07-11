@@ -62,10 +62,10 @@ In this case, both destination and source are "normal" functions, and you can us
 In this case, roxygen will automatically detect whether a source function is a method and document the relationship to the relevant class or generic.
 Your new methods will be organised in one of two ways:
 
-1.  If your new method extends a generic in the `<destination>`, it will be listed in a subsection titled "**Methods extending `<destination>` generic (by class)**".
+1.  If your new method extends a generic in the `<destination>`, it will be listed in a section titled "**Methods for generic `<destination>`**".
     The subsection will include all methods for your new generic, labelled by the class they cover.
 
-2.  If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled "**Methods extending `<destination>` class (by generic)**" It will be labelled by the generic which the method extends.
+2.  If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled "**Methods for class `<destination>`**" It will be labelled by the generic which the method extends.
 
 While you can mix and match (some) different types of functions with `@describeIn`, the output may quickly become disorienting for users if the functions are not tightly related.
 

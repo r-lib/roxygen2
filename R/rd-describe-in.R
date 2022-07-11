@@ -90,39 +90,32 @@ merge.rd_section_minidesc <- function(x, y, ..., block) {
 #' @export
 format.rd_section_minidesc <- function(x, ...) {
   subsections <- split(x$value, x$value$extends)
-  body <- purrr::map2_chr(subsections, names(subsections), format_subsection)
+  body <- purrr::map2_chr(subsections, names(subsections), format_section)
 
-  paste0(
-    "\\section{Related functions and methods}{\n",
-    paste0(body, collapse = "\n"),
-    "}\n"
-  )
+  paste0(body, collapse = "\n")
 }
 
-format_subsection <- function(df, extends) {
-  if (extends == "class") {
+format_section <- function(df, type) {
+  if (type == "class") {
     title <- paste0(
-      "Methods extending \\code{", escape(df$class[[1]]), "} class (by generic)"
+      "Methods for class \\code{", escape(df$class[[1]]), "}"
     )
-    label <- df$generic
-  } else if (extends == "generic") {
+  } else if (type == "generic") {
     title <- paste0(
-      "Methods extending \\code{", escape(df$generic[[1]]), "} generic (by class)"
+      "Methods for generic \\code{", escape(df$generic[[1]]), "()}"
     )
-    label <- df$class
   } else {
-    title <- "Functions"
-    label <- df$name
+    title <- "Related functions"
   }
 
-  bullets <- paste0("\\code{", escape(label), "}: ", df$desc)
+  bullets <- paste0("\\code{", escape(df$name), "}: ", df$desc)
   body <- paste0(
     "\\itemize{\n",
     paste0("  \\item ", bullets, "\n", collapse = ""),
     "}\n"
   )
 
-  paste0("\\subsection{", title, "}{\n", body, "}")
+  paste0("\\section{", title, "}{\n", body, "}")
 }
 
 # Helpers -----------------------------------------------------------------

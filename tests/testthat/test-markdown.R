@@ -636,3 +636,18 @@ test_that("alternative knitr engines", {
     "))
   )
 })
+
+test_that("can override default options", {
+  local_roxy_meta_set("knitr_chunk_options", list(comment = "###"))
+
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' ```{r}
+    #' 1+1
+    #' ```
+    #' @md
+    foo <- function() { }
+  ")[[1]]
+  expect_match(out$get_section("description")$value, "###", fixed = TRUE)
+})

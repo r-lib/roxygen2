@@ -139,3 +139,10 @@ roxy_meta_load <- function(base_path = getwd()) {
   env_bind(roxy_meta, !!!load_options(base_path))
 }
 
+local_roxy_meta_set <- function(key, value, envir = caller_env()) {
+  old_value <- roxy_meta_get(key)
+  withr::defer(roxy_meta_set(key, old_value), envir = envir)
+
+  roxy_meta_set(key, value)
+}
+

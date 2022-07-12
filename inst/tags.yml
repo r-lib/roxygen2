@@ -31,14 +31,14 @@
   description: >
     A short description of the purpose of the function. Usually a
     paragraph or less.
-  template: '\n'
+  template: "\n"
   vignette: rd
 
 - name: details
   description: >
     Additional details about the function. Now generally superseded by
     using a level 1 markdown heading.
-  template: '\n'
+  template: "\n"
   vignette: rd
 
 - name: docType
@@ -81,11 +81,12 @@
 - name: examples
   description: >
     Examples demonstrating how the function works.
-  template: '\n'
+  template: "\n"
 
 - name: examplesIf
-  description: ~
-  template: ' {condition}\n'
+  description: >
+    Run examples only if a `condition` is `TRUE`.
+  template: " {condition}\n"
   vignette: rd
 
 - name: export
@@ -249,7 +250,7 @@
   description: >
     Add an optional note. Now generally superseded by
     using a level 1 markdown heading.
-  template: '\n'
+  template: "\n"
 
 - name: order
   description: >
@@ -294,7 +295,6 @@
   description: >
     The type of output returned by the function.
   template: ' {description}'
-  vignette: rd
 
 - name: returns
   description: >
@@ -306,12 +306,12 @@
   description: >
     Add an arbitrary section to the documentation. Now generally superseded
     by using a level 1 markdown heading.
-  template: ' {section title}:\n'
+  template: " {section title}:\n"
 
 - name: seealso
   description: >
     Other related functions.
-  template: ' {cross-reference}'
+  template: ' {links to other functions}'
   vignette: rd
 
 - name: slot

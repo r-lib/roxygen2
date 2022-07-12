@@ -132,14 +132,14 @@
 
 - name: field
   description: >
-    Describe a R6 or refClass field
+    Describe a R6 or refClass field.
   template: ' {name} {description}'
   vignette: rd-other
 
 - name: format
   description: >
-    Describe the "format" of a dataset. If the dataset is a data frame,
-    should include a description of each column.
+    Describe the type/shape of a dataset. If the dataset is a data frame,
+    include a description of each column.
   template: ' {description}'
   vignette: rd-other
 
@@ -221,9 +221,9 @@
 
 - name: method
   description: >
-    Force a function to be recognised as an S3 method. This affects how
-    the usage is displayed and the `NAMESPACE` directive that `@export`
-    will produce.
+    Force a function to be recognised as an S3 method. This affects the
+    default usage and the `NAMESPACE` directive produced by `@export`.
+    Only needed if automatically detection fails.
   template: ' {generic} {class}'
   vignette: rd-other
 
@@ -322,7 +322,8 @@
 
 - name: source
   description: >
-    Describe the source of a dataset
+    Describe where the dataset came from. If possible, link to the original
+    source and briefly describe any manipulation that you performed.
   template: ' {description}'
   vignette: rd-other
 

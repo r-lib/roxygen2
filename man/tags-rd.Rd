@@ -23,7 +23,7 @@
 #' @seealso {links to other functions}
 }
 \description{
-Tags are briefly described below. Learn more about their usage in vignette('rd').
+Tags are briefly described below. Learn more about their usage in \code{vignette('rd')}.
 
 \itemize{
 \item \verb{@backref \{path\}}: Manually override the backreference that points back from the \code{.Rd} to the source \code{.R} file. Only needed when generating code.

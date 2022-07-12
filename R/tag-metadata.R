@@ -43,7 +43,7 @@ tags_rd <- function(type) {
     paste0("@name tags-", type),
     tags_rd_section(tags, "aliases"),
     "@description",
-    paste0("Tags are briefly described below. Learn more about their usage in vignette('", type, "')."),
+    paste0("Tags are briefly described below. Learn more about their usage in `vignette('", type, "')`."),
     tags_rd_section(tags, "description"),
     tags_rd_section(tags, "usage")
   )
@@ -62,3 +62,9 @@ tags_rd_section <- function(tags, section) {
 #'
 #' @eval tags_rd("rd")
 NULL
+
+#' Tags for documenting other objects
+#'
+#' @eval tags_rd("rd-other")
+NULL
+

@@ -42,6 +42,7 @@ Suggests:
     R.oo,
     rmarkdown,
     testthat (>= 3.1.2),
+    yaml
 LinkingTo: 
     cpp11
 VignetteBuilder: 

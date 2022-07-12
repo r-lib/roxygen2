@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* New `tags_list()` lists all tags defined by roxygen2 and
+  `tags_metadata()` provides some useful information about them for
+  use by (e.g.) IDEs (#1375).
+
 * roxygen2 now only only includes PDF figures generated via markdown in
   the PDF manual, and only includes SVG figures generated via markdown
   in the HTML manual (#1399).

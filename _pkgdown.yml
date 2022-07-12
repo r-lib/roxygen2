@@ -17,6 +17,10 @@ home:
     href: https://r-pkgs.org/man.html
 
 reference:
+- title: Tags
+  contents:
+  - tags-rd
+
 - title: Roclets
   contents:
   - ends_with("roclet")

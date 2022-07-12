@@ -2,29 +2,29 @@
   description: >
     Add additional aliases to the topic. Use `NULL` to suppress
     the default alias automatically that roxygen2 automatically generates.
-  template: '{alias}'
+  template: ' {alias}'
 
 - name: author
   description: Topic author(s), if different from the package author(s).
-  template: '{author}'
+  template: ' {author}'
 
 - name: backref
   description: >
     Manually override the backreference that points back from the `.Rd`
     to the source `.R` file. Only needed when generating code.
-  template: '{path}'
+  template: ' {path}'
   vignette: rd
 
 - name: concept
   description: >
     Add additional keywords or phrases to be included in the `help.search()`
     index. Each `@concept` should include a single term or phrase.
-  template: '{concept}'
+  template: ' {concept}'
 
 - name: describeIn
   description: >
     Document a function or method in the `destination` topic.
-  template: '${1:destination} ${2:description}'
+  template: ' {destination} {description}'
   vignette: reuse
 
 - name: description
@@ -45,38 +45,38 @@
   description: >
     Set documentation type. One of `data`, `package`, `class`, or `methods`.
     Usually added automatically; for expert use only.
-  template: 'data|package|class'
+  template: ' data|package|class'
 
 - name: encoding
   description: >
     Override encoding of single `.Rd` file. No longer recommended since
     all files should be in UTF-8.
-  template: '{encoding}'
+  template: ' {encoding}'
 
 - name: eval
   description: >
     Evaluate arbitrary code in the package namespace and insert the results
     back as into the block. Superseded in favour of inline R code.
-  template: '{r-code}'
+  template: ' {r-code}'
   vignette: reuse
 
 - name: evalNamespace
   description: >
     Evaluate arbitrary code in the package namespace and insert the results
     into the `NAMESPACE`.
-  template: '{r-code}'
+  template: ' {r-code}'
   vignette: namespace
 
 - name: evalRd
   description: >
     Evaluate arbitrary code in the package namespace and insert the results
     back as into the block. Superseded in favour of inline R code.
-  template: '{r-code}'
+  template: ' {r-code}'
 
 - name: example
   description: >
     Path to file containing R code to use as examples.
-  template: '{path}'
+  template: ' {path}'
 
 - name: examples
   description: >
@@ -85,14 +85,14 @@
 
 - name: examplesIf
   description: ~
-  template: '@examplesIf condition\n'
+  template: ' {condition}\n'
   vignette: rd
 
 - name: export
   description: >
     Export this function, method, generic, or class so it's available
     outside of the package.
-  template: ~
+  template: ""
   vignette: namespace
 
 - name: exportClass
@@ -100,7 +100,7 @@
     Export an S4 class. For expert use only; in most cases you should use
     `@export` to allow roxygen2 to automatically generate the correct
     export directive.
-  template: '{class}'
+  template: ' {class}'
   vignette: namespace
 
 - name: exportMethod
@@ -108,75 +108,75 @@
     Export S4 methods. For expert use only; in most cases you should use
     `@export` to allow roxygen2 to automatically generate the correct
     export directive.
-  template: '{generic}'
+  template: ' {generic}'
   vignette: namespace
 
 - name: exportPattern
   description: >
     Export all objects matching a regular expression.
-  template: '{pattern}'
+  template: ' {pattern}'
   vignette: namespace
 
 - name: exportS3Method
   description: >
     Export an S3 method, typically for a generic in a suggested package.
-  template: 'pkg::generic'
+  template: ' pkg::generic'
   vignette: namespace
 
 - name: family
   description: >
     Automatically generate `@seealso` entries for all functions in family.
-  template: '{family name}'
+  template: ' {family name}'
   vignette: rd
 
 - name: field
   description: >
     Describe a R6 or refClass field
-  template: '{name} {description}'
+  template: ' {name} {description}'
   vignette: rd-other
 
 - name: format
   description: >
     Describe the "format" of a dataset. If the dataset is a data frame,
     should include a description of each column.
-  template: '{description}'
+  template: ' {description}'
   vignette: rd-other
 
 - name: import
   description: >
     Import all functions from a package. Use with extreme care.
-  template: '{package}'
+  template: ' {package}'
   vignette: namespace
 
 - name: importClassesFrom
   description: >
     Import S4 classes from another package.
-  template: '{package} {class}'
+  template: ' {package} {class}'
   vignette: namespace
 
 - name: importFrom
   description: >
     Import specific functions from a package.
-  template: '{package} {function}'
+  template: ' {package} {function}'
   vignette: namespace
 
 - name: importMethodsFrom
   description: >
     Import S4 methods from a package.
-  template: '{package} {generic}'
+  template: ' {package} {generic}'
   vignette: namespace
 
 - name: include
   description: >
     Declare that the R file `path` must be executed before the
     current file.
-  template: '{path}'
+  template: ' {path}'
 
 - name: includeRmd
   description: >
     Insert the contents on a `.Rmd` into the current block. Superseded
     in favour of using a code chunk with child document.
-  template: '{path}'
+  template: ' {path}'
   vignette: reuse
 
 - name: inherit
@@ -186,36 +186,36 @@
     Otherwise, specify individual components to inherit by picking one or
     more of `params`, `return`, `title`, `description`, `details`, `seealso`,
     `sections`, `references`, `examples`, `author`, `source`, `note`.
-  template: '{source} {components}'
+  template: ' {source} {components}'
 
 - name: inheritDotParams
   description: >
     Automatically generate documentation for `...` for the common case
     where you're passing along to another function.
-  template: '{source} {arg1 arg2 arg3}'
+  template: ' {source} {arg1 arg2 arg3}'
 
 - name: inheritParams
   description: >
     Inherit argument documentation from another function. Only inherits
     documentation for arguments that aren't already documented.
-  template: '{source}'
+  template: ' {source}'
 
 - name: inheritSection
   description: >
     Inherit a specific named section from another topic.
-  template: '{source} {section name}'
+  template: ' {source} {section name}'
 
 - name: keywords
   description: >
     Add keywords, indexed by `help.search()`. These are generally not
     useful apart from `@keyword internal` which flags the topic as
     internal and removes from topic indexes.
-  template: '{keyword}'
+  template: ' {keyword}'
 
 - name: md
   description: >
     Force markdown processing for a block.
-  template: ~
+  template: ''
   vignette: rd-formatting
 
 - name: method
@@ -223,26 +223,26 @@
     Force a function to be recognised as an S3 method. This affects how
     the usage is displayed and the `NAMESPACE` directive that `@export`
     will produce.
-  template: '{generic} {class}'
+  template: ' {generic} {class}'
   vignette: rd-other
 
 - name: name
   description: >
     Define (or override the topic) name. Typically only needed for synthetic
     topics where you are documenting `NULL`.
-  template: '{name}'
+  template: ' {name}'
 
 - name: noMd
   description: >
     Suppress markdown processing for a block.
-  template: ~
+  template: ''
   vignette: 'rd-formatting'
 
 - name: noRd
   description: >
     Suppress `.Rd` generation for a block. Use for documentation blocks that
     should only be visible in the source code.
-  template: ~
+  template: ''
   vignette: 'rd'
 
 - name: note
@@ -255,7 +255,7 @@
   description: >
     Override the default (lexigraphic) order in which multiple blocks
     are combined into a single topic.
-  template: '${1:number}'
+  template: ' {number}'
   vignette: resue
 
 - name: param
@@ -264,92 +264,92 @@
     and how it affects the output. `description` is usually one or two
     sentences but can be as long as needed. Document multiple arguments
     by separating names with commas (without spaces).
-  template: '${1:name} ${2:description}'
+  template: ' {name} {description}'
   vignette: rd
 
 - name: rawNamespace
   description: >
     Insert literal text directly into the `NAMESPACE`.
-  template: '{namespace directives}'
+  template: ' {namespace directives}'
   vignette: namespace
 
 - name: rawRd
   description: >
     Insert literal text directly into the `.Rd` file.
-  template: ''
+  template: ' {rd}'
 
 - name: rdname
   description: >
     Override the file name of generated `.Rd` file. Can be used to
     combine multiple blocks into a single documentation topic.
-  template: '{topic-name}'
+  template: ' {topic-name}'
   vignette: reuse
 
 - name: references
   description: >
     Pointers to the related literature. Usually formatted like a bibliography.
-  template: '{reference}'
+  template: ' {reference}'
 
 - name: return
   description: >
     The type of output returned by the function.
-  template: '{description}'
+  template: ' {description}'
   vignette: rd
 
 - name: returns
   description: >
     The type of output returned by the function.
-  template: '{description}'
+  template: ' {description}'
   vignette: rd
 
 - name: section
   description: >
     Add an arbitrary section to the documentation. Now generally superseded
     by using a level 1 markdown heading.
-  template: '{section title}:\n'
+  template: ' {section title}:\n'
 
 - name: seealso
   description: >
     Other related functions.
-  template: '{cross-reference}'
+  template: ' {cross-reference}'
   vignette: rd
 
 - name: slot
   description: >
     Describe the slot of an S4 class.
-  template: '{name} {description}'
+  template: ' {name} {description}'
   vignette: rd-other
 
 - name: source
   description: >
     Describe the source of a dataset
-  template: '{description}'
+  template: ' {description}'
   vignette: rd-other
 
 - name: template
   description: >
     Use a roxygen2 template. Now superseded in favour of inline R code.
-  template: '{path-to-template}'
+  template: ' {path-to-template}'
 
 - name: templateVar
   description: >
     Define variables for use in a roxygen2 template
-  template: '{name} {value}'
+  template: ' {name} {value}'
 
 - name: title
   description: >
     A one-line description of the function shown in various indexes.
     An explicit `@title` is not usually needed as the first paragraph in the
     roxygen block will be used as the title.
-  template: '{title}'
+  template: ' {title}'
 
 - name: usage
   description: >
     Override the default usage generated by roxygen2. Only needed when
     roxygen2 fails to correctly derive the usage of your function.
-  template: '{function_call(arg1, arg2 = default, ...)}'
+  template: ' {function_call(arg1, arg2 = default, ...)}'
 
 - name: useDynLib
   description: >
     Import compiled code from another package.
-  template: '{package}'
+  template: ' {package}'

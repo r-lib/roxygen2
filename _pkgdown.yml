@@ -19,7 +19,7 @@ home:
 reference:
 - title: Tags
   contents:
-  - tags-rd
+  - starts_with("tags")
 
 - title: Roclets
   contents:

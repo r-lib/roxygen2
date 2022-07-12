@@ -68,3 +68,19 @@ NULL
 #' @eval tags_rd("rd-other")
 NULL
 
+#' Tags that help you reuse documentation
+#'
+#' @eval tags_rd("reuse")
+NULL
+
+#' Tags for managing the namespace
+#'
+#' @eval tags_rd("namespace")
+NULL
+
+#' Tags related to markdown support
+#'
+#' @eval tags_rd("rd-formatting")
+NULL
+
+

@@ -29,19 +29,22 @@
 #' @templateVar {name} {value}
 }
 \description{
-Tags are briefly described below. Learn more about their usage in \code{vignette('reuse')}.
-
+Key tags are briefly described below. Learn more about their usage in \code{vignette('reuse')}.
 \itemize{
 \item \verb{@describeIn \{destination\} \{description\}}: Document a function or method in the \code{destination} topic.
-\item \verb{@eval \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back into the block. Should return a character vector of lines.
-\item \verb{@evalRd \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back as into the block. Should return a character vector of lines.
-\item \verb{@includeRmd \{path\}}: Insert the contents of an \code{.Rmd} into the current block. Superseded in favour of using a code chunk with a child document.
 \item \verb{@inherit \{source\} \{components\}}: Inherit one or more documentation components from another topic. If \code{components} is omitted, all supported components will be inherited. Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, and \code{note}.
 \item \verb{@inheritDotParams \{source\} \{arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function.
 \item \verb{@inheritParams \{source\}}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
 \item \verb{@inheritSection \{source\} \{section name\}}: Inherit a specific named section from another topic.
 \item \verb{@order \{number\}}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
 \item \verb{@rdname \{topic-name\}}: Override the file name of generated \code{.Rd} file. Can be used to combine multiple blocks into a single documentation topic.
+}
+
+Other less frequently used tags:
+\itemize{
+\item \verb{@eval \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back into the block. Should return a character vector of lines.
+\item \verb{@evalRd \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back as into the block. Should return a character vector of lines.
+\item \verb{@includeRmd \{path\}}: Insert the contents of an \code{.Rmd} into the current block. Superseded in favour of using a code chunk with a child document.
 \item \verb{@template \{path-to-template\}}: Use a roxygen2 template. Now superseded in favour of inline R code.
 \item \verb{@templateVar \{name\} \{value\}}: Define variables for use in a roxygen2 template
 }

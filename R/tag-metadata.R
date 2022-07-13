@@ -27,6 +27,7 @@ tags_metadata <- function() {
     # \n not useful outside of RStudio
     template = sub("\n", "", map_chr(meta, "template")),
     vignette = map_chr(meta, "vignette", .default = NA),
+    recommend = map_lgl(meta, "recommend", .default = FALSE),
     stringsAsFactors = FALSE
   )
 }
@@ -41,21 +42,26 @@ tags_rd <- function(type) {
 
   c(
     paste0("@name tags-", type),
+    "@aliases",
     tags_rd_section(tags, "aliases"),
     "@description",
-    paste0("Tags are briefly described below. Learn more about their usage in `vignette('", type, "')`."),
-    tags_rd_section(tags, "description"),
+    paste0("Key tags are briefly described below. Learn more about their usage in `vignette('", type, "')`."),
+    tags_rd_section(tags[tags$recommend, ], "description"),
+    if (any(!tags$recommend)) c(
+      "Other less frequently used tags:",
+      "",
+      tags_rd_section(tags[!tags$recommend, ], "description")
+    ),
+    "@usage",
     tags_rd_section(tags, "usage")
   )
 }
 tags_rd_section <- function(tags, section) {
-  lines <- switch(section,
+  switch(section,
     aliases = c(paste0("  @", tags$tag), "  NULL"),
     usage = paste0("#' @", tags$tag, tags$template),
     description = paste0("* `@", tags$tag, tags$template, "`: ", tags$description)
   )
-
-  c(paste0("@", section), lines)
 }
 
 #' Tags for documenting functions

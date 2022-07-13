@@ -32,6 +32,9 @@ A block ends when it hits R code, usually a function or object assignment.
 Blocks ignore empty lines, including lines made up of non-roxygen comments.
 If you need to separate two blocks, use `NULL`.
 
+If you want to use roxygen2 documentation tags without generating an `.Rd` file, you can use `@noRd` to suppress file generation for a given topic. This is useful if you want to use roxygen2 conventions for documenting an internal function; only people reading the source doc will be able to read the docs.
+
+
 ## The introduction
 
 Each documentation block starts with some text which defines the title, the description, and the details.
@@ -133,10 +136,3 @@ All functions must have a documented return value for initial CRAN submission.
 In most case, the function usage (which appears beneath the description in the generates docs) will be automatically derived from the function specification.
 For the cases where it is not, please [file an issue](https://github.com/r-lib/roxygen2/issues) and use `@usage` to override the default with you want.
 If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use `@usage NULL`.
-
-## Other tags
-
-### Suppress documentation
-
-It's sometimes useful to include roxygen2 documentation tags without generating an `.Rd` file.
-You can use `@noRd` to suppress file generation for a given topic.

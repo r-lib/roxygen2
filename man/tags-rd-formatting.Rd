@@ -16,6 +16,6 @@ Tags are briefly described below. Learn more about their usage in \code{vignette
 \itemize{
 \item \verb{@md}: Force markdown processing for a block.
 \item \verb{@noMd}: Suppress markdown processing for a block.
-\item \verb{@section \{section title\}:}: Add an arbitrary section to the documentation. Now generally superseded by using a level 1 markdown heading.
+\item \verb{@section \{section title\}:}: Add an arbitrary section to the documentation. Now generally superseded in favour of using a level 1 heading.
 }
 }

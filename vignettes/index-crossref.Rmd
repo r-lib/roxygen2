@@ -85,4 +85,3 @@ Use one tag per source file:
 #' @backref src/file.cpp
 #' @backref src/file.h
 ```
-

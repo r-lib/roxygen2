@@ -32,12 +32,12 @@
 Tags are briefly described below. Learn more about their usage in \code{vignette('namespace')}.
 
 \itemize{
-\item \verb{@evalNamespace \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results into the \code{NAMESPACE}.
+\item \verb{@evalNamespace \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results into the \code{NAMESPACE}. Should return a character vector of directives.
 \item \verb{@export}: Export this function, method, generic, or class so it's available outside of the package.
-\item \verb{@exportClass \{class\}}: Export an S4 class. For expert use only; in most cases you should use \verb{@export} to allow roxygen2 to automatically generate the correct export directive.
-\item \verb{@exportMethod \{generic\}}: Export S4 methods. For expert use only; in most cases you should use \verb{@export} to allow roxygen2 to automatically generate the correct export directive.
+\item \verb{@exportClass \{class\}}: Export an S4 class. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
+\item \verb{@exportMethod \{generic\}}: Export S4 methods. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
 \item \verb{@exportPattern \{pattern\}}: Export all objects matching a regular expression.
-\item \verb{@exportS3Method pkg::generic}: Export an S3 method, typically for a generic in a suggested package.
+\item \verb{@exportS3Method pkg::generic}: Export an S3 method. Only needed when the method is for a generic from a suggested package.
 \item \verb{@import \{package\}}: Import all functions from a package. Use with extreme care.
 \item \verb{@importClassesFrom \{package\} \{class\}}: Import S4 classes from another package.
 \item \verb{@importFrom \{package\} \{function\}}: Import specific functions from a package.

@@ -3,6 +3,7 @@
     Add additional aliases to the topic. Use `NULL` to suppress
     the default alias automatically that roxygen2 automatically generates.
   template: ' {alias}'
+  vignette: index-crossref
 
 - name: author
   description: Topic author(s), if different from the package author(s).
@@ -13,13 +14,14 @@
     Manually override the backreference that points back from the `.Rd`
     to the source `.R` file. Only needed when generating code.
   template: ' {path}'
-  vignette: rd
+  vignette: index-crossref
 
 - name: concept
   description: >
     Add additional keywords or phrases to be included in the `help.search()`
     index. Each `@concept` should include a single term or phrase.
   template: ' {concept}'
+  vignette: index-crossref
 
 - name: describeIn
   description: >
@@ -131,7 +133,7 @@
   description: >
     Automatically generate `@seealso` entries for all functions in family.
   template: ' {family name}'
-  vignette: rd
+  vignette: index-crossref
 
 - name: field
   description: >
@@ -219,6 +221,7 @@
     useful apart from `@keyword internal` which flags the topic as
     internal and removes from topic indexes.
   template: ' {keyword}'
+  vignette: index-crossref
 
 - name: md
   description: >
@@ -298,6 +301,7 @@
   description: >
     Pointers to the related literature. Usually formatted like a bibliography.
   template: ' {reference}'
+  vignette: index-crossref
 
 - name: return
   description: >
@@ -321,7 +325,7 @@
   description: >
     Other related functions.
   template: ' {links to other functions}'
-  vignette: rd
+  vignette: index-crossref
 
 - name: slot
   description: >

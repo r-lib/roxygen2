@@ -136,63 +136,7 @@ If you want to suppress the usage altogether (which is sometimes useful for inte
 
 ## Other tags
 
-### Cross-references
-
-There are two tags that make it easier for people to navigate your documentation: `@seealso` and `@family`.
-`@seealso` allows you to point to other useful resources, either on the web `<http://www.r-project.org>` or to other documentation with `[function_name()]`.
-If you have a family of related functions, you can use `@family {family}` to cross-reference each function to every other function within the family.
-A function can be a member of multiple families.
-
-For `sum()`, this might look like:
-
-```{r}
-#' @family aggregations
-#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and
-#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.
-```
-
-By default `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper").
-You can override the default title by providing a `rd_family_title` list in `man/roxygen/meta.R`:
-
-```{r, eval = FALSE}
-list(
-  rd_family_title = list(aggregations = "Aggregation functions")
-)
-```
-
 ### Suppress documentation
 
 It's sometimes useful to include roxygen2 documentation tags without generating an `.Rd` file.
 You can use `@noRd` to suppress file generation for a given topic.
-
-### Indexing
-
-Three other tags make it easier for the user to find documentation within R's help system:
-
--   Aliases form the index that `?` searches.
-    Use `@aliases space separated aliases` to add additional aliases.
-
--   `@concept` add extra keywords that will be found with `help.search()`
-
--   Use `@keywords keyword1 keyword2 ...` to add standardised keywords.
-    Keywords are optional, but if present, must be taken from the predefined list found `file.path(R.home("doc"), "KEYWORDS")`.
-
-Apart from `@keywords internal`, these tags are not very useful because most people find documentation using Google.
-`@keywords internal` is useful because it removes the function from the documentation index; it's useful for functions aimed primarily at other developers, not typical users of the package.
-
-### Back references
-
-The original source location is added as a comment to the second line of each generated `.Rd` file in the following form:
-
-    % Please edit documentation in ...
-
-`roxygen2` tries to capture all locations from which the documentation is assembled.
-For code that *generates* R code with Roxygen comments (e.g., the Rcpp package), the `@backref` tag is provided.
-This allows specifying the "true" source of the documentation, and will substitute the default list of source files.
-Use one tag per source file:
-
-```{r}
-#' @backref src/file.cpp
-#' @backref src/file.h
-```
-

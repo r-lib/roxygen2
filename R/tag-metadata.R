@@ -83,4 +83,8 @@ NULL
 #' @eval tags_rd("rd-formatting")
 NULL
 
+#' Tags for indexing and cross-references
+#'
+#' @eval tags_rd("index-crossref")
+NULL
 

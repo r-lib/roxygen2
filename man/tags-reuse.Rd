@@ -29,7 +29,9 @@
 #' @templateVar {name} {value}
 }
 \description{
-Key tags are briefly described below. Learn more about their usage in \code{vignette('reuse')}.
+Learn full the details in in \code{vignette('reuse')}.
+
+Key tags:
 \itemize{
 \item \verb{@describeIn \{destination\} \{description\}}: Document a function or method in the \code{destination} topic.
 \item \verb{@inherit \{source\} \{components\}}: Inherit one or more documentation components from another topic. If \code{components} is omitted, all supported components will be inherited. Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, and \code{note}.
@@ -46,6 +48,6 @@ Other less frequently used tags:
 \item \verb{@evalRd \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back as into the block. Should return a character vector of lines.
 \item \verb{@includeRmd \{path\}}: Insert the contents of an \code{.Rmd} into the current block. Superseded in favour of using a code chunk with a child document.
 \item \verb{@template \{path-to-template\}}: Use a roxygen2 template. Now superseded in favour of inline R code.
-\item \verb{@templateVar \{name\} \{value\}}: Define variables for use in a roxygen2 template
+\item \verb{@templateVar \{name\} \{value\}}: Define variables for use in a roxygen2 template.
 }
 }

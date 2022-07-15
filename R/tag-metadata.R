@@ -45,8 +45,12 @@ tags_rd <- function(type) {
     "@aliases",
     tags_rd_section(tags, "aliases"),
     "@description",
-    paste0("Key tags are briefly described below. Learn more about their usage in `vignette('", type, "')`."),
-    tags_rd_section(tags[tags$recommend, ], "description"),
+    paste0("Learn full the details in in `vignette('", type, "')`."),
+    "",
+    if (any(tags$recommend)) c(
+      "Key tags:",
+      tags_rd_section(tags[tags$recommend, ], "description")
+    ),
     if (any(!tags$recommend)) c(
       "Other less frequently used tags:",
       "",
@@ -57,6 +61,8 @@ tags_rd <- function(type) {
   )
 }
 tags_rd_section <- function(tags, section) {
+  if (nrow(tags) == 0) return()
+
   switch(section,
     aliases = c(paste0("  @", tags$tag), "  NULL"),
     usage = paste0("#' @", tags$tag, tags$template),
@@ -69,7 +75,7 @@ tags_rd_section <- function(tags, section) {
 #' @eval tags_rd("rd")
 NULL
 
-#' Tags for documenting other objects
+#' Tags for documenting datasets and classes
 #'
 #' @eval tags_rd("rd-other")
 NULL
@@ -79,7 +85,7 @@ NULL
 #' @eval tags_rd("reuse")
 NULL
 
-#' Tags for managing the namespace
+#' Tags for managing the `NAMESPACE`
 #'
 #' @eval tags_rd("namespace")
 NULL

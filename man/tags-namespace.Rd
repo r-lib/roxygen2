@@ -13,7 +13,7 @@
 \alias{@importMethodsFrom}
 \alias{@rawNamespace}
 \alias{@useDynLib}
-\title{Tags for managing the namespace}
+\title{Tags for managing the \code{NAMESPACE}}
 \usage{
 #' @evalNamespace {r-code}
 #' @export
@@ -29,9 +29,12 @@
 #' @useDynLib {package}
 }
 \description{
-Key tags are briefly described below. Learn more about their usage in \code{vignette('namespace')}.
+Learn full the details in in \code{vignette('namespace')}.
+
+Key tags:
 \itemize{
 \item \verb{@export}: Export this function, method, generic, or class so it's available outside of the package.
+\item \verb{@exportS3Method pkg::generic}: Export an S3 method. Only needed when the method is for a generic from a suggested package.
 \item \verb{@importFrom \{package\} \{function\}}: Import specific functions from a package.
 \item \verb{@useDynLib \{package\}}: Import compiled code from another package.
 }
@@ -42,7 +45,6 @@ Other less frequently used tags:
 \item \verb{@exportClass \{class\}}: Export an S4 class. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
 \item \verb{@exportMethod \{generic\}}: Export S4 methods. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
 \item \verb{@exportPattern \{pattern\}}: Export all objects matching a regular expression.
-\item \verb{@exportS3Method pkg::generic}: Export an S3 method. Only needed when the method is for a generic from a suggested package.
 \item \verb{@import \{package\}}: Import all functions from a package. Use with extreme care.
 \item \verb{@importClassesFrom \{package\} \{class\}}: Import S4 classes from another package.
 \item \verb{@importMethodsFrom \{package\} \{generic\}}: Import S4 methods from a package.

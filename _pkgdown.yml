@@ -42,7 +42,6 @@ articles:
 - title: Documentation
   navbar: Documentation
   contents:
-  - roxygen2
   - rd
   - rd-other
   - reuse

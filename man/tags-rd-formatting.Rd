@@ -11,10 +11,10 @@
 #' @section {section title}:
 }
 \description{
-Key tags are briefly described below. Learn more about their usage in \code{vignette('rd-formatting')}.
-\itemize{
-\item \code{@}:
+Learn full the details in in \code{vignette('rd-formatting')}.
+
 Other less frequently used tags:
+\itemize{
 \item \verb{@md}: Force markdown processing for a block.
 \item \verb{@noMd}: Suppress markdown processing for a block.
 \item \verb{@section \{section title\}:}: Add an arbitrary section to the documentation. Now generally superseded in favour of using a level 1 heading.

@@ -17,6 +17,10 @@ home:
     href: https://r-pkgs.org/man.html
 
 reference:
+- title: Tags
+  contents:
+  - starts_with("tags")
+
 - title: Roclets
   contents:
   - ends_with("roclet")
@@ -38,10 +42,10 @@ articles:
 - title: Documentation
   navbar: Documentation
   contents:
-  - roxygen2
   - rd
   - rd-other
   - reuse
+  - index-crossref
   - rd-formatting
 
 - title: NAMESPACE

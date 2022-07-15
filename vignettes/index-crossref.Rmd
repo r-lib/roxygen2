@@ -1,0 +1,87 @@
+---
+title: "Indexing and cross-refernces"
+output: rmarkdown::html_vignette
+description: >
+  Make it easier for users to find your functions
+  by cross-referencing them and control their
+  indexing.
+vignette: >
+  %\VignetteIndexEntry{Indexing and cross-refernces}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette discusses tags that help users finding documentation through cross-references and indexes.
+
+## See also
+
+`@seealso` allows you to point to other useful resources, either on the web (using a url) or to related functions (with a function link like `[function_name()])`.
+For `sum()`, this might look like:
+
+```{r}
+#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and
+#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.
+```
+
+## Family
+
+If you have a family of related functions, you can use `@family {family}` to cross-reference each function to every member of the family.
+A function can be a member of multiple families.
+
+By default `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper").
+
+If you want to override default title, you can provide an `rd_family_title` element in a list stored in `man/roxygen/meta.R`:
+
+```{r, eval = FALSE}
+list(
+  rd_family_title = list(aggregations = "Aggregation functions")
+)
+```
+
+## References
+
+If the object you're documenting has connections to the scientific literature, use `@reference` to provide a citation.
+
+## Aliases
+
+`?` and `help()` look for topic aliases; `?foo` will find any topic that contains the `foo` alias.
+
+roxygen2 generates a default alias for you based on the object you're documenting.
+You can add additional aliases with `@aliases alias1 alias2 alias3` or remove default alias with `@aliases NULL`.
+
+## Search
+
+As well as looking in the aliases, `help.search()` and `???` also look in the `@title`, `@keywords`, and `@concept`s tags.
+
+-   `@keywords` adds standard keywords, which must be present in `file.path(R.home("doc"), "KEYWORDS")`.
+
+-   `@concept` adds arbitrary key words or phrases.
+    Each `@concept` should contain a single word or phrase.
+
+Generally speaking, `@keywords` and `@concepts` are not terribly useful because most people find documentation using Google, not R's built-in search.
+
+There's one exception: `@keywords internal`.
+It's useful because it removes the function from the documentation index; it's useful for functions aimed primarily at other developers, not typical users of the package.
+
+## Back references
+
+The original source location is added as a comment to the second line of each generated `.Rd` file in the following form:
+
+    % Please edit documentation in ...
+
+`roxygen2` tries to capture all locations from which the documentation is assembled.
+For code that *generates* R code with Roxygen comments (e.g., the Rcpp package), the `@backref` tag is provided.
+This allows specifying the "true" source of the documentation, and will substitute the default list of source files.
+Use one tag per source file:
+
+```{r}
+#' @backref src/file.cpp
+#' @backref src/file.h
+```

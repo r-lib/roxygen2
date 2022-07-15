@@ -117,11 +117,19 @@ You can inherit documentation from other topics in a few ways:
 
 -   `@inheritParams source_function` inherits just the parameter documentation from `source_function()`.
 
--   `@inherit source_function` will inherit parameters, return, references, description, details, sections, and see also from `source_function`.
+-   `@inherit source_function` will inherit all supported components from `source_function`.
 
--   `@inherit source_function return details` (e.g.) will inherit just return value and details from `source_function()`.
+    Alternatively, you can use (e.g.) `@inherit source_function return details` to just inherit the return value and details from `source_function()`.
+    Supported components are `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`.
 
 -   `@inheritSection source_function Section title` will inherit the single `@section` called "Section title" from `source_function()`.
+
+-   `@inheritDotParams` automatically generates parameter documentation for `...` for the common case where you pass `...` on to another function.
+    Because you often override some arguments, it comes with a flexible specification for argument selection:
+
+    -   `@inheritDotParams foo` takes all parameters from `foo()`
+    -   `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`
+    -   `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
 
 All of these tags also work to inherit documentation from functions in another package by using `pkg::source_function`.
 

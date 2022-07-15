@@ -33,7 +33,7 @@ tags_metadata <- function() {
 }
 
 yaml_path <- function() {
-  system.file("tags.yml", package = "roxygen2")
+  system.file("roxygen2-tags.yml", package = "roxygen2")
 }
 
 tags_rd <- function(type) {

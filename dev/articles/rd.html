@@ -60,6 +60,7 @@
     <a class="dropdown-item" href="../articles/rd.html">Documenting functions</a>
     <a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a>
     <a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a>
+    <a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-refernces</a>
     <a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>NAMESPACE</h6>
@@ -125,6 +126,7 @@
 <p>The first lines of the block is called the <strong>introduction</strong> and forms the title, description, and details, as described below. The introduction continues until the first <strong>tag</strong>.</p>
 <p>Tags start with <code>@</code>, like <code>@details</code> or <code>@param</code>. Tags must appear at the beginning of a line and their content extends to the start of the next tag or the end of the block. Text within the description or tags can be formatted using Markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
 <p>A block ends when it hits R code, usually a function or object assignment. Blocks ignore empty lines, including lines made up of non-roxygen comments. If you need to separate two blocks, use <code>NULL</code>.</p>
+<p>If you want to use roxygen2 documentation tags without generating an <code>.Rd</code> file, you can use <code>@noRd</code> to suppress file generation for a given topic. This is useful if you want to use roxygen2 conventions for documenting an internal function; only people reading the source doc will be able to read the docs.</p>
 </div>
 <div class="section level2">
 <h2 id="the-introduction">The introduction<a class="anchor" aria-label="anchor" href="#the-introduction"></a>
@@ -200,51 +202,6 @@ gh_organizations(since = 42)
 <p>In most case, the function usage (which appears beneath the description in the generates docs) will be automatically derived from the function specification. For the cases where it is not, please <a href="https://github.com/r-lib/roxygen2/issues" class="external-link">file an issue</a> and use <code>@usage</code> to override the default with you want. If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use <code>@usage NULL</code>.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="other-tags">Other tags<a class="anchor" aria-label="anchor" href="#other-tags"></a>
-</h2>
-<div class="section level3">
-<h3 id="cross-references">Cross-references<a class="anchor" aria-label="anchor" href="#cross-references"></a>
-</h3>
-<p>There are two tags that make it easier for people to navigate your documentation: <code>@seealso</code> and <code>@family</code>. <code>@seealso</code> allows you to point to other useful resources, either on the web <code>&lt;http://www.r-project.org&gt;</code> or to other documentation with <code>[function_name()]</code>. If you have a family of related functions, you can use <code>@family {family}</code> to cross-reference each function to every other function within the family. A function can be a member of multiple families.</p>
-<p>For <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code>, this might look like:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @family aggregations</span></span>
-<span><span class="co">#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and</span></span>
-<span><span class="co">#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.</span></span></code></pre></div>
-<p>By default <code>@family {family}</code>, will generate the see also text “Other {family}:”, so the <code>@family</code> name should be plural (i.e., “model building helpers” not “model building helper”). You can override the default title by providing a <code>rd_family_title</code> list in <code>man/roxygen/meta.R</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  rd_family_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aggregations <span class="op">=</span> <span class="st">"Aggregation functions"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="suppress-documentation">Suppress documentation<a class="anchor" aria-label="anchor" href="#suppress-documentation"></a>
-</h3>
-<p>It’s sometimes useful to include roxygen2 documentation tags without generating an <code>.Rd</code> file. You can use <code>@noRd</code> to suppress file generation for a given topic.</p>
-</div>
-<div class="section level3">
-<h3 id="indexing">Indexing<a class="anchor" aria-label="anchor" href="#indexing"></a>
-</h3>
-<p>Three other tags make it easier for the user to find documentation within R’s help system:</p>
-<ul>
-<li><p>Aliases form the index that <code>?</code> searches. Use <code>@aliases space separated aliases</code> to add additional aliases.</p></li>
-<li><p><code>@concept</code> add extra keywords that will be found with <code><a href="https://rdrr.io/r/utils/help.search.html" class="external-link">help.search()</a></code></p></li>
-<li><p>Use <code>@keywords keyword1 keyword2 ...</code> to add standardised keywords. Keywords are optional, but if present, must be taken from the predefined list found <code>file.path(R.home("doc"), "KEYWORDS")</code>.</p></li>
-</ul>
-<p>Apart from <code>@keywords internal</code>, these tags are not very useful because most people find documentation using Google. <code>@keywords internal</code> is useful because it removes the function from the documentation index; it’s useful for functions aimed primarily at other developers, not typical users of the package.</p>
-</div>
-<div class="section level3">
-<h3 id="back-references">Back references<a class="anchor" aria-label="anchor" href="#back-references"></a>
-</h3>
-<p>The original source location is added as a comment to the second line of each generated <code>.Rd</code> file in the following form:</p>
-<pre><code>% Please edit documentation in ...</code></pre>
-<p><code>roxygen2</code> tries to capture all locations from which the documentation is assembled. For code that <em>generates</em> R code with Roxygen comments (e.g., the Rcpp package), the <code>@backref</code> tag is provided. This allows specifying the “true” source of the documentation, and will substitute the default list of source files. Use one tag per source file:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @backref src/file.cpp</span></span>
-<span><span class="co">#' @backref src/file.h</span></span></code></pre></div>
-</div>
-</div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -260,7 +217,7 @@ gh_organizations(since = 42)
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
   </div></footer>

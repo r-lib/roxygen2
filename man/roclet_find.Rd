@@ -27,3 +27,4 @@ roclet_find("roxygen2::rd_roclet")
 # to call the function
 roclet_find("roxygen2::rd_roclet()")
 }
+\keyword{internal}

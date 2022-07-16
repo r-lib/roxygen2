@@ -79,6 +79,7 @@ roclet_tags <- function(x) {
 #' This provides a flexible way of specifying a roclet in a string.
 #'
 #' @param x Arbitrary R code evaluated in roxygen2 package.
+#' @keywords internal
 #' @export
 #' @examples
 #' # rd, namespace, and vignette work for backward compatibility

@@ -22,3 +22,4 @@ calls \code{\link[=UseMethod]{UseMethod()}}.
 \code{is_s3_method} builds names of all possible generics for that function
 and then checks if any of them actually is a generic.
 }
+\keyword{internal}

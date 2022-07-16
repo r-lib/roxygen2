@@ -2,7 +2,7 @@
 % Please edit documentation in R/vignette.R
 \name{vignette_roclet}
 \alias{vignette_roclet}
-\title{Re-build outdated vignettes.}
+\title{Re-build outdated vignettes}
 \usage{
 vignette_roclet()
 }

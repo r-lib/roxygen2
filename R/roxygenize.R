@@ -1,4 +1,4 @@
-#' Process a package with the Rd, namespace and collate roclets.
+#' Process a package with the Rd, namespace and collate roclets
 #'
 #' This is the workhorse function that uses roclets, the built-in document
 #' transformation functions, to build all documentation for a package. See

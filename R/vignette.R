@@ -1,4 +1,4 @@
-#' Re-build outdated vignettes.
+#' Re-build outdated vignettes
 #'
 #' This rebuilds outdated vignettes with [tools::buildVignette].
 #' By default, it will rebuild all vignettes if the source file is newer than

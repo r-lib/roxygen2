@@ -6,6 +6,7 @@
 #'
 #' @param x A data object
 #' @return A `character` value with valid `Rd` syntax, or `NULL`.
+#' @keywords internal
 #' @export
 object_format <- function(x) {
   UseMethod("object_format")

@@ -2,25 +2,23 @@
 % Please edit documentation in R/rd.R
 \name{rd_roclet}
 \alias{rd_roclet}
-\title{Roclet: make Rd files.}
+\title{Roclet: make Rd files}
 \usage{
 rd_roclet()
 }
 \description{
-This roclet is the workhorse of \code{roxygen}, producing the \code{.Rd} files that
-R uses to document that functions, datasets, packages, classes, and
-other objects.
-
+This roclet is the workhorse of roxygen2, producing the \code{.Rd} files that
+R uses to document functions, datasets, packages, classes, and more.
 See \code{vignette("rd")} for details.
 
 Generally you will not call this function directly
-but will instead use roxygenise() specifying the rd roclet
+but will instead use \code{\link[=roxygenise]{roxygenise()}} specifying the rd roclet.
 }
 \examples{
 #' The length of a string (in characters)
 #'
-#' @param x String input character vector
-#' @return An integer vector the same length as `x`.
+#' @param x A character vector.
+#' @returns An integer vector the same length as `x`.
 #'   `NA` strings have `NA` length.
 #' @seealso [nchar()]
 #' @export

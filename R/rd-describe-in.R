@@ -98,7 +98,7 @@ format_section <- function(df, type) {
   title <- switch(type,
     class = "Methods (by generic)",
     generic = "Methods (by class)",
-    "Related functions"
+    "Functions"
   )
 
   bullets <- paste0("\\code{", df$name, "}: ", df$desc)

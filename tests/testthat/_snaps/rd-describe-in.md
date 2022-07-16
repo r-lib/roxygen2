@@ -3,7 +3,7 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions}{
+      \section{Functions}{
       \itemize{
         \item \code{square()}: Square a number
         \item \code{cube()}: Cube a number
@@ -21,7 +21,7 @@
         \item \code{zap(character)}: method
       }
       }
-      \section{Related functions}{
+      \section{Functions}{
       \itemize{
         \item \code{print(qux)}: function (method for different generic)
         \item \code{zap_helper()}: function
@@ -39,7 +39,7 @@
         \item \code{format(foo)}: method
       }
       }
-      \section{Related functions}{
+      \section{Functions}{
       \itemize{
         \item \code{format(bar)}: function (method for different class)
         \item \code{is_foo()}: function
@@ -56,7 +56,7 @@
         \item \code{print(roxygen2_baz)}: method
       }
       }
-      \section{Related functions}{
+      \section{Functions}{
       \itemize{
         \item \code{format(quuz_baz)}: function (method for another class)
       }
@@ -67,7 +67,7 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Related functions}{
+      \section{Functions}{
       \itemize{
         \item \code{x \%foo\% y}: infix
         \item \code{foo(x) <- value}: replacement for foo
@@ -84,7 +84,7 @@
         \item \code{m_id(foo1)}: function
       }
       }
-      \section{Related functions}{
+      \section{Functions}{
       \itemize{
         \item \code{m_id()}: generic
       }

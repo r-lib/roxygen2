@@ -1,5 +1,13 @@
 # roxygen2 (development version)
 
+## Tags
+
+* All built-in tags are now documented so that you can do (e.g.) `?"@param"`
+  to get a basic description of `@param` and a pointer where to learn more 
+  (#1165). This is powered by a new `tags_list()` lists all tags defined by 
+  roxygen2 and `tags_metadata()` provides some useful information about them 
+  for use by (e.g.) IDEs (#1375).
+
 * `@describeIn` can now be used to combine more types of functions
   (generics, methods and other functions) into a single topic.
   The resulting section organises the functions by type (#1181)
@@ -7,53 +15,47 @@
   they extend the generic in the destination,or if the destination can 
   heuristically be identified as a constructor.
 
-* All built-in tags are now documented so that you can do (e.g.) `?"@param"`
-  to get a basic description of `@param` and a pointer where to learn more 
-  (#1165).
+* Code evaluated in inline markdown code chunks and `@eval`/`@evalRd`/
+  `@evalNamespace` is now evaluated in an environment designed to be more
+  reproducible and to suppress output that won't work in Rd (e.g. turning
+  off colour and unicode support in cli) (#1351). They now also set 
+  knitr options `comment = #>` (#1380) and `collapse = TRUE` (#1376).
 
-* New `tags_list()` lists all tags defined by roxygen2 and
-  `tags_metadata()` provides some useful information about them for
-  use by (e.g.) IDEs (#1375).
+* `@export` will now export both the class and constructor function when
+  applied to expressions like `foo <- setClass("foo")` (#1216).
 
-* roxygen2 now only only includes PDF figures generated via markdown in
-  the PDF manual, and only includes SVG figures generated via markdown
-  in the HTML manual (#1399).
+* `@includeRmd` now gives better feedback when it fails (#1089).
 
-* The new `knitr_chunk_options` option (in the `Roxygen` entry of
+## (R)markdown
+
+* New `knitr_chunk_options` option (in the `Roxygen` entry of
   `DESCRIPTION` or in `man/roxygen/meta.R`) is added to the knitr chunk
   options that roxygen2 uses for markdown code blocks and inline
   code (#1390).
   
-* `@includeRmd` now gives better feedback when it fails (#1089).
+* PDF figures are only included the PDF manual, and SVG figures are only
+  included in the HTML manual (#1399).
 
-* `@export` will now export both the class and constructor function when
-  applied to expressions like `foo <- setClass("foo")` (#1216).
+* You can now use alternative knitr engines in markdown code blocks (#1149).
 
 * Generated HTML for code blocks never includes "NA" for language (#1251). 
 
 * Using a level 1 heading in the wrong tag now gives a more useful warning 
   (#1374).
 
-* R6 only links to superclass docs if they're actually available (#1236).
-
-* You can now use alternative knitr engines in markdown code blocks (#1149).
-
 * Fix bug interpolating the results of indented inline RMarkdown (#1353).
 
-* R6 documentation no longer shows inherited methods if there aren't any 
-  (#1371).
+## Other
 
 * If you have a daily build of RStudio, the lists of changed Rd files are
   now clickable so you can immediately see the rendered development
   documentation (#1354).
 
-* Automated usage no longer mangles nbsp in default arguments (#1342).
+* R6 documentation no longer shows inherited methods if there aren't any 
+  (#1371), and only links to superclass docs if they're actually available 
+  (#1236).
 
-* Code evaluated in inline markdown code chunks and `@eval`/`@evalRd`/
-  `@evalNamespace` is now evaluated in an environment designed to be more
-  reproducible and to suppress output that won't work in Rd (e.g. turning
-  off colour and unicode support in cli) (#1351). They now also set 
-  knitr options `comment = #>` (#1380) and `collapse = TRUE` (#1376).
+* Automated usage no longer mangles nbsp in default arguments (#1342).
 
 # roxygen2 7.2.0
 

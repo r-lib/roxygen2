@@ -79,7 +79,11 @@ function_usage <- function(name, formals, format_name = identity) {
   } else if (is_infix_fun(name) && identical(format_name, identity)) {
     # If infix, and regular function, munge format
     arg_names <- names(formals)
-    build_rd(arg_names[1], " ", format_name(name), " ", arg_names[2])
+    name <- format_name(name)
+    if (is_padded_infix_fun(name)) {
+      name <- paste0(" ", name, " ")
+    }
+    build_rd(arg_names[1], name, arg_names[2])
   } else {
     if (identical(format_name, identity)) {
       name <- auto_backtick(name)
@@ -93,7 +97,21 @@ is_replacement_fun <- function(name) {
   str_detect(name, fixed("<-"))
 }
 is_infix_fun <- function(name) {
-  str_detect(name, "^%.*%$")
+  ops <- c(
+    "+", "-", "*", "^", "/",
+    "==", ">", "<", "!=", "<=", ">=",
+    "&", "|",
+    "[[", "[", "$", ":", "::", ":::"
+  )
+  str_detect(name, "^%.*%$") || name %in% ops
+}
+is_padded_infix_fun <- function(name) {
+  ops <- c(
+    "+", "-", "*", "/",
+    "==", ">", "<", "!=", "<=", ">=",
+    "&", "|"
+  )
+  str_detect(name, "^%.*%$") || name %in% ops
 }
 
 usage_args <- function(args) {

@@ -90,6 +90,18 @@
       }
       } 
 
+---
+
+    Code
+      out$get_section("minidesc")
+    Output
+      \section{Methods (by class)}{
+      \itemize{
+        \item \code{bar1(x = foo2, y = foo3)}: method1
+        \item \code{bar1(x = foo3, y = foo2)}: method2
+      }
+      } 
+
 # complains about bad usage
 
     [<text>:6] @describeIn must be used with an object

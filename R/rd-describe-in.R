@@ -222,7 +222,9 @@ object_name.s4generic <- function(x) {
 #' @export
 object_name.s4method <- function(x) {
   classes <- lapply(x$value@defined, as.name)
-  names2(classes)[[1]] <- ""
+  if (length(classes) == 1) {
+    names(classes) <- NULL
+  }
   as.character(function_usage(x$value@generic, classes))
 }
 

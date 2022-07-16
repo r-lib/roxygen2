@@ -205,6 +205,20 @@ test_that("s4 methods get nice label", {
       setMethod('m_id', 'foo1', function(x) x@id)
     ")[[1]]
   expect_snapshot(out$get_section("minidesc"))
+
+  out <- roc_proc_text(rd_roclet(), "
+    setClass('foo2')
+    setClass('foo3')
+
+    #' bar1
+    setGeneric('bar1', function(x, y) standardGeneric('bar1'))
+
+    #' @describeIn bar1 method1
+    setMethod('bar1', c('foo2', 'foo3'), function(x, y) 1)
+    #' @describeIn bar1 method2
+    setMethod('bar1', c('foo3', 'foo2'), function(x, y) 1)
+  ")[[1]]
+  expect_snapshot(out$get_section("minidesc"))
 })
 
 test_that("complains about bad usage", {

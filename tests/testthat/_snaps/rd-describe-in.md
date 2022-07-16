@@ -1,3 +1,67 @@
+# Multiple @describeIn functions combined into one
+
+    Code
+      out$get_section("minidesc")
+    Output
+      \section{Related functions}{
+      \itemize{
+        \item \code{square}: Square a number
+        \item \code{cube}: Cube a number
+      }
+      } 
+
+# multiple methods and others are combined into a generic
+
+    Code
+      out$get_section("minidesc")
+    Output
+      \section{Methods for generic \code{zap()}}{
+      \itemize{
+        \item \code{zap.numeric}: method
+        \item \code{zap.character}: method
+      }
+      }
+      \section{Related functions}{
+      \itemize{
+        \item \code{print.qux}: function (method for different generic)
+        \item \code{zap_helper}: function
+      }
+      } 
+
+# multiple methods and others are combined into a class constructor
+
+    Code
+      out$get_section("minidesc")
+    Output
+      \section{Methods for class \code{foo}}{
+      \itemize{
+        \item \code{print.foo}: method
+        \item \code{format.foo}: method
+      }
+      }
+      \section{Related functions}{
+      \itemize{
+        \item \code{format.bar}: function (method for different class)
+        \item \code{is_foo}: function
+      }
+      } 
+
+---
+
+    Code
+      out$get_section("minidesc")
+    Output
+      \section{Methods for class \code{roxygen2_baz}}{
+      \itemize{
+        \item \code{print.roxygen2_baz}: method
+      }
+      }
+      \section{Related functions}{
+      \itemize{
+        \item \code{format.quuz_baz}: function (method for another class)
+      }
+      } 
+
 # complains about bad usage
 
     [<text>:6] @describeIn must be used with an object
@@ -9,8 +73,4 @@
 ---
 
     [<text>:6] @describeIn can not be used with @rdname
-
-# useful error if can't combine
-
-    [<text>:9] Don't know how to combine @describeIn types "function" and "class"
 

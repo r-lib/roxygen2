@@ -95,17 +95,11 @@ format.rd_section_minidesc <- function(x, ...) {
 }
 
 format_section <- function(df, type) {
-  if (type == "class") {
-    title <- paste0(
-      "Methods for class \\code{", escape(df$class[[1]]), "}"
-    )
-  } else if (type == "generic") {
-    title <- paste0(
-      "Methods for generic \\code{", escape(df$generic[[1]]), "()}"
-    )
-  } else {
-    title <- "Related functions"
-  }
+  title <- switch(type,
+    class = "Methods (by generic)",
+    generic = "Methods (by class)",
+    "Related functions"
+  )
 
   bullets <- paste0("\\code{", df$name, "}: ", df$desc)
   body <- paste0(

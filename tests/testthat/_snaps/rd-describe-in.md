@@ -15,7 +15,7 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Methods for generic \code{zap()}}{
+      \section{Methods (by class)}{
       \itemize{
         \item \code{zap(numeric)}: method
         \item \code{zap(character)}: method
@@ -33,7 +33,7 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Methods for class \code{foo}}{
+      \section{Methods (by generic)}{
       \itemize{
         \item \code{print(foo)}: method
         \item \code{format(foo)}: method
@@ -51,7 +51,7 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Methods for class \code{roxygen2_baz}}{
+      \section{Methods (by generic)}{
       \itemize{
         \item \code{print(roxygen2_baz)}: method
       }
@@ -79,7 +79,7 @@
     Code
       out$get_section("minidesc")
     Output
-      \section{Methods for class \code{foo1}}{
+      \section{Methods (by generic)}{
       \itemize{
         \item \code{m_id(foo1)}: function
       }

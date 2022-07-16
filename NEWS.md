@@ -2,9 +2,10 @@
 
 * `@describeIn` can now be used to combine more types of functions
   (generics, methods and other functions) into a single topic.
-  The resulting section organises the functions by type (#1181).
-  Methods are recognized only if they extend the generic in the destination,
-  or if the destination can heuristically be identified as a constructor.
+  The resulting section organises the functions by type (#1181)
+  and displays methods like function calls. Methods are recognized only if 
+  they extend the generic in the destination,or if the destination can 
+  heuristically be identified as a constructor.
 
 * All built-in tags are now documented so that you can do (e.g.) `?"@param"`
   to get a basic description of `@param` and a pointer where to learn more 

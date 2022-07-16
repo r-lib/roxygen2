@@ -101,11 +101,11 @@ format_section <- function(df, type) {
     "Functions"
   )
 
-  bullets <- paste0("\\code{", df$name, "}: ", df$desc)
+  bullets <- paste0("\\code{", df$name, "}: ", df$desc, "\n")
   body <- paste0(
     "\\itemize{\n",
-    paste0("  \\item ", bullets, "\n", collapse = ""),
-    "}\n"
+    paste0("\\item ", bullets, "\n", collapse = ""),
+    "}"
   )
 
   paste0("\\section{", title, "}{\n", body, "}")

@@ -11,7 +11,7 @@ NULL
 #' Generally you will not call this function directly
 #' but will instead use [roxygenise()] specifying the rd roclet.
 #'
-#' @family roclets
+#' @family generating `.Rd` files
 #' @export
 #' @examples
 #' #' The length of a string (in characters)

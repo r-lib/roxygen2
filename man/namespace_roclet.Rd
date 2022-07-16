@@ -32,8 +32,5 @@ foofy <- function(x, y, z) {
 NULL
 }
 \seealso{
-Other roclets: 
-\code{\link{rd_roclet}()},
-\code{\link{vignette_roclet}()}
+\link{tags-namespace} for tags that generate \code{NAMESPACE} directives.
 }
-\concept{roclets}

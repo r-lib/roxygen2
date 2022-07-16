@@ -64,7 +64,7 @@ tags_rd_section <- function(tags, section) {
   if (nrow(tags) == 0) return()
 
   switch(section,
-    aliases = c(paste0("  @", tags$tag), "  NULL"),
+    aliases = paste0("  @", tags$tag),
     usage = paste0("#' @", tags$tag, tags$template),
     description = paste0("* `@", tags$tag, tags$template, "`: ", tags$description)
   )
@@ -73,16 +73,19 @@ tags_rd_section <- function(tags, section) {
 #' Tags for documenting functions
 #'
 #' @eval tags_rd("rd")
+#' @family generating `.Rd` files
 NULL
 
 #' Tags for documenting datasets and classes
 #'
 #' @eval tags_rd("rd-other")
+#' @family generating `.Rd` files
 NULL
 
 #' Tags that help you reuse documentation
 #'
 #' @eval tags_rd("reuse")
+#' @family generating `.Rd` files
 NULL
 
 #' Tags for managing the `NAMESPACE`
@@ -98,5 +101,6 @@ NULL
 #' Tags for indexing and cross-references
 #'
 #' @eval tags_rd("index-crossref")
+#' @family generating `.Rd` files
 NULL
 

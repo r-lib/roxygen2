@@ -29,8 +29,6 @@ str_length <- function(x) {
 }
 }
 \seealso{
-Other roclets: 
-\code{\link{namespace_roclet}()},
-\code{\link{vignette_roclet}()}
+\link{tags-rd}, \link{tags-rd-other}, \link{tags-reuse}, \link{tags-index-crossref} for
+tags provided by this roclet.
 }
-\concept{roclets}

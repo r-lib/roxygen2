@@ -55,6 +55,8 @@ The most important details are described below.
 
 The usual Markdown heading markup creates sections and subsections.
 Top level headings (e.g. `# title`) create sections with the `\section{}` Rd tag.
+This largely supersedes use of the older `@section` tag.
+
 Top-level headings can only appear after the `@description` and `@details` tags.
 Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`, if you want put it near the end of the block, after `@return` for example:
 
@@ -360,3 +362,4 @@ The commonmark parser does not require an empty line before lists, and this migh
 #' You can see more about this topic in the book cited below, on page
 #' 42. Clearly, the numbered list that starts here is not intentional.
 ```
+

@@ -29,6 +29,12 @@ tag_value <- function(x) {
   }
 }
 
+# Also recorded in tags.yml
+inherit_components <- c(
+  "params", "return", "title", "description", "details", "seealso",
+  "sections", "references", "examples", "author", "source", "note"
+)
+
 #' @export
 #' @rdname tag_parsers
 tag_inherit <- function(x) {
@@ -42,9 +48,7 @@ tag_inherit <- function(x) {
     pieces <- str_split(str_trim(x$raw), "\\s+")[[1]]
     fields <- pieces[-1]
 
-    # Also recorded in `rd.Rmd`
-    all <- c("params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples", "author", "source", "note")
+    all <- inherit_components
     if (length(fields) == 0) {
       fields <- all
     } else {

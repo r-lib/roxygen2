@@ -79,7 +79,7 @@ Some notes:
 ## S3
 
 -   S3 **generics** are regular functions, so document them as such.
-    If necessary, include a `@section` that provides additional details for developers implementing methods.
+    If necessary, include a section that provides additional details for developers implementing methods.
 
 -   S3 **classes** have no formal definition, so document the [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
 
@@ -87,9 +87,9 @@ Some notes:
     Generally, it's not necessary to document straightforward methods for common generics like `print()`.
     (You should, however, always `@export` S3 methods).
 
-    If your method is more complicated, you should document it by setting `@rdname`.
-    Typically you will document methods with their generic, so you'd document `foofy.data.frame` by setting `@rdname`.
-    In base R, you can find documentation for more complex methods like `?predict.lm`, `?predict.glm`, and `?anova.glm`.
+    If your method is more complicated, you should document it by setting `@rdname` or `@describeIn`.
+    For complicated methods, you might document in their own file (i.e. `@rdname generic.class`; for simpler methods you might document with the generic (i.e. `@describeIn generic)`.
+    Learn more about these tags in `vignette("reuse")`.
 
 -   Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use `@method` if there is ambiguity.
     For example, is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, or the `data.frame` method for `all.equal()`?.
@@ -205,5 +205,3 @@ public = list(
   )
 )
 ```
-
-## 

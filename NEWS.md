@@ -6,6 +6,14 @@
   Methods are recognized only if they extend the generic in the destination,
   or if the destination can heuristically be identified as a constructor.
 
+* All built-in tags are now documented so that you can do (e.g.) `?"@param"`
+  to get a basic description of `@param` and a pointer where to learn more 
+  (#1165).
+
+* New `tags_list()` lists all tags defined by roxygen2 and
+  `tags_metadata()` provides some useful information about them for
+  use by (e.g.) IDEs (#1375).
+
 * roxygen2 now only only includes PDF figures generated via markdown in
   the PDF manual, and only includes SVG figures generated via markdown
   in the HTML manual (#1399).

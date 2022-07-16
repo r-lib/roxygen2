@@ -24,7 +24,6 @@
 #'   created by roxygen before running each roclet.
 #' @return `NULL`
 #' @export
-#' @importFrom stats setNames
 roxygenize <- function(package.dir = ".",
                        roclets = NULL,
                        load_code = NULL,

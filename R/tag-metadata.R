@@ -73,19 +73,19 @@ tags_rd_section <- function(tags, section) {
 #' Tags for documenting functions
 #'
 #' @eval tags_rd("rd")
-#' @family generating `.Rd` files
+#' @family documentation tags
 NULL
 
 #' Tags for documenting datasets and classes
 #'
 #' @eval tags_rd("rd-other")
-#' @family generating `.Rd` files
+#' @family documentation tags
 NULL
 
 #' Tags that help you reuse documentation
 #'
 #' @eval tags_rd("reuse")
-#' @family generating `.Rd` files
+#' @family documentation tags
 NULL
 
 #' Tags for managing the `NAMESPACE`
@@ -101,6 +101,6 @@ NULL
 #' Tags for indexing and cross-references
 #'
 #' @eval tags_rd("index-crossref")
-#' @family generating `.Rd` files
+#' @family documentation tags
 NULL
 

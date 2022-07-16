@@ -39,7 +39,6 @@
 #'   appended.
 #'
 #' @noRd
-#' @importFrom utils URLencode URLdecode
 
 get_md_linkrefs <- function(text) {
   refs <- str_match_all(
@@ -83,7 +82,6 @@ add_linkrefs_to_md <- function(text) {
 #' @param contents An XML node, containing the contents of the link.
 #'
 #' @noRd
-#' @importFrom xml2 xml_name
 
 parse_link <- function(destination, contents, state) {
 

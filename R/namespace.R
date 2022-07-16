@@ -12,8 +12,8 @@
 #'
 #' See `vignette("namespace")` for details.
 #'
-#' @family roclets
 #' @export
+#' @seealso [tags-namespace] for tags that generate `NAMESPACE` directives.
 #' @examples
 #' # The most common namespace tag is @@export, which declares that a function
 #' # is part of the external interface of your package

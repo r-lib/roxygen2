@@ -11,7 +11,8 @@ NULL
 #' Generally you will not call this function directly
 #' but will instead use [roxygenise()] specifying the rd roclet.
 #'
-#' @family generating `.Rd` files
+#' @seealso [tags-rd], [tags-rd-other], [tags-reuse], [tags-index-crossref] for
+#'   tags provided by this roclet.
 #' @export
 #' @examples
 #' #' The length of a string (in characters)

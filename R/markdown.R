@@ -65,9 +65,6 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' Text with R code expanded.
 #' A character vector of the same length as the input `text`.
 #'
-#' @importFrom xml2 xml_ns_strip xml_find_all xml_attr
-#' @importFrom purrr keep
-#'
 #' @keywords internal
 
 markdown_pass1 <- function(text) {
@@ -141,9 +138,6 @@ eval_code_nodes <- function(nodes) {
 
   map_chr(nodes, eval_code_node, env = evalenv)
 }
-
-#' @importFrom xml2 xml_name
-#' @importFrom knitr knit opts_chunk
 
 eval_code_node <- function(node, env) {
   if (xml_name(node) == "code") {
@@ -239,7 +233,6 @@ mdxml_children_to_rd <- function(xml, state) {
   paste0(out, collapse = "")
 }
 
-#' @importFrom xml2 xml_name xml_type xml_text xml_contents xml_attr xml_children xml_find_all
 mdxml_node_to_rd <- function(xml, state) {
   if (!inherits(xml, "xml_node") ||
       ! xml_type(xml) %in% c("text", "element")) {
@@ -518,8 +511,6 @@ mdxml_html_inline <- function(xml, state) {
     "}}"
   )
 }
-
-#' @importFrom utils head tail
 
 mdxml_close_sections <- function(state, upto = 1L) {
   hmy <- 0L

@@ -16,8 +16,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Source%20Sans%20Pro-0.4.1/font.css" rel="stylesheet">
-<link href="../deps/_Source%20Code%20Pro-0.4.1/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Reusing documentation">
@@ -134,58 +134,32 @@
 <h3 id="describein">
 <code>@describeIn</code><a class="anchor" aria-label="anchor" href="#describein"></a>
 </h3>
-<p><code>@describeIn</code> is designed for the most common cases:</p>
-<ul>
-<li>documenting methods in a generic</li>
-<li>documenting methods in a class</li>
-<li>documenting functions with the same (or similar arguments)</li>
-</ul>
-<p>It generates a new section, named either “Methods (by class)”, “Methods (by generic)” or “Functions”. The section contains a bulleted list describing each function, labelled so that you know what function or method it’s talking about. Here’s an example documenting an imaginary new generic:</p>
+<p>Use <code>@describeIn &lt;destination&gt; &lt;description&gt;</code> to document mutiple functions together. It generates a new section named “<strong>Related functions and methods</strong>”, further divided into subsections by the type of relationship between the source and the destination documentation. Each subsection contains a bulleted list describing the function with the specified <code>&lt;description&gt;</code>.</p>
+<p>You can document several functions which perform slight variations of a task or which use different defaults in one documentation file:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Foo bar generic</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x Object to foo.</span></span>
-<span><span class="va">foobar</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"x"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co">#' Power</span></span>
+<span><span class="co">#' @param x base</span></span>
+<span><span class="co">#' @param exp exponent</span></span>
+<span><span class="va">power</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">exp</span><span class="op">)</span> <span class="va">x</span> <span class="op">^</span> <span class="va">exp</span></span>
 <span></span>
-<span><span class="co">#' @describeIn foobar Difference between the mean and the median</span></span>
-<span><span class="va">foobar.numeric</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#' @describeIn power Square a number</span></span>
+<span><span class="va">square</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/power.html" class="external-link">power</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#' @describeIn foobar First and last values pasted together in a string.</span></span>
-<span><span class="va">foobar.character</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"-"</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="rdname">
-<code>@rdname</code><a class="anchor" aria-label="anchor" href="#rdname"></a>
-</h3>
-<p><code>@rdname</code> is a more general-purpose tool. It overrides the default file name generated by roxygen and merges documentation for multiple objects into one file. This gives you complete freedom to combine documentation however you see fit. There are two ways to use <code>@rdname</code>. You can add documentation to an existing function:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Basic arithmetic</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x,y numeric vectors.</span></span>
-<span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
-<span></span>
-<span><span class="co">#' @rdname add</span></span>
-<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="va">y</span></span></code></pre></div>
-<p>Or, you can create a dummy documentation file by documenting <code>NULL</code> and setting an informative <code>@name</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Basic arithmetic</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x,y numeric vectors.</span></span>
-<span><span class="co">#' @name arith</span></span>
-<span><span class="cn">NULL</span></span>
-<span><span class="co">#&gt; NULL</span></span>
-<span></span>
-<span><span class="co">#' @rdname arith</span></span>
-<span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
-<span></span>
-<span><span class="co">#' @rdname arith</span></span>
-<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="va">y</span></span></code></pre></div>
+<span><span class="co">#' @describeIn power Cube a number</span></span>
+<span><span class="va">cube</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/power.html" class="external-link">power</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p>In this case, both destination and source are “normal” functions, and you can use <code>&lt;description&gt;</code> to explain their differences.</p>
+<p><code>@describeIn</code> is also well suited to explain the relationships between functions making up an object oriented (OO) scheme using S3 or S4. In this case, roxygen will automatically detect whether a source function is a method and document the relationship to the relevant class or generic. Your new methods will be organised in one of two ways:</p>
+<ol style="list-style-type: decimal">
+<li><p>If your new method extends a generic in the <code>&lt;destination&gt;</code>, it will be listed in a section titled “<strong>Methods for generic <code>&lt;destination&gt;</code></strong>”. The subsection will include all methods for your new generic, labelled by the class they cover.</p></li>
+<li><p>If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled “<strong>Methods for class <code>&lt;destination&gt;</code></strong>”. It will be labelled by the generic which the method extends.</p></li>
+</ol>
+<p>While you can mix and match (some) different types of functions with <code>@describeIn</code>, the output may quickly become disorienting for users if the functions are not tightly related.</p>
 </div>
 <div class="section level3">
 <h3 id="order-of-includes">Order of includes<a class="anchor" aria-label="anchor" href="#order-of-includes"></a>
 </h3>
 <p>By default, roxygen blocks are processed in the order in which they appear in the file. When you’re combining multiple files, this can sometimes cause the function usage to appear in a suboptimal order. You can override the default ordering with <code>@order</code>. For example, the following the block would place <code>times</code> first in <code>arith.Rd</code> because 1 comes before 2.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @rdname arith</span></span>
 <span><span class="co">#' @order 2</span></span>
 <span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
@@ -226,30 +200,30 @@
 <h2 id="inline-code">Inline code<a class="anchor" aria-label="anchor" href="#inline-code"></a>
 </h2>
 <p>To insert code inline, enclose it in <code>`r `</code>. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. Here’s a simple example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title `r 1 + 1`</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description `r 2 + 2`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>This is equivalent to writing:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title 2</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description 4</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>The resulting text, together with the whole tag is interpreted as markdown, as usual. This means that you can use R to dynamically write markdown. For example if you defined this function in your package:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alphabet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"`"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">]</span>, <span class="st">"`"</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>You could then write:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `r alphabet(5)`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>The result is equivalent to writing the following by hand:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`</span></span>

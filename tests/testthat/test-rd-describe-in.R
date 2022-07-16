@@ -67,7 +67,7 @@ test_that("@describeIn function destination captures function source", {
     f2 <- function(x) 1
     ")[[1]]
 
-  expect_equal(out$get_value("minidesc")$name, "f2")
+  expect_equal(out$get_value("minidesc")$name, "f2()")
   expect_equal(out$get_value("minidesc")$extends, "")
   expect_equal(out$get_value("minidesc")$generic, "")
   expect_equal(out$get_value("minidesc")$class, "")
@@ -83,7 +83,7 @@ test_that("@describeIn class captures function name with data", {
     f2 <- function(x) 1
     ")[[1]]
 
-  expect_equal(out$get_value("minidesc")$name, "f2")
+  expect_equal(out$get_value("minidesc")$name, "f2()")
 })
 
 test_that("@describeIn class captures function description", {
@@ -177,16 +177,48 @@ test_that("multiple methods and others are combined into a class constructor", {
   expect_snapshot(out$get_section("minidesc"))
 })
 
-test_that("function names are escaped", {
+test_that("infix and replacement names get nice label", {
   out <- roc_proc_text(rd_roclet(), "
     #' foo
     foo <- 100
 
-    #' @describeIn foo shortcut for foo
+    #' @describeIn foo infix
     `%foo%` <- function(x, y) foo(x, y)
+
+    #' @describeIn foo replacement for foo
+    `foo<-` <- function(x, value) 10
+
     ")[[1]]
-  out
-  expect_match(out$get_rd("minidesc"), "\\\\%foo\\\\%")
+  expect_snapshot(out$get_section("minidesc"))
+})
+
+test_that("s4 methods get nice label", {
+  out <- roc_proc_text(rd_roclet(), "
+      #' Class
+      #'
+      setClass('foo1', slots = c(id = 'character'))
+
+      #' @describeIn foo1 generic
+      setGeneric('m_id', function(x) standardGeneric('m_id'))
+
+      #' @describeIn foo1 function
+      setMethod('m_id', 'foo1', function(x) x@id)
+    ")[[1]]
+  expect_snapshot(out$get_section("minidesc"))
+
+  out <- roc_proc_text(rd_roclet(), "
+    setClass('foo2')
+    setClass('foo3')
+
+    #' bar1
+    setGeneric('bar1', function(x, y) standardGeneric('bar1'))
+
+    #' @describeIn bar1 method1
+    setMethod('bar1', c('foo2', 'foo3'), function(x, y) 1)
+    #' @describeIn bar1 method2
+    setMethod('bar1', c('foo3', 'foo2'), function(x, y) 1)
+  ")[[1]]
+  expect_snapshot(out$get_section("minidesc"))
 })
 
 test_that("complains about bad usage", {

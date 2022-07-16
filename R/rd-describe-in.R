@@ -26,7 +26,7 @@ topic_add_describe_in <- function(topic, block, env) {
   metadata <- build_minidesc_metadata(block$object, dest)
 
   topic$add(rd_section_minidesc(
-    name = block$object$topic,
+    name = object_name(block$object),
     desc = tag$val$description,
     extends = metadata$extends,
     generic = metadata$generic,
@@ -95,23 +95,17 @@ format.rd_section_minidesc <- function(x, ...) {
 }
 
 format_section <- function(df, type) {
-  if (type == "class") {
-    title <- paste0(
-      "Methods for class \\code{", escape(df$class[[1]]), "}"
-    )
-  } else if (type == "generic") {
-    title <- paste0(
-      "Methods for generic \\code{", escape(df$generic[[1]]), "()}"
-    )
-  } else {
-    title <- "Related functions"
-  }
+  title <- switch(type,
+    class = "Methods (by generic)",
+    generic = "Methods (by class)",
+    "Functions"
+  )
 
-  bullets <- paste0("\\code{", escape(df$name), "}: ", df$desc)
+  bullets <- paste0("\\code{", df$name, "}: ", df$desc, "\n")
   body <- paste0(
     "\\itemize{\n",
-    paste0("  \\item ", bullets, "\n", collapse = ""),
-    "}\n"
+    paste0("\\item ", bullets, "\n", collapse = ""),
+    "}"
   )
 
   paste0("\\section{", title, "}{\n", body, "}")
@@ -196,4 +190,50 @@ fits_constructor <- function(dest_name, src) {
   pkg_name <- utils::packageName(evalenv) %||% ""
 
   src_class == paste0(pkg_name, "_", dest_name)
+}
+
+
+
+object_name <- function(x) {
+  UseMethod("object_name")
+}
+#' @export
+object_name.default <- function(x) {
+  x$alias
+}
+#' @export
+object_name.function <- function(x) {
+  object_name_fun(x$alias, x)
+}
+#' @export
+object_name.s3generic <- object_name.function
+#' @export
+object_name.s3method <- function(x) {
+  method <- attr(x$value, "s3method")
+  as.character(function_usage(method[[1]], list(as.name(method[[2]]))))
+#
+#   name <- paste(, collapse = ".")
+#   object_name_fun(name, x)
+}
+#' @export
+object_name.s4generic <- function(x) {
+  object_name_fun(x$value@generic, x)
+}
+#' @export
+object_name.s4method <- function(x) {
+  classes <- lapply(x$value@defined, as.name)
+  if (length(classes) == 1) {
+    names(classes) <- NULL
+  }
+  as.character(function_usage(x$value@generic, classes))
+}
+
+object_name_fun <- function(name, x, format_name = identity) {
+  if (is_replacement_fun(name) || is_infix_fun(name)) {
+    args <- formals(x$value)
+  } else {
+    args <- NULL
+  }
+
+  as.character(function_usage(name, args, format_name))
 }

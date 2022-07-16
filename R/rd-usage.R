@@ -112,8 +112,10 @@ usage_args <- function(args) {
 }
 
 args_string <- function(x, space = " ") {
-  sep <- ifelse(x != "", paste0(space, "=", space), "")
-  arg_names <- escape(auto_backtick(names(x)))
+  sep <- ifelse(names(x) != "" & x != "", paste0(space, "=", space), "")
+
+  nms <- names2(x)
+  arg_names <- ifelse(nms == "", "", escape(auto_backtick(nms)))
   paste0(arg_names, sep, escape(x))
 }
 

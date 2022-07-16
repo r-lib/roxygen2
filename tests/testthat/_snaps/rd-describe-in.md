@@ -5,8 +5,8 @@
     Output
       \section{Related functions}{
       \itemize{
-        \item \code{square}: Square a number
-        \item \code{cube}: Cube a number
+        \item \code{square()}: Square a number
+        \item \code{cube()}: Cube a number
       }
       } 
 
@@ -17,14 +17,14 @@
     Output
       \section{Methods for generic \code{zap()}}{
       \itemize{
-        \item \code{zap.numeric}: method
-        \item \code{zap.character}: method
+        \item \code{zap(numeric)}: method
+        \item \code{zap(character)}: method
       }
       }
       \section{Related functions}{
       \itemize{
-        \item \code{print.qux}: function (method for different generic)
-        \item \code{zap_helper}: function
+        \item \code{print(qux)}: function (method for different generic)
+        \item \code{zap_helper()}: function
       }
       } 
 
@@ -35,14 +35,14 @@
     Output
       \section{Methods for class \code{foo}}{
       \itemize{
-        \item \code{print.foo}: method
-        \item \code{format.foo}: method
+        \item \code{print(foo)}: method
+        \item \code{format(foo)}: method
       }
       }
       \section{Related functions}{
       \itemize{
-        \item \code{format.bar}: function (method for different class)
-        \item \code{is_foo}: function
+        \item \code{format(bar)}: function (method for different class)
+        \item \code{is_foo()}: function
       }
       } 
 
@@ -53,12 +53,40 @@
     Output
       \section{Methods for class \code{roxygen2_baz}}{
       \itemize{
-        \item \code{print.roxygen2_baz}: method
+        \item \code{print(roxygen2_baz)}: method
       }
       }
       \section{Related functions}{
       \itemize{
-        \item \code{format.quuz_baz}: function (method for another class)
+        \item \code{format(quuz_baz)}: function (method for another class)
+      }
+      } 
+
+# infix and replacement names get nice label
+
+    Code
+      out$get_section("minidesc")
+    Output
+      \section{Related functions}{
+      \itemize{
+        \item \code{x \%foo\% y}: infix
+        \item \code{foo(x) <- value}: replacement for foo
+      }
+      } 
+
+# s4 methods get nice label
+
+    Code
+      out$get_section("minidesc")
+    Output
+      \section{Methods for class \code{foo1}}{
+      \itemize{
+        \item \code{m_id(foo1)}: function
+      }
+      }
+      \section{Related functions}{
+      \itemize{
+        \item \code{m_id()}: generic
       }
       } 
 

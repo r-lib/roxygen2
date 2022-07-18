@@ -228,7 +228,6 @@ make_random_string <- function(length = 32) {
 #' @details
 #' Each of the following bullets should look the same when rendered:
 #'
-#' * Double escapes: \\, \\%, \\$, \\_
 #' * Backticks: `\`, `\%`, `\$`, `\_`
 #' * `\verb{}`: \verb{\\}, \verb{\\%}, \verb{\$}, \verb{\_}
 #'

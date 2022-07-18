@@ -18,7 +18,6 @@ This is a regression test for Markdown escaping.
 \details{
 Each of the following bullets should look the same when rendered:
 \itemize{
-\item Double escapes: \\, \\\%, \\$, \\_
 \item Backticks: \verb{\\}, \verb{\\\%}, \verb{\\$}, \verb{\\_}
 \item \verb{\verb{}}: \verb{\\}, \verb{\\\%}, \verb{\$}, \verb{\_}
 }

@@ -1,6 +1,6 @@
 pandoc: 2.14.2
-pkgdown: 2.0.6.9000
-pkgdown_sha: 956f076f661eb2de9413f64ea24a580cf444466d
+pkgdown: 2.0.6
+pkgdown_sha: ~
 articles:
   extending: extending.html
   index-crossref: index-crossref.html
@@ -10,7 +10,7 @@ articles:
   rd: rd.html
   reuse: reuse.html
   roxygen2: roxygen2.html
-last_built: 2022-07-16T19:59Z
+last_built: 2022-07-18T22:28Z
 urls:
   reference: https://roxygen2.r-lib.org/reference
   article: https://roxygen2.r-lib.org/articles

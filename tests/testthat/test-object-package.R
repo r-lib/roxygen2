@@ -25,6 +25,18 @@ test_that("useful message if Authors@R is corrupted", {
   })
 })
 
+test_that("can convert quote percentage signs in urls", {
+  expect_equal(
+    package_seealso_urls("https://www.foo.bar/search?q=see%20also"),
+    "\\url{https://www.foo.bar/search?q=see\\%20also}"
+  )
+
+  expect_equal(
+    package_seealso_urls(BugReports = "https://www.foo.bar/search?q=bug%20report"),
+    "Report bugs at \\url{https://www.foo.bar/search?q=bug\\%20report}"
+  )
+})
+
 test_that("can convert DOIs in url", {
   expect_equal(
     package_seealso_urls("https://doi.org/10.5281/zenodo.1485309"),

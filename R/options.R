@@ -28,11 +28,11 @@
 #' * `rd_family_title` `<list>`: overrides for `@family` titles. See the
 #'    _rd_ vignette for details: `vignette("rd", package = "roxygen2")`
 #'
-#' * `knitr_chunk_options`: default chunk options used for knitr.
+#' * `knitr_chunk_options` `<list>`: default chunk options used for knitr.
 #'
-#' * `restrict_image_formats`: if `TRUE` then PDF images are only included in the
-#'   PDF manual, and SVG images are only included in the HTML manual.
-#'   (This only applies to images supplied via markdown.)
+#' * `restrict_image_formats` `<flag>`: if `TRUE` then PDF images are only
+#'   included in the PDF manual, and SVG images are only included in the HTML
+#'   manual. (This only applies to images supplied via markdown.)
 #'
 #' @section How to set:
 #' Either set in `DESCRIPTION`:

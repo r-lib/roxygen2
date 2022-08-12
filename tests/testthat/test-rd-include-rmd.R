@@ -277,5 +277,8 @@ test_that("useful warnings", {
     #' @name foobar
     NULL", path
   )
-  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
+  expect_snapshot(
+    roc_proc_text(rd_roclet(), text),
+    transform = function(x) gsub("/[a-zA-Z0-9/]+", "<temp-path>", x)
+  )
 })

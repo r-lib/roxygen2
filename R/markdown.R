@@ -491,12 +491,12 @@ mdxml_heading <- function(xml, state) {
 }
 
 mdxml_html_block <- function(xml, state) {
-  if (state$tag$tag != "includeRmd") {
-    return(mdxml_unsupported(xml, state$tag, "HTML blocks"))
-  }
+  txt <- xml_text(xml)
+  txt <- gsub("}", "\\}", txt, fixed = TRUE)
+  txt <- gsub("{", "\\{", txt, fixed = TRUE)
   paste0(
     "\\if{html}{\\out{\n",
-    gsub("}", "\\}", xml_text(xml), fixed = TRUE),
+    txt,
     "}}\n"
   )
 }

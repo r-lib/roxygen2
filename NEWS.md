@@ -2,6 +2,9 @@
 
 * `@includeRmd` calls `local_reproducible_output()` to make code run in
   included `.Rmd`s more consistent with other sources (#1431).
+* roxygen2 now supports HTML blocks in markdown. They are only included
+  in the HTML manual. They can also be produced as the output of code
+  chunks.
 
 # roxygen2 7.2.1
 

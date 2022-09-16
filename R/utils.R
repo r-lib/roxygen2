@@ -166,7 +166,7 @@ uuid <- function(nchar = 8) {
 
 # https://github.com/r-lib/rlang/issues/1434
 is_installed <- function(x) {
-  !identical(system.file(package = x), "")
+  length(find.package(package = x, quiet = TRUE)) > 0
 }
 
 # quoting -----------------------------------------------------------------

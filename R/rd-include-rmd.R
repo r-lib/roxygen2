@@ -49,6 +49,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   )
   cat(txt, file = rmd_path)
 
+  local_reproducible_output()
   tryCatch(
     rmarkdown::render(
       rmd_path,

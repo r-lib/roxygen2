@@ -40,7 +40,7 @@ Suggests:
     covr,
     R.methodsS3,
     R.oo,
-    rmarkdown,
+    rmarkdown (>= 2.16),
     testthat (>= 3.1.2),
     yaml
 LinkingTo: 

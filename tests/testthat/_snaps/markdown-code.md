@@ -19,10 +19,10 @@
     Condition
       Warning:
       [<text>:4] @description failed to evaluate inline markdown code
-      Caused by error in `parse()`:
-      ! <text>:2:0: unexpected end of input
+      Caused by error:
+      ! Failed to parse the inline R code: 1 +  (Reason: <text>:2:0: unexpected end of input
       1: 1 + 
-         ^
+         ^)
 
 # interleaving fences and inline code
 

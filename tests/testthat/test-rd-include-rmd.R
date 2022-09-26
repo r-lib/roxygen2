@@ -282,3 +282,18 @@ test_that("useful warnings", {
     transform = function(x) gsub("/[a-zA-Z0-9_/]+", "<temp-path>", x)
   )
 })
+
+test_that("sets width", {
+  skip_if_not(rmarkdown::pandoc_available("2.17"))
+
+  local_options(width = 123)
+  temp_rd <- withr::local_tempfile(lines = "`r getOption('width')`")
+
+  rox <- sprintf("
+    #' Title
+    #' @includeRmd %s
+    #' @name foobar
+    NULL", temp_rd)
+  out <- roc_proc_text(rd_roclet(), rox)[[1]]
+  expect_equal(out$get_value("details"), "80")
+})

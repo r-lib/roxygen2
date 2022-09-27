@@ -16,6 +16,9 @@
     <loc>https://roxygen2.r-lib.org/articles/extending.html</loc>
   </url>
   <url>
+    <loc>https://roxygen2.r-lib.org/articles/index-crossref.html</loc>
+  </url>
+  <url>
     <loc>https://roxygen2.r-lib.org/articles/index.html</loc>
   </url>
   <url>
@@ -25,7 +28,13 @@
     <loc>https://roxygen2.r-lib.org/articles/rd-formatting.html</loc>
   </url>
   <url>
+    <loc>https://roxygen2.r-lib.org/articles/rd-other.html</loc>
+  </url>
+  <url>
     <loc>https://roxygen2.r-lib.org/articles/rd.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/articles/reuse.html</loc>
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/articles/roxygen2.html</loc>
@@ -113,6 +122,27 @@
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/tag_parsers.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tags-index-crossref.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tags-namespace.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tags-rd-formatting.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tags-rd-other.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tags-rd.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tags-reuse.html</loc>
+  </url>
+  <url>
+    <loc>https://roxygen2.r-lib.org/reference/tags_list.html</loc>
   </url>
   <url>
     <loc>https://roxygen2.r-lib.org/reference/update_collate.html</loc>

@@ -14,9 +14,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Source%20Sans%20Pro-0.4.1/font.css" rel="stylesheet">
-<link href="../deps/_Source%20Code%20Pro-0.4.1/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Extending roxygen2">
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,16 +53,25 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Documentation</h6>
+    <a class="dropdown-item" href="../articles/rd.html">Documenting functions</a>
+    <a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a>
+    <a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a>
+    <a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-refernces</a>
+    <a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>NAMESPACE</h6>
+    <a class="dropdown-item" href="../articles/namespace.html">Managing imports and exports</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer</h6>
     <a class="dropdown-item" href="../articles/extending.html">Extending roxygen2</a>
-    <a class="dropdown-item" href="../articles/namespace.html">NAMESPACE tags</a>
-    <a class="dropdown-item" href="../articles/rd-formatting.html">Rd formatting</a>
-    <a class="dropdown-item" href="../articles/rd.html">Rd (documentation) tags</a>
   </div>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-news">
     <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">Version 7.2.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/">Version 7.0.0</a>
     <a class="external-link dropdown-item" href="https://blog.rstudio.com/2017/02/01/roxygen2-6-0-0/">Version 6.0.0</a>
@@ -96,7 +105,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Extending roxygen2</h1>
             
       
@@ -117,7 +126,7 @@
 </ul>
 <p>This vignette will introduce you to the key data structures in roxygen2, and then show you how to use these two extension points. This vignette is very rough, so you are expected to have also read some roxygen2 source code to understand all the extension points. Hopefully, it’s useful enough to help you get started, and if you have problems, please <a href="https://github.com/r-lib/roxygen2/issues/new" class="external-link">file an issue</a>!</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://roxygen2.r-lib.org/">roxygen2</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://roxygen2.r-lib.org/">roxygen2</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="key-data-structures">Key data structures<a class="anchor" aria-label="anchor" href="#key-data-structures"></a>
@@ -135,16 +144,16 @@
 </ul>
 <p>You <em>can</em> construct tag objects by hand with <code><a href="../reference/roxy_tag.html">roxy_tag()</a></code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/roxy_tag.html">roxy_tag</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"Hadley"</span><span class="op">)</span>
-<span class="co">#&gt; [????:???] @name 'Hadley' {unparsed}</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/roxy_tag.html">roxy_tag</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"Hadley"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; List of 5</span>
-<span class="co">#&gt;  $ file: chr NA</span>
-<span class="co">#&gt;  $ line: chr NA</span>
-<span class="co">#&gt;  $ raw : chr "Hadley"</span>
-<span class="co">#&gt;  $ tag : chr "name"</span>
-<span class="co">#&gt;  $ val : NULL</span>
-<span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_name" "roxy_tag"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/roxy_tag.html">roxy_tag</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"Hadley"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [????:???] @name 'Hadley' {unparsed}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/roxy_tag.html">roxy_tag</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"Hadley"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ file: chr NA</span></span>
+<span><span class="co">#&gt;  $ line: chr NA</span></span>
+<span><span class="co">#&gt;  $ raw : chr "Hadley"</span></span>
+<span><span class="co">#&gt;  $ tag : chr "name"</span></span>
+<span><span class="co">#&gt;  $ val : NULL</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_name" "roxy_tag"</span></span></code></pre></div>
 <p>However, you should rarely need to do so, because you’ll typically have them given to you in a block object, as you’ll see shortly.</p>
 </div>
 <div class="section level3">
@@ -163,32 +172,32 @@
 </ul>
 <p>The easiest way to see the basic structure of a <code><a href="../reference/roxy_block.html">roxy_block()</a></code> is to generate one by parsing a roxygen block with <code><a href="../reference/parse_package.html">parse_text()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"
-  #' This is a title
-  #'
-  #' This is the description.
-  #'
-  #' @param x,y A number
-  #' @export
-  f &lt;- function(x, y) x + y
-"</span>
-
-<span class="co"># parse_text() returns a list of blocks, so I extract the first</span>
-<span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_package.html">parse_text</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">block</span>
-<span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:8]</span>
-<span class="co">#&gt;   $tag</span>
-<span class="co">#&gt;     [line:  2] @title 'This is a title' {parsed}</span>
-<span class="co">#&gt;     [line:  4] @description 'This is the description.' {parsed}</span>
-<span class="co">#&gt;     [line:  6] @param 'x,y A number' {parsed}</span>
-<span class="co">#&gt;     [line:  7] @export '' {parsed}</span>
-<span class="co">#&gt;     [line:  8] @usage '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;     [line:  8] @.formals '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;     [line:  8] @backref '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;   $call   f &lt;- function(x, y) x + y</span>
-<span class="co">#&gt;   $object &lt;function&gt; </span>
-<span class="co">#&gt;     $topic f</span>
-<span class="co">#&gt;     $alias f</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">  #' This is a title</span></span>
+<span><span class="st">  #'</span></span>
+<span><span class="st">  #' This is the description.</span></span>
+<span><span class="st">  #'</span></span>
+<span><span class="st">  #' @param x,y A number</span></span>
+<span><span class="st">  #' @export</span></span>
+<span><span class="st">  f &lt;- function(x, y) x + y</span></span>
+<span><span class="st">"</span></span>
+<span></span>
+<span><span class="co"># parse_text() returns a list of blocks, so I extract the first</span></span>
+<span><span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_package.html">parse_text</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">block</span></span>
+<span><span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:8]</span></span>
+<span><span class="co">#&gt;   $tag</span></span>
+<span><span class="co">#&gt;     [line:  2] @title 'This is a title' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  4] @description 'This is the description.' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  6] @param 'x,y A number' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  7] @export '' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  8] @usage '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  8] @.formals '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  8] @backref '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;   $call   f &lt;- function(x, y) x + y</span></span>
+<span><span class="co">#&gt;   $object &lt;function&gt; </span></span>
+<span><span class="co">#&gt;     $topic f</span></span>
+<span><span class="co">#&gt;     $alias f</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -201,8 +210,8 @@
 </ol>
 <p>To illustrate the basic idea, we’ll create a new <code>@tip</code> tag that will create a bulleted list of tips about how to use a function. The idea is to take something like this:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' @tip The mean of a logical vector is the proportion of `TRUE` values.</span>
-<span class="co">#' @tip You can compute means of dates and date-times!</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#' @tip The mean of a logical vector is the proportion of `TRUE` values.</span></span>
+<span><span class="co">#' @tip You can compute means of dates and date-times!</span></span></code></pre></div>
 <p>And generate Rd like this:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">\section</span>{Tips and tricks}{</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">\itemize</span>{</span>
@@ -212,74 +221,74 @@
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>The first step is to define a method for <code><a href="../reference/roxy_tag.html">roxy_tag_parse()</a></code> that describes how to parse the tag text. The name of the class will be <code>roxy_tag_{tag}</code>, which in this case is <code>roxy_tag_tip</code>. This function takes a <code>roxy_tag</code> as input, and it’s job is to set <code>x$val</code> to a convenient parsed value that will be used later by the roclet. Here we want to process the text using Markdown so we can just use <code><a href="../reference/tag_parsers.html">tag_markdown()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">roxy_tag_parse.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/tag_parsers.html">tag_markdown</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">roxy_tag_parse.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/tag_parsers.html">tag_markdown</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>We check this works by using <code><a href="../reference/parse_package.html">parse_text()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"
-  #' Title
-  #'
-  #' @tip The mean of a logical vector is the proportion of `TRUE` values.
-  #' @tip You can compute means of dates and date-times!
-  #' @md
-  f &lt;- function(x, y) {
-    # ...
-  }
-"</span>
-<span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_package.html">parse_text</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">block</span>
-<span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:7]</span>
-<span class="co">#&gt;   $tag</span>
-<span class="co">#&gt;     [line:  2] @title 'Title' {parsed}</span>
-<span class="co">#&gt;     [line:  4] @tip 'The mean of a logical vector is the proportion ...' {parsed}</span>
-<span class="co">#&gt;     [line:  5] @tip 'You can compute means of dates and date-times!' {parsed}</span>
-<span class="co">#&gt;     [line:  6] @md '' {parsed}</span>
-<span class="co">#&gt;     [line:  7] @usage '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;     [line:  7] @.formals '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;     [line:  7] @backref '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;   $call   f &lt;- function(x, y) { ...</span>
-<span class="co">#&gt;   $object &lt;function&gt; </span>
-<span class="co">#&gt;     $topic f</span>
-<span class="co">#&gt;     $alias f</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">block</span><span class="op">$</span><span class="va">tags</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; List of 5</span>
-<span class="co">#&gt;  $ file: chr "&lt;text&gt;"</span>
-<span class="co">#&gt;  $ line: int 4</span>
-<span class="co">#&gt;  $ tag : chr "tip"</span>
-<span class="co">#&gt;  $ raw : chr "The mean of a logical vector is the proportion of `TRUE` values."</span>
-<span class="co">#&gt;  $ val : chr "The mean of a logical vector is the proportion of \\code{TRUE} values."</span>
-<span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_tip" "roxy_tag"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">  #' Title</span></span>
+<span><span class="st">  #'</span></span>
+<span><span class="st">  #' @tip The mean of a logical vector is the proportion of `TRUE` values.</span></span>
+<span><span class="st">  #' @tip You can compute means of dates and date-times!</span></span>
+<span><span class="st">  #' @md</span></span>
+<span><span class="st">  f &lt;- function(x, y) {</span></span>
+<span><span class="st">    # ...</span></span>
+<span><span class="st">  }</span></span>
+<span><span class="st">"</span></span>
+<span><span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_package.html">parse_text</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">block</span></span>
+<span><span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:7]</span></span>
+<span><span class="co">#&gt;   $tag</span></span>
+<span><span class="co">#&gt;     [line:  2] @title 'Title' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  4] @tip 'The mean of a logical vector is the proportion ...' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  5] @tip 'You can compute means of dates and date-times!' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  6] @md '' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  7] @usage '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  7] @.formals '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  7] @backref '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;   $call   f &lt;- function(x, y) { ...</span></span>
+<span><span class="co">#&gt;   $object &lt;function&gt; </span></span>
+<span><span class="co">#&gt;     $topic f</span></span>
+<span><span class="co">#&gt;     $alias f</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">block</span><span class="op">$</span><span class="va">tags</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ file: chr "&lt;text&gt;"</span></span>
+<span><span class="co">#&gt;  $ line: int 4</span></span>
+<span><span class="co">#&gt;  $ tag : chr "tip"</span></span>
+<span><span class="co">#&gt;  $ raw : chr "The mean of a logical vector is the proportion of `TRUE` values."</span></span>
+<span><span class="co">#&gt;  $ val : chr "The mean of a logical vector is the proportion of \\code{TRUE} values."</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_tip" "roxy_tag"</span></span></code></pre></div>
 <p>(Here I explicitly turn Markdown parsing on using <code>@md</code>; it’s usually turned on for a package using roxygen options).</p>
 <p>Next, we define a method for <code><a href="../reference/roxy_tag_rd.html">roxy_tag_rd()</a></code>, which must create an <code><a href="../reference/rd_section.html">rd_section()</a></code>. We’re going to create a new section called <code>tip</code>. It will contain a character vector of tips:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">roxy_tag_rd.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">base_path</span>, <span class="va">env</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/rd_section.html">rd_section</a></span><span class="op">(</span><span class="st">"tip"</span>, <span class="va">x</span><span class="op">$</span><span class="va">val</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">roxy_tag_rd.roxy_tag_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">base_path</span>, <span class="va">env</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/rd_section.html">rd_section</a></span><span class="op">(</span><span class="st">"tip"</span>, <span class="va">x</span><span class="op">$</span><span class="va">val</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>This additional layer is needed because there can be multiple tags of the same type in a single block, and multiple blocks can contribute to the same <code>.Rd</code> file. The job of the <code>rd_section</code> is to combine all the tags into a single top-level Rd section. Each tag generates an <code>rd_section</code> which is then combined with any previous section using <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code>. The default <code>merge.rd_section()</code> just concatenates the values together (<code>rd_section(x$type, c(x$value, y$value))</code>); you can override this method if you need more sophisticated behaviour.</p>
 <p>We then need to define a <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> method to convert this object into text for the <code>.Rd</code> file:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">format.rd_section_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span>
-    <span class="st">"\\section{Tips and tricks}{\n"</span>,
-    <span class="st">"\\itemize{\n"</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"  \\item "</span>, <span class="va">x</span><span class="op">$</span><span class="va">value</span>, <span class="st">"\n"</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,
-    <span class="st">"}\n"</span>,
-    <span class="st">"}\n"</span>
-  <span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">format.rd_section_tip</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<span>    <span class="st">"\\section{Tips and tricks}{\n"</span>,</span>
+<span>    <span class="st">"\\itemize{\n"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"  \\item "</span>, <span class="va">x</span><span class="op">$</span><span class="va">value</span>, <span class="st">"\n"</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,</span>
+<span>    <span class="st">"}\n"</span>,</span>
+<span>    <span class="st">"}\n"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>We can now try this out with <code>roclet_text()</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">topic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_proc_text.html">roc_proc_text</a></span><span class="op">(</span><span class="fu"><a href="../reference/rd_roclet.html">rd_roclet</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">topic</span><span class="op">$</span><span class="fu">get_section</span><span class="op">(</span><span class="st">"tip"</span><span class="op">)</span>
-<span class="co">#&gt; \section{Tips and tricks}{</span>
-<span class="co">#&gt; \itemize{</span>
-<span class="co">#&gt;   \item The mean of a logical vector is the proportion of \code{TRUE} values.</span>
-<span class="co">#&gt;   \item You can compute means of dates and date-times!</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; </span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">topic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_proc_text.html">roc_proc_text</a></span><span class="op">(</span><span class="fu"><a href="../reference/rd_roclet.html">rd_roclet</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">topic</span><span class="op">$</span><span class="fu">get_section</span><span class="op">(</span><span class="st">"tip"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; \section{Tips and tricks}{</span></span>
+<span><span class="co">#&gt; \itemize{</span></span>
+<span><span class="co">#&gt;   \item The mean of a logical vector is the proportion of \code{TRUE} values.</span></span>
+<span><span class="co">#&gt;   \item You can compute means of dates and date-times!</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt; </span></span></code></pre></div>
 <p>Note that there is no namespacing so if you’re defining multiple new tags I recommend using your package name as the common prefix.</p>
 </div>
 <div class="section level2">
@@ -295,62 +304,62 @@
 <pre><code>@memo [EFFICIENCY] Currently brute-force; find better algorithm.</code></pre>
 <p>As above, we first define a parse method:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">roxy_tag_parse.roxy_tag_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^\\[.*\\].*$"</span>, <span class="va">x</span><span class="op">$</span><span class="va">raw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="../reference/roxy_tag.html">roxy_tag_warning</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"Invalid memo format"</span><span class="op">)</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="op">}</span>
-
-  <span class="va">parsed</span> <span class="op">&lt;-</span> <span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_match.html" class="external-link">stri_match</a></span><span class="op">(</span>str <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">raw</span>, regex <span class="op">=</span> <span class="st">"\\[(.*)\\](.*)"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>
-
-  <span class="va">x</span><span class="op">$</span><span class="va">val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    header <span class="op">=</span> <span class="va">parsed</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, 
-    message <span class="op">=</span> <span class="va">parsed</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
-  <span class="op">)</span>
-  <span class="va">x</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">roxy_tag_parse.roxy_tag_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^\\[.*\\].*$"</span>, <span class="va">x</span><span class="op">$</span><span class="va">raw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="../reference/roxy_tag.html">roxy_tag_warning</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"Invalid memo format"</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="va">parsed</span> <span class="op">&lt;-</span> <span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_match.html" class="external-link">stri_match</a></span><span class="op">(</span>str <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">raw</span>, regex <span class="op">=</span> <span class="st">"\\[(.*)\\](.*)"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
+<span></span>
+<span>  <span class="va">x</span><span class="op">$</span><span class="va">val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    header <span class="op">=</span> <span class="va">parsed</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>    message <span class="op">=</span> <span class="va">parsed</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">x</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Then check if it works with <code><a href="../reference/parse_package.html">parse_text()</a></code>:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"
-  #' @memo [TBI] Remember to implement this!
-  #' @memo [API] Check best API
-  f &lt;- function(x, y) {
-    # ...
-  }
-"</span>
-<span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_package.html">parse_text</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">block</span>
-<span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:4]</span>
-<span class="co">#&gt;   $tag</span>
-<span class="co">#&gt;     [line:  2] @memo '[TBI] Remember to implement this!' {parsed}</span>
-<span class="co">#&gt;     [line:  3] @memo '[API] Check best API' {parsed}</span>
-<span class="co">#&gt;     [line:  4] @usage '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;     [line:  4] @.formals '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;     [line:  4] @backref '&lt;generated&gt;' {parsed}</span>
-<span class="co">#&gt;   $call   f &lt;- function(x, y) { ...</span>
-<span class="co">#&gt;   $object &lt;function&gt; </span>
-<span class="co">#&gt;     $topic f</span>
-<span class="co">#&gt;     $alias f</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">block</span><span class="op">$</span><span class="va">tags</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; List of 5</span>
-<span class="co">#&gt;  $ file: chr "&lt;text&gt;"</span>
-<span class="co">#&gt;  $ line: int 2</span>
-<span class="co">#&gt;  $ tag : chr "memo"</span>
-<span class="co">#&gt;  $ raw : chr "[TBI] Remember to implement this!"</span>
-<span class="co">#&gt;  $ val :List of 2</span>
-<span class="co">#&gt;   ..$ header : chr "TBI"</span>
-<span class="co">#&gt;   ..$ message: chr " Remember to implement this!"</span>
-<span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_memo" "roxy_tag"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">  #' @memo [TBI] Remember to implement this!</span></span>
+<span><span class="st">  #' @memo [API] Check best API</span></span>
+<span><span class="st">  f &lt;- function(x, y) {</span></span>
+<span><span class="st">    # ...</span></span>
+<span><span class="st">  }</span></span>
+<span><span class="st">"</span></span>
+<span><span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_package.html">parse_text</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">block</span></span>
+<span><span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:4]</span></span>
+<span><span class="co">#&gt;   $tag</span></span>
+<span><span class="co">#&gt;     [line:  2] @memo '[TBI] Remember to implement this!' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  3] @memo '[API] Check best API' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  4] @usage '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  4] @.formals '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;     [line:  4] @backref '&lt;generated&gt;' {parsed}</span></span>
+<span><span class="co">#&gt;   $call   f &lt;- function(x, y) { ...</span></span>
+<span><span class="co">#&gt;   $object &lt;function&gt; </span></span>
+<span><span class="co">#&gt;     $topic f</span></span>
+<span><span class="co">#&gt;     $alias f</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">block</span><span class="op">$</span><span class="va">tags</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ file: chr "&lt;text&gt;"</span></span>
+<span><span class="co">#&gt;  $ line: int 2</span></span>
+<span><span class="co">#&gt;  $ tag : chr "memo"</span></span>
+<span><span class="co">#&gt;  $ raw : chr "[TBI] Remember to implement this!"</span></span>
+<span><span class="co">#&gt;  $ val :List of 2</span></span>
+<span><span class="co">#&gt;   ..$ header : chr "TBI"</span></span>
+<span><span class="co">#&gt;   ..$ message: chr " Remember to implement this!"</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "roxy_tag_memo" "roxy_tag"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-roclet">The roclet<a class="anchor" aria-label="anchor" href="#the-roclet"></a>
 </h3>
 <p>Next, we create a constructor for the roclet, which uses <code><a href="../reference/roclet.html">roclet()</a></code>. Our <code>memo</code> roclet doesn’t have any options so this is very simple:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">memo_roclet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/roclet.html">roclet</a></span><span class="op">(</span><span class="st">"memo"</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">memo_roclet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/roclet.html">roclet</a></span><span class="op">(</span><span class="st">"memo"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>To give the roclet behaviour, you need to define method. There are two methods that almost every roclet will use:</p>
 <ul>
 <li><p><code><a href="../reference/roclet.html">roclet_process()</a></code> is called with a list of blocks, and returns an object of your choosing.</p></li>
@@ -358,51 +367,51 @@
 </ul>
 <p>For this roclet, we’ll have <code><a href="../reference/roclet.html">roclet_process()</a></code> collect all the memo tags into a named list:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">roclet_process.roclet_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">blocks</span>, <span class="va">env</span>, <span class="va">base_path</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
-  
-  <span class="kw">for</span> <span class="op">(</span><span class="va">block</span> <span class="kw">in</span> <span class="va">blocks</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roxy_block.html">block_get_tags</a></span><span class="op">(</span><span class="va">block</span>, <span class="st">"memo"</span><span class="op">)</span>
-
-    <span class="kw">for</span> <span class="op">(</span><span class="va">tag</span> <span class="kw">in</span> <span class="va">tags</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"["</span>, <span class="va">tag</span><span class="op">$</span><span class="va">file</span>, <span class="st">":"</span>, <span class="va">tag</span><span class="op">$</span><span class="va">line</span>, <span class="st">"] "</span>, <span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">message</span><span class="op">)</span>
-      <span class="va">results</span><span class="op">[[</span><span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">header</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">results</span><span class="op">[[</span><span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">header</span><span class="op">]</span><span class="op">]</span>, <span class="va">msg</span><span class="op">)</span>
-    <span class="op">}</span>
-  <span class="op">}</span>
-  
-  <span class="va">results</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">roclet_process.roclet_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">blocks</span>, <span class="va">env</span>, <span class="va">base_path</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">block</span> <span class="kw">in</span> <span class="va">blocks</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roxy_block.html">block_get_tags</a></span><span class="op">(</span><span class="va">block</span>, <span class="st">"memo"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">tag</span> <span class="kw">in</span> <span class="va">tags</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"["</span>, <span class="va">tag</span><span class="op">$</span><span class="va">file</span>, <span class="st">":"</span>, <span class="va">tag</span><span class="op">$</span><span class="va">line</span>, <span class="st">"] "</span>, <span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">message</span><span class="op">)</span></span>
+<span>      <span class="va">results</span><span class="op">[[</span><span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">header</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">results</span><span class="op">[[</span><span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">header</span><span class="op">]</span><span class="op">]</span>, <span class="va">msg</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="va">results</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>And then have <code><a href="../reference/roclet.html">roclet_output()</a></code> just print them to the screen:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">roclet_output.roclet_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">results</span>, <span class="va">base_path</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">header</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">messages</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">[[</span><span class="va">header</span><span class="op">]</span><span class="op">]</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">header</span>, <span class="st">": "</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">" * "</span>, <span class="va">messages</span>, <span class="st">"\n"</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span>
-
-  <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">roclet_output.roclet_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">results</span>, <span class="va">base_path</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">header</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">messages</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">[[</span><span class="va">header</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">header</span>, <span class="st">": "</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">" * "</span>, <span class="va">messages</span>, <span class="st">"\n"</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Then you can test if it works by using <code><a href="../reference/roc_proc_text.html">roc_proc_text()</a></code>:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_proc_text.html">roc_proc_text</a></span><span class="op">(</span><span class="fu">memo_roclet</span><span class="op">(</span><span class="op">)</span>, <span class="st">"
-#' @memo [TBI] Remember to implement this!
-#' @memo [API] Check best API
-f &lt;- function(x, y) {
-  # ...
-}
-
-#' @memo [API] Consider passing z option
-g &lt;- function(x, y) {
-  # ...
-}
-"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/roclet.html">roclet_output</a></span><span class="op">(</span><span class="fu">memo_roclet</span><span class="op">(</span><span class="op">)</span>, <span class="va">results</span><span class="op">)</span>
-<span class="co">#&gt; TBI: </span>
-<span class="co">#&gt;  * [&lt;text&gt;:2]  Remember to implement this!</span>
-<span class="co">#&gt; API: </span>
-<span class="co">#&gt;  * [&lt;text&gt;:3]  Check best API</span>
-<span class="co">#&gt;  * [&lt;text&gt;:8]  Consider passing z option</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_proc_text.html">roc_proc_text</a></span><span class="op">(</span><span class="fu">memo_roclet</span><span class="op">(</span><span class="op">)</span>, <span class="st">"</span></span>
+<span><span class="st">#' @memo [TBI] Remember to implement this!</span></span>
+<span><span class="st">#' @memo [API] Check best API</span></span>
+<span><span class="st">f &lt;- function(x, y) {</span></span>
+<span><span class="st">  # ...</span></span>
+<span><span class="st">}</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#' @memo [API] Consider passing z option</span></span>
+<span><span class="st">g &lt;- function(x, y) {</span></span>
+<span><span class="st">  # ...</span></span>
+<span><span class="st">}</span></span>
+<span><span class="st">"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/roclet.html">roclet_output</a></span><span class="op">(</span><span class="fu">memo_roclet</span><span class="op">(</span><span class="op">)</span>, <span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TBI: </span></span>
+<span><span class="co">#&gt;  * [&lt;text&gt;:2]  Remember to implement this!</span></span>
+<span><span class="co">#&gt; API: </span></span>
+<span><span class="co">#&gt;  * [&lt;text&gt;:3]  Check best API</span></span>
+<span><span class="co">#&gt;  * [&lt;text&gt;:8]  Consider passing z option</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -420,7 +429,7 @@ g &lt;- function(x, y) {
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
   </div></footer>

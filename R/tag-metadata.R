@@ -26,6 +26,7 @@ tags_metadata <- function() {
     description = map_chr(meta, "description"),
     # \n not useful outside of RStudio
     template = sub("\n", "", map_chr(meta, "template")),
+    snippet = sub("\n", "", map_chr(meta, "snippet", .default = "")),
     vignette = map_chr(meta, "vignette", .default = NA),
     recommend = map_lgl(meta, "recommend", .default = FALSE),
     stringsAsFactors = FALSE

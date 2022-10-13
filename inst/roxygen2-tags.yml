@@ -103,7 +103,6 @@
     Executable R code that demonstrates how the function works. Code must run
     without error.
   template: "\n"
-  snippet: '\n'
   vignette: rd
   recommend: true
 
@@ -111,7 +110,7 @@
   description: >
     Run examples only when `condition` is `TRUE`.
   template: " {condition}\n"
-  snippet: '${1:condition}\n'
+  snippet: '${1:condition}'
   vignette: rd
   recommend: true
 

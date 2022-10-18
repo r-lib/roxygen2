@@ -1,12 +1,12 @@
 ---
-title: "Indexing and cross-refernces"
+title: "Indexing and cross-references"
 output: rmarkdown::html_vignette
 description: >
   Make it easier for users to find your functions
   by cross-referencing them and control their
   indexing.
 vignette: >
-  %\VignetteIndexEntry{Indexing and cross-refernces}
+  %\VignetteIndexEntry{Indexing and cross-references}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -38,7 +38,7 @@
   description: >
     <p>A short description of the purpose of the function. Usually around
     a paragraph, but can be longer if needed.</p>
-  template: "\n${1:A short description...}"
+  template: "\n${1:A short description...}\n"
   vignette: rd
   recommend: true
 
@@ -46,7 +46,7 @@
   description: >
     <p>Additional details about the function. Generally superseded by instead
     using a level 1 heading.</p>
-  template: "\n${1:Additional details...}"
+  template: "\n${1:Additional details...}\n"
   vignette: rd
 
 - name: docType
@@ -94,14 +94,14 @@
   description: >
     <p>Executable R code that demonstrates how the function works. Code must run
     without error.</p>
-  template: "\n${1:# example code}"
+  template: "\n${1:# example code}\n"
   vignette: rd
   recommend: true
 
 - name: examplesIf
   description: >
     <p>Run examples only when <code>condition</code> is <code>TRUE</code>.</p>
-  template: ' ${1:condition}\n${1:# example code}'
+  template: ' ${1:condition}\n${1:# example code}\n'
   vignette: rd
   recommend: true
 

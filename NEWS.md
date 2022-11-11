@@ -1,4 +1,4 @@
-# roxygen2 (development version)
+# roxygen2 7.2.2
 
 * `@includeRmd` calls `local_reproducible_output()` to make code run in
   included `.Rmd`s more consistent with other sources (#1431).

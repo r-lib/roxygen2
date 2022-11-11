@@ -118,24 +118,44 @@
 
     
     
-<p>roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:</p>
+<p>roxygen2 provides several ways to avoid repeating yourself in code
+documentation, while assembling information from multiple places in one
+documentation file:</p>
 <ul>
-<li><p>Combine documentation for closely related functions into a single file with <code>@describe</code> in or <code>@rdname</code>.</p></li>
-<li><p>Inherit components from another topic with <code>@inheritParams</code>, <code>@inheritSection</code>, or <code>@inherit</code>.</p></li>
-<li><p>Use functions to generate repeated text with inline R code.</p></li>
-<li><p>Share text between documentation and vignettes with child documents.</p></li>
+<li><p>Combine documentation for closely related functions into a single
+file with <code>@describe</code> in or <code>@rdname</code>.</p></li>
+<li><p>Inherit components from another topic with
+<code>@inheritParams</code>, <code>@inheritSection</code>, or
+<code>@inherit</code>.</p></li>
+<li><p>Use functions to generate repeated text with inline R
+code.</p></li>
+<li><p>Share text between documentation and vignettes with child
+documents.</p></li>
 </ul>
-<p>The chapter concludes by showing you how to update superseded reuse mechanisms that we no longer recommend: <code>@includeRmd</code>, <code>@eval</code>/<code>@evalRd</code>, and <code>@template</code>.</p>
+<p>The chapter concludes by showing you how to update superseded reuse
+mechanisms that we no longer recommend: <code>@includeRmd</code>,
+<code>@eval</code>/<code>@evalRd</code>, and <code>@template</code>.</p>
 <div class="section level2">
 <h2 id="multiple-functions-in-the-same-topic">Multiple functions in the same topic<a class="anchor" aria-label="anchor" href="#multiple-functions-in-the-same-topic"></a>
 </h2>
-<p>You can document multiple functions in the same file by using either <code>@rdname</code> or <code>@describeIn</code> tag. It’s a technique best used with care: documenting too many functions in one place leads to confusion. Use it when all functions have the same (or very similar) arguments.</p>
+<p>You can document multiple functions in the same file by using either
+<code>@rdname</code> or <code>@describeIn</code> tag. It’s a technique
+best used with care: documenting too many functions in one place leads
+to confusion. Use it when all functions have the same (or very similar)
+arguments.</p>
 <div class="section level3">
 <h3 id="describein">
 <code>@describeIn</code><a class="anchor" aria-label="anchor" href="#describein"></a>
 </h3>
-<p>Use <code>@describeIn &lt;destination&gt; &lt;description&gt;</code> to document mutiple functions together. It generates a new section named “<strong>Related functions and methods</strong>”, further divided into subsections by the type of relationship between the source and the destination documentation. Each subsection contains a bulleted list describing the function with the specified <code>&lt;description&gt;</code>.</p>
-<p>You can document several functions which perform slight variations of a task or which use different defaults in one documentation file:</p>
+<p>Use <code>@describeIn &lt;destination&gt; &lt;description&gt;</code>
+to document mutiple functions together. It generates a new section named
+“<strong>Related functions and methods</strong>”, further divided into
+subsections by the type of relationship between the source and the
+destination documentation. Each subsection contains a bulleted list
+describing the function with the specified
+<code>&lt;description&gt;</code>.</p>
+<p>You can document several functions which perform slight variations of
+a task or which use different defaults in one documentation file:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Power</span></span>
 <span><span class="co">#' @param x base</span></span>
@@ -147,18 +167,39 @@
 <span></span>
 <span><span class="co">#' @describeIn power Cube a number</span></span>
 <span><span class="va">cube</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/power.html" class="external-link">power</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p>In this case, both destination and source are “normal” functions, and you can use <code>&lt;description&gt;</code> to explain their differences.</p>
-<p><code>@describeIn</code> is also well suited to explain the relationships between functions making up an object oriented (OO) scheme using S3 or S4. In this case, roxygen will automatically detect whether a source function is a method and document the relationship to the relevant class or generic. Your new methods will be organised in one of two ways:</p>
+<p>In this case, both destination and source are “normal” functions, and
+you can use <code>&lt;description&gt;</code> to explain their
+differences.</p>
+<p><code>@describeIn</code> is also well suited to explain the
+relationships between functions making up an object oriented (OO) scheme
+using S3 or S4. In this case, roxygen will automatically detect whether
+a source function is a method and document the relationship to the
+relevant class or generic. Your new methods will be organised in one of
+two ways:</p>
 <ol style="list-style-type: decimal">
-<li><p>If your new method extends a generic in the <code>&lt;destination&gt;</code>, it will be listed in a section titled “<strong>Methods for generic <code>&lt;destination&gt;</code></strong>”. The subsection will include all methods for your new generic, labelled by the class they cover.</p></li>
-<li><p>If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled “<strong>Methods for class <code>&lt;destination&gt;</code></strong>”. It will be labelled by the generic which the method extends.</p></li>
+<li><p>If your new method extends a generic in the
+<code>&lt;destination&gt;</code>, it will be listed in a section titled
+“<strong>Methods for generic <code>&lt;destination&gt;</code></strong>”.
+The subsection will include all methods for your new generic, labelled
+by the class they cover.</p></li>
+<li><p>If your new method extends another generic, for a class
+constructed in the destination, it will be listed in a subsection titled
+“<strong>Methods for class <code>&lt;destination&gt;</code></strong>”.
+It will be labelled by the generic which the method extends.</p></li>
 </ol>
-<p>While you can mix and match (some) different types of functions with <code>@describeIn</code>, the output may quickly become disorienting for users if the functions are not tightly related.</p>
+<p>While you can mix and match (some) different types of functions with
+<code>@describeIn</code>, the output may quickly become disorienting for
+users if the functions are not tightly related.</p>
 </div>
 <div class="section level3">
 <h3 id="order-of-includes">Order of includes<a class="anchor" aria-label="anchor" href="#order-of-includes"></a>
 </h3>
-<p>By default, roxygen blocks are processed in the order in which they appear in the file. When you’re combining multiple files, this can sometimes cause the function usage to appear in a suboptimal order. You can override the default ordering with <code>@order</code>. For example, the following the block would place <code>times</code> first in <code>arith.Rd</code> because 1 comes before 2.</p>
+<p>By default, roxygen blocks are processed in the order in which they
+appear in the file. When you’re combining multiple files, this can
+sometimes cause the function usage to appear in a suboptimal order. You
+can override the default ordering with <code>@order</code>. For example,
+the following the block would place <code>times</code> first in
+<code>arith.Rd</code> because 1 comes before 2.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @rdname arith</span></span>
 <span><span class="co">#' @order 2</span></span>
@@ -174,32 +215,55 @@
 </h2>
 <p>You can inherit documentation from other topics in a few ways:</p>
 <ul>
-<li><p><code>@inheritParams source_function</code> inherits just the parameter documentation from <code>source_function()</code>.</p></li>
+<li><p><code>@inheritParams source_function</code> inherits just the
+parameter documentation from <code>source_function()</code>.</p></li>
 <li>
-<p><code>@inherit source_function</code> will inherit all supported components from <code>source_function</code>.</p>
-<p>Alternatively, you can use (e.g.) <code>@inherit source_function return details</code> to just inherit the return value and details from <code>source_function()</code>. Supported components are <code>params</code>, <code>return</code>, <code>title</code>, <code>description</code>, <code>details</code>, <code>seealso</code>, <code>sections</code>, <code>references</code>, <code>examples</code>, <code>author</code>, <code>source</code>, <code>note</code>.</p>
+<p><code>@inherit source_function</code> will inherit all supported
+components from <code>source_function</code>.</p>
+<p>Alternatively, you can use (e.g.)
+<code>@inherit source_function return details</code> to just inherit the
+return value and details from <code>source_function()</code>. Supported
+components are <code>params</code>, <code>return</code>,
+<code>title</code>, <code>description</code>, <code>details</code>,
+<code>seealso</code>, <code>sections</code>, <code>references</code>,
+<code>examples</code>, <code>author</code>, <code>source</code>,
+<code>note</code>.</p>
 </li>
-<li><p><code>@inheritSection source_function Section title</code> will inherit the single <code>@section</code> called “Section title” from <code>source_function()</code>.</p></li>
+<li><p><code>@inheritSection source_function Section title</code> will
+inherit the single <code>@section</code> called “Section title” from
+<code>source_function()</code>.</p></li>
 <li>
-<p><code>@inheritDotParams</code> automatically generates parameter documentation for <code>...</code> for the common case where you pass <code>...</code> on to another function. Because you often override some arguments, it comes with a flexible specification for argument selection:</p>
+<p><code>@inheritDotParams</code> automatically generates parameter
+documentation for <code>...</code> for the common case where you pass
+<code>...</code> on to another function. Because you often override some
+arguments, it comes with a flexible specification for argument
+selection:</p>
 <ul>
 <li>
-<code>@inheritDotParams foo</code> takes all parameters from <code>foo()</code>
+<code>@inheritDotParams foo</code> takes all parameters from
+<code>foo()</code>
 </li>
 <li>
-<code>@inheritDotParams foo a b e:h</code> takes parameters <code>a</code>, <code>b</code>, and all parameters between <code>e</code> and <code>h</code>
+<code>@inheritDotParams foo a b e:h</code> takes parameters
+<code>a</code>, <code>b</code>, and all parameters between
+<code>e</code> and <code>h</code>
 </li>
 <li>
-<code>@inheritDotParams foo -x -y</code> takes all parameters except for <code>x</code> and <code>y</code>.</li>
+<code>@inheritDotParams foo -x -y</code> takes all parameters except
+for <code>x</code> and <code>y</code>.</li>
 </ul>
 </li>
 </ul>
-<p>All of these tags also work to inherit documentation from functions in another package by using <code>pkg::source_function</code>.</p>
+<p>All of these tags also work to inherit documentation from functions
+in another package by using <code>pkg::source_function</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="inline-code">Inline code<a class="anchor" aria-label="anchor" href="#inline-code"></a>
 </h2>
-<p>To insert code inline, enclose it in <code>`r `</code>. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. Here’s a simple example:</p>
+<p>To insert code inline, enclose it in <code>`r `</code>. Roxygen will
+interpret the rest of the text within backticks as R code and evaluate
+it, and replace the backtick expression with its value. Here’s a simple
+example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title `r 1 + 1`</span></span>
 <span><span class="co">#'</span></span>
@@ -211,7 +275,9 @@
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description 4</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
-<p>The resulting text, together with the whole tag is interpreted as markdown, as usual. This means that you can use R to dynamically write markdown. For example if you defined this function in your package:</p>
+<p>The resulting text, together with the whole tag is interpreted as
+markdown, as usual. This means that you can use R to dynamically write
+markdown. For example if you defined this function in your package:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alphabet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"`"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">]</span>, <span class="st">"`"</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
@@ -228,32 +294,62 @@
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
-<p>This is a powerful technique for reducing duplication because you can flexibly parameterise the function however best meets your needs. Note that the evaluation environment is deliberately a child of the package that you’re documenting so you can call internal functions.</p>
+<p>This is a powerful technique for reducing duplication because you can
+flexibly parameterise the function however best meets your needs. Note
+that the evaluation environment is deliberately a child of the package
+that you’re documenting so you can call internal functions.</p>
 </div>
 <div class="section level2">
 <h2 id="child-documents">Child documents<a class="anchor" aria-label="anchor" href="#child-documents"></a>
 </h2>
-<p>You can use the same <code>.Rmd</code> or <code>.md</code> document in the documentation, <code>README.Rmd</code>, and vignettes but using child documents:</p>
+<p>You can use the same <code>.Rmd</code> or <code>.md</code> document
+in the documentation, <code>README.Rmd</code>, and vignettes but using
+child documents:</p>
 <pre><code>```{r child = "common.Rmd"}
 ```</code></pre>
-<p>The included Rmd file can have roxygen Markdown-style links to other help topics. E.g. <code>[roxygen2::roxygenize()]</code> will link to the manual page of the <code>roxygenize</code> function in roxygen2. See <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
-<p>If the Rmd file contains roxygen (Markdown-style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default. A workaround is to specify external HTML links for them. These external locations will <em>not</em> be used for the manual which instead always links to the help topics in the manual. Example:</p>
+<p>The included Rmd file can have roxygen Markdown-style links to other
+help topics. E.g. <code>[roxygen2::roxygenize()]</code> will link to the
+manual page of the <code>roxygenize</code> function in roxygen2. See
+<code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>If the Rmd file contains roxygen (Markdown-style) links to other help
+topics, then some care is needed, as those links will not work in Rmd
+files by default. A workaround is to specify external HTML links for
+them. These external locations will <em>not</em> be used for the manual
+which instead always links to the help topics in the manual.
+Example:</p>
 <pre><code>See also the [roxygen2::roxygenize()] function.
 
 [roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html</code></pre>
-<p>This example will link to the supplied URLs in HTML / Markdown files and it will link to the <code>roxygenize</code> help topic in the manual.</p>
-<p>Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in Pandoc, and it is harmless.</p>
+<p>This example will link to the supplied URLs in HTML / Markdown files
+and it will link to the <code>roxygenize</code> help topic in the
+manual.</p>
+<p>Note that if you add external link targets like these, then roxygen
+will emit a warning about these link references being defined multiple
+times (once externally, and once to the help topic). This warning
+originates in Pandoc, and it is harmless.</p>
 </div>
 <div class="section level2">
 <h2 id="superseded">Superseded<a class="anchor" aria-label="anchor" href="#superseded"></a>
 </h2>
-<p>Over the years, we have experimented with a number of other ways to reduce duplication across documentation files. A number of these are now superseded and we recommend changing them to use the techniques described above:</p>
+<p>Over the years, we have experimented with a number of other ways to
+reduce duplication across documentation files. A number of these are now
+superseded and we recommend changing them to use the techniques
+described above:</p>
 <ul>
-<li><p>Instead of <code>@includeRmd man/rmd/example.Rmd</code>, use a child document.</p></li>
-<li><p>Instead of <code>@eval</code> or <code>@evalRd</code>, use inline R code.</p></li>
-<li><p>Instead of <code>@template</code> and <code>@templateVars</code> write your own function and call it from inline R code.</p></li>
+<li><p>Instead of <code>@includeRmd man/rmd/example.Rmd</code>, use a
+child document.</p></li>
+<li><p>Instead of <code>@eval</code> or <code>@evalRd</code>, use inline
+R code.</p></li>
+<li><p>Instead of <code>@template</code> and <code>@templateVars</code>
+write your own function and call it from inline R code.</p></li>
 </ul>
-<p>Inline R markdown can only generate markdown text within a tag so in principle it is less flexible than <code>@eval</code>/<code>@evalRd</code>/<code>@template</code>. However, our experience has revealed that generating multiple tags at once tends to be rather inflexible, and you often end up refactoring into smaller pieces so we don’t believe this reflects a real loss of functionality.</p>
+<p>Inline R markdown can only generate markdown text within a tag so in
+principle it is less flexible than
+<code>@eval</code>/<code>@evalRd</code>/<code>@template</code>. However,
+our experience has revealed that generating multiple tags at once tends
+to be rather inflexible, and you often end up refactoring into smaller
+pieces so we don’t believe this reflects a real loss of
+functionality.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

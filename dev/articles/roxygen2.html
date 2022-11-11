@@ -118,24 +118,50 @@
 
     
     
-<p>Documentation is one of the most important aspects of good code. Without it, users won’t know how to use your package, and are unlikely to do so. Documentation is also useful for you in the future (so you remember what the heck you were thinking!), and for other developers working on your package. The goal of roxygen2 is to make documenting your code as easy as possible.</p>
-<p>R provides a standard way of documenting packages: you write <code>.Rd</code> files in the <code>man/</code> directory. These files use a custom syntax, loosely based on LaTeX. roxygen2 provides a number of advantages over writing <code>.Rd</code> files by hand:</p>
+<p>Documentation is one of the most important aspects of good code.
+Without it, users won’t know how to use your package, and are unlikely
+to do so. Documentation is also useful for you in the future (so you
+remember what the heck you were thinking!), and for other developers
+working on your package. The goal of roxygen2 is to make documenting
+your code as easy as possible.</p>
+<p>R provides a standard way of documenting packages: you write
+<code>.Rd</code> files in the <code>man/</code> directory. These files
+use a custom syntax, loosely based on LaTeX. roxygen2 provides a number
+of advantages over writing <code>.Rd</code> files by hand:</p>
 <ul>
-<li><p>Code and documentation are adjacent so when you modify your code, it’s easy to remember that you need to update the documentation.</p></li>
-<li><p>roxygen2 dynamically inspects the objects that it’s documenting, so it can automatically add data that you’d otherwise have to write by hand.</p></li>
-<li><p>It abstracts over the differences in documenting S3 and S4 methods, generics and classes, so you need to learn fewer details.</p></li>
+<li><p>Code and documentation are adjacent so when you modify your code,
+it’s easy to remember that you need to update the
+documentation.</p></li>
+<li><p>roxygen2 dynamically inspects the objects that it’s documenting,
+so it can automatically add data that you’d otherwise have to write by
+hand.</p></li>
+<li><p>It abstracts over the differences in documenting S3 and S4
+methods, generics and classes, so you need to learn fewer
+details.</p></li>
 </ul>
-<p>As well as generating <code>.Rd</code> files, roxygen will also create a <code>NAMESPACE</code> for you, and will manage the <code>Collate</code> field in <code>DESCRIPTION</code>.</p>
+<p>As well as generating <code>.Rd</code> files, roxygen will also
+create a <code>NAMESPACE</code> for you, and will manage the
+<code>Collate</code> field in <code>DESCRIPTION</code>.</p>
 <div class="section level2">
 <h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
 </h2>
-<p>This vignette provides a high-level description of roxygen2 and the overall workflow you’ll use with it. The other vignettes provide more detail on the most important individual components:</p>
+<p>This vignette provides a high-level description of roxygen2 and the
+overall workflow you’ll use with it. The other vignettes provide more
+detail on the most important individual components:</p>
 <ul>
-<li><p>Start with <code><a href="../articles/rd.html">vignette("rd")</a></code> to learn how document your functions with roxygen2.</p></li>
-<li><p><code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> discusses how to document other things like datasets, the package itself, and the various pieces used by R’s OOP systems.</p></li>
-<li><p><code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> gives the details of roxygen2’s rmarkdown support.</p></li>
-<li><p><code><a href="../articles/reuse.html">vignette("reuse")</a></code> demonstrates the tools available to reuse documentation in multiple places.</p></li>
-<li><p><code><a href="../articles/namespace.html">vignette("namespace")</a></code> describes how to generate a <code>NAMESPACE</code> file, how namespacing works in R, and how you can use roxygen2 to be specific about what your package needs and supplies.</p></li>
+<li><p>Start with <code><a href="../articles/rd.html">vignette("rd")</a></code> to learn how document your
+functions with roxygen2.</p></li>
+<li><p><code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> discusses how to document other
+things like datasets, the package itself, and the various pieces used by
+R’s OOP systems.</p></li>
+<li><p><code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> gives the details of
+roxygen2’s rmarkdown support.</p></li>
+<li><p><code><a href="../articles/reuse.html">vignette("reuse")</a></code> demonstrates the tools available
+to reuse documentation in multiple places.</p></li>
+<li><p><code><a href="../articles/namespace.html">vignette("namespace")</a></code> describes how to generate a
+<code>NAMESPACE</code> file, how namespacing works in R, and how you can
+use roxygen2 to be specific about what your package needs and
+supplies.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -147,19 +173,25 @@
 <li><p><code>devtools::document()</code>.</p></li>
 <li><p><code>Ctrl + Shift + D</code>, if you’re using RStudio.</p></li>
 </ul>
-<p>You can mix handwritten Rd and roxygen2; roxygen2 will never overwrite a file it didn’t create.</p>
+<p>You can mix handwritten Rd and roxygen2; roxygen2 will never
+overwrite a file it didn’t create.</p>
 </div>
 <div class="section level2">
 <h2 id="basic-process">Basic process<a class="anchor" aria-label="anchor" href="#basic-process"></a>
 </h2>
-<p>There are three steps in the transformation from roxygen comments in your source file to human readable documentation:</p>
+<p>There are three steps in the transformation from roxygen comments in
+your source file to human readable documentation:</p>
 <ol style="list-style-type: decimal">
 <li>You add roxygen comments to your source file.</li>
 <li>
-<code><a href="../reference/roxygenize.html">roxygen2::roxygenise()</a></code> converts roxygen comments to <code>.Rd</code> files.</li>
-<li>R converts <code>.Rd</code> files to human readable documentation.</li>
+<code><a href="../reference/roxygenize.html">roxygen2::roxygenise()</a></code> converts roxygen comments to
+<code>.Rd</code> files.</li>
+<li>R converts <code>.Rd</code> files to human readable
+documentation.</li>
 </ol>
-<p>The process starts when you add specially formatted roxygen comments to your source file. Roxygen comments start with <code>#'</code> so you can continue to use regular comments for other purposes.</p>
+<p>The process starts when you add specially formatted roxygen comments
+to your source file. Roxygen comments start with <code>#'</code> so you
+can continue to use regular comments for other purposes.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Add together two numbers</span></span>
 <span><span class="co">#'</span></span>
@@ -172,7 +204,8 @@
 <span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>For the example above, this will generate <code>man/add.Rd</code> that looks like:</p>
+<p>For the example above, this will generate <code>man/add.Rd</code>
+that looks like:</p>
 <pre class="rd"><code>% Generated by roxygen2: do not edit by hand
 % Please edit documentation in ./&lt;text&gt;
 \name{add}
@@ -196,12 +229,31 @@ Add together two numbers
 add(1, 1)
 add(10, 1)
 }</code></pre>
-<p>Rd files are a special file format loosely based on LaTeX. You can read more about the Rd format in the <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Rd-format" class="external-link">R extensions</a> manual. With roxygen2, there are few reasons to know about Rd files, so here I’ll avoid discussing them as much as possible, focusing instead on what you need to know about roxygen2.</p>
-<p>When you use <code>?x</code>, <code>help("x")</code> or <code>example("x")</code> R looks for an Rd file containing <code>\alias{x}</code>. It then parses the file, converts it into HTML and displays it. These functions look for an Rd file in <em>installed</em> packages. This isn’t very useful for package development, because you want to use the <code>.Rd</code> files in the <em>source</em> package. For this reason, we recommend that you use roxygen2 in conjunction with devtools: <code>devtools::load_all()</code> automatically adds shims so that <code>?</code> and friends will look in the development package. Note, however, that this preview does not work with intra-package links. To preview those, you’ll need to install the package. If you use RStudio, the easiest way to do this is to click the “Build &amp; Reload button”.</p>
+<p>Rd files are a special file format loosely based on LaTeX. You can
+read more about the Rd format in the <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Rd-format" class="external-link">R
+extensions</a> manual. With roxygen2, there are few reasons to know
+about Rd files, so here I’ll avoid discussing them as much as possible,
+focusing instead on what you need to know about roxygen2.</p>
+<p>When you use <code>?x</code>, <code>help("x")</code> or
+<code>example("x")</code> R looks for an Rd file containing
+<code>\alias{x}</code>. It then parses the file, converts it into HTML
+and displays it. These functions look for an Rd file in
+<em>installed</em> packages. This isn’t very useful for package
+development, because you want to use the <code>.Rd</code> files in the
+<em>source</em> package. For this reason, we recommend that you use
+roxygen2 in conjunction with devtools: <code>devtools::load_all()</code>
+automatically adds shims so that <code>?</code> and friends will look in
+the development package. Note, however, that this preview does not work
+with intra-package links. To preview those, you’ll need to install the
+package. If you use RStudio, the easiest way to do this is to click the
+“Build &amp; Reload button”.</p>
 <div class="section level3">
 <h3 id="rcpp">Rcpp<a class="anchor" aria-label="anchor" href="#rcpp"></a>
 </h3>
-<p>You can also use roxygen2 with Rcpp. Simply include roxygen2 comments in your C++ code (using <code>//</code> instead of <code>#</code>), and Rcpp will automatically carry the comments along into <code>RcppExports.R</code> where roxygen2 will find them.</p>
+<p>You can also use roxygen2 with Rcpp. Simply include roxygen2 comments
+in your C++ code (using <code>//</code> instead of <code>#</code>), and
+Rcpp will automatically carry the comments along into
+<code>RcppExports.R</code> where roxygen2 will find them.</p>
 <p>For example, dplyr has <code>between.cpp</code> which starts:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">//' Do values in a numeric vector fall in specified range?</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">//'</span></span>
@@ -220,7 +272,8 @@ add(10, 1)
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export(rng = false)]]</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>LogicalVector between<span class="op">(</span>Rcpp<span class="op">::</span>NumericVector x<span class="op">,</span> <span class="dt">double</span> left<span class="op">,</span> <span class="dt">double</span> right<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>This is automatically translated to the following R code in <code>RcppExports.R</code>:</p>
+<p>This is automatically translated to the following R code in
+<code>RcppExports.R</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Do values in a numeric vector fall in specified range?</span></span>
 <span><span class="co">#'</span></span>

@@ -118,20 +118,42 @@
 
     
     
-<p>This vignette introduces the basics of roxygen2 for documenting functions. See <code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> for documenting other types of objects and <code><a href="../articles/reuse.html">vignette("reuse")</a></code> for reusing documentation across topics.</p>
+<p>This vignette introduces the basics of roxygen2 for documenting
+functions. See <code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> for documenting other
+types of objects and <code><a href="../articles/reuse.html">vignette("reuse")</a></code> for reusing
+documentation across topics.</p>
 <div class="section level2">
 <h2 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
 </h2>
-<p>A roxygen <strong>block</strong> is a sequence of lines starting with <code>#'</code> (optionally preceded by white space).</p>
-<p>The first lines of the block is called the <strong>introduction</strong> and forms the title, description, and details, as described below. The introduction continues until the first <strong>tag</strong>.</p>
-<p>Tags start with <code>@</code>, like <code>@details</code> or <code>@param</code>. Tags must appear at the beginning of a line and their content extends to the start of the next tag or the end of the block. Text within the description or tags can be formatted using Markdown or <code>Rd</code> commands; see <code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
-<p>A block ends when it hits R code, usually a function or object assignment. Blocks ignore empty lines, including lines made up of non-roxygen comments. If you need to separate two blocks, use <code>NULL</code>.</p>
-<p>If you want to use roxygen2 documentation tags without generating an <code>.Rd</code> file, you can use <code>@noRd</code> to suppress file generation for a given topic. This is useful if you want to use roxygen2 conventions for documenting an internal function; only people reading the source doc will be able to read the docs.</p>
+<p>A roxygen <strong>block</strong> is a sequence of lines starting with
+<code>#'</code> (optionally preceded by white space).</p>
+<p>The first lines of the block is called the
+<strong>introduction</strong> and forms the title, description, and
+details, as described below. The introduction continues until the first
+<strong>tag</strong>.</p>
+<p>Tags start with <code>@</code>, like <code>@details</code> or
+<code>@param</code>. Tags must appear at the beginning of a line and
+their content extends to the start of the next tag or the end of the
+block. Text within the description or tags can be formatted using
+Markdown or <code>Rd</code> commands; see
+<code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>A block ends when it hits R code, usually a function or object
+assignment. Blocks ignore empty lines, including lines made up of
+non-roxygen comments. If you need to separate two blocks, use
+<code>NULL</code>.</p>
+<p>If you want to use roxygen2 documentation tags without generating an
+<code>.Rd</code> file, you can use <code>@noRd</code> to suppress file
+generation for a given topic. This is useful if you want to use roxygen2
+conventions for documenting an internal function; only people reading
+the source doc will be able to read the docs.</p>
 </div>
 <div class="section level2">
 <h2 id="the-introduction">The introduction<a class="anchor" aria-label="anchor" href="#the-introduction"></a>
 </h2>
-<p>Each documentation block starts with some text which defines the title, the description, and the details. Here’s an example showing what the documentation for <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code> might look like if it had been written with roxygen:</p>
+<p>Each documentation block starts with some text which defines the
+title, the description, and the details. Here’s an example showing what
+the documentation for <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code> might look like if it had been
+written with roxygen:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Sum of vector elements</span></span>
 <span><span class="co">#'</span></span>
@@ -144,11 +166,22 @@
 <span><span class="va">sum</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span>, <span class="va">na.rm</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span></code></pre></div>
 <p>This introductory block is broken up as follows:</p>
 <ul>
-<li><p>The first sentence is the <strong>title</strong>: that’s what you see when you look at <code><a href="https://rdrr.io/pkg/mypackage/man" class="external-link">help(package = mypackage)</a></code> and is shown at the top of each help file. It should generally fit on one line, be written in sentence case, and not end in a full stop.</p></li>
-<li><p>The second paragraph is the <strong>description</strong>: this comes first in the documentation and should briefly describe what the function does.</p></li>
-<li><p>The third and subsequent paragraphs go into the <strong>details</strong>: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates. The details are optional.</p></li>
+<li><p>The first sentence is the <strong>title</strong>: that’s what you
+see when you look at <code><a href="https://rdrr.io/pkg/mypackage/man" class="external-link">help(package = mypackage)</a></code> and is shown
+at the top of each help file. It should generally fit on one line, be
+written in sentence case, and not end in a full stop.</p></li>
+<li><p>The second paragraph is the <strong>description</strong>: this
+comes first in the documentation and should briefly describe what the
+function does.</p></li>
+<li><p>The third and subsequent paragraphs go into the
+<strong>details</strong>: this is a (often long) section that comes
+after the argument description and should provide any other important
+details of how the function operates. The details are optional.</p></li>
 </ul>
-<p>You can also use explicit <code>@title</code>, <code>@description</code>, and <code>@details</code> tags. This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.</p>
+<p>You can also use explicit <code>@title</code>,
+<code>@description</code>, and <code>@details</code> tags. This is
+unnecessary unless you want to have a multi-paragraph description,
+bulleted list, or other more exotic structure.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Sum of vector elements</span></span>
 <span><span class="co">#' </span></span>
@@ -164,24 +197,45 @@
 <div class="section level2">
 <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h2>
-<p>Functions are the mostly commonly documented objects. Functions require three tags: <code>@param</code>, <code>@returns</code>, and <code>@examples</code>.</p>
+<p>Functions are the mostly commonly documented objects. Functions
+require three tags: <code>@param</code>, <code>@returns</code>, and
+<code>@examples</code>.</p>
 <div class="section level3">
 <h3 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
 </h3>
-<p>Use <code>@param name description</code> to describe each input to the function. The description should provide a succinct summary of parameter type (e.g. a string, a numeric vector), and if not obvious from the name, what the parameter does. The description is a sentence so should start with a capital letter and end with a full stop. It can span multiple lines (or even paragraphs) if necessary. All parameters must be documented.</p>
-<p>If two or more arguments are tightly coupled, you can document them in one place by separating the names with commas (no spaces). For example, to document both <code>x</code> and <code>y</code>, you can say <code>@param x,y Numeric vectors</code>.</p>
+<p>Use <code>@param name description</code> to describe each input to
+the function. The description should provide a succinct summary of
+parameter type (e.g. a string, a numeric vector), and if not obvious
+from the name, what the parameter does. The description is a sentence so
+should start with a capital letter and end with a full stop. It can span
+multiple lines (or even paragraphs) if necessary. All parameters must be
+documented.</p>
+<p>If two or more arguments are tightly coupled, you can document them
+in one place by separating the names with commas (no spaces). For
+example, to document both <code>x</code> and <code>y</code>, you can say
+<code>@param x,y Numeric vectors</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="outputs">Outputs<a class="anchor" aria-label="anchor" href="#outputs"></a>
 </h3>
-<p><code>@returns description</code> describes the output from the function. Briefly describe the type/shape of the output, not the details.</p>
-<p>All functions must have a documented return value for initial CRAN submission.</p>
+<p><code>@returns description</code> describes the output from the
+function. Briefly describe the type/shape of the output, not the
+details.</p>
+<p>All functions must have a documented return value for initial CRAN
+submission.</p>
 </div>
 <div class="section level3">
 <h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
-<p><code>@examples</code> provides executable R code showing how to use the function in practice. This is a very important part of the documentation because many people look at the examples before reading anything. Example code must work without errors as it is run automatically as part of <code>R CMD check</code>.</p>
-<p>For the purpose of illustration, it’s often useful to include code that causes an error. You can do this by wrapping the code in <code><a href="https://rdrr.io/r/base/try.html" class="external-link">try()</a></code> or using <code>\dontrun{}</code> to exclude from the executed example code.</p>
+<p><code>@examples</code> provides executable R code showing how to use
+the function in practice. This is a very important part of the
+documentation because many people look at the examples before reading
+anything. Example code must work without errors as it is run
+automatically as part of <code>R CMD check</code>.</p>
+<p>For the purpose of illustration, it’s often useful to include code
+that causes an error. You can do this by wrapping the code in
+<code><a href="https://rdrr.io/r/base/try.html" class="external-link">try()</a></code> or using <code>\dontrun{}</code> to exclude from the
+executed example code.</p>
 <p>For finer control, you can use <code>@examplesIf</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @examplesIf interactive()</span></span>
@@ -192,14 +246,26 @@
 gh_organizations(since = 42)
 \dontshow{\}) # examplesIf}
 }</code></pre>
-<p>This way, the code evaluating whether the example can be run is not shown to users reading the help, but it still prevents R CMD check failures.</p>
-<p>Instead of including examples directly in the documentation, you can put them in separate files and use <code>@example path/relative/to/package/root</code> to insert them into the documentation.</p>
-<p>All functions must have a documented return value for initial CRAN submission.</p>
+<p>This way, the code evaluating whether the example can be run is not
+shown to users reading the help, but it still prevents R CMD check
+failures.</p>
+<p>Instead of including examples directly in the documentation, you can
+put them in separate files and use
+<code>@example path/relative/to/package/root</code> to insert them into
+the documentation.</p>
+<p>All functions must have a documented return value for initial CRAN
+submission.</p>
 </div>
 <div class="section level3">
 <h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h3>
-<p>In most case, the function usage (which appears beneath the description in the generates docs) will be automatically derived from the function specification. For the cases where it is not, please <a href="https://github.com/r-lib/roxygen2/issues" class="external-link">file an issue</a> and use <code>@usage</code> to override the default with you want. If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use <code>@usage NULL</code>.</p>
+<p>In most case, the function usage (which appears beneath the
+description in the generates docs) will be automatically derived from
+the function specification. For the cases where it is not, please <a href="https://github.com/r-lib/roxygen2/issues" class="external-link">file an issue</a> and
+use <code>@usage</code> to override the default with you want. If you
+want to suppress the usage altogether (which is sometimes useful for
+internal or deprecated functions), you can use
+<code>@usage NULL</code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

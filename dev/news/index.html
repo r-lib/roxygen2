@@ -79,7 +79,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
 <ul><li>
-<code>@includeRmd</code> calls <code>local_reproducible_output()</code> to make code run in included <code>.Rmd</code>s more consistent with other sources (<a href="https://github.com/r-lib/roxygen2/issues/1431" class="external-link">#1431</a>).</li></ul></div>
+<code>@includeRmd</code> calls <code>local_reproducible_output()</code> to make code run in included <code>.Rmd</code>s more consistent with other sources (<a href="https://github.com/r-lib/roxygen2/issues/1431" class="external-link">#1431</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.2.1" id="roxygen2-721">roxygen2 7.2.1<a class="anchor" aria-label="anchor" href="#roxygen2-721"></a></h2><p class="text-muted">CRAN release: 2022-07-18</p>
 <div class="section level3">
@@ -188,7 +189,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.0.2" id="roxygen2-702">roxygen2 7.0.2<a class="anchor" aria-label="anchor" href="#roxygen2-702"></a></h2><p class="text-muted">CRAN release: 2019-12-02</p>
 <ul><li>
-<code>\example{}</code> escaping has been improved (again!) so that special escapes within strings are correctly escaped (<a href="https://github.com/r-lib/roxygen2/issues/990" class="external-link">#990</a>).</li></ul></div>
+<code>\example{}</code> escaping has been improved (again!) so that special escapes within strings are correctly escaped (<a href="https://github.com/r-lib/roxygen2/issues/990" class="external-link">#990</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.0.1" id="roxygen2-701">roxygen2 7.0.1<a class="anchor" aria-label="anchor" href="#roxygen2-701"></a></h2><p class="text-muted">CRAN release: 2019-11-22</p>
 <ul><li><p><code>@includeRmd</code> has now an optional second argument, the top level section the included file will go to. It defaults to the details section (<a href="https://github.com/r-lib/roxygen2/issues/970" class="external-link">#970</a>). Code chunks are now evaluated in a child of the global environment (<a href="https://github.com/r-lib/roxygen2/issues/972" class="external-link">#972</a>).</p></li>
@@ -267,7 +269,8 @@
 <span><span class="op">)</span></span></code></pre></div>
 <p>If you prefer the old behaviour you can put the following in your <code>DESCRIPTION</code>:</p>
 <pre><code><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>old_usage <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
-</li></ul></div>
+</li>
+</ul></div>
 <div class="section level4">
 <h4 id="code-loading-7-0-0">Code loading<a class="anchor" aria-label="anchor" href="#code-loading-7-0-0"></a></h4>
 <p>roxygen2 now provides three strategies for loading your code (<a href="https://github.com/r-lib/roxygen2/issues/822" class="external-link">#822</a>):</p>
@@ -399,7 +402,8 @@
 <h2 class="pkg-version" data-toc-text="6.0.0" id="roxygen2-600">roxygen2 6.0.0<a class="anchor" aria-label="anchor" href="#roxygen2-600"></a></h2><p class="text-muted">CRAN release: 2017-01-31</p>
 <div class="section level3">
 <h3 id="markdown-6-0-0">Markdown<a class="anchor" aria-label="anchor" href="#markdown-6-0-0"></a></h3>
-<ul><li>Most fields can now be written using Markdown markup instead of the traditional Rd language. You can turn on Markdown globally by adding <code>Roxygen: list(markdown = TRUE)</code> to <code>DESCRIPTION</code>. The <code>@md</code> / <code>@noMd</code> tags turn Markdown parsing on / off for the given block. See <code>vignette("markdown")</code> for more details (<a href="https://github.com/r-lib/roxygen2/issues/364" class="external-link">#364</a>, <a href="https://github.com/r-lib/roxygen2/issues/431" class="external-link">#431</a>, <a href="https://github.com/r-lib/roxygen2/issues/499" class="external-link">#499</a>, <a href="https://github.com/r-lib/roxygen2/issues/506" class="external-link">#506</a>, <a href="https://github.com/r-lib/roxygen2/issues/507" class="external-link">#507</a>), by <a href="https://github.com/gaborcsardi" class="external-link">@gaborcsardi</a></li></ul></div>
+<ul><li>Most fields can now be written using Markdown markup instead of the traditional Rd language. You can turn on Markdown globally by adding <code>Roxygen: list(markdown = TRUE)</code> to <code>DESCRIPTION</code>. The <code>@md</code> / <code>@noMd</code> tags turn Markdown parsing on / off for the given block. See <code>vignette("markdown")</code> for more details (<a href="https://github.com/r-lib/roxygen2/issues/364" class="external-link">#364</a>, <a href="https://github.com/r-lib/roxygen2/issues/431" class="external-link">#431</a>, <a href="https://github.com/r-lib/roxygen2/issues/499" class="external-link">#499</a>, <a href="https://github.com/r-lib/roxygen2/issues/506" class="external-link">#506</a>, <a href="https://github.com/r-lib/roxygen2/issues/507" class="external-link">#507</a>), by <a href="https://github.com/gaborcsardi" class="external-link">@gaborcsardi</a></li>
+</ul></div>
 <div class="section level3">
 <h3 id="improved-inheritance-6-0-0">Improved inheritance<a class="anchor" aria-label="anchor" href="#improved-inheritance-6-0-0"></a></h3>
 <ul><li>

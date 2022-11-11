@@ -121,7 +121,10 @@
 <div class="section level2">
 <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a>
 </h2>
-<p>Datasets are stored in <code>data/</code>, not as regular R objects in the package. This means you need to document them in a slightly different way: instead of documenting the data directly, you quote the dataset’s name.</p>
+<p>Datasets are stored in <code>data/</code>, not as regular R objects
+in the package. This means you need to document them in a slightly
+different way: instead of documenting the data directly, you quote the
+dataset’s name.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Prices of over 50,000 round cut diamonds</span></span>
 <span><span class="co">#'</span></span>
@@ -142,46 +145,86 @@
 <span><span class="co">#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}</span></span>
 <span><span class="co">#'   \item{table}{width of top of diamond relative to widest point (43--95)}</span></span>
 <span><span class="co">#' }</span></span></code></pre></div>
-<p>Note the use of two additional tags that are particularly useful for documenting data:</p>
+<p>Note the use of two additional tags that are particularly useful for
+documenting data:</p>
 <ul>
-<li><p><code>@format</code>, which gives an overview of the structure of the dataset. This should include a <strong>definition list</strong> that describes each variable. There’s currently no way to generate this with Markdown, so this is one of the few places you’ll need to Rd markup directly.</p></li>
-<li><p><code>@source</code> where you got the data form, often a URL.</p></li>
+<li><p><code>@format</code>, which gives an overview of the structure of
+the dataset. This should include a <strong>definition list</strong> that
+describes each variable. There’s currently no way to generate this with
+Markdown, so this is one of the few places you’ll need to Rd markup
+directly.</p></li>
+<li><p><code>@source</code> where you got the data form, often a
+URL.</p></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="packages">Packages<a class="anchor" aria-label="anchor" href="#packages"></a>
 </h2>
-<p>As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel <code>"_PACKAGE"</code>. This automatically include information parsed from the <code>DESCRIPTION</code>, including title, description, list of authors, and useful URLs.</p>
-<p>We recommend placing package documentation in <code>{pkgname}-package.R</code>, and have <code>@keywords internal</code>. Use <code>usethis::use_package_doc()</code> to set up automatically.</p>
+<p>As well as documenting every object inside the package, you can also
+document the package itself by documenting the special sentinel
+<code>"_PACKAGE"</code>. This automatically include information parsed
+from the <code>DESCRIPTION</code>, including title, description, list of
+authors, and useful URLs.</p>
+<p>We recommend placing package documentation in
+<code>{pkgname}-package.R</code>, and have
+<code>@keywords internal</code>. Use
+<code>usethis::use_package_doc()</code> to set up automatically.</p>
 <p>Here’s an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @keywords internal </span></span>
 <span><span class="st">"_PACKAGE"</span></span></code></pre></div>
-<p>Package documentation is a good place to put <code># Package options</code> that documents options used by the package.</p>
+<p>Package documentation is a good place to put
+<code># Package options</code> that documents options used by the
+package.</p>
 <p>Some notes:</p>
 <ul>
-<li><p>By default, aliases will be added so that both <code>?pkgname</code> and <code>package?pkgname</code> will find the package help. If there’s an existing function called <code>pkgname</code>, use <code>@aliases {pkgname}-package NULL</code> to override the default.</p></li>
-<li><p>Use <code>@references</code> to point to published material about the package that users might find helpful.</p></li>
+<li><p>By default, aliases will be added so that both
+<code>?pkgname</code> and <code>package?pkgname</code> will find the
+package help. If there’s an existing function called
+<code>pkgname</code>, use <code>@aliases {pkgname}-package NULL</code>
+to override the default.</p></li>
+<li><p>Use <code>@references</code> to point to published material about
+the package that users might find helpful.</p></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>
 </h2>
 <ul>
-<li><p>S3 <strong>generics</strong> are regular functions, so document them as such. If necessary, include a section that provides additional details for developers implementing methods.</p></li>
-<li><p>S3 <strong>classes</strong> have no formal definition, so document the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor" class="external-link">constructor</a>.</p></li>
+<li><p>S3 <strong>generics</strong> are regular functions, so document
+them as such. If necessary, include a section that provides additional
+details for developers implementing methods.</p></li>
+<li><p>S3 <strong>classes</strong> have no formal definition, so
+document the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor" class="external-link">constructor</a>.</p></li>
 <li>
-<p>It is your choice whether or not to document S3 <strong>methods</strong>. Generally, it’s not necessary to document straightforward methods for common generics like <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>. (You should, however, always <code>@export</code> S3 methods).</p>
-<p>If your method is more complicated, you should document it by setting <code>@rdname</code> or <code>@describeIn</code>. For complicated methods, you might document in their own file (i.e. <code>@rdname generic.class</code>; for simpler methods you might document with the generic (i.e. <code>@describeIn generic)</code>. Learn more about these tags in <code><a href="../articles/reuse.html">vignette("reuse")</a></code>.</p>
+<p>It is your choice whether or not to document S3
+<strong>methods</strong>. Generally, it’s not necessary to document
+straightforward methods for common generics like <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>.
+(You should, however, always <code>@export</code> S3 methods).</p>
+<p>If your method is more complicated, you should document it by setting
+<code>@rdname</code> or <code>@describeIn</code>. For complicated
+methods, you might document in their own file
+(i.e. <code>@rdname generic.class</code>; for simpler methods you might
+document with the generic (i.e. <code>@describeIn generic)</code>. Learn
+more about these tags in <code><a href="../articles/reuse.html">vignette("reuse")</a></code>.</p>
 </li>
-<li><p>Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use <code>@method</code> if there is ambiguity. For example, is <code>all.equal.data.frame()</code> the <code>equal.data.frame</code> method for <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code>, or the <code>data.frame</code> method for <code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal()</a></code>?. If this happens to you, disambiguate with (e.g.) <code>@method all.equal data.frame</code>.</p></li>
+<li><p>Generally, roxygen2 will automatically figure out the generic
+that the method belongs to, and you should only need to use
+<code>@method</code> if there is ambiguity. For example, is
+<code>all.equal.data.frame()</code> the <code>equal.data.frame</code>
+method for <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code>, or the <code>data.frame</code> method for
+<code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal()</a></code>?. If this happens to you, disambiguate with
+(e.g.) <code>@method all.equal data.frame</code>.</p></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
 </h2>
-<p>S4 <strong>generics</strong> are also functions, so document them as such.</p>
-<p>Document <strong>S4 classes</strong> by adding a roxygen block before <code>setClass()</code>. Use <code>@slot</code> to document the slots of the class. Here’s a simple example:</p>
+<p>S4 <strong>generics</strong> are also functions, so document them as
+such.</p>
+<p>Document <strong>S4 classes</strong> by adding a roxygen block before
+<code>setClass()</code>. Use <code>@slot</code> to document the slots of
+the class. Here’s a simple example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' An S4 class to represent a bank account</span></span>
 <span><span class="co">#'</span></span>
@@ -189,29 +232,55 @@
 <span><span class="va">Account</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"Account"</span>,</span>
 <span>  slots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>balance <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>S4 <strong>methods</strong> are a little more complicated. Unlike S3 methods, all S4 methods must be documented. You can document them in three places:</p>
+<p>S4 <strong>methods</strong> are a little more complicated. Unlike S3
+methods, all S4 methods must be documented. You can document them in
+three places:</p>
 <ul>
-<li><p>In the class. Most appropriate if the corresponding generic uses single dispatch and you created the class.</p></li>
-<li><p>In the generic. Most appropriate if the generic uses multiple dispatches and you control it.</p></li>
-<li><p>In its own file. Most appropriate if the method is complex. or the either two options don’t apply.</p></li>
+<li><p>In the class. Most appropriate if the corresponding generic uses
+single dispatch and you created the class.</p></li>
+<li><p>In the generic. Most appropriate if the generic uses multiple
+dispatches and you control it.</p></li>
+<li><p>In its own file. Most appropriate if the method is complex. or
+the either two options don’t apply.</p></li>
 </ul>
-<p>Use either <code>@rdname</code> or <code>@describeIn</code> to control where method documentation goes. See the next section for more details.</p>
+<p>Use either <code>@rdname</code> or <code>@describeIn</code> to
+control where method documentation goes. See the next section for more
+details.</p>
 </div>
 <div class="section level2">
 <h2 id="r6">R6<a class="anchor" aria-label="anchor" href="#r6"></a>
 </h2>
 <ul>
-<li><p>R6 methods can be documented in-line, i.e. the method’s documentation comments come right before the definition of the method.</p></li>
-<li><p>Method documentation can use the <code>@description</code>, <code>@details</code>, <code>@param</code>, <code>@return</code> and <code>@examples</code> tags. These are used to create a subsection for the method, within a separate ‘Methods’ section. All roxygen comment lines of a method documentation must appear after a tag.</p></li>
-<li><p><code>@param</code> tags that appear before the class definition are automatically inherited by all methods, if needed.</p></li>
-<li><p>R6 fields and active bindings can make use of the <code>@field</code> tag. Their documentation should also be in-line.</p></li>
-<li><p>roxygen2 checks that all public methods, public fields, active bindings and all method arguments are documented, and issues warnings otherwise.</p></li>
-<li><p>To turn off the special handling of R6 classes and go back to the roxygen2 6.x.x behavior, use the <code>r6 = FALSE</code> option in <code>DESCRIPTION</code>, in the <code>Roxygen</code> entry: <code>Roxygen: list(r6 = FALSE)</code>.</p></li>
+<li><p>R6 methods can be documented in-line, i.e. the method’s
+documentation comments come right before the definition of the
+method.</p></li>
+<li><p>Method documentation can use the <code>@description</code>,
+<code>@details</code>, <code>@param</code>, <code>@return</code> and
+<code>@examples</code> tags. These are used to create a subsection for
+the method, within a separate ‘Methods’ section. All roxygen comment
+lines of a method documentation must appear after a tag.</p></li>
+<li><p><code>@param</code> tags that appear before the class definition
+are automatically inherited by all methods, if needed.</p></li>
+<li><p>R6 fields and active bindings can make use of the
+<code>@field</code> tag. Their documentation should also be
+in-line.</p></li>
+<li><p>roxygen2 checks that all public methods, public fields, active
+bindings and all method arguments are documented, and issues warnings
+otherwise.</p></li>
+<li><p>To turn off the special handling of R6 classes and go back to the
+roxygen2 6.x.x behavior, use the <code>r6 = FALSE</code> option in
+<code>DESCRIPTION</code>, in the <code>Roxygen</code> entry:
+<code>Roxygen: list(r6 = FALSE)</code>.</p></li>
 </ul>
-<p>roxygen2 automatically generates additional sections for an R6 class:</p>
+<p>roxygen2 automatically generates additional sections for an R6
+class:</p>
 <ul>
-<li><p>A section with information about the superclass(es) of the class, with links. In HTML this includes a list of all inherited methods, with links.</p></li>
-<li><p>An ‘Examples’ section that contains all class and method examples. This section is run by <code>R CMD check</code>, so method examples must work without errors.</p></li>
+<li><p>A section with information about the superclass(es) of the class,
+with links. In HTML this includes a list of all inherited methods, with
+links.</p></li>
+<li><p>An ‘Examples’ section that contains all class and method
+examples. This section is run by <code>R CMD check</code>, so method
+examples must work without errors.</p></li>
 </ul>
 <p>An example from the R6 tutorial:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">

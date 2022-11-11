@@ -31,7 +31,7 @@ by inspecting/evaluating \code{call}.}
 
 \item{block}{A \code{roxy_block} to manipulate.}
 
-\item{tag, tags}{Either a single tag name, or a character vector of tag names.}
+\item{tag}{A single tag name.}
 }
 \description{
 A \code{roxy_block} represents a single roxygen2 block.

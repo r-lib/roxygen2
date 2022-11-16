@@ -103,10 +103,10 @@ same_contents <- function(path, contents) {
   }
   if (!file.exists(path)) return(FALSE)
 
-  text_hash <- digest::digest(contents, serialize = FALSE)
+  text_hash <- cli::hash_sha256(contents)
 
   path <- normalizePath(path, mustWork = TRUE)
-  file_hash <- digest::digest(file = path)
+  file_hash <- cli::hash_file_sha256(path)
 
   identical(text_hash, file_hash)
 }

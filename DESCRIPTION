@@ -24,7 +24,6 @@ Imports:
     cli (>= 3.3.0),
     commonmark,
     desc (>= 1.2.0),
-    digest,
     knitr,
     methods,
     pkgload (>= 1.0.2),

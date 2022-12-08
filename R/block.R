@@ -17,7 +17,7 @@
 #' @param object Optionally, the object associated with the block, found
 #'   by inspecting/evaluating `call`.
 #' @param block A `roxy_block` to manipulate.
-#' @param tag,tags Either a single tag name, or a character vector of tag names.
+#' @param tag A single tag name.
 #' @export
 #' @keywords internal
 #' @examples

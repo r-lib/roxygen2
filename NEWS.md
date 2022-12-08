@@ -4,6 +4,8 @@
   in the HTML manual. They can also be produced as the output of code
   chunks.
 
+* Improved support for RStudio IDE.
+
 # roxygen2 7.2.2
 
 * `@includeRmd` calls `local_reproducible_output()` to make code run in

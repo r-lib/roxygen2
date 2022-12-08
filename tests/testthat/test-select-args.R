@@ -1,10 +1,11 @@
 test_that("warns on invalid input", {
-  tag <- roxy_test_tag()
+  topic <- RoxyTopic$new()
+  topic$add(rd_section("name", "test"))
 
   expect_snapshot({
-    select_args_text(sum, "-xlab:", tag)
-    select_args_text(sum, '"a"', tag)
-    select_args_text(function(x, y, z) {}, "-x:z", tag)
+    select_args_text(sum, "-xlab:", topic)
+    select_args_text(sum, '"a"', topic)
+    select_args_text(function(x, y, z) {}, "-x:z", topic)
   })
 })
 

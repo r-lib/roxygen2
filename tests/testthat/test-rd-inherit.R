@@ -675,6 +675,23 @@ test_that("inheritDotParams does not add already-documented params", {
   expect_match(dot_param, "item{\\code{z}}{z description}", fixed = TRUE)
 })
 
+test_that("useful error for bad inherits", {
+  text <- "
+    #' Foo
+    #'
+    #' @param x x
+    #' @param y y
+    foo <- function(x, y) {}
+
+    #' Bar
+    #'
+    #' @inheritDotParams foo -z
+    bar <- function(...) {}
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
+})
+
+
 # inherit everything ------------------------------------------------------
 
 test_that("can inherit all from single function", {

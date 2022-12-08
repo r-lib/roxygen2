@@ -1,4 +1,4 @@
-# roxygen2 (development version)
+# roxygen2 7.2.3
 
 * roxygen2 now supports HTML blocks in markdown. They are only included
   in the HTML manual. They can also be produced as the output of code

@@ -16,6 +16,28 @@
     
     After
 
+# can insert block and inline html
+
+    Code
+      out$get_section("description")
+    Output
+      \description{
+      \if{html}{\out{
+      <p>This is a paragraph</p>
+      <p>This is another paragraph</p>
+      }}
+      } 
+
+---
+
+    Code
+      out$get_section("description")
+    Output
+      \description{
+      This is a paragraph containing a manually inserted image
+      before-\if{html}{\out{<img src='foo.png'>}}-after
+      } 
+
 # can convert table to Rd
 
     Code

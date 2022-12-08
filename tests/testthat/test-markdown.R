@@ -204,6 +204,28 @@ test_that("nested lists are OK", {
 })
 
 
+# html --------------------------------------------------------------------
+
+test_that("can insert block and inline html", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' <p>This is a paragraph</p>
+    #' <p>This is another paragraph</p>
+    #' @md
+    foo <- function() {}")[[1]]
+  expect_snapshot(out$get_section("description"))
+
+  out <- roc_proc_text(rd_roclet(), "
+    #' Title
+    #'
+    #' This is a paragraph containing a manually inserted image
+    #' before-<img src='foo.png'>-after
+    #' @md
+    foo <- function() {}")[[1]]
+  expect_snapshot(out$get_section("description"))
+})
+
 # tables ------------------------------------------------------------------
 
 

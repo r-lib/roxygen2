@@ -502,9 +502,6 @@ mdxml_html_block <- function(xml, state) {
 }
 
 mdxml_html_inline <- function(xml, state) {
-  if (state$tag$tag != "includeRmd") {
-    return(mdxml_unsupported(xml, state$tag, "inline HTML components"))
-  }
   paste0(
     "\\if{html}{\\out{",
     gsub("}", "\\}", xml_text(xml), fixed = TRUE),

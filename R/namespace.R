@@ -229,6 +229,14 @@ roxy_tag_parse.roxy_tag_importClassesFrom <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env, import_only = FALSE) {
+  pkg <- x$val[1L]
+  if (requireNamespace(pkg, quietly = TRUE)) {
+    importing <- x$val[-1L]
+    unknown_idx <- !importing %in% getNamespaceExports(pkg)
+    if (any(unknown_idx)) {
+      stop(sprintf("Unkown exports in @importFrom %s: [%s]", pkg, toString(importing[unknown_idx])))
+    }
+  }
   repeat_first("importClassesFrom", x$val)
 }
 

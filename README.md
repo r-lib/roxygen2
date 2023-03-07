@@ -11,12 +11,12 @@ The premise of roxygen2 is simple: describe your functions in comments next to t
 ## Installation 
 
 ```R
-# Install devtools from CRAN
+# Install roxygen2 from CRAN
 install.packages("roxygen2")
 
 # Or the development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("r-lib/roxygen2")
+# install.packages("pak")
+pak::pak("r-lib/roxygen2")
 ```
 
 ## Usage

@@ -6,7 +6,7 @@ object_from_call <- function(call, env, block, file) {
       parser_data(call, env, file)
     }
   } else if (is.call(call)) {
-    call <- call_standardise(call, env)
+    call <- call_match(call, eval(call[[1]], env))
     name <- deparse(call[[1]])
     switch(name,
       "=" = ,

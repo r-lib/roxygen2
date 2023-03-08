@@ -1,4 +1,4 @@
-# roxygen2 <img src="man/figures/logo.png" align="right" />
+# roxygen2 <a href="https://roxygen2.r-lib.org"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/roxygen2)](https://CRAN.R-project.org/package=roxygen2)
@@ -11,12 +11,12 @@ The premise of roxygen2 is simple: describe your functions in comments next to t
 ## Installation 
 
 ```R
-# Install devtools from CRAN
+# Install roxygen2 from CRAN
 install.packages("roxygen2")
 
 # Or the development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("r-lib/roxygen2")
+# install.packages("pak")
+pak::pak("r-lib/roxygen2")
 ```
 
 ## Usage

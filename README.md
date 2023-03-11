@@ -1,4 +1,4 @@
-# roxygen2 <a href="https://roxygen2.r-lib.org"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# roxygen2 <a href="https://roxygen2.r-lib.org"><img src="man/figures/logo.png" align="right" height="138" alt=""/></a>
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/roxygen2)](https://CRAN.R-project.org/package=roxygen2)

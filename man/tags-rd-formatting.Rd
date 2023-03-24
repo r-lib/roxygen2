@@ -12,7 +12,7 @@
 #' @section ${1:section title}:
 }
 \description{
-Learn full the details in in \code{vignette('rd-formatting')}.
+Learn the full details in \code{vignette('rd-formatting')}.
 
 Other less frequently used tags:
 \itemize{

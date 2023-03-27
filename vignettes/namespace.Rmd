@@ -93,7 +93,7 @@ my_function <- function(x, y) {
 
 If the repetition of the package name becomes annoying you can `@importFrom` and drop the `::`:
 
-```{r}
+```r
 #' @importFrom pkg fun 
 my_function <- function(x, y) {
   fun(x) * y

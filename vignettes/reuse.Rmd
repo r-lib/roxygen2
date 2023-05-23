@@ -37,7 +37,7 @@ Use it when all functions have the same (or very similar) arguments.
 
 ### `@describeIn`
 
-Use `@describeIn <destination> <description>` to document mutiple functions together.
+Use `@describeIn <destination> <description>` to document multiple functions together.
 It generates a new section named "**Related functions and methods**", further divided into subsections by the type of relationship between the source and the destination documentation.
 Each subsection contains a bulleted list describing the function with the specified `<description>`.
 

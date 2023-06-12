@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* Import directives are now ignored if they try to import from the
+  package being documented. This is useful to add self-dependencies in
+  standalone files meant to be used in other packages (r-lib/usethis#1853).
+
 # roxygen2 7.2.3
 
 * roxygen2 now supports HTML blocks in markdown. They are only included

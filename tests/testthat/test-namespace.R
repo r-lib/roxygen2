@@ -203,6 +203,23 @@ test_that("other namespace tags produce correct output", {
   )))
 })
 
+test_that("import directives for current package are ignored", {
+  local_options("roxygen2:::package" = "ignored")
+
+  out <- roc_proc_text(namespace_roclet(), "
+    #' @import ignored
+    #' @import test ignored test2
+    #' @importFrom ignored test1 test2
+    #' @importClassesFrom ignored test1 test2
+    #' @importMethodsFrom ignored test1 test2
+    NULL")
+
+  expect_equal(sort(out), sort(c(
+    "import(test)",
+    "import(test2)"
+  )))
+})
+
 test_that("poorly formed importFrom throws error", {
   expect_snapshot_warning(roc_proc_text(namespace_roclet(), "
     #' @importFrom test

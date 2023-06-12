@@ -1,4 +1,4 @@
-test_that("warn if forgotton colom", {
+test_that("warn if forgotten colon", {
   expect_snapshot_warning(
     roc_proc_text(rd_roclet(), "
       #' Foo

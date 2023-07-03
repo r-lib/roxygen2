@@ -102,7 +102,7 @@
 - name: examplesIf
   description: >
     Run examples only when `condition` is `TRUE`.
-  template: " ${1:condition}\n${1:# example code}\n"
+  template: " ${1:condition}\n${2:# example code}\n"
   vignette: rd
   recommend: true
 

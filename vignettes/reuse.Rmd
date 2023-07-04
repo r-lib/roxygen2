@@ -35,6 +35,27 @@ You can document multiple functions in the same file by using either `@rdname` o
 It's a technique best used with care: documenting too many functions in one place leads to confusion.
 Use it when all functions have the same (or very similar) arguments.
 
+### `@rdname`
+
+Use `@rdname <destination>` to include multiple functions in the same page.
+The functions will be collected and share the same `@title`, `@description`, `@examples`, etc.
+
+```{r}
+#' Trigonometric approximations
+#' @param x Input, in radians.
+#' @name trig
+NULL
+
+#' @rdname trig
+sin_ish <- function(x) x - x^3 / 6
+
+#' @rdname trig
+cos_ish <- function(x) 1 - x^2 / 2
+
+#' @rdname trig
+tan_ish <- function(x) x + x^3 / 3
+```
+
 ### `@describeIn`
 
 Use `@describeIn <destination> <description>` to document mutiple functions together.

@@ -301,7 +301,7 @@ role_lookup <- c(
   "rpc" = "radio producer",
   "rce" = "recording engineer",
   "rcd" = "recordist",
-  "red" = "redaktor",
+  "red" = "redactor",
   "ren" = "renderer",
   "rpt" = "reporter",
   "rps" = "repository",

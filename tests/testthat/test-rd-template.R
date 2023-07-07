@@ -6,7 +6,7 @@ test_that("can find template from name", {
     file.path(base, "man-roxygen", "UCase.R")
   )
 
-  # On case-insentive file systems, will find upper case version first
+  # On case-insensitive file systems, will find upper case version first
   expect_equal(
     tolower(template_find(base, "lcase")),
     tolower(file.path(base, "man-roxygen", "lcase.r"))

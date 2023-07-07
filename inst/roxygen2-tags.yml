@@ -218,7 +218,7 @@
   description: >
     Automatically generate documentation for `...` when you're passing dots
     along to another function.
-  template: ' ${1:source} ${2:arg1 arg2 arg3}'
+  template: ' ${1:source}'
   vignette: reuse
   recommend: true
 
@@ -226,7 +226,7 @@
   description: >
     Inherit argument documentation from another function. Only inherits
     documentation for arguments that aren't already documented locally.
-  template: ' ${1:source}'
+  template: ' ${1:source} ${2:arg1 arg2 arg3}'
   vignette: reuse
   recommend: true
 

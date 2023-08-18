@@ -39,6 +39,16 @@
       }}
     } 
 
+# useful error for bad inherits
+
+    Code
+      . <- roc_proc_text(rd_roclet(), text)
+    Condition
+      Warning:
+      @inheritDotsParam failed in topic "bar".
+      Caused by error in `FUN()`:
+      ! object 'z' not found
+
 # useful warnings if can't find topics
 
     Code

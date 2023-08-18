@@ -126,7 +126,7 @@ usage_args <- function(args) {
 
     text
   }
-  map_chr(args, arg_to_text)
+  map_chr(as.list(args), arg_to_text)
 }
 
 args_string <- function(x, space = " ") {

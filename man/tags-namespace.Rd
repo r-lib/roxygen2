@@ -16,18 +16,18 @@
 \alias{@useDynLib}
 \title{Tags for managing the \code{NAMESPACE}}
 \usage{
-#' @evalNamespace {r-code}
+#' @evalNamespace ${1:r-code}
 #' @export
-#' @exportClass {class}
-#' @exportMethod {generic}
-#' @exportPattern {pattern}
-#' @exportS3Method pkg::generic
-#' @import {package}
-#' @importClassesFrom {package} {class}
-#' @importFrom {package} {function}
-#' @importMethodsFrom {package} {generic}
-#' @rawNamespace {namespace directives}
-#' @useDynLib {package}
+#' @exportClass ${1:class}
+#' @exportMethod ${1:generic}
+#' @exportPattern ${1:pattern}
+#' @exportS3Method ${1:package}::${2:generic}
+#' @import ${1:package}
+#' @importClassesFrom ${1:package} ${2:class}
+#' @importFrom ${1:package} ${2:function}
+#' @importMethodsFrom ${1:package} ${2:generic}
+#' @rawNamespace ${1:namespace directives}
+#' @useDynLib ${1:package}
 }
 \description{
 Learn full the details in in \code{vignette('namespace')}.
@@ -35,20 +35,20 @@ Learn full the details in in \code{vignette('namespace')}.
 Key tags:
 \itemize{
 \item \verb{@export}: Export this function, method, generic, or class so it's available outside of the package.
-\item \verb{@exportS3Method pkg::generic}: Export an S3 method. Only needed when the method is for a generic from a suggested package.
-\item \verb{@importFrom \{package\} \{function\}}: Import specific functions from a package.
-\item \verb{@useDynLib \{package\}}: Import compiled code from another package.
+\item \verb{@exportS3Method $\{1:package\}::$\{2:generic\}}: Export an S3 method. Only needed when the method is for a generic from a suggested package.
+\item \verb{@importFrom $\{1:package\} $\{2:function\}}: Import specific functions from a package.
+\item \verb{@useDynLib $\{1:package\}}: Import compiled code from another package.
 }
 
 Other less frequently used tags:
 \itemize{
-\item \verb{@evalNamespace \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results into the \code{NAMESPACE}. Should return a character vector of directives.
-\item \verb{@exportClass \{class\}}: Export an S4 class. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
-\item \verb{@exportMethod \{generic\}}: Export S4 methods. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
-\item \verb{@exportPattern \{pattern\}}: Export all objects matching a regular expression.
-\item \verb{@import \{package\}}: Import all functions from a package. Use with extreme care.
-\item \verb{@importClassesFrom \{package\} \{class\}}: Import S4 classes from another package.
-\item \verb{@importMethodsFrom \{package\} \{generic\}}: Import S4 methods from a package.
-\item \verb{@rawNamespace \{namespace directives\}}: Insert literal text directly into the \code{NAMESPACE}.
+\item \verb{@evalNamespace $\{1:r-code\}}: Evaluate arbitrary code in the package namespace and insert the results into the \code{NAMESPACE}. Should return a character vector of directives.
+\item \verb{@exportClass $\{1:class\}}: Export an S4 class. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
+\item \verb{@exportMethod $\{1:generic\}}: Export S4 methods. For expert use only; in most cases you should use \verb{@export} so roxygen2 can automatically generate the correct directive.
+\item \verb{@exportPattern $\{1:pattern\}}: Export all objects matching a regular expression.
+\item \verb{@import $\{1:package\}}: Import all functions from a package. Use with extreme care.
+\item \verb{@importClassesFrom $\{1:package\} $\{2:class\}}: Import S4 classes from another package.
+\item \verb{@importMethodsFrom $\{1:package\} $\{2:generic\}}: Import S4 methods from a package.
+\item \verb{@rawNamespace $\{1:namespace directives\}}: Insert literal text directly into the \code{NAMESPACE}.
 }
 }

@@ -1,13 +1,13 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 7.2.1.9000
+Version: 7.2.3.9000
 Authors@R: c(
-    person("Hadley", "Wickham", , "hadley@rstudio.com", role = c("aut", "cre", "cph"),
+    person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-4757-117X")),
     person("Peter", "Danenberg", , "pcd@roxygen.org", role = c("aut", "cph")),
     person("Gábor", "Csárdi", , "csardi.gabor@gmail.com", role = "aut"),
     person("Manuel", "Eugster", role = c("aut", "cph")),
-    person("RStudio", role = c("cph", "fnd"))
+    person("Posit Software, PBC", role = c("cph", "fnd"))
   )
 Description: Generate your Rd documentation, 'NAMESPACE' file, and
     collation field using specially formatted comments. Writing
@@ -24,13 +24,12 @@ Imports:
     cli (>= 3.3.0),
     commonmark,
     desc (>= 1.2.0),
-    digest,
     knitr,
     methods,
     pkgload (>= 1.0.2),
-    purrr (>= 0.3.3),
+    purrr (>= 1.0.0),
     R6 (>= 2.1.2),
-    rlang (>= 1.0.0),
+    rlang (>= 1.0.6),
     stringi,
     stringr (>= 1.0.0),
     utils,
@@ -40,7 +39,7 @@ Suggests:
     covr,
     R.methodsS3,
     R.oo,
-    rmarkdown,
+    rmarkdown (>= 2.16),
     testthat (>= 3.1.2),
     yaml
 LinkingTo: 
@@ -52,5 +51,5 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE, load = "installed")
-RoxygenNote: 7.2.0.9000
+RoxygenNote: 7.2.2.9000
 SystemRequirements: C++11

@@ -16,40 +16,41 @@
 \alias{@templateVar}
 \title{Tags that help you reuse documentation}
 \usage{
-#' @describeIn {destination} {description}
-#' @eval {r-code}
-#' @evalRd {r-code}
-#' @includeRmd {path}
-#' @inherit {source} {components}
-#' @inheritDotParams {source} {arg1 arg2 arg3}
-#' @inheritParams {source}
-#' @inheritSection {source} {section name}
-#' @order {number}
-#' @rdname {topic-name}
-#' @template {path-to-template}
-#' @templateVar {name} {value}
+#' @describeIn ${1:destination} ${2:description}
+#' @eval ${1:r-code}
+#' @evalRd ${1:r-code}
+#' @includeRmd man/rmd/${1:filename}.Rmd
+#' @inherit ${1:source} ${2:components}
+#' @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}
+#' @inheritParams ${1:source}
+#' @inheritSection ${1:source} ${2:section name}
+#' @order ${1:number}
+#' @rdname ${1:topic-name}
+#' @template ${1:path-to-template}
+#' @templateVar ${1:name} ${2:value}
 }
 \description{
 Learn full the details in in \code{vignette('reuse')}.
 
 Key tags:
 \itemize{
-\item \verb{@describeIn \{destination\} \{description\}}: Document a function or method in the \code{destination} topic.
-\item \verb{@inherit \{source\} \{components\}}: Inherit one or more documentation components from another topic. If \code{components} is omitted, all supported components will be inherited. Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, and \code{note}.
-\item \verb{@inheritDotParams \{source\} \{arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function.
-\item \verb{@inheritParams \{source\}}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
-\item \verb{@inheritSection \{source\} \{section name\}}: Inherit a specific named section from another topic.
-\item \verb{@order \{number\}}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
-\item \verb{@rdname \{topic-name\}}: Override the file name of generated \code{.Rd} file. Can be used to combine multiple blocks into a single documentation topic.
+\item \verb{@describeIn $\{1:destination\} $\{2:description\}}: Document a function or method in the \code{destination} topic.
+\item \verb{@inherit $\{1:source\} $\{2:components\}}: Inherit one or more documentation components from another topic. If \code{components} is omitted, all supported components will be inherited.
+Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, and \code{note}.
+\item \verb{@inheritDotParams $\{1:source\} $\{2:arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function.
+\item \verb{@inheritParams $\{1:source\}}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
+\item \verb{@inheritSection $\{1:source\} $\{2:section name\}}: Inherit a specific named section from another topic.
+\item \verb{@order $\{1:number\}}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
+\item \verb{@rdname $\{1:topic-name\}}: Override the file name of generated \code{.Rd} file. Can be used to combine multiple blocks into a single documentation topic.
 }
 
 Other less frequently used tags:
 \itemize{
-\item \verb{@eval \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back into the block. Should return a character vector of lines.
-\item \verb{@evalRd \{r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back as into the block. Should return a character vector of lines.
-\item \verb{@includeRmd \{path\}}: Insert the contents of an \code{.Rmd} into the current block. Superseded in favour of using a code chunk with a child document.
-\item \verb{@template \{path-to-template\}}: Use a roxygen2 template. Now superseded in favour of inline R code.
-\item \verb{@templateVar \{name\} \{value\}}: Define variables for use in a roxygen2 template.
+\item \verb{@eval $\{1:r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back into the block. Should return a character vector of lines.
+\item \verb{@evalRd $\{1:r-code\}}: Evaluate arbitrary code in the package namespace and insert the results back as into the block. Should return a character vector of lines.
+\item \verb{@includeRmd man/rmd/$\{1:filename\}.Rmd}: Insert the contents of an \code{.Rmd} into the current block. Superseded in favour of using a code chunk with a child document.
+\item \verb{@template $\{1:path-to-template\}}: Use a roxygen2 template. Now superseded in favour of inline R code.
+\item \verb{@templateVar $\{1:name\} $\{2:value\}}: Define variables for use in a roxygen2 template.
 }
 }
 \seealso{

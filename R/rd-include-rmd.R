@@ -10,7 +10,7 @@ roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
 
 #' @export
 roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
-  rmd <- x$val$path
+  rmd <- rel_rmd <- x$val$path
   section <- x$val$section
 
   if (!file.exists(rmd)) {
@@ -49,6 +49,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   )
   cat(txt, file = rmd_path)
 
+  local_reproducible_output()
   tryCatch(
     rmarkdown::render(
       rmd_path,
@@ -62,7 +63,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
       envir = new_environment(parent = global_env())
     ),
     error = function(e) {
-      warn_roxy_tag(x, "failed to evaluate Rmd", parent = e)
+      warn_roxy_tag(x, "failed to evaluate {.path {rel_rmd}}", parent = e)
     }
   )
 
@@ -70,7 +71,13 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
     return(NULL)
   }
 
-  value <- rmd_eval_rd(md_path, x)
+  tryCatch(
+    value <- rmd_eval_rd(md_path, x),
+    error =  function(e) {
+      warn_roxy_tag(x, "failed to process result of {.path {rel_rmd}}", parent = e)
+    }
+  )
+
   rd_section_markdown(section, value)
 }
 

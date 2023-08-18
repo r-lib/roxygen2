@@ -7,7 +7,10 @@ select_args_text <- function(fun, select = "", topic) {
       select_args(fun, parsed)
     },
     error = function(e) {
-      warn_roxy_tag(topic, "failed to parse argument specification", parent = e)
+      cli::cli_warn(
+        "@inheritDotsParam failed in topic {.str {topic$get_name()}}.",
+        parent = e
+      )
       character()
     }
   )

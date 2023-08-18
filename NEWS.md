@@ -1,5 +1,20 @@
 # roxygen2 (development version)
 
+# roxygen2 7.2.3
+
+* roxygen2 now supports HTML blocks in markdown. They are only included
+  in the HTML manual. They can also be produced as the output of code
+  chunks.
+
+* Improved support for RStudio IDE.
+
+# roxygen2 7.2.2
+
+* `@includeRmd` calls `local_reproducible_output()` to make code run in
+  included `.Rmd`s more consistent with other sources (#1431).
+
+* Fix duplicated argument in `roxy_block()` to avoid CRAN removal.
+
 # roxygen2 7.2.1
 
 ## Tags

@@ -32,7 +32,9 @@ test_that("can convert quote percentage signs in urls", {
   )
 
   expect_equal(
-    package_seealso_urls(BugReports = "https://www.foo.bar/search?q=bug%20report"),
+    package_seealso_urls(
+      BugReports = "https://www.foo.bar/search?q=bug%20report"
+    ),
     "Report bugs at \\url{https://www.foo.bar/search?q=bug\\%20report}"
   )
 })

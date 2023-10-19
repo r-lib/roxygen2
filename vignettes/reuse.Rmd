@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
--   Combine documentation for closely related functions into a single file with `@describe` in or `@rdname`.
+-   Combine documentation for closely related functions into a single file with `@describeIn` or `@rdname`.
 
 -   Inherit components from another topic with `@inheritParams`, `@inheritSection`, or `@inherit`.
 

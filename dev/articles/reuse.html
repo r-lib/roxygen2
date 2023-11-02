@@ -123,7 +123,7 @@ documentation, while assembling information from multiple places in one
 documentation file:</p>
 <ul>
 <li><p>Combine documentation for closely related functions into a single
-file with <code>@describe</code> in or <code>@rdname</code>.</p></li>
+file with <code>@describeIn</code> or <code>@rdname</code>.</p></li>
 <li><p>Inherit components from another topic with
 <code>@inheritParams</code>, <code>@inheritSection</code>, or
 <code>@inherit</code>.</p></li>
@@ -148,9 +148,9 @@ arguments.</p>
 <code>@describeIn</code><a class="anchor" aria-label="anchor" href="#describein"></a>
 </h3>
 <p>Use <code>@describeIn &lt;destination&gt; &lt;description&gt;</code>
-to document mutiple functions together. It generates a new section named
-“<strong>Related functions and methods</strong>”, further divided into
-subsections by the type of relationship between the source and the
+to document multiple functions together. It generates a new section
+named “<strong>Related functions and methods</strong>”, further divided
+into subsections by the type of relationship between the source and the
 destination documentation. Each subsection contains a bulleted list
 describing the function with the specified
 <code>&lt;description&gt;</code>.</p>
@@ -303,7 +303,7 @@ that you’re documenting so you can call internal functions.</p>
 <h2 id="child-documents">Child documents<a class="anchor" aria-label="anchor" href="#child-documents"></a>
 </h2>
 <p>You can use the same <code>.Rmd</code> or <code>.md</code> document
-in the documentation, <code>README.Rmd</code>, and vignettes but using
+in the documentation, <code>README.Rmd</code>, and vignettes by using
 child documents:</p>
 <pre><code>```{r child = "common.Rmd"}
 ```</code></pre>

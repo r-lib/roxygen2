@@ -168,6 +168,7 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
 # R.oo / R.methodsS3 ------------------------------------------------------
 
 test_that("can define constructor with R.oo", {
+  skip_if_not_installed("R.oo")
   obj <- call_to_object({
     R.oo::setConstructorS3("Foo", function(x, y, z) {})
   })
@@ -176,6 +177,7 @@ test_that("can define constructor with R.oo", {
 })
 
 test_that("can define method for R.methodsS3", {
+  skip_if_not_installed("R.methodsS3")
   obj <- call_to_object({
     R.methodsS3::setMethodS3("foo", "default", function(x, ...) {})
   })

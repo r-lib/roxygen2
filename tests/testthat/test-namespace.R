@@ -361,3 +361,20 @@ test_that("can extract non-imports from namespace preserving source", {
   path <- withr::local_tempfile(lines = lines)
   expect_equal(namespace_exports(path), lines[c(1:3, 5)])
 })
+
+test_that("Invalid imports throw a helpful error", {
+  expect_snapshot(
+    roc_proc_text(namespace_roclet(), "
+      #' @importFrom utils InvalidUtilsFunction
+    "),
+    error = TRUE
+  )
+
+  # pluralization
+  expect_snapshot(
+    roc_proc_text(namespace_roclet(), "
+      #' @importFrom utils InvalidUtilsFunction1 InvalidUtilsFunction2
+    "),
+    error = TRUE
+  )
+})

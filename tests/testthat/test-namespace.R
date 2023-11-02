@@ -380,6 +380,7 @@ test_that("Invalid imports throw a helpful error", {
     error = TRUE
   )
 
+  # If the package is not available at roxygenize() run time, nothing we can do
   expect_equal(
     roc_proc_text(namespace_roclet(), "
       #' @importFrom AnUnknownUnavailablePackage Unchecked

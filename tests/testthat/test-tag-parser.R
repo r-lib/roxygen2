@@ -39,7 +39,7 @@ test_that("tags check for mismatched parents gives useful warnings", {
 
 test_that("tag_inhert checks for valid inherits", {
   expect_snapshot({
-    tag <- roxy_test_tag("foo params sction")
+    tag <- roxy_test_tag("foo params section")
     . <- tag_inherit(tag)
   })
 })

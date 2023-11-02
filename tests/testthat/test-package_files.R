@@ -1,7 +1,7 @@
 test_that("respects order in Collate (#790)", {
   expect_equal(
     package_files('testCollateParse'),
-    normalizePath(c("testCollateParse/R/b.r", "testCollateParse/R/c.r"))
+    normalizePath(c("testCollateParse/R/b.R", "testCollateParse/R/c.R"))
   )
 })
 

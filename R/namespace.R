@@ -334,7 +334,7 @@ namespace_exports <- function(path) {
     return(character())
   }
 
-  parsed <- parse(path, keep.source = TRUE)
+  parsed <- as.list(parse(path, keep.source = TRUE))
   is_import <- function(x) is_call(x, c("import", "importFrom", "importClassesFrom", "importMethodsFrom", "useDynLib"))
   export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import)]
   unlist(lapply(export_lines, as.character))

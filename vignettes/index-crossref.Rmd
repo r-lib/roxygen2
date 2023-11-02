@@ -37,7 +37,7 @@ A function can be a member of multiple families.
 
 By default `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper").
 
-If you want to override default title, you can provide an `rd_family_title` element in a list stored in `man/roxygen/meta.R`:
+If you want to override the default title, you can provide an `rd_family_title` element in a list stored in `man/roxygen/meta.R`:
 
 ```{r, eval = FALSE}
 list(

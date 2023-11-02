@@ -302,7 +302,7 @@ Either avoid expensive computations, or turn on knitr caching with `cache = TRUE
 Make sure to omit the cache from the package with `usethis::use_build_ignore()`.
 
 Note that knitr will call the appropriate `print()` or (if available) `knitr::knit_print()` method on the result.
-This may geenrate markdown not supported by roxygen2.
+This may generate markdown not supported by roxygen2.
 If needed, override the automatic methods to have your R calls return your own markdown as a character vector, wrapped in `knitr::asis_output()`.
 
 ### Chunk options

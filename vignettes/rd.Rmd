@@ -80,7 +80,7 @@ This is unnecessary unless you want to have a multi-paragraph description, bulle
 
 ## Functions
 
-Functions are the mostly commonly documented objects.
+Functions are the most commonly documented objects.
 Functions require three tags: `@param`, `@returns`, and `@examples`.
 
 ### Inputs
@@ -129,10 +129,10 @@ This way, the code evaluating whether the example can be run is not shown to use
 
 Instead of including examples directly in the documentation, you can put them in separate files and use `@example path/relative/to/package/root` to insert them into the documentation.
 
-All functions must have a documented return value for initial CRAN submission.
+All functions must have examples for initial CRAN submission.
 
 ### Usage
 
 In most case, the function usage (which appears beneath the description in the generates docs) will be automatically derived from the function specification.
-For the cases where it is not, please [file an issue](https://github.com/r-lib/roxygen2/issues) and use `@usage` to override the default with you want.
+For the cases where it is not, please [file an issue](https://github.com/r-lib/roxygen2/issues) and use `@usage` to override the default with what you want.
 If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use `@usage NULL`.

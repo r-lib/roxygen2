@@ -34,7 +34,7 @@
 #' @usage ${1:fun}(${2:arg1, arg2 = default, ...})
 }
 \description{
-Learn full the details in in \code{vignette('rd')}.
+Learn the full details in \code{vignette('rd')}.
 
 Key tags:
 \itemize{

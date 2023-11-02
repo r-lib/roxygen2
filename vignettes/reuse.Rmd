@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
--   Combine documentation for closely related functions into a single file with `@describe` in or `@rdname`.
+-   Combine documentation for closely related functions into a single file with `@describeIn` or `@rdname`.
 
 -   Inherit components from another topic with `@inheritParams`, `@inheritSection`, or `@inherit`.
 
@@ -58,7 +58,7 @@ tan_ish <- function(x) x + x^3 / 3
 
 ### `@describeIn`
 
-Use `@describeIn <destination> <description>` to document mutiple functions together.
+Use `@describeIn <destination> <description>` to document multiple functions together.
 It generates a new section named "**Related functions and methods**", further divided into subsections by the type of relationship between the source and the destination documentation.
 Each subsection contains a bulleted list describing the function with the specified `<description>`.
 
@@ -191,7 +191,7 @@ Note that the evaluation environment is deliberately a child of the package that
 
 ## Child documents
 
-You can use the same `.Rmd` or `.md` document in the documentation, `README.Rmd`, and vignettes but using child documents:
+You can use the same `.Rmd` or `.md` document in the documentation, `README.Rmd`, and vignettes by using child documents:
 
     ```{r child = "common.Rmd"}`r ''`
     ```

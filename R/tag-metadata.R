@@ -45,7 +45,7 @@ tags_rd <- function(type) {
     "@aliases",
     tags_rd_section(tags, "aliases"),
     "@description",
-    paste0("Learn full the details in in `vignette('", type, "')`."),
+    paste0("Learn the full details in `vignette('", type, "')`."),
     "",
     if (any(tags$recommend)) c(
       "Key tags:",

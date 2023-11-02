@@ -16,7 +16,7 @@
 #' @source ${1:description}
 }
 \description{
-Learn full the details in in \code{vignette('rd-other')}.
+Learn the full details in \code{vignette('rd-other')}.
 
 Key tags:
 \itemize{

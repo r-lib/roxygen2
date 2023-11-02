@@ -366,6 +366,7 @@ test_that("Invalid imports throw a helpful error", {
   expect_snapshot(
     roc_proc_text(namespace_roclet(), "
       #' @importFrom utils InvalidUtilsFunction
+      NULL
     "),
     error = TRUE
   )
@@ -374,7 +375,16 @@ test_that("Invalid imports throw a helpful error", {
   expect_snapshot(
     roc_proc_text(namespace_roclet(), "
       #' @importFrom utils InvalidUtilsFunction1 InvalidUtilsFunction2
+      NULL
     "),
     error = TRUE
+  )
+
+  expect_equal(
+    roc_proc_text(namespace_roclet(), "
+      #' @importFrom AnUnknownUnavailablePackage Unchecked
+      NULL
+    "),
+    "importFrom(AnUknownUnavailablePackage,Unchecked)"
   )
 })

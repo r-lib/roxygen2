@@ -102,7 +102,7 @@
 - name: examplesIf
   description: >
     Run examples only when `condition` is `TRUE`.
-  template: " ${1:condition}\n${1:# example code}\n"
+  template: " ${1:condition}\n${2:# example code}\n"
   vignette: rd
   recommend: true
 
@@ -240,7 +240,7 @@
 - name: keywords
   description: >
     Add a standardised keyword, indexed by `help.search()`. These are generally
-    not useful apart from `@keyword internal` which flags the topic as internal
+    not useful apart from `@keywords internal` which flags the topic as internal
     and removes from topic indexes.
   template: ' ${1:keyword}'
   vignette: index-crossref

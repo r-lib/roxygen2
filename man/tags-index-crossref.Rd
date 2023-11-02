@@ -20,7 +20,7 @@
 #' @seealso [${1:func}()]
 }
 \description{
-Learn full the details in in \code{vignette('index-crossref')}.
+Learn the full details in \code{vignette('index-crossref')}.
 
 Key tags:
 \itemize{

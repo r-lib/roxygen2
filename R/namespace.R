@@ -234,7 +234,7 @@ roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env, import_only = 
     importing <- x$val[-1L]
     unknown_idx <- !importing %in% getNamespaceExports(pkg)
     if (any(unknown_idx)) {
-      stop(sprintf("Unkown exports in @importFrom %s: [%s]", pkg, toString(importing[unknown_idx])))
+      cli::cli_abort("Unknown {cli::qty(sum(unknown_idx))} export{?s} in {.code @importFrom {pkg}}: {.code {importing[unknown_idx]}}")
     }
   }
   repeat_first("importClassesFrom", x$val)

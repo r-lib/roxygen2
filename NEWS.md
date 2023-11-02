@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* A friendlier error is thrown when attempting to import non-existing
+  functions with `@importFrom` (#1409, @MichaelChirico).
+
 # roxygen2 7.2.3
 
 * roxygen2 now supports HTML blocks in markdown. They are only included

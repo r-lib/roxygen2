@@ -42,7 +42,7 @@ roxygen2 issues can be tricky to create a minimal reprex for. There are two gene
     problem goes away. Once you've done that, sometimes you'll be able to 
     reduce the problem further to a call to `roc_proc_text()` as above. If not,
     you'll need to make your minimal package available somewhere on the internet
-    (preferrably github) and link to it in the issue. The more you can do to
+    (preferably github) and link to it in the issue. The more you can do to
     make the package as small as possible, the less time it'll take me to
     find the bug, and the more time I'll have to work on it.
 

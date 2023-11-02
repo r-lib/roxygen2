@@ -1,2 +1,2 @@
-#' @include b.r
+#' @include b.R
 a <- 1

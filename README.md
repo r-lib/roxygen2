@@ -1,8 +1,8 @@
-# roxygen2 <img src="man/figures/logo.png" align="right" />
+# roxygen2 <a href="https://roxygen2.r-lib.org"><img src="man/figures/logo.png" align="right" height="138" alt="roxygen2 website" /></a>
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/roxygen2)](https://CRAN.R-project.org/package=roxygen2)
-[![R-CMD-check](https://github.com/r-lib/roxygen2/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/roxygen2/actions)
+[![R-CMD-check](https://github.com/r-lib/roxygen2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/roxygen2/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/r-lib/roxygen2/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/roxygen2?branch=main)
 <!-- badges: end -->
 
@@ -11,12 +11,12 @@ The premise of roxygen2 is simple: describe your functions in comments next to t
 ## Installation 
 
 ```R
-# Install devtools from CRAN
+# Install roxygen2 from CRAN
 install.packages("roxygen2")
 
 # Or the development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("r-lib/roxygen2")
+# install.packages("pak")
+pak::pak("r-lib/roxygen2")
 ```
 
 ## Usage

@@ -367,8 +367,7 @@ test_that("Invalid imports throw a helpful error", {
     roc_proc_text(namespace_roclet(), "
       #' @importFrom utils InvalidUtilsFunction
       NULL
-    "),
-    error = TRUE
+    ")
   )
 
   # pluralization
@@ -376,8 +375,7 @@ test_that("Invalid imports throw a helpful error", {
     roc_proc_text(namespace_roclet(), "
       #' @importFrom utils InvalidUtilsFunction1 InvalidUtilsFunction2
       NULL
-    "),
-    error = TRUE
+    ")
   )
 
   # If the package is not available at roxygenize() run time, nothing we can do
@@ -386,6 +384,6 @@ test_that("Invalid imports throw a helpful error", {
       #' @importFrom AnUnknownUnavailablePackage Unchecked
       NULL
     "),
-    "importFrom(AnUknownUnavailablePackage,Unchecked)"
+    "importFrom(AnUnknownUnavailablePackage,Unchecked)"
   )
 })

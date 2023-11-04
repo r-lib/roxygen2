@@ -16,7 +16,7 @@ expect_parse_failure <- function(code)  {
   (expect_warning(expect_null(code)))
 }
 
-local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {
+local_package_copy <- function(path, env = rlang::caller_env(), set_version = TRUE) {
   temp_path <- withr::local_tempdir(.local_envir = env)
 
   file.copy(path, temp_path, recursive = TRUE)

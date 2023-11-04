@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* authors in `DESCRIPTION` can now have multiple email addresses (@jmbarbone, #1487).
+
 # roxygen2 7.2.3
 
 * roxygen2 now supports HTML blocks in markdown. They are only included

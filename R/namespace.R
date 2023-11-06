@@ -326,7 +326,7 @@ repeat_first <- function(name, x) {
 }
 
 one_per_line_ignore_current <- function(name, x) {
-  current <- getOption("roxygen2:::package")
+  current <- peek_roxygen_pkg()
 
   # Ignore any occurrence of `current` inside `x`
   if (is_string(current)) {
@@ -336,7 +336,7 @@ one_per_line_ignore_current <- function(name, x) {
   one_per_line(name, x)
 }
 repeat_first_ignore_current <- function(name, x) {
-  current <- getOption("roxygen2:::package")
+  current <- peek_roxygen_pkg()
 
   # Ignore the whole command if "first" is `current`
   if (is_string(current) && length(x) && x[[1]] == current) {

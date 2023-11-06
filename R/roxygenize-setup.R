@@ -25,12 +25,22 @@ roxygen_setup <- function(path = ".",
   man_path <- file.path(path, "man")
   dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
 
-  local_options(
-    "roxygen2:::package" = desc::desc_get("Package", path),
-    .frame = frame
+  withr::local_envvar(
+    ROXYGEN_PKG = desc::desc_get("Package", path),
+    .local_envir = frame
   )
 
   is_first
+}
+
+peek_roxygen_pkg <- function() {
+  pkg <- Sys.getenv("ROXYGEN_PKG")
+
+  if (nzchar(pkg)) {
+    pkg
+  } else {
+    NULL
+  }
 }
 
 update_roxygen_version <- function(path, cur_version = NULL) {

@@ -204,7 +204,7 @@ test_that("other namespace tags produce correct output", {
 })
 
 test_that("import directives for current package are ignored", {
-  local_options("roxygen2:::package" = "ignored")
+  withr::local_envvar(c("ROXYGEN_PKG" = "ignored"))
 
   out <- roc_proc_text(namespace_roclet(), "
     #' @import ignored

@@ -220,7 +220,7 @@ roxy_tag_parse.roxy_tag_import <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_import <- function(x, block, env, import_only = FALSE) {
-  one_per_line("import", x$val)
+  one_per_line_ignore_current("import", x$val)
 }
 
 #' @export
@@ -229,7 +229,7 @@ roxy_tag_parse.roxy_tag_importClassesFrom <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env, import_only = FALSE) {
-  repeat_first("importClassesFrom", x$val)
+  repeat_first_ignore_current("importClassesFrom", x$val)
 }
 
 #' @export
@@ -238,7 +238,7 @@ roxy_tag_parse.roxy_tag_importFrom <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env, import_only = FALSE) {
-  repeat_first("importFrom", x$val)
+  repeat_first_ignore_current("importFrom", x$val)
 }
 
 #' @export
@@ -247,7 +247,7 @@ roxy_tag_parse.roxy_tag_importMethodsFrom <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_importMethodsFrom <- function(x, block, env, import_only = FALSE) {
-  repeat_first("importMethodsFrom", x$val)
+  repeat_first_ignore_current("importMethodsFrom", x$val)
 }
 
 #' @export
@@ -315,10 +315,35 @@ export_s3_method <- function(x) {
 }
 
 one_per_line <- function(name, x) {
-  paste0(name, "(", auto_quote(x), ")")
+  if (length(x)) {
+    paste0(name, "(", auto_quote(x), ")")
+  } else {
+    NULL
+  }
 }
 repeat_first <- function(name, x) {
   paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
+}
+
+one_per_line_ignore_current <- function(name, x) {
+  current <- peek_roxygen_pkg()
+
+  # Ignore any occurrence of `current` inside `x`
+  if (is_string(current)) {
+    x <- x[x != current]
+  }
+
+  one_per_line(name, x)
+}
+repeat_first_ignore_current <- function(name, x) {
+  current <- peek_roxygen_pkg()
+
+  # Ignore the whole command if "first" is `current`
+  if (is_string(current) && length(x) && x[[1]] == current) {
+    NULL
+  } else {
+    repeat_first(name, x)
+  }
 }
 
 namespace_exports <- function(path) {

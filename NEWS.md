@@ -1,5 +1,12 @@
 # roxygen2 (development version)
 
+* The `ROXYGEN_PKG` environment variable is now set up while roxygen
+  is running to the name of the package being documented (#1517).
+
+* Import directives are now ignored if they try to import from the
+  package being documented. This is useful to add self-dependencies in
+  standalone files meant to be used in other packages (r-lib/usethis#1853).
+
 # roxygen2 7.2.3
 
 * roxygen2 now supports HTML blocks in markdown. They are only included

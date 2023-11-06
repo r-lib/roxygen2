@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* authors in `DESCRIPTION` can now have multiple email addresses (@jmbarbone, #1487).
+
 * The `ROXYGEN_PKG` environment variable is now set up while roxygen
   is running to the name of the package being documented (#1517).
 

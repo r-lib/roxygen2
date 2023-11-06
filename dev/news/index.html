@@ -78,7 +78,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-</div>
+<ul><li><p>The <code>ROXYGEN_PKG</code> environment variable is now set up while roxygen is running to the name of the package being documented (<a href="https://github.com/r-lib/roxygen2/issues/1517" class="external-link">#1517</a>).</p></li>
+<li><p>Import directives are now ignored if they try to import from the package being documented. This is useful to add self-dependencies in standalone files meant to be used in other packages (r-lib/usethis#1853).</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.2.3" id="roxygen2-723">roxygen2 7.2.3<a class="anchor" aria-label="anchor" href="#roxygen2-723"></a></h2><p class="text-muted">CRAN release: 2022-12-08</p>
 <ul><li><p>roxygen2 now supports HTML blocks in markdown. They are only included in the HTML manual. They can also be produced as the output of code chunks.</p></li>

@@ -266,7 +266,7 @@ memo_roclet <- function() {
 }
 ```
 
-To give the roclet behaviour, you need to define method.
+To give the roclet behaviour, you need to define methods.
 There are two methods that almost every roclet will use:
 
 -   `roclet_process()` is called with a list of blocks, and returns an object of your choosing.
@@ -329,3 +329,29 @@ g <- function(x, y) {
 ")
 roclet_output(memo_roclet(), results)
 ```
+
+
+## Adding a roclet to your workflow
+
+To use a roclet when developing a package, call
+
+```r
+roxygen2::roxygenize(roclets = "yourPackage::roclet")
+```
+
+where `yourPackage::roclet` is the function which creates the roclet, e.g. `memo_roclet`
+above.
+
+You can also add the roclet to the target package's DESCRIPTION file, like this:
+
+```r
+Roxygen: list(roclets = c("collate", "rd", "namespace", "yourPackage::roclet")) 
+```
+
+Optionally, you can add your roclet package to the target package as a `Suggests:` dependency:
+
+```r
+usethis::use_dev_package("yourPackage", type = "Suggests", remote = "yourGithubID/yourPackage")
+```
+
+You don't have to do this, but it will help other developers working on the target package.

@@ -4,7 +4,7 @@ Key tags:
 @description${1:A short description...} : A short description of the purpose of the function. Usually around a paragraph, but can be longer if needed.
 @example ${1:path}.R: Embed examples stored in another file.
 @examples${1:# example code} : Executable R code that demonstrates how the function works. Code must run without error.
-@examplesIf ${1:condition}${1:# example code} : Run examples only when condition is TRUE.
+@examplesIf ${1:condition}${2:# example code} : Run examples only when condition is TRUE.
 @noRd: Suppress .Rd generation for a block. Use for documentation blocks that should only be visible in the source code.
 @param ${1:name} ${2:description}: Describe a function input. Should describe acceptable input types and how it affects the output. description is usually one or two sentences but can be as long as needed.
 Document multiple arguments by separating their names with commas without spaces.
@@ -23,7 +23,7 @@ Key tags:
 @description${1:A short description...} : A short description of the purpose of the function. Usually around a paragraph, but can be longer if needed.
 @example ${1:path}.R: Embed examples stored in another file.
 @examples${1:# example code} : Executable R code that demonstrates how the function works. Code must run without error.
-@examplesIf ${1:condition}${1:# example code} : Run examples only when condition is TRUE.
+@examplesIf ${1:condition}${2:# example code} : Run examples only when condition is TRUE.
 @noRd: Suppress .Rd generation for a block. Use for documentation blocks that should only be visible in the source code.
 @param ${1:name} ${2:description}: Describe a function input. Should describe acceptable input types and how it affects the output. description is usually one or two sentences but can be as long as needed.
 Document multiple arguments by separating their names with commas without spaces.
@@ -120,7 +120,7 @@ Other less frequently used tags:
 <p>Key tags:</p><ul><li><p><code>@description${1:A short description...} </code>: A short description of the purpose of the function. Usually around a paragraph, but can be longer if needed.</p></li>
 <li><p><code>@example ${1:path}.R</code>: Embed examples stored in another file.</p></li>
 <li><p><code>@examples${1:# example code} </code>: Executable R code that demonstrates how the function works. Code must run without error.</p></li>
-<li><p><code>@examplesIf ${1:condition}${1:# example code} </code>: Run examples only when <code>condition</code> is <code>TRUE</code>.</p></li>
+<li><p><code>@examplesIf ${1:condition}${2:# example code} </code>: Run examples only when <code>condition</code> is <code>TRUE</code>.</p></li>
 <li><p><code>@noRd</code>: Suppress <code>.Rd</code> generation for a block. Use for documentation blocks that should only be visible in the source code.</p></li>
 <li><p><code>@param ${1:name} ${2:description}</code>: Describe a function input. Should describe acceptable input types and how it affects the output. <code>description</code> is usually one or two sentences but can be as long as needed.
 Document multiple arguments by separating their names with commas without spaces.</p></li>
@@ -141,7 +141,7 @@ Document multiple arguments by separating their names with commas without spaces
 <span><span class="co">#' @example ${1:path}.R</span></span>
 <span><span class="co">#' @examples${1:# example code}</span></span>
 <span></span>
-<span><span class="co">#' @examplesIf ${1:condition}${1:# example code}</span></span>
+<span><span class="co">#' @examplesIf ${1:condition}${2:# example code}</span></span>
 <span></span>
 <span><span class="co">#' @noRd</span></span>
 <span><span class="co">#' @param ${1:name} ${2:description}</span></span>

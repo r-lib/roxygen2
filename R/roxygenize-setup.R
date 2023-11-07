@@ -1,4 +1,6 @@
-roxygen_setup <- function(path = ".", cur_version = NULL) {
+roxygen_setup <- function(path = ".",
+                          cur_version = NULL,
+                          frame = caller_env()) {
   if (!file.exists(file.path(path, "DESCRIPTION"))) {
     cli::cli_abort(
       "{.arg package.dir} ({.path {path}}) does not contain a DESCRIPTION"
@@ -23,7 +25,22 @@ roxygen_setup <- function(path = ".", cur_version = NULL) {
   man_path <- file.path(path, "man")
   dir.create(man_path, recursive = TRUE, showWarnings = FALSE)
 
+  withr::local_envvar(
+    ROXYGEN_PKG = desc::desc_get("Package", path),
+    .local_envir = frame
+  )
+
   is_first
+}
+
+peek_roxygen_pkg <- function() {
+  pkg <- Sys.getenv("ROXYGEN_PKG")
+
+  if (nzchar(pkg)) {
+    pkg
+  } else {
+    NULL
+  }
 }
 
 update_roxygen_version <- function(path, cur_version = NULL) {

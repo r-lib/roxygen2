@@ -51,7 +51,7 @@ author_desc <- function(x) {
   }
 
   if (!is.null(x$email)) {
-    desc <- paste0(desc, " \\email{", x$email, "}")
+    desc <- paste0(desc, " \\email{", paste(x$email, collapse = ", "), "}")
   }
 
   if (!is.null(x$comment)) {

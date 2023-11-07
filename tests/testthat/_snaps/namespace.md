@@ -46,26 +46,3 @@
 
     [<text>:2] @evalNamespace must evaluate to a character vector
 
-# Invalid imports throw a helpful error
-
-    Code
-      roc_proc_text(namespace_roclet(),
-      "\n      #' @importFrom utils InvalidUtilsFunction\n      NULL\n    ")
-    Condition
-      Warning:
-      [<text>:2] @importFrom Unknown export in `@importFrom utils`: `InvalidUtilsFunction`
-    Output
-      [1] "importFrom(utils,InvalidUtilsFunction)"
-
----
-
-    Code
-      roc_proc_text(namespace_roclet(),
-      "\n      #' @importFrom utils InvalidUtilsFunction1 InvalidUtilsFunction2\n      NULL\n    ")
-    Condition
-      Warning:
-      [<text>:2] @importFrom Unknown exports in `@importFrom utils`: `InvalidUtilsFunction1` and `InvalidUtilsFunction2`
-    Output
-      [1] "importFrom(utils,InvalidUtilsFunction1)"
-      [2] "importFrom(utils,InvalidUtilsFunction2)"
-

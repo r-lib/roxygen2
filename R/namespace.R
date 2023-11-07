@@ -243,7 +243,8 @@ roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env, import_only = FALSE) 
     importing <- x$val[-1L]
     unknown_idx <- !importing %in% getNamespaceExports(pkg)
     if (any(unknown_idx)) {
-      warn_roxy_tag(x, "Unknown {cli::qty(sum(unknown_idx))} export{?s} in {.code @importFrom {pkg}}: {.code {importing[unknown_idx]}}")
+      warn_roxy_tag(x, "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} in from {.package {pkg}}: {.code {importing[unknown_idx]}}")
+      x$val <- c(pkg, importing[!unknown_idx])
     }
   }
   repeat_first("importFrom", x$val)

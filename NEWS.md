@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* A friendlier error is thrown when attempting to import non-existing
+  functions with `@importFrom` (#1409, @MichaelChirico).
 * authors in `DESCRIPTION` can now have multiple email addresses (@jmbarbone, #1487).
 
 * The `ROXYGEN_PKG` environment variable is now set up while roxygen

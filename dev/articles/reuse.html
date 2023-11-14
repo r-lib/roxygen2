@@ -144,52 +144,77 @@ best used with care: documenting too many functions in one place leads
 to confusion. Use it when all functions have the same (or very similar)
 arguments.</p>
 <div class="section level3">
+<h3 id="rdname">
+<code>@rdname</code><a class="anchor" aria-label="anchor" href="#rdname"></a>
+</h3>
+<p>Use <code>@rdname &lt;destination&gt;</code> to include multiple
+functions in the same page. Tags (e.g. <code>@title</code>,
+<code>@description</code>, <code>@examples</code>) will be combined,
+across blocks but often this yields text that is hard to understand. So
+we recommend that you make one block that contains the title,
+description, common parameters, examples and so on, and then only
+document individual parameters in the other blocks.</p>
+<p>There are two basic ways to do that. You can create a standalone
+documentation block and then add the functions to it. This typically
+works best when you have a family of related functions and you want to
+link to that family from other functions (i.e. <code>trig</code> in the
+examples below).</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Trigonometric approximations</span></span>
+<span><span class="co">#' @param x Input, in radians.</span></span>
+<span><span class="co">#' @name trig</span></span>
+<span><span class="cn">NULL</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span></span>
+<span><span class="co">#' @rdname trig</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">sin_ish</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">-</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span> <span class="op">/</span> <span class="fl">6</span></span>
+<span></span>
+<span><span class="co">#' @rdname trig</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">cos_ish</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fl">2</span></span>
+<span></span>
+<span><span class="co">#' @rdname trig</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">tan_ish</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span> <span class="op">/</span> <span class="fl">3</span></span></code></pre></div>
+<p>Alternatively, you can add docs to an existing function. This tends
+to work better if you have a “primary” function with some variants or
+some helpers.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Logarithms</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @param x A numeric vector</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">log</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">base</span><span class="op">)</span> <span class="va">...</span></span>
+<span></span>
+<span><span class="co">#' @rdname log</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">log2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#' @rdname log</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">ln</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="describein">
 <code>@describeIn</code><a class="anchor" aria-label="anchor" href="#describein"></a>
 </h3>
-<p>Use <code>@describeIn &lt;destination&gt; &lt;description&gt;</code>
-to document multiple functions together. It generates a new section
-named “<strong>Related functions and methods</strong>”, further divided
-into subsections by the type of relationship between the source and the
-destination documentation. Each subsection contains a bulleted list
-describing the function with the specified
-<code>&lt;description&gt;</code>.</p>
-<p>You can document several functions which perform slight variations of
-a task or which use different defaults in one documentation file:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Power</span></span>
-<span><span class="co">#' @param x base</span></span>
-<span><span class="co">#' @param exp exponent</span></span>
-<span><span class="va">power</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">exp</span><span class="op">)</span> <span class="va">x</span> <span class="op">^</span> <span class="va">exp</span></span>
-<span></span>
-<span><span class="co">#' @describeIn power Square a number</span></span>
-<span><span class="va">square</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/power.html" class="external-link">power</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#' @describeIn power Cube a number</span></span>
-<span><span class="va">cube</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/power.html" class="external-link">power</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p>In this case, both destination and source are “normal” functions, and
-you can use <code>&lt;description&gt;</code> to explain their
-differences.</p>
-<p><code>@describeIn</code> is also well suited to explain the
-relationships between functions making up an object oriented (OO) scheme
-using S3 or S4. In this case, roxygen will automatically detect whether
-a source function is a method and document the relationship to the
-relevant class or generic. Your new methods will be organised in one of
-two ways:</p>
-<ol style="list-style-type: decimal">
-<li><p>If your new method extends a generic in the
-<code>&lt;destination&gt;</code>, it will be listed in a section titled
-“<strong>Methods for generic <code>&lt;destination&gt;</code></strong>”.
-The subsection will include all methods for your new generic, labelled
-by the class they cover.</p></li>
-<li><p>If your new method extends another generic, for a class
-constructed in the destination, it will be listed in a subsection titled
-“<strong>Methods for class <code>&lt;destination&gt;</code></strong>”.
-It will be labelled by the generic which the method extends.</p></li>
-</ol>
-<p>While you can mix and match (some) different types of functions with
-<code>@describeIn</code>, the output may quickly become disorienting for
-users if the functions are not tightly related.</p>
+<p>An alternative to <code>@rdname</code> is <code>@describeIn</code>.
+It has a slightly different syntax because as well as a topic name, you
+also provide a brief description for the function, like
+<code>@describein topic one sentence description</code>. The primary
+difference between <code>@rdname</code> and <code>@describeIn</code>, is
+that <code>@describeIn</code> creates a new section containing a
+bulleted list all of each function, along with its description. It uses
+a number of heuristics to determine the heading of this section,
+depending on you’re documenting related functions, methods for a
+generic, or methods for a class.</p>
+<p>In general, I no longer recommend <code>@describeIn</code> because I
+don’t think the heuristics it uses are as good as a thoughtful
+hand-crafted summary. If you’re currently using
+<code>@describeIn</code>, you can general replace it with
+<code>@rdname</code>, as long as you give some thought to the
+multiple-function <code>@description</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="order-of-includes">Order of includes<a class="anchor" aria-label="anchor" href="#order-of-includes"></a>
@@ -200,7 +225,7 @@ sometimes cause the function usage to appear in a suboptimal order. You
 can override the default ordering with <code>@order</code>. For example,
 the following the block would place <code>times</code> first in
 <code>arith.Rd</code> because 1 comes before 2.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @rdname arith</span></span>
 <span><span class="co">#' @order 2</span></span>
 <span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
@@ -264,13 +289,13 @@ in another package by using <code>pkg::source_function</code>.</p>
 interpret the rest of the text within backticks as R code and evaluate
 it, and replace the backtick expression with its value. Here’s a simple
 example:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title `r 1 + 1`</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description `r 2 + 2`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>This is equivalent to writing:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title 2</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description 4</span></span>
@@ -278,18 +303,18 @@ example:</p>
 <p>The resulting text, together with the whole tag is interpreted as
 markdown, as usual. This means that you can use R to dynamically write
 markdown. For example if you defined this function in your package:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alphabet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"`"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">]</span>, <span class="st">"`"</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>You could then write:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `r alphabet(5)`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>The result is equivalent to writing the following by hand:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`</span></span>

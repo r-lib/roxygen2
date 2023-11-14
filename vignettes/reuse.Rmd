@@ -38,10 +38,11 @@ Use it when all functions have the same (or very similar) arguments.
 ### `@rdname`
 
 Use `@rdname <destination>` to include multiple functions in the same page.
-The functions will be collected and share the same `@title`, `@description`, `@examples`, etc.
+Tags (e.g. `@title`, `@description`, `@examples`) will be combined, across blocks but often this yields text that is hard to understand.
+So we recommend that you make one block that contains the title, description, common parameters, examples and so on, and then only document individual parameters in the other blocks.
 
-There are two basic ways to use it.
-You can create a dummy documentation block and then add the functions to it.
+There are two basic ways to do that.
+You can create a standalone documentation block and then add the functions to it.
 This typically works best when you have a family of related functions and you want to link to that family from other functions (i.e. `trig` in the examples below).
 
 ```{r}
@@ -84,38 +85,13 @@ ln <- function(x) log(x, exp(1))
 
 ### `@describeIn`
 
-Use `@describeIn <destination> <description>` to document multiple functions together.
-It generates a new section named "**Related functions and methods**", further divided into subsections by the type of relationship between the source and the destination documentation.
-Each subsection contains a bulleted list describing the function with the specified `<description>`.
+An alternative to `@rdname` is `@describeIn`.
+It has a slightly different syntax because as well as a topic name, you also provide a brief description for the function, like `@describein topic one sentence description`.
+The primary difference between `@rdname` and `@describeIn`, is that `@describeIn` creates a new section containing a bulleted list all of each function, along with its description.
+It uses a number of heuristics to determine the heading of this section, depending on you're documenting related functions, methods for a generic, or methods for a class.
 
-You can document several functions which perform slight variations of a task or which use different defaults in one documentation file:
-
-```{r}
-#' Power
-#' @param x base
-#' @param exp exponent
-power <- function(x, exp) x ^ exp
-
-#' @describeIn power Square a number
-square <- function(x) power(x, 2)
-
-#' @describeIn power Cube a number
-cube <- function(x) power(x, 3)
-```
-
-In this case, both destination and source are "normal" functions, and you can use `<description>` to explain their differences.
-
-`@describeIn` is also well suited to explain the relationships between functions making up an object oriented (OO) scheme using S3 or S4.
-In this case, roxygen will automatically detect whether a source function is a method and document the relationship to the relevant class or generic.
-Your new methods will be organised in one of two ways:
-
-1.  If your new method extends a generic in the `<destination>`, it will be listed in a section titled "**Methods for generic `<destination>`**".
-    The subsection will include all methods for your new generic, labelled by the class they cover.
-
-2.  If your new method extends another generic, for a class constructed in the destination, it will be listed in a subsection titled "**Methods for class `<destination>`**".
-    It will be labelled by the generic which the method extends.
-
-While you can mix and match (some) different types of functions with `@describeIn`, the output may quickly become disorienting for users if the functions are not tightly related.
+In general, I no longer recommend `@describeIn` because I don't think the heuristics it uses are as good as a thoughtful hand-crafted summary.
+If you're currently using `@describeIn`, you can general replace it with `@rdname`, as long as you give some thought to the multiple-function `@description`.
 
 ### Order of includes
 

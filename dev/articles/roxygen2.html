@@ -243,55 +243,7 @@ development, because you want to use the <code>.Rd</code> files in the
 <em>source</em> package. For this reason, we recommend that you use
 roxygen2 in conjunction with devtools: <code>devtools::load_all()</code>
 automatically adds shims so that <code>?</code> and friends will look in
-the development package. Note, however, that this preview does not work
-with intra-package links. To preview those, you’ll need to install the
-package. If you use RStudio, the easiest way to do this is to click the
-“Build &amp; Reload button”.</p>
-<div class="section level3">
-<h3 id="rcpp">Rcpp<a class="anchor" aria-label="anchor" href="#rcpp"></a>
-</h3>
-<p>You can also use roxygen2 with Rcpp. Simply include roxygen2 comments
-in your C++ code (using <code>//</code> instead of <code>#</code>), and
-Rcpp will automatically carry the comments along into
-<code>RcppExports.R</code> where roxygen2 will find them.</p>
-<p>For example, dplyr has <code>between.cpp</code> which starts:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">//' Do values in a numeric vector fall in specified range?</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">//'</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">//' This is a shortcut for `x &gt;= left &amp; x &lt;= right`, implemented</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">//' efficiently in C++ for local values, and translated to the</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">//' appropriate SQL for remote tables.</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">//'</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">//' @param x A numeric vector of values.</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">//' @param left,right Boundary values.</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">//' @export</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">//' @examples</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">//' between(1:12, 7, 9)</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">//'</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">//' x &lt;- rnorm(1e2)</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">//' x[between(x, -1, 1)]</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export(rng = false)]]</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>LogicalVector between<span class="op">(</span>Rcpp<span class="op">::</span>NumericVector x<span class="op">,</span> <span class="dt">double</span> left<span class="op">,</span> <span class="dt">double</span> right<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>This is automatically translated to the following R code in
-<code>RcppExports.R</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Do values in a numeric vector fall in specified range?</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' This is a shortcut for `x &gt;= left &amp; x &lt;= right`, implemented</span></span>
-<span><span class="co">#' efficiently in C++ for local values, and translated to the</span></span>
-<span><span class="co">#' appropriate SQL for remote tables.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x A numeric vector of values.</span></span>
-<span><span class="co">#' @param left,right Boundary values.</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="co">#' @examples</span></span>
-<span><span class="co">#' between(1:12, 7, 9)</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' x &lt;- rnorm(1e2)</span></span>
-<span><span class="co">#' x[between(x, -1, 1)]</span></span>
-<span><span class="va">between</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">left</span>, <span class="va">right</span><span class="op">)</span> <span class="op">{</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
+the development package.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

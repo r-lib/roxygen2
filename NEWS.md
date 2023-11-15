@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@describeIn()` gives a more informative warning if you use it with an
+  unsupported type (#1490).
+
 * A friendlier error is thrown when attempting to import non-existing
   functions with `@importFrom` (#1409, @MichaelChirico).
 * authors in `DESCRIPTION` can now have multiple email addresses (@jmbarbone, #1487).

@@ -209,7 +209,8 @@
 
     Otherwise, specify individual components to inherit by picking one or
     more of `params`, `return`, `title`, `description`, `details`, `seealso`,
-    `sections`, `references`, `examples`, `author`, `source`, and `note`.
+    `sections`, `references`, `examples`, `author`, `source`, `note`,
+    and `format`.
   template: ' ${1:source} ${2:components}'
   vignette: reuse
   recommend: true

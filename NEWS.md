@@ -1,5 +1,19 @@
 # roxygen2 (development version)
 
+* `@describeIn()` gives a more informative warning if you use it with an
+  unsupported type (#1490).
+
+* A friendlier error is thrown when attempting to import non-existing
+  functions with `@importFrom` (#1409, @MichaelChirico).
+* authors in `DESCRIPTION` can now have multiple email addresses (@jmbarbone, #1487).
+
+* The `ROXYGEN_PKG` environment variable is now set up while roxygen
+  is running to the name of the package being documented (#1517).
+
+* Import directives are now ignored if they try to import from the
+  package being documented. This is useful to add self-dependencies in
+  standalone files meant to be used in other packages (r-lib/usethis#1853).
+
 # roxygen2 7.2.3
 
 * roxygen2 now supports HTML blocks in markdown. They are only included

@@ -1,6 +1,10 @@
 #' Re-build outdated vignettes
 #'
-#' This rebuilds outdated vignettes with [tools::buildVignette].
+#' @description
+#' This roclet rebuilds outdated vignettes with [tools::buildVignette],
+#' but we no longer recommend it because we no longer recommend storing
+#' built vignettes in a package.
+#'
 #' By default, it will rebuild all vignettes if the source file is newer than
 #' the output pdf or html. (This means it will automatically re-build the
 #' vignette if you change the vignette source, but _not_ when you
@@ -11,6 +15,7 @@
 #' your package, add `--no-build-vignettes` to the "Build Source Package"
 #' field in your project options.
 #'
+#' @keywords internal
 #' @export
 vignette_roclet <- function() {
   roclet("vignette")

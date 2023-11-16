@@ -203,6 +203,23 @@ test_that("other namespace tags produce correct output", {
   )))
 })
 
+test_that("import directives for current package are ignored", {
+  withr::local_envvar(c("ROXYGEN_PKG" = "ignored"))
+
+  out <- roc_proc_text(namespace_roclet(), "
+    #' @import ignored
+    #' @import test ignored test2
+    #' @importFrom ignored test1 test2
+    #' @importClassesFrom ignored test1 test2
+    #' @importMethodsFrom ignored test1 test2
+    NULL")
+
+  expect_equal(sort(out), sort(c(
+    "import(test)",
+    "import(test2)"
+  )))
+})
+
 test_that("poorly formed importFrom throws error", {
   expect_snapshot_warning(roc_proc_text(namespace_roclet(), "
     #' @importFrom test
@@ -360,4 +377,39 @@ test_that("can extract non-imports from namespace preserving source", {
   )
   path <- withr::local_tempfile(lines = lines)
   expect_equal(namespace_exports(path), lines[c(1:3, 5)])
+})
+
+test_that("Invalid imports throw a helpful error", {
+  expect_warning(
+    expect_equal(
+      roc_proc_text(namespace_roclet(), "
+        #' @importFrom utils head InvalidUtilsFunction
+        NULL
+      "),
+      "importFrom(utils,head)"
+    ),
+    "Excluding unknown export",
+    fixed = TRUE
+  )
+
+  # pluralization
+  expect_warning(
+    expect_equal(
+      roc_proc_text(namespace_roclet(), "
+        #' @importFrom utils head InvalidUtilsFunction1 InvalidUtilsFunction2
+        NULL
+      "),
+      "importFrom(utils,head)"
+    ),
+    "Excluding unknown exports"
+  )
+
+  # If the package is not available at roxygenize() run time, nothing we can do
+  expect_equal(
+    roc_proc_text(namespace_roclet(), "
+      #' @importFrom AnUnknownUnavailablePackage Unchecked
+      NULL
+    "),
+    "importFrom(AnUnknownUnavailablePackage,Unchecked)"
+  )
 })

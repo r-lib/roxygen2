@@ -30,7 +30,7 @@
 #' @templateVar ${1:name} ${2:value}
 }
 \description{
-Learn full the details in in \code{vignette('reuse')}.
+Learn the full details in \code{vignette('reuse')}.
 
 Key tags:
 \itemize{

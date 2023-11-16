@@ -42,6 +42,8 @@ This means you need to document them in a slightly different way: instead of doc
 #'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
 #'   \item{table}{width of top of diamond relative to widest point (43--95)}
 #' }
+#' 
+#' @source {ggplot2} tidyverse R package.
 ```
 
 Note the use of two additional tags that are particularly useful for documenting data:

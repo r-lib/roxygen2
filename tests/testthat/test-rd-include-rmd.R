@@ -1,3 +1,5 @@
+skip_if_not_installed("rmarkdown")
+
 test_that("markdown file can be included", {
   skip_if_not(rmarkdown::pandoc_available("2.17"))
 

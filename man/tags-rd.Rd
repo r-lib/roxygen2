@@ -23,7 +23,7 @@
 #' @example ${1:path}.R
 #' @examples${1:# example code}
 
-#' @examplesIf ${1:condition}${1:# example code}
+#' @examplesIf ${1:condition}${2:# example code}
 
 #' @noRd
 #' @param ${1:name} ${2:description}
@@ -34,14 +34,14 @@
 #' @usage ${1:fun}(${2:arg1, arg2 = default, ...})
 }
 \description{
-Learn full the details in in \code{vignette('rd')}.
+Learn the full details in \code{vignette('rd')}.
 
 Key tags:
 \itemize{
 \item \verb{@description$\{1:A short description...\} }: A short description of the purpose of the function. Usually around a paragraph, but can be longer if needed.
 \item \verb{@example $\{1:path\}.R}: Embed examples stored in another file.
 \item \verb{@examples$\{1:# example code\} }: Executable R code that demonstrates how the function works. Code must run without error.
-\item \verb{@examplesIf $\{1:condition\}$\{1:# example code\} }: Run examples only when \code{condition} is \code{TRUE}.
+\item \verb{@examplesIf $\{1:condition\}$\{2:# example code\} }: Run examples only when \code{condition} is \code{TRUE}.
 \item \verb{@noRd}: Suppress \code{.Rd} generation for a block. Use for documentation blocks that should only be visible in the source code.
 \item \verb{@param $\{1:name\} $\{2:description\}}: Describe a function input. Should describe acceptable input types and how it affects the output. \code{description} is usually one or two sentences but can be as long as needed.
 Document multiple arguments by separating their names with commas without spaces.

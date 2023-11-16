@@ -21,6 +21,10 @@ topic_add_describe_in <- function(topic, block, env) {
     warn_roxy_tag(tag, "can not be used with @rdname")
     return()
   }
+  if (is.null(object_name(block$object))) {
+    warn_roxy_tag(tag, "not supported with this object type")
+    return()
+  }
 
   dest <- find_object(tag$val$name, env)
   metadata <- build_minidesc_metadata(block$object, dest)

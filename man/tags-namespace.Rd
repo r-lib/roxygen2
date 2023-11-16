@@ -30,7 +30,7 @@
 #' @useDynLib ${1:package}
 }
 \description{
-Learn full the details in in \code{vignette('namespace')}.
+Learn the full details in \code{vignette('namespace')}.
 
 Key tags:
 \itemize{

@@ -89,3 +89,11 @@ test_that("autolink several matching patterns", {
     )
   )
 })
+
+test_that("multiple email addresses for a person are acceptable #1487", {
+  me <- person("me", email = c("one@email.me", "two@email.me"))
+  expect_equal(
+    author_desc(unclass(me)[[1]]),
+    "me \\email{one@email.me, two@email.me}"
+  )
+})

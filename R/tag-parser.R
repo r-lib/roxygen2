@@ -32,7 +32,8 @@ tag_value <- function(x) {
 # Also recorded in tags.yml
 inherit_components <- c(
   "params", "return", "title", "description", "details", "seealso",
-  "sections", "references", "examples", "author", "source", "note"
+  "sections", "references", "examples", "author", "source", "note",
+  "format"
 )
 
 #' @export

@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* `URL` and `BugReports` fields in `DESCRIPTION` may now contain 
+  percent-encoded URLs (@HenningLorenzen-ext-bayer, #1415).
+
+* `@inherit` can now also inherit from `@format` (#1293). 
+
 * `@describeIn()` gives a more informative warning if you use it with an
   unsupported type (#1490).
 

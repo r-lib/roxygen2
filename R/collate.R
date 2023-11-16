@@ -53,7 +53,7 @@ update_collate <- function(base_path) {
 
 generate_collate <- function(base_path) {
   paths <- sort_c(dir(base_path, pattern = "[.][Rr]$", full.names = TRUE))
-  includes <- lapply(paths, find_includes)
+  includes <- lapply(paths, function(x) intersect(find_includes(x), basename(paths)))
   names(includes) <- paths
 
   n <- sum(map_int(includes, length))

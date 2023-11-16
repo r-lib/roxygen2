@@ -74,13 +74,7 @@ test_that("no options gives default values", {
     NULL
   ")[[1]]
 
-  expect_equal(
-    block_get_tag_value(block, "inherit")$fields,
-    c(
-      "params", "return", "title", "description", "details", "seealso",
-      "sections", "references", "examples", "author", "source", "note"
-    )
-  )
+  expect_equal(block_get_tag_value(block, "inherit")$fields, inherit_components)
 })
 
 test_that("some options overrides defaults", {
@@ -707,6 +701,7 @@ test_that("can inherit all from single function", {
     #' @author Hadley
     #' @source my mind
     #' @note my note
+    #' @format my format
     #' @examples
     #' x <- 1
     foo <- function(x, y) {}
@@ -722,6 +717,7 @@ test_that("can inherit all from single function", {
   expect_equal(out$get_value("examples"), rd("x <- 1"))
   expect_equal(out$get_value("author"), "Hadley")
   expect_equal(out$get_value("source"), "my mind")
+  expect_equal(out$get_value("format"), "my format")
   expect_equal(out$get_value("note"), "my note")
 })
 

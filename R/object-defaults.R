@@ -3,7 +3,7 @@ object_defaults <- function(x, block) UseMethod("object_defaults")
 #' @export
 object_defaults.default <- function(x, block) list()
 
-#' @exportS3Method object_defaults "function"
+#' @export
 object_defaults.function <- function(x, block) {
   list(
     roxy_generated_tag(block, "usage", object_usage(x)),

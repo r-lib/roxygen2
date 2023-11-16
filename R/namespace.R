@@ -378,7 +378,7 @@ warn_missing_s3_exports <- function(blocks, env) {
   s3blocks <- blocks[map_lgl(blocks, block_has_tags, c("export", "exportS3method"))]
   s3objects <- map(blocks, function(block) block$object$value)
 
-  undocumented <- setdiff(methods, s3objects)
+  undocumented <- methods[!methods %in% s3objects]
   srcrefs <- map(undocumented, attr, "srcref")
   messages <- paste0("S3 method `", names(undocumented) , "` needs @export or @exportS3method tag.")
   map2(undocumented, messages, warn_roxy_function)

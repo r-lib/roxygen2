@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* `@docType package` now works more like documenting `"_PACKAGE"`, 
+  creating a `{packagename}-package` alias and clearly suggesting that
+  you should switch to `"_PACKAGE"` instead (#1491).
+
 * `URL` and `BugReports` fields in `DESCRIPTION` may now contain 
   percent-encoded URLs (@HenningLorenzen-ext-bayer, #1415).
 

@@ -1,7 +1,7 @@
 object_from_call <- function(call, env, block, file) {
   if (is.character(call)) {
     if (identical(call, "_PACKAGE")) {
-      parser_package(call, env, block, file)
+      parser_package(file)
     } else {
       parser_data(call, env, file)
     }
@@ -36,6 +36,18 @@ object_from_call <- function(call, env, block, file) {
       NULL
     )
   } else {
+    # Patch @docType package to ensure that it gets a default alias
+    # and other "_PACKAGE" features
+    if (block_has_tags(block, "docType")) {
+      docType <- block_get_tag_value(block, "docType")
+      if (docType == "package") {
+        warn_roxy_block(block, c(
+          '`@docType "package"` is deprecated.',
+          i = 'Please document "_PACKAGE" instead.'
+        ))
+        return(parser_package(file))
+      }
+    }
     NULL
   }
 }
@@ -85,14 +97,14 @@ parser_data <- function(call, env, block) {
   object(value, call, type = "data")
 }
 
-parser_package <- function(call, env, block, file) {
+parser_package <- function(file) {
 
   pkg_path <- dirname(dirname(file))
   value <- list(
     desc = desc::desc(file = pkg_path),
     path = pkg_path
   )
-  object(value, call, type = "package")
+  object(value, "_PACKAGE", type = "package")
 }
 
 parser_assignment <- function(call, env, block) {

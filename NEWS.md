@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* The NAMESPACE roclet now reports if you have S3 methods that are missing
+  an `@export` tag. All S3 methods need to be `@export`ed (which confusingly
+  really registers the method) even if the generic is not. This avoids rare,
+  but hard to debug, problems (#1175).
+
 * `@describeIn()` gives a more informative warning if you use it with an
   unsupported type (#1490).
 

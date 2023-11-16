@@ -226,6 +226,7 @@ roxy_tag_rd <- function(x, base_path, env) {
   UseMethod("roxy_tag_rd")
 }
 
+#' @export
 roxy_tag_rd.default <- function(x, base_path, env) {
 }
 

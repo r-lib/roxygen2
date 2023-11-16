@@ -48,6 +48,8 @@ roclet_preprocess.roclet_namespace <- function(x, blocks, base_path) {
 
 #' @export
 roclet_process.roclet_namespace <- function(x, blocks, env, base_path) {
+  warn_missing_s3_exports(blocks, env)
+
   blocks_to_ns(blocks, env)
 }
 
@@ -364,4 +366,29 @@ namespace_exports <- function(path) {
   is_import <- function(x) is_call(x, c("import", "importFrom", "importClassesFrom", "importMethodsFrom", "useDynLib"))
   export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import)]
   unlist(lapply(export_lines, as.character))
+}
+
+# missing s3 exports ------------------------------------------------------
+
+warn_missing_s3_exports <- function(blocks, env) {
+  objs <- as.list(env)
+  funs <- Filter(is.function, objs)
+  methods <- funs[map_lgl(names(funs), is_s3_method, env = env)]
+
+  s3blocks <- blocks[map_lgl(blocks, block_has_tags, c("export", "exportS3method"))]
+  s3objects <- map(blocks, function(block) block$object$value)
+
+  undocumented <- setdiff(methods, s3objects)
+  srcrefs <- map(undocumented, attr, "srcref")
+  messages <- paste0("S3 method `", names(undocumented) , "` needs @export or @exportS3method tag.")
+  map2(undocumented, messages, warn_roxy_function)
+}
+
+warn_roxy_function <- function(fun, message, ...) {
+  srcref <- attr(fun, "srcref")
+  file <- attr(srcref, "srcfile")$filename
+  line <- as.vector(srcref)[[1]]
+
+  message[[1]] <- paste0(link_to(file, line), " ", message[[1]])
+  cli::cli_inform(c(x = message), ...)
 }

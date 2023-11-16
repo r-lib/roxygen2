@@ -19,37 +19,90 @@ This is a little frustrating at first, but soon becomes second-nature.
 
 ## Exports
 
-For a function to be usable outside your package, you must **export** it.
-By default roxygen2 doesn't export anything from your package.
-If you want an object to be publicly available, you must explicitly tag it with `@export`.
+In order for your users to use a function[^1] in your package, you must **export** it.
+In most cases, you can just use the `@export` tag, and roxygen2 will automatically figure out which `NAMESPACE` directive (e.g. `export()`, `exportS3method()`, `exportClasses()`, and `exportMethods()`) you need.
 
-Use the following guidelines to decide what to export:
+[^1]: Including S3 and S4 generics and methods.
 
--   **Functions**: export functions that you want to make available.
-    Exported functions must be documented, and you must be cautious when changing their interface.
+### Functions
 
--   **Datasets**: all datasets are publicly available.
-    They exist outside of the package namespace and must not be exported.
+Functions should be exported if you want your users to available.
+If you export a function, you must also document it, and since other people will use it, you need to be careful if you later change the function interface.
 
--   **S3 classes**: if you want others to be able to create instances of the class `@export` the constructor function.
+```{r}
+#' Add two numbers together
+#' 
+#' @param x,y Two numbers
+#' @export
+add <- function(x, y) {
+  x + y
+}
+```
 
--   **S3 generics**: the generic is a function, so `@export` if you want it to be usable outside the package.
+### S3
 
--   **S3 methods**: every S3 method *must* be exported, even if the generic is not.
-    Otherwise, the S3 method table will not be generated correctly and internal generics will not find the correct method.
-    See below for instructions on how to export a method for a generic in a suggested package.
+S3 generics work like regular R functions so export them using the advice above: if you want users to call this function, export; if it's purely for internal use, don't export it.
 
--   **S4 classes**: export S4 classes if you want others to be able to extend them.
+```{r}
+#' Take an object to bizarro world
+#' 
+#' @param x A vector.
+#' @export
+bizarro <- function(x, ...) {
+  UseMethod("bizarro")
+}
+```
 
--   **S4 generics:** `@export` if you want the generic to be publicly usable.
+While S3 methods are regular functions with a special naming scheme, their "export" works a bit differently.
+S3 methods are exported only in the sense that when you call the generic with the appropriate method; a user can't directly access the function definition by typing the name of the generic.
+A more technically correctly term would be to say that the method is **registered** so that the generics can find it.
+You must register, i.e. `@export`, every S3 method regardless of whether or not the generic is exported, and roxygen2 will warn you if you have forgotten.
 
--   **S4 methods**: you only need to `@export` methods for generics in other packages.
+```{r}
+#' @export
+bizarro.character <- function(x, ...) {
+  letters <- strsplit(x, "")
+  letters_rev <- lapply(letters, rev)
+  vapply(letters_rev, paste, collapse = "", FUN.VALUE = character(1))
+}
+```
 
-### S3 methods for generics in suggested packages
+You can document S3 methods, but you're not required to.
+If you document a method, you have three choices.
+If the method is particularly complex or has many arguments that the generic does not, you can document it in its own file.
+Otherwise you can use `@rdname` to document it with either the generic or the class.
 
-`@exportS3Method` tag allows you to generate `S3method()` namespace directives.
-Its primary use is for "delayed" method registration, which allows you to define methods for generics found in suggested packages (R \>= 3.6).
-For example,
+```{r}
+#' Take an object to bizarro world
+#' 
+#' @description
+#' This is an S3 generic. This package provides methods for the 
+#' following classes:
+#' 
+#' * `character`: reverses the order of the letters in each element of 
+#'    the vector.
+#' 
+#' @param x A vector.
+#' @export
+bizarro <- function(x, ...) {
+  UseMethod("bizarro")
+}
+
+#' @export
+#' @rdname bizarro
+bizarro.character <- function(x, ...) {
+  letters <- strsplit(x, "")
+  letters_rev <- lapply(letters, rev)
+  vapply(letters_rev, paste, collapse = "", FUN.VALUE = character(1))
+}
+```
+
+Typically, you will write methods for generics that are either defined in the current package or a package that is a hard dependency[^2] of your package.
+Sometimes, however, you will want to write a method for a suggested dependency.
+In this case, `@export` will not work because it relies on being able to see the generic.
+Instead, use `@exportS3Method`. This will use "delayed" method registration, which means the method will only be registered when the suggested package is loaded.
+
+[^2]: i.e. listed the `Imports` or `Depends` fields in your `DESCRIPTION`.
 
 ```{r}
 #' @exportS3Method pkg::generic
@@ -57,11 +110,18 @@ generic.foo <- function(x, ...) {
 }
 ```
 
-will generate
+### S4
 
-    S3method(pkg::generic, foo)
+-   **Classes**: export the class object if you want others to be able to extend it.
 
-Which will cause the method to be registered only when pkg is loaded.
+-   **Generics:** treat it like a function and `@export` if user facing.
+
+-   **Methods**: you only need to `@export` a method, if the generic lives in another package.
+
+### Datasets
+
+Note that datasets should never be exported as they use a different mechanism.
+Instead, datasets will either be automatically exported if you set `LazyData: true` in your `DESCRIPTION`, or made available after calling `data()` if not.
 
 ### Manual exports
 
@@ -85,7 +145,7 @@ The `NAMESPACE` also controls which functions from other packages are made avail
 
 If you are using just a few functions from another package, we recommending adding the package to the `Imports:` field of the `DESCRIPTION` file and calling the functions explicitly using `::`, e.g., `pkg::fun()`.
 
-```r
+``` r
 my_function <- function(x, y) {
   pkg::fun(x) * y
 }
@@ -93,7 +153,7 @@ my_function <- function(x, y) {
 
 If the repetition of the package name becomes annoying you can `@importFrom` and drop the `::`:
 
-```r
+``` r
 #' @importFrom pkg fun 
 my_function <- function(x, y) {
   fun(x) * y

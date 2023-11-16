@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `@inherit` can now also inherit from `@format` (#1293). 
+
 * `@describeIn()` gives a more informative warning if you use it with an
   unsupported type (#1490).
 

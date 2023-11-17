@@ -32,14 +32,12 @@ namespace_roclet <- function() {
 
 
 update_namespace_imports <- function(base_path) {
-  lines <- namespace_imports(base_path)
   NAMESPACE <- file.path(base_path, "NAMESPACE")
-
-  if (length(lines) == 0 && !made_by_roxygen(NAMESPACE)) {
+  if (!made_by_roxygen(NAMESPACE)) {
     return(invisible())
   }
 
-  lines <- c(lines, namespace_exports(NAMESPACE))
+  lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
   results <- c(made_by("#"), sort_c(unique(lines)))
   write_if_different(NAMESPACE, results, check = TRUE)
 

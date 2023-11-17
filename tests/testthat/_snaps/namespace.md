@@ -20,6 +20,22 @@
 
     [<text>:2] @importFrom must have at least 2 words, not 1
 
+# can regenerate NAMESPACE even if its broken
+
+    Code
+      roxygenise(".")
+    Condition
+      Warning:
+      [x.R:1] @importFrom must have at least 2 words, not 1
+    Message
+      Writing 'NAMESPACE'
+      i Loading brokenNamespace
+    Condition
+      Warning:
+      [x.R:1] @importFrom must have at least 2 words, not 1
+    Message
+      Writing 'NAMESPACE'
+
 # rawNamespace must be valid code
 
     [<text>:2] @rawNamespace failed to parse

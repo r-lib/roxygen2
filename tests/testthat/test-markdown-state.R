@@ -92,7 +92,7 @@ test_that("warning for both @md and @noMd", {
     foo <- function() {}
   "
 
-  expect_snapshot_warning(out1 <- roc_proc_text(rd_roclet(), block))
+  expect_snapshot(out1 <- roc_proc_text(rd_roclet(), block))
   expect_equal(out1[[1]]$get_value("description"), "`code`")
 
   # No translation even if markdown on generally

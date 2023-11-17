@@ -92,12 +92,11 @@ test_that("@exportS3method generates fully automatically", {
   ")
   expect_equal(out, "S3method(mean,foo)")
 
-  expect_snapshot_warning(
-    roc_proc_text(namespace_roclet(), "
-      #' @exportS3Method
-      f <- function(x) 'foo'
-    ")
-  )
+  block <- "
+    #' @exportS3Method
+    f <- function(x) 'foo'
+  "
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
 test_that("@exportS3methd can create literal directive", {
@@ -119,19 +118,19 @@ test_that("@exportS3method can extract class from generic", {
     #' @exportS3Method pkg_foo
     foo.bar <- function(x) 'foo'
   "
-  expect_snapshot_warning(roc_proc_text(namespace_roclet(), block))
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 
   block <- "
     #' @exportS3Method pkg::foo
     foo1.bar <- 10
   "
-  expect_snapshot_warning(roc_proc_text(namespace_roclet(), block))
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 
   block <- "
     #' @exportS3Method pkg::foo
     foo1.bar <- function(x) 'foo'
   "
-  expect_snapshot_warning(roc_proc_text(namespace_roclet(), block))
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
 test_that("exportClass overrides default class name", {
@@ -221,10 +220,11 @@ test_that("import directives for current package are ignored", {
 })
 
 test_that("poorly formed importFrom throws error", {
-  expect_snapshot_warning(roc_proc_text(namespace_roclet(), "
+  block <- "
     #' @importFrom test
     NULL
-  "))
+  "
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
 test_that("multiline importFrom parsed correctly", {
@@ -273,11 +273,11 @@ test_that("empty NAMESPACE generates zero-length vector", {
 
 
 test_that("rawNamespace must be valid code", {
-  expect_snapshot_warning(
-    roc_proc_text(namespace_roclet(), "
-      #' @rawNamespace a +
-      NULL")
-  )
+  block <- "
+    #' @rawNamespace a +
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
 test_that("rawNamespace inserted unchanged", {
@@ -294,29 +294,29 @@ test_that("rawNamespace inserted unchanged", {
 # @evalNamespace ----------------------------------------------------------
 
 test_that("evalNamespace warns for bad code", {
-  expect_snapshot_warning(
-    roc_proc_text(namespace_roclet(), "
-      #' @evalNamespace a +
-      #' @name a
-      #' @title a
-      NULL")
-  )
+  block <- "
+    #' @evalNamespace a +
+    #' @name a
+    #' @title a
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 
-  expect_snapshot_warning(
-    roc_proc_text(namespace_roclet(), "
-      #' @evalNamespace stop('Uhoh')
-      #' @name a
-      #' @title a
-      NULL")
-  )
+  block <- "
+    #' @evalNamespace stop('Uhoh')
+    #' @name a
+    #' @title a
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 
-  expect_snapshot_warning(
-    roc_proc_text(namespace_roclet(), "
-      #' @evalNamespace 1
-      #' @name a
-      #' @title a
-      NULL")
-  )
+  block <- "
+    #' @evalNamespace 1
+    #' @name a
+    #' @title a
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
 test_that("evalNamespace code is inserted when its value is a string", {

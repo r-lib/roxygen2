@@ -1,6 +1,10 @@
 # useful warnings
 
-    [<text>:3] @includeRmd Can't find Rmd 'path'
+    Code
+      . <- roc_proc_text(rd_roclet(), block)
+    Condition
+      Warning:
+      [<text>:3] @includeRmd Can't find Rmd 'path'
 
 ---
 

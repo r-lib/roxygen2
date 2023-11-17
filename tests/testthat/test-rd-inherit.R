@@ -60,12 +60,11 @@ test_that("relative links converted to absolute", {
 # tag parsing -------------------------------------------------------------
 
 test_that("warns on unknown inherit type", {
-  expect_snapshot_warning(
-    parse_text("
-      #' @inherit fun blah
-      NULL
-    ")
-  )
+  text <- "
+    #' @inherit fun blah
+    NULL
+  "
+  expect_snapshot(parse_text(text))
 })
 
 test_that("no options gives default values", {
@@ -270,7 +269,7 @@ test_that("warns if can't find section", {
     #' @inheritSection a A
     b <- function(y) {}
   "
-  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), code))
 })
 
 # Inherit parameters ------------------------------------------------------
@@ -470,7 +469,7 @@ test_that("warned if no params need documentation", {
     #' @inheritParams foo
     x <- function(x, y) {}
   "
-  expect_snapshot_warning(roc_proc_text(rd_roclet(), code))
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), code))
 })
 
 test_that("argument order, also for incomplete documentation", {

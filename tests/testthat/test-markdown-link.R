@@ -139,14 +139,15 @@ test_that("short and sweet links work", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 
-  expect_snapshot_warning(
-    out1 <- roc_proc_text(rd_roclet(), "
+  block <- "
     #' Title
     #'
     #' Description, see [name words][stringr::bar111].
     #' @md
-    foo <- function() {}")[[1]]
-  )
+    foo <- function() {}
+  "
+  expect_snapshot(out1 <- roc_proc_text(rd_roclet(), block)[[1]])
+
   out2 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'

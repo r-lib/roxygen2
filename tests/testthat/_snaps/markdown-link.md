@@ -35,5 +35,9 @@
 
 ---
 
-    [<text>:4] @description refers to unavailable topic stringr::bar111
+    Code
+      out1 <- roc_proc_text(rd_roclet(), block)[[1]]
+    Condition
+      Warning:
+      [<text>:4] @description refers to unavailable topic stringr::bar111
 

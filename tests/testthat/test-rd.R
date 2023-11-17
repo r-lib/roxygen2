@@ -37,37 +37,32 @@ test_that("deleted objects not documented", {
 })
 
 test_that("documenting unknown function requires name", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' Virtual Class To Enforce Max Slot Length
-      setClass('A')
+  block <- "
+    #' Virtual Class To Enforce Max Slot Length
+    setClass('A')
 
-      #' Validity function.
-      setValidity('A', function(object) TRUE)"
-    )
-  )
+    #' Validity function.
+    setValidity('A', function(object) TRUE)
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("can't set description and re-export", {
-  expect_snapshot_warning(
-    out <- roc_proc_text(rd_roclet(), "
+  block <- "
       #' @description NOPE
       #' @export
       magrittr::`%>%`
-      ")
-  )
-
+      "
+  expect_snapshot(out <- roc_proc_text(rd_roclet(), block))
   expect_length(out, 0)
 })
 
-
 test_that("documenting NA gives useful error message (#194)", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' Missing value
-      NA"
-    )
-  )
+  block <- "
+    #' Missing value
+    NA
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("@description NULL", {

@@ -7,17 +7,39 @@
 
 # warns on unknown inherit type
 
-    [<text>:2] @inherit attempts to inherit from unknown type "blah"
+    Code
+      parse_text(text)
+    Condition
+      Warning:
+      [<text>:2] @inherit attempts to inherit from unknown type "blah"
+    Output
+      [[1]]
+      <roxy_block> [<text>:3]
+        $tag
+          [line:  2] @inherit 'fun blah' {parsed}
+          [line:  3] @backref '<generated>' {parsed}
+        $call   NULL
+        $object NULL
+        
+      
 
 # warns if can't find section
 
-    @inheritSection failed in topic "b".
-    x Can't find section "A" in topic a.
+    Code
+      . <- roc_proc_text(rd_roclet(), code)
+    Condition
+      Warning:
+      @inheritSection failed in topic "b".
+      x Can't find section "A" in topic a.
 
 # warned if no params need documentation
 
-    @inheritParams failed in topic "x".
-    x All parameters are already documented; none remain to be inherited.
+    Code
+      . <- roc_proc_text(rd_roclet(), code)
+    Condition
+      Warning:
+      @inheritParams failed in topic "x".
+      x All parameters are already documented; none remain to be inherited.
 
 # can inherit all from single function
 

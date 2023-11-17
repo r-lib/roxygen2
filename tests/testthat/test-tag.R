@@ -3,9 +3,7 @@ test_that("warn about unknown tags", {
     #' @unknown
     foo <- function() {}
   "
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), block)
-  )
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 # Test low-level behaviour ----------------------------------------------------

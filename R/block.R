@@ -208,8 +208,7 @@ parse_tags <- function(tokens) {
   # Set up evaluation environment for markdown
   pkgenv <- roxy_meta_get("env") %||% baseenv()
   evalenv <- new.env(parent = pkgenv)
-  roxy_meta_set("evalenv", evalenv)
-  on.exit(roxy_meta_set("evalenv", NULL), add = TRUE)
+  local_roxy_meta_set("evalenv", evalenv)
 
   markdown_activate(tokens)
 

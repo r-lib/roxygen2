@@ -453,8 +453,7 @@ test_that("markup in link text", {
 })
 
 test_that("linking to self is unqualified", {
-  old <- roxy_meta_set("current_package", "myself")
-  on.exit(roxy_meta_set("current_package", old), add = TRUE)
+  local_roxy_meta_set("current_package", "myself")
   rd <- markdown("foo [myself::fun()] and [myself::obj] bar")
   expect_equal(
     rd,

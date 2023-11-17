@@ -15,33 +15,33 @@
 # can generate nonASCII document
 
     Code
-      roxygenise(roclets = "rd")
+      roxygenise(path, roclets = "rd")
     Message
       i Loading testNonASCII
       Writing 'printChineseMsg.Rd'
     Code
       # Second run should be idempotent
-      roxygenise(roclets = "rd")
+      roxygenise(path, roclets = "rd")
     Message
       i Loading testNonASCII
 
 # unicode escapes are ok
 
     Code
-      roxygenise(roclets = "rd")
+      roxygenise(path, roclets = "rd")
     Message
       i Loading testUtf8Escape
       Writing 'a.Rd'
     Code
       # Second run should be idempotent
-      roxygenise(roclets = "rd")
+      roxygenise(path, roclets = "rd")
     Message
       i Loading testUtf8Escape
 
 # automatically deletes unused files
 
     Code
-      roxygenise()
+      roxygenise(path)
     Message
       i Loading empty
       Deleting 'test.Rd'

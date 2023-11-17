@@ -30,7 +30,6 @@ namespace_roclet <- function() {
   roclet("namespace")
 }
 
-
 update_namespace_imports <- function(base_path) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
   if (!made_by_roxygen(NAMESPACE)) {
@@ -50,7 +49,7 @@ namespace_imports <- function(base_path = ".") {
   srcrefs <- lapply(parsed, utils::getSrcref)
   blocks <- unlist(lapply(srcrefs, ns_blocks), recursive = FALSE)
 
-  blocks_to_ns(blocks, emptyenv(), import_only = TRUE)
+  blocks_to_ns(blocks, emptyenv())
 }
 
 ns_blocks <- function(srcref) {
@@ -101,25 +100,25 @@ roclet_clean.roclet_namespace <- function(x, base_path) {
 
 # NAMESPACE generation ----------------------------------------------------
 
-blocks_to_ns <- function(blocks, env, import_only = FALSE) {
-  lines <- map(blocks, block_to_ns, env = env, import_only = import_only)
+blocks_to_ns <- function(blocks, env) {
+  lines <- map(blocks, block_to_ns, env = env)
   lines <- unlist(lines) %||% character()
 
   sort_c(unique(lines))
 }
 
-block_to_ns <- function(block, env, import_only = FALSE) {
-  map(block$tags, roxy_tag_ns, block = block, env = env, import_only = import_only)
+block_to_ns <- function(block, env) {
+  map(block$tags, roxy_tag_ns, block = block, env = env)
 }
 
 # Namespace tag methods ---------------------------------------------------
 
-roxy_tag_ns <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns <- function(x, block, env) {
   UseMethod("roxy_tag_ns")
 }
 
 #' @export
-roxy_tag_ns.default <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns.default <- function(x, block, env) {
 
 }
 
@@ -128,11 +127,7 @@ roxy_tag_parse.roxy_tag_evalNamespace <- function(x) {
   tag_code(x)
 }
 #' @export
-roxy_tag_ns.roxy_tag_evalNamespace <- function(x, block, env, import_only = FALSE) {
-  if (import_only) {
-    return()
-  }
-
+roxy_tag_ns.roxy_tag_evalNamespace <- function(x, block, env) {
   roxy_tag_eval(x, env)
 }
 
@@ -141,11 +136,7 @@ roxy_tag_parse.roxy_tag_export <- function(x) {
   tag_words_line(x)
 }
 #' @export
-roxy_tag_ns.roxy_tag_export <- function(x, block, env, import_only = FALSE) {
-  if (import_only) {
-    return()
-  }
-
+roxy_tag_ns.roxy_tag_export <- function(x, block, env) {
   if (identical(x$val, "")) {
     # FIXME: check for empty exports (i.e. no name)
     default_export(block$object, block)
@@ -159,11 +150,7 @@ roxy_tag_parse.roxy_tag_exportClass <- function(x) {
   tag_words(x, 1)
 }
 #' @export
-roxy_tag_ns.roxy_tag_exportClass <- function(x, block, env, import_only = FALSE) {
-  if (import_only) {
-    return()
-  }
-
+roxy_tag_ns.roxy_tag_exportClass <- function(x, block, env) {
   export_class(x$val)
 }
 
@@ -172,10 +159,7 @@ roxy_tag_parse.roxy_tag_exportMethod <- function(x) {
   tag_words(x, min = 1)
 }
 #' @export
-roxy_tag_ns.roxy_tag_exportMethod <- function(x, block, env, import_only = FALSE) {
-  if (import_only) {
-    return()
-  }
+roxy_tag_ns.roxy_tag_exportMethod <- function(x, block, env) {
   export_s4_method(x$val)
 }
 
@@ -184,10 +168,7 @@ roxy_tag_parse.roxy_tag_exportPattern <- function(x) {
   tag_words(x, min = 1)
 }
 #' @export
-roxy_tag_ns.roxy_tag_exportPattern <- function(x, block, env, import_only = FALSE) {
-  if (import_only) {
-    return()
-  }
+roxy_tag_ns.roxy_tag_exportPattern <- function(x, block, env) {
   one_per_line("exportPattern", x$val)
 }
 
@@ -196,11 +177,7 @@ roxy_tag_parse.roxy_tag_exportS3Method <- function(x) {
   tag_words(x, min = 0, max = 2)
 }
 #' @export
-roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env, import_only = FALSE) {
-  if (import_only) {
-    return()
-  }
-
+roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
   obj <- block$object
 
   if (identical(x$val, "")) {
@@ -247,7 +224,7 @@ roxy_tag_parse.roxy_tag_import <- function(x) {
   tag_words(x, min = 1)
 }
 #' @export
-roxy_tag_ns.roxy_tag_import <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns.roxy_tag_import <- function(x, block, env) {
   one_per_line_ignore_current("import", x$val)
 }
 
@@ -256,7 +233,7 @@ roxy_tag_parse.roxy_tag_importClassesFrom <- function(x) {
   tag_words(x, min = 2)
 }
 #' @export
-roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env) {
   repeat_first_ignore_current("importClassesFrom", x$val)
 }
 
@@ -265,7 +242,7 @@ roxy_tag_parse.roxy_tag_importFrom <- function(x) {
   tag_words(x, min = 2)
 }
 #' @export
-roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
   pkg <- x$val[1L]
   if (requireNamespace(pkg, quietly = TRUE)) {
     importing <- x$val[-1L]
@@ -283,7 +260,7 @@ roxy_tag_parse.roxy_tag_importMethodsFrom <- function(x) {
   tag_words(x, min = 2)
 }
 #' @export
-roxy_tag_ns.roxy_tag_importMethodsFrom <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns.roxy_tag_importMethodsFrom <- function(x, block, env) {
   repeat_first_ignore_current("importMethodsFrom", x$val)
 }
 
@@ -292,7 +269,7 @@ roxy_tag_parse.roxy_tag_rawNamespace <- function(x) {
   tag_code(x)
 }
 #' @export
-roxy_tag_ns.roxy_tag_rawNamespace  <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns.roxy_tag_rawNamespace  <- function(x, block, env) {
   x$raw
 }
 
@@ -301,7 +278,7 @@ roxy_tag_parse.roxy_tag_useDynLib <- function(x) {
   tag_words(x, min = 1)
 }
 #' @export
-roxy_tag_ns.roxy_tag_useDynLib <- function(x, block, env, import_only = FALSE) {
+roxy_tag_ns.roxy_tag_useDynLib <- function(x, block, env) {
   if (length(x$val) == 1) {
     return(paste0("useDynLib(", auto_quote(x$val), ")"))
   }

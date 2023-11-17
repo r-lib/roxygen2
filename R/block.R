@@ -73,21 +73,20 @@ print.roxy_block <- function(x, ...) {
   cat_line("  ", obj[-1])
 }
 
-block_create <- function(tokens, call, srcref) {
-
-  pkgenv <- roxy_meta_get("env")
-  # This should only happen in our test cases
-  if (is.null(pkgenv)) pkgenv <- baseenv()
-  evalenv <- new.env(parent = pkgenv)
-  roxy_meta_set("evalenv", evalenv)
-  on.exit(roxy_meta_set("evalenv", NULL), add = TRUE)
+block_create <- function(call, srcref, tokens = c()) {
+  if (is_empty(tokens)) {
+    return(NULL)
+  }
 
   tags <- parse_tags(tokens)
-  if (length(tags) == 0) return()
+  if (length(tags) == 0) {
+    return(NULL)
+  }
 
-  roxy_block(tags,
+  roxy_block(
+    tags = tags,
     file = attr(srcref, "srcfile")$filename,
-    line = as.vector(srcref)[[1]],
+    line = srcref[[1]],
     call = call
   )
 }
@@ -206,15 +205,17 @@ block_replace_tags <- function(block, tags, values) {
 # parsing -----------------------------------------------------------------
 
 parse_tags <- function(tokens) {
+  # Set up evaluation environment for markdown
+  pkgenv <- roxy_meta_get("env") %||% baseenv()
+  evalenv <- new.env(parent = pkgenv)
+  roxy_meta_set("evalenv", evalenv)
+  on.exit(roxy_meta_set("evalenv", NULL), add = TRUE)
+
   markdown_activate(tokens)
 
   tokens <- parse_description(tokens)
-
-  out <- vector("list", length(tokens))
-  for (i in seq_along(tokens)) {
-    out[[i]] <- roxy_tag_parse(tokens[[i]])
-  }
-  compact(out)
+  tokens <- map(tokens, roxy_tag_parse)
+  compact(tokens)
 }
 
 #' @export

@@ -30,49 +30,6 @@ namespace_roclet <- function() {
   roclet("namespace")
 }
 
-update_namespace_imports <- function(base_path) {
-  NAMESPACE <- file.path(base_path, "NAMESPACE")
-  if (!made_by_roxygen(NAMESPACE)) {
-    return(invisible())
-  }
-
-  lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
-  results <- c(made_by("#"), sort_c(unique(lines)))
-  write_if_different(NAMESPACE, results, check = TRUE)
-
-  invisible()
-}
-
-namespace_imports <- function(base_path = ".") {
-  paths <- package_files(base_path)
-  parsed <- lapply(paths, parse, keep.source = TRUE)
-  srcrefs <- lapply(parsed, utils::getSrcref)
-  blocks <- unlist(lapply(srcrefs, ns_blocks), recursive = FALSE)
-
-  blocks_to_ns(blocks, emptyenv())
-}
-
-ns_blocks <- function(srcref) {
-  comment_refs <- comments(srcref)
-  tokens <- lapply(comment_refs, tokenise_ref)
-
-  import_tags <- c(
-    "import", "importFrom", "importClassesFrom", "importMethodsFrom",
-    "rawNamespace", "useDynLib"
-  )
-  tokens_filtered <- lapply(tokens, function(tokens) {
-    tokens[map_lgl(tokens, function(x) x$tag %in% import_tags)]
-  })
-
-  compact(lapply(tokens_filtered, function(tokens) {
-    block_create(
-      call = NULL,
-      srcref = srcref(srcfile("NAMESPACE"), rep(1, 4)),
-      tokens = tokens
-    )
-  }))
-}
-
 #' @export
 roclet_process.roclet_namespace <- function(x, blocks, env, base_path) {
   blocks_to_ns(blocks, env)
@@ -97,6 +54,73 @@ roclet_clean.roclet_namespace <- function(x, base_path) {
     unlink(NAMESPACE)
   }
 }
+
+
+# NAMESPACE updates -------------------------------------------------------
+
+
+update_namespace_imports <- function(base_path) {
+  NAMESPACE <- file.path(base_path, "NAMESPACE")
+  if (!made_by_roxygen(NAMESPACE) || !file.exists(NAMESPACE)) {
+    return(invisible())
+  }
+
+  lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
+  results <- c(made_by("#"), sort_c(unique(lines)))
+  write_if_different(NAMESPACE, results, check = TRUE)
+
+  invisible()
+}
+
+# Here we hand roll parsing and tokenisation from roxygen2 primitives so
+# we can filter tags that we know don't require package code.
+namespace_imports <- function(base_path = ".") {
+  paths <- package_files(base_path)
+  parsed <- lapply(paths, parse, keep.source = TRUE)
+  srcrefs <- lapply(parsed, utils::getSrcref)
+  blocks <- unlist(lapply(srcrefs, ns_blocks), recursive = FALSE)
+
+  blocks_to_ns(blocks, emptyenv())
+}
+
+ns_blocks <- function(srcref) {
+  comment_refs <- comments(srcref)
+  tokens <- lapply(comment_refs, tokenise_ref)
+
+  import_tags <- c(
+    "import",
+    "importFrom",
+    "importClassesFrom",
+    "importMethodsFrom",
+    "rawNamespace",
+    "useDynLib"
+  )
+  tokens_filtered <- lapply(tokens, function(tokens) {
+    tokens[map_lgl(tokens, function(x) x$tag %in% import_tags)]
+  })
+
+  compact(lapply(tokens_filtered, function(tokens) {
+    block_create(
+      call = NULL,
+      srcref = srcref(srcfile("NAMESPACE"), rep(1, 4)),
+      tokens = tokens
+    )
+  }))
+}
+
+namespace_exports <- function(path) {
+  parsed <- as.list(parse(path, keep.source = TRUE))
+  ns_calls <- c(
+    "import",
+    "importFrom",
+    "importClassesFrom",
+    "importMethodsFrom",
+    "useDynLib"
+  )
+  export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_call, ns_calls)]
+  unlist(lapply(export_lines, as.character))
+}
+
 
 # NAMESPACE generation ----------------------------------------------------
 
@@ -358,15 +382,4 @@ repeat_first_ignore_current <- function(name, x) {
   } else {
     repeat_first(name, x)
   }
-}
-
-namespace_exports <- function(path) {
-  if (!file.exists(path)) {
-    return(character())
-  }
-
-  parsed <- as.list(parse(path, keep.source = TRUE))
-  is_import <- function(x) is_call(x, c("import", "importFrom", "importClassesFrom", "importMethodsFrom", "useDynLib"))
-  export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import)]
-  unlist(lapply(export_lines, as.character))
 }

@@ -1,4 +1,4 @@
-#' @importFrom test
+#' @importFrom stats median
 NULL
 
 #' @export

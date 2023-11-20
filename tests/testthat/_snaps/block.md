@@ -43,7 +43,6 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      <text>:5 Block must contain only one @rdname
+    Message
+      x <text>:5: Block must contain only one @rdname.
 

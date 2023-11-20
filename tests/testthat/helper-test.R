@@ -29,5 +29,5 @@ local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {
     )
   }
 
-  pkg_path
+  normalizePath(pkg_path, winslash = "/")
 }

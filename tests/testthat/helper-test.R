@@ -13,7 +13,7 @@ expect_equal_strings <- function(s1, s2, ignore_ws = TRUE) {
 }
 
 expect_parse_failure <- function(code)  {
-  (expect_warning(expect_null(code)))
+  (expect_condition(expect_null(code)))
 }
 
 local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {

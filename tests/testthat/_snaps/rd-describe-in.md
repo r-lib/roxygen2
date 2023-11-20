@@ -113,23 +113,20 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:6] @describeIn must be used with an object
+    Message
+      x <text>:6: @describeIn must be used with an object.
 
 ---
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:6] @describeIn can not be used with @name
+    Message
+      x <text>:6: @describeIn can not be used with @name.
 
 ---
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:6] @describeIn can not be used with @rdname
+    Message
+      x <text>:6: @describeIn can not be used with @rdname.
 

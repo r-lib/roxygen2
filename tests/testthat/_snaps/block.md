@@ -20,9 +20,8 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:5] @eval failed to evaluate
+    Message
+      x <text>:5: @eval failed to evaluate.
       Caused by error in `foo()`:
       ! Uhoh
 
@@ -30,17 +29,15 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:3] @eval must evaluate to a character vector
+    Message
+      x <text>:3: @eval must evaluate to a character vector.
 
 ---
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:3] @eval must not contain any missing values
+    Message
+      x <text>:3: @eval must not contain any missing values.
 
 # warns about duplicate tags
 
@@ -48,5 +45,5 @@
       . <- roc_proc_text(rd_roclet(), block)
     Condition
       Warning:
-      [<text>:5] Block must contain only one @rdname
+      <text>:5 Block must contain only one @rdname
 

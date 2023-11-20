@@ -2,9 +2,8 @@
 
     Code
       out <- roc_proc_text(rd_roclet(), block)[[1]]
-    Condition
-      Warning:
-      [<text>:4] @description failed to evaluate inline markdown code
+    Message
+      x <text>:4: @description failed to evaluate inline markdown code.
       Caused by error:
       ! multi-line `r ` markup is not supported
 
@@ -17,9 +16,7 @@
     Message
       
       Quitting from lines 1-1
-    Condition
-      Warning:
-      [<text>:4] @description failed to evaluate inline markdown code
+      x <text>:4: @description failed to evaluate inline markdown code.
       Caused by error in `map_chr()`:
       i In index: 1.
       Caused by error:

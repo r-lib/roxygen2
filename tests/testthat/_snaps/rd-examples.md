@@ -10,18 +10,16 @@
 
     Code
       out <- roc_proc_text(rd_roclet(), block)[[1]]
-    Condition
-      Warning:
-      [<text>:4] @example must be a single line
+    Message
+      x <text>:4: @example must be a single line.
       i Do you want @examples?
 
 # warns if path doesn't exist
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:4] @example './this-path-doesnt-exist.R' doesn't exist
+    Message
+      x <text>:4: @example './this-path-doesnt-exist.R' doesn't exist.
 
 # @examplesIf
 
@@ -38,9 +36,8 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:4] @examplesIf condition failed to parse
+    Message
+      x <text>:4: @examplesIf condition failed to parse.
       Caused by error in `parse()`:
       ! <text>:2:0: unexpected end of input
       1: 1 +

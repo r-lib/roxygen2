@@ -2,7 +2,6 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      [<text>:2] @title must be a single paragraph
+    Message
+      x <text>:2: @title must be a single paragraph.
 

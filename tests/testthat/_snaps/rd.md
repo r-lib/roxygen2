@@ -4,7 +4,7 @@
       . <- roc_proc_text(rd_roclet(), block)
     Condition
       Warning:
-      [<text>:6] Block must have a @name
+      <text>:6 Block must have a @name
       i Either document an existing object or manually specify with @name
 
 # can't set description and re-export
@@ -13,7 +13,7 @@
       out <- roc_proc_text(rd_roclet(), block)
     Condition
       Warning:
-      [<text>:4] Block must not include a description when re-exporting a function
+      <text>:4 Block must not include a description when re-exporting a function
 
 # documenting NA gives useful error message (#194)
 
@@ -21,7 +21,7 @@
       . <- roc_proc_text(rd_roclet(), block)
     Condition
       Warning:
-      [<text>:3] Block must have a @name
+      <text>:3 Block must have a @name
       i Either document an existing object or manually specify with @name
 
 # can generate nonASCII document

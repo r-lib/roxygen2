@@ -9,9 +9,8 @@
 
     Code
       parse_text(text)
-    Condition
-      Warning:
-      [<text>:2] @inherit attempts to inherit from unknown type "blah"
+    Message
+      x <text>:2: @inherit attempts to inherit from unknown type "blah".
     Output
       [[1]]
       <roxy_block> [<text>:3]

@@ -380,36 +380,27 @@ test_that("can extract non-imports from namespace preserving source", {
 })
 
 test_that("Invalid imports throw a helpful error", {
-  expect_warning(
-    expect_equal(
-      roc_proc_text(namespace_roclet(), "
-        #' @importFrom utils head InvalidUtilsFunction
-        NULL
-      "),
-      "importFrom(utils,head)"
-    ),
-    "Excluding unknown export",
-    fixed = TRUE
-  )
+  block <- "
+    #' @importFrom utils head InvalidUtilsFunction
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(out, "importFrom(utils,head)")
 
   # pluralization
-  expect_warning(
-    expect_equal(
-      roc_proc_text(namespace_roclet(), "
-        #' @importFrom utils head InvalidUtilsFunction1 InvalidUtilsFunction2
-        NULL
-      "),
-      "importFrom(utils,head)"
-    ),
-    "Excluding unknown exports"
-  )
+  block <- "
+    #' @importFrom utils head InvalidUtilsFunction1 InvalidUtilsFunction2
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(out, "importFrom(utils,head)")
 
   # If the package is not available at roxygenize() run time, nothing we can do
-  expect_equal(
-    roc_proc_text(namespace_roclet(), "
-      #' @importFrom AnUnknownUnavailablePackage Unchecked
-      NULL
-    "),
-    "importFrom(AnUnknownUnavailablePackage,Unchecked)"
-  )
+  block <- "
+    #' @importFrom AnUnknownUnavailablePackage Unchecked
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(out, "importFrom(AnUnknownUnavailablePackage,Unchecked)")
+
 })

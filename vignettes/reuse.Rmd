@@ -21,7 +21,7 @@ roxygen2 provides several ways to avoid repeating yourself in code documentation
 
 -   Combine documentation for closely related functions into a single file with `@describeIn` or `@rdname`.
 
--   Inherit components from another topic with `@inheritParams`, `@inheritSection`, or `@inherit`.
+-   Automatically copy tags from with `@inheritParams`, `@inheritSection`, or `@inherit`.
 
 -   Use functions to generate repeated text with inline R code.
 
@@ -110,27 +110,104 @@ add <- function(x, y) x + y
 times <- function(x, y) x * y
 ```
 
-## Inheriting documentation
+## Automatically copy tags
 
-You can inherit documentation from other topics in a few ways:
+If two or more functions share have similarities but are different or complex enough that you don't want to document them in a single file, you can use one of the four `@inherits` tags to automatically copy various components from another topic:
 
--   `@inheritParams source_function` inherits just the parameter documentation from `source_function()`.
+-   `@inheritParams foo` will copy `@param` contents from `foo`.
+-   `@inherit foo` will copy all supported components from `foo`.
+-   `@inheritSection foo {Section title}` will copy the `@section {Section title}` section from `foo`..
+-   `@inheritDotParams foo` will generate documentation for `…` by coping the documentation for `foo()`'s arguments.
 
--   `@inherit source_function` will inherit all supported components from `source_function`.
+We think of this an "inheritance" rather than just copying, because anything you inherit can be overridden by a more specific definition in the documentation. This applies particularly to `@inheritParams` which allows you to copy the documentation for some parameters while documenting others directly. We'll focus on this first.
 
-    Alternatively, you can use (e.g.) `@inherit source_function return details` to just inherit the return value and details from `source_function()`.
-    Supported components are `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`.
+### Parameters
 
--   `@inheritSection source_function Section title` will inherit the single `@section` called "Section title" from `source_function()`.
+The oldest, and most frequently used, inherits tag is `@inheritParams`.
+It's particularly useful when your multiple functions use the same argument name for the same task, as you can document the argument once, then inherit those docs elsewhere. For example, take the dplyr functions `arrange()`, `mutate()`, and `summarise()` which all have an argument called `.data`. `arrange()` is documented like so:
 
--   `@inheritDotParams` automatically generates parameter documentation for `...` for the common case where you pass `...` on to another function.
-    Because you often override some arguments, it comes with a flexible specification for argument selection:
+```{r}
+#' @param .data A data frame, data frame extension (e.g. a tibble), or a
+#'   lazy data frame (e.g. from dbplyr or dtplyr). See *Methods*, below, for
+#'   more details.
+#' @param ... <[`data-masking`][rlang::args_data_masking]> Variables, or
+#'   functions of variables. Use [desc()] to sort a variable in descending
+#'   order.
+arrange <- function(.data, ...) {}
+```
 
-    -   `@inheritDotParams foo` takes all parameters from `foo()`
-    -   `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`
-    -   `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
+Then `mutate()` and `summarise()` don't need to provide `@param .data` but can instead inherit the documentation from `arrange()`:
 
-All of these tags also work to inherit documentation from functions in another package by using `pkg::source_function`.
+```{r}
+#' @inheritParams arrange
+mutate <- function(.data, ...) {}
+
+#' @inheritParams arrange
+summarise <- function(.data, ...) {}
+```
+
+If this was all you wrote it wouldn't be quite right because `mutate()` and `summarise()` would also inherit the documentation for `...`, which has a different interpretation in these functions. So, for example, `mutate()` provides its own definition for `...`:
+
+```{r}
+#' @inheritParams arrange
+#' @param ... <[`data-masking`][rlang::args_data_masking]> Name-value pairs.
+#'   The name gives the name of the column in the output.
+#'
+#'   The value can be:
+#'
+#'   * A vector of length 1, which will be recycled to the correct length.
+#'   * A vector the same length as the current group (or the whole data frame
+#'     if ungrouped).
+#'   * `NULL`, to remove the column.
+#'   * A data frame or tibble, to create multiple columns in the output.
+mutate <- function(.data, ...) {}
+```
+
+Note that only the documentation for arguments with the same names are inherited. For example, `arrange()` also has a `.by_group` argument. Since no other function in dplyr has an argument with this name, its documentation will never be inherited.
+
+### Multiple parameters
+
+Sometimes you document two (or more) tightly coupled parameters together. For example, `dplyr::left_join()` has:
+
+```{r}
+#' @param x,y A pair of data frames, data frame extensions (e.g. a tibble), or
+#'   lazy data frames (e.g. from dbplyr or dtplyr). See *Methods*, below, for
+#'   more details.
+```
+
+When joint parameter documentation is inherited, it's all or nothing, i.e. if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documnted by the inheriting function.
+
+### Inheriting other components
+
+You can use `@inherits foo` to inherit the documentation for every supported tag from another topic. Currently, `@inherits` supports inheriting the following tags: `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`. 
+
+By supplying a space separated list of components after the function name, you can also choose to inherit only selected components. For example, `@inherit foo return` would just inherit the `@return` tag, and `@inherit foo seealso source` would inherit the `@seealso` and `@source` tags.
+
+`@inherit foo sections` will inherit _every_ `@section` tag (which can also be specified in markdown by using the top-level heading spec, `#`). To inherit a _specific_ section from another function, use `@inheritSection foo Section title`. For example, all the "adverbs" in purrr use `#' @inheritSection safely Adverbs` to inherit a standard section that provides advice on using an adverb in package code.
+
+### Documenting `...`
+
+When your function passes `...` on to another function, it can be useful to inline the documentation for some of the most common arguments. This technique is inspired by the documentation for `plot()`, where `...` can take any graphical parameter; `?plot` describes some of the most common arguments so that you don't have to look them up in `?par`.
+
+`@inheritDotParams` has two components: the function to inherit from and the arguments to inherit. Since you'll typically only want to document the most important arguments, `@inheritDotParams` it comes with a flexible specification for argument selection inspired by `dplyr::select()`:
+
+-   `@inheritDotParams foo` takes all parameters from `foo()`
+-   `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`
+-   `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
+
+### Inheriting from other packages
+
+It's most common to inherit from other documentation topics within the current package, but roxygen2 also supports inheriting documentation from other packages by using `package::function` syntax, e.g.:
+
+-   `@inheritParams package::function`
+
+-   `@inherit package::function`
+
+-   `@inheritSection package::function Section title`
+
+-   `@inheritDotParams package::function` 
+
+When inheriting documentation from another package bear in mind that you're now taking a fairly strong dependency on an external package, and now to ensure every developer produces the same documentation you'll need to make sure that they all have the same version of the package installed. For that reason, this technique is best used sparingly.
 
 ## Inline code
 

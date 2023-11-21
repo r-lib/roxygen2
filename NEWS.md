@@ -7,6 +7,8 @@
   somehow bork your `NAMESPACE` and can't easily get out of it because you
   can't re-document the package because your code doesn't reload.
 
+* `escape_examples()` is now exported (#1450).
+
 * `@docType package` now works more like documenting `"_PACKAGE"`, 
   creating a `{packagename}-package` alias and clearly suggesting that
   you should switch to `"_PACKAGE"` instead (#1491).

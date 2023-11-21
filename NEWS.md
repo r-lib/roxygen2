@@ -5,6 +5,10 @@
   really registers the method) even if the generic is not. This avoids rare,
   but hard to debug, problems (#1175).
 
+* `@docType package` now works more like documenting `"_PACKAGE"`, 
+  creating a `{packagename}-package` alias and clearly suggesting that
+  you should switch to `"_PACKAGE"` instead (#1491).
+
 * `URL` and `BugReports` fields in `DESCRIPTION` may now contain 
   percent-encoded URLs (@HenningLorenzen-ext-bayer, #1415).
 

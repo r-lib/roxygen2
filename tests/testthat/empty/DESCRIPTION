@@ -1,3 +1,5 @@
 Package: empty
 Version: 1.0.0
 Encoding: UTF-8
+Title: Empty package
+Description: An empty package

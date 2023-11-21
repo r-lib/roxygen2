@@ -112,19 +112,19 @@ times <- function(x, y) x * y
 
 ## Automatically copy tags
 
-If two or more functions share have similarities but are different or complex enough that you don't want to document them in a single file, you can use one of the four `@inherits` tags to automatically copy various components from another topic:
+If two or more functions share have similarities but are different or complex enough that you don't want to document them in a single file, you can use one of the four `@inherit` tags to automatically copy various components from another topic:
 
 -   `@inheritParams foo` will copy `@param` contents from `foo`.
 -   `@inherit foo` will copy all supported components from `foo`.
--   `@inheritSection foo {Section title}` will copy the `@section {Section title}` section from `foo`..
--   `@inheritDotParams foo` will generate documentation for `…` by coping the documentation for `foo()`'s arguments.
+-   `@inheritSection foo {Section title}` will copy the `@section {Section title}` section from `foo`.
+-   `@inheritDotParams foo` will generate documentation for `…` by copying the documentation for `foo()`'s arguments.
 
-We think of this an "inheritance" rather than just copying, because anything you inherit can be overridden by a more specific definition in the documentation. This applies particularly to `@inheritParams` which allows you to copy the documentation for some parameters while documenting others directly. We'll focus on this first.
+We think of this as "inheritance" rather than just copying, because anything you inherit can be overridden by a more specific definition in the documentation. This applies particularly to `@inheritParams` which allows you to copy the documentation for some parameters while documenting others directly. We'll focus on this first.
 
 ### Parameters
 
 The oldest, and most frequently used, inherits tag is `@inheritParams`.
-It's particularly useful when your multiple functions use the same argument name for the same task, as you can document the argument once, then inherit those docs elsewhere. For example, take the dplyr functions `arrange()`, `mutate()`, and `summarise()` which all have an argument called `.data`. `arrange()` is documented like so:
+It's particularly useful when multiple functions use the same argument name for the same task, as you can document the argument once, then inherit those docs elsewhere. For example, take the dplyr functions `arrange()`, `mutate()`, and `summarise()` which all have an argument called `.data`. `arrange()` is documented like so:
 
 ```{r}
 #' @param .data A data frame, data frame extension (e.g. a tibble), or a
@@ -175,13 +175,13 @@ Sometimes you document two (or more) tightly coupled parameters together. For ex
 #'   more details.
 ```
 
-When joint parameter documentation is inherited, it's all or nothing, i.e. if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documnted by the inheriting function.
+When joint parameter documentation is inherited, it's all or nothing, i.e. if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documented by the inheriting function.
 
 ### Inheriting other components
 
 You can use `@inherits foo` to inherit the documentation for every supported tag from another topic. Currently, `@inherits` supports inheriting the following tags: `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`. 
 
-By supplying a space separated list of components after the function name, you can also choose to inherit only selected components. For example, `@inherit foo return` would just inherit the `@return` tag, and `@inherit foo seealso source` would inherit the `@seealso` and `@source` tags.
+By supplying a space separated list of components after the function name, you can also choose to inherit only selected components. For example, `@inherit foo returns` would just inherit the `@returns` tag, and `@inherit foo seealso source` would inherit the `@seealso` and `@source` tags.
 
 `@inherit foo sections` will inherit _every_ `@section` tag (which can also be specified in markdown by using the top-level heading spec, `#`). To inherit a _specific_ section from another function, use `@inheritSection foo Section title`. For example, all the "adverbs" in purrr use `#' @inheritSection safely Adverbs` to inherit a standard section that provides advice on using an adverb in package code.
 
@@ -189,10 +189,10 @@ By supplying a space separated list of components after the function name, you c
 
 When your function passes `...` on to another function, it can be useful to inline the documentation for some of the most common arguments. This technique is inspired by the documentation for `plot()`, where `...` can take any graphical parameter; `?plot` describes some of the most common arguments so that you don't have to look them up in `?par`.
 
-`@inheritDotParams` has two components: the function to inherit from and the arguments to inherit. Since you'll typically only want to document the most important arguments, `@inheritDotParams` it comes with a flexible specification for argument selection inspired by `dplyr::select()`:
+`@inheritDotParams` has two components: the function to inherit from and the arguments to inherit. Since you'll typically only want to document the most important arguments, `@inheritDotParams` comes with a flexible specification for argument selection inspired by `dplyr::select()`:
 
--   `@inheritDotParams foo` takes all parameters from `foo()`
--   `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`
+-   `@inheritDotParams foo` takes all parameters from `foo()`.
+-   `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`.
 -   `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
 
 ### Inheriting from other packages

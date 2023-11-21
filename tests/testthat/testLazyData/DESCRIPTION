@@ -1,4 +1,4 @@
-Package: testEagerData
+Package: testLazyData
 Title: Tools to make developing R code easier
 License: GPL-2
 Description:

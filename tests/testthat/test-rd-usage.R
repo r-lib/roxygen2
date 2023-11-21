@@ -308,8 +308,7 @@ test_that("new wrapping style doesn't change unexpectedly", {
 })
 
 test_that("old wrapping style doesn't change unexpectedly", {
-  old <- roxy_meta_set("old_usage", TRUE)
-  on.exit(roxy_meta_set("old_usage", old))
+  local_roxy_meta_set("old_usage", TRUE)
 
   expect_snapshot_output({
     cat(call_to_usage({

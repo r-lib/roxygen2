@@ -19,14 +19,14 @@ test_that("grouped args get spaces", {
 })
 
 test_that("empty @param generates warning", {
-  expect_warning(
-    roc_proc_text(rd_roclet(), "
+  block <- "
     #' A
     #' @param
     #'
-    a <- function() {}"),
-    "requires a value"
-  )
+    a <- function() {}
+  "
+
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("data objects don't get params", {

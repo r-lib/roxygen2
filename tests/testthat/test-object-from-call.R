@@ -7,11 +7,28 @@ test_that("undocumentable things return null", {
 # data / package -------------------------------------------------------
 
 test_that("finds package description", {
+  path <- local_package_copy(test_path("empty"))
+  write_lines(path = file.path(path, "R/packages.R"), c(
+    "#' @docType package
+    NULL"
+  ))
+  expect_snapshot(blocks <- parse_file(file.path(path, "R/packages.R")))
+
+  expect_s3_class(blocks[[1]]$object, "package")
+
+  expect_equal(
+    block_get_tag_value(blocks[[1]], "aliases"),
+    "NULL empty empty-package"
+  )
+})
+
+test_that("finds package description", {
   obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
   expect_s3_class(obj, "package")
   expect_equal(obj$alias, "_PACKAGE")
   expect_equal(obj$value$desc$get_field("Package"), "testEagerData")
 })
+
 
 test_that("finds datasets given by name", {
   obj <- call_to_object({
@@ -24,17 +41,19 @@ test_that("finds datasets given by name", {
 })
 
 test_that("can document eager data", {
-  local_package_copy(test_path('testEagerData'))
-  suppressMessages(roxygenise())
+  path <- local_package_copy(test_path('testEagerData'))
+  suppressMessages(roxygenise(path))
+  withr::defer(pkgload::unload("testEagerData"))
 
-  expect_true(file.exists("man/a.Rd"))
+  expect_true(file.exists(file.path(path, "man/a.Rd")))
 })
 
 test_that("can document lazy data", {
-  local_package_copy(test_path('testLazyData'))
-  suppressMessages(roxygenise())
+  path <- local_package_copy(test_path('testLazyData'))
+  suppressMessages(roxygenise(path))
+  withr::defer(pkgload::unload("testLazyData"))
 
-  expect_true(file.exists("man/a.Rd"))
+  expect_true(file.exists(file.path(path, "man/a.Rd")))
 })
 
 # imports -----------------------------------------------------------------

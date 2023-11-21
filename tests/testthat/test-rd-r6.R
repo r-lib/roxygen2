@@ -366,9 +366,7 @@ test_that("r6 option", {
         meth = function(arg) { }
       )
     )"
-  old <- roxy_meta_get("r6")
-  on.exit(roxy_meta_set("r6", old), add = TRUE)
-  roxy_meta_set("r6", FALSE)
+  local_roxy_meta_set("r6", FALSE)
 
   expect_silent(
     out <- roc_proc_text(rd_roclet(), text)

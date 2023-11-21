@@ -21,8 +21,7 @@ test_that("turning on/off markdown globally", {
     "Description with some `code` included. `More code.`"
   )
 
-  old <- roxy_meta_set("markdown", TRUE)
-  on.exit(roxy_meta_set("markdown", old))
+  local_roxy_meta_set("markdown", TRUE)
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -57,8 +56,7 @@ test_that("turning on/off markdown locally", {
     "Description with some \\code{code} included. \\verb{More code.}"
   )
 
-  old <- roxy_meta_set("markdown", TRUE)
-  on.exit(roxy_meta_set("markdown", old))
+  local_roxy_meta_set("markdown", TRUE)
   out1 <- roc_proc_text(rd_roclet(), "
     #' Title
     #'
@@ -94,7 +92,7 @@ test_that("warning for both @md and @noMd", {
     foo <- function() {}
   "
 
-  expect_snapshot_warning(out1 <- roc_proc_text(rd_roclet(), block))
+  expect_snapshot(out1 <- roc_proc_text(rd_roclet(), block))
   expect_equal(out1[[1]]$get_value("description"), "`code`")
 
   # No translation even if markdown on generally

@@ -37,37 +37,32 @@ test_that("deleted objects not documented", {
 })
 
 test_that("documenting unknown function requires name", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' Virtual Class To Enforce Max Slot Length
-      setClass('A')
+  block <- "
+    #' Virtual Class To Enforce Max Slot Length
+    setClass('A')
 
-      #' Validity function.
-      setValidity('A', function(object) TRUE)"
-    )
-  )
+    #' Validity function.
+    setValidity('A', function(object) TRUE)
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("can't set description and re-export", {
-  expect_snapshot_warning(
-    out <- roc_proc_text(rd_roclet(), "
+  block <- "
       #' @description NOPE
       #' @export
       magrittr::`%>%`
-      ")
-  )
-
+      "
+  expect_snapshot(out <- roc_proc_text(rd_roclet(), block))
   expect_length(out, 0)
 })
 
-
 test_that("documenting NA gives useful error message (#194)", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' Missing value
-      NA"
-    )
-  )
+  block <- "
+    #' Missing value
+    NA
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("@description NULL", {
@@ -101,20 +96,24 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
-  local_package_copy(test_path("empty"))
+  path <- local_package_copy(test_path("empty"))
   desc::desc_set(
+    file = path,
     Package = "roxygendevtest",
     Title = "Package Title",
     Description = "Package description."
   )
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title
-    #'
-    #' @docType package
-    #' @description NULL
-    #' @name pkg
-    '_PACKAGE'
-  ")
+  withr::with_dir(
+    path,
+    out <- roc_proc_text(rd_roclet(), "
+      #' Title
+      #'
+      #' @docType package
+      #' @description NULL
+      #' @name pkg
+      '_PACKAGE'
+    ")
+  )
   expect_null(out[[1]]$get_value("description"))
 })
 
@@ -152,15 +151,16 @@ test_that("@details NULL", {
 # UTF-8 -------------------------------------------------------------------
 
 test_that("can generate nonASCII document", {
-  local_package_copy(test_path('testNonASCII'))
+  path <- local_package_copy(test_path('testNonASCII'))
+  withr::defer(pkgload::unload("testNonASCII"))
 
   expect_snapshot({
-    roxygenise(roclets = "rd")
+    roxygenise(path, roclets = "rd")
     "Second run should be idempotent"
-    roxygenise(roclets = "rd")
+    roxygenise(path, roclets = "rd")
   })
 
-  rd_path <- file.path("man", "printChineseMsg.Rd")
+  rd_path <- file.path(path, "man", "printChineseMsg.Rd")
   expect_true(file.exists(rd_path))
   rd <- read_lines(rd_path)
 
@@ -169,15 +169,16 @@ test_that("can generate nonASCII document", {
 })
 
 test_that("unicode escapes are ok", {
-  local_package_copy(test_path('testUtf8Escape'))
+  path <- local_package_copy(test_path('testUtf8Escape'))
+  withr::defer(pkgload::unload("testUtf8Escape"))
 
   expect_snapshot({
-    roxygenise(roclets = "rd")
+    roxygenise(path, roclets = "rd")
     "Second run should be idempotent"
-    roxygenise(roclets = "rd")
+    roxygenise(path, roclets = "rd")
   })
 
-  rd_path <- file.path("man", "a.Rd")
+  rd_path <- file.path(path, "man", "a.Rd")
   expect_true(file.exists(rd_path))
   rd <- read_lines(rd_path)
 
@@ -185,10 +186,11 @@ test_that("unicode escapes are ok", {
 })
 
 test_that("automatically deletes unused files", {
-  local_package_copy(test_path("empty"))
-  dir.create("man")
-  suppressMessages(roxygenise())
+  path <- local_package_copy(test_path("empty"))
+  dir.create(file.path(path, "man"))
+  suppressMessages(roxygenise(path))
+  withr::defer(pkgload::unload("empty"))
 
-  write_lines(made_by("%"), "man/test.Rd")
-  expect_snapshot(roxygenise())
+  write_lines(made_by("%"), file.path(path, "man/test.Rd"))
+  expect_snapshot(roxygenise(path))
 })

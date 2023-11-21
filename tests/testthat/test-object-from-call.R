@@ -43,6 +43,7 @@ test_that("finds datasets given by name", {
 test_that("can document eager data", {
   path <- local_package_copy(test_path('testEagerData'))
   suppressMessages(roxygenise(path))
+  withr::defer(pkgload::unload("testEagerData"))
 
   expect_true(file.exists(file.path(path, "man/a.Rd")))
 })
@@ -50,6 +51,7 @@ test_that("can document eager data", {
 test_that("can document lazy data", {
   path <- local_package_copy(test_path('testLazyData'))
   suppressMessages(roxygenise(path))
+  withr::defer(pkgload::unload("testLazyData"))
 
   expect_true(file.exists(file.path(path, "man/a.Rd")))
 })

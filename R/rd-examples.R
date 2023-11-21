@@ -77,6 +77,7 @@ format.rd_section_examples <- function(x, ...) {
 #' by R core.
 #'
 #' @keywords internal
+#' @export
 #' @examples
 #' # In examples we automatically escape Rd comments (%):
 #' 100 %% 30

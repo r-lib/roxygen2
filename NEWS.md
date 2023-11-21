@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `escape_examples()` is now exported (#1450).
+
 * `@docType package` now works more like documenting `"_PACKAGE"`, 
   creating a `{packagename}-package` alias and clearly suggesting that
   you should switch to `"_PACKAGE"` instead (#1491).

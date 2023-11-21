@@ -31,6 +31,16 @@ test_that("DESCRIPTION file is re-written only if collate changes", {
   }, transform = function(x) gsub(path, "<path>", x, fixed = TRUE))
 })
 
+test_that("drops bad collect directives", {
+  path <- local_package_copy(test_path("empty"))
+  write_lines(c("#' @include foo", "NULL"), file.path(path, "R", "a.R"))
+  write_lines(c("#' @include a.R", "NULL"), file.path(path, "R", "b.R"))
+  unlink(file.path(path, "R/empty-package.R"))
+
+  withr::with_dir(path, expect_snapshot(update_collate(".")))
+  expect_equal(desc::desc_get_collate(file = path), c("a.R", "b.R"))
+})
+
 test_that("can read from file name with utf-8 path", {
   path <- withr::local_tempfile(
     pattern = "Universit\u00e0-",

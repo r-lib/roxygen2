@@ -16,3 +16,11 @@
       # Second run should be idempotent
       update_collate(path)
 
+# drops bad collect directives
+
+    Code
+      update_collate(".")
+    Message
+      x a.R: unknown path in `@include foo`.
+      Updating collate directive in './DESCRIPTION'
+

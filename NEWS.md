@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@include` now gives an informative warning if you use a path that doesn't
+  exist (#1497).
+
 * The `NAMESPACE` roclet once again regenerates imports _before_ loading 
   package code and parsing roxygen blocks. This has been the goal for a long 
   time (#372), but we accidentally broke it when adding support for code 

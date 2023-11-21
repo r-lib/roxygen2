@@ -380,16 +380,6 @@ warn_missing_s3_exports <- function(blocks, env) {
 
   undocumented <- methods[!methods %in% s3objects]
   srcrefs <- map(undocumented, attr, "srcref")
-  messages <- paste0("S3 method `", names(undocumented) , "` needs @export or @exportS3method tag.")
+  messages <- paste0("S3 method `", names(undocumented) , "` needs @export or @exportS3method tag")
   map2(undocumented, messages, warn_roxy_function)
-}
-
-warn_roxy_function <- function(fun, message, ...) {
-  srcref <- attr(fun, "srcref")
-  file <- attr(srcref, "srcfile")$filename
-  line <- as.vector(srcref)[[1]]
-
-  message[[1]] <- paste0(link_to(file, line), ": ", message[[1]])
-  names(message)[[1]] <- "x"
-  cli::cli_inform(message, ...)
 }

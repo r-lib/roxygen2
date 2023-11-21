@@ -35,6 +35,13 @@
     Message
       x <text>:2: @importFrom must have at least 2 words, not 1.
 
+# can regenerate NAMESPACE even if its broken
+
+    Code
+      update_namespace_imports(path)
+    Message
+      Writing 'NAMESPACE'
+
 # rawNamespace must be valid code
 
     Code

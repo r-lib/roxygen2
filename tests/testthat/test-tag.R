@@ -3,9 +3,7 @@ test_that("warn about unknown tags", {
     #' @unknown
     foo <- function() {}
   "
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), block)
-  )
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 # Test low-level behaviour ----------------------------------------------------
@@ -70,20 +68,13 @@ test_that("braces in code must match", {
 
 # Test that incomplete Rd is caught in Rd blocks -------------------------------
 
-test_that("incomplete rd in tag raises error", {
-  expect_warning(roc_proc_text(rd_roclet(), "
-    #' Title
+test_that("incomplete rd in prequel or tag raises issue", {
+  block <- "
+    #' Title {
     #' @aliases title{
-    x <- 1"), "mismatched braces")
+    x <- 1
+  "
+  expect_snapshot(out <- roc_proc_text(rd_roclet(), block))
+  expect_equal(out[[1]]$get_value("title"), "")
+  expect_equal(out[[1]]$get_value("alias"), "x")
 })
-
-test_that("incomplete rd in prequel raises error", {
-  expect_warning(
-    roc_proc_text(rd_roclet(), "
-      #' Title {
-      x <- 1"
-    ),
-    "mismatched braces"
-  )
-})
-

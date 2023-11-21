@@ -36,7 +36,7 @@ Key tags:
 \itemize{
 \item \verb{@describeIn $\{1:destination\} $\{2:description\}}: Document a function or method in the \code{destination} topic.
 \item \verb{@inherit $\{1:source\} $\{2:components\}}: Inherit one or more documentation components from another topic. If \code{components} is omitted, all supported components will be inherited.
-Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, and \code{note}.
+Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, \code{note}, and \code{format}.
 \item \verb{@inheritDotParams $\{1:source\} $\{2:arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function.
 \item \verb{@inheritParams $\{1:source\}}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
 \item \verb{@inheritSection $\{1:source\} $\{2:section name\}}: Inherit a specific named section from another topic.

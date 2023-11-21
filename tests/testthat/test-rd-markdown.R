@@ -72,5 +72,5 @@ test_that("@title warns about multiple paragraphs", {
     #' Paragraph 2
     x <- list(a = 1, b = 2)
   "
-  expect_snapshot_warning(roc_proc_text(rd_roclet(), block))
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })

@@ -1,31 +1,28 @@
 # Returns list of roxy_blocks
-tokenize_file <- function(file, srcref_path = NULL) {
-  lines <- read_lines(file)
+tokenize_file <- function(path, srcref_path = NULL) {
+  lines <- read_lines(path)
+  calls <- parse_lines(lines, srcref_path %||% path)
+  srcrefs <- utils::getSrcref(calls)
 
-  parsed <- parse(
-    text = lines,
-    keep.source = TRUE,
-    srcfile = srcfilecopy(srcref_path %||% file, lines, isFile = TRUE)
-  )
-  if (length(parsed) == 0)
-    return(list())
-
-  refs <- utils::getSrcref(parsed)
-
-  comment_refs <- comments(refs)
+  comment_refs <- comments(srcrefs)
   tokens <- lapply(comment_refs, tokenise_ref)
 
-  has_tokens <- !purrr::map_lgl(tokens, purrr::is_empty)
+  blocks <- map(seq_along(tokens), function(i) {
+    block_create(
+      call = calls[[i]],
+      srcref = srcrefs[[i]],
+      tokens = tokens[[i]]
+    )
+  })
+  compact(blocks)
+}
 
-  blocks <- purrr::pmap(
-    list(
-      call = as.list(parsed)[has_tokens],
-      srcref = refs[has_tokens],
-      tokens = tokens[has_tokens]
-    ),
-    block_create
+parse_lines <- function(lines, path) {
+  parse(
+    text = lines,
+    keep.source = TRUE,
+    srcfile = srcfilecopy(path, lines, isFile = TRUE)
   )
-  purrr::compact(blocks)
 }
 
 tokenise_ref <- function(x) {
@@ -38,6 +35,10 @@ tokenise_ref <- function(x) {
 
 # For each src ref, find the comment block preceding it
 comments <- function(refs) {
+  if (length(refs) == 0) {
+    return(list())
+  }
+
   srcfile <- attr(refs[[1]], "srcfile")
 
   # first_line, first_byte, last_line, last_byte

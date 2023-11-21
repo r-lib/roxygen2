@@ -110,10 +110,7 @@ test_that("family also included in concepts", {
 
 test_that("custom family prefixes can be set", {
 
-  owd <- setwd(tempdir())
-  on.exit(setwd(owd), add = TRUE)
-
-  roxy_meta_set("rd_family_title", list(a = "Custom prefix: "))
+  local_roxy_meta_set("rd_family_title", list(a = "Custom prefix: "))
   out <- roc_proc_text(rd_roclet(), "
     #' foo
     #' @family a

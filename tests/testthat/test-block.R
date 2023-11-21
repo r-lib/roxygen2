@@ -9,8 +9,7 @@ test_that("has thoughtful print method", {
     #' @export
     f <- function(x, y) x + y
   "
-  block <- parse_text(text)[[1]]
-  expect_snapshot_output(block)
+  expect_snapshot(parse_text(text)[[1]])
 })
 
 # description block -------------------------------------------------------
@@ -237,33 +236,30 @@ test_that("evaluation occurs during parsing", {
 })
 
 test_that("errors are propagated", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      foo <- function() stop('Uhoh')
-      #' Title
-      #' @name foo
-      #' @eval foo()
-      NULL"
-    )
-  )
+  block <- "
+    foo <- function() stop('Uhoh')
+    #' Title
+    #' @name foo
+    #' @eval foo()
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("must return non-NA string", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      foo <- function() NA
-      #' @eval foo()
-      NULL"
-    )
-  )
+  block <- "
+    foo <- function() NA
+    #' @eval foo()
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      foo <- function() NA_character_
-      #' @eval foo()
-      NULL"
-    )
-  )
+  block <- "
+    foo <- function() NA_character_
+    #' @eval foo()
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("also works with namespace roclet", {
@@ -282,12 +278,11 @@ test_that("also works with namespace roclet", {
 
 
 test_that("warns about duplicate tags", {
-  expect_snapshot_warning({
-    roc_proc_text(rd_roclet(), "
-      #' Foo
-      #' @rdname foo
-      #' @rdname bar
-      foo <- function() {}
-    ")
-  })
+  block <- "
+    #' Foo
+    #' @rdname foo
+    #' @rdname bar
+    foo <- function() {}
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })

@@ -21,7 +21,7 @@ roxygen2 provides several ways to avoid repeating yourself in code documentation
 
 -   Combine documentation for closely related functions into a single file with `@describeIn` or `@rdname`.
 
--   Automatically copy tags from with `@inheritParams`, `@inheritSection`, or `@inherit`.
+-   Automatically copy tags with `@inheritParams`, `@inheritSection`, or `@inherit`.
 
 -   Use functions to generate repeated text with inline R code.
 
@@ -119,12 +119,16 @@ If two or more functions share have similarities but are different or complex en
 -   `@inheritSection foo {Section title}` will copy the `@section {Section title}` section from `foo`.
 -   `@inheritDotParams foo` will generate documentation for `…` by copying the documentation for `foo()`'s arguments.
 
-We think of this as "inheritance" rather than just copying, because anything you inherit can be overridden by a more specific definition in the documentation. This applies particularly to `@inheritParams` which allows you to copy the documentation for some parameters while documenting others directly. We'll focus on this first.
+We think of this as "inheritance" rather than just copying, because anything you inherit can be overridden by a more specific definition in the documentation.
+This applies particularly to `@inheritParams` which allows you to copy the documentation for some parameters while documenting others directly.
+We'll focus on this first.
 
 ### Parameters
 
 The oldest, and most frequently used, inherits tag is `@inheritParams`.
-It's particularly useful when multiple functions use the same argument name for the same task, as you can document the argument once, then inherit those docs elsewhere. For example, take the dplyr functions `arrange()`, `mutate()`, and `summarise()` which all have an argument called `.data`. `arrange()` is documented like so:
+It's particularly useful when multiple functions use the same argument name for the same task, as you can document the argument once, then inherit those docs elsewhere.
+For example, take the dplyr functions `arrange()`, `mutate()`, and `summarise()` which all have an argument called `.data`.
+`arrange()` is documented like so:
 
 ```{r}
 #' @param .data A data frame, data frame extension (e.g. a tibble), or a
@@ -146,7 +150,8 @@ mutate <- function(.data, ...) {}
 summarise <- function(.data, ...) {}
 ```
 
-If this was all you wrote it wouldn't be quite right because `mutate()` and `summarise()` would also inherit the documentation for `...`, which has a different interpretation in these functions. So, for example, `mutate()` provides its own definition for `...`:
+If this was all you wrote it wouldn't be quite right because `mutate()` and `summarise()` would also inherit the documentation for `...`, which has a different interpretation in these functions.
+So, for example, `mutate()` provides its own definition for `...`:
 
 ```{r}
 #' @inheritParams arrange
@@ -163,11 +168,14 @@ If this was all you wrote it wouldn't be quite right because `mutate()` and `sum
 mutate <- function(.data, ...) {}
 ```
 
-Note that only the documentation for arguments with the same names are inherited. For example, `arrange()` also has a `.by_group` argument. Since no other function in dplyr has an argument with this name, its documentation will never be inherited.
+Note that only the documentation for arguments with the same names are inherited.
+For example, `arrange()` also has a `.by_group` argument.
+Since no other function in dplyr has an argument with this name, its documentation will never be inherited.
 
 ### Multiple parameters
 
-Sometimes you document two (or more) tightly coupled parameters together. For example, `dplyr::left_join()` has:
+Sometimes you document two (or more) tightly coupled parameters together.
+For example, `dplyr::left_join()` has:
 
 ```{r}
 #' @param x,y A pair of data frames, data frame extensions (e.g. a tibble), or
@@ -177,19 +185,36 @@ Sometimes you document two (or more) tightly coupled parameters together. For ex
 
 When joint parameter documentation is inherited, it's all or nothing, i.e. if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documented by the inheriting function.
 
+### The dot prefix
+
+Many tidyverse functions that accept named arguments in `...` also use a `.` prefix for their own arguments.
+This reduces the risk of an argument going to the wrong place.
+For example, `dplyr::mutate()` has `.by`, `.keep`, `.before`, and `.after` arguments, because if they didn't have that prefix, you wouldn't be able to create new variables called `by`, `keep`, `before`, or `after`.
+We call this pattern the [dot prefix](https://design.tidyverse.org/dots-prefix.html).
+
+This means that an argument with the same meaning can come in one of two forms: with and without the `.`.
+`@inheritParams` knows about this common pattern so ignores a `.` prefix when matching argument name.
+In other words, `.x` will inherit documentation for `x`, and `x` will inherit documentation from `.x`.
+
 ### Inheriting other components
 
-You can use `@inherits foo` to inherit the documentation for every supported tag from another topic. Currently, `@inherits` supports inheriting the following tags: `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`. 
+You can use `@inherits foo` to inherit the documentation for every supported tag from another topic.
+Currently, `@inherits` supports inheriting the following tags: `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`.
 
-By supplying a space separated list of components after the function name, you can also choose to inherit only selected components. For example, `@inherit foo returns` would just inherit the `@returns` tag, and `@inherit foo seealso source` would inherit the `@seealso` and `@source` tags.
+By supplying a space separated list of components after the function name, you can also choose to inherit only selected components.
+For example, `@inherit foo returns` would just inherit the `@returns` tag, and `@inherit foo seealso source` would inherit the `@seealso` and `@source` tags.
 
-`@inherit foo sections` will inherit _every_ `@section` tag (which can also be specified in markdown by using the top-level heading spec, `#`). To inherit a _specific_ section from another function, use `@inheritSection foo Section title`. For example, all the "adverbs" in purrr use `#' @inheritSection safely Adverbs` to inherit a standard section that provides advice on using an adverb in package code.
+`@inherit foo sections` will inherit *every* `@section` tag (which can also be specified in markdown by using the top-level heading spec, `#`).
+To inherit a *specific* section from another function, use `@inheritSection foo Section title`.
+For example, all the "adverbs" in purrr use `#' @inheritSection safely Adverbs` to inherit a standard section that provides advice on using an adverb in package code.
 
 ### Documenting `...`
 
-When your function passes `...` on to another function, it can be useful to inline the documentation for some of the most common arguments. This technique is inspired by the documentation for `plot()`, where `...` can take any graphical parameter; `?plot` describes some of the most common arguments so that you don't have to look them up in `?par`.
+When your function passes `...` on to another function, it can be useful to inline the documentation for some of the most common arguments.
+This technique is inspired by the documentation for `plot()`, where `...` can take any graphical parameter; `?plot` describes some of the most common arguments so that you don't have to look them up in `?par`.
 
-`@inheritDotParams` has two components: the function to inherit from and the arguments to inherit. Since you'll typically only want to document the most important arguments, `@inheritDotParams` comes with a flexible specification for argument selection inspired by `dplyr::select()`:
+`@inheritDotParams` has two components: the function to inherit from and the arguments to inherit.
+Since you'll typically only want to document the most important arguments, `@inheritDotParams` comes with a flexible specification for argument selection inspired by `dplyr::select()`:
 
 -   `@inheritDotParams foo` takes all parameters from `foo()`.
 -   `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`.
@@ -205,9 +230,11 @@ It's most common to inherit from other documentation topics within the current p
 
 -   `@inheritSection package::function Section title`
 
--   `@inheritDotParams package::function` 
+-   `@inheritDotParams package::function`
 
-When inheriting documentation from another package bear in mind that you're now taking a fairly strong dependency on an external package, and now to ensure every developer produces the same documentation you'll need to make sure that they all have the same version of the package installed. For that reason, this technique is best used sparingly.
+When inheriting documentation from another package bear in mind that you're now taking a fairly strong dependency on an external package, and to ensure every developer produces the same documentation you'll need to make sure that they all have the same version of the package installed.
+And if the package changes the name of the topic or section, your documentation will require an update.
+For those reasons, this technique is best used sparingly.
 
 ## Inline code
 

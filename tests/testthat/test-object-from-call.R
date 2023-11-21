@@ -6,26 +6,22 @@ test_that("undocumentable things return null", {
 
 # data / package -------------------------------------------------------
 
-test_that("finds package description", {
+test_that("recommends use of _PACKAGE", {
   path <- local_package_copy(test_path("empty"))
-  write_lines(path = file.path(path, "R/packages.R"), c(
-    "#' @docType package
-    NULL"
-  ))
-  expect_snapshot(blocks <- parse_file(file.path(path, "R/packages.R")))
 
-  expect_s3_class(blocks[[1]]$object, "package")
+  block <- "
+    #' @docType package
+    NULL
+  "
+  withr::with_dir(path, expect_snapshot(out <- parse_text(block)[[1]]))
 
-  expect_equal(
-    block_get_tag_value(blocks[[1]], "aliases"),
-    "NULL empty empty-package"
-  )
+  expect_s3_class(out$object, "package")
+  expect_equal(out$object$value$desc$get_field("Package"), "empty")
 })
 
 test_that("finds package description", {
   obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
   expect_s3_class(obj, "package")
-  expect_equal(obj$alias, "_PACKAGE")
   expect_equal(obj$value$desc$get_field("Package"), "testEagerData")
 })
 

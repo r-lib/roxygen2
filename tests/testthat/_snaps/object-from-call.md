@@ -1,8 +1,8 @@
-# finds package description
+# recommends use of _PACKAGE
 
     Code
-      blocks <- parse_file(file.path(path, "R/packages.R"))
+      out <- parse_text(block)[[1]]
     Message
-      x packages.R:2: `@docType "package"` is deprecated.
+      x <text>:3: `@docType "package"` is deprecated.
       i Please document "_PACKAGE" instead.
 

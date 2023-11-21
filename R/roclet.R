@@ -123,14 +123,19 @@ is.roclet <- function(x) inherits(x, "roclet")
 #'
 #' @param roclet Name of roclet to use for processing.
 #' @param input Source string
+#' @param wd Working directory
 #' @export
 #' @keywords internal
-roc_proc_text <- function(roclet, input) {
+roc_proc_text <- function(roclet, input, wd = NULL) {
   stopifnot(is.roclet(roclet))
 
   file <- tempfile()
   write_lines(input, file)
   on.exit(unlink(file))
+
+  if (!is.null(wd)) {
+    withr::local_dir(wd)
+  }
 
   env <- env_file(file)
   blocks <- parse_text(input, env = env)

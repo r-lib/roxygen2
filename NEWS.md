@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `_PACKAGE` will no longer generate an alias for your package name if 
+  a function of the same name exists (#1160).
+
 * `@exportS3Method` provides the needed metadata to generate correct usage
   for S3 methods, just like `@method` (#1202).
 

@@ -104,7 +104,7 @@ parser_package <- function(file) {
     desc = desc::desc(file = pkg_path),
     path = pkg_path
   )
-  object(value, "_PACKAGE", type = "package")
+  object(value, NULL, type = "package")
 }
 
 parser_assignment <- function(call, env, block) {

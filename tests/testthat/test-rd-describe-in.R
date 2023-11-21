@@ -222,37 +222,33 @@ test_that("s4 methods get nice label", {
 })
 
 test_that("complains about bad usage", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' bar
-      bar <- 100
+  block <- "
+    #' bar
+    bar <- 100
 
-      #' @name bar
-      #' @describeIn foo shortcut for foo
-      NULL
-      "
-    )
-  )
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' bar
-      bar <- 100
+    #' @name bar
+    #' @describeIn foo shortcut for foo
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 
-      #' @name bar
-      #' @describeIn foo shortcut for foo
-      foo <- 10
-      "
-    )
-  )
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' bar
-      bar <- 100
+  block <- "
+    #' bar
+    bar <- 100
 
-      #' @rdname bar
-      #' @describeIn foo shortcut for foo
-      foo <- 10
-      "
-    )
-  )
+    #' @name bar
+    #' @describeIn foo shortcut for foo
+    foo <- 10
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
+
+  block <- "
+    #' bar
+    bar <- 100
+
+    #' @rdname bar
+    #' @describeIn foo shortcut for foo
+    foo <- 10
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })

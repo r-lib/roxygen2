@@ -46,8 +46,9 @@ test_that("@docType class automatically added to reference class objects", {
 # packages -----------------------------------------------------------------
 
 test_that("can create package documentation", {
-  local_package_copy(test_path("empty"))
+  path <- local_package_copy(test_path("empty"))
   desc::desc_set(
+    file = path,
     Package = "roxygendevtest",
     Title = "Package Title",
     Description = "Package description."
@@ -57,7 +58,10 @@ test_that("can create package documentation", {
     #' @details Details.
   '_PACKAGE'
   "
-  blocks <- parse_text(block, env = new.env())
+  withr::with_dir(
+    path,
+    blocks <- parse_text(block, env = new.env())
+  )
   out <- roclet_process(rd_roclet(), blocks, env = new.env(), base_path = ".")[[1]]
 
   expect_equal(out$get_value("name"), "roxygendevtest-package")

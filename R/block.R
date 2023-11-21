@@ -208,8 +208,7 @@ parse_tags <- function(tokens) {
   # Set up evaluation environment for markdown
   pkgenv <- roxy_meta_get("env") %||% baseenv()
   evalenv <- new.env(parent = pkgenv)
-  roxy_meta_set("evalenv", evalenv)
-  on.exit(roxy_meta_set("evalenv", NULL), add = TRUE)
+  local_roxy_meta_set("evalenv", evalenv)
 
   markdown_activate(tokens)
 
@@ -292,6 +291,7 @@ parse_description <- function(tags) {
 }
 
 warn_roxy_block <- function(block, message, ...) {
-  message[[1]] <- paste0(link_to(block$file, block$line), " ", message[[1]])
-  cli::cli_warn(message, ..., .envir = parent.frame())
+  message[[1]] <- paste0(link_to(block$file, block$line), ": ", message[[1]], ".")
+  names(message)[[1]] <- "x"
+  cli::cli_inform(message, ..., .envir = parent.frame())
 }

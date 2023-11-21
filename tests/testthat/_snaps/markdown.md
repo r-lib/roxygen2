@@ -76,14 +76,20 @@
 
 # unhandled markdown generates warning
 
-    [<text>:4] @description markdown translation failed
-    x block quotes are not currently supported
+    Code
+      . <- roc_proc_text(rd_roclet(), text)
+    Message
+      x <text>:4: @description markdown translation failed.
+      x block quotes are not currently supported
 
 # level 1 heading in markdown generates warning in some tags
 
-    [<text>:4] @seealso markdown translation failed
-    x Level 1 headings are not supported in @seealso
-    i Do you want to put the heading in @description or @details?
+    Code
+      . <- roc_proc_text(rd_roclet(), text)
+    Message
+      x <text>:4: @seealso markdown translation failed.
+      x Level 1 headings are not supported in @seealso
+      i Do you want to put the heading in @description or @details?
 
 # alternative knitr engines
 

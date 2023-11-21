@@ -25,15 +25,15 @@ test_that("tags check for mismatched parents gives useful warnings", {
     expect_parse_failure(tag_examples(tag))
 
     "markdown tags return empty values"
-    (expect_warning(tag_markdown(tag)))
-    (expect_warning(tag_markdown_with_sections(tag)))
+    tag_markdown(tag)
+    tag_markdown_with_sections(tag)
   })
 
   local_markdown()
+  markdown_on()
   expect_snapshot({
-    markdown_on()
     tag <- roxy_test_tag("# one\ntwo\n# three\nfour {")
-    (expect_warning(tag_markdown_with_sections(tag)))
+    tag_markdown_with_sections(tag)
   })
 })
 
@@ -80,13 +80,13 @@ test_that("tag_words_line() gives useful warnings", {
 test_that("tag_toggle() gives useful warnings", {
   expect_snapshot({
     tag <- roxy_test_tag("x")
-    expect_parse_failure(tag_toggle(tag))
+    tag_toggle(tag)
   })
 })
 
 test_that("tag_code() gives useful warnings", {
   expect_snapshot({
     tag <- roxy_test_tag("a + ")
-    expect_parse_failure(tag_code(tag))
+    tag_code(tag)
   })
 })

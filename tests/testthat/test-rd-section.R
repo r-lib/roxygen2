@@ -1,18 +1,17 @@
 test_that("warn if forgotten colon", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' Foo
-      #'
-      #' @section Haz dox
-      #' Here.
-      #' There
-      foo <- function(x = '%') x
-    ")
-  )
+  block <- "
+    #' Foo
+    #'
+    #' @section Haz dox
+    #' Here.
+    #' There
+    foo <- function(x = '%') x
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("@section-s with identical titles are merged", {
-  out <- roc_proc_text(rd_roclet(), "
+  block <- "
     #' Foo
     #'
     #' @section Haz dox: Here.
@@ -25,7 +24,8 @@ test_that("@section-s with identical titles are merged", {
     #' @section Haz dox:
     #'   Got news.
     bar <- function(y = '%') y
-  ")[[1]]
+  "
+  out <- roc_proc_text(rd_roclet(), block)[[1]]
 
   expect_equal(
     out$get_section("section"),

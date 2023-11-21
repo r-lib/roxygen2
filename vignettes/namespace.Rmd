@@ -75,8 +75,8 @@ bizarro.character <- function(x, ...) {
 You have four options for documenting an S3 method:
 
 -   Don't document it; it's not required, and not needed for simple generics where the user won't care about the details.
--   If the method is particularly complex or has many arguments that the generic does not, you can document it in its own file. In this case, just document it as if its a function.
--   You can use `@rdname` to document it with other methds for the generic. This is a good option if it's your generic, and you're providing a bunch of methods for different classes.
+-   If the method is particularly complex or has many arguments that the generic does not, you can document it in its own file. In this case, just document it as if it's a function.
+-   You can use `@rdname` to document it with other methods for the generic. This is a good option if it's your generic, and you're providing a bunch of methods for different classes.
 -   You can use `@rdname` to document it with other methods for the class. This is typically the least appealing option because the different generics will have different arguments, leading to a cluttered and potentially confusing page.
 
 ```{r}
@@ -125,7 +125,7 @@ generic.foo <- function(x, ...) {
 -   **Generics:** treat it like a function and `@export` if user facing.
 
 -   **Methods**: you only need to `@export` a method, if the generic lives in another package.
-    Unlike S4, you must document S4 methods.
+    Unlike S3, you must document S4 methods.
     Because method details are often not that important, it's common to use `@rdname` to put the documentation for unimportant methods into a single topic with `@keywords internal`.
 
 ### Manual exports

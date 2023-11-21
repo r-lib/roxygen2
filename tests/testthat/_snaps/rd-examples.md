@@ -8,12 +8,18 @@
 
 # @example gives warning if used instead of @examples
 
-    [<text>:4] @example must be a single line
-    i Do you want @examples?
+    Code
+      out <- roc_proc_text(rd_roclet(), block)[[1]]
+    Message
+      x <text>:4: @example must be a single line.
+      i Do you want @examples?
 
 # warns if path doesn't exist
 
-    [<text>:4] @example './this-path-doesnt-exist.R' doesn't exist
+    Code
+      . <- roc_proc_text(rd_roclet(), block)
+    Message
+      x <text>:4: @example './this-path-doesnt-exist.R' doesn't exist.
 
 # @examplesIf
 
@@ -28,9 +34,12 @@
 
 # @examplesIf warns about unparseable condition
 
-    [<text>:4] @examplesIf condition failed to parse
-    Caused by error in `parse()`:
-    ! <text>:2:0: unexpected end of input
-    1: 1 +
-       ^
+    Code
+      . <- roc_proc_text(rd_roclet(), block)
+    Message
+      x <text>:4: @examplesIf condition failed to parse.
+      Caused by error in `parse()`:
+      ! <text>:2:0: unexpected end of input
+      1: 1 +
+         ^
 

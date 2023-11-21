@@ -24,17 +24,17 @@ test_that("finds datasets given by name", {
 })
 
 test_that("can document eager data", {
-  local_package_copy(test_path('testEagerData'))
-  suppressMessages(roxygenise())
+  path <- local_package_copy(test_path('testEagerData'))
+  suppressMessages(roxygenise(path))
 
-  expect_true(file.exists("man/a.Rd"))
+  expect_true(file.exists(file.path(path, "man/a.Rd")))
 })
 
 test_that("can document lazy data", {
-  local_package_copy(test_path('testLazyData'))
-  suppressMessages(roxygenise())
+  path <- local_package_copy(test_path('testLazyData'))
+  suppressMessages(roxygenise(path))
 
-  expect_true(file.exists("man/a.Rd"))
+  expect_true(file.exists(file.path(path, "man/a.Rd")))
 })
 
 # imports -----------------------------------------------------------------

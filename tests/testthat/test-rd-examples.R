@@ -49,27 +49,26 @@ test_that("@example does not introduce extra empty lines", {
 })
 
 test_that("@example gives warning if used instead of @examples", {
-  expect_snapshot_warning(
-    out <- roc_proc_text(rd_roclet(), "
-      #' @name a
-      #' @title a
-      #' @example
-      #' a <- 1
-      #' a + b
-      NULL")[[1]]
-  )
+  block <- "
+    #' @name a
+    #' @title a
+    #' @example
+    #' a <- 1
+    #' a + b
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(rd_roclet(), block)[[1]])
   expect_null(out$get_value("examples"))
 })
 
 test_that("warns if path doesn't exist", {
-  expect_snapshot_warning(
-    roc_proc_text(rd_roclet(), "
-      #' @name a
-      #' @title a
-      #' @example this-path-doesnt-exist.R
-      NULL
-    ")
-  )
+  block <- "
+    #' @name a
+    #' @title a
+    #' @example this-path-doesnt-exist.R
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("@examplesIf", {
@@ -86,22 +85,25 @@ test_that("@examplesIf", {
 })
 
 test_that("@examplesIf warns about unparseable condition", {
-  expect_snapshot_warning(roc_proc_text(rd_roclet(), "
+  block <- "
     #' @name a
     #' @title a
     #' @examplesIf 1 +
     #' maybe-run-this-code
-    NULL"))
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
 test_that("% in @examples escaped before matching braces test (#213)", {
-  out <- roc_proc_text(rd_roclet(), "
+  block <- "
     #' @name a
     #' @title a
     #' @examples
     #' {a %% b}
-    NULL")[[1]]
-
+    NULL
+  "
+  out <- roc_proc_text(rd_roclet(), block)[[1]]
   expect_equal(out$get_value("examples"), rd("{a \\%\\% b}"))
 })
 

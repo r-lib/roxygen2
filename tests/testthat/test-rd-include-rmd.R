@@ -261,12 +261,12 @@ test_that("order of sections is correct", {
 test_that("useful warnings", {
   skip_if_not(rmarkdown::pandoc_available("2.17"))
 
-  text <- "
+  block <- "
     #' Title
     #' @includeRmd path
     #' @name foobar
     NULL"
-  expect_snapshot_warning(roc_proc_text(rd_roclet(), text))
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 
   path <- withr::local_tempfile(fileext = ".Rmd", lines = c(
     "```{r}",

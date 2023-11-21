@@ -38,11 +38,14 @@ roxygenize <- function(package.dir = ".",
   lapply(packages, loadNamespace)
 
   roclets <- roclets %||% roxy_meta_get("roclets")
-  # Special case collate: it doesn't need to execute code, and must be run
-  # first to ensure that code can be executed
+
+  # To load code, we need a up-to-date Collate field and NAMESPACE
   if ("collate" %in% roclets) {
     update_collate(base_path)
     roclets <- setdiff(roclets, "collate")
+  }
+  if ("namespace" %in% roclets) {
+    update_namespace_imports(base_path)
   }
 
   if (length(roclets) == 0)

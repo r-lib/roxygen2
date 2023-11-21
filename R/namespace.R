@@ -389,6 +389,7 @@ warn_roxy_function <- function(fun, message, ...) {
   file <- attr(srcref, "srcfile")$filename
   line <- as.vector(srcref)[[1]]
 
-  message[[1]] <- paste0(link_to(file, line), " ", message[[1]])
-  cli::cli_inform(c(x = message), ...)
+  message[[1]] <- paste0(link_to(file, line), ": ", message[[1]])
+  names(message)[[1]] <- "x"
+  cli::cli_inform(message, ...)
 }

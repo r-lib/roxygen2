@@ -74,7 +74,16 @@ object_defaults.package <- function(x, block) {
 
 #' @export
 object_defaults.import <- function(x, block) {
+
+  importFrom <- roxy_generated_tag(block, "importFrom", c(x$value$pkg, x$value$fun))
+
+  if (block_has_tags(block, c("rdname", "name"))) {
+    obj <- object_from_name(x$value$fun, asNamespace(x$value$pkg), block)
+    return(c(list(importFrom), object_defaults(obj, block)))
+  }
+
   list(
+    importFrom,
     roxy_generated_tag(block, "docType", "import"),
     roxy_generated_tag(block, "name", "reexports"),
     roxy_generated_tag(block, "keywords", "internal"),

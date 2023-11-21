@@ -1,7 +1,9 @@
 test_that("exporting a call to :: produces re-exports documentation", {
-  out <- roc_proc_text(rd_roclet(), "
+  block <- "
     #' @export
-    testthat::auto_test")[[1]]
+    testthat::auto_test
+  "
+  out <- roc_proc_text(rd_roclet(), block)[[1]]
 
   expect_equal(
     out$get_section("reexport"),
@@ -9,8 +11,11 @@ test_that("exporting a call to :: produces re-exports documentation", {
   )
   expect_equal(out$get_value("title"), "Objects exported from other packages")
   expect_equal(out$get_value("keyword"), "internal")
-
   expect_snapshot_output(cat(format(out)))
+
+  # And generates correct namespace definitions
+  out <- roc_proc_text(namespace_roclet(), block)
+  expect_equal(out, c("export(auto_test)", "importFrom(testthat,auto_test)"))
 })
 
 test_that("multiple re-exports are combined", {

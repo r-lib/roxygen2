@@ -5,6 +5,14 @@
     "sha1"}
     } 
 
+# invalid syntax gives useful warning
+
+    Code
+      . <- roc_proc_text(rd_roclet(), block)
+    Message
+      x <text>:2: @inheritDotParams requires a source.
+      x <text>:3: @inheritSection requires two parts: a topic name and a section title.
+
 # warns on unknown inherit type
 
     Code

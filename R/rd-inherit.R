@@ -16,15 +16,17 @@ roxy_tag_rd.roxy_tag_inheritParams <- function(x, base_path, env) {
 
 #' @export
 roxy_tag_parse.roxy_tag_inheritDotParams <- function(x) {
-  tag_two_part(x, "source", "args", required = FALSE, markdown = FALSE)
+  tag_two_part(x, "a source", "an argument list", required = FALSE, markdown = FALSE)
 }
 #' @export
 roxy_tag_rd.roxy_tag_inheritDotParams <- function(x, base_path, env) {
-  rd_section_inherit_dot_params(x$val$source, x$val$args)
+  rd_section_inherit_dot_params(x$val$name, x$val$description)
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_inheritSection <- function(x) tag_name_description(x)
+roxy_tag_parse.roxy_tag_inheritSection <- function(x) {
+  tag_two_part(x, "a topic name", "a section title")
+}
 #' @export
 roxy_tag_rd.roxy_tag_inheritSection <- function(x, base_path, env) {
   rd_section_inherit_section(x$val$name, x$val$description)

@@ -98,10 +98,14 @@ tag_name <- function(x) {
 #' @param markdown Should the second part be parsed as markdown?
 tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
   if (str_trim(x$raw) == "") {
-    warn_roxy_tag(x, "requires a value")
+    if (!required) {
+      warn_roxy_tag(x, "requires {first}")
+    } else {
+      warn_roxy_tag(x, "requires two parts: {first} and {second}")
+    }
     NULL
   } else if (required && !str_detect(x$raw, "[[:space:]]+")) {
-    warn_roxy_tag(x, "requires {first} and {second}")
+    warn_roxy_tag(x, "requires two parts: {first} and {second}")
     NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
@@ -118,7 +122,7 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
       pieces[, 1],
       trim_docstring(pieces[,2])
     )
-    names(x$val) <- c(first, second)
+    names(x$val) <- c("name", "description")
     x
   }
 }
@@ -126,7 +130,7 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
 #' @export
 #' @rdname tag_parsers
 tag_name_description <- function(x) {
-  tag_two_part(x, "name", "description")
+  tag_two_part(x, "a name", "a description")
 }
 
 #' @export

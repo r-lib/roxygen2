@@ -1,3 +1,13 @@
+test_that("invalid syntax generates useful warning", {
+  block <- "
+    #' A
+    #' @templateVar
+    a <- function() {}
+  "
+
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
+})
+
 test_that("can find template from name", {
   base <- test_path("templates/")
 

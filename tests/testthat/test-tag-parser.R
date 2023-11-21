@@ -4,7 +4,6 @@ test_that("tags containing only whitespace generate warning", {
     expect_parse_failure(tag_value(tag))
     expect_parse_failure(tag_inherit(tag))
     expect_parse_failure(tag_name(tag))
-    expect_parse_failure(tag_two_part(tag))
     expect_parse_failure(tag_name_description(tag))
     expect_parse_failure(tag_code(tag))
     expect_parse_failure(tag_examples(tag))
@@ -54,8 +53,9 @@ test_that("tag_name() checks for valid names", {
 test_that("tag_two_part() gives useful warnings", {
   local_markdown()
   expect_snapshot({
-    tag <- roxy_test_tag("a")
-    expect_parse_failure(tag_two_part(tag, "name", "value"))
+    tag <- roxy_test_tag("")
+    expect_parse_failure(tag_two_part(tag, "a name", "a value", required = FALSE))
+    expect_parse_failure(tag_two_part(tag, "a name", "a value"))
   })
 })
 

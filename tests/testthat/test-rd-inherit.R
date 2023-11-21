@@ -59,6 +59,15 @@ test_that("relative links converted to absolute", {
 
 # tag parsing -------------------------------------------------------------
 
+test_that("invalid syntax gives useful warning", {
+  block <- "
+    #' @inheritDotParams
+    #' @inheritSection
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
+})
+
 test_that("warns on unknown inherit type", {
   text <- "
     #' @inherit fun blah

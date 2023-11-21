@@ -1,3 +1,11 @@
+test_that("@describeIn suggests @rdname", {
+  block <- "
+    #' @describeIn foo
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
+})
+
 test_that("@describeIn generic destination captures s3 method source", {
   out <- roc_proc_text(rd_roclet(), "
     #' Title
@@ -252,3 +260,4 @@ test_that("complains about bad usage", {
   "
   expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
+

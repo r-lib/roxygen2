@@ -20,17 +20,11 @@
       Message:
       x test.R:1: @test requires a value.
     Code
-      expect_parse_failure(tag_two_part(tag))
-    Output
-      <message/rlang_message>
-      Message:
-      x test.R:1: @test requires a value.
-    Code
       expect_parse_failure(tag_name_description(tag))
     Output
       <message/rlang_message>
       Message:
-      x test.R:1: @test requires a value.
+      x test.R:1: @test requires two parts: a name and a description.
     Code
       expect_parse_failure(tag_code(tag))
     Output
@@ -146,12 +140,18 @@
 # tag_two_part() gives useful warnings
 
     Code
-      tag <- roxy_test_tag("a")
-      expect_parse_failure(tag_two_part(tag, "name", "value"))
+      tag <- roxy_test_tag("")
+      expect_parse_failure(tag_two_part(tag, "a name", "a value", required = FALSE))
     Output
       <message/rlang_message>
       Message:
-      x test.R:1: @test requires name and value.
+      x test.R:1: @test requires a name.
+    Code
+      expect_parse_failure(tag_two_part(tag, "a name", "a value"))
+    Output
+      <message/rlang_message>
+      Message:
+      x test.R:1: @test requires two parts: a name and a value.
 
 # tag_words() gives useful warnings
 

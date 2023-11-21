@@ -1,5 +1,13 @@
 skip_if_not_installed("rmarkdown")
 
+test_that("invalid syntax gives useful warning", {
+  block <- "
+    #' @includeRmd
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
+})
+
 test_that("markdown file can be included", {
   skip_if_not(rmarkdown::pandoc_available("2.17"))
 

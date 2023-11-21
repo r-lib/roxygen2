@@ -1,3 +1,10 @@
+# invalid syntax generates useful warning
+
+    Code
+      . <- roc_proc_text(rd_roclet(), block)
+    Message
+      x <text>:3: @templateVar requires two parts: a variable name and a value.
+
 # templates gives useful error if not found
 
     Code

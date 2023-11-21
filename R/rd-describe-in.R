@@ -1,6 +1,14 @@
 #' @export
 roxy_tag_parse.roxy_tag_describeIn <- function(x) {
-  tag_name_description(x)
+  if (!is.na(x$raw) && !str_detect(x$raw, "[[:space:]]+")) {
+    warn_roxy_tag(x, c(
+      "requires a name and description",
+      i = "Did you want @rdname instead?"
+    ))
+    NULL
+  } else {
+    tag_two_part(x, "a topic name", "a description")
+  }
 }
 
 topic_add_describe_in <- function(topic, block, env) {

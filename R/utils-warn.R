@@ -32,3 +32,9 @@ warn_roxy <- function(file, line, message, parent = NULL, envir = parent.frame()
   names(message)[[1]] <- "x"
   cli::cli_inform(message, parent = parent, .envir = envir)
 }
+
+warn_roxy_topic <- function(topic, message, parent = NULL, envir = parent.frame()) {
+  message[[1]] <- paste0("In topic '", topic, "': ", message[[1]], ".")
+  names(message)[[1]] <- "x"
+  cli::cli_inform(message, parent = parent, .envir = envir)
+}

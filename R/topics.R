@@ -22,10 +22,7 @@ RoxyTopics <- R6::R6Class("RoxyTopics", public = list(
   drop_invalid = function() {
     for (topic in names(self$topics)) {
       if (!self$topics[[topic]]$is_valid()) {
-        cli::cli_warn(c(
-          "Skipping {.path {topic}}",
-          i = "File lacks name and/or title"
-        ))
+        warn_roxy_topic(topic, "Skipping; no name and/or title")
         self$topics[[topic]] <- NULL
       }
     }

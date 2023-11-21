@@ -43,6 +43,50 @@ test_that("@docType class automatically added to reference class objects", {
   expect_equal(out$get_value("docType"), "class")
 })
 
+
+# imports -----------------------------------------------------------------
+
+test_that("only generates re-exports if no @name or @rdname", {
+  block <- "
+    #' @export
+    stats::median
+  "
+  out <- roc_proc_text(rd_roclet(), block)[[1]]
+  expect_equal(out$get_value("name"), "reexports")
+  expect_equal(out$get_value("keyword"), "internal")
+
+  block <- "
+    #' Title
+    #' @name stats-imports
+    #' @export
+    stats::median
+
+    #' @rdname stats-imports
+    stats::acf
+  "
+  out <- roc_proc_text(rd_roclet(), block)[[1]]
+  expect_equal(out$get_value("name")[[1]], "stats-imports")
+  expect_equal(out$get_value("alias"), c("stats-imports", "median", "acf"))
+  expect_equal(out$get_value("keyword"), NULL)
+})
+
+test_that("imports are automatically imported", {
+  block <- "
+    #' @export
+    stats::median
+  "
+  out <- roc_proc_text(namespace_roclet(), block)
+  expect_equal(out, c("export(median)", "importFrom(stats,median)"))
+
+  block <- "
+    #' @export
+    #' @name foo
+    stats::median
+  "
+  out <- roc_proc_text(namespace_roclet(), block)
+  expect_equal(out, c("export(median)", "importFrom(stats,median)"))
+})
+
 # packages -----------------------------------------------------------------
 
 test_that("can create package documentation", {

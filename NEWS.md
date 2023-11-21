@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+* If you document a function from another package it is automatically 
+  imported. Additionally, if you set `@rdname` or `@name` you can opt out 
+  of the default `reexports` topic generation and provide your own docs 
+  (#1408).
+
 * The NAMESPACE roclet now reports if you have S3 methods that are missing
   an `@export` tag. All S3 methods need to be `@export`ed (which confusingly
   really registers the method) even if the generic is not. This avoids rare,

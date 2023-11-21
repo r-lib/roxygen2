@@ -67,7 +67,7 @@ env_file <- function(file) {
   env <- new.env(parent = parent.env(globalenv()))
   methods::setPackageName("roxygen_devtest", env)
 
-  sys.source(file, envir = env)
+  sys.source(file, envir = env, keep.source = TRUE)
   env
 }
 

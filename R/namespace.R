@@ -32,6 +32,8 @@ namespace_roclet <- function() {
 
 #' @export
 roclet_process.roclet_namespace <- function(x, blocks, env, base_path) {
+  warn_missing_s3_exports(blocks, env)
+
   blocks_to_ns(blocks, env)
 }
 
@@ -376,3 +378,20 @@ repeat_first_ignore_current <- function(name, x) {
     repeat_first(name, x)
   }
 }
+
+# missing s3 exports ------------------------------------------------------
+
+warn_missing_s3_exports <- function(blocks, env) {
+  objs <- as.list(env)
+  funs <- Filter(is.function, objs)
+  methods <- funs[map_lgl(names(funs), is_s3_method, env = env)]
+
+  s3blocks <- blocks[map_lgl(blocks, block_has_tags, c("export", "exportS3method"))]
+  s3objects <- map(blocks, function(block) block$object$value)
+
+  undocumented <- methods[!methods %in% s3objects]
+  srcrefs <- map(undocumented, attr, "srcref")
+  messages <- paste0("S3 method `", names(undocumented) , "` needs @export or @exportS3method tag")
+  map2(undocumented, messages, warn_roxy_function)
+}
+

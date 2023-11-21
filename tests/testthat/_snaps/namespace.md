@@ -99,3 +99,14 @@
     Code
       out <- roc_proc_text(namespace_roclet(), block)
 
+# warns if S3 method not documented
+
+    Code
+      roc_proc_text(namespace_roclet(),
+      "\n      foo <- function(x) UseMethod('foo')\n      foo.numeric <- function(x) 1\n\n      mean.myclass <- function(x) 2\n    ")
+    Message
+      x <text>:5: S3 method `mean.myclass` needs @export or @exportS3method tag.
+      x <text>:3: S3 method `foo.numeric` needs @export or @exportS3method tag.
+    Output
+      character(0)
+

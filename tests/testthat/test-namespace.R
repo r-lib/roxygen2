@@ -419,3 +419,29 @@ test_that("Invalid imports throw a helpful error", {
   expect_equal(out, "importFrom(AnUnknownUnavailablePackage,Unchecked)")
 
 })
+
+
+# warn_missing_s3_exports -------------------------------------------------
+
+test_that("warns if S3 method not documented", {
+  expect_snapshot(
+    roc_proc_text(namespace_roclet(), "
+      foo <- function(x) UseMethod('foo')
+      foo.numeric <- function(x) 1
+
+      mean.myclass <- function(x) 2
+    "),
+    # Need to manually transform since the srcref is coming from the function;
+    # roc_proc_text() uses fake srcrefs for the blocks themselves
+    transform = function(x) gsub("file[a-z0-9]+", "<text>", x)
+  )
+})
+
+test_that("doesn't warn for potential false postives", {
+  roc <- namespace_roclet()
+  expect_no_warning({
+    roc_proc_text(roc, "foo.numeric <- function(x) 1")
+    roc_proc_text(roc, "is.numeric <- function(x) 1")
+    roc_proc_text(roc, "as.numeric <- function(x) 1")
+  })
+})

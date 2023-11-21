@@ -26,20 +26,24 @@ object_usage <- function(x) {
   UseMethod("object_usage")
 }
 
+#' @export
 object_usage.default <- function(x) {
   NULL
 }
 
+#' @export
 object_usage.data <- function(x) {
   rd(x$alias)
 }
 
+#' @export
 object_usage.function <- function(x) {
   function_usage(x$alias, formals(x$value), identity)
 }
 
 object_usage.s3generic <- object_usage.function
 
+#' @export
 object_usage.s3method <- function(x) {
   method <- attr(x$value, "s3method")
   s3method <- function(name) {
@@ -48,10 +52,12 @@ object_usage.s3method <- function(x) {
   function_usage(method[1], formals(x$value), s3method)
 }
 
+#' @export
 object_usage.s4generic <- function(x) {
   function_usage(x$value@generic, formals(x$value), identity)
 }
 
+#' @export
 object_usage.s4method <- function(x) {
   s4method <- function(name) {
     classes <- auto_backtick(as.character(x$value@defined))

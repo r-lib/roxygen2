@@ -116,23 +116,3 @@ roxy_tag_warning <- function(x, ...) {
   warning(message, call. = FALSE, immediate. = TRUE)
   NULL
 }
-
-#' @export
-#' @rdname roxy_tag
-warn_roxy_tag <- function(tag, message, ...) {
-  message[[1]] <- paste0(
-    link_to(tag$file, tag$line), ": {.strong @", tag$tag, "} ",
-    if (is.null(tag$raw)) ("(automatically generated) "),
-    message[[1]], "."
-  )
-  names(message)[[1]] <- "x"
-  cli::cli_inform(message, ..., .envir = parent.frame())
-}
-
-link_to <- function(file, line) {
-  cli::style_hyperlink(
-    paste0(basename(file), ":", line),
-    paste0("file://", file),
-    params = c(line = line, col = 1)
-  )
-}

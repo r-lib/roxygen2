@@ -7,12 +7,12 @@ test_that("undocumentable things return null", {
 # data / package -------------------------------------------------------
 
 test_that("finds package description", {
-  local_package_copy(test_path("empty"))
-  write_lines(path = "R/packages.R", c(
+  path <- local_package_copy(test_path("empty"))
+  write_lines(path = file.path(path, "R/packages.R"), c(
     "#' @docType package
     NULL"
   ))
-  expect_snapshot(blocks <- parse_file("R/packages.R"))
+  expect_snapshot(blocks <- parse_file(file.path(path, "R/packages.R")))
 
   expect_s3_class(blocks[[1]]$object, "package")
 

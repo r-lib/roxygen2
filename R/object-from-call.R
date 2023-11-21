@@ -42,7 +42,7 @@ object_from_call <- function(call, env, block, file) {
       docType <- block_get_tag_value(block, "docType")
       if (docType == "package") {
         warn_roxy_block(block, c(
-          '`@docType "package"` is deprecated.',
+          '`@docType "package"` is deprecated',
           i = 'Please document "_PACKAGE" instead.'
         ))
         return(parser_package(file))

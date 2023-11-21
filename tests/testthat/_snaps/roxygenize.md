@@ -1,7 +1,7 @@
 # can regenerate NAMESPACE even if its broken
 
     Code
-      roxygenise(".")
+      roxygenise(path)
     Message
       Writing 'NAMESPACE'
       i Loading brokenNamespace

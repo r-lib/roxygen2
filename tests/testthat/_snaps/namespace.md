@@ -38,7 +38,7 @@
 # can regenerate NAMESPACE even if its broken
 
     Code
-      update_namespace_imports(".")
+      update_namespace_imports(path)
     Message
       Writing 'NAMESPACE'
 

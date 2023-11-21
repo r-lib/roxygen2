@@ -37,9 +37,12 @@ Use it when all functions have the same (or very similar) arguments.
 
 ### `@rdname`
 
-Use `@rdname <destination>` to include multiple functions in the same page.
+Use `@rdname <destination>`[^1] to include multiple functions in the same page.
 Tags (e.g. `@title`, `@description`, `@examples`) will be combined, across blocks but often this yields text that is hard to understand.
 So we recommend that you make one block that contains the title, description, common parameters, examples and so on, and then only document individual parameters in the other blocks.
+
+[^1]: The destination is a topic name.
+    There's a one-to-one correspondence between topic names and `.Rd` files where a topic called `foo` will produce a file called `man/foo.Rd`.
 
 There are two basic ways to do that.
 You can create a standalone documentation block and then add the functions to it.

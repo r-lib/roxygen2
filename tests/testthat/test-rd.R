@@ -152,6 +152,7 @@ test_that("@details NULL", {
 
 test_that("can generate nonASCII document", {
   path <- local_package_copy(test_path('testNonASCII'))
+  withr::defer(pkgload::unload("testNonASCII"))
 
   expect_snapshot({
     roxygenise(path, roclets = "rd")
@@ -169,6 +170,7 @@ test_that("can generate nonASCII document", {
 
 test_that("unicode escapes are ok", {
   path <- local_package_copy(test_path('testUtf8Escape'))
+  withr::defer(pkgload::unload("testUtf8Escape"))
 
   expect_snapshot({
     roxygenise(path, roclets = "rd")
@@ -187,6 +189,7 @@ test_that("automatically deletes unused files", {
   path <- local_package_copy(test_path("empty"))
   dir.create(file.path(path, "man"))
   suppressMessages(roxygenise(path))
+  withr::defer(pkgload::unload("empty"))
 
   write_lines(made_by("%"), file.path(path, "man/test.Rd"))
   expect_snapshot(roxygenise(path))

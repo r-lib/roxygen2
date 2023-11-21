@@ -2,6 +2,7 @@ test_that("end-to-end NAMESPACE generation works", {
   path <- local_package_copy(test_path("testNamespace"))
 
   suppressMessages(roxygenise(path))
+  withr::defer(pkgload::unload("testNamespace"))
 
   ns <- read_lines(file.path(path, "NAMESPACE"))
   expect_equal(ns, c(
@@ -262,6 +263,8 @@ test_that("empty NAMESPACE generates zero-length vector", {
   base_path <- test_path("empty")
 
   env <- pkgload::load_all(base_path, quiet = TRUE)$env
+  withr::defer(pkgload::unload("empty"))
+
   blocks <- parse_package(base_path, env = env)
 
   results <- roclet_process(namespace_roclet(), blocks, env = env, base_path)

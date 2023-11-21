@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@include` now gives an informative warning if you use a path that doesn't
+  exist (#1497).
+
 * `@docType package` now works more like documenting `"_PACKAGE"`, 
   creating a `{packagename}-package` alias and clearly suggesting that
   you should switch to `"_PACKAGE"` instead (#1491).

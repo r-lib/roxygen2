@@ -53,7 +53,8 @@ update_collate <- function(base_path) {
 
 generate_collate <- function(base_path) {
   paths <- sort_c(dir(base_path, pattern = "[.][Rr]$", full.names = TRUE))
-  includes <- lapply(paths, function(x) intersect(find_includes(x), basename(paths)))
+
+  includes <- lapply(paths, find_and_filter_includes, paths = basename(paths))
   names(includes) <- paths
 
   n <- sum(map_int(includes, length))
@@ -70,6 +71,22 @@ generate_collate <- function(base_path) {
   }
 
   topo$sort()
+}
+
+find_and_filter_includes <- function(path, paths) {
+  includes <- find_includes(path)
+
+  invalid <- setdiff(includes, paths)
+  if (length(invalid) > 0) {
+    for (include in invalid) {
+      path <- cli::style_hyperlink(basename(path), paste0("file://", path))
+      cli::cli_inform(c(
+        x = "{path}: unknown path in `@include {invalid}`."
+      ))
+    }
+  }
+
+  intersect(includes, paths)
 }
 
 base_path <- function(path, base) {

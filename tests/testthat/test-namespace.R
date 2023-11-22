@@ -437,6 +437,17 @@ test_that("warns if S3 method not documented", {
   )
 })
 
+
+test_that("can suppress the warning", {
+  block <- "
+    #' @exportS3Method NULL
+    mean.myclass <- function(x) 1
+  "
+  expect_silent(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(out, character())
+})
+
+
 test_that("doesn't warn for potential false postives", {
   roc <- namespace_roclet()
   expect_no_warning({

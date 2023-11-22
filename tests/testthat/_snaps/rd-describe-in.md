@@ -1,3 +1,11 @@
+# @describeIn suggests @rdname
+
+    Code
+      . <- roc_proc_text(rd_roclet(), block)
+    Message
+      x <text>:2: @describeIn requires a name and description.
+      i Did you want @rdname instead?
+
 # Multiple @describeIn functions combined into one
 
     Code

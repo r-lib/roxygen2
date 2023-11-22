@@ -1,5 +1,7 @@
 #' @export
-roxy_tag_parse.roxy_tag_field <- function(x) tag_name_description(x)
+roxy_tag_parse.roxy_tag_field <- function(x) {
+  tag_two_part(x, "a field name", "a description")
+}
 #' @export
 roxy_tag_rd.roxy_tag_field <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)
@@ -11,7 +13,9 @@ format.rd_section_field <- function(x, ...) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_slot <- function(x) tag_name_description(x)
+roxy_tag_parse.roxy_tag_slot <- function(x) {
+  tag_two_part(x, "a slot name", "a description")
+}
 #' @export
 roxy_tag_rd.roxy_tag_slot <- function(x, base_path, env) {
   value <- setNames(x$val$description, x$val$name)

@@ -5,13 +5,13 @@ roxy_tag_parse.roxy_tag_includeRmd <- function(x) {
     return()
   }
 
-  tag_two_part(x, "path", "section", required = FALSE, markdown = FALSE)
+  tag_two_part(x, "a path", "a section", required = FALSE, markdown = FALSE)
 }
 
 #' @export
 roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
-  rmd <- rel_rmd <- x$val$path
-  section <- x$val$section
+  rmd <- rel_rmd <- x$val$name
+  section <- x$val$description
 
   if (!file.exists(rmd)) {
     warn_roxy_tag(x, "Can't find Rmd {.path {rmd}}")

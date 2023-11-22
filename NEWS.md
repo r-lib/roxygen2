@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `@describeIn foo` now suggests that you might want `@rdname` instead 
+  (#1493).
+
 * `_PACKAGE` will no longer generate an alias for your package name if 
   a function of the same name exists (#1160).
 

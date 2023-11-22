@@ -24,9 +24,7 @@
     Code
       . <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @exportS3Method doesn't match function name.
-      x Expected to see "foo" to match "pkg::foo"
-      i Function name is "foo1.bar"
+      x <text>:2: @exportS3Method generic ("foo") doesn't match function ("foo1.bar").
 
 # poorly formed importFrom throws error
 

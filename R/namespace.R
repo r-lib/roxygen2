@@ -221,11 +221,10 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
     generic_re <- paste0("^", generic[[2]], "\\.")
 
     if (!str_detect(obj$alias, generic_re)) {
-      warn_roxy_tag(x, c(
-        "doesn't match function name",
-        x = "Expected to see {.str {generic[[2]]}} to match {.str {x$val}}",
-        i = "Function name is {.str {obj$alias}}"
-      ))
+      warn_roxy_tag(
+        x,
+        "generic ({.str {generic[[2]]}}) doesn't match function ({.str {obj$alias}})",
+      )
       return()
     }
 

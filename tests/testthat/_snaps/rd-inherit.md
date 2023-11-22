@@ -34,19 +34,16 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), code)
-    Condition
-      Warning:
-      @inheritSection failed in topic "b".
-      x Can't find section "A" in topic a.
+    Message
+      x In topic 'b': @inheritSection failed to find section "A" in topic a.
 
 # warned if no params need documentation
 
     Code
       . <- roc_proc_text(rd_roclet(), code)
-    Condition
-      Warning:
-      @inheritParams failed in topic "x".
-      x All parameters are already documented; none remain to be inherited.
+    Message
+      x In topic 'x': @inheritParams failed.
+      i All parameters are already documented; none remain to be inherited.
 
 # can inherit all from single function
 
@@ -72,9 +69,8 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), text)
-    Condition
-      Warning:
-      @inheritDotsParam failed in topic "bar".
+    Message
+      x In topic 'bar': @inheritDotsParam failed.
       Caused by error in `FUN()`:
       ! object 'z' not found
 
@@ -82,34 +78,26 @@
 
     Code
       get_rd("base2::attach", source = "source")
-    Condition
-      Warning:
-      @inherits failed in topic "source".
-      x Package base2 is not installed.
+    Message
+      x In topic 'source': @inherits failed because base2 is not installed.
     Output
       NULL
     Code
       get_rd("base::function_not_found", source = "source")
-    Condition
-      Warning:
-      @inherits failed in topic "source".
-      x Can't find topic base::function_not_found.
+    Message
+      x In topic 'source': @inherits failed to find topic base::function_not_found.
     Output
       NULL
     Code
       get_rd("function", RoxyTopics$new(), source = "source")
-    Condition
-      Warning:
-      @inherits failed in topic "source".
-      x Can't find topic "function".
+    Message
+      x In topic 'source': @inherits failed to find topic "function".
     Output
       NULL
     Code
       get_rd("foo::bar()", RoxyTopics$new(), source = "source")
-    Condition
-      Warning:
-      @inherits failed in topic "source".
-      x Can't find topic "foo::bar()".
+    Message
+      x In topic 'source': @inherits failed to find topic "foo::bar()".
     Output
       NULL
 

@@ -7,10 +7,7 @@ select_args_text <- function(fun, select = "", topic) {
       select_args(fun, parsed)
     },
     error = function(e) {
-      cli::cli_warn(
-        "@inheritDotsParam failed in topic {.str {topic$get_name()}}.",
-        parent = e
-      )
+      warn_roxy_topic(topic$get_name(), "@inheritDotsParam failed", parent = e)
       character()
     }
   )

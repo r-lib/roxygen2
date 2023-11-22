@@ -96,24 +96,15 @@ test_that("@description NULL", {
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
-  path <- local_package_copy(test_path("empty"))
-  desc::desc_set(
-    file = path,
-    Package = "roxygendevtest",
-    Title = "Package Title",
-    Description = "Package description."
-  )
-  withr::with_dir(
-    path,
-    out <- roc_proc_text(rd_roclet(), "
-      #' Title
-      #'
-      #' @docType package
-      #' @description NULL
-      #' @name pkg
-      '_PACKAGE'
-    ")
-  )
+  block <- "
+    #' Title
+    #'
+    #' @docType package
+    #' @description NULL
+    #' @name pkg
+    '_PACKAGE'
+  "
+  out <- roc_proc_text(rd_roclet(), block, wd = test_path("empty"))
   expect_null(out[[1]]$get_value("description"))
 })
 
@@ -146,6 +137,60 @@ test_that("@details NULL", {
     foobar <- 1:10
   ")
   expect_null(out[[1]]$get_value("details"))
+})
+
+
+# package docs ------------------------------------------------------------
+
+
+test_that("package docs don't get alias if function present", {
+
+  block <- "
+    #' Title
+    #'
+    '_PACKAGE'
+
+    #' Empty
+    empty <- function() {}
+  "
+
+  out <- roc_proc_text(rd_roclet(), block, test_path("empty"))[[1]]
+  expect_equal(out$get_value("alias"), "empty-package")
+})
+
+test_that("package docs preserve existing aliases", {
+  block <- "
+    #' Title
+    #' @aliases a b
+    #'
+    '_PACKAGE'
+  "
+
+  out <- roc_proc_text(rd_roclet(), block, test_path("empty"))[[1]]
+  expect_equal(out$get_value("alias"), c("empty", "empty-package", "a", "b"))
+
+  block <- paste0(block, "
+    #' Empty
+    empty <- function() {}
+  ")
+  out <- roc_proc_text(rd_roclet(), block, test_path("empty"))[[1]]
+  expect_equal(out$get_value("alias"), c("empty-package", "a", "b"))
+})
+
+test_that("get correct alias even if user has overriden name", {
+  block <- "
+    #' Title
+    #' @name foo
+    #' @aliases bar
+    #'
+    '_PACKAGE'
+  "
+
+  out <- roc_proc_text(rd_roclet(), block, test_path("empty"))[[1]]
+  expect_equal(
+    out$get_value("alias"),
+    c("empty", "empty-package", "foo", "bar")
+  )
 })
 
 # UTF-8 -------------------------------------------------------------------

@@ -3,6 +3,12 @@
 * `@describeIn foo` now suggests that you might want `@rdname` instead 
   (#1493).
 
+* `_PACKAGE` will no longer generate an alias for your package name if 
+  a function of the same name exists (#1160).
+
+* `@exportS3Method` provides the needed metadata to generate correct usage
+  for S3 methods, just like `@method` (#1202).
+
 * If you document a function from another package it is automatically 
   imported. Additionally, if you set `@rdname` or `@name` you can opt out 
   of the default `reexports` topic generation and provide your own docs 

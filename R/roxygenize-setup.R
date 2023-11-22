@@ -16,8 +16,8 @@ roxygen_setup <- function(path = ".",
 
   encoding <- desc::desc_get("Encoding", path)[[1]]
   if (!identical(encoding, "UTF-8")) {
-    cli::cli_warn(c(
-      "roxygen2 requires Encoding: {.val UTF-8}",
+    cli::cli_inform(c(
+      x = "roxygen2 requires {.val Encoding: UTF-8}",
       i = "Current encoding is {.val {encoding}}"
     ))
   }
@@ -48,8 +48,8 @@ update_roxygen_version <- function(path, cur_version = NULL) {
   prev <- roxygen_version(path)
 
   if (!is.na(cur) && !is.na(prev) && package_version(cur) < package_version(prev)) {
-    cli::cli_warn(c(
-      "Installed roxygen2 is older than the version used with this package",
+    cli::cli_inform(c(
+      x = "Installed roxygen2 is older than the version used with this package",
       i = "You have {.str {cur}} but you need {.str {prev}}"
     ))
   } else if (!identical(cur, prev)) {

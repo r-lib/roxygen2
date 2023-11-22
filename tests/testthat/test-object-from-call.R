@@ -6,26 +6,22 @@ test_that("undocumentable things return null", {
 
 # data / package -------------------------------------------------------
 
-test_that("finds package description", {
+test_that("recommends use of _PACKAGE", {
   path <- local_package_copy(test_path("empty"))
-  write_lines(path = file.path(path, "R/packages.R"), c(
-    "#' @docType package
-    NULL"
-  ))
-  expect_snapshot(blocks <- parse_file(file.path(path, "R/packages.R")))
 
-  expect_s3_class(blocks[[1]]$object, "package")
+  block <- "
+    #' @docType package
+    NULL
+  "
+  withr::with_dir(path, expect_snapshot(out <- parse_text(block)[[1]]))
 
-  expect_equal(
-    block_get_tag_value(blocks[[1]], "aliases"),
-    "NULL empty empty-package"
-  )
+  expect_s3_class(out$object, "package")
+  expect_equal(out$object$value$desc$get_field("Package"), "empty")
 })
 
 test_that("finds package description", {
   obj <- call_to_object("_PACKAGE", file = test_path("testEagerData/R/a.r"))
   expect_s3_class(obj, "package")
-  expect_equal(obj$alias, "_PACKAGE")
   expect_equal(obj$value$desc$get_field("Package"), "testEagerData")
 })
 
@@ -127,6 +123,39 @@ test_that("finds function created with delayed assignment", {
   expect_s3_class(obj, "function")
 })
 
+# S3 ----------------------------------------------------------------------
+
+test_that("can derive S3 metadata for base generics", {
+  block <- "
+    #' @export
+    mean.foo <- function(...) 1
+  "
+  out <- parse_text(block)[[1]]
+
+  expect_equal(s3_method_info(out$object$value), c("mean", "foo"))
+})
+
+test_that("@method overrides auto-detection", {
+  block <- "
+    #' @export
+    #' @method all.equal data.frame
+    all.equal.data.frame <- function(...) 1
+  "
+  out <- parse_text(block)[[1]]
+
+  expect_equal(s3_method_info(out$object$value), c("all.equal", "data.frame"))
+})
+
+test_that("exportS3Method registers S3 metadata", {
+  block <- "
+    #' @exportS3Method stats::median
+    median.foo <- function(...) 1
+  "
+  out <- parse_text(block)[[1]]
+  expect_equal(s3_method_info(out$object$value), c("median", "foo"))
+})
+
+
 # S4 ----------------------------------------------------------------------
 
 test_that("finds S4 and RC classes", {
@@ -183,6 +212,7 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
   expect_s3_class(obj, "s4method")
   expect_named(formals(obj$value@.Data), c("x", "foo", "..."))
 })
+
 
 # R.oo / R.methodsS3 ------------------------------------------------------
 

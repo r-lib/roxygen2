@@ -207,7 +207,7 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
 
     method <- attr(obj$value, "s3method")
   } else if (length(x$val) == 1) {
-    if (!inherits(obj, "function")) {
+    if (!inherits(obj, "function") && !inherits(obj, "s3method")) {
       warn_roxy_tag(x, "must be used with a function")
       return()
     }

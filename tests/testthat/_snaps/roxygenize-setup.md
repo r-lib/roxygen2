@@ -20,9 +20,8 @@
 
     Code
       roxygen_setup(path, cur_version = "8.0.0")
-    Condition
-      Warning:
-      roxygen2 requires Encoding: "UTF-8"
+    Message
+      x roxygen2 requires "Encoding: UTF-8"
       i Current encoding is "latin1"
     Output
       [1] FALSE
@@ -31,9 +30,8 @@
 
     Code
       roxygen_setup(path, cur_version = "8.0.0")
-    Condition
-      Warning:
-      Installed roxygen2 is older than the version used with this package
+    Message
+      x Installed roxygen2 is older than the version used with this package
       i You have "8.0.0" but you need "10.0.0"
     Output
       [1] FALSE

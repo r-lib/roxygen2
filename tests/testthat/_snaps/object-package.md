@@ -28,9 +28,8 @@
 
     Code
       package_authors("1 + ")
-    Condition
-      Warning:
-      Failed to evaluate Authors@R.
+    Message
+      x Failed to evaluate Authors@R.
       Caused by error in `parse()`:
       ! <text>:2:0: unexpected end of input
       1: 1 + 
@@ -39,9 +38,8 @@
       NULL
     Code
       package_authors("stop('Uhoh')")
-    Condition
-      Warning:
-      Failed to evaluate Authors@R.
+    Message
+      x Failed to evaluate Authors@R.
       Caused by error:
       ! Uhoh
     Output

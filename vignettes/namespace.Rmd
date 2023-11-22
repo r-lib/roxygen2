@@ -72,6 +72,8 @@ bizarro.character <- function(x, ...) {
 }
 ```
 
+If you are exporting a method in some other way, you can use `@exportS3Method NULL` to suppress the warning.
+
 You have four options for documenting an S3 method:
 
 -   Don't document it; it's not required, and not needed for simple generics where the user won't care about the details.

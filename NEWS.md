@@ -11,7 +11,8 @@
 * The NAMESPACE roclet now reports if you have S3 methods that are missing
   an `@export` tag. All S3 methods need to be `@export`ed (which confusingly
   really registers the method) even if the generic is not. This avoids rare,
-  but hard to debug, problems (#1175).
+  but hard to debug, problems (#1175). You can suppress the warning with
+  `@exportS3Method NULL` (#1550).
 
 * `@include` now gives an informative warning if you use a path that doesn't
   exist (#1497).

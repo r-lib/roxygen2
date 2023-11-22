@@ -19,7 +19,7 @@ package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
 package_authors <- function(authors) {
   authors <- tryCatch(eval(parse(text = authors %||% "")),
     error = function(e) {
-      cli::cli_warn("Failed to evaluate Authors@R.", parent = e)
+      cli::cli_inform(c(x = "Failed to evaluate Authors@R."), parent = e)
       NULL
     }
   )

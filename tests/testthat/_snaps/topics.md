@@ -2,10 +2,8 @@
 
     Code
       roc_proc_text(rd_roclet(), block)
-    Condition
-      Warning:
-      Skipping 'foo.Rd'
-      i File lacks name and/or title
+    Message
+      x In topic 'foo.Rd': Skipping; no name and/or title.
     Output
       named list()
 

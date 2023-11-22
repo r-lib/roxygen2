@@ -46,6 +46,7 @@ roclet_process.roclet_rd <- function(x, blocks, env, base_path) {
   topics$drop_invalid()
   topics_fix_params_order(topics)
   topics_add_default_description(topics)
+  topics_add_package_alias(topics)
 
   topics$topics
 }
@@ -209,6 +210,25 @@ topics_add_default_description <- function(topics) {
   invisible()
 }
 
+topics_add_package_alias <- function(topics) {
+  aliases <- unlist(topics$simple_values("alias"), use.names = FALSE)
+
+  for (topic in topics$topics) {
+    if (!identical(topic$get_value("docType"), "package")) {
+      next
+    }
+
+    package <- topic$get_value("package")
+    defaults <- c(package, package_suffix(package))
+
+    aliases <- union(setdiff(defaults, aliases), topic$get_value("alias"))
+    topic$add(rd_section("alias", aliases), overwrite = TRUE)
+    break
+  }
+
+  invisible(NULL)
+}
+
 # Tag-wise processing -----------------------------------------------------
 
 #' Generate Rd output from a tag
@@ -241,6 +261,12 @@ roxy_tag_rd.roxy_tag_.formals <- function(x, base_path, env) {
 #' @export
 format.rd_section_formals <- function(x, ...) NULL
 
+#' @export
+roxy_tag_rd.roxy_tag_.package <- function(x, base_path, env) {
+  rd_section("package", x$val)
+}
+#' @export
+format.rd_section_package <- function(x, ...) NULL
 
 #' @export
 roxy_tag_parse.roxy_tag_method <- function(x) tag_words(x, 2, 2)

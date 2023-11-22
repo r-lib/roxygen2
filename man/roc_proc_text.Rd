@@ -4,12 +4,14 @@
 \alias{roc_proc_text}
 \title{Process roclet on string and capture results.}
 \usage{
-roc_proc_text(roclet, input)
+roc_proc_text(roclet, input, wd = NULL)
 }
 \arguments{
 \item{roclet}{Name of roclet to use for processing.}
 
 \item{input}{Source string}
+
+\item{wd}{Working directory}
 }
 \description{
 Useful for testing.

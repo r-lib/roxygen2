@@ -61,10 +61,10 @@ object_defaults.package <- function(x, block) {
   authors <- package_authors(desc$get_field("Authors@R", NULL))
 
   list(
+    roxy_generated_tag(block, ".package", name),
     roxy_generated_tag(block, "docType", "package"),
     roxy_generated_tag(block, "name", package_suffix(name)),
-    # "NULL" prevents addition of default aliases, see also #202
-    roxy_generated_tag(block, "aliases", paste("NULL", name, package_suffix(name))),
+    # default aliases are added in topics_add_package_alias()
     roxy_generated_tag(block, "title", paste0(name, ": ", title)),
     roxy_generated_tag(block, "description", description),
     roxy_generated_tag(block, "seealso", seealso),

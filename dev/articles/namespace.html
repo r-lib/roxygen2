@@ -183,6 +183,8 @@ you if you have forgotten.</p>
 <span>  <span class="va">letters_rev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">rev</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">letters_rev</span>, <span class="va">paste</span>, collapse <span class="op">=</span> <span class="st">""</span>, FUN.VALUE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+<p>If you are exporting a method in some other way, you can use
+<code>@exportS3Method NULL</code> to suppress the warning.</p>
 <p>You have four options for documenting an S3 method:</p>
 <ul>
 <li>Don’t document it; it’s not required, and not needed for simple

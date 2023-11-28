@@ -14,10 +14,9 @@
 #' @export
 is_s3_generic <- function(name, env = parent.frame()) {
   if (name == "") return(FALSE)
-  if (!exists(name, envir = env)) return(FALSE)
+  if (!exists(name, envir = env, mode = "function")) return(FALSE)
 
-  f <- get(name, envir = env)
-  if (!is.function(f)) return(FALSE)
+  f <- get(name, envir = env, mode = "function")
   if (inherits(f, "groupGenericFunction")) return(TRUE)
 
   ns_name <- tryCatch(getNamespaceName(environment(f)), error = function(e) "")

@@ -47,7 +47,7 @@ object_usage.s3generic <- object_usage.function
 object_usage.s3method <- function(x) {
   method <- attr(x$value, "s3method")
   s3method <- function(name) {
-    paste0("\\method{", name, "}{", auto_backtick(method[2]), "}")
+    paste0("\\method{", name, "}{", method[2], "}")
   }
   function_usage(method[1], formals(x$value), s3method)
 }

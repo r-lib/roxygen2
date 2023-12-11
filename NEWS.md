@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Generate correct usage for S4 methods with non-syntactic class names.
+
 * `@describeIn foo` now suggests that you might want `@rdname` instead 
   (#1493).
 

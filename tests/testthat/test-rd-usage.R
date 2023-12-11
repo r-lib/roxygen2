@@ -251,13 +251,13 @@ test_that("default usage correct for S4 methods with different args to generic",
   )
 })
 
-test_that("non-syntactic S4 class names are escaped in usage", {
+test_that("non-syntactic S4 class names are not escaped in usage", {
   expect_equal(
     call_to_usage({
       setGeneric("rhs", function(x) standardGeneric("rhs"))
       setMethod("rhs", "<-", function(x) x[[3]])
     }),
-    "\\S4method{rhs}{`<-`}(x)"
+    "\\S4method{rhs}{<-}(x)"
   )
 })
 

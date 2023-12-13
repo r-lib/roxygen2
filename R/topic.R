@@ -85,7 +85,7 @@ RoxyTopic <- R6::R6Class("RoxyTopic", public = list(
   #' @return Character scalar.
 
   get_name = function() {
-    self$get_value("name")
+    self$get_value("name")[[1]]
   },
 
   #' @description Query the topics this topic inherits `type` from.

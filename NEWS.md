@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* `is_s3_generic()` now ignores non-function objects when looking for a 
+  candidate function. I believe this is closer to how R operates.
+  
 * Generate correct usage for S4 methods with non-syntactic class names.
 
 * `@describeIn foo` now suggests that you might want `@rdname` instead 

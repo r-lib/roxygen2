@@ -60,7 +60,7 @@ object_usage.s4generic <- function(x) {
 #' @export
 object_usage.s4method <- function(x) {
   s4method <- function(name) {
-    classes <- auto_backtick(as.character(x$value@defined))
+    classes <- as.character(x$value@defined)
     paste0("\\S4method{", name, "}{", paste0(classes, collapse = ","), "}")
   }
   function_usage(x$value@generic, formals(x$value), s4method)

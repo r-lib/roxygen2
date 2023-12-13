@@ -1,33 +1,20 @@
 # roxygen2 (development version)
 
-* `is_s3_generic()` now ignores non-function objects when looking for a 
-  candidate function. I believe this is closer to how R operates.
-  
-* Generate correct usage for S4 methods with non-syntactic class names.
+## New features
 
-* `@describeIn foo` now suggests that you might want `@rdname` instead 
-  (#1493).
+* `@docType package` now works more like documenting `"_PACKAGE"`, 
+  creating a `{packagename}-package` alias and clearly suggesting that
+  you should switch to `"_PACKAGE"` instead (#1491).
 
 * `_PACKAGE` will no longer generate an alias for your package name if 
   a function of the same name exists (#1160).
-
-* `@exportS3Method` provides the needed metadata to generate correct usage
-  for S3 methods, just like `@method` (#1202).
-
-* If you document a function from another package it is automatically 
-  imported. Additionally, if you set `@rdname` or `@name` you can opt out 
-  of the default `reexports` topic generation and provide your own docs 
-  (#1408).
 
 * The NAMESPACE roclet now reports if you have S3 methods that are missing
   an `@export` tag. All S3 methods need to be `@export`ed (which confusingly
   really registers the method) even if the generic is not. This avoids rare,
   but hard to debug, problems (#1175). You can suppress the warning with
   `@exportS3Method NULL` (#1550).
-
-* `@include` now gives an informative warning if you use a path that doesn't
-  exist (#1497).
-
+  
 * The `NAMESPACE` roclet once again regenerates imports _before_ loading 
   package code and parsing roxygen blocks. This has been the goal for a long 
   time (#372), but we accidentally broke it when adding support for code 
@@ -35,30 +22,45 @@
   somehow bork your `NAMESPACE` and can't easily get out of it because you
   can't re-document the package because your code doesn't reload.
 
-* `escape_examples()` is now exported (#1450).
+## Minor improvements and bug fixes
 
-* `@docType package` now works more like documenting `"_PACKAGE"`, 
-  creating a `{packagename}-package` alias and clearly suggesting that
-  you should switch to `"_PACKAGE"` instead (#1491).
+* If you document a function from another package it is automatically 
+  imported. Additionally, if you set `@rdname` or `@name` you can opt out 
+  of the default `reexports` topic generation and provide your own docs 
+  (#1408).
 
-* `URL` and `BugReports` fields in `DESCRIPTION` may now contain 
-  percent-encoded URLs (@HenningLorenzen-ext-bayer, #1415).
+* Generate correct usage for S4 methods with non-syntactic class names.
 
-* `@inherit` can now also inherit from `@format` (#1293). 
-
-* `@describeIn()` gives a more informative warning if you use it with an
+* The `ROXYGEN_PKG` env var provides the name of the package being documented
+  (#1517).
+  
+* `@describeIn foo` now suggests that you might want `@rdname` instead 
+  (#1493). It also gives a more informative warning if you use it with an
   unsupported type (#1490).
 
-* A friendlier error is thrown when attempting to import non-existing
-  functions with `@importFrom` (#1409, @MichaelChirico).
-* authors in `DESCRIPTION` can now have multiple email addresses (@jmbarbone, #1487).
+* In `DESCRIPTION`, URLs containing escapes in `URL` and `BugReports` are 
+  now correctly handled (@HenningLorenzen-ext-bayer, #1415). Authors can now 
+  have multiple email addresses (@jmbarbone, #1487).
 
-* The `ROXYGEN_PKG` environment variable is now set up while roxygen
-  is running to the name of the package being documented (#1517).
+* `escape_examples()` is now exported (#1450).
 
-* Import directives are now ignored if they try to import from the
+* `@exportS3Method` provides the needed metadata to generate correct usage
+  for S3 methods, just like `@method` (#1202).
+
+* `is_s3_generic()` now ignores non-function objects when looking for a 
+  candidate function. I believe this is closer to how R operates.
+
+* `@import` and friends are now ignored if they try to import from the
   package being documented. This is useful to add self-dependencies in
   standalone files meant to be used in other packages (r-lib/usethis#1853).
+
+* `@importFrom` throws a friendlier error if you try and import a non-existing
+  functions (@MichaelChirico, #1409).
+
+* `@include` now gives an informative warning if you use a path that doesn't
+  exist (#1497).
+
+* `@inherit` can now also inherit from `@format` (#1293). 
 
 # roxygen2 7.2.3
 

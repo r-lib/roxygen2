@@ -18,8 +18,8 @@
       \seealso{
       Other a: 
       \code{\link{Foofun3}()},
-      \code{\link{foofun2}()},
-      \code{\link{foofun}()}
+      \code{\link{foofun}()},
+      \code{\link{foofun2}()}
       }
       \concept{a}
       
@@ -38,8 +38,8 @@
       \seealso{
       Other a: 
       \code{\link{Foofun3}()},
-      \code{\link{foofun1}()},
-      \code{\link{foofun}()}
+      \code{\link{foofun}()},
+      \code{\link{foofun1}()}
       }
       \concept{a}
       
@@ -57,9 +57,9 @@
       }
       \seealso{
       Other a: 
+      \code{\link{foofun}()},
       \code{\link{foofun1}()},
-      \code{\link{foofun2}()},
-      \code{\link{foofun}()}
+      \code{\link{foofun2}()}
       }
       \concept{a}
       

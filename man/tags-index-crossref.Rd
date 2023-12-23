@@ -40,8 +40,8 @@ Other less frequently used tags:
 }
 \seealso{
 Other documentation tags: 
-\code{\link{tags-rd-other}},
 \code{\link{tags-rd}},
+\code{\link{tags-rd-other}},
 \code{\link{tags-reuse}}
 }
 \concept{documentation tags}

@@ -62,6 +62,8 @@
 
 * `@inherit` can now also inherit from `@format` (#1293). 
 
+* `@family` lists are now ordered more carefully, "foo1" comes after "foo" (#1563, @krlmlr).
+
 # roxygen2 7.2.3
 
 * roxygen2 now supports HTML blocks in markdown. They are only included

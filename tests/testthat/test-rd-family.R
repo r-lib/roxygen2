@@ -125,24 +125,22 @@ test_that("custom family prefixes can be set", {
 })
 
 test_that("careful ordering", {
-  # Can't use foo1 because it's used as class in another test
-
   out <- roc_proc_text(rd_roclet(), "
-    #' foofun1
+    #' foo1
     #' @family a
-    foofun1 <- function() {}
+    foo1 <- function() {}
 
-    #' foofun2
+    #' foo2
     #' @family a
-    foofun2 <- function() {}
+    foo2 <- function() {}
 
-    #' Foofun3
+    #' Foo3
     #' @family a
-    Foofun3 <- function() {}
+    Foo3 <- function() {}
 
-    #' foofun
+    #' foo
     #' @family a
-    foofun <- function() {}
+    foo <- function() {}
   ")
 
   expect_snapshot({

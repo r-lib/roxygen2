@@ -48,7 +48,7 @@ roclet_process.roclet_rd <- function(x, blocks, env, base_path) {
   topics_add_default_description(topics)
   topics_add_package_alias(topics)
 
-  topics$topics
+  structure(topics$topics, env = env)
 }
 
 #' @export

@@ -104,7 +104,7 @@
       
       }} 
 
----
+# s4 methods get nice label (2)
 
     Code
       out$get_section("minidesc")

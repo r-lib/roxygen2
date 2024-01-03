@@ -201,7 +201,7 @@ test_that("infix and replacement names get nice label", {
 })
 
 test_that("s4 methods get nice label", {
-  out <- roc_proc_text(rd_roclet(), "
+  proc <- roc_proc_text(rd_roclet(), "
       #' Class
       #'
       setClass('foo1', slots = c(id = 'character'))
@@ -211,10 +211,15 @@ test_that("s4 methods get nice label", {
 
       #' @describeIn foo1 function
       setMethod('m_id', 'foo1', function(x) x@id)
-    ")[[1]]
+    ")
+  expect_type(attr(proc, "env"), "environment")
+  withr::defer(removeClass("foo1", attr(proc, "env")))
+  out <- proc[[1]]
   expect_snapshot(out$get_section("minidesc"))
+})
 
-  out <- roc_proc_text(rd_roclet(), "
+test_that("s4 methods get nice label (2)", {
+  proc <- roc_proc_text(rd_roclet(), "
     setClass('foo2')
     setClass('foo3')
 
@@ -225,7 +230,11 @@ test_that("s4 methods get nice label", {
     setMethod('bar1', c('foo2', 'foo3'), function(x, y) 1)
     #' @describeIn bar1 method2
     setMethod('bar1', c('foo3', 'foo2'), function(x, y) 1)
-  ")[[1]]
+  ")
+  expect_type(attr(proc, "env"), "environment")
+  withr::defer(removeClass("foo2", attr(proc, "env")))
+  withr::defer(removeClass("foo3", attr(proc, "env")))
+  out <- proc[[1]]
   expect_snapshot(out$get_section("minidesc"))
 })
 

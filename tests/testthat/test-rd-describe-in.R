@@ -201,10 +201,11 @@ test_that("infix and replacement names get nice label", {
 })
 
 test_that("s4 methods get nice label", {
+  withr::defer(removeClass("foo1"))
   out <- roc_proc_text(rd_roclet(), "
       #' Class
       #'
-      setClass('foo1', slots = c(id = 'character'))
+      setClass('foo1', slots = c(id = 'character'), where = .GlobalEnv)
 
       #' @describeIn foo1 generic
       setGeneric('m_id', function(x) standardGeneric('m_id'))
@@ -214,9 +215,11 @@ test_that("s4 methods get nice label", {
     ")[[1]]
   expect_snapshot(out$get_section("minidesc"))
 
+  withr::defer(removeClass("foo2"))
+  withr::defer(removeClass("foo3"))
   out <- roc_proc_text(rd_roclet(), "
-    setClass('foo2')
-    setClass('foo3')
+    setClass('foo2', where = .GlobalEnv)
+    setClass('foo3', where = .GlobalEnv)
 
     #' bar1
     setGeneric('bar1', function(x, y) standardGeneric('bar1'))

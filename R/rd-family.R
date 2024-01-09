@@ -51,12 +51,15 @@ topics_process_family <- function(topics, env) {
       if (length(others) < 1)
         next
 
-      by_file <- map_chr(aliases[others], function(x) {
+      other_aliases <- aliases[others]
+      other_aliases_order <- map_chr(other_aliases, function(x) escape(x[1]))
+
+      by_file <- map_chr(other_aliases[order_c(other_aliases_order)], function(x) {
         obj <- find_object(x[1], env)
         suffix <- if (is.function(obj$value)) "()" else ""
         paste0("\\code{\\link{", escape(x[1]), "}", suffix, "}")
       })
-      links <- paste(sort_c(by_file), collapse = ",\n")
+      links <- paste(by_file, collapse = ",\n")
       seealso <- topics_process_family_prefix(family)
 
       topic$add(rd_section("seealso", paste0(seealso, "\n", links)))

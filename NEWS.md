@@ -1,3 +1,7 @@
+# withr (development version)
+
+* `@family` lists are now ordered more carefully, "foo1" comes after "foo" (#1563, @krlmlr).
+
 # roxygen2 7.3.0
 
 ## New features

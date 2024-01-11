@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">7.2.3.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">7.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-news">
     <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/roxygen2-7-3-0/">Version 7.3.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">Version 7.2.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/">Version 7.0.0</a>
@@ -78,15 +79,20 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
+<ul><li>
+<code>@family</code> lists are now ordered more carefully, “foo1” comes after “foo” (<a href="https://github.com/r-lib/roxygen2/issues/1563" class="external-link">#1563</a>, <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="7.3.0" id="roxygen2-730">roxygen2 7.3.0<a class="anchor" aria-label="anchor" href="#roxygen2-730"></a></h2><p class="text-muted">CRAN release: 2024-01-11</p>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-7-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-7-3-0"></a></h3>
 <ul><li><p><code>@docType package</code> now works more like documenting <code>"_PACKAGE"</code>, creating a <code>{packagename}-package</code> alias and clearly suggesting that you should switch to <code>"_PACKAGE"</code> instead (<a href="https://github.com/r-lib/roxygen2/issues/1491" class="external-link">#1491</a>).</p></li>
 <li><p><code>_PACKAGE</code> will no longer generate an alias for your package name if a function of the same name exists (<a href="https://github.com/r-lib/roxygen2/issues/1160" class="external-link">#1160</a>).</p></li>
 <li><p>The NAMESPACE roclet now reports if you have S3 methods that are missing an <code>@export</code> tag. All S3 methods need to be <code>@export</code>ed (which confusingly really registers the method) even if the generic is not. This avoids rare, but hard to debug, problems (<a href="https://github.com/r-lib/roxygen2/issues/1175" class="external-link">#1175</a>). You can suppress the warning with <code>@exportS3Method NULL</code> (<a href="https://github.com/r-lib/roxygen2/issues/1550" class="external-link">#1550</a>).</p></li>
 <li><p>The <code>NAMESPACE</code> roclet once again regenerates imports <em>before</em> loading package code and parsing roxygen blocks. This has been the goal for a long time (<a href="https://github.com/r-lib/roxygen2/issues/372" class="external-link">#372</a>), but we accidentally broke it when adding support for code execution in markdown blocks. This resolves a family of problems where you somehow bork your <code>NAMESPACE</code> and can’t easily get out of it because you can’t re-document the package because your code doesn’t reload.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
+<h3 id="minor-improvements-and-bug-fixes-7-3-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-7-3-0"></a></h3>
 <ul><li><p>If you document a function from another package it is automatically imported. Additionally, if you set <code>@rdname</code> or <code>@name</code> you can opt out of the default <code>reexports</code> topic generation and provide your own docs (<a href="https://github.com/r-lib/roxygen2/issues/1408" class="external-link">#1408</a>).</p></li>
 <li><p>Generate correct usage for S4 methods with non-syntactic class names.</p></li>
 <li><p>The <code>ROXYGEN_PKG</code> env var provides the name of the package being documented (<a href="https://github.com/r-lib/roxygen2/issues/1517" class="external-link">#1517</a>).</p></li>

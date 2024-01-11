@@ -15,9 +15,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.8/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.8/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Reusing documentation">
@@ -37,7 +37,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +73,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-news">
     <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/roxygen2-7-3-0/">Version 7.3.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">Version 7.2.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/">Version 7.0.0</a>
@@ -123,9 +124,8 @@ documentation file:</p>
 <ul>
 <li><p>Combine documentation for closely related functions into a single
 file with <code>@describeIn</code> or <code>@rdname</code>.</p></li>
-<li><p>Inherit components from another topic with
-<code>@inheritParams</code>, <code>@inheritSection</code>, or
-<code>@inherit</code>.</p></li>
+<li><p>Automatically copy tags with <code>@inheritParams</code>,
+<code>@inheritSection</code>, or <code>@inherit</code>.</p></li>
 <li><p>Use functions to generate repeated text with inline R
 code.</p></li>
 <li><p>Share text between documentation and vignettes with child
@@ -143,52 +143,80 @@ best used with care: documenting too many functions in one place leads
 to confusion. Use it when all functions have the same (or very similar)
 arguments.</p>
 <div class="section level3">
+<h3 id="rdname">
+<code>@rdname</code><a class="anchor" aria-label="anchor" href="#rdname"></a>
+</h3>
+<p>Use <code>@rdname &lt;destination&gt;</code><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;The destination is a topic name. There’s a one-to-one
+correspondence between topic names and &lt;code&gt;.Rd&lt;/code&gt; files where a
+topic called &lt;code&gt;foo&lt;/code&gt; will produce a file called
+&lt;code&gt;man/foo.Rd&lt;/code&gt;.&lt;/p&gt;"><sup>1</sup></a> to include multiple
+functions in the same page. Tags (e.g. <code>@title</code>,
+<code>@description</code>, <code>@examples</code>) will be combined,
+across blocks but often this yields text that is hard to understand. So
+we recommend that you make one block that contains the title,
+description, common parameters, examples and so on, and then only
+document individual parameters in the other blocks.</p>
+<p>There are two basic ways to do that. You can create a standalone
+documentation block and then add the functions to it. This typically
+works best when you have a family of related functions and you want to
+link to that family from other functions (i.e. <code>trig</code> in the
+examples below).</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Trigonometric approximations</span></span>
+<span><span class="co">#' @param x Input, in radians.</span></span>
+<span><span class="co">#' @name trig</span></span>
+<span><span class="cn">NULL</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span></span>
+<span><span class="co">#' @rdname trig</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">sin_ish</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">-</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span> <span class="op">/</span> <span class="fl">6</span></span>
+<span></span>
+<span><span class="co">#' @rdname trig</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">cos_ish</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fl">2</span></span>
+<span></span>
+<span><span class="co">#' @rdname trig</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">tan_ish</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span> <span class="op">/</span> <span class="fl">3</span></span></code></pre></div>
+<p>Alternatively, you can add docs to an existing function. This tends
+to work better if you have a “primary” function with some variants or
+some helpers.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Logarithms</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @param x A numeric vector</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">log</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">base</span><span class="op">)</span> <span class="va">...</span></span>
+<span></span>
+<span><span class="co">#' @rdname log</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">log2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#' @rdname log</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">ln</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="describein">
 <code>@describeIn</code><a class="anchor" aria-label="anchor" href="#describein"></a>
 </h3>
-<p>Use <code>@describeIn &lt;destination&gt; &lt;description&gt;</code>
-to document multiple functions together. It generates a new section
-named “<strong>Related functions and methods</strong>”, further divided
-into subsections by the type of relationship between the source and the
-destination documentation. Each subsection contains a bulleted list
-describing the function with the specified
-<code>&lt;description&gt;</code>.</p>
-<p>You can document several functions which perform slight variations of
-a task or which use different defaults in one documentation file:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Power</span></span>
-<span><span class="co">#' @param x base</span></span>
-<span><span class="co">#' @param exp exponent</span></span>
-<span><span class="va">power</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">exp</span><span class="op">)</span> <span class="va">x</span> <span class="op">^</span> <span class="va">exp</span></span>
-<span></span>
-<span><span class="co">#' @describeIn power Square a number</span></span>
-<span><span class="va">square</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/power.html" class="external-link">power</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#' @describeIn power Cube a number</span></span>
-<span><span class="va">cube</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/power.html" class="external-link">power</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p>In this case, both destination and source are “normal” functions, and
-you can use <code>&lt;description&gt;</code> to explain their
-differences.</p>
-<p><code>@describeIn</code> is also well suited to explain the
-relationships between functions making up an object oriented (OO) scheme
-using S3 or S4. In this case, roxygen will automatically detect whether
-a source function is a method and document the relationship to the
-relevant class or generic. Your new methods will be organised in one of
-two ways:</p>
-<ol style="list-style-type: decimal">
-<li><p>If your new method extends a generic in the
-<code>&lt;destination&gt;</code>, it will be listed in a section titled
-“<strong>Methods for generic <code>&lt;destination&gt;</code></strong>”.
-The subsection will include all methods for your new generic, labelled
-by the class they cover.</p></li>
-<li><p>If your new method extends another generic, for a class
-constructed in the destination, it will be listed in a subsection titled
-“<strong>Methods for class <code>&lt;destination&gt;</code></strong>”.
-It will be labelled by the generic which the method extends.</p></li>
-</ol>
-<p>While you can mix and match (some) different types of functions with
-<code>@describeIn</code>, the output may quickly become disorienting for
-users if the functions are not tightly related.</p>
+<p>An alternative to <code>@rdname</code> is <code>@describeIn</code>.
+It has a slightly different syntax because as well as a topic name, you
+also provide a brief description for the function, like
+<code>@describein topic one sentence description</code>. The primary
+difference between <code>@rdname</code> and <code>@describeIn</code>, is
+that <code>@describeIn</code> creates a new section containing a
+bulleted list all of each function, along with its description. It uses
+a number of heuristics to determine the heading of this section,
+depending on you’re documenting related functions, methods for a
+generic, or methods for a class.</p>
+<p>In general, I no longer recommend <code>@describeIn</code> because I
+don’t think the heuristics it uses are as good as a thoughtful
+hand-crafted summary. If you’re currently using
+<code>@describeIn</code>, you can general replace it with
+<code>@rdname</code>, as long as you give some thought to the
+multiple-function <code>@description</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="order-of-includes">Order of includes<a class="anchor" aria-label="anchor" href="#order-of-includes"></a>
@@ -199,7 +227,7 @@ sometimes cause the function usage to appear in a suboptimal order. You
 can override the default ordering with <code>@order</code>. For example,
 the following the block would place <code>times</code> first in
 <code>arith.Rd</code> because 1 comes before 2.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @rdname arith</span></span>
 <span><span class="co">#' @order 2</span></span>
 <span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
@@ -210,51 +238,194 @@ the following the block would place <code>times</code> first in
 </div>
 </div>
 <div class="section level2">
-<h2 id="inheriting-documentation">Inheriting documentation<a class="anchor" aria-label="anchor" href="#inheriting-documentation"></a>
+<h2 id="automatically-copy-tags">Automatically copy tags<a class="anchor" aria-label="anchor" href="#automatically-copy-tags"></a>
 </h2>
-<p>You can inherit documentation from other topics in a few ways:</p>
+<p>If two or more functions share have similarities but are different or
+complex enough that you don’t want to document them in a single file,
+you can use one of the four <code>@inherit</code> tags to automatically
+copy various components from another topic:</p>
 <ul>
-<li><p><code>@inheritParams source_function</code> inherits just the
-parameter documentation from <code>source_function()</code>.</p></li>
 <li>
-<p><code>@inherit source_function</code> will inherit all supported
-components from <code>source_function</code>.</p>
-<p>Alternatively, you can use (e.g.)
-<code>@inherit source_function return details</code> to just inherit the
-return value and details from <code>source_function()</code>. Supported
-components are <code>params</code>, <code>return</code>,
-<code>title</code>, <code>description</code>, <code>details</code>,
-<code>seealso</code>, <code>sections</code>, <code>references</code>,
-<code>examples</code>, <code>author</code>, <code>source</code>,
-<code>note</code>.</p>
-</li>
-<li><p><code>@inheritSection source_function Section title</code> will
-inherit the single <code>@section</code> called “Section title” from
-<code>source_function()</code>.</p></li>
+<code>@inheritParams foo</code> will copy <code>@param</code>
+contents from <code>foo</code>.</li>
 <li>
-<p><code>@inheritDotParams</code> automatically generates parameter
-documentation for <code>...</code> for the common case where you pass
-<code>...</code> on to another function. Because you often override some
-arguments, it comes with a flexible specification for argument
-selection:</p>
+<code>@inherit foo</code> will copy all supported components from
+<code>foo</code>.</li>
+<li>
+<code>@inheritSection foo {Section title}</code> will copy the
+<code>@section {Section title}</code> section from
+<code>foo</code>.</li>
+<li>
+<code>@inheritDotParams foo</code> will generate documentation for
+<code>…</code> by copying the documentation for <code>foo()</code>’s
+arguments.</li>
+</ul>
+<p>We think of this as “inheritance” rather than just copying, because
+anything you inherit can be overridden by a more specific definition in
+the documentation. This applies particularly to
+<code>@inheritParams</code> which allows you to copy the documentation
+for some parameters while documenting others directly. We’ll focus on
+this first.</p>
+<div class="section level3">
+<h3 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
+</h3>
+<p>The oldest, and most frequently used, inherits tag is
+<code>@inheritParams</code>. It’s particularly useful when multiple
+functions use the same argument name for the same task, as you can
+document the argument once, then inherit those docs elsewhere. For
+example, take the dplyr functions <code>arrange()</code>,
+<code>mutate()</code>, and <code>summarise()</code> which all have an
+argument called <code>.data</code>. <code>arrange()</code> is documented
+like so:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @param .data A data frame, data frame extension (e.g. a tibble), or a</span></span>
+<span><span class="co">#'   lazy data frame (e.g. from dbplyr or dtplyr). See *Methods*, below, for</span></span>
+<span><span class="co">#'   more details.</span></span>
+<span><span class="co">#' @param ... &lt;[`data-masking`][rlang::args_data_masking]&gt; Variables, or</span></span>
+<span><span class="co">#'   functions of variables. Use [desc()] to sort a variable in descending</span></span>
+<span><span class="co">#'   order.</span></span>
+<span><span class="va">arrange</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span></code></pre></div>
+<p>Then <code>mutate()</code> and <code>summarise()</code> don’t need to
+provide <code>@param .data</code> but can instead inherit the
+documentation from <code>arrange()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @inheritParams arrange</span></span>
+<span><span class="va">mutate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @inheritParams arrange</span></span>
+<span><span class="va">summarise</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span></code></pre></div>
+<p>If this was all you wrote it wouldn’t be quite right because
+<code>mutate()</code> and <code>summarise()</code> would also inherit
+the documentation for <code>...</code>, which has a different
+interpretation in these functions. So, for example,
+<code>mutate()</code> provides its own definition for
+<code>...</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @inheritParams arrange</span></span>
+<span><span class="co">#' @param ... &lt;[`data-masking`][rlang::args_data_masking]&gt; Name-value pairs.</span></span>
+<span><span class="co">#'   The name gives the name of the column in the output.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#'   The value can be:</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#'   * A vector of length 1, which will be recycled to the correct length.</span></span>
+<span><span class="co">#'   * A vector the same length as the current group (or the whole data frame</span></span>
+<span><span class="co">#'     if ungrouped).</span></span>
+<span><span class="co">#'   * `NULL`, to remove the column.</span></span>
+<span><span class="co">#'   * A data frame or tibble, to create multiple columns in the output.</span></span>
+<span><span class="va">mutate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span></code></pre></div>
+<p>Note that only the documentation for arguments with the same names
+are inherited. For example, <code>arrange()</code> also has a
+<code>.by_group</code> argument. Since no other function in dplyr has an
+argument with this name, its documentation will never be inherited.</p>
+</div>
+<div class="section level3">
+<h3 id="multiple-parameters">Multiple parameters<a class="anchor" aria-label="anchor" href="#multiple-parameters"></a>
+</h3>
+<p>Sometimes you document two (or more) tightly coupled parameters
+together. For example, <code>dplyr::left_join()</code> has:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @param x,y A pair of data frames, data frame extensions (e.g. a tibble), or</span></span>
+<span><span class="co">#'   lazy data frames (e.g. from dbplyr or dtplyr). See *Methods*, below, for</span></span>
+<span><span class="co">#'   more details.</span></span></code></pre></div>
+<p>When joint parameter documentation is inherited, it’s all or nothing,
+i.e. if a function has <code>@inheritParams left_join</code> it will
+only inherit the documentation for <code>x</code> and <code>y</code> if
+it has both <code>x</code> and <code>y</code> arguments and neither is
+documented by the inheriting function.</p>
+</div>
+<div class="section level3">
+<h3 id="the-dot-prefix">The dot prefix<a class="anchor" aria-label="anchor" href="#the-dot-prefix"></a>
+</h3>
+<p>Many tidyverse functions that accept named arguments in
+<code>...</code> also use a <code>.</code> prefix for their own
+arguments. This reduces the risk of an argument going to the wrong
+place. For example, <code>dplyr::mutate()</code> has <code>.by</code>,
+<code>.keep</code>, <code>.before</code>, and <code>.after</code>
+arguments, because if they didn’t have that prefix, you wouldn’t be able
+to create new variables called <code>by</code>, <code>keep</code>,
+<code>before</code>, or <code>after</code>. We call this pattern the <a href="https://design.tidyverse.org/dots-prefix.html" class="external-link">dot prefix</a>.</p>
+<p>This means that an argument with the same meaning can come in one of
+two forms: with and without the <code>.</code>.
+<code>@inheritParams</code> knows about this common pattern so ignores a
+<code>.</code> prefix when matching argument name. In other words,
+<code>.x</code> will inherit documentation for <code>x</code>, and
+<code>x</code> will inherit documentation from <code>.x</code>.</p>
+</div>
+<div class="section level3">
+<h3 id="inheriting-other-components">Inheriting other components<a class="anchor" aria-label="anchor" href="#inheriting-other-components"></a>
+</h3>
+<p>You can use <code>@inherits foo</code> to inherit the documentation
+for every supported tag from another topic. Currently,
+<code>@inherits</code> supports inheriting the following tags:
+<code>params</code>, <code>return</code>, <code>title</code>,
+<code>description</code>, <code>details</code>, <code>seealso</code>,
+<code>sections</code>, <code>references</code>, <code>examples</code>,
+<code>author</code>, <code>source</code>, <code>note</code>,
+<code>format</code>.</p>
+<p>By supplying a space separated list of components after the function
+name, you can also choose to inherit only selected components. For
+example, <code>@inherit foo returns</code> would just inherit the
+<code>@returns</code> tag, and <code>@inherit foo seealso source</code>
+would inherit the <code>@seealso</code> and <code>@source</code>
+tags.</p>
+<p><code>@inherit foo sections</code> will inherit <em>every</em>
+<code>@section</code> tag (which can also be specified in markdown by
+using the top-level heading spec, <code>#</code>). To inherit a
+<em>specific</em> section from another function, use
+<code>@inheritSection foo Section title</code>. For example, all the
+“adverbs” in purrr use <code>#' @inheritSection safely Adverbs</code> to
+inherit a standard section that provides advice on using an adverb in
+package code.</p>
+</div>
+<div class="section level3">
+<h3 id="documenting----">Documenting <code>...</code><a class="anchor" aria-label="anchor" href="#documenting----"></a>
+</h3>
+<p>When your function passes <code>...</code> on to another function, it
+can be useful to inline the documentation for some of the most common
+arguments. This technique is inspired by the documentation for
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, where <code>...</code> can take any graphical
+parameter; <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">?plot</a></code> describes some of the most common
+arguments so that you don’t have to look them up in
+<code><a href="https://rdrr.io/r/graphics/par.html" class="external-link">?par</a></code>.</p>
+<p><code>@inheritDotParams</code> has two components: the function to
+inherit from and the arguments to inherit. Since you’ll typically only
+want to document the most important arguments,
+<code>@inheritDotParams</code> comes with a flexible specification for
+argument selection inspired by <code>dplyr::select()</code>:</p>
 <ul>
 <li>
 <code>@inheritDotParams foo</code> takes all parameters from
-<code>foo()</code>
-</li>
+<code>foo()</code>.</li>
 <li>
 <code>@inheritDotParams foo a b e:h</code> takes parameters
 <code>a</code>, <code>b</code>, and all parameters between
-<code>e</code> and <code>h</code>
-</li>
+<code>e</code> and <code>h</code>.</li>
 <li>
 <code>@inheritDotParams foo -x -y</code> takes all parameters except
 for <code>x</code> and <code>y</code>.</li>
 </ul>
-</li>
+</div>
+<div class="section level3">
+<h3 id="inheriting-from-other-packages">Inheriting from other packages<a class="anchor" aria-label="anchor" href="#inheriting-from-other-packages"></a>
+</h3>
+<p>It’s most common to inherit from other documentation topics within
+the current package, but roxygen2 also supports inheriting documentation
+from other packages by using <code>package::function</code> syntax,
+e.g.:</p>
+<ul>
+<li><p><code>@inheritParams package::function</code></p></li>
+<li><p><code>@inherit package::function</code></p></li>
+<li><p><code>@inheritSection package::function Section title</code></p></li>
+<li><p><code>@inheritDotParams package::function</code></p></li>
 </ul>
-<p>All of these tags also work to inherit documentation from functions
-in another package by using <code>pkg::source_function</code>.</p>
+<p>When inheriting documentation from another package bear in mind that
+you’re now taking a fairly strong dependency on an external package, and
+to ensure every developer produces the same documentation you’ll need to
+make sure that they all have the same version of the package installed.
+And if the package changes the name of the topic or section, your
+documentation will require an update. For those reasons, this technique
+is best used sparingly.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="inline-code">Inline code<a class="anchor" aria-label="anchor" href="#inline-code"></a>
@@ -263,13 +434,13 @@ in another package by using <code>pkg::source_function</code>.</p>
 interpret the rest of the text within backticks as R code and evaluate
 it, and replace the backtick expression with its value. Here’s a simple
 example:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title `r 1 + 1`</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description `r 2 + 2`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>This is equivalent to writing:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title 2</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description 4</span></span>
@@ -277,18 +448,18 @@ example:</p>
 <p>The resulting text, together with the whole tag is interpreted as
 markdown, as usual. This means that you can use R to dynamically write
 markdown. For example if you defined this function in your package:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alphabet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"`"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">]</span>, <span class="st">"`"</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>You could then write:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `r alphabet(5)`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>The result is equivalent to writing the following by hand:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`</span></span>
@@ -350,6 +521,7 @@ to be rather inflexible, and you often end up refactoring into smaller
 pieces so we don’t believe this reflects a real loss of
 functionality.</p>
 </div>
+
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>

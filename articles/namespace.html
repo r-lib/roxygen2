@@ -15,9 +15,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.8/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.8/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Managing imports and exports">
@@ -37,7 +37,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +73,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-news">
     <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/roxygen2-7-3-0/">Version 7.3.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">Version 7.2.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/">Version 7.0.0</a>
@@ -124,58 +125,142 @@ is a little frustrating at first, but soon becomes second-nature.</p>
 <div class="section level2">
 <h2 id="exports">Exports<a class="anchor" aria-label="anchor" href="#exports"></a>
 </h2>
-<p>For a function to be usable outside your package, you must
-<strong>export</strong> it. By default roxygen2 doesn’t export anything
-from your package. If you want an object to be publicly available, you
-must explicitly tag it with <code>@export</code>.</p>
-<p>Use the following guidelines to decide what to export:</p>
-<ul>
-<li><p><strong>Functions</strong>: export functions that you want to
-make available. Exported functions must be documented, and you must be
-cautious when changing their interface.</p></li>
-<li><p><strong>Datasets</strong>: all datasets are publicly available.
-They exist outside of the package namespace and must not be
-exported.</p></li>
-<li><p><strong>S3 classes</strong>: if you want others to be able to
-create instances of the class <code>@export</code> the constructor
-function.</p></li>
-<li><p><strong>S3 generics</strong>: the generic is a function, so
-<code>@export</code> if you want it to be usable outside the
-package.</p></li>
-<li><p><strong>S3 methods</strong>: every S3 method <em>must</em> be
-exported, even if the generic is not. Otherwise, the S3 method table
-will not be generated correctly and internal generics will not find the
-correct method. See below for instructions on how to export a method for
-a generic in a suggested package.</p></li>
-<li><p><strong>S4 classes</strong>: export S4 classes if you want others
-to be able to extend them.</p></li>
-<li><p><strong>S4 generics:</strong> <code>@export</code> if you want
-the generic to be publicly usable.</p></li>
-<li><p><strong>S4 methods</strong>: you only need to
-<code>@export</code> methods for generics in other packages.</p></li>
-</ul>
+<p>In order for your users to use a function<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Including S3 and S4 generics and methods.&lt;/p&gt;"><sup>1</sup></a> in your package, you
+must <strong>export</strong> it. In most cases, you can just use the
+<code>@export</code> tag, and roxygen2 will automatically figure out
+which <code>NAMESPACE</code> directive (i.e. <code>export()</code>,
+<code>exportS3method()</code>, <code>exportClasses()</code>,
+or<code>exportMethods()</code>) you need.</p>
+<p>Note that datasets should never be exported as they are not found in
+<code>NAMESPACE</code>. Instead, datasets will either be automatically
+exported if you set <code>LazyData: true</code> in your
+<code>DESCRIPTION</code>, or made available after calling
+<code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> if not.</p>
 <div class="section level3">
-<h3 id="s3-methods-for-generics-in-suggested-packages">S3 methods for generics in suggested packages<a class="anchor" aria-label="anchor" href="#s3-methods-for-generics-in-suggested-packages"></a>
+<h3 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h3>
-<p><code>@exportS3Method</code> tag allows you to generate
-<code>S3method()</code> namespace directives. Its primary use is for
-“delayed” method registration, which allows you to define methods for
-generics found in suggested packages (R &gt;= 3.6). For example,</p>
+<p>A function should be exported if it is user facing; it should not be
+exported if it’s for internal use only. If you export a function, you
+must also document it, and since other people will use it, you need to
+be careful if you later change the function interface.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Add two numbers together</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @param x,y A pair of numbers.</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>
+</h3>
+<p>An S3 generic works like a regular R function so export it following
+the advice above: if you want users to call it, export; otherwise,
+don’t.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Take an object to bizarro world</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @param x A vector.</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">bizarro</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"bizarro"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>While S3 methods are regular functions with a special naming scheme,
+their “export” works a bit differently. S3 methods are exported only in
+the sense that calling the generic with the appropriate class will call
+the method; a user can’t directly access the method definition by typing
+its name. A more technically correctly term would be to say that the
+method is <strong>registered</strong> so that the generics can find
+it.</p>
+<p>You must register, i.e. <code>@export</code>, every S3 method
+regardless of whether or not the generic is exported. roxygen2 will warn
+you if you have forgotten.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @export</span></span>
+<span><span class="va">bizarro.character</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">letters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">""</span><span class="op">)</span></span>
+<span>  <span class="va">letters_rev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">rev</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">letters_rev</span>, <span class="va">paste</span>, collapse <span class="op">=</span> <span class="st">""</span>, FUN.VALUE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>If you are exporting a method in some other way, you can use
+<code>@exportS3Method NULL</code> to suppress the warning.</p>
+<p>You have four options for documenting an S3 method:</p>
+<ul>
+<li>Don’t document it; it’s not required, and not needed for simple
+generics where the user won’t care about the details.</li>
+<li>If the method is particularly complex or has many arguments that the
+generic does not, you can document it in its own file. In this case,
+just document it as if it’s a function.</li>
+<li>You can use <code>@rdname</code> to document it with other methods
+for the generic. This is a good option if it’s your generic, and you’re
+providing a bunch of methods for different classes.</li>
+<li>You can use <code>@rdname</code> to document it with other methods
+for the class. This is typically the least appealing option because the
+different generics will have different arguments, leading to a cluttered
+and potentially confusing page.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Take an object to bizarro world</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @description</span></span>
+<span><span class="co">#' This is an S3 generic. This package provides methods for the </span></span>
+<span><span class="co">#' following classes:</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' * `character`: reverses the order of the letters in each element of </span></span>
+<span><span class="co">#'    the vector.</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @param x A vector.</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">bizarro</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"bizarro"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="co">#' @rdname bizarro</span></span>
+<span><span class="va">bizarro.character</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">letters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">""</span><span class="op">)</span></span>
+<span>  <span class="va">letters_rev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">rev</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">letters_rev</span>, <span class="va">paste</span>, collapse <span class="op">=</span> <span class="st">""</span>, FUN.VALUE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Typically, you will write methods for generics that are either
+defined in the current package or a package that is a hard dependency<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;i.e. it is listed in either the &lt;code&gt;Imports&lt;/code&gt; or
+&lt;code&gt;Depends&lt;/code&gt; fields in your &lt;code&gt;DESCRIPTION&lt;/code&gt;.&lt;/p&gt;"><sup>2</sup></a> of your
+package. Sometimes, however, you will want to write a method for a
+suggested dependency. In this case, <code>@export</code> will not work
+because it assumes the generic is included or imported in your
+<code>NAMESPACE</code>. Instead, use <code>@exportS3Method</code>. This
+will use “delayed” method registration, which means the method will only
+be registered when the suggested package is loaded.</p>
+<p>To use <code>@exportS3Method</code> you must provide the package and
+generic name in the following format:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @exportS3Method pkg::generic</span></span>
 <span><span class="va">generic.foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>will generate</p>
-<pre><code><span><span class="fu">S3method</span><span class="op">(</span><span class="fu">pkg</span><span class="fu">::</span><span class="va">generic</span>, <span class="va">foo</span><span class="op">)</span></span></code></pre>
-<p>Which will cause the method to be registered only when pkg is
-loaded.</p>
+</div>
+<div class="section level3">
+<h3 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
+</h3>
+<ul>
+<li><p><strong>Classes</strong>: export the class object if you want
+others to be able to extend it.</p></li>
+<li><p><strong>Generics:</strong> treat it like a function and
+<code>@export</code> if user facing.</p></li>
+<li><p><strong>Methods</strong>: you only need to <code>@export</code> a
+method, if the generic lives in another package. Unlike S3, you must
+document S4 methods. Because method details are often not that
+important, it’s common to use <code>@rdname</code> to put the
+documentation for unimportant methods into a single topic with
+<code>@keywords internal</code>.</p></li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="manual-exports">Manual exports<a class="anchor" aria-label="anchor" href="#manual-exports"></a>
 </h3>
 <p>If <code>@export</code> does not automatically generate the correct
-directive when, you can use one of the tags below to exercise greater
-control:</p>
+<code>NAMESPACE</code> directive, you can use one of the tags below to
+exercise greater control:</p>
 <ul>
 <li>
 <code>@export foo</code> generates <code>export(foo)</code>
@@ -199,11 +284,19 @@ control:</p>
 </ul>
 <p>For even more specialised cases you can use
 <code>@rawNamespace code</code> which inserts <code>code</code>
-literally into the <code>NAMESPACE</code>. If you need to automate this,
-<code>@evalNamespace fun()</code> will evaluate <code>fun()</code> in
-the package environment and insert the results into
-<code>NAMESPACE</code>. Because <code>evalNamespace()</code> is run in
-the package environment, it can only generate exports, not imports.</p>
+literally into the <code>NAMESPACE</code>. This is useful if you need a
+conditional import or export, e.g.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># From dplyr:</span></span>
+<span><span class="co">#' @rawNamespace import(vctrs, except = data_frame)</span></span>
+<span></span>
+<span><span class="co"># From backports:</span></span>
+<span><span class="co">#' @rawNamespace if (getRversion() &lt; "4.0.0") export(stopifnot)</span></span></code></pre></div>
+<p>If you need to automate this, <code>@evalNamespace fun()</code> will
+evaluate <code>fun()</code> in the package environment and insert the
+results into <code>NAMESPACE</code>. Note that because
+<code>evalNamespace()</code> is run in the package environment, it can
+only generate exports, not imports.</p>
 </div>
 </div>
 <div class="section level2">
@@ -212,19 +305,19 @@ the package environment, it can only generate exports, not imports.</p>
 <p>The <code>NAMESPACE</code> also controls which functions from other
 packages are made available to your package.</p>
 <div class="section level3">
-<h3 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
+<h3 id="functions-1">Functions<a class="anchor" aria-label="anchor" href="#functions-1"></a>
 </h3>
 <p>If you are using just a few functions from another package, we
 recommending adding the package to the <code>Imports:</code> field of
 the <code>DESCRIPTION</code> file and calling the functions explicitly
 using <code>::</code>, e.g., <code>pkg::fun()</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">pkg</span><span class="fu">::</span><span class="fu">fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="va">y</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>If the repetition of the package name becomes annoying you can
 <code>@importFrom</code> and drop the <code>::</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @importFrom pkg fun </span></span>
 <span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="va">y</span></span>
@@ -232,7 +325,7 @@ using <code>::</code>, e.g., <code>pkg::fun()</code>.</p>
 <p>Imports affect every function in a package, so it’s common to collect
 them in a central place, like <code>{packagename}-package.R</code>. This
 is automated by <code>usethis::use_import_from()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @importFrom pkg fun1 fun2</span></span>
 <span><span class="co">#' @importFrom pkg2 fun3</span></span>
 <span><span class="co">#' @importFrom pkg3 fun4</span></span>
@@ -249,7 +342,7 @@ the same name, and your users will get a warning every time your package
 is loaded.</p>
 </div>
 <div class="section level3">
-<h3 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>
+<h3 id="s3-1">S3<a class="anchor" aria-label="anchor" href="#s3-1"></a>
 </h3>
 <p>S3 generics are just functions, so the same rules for functions
 apply. S3 methods always accompany the generic, so as long as you can
@@ -259,7 +352,7 @@ for S3 methods. As long as you’ve imported the generic, all the methods
 will also be available.</p>
 </div>
 <div class="section level3">
-<h3 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
+<h3 id="s4-1">S4<a class="anchor" aria-label="anchor" href="#s4-1"></a>
 </h3>
 <ul>
 <li>To use classes defined in another package,
@@ -288,6 +381,7 @@ e.g. <code>useDynLib(mypackage, .registration = TRUE)</code></p></li>
 </ul>
 </div>
 </div>
+
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>

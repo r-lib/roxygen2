@@ -57,7 +57,7 @@ Note the use of two additional tags that are particularly useful for documenting
 ## Packages
 
 As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel `"_PACKAGE"`.
-This automatically include information parsed from the `DESCRIPTION`, including title, description, list of authors, and useful URLs.
+This automatically includes information parsed from the `DESCRIPTION`, including title, description, list of authors, and useful URLs.
 
 We recommend placing package documentation in `{pkgname}-package.R`, and have `@keywords internal`.
 Use `usethis::use_package_doc()` to set up automatically.

@@ -391,7 +391,13 @@ test_that("can extract non-imports from namespace preserving source", {
     "export(b)"
   )
   path <- withr::local_tempfile(lines = lines)
-  expect_equal(namespace_exports(path), lines[c(1:3, 5)])
+  expect_equal(
+    namespace_exports(path),
+    c(
+      paste(lines[1:3], collapse = "\n"),
+      lines[5L]
+    )
+  )
 })
 
 test_that("Invalid imports throw a helpful error", {

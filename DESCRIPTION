@@ -46,6 +46,7 @@ LinkingTo:
     cpp11
 VignetteBuilder: 
     knitr
+Config/Needs/development: testthat
 Config/Needs/website: tidyverse/tidytemplate
 Config/testthat/edition: 3
 Config/testthat/parallel: TRUE

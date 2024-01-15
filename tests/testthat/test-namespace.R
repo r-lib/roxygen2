@@ -395,6 +395,15 @@ test_that("can extract non-imports from namespace preserving source", {
 })
 
 test_that("Invalid imports throw a helpful error", {
+  # No matched functions --> no output
+  block <- "
+    #' @importFrom utils InvalidUtilsFunction
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(out, character())
+
+  # Matched functions --> only drop unmatched functions
   block <- "
     #' @importFrom utils head InvalidUtilsFunction
     NULL
@@ -418,6 +427,23 @@ test_that("Invalid imports throw a helpful error", {
   expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
   expect_equal(out, "importFrom(AnUnknownUnavailablePackage,Unchecked)")
 
+  # make sure to match several forms of non-syntactic names
+  expect_no_warning(expect_equal(
+    roc_proc_text(namespace_roclet(), "#' @importFrom stringr %>%\nNULL"),
+    'importFrom(stringr,"%>%")'
+  ))
+  expect_no_warning(expect_equal(
+    roc_proc_text(namespace_roclet(), "#' @importFrom stringr '%>%'\nNULL"),
+    "importFrom(stringr,'%>%')"
+  ))
+  expect_no_warning(expect_equal(
+    roc_proc_text(namespace_roclet(), "#' @importFrom stringr `%>%`\nNULL"),
+    "importFrom(stringr,`%>%`)"
+  ))
+  expect_no_warning(expect_equal(
+    roc_proc_text(namespace_roclet(), '#\' @importFrom stringr "%>%"\nNULL'),
+    'importFrom(stringr,"%>%")'
+  ))
 })
 
 

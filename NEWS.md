@@ -2,6 +2,10 @@
 
 * `@family` lists are now ordered more carefully, "foo1" comes after "foo" (#1563, @krlmlr).
 
+* `@importFrom magrittr "%>%"` works again (#1570, @MichaelChirico). Relatedly, `@importFrom`
+  directives not matching any known functions (e.g. `@importFrom utils plot pdf`) will not
+  produce invalid NAMESPACE files.
+
 # roxygen2 7.3.0
 
 ## New features

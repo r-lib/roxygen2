@@ -83,14 +83,21 @@
     Code
       out <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @importFrom Excluding unknown export in from utils: `InvalidUtilsFunction`.
+      x <text>:2: @importFrom Excluding unknown export from utils: `InvalidUtilsFunction`.
 
 ---
 
     Code
       out <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @importFrom Excluding unknown exports in from utils: `InvalidUtilsFunction1` and `InvalidUtilsFunction2`.
+      x <text>:2: @importFrom Excluding unknown export from utils: `InvalidUtilsFunction`.
+
+---
+
+    Code
+      out <- roc_proc_text(namespace_roclet(), block)
+    Message
+      x <text>:2: @importFrom Excluding unknown exports from utils: `InvalidUtilsFunction1` and `InvalidUtilsFunction2`.
 
 ---
 

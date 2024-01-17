@@ -82,7 +82,7 @@ update_namespace_imports <- function(base_path) {
 
 # Here we hand roll parsing and tokenisation from roxygen2 primitives so
 # we can filter tags that we know don't require package code.
- namespace_imports <- function(base_path = ".") {
+namespace_imports <- function(base_path = ".") {
   paths <- package_files(base_path)
   parsed <- lapply(paths, parse, keep.source = TRUE)
   srcrefs <- lapply(parsed, utils::getSrcref)
@@ -109,6 +109,8 @@ namespace_imports_blocks <- function(srcref) {
   }))
 }
 
+# NB: this is designed as the conjugate of namespace_imports(), so also
+#   includes @rawNamespace entries which may/may not also include import directives.
 namespace_exports <- function(path) {
   parsed <- as.list(parse(path, keep.source = TRUE))
 

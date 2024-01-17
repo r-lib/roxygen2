@@ -269,7 +269,7 @@ roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
   if (requireNamespace(pkg, quietly = TRUE)) {
     importing <- x$val[-1L]
     # be sure to match '%>%', `%>%`, "%>%" all to %>% given by getNamespaceExports, #1570
-    unknown_idx <- !normalize_quotes(importing) %in% getNamespaceExports(pkg)
+    unknown_idx <- !strip_quotes(importing) %in% getNamespaceExports(pkg)
     if (any(unknown_idx)) {
       warn_roxy_tag(x, "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} from {.package {pkg}}: {.code {importing[unknown_idx]}}")
       if (all(unknown_idx)) {

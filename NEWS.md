@@ -2,11 +2,11 @@
 
 * `@family` lists are now ordered more carefully, "foo1" comes after "foo" (#1563, @krlmlr).
 
-* `@importFrom magrittr "%>%"` works again, as does
-  ``@importFrom rlang `:=` `` (#1570, @MichaelChirico). The form
-  `@importFrom magrittr %>%` continues to work. Relatedly, `@importFrom`
-  directives not matching any known functions (e.g.
-  `@importFrom utils plot pdf`) will not produce invalid NAMESPACE files.
+* `@importFrom` works again for quoted non-syntactic names, e.g.
+  `@importFrom magrittr "%>%"` or ``@importFrom rlang `:=` ``, after being broken
+  in 7.3.0 (#1570, @MichaelChirico). The unquoted form `@importFrom magrittr %>%`
+  continues to work. Relatedly, `@importFrom` directives not matching any known
+  functions (e.g. `@importFrom utils plot pdf`) produce valid NAMESPACE files again.
 
 # roxygen2 7.3.0
 

@@ -179,3 +179,4 @@ auto_quote <- function(x) {
 
 is_syntactic <- function(x) make.names(x) == x
 has_quotes <- function(x) str_detect(x, "^(`|'|\").*\\1$")
+strip_quotes <- function(x) str_replace(x, "^(`|'|\")(.*)\\1$", "\\2")

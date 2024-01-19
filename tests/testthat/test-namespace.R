@@ -306,22 +306,15 @@ test_that("rawNamespace inserted unchanged", {
 })
 
 test_that("rawNamespace does not break idempotency", {
-  initial_namespace <- roc_proc_text(namespace_roclet(), "
-    #' @import methods
-    #' @rawNamespace
-    #' if (TRUE) {
-    #'   1
-    #' } else {
-    #'   2
-    #' }
-    NULL")
-  
-  tmp_namespace <- withr::local_tempfile(lines = initial_namespace)
+  test_pkg <- test_path("testRawNamespace")
+  NAMESPACE <- file.path(test_pkg, "NAMESPACE")
 
-  expect_no_error(update_namespace_imports(dirname(tmp_namespace)))
+  lines_orig <- read_lines(NAMESPACE)
+
+  expect_no_error(roxygenize(test_pkg, namespace_roclet()))
 
   # contents unchanged
-  expect_equal(read_lines(tmp_namespace), unlist(strsplit(initial_namespace, "\n")))
+  expect_equal(read_lines(NAMESPACE), lines_orig)
 })
 
 # @evalNamespace ----------------------------------------------------------

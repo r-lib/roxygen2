@@ -394,13 +394,13 @@ test_that("can extract non-imports from namespace preserving source", {
   expect_equal(namespace_exports(path), lines[c(1:3, 5)])
 })
 
-test_that("Invalid imports throw a helpful error", {
+test_that("invalid imports generate correct declarations", {
   # No matched functions --> no output
   block <- "
     #' @importFrom utils InvalidUtilsFunction
     NULL
   "
-  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_message(out <- roc_proc_text(namespace_roclet(), block))
   expect_equal(out, character())
 
   # Matched functions --> only drop unmatched functions
@@ -408,44 +408,49 @@ test_that("Invalid imports throw a helpful error", {
     #' @importFrom utils head InvalidUtilsFunction
     NULL
   "
-  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_message(out <- roc_proc_text(namespace_roclet(), block))
   expect_equal(out, "importFrom(utils,head)")
+})
 
-  # pluralization
+test_that("invalid imports generate helpful message", {
+  block <- "
+    #' @importFrom utils head InvalidUtilsFunction1
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+
   block <- "
     #' @importFrom utils head InvalidUtilsFunction1 InvalidUtilsFunction2
     NULL
   "
   expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
-  expect_equal(out, "importFrom(utils,head)")
+})
 
-  # If the package is not available at roxygenize() run time, nothing we can do
+test_that("nothing we can do if package isn't installed", {
   block <- "
     #' @importFrom AnUnknownUnavailablePackage Unchecked
     NULL
   "
-  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_no_message(out <- roc_proc_text(namespace_roclet(), block))
   expect_equal(out, "importFrom(AnUnknownUnavailablePackage,Unchecked)")
-
-  # make sure to match several forms of non-syntactic names
-  expect_no_warning(expect_equal(
-    roc_proc_text(namespace_roclet(), "#' @importFrom stringr %>%\nNULL"),
-    'importFrom(stringr,"%>%")'
-  ))
-  expect_no_warning(expect_equal(
-    roc_proc_text(namespace_roclet(), "#' @importFrom stringr '%>%'\nNULL"),
-    "importFrom(stringr,'%>%')"
-  ))
-  expect_no_warning(expect_equal(
-    roc_proc_text(namespace_roclet(), "#' @importFrom stringr `%>%`\nNULL"),
-    "importFrom(stringr,`%>%`)"
-  ))
-  expect_no_warning(expect_equal(
-    roc_proc_text(namespace_roclet(), '#\' @importFrom stringr "%>%"\nNULL'),
-    'importFrom(stringr,"%>%")'
-  ))
 })
 
+test_that("non-syntactic imports can use multiple quoting forms", {
+  lines <- c(
+    "#' @importFrom stringr %>%",
+    "#' @importFrom stringr `%>%`",
+    "#' @importFrom stringr '%>%'",
+    "#' @importFrom stringr \"%>%\"",
+    "NULL"
+  )
+
+  import <- expect_no_warning(roc_proc_text(namespace_roclet(), lines))
+  expect_equal(import, c(
+    "importFrom(stringr,\"%>%\")",
+    "importFrom(stringr,'%>%')",
+    "importFrom(stringr,`%>%`)"
+  ))
+})
 
 # warn_missing_s3_exports -------------------------------------------------
 

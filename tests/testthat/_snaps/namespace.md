@@ -78,19 +78,12 @@
     Message
       x <text>:2: @evalNamespace must evaluate to a character vector.
 
-# Invalid imports throw a helpful error
+# invalid imports generate helpful message
 
     Code
       out <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @importFrom Excluding unknown export from utils: `InvalidUtilsFunction`.
-
----
-
-    Code
-      out <- roc_proc_text(namespace_roclet(), block)
-    Message
-      x <text>:2: @importFrom Excluding unknown export from utils: `InvalidUtilsFunction`.
+      x <text>:2: @importFrom Excluding unknown export from utils: `InvalidUtilsFunction1`.
 
 ---
 
@@ -98,11 +91,6 @@
       out <- roc_proc_text(namespace_roclet(), block)
     Message
       x <text>:2: @importFrom Excluding unknown exports from utils: `InvalidUtilsFunction1` and `InvalidUtilsFunction2`.
-
----
-
-    Code
-      out <- roc_proc_text(namespace_roclet(), block)
 
 # warns if S3 method not documented
 

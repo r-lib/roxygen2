@@ -116,6 +116,7 @@ namespace_exports <- function(path) {
 
   is_import_directive <- function(x) is_call(x, import_directives)
   export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import_directive)]
+  # Each multiline directives are a single element so they're sorted correctly
   unlist(lapply(export_lines, function(x) paste(as.character(x), collapse = "\n")))
 }
 

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,6 +78,13 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="7.3.1" id="roxygen2-731">roxygen2 7.3.1<a class="anchor" aria-label="anchor" href="#roxygen2-731"></a></h2><p class="text-muted">CRAN release: 2024-01-22</p>
+<ul><li><p>S3 method export warning no longer fails if class contains <code>{</code> or <code>}</code> (<a href="https://github.com/r-lib/roxygen2/issues/1575" class="external-link">#1575</a>).</p></li>
+<li><p><code>@family</code> lists are now ordered more carefully, “foo1” comes after “foo” (<a href="https://github.com/r-lib/roxygen2/issues/1563" class="external-link">#1563</a>, <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</p></li>
+<li><p><code>@importFrom</code> works again for quoted non-syntactic names, e.g. <code>@importFrom magrittr "%&gt;%"</code> or <code>@importFrom rlang `:=`</code> (<a href="https://github.com/r-lib/roxygen2/issues/1570" class="external-link">#1570</a>, <a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>). The unquoted form <code>@importFrom magrittr %&gt;%</code> continues to work. Relatedly, <code>@importFrom</code> directives matching no known functions (e.g. <code>@importFrom utils plot pdf</code>) produce valid NAMESPACE files again.</p></li>
+<li><p>Multi-line <code>@rawNamespace</code> no longer break re-runs of <code><a href="../reference/namespace_roclet.html">namespace_roclet()</a></code> (<a href="https://github.com/r-lib/roxygen2/issues/1572" class="external-link">#1572</a>, <a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>).</p></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.3.0" id="roxygen2-730">roxygen2 7.3.0<a class="anchor" aria-label="anchor" href="#roxygen2-730"></a></h2><p class="text-muted">CRAN release: 2024-01-11</p>
 <div class="section level3">
 <h3 id="new-features-7-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-7-3-0"></a></h3>
@@ -100,7 +107,6 @@
 <li><p><code>@importFrom</code> throws a friendlier error if you try and import a non-existing functions (<a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>, <a href="https://github.com/r-lib/roxygen2/issues/1409" class="external-link">#1409</a>).</p></li>
 <li><p><code>@include</code> now gives an informative warning if you use a path that doesn’t exist (<a href="https://github.com/r-lib/roxygen2/issues/1497" class="external-link">#1497</a>).</p></li>
 <li><p><code>@inherit</code> can now also inherit from <code>@format</code> (<a href="https://github.com/r-lib/roxygen2/issues/1293" class="external-link">#1293</a>).</p></li>
-<li><p><code>@family</code> lists are now ordered more carefully, “foo1” comes after “foo” (<a href="https://github.com/r-lib/roxygen2/issues/1563" class="external-link">#1563</a>, <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -778,7 +784,7 @@
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Peter Danenberg, <a href="https://github.com/gaborcsardi" class="external-link">Gábor Csárdi</a>, Manuel Eugster, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
+  <p></p><p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Peter Danenberg, <a href="https://github.com/gaborcsardi" class="external-link">Gábor Csárdi</a>, Manuel Eugster, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

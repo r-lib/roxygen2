@@ -401,7 +401,11 @@ warn_missing_s3_exports <- function(blocks, env) {
 
   undocumented <- methods[!methods %in% s3objects]
   srcrefs <- map(undocumented, attr, "srcref")
-  messages <- paste0("S3 method `", names(undocumented) , "` needs @export or @exportS3method tag")
-  map2(undocumented, messages, warn_roxy_function)
-}
 
+  map2(undocumented, names(undocumented), function(fun, name) {
+    warn_roxy_function(
+      fun,
+      "S3 method {.arg {name}} needs @export or @exportS3method tag"
+    )
+  })
+}

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">7.3.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">7.3.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="7.3.1" id="roxygen2-731">roxygen2 7.3.1<a class="anchor" aria-label="anchor" href="#roxygen2-731"></a></h2><p class="text-muted">CRAN release: 2024-01-22</p>
 <ul><li><p>S3 method export warning no longer fails if class contains <code>{</code> or <code>}</code> (<a href="https://github.com/r-lib/roxygen2/issues/1575" class="external-link">#1575</a>).</p></li>
 <li><p><code>@family</code> lists are now ordered more carefully, “foo1” comes after “foo” (<a href="https://github.com/r-lib/roxygen2/issues/1563" class="external-link">#1563</a>, <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</p></li>
 <li><p><code>@importFrom</code> works again for quoted non-syntactic names, e.g. <code>@importFrom magrittr "%&gt;%"</code> or <code>@importFrom rlang `:=`</code> (<a href="https://github.com/r-lib/roxygen2/issues/1570" class="external-link">#1570</a>, <a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>). The unquoted form <code>@importFrom magrittr %&gt;%</code> continues to work. Relatedly, <code>@importFrom</code> directives matching no known functions (e.g. <code>@importFrom utils plot pdf</code>) produce valid NAMESPACE files again.</p></li>

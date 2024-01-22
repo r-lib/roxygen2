@@ -79,7 +79,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li><p><code>@family</code> lists are now ordered more carefully, “foo1” comes after “foo” (<a href="https://github.com/r-lib/roxygen2/issues/1563" class="external-link">#1563</a>, <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</p></li>
+<ul><li><p>S3 method export warning no longer fails if class contains <code>{</code> or <code>}</code> (<a href="https://github.com/r-lib/roxygen2/issues/1575" class="external-link">#1575</a>).</p></li>
+<li><p><code>@family</code> lists are now ordered more carefully, “foo1” comes after “foo” (<a href="https://github.com/r-lib/roxygen2/issues/1563" class="external-link">#1563</a>, <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</p></li>
 <li><p>Re-runs of <code><a href="../reference/namespace_roclet.html">namespace_roclet()</a></code> fixed for packages using multi-line <code>@rawNamespace</code> directives (<a href="https://github.com/r-lib/roxygen2/issues/1572" class="external-link">#1572</a>, <a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>).</p></li>
 <li><p><code>@importFrom</code> works again for quoted non-syntactic names, e.g. <code>@importFrom magrittr "%&gt;%"</code> or <code>@importFrom rlang `:=`</code>, after being broken in 7.3.0 (<a href="https://github.com/r-lib/roxygen2/issues/1570" class="external-link">#1570</a>, <a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>). The unquoted form <code>@importFrom magrittr %&gt;%</code> continues to work. Relatedly, <code>@importFrom</code> directives not matching any known functions (e.g. <code>@importFrom utils plot pdf</code>) produce valid NAMESPACE files again.</p></li>
 </ul></div>
@@ -783,7 +784,7 @@
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Peter Danenberg, <a href="https://github.com/gaborcsardi" class="external-link">Gábor Csárdi</a>, Manuel Eugster, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
+  <p></p><p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Peter Danenberg, <a href="https://github.com/gaborcsardi" class="external-link">Gábor Csárdi</a>, Manuel Eugster, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -472,31 +472,31 @@ test_that("non-syntactic imports can use multiple quoting forms", {
 # warn_missing_s3_exports -------------------------------------------------
 
 test_that("warns if S3 method not documented", {
-  expect_snapshot(
-    roc_proc_text(namespace_roclet(), "
+  # Need to manually transform since the srcref is coming from the function;
+  # roc_proc_text() uses fake srcrefs for the blocks themselves
+  fix_srcref <- function(x) gsub("file[a-z0-9]+", "<text>", x)
+
+  block <- "
       foo <- function(x) UseMethod('foo')
       foo.numeric <- function(x) 1
 
       mean.myclass <- function(x) 2
-    "),
-    # Need to manually transform since the srcref is coming from the function;
-    # roc_proc_text() uses fake srcrefs for the blocks themselves
-    transform = function(x) gsub("file[a-z0-9]+", "<text>", x)
-  )
-})
-
-test_that("correctly interpolates warning", {
+    "
   expect_snapshot(
-    roc_proc_text(namespace_roclet(), "
-      foo <- function(x) UseMethod('foo')
-      `foo.{` <- function(x) 1
-    "),
-    # Need to manually transform since the srcref is coming from the function;
-    # roc_proc_text() uses fake srcrefs for the blocks themselves
-    transform = function(x) gsub("file[a-z0-9]+", "<text>", x)
+    . <- roc_proc_text(namespace_roclet(), block),
+    transform = fix_srcref
+  )
+
+  # Works even if method contains {
+  block <- "
+    foo <- function(x) UseMethod('foo')
+    `foo.{` <- function(x) 1
+  "
+  expect_snapshot(
+    . <- roc_proc_text(namespace_roclet(), block),
+    transform = fix_srcref
   )
 })
-
 
 test_that("can suppress the warning", {
   block <- "

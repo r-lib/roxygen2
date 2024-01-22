@@ -103,3 +103,13 @@
     Output
       character(0)
 
+# correctly interpolates warning
+
+    Code
+      roc_proc_text(namespace_roclet(),
+      "\n      foo <- function(x) UseMethod('foo')\n      `foo.{` <- function(x) 1\n    ")
+    Message
+      x <text>:3: S3 method `foo.{` needs @export or @exportS3method tag.
+    Output
+      character(0)
+

@@ -485,6 +485,18 @@ test_that("warns if S3 method not documented", {
   )
 })
 
+test_that("correctly interpolates warning", {
+  expect_snapshot(
+    roc_proc_text(namespace_roclet(), "
+      foo <- function(x) UseMethod('foo')
+      `foo.{` <- function(x) 1
+    "),
+    # Need to manually transform since the srcref is coming from the function;
+    # roc_proc_text() uses fake srcrefs for the blocks themselves
+    transform = function(x) gsub("file[a-z0-9]+", "<text>", x)
+  )
+})
+
 
 test_that("can suppress the warning", {
   block <- "

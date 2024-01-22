@@ -74,7 +74,7 @@ update_namespace_imports <- function(base_path) {
   }
 
   lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
-  results <- c(made_by("#"), sort_c(unique(lines)))
+  results <- c(made_by("#"), sort_c(unique(trimws(lines))))
   write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible()
@@ -109,12 +109,15 @@ namespace_imports_blocks <- function(srcref) {
   }))
 }
 
+# NB: this is designed as the conjugate of namespace_imports(), so also
+#   includes @rawNamespace entries which may/may not also include import directives.
 namespace_exports <- function(path) {
   parsed <- as.list(parse(path, keep.source = TRUE))
 
   is_import_directive <- function(x) is_call(x, import_directives)
   export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import_directive)]
-  unlist(lapply(export_lines, as.character))
+  # Each multiline directives are a single element so they're sorted correctly
+  unlist(lapply(export_lines, function(x) paste(as.character(x), collapse = "\n")))
 }
 
 # NAMESPACE generation ----------------------------------------------------

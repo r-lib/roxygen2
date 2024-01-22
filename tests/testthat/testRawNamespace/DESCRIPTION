@@ -1,0 +1,9 @@
+Package: testRawNamespace
+Title: Check that re-running on multi-line @rawNamespace directive is OK
+License: GPL-2
+Description: testRawNamespace.
+Author: Hadley <hadley@rstudio.com>
+Maintainer: Hadley <hadley@rstudio.com>
+Encoding: UTF-8
+Version: 0.1
+RoxygenNote: 7.3.0.9000

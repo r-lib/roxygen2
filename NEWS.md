@@ -1,6 +1,7 @@
 # roxygen2 (development version)
 
 * `@family` lists are now ordered more carefully, "foo1" comes after "foo" (#1563, @krlmlr).
+* Re-runs of `namespace_roclet()` fixed for packages using multi-line `@rawNamespace` directives (#1572, @MichaelChirico).
 
 * `@importFrom` works again for quoted non-syntactic names, e.g.
   `@importFrom magrittr "%>%"` or ``@importFrom rlang `:=` ``, after being broken

@@ -1,4 +1,4 @@
-# roxygen2 (development version)
+# roxygen2 7.3.1
 
 * S3 method export warning no longer fails if class contains `{` or `}` (#1575).
 

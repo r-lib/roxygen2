@@ -1,11 +1,11 @@
-# @exportS3method generates fully automatically
+# @exportS3Method generates fully automatically
 
     Code
       . <- roc_proc_text(namespace_roclet(), block)
     Message
       x <text>:2: @exportS3Method must be used with an known S3 method.
 
-# @exportS3method can extract class from generic
+# @exportS3Method can extract class from generic
 
     Code
       . <- roc_proc_text(namespace_roclet(), block)
@@ -97,13 +97,13 @@
     Code
       . <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:5: S3 method `mean.myclass` needs @export or @exportS3method tag.
-      x <text>:3: S3 method `foo.numeric` needs @export or @exportS3method tag.
+      x <text>:5: S3 method `mean.myclass` needs @export or @exportS3Method tag.
+      x <text>:3: S3 method `foo.numeric` needs @export or @exportS3Method tag.
 
 ---
 
     Code
       . <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:3: S3 method `foo.{` needs @export or @exportS3method tag.
+      x <text>:3: S3 method `foo.{` needs @export or @exportS3Method tag.
 

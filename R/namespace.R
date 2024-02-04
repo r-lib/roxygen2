@@ -396,7 +396,7 @@ warn_missing_s3_exports <- function(blocks, env) {
   funs <- Filter(is.function, objs)
   methods <- funs[map_lgl(names(funs), is_s3_method, env = env)]
 
-  s3blocks <- blocks[map_lgl(blocks, block_has_tags, c("export", "exportS3method"))]
+  s3blocks <- blocks[map_lgl(blocks, block_has_tags, c("export", "exportS3Method"))]
   s3objects <- map(blocks, function(block) block$object$value)
 
   undocumented <- methods[!methods %in% s3objects]
@@ -405,7 +405,7 @@ warn_missing_s3_exports <- function(blocks, env) {
   map2(undocumented, names(undocumented), function(fun, name) {
     warn_roxy_function(
       fun,
-      "S3 method {.arg {name}} needs @export or @exportS3method tag"
+      "S3 method {.arg {name}} needs @export or @exportS3Method tag"
     )
   })
 }

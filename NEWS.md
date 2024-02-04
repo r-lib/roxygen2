@@ -185,7 +185,7 @@
 
 * `@author`s are de-duplicated in merged documentation (@DanChaltiel, #1333).
 
-* `@exportS3method pkg::generic` now works when `pkg::generic` isn't 
+* `@exportS3Method pkg::generic` now works when `pkg::generic` isn't 
   imported by your package (#1085).
 
 * `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math 

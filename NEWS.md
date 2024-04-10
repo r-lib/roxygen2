@@ -1,5 +1,9 @@
 # roxygen2 (development version)
 
+* Custom [`@family`
+  titles](https://roxygen2.r-lib.org/articles/index-crossref.html) now support
+  Markdown syntax (#1608, @salim-b).
+
 # roxygen2 7.3.1
 
 * S3 method export warning no longer fails if class contains `{` or `}` (#1575).

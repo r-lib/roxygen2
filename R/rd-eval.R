@@ -17,6 +17,7 @@ local_reproducible_output <- function(.envir = parent.frame()) {
     crayon.enabled = FALSE,
     cli.unicode = FALSE,
     cli.dynamic = FALSE,
+    cli.hyperlink = FALSE,
     rlang_interactive = FALSE,
     width = 80,
     .local_envir = .envir

@@ -15,9 +15,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   )
 
   dontshow <- paste0(
-    "\\dontshow{if (",
-    condition,
-    ") (if (getRversion() >= \"3.4\") withAutoprint else force)(\\{ # examplesIf}"
+    "\\dontshow{if (", condition, ") withAutoprint(\\{ # examplesIf}"
   )
 
   x$raw <- paste(

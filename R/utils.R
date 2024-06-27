@@ -61,7 +61,7 @@ nice_name <- function(x) {
   x
 }
 
-write_if_different <- function(path, contents, href = NULL, check = TRUE) {
+write_if_different <- function(path, contents, command = NULL, check = TRUE) {
   if (!file.exists(dirname(path))) {
     dir.create(dirname(path), showWarnings = FALSE)
   }
@@ -87,8 +87,10 @@ write_if_different <- function(path, contents, href = NULL, check = TRUE) {
     ))
     FALSE
   } else {
-    if (!is.null(href)) {
-      name <- cli::style_hyperlink(name, href)
+    if (!is.null(command)) {
+      scheme <- "x-r-run"
+      url <- paste0(scheme, ":", command)
+      name <- cli::style_hyperlink(name, url)
     }
     cli::cli_inform("Writing {.path {name}}")
 

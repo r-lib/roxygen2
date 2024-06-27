@@ -291,7 +291,11 @@ test_that("useful warnings", {
   )
   expect_snapshot(
     . <- roc_proc_text(rd_roclet(), text),
-    transform = function(x) gsub(path, "<temp-path.Rmd>", x, fixed =TRUE)
+    transform = function(x) {
+      x <- gsub(path, "<temp-path.Rmd>", x, fixed = TRUE)
+      x <- gsub("file.*\\.Rmd", "<another-temp-path.Rmd>", x)
+      x
+    }
   )
 })
 

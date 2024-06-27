@@ -167,8 +167,9 @@ examples below).</p>
 <span><span class="co">#' @param x Input, in radians.</span></span>
 <span><span class="co">#' @name trig</span></span>
 <span><span class="cn">NULL</span></span>
-<span><span class="co">#&gt; NULL</span></span>
-<span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co">#' @rdname trig</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">sin_ish</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">-</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span> <span class="op">/</span> <span class="fl">6</span></span>
@@ -183,7 +184,7 @@ examples below).</p>
 <p>Alternatively, you can add docs to an existing function. This tends
 to work better if you have a “primary” function with some variants or
 some helpers.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Logarithms</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A numeric vector</span></span>
@@ -228,7 +229,7 @@ sometimes cause the function usage to appear in a suboptimal order. You
 can override the default ordering with <code>@order</code>. For example,
 the following the block would place <code>times</code> first in
 <code>arith.Rd</code> because 1 comes before 2.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @rdname arith</span></span>
 <span><span class="co">#' @order 2</span></span>
 <span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
@@ -278,7 +279,7 @@ example, take the dplyr functions <code>arrange()</code>,
 <code>mutate()</code>, and <code>summarise()</code> which all have an
 argument called <code>.data</code>. <code>arrange()</code> is documented
 like so:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @param .data A data frame, data frame extension (e.g. a tibble), or a</span></span>
 <span><span class="co">#'   lazy data frame (e.g. from dbplyr or dtplyr). See *Methods*, below, for</span></span>
 <span><span class="co">#'   more details.</span></span>
@@ -289,7 +290,7 @@ like so:</p>
 <p>Then <code>mutate()</code> and <code>summarise()</code> don’t need to
 provide <code>@param .data</code> but can instead inherit the
 documentation from <code>arrange()</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @inheritParams arrange</span></span>
 <span><span class="va">mutate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span>
 <span></span>
@@ -301,7 +302,7 @@ the documentation for <code>...</code>, which has a different
 interpretation in these functions. So, for example,
 <code>mutate()</code> provides its own definition for
 <code>...</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @inheritParams arrange</span></span>
 <span><span class="co">#' @param ... &lt;[`data-masking`][rlang::args_data_masking]&gt; Name-value pairs.</span></span>
 <span><span class="co">#'   The name gives the name of the column in the output.</span></span>
@@ -324,7 +325,7 @@ argument with this name, its documentation will never be inherited.</p>
 </h3>
 <p>Sometimes you document two (or more) tightly coupled parameters
 together. For example, <code>dplyr::left_join()</code> has:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @param x,y A pair of data frames, data frame extensions (e.g. a tibble), or</span></span>
 <span><span class="co">#'   lazy data frames (e.g. from dbplyr or dtplyr). See *Methods*, below, for</span></span>
 <span><span class="co">#'   more details.</span></span></code></pre></div>
@@ -435,13 +436,13 @@ is best used sparingly.</p>
 interpret the rest of the text within backticks as R code and evaluate
 it, and replace the backtick expression with its value. Here’s a simple
 example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title `r 1 + 1`</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description `r 2 + 2`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>This is equivalent to writing:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title 2</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description 4</span></span>
@@ -449,18 +450,18 @@ example:</p>
 <p>The resulting text, together with the whole tag is interpreted as
 markdown, as usual. This means that you can use R to dynamically write
 markdown. For example if you defined this function in your package:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alphabet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"`"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">]</span>, <span class="st">"`"</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>You could then write:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `r alphabet(5)`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>The result is equivalent to writing the following by hand:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`</span></span>

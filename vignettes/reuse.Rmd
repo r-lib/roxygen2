@@ -90,11 +90,11 @@ ln <- function(x) log(x, exp(1))
 
 An alternative to `@rdname` is `@describeIn`.
 It has a slightly different syntax because as well as a topic name, you also provide a brief description for the function, like `@describein topic one sentence description`.
-The primary difference between `@rdname` and `@describeIn`, is that `@describeIn` creates a new section containing a bulleted list all of each function, along with its description.
-It uses a number of heuristics to determine the heading of this section, depending on you're documenting related functions, methods for a generic, or methods for a class.
+The primary difference between `@rdname` and `@describeIn`, is that `@describeIn` creates a new section containing a bulleted list of each function, along with its description.
+It uses a number of heuristics to determine the heading of this section, depending on if you're documenting related functions, methods for a generic, or methods for a class.
 
 In general, I no longer recommend `@describeIn` because I don't think the heuristics it uses are as good as a thoughtful hand-crafted summary.
-If you're currently using `@describeIn`, you can general replace it with `@rdname`, as long as you give some thought to the multiple-function `@description`.
+If you're currently using `@describeIn`, you can generally replace it with `@rdname`, as long as you give some thought to the multiple-function `@description`.
 
 ### Order of includes
 

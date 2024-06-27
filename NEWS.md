@@ -1,6 +1,6 @@
 # roxygen2 (development version)
 
-* `@includeRmd` now additionally sets `options(cli.hyperlink = FALSE)` to make
+* `@includeRmd` now additionally sets `options(cli.hyperlink = FALSE)` and language = English to make
   code run in included `.Rmd`s even more consistent across sessions (#1620).
 
 # roxygen2 7.3.1

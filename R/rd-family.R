@@ -31,8 +31,7 @@ topics_process_family_prefix <- function(family) {
   if (is.null(prefix))
     return(default)
 
-  prefix
-
+  markdown(prefix, tag = "family")
 }
 
 topics_process_family <- function(topics, env) {

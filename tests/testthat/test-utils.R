@@ -68,3 +68,13 @@ test_that("write_if_different and end of line", {
   expect_message(write_if_different(tmp, cnt_mix, check = FALSE), "Writing ")
   expect_identical(readBin(tmp, "raw", 100), readBin(tmp_win, "raw", 100))
 })
+
+test_that("write_if_different produces correct command hyperlink", {
+  testthat::local_reproducible_output(hyperlinks = TRUE)
+
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "test.R")
+
+  write_lines(made_by("#"), path)
+  expect_snapshot(write_if_different(path, "a <- 2", command = "rlang::inform('hi')"))
+})

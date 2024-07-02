@@ -1,5 +1,8 @@
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTEs.
+
+There was one note:  Found non-API calls to R: 'SETLENGTH', 'SET_GROWABLE_BIT', 'SET_TRUELENGTH'.
+
+These come from the upstream cpp11, and we're working to fix them there.
 
 ## revdepcheck results
 

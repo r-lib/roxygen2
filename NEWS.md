@@ -1,8 +1,12 @@
 # roxygen2 (development version)
 
+* The check for unexported S3 methods was improved, so it does not hang any more
+  if a largish data object is in the package (#1593, @jranke).
+
 * Custom [`@family`
   titles](https://roxygen2.r-lib.org/articles/index-crossref.html) now support
   Markdown syntax (#1608, @salim-b).
+
 # roxygen2 7.3.2
 
 * `@includeRmd` now additionally sets `options(cli.hyperlink = FALSE)` to make

@@ -1,6 +1,6 @@
 Package: roxygen2
 Title: In-Line Documentation for R
-Version: 7.3.1.9000
+Version: 7.3.2.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -53,4 +53,4 @@ Config/testthat/parallel: TRUE
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE, load = "installed")
-RoxygenNote: 7.3.0.9000
+RoxygenNote: 7.3.2.9000

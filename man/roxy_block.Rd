@@ -38,7 +38,7 @@ A \code{roxy_block} represents a single roxygen2 block.
 
 The \verb{block_*} functions provide a few helpers for common operations:
 \itemize{
-\item \code{block_has_tag(blocks, tags)}: does \code{block} contain any of these \code{tags}?
+\item \code{block_has_tags(blocks, tags)}: does \code{block} contain any of these \code{tags}?
 \item \code{block_get_tags(block, tags)}: get all instances of \code{tags}
 \item \code{block_get_tag(block, tag)}: get single tag. Returns \code{NULL} if 0,
 throws warning if more than 1.

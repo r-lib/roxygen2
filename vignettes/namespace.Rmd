@@ -20,7 +20,7 @@ This is a little frustrating at first, but soon becomes second-nature.
 ## Exports
 
 In order for your users to use a function[^1] in your package, you must **export** it.
-In most cases, you can just use the `@export` tag, and roxygen2 will automatically figure out which `NAMESPACE` directive (i.e. `export()`, `exportS3method()`, `exportClasses()`, or`exportMethods()`) you need.
+In most cases, you can just use the `@export` tag, and roxygen2 will automatically figure out which `NAMESPACE` directive (i.e. `export()`, `S3method()`, `exportClasses()`, or `exportMethods()`) you need.
 
 [^1]: Including S3 and S4 generics and methods.
 

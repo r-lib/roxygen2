@@ -1,153 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/extending.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/index-crossref.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/namespace.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/rd-formatting.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/rd-other.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/rd.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/reuse.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/articles/roxygen2.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/RoxyTopic.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/double_escape_md.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/escape_examples.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/is_s3_generic.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/load.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/load_options.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/markdown-internals.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/markdown-test.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/markdown_pass1.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/namespace_roclet.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/object.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/object_format.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/parse_package.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/rd_roclet.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/rd_section.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roc_proc_text.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roclet.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roclet_find.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roxy_block.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roxy_tag.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roxygen2-package.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/roxygenize.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tag_parsers.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tags-namespace.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tags-rd-other.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tags-rd.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tags-reuse.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/tags_list.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/update_collate.html</loc>
-  </url>
-  <url>
-    <loc>https://roxygen2.r-lib.org/dev/reference/vignette_roclet.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://roxygen2.r-lib.org/dev/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/LICENSE-text.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/LICENSE.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/SUPPORT.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/extending.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/index-crossref.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/index.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/namespace.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/rd-formatting.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/rd-other.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/rd.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/reuse.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/articles/roxygen2.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/authors.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/index.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/news/index.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/RoxyTopic.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/double_escape_md.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/escape_examples.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/index.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/is_s3_generic.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/load.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/load_options.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/markdown-internals.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/markdown-test.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/markdown_pass1.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/namespace_roclet.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/object.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/object_format.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/parse_package.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/rd_roclet.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/rd_section.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roc_proc_text.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roclet.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roclet_find.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roxy_block.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roxy_tag.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roxygen2-package.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/roxygenize.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tag_parsers.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tags-namespace.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tags-rd-other.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tags-rd.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tags-reuse.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/tags_list.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/update_collate.html</loc></url>
+<url><loc>https://roxygen2.r-lib.org/dev/reference/vignette_roclet.html</loc></url>
 </urlset>
+

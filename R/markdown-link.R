@@ -193,9 +193,8 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
   # if it is in the current package, then no need for package name, right?
   if (has_topic(topic, me)) return(NA_character_)
 
-  # otherwise check depends, imports, suggests and base packages
+  # try packages in depends, imports, suggests first, error on name clashes
   pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
-  base <- base_packages()
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
   deps <- deps[deps$type %in% c("Depeneds", "Imports", "Suggests"), ]
@@ -203,11 +202,7 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
 
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   if (length(pkg_has_topic) == 1) {
-    if (pkg_has_topic %in% base_packages()) {
-      return(NA_character_)
-    } else {
-      return(pkg_has_topic)
-    }
+    return(pkg_has_topic)
   } else if (length(pkg_has_topic) > 1) {
     cli::cli_abort(c(
       "Topic {.val {topic}} is available in multiple packages: {.pkg {pkgs}}.",
@@ -215,9 +210,11 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
     ))
   }
 
-  # try base packages as well
+  # try base packages as well, take the first hit,
+  # there should not be any name clashes, anyway
+  base <- base_packages()
   for (bp in base) {
-    if (has_topic(topic, bp)) return(NA_character_)
+    if (has_topic(topic, bp)) return(bp)
   }
 
   cli::cli_abort(c(

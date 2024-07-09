@@ -86,7 +86,7 @@ test_that("export handles non-syntactic names", {
   expect_equal(out, "S3method(\"foo-bar\",integer)")
 })
 
-test_that("@exportS3method generates fully automatically", {
+test_that("@exportS3Method generates fully automatically", {
   out <- roc_proc_text(namespace_roclet(),"
     #' @exportS3Method
     mean.foo <- function(x) 'foo'
@@ -100,7 +100,7 @@ test_that("@exportS3method generates fully automatically", {
   expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
-test_that("@exportS3methd can create literal directive", {
+test_that("@exportS3Method can create literal directive", {
   out <- roc_proc_text(namespace_roclet(),
     "#' @exportS3Method base::mean foo
     NULL
@@ -108,7 +108,7 @@ test_that("@exportS3methd can create literal directive", {
   expect_equal(out, "S3method(base::mean,foo)")
 })
 
-test_that("@exportS3method can extract class from generic", {
+test_that("@exportS3Method can extract class from generic", {
   out <- roc_proc_text(namespace_roclet(), "
     #' @exportS3Method pkg::foo
     foo.bar <- function(x) 'foo'

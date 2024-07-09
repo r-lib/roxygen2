@@ -477,3 +477,14 @@ test_that("percents are escaped in link targets", {
     foo <- function() {}")[[1]]
   expect_equivalent_rd(out1, out2)
 })
+
+test_that("resolve_link_package", {
+  expect_snapshot({
+    resolve_link_package("roxygenize", "roxygen2", ".")
+    resolve_link_package("UseMethod", "roxygen2", ".")
+    resolve_link_package("cli_abort", "roxygen2", ".")
+  })
+  expect_snapshot(error = TRUE, {
+    resolve_link_package("aa3bc042880aa3b64fef1a9", "roxygen2", ".")
+  })
+})

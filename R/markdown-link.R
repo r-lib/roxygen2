@@ -12,15 +12,15 @@
 #' MARKDOWN           LINK TEXT  CODE RD
 #' --------           ---------  ---- --
 #' [fun()]            fun()       T   \\link[=fun]{fun()} or
-#'                                    \\link[pkg::file]{fun()}
+#'                                    \\link[pkg:file]{fun()}
 #' [obj]              obj         F   \\link{obj} or
-#'                                    \\link[pkg::obj]{obj}
+#'                                    \\link[pkg:obj]{obj}
 #' [pkg::fun()]       pkg::fun()  T   \\link[pkg:file]{pkg::fun()}
 #' [pkg::obj]         pkg::obj    F   \\link[pkg:file]{pkg::obj}
 #' [text][fun()]      text        F   \\link[=fun]{text} or
 #'                                    \\link[pkg:file]{text}
 #' [text][obj]        text        F   \\link[=obj]{text} or
-#'                                    \\link[pkg::file]{text}
+#'                                    \\link[pkg:file]{text}
 #' [text][pkg::fun()] text        F   \\link[pkg:file]{text}
 #' [text][pkg::obj]   text        F   \\link[pkg:file]{text}
 #' [s4-class]         s4          F   \\linkS4class{s4} or
@@ -197,7 +197,7 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
   pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
-  deps <- deps[deps$type %in% c("Depeneds", "Imports", "Suggests"), ]
+  deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]
   pkgs <- deps$package
 
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]

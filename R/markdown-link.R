@@ -14,7 +14,7 @@
 #' [fun()]            fun()       T   \\link[=fun]{fun()} or
 #'                                    \\link[pkg:file]{pkg::fun()}
 #' [obj]              obj         F   \\link{obj} or
-#'                                    \\link[pkg:obj]{pkg::obj}
+#'                                    \\link[pkg:file]{pkg::obj}
 #' [pkg::fun()]       pkg::fun()  T   \\link[pkg:file]{pkg::fun()}
 #' [pkg::obj]         pkg::obj    F   \\link[pkg:file]{pkg::obj}
 #' [text][fun()]      text        F   \\link[=fun]{text} or

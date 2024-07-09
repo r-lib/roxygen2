@@ -27,3 +27,12 @@
     Output
       [1] FALSE
 
+# write_if_different produces correct command hyperlink
+
+    Code
+      write_if_different(path, "a <- 2", command = "rlang::inform('hi')")
+    Message
+      Writing ']8;;x-r-run:rlang::inform('hi')test.R]8;;'
+    Output
+      [1] TRUE
+

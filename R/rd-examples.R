@@ -15,7 +15,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   )
 
   x$raw <- paste(
-    "\\dontshow{if (", condition, ") withAutoprint(\\{ # examplesIf}",
+    paste0("\\dontshow{if (", condition, ") withAutoprint(\\{ # examplesIf}"),
     lines[-1],
     "\\dontshow{\\}) # examplesIf}",
     sep = "\n"

@@ -185,7 +185,7 @@ strip_quotes <- function(x) str_replace(x, "^(`|'|\")(.*)\\1$", "\\2")
 
 base_packages <- function() {
   if (getRversion() >= "4.4.0") {
-    tools::standard_package_names()[["base"]]
+    asNamespace("tools")$standard_package_names()[["base"]]
   } else {
     c("base", "compiler", "datasets",
       "graphics", "grDevices", "grid", "methods", "parallel",

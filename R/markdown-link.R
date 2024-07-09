@@ -12,9 +12,9 @@
 #' MARKDOWN           LINK TEXT  CODE RD
 #' --------           ---------  ---- --
 #' [fun()]            fun()       T   \\link[=fun]{fun()} or
-#'                                    \\link[pkg:file]{fun()}
+#'                                    \\link[pkg:file]{pkg::fun()}
 #' [obj]              obj         F   \\link{obj} or
-#'                                    \\link[pkg:obj]{obj}
+#'                                    \\link[pkg:obj]{pkg::obj}
 #' [pkg::fun()]       pkg::fun()  T   \\link[pkg:file]{pkg::fun()}
 #' [pkg::obj]         pkg::obj    F   \\link[pkg:file]{pkg::obj}
 #' [text][fun()]      text        F   \\link[=fun]{text} or
@@ -224,6 +224,18 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
     "i" = "Always list the linked package as a dependency.",
     "i" = "Alternatively, you can fully qualify the link with a package name."
   ))
+}
+
+is_exported <- function(name, package) {
+  name %in% getNamespaceExports(ns_env(package))
+}
+
+is_reexported <- function(name, package) {
+  if (package == "base") {
+    return(FALSE)
+  }
+  is_imported <- env_has(ns_imports_env(package), name)
+  is_imported && is_exported(name, package)
 }
 
 #' Dummy page to test roxygen's markdown formatting

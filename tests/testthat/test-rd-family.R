@@ -124,6 +124,22 @@ test_that("custom family prefixes can be set", {
   expect_match(out$get_value("seealso"), "^Custom prefix:")
 })
 
+test_that("custom family prefixes can include Markdown", {
+
+  local_roxy_meta_set("rd_family_title", list(a = "Custom ***strongly emphasized*** prefix: "))
+  out <- roc_proc_text(rd_roclet(), "
+    #' foo
+    #' @family a
+    foo <- function() {}
+
+    #' bar
+    #' @family a
+    bar <- function() {}
+  ")[[1]]
+
+  expect_match(out$get_value("seealso"), "^Custom \\\\emph\\{\\\\strong\\{strongly emphasized\\}} prefix:")
+})
+
 test_that("careful ordering", {
   out <- roc_proc_text(rd_roclet(), "
     #' foo1

@@ -1,5 +1,8 @@
 skip_if_not_installed("rmarkdown")
 
+# clear some state
+roxy_meta_clear()
+
 test_that("invalid syntax gives useful warning", {
   block <- "
     #' @includeRmd

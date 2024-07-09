@@ -11,17 +11,26 @@
 #' ```
 #' MARKDOWN           LINK TEXT  CODE RD
 #' --------           ---------  ---- --
-#' [fun()]            fun()       T   \\link[=fun]{fun()}
-#' [obj]              obj         F   \\link{obj}
+#' [fun()]            fun()       T   \\link[=fun]{fun()} or
+#'                                    \\link[pkg::file]{fun()}
+#' [obj]              obj         F   \\link{obj} or
+#'                                    \\link[pkg::obj]{obj}
 #' [pkg::fun()]       pkg::fun()  T   \\link[pkg:file]{pkg::fun()}
 #' [pkg::obj]         pkg::obj    F   \\link[pkg:file]{pkg::obj}
-#' [text][fun()]      text        F   \\link[=fun]{text}
-#' [text][obj]        text        F   \\link[=obj]{text}
+#' [text][fun()]      text        F   \\link[=fun]{text} or
+#'                                    \\link[pkg:file]{text}
+#' [text][obj]        text        F   \\link[=obj]{text} or
+#'                                    \\link[pkg::file]{text}
 #' [text][pkg::fun()] text        F   \\link[pkg:file]{text}
 #' [text][pkg::obj]   text        F   \\link[pkg:file]{text}
-#' [s4-class]         s4          F   \\linkS4class{s4}
+#' [s4-class]         s4          F   \\linkS4class{s4} or
+#'                                    \\link[pkg:file]{s4}
 #' [pkg::s4-class]    pkg::s4     F   \\link[pkg:file]{pkg::s4}
 #' ```
+#'
+#' For the ones that have two RD variants the first version is used for
+#' within-package links, and the second version is used for cross-package
+#' links.
 #'
 #' The reference links will always look like `R:ref` for `[ref]` and
 #' `[text][ref]`. These are explicitly tested in `test-rd-markdown-links.R`.
@@ -131,13 +140,15 @@ parse_link <- function(destination, contents, state) {
   is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
   pkg <- gsub("%", "\\\\%", pkg)
-  if (!is.na(pkg) && pkg == thispkg) pkg <- NA_character_
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   fun <- gsub("%", "\\\\%", fun)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
   s4 <- str_detect(destination, "-class$")
   noclass <- str_match(fun, "^(.*)-class$")[1,2]
+
+  if (is.na(pkg)) pkg <- resolve_link_package(obj, thispkg)
+  if (!is.na(pkg) && pkg == thispkg) pkg <- NA_character_
   file <- find_topic_filename(pkg, obj, state$tag)
 
   ## To understand this, look at the RD column of the table above
@@ -172,6 +183,50 @@ parse_link <- function(destination, contents, state) {
       if (is_code) "}" else ""
     )
   }
+}
+
+resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
+  me <- me %||% roxy_meta_get("current_package")
+  # this is probably from the roxygen2 tests
+  if (me == "") return(NA_character_)
+
+  # if it is in the current package, then no need for package name, right?
+  if (has_topic(topic, me)) return(NA_character_)
+
+  # otherwise check depends, imports, suggests and base packages
+  pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
+  base <- base_packages()
+  deps <- desc::desc_get_deps(pkgdir)
+  deps <- deps[deps$package != "R", ]
+  deps <- deps[deps$type %in% c("Depeneds", "Imports", "Suggests"), ]
+  pkgs <- deps$package
+
+  pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
+  if (length(pkg_has_topic) == 1) {
+    if (pkg_has_topic %in% base_packages()) {
+      return(NA_character_)
+    } else {
+      return(pkg_has_topic)
+    }
+  } else if (length(pkg_has_topic) > 1) {
+    cli::cli_abort(c(
+      "Topic {.val {topic}} is available in multiple packages: {.pkg {pkgs}}.",
+      i = "Qualify topic explicitly with a package name."
+    ))
+  }
+
+  # try base packages as well
+  for (bp in base) {
+    if (has_topic(topic, bp)) return(NA_character_)
+  }
+
+  cli::cli_abort(c(
+    "Could not resolve link to topic {.val {topic}} in the dependent
+     and base packages.",
+    "i" = "Make sure that the name of the topic is spelled correctly.",
+    "i" = "Always list the linked package as a dependency.",
+    "i" = "Alternatively, you can fully qualify the link with a package name."
+  ))
 }
 
 #' Dummy page to test roxygen's markdown formatting

@@ -66,6 +66,7 @@ load_options <- function(base_path = ".") {
     markdown = FALSE,
     r6 = TRUE,
     current_package = NA_character_,
+    current_package_dir = NA_character_,
     rd_family_title = list(),
     knitr_chunk_options = NULL,
     restrict_image_formats = TRUE
@@ -94,6 +95,7 @@ load_options_description <- function(base_path = ".") {
   }
 
   opts$current_package <- dcf[[1, 2]]
+  opts$current_package_dir <- normalizePath(base_path)
   opts
 }
 

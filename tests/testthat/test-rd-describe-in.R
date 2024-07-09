@@ -263,4 +263,3 @@ test_that("complains about bad usage", {
   "
   expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
-

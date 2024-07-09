@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 
+# roxygen2 7.3.2
+
+* `@includeRmd` now additionally sets `options(cli.hyperlink = FALSE)` to make
+  code run in included `.Rmd`s even more consistent across sessions (#1620).
+
 # roxygen2 7.3.1
 
 * S3 method export warning no longer fails if class contains `{` or `}` (#1575).

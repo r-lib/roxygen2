@@ -87,10 +87,10 @@ Some notes:
 
 -   It is your choice whether or not to document S3 **methods**.
     Generally, it's not necessary to document straightforward methods for common generics like `print()`.
-    (You should, however, always `@export` S3 methods).
+    (You should, however, always `@export` S3 methods, even internal ones).
 
     If your method is more complicated, you should document it by setting `@rdname` or `@describeIn`.
-    For complicated methods, you might document in their own file (i.e. `@rdname generic.class`; for simpler methods you might document with the generic (i.e. `@describeIn generic)`.
+    For complicated methods, you might document in their own file (i.e. `@name generic.class`; for simpler methods you might document with the generic (i.e. `@rdname generic)`.
     Learn more about these tags in `vignette("reuse")`.
 
 -   Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use `@method` if there is ambiguity.

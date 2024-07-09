@@ -4,7 +4,7 @@
 #' A `roxy_block` represents a single roxygen2 block.
 #'
 #' The `block_*` functions provide a few helpers for common operations:
-#' * `block_has_tag(blocks, tags)`: does `block` contain any of these `tags`?
+#' * `block_has_tags(blocks, tags)`: does `block` contain any of these `tags`?
 #' * `block_get_tags(block, tags)`: get all instances of `tags`
 #' * `block_get_tag(block, tag)`: get single tag. Returns `NULL` if 0,
 #'    throws warning if more than 1.

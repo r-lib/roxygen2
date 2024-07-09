@@ -51,7 +51,7 @@ extract_r6_methods <- function(x) {
           c(
             "R6 class {.cls {name}} lacks source references.",
             i = paste0(
-              "If you are using the `installed` load method in `DESCRIPTION`, then ",
+              "If you are using the `installed` load method in {.file DESCRIPTION}, then ",
               "try re-installing the package with option '--with-keep.source', e.g. ",
               "{.code install.packages(..., INSTALL_OPTS = \"--with-keep.source\")}."
             )

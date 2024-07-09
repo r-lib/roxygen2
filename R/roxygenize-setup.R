@@ -9,7 +9,7 @@ roxygen_setup <- function(path = ".",
 
   is_first <- first_time(path)
   if (is_first) {
-    cli::cli_inform("First time using roxygen2. Upgrading automatically...")
+    cli::cli_inform("First time using {.pkg roxygen2}. Upgrading automatically...")
   }
 
   update_roxygen_version(path, cur_version = cur_version)
@@ -17,7 +17,7 @@ roxygen_setup <- function(path = ".",
   encoding <- desc::desc_get("Encoding", path)[[1]]
   if (!identical(encoding, "UTF-8")) {
     cli::cli_inform(c(
-      x = "roxygen2 requires {.val Encoding: UTF-8}",
+      x = "{.pkg roxygen2} requires {.val Encoding: UTF-8}",
       i = "Current encoding is {.val {encoding}}"
     ))
   }
@@ -49,21 +49,21 @@ update_roxygen_version <- function(path, cur_version = NULL) {
 
   if (!is.na(cur) && !is.na(prev) && package_version(cur) < package_version(prev)) {
     cli::cli_inform(c(
-      x = "Installed roxygen2 is older than the version used with this package",
-      i = "You have {.str {cur}} but you need {.str {prev}}"
+      x = "Installed {.pkg roxygen2} is older than the version used with this package",
+      i = "You have {.val {cur}} but you need {.val {prev}}"
     ))
   } else if (!identical(cur, prev)) {
     if (!is.na(prev) && numeric_version(prev) <= "6.1.99") {
       cli::cli_rule()
       cli::cli_inform(c(
-        "Changes in roxygen2 7.0.0:",
+        "Changes in {.pkg roxygen2} 7.0.0:",
         "* `%` is now escaped automatically in Markdown mode.",
         "Please carefully check .Rd files for changes"
       ))
       cli::cli_rule()
     }
 
-    cli::cli_inform("Setting {.var RoxygenNote} to {.str {cur}}")
+    cli::cli_inform(c(i = "Setting {.field RoxygenNote} to {.val {cur}}"))
     desc::desc_set(RoxygenNote = cur, file = path)
   }
 }

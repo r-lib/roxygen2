@@ -2,6 +2,10 @@
 
 * `@includeRmd` now additionally sets language to the Language in DESCRIPTION to make output reproducible (#1622)
 
+* Custom [`@family`
+  titles](https://roxygen2.r-lib.org/articles/index-crossref.html) now support
+  Markdown syntax (#1608, @salim-b).
+
 # roxygen2 7.3.2
 
 * `@includeRmd` now additionally sets `options(cli.hyperlink = FALSE)` to make
@@ -192,7 +196,7 @@
 
 * `@author`s are de-duplicated in merged documentation (@DanChaltiel, #1333).
 
-* `@exportS3method pkg::generic` now works when `pkg::generic` isn't 
+* `@exportS3Method pkg::generic` now works when `pkg::generic` isn't 
   imported by your package (#1085).
 
 * `@includeRmd` is now adapted to change in rmarkdown 2.12 regarding math 

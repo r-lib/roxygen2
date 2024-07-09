@@ -305,6 +305,17 @@ test_that("rawNamespace inserted unchanged", {
   expect_equal(out, "xyz\n  abc")
 })
 
+test_that("rawNamespace does not break idempotency", {
+  test_pkg <- test_path("testRawNamespace")
+  NAMESPACE <- file.path(test_pkg, "NAMESPACE")
+
+  lines_orig <- read_lines(NAMESPACE)
+
+  expect_no_error(roxygenize(test_pkg, namespace_roclet()))
+
+  # contents unchanged
+  expect_equal(read_lines(NAMESPACE), lines_orig)
+})
 
 # @evalNamespace ----------------------------------------------------------
 
@@ -391,52 +402,101 @@ test_that("can extract non-imports from namespace preserving source", {
     "export(b)"
   )
   path <- withr::local_tempfile(lines = lines)
-  expect_equal(namespace_exports(path), lines[c(1:3, 5)])
+  expect_equal(
+    namespace_exports(path),
+    c(
+      paste(lines[1:3], collapse = "\n"),
+      lines[5L]
+    )
+  )
 })
 
-test_that("Invalid imports throw a helpful error", {
+test_that("invalid imports generate correct declarations", {
+  # No matched functions --> no output
+  block <- "
+    #' @importFrom utils InvalidUtilsFunction
+    NULL
+  "
+  expect_message(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(out, character())
+
+  # Matched functions --> only drop unmatched functions
   block <- "
     #' @importFrom utils head InvalidUtilsFunction
     NULL
   "
-  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_message(out <- roc_proc_text(namespace_roclet(), block))
   expect_equal(out, "importFrom(utils,head)")
+})
 
-  # pluralization
+test_that("invalid imports generate helpful message", {
+  block <- "
+    #' @importFrom utils head InvalidUtilsFunction1
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+
   block <- "
     #' @importFrom utils head InvalidUtilsFunction1 InvalidUtilsFunction2
     NULL
   "
   expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
-  expect_equal(out, "importFrom(utils,head)")
+})
 
-  # If the package is not available at roxygenize() run time, nothing we can do
+test_that("nothing we can do if package isn't installed", {
   block <- "
     #' @importFrom AnUnknownUnavailablePackage Unchecked
     NULL
   "
-  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_no_message(out <- roc_proc_text(namespace_roclet(), block))
   expect_equal(out, "importFrom(AnUnknownUnavailablePackage,Unchecked)")
-
 })
 
+test_that("non-syntactic imports can use multiple quoting forms", {
+  lines <- c(
+    "#' @importFrom stringr %>%",
+    "#' @importFrom stringr `%>%`",
+    "#' @importFrom stringr '%>%'",
+    "#' @importFrom stringr \"%>%\"",
+    "NULL"
+  )
+
+  import <- expect_no_warning(roc_proc_text(namespace_roclet(), lines))
+  expect_equal(import, c(
+    "importFrom(stringr,\"%>%\")",
+    "importFrom(stringr,'%>%')",
+    "importFrom(stringr,`%>%`)"
+  ))
+})
 
 # warn_missing_s3_exports -------------------------------------------------
 
 test_that("warns if S3 method not documented", {
-  expect_snapshot(
-    roc_proc_text(namespace_roclet(), "
+  # Need to manually transform since the srcref is coming from the function;
+  # roc_proc_text() uses fake srcrefs for the blocks themselves
+  fix_srcref <- function(x) gsub("file[a-z0-9]+", "<text>", x)
+
+  block <- "
       foo <- function(x) UseMethod('foo')
       foo.numeric <- function(x) 1
 
       mean.myclass <- function(x) 2
-    "),
-    # Need to manually transform since the srcref is coming from the function;
-    # roc_proc_text() uses fake srcrefs for the blocks themselves
-    transform = function(x) gsub("file[a-z0-9]+", "<text>", x)
+    "
+  expect_snapshot(
+    . <- roc_proc_text(namespace_roclet(), block),
+    transform = fix_srcref
+  )
+
+  # Works even if method contains {
+  block <- "
+    foo <- function(x) UseMethod('foo')
+    `foo.{` <- function(x) 1
+  "
+  expect_snapshot(
+    . <- roc_proc_text(namespace_roclet(), block),
+    transform = fix_srcref
   )
 })
-
 
 test_that("can suppress the warning", {
   block <- "

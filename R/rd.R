@@ -60,14 +60,14 @@ roclet_output.roclet_rd <- function(x, results, base_path, ..., is_first = FALSE
 
   names <- unname(map_chr(results, ~ .$get_name()[[1]]))
   if (length(names) > 0) {
-    hrefs <- paste0("ide:run:pkgload::dev_help('", names, "')")
+    commands <- paste0("pkgload::dev_help('", names, "')")
   } else {
-    hrefs <- character()
+    commands <- character()
   }
 
   # Always check for roxygen2 header before overwriting NAMESPACE (#436),
   # even when running for the first time
-  mapply(write_if_different, paths, contents, href = hrefs)
+  mapply(write_if_different, paths, contents, command = commands)
 
   if (!is_first) {
     # Automatically delete any files in man directory that were generated

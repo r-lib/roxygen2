@@ -2,6 +2,8 @@
 .Rproj.user
 /.Rhistory
 
+tests/testthat/testthat-problems.rds
+
 ## Qt Creator
 *.pro
 *.pro.user

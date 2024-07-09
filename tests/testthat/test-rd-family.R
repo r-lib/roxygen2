@@ -123,3 +123,27 @@ test_that("custom family prefixes can be set", {
 
   expect_match(out$get_value("seealso"), "^Custom prefix:")
 })
+
+test_that("careful ordering", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' foo1
+    #' @family a
+    foo1 <- function() {}
+
+    #' foo2
+    #' @family a
+    foo2 <- function() {}
+
+    #' Foo3
+    #' @family a
+    Foo3 <- function() {}
+
+    #' foo
+    #' @family a
+    foo <- function() {}
+  ")
+
+  expect_snapshot({
+    out
+  })
+})

@@ -12,11 +12,14 @@ test_that("primitive generics detected", {
 test_that("non-functions are not generics", {
   a <- TRUE
   b <- NULL
-  c <- data.frame()
 
   expect_false(is_s3_generic("a"))
   expect_false(is_s3_generic("b"))
-  expect_false(is_s3_generic("c"))
+})
+
+test_that("ignores non-function objects when looking for generics", {
+  c <- data.frame()
+  expect_true(is_s3_generic("c"))
 })
 
 test_that("user defined generics & methods detected", {

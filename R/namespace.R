@@ -74,7 +74,7 @@ update_namespace_imports <- function(base_path) {
   }
 
   lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
-  results <- c(made_by("#"), sort_c(unique(lines)))
+  results <- c(made_by("#"), sort_c(unique(trimws(lines))))
   write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible()
@@ -109,12 +109,15 @@ namespace_imports_blocks <- function(srcref) {
   }))
 }
 
+# NB: this is designed as the conjugate of namespace_imports(), so also
+#   includes @rawNamespace entries which may/may not also include import directives.
 namespace_exports <- function(path) {
   parsed <- as.list(parse(path, keep.source = TRUE))
 
   is_import_directive <- function(x) is_call(x, import_directives)
   export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import_directive)]
-  unlist(lapply(export_lines, as.character))
+  # Each multiline directives are a single element so they're sorted correctly
+  unlist(lapply(export_lines, function(x) paste(as.character(x), collapse = "\n")))
 }
 
 # NAMESPACE generation ----------------------------------------------------
@@ -268,9 +271,13 @@ roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
   pkg <- x$val[1L]
   if (requireNamespace(pkg, quietly = TRUE)) {
     importing <- x$val[-1L]
-    unknown_idx <- !importing %in% getNamespaceExports(pkg)
+    # be sure to match '%>%', `%>%`, "%>%" all to %>% given by getNamespaceExports, #1570
+    unknown_idx <- !strip_quotes(importing) %in% getNamespaceExports(pkg)
     if (any(unknown_idx)) {
-      warn_roxy_tag(x, "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} in from {.package {pkg}}: {.code {importing[unknown_idx]}}")
+      warn_roxy_tag(x, "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} from {.package {pkg}}: {.code {importing[unknown_idx]}}")
+      if (all(unknown_idx)) {
+        return(NULL)
+      }
       x$val <- c(pkg, importing[!unknown_idx])
     }
   }
@@ -394,7 +401,11 @@ warn_missing_s3_exports <- function(blocks, env) {
 
   undocumented <- methods[!methods %in% s3objects]
   srcrefs <- map(undocumented, attr, "srcref")
-  messages <- paste0("S3 method `", names(undocumented) , "` needs @export or @exportS3method tag")
-  map2(undocumented, messages, warn_roxy_function)
-}
 
+  map2(undocumented, names(undocumented), function(fun, name) {
+    warn_roxy_function(
+      fun,
+      "S3 method {.arg {name}} needs @export or @exportS3method tag"
+    )
+  })
+}

@@ -78,33 +78,32 @@
     Message
       x <text>:2: @evalNamespace must evaluate to a character vector.
 
-# Invalid imports throw a helpful error
+# invalid imports generate helpful message
 
     Code
       out <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @importFrom Excluding unknown export in from utils: `InvalidUtilsFunction`.
+      x <text>:2: @importFrom Excluding unknown export from utils: `InvalidUtilsFunction1`.
 
 ---
 
     Code
       out <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @importFrom Excluding unknown exports in from utils: `InvalidUtilsFunction1` and `InvalidUtilsFunction2`.
-
----
-
-    Code
-      out <- roc_proc_text(namespace_roclet(), block)
+      x <text>:2: @importFrom Excluding unknown exports from utils: `InvalidUtilsFunction1` and `InvalidUtilsFunction2`.
 
 # warns if S3 method not documented
 
     Code
-      roc_proc_text(namespace_roclet(),
-      "\n      foo <- function(x) UseMethod('foo')\n      foo.numeric <- function(x) 1\n\n      mean.myclass <- function(x) 2\n    ")
+      . <- roc_proc_text(namespace_roclet(), block)
     Message
       x <text>:5: S3 method `mean.myclass` needs @export or @exportS3method tag.
       x <text>:3: S3 method `foo.numeric` needs @export or @exportS3method tag.
-    Output
-      character(0)
+
+---
+
+    Code
+      . <- roc_proc_text(namespace_roclet(), block)
+    Message
+      x <text>:3: S3 method `foo.{` needs @export or @exportS3method tag.
 

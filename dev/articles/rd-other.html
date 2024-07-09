@@ -191,12 +191,13 @@ document the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor" class="ext
 <p>It is your choice whether or not to document S3
 <strong>methods</strong>. Generally, it’s not necessary to document
 straightforward methods for common generics like <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>.
-(You should, however, always <code>@export</code> S3 methods).</p>
+(You should, however, always <code>@export</code> S3 methods, even
+internal ones).</p>
 <p>If your method is more complicated, you should document it by setting
 <code>@rdname</code> or <code>@describeIn</code>. For complicated
 methods, you might document in their own file
-(i.e. <code>@rdname generic.class</code>; for simpler methods you might
-document with the generic (i.e. <code>@describeIn generic)</code>. Learn
+(i.e. <code>@name generic.class</code>; for simpler methods you might
+document with the generic (i.e. <code>@rdname generic)</code>. Learn
 more about these tags in <code><a href="../articles/reuse.html">vignette("reuse")</a></code>.</p>
 </li>
 <li><p>Generally, roxygen2 will automatically figure out the generic

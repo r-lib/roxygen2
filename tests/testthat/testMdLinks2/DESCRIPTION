@@ -1,0 +1,56 @@
+Package: roxygen2
+Title: In-Line Documentation for R
+Version: 7.3.2.9000
+Authors@R: c(
+    person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0003-4757-117X")),
+    person("Peter", "Danenberg", , "pcd@roxygen.org", role = c("aut", "cph")),
+    person("Gábor", "Csárdi", , "csardi.gabor@gmail.com", role = "aut"),
+    person("Manuel", "Eugster", role = c("aut", "cph")),
+    person("Posit Software, PBC", role = c("cph", "fnd"))
+  )
+Description: Generate your Rd documentation, 'NAMESPACE' file, and
+    collation field using specially formatted comments. Writing
+    documentation in-line with code makes it easier to keep your
+    documentation up-to-date as your requirements change. 'roxygen2' is
+    inspired by the 'Doxygen' system for C++.
+License: MIT + file LICENSE
+URL: https://roxygen2.r-lib.org/, https://github.com/r-lib/roxygen2
+BugReports: https://github.com/r-lib/roxygen2/issues
+Depends: 
+    R (>= 3.6)
+Imports: 
+    brew,
+    cli (>= 3.3.0),
+    commonmark,
+    desc (>= 1.2.0),
+    knitr,
+    methods,
+    pkgload (>= 1.0.2),
+    purrr (>= 1.0.0),
+    R6 (>= 2.1.2),
+    rlang (>= 1.0.6),
+    stringi,
+    stringr (>= 1.0.0),
+    utils,
+    withr,
+    xml2
+Suggests: 
+    covr,
+    R.methodsS3,
+    R.oo,
+    rmarkdown (>= 2.16),
+    testthat (>= 3.1.2),
+    yaml
+LinkingTo: 
+    cpp11
+VignetteBuilder: 
+    knitr
+Config/Needs/development: testthat
+Config/Needs/website: tidyverse/tidytemplate
+Config/testthat/edition: 3
+Config/testthat/parallel: TRUE
+Encoding: UTF-8
+Language: en-GB
+Roxygen: list(markdown = TRUE, load = "installed")
+RoxygenNote: 7.3.2.9000

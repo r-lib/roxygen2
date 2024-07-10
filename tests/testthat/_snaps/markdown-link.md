@@ -39,26 +39,36 @@
 # resolve_link_package
 
     Code
-      resolve_link_package("roxygenize", "roxygen2", ".")
+      resolve_link_package("roxygenize", "roxygen2", test_path("testMdLinks2"))
     Output
       [1] NA
     Code
-      resolve_link_package("UseMethod", "roxygen2", ".")
+      resolve_link_package("UseMethod", "roxygen2", test_path("testMdLinks2"))
     Output
       [1] NA
     Code
-      resolve_link_package("cli_abort", "roxygen2", ".")
+      resolve_link_package("cli_abort", "roxygen2", test_path("testMdLinks2"))
     Output
       [1] "cli"
 
 ---
 
     Code
-      resolve_link_package("aa3bc042880aa3b64fef1a9", "roxygen2", ".")
+      resolve_link_package("aa3bc042880aa3b64fef1a9", "roxygen2", test_path(
+        "testMdLinks2"))
     Condition
       Error in `resolve_link_package()`:
       ! Could not resolve link to topic "aa3bc042880aa3b64fef1a9" in the dependent and base packages.
       i Make sure that the name of the topic is spelled correctly.
       i Always list the linked package as a dependency.
       i Alternatively, you can fully qualify the link with a package name.
+
+# resolve_link_package name clash
+
+    Code
+      resolve_link_package("pkg_env", "roxygen2", test_path("testMdLinks2"))
+    Condition
+      Error in `resolve_link_package()`:
+      ! Topic "pkg_env" is available in multiple packages: pkgload and rlang.
+      i Qualify topic explicitly with a package name when linking to it.
 

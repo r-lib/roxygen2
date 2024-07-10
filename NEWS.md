@@ -10,6 +10,9 @@
 * Unqualified markdown links to topics in external packages are now
   automatically resolved (#1612).
 
+* `@examplesIf` always uses `withAutoprint()` (@MichaelChirico, #1581). The raw Rd
+  will be cleaner, but such examples will now only run under R>=3.4.0 (2017).
+
 # roxygen2 7.3.2
 
 * `@includeRmd` now additionally sets `options(cli.hyperlink = FALSE)` to make

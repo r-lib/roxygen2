@@ -194,11 +194,7 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
   if (has_topic(topic, me)) return(NA_character_)
 
   # try packages in depends, imports, suggests first, error on name clashes
-  pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
-  deps <- mddata[["deps"]] <- mddata[["deps"]] %||% desc::desc_get_deps(pkgdir)
-  deps <- deps[deps$package != "R", ]
-  deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]
-  pkgs <- deps$package
+  pkgs <- local_pkg_deps(pkgdir)
 
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   pkg_has_topic <- map_chr(pkg_has_topic, function(p) {

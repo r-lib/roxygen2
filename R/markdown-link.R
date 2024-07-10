@@ -225,8 +225,7 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
   }
 
   cli::cli_abort(c(
-    "Could not resolve link to topic {.val {topic}} in the dependent
-     and base packages.",
+    "Could not resolve link to topic {.val {topic}} in the dependencies or base packages.",
     "i" = "Make sure that the name of the topic is spelled correctly.",
     "i" = "Always list the linked package as a dependency.",
     "i" = "Alternatively, you can fully qualify the link with a package name."

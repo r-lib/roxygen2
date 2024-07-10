@@ -58,7 +58,7 @@
         "testMdLinks2"))
     Condition
       Error in `resolve_link_package()`:
-      ! Could not resolve link to topic "aa3bc042880aa3b64fef1a9" in the dependent and base packages.
+      ! Could not resolve link to topic "aa3bc042880aa3b64fef1a9" in the dependencies or base packages.
       i Make sure that the name of the topic is spelled correctly.
       i Always list the linked package as a dependency.
       i Alternatively, you can fully qualify the link with a package name.

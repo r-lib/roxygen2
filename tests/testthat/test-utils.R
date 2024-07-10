@@ -22,7 +22,11 @@ test_that("write_if_different produces informative messages", {
   expect_snapshot(write_if_different(path, "a <- 2"))
 
   write_lines("a <- 1", path)
-  expect_snapshot(write_if_different(path, "a <- 2"))
+  # strip temp path
+  expect_snapshot(
+    write_if_different(path, "a <- 2"),
+    transform = function(x) gsub(dir, "", x, fixed = TRUE)
+  )
 
   path <- file.path(dir, "+.R")
   expect_snapshot(write_if_different(path, "a <- 2"))

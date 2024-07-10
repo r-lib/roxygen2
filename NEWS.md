@@ -2,9 +2,15 @@
 
 * `@includeRmd` now additionally sets language to the Language in DESCRIPTION to make output reproducible (#1622)
 
+* The check for unexported S3 methods was improved, so it does not hang any more
+  if a largish data object is in the package (#1593, @jranke).
+
 * Custom [`@family`
   titles](https://roxygen2.r-lib.org/articles/index-crossref.html) now support
   Markdown syntax (#1608, @salim-b).
+
+* `@examplesIf` always uses `withAutoprint()` (@MichaelChirico, #1581). The raw Rd
+  will be cleaner, but such examples will now only run under R>=3.4.0 (2017).
 
 # roxygen2 7.3.2
 

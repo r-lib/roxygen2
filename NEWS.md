@@ -26,7 +26,7 @@
   (#1563, @krlmlr).
 
 * `@importFrom` works again for quoted non-syntactic names, e.g.
-  `@importFrom magrittr "%>%"` or ``@importFrom rlang `:=` ``
+  `@importFrom magrittr "%>%"` or ``@importFrom rlang `:=` `` 
   (#1570, @MichaelChirico). The unquoted form `@importFrom magrittr %>%`
   continues to work. Relatedly, `@importFrom` directives matching no known
   functions (e.g. `@importFrom utils plot pdf`) produce valid NAMESPACE files

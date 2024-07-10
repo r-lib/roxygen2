@@ -28,7 +28,7 @@
 #' [pkg::s4-class]    pkg::s4     F   \\link[pkg:file]{pkg::s4}
 #' ```
 #'
-#' For the ones that have two RD variants the first version is used for
+#' For the links with two RD variants the first version is used for
 #' within-package links, and the second version is used for cross-package
 #' links.
 #'

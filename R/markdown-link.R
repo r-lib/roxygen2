@@ -195,7 +195,7 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
 
   # try packages in depends, imports, suggests first, error on name clashes
   pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
-  deps <- desc::desc_get_deps(pkgdir)
+  deps <- mddata[["deps"]] <- mddata[["deps"]] %||% desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
   deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]
   pkgs <- deps$package

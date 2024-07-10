@@ -17,6 +17,8 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
   )
 }
 
+mddata <- new.env(parent = emptyenv())
+
 #' Expand the embedded inline code
 #'
 #' @details
@@ -68,6 +70,7 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
 #' @keywords internal
 
 markdown_pass1 <- function(text) {
+  rm(list = ls(envir = mddata), envir = mddata)
   text <- paste(text, collapse = "\n")
   mdxml <- xml_ns_strip(md_to_mdxml(text, sourcepos = TRUE))
   code_nodes <- xml_find_all(mdxml, ".//code | .//code_block")

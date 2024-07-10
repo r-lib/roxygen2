@@ -45,7 +45,7 @@
     Code
       resolve_link_package("UseMethod", "roxygen2", ".")
     Output
-      [1] "base"
+      [1] NA
     Code
       resolve_link_package("cli_abort", "roxygen2", ".")
     Output

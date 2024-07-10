@@ -187,8 +187,8 @@ parse_link <- function(destination, contents, state) {
 
 resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
   me <- me %||% roxy_meta_get("current_package")
-  # this is probably from the roxygen2 tests
-  if (me == "") return(NA_character_)
+  # this is  from the roxygen2 tests, should not happen on a real package
+  if (is.null(me) || is.na(me) || me == "") return(NA_character_)
 
   # if it is in the current package, then no need for package name, right?
   if (has_topic(topic, me)) return(NA_character_)
@@ -201,8 +201,13 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
   pkgs <- deps$package
 
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
+  base <- base_packages()
   if (length(pkg_has_topic) == 1) {
-    return(pkg_has_topic)
+    if (pkg_has_topic %in% base) {
+      return(NA_character_)
+    } else {
+      return(pkg_has_topic)
+    }
   } else if (length(pkg_has_topic) > 1) {
     cli::cli_abort(c(
       "Topic {.val {topic}} is available in multiple packages: {.pkg {pkgs}}.",
@@ -212,9 +217,8 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
 
   # try base packages as well, take the first hit,
   # there should not be any name clashes, anyway
-  base <- base_packages()
   for (bp in base) {
-    if (has_topic(topic, bp)) return(bp)
+    if (has_topic(topic, bp)) return(NA_character_)
   }
 
   cli::cli_abort(c(

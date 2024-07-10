@@ -203,13 +203,15 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
   })
   pkg_has_topic <- unique(pkg_has_topic)
   base <- base_packages()
-  if (length(pkg_has_topic) == 1) {
+  if (length(pkg_has_topic) == 0) {
+    # fall through to check base packages as well
+  } else if (length(pkg_has_topic) == 1) {
     if (pkg_has_topic %in% base) {
       return(NA_character_)
     } else {
       return(pkg_has_topic)
     }
-  } else if (length(pkg_has_topic) > 1) {
+  } else {
     cli::cli_abort(c(
       "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg_has_topic}}.",
       i = "Qualify topic explicitly with a package name when linking to it."

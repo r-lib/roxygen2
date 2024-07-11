@@ -24,10 +24,8 @@ local_reproducible_output <- function(.envir = parent.frame()) {
   )
   withr::local_envvar(RSTUDIO = NA, .local_envir = .envir)
 
-  if (isTRUE(capabilities("NLS")) && Sys.getenv("LANG") != "C") {
-    lang <- unname(desc::desc_get("Language")) %|% "en"
-    withr::local_language(lang, .local_envir = .envir)
-  }
+  lang <- unname(desc::desc_get("Language")) %|% "en"
+  withr::local_language(lang, .local_envir = .envir)
 
   withr::local_collate("C", .local_envir = .envir)
 }

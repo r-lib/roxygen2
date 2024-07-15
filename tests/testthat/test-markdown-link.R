@@ -485,8 +485,10 @@ test_that("resolve_link_package", {
     resolve_link_package("UseMethod", "roxygen2", test_path("testMdLinks2"))
     resolve_link_package("cli_abort", "roxygen2", test_path("testMdLinks2"))
   })
+
+  tag <- roxy_tag("title", NULL, NULL, file = "foo.R", line = 10)
   expect_snapshot({
-    resolve_link_package("aa3bc042880aa3b64fef1a9", "roxygen2", test_path("testMdLinks2"))
+    resolve_link_package("aa3bc042880aa3b64fef1a9", "roxygen2", test_path("testMdLinks2"), list(tag = tag))
   })
   # re-exported topics are identified
   rm(list = ls(envir = mddata), envir = mddata)
@@ -499,8 +501,9 @@ test_that("resolve_link_package", {
 test_that("resolve_link_package name clash", {
   # skip in case pkgload/rlang changes this
   skip_on_cran()
+  tag <- roxy_tag("title", NULL, NULL, file = "foo.R", line = 10)
   expect_snapshot({
-    resolve_link_package("pkg_env", "roxygen2", test_path("testMdLinks2"))
+    resolve_link_package("pkg_env", "roxygen2", test_path("testMdLinks2"), list(tag = tag))
   })
 })
 

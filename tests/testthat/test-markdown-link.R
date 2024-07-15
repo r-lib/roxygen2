@@ -485,7 +485,7 @@ test_that("resolve_link_package", {
     resolve_link_package("UseMethod", "roxygen2", test_path("testMdLinks2"))
     resolve_link_package("cli_abort", "roxygen2", test_path("testMdLinks2"))
   })
-  expect_snapshot(error = TRUE, {
+  expect_snapshot({
     resolve_link_package("aa3bc042880aa3b64fef1a9", "roxygen2", test_path("testMdLinks2"))
   })
   # re-exported topics are identified
@@ -499,7 +499,7 @@ test_that("resolve_link_package", {
 test_that("resolve_link_package name clash", {
   # skip in case pkgload/rlang changes this
   skip_on_cran()
-  expect_snapshot(error = TRUE, {
+  expect_snapshot({
     resolve_link_package("pkg_env", "roxygen2", test_path("testMdLinks2"))
   })
 })

@@ -57,8 +57,9 @@
       resolve_link_package("aa3bc042880aa3b64fef1a9", "roxygen2", test_path(
         "testMdLinks2"))
     Condition
-      Error in `resolve_link_package()`:
-      ! Could not resolve link to topic "aa3bc042880aa3b64fef1a9" in the dependencies or base packages.
+      Warning:
+      Could not resolve link to topic "aa3bc042880aa3b64fef1a9" in the dependencies or base packages.
+      i If you haven'r documented "aa3bc042880aa3b64fef1a9" yet, or just changed its name, this is normal. Once "aa3bc042880aa3b64fef1a9" is documented, this warning goes away.
       i Make sure that the name of the topic is spelled correctly.
       i Always list the linked package as a dependency.
       i Alternatively, you can fully qualify the link with a package name.
@@ -68,7 +69,13 @@
     Code
       resolve_link_package("pkg_env", "roxygen2", test_path("testMdLinks2"))
     Condition
-      Error in `resolve_link_package()`:
-      ! Topic "pkg_env" is available in multiple packages: pkgload and rlang.
+      Warning:
+      Topic "pkg_env" is available in multiple packages: pkgload and rlang.
       i Qualify topic explicitly with a package name when linking to it.
+      Warning:
+      Could not resolve link to topic "pkg_env" in the dependencies or base packages.
+      i If you haven'r documented "pkg_env" yet, or just changed its name, this is normal. Once "pkg_env" is documented, this warning goes away.
+      i Make sure that the name of the topic is spelled correctly.
+      i Always list the linked package as a dependency.
+      i Alternatively, you can fully qualify the link with a package name.
 

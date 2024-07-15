@@ -212,7 +212,7 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
       return(pkg_has_topic)
     }
   } else {
-    cli::cli_abort(c(
+    cli::cli_warn(c(
       "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg_has_topic}}.",
       i = "Qualify topic explicitly with a package name when linking to it."
     ))
@@ -224,8 +224,11 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL) {
     if (has_topic(topic, bp)) return(NA_character_)
   }
 
-  cli::cli_abort(c(
+  cli::cli_warn(c(
     "Could not resolve link to topic {.val {topic}} in the dependencies or base packages.",
+    "i" = paste(
+      "If you haven'r documented {.val {topic}} yet, or just changed its name, this is normal.",
+      "Once {.val {topic}} is documented, this warning goes away."),
     "i" = "Make sure that the name of the topic is spelled correctly.",
     "i" = "Always list the linked package as a dependency.",
     "i" = "Alternatively, you can fully qualify the link with a package name."

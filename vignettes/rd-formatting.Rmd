@@ -209,6 +209,16 @@ There are two basic forms:
 -   `[topic]`: The link text is automatically generated from the topic.
 -   `[text][topic]`: You supply the link text.
 
+If `topic` is not a help topic within the package you are documenting,
+but it is in one of its dependent packages, roxygen2 will try to find
+which package it is coming from to generate a fully qualified link. Fully
+qualified links are required by R 4.5.0 and later.
+
+If multiple dependent packages document `topic`, then roxygen2 will stop
+with an error. Re-exported functions and objects do not generate an error,
+however, but roxygen2 will link to the package that originally defines the
+re-exported object.
+
 ### Default link text
 
 First we explore the simplest form: `[ref]`.
@@ -362,4 +372,3 @@ The commonmark parser does not require an empty line before lists, and this migh
 #' You can see more about this topic in the book cited below, on page
 #' 42. Clearly, the numbered list that starts here is not intentional.
 ```
-

@@ -65,6 +65,7 @@
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
 <ul><li><p>The check for unexported S3 methods was improved, so it does not hang any more if a largish data object is in the package (<a href="https://github.com/r-lib/roxygen2/issues/1593" class="external-link">#1593</a>, <a href="https://github.com/jranke" class="external-link">@jranke</a>).</p></li>
 <li><p>Custom <a href="https://roxygen2.r-lib.org/articles/index-crossref.html"><code>@family</code> titles</a> now support Markdown syntax (<a href="https://github.com/r-lib/roxygen2/issues/1608" class="external-link">#1608</a>, <a href="https://github.com/salim-b" class="external-link">@salim-b</a>).</p></li>
+<li><p>Unqualified markdown links to topics in external packages are now automatically resolved (<a href="https://github.com/r-lib/roxygen2/issues/1612" class="external-link">#1612</a>).</p></li>
 <li><p><code>@examplesIf</code> always uses <code><a href="https://rdrr.io/r/base/source.html" class="external-link">withAutoprint()</a></code> (<a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>, <a href="https://github.com/r-lib/roxygen2/issues/1581" class="external-link">#1581</a>). The raw Rd will be cleaner, but such examples will now only run under R&gt;=3.4.0 (2017).</p></li>
 </ul></div>
     <div class="section level2">
@@ -285,7 +286,7 @@
 <ul><li>
 <p>The default formatting for function usage that spans multiple lines has now changed. Previously, the usage was wrapped to produce the smallest number of lines, e.g.:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/parse_package.html">parse_package</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"."</span>, env <span class="op">=</span> <span class="fu"><a href="../reference/parse_package.html">env_package</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/parse_package.html">parse_package</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"."</span>, env <span class="op">=</span> <span class="fu"><a href="../reference/parse_package.html">env_package</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>,</span>
 <span>  registry <span class="op">=</span> <span class="fu">default_tags</span><span class="op">(</span><span class="op">)</span>, global_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now it is wrapped so that each argument gets its own line (<a href="https://github.com/r-lib/roxygen2/issues/820" class="external-link">#820</a>):</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">

@@ -295,6 +295,15 @@ the topic.</li>
 <li>
 <code>[text][topic]</code>: You supply the link text.</li>
 </ul>
+<p>If <code>topic</code> is not a help topic within the package you are
+documenting, but it is in one of its dependent packages, roxygen2 will
+try to find which package it is coming from to generate a fully
+qualified link. Fully qualified links are required by R 4.5.0 and
+later.</p>
+<p>If multiple dependent packages document <code>topic</code>, then
+roxygen2 will stop with an error. Re-exported functions and objects do
+not generate an error, however, but roxygen2 will link to the package
+that originally defines the re-exported object.</p>
 <div class="section level3">
 <h3 id="default-link-text">Default link text<a class="anchor" aria-label="anchor" href="#default-link-text"></a>
 </h3>

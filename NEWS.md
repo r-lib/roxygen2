@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `@includeRmd` now additionally sets language to the Language in DESCRIPTION to make output reproducible (#1622)
+
 * The check for unexported S3 methods was improved, so it does not hang any more
   if a largish data object is in the package (#1593, @jranke).
 

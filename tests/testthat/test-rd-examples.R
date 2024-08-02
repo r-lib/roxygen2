@@ -79,6 +79,7 @@ test_that("@examplesIf", {
     #' maybe-run-this-code
     #' @examplesIf foobar()
     #' and-this
+    #' and-that
     NULL")[[1]]
 
   expect_snapshot_output(out$get_section("examples"))

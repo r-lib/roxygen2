@@ -29,6 +29,7 @@
     \dontshow{\}) # examplesIf}
     \dontshow{if (foobar()) withAutoprint(\{ # examplesIf}
     and-this
+    and-that
     \dontshow{\}) # examplesIf}
     } 
 

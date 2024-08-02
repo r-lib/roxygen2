@@ -15,10 +15,12 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   )
 
   x$raw <- paste(
-    paste0("\\dontshow{if (", condition, ") withAutoprint(\\{ # examplesIf}"),
-    lines[-1],
-    "\\dontshow{\\}) # examplesIf}",
-    sep = "\n"
+    c(
+      paste0("\\dontshow{if (", condition, ") withAutoprint(\\{ # examplesIf}"),
+      lines[-1],
+      "\\dontshow{\\}) # examplesIf}"
+    ),
+    collapse = "\n"
   )
 
   tag_examples(x)

@@ -43,8 +43,8 @@ test_that("inheritDotParams inherits `...` parameters from mulitple parents incl
     #' Foo
     #'
     #' @param .messages like in dtrackr
-    #' @inheritParams dplyr::mutate
-    #' @inheritAllDotParams dplyr::mutate
+    #' @inheritParams purrr::pmap
+    #' @inheritAllDotParams purrr::pmap
     #' @inheritAllDotParams bar
     foo <- function(.data, ..., .messages) {}
   ")[[2]]
@@ -56,7 +56,7 @@ test_that("inheritDotParams inherits `...` parameters from mulitple parents incl
     c(y="ybar")
   )
 
-  lapply(c("Name-value pairs.", "\\.by", "\\.keep"), function(.x) {
+  lapply(c("We now generally recommend", "\\.l", "\\.f"), function(.x) {
     expect(
       stringr::str_detect(out$get_value("param")[["..."]],.x),
       paste0("could not find documentation string: ",.x)

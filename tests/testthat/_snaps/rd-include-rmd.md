@@ -16,13 +16,11 @@
 
     Code
       . <- roc_proc_text(rd_roclet(), text)
-    Output
-      
     Message
       
-      Quitting from lines 2-3 [unnamed-chunk-2] (<temp-path.Rmd>)
+      Quitting from lines  at lines 2-3 [unnamed-chunk-2] (<temp-path.Rmd>)
       
-      Quitting from lines 2-2 [unnamed-chunk-1] (<another-temp-path.Rmd>)
+      Quitting from lines  at lines 2-3 [unnamed-chunk-1] (<temp-path.Rmd>)
       x <text>:3: @includeRmd failed to evaluate '<temp-path.Rmd>'.
       Caused by error:
       ! Error

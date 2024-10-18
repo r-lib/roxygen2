@@ -23,6 +23,17 @@ roxy_tag_rd.roxy_tag_inheritDotParams <- function(x, base_path, env) {
   rd_section_inherit_dot_params(x$val$name, x$val$description)
 }
 
+# Fix for issues #1670 and #1671 by implementing a new tag for backward compatibility.
+# @inheritAllDotParams will also pick up `...` documentation from parent.
+#' @export
+roxy_tag_parse.roxy_tag_inheritAllDotParams <- function(x) {
+  tag_two_part(x, "a source", "an argument list", required = FALSE, markdown = FALSE)
+}
+#' @export
+roxy_tag_rd.roxy_tag_inheritAllDotParams <- function(x, base_path, env) {
+  rd_section_inherit_dot_params(x$val$name, x$val$description, recurse = TRUE)
+}
+
 #' @export
 roxy_tag_parse.roxy_tag_inheritSection <- function(x) {
   tag_two_part(x, "a topic name", "a section title")
@@ -76,11 +87,11 @@ merge.rd_section_inherit_section <- function(x, y, ...) {
   rd_section_inherit_section(c(x$value$source, y$value$source), c(x$value$title, y$value$title))
 }
 
-rd_section_inherit_dot_params <- function(source, args) {
+rd_section_inherit_dot_params <- function(source, args, recurse = FALSE) {
   stopifnot(is.character(source), is.character(args))
   stopifnot(length(source) == length(args))
 
-  rd_section("inherit_dot_params", list(source = source, args = args))
+  rd_section("inherit_dot_params", list(source = source, args = args, recurse=recurse))
 }
 
 #' @export
@@ -194,6 +205,9 @@ inherit_dot_params <- function(topic, topics, env) {
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
   arg_matches <- function(args, docs) {
+    # fix for issue #1670:
+    # also match "..." in inherited docs. potential recursion issues?
+    if (inheritors$recurse) args = c(args,"...")
     match <- map_lgl(docs, function(x) all(x$name %in% args))
     matched <- docs[match]
     setNames(
@@ -218,14 +232,23 @@ inherit_dot_params <- function(topic, topics, env) {
   arg_names <- paste0("\\code{", names(docs_selected), "}")
   args <- paste0("    \\item{", arg_names, "}{", docs_selected, "}", collapse = "\n")
 
-  rd <- paste0(
-    "\n",
-    "  Arguments passed on to ", from, "\n",
-    "  \\describe{\n",
-    args, "\n",
-    "  }"
-  )
-  topic$add(rd_section("param", c("..." = rd)))
+  # fix for issue #1671:
+  # stop empty block being generated
+  if (length(docs_selected>0)) {
+    rd <- paste0(
+      "\n",
+      "  Arguments passed on to ", from, "\n",
+      "  \\describe{\n",
+      args, "\n",
+      "  }"
+    )
+    topic$add(rd_section("param", c("..." = rd)))
+  } else {
+    # you are inheriting dots from a function, and nothing matches
+    # This is potentially a code error and maybe should be thrown here.
+    # with fix 1670 this should really happen any more, except possibly if
+    # someone has documented `...` and also tries to inherit it.
+  }
 }
 
 

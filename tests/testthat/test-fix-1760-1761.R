@@ -32,6 +32,40 @@ test_that("inheritDotParams inherits `...` parameters from parent", {
 
 })
 
+test_that("inheritDotParams inherits `...` parameters from mulitple parents including from dplyr", {
+  out <- roc_proc_text(rd_roclet(), "
+    #' Bar
+    #'
+    #' @param y ybar
+    #' @param \\dots not used
+    bar <- function(y, ...) {}
+
+    #' Foo
+    #'
+    #' @param .messages like in dtrackr
+    #' @inheritParams dplyr::mutate
+    #' @inheritAllDotParams dplyr::mutate
+    #' @inheritAllDotParams bar
+    foo <- function(.data, ..., .messages) {}
+  ")[[2]]
+
+  # I expect to see here the foo dot params documented
+
+  .expect_inherited(
+    out$get_value("param"),
+    c(y="ybar")
+  )
+
+  lapply(c("Name-value pairs.", "\\.by", "\\.keep"), function(.x) {
+    expect(
+      stringr::str_detect(out$get_value("param")[["..."]],.x),
+      paste0("could not find documentation string: ",.x)
+    )
+  })
+
+
+})
+
 ## fix 1671 ----
 # with fix 1670 this cannot really happen any more, as for a `...`
 # to be passed to parent it is an error to not have a `...`

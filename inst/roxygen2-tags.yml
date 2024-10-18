@@ -223,6 +223,14 @@
   vignette: reuse
   recommend: true
 
+- name: inheritAllDotParams
+  description: >
+    Automatically generate documentation for `...` when you're passing dots
+    along to another function, including transitive `...` documentation.
+  template: ' ${1:source} ${2:arg1 arg2 arg3}'
+  vignette: reuse
+  recommend: true
+
 - name: inheritParams
   description: >
     Inherit argument documentation from another function. Only inherits

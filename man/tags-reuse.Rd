@@ -8,6 +8,7 @@
 \alias{@includeRmd}
 \alias{@inherit}
 \alias{@inheritDotParams}
+\alias{@inheritAllDotParams}
 \alias{@inheritParams}
 \alias{@inheritSection}
 \alias{@order}
@@ -22,6 +23,7 @@
 #' @includeRmd man/rmd/${1:filename}.Rmd
 #' @inherit ${1:source} ${2:components}
 #' @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}
+#' @inheritAllDotParams ${1:source} ${2:arg1 arg2 arg3}
 #' @inheritParams ${1:source}
 #' @inheritSection ${1:source} ${2:section name}
 #' @order ${1:number}
@@ -38,6 +40,7 @@ Key tags:
 \item \verb{@inherit $\{1:source\} $\{2:components\}}: Inherit one or more documentation components from another topic. If \code{components} is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, \code{note}, and \code{format}.
 \item \verb{@inheritDotParams $\{1:source\} $\{2:arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function.
+\item \verb{@inheritAllDotParams $\{1:source\} $\{2:arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function, including transitive \code{...} documentation.
 \item \verb{@inheritParams $\{1:source\}}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
 \item \verb{@inheritSection $\{1:source\} $\{2:section name\}}: Inherit a specific named section from another topic.
 \item \verb{@order $\{1:number\}}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.

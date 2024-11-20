@@ -198,6 +198,20 @@ topic$get_section("tip")
 
 Note that there is no namespacing so if you're defining multiple new tags I recommend using your package name as the common prefix.
 
+### Adding new .Rd tags to your workflow
+
+To use your new tags in another package, you must tell roxygen to load the package inlcuding your new tags.
+
+If, for example, you created some new tags in *packageFoo*, and would like to use these tags in your documentation for *packageBar*, append this like to the `DESCRIPTION` of *packageBar*:
+
+```
+Roxygen: list(packages =  "packageFoo")
+```
+
+See [roxygen2::load_options()] for more details.
+
+Notice that this only covers new `*.Rd` tags; if your workflow also depends on new roclets, see below.
+
 ## Creating a new roclet
 
 Creating a new roclet is usually a two part process.
@@ -227,7 +241,7 @@ roxy_tag_parse.roxy_tag_memo <- function(x) {
   parsed <- stringi::stri_match(str = x$raw, regex = "\\[(.*)\\](.*)")[1, ]
 
   x$val <- list(
-    header = parsed[[2]], 
+    header = parsed[[2]],
     message = parsed[[3]]
   )
   x
@@ -278,7 +292,7 @@ For this roclet, we'll have `roclet_process()` collect all the memo tags into a 
 ```{r}
 roclet_process.roclet_memo <- function(x, blocks, env, base_path) {
   results <- list()
-  
+
   for (block in blocks) {
     tags <- block_get_tags(block, "memo")
 
@@ -287,7 +301,7 @@ roclet_process.roclet_memo <- function(x, blocks, env, base_path) {
       results[[tag$val$header]] <- c(results[[tag$val$header]], msg)
     }
   }
-  
+
   results
 }
 ```
@@ -345,7 +359,7 @@ above.
 You can also add the roclet to the target package's DESCRIPTION file, like this:
 
 ```r
-Roxygen: list(roclets = c("collate", "rd", "namespace", "yourPackage::roclet")) 
+Roxygen: list(roclets = c("collate", "rd", "namespace", "yourPackage::roclet"))
 ```
 
 Optionally, you can add your roclet package to the target package as a `Suggests:` dependency:

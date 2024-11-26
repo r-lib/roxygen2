@@ -70,7 +70,7 @@ tan_ish <- function(x) x + x^3 / 3
 Alternatively, you can add docs to an existing function.
 This tends to work better if you have a "primary" function with some variants or some helpers.
 
-```{r}
+``` r
 #' Logarithms
 #' 
 #' @param x A numeric vector

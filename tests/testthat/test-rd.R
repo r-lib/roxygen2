@@ -177,7 +177,7 @@ test_that("package docs preserve existing aliases", {
   expect_equal(out$get_value("alias"), c("empty-package", "a", "b"))
 })
 
-test_that("get correct alias even if user has overriden name", {
+test_that("get correct alias even if user has overridden name", {
   block <- "
     #' Title
     #' @name foo

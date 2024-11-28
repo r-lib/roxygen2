@@ -58,7 +58,7 @@ bizarro <- function(x, ...) {
 
 While S3 methods are regular functions with a special naming scheme, their "export" works a bit differently.
 S3 methods are exported only in the sense that calling the generic with the appropriate class will call the method; a user can't directly access the method definition by typing its name.
-A more technically correctly term would be to say that the method is **registered** so that the generics can find it.
+A more technically correct term would be to say that the method is **registered** so that the generics can find it.
 
 You must register, i.e. `@export`, every S3 method regardless of whether or not the generic is exported.
 roxygen2 will warn you if you have forgotten.

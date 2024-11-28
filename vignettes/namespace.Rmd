@@ -187,7 +187,7 @@ This is automated by `usethis::use_import_from()`.
 NULL
 ```
 
-Note the use of `NULL` here: you must provide something for roxygen2 to document, so we use `NULL` as place holder.
+Note the use of `NULL` here: you must provide something for roxygen2 to document, so we use `NULL` as placeholder.
 
 It is possible, but not generally recommended to import all functions from a package with `@import package`.
 This is risky if you import functions from more than one package, because while it might be ok today, in the future the packages might end up with a function having the same name, and your users will get a warning every time your package is loaded.

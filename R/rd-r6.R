@@ -6,7 +6,7 @@ topic_add_r6_methods <- function(rd, block, env) {
   methods <- methods[order(methods$file, methods$line), ]
   methods$tags <- replicate(nrow(methods), list(), simplify = FALSE)
 
-  r6_tags <- c("description", "details", "param", "return", "examples")
+  r6_tags <- c("description", "details", "param", "return", "returns", "examples")
 
   del <- integer()
   for (i in seq_along(block$tags)) {
@@ -414,7 +414,7 @@ r6_method_params <- function(block, method) {
 }
 
 r6_method_return <- function(block, method) {
-  ret <- purrr::keep(method$tags[[1]], function(t) t$tag == "return")
+  ret <- purrr::keep(method$tags[[1]], function(t) t$tag %in% c("return", "returns"))
   if (length(ret) == 0) return()
   if (length(ret) > 1) {
     warn_roxy_block(block, "Must use one @return per R6 method")

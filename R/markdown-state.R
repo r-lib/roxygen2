@@ -25,7 +25,7 @@ local_markdown <- function(env = parent.frame()) {
 markdown_activate <- function(tags) {
   ## markdown on/off based on global flag and presence of @md & @nomd
 
-  names <- purrr::map_chr(tags, "tag")
+  names <- map_chr(tags, "tag")
   has_md <- "md" %in% names
   has_nomd <- "noMd" %in% names
 

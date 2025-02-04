@@ -15,6 +15,11 @@ test_that("person turned into meaningful text", {
     person_desc(comment = c("ORCID" = "1234"))
     person_desc(comment = c("ORCID" = "https://orcid.org/1234"))
     person_desc(comment = c("ORCID" = "1234", "extra"))
+
+    "ROR comments"
+    person_desc(comment = c("ROR" = "03wc8by49"))
+    person_desc(comment = c("ROR" = "https://ror.org/03wc8by49"))
+    person_desc(comment = c("ROR" = "03wc8by49", "extra"))
   })
 })
 

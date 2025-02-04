@@ -23,6 +23,19 @@
       person_desc(comment = c(ORCID = "1234", "extra"))
     Output
       [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID}) (extra)"
+    Code
+      # ROR comments
+      person_desc(comment = c(ROR = "03wc8by49"))
+    Output
+      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR})"
+    Code
+      person_desc(comment = c(ROR = "https://ror.org/03wc8by49"))
+    Output
+      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR})"
+    Code
+      person_desc(comment = c(ROR = "03wc8by49", "extra"))
+    Output
+      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR}) (extra)"
 
 # useful message if Authors@R is corrupted
 

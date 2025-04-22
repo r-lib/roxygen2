@@ -44,9 +44,10 @@ This means you need to document them in a slightly different way: instead of doc
 #' }
 #' 
 #' @source {ggplot2} tidyverse R package.
+"diamonds"
 ```
 
-Note the use of two additional tags that are particularly useful for documenting data:
+This generates documentation for the `data(diamonds)` object. Note the use of two additional tags that are particularly useful for documenting data:
 
 -   `@format`, which gives an overview of the structure of the dataset.
     This should include a **definition list** that describes each variable.

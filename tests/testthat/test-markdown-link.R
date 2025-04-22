@@ -62,7 +62,9 @@ test_that("{ and } in links are escaped (#1259)", {
   expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo({ bar })}")
 })
 
-test_that("non-text nodes in links fails", {
+test_that("non-text nodes in links fails for R < 4.5.0", {
+  skip_if(getRversion() >= "4.5.0")
+
   tag <- roxy_tag("title", NULL, NULL, file = "foo.R", line = 10)
 
   expect_snapshot({

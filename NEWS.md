@@ -13,7 +13,12 @@
   automatically resolved (#1612).
 
 * `@examplesIf` always uses `withAutoprint()` (@MichaelChirico, #1581). The raw Rd
-  will be cleaner, but such examples will now only run under R>=3.4.0 (2017).
+  will be cleaner, but such examples will now only run under R >= 3.4.0 (2017).
+
+* R 4.5.0 added support for markup in Rd `\link` texts and roxygen2 now properly
+  supports this. This means now you can for example write
+  `` A [link *with* markup to `roxygen2::roxygenize()`][roxygen2::roxygenize]! ``
+  in roxygen2 documentation. (#1712, @salim-b)
 
 # roxygen2 7.3.2
 

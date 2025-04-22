@@ -1,4 +1,4 @@
-#' Add link reference definitions for functions to a markdown text.
+#' Add link reference definitions for functions to a Markdown text.
 #'
 #' We find the `[text][ref]` and the `[ref]` forms. There must be no
 #' spaces between the closing and opening bracket in the `[text][ref]`
@@ -43,7 +43,7 @@
 #' In the link references, we need to URL encode the reference,
 #' otherwise commonmark does not use it (see issue #518).
 #'
-#' @param text Input markdown text.
+#' @param text Input Markdown text.
 #' @return The input text and all dummy reference link definitions
 #'   appended.
 #'
@@ -58,7 +58,7 @@ get_md_linkrefs <- function(text) {
         (?<=[^\\]\\\\]|^)       # must not be preceded by ] or \
         \\[([^\\]\\[]+)\\]      # match anything inside of []
         (?:\\[([^\\]\\[]+)\\])? # match optional second pair of []
-        (?=[^\\[{]|$)            # must not be followed by [ or {
+        (?=[^\\[{]|$)           # must not be followed by [ or {
       "
     )
   )[[1]]
@@ -83,11 +83,11 @@ add_linkrefs_to_md <- function(text) {
   paste0(text, "\n\n", ref_text, "\n")
 }
 
-#' Parse a MarkDown link, to see if we should create an Rd link
+#' Parse a Markdown link, to see if we should create an Rd link
 #'
 #' See the table above.
 #'
-#' @param destination string constant, the "url" of the link
+#' @param destination String constant, the "URL" of the link.
 #' @param contents An XML node, containing the contents of the link.
 #'
 #' @noRd
@@ -95,10 +95,11 @@ add_linkrefs_to_md <- function(text) {
 parse_link <- function(destination, contents, state) {
 
   ## Not a [] or [][] type link, remove prefix if it is
-  if (! grepl("^R:", destination)) return(NULL)
+  if (!grepl("^R:", destination)) return(NULL)
   destination <- sub("^R:", "", URLdecode(destination))
 
-  ## if contents is a `code tag`, then we need to move this outside
+  ## If contents is a single \code tag, we move it outside
+  ## (still necessary in R >= 4.5 to support the short "[`obj_name`]" syntax)
   is_code <- FALSE
   if (length(contents) == 1 && xml_name(contents) == "code") {
     is_code <- TRUE
@@ -109,14 +110,17 @@ parse_link <- function(destination, contents, state) {
     local_bindings(.env = state, in_link_code = TRUE)
   }
 
-  if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
-    incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
+  # In R < 4.5.0, the Rd link macro didn't allow markup in the link text
+  if (getRversion() < "4.5.0") {
+    if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
+      incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
 
-    warn_roxy_tag(state$tag, c(
-      "markdown links must contain plain text",
-      i = "Problematic link: {destination}"
-    ))
-    return("")
+      warn_roxy_tag(state$tag, c(
+        "Markdown links in R < 4.5 must contain plain text only",
+        i = "Problematic link: {destination}"
+      ))
+      return("")
+    }
   }
 
   ## If the supplied link text is the same as the reference text,
@@ -132,19 +136,19 @@ parse_link <- function(destination, contents, state) {
   ## `fun` is fun() or obj (fun is with parens)
   ## `is_fun` is TRUE for fun(), FALSE for obj
   ## `obj` is fun or obj (fun is without parens)
-  ## `s4` is TRUE if we link to an S4 class (i.e. have -class suffix)
+  ## `is_s4` is TRUE if we link to an S4 class (i.e. have -class suffix)
   ## `noclass` is fun with -class removed
   ## `file` is the file name of the linked topic.
 
   thispkg <- roxy_meta_get("current_package") %||% ""
-  is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
+  is_code <- is_code || (grepl("[(][)]$", destination) && !has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1,2]
   pkg <- gsub("%", "\\\\%", pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   fun <- gsub("%", "\\\\%", fun)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
-  s4 <- str_detect(destination, "-class$")
+  is_s4 <- str_detect(destination, "-class$")
   noclass <- str_match(fun, "^(.*)-class$")[1,2]
 
   if (is.na(pkg)) pkg <- resolve_link_package(obj, thispkg, state = state)
@@ -155,14 +159,14 @@ parse_link <- function(destination, contents, state) {
   if (!has_link_text) {
     paste0(
       if (is_code) "\\code{",
-      if (s4 && is.na(pkg)) "\\linkS4class" else "\\link",
-      if (is_fun || ! is.na(pkg)) "[",
+      if (is_s4 && is.na(pkg)) "\\linkS4class" else "\\link",
+      if (is_fun || !is.na(pkg)) "[",
       if (is_fun && is.na(pkg)) "=",
-      if (! is.na(pkg)) paste0(pkg, ":"),
-      if (is_fun || ! is.na(pkg)) paste0(if (is.na(pkg)) obj else file, "]"),
+      if (!is.na(pkg)) paste0(pkg, ":"),
+      if (is_fun || !is.na(pkg)) paste0(if (is.na(pkg)) obj else file, "]"),
       "{",
       if (!is.na(pkg)) paste0(pkg, "::"),
-      if (s4) noclass else fun,
+      if (is_s4) noclass else fun,
       "}",
       if (is_code) "}" else ""
     )
@@ -282,7 +286,7 @@ find_reexport_source <- function(topic, package) {
   }
 }
 
-#' Dummy page to test roxygen's markdown formatting
+#' Dummy page to test roxygen's Markdown formatting
 #'
 #' Links are very tricky, so I'll put in some links here:
 #' Link to a function: [roxygenize()].

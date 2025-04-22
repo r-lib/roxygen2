@@ -13,14 +13,23 @@
     Code
       # ORCID comments
       person_desc(comment = c(ORCID = "1234"))
+    Condition
+      Warning in `person1()`:
+      Invalid ORCID iD: '1234'.
     Output
       [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID})"
     Code
       person_desc(comment = c(ORCID = "https://orcid.org/1234"))
+    Condition
+      Warning in `person1()`:
+      Invalid ORCID iD: 'https://orcid.org/1234'.
     Output
       [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID})"
     Code
       person_desc(comment = c(ORCID = "1234", "extra"))
+    Condition
+      Warning in `person1()`:
+      Invalid ORCID iD: '1234'.
     Output
       [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID}) (extra)"
 

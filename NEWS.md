@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Package documentation now converts ROR IDs into a useful link (#1698, @maelle).
+
 * The check for unexported S3 methods was improved, so it does not hang any more
   if a largish data object is in the package (#1593, @jranke).
 

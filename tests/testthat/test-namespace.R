@@ -306,7 +306,7 @@ test_that("rawNamespace inserted unchanged", {
 })
 
 test_that("rawNamespace does not break idempotency", {
-  test_pkg <- test_path("testRawNamespace")
+  test_pkg <- local_package_copy(test_path("testRawNamespace"))
   NAMESPACE <- file.path(test_pkg, "NAMESPACE")
 
   lines_orig <- read_lines(NAMESPACE)

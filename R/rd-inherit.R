@@ -23,6 +23,17 @@ roxy_tag_rd.roxy_tag_inheritDotParams <- function(x, base_path, env) {
   rd_section_inherit_dot_params(x$val$name, x$val$description)
 }
 
+# Fix for issues #1670 and #1671 by implementing a new tag for backward compatibility.
+# @inheritAllDotParams will also pick up `...` documentation from parent.
+#' @export
+roxy_tag_parse.roxy_tag_inheritAllDotParams <- function(x) {
+  tag_two_part(x, "a source", "an argument list", required = FALSE, markdown = FALSE)
+}
+#' @export
+roxy_tag_rd.roxy_tag_inheritAllDotParams <- function(x, base_path, env) {
+  rd_section_inherit_dot_params(x$val$name, x$val$description, recurse = TRUE)
+}
+
 #' @export
 roxy_tag_parse.roxy_tag_inheritSection <- function(x) {
   tag_two_part(x, "a topic name", "a section title")
@@ -76,11 +87,12 @@ merge.rd_section_inherit_section <- function(x, y, ...) {
   rd_section_inherit_section(c(x$value$source, y$value$source), c(x$value$title, y$value$title))
 }
 
-rd_section_inherit_dot_params <- function(source, args) {
+# set recurse to true to make it default of @inheritDotParams (and @interitAllDotParams)
+rd_section_inherit_dot_params <- function(source, args, recurse = FALSE) {
   stopifnot(is.character(source), is.character(args))
   stopifnot(length(source) == length(args))
 
-  rd_section("inherit_dot_params", list(source = source, args = args))
+  rd_section("inherit_dot_params", list(source = source, args = args, recurse=recurse))
 }
 
 #' @export
@@ -89,7 +101,7 @@ format.rd_section_inherit_dot_params <- function(x, ...) NULL
 #' @export
 merge.rd_section_inherit_dot_params <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  rd_section_inherit_dot_params(c(x$value$source, y$value$source), c(x$value$args, y$value$args))
+  rd_section_inherit_dot_params(c(x$value$source, y$value$source), c(x$value$args, y$value$args), all(c(x$value$recurse, y$value$recurse)))
 }
 
 
@@ -183,6 +195,7 @@ match_param <- function(from, to) {
 }
 
 inherit_dot_params <- function(topic, topics, env) {
+
   inheritors <- topic$get_value("inherit_dot_params")
   if (is.null(inheritors))
     return()
@@ -190,42 +203,108 @@ inherit_dot_params <- function(topic, topics, env) {
   # Need to find formals for each source
   funs <- lapply(inheritors$source, function(x) eval(parse(text = x), envir = env))
   args <- map2(funs, inheritors$args, select_args_text, topic = topic)
-
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
-  arg_matches <- function(args, docs) {
-    match <- map_lgl(docs, function(x) all(x$name %in% args))
-    matched <- docs[match]
-    setNames(
-      lapply(matched, "[[", "value"),
-      map_chr(matched, function(x) paste(x$name, collapse = ","))
-    )
+
+  if (!inheritors$recurse) {
+
+    # Original behaviour, with output modified to prevent empty blocks.
+    arg_matches <- function(args, docs) {
+      match <- map_lgl(docs, function(x) all(x$name %in% args))
+      matched <- docs[match]
+      setNames(
+        lapply(matched, "[[", "value"),
+        map_chr(matched, function(x) paste(x$name, collapse = ","))
+      )
+    }
+    docs_selected <- unlist(map2(args, docs, arg_matches))
+
+    # Only document params under "..." that aren't otherwise documented
+    documented <- get_documented_params(topic)
+    non_documented_params <- setdiff(names(docs_selected), documented)
+    docs_selected <- docs_selected[non_documented_params]
+
+    # Build the Rd
+    # (1) Link to function(s) that was inherited from
+    src <- inheritors$source
+    dest <- map_chr(src, resolve_qualified_link)
+    from <- paste0("\\code{\\link[", dest, "]{", src, "}}", collapse = ", ")
+
+    # (2) Show each inherited argument
+    arg_names <- paste0("\\code{", names(docs_selected), "}")
+    args <- paste0("    \\item{", arg_names, "}{", docs_selected, "}", collapse = "\n")
+
+    # fix for issue #1671:
+    # stop empty block being generated
+    if (length(docs_selected>0)) {
+      rd <- paste0(
+        "\n",
+        "  Arguments passed on to ", from, "\n",
+        "  \\describe{\n",
+        args, "\n",
+        "  }"
+      )
+      topic$add(rd_section("param", c("..." = rd)))
+    } else {
+      # you are inheriting dots from a function, and nothing matches
+      # This is potentially a code error and maybe should be thrown here.
+      # with fix 1670 this should really happen any more, except possibly if
+      # someone has documented `...` and also tries to inherit it.
+    }
+    return()
+
+  } else {
+
+    # Transitive inheritance of paramater documentation
+    # Basically this looks into parent documentation
+    # and finds anything that has not been documented already
+
+    sources = inheritors$source
+    dests = map_chr(sources, resolve_qualified_link)
+    defined_params = get_documented_params(topic)
+
+    # docs is a complex list of stuff. within it we need to find stuff that
+    # we have not already documented. We have to match by name with the
+    # complication that the names might be vectors themselves
+
+    i=1
+    # to_include = list()
+    dots_rd = character()
+    for (doc in docs) {
+      source = sources[[i]]
+      dest = dests[[i]]
+
+      # source_entries = list()
+      doc_rd = character()
+      for (entry in doc) {
+
+        # extras are the documented entries that are not already defined
+        # entry$name can be multiple names
+        extras = entry$name[!entry$name %in% defined_params]
+        if (length(extras) > 0) {
+          # keep the documentation for these extra parameters
+          # this is formatted as a csv for ease
+          extras = paste0(extras,collapse=",")
+          # source_entries[[extras]] = entry$value
+          doc_rd = c(doc_rd, sprintf("\\item{\\code{%s}}{%s}\n",extras,entry$value))
+        }
+      }
+      # to_include[[source]] = source_entries
+      if (length(doc_rd)>0) {
+        dots_rd = c(dots_rd, sprintf("\n  Named arguments passed on to \\code{\\link[%s]{%s}}\\describe{\n    %s}",dest,source,paste0(doc_rd,collapse="")))
+      }
+      i=i+1
+    }
+
+    if ("..." %in% names(topic$get_value("param"))) dots_rd =  c(topic$get_value("param")["..."], dots_rd)
+    dots_rd = paste0(dots_rd,collapse="")
+    if (dots_rd != "") {
+      topic$add(rd_section("param", c("..." = dots_rd)))
+    }
+
+
+
   }
-  docs_selected <- unlist(map2(args, docs, arg_matches))
-
-  # Only document params under "..." that aren't otherwise documented
-  documented <- get_documented_params(topic)
-  non_documented_params <- setdiff(names(docs_selected), documented)
-  docs_selected <- docs_selected[non_documented_params]
-
-  # Build the Rd
-  # (1) Link to function(s) that was inherited from
-  src <- inheritors$source
-  dest <- map_chr(src, resolve_qualified_link)
-  from <- paste0("\\code{\\link[", dest, "]{", src, "}}", collapse = ", ")
-
-  # (2) Show each inherited argument
-  arg_names <- paste0("\\code{", names(docs_selected), "}")
-  args <- paste0("    \\item{", arg_names, "}{", docs_selected, "}", collapse = "\n")
-
-  rd <- paste0(
-    "\n",
-    "  Arguments passed on to ", from, "\n",
-    "  \\describe{\n",
-    args, "\n",
-    "  }"
-  )
-  topic$add(rd_section("param", c("..." = rd)))
 }
 
 

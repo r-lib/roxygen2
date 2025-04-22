@@ -1,6 +1,9 @@
 test_that("person turned into meaningful text", {
   person_desc <- function(given = "H", family = "W", email = "h@w.com", role = "aut", comment = NULL) {
-    out <- person(given = given, family = family, email = email, role = role, comment = comment)
+    out <- suppressWarnings(
+      # newer version of utils::person throws warning if ORCID is invalid format
+      person(given = given, family = family, email = email, role = role, comment = comment)
+    )
     author_desc(unclass(out)[[1]])
   }
 

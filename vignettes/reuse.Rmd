@@ -121,6 +121,7 @@ If two or more functions share have similarities but are different or complex en
 -   `@inherit foo` will copy all supported components from `foo`.
 -   `@inheritSection foo {Section title}` will copy the `@section {Section title}` section from `foo`.
 -   `@inheritDotParams foo` will generate documentation for `…` by copying the documentation for `foo()`'s arguments.
+-   `@inheritAllDotParams foo` will generate documentation for `…` by copying the documentation for `foo()`'s arguments, including inheriting `foo()`'s `...` documentation.
 
 We think of this as "inheritance" rather than just copying, because anything you inherit can be overridden by a more specific definition in the documentation.
 This applies particularly to `@inheritParams` which allows you to copy the documentation for some parameters while documenting others directly.
@@ -216,7 +217,7 @@ For example, all the "adverbs" in purrr use `#' @inheritSection safely Adverbs` 
 When your function passes `...` on to another function, it can be useful to inline the documentation for some of the most common arguments.
 This technique is inspired by the documentation for `plot()`, where `...` can take any graphical parameter; `?plot` describes some of the most common arguments so that you don't have to look them up in `?par`.
 
-`@inheritDotParams` has two components: the function to inherit from and the arguments to inherit.
+`@inheritDotParams` and `@inheritAllDotParams` have two components: the function to inherit from and the arguments to inherit.
 Since you'll typically only want to document the most important arguments, `@inheritDotParams` comes with a flexible specification for argument selection inspired by `dplyr::select()`:
 
 -   `@inheritDotParams foo` takes all parameters from `foo()`.
@@ -234,6 +235,8 @@ It's most common to inherit from other documentation topics within the current p
 -   `@inheritSection package::function Section title`
 
 -   `@inheritDotParams package::function`
+
+-   `@inheritAllDotParams package::function`
 
 When inheriting documentation from another package bear in mind that you're now taking a fairly strong dependency on an external package, and to ensure every developer produces the same documentation you'll need to make sure that they all have the same version of the package installed.
 And if the package changes the name of the topic or section, your documentation will require an update.

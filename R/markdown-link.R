@@ -98,7 +98,8 @@ parse_link <- function(destination, contents, state) {
   if (!grepl("^R:", destination)) return(NULL)
   destination <- sub("^R:", "", URLdecode(destination))
 
-  ## if contents is a `code tag`, then we need to move this outside
+  ## If contents is a single \code tag, we move it outside
+  ## (still necessary in R >= 4.5 to support the short "[`obj_name`]" syntax)
   is_code <- FALSE
   if (length(contents) == 1 && xml_name(contents) == "code") {
     is_code <- TRUE
@@ -109,14 +110,17 @@ parse_link <- function(destination, contents, state) {
     local_bindings(.env = state, in_link_code = TRUE)
   }
 
-  if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
-    incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
+  # In R < 4.5.0, the Rd link macro didn't allow markup in the link text
+  if (getRversion() < "4.5.0") {
+    if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
+      incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
 
-    warn_roxy_tag(state$tag, c(
-      "markdown links must contain plain text",
-      i = "Problematic link: {destination}"
-    ))
-    return("")
+      warn_roxy_tag(state$tag, c(
+        "Markdown links in R < 4.5 must contain plain text only",
+        i = "Problematic link: {destination}"
+      ))
+      return("")
+    }
   }
 
   ## If the supplied link text is the same as the reference text,

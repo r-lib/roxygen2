@@ -7,7 +7,8 @@ Authors@R: c(
     person("Peter", "Danenberg", , "pcd@roxygen.org", role = c("aut", "cph")),
     person("Gábor", "Csárdi", , "csardi.gabor@gmail.com", role = "aut"),
     person("Manuel", "Eugster", role = c("aut", "cph")),
-    person("Posit Software, PBC", role = c("cph", "fnd"))
+    person("Posit Software, PBC", role = c("cph", "fnd"),
+           comment = c(ROR = "03wc8by49"))
   )
 Description: Generate your Rd documentation, 'NAMESPACE' file, and
     collation field using specially formatted comments. Writing

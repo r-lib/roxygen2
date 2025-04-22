@@ -66,6 +66,16 @@ author_desc <- function(x) {
       }
       x$comment <- x$comment[!names(x$comment) %in% "ORCID"]
     }
+    if (has_name(x$comment, "ROR")) {
+      ror <- x$comment[["ROR"]]
+
+      if (grepl("https?://", ror)) {
+        desc <- paste0(desc, " (\\href{", ror, "}{ROR})")
+      } else {
+        desc <- paste0(desc, " (\\href{https://ror.org/", ror, "}{ROR})")
+      }
+      x$comment <- x$comment[!names(x$comment) %in% "ROR"]
+    }
 
     if (length(x$comment) > 0) {
       desc <- paste0(desc, " (", x$comment, ")")

@@ -82,7 +82,7 @@ roxygenize <- function(package.dir = ".",
     base_path = base_path
   )
 
-  out <- purrr::map2(
+  out <- map2(
     roclets, results,
     roclet_output,
     base_path = base_path,

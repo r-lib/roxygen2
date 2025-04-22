@@ -119,7 +119,7 @@ r6_fields <- function(block, r6data) {
   fields <- self$name[self$type == "field"]
   active <- self$name[self$type == "active"]
 
-  tags <- purrr::keep(
+  tags <- keep(
     block$tags,
     function(t) t$tag == "field" && ! t$val$name %in% active
   )
@@ -165,7 +165,7 @@ r6_active_bindings <- function(block, r6data) {
   fields <- self$name[self$type == "field"]
   active <- self$name[self$type == "active"]
 
-  tags <- purrr::keep(
+  tags <- keep(
     block$tags,
     function(t) t$tag == "field" && ! t$val$name %in% fields
   )
@@ -313,7 +313,7 @@ r6_method_begin <- function(block, method) {
 }
 
 r6_method_description <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], function(t) t$tag == "description")
+  det <- keep(method$tags[[1]], function(t) t$tag == "description")
   # Add an empty line between @description tags, if there isn't one
   # there already
   txt <- map_chr(det, "val")
@@ -340,7 +340,7 @@ r6_method_usage <- function(block, method) {
 }
 
 r6_method_details <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], function(t) t$tag == "details")
+  det <- keep(method$tags[[1]], function(t) t$tag == "details")
   # Add an empty line between @details tags, if there isn't one
   # there already
   txt <- map_chr(det, "val")
@@ -354,7 +354,7 @@ r6_method_details <- function(block, method) {
 }
 
 r6_method_params <- function(block, method) {
-  par <- purrr::keep(method$tags[[1]], function(t) t$tag == "param")
+  par <- keep(method$tags[[1]], function(t) t$tag == "param")
   nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
 
   # Each arg should appear exactly once
@@ -414,7 +414,7 @@ r6_method_params <- function(block, method) {
 }
 
 r6_method_return <- function(block, method) {
-  ret <- purrr::keep(method$tags[[1]], function(t) t$tag == "return")
+  ret <- keep(method$tags[[1]], function(t) t$tag == "return")
   if (length(ret) == 0) return()
   if (length(ret) > 1) {
     warn_roxy_block(block, "Must use one @return per R6 method")
@@ -428,7 +428,7 @@ r6_method_return <- function(block, method) {
 }
 
 r6_method_examples <- function(block, method) {
-  exa <- purrr::keep(method$tags[[1]], function(t) t$tag == "examples")
+  exa <- keep(method$tags[[1]], function(t) t$tag == "examples")
   if (length(exa) == 0) return()
 
   txt <- map_chr(exa, "val")
@@ -455,7 +455,7 @@ r6_all_examples <- function(block, methods) {
   unlist(lapply(
     seq_len(nrow(methods)),
     function(i) {
-      exa <- purrr::keep(methods$tags[[i]], function(t) t$tag == "examples")
+      exa <- keep(methods$tags[[i]], function(t) t$tag == "examples")
       if (length(exa) == 0) return()
       name <- paste0(block$object$alias, "$", r6_show_name(methods$name[i]))
       c(

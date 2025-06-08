@@ -22,7 +22,7 @@ This vignette discusses tags that help users finding documentation through cross
 
 ## See also
 
-`@seealso` allows you to point to other useful resources, either on the web (using a url) or to related functions (with a function link like `[function_name()])`.
+`@seealso` allows you to point to other useful resources, either on the web (using a url) or to related functions (with a function link like `[function_name()]`).
 For `sum()`, this might look like:
 
 ```{r}

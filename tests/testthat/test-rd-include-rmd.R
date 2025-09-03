@@ -297,6 +297,10 @@ test_that("useful warnings", {
     transform = function(x) {
       x <- gsub(path, "<temp-path.Rmd>", x, fixed = TRUE)
       x <- gsub("file.*\\.Rmd", "<another-temp-path.Rmd>", x)
+      line <- grep("~~~", x)[1]
+      if (!is.na(line)) {
+        x <- x[1:(line-1)]
+      }
       x
     }
   )

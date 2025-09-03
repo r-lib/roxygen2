@@ -19,7 +19,7 @@ extract_r6_data <- function(x) {
 }
 
 drop_clone_maybe <- function(x, data) {
-  if (! "clone" %in% names(x$public_methods)) {
+  if (! "clone" %in% names(.subset2(x, "public_methods"))) {
     cline <- which(data$members$name == "clone" & data$members$type == "method")
     if (length(cline)) data$members <- data$members[-cline, ]
   }
@@ -39,13 +39,14 @@ default_r6_methods <- function() {
 }
 
 extract_r6_methods <- function(x) {
-  method_nms <- setdiff(names(x$public_methods), default_r6_methods())
+  public_methods <- .subset2(x, "public_methods")
+  method_nms <- setdiff(names(public_methods), default_r6_methods())
   method_loc <- map_int(
-    x$public_methods[method_nms],
+    public_methods[method_nms],
     function(m) {
       ref <- utils::getSrcref(m)
       if (is.null(ref)) {
-        name <- x$classname %||% "unknown"
+        name <- .subset2(x, "classname") %||% "unknown"
 
         cli::cli_abort(
           c(
@@ -63,17 +64,17 @@ extract_r6_methods <- function(x) {
     }
   )
   method_fnm <- map_chr(
-    x$public_methods[method_nms],
+    public_methods[method_nms],
     function(m) {
       utils::getSrcFilename(utils::getSrcref(m))
     }
   )
-  method_formals <- map(x$public_methods[method_nms], formals)
+  method_formals <- map(public_methods[method_nms], formals)
 
   methods <- data.frame(
     stringsAsFactors = FALSE,
     type = if (length(method_loc)) "method" else character(),
-    class = if (length(method_loc)) x$classname %||% NA_character_ else character(),
+    class = if (length(method_loc)) .subset2(x, "classname") %||% NA_character_ else character(),
     name = unname(method_nms),
     file = unname(method_fnm),
     line = unname(method_loc),
@@ -84,7 +85,7 @@ extract_r6_methods <- function(x) {
 }
 
 add_default_method_data <- function(obj, methods) {
-  pubm <- obj$public_methods
+  pubm <- .subset2(obj, "public_methods")
   defaults <- list(
     clone = list(
       formals = if ("clone" %in% names(pubm)) I(list(formals(pubm$clone)))
@@ -93,11 +94,12 @@ add_default_method_data <- function(obj, methods) {
 
   for (mname in names(defaults)) {
     if (mname %in% methods$name) next
-    if (! mname %in% names(obj$public_methods)) next
+    if (! mname %in% names(pubm)) next
     rec <- data.frame(
       stringsAsFactors = FALSE,
       type = defaults[[mname]]$type %||% "method",
-      class = defaults[[mname]]$class %||% obj$classname %||% "unknown",
+      class = defaults[[mname]]$class %||%
+        .subset2(obj, "classname") %||% "unknown",
       name = defaults[[mname]]$name %||% mname,
       file = defaults[[mname]]$file %||% NA_character_,
       line = defaults[[mname]]$line %||% NA_integer_,
@@ -110,12 +112,12 @@ add_default_method_data <- function(obj, methods) {
 }
 
 extract_r6_fields <- function(x) {
-  field_nms <- names(x$public_fields)
+  field_nms <- names(.subset2(x, "public_fields"))
   data.frame(
     stringsAsFactors = FALSE,
     type = rep("field", length(field_nms)),
     name = as.character(field_nms),
-    class = rep(x$classname %||% NA_character_, length(field_nms)),
+    class = rep(.subset2(x, "classname") %||% NA_character_, length(field_nms)),
     file = rep(NA, length(field_nms)),
     line = rep(NA, length(field_nms)),
     formals = I(replicate(length(field_nms), NULL))
@@ -123,12 +125,12 @@ extract_r6_fields <- function(x) {
 }
 
 extract_r6_bindings <- function(x) {
-  bind_nms <- names(x$active)
+  bind_nms <- names(.subset2(x, "active"))
   data.frame(
     stringsAsFactors = FALSE,
     type = if (length(bind_nms)) "active" else character(),
     name = as.character(bind_nms),
-    class = rep(x$classname %||% NA_character_, length(bind_nms)),
+    class = rep(.subset2(x, "classname") %||% NA_character_, length(bind_nms)),
     file = rep(NA, length(bind_nms)),
     line = rep(NA, length(bind_nms)),
     formals = I(replicate(length(bind_nms), NULL))
@@ -136,15 +138,15 @@ extract_r6_bindings <- function(x) {
 }
 
 extract_r6_super_data <- function(x) {
-  if (is.null(x$inherit)) return()
-  super <- x$get_inherit()
+  if (is.null(.subset2(x, "inherit"))) return()
+  super <- .subset2(x, "get_inherit")()
   super_data <- extract_r6_super_data(super)
 
-  method_nms <- names(super$public_methods)
-  field_nms <- names(super$public_fields)
-  active_nms <- names(super$active)
-  classname <- super$classname %||% NA_character_
-  pkg <- environmentName(topenv(super$parent_env))
+  method_nms <- names(.subset2(super, "public_methods"))
+  field_nms <- names(.subset2(super, "public_fields"))
+  active_nms <- names(.subset2(super, "active"))
+  classname <- .subset2(super, "classname") %||% NA_character_
+  pkg <- environmentName(topenv(.subset2(super, "parent_env")))
 
   cls <- rbind(
     data.frame(
@@ -160,7 +162,7 @@ extract_r6_super_data <- function(x) {
     c(length(method_nms), length(field_nms), length(active_nms))
   )
   rsort <- function(x) sort_c(x, decreasing = TRUE)
-  names <-c(rsort(method_nms), rsort(field_nms), rsort(active_nms))
+  names <- c(rsort(method_nms), rsort(field_nms), rsort(active_nms))
   mth <- rbind(
     data.frame(
       stringsAsFactors = FALSE,

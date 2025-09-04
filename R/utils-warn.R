@@ -15,8 +15,8 @@ warn_roxy_block <- function(block, message, parent = NULL, envir = parent.frame(
 
 warn_roxy_function <- function(fun, message, parent = NULL, envir = parent.frame()) {
   srcref <- attr(fun, "srcref")
-  file <- attr(srcref, "srcfile")$filename
-  line <- as.vector(srcref)[[1]]
+  file <- attr(srcref, "srcfile")$filename %||% '<unknown-file>'
+  line <- as.vector(srcref)[[1]] %||% 0
 
   warn_roxy(file, line, message, parent = parent, envir = envir)
 }

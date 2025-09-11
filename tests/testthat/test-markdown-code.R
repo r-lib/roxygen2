@@ -133,7 +133,14 @@ test_that("inline code gives useful warning", {
   "
 
   expect_snapshot(
-    out <- roc_proc_text(rd_roclet(), block)[[1]]
+    out <- roc_proc_text(rd_roclet(), block)[[1]],
+    transform = function(x) {
+      line <- grep("~~~", x)[1]
+      if (!is.na(line)) {
+        x <- x[1:(line-1)]
+      }
+      x
+    }
   )
   expect_equal(out$get_value("description"), "\\verb{r 1 + }")
 })

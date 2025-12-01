@@ -208,7 +208,7 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
 
   if (identical(x$val, "")) {
     if (!inherits(obj, "s3method")) {
-      warn_roxy_tag(x, "must be used with an known S3 method")
+      warn_roxy_tag(x, "must be used with a known S3 method")
       return()
     }
 

@@ -232,7 +232,8 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL, state = NULL) 
       "Once {.val {topic}} is documented, this warning goes away."),
     "i" = "Make sure that the name of the topic is spelled correctly.",
     "i" = "Always list the linked package as a dependency.",
-    "i" = "Alternatively, you can fully qualify the link with a package name."
+    "i" = "Alternatively, you can fully qualify the link with a package name.",
+    "i" = if (grepl("%", topic, fixed = TRUE)) "Note that links to operator help pages (with '%') in markdown are not supported."
   ))
 
   NA_character_

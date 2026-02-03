@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* For person defintions `DESCRIPTION`, the comment argument can now contain an arbitrary number of elements, and the names of these elements are included in the resulting string representation (@jranke, #1746)
+
 # roxygen2 7.3.3
 
 * Package documentation now converts ROR IDs into a useful link (#1698, @maelle).

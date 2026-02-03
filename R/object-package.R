@@ -78,7 +78,13 @@ author_desc <- function(x) {
     }
 
     if (length(x$comment) > 0) {
-      desc <- paste0(desc, " (", x$comment, ")")
+      desc <- paste0(desc, " (",
+        paste(
+          ifelse(nzchar(names(x$comment)),
+            paste0(names(x$comment), ": ", x$comment),
+            x$comment),
+            collapse = ", "),
+      ")")
     }
   }
 

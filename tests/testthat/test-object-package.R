@@ -102,3 +102,11 @@ test_that("multiple email addresses for a person are acceptable #1487", {
     "me \\email{one@email.me, two@email.me}"
   )
 })
+
+test_that("Arbitrary comments for a person are acceptable #1746", {
+  me <- person("me", comment = c(acronym = "m", "contributed X"))
+  expect_equal(
+    author_desc(unclass(me)[[1]]),
+    "me (acronym: m, contributed X)"
+  )
+})

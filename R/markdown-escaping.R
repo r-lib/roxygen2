@@ -177,7 +177,7 @@ find_all_rd_tags <- function(text) {
 
 find_all_tag_names <- function(text) {
   ## Find the tags without arguments first
-  tag_pos <- str_locate_all(text, "\\\\[a-zA-Z][a-zA-Z0-9]*")[[1]]
+  tag_pos <- str_locate_all(text, r"(\\[a-zA-Z][a-zA-Z0-9]*)")[[1]]
 
   data.frame(
     tag = str_sub(text, tag_pos[, "start"], tag_pos[, "end"]),
@@ -281,10 +281,10 @@ make_random_string <- function(length = 32) {
 #' "\"" # double quote
 #' '\'' # single quote
 double_escape_md <- function(text) {
-  text <- gsub("\\", "\\\\", text, fixed = TRUE)
+  text <- gsub(r"(\)", r"(\\)", text, fixed = TRUE)
 
   # De-dup escaping used to avoid [] creating a link
-  text <- gsub("\\\\[", "\\[", text, fixed = TRUE)
-  text <- gsub("\\\\]", "\\]", text, fixed = TRUE)
+  text <- gsub(r"(\\[)", r"(\[)", text, fixed = TRUE)
+  text <- gsub(r"(\\])", r"(\])", text, fixed = TRUE)
   text
 }

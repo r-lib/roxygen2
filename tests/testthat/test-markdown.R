@@ -78,15 +78,15 @@ test_that("code block with language creates HTML tag", {
 })
 
 test_that("inline code escapes %", {
-  expect_equal(markdown("`5%`"), "\\verb{5\\%}")
-  expect_equal(markdown("`'5%'`"), "\\code{'5\\%'}")
-  expect_equal(markdown("`%*%`"), "\\code{\\%*\\%}")
+  expect_equal(markdown("`5%`"), r"(\verb{5\%})")
+  expect_equal(markdown("`'5%'`"), r"(\code{'5\%'})")
+  expect_equal(markdown("`%*%`"), r"(\code{\%*\%})")
 })
 
 test_that("inline verbatim escapes Rd special chars", {
-  expect_equal(markdown("`{`"), "\\verb{\\{}")
-  expect_equal(markdown("`}`"), "\\verb{\\}}")
-  expect_equal(markdown("`\\`"), "\\verb{\\\\}")
+  expect_equal(markdown("`{`"), r"(\verb{\{})")
+  expect_equal(markdown("`}`"), r"(\verb{\}})")
+  expect_equal(markdown("`\\`"), r"(\verb{\\})")
 })
 
 test_that("special operators get \\code{}, not \\verb{}", {
@@ -103,7 +103,7 @@ test_that("inline code works with < and >", {
   "
   )[[1]]
 
-  expect_equal(out$get_value("title"), "\\verb{SELECT <name> FROM <table>}")
+  expect_equal(out$get_value("title"), r"(\verb{SELECT <name> FROM <table>})")
 })
 
 
@@ -476,15 +476,15 @@ test_that("markdown emphasis is ok", {
     #' @md
     foo <- function() {}"
   )[[1]]
-  desc1 <- "Description with some \\emph{keywords} included.
-So far so good. \\preformatted{ *these are not
+  desc1 <- r"(Description with some \emph{keywords} included.
+So far so good. \preformatted{ *these are not
   emphasised*. Or are they?
-}"
+})"
   expect_equal(out1$get_section("description")[[2]], desc1)
 })
 
 test_that("% is automatically escaped", {
-  expect_equal(markdown("5%"), "5\\%")
+  expect_equal(markdown("5%"), r"(5\%)")
 })
 
 test_that("Escaping is kept", {
@@ -584,7 +584,10 @@ test_that("level >2 markdown headings work in @description", {
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
     out$get_value("description"),
-    "\\subsection{This is good}{\n\nyes\n}"
+    r"(\subsection{This is good}{
+
+yes
+})"
   )
 })
 
@@ -605,7 +608,13 @@ test_that("level >2 markdown headings work in @details", {
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
     out$get_value("details"),
-    "\\subsection{Heading 2}{\n\\subsection{Heading 3}{\n\nText.\n}\n\n}"
+    r"(\subsection{Heading 2}{
+\subsection{Heading 3}{
+
+Text.
+}
+
+})"
   )
 })
 
@@ -625,7 +634,11 @@ test_that("level >2 markdown headings work in @return", {
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
     out$get_value("value"),
-    "Even this\n\\subsection{Can have a subsection.}{\n\nYes.\n}"
+    r"(Even this
+\subsection{Can have a subsection.}{
+
+Yes.
+})"
   )
 })
 

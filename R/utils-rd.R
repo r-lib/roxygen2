@@ -26,8 +26,8 @@ escape.character <- function(x) {
   # wrap_usage uses \u{A0}, the unicode non-breaking space, which
   # is not necessarily valid in windows locales. useBytes is a quick
   # hack to fix the problem.
-  x1 <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
-  x2 <- gsub("%", "\\%", x1, fixed = TRUE, useBytes = TRUE)
+  x1 <- gsub(r"(\)", r"(\\)", x, fixed = TRUE, useBytes = TRUE)
+  x2 <- gsub("%", r"(\%)", x1, fixed = TRUE, useBytes = TRUE)
 
   rd(x2)
 }

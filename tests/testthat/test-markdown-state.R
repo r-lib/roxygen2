@@ -38,7 +38,7 @@ test_that("turning on/off markdown globally", {
   )[[1]]
   expect_equal(
     out1$get_value("description"),
-    "Description with some \\code{code} included. \\verb{More code.}"
+    r"(Description with some \code{code} included. \verb{More code.})"
   )
 })
 
@@ -68,7 +68,7 @@ test_that("turning on/off markdown locally", {
   )[[1]]
   expect_equal(
     out1$get_value("description"),
-    "Description with some \\code{code} included. \\verb{More code.}"
+    r"(Description with some \code{code} included. \verb{More code.})"
   )
 
   local_roxy_meta_set("markdown", TRUE)
@@ -98,7 +98,7 @@ test_that("turning on/off markdown locally", {
   )[[1]]
   expect_equal(
     out1$get_value("description"),
-    "Description with some \\code{code} included. \\verb{More code.}"
+    r"(Description with some \code{code} included. \verb{More code.})"
   )
 })
 

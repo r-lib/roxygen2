@@ -423,7 +423,7 @@ mdxml_table <- function(xml, state) {
   rows <- xml_find_all(xml, "d1:table_row|d1:table_header")
   cells <- map(rows, xml_find_all, "d1:table_cell")
 
-  cells_rd <- map(cells, ~ map(.x, mdxml_children_to_rd, state = state))
+  cells_rd <- map(cells, \(x) map(x, mdxml_children_to_rd, state = state))
   rows_rd <- map_chr(cells_rd, paste0, collapse = " \\tab ")
 
   paste0(

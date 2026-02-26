@@ -70,7 +70,7 @@ rd_macro <- function(field, ..., space = FALSE) {
 # Input -------------------------------------------------------------------
 
 get_tags <- function(rd, tag) {
-  Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)
+  Filter(\(x) identical(attr(x, "Rd_tag"), tag), rd)
 }
 
 # helpers -----------------------------------------------------------------
@@ -95,7 +95,7 @@ make_as_character_rd <- function() {
   body <- body(fn)
   idx <- purrr::detect_index(
     body,
-    ~ is_call(.x, "<-", 2) && is_symbol(.x[[2]], "TWOARG")
+    \(x) is_call(x, "<-", 2) && is_symbol(x[[2]], "TWOARG")
   )
   if (idx == 0) {
     return(fn)

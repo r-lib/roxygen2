@@ -97,7 +97,7 @@ namespace_imports_blocks <- function(srcref) {
 
   import_tags <- c(import_directives, "rawNamespace")
   tokens_filtered <- lapply(tokens, function(tokens) {
-    tokens[map_lgl(tokens, function(x) x$tag %in% import_tags)]
+    tokens[map_lgl(tokens, \(x) x$tag %in% import_tags)]
   })
 
   compact(lapply(tokens_filtered, function(tokens) {
@@ -117,9 +117,7 @@ namespace_exports <- function(path) {
   is_import_directive <- function(x) is_call(x, import_directives)
   export_lines <- attr(parsed, "srcref")[!map_lgl(parsed, is_import_directive)]
   # Each multiline directives are a single element so they're sorted correctly
-  unlist(lapply(export_lines, function(x) {
-    paste(as.character(x), collapse = "\n")
-  }))
+  unlist(lapply(export_lines, \(x) paste(as.character(x), collapse = "\n")))
 }
 
 # NAMESPACE generation ----------------------------------------------------
@@ -408,7 +406,7 @@ warn_missing_s3_exports <- function(blocks, env) {
     block_has_tags,
     c("export", "exportS3Method")
   )]
-  s3objects <- map(blocks, function(block) block$object$value)
+  s3objects <- map(blocks, \(block) block$object$value)
   s3functions <- Filter(is.function, s3objects)
 
   undocumented <- methods[!methods %in% s3functions]

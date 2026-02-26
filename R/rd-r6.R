@@ -350,7 +350,7 @@ r6_method_begin <- function(block, method) {
 }
 
 r6_method_description <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], function(t) t$tag == "description")
+  det <- purrr::keep(method$tags[[1]], \(t) t$tag == "description")
   # Add an empty line between @description tags, if there isn't one
   # there already
   txt <- map_chr(det, "val")
@@ -378,7 +378,7 @@ r6_method_usage <- function(block, method) {
 }
 
 r6_method_details <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], function(t) t$tag == "details")
+  det <- purrr::keep(method$tags[[1]], \(t) t$tag == "details")
   # Add an empty line between @details tags, if there isn't one
   # there already
   txt <- map_chr(det, "val")
@@ -394,7 +394,7 @@ r6_method_details <- function(block, method) {
 }
 
 r6_method_params <- function(block, method) {
-  par <- purrr::keep(method$tags[[1]], function(t) t$tag == "param")
+  par <- purrr::keep(method$tags[[1]], \(t) t$tag == "param")
   nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
 
   # Each arg should appear exactly once
@@ -464,7 +464,7 @@ r6_method_params <- function(block, method) {
 }
 
 r6_method_return <- function(block, method) {
-  ret <- purrr::keep(method$tags[[1]], function(t) t$tag == "return")
+  ret <- purrr::keep(method$tags[[1]], \(t) t$tag == "return")
   if (length(ret) == 0) {
     return()
   }
@@ -480,7 +480,7 @@ r6_method_return <- function(block, method) {
 }
 
 r6_method_examples <- function(block, method) {
-  exa <- purrr::keep(method$tags[[1]], function(t) t$tag == "examples")
+  exa <- purrr::keep(method$tags[[1]], \(t) t$tag == "examples")
   if (length(exa) == 0) {
     return()
   }
@@ -512,7 +512,7 @@ r6_all_examples <- function(block, methods) {
   unlist(lapply(
     seq_len(nrow(methods)),
     function(i) {
-      exa <- purrr::keep(methods$tags[[i]], function(t) t$tag == "examples")
+      exa <- purrr::keep(methods$tags[[i]], \(t) t$tag == "examples")
       if (length(exa) == 0) {
         return()
       }

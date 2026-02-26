@@ -63,7 +63,7 @@ roclet_output.roclet_rd <- function(
   contents <- map_chr(results, format)
   paths <- file.path(man, names(results))
 
-  names <- unname(map_chr(results, ~ .$get_name()[[1]]))
+  names <- unname(map_chr(results, \(x) x$get_name()[[1]]))
   if (length(names) > 0) {
     commands <- paste0("pkgload::dev_help('", names, "')")
   } else {

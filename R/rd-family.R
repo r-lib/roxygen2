@@ -55,7 +55,7 @@ topics_process_family <- function(topics, env) {
       }
 
       other_aliases <- aliases[others]
-      other_aliases_order <- map_chr(other_aliases, function(x) escape(x[1]))
+      other_aliases_order <- map_chr(other_aliases, \(x) escape(x[1]))
 
       by_file <- map_chr(
         other_aliases[order_c(other_aliases_order)],

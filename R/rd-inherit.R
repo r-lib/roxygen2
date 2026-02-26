@@ -57,7 +57,7 @@ merge.rd_section_inherit <- function(x, y, ...) {
   dedup <- collapse(
     c(x$value$source, y$value$source),
     c(x$value$fields, y$value$fields),
-    function(x) Reduce(union, x)
+    \(x) Reduce(union, x)
   )
 
   rd_section("inherit", list(source = dedup$key, fields = dedup$value))
@@ -109,7 +109,7 @@ merge.rd_section_inherit_dot_params <- function(x, y, ...) {
 
 topics_process_inherit <- function(topics, env) {
   inherits <- function(type) {
-    function(x) x$inherits_from(type)
+    \(x) x$inherits_from(type)
   }
 
   topics$topo_apply(
@@ -219,11 +219,11 @@ inherit_dot_params <- function(topic, topics, env) {
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
   arg_matches <- function(args, docs) {
-    match <- map_lgl(docs, function(x) all(x$name %in% args))
+    match <- map_lgl(docs, \(x) all(x$name %in% args))
     matched <- docs[match]
     setNames(
       lapply(matched, "[[", "value"),
-      map_chr(matched, function(x) paste(x$name, collapse = ","))
+      map_chr(matched, \(x) paste(x$name, collapse = ","))
     )
   }
   docs_selected <- unlist(map2(args, docs, arg_matches))
@@ -304,8 +304,8 @@ topic_params <- function(x) {
     }
     items <- get_tags(arguments[[1]], "\\item")
 
-    values <- map_chr(items, function(y) rd2text(y[[2]], attr(x, "package")))
-    params <- map_chr(items, function(y) rd2text(y[[1]], attr(x, "package")))
+    values <- map_chr(items, \(y) rd2text(y[[2]], attr(x, "package")))
+    params <- map_chr(items, \(y) rd2text(y[[1]], attr(x, "package")))
 
     setNames(values, params)
   } else {

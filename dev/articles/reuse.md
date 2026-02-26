@@ -1,0 +1,404 @@
+# Reusing documentation
+
+roxygen2 provides several ways to avoid repeating yourself in code
+documentation, while assembling information from multiple places in one
+documentation file:
+
+- Combine documentation for closely related functions into a single file
+  with `@describeIn` or `@rdname`.
+
+- Automatically copy tags with `@inheritParams`, `@inheritSection`, or
+  `@inherit`.
+
+- Use functions to generate repeated text with inline R code.
+
+- Share text between documentation and vignettes with child documents.
+
+The chapter concludes by showing you how to update superseded reuse
+mechanisms that we no longer recommend: `@includeRmd`,
+`@eval`/`@evalRd`, and `@template`.
+
+## Multiple functions in the same topic
+
+You can document multiple functions in the same file by using either
+`@rdname` or `@describeIn` tag. It’s a technique best used with care:
+documenting too many functions in one place leads to confusion. Use it
+when all functions have the same (or very similar) arguments.
+
+### `@rdname`
+
+Use `@rdname <destination>`[¹](#fn1) to include multiple functions in
+the same page. Tags (e.g. `@title`, `@description`, `@examples`) will be
+combined, across blocks but often this yields text that is hard to
+understand. So we recommend that you make one block that contains the
+title, description, common parameters, examples and so on, and then only
+document individual parameters in the other blocks.
+
+There are two basic ways to do that. You can create a standalone
+documentation block and then add the functions to it. This typically
+works best when you have a family of related functions and you want to
+link to that family from other functions (i.e. `trig` in the examples
+below).
+
+``` r
+#' Trigonometric approximations
+#' @param x Input, in radians.
+#' @name trig
+NULL
+#> NULL
+
+#' @rdname trig
+#' @export
+sin_ish <- function(x) x - x^3 / 6
+
+#' @rdname trig
+#' @export
+cos_ish <- function(x) 1 - x^2 / 2
+
+#' @rdname trig
+#' @export
+tan_ish <- function(x) x + x^3 / 3
+```
+
+Alternatively, you can add docs to an existing function. This tends to
+work better if you have a “primary” function with some variants or some
+helpers.
+
+``` r
+#' Logarithms
+#' 
+#' @param x A numeric vector
+#' @export
+log <- function(x, base) ...
+
+#' @rdname log
+#' @export
+log2 <- function(x) log(x, 2)
+
+#' @rdname log
+#' @export
+ln <- function(x) log(x, exp(1))
+```
+
+### `@describeIn`
+
+An alternative to `@rdname` is `@describeIn`. It has a slightly
+different syntax because as well as a topic name, you also provide a
+brief description for the function, like
+`@describein topic one sentence description`. The primary difference
+between `@rdname` and `@describeIn`, is that `@describeIn` creates a new
+section containing a bulleted list of each function, along with its
+description. It uses a number of heuristics to determine the heading of
+this section, depending on if you’re documenting related functions,
+methods for a generic, or methods for a class.
+
+In general, I no longer recommend `@describeIn` because I don’t think
+the heuristics it uses are as good as a thoughtful hand-crafted summary.
+If you’re currently using `@describeIn`, you can generally replace it
+with `@rdname`, as long as you give some thought to the
+multiple-function `@description`.
+
+### Order of includes
+
+By default, roxygen blocks are processed in the order in which they
+appear in the file. When you’re combining multiple files, this can
+sometimes cause the function usage to appear in a suboptimal order. You
+can override the default ordering with `@order`. For example, the
+following the block would place `times` first in `arith.Rd` because 1
+comes before 2.
+
+``` r
+#' @rdname arith
+#' @order 2
+add <- function(x, y) x + y
+
+#' @rdname arith
+#' @order 1
+times <- function(x, y) x * y
+```
+
+## Automatically copy tags
+
+If two or more functions share have similarities but are different or
+complex enough that you don’t want to document them in a single file,
+you can use one of the four `@inherit` tags to automatically copy
+various components from another topic:
+
+- `@inheritParams foo` will copy `@param` contents from `foo`.
+- `@inherit foo` will copy all supported components from `foo`.
+- `@inheritSection foo {Section title}` will copy the
+  `@section {Section title}` section from `foo`.
+- `@inheritDotParams foo` will generate documentation for `…` by copying
+  the documentation for `foo()`’s arguments.
+
+We think of this as “inheritance” rather than just copying, because
+anything you inherit can be overridden by a more specific definition in
+the documentation. This applies particularly to `@inheritParams` which
+allows you to copy the documentation for some parameters while
+documenting others directly. We’ll focus on this first.
+
+### Parameters
+
+The oldest, and most frequently used, inherits tag is `@inheritParams`.
+It’s particularly useful when multiple functions use the same argument
+name for the same task, as you can document the argument once, then
+inherit those docs elsewhere. For example, take the dplyr functions
+`arrange()`, `mutate()`, and `summarise()` which all have an argument
+called `.data`. `arrange()` is documented like so:
+
+``` r
+#' @param .data A data frame, data frame extension (e.g. a tibble), or a
+#'   lazy data frame (e.g. from dbplyr or dtplyr). See *Methods*, below, for
+#'   more details.
+#' @param ... <[`data-masking`][rlang::args_data_masking]> Variables, or
+#'   functions of variables. Use [desc()] to sort a variable in descending
+#'   order.
+arrange <- function(.data, ...) {}
+```
+
+Then `mutate()` and `summarise()` don’t need to provide `@param .data`
+but can instead inherit the documentation from `arrange()`:
+
+``` r
+#' @inheritParams arrange
+mutate <- function(.data, ...) {}
+
+#' @inheritParams arrange
+summarise <- function(.data, ...) {}
+```
+
+If this was all you wrote it wouldn’t be quite right because `mutate()`
+and `summarise()` would also inherit the documentation for `...`, which
+has a different interpretation in these functions. So, for example,
+`mutate()` provides its own definition for `...`:
+
+``` r
+#' @inheritParams arrange
+#' @param ... <[`data-masking`][rlang::args_data_masking]> Name-value pairs.
+#'   The name gives the name of the column in the output.
+#'
+#'   The value can be:
+#'
+#'   * A vector of length 1, which will be recycled to the correct length.
+#'   * A vector the same length as the current group (or the whole data frame
+#'     if ungrouped).
+#'   * `NULL`, to remove the column.
+#'   * A data frame or tibble, to create multiple columns in the output.
+mutate <- function(.data, ...) {}
+```
+
+Note that only the documentation for arguments with the same names are
+inherited. For example, `arrange()` also has a `.by_group` argument.
+Since no other function in dplyr has an argument with this name, its
+documentation will never be inherited.
+
+### Multiple parameters
+
+Sometimes you document two (or more) tightly coupled parameters
+together. For example, `dplyr::left_join()` has:
+
+``` r
+#' @param x,y A pair of data frames, data frame extensions (e.g. a tibble), or
+#'   lazy data frames (e.g. from dbplyr or dtplyr). See *Methods*, below, for
+#'   more details.
+```
+
+When joint parameter documentation is inherited, it’s all or nothing,
+i.e. if a function has `@inheritParams left_join` it will only inherit
+the documentation for `x` and `y` if it has both `x` and `y` arguments
+and neither is documented by the inheriting function.
+
+### The dot prefix
+
+Many tidyverse functions that accept named arguments in `...` also use a
+`.` prefix for their own arguments. This reduces the risk of an argument
+going to the wrong place. For example, `dplyr::mutate()` has `.by`,
+`.keep`, `.before`, and `.after` arguments, because if they didn’t have
+that prefix, you wouldn’t be able to create new variables called `by`,
+`keep`, `before`, or `after`. We call this pattern the [dot
+prefix](https://design.tidyverse.org/dots-prefix.html).
+
+This means that an argument with the same meaning can come in one of two
+forms: with and without the `.`. `@inheritParams` knows about this
+common pattern so ignores a `.` prefix when matching argument name. In
+other words, `.x` will inherit documentation for `x`, and `x` will
+inherit documentation from `.x`.
+
+### Inheriting other components
+
+You can use `@inherits foo` to inherit the documentation for every
+supported tag from another topic. Currently, `@inherits` supports
+inheriting the following tags: `params`, `return`, `title`,
+`description`, `details`, `seealso`, `sections`, `references`,
+`examples`, `author`, `source`, `note`, `format`.
+
+By supplying a space separated list of components after the function
+name, you can also choose to inherit only selected components. For
+example, `@inherit foo returns` would just inherit the `@returns` tag,
+and `@inherit foo seealso source` would inherit the `@seealso` and
+`@source` tags.
+
+`@inherit foo sections` will inherit *every* `@section` tag (which can
+also be specified in markdown by using the top-level heading spec, `#`).
+To inherit a *specific* section from another function, use
+`@inheritSection foo Section title`. For example, all the “adverbs” in
+purrr use `#' @inheritSection safely Adverbs` to inherit a standard
+section that provides advice on using an adverb in package code.
+
+### Documenting `...`
+
+When your function passes `...` on to another function, it can be useful
+to inline the documentation for some of the most common arguments. This
+technique is inspired by the documentation for
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html), where `...`
+can take any graphical parameter;
+[`?plot`](https://rdrr.io/r/graphics/plot.default.html) describes some
+of the most common arguments so that you don’t have to look them up in
+[`?par`](https://rdrr.io/r/graphics/par.html).
+
+`@inheritDotParams` has two components: the function to inherit from and
+the arguments to inherit. Since you’ll typically only want to document
+the most important arguments, `@inheritDotParams` comes with a flexible
+specification for argument selection inspired by `dplyr::select()`:
+
+- `@inheritDotParams foo` takes all parameters from `foo()`.
+- `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all
+  parameters between `e` and `h`.
+- `@inheritDotParams foo -x -y` takes all parameters except for `x` and
+  `y`.
+
+### Inheriting from other packages
+
+It’s most common to inherit from other documentation topics within the
+current package, but roxygen2 also supports inheriting documentation
+from other packages by using `package::function` syntax, e.g.:
+
+- `@inheritParams package::function`
+
+- `@inherit package::function`
+
+- `@inheritSection package::function Section title`
+
+- `@inheritDotParams package::function`
+
+When inheriting documentation from another package bear in mind that
+you’re now taking a fairly strong dependency on an external package, and
+to ensure every developer produces the same documentation you’ll need to
+make sure that they all have the same version of the package installed.
+And if the package changes the name of the topic or section, your
+documentation will require an update. For those reasons, this technique
+is best used sparingly.
+
+## Inline code
+
+To insert code inline, enclose it in `` `r ` ``. Roxygen will interpret
+the rest of the text within backticks as R code and evaluate it, and
+replace the backtick expression with its value. Here’s a simple example:
+
+``` r
+#' Title `r 1 + 1`
+#'
+#' Description `r 2 + 2`
+foo <- function() NULL
+```
+
+This is equivalent to writing:
+
+``` r
+#' Title 2
+#'
+#' Description 4
+foo <- function() NULL
+```
+
+The resulting text, together with the whole tag is interpreted as
+markdown, as usual. This means that you can use R to dynamically write
+markdown. For example if you defined this function in your package:
+
+``` r
+alphabet <- function(n) {
+  paste0("`", letters[1:n], "`", collapse = ", ")
+}
+```
+
+You could then write:
+
+``` r
+#' Title
+#' 
+#' @param x A string. Must be one of `r alphabet(5)`
+foo <- function(x) NULL
+```
+
+The result is equivalent to writing the following by hand:
+
+``` r
+#' Title
+#' 
+#' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`
+foo <- function(x) NULL
+```
+
+This is a powerful technique for reducing duplication because you can
+flexibly parameterise the function however best meets your needs. Note
+that the evaluation environment is deliberately a child of the package
+that you’re documenting so you can call internal functions.
+
+## Child documents
+
+You can use the same `.Rmd` or `.md` document in the documentation,
+`README.Rmd`, and vignettes by using child documents:
+
+    ```{r child = "common.Rmd"}
+    ```
+
+The included Rmd file can have roxygen Markdown-style links to other
+help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual
+page of the `roxygenize` function in roxygen2. See
+[`vignette("rd-formatting")`](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md)
+for details.
+
+If the Rmd file contains roxygen (Markdown-style) links to other help
+topics, then some care is needed, as those links will not work in Rmd
+files by default. A workaround is to specify external HTML links for
+them. These external locations will *not* be used for the manual which
+instead always links to the help topics in the manual. Example:
+
+    See also the [roxygen2::roxygenize()] function.
+
+    [roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html
+
+This example will link to the supplied URLs in HTML / Markdown files and
+it will link to the `roxygenize` help topic in the manual.
+
+Note that if you add external link targets like these, then roxygen will
+emit a warning about these link references being defined multiple times
+(once externally, and once to the help topic). This warning originates
+in Pandoc, and it is harmless.
+
+## Superseded
+
+Over the years, we have experimented with a number of other ways to
+reduce duplication across documentation files. A number of these are now
+superseded and we recommend changing them to use the techniques
+described above:
+
+- Instead of `@includeRmd man/rmd/example.Rmd`, use a child document.
+
+- Instead of `@eval` or `@evalRd`, use inline R code.
+
+- Instead of `@template` and `@templateVars` write your own function and
+  call it from inline R code.
+
+Inline R markdown can only generate markdown text within a tag so in
+principle it is less flexible than `@eval`/`@evalRd`/`@template`.
+However, our experience has revealed that generating multiple tags at
+once tends to be rather inflexible, and you often end up refactoring
+into smaller pieces so we don’t believe this reflects a real loss of
+functionality.
+
+------------------------------------------------------------------------
+
+1.  The destination is a topic name. There’s a one-to-one correspondence
+    between topic names and `.Rd` files where a topic called `foo` will
+    produce a file called `man/foo.Rd`.

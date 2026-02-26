@@ -1,0 +1,224 @@
+# roxygen2
+
+The premise of roxygen2 is simple: describe your functions in comments
+next to their definitions and roxygen2 will process your source code and
+comments to automatically generate `.Rd` files in `man/`, `NAMESPACE`,
+and, if needed, the `Collate` field in `DESCRIPTION`.
+
+## Installation
+
+``` r
+# Install roxygen2 from CRAN
+install.packages("roxygen2")
+
+# Or the development version from GitHub:
+# install.packages("pak")
+pak::pak("r-lib/roxygen2")
+```
+
+## Usage
+
+The premise of roxygen2 is simple: describe your functions in comments
+next to their definitions and roxygen2 will process your source code and
+comments to produce Rd files in the `man/` directory. Here’s a [simple
+example](https://stringr.tidyverse.org/reference/str_length.html) from
+the stringr package:
+
+``` r
+#' The length of a string
+#'
+#' Technically this returns the number of "code points", in a string. One
+#' code point usually corresponds to one character, but not always. For example,
+#' an u with a umlaut might be represented as a single character or as the
+#' combination a u and an umlaut.
+#'
+#' @inheritParams str_detect
+#' @return A numeric vector giving number of characters (code points) in each
+#'    element of the character vector. Missing string have missing length.
+#' @seealso [stringi::stri_length()] which this function wraps.
+#' @export
+#' @examples
+#' str_length(letters)
+#' str_length(NA)
+#' str_length(factor("abc"))
+#' str_length(c("i", "like", "programming", NA))
+str_length <- function(string) {
+}
+```
+
+When you
+[`roxygenise()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+(or `devtools::document()`) your package these comments will be
+automatically transformed to the `.Rd` that R uses to generate the
+documentation you see when you type `?str_length`.
+
+## Learn more
+
+To get started, first read
+[`vignette("roxygen2")`](https://roxygen2.r-lib.org/dev/articles/roxygen2.md).
+Then read more about the specific package component that you want to
+generate:
+
+- Start with
+  [`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md) to
+  learn how document your functions with roxygen2.
+
+- [`vignette("rd-other")`](https://roxygen2.r-lib.org/dev/articles/rd-other.md)
+  discusses how to document other things like datasets, the package
+  itself, and the various pieces used by R’s OOP systems.
+
+- [`vignette("rd-formatting")`](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md)
+  gives the details of roxygen2’s rmarkdown support.
+
+- [`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md)
+  demonstrates the tools available to reuse documentation in multiple
+  places.
+
+- [`vignette("namespace")`](https://roxygen2.r-lib.org/dev/articles/namespace.md)
+  describes how to generate a `NAMESPACE` file, how namespacing works in
+  R, and how you can use roxygen2 to be specific about what your package
+  needs and supplies.
+
+- For the `Collate` field in the `DESCRIPTION`, see `?update_collate()`.
+
+# Package index
+
+## Tags
+
+- [`tags-index-crossref`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  [`@aliases`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  [`@backref`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  [`@concept`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  [`@family`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  [`@keywords`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  [`@references`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  [`@seealso`](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
+  : Tags for indexing and cross-references
+
+- [`tags-namespace`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@evalNamespace`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@export`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@exportClass`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@exportMethod`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@exportPattern`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@exportS3Method`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@import`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@importClassesFrom`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@importFrom`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@importMethodsFrom`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@rawNamespace`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  [`@useDynLib`](https://roxygen2.r-lib.org/dev/reference/tags-namespace.md)
+  :
+
+  Tags for managing the `NAMESPACE`
+
+- [`tags-rd-formatting`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
+  [`@md`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
+  [`@noMd`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
+  [`@section`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
+  : Tags related to markdown support
+
+- [`tags-rd-other`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
+  [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
+  [`@format`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
+  [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
+  [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
+  [`@source`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
+  : Tags for documenting datasets and classes
+
+- [`tags-rd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@description`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@details`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@example`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@examples`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@examplesIf`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@noRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@param`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@rawRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@return`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@returns`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@title`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
+  [`@usage`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md) : Tags
+  for documenting functions
+
+- [`tags-reuse`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@describeIn`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@eval`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@evalRd`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@includeRmd`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@inherit`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@inheritDotParams`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@inheritParams`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@inheritSection`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@order`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@rdname`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@template`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  [`@templateVar`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
+  : Tags that help you reuse documentation
+
+## Running roxygen2
+
+- [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+  [`roxygenise()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+  : Process a package with the Rd, namespace and collate roclets
+- [`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md)
+  : Update Collate field in DESCRIPTION
+- [`load_pkgload()`](https://roxygen2.r-lib.org/dev/reference/load.md)
+  [`load_installed()`](https://roxygen2.r-lib.org/dev/reference/load.md)
+  [`load_source()`](https://roxygen2.r-lib.org/dev/reference/load.md) :
+  Load package code
+
+## Roclets
+
+- [`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md)
+  :
+
+  Roclet: make `NAMESPACE`
+
+- [`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md)
+  : Roclet: make Rd files
+
+# Articles
+
+### Documentation
+
+- [Documenting
+  functions](https://roxygen2.r-lib.org/dev/articles/rd.md):
+
+  The basics of roxygen2 tags and how to use them for documenting
+  functions.
+
+- [Documenting other
+  objects](https://roxygen2.r-lib.org/dev/articles/rd-other.md):
+
+  How to document datasets, packages, and the classes, generics, and
+  methods of S3, S4, and R6.
+
+- [Reusing
+  documentation](https://roxygen2.r-lib.org/dev/articles/reuse.md):
+
+  Tools for reusing documentation across topics, and between
+  documentation and vignettes.
+
+- [Indexing and
+  cross-references](https://roxygen2.r-lib.org/dev/articles/index-crossref.md):
+
+  Make it easier for users to find your functions by cross-referencing
+  them and control their indexing.
+
+- [(R)Markdown
+  support](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md):
+
+  The details of the (R)Markdown support provided by roxygen2.
+
+### NAMESPACE
+
+- [Managing imports and
+  exports](https://roxygen2.r-lib.org/dev/articles/namespace.md):
+
+  Generating the `NAMESPACE` file with roxygen2.
+
+### Developer resources
+
+- [Extending
+  roxygen2](https://roxygen2.r-lib.org/dev/articles/extending.md):

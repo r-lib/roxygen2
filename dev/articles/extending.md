@@ -1,0 +1,442 @@
+# Extending roxygen2
+
+## Basics
+
+Roxygen is extensible with user-defined **roclets**. It means that you
+can take advantage of Roxygen’s parser and extend it with your own
+`@tags`.
+
+There are two primary ways to extend roxygen2:
+
+- Add a new tag that generates a new top-level section in `.Rd` files.
+
+- Add a new roclet that does anything you like.
+
+This vignette will introduce you to the key data structures in roxygen2,
+and then show you how to use these two extension points. This vignette
+is very rough, so you are expected to have also read some roxygen2
+source code to understand all the extension points. Hopefully, it’s
+useful enough to help you get started, and if you have problems, please
+[file an issue](https://github.com/r-lib/roxygen2/issues/new)!
+
+``` r
+library(roxygen2)
+```
+
+## Key data structures
+
+Before we talk about extending roxygen2, we need to first discuss two
+important data structures that power roxygen: tags and blocks.
+
+### Tags
+
+A tag (a list with S3 class `roxy_tag`) represents a single tag. It has
+the following fields:
+
+- `tag`: the name of the tag.
+
+- `raw`: the raw contents of the tag (i.e. everything from the end of
+  this tag to the beginning of the next).
+
+- `val`: the parsed value, which we’ll come back to shortly.
+
+- `file` and `line`: the location of the tag in the package. Used with
+  [`roxy_tag_warning()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
+  to produce informative error messages.
+
+You *can* construct tag objects by hand with
+[`roxy_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md):
+
+``` r
+roxy_tag("name", "Hadley")
+#> [????:???] @name 'Hadley' {unparsed}
+str(roxy_tag("name", "Hadley"))
+#> List of 5
+#>  $ file: chr NA
+#>  $ line: chr NA
+#>  $ raw : chr "Hadley"
+#>  $ tag : chr "name"
+#>  $ val : NULL
+#>  - attr(*, "class")= chr [1:2] "roxy_tag_name" "roxy_tag"
+```
+
+However, you should rarely need to do so, because you’ll typically have
+them given to you in a block object, as you’ll see shortly.
+
+### Blocks
+
+A block (a list with S3 class `roxy_block`) represents a single roxygen
+block. It has the following fields:
+
+- `tags`: a list of `roxy_tags`.
+- `call`: the R code associated with the block (usually a function
+  call).
+- `file` and `line`: the location of the R code.
+- `object`: the evaluated R object associated with the code.
+
+The easiest way to see the basic structure of a
+[`roxy_block()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md)
+is to generate one by parsing a roxygen block with
+[`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
+
+``` r
+text <- "
+  #' This is a title
+  #'
+  #' This is the description.
+  #'
+  #' @param x,y A number
+  #' @export
+  f <- function(x, y) x + y
+"
+
+# parse_text() returns a list of blocks, so I extract the first
+block <- parse_text(text)[[1]]
+block
+#> <roxy_block> [<text>:8]
+#>   $tag
+#>     [line:  2] @title 'This is a title' {parsed}
+#>     [line:  4] @description 'This is the description.' {parsed}
+#>     [line:  6] @param 'x,y A number' {parsed}
+#>     [line:  7] @export '' {parsed}
+#>     [line:  8] @usage '<generated>' {parsed}
+#>     [line:  8] @.formals '<generated>' {parsed}
+#>     [line:  8] @backref '<generated>' {parsed}
+#>   $call   f <- function(x, y) x + y
+#>   $object <function> 
+#>     $topic f
+#>     $alias f
+```
+
+## Adding a new `.Rd` tag
+
+The easiest way to extend roxygen2 is to create a new tag that adds
+output to `.Rd` files. This requires two steps:
+
+1.  Define a
+    [`roxy_tag_parse()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
+    method that describes how to parse our new tag.
+
+2.  Define a
+    [`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md)
+    method that describes how to convert the tag into `.Rd` commands.
+
+To illustrate the basic idea, we’ll create a new `@tip` tag that will
+create a bulleted list of tips about how to use a function. The idea is
+to take something like this:
+
+``` r
+#' @tip The mean of a logical vector is the proportion of `TRUE` values.
+#' @tip You can compute means of dates and date-times!
+```
+
+And generate Rd like this:
+
+``` latex
+\section{Tips and tricks}{
+\itemize{
+  \item The mean of a logical vector is the proportion of \code{TRUE} values.
+  \item You can compute means of dates and date-times!
+}
+}
+```
+
+The first step is to define a method for
+[`roxy_tag_parse()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
+that describes how to parse the tag text. The name of the class will be
+`roxy_tag_{tag}`, which in this case is `roxy_tag_tip`. This function
+takes a `roxy_tag` as input, and it’s job is to set `x$val` to a
+convenient parsed value that will be used later by the roclet. Here we
+want to process the text using Markdown so we can just use
+[`tag_markdown()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md):
+
+``` r
+roxy_tag_parse.roxy_tag_tip <- function(x) {
+  tag_markdown(x)
+}
+```
+
+We check this works by using
+[`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
+
+``` r
+text <- "
+  #' Title
+  #'
+  #' @tip The mean of a logical vector is the proportion of `TRUE` values.
+  #' @tip You can compute means of dates and date-times!
+  #' @md
+  f <- function(x, y) {
+    # ...
+  }
+"
+block <- parse_text(text)[[1]]
+block
+#> <roxy_block> [<text>:7]
+#>   $tag
+#>     [line:  2] @title 'Title' {parsed}
+#>     [line:  4] @tip 'The mean of a logical vector is the proportion ...' {parsed}
+#>     [line:  5] @tip 'You can compute means of dates and date-times!' {parsed}
+#>     [line:  6] @md '' {parsed}
+#>     [line:  7] @usage '<generated>' {parsed}
+#>     [line:  7] @.formals '<generated>' {parsed}
+#>     [line:  7] @backref '<generated>' {parsed}
+#>   $call   f <- function(x, y) { ...
+#>   $object <function> 
+#>     $topic f
+#>     $alias f
+
+str(block$tags[[2]])
+#> List of 5
+#>  $ file: chr "<text>"
+#>  $ line: int 4
+#>  $ tag : chr "tip"
+#>  $ raw : chr "The mean of a logical vector is the proportion of `TRUE` values."
+#>  $ val : chr "The mean of a logical vector is the proportion of \\code{TRUE} values."
+#>  - attr(*, "class")= chr [1:2] "roxy_tag_tip" "roxy_tag"
+```
+
+(Here I explicitly turn Markdown parsing on using `@md`; it’s usually
+turned on for a package using roxygen options).
+
+Next, we define a method for
+[`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md),
+which must create an
+[`rd_section()`](https://roxygen2.r-lib.org/dev/reference/rd_section.md).
+We’re going to create a new section called `tip`. It will contain a
+character vector of tips:
+
+``` r
+roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
+  rd_section("tip", x$val)
+}
+```
+
+This additional layer is needed because there can be multiple tags of
+the same type in a single block, and multiple blocks can contribute to
+the same `.Rd` file. The job of the `rd_section` is to combine all the
+tags into a single top-level Rd section. Each tag generates an
+`rd_section` which is then combined with any previous section using
+[`merge()`](https://rdrr.io/r/base/merge.html). The default
+`merge.rd_section()` just concatenates the values together
+(`rd_section(x$type, c(x$value, y$value))`); you can override this
+method if you need more sophisticated behaviour.
+
+We then need to define a
+[`format()`](https://rdrr.io/r/base/format.html) method to convert this
+object into text for the `.Rd` file:
+
+``` r
+format.rd_section_tip <- function(x, ...) {
+  paste0(
+    "\\section{Tips and tricks}{\n",
+    "\\itemize{\n",
+    paste0("  \\item ", x$value, "\n", collapse = ""),
+    "}\n",
+    "}\n"
+  )
+}
+```
+
+We can now try this out with `roclet_text()`:
+
+``` r
+topic <- roc_proc_text(rd_roclet(), text)[[1]]
+topic$get_section("tip")
+#> \section{Tips and tricks}{
+#> \itemize{
+#>   \item The mean of a logical vector is the proportion of \code{TRUE} values.
+#>   \item You can compute means of dates and date-times!
+#> }
+#> }
+#> 
+```
+
+Note that there is no namespacing so if you’re defining multiple new
+tags I recommend using your package name as the common prefix.
+
+## Creating a new roclet
+
+Creating a new roclet is usually a two part process. First, you define
+new tags that your roclet will work with. Second, you define a roclet
+that tells roxygen how to process an entire package.
+
+### Custom tags
+
+In this example we will make a new `@memo` tag to enable printing the
+memos at the console when the roclet runs. We choose that the `@memo`
+has this syntax:
+
+    @memo [Headline] Description
+
+As an example:
+
+    @memo [EFFICIENCY] Currently brute-force; find better algorithm.
+
+As above, we first define a parse method:
+
+``` r
+roxy_tag_parse.roxy_tag_memo <- function(x) {
+  if (!grepl("^\\[.*\\].*$", x$raw)) {
+    roxy_tag_warning(x, "Invalid memo format")
+    return()
+  }
+
+  parsed <- stringi::stri_match(str = x$raw, regex = "\\[(.*)\\](.*)")[1, ]
+
+  x$val <- list(
+    header = parsed[[2]], 
+    message = parsed[[3]]
+  )
+  x
+}
+```
+
+Then check if it works with
+[`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
+
+``` r
+text <- "
+  #' @memo [TBI] Remember to implement this!
+  #' @memo [API] Check best API
+  f <- function(x, y) {
+    # ...
+  }
+"
+block <- parse_text(text)[[1]]
+block
+#> <roxy_block> [<text>:4]
+#>   $tag
+#>     [line:  2] @memo '[TBI] Remember to implement this!' {parsed}
+#>     [line:  3] @memo '[API] Check best API' {parsed}
+#>     [line:  4] @usage '<generated>' {parsed}
+#>     [line:  4] @.formals '<generated>' {parsed}
+#>     [line:  4] @backref '<generated>' {parsed}
+#>   $call   f <- function(x, y) { ...
+#>   $object <function> 
+#>     $topic f
+#>     $alias f
+
+str(block$tags[[1]])
+#> List of 5
+#>  $ file: chr "<text>"
+#>  $ line: int 2
+#>  $ tag : chr "memo"
+#>  $ raw : chr "[TBI] Remember to implement this!"
+#>  $ val :List of 2
+#>   ..$ header : chr "TBI"
+#>   ..$ message: chr " Remember to implement this!"
+#>  - attr(*, "class")= chr [1:2] "roxy_tag_memo" "roxy_tag"
+```
+
+### The roclet
+
+Next, we create a constructor for the roclet, which uses
+[`roclet()`](https://roxygen2.r-lib.org/dev/reference/roclet.md). Our
+`memo` roclet doesn’t have any options so this is very simple:
+
+``` r
+memo_roclet <- function() {
+  roclet("memo")
+}
+```
+
+To give the roclet behaviour, you need to define methods. There are two
+methods that almost every roclet will use:
+
+- [`roclet_process()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)
+  is called with a list of blocks, and returns an object of your
+  choosing.
+
+- [`roclet_output()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)
+  produces side-effects (usually writing to disk) using the result from
+  [`roclet_process()`](https://roxygen2.r-lib.org/dev/reference/roclet.md).
+
+For this roclet, we’ll have
+[`roclet_process()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)
+collect all the memo tags into a named list:
+
+``` r
+roclet_process.roclet_memo <- function(x, blocks, env, base_path) {
+  results <- list()
+  
+  for (block in blocks) {
+    tags <- block_get_tags(block, "memo")
+
+    for (tag in tags) {
+      msg <- paste0("[", tag$file, ":", tag$line, "] ", tag$val$message)
+      results[[tag$val$header]] <- c(results[[tag$val$header]], msg)
+    }
+  }
+  
+  results
+}
+```
+
+And then have
+[`roclet_output()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)
+just print them to the screen:
+
+``` r
+roclet_output.roclet_memo <- function(x, results, base_path, ...) {
+  for (header in names(results)) {
+    messages <- results[[header]]
+    cat(paste0(header, ": ", "\n"))
+    cat(paste0(" * ", messages, "\n", collapse = ""))
+  }
+
+  invisible(NULL)
+}
+```
+
+Then you can test if it works by using
+[`roc_proc_text()`](https://roxygen2.r-lib.org/dev/reference/roc_proc_text.md):
+
+``` r
+results <- roc_proc_text(memo_roclet(), "
+#' @memo [TBI] Remember to implement this!
+#' @memo [API] Check best API
+f <- function(x, y) {
+  # ...
+}
+
+#' @memo [API] Consider passing z option
+g <- function(x, y) {
+  # ...
+}
+")
+roclet_output(memo_roclet(), results)
+#> TBI: 
+#>  * [<text>:2]  Remember to implement this!
+#> API: 
+#>  * [<text>:3]  Check best API
+#>  * [<text>:8]  Consider passing z option
+```
+
+## Adding a roclet to your workflow
+
+To use a roclet when developing a package, call
+
+``` r
+roxygen2::roxygenize(roclets = "yourPackage::roclet")
+```
+
+where `yourPackage::roclet` is the function which creates the roclet,
+e.g. `memo_roclet` above.
+
+You can also add the roclet to the target package’s DESCRIPTION file,
+like this:
+
+``` r
+Roxygen: list(roclets = c("collate", "rd", "namespace", "yourPackage::roclet")) 
+```
+
+Optionally, you can add your roclet package to the target package as a
+`Suggests:` dependency:
+
+``` r
+usethis::use_dev_package("yourPackage", type = "Suggests", remote = "yourGithubID/yourPackage")
+```
+
+You don’t have to do this, but it will help other developers working on
+the target package.

@@ -25,8 +25,7 @@ format.rd_section_reexport <- function(x, ...) {
   info <- data.frame(
     pkg = x$value$pkg,
     fun = x$value$fun,
-    file = x$value$file,
-    stringsAsFactors = FALSE
+    file = x$value$file
   )
 
   pkgs <- split(info, x$value$pkg)

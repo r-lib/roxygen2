@@ -86,8 +86,7 @@ rd_section_minidesc <- function(
     desc = desc,
     extends = extends,
     generic = generic,
-    class = class,
-    stringsAsFactors = FALSE
+    class = class
   )
   rd_section("minidesc", data)
 }

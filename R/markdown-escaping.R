@@ -180,7 +180,6 @@ find_all_tag_names <- function(text) {
   tag_pos <- str_locate_all(text, "\\\\[a-zA-Z][a-zA-Z0-9]*")[[1]]
 
   data.frame(
-    stringsAsFactors = FALSE,
     tag = str_sub(text, tag_pos[, "start"], tag_pos[, "end"]),
     as.data.frame(tag_pos)
   )

@@ -1,6 +1,5 @@
 tag_df <- function(tag, start, end, argend = NULL) {
   df <- data.frame(
-    stringsAsFactors = FALSE,
     tag = tag,
     start = start,
     end = end

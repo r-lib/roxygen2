@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* roxygen2 now requires R 4.0 (#1632).
+
 # roxygen2 7.3.3
 
 * Package documentation now converts ROR IDs into a useful link (#1698, @maelle).

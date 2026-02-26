@@ -19,7 +19,7 @@ License: MIT + file LICENSE
 URL: https://roxygen2.r-lib.org/, https://github.com/r-lib/roxygen2
 BugReports: https://github.com/r-lib/roxygen2/issues
 Depends: 
-    R (>= 3.6)
+    R (>= 4.0)
 Imports: 
     brew,
     cli (>= 3.3.0),

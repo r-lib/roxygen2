@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `object_format()` now escapes braces in class names, fixing broken Rd output for data objects with class `{` like `quote({})` (#1744).
+
 # roxygen2 7.3.3
 
 * Package documentation now converts ROR IDs into a useful link (#1698, @maelle).

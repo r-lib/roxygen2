@@ -9,3 +9,9 @@ test_that("format has nice defaults for bare vectors", {
     call_to_format(x <- data.frame(a = 1, b = 2))
   })
 })
+
+test_that("format escapes braces in class names (#1744)", {
+  expect_snapshot({
+    call_to_format(x <- quote({}))
+  })
+})

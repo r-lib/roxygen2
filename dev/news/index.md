@@ -2,6 +2,9 @@
 
 ## roxygen2 (development version)
 
+- roxygen2 now requires R 4.0
+  ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
+
 ## roxygen2 7.3.3
 
 CRAN release: 2025-09-03

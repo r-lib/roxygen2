@@ -69,16 +69,17 @@ get_md_linkrefs <- function(text) {
 
   ## For the [fun] form the link text is the same as the destination.
   # Need to check both NA and "" for different versions of stringr
-  refs[, 3] <- ifelse(is.na(refs[,3]) | refs[,3] == "", refs[, 2], refs[,3])
+  refs[, 3] <- ifelse(is.na(refs[, 3]) | refs[, 3] == "", refs[, 2], refs[, 3])
 
-  refs3encoded <- map_chr(refs[,3], URLencode)
+  refs3encoded <- map_chr(refs[, 3], URLencode)
   paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
 }
 
 add_linkrefs_to_md <- function(text) {
   ref_lines <- get_md_linkrefs(text)
-  if (length(ref_lines) == 0)
+  if (length(ref_lines) == 0) {
     return(text)
+  }
   ref_text <- paste0(ref_lines, collapse = "\n")
   paste0(text, "\n\n", ref_text, "\n")
 }
@@ -93,9 +94,10 @@ add_linkrefs_to_md <- function(text) {
 #' @noRd
 
 parse_link <- function(destination, contents, state) {
-
   ## Not a [] or [][] type link, remove prefix if it is
-  if (! grepl("^R:", destination)) return(NULL)
+  if (!grepl("^R:", destination)) {
+    return(NULL)
+  }
   destination <- sub("^R:", "", URLdecode(destination))
 
   ## if contents is a `code tag`, then we need to move this outside
@@ -110,12 +112,18 @@ parse_link <- function(destination, contents, state) {
   }
 
   if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
-    incorrect <- setdiff(unique(xml_name(contents)), c("text", "softbreak", "linebreak"))
+    incorrect <- setdiff(
+      unique(xml_name(contents)),
+      c("text", "softbreak", "linebreak")
+    )
 
-    warn_roxy_tag(state$tag, c(
-      "markdown links must contain plain text",
-      i = "Problematic link: {destination}"
-    ))
+    warn_roxy_tag(
+      state$tag,
+      c(
+        "markdown links must contain plain text",
+        i = "Problematic link: {destination}"
+      )
+    )
     return("")
   }
 
@@ -137,18 +145,22 @@ parse_link <- function(destination, contents, state) {
   ## `file` is the file name of the linked topic.
 
   thispkg <- roxy_meta_get("current_package") %||% ""
-  is_code <- is_code || (grepl("[(][)]$", destination) && ! has_link_text)
-  pkg <- str_match(destination, "^(.*)::")[1,2]
+  is_code <- is_code || (grepl("[(][)]$", destination) && !has_link_text)
+  pkg <- str_match(destination, "^(.*)::")[1, 2]
   pkg <- gsub("%", "\\\\%", pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   fun <- gsub("%", "\\\\%", fun)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
   s4 <- str_detect(destination, "-class$")
-  noclass <- str_match(fun, "^(.*)-class$")[1,2]
+  noclass <- str_match(fun, "^(.*)-class$")[1, 2]
 
-  if (is.na(pkg)) pkg <- resolve_link_package(obj, thispkg, state = state)
-  if (!is.na(pkg) && pkg == thispkg) pkg <- NA_character_
+  if (is.na(pkg)) {
+    pkg <- resolve_link_package(obj, thispkg, state = state)
+  }
+  if (!is.na(pkg) && pkg == thispkg) {
+    pkg <- NA_character_
+  }
   file <- find_topic_filename(pkg, obj, state$tag)
 
   ## To understand this, look at the RD column of the table above
@@ -156,17 +168,16 @@ parse_link <- function(destination, contents, state) {
     paste0(
       if (is_code) "\\code{",
       if (s4 && is.na(pkg)) "\\linkS4class" else "\\link",
-      if (is_fun || ! is.na(pkg)) "[",
+      if (is_fun || !is.na(pkg)) "[",
       if (is_fun && is.na(pkg)) "=",
-      if (! is.na(pkg)) paste0(pkg, ":"),
-      if (is_fun || ! is.na(pkg)) paste0(if (is.na(pkg)) obj else file, "]"),
+      if (!is.na(pkg)) paste0(pkg, ":"),
+      if (is_fun || !is.na(pkg)) paste0(if (is.na(pkg)) obj else file, "]"),
       "{",
       if (!is.na(pkg)) paste0(pkg, "::"),
       if (s4) noclass else fun,
       "}",
       if (is_code) "}" else ""
     )
-
   } else {
     contents <- mdxml_link_text(contents, state)
 
@@ -185,13 +196,22 @@ parse_link <- function(destination, contents, state) {
   }
 }
 
-resolve_link_package <- function(topic, me = NULL, pkgdir = NULL, state = NULL) {
+resolve_link_package <- function(
+  topic,
+  me = NULL,
+  pkgdir = NULL,
+  state = NULL
+) {
   me <- me %||% roxy_meta_get("current_package")
   # this is  from the roxygen2 tests, should not happen on a real package
-  if (is.null(me) || is.na(me) || me == "") return(NA_character_)
+  if (is.null(me) || is.na(me) || me == "") {
+    return(NA_character_)
+  }
 
   # if it is in the current package, then no need for package name, right?
-  if (has_topic(topic, me)) return(NA_character_)
+  if (has_topic(topic, me)) {
+    return(NA_character_)
+  }
 
   # try packages in depends, imports, suggests first, error on name clashes
   pkgs <- local_pkg_deps(pkgdir)
@@ -212,10 +232,13 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL, state = NULL) 
       return(pkg_has_topic)
     }
   } else {
-    warn_roxy_tag(state$tag, c(
-      "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg_has_topic}}",
-      i = "Qualify topic explicitly with a package name when linking to it."
-    ))
+    warn_roxy_tag(
+      state$tag,
+      c(
+        "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg_has_topic}}",
+        i = "Qualify topic explicitly with a package name when linking to it."
+      )
+    )
     return(NA_character_)
   }
 
@@ -225,15 +248,19 @@ resolve_link_package <- function(topic, me = NULL, pkgdir = NULL, state = NULL) 
     if (has_topic(topic, bp)) return(NA_character_)
   }
 
-  warn_roxy_tag(state$tag, c(
-    "Could not resolve link to topic {.val {topic}} in the dependencies or base packages",
-    "i" = paste(
-      "If you haven't documented {.val {topic}} yet, or just changed its name, this is normal.",
-      "Once {.val {topic}} is documented, this warning goes away."),
-    "i" = "Make sure that the name of the topic is spelled correctly.",
-    "i" = "Always list the linked package as a dependency.",
-    "i" = "Alternatively, you can fully qualify the link with a package name."
-  ))
+  warn_roxy_tag(
+    state$tag,
+    c(
+      "Could not resolve link to topic {.val {topic}} in the dependencies or base packages",
+      "i" = paste(
+        "If you haven't documented {.val {topic}} yet, or just changed its name, this is normal.",
+        "Once {.val {topic}} is documented, this warning goes away."
+      ),
+      "i" = "Make sure that the name of the topic is spelled correctly.",
+      "i" = "Always list the linked package as a dependency.",
+      "i" = "Alternatively, you can fully qualify the link with a package name."
+    )
+  )
 
   NA_character_
 }

@@ -24,11 +24,14 @@ test_that("Collate field unchanged when no @includes", {
 test_that("DESCRIPTION file is re-written only if collate changes", {
   path <- local_package_copy(test_path("testCollateOverwrite"))
 
-  expect_snapshot({
-    update_collate(path)
-    "Second run should be idempotent"
-    update_collate(path)
-  }, transform = function(x) gsub(path, "<path>", x, fixed = TRUE))
+  expect_snapshot(
+    {
+      update_collate(path)
+      "Second run should be idempotent"
+      update_collate(path)
+    },
+    transform = function(x) gsub(path, "<path>", x, fixed = TRUE)
+  )
 })
 
 test_that("drops bad collect directives", {

@@ -9,18 +9,23 @@ test_that("NULL gives empty list", {
 })
 
 test_that("@noRd inhibits documentation", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Would be title
     #' @title Overridden title
     #' @name a
     #' @noRd
-    NULL")
+    NULL"
+  )
 
   expect_equal(length(out), 0)
 })
 
 test_that("deleted objects not documented", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     f <- function(){
       .a <- 0
       function(x = 1){
@@ -32,7 +37,8 @@ test_that("deleted objects not documented", {
     #' Addition function.
     f2 <- f()
     rm(f)
-  ")
+  "
+  )
   expect_equal(names(out), "f2.Rd")
 })
 
@@ -67,32 +73,41 @@ test_that("documenting NA gives useful error message (#194)", {
 
 test_that("@description NULL", {
   # Just ignore in this case
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' @description NULL
     #' @format NULL
     foobar <- 1:10
-  ")
+  "
+  )
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # Still ignore
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #' @description NULL
     #' @description desc
     #' @format NULL
     foobar <- 1:10
-  ")
+  "
+  )
   expect_identical(out[[1]]$get_value("description"), "desc")
 
   # Still ignore for objects as well
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #' @description NULL
     #' @format NULL
     foobar <- 1:10
-  ")
+  "
+  )
   expect_identical(out[[1]]$get_value("description"), "Title")
 
   # But drop for package docs
@@ -110,41 +125,48 @@ test_that("@description NULL", {
 
 test_that("@details NULL", {
   # Just ignore in this case
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' @details NULL
     #' @format NULL
     foobar <- 1:10
-  ")
+  "
+  )
   expect_null(out[[1]]$get_value("details"))
 
   # Still ignore
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #' @details NULL
     #' @details desc
     #' @format NULL
     foobar <- 1:10
-  ")
+  "
+  )
   expect_identical(out[[1]]$get_value("details"), "desc")
 
   # Still ignore for objects as well
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #' @details NULL
     #' @format NULL
     foobar <- 1:10
-  ")
+  "
+  )
   expect_null(out[[1]]$get_value("details"))
 })
 
 
 # package docs ------------------------------------------------------------
 
-
 test_that("package docs don't get alias if function present", {
-
   block <- "
     #' Title
     #'
@@ -169,15 +191,18 @@ test_that("package docs preserve existing aliases", {
   out <- roc_proc_text(rd_roclet(), block, test_path("empty"))[[1]]
   expect_equal(out$get_value("alias"), c("empty", "empty-package", "a", "b"))
 
-  block <- paste0(block, "
+  block <- paste0(
+    block,
+    "
     #' Empty
     empty <- function() {}
-  ")
+  "
+  )
   out <- roc_proc_text(rd_roclet(), block, test_path("empty"))[[1]]
   expect_equal(out$get_value("alias"), c("empty-package", "a", "b"))
 })
 
-test_that("get correct alias even if user has overriden name", {
+test_that("get correct alias even if user has overridden name", {
   block <- "
     #' Title
     #' @name foo

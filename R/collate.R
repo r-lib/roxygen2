@@ -38,7 +38,9 @@ update_collate <- function(base_path) {
   }
 
   new <- generate_collate(file.path(base_path, "R"))
-  if (is.null(new)) return(invisible())
+  if (is.null(new)) {
+    return(invisible())
+  }
 
   desc_path <- file.path(base_path, "DESCRIPTION")
   old <- desc::desc_get_collate(file = desc_path)
@@ -58,7 +60,9 @@ generate_collate <- function(base_path) {
   names(includes) <- paths
 
   n <- sum(map_int(includes, length))
-  if (n == 0) return()
+  if (n == 0) {
+    return()
+  }
 
   topo <- TopoSort$new()
   for (path in paths) {

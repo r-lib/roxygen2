@@ -15,8 +15,11 @@ write_lines <- function(text, path, line_ending = detect_line_ending(path)) {
 }
 
 detect_line_ending <- function(path) {
-  tryCatch({
-    samp <- suppressWarnings(readChar(path, nchars = 500))
-    if (isTRUE(grepl("\r\n", samp))) "\r\n" else "\n"
-  }, error = function(e) "\n")
+  tryCatch(
+    {
+      samp <- suppressWarnings(readChar(path, nchars = 500))
+      if (isTRUE(grepl("\r\n", samp))) "\r\n" else "\n"
+    },
+    error = function(e) "\n"
+  )
 }

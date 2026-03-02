@@ -1,4 +1,3 @@
-
 topic_add_r6_methods <- function(rd, block, env) {
   r6data <- block_get_tag_value(block, ".r6data")
   self <- r6data$self
@@ -12,9 +11,13 @@ topic_add_r6_methods <- function(rd, block, env) {
   for (i in seq_along(block$tags)) {
     tag <- block$tags[[i]]
     # Not inline?
-    if (is.na(tag$line) || tag$line < block$line) next
+    if (is.na(tag$line) || tag$line < block$line) {
+      next
+    }
     # Not a method tag?
-    if (! tag$tag %in% r6_tags) next
+    if (!tag$tag %in% r6_tags) {
+      next
+    }
     del <- c(del, i)
     meth <- find_method_for_tag(methods, tag)
     if (is.na(meth)) {
@@ -38,7 +41,7 @@ topic_add_r6_methods <- function(rd, block, env) {
   # Now do the main tags first. We leave out the param tags, those are
   # for the methods
   for (tag in block$tags) {
-    if (! tag$tag %in% c("param", "field")) {
+    if (!tag$tag %in% c("param", "field")) {
       rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
     }
   }
@@ -79,8 +82,12 @@ add_default_methods <- function(methods, block) {
 
   for (mname in names(defaults)) {
     mline <- match(mname, methods$name)
-    if (is.na(mline)) next
-    if (length(methods$tags[[mline]]) > 0) next
+    if (is.na(mline)) {
+      next
+    }
+    if (length(methods$tags[[mline]]) > 0) {
+      next
+    }
     methods$tags[[mline]] <- defaults[[mname]]
   }
 
@@ -90,7 +97,9 @@ add_default_methods <- function(methods, block) {
 r6_superclass <- function(block, r6data, env) {
   super <- r6data$super
   cls <- unique(super$classes$classname)
-  if (length(cls) == 0) return()
+  if (length(cls) == 0) {
+    return()
+  }
 
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
@@ -121,7 +130,7 @@ r6_fields <- function(block, r6data) {
 
   tags <- purrr::keep(
     block$tags,
-    function(t) t$tag == "field" && ! t$val$name %in% active
+    function(t) t$tag == "field" && !t$val$name %in% active
   )
 
   labels <- gsub(",", ", ", map_chr(tags, c("val", "name")))
@@ -145,12 +154,15 @@ r6_fields <- function(block, r6data) {
     warn_roxy_block(block, "Unknown R6 field{?s}: {xtra}")
   }
 
-  if (length(docd) == 0) return()
+  if (length(docd) == 0) {
+    return()
+  }
 
   # We keep the order of the documentation
 
   vals <- map_chr(tags, c("val", "description"))
-  c("\\section{Public fields}{",
+  c(
+    "\\section{Public fields}{",
     "\\if{html}{\\out{<div class=\"r6-fields\">}}",
     "\\describe{",
     paste0("\\item{\\code{", labels, "}}{", vals, "}", collapse = "\n\n"),
@@ -167,7 +179,7 @@ r6_active_bindings <- function(block, r6data) {
 
   tags <- purrr::keep(
     block$tags,
-    function(t) t$tag == "field" && ! t$val$name %in% fields
+    function(t) t$tag == "field" && !t$val$name %in% fields
   )
 
   labels <- gsub(",", ", ", map_chr(tags, c("val", "name")))
@@ -182,15 +194,21 @@ r6_active_bindings <- function(block, r6data) {
   # Check for duplicate bindings
   dup <- unique(docd[duplicated(docd)])
   if (length(dup) > 0) {
-    warn_roxy_block(block, "R6 active binding{?s} documented multiple times: {dup}")
+    warn_roxy_block(
+      block,
+      "R6 active binding{?s} documented multiple times: {dup}"
+    )
   }
 
-  if (length(docd) == 0) return()
+  if (length(docd) == 0) {
+    return()
+  }
 
   # We keep the order of the documentation
 
   vals <- map_chr(tags, c("val", "description"))
-  c("\\section{Active bindings}{",
+  c(
+    "\\section{Active bindings}{",
     "\\if{html}{\\out{<div class=\"r6-active-bindings\">}}",
     "\\describe{",
     paste0("\\item{\\code{", labels, "}}{", vals, "}", collapse = "\n\n"),
@@ -202,7 +220,9 @@ r6_active_bindings <- function(block, r6data) {
 
 r6_methods <- function(block, r6data, methods) {
   # And then the methods, if any
-  if (nrow(methods) == 0) return()
+  if (nrow(methods) == 0) {
+    return()
+  }
 
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
@@ -211,14 +231,14 @@ r6_methods <- function(block, r6data, methods) {
   push(r6_method_list(block, methods))
   push(r6_inherited_method_list(block, r6data))
   for (i in seq_len(nrow(methods))) {
-    push(r6_method_begin(block, methods[i,]))
-    push(r6_method_description(block, methods[i,]))
-    push(r6_method_usage(block, methods[i,]))
-    push(r6_method_params(block, methods[i,]))
-    push(r6_method_details(block, methods[i,]))
-    push(r6_method_return(block, methods[i,]))
-    push(r6_method_examples(block, methods[i,]))
-    push(r6_method_end(block, methods[i,]))
+    push(r6_method_begin(block, methods[i, ]))
+    push(r6_method_description(block, methods[i, ]))
+    push(r6_method_usage(block, methods[i, ]))
+    push(r6_method_params(block, methods[i, ]))
+    push(r6_method_details(block, methods[i, ]))
+    push(r6_method_return(block, methods[i, ]))
+    push(r6_method_examples(block, methods[i, ]))
+    push(r6_method_end(block, methods[i, ]))
   }
   push("}")
 
@@ -228,7 +248,7 @@ r6_methods <- function(block, r6data, methods) {
 find_method_for_tag <- function(methods, tag) {
   w <- which(
     basename(methods$file) == basename(tag$file) &
-    methods$line > tag$line
+      methods$line > tag$line
   )[1]
   methods$name[w]
 }
@@ -241,7 +261,8 @@ r6_show_name <- function(names) {
 
 r6_method_list <- function(block, methods) {
   nms <- r6_show_name(methods$name)
-  c("\\subsection{Public methods}{",
+  c(
+    "\\subsection{Public methods}{",
     "\\itemize{",
     sprintf(
       "\\item \\href{#method-%s-%s}{\\code{%s$%s()}}",
@@ -257,13 +278,15 @@ r6_method_list <- function(block, methods) {
 
 r6_inherited_method_list <- function(block, r6data) {
   super <- r6data$super
-  if (is.null(super)) return()
+  if (is.null(super)) {
+    return()
+  }
 
   # drop methods that were shadowed in a subclass
   super_meth <- super$members[super$members$type == "method", ]
   self <- r6data$self
-  super_meth <- super_meth[! super_meth$name %in% self$name, ]
-  super_meth <- super_meth[! duplicated(super_meth$name), ]
+  super_meth <- super_meth[!super_meth$name %in% self$name, ]
+  super_meth <- super_meth[!duplicated(super_meth$name), ]
   if (nrow(super_meth) == 0) {
     return()
   }
@@ -275,7 +298,9 @@ r6_inherited_method_list <- function(block, r6data) {
     "><summary>Inherited methods</summary>"
   )
 
-  c("\\if{html}{\\out{", details,
+  c(
+    "\\if{html}{\\out{",
+    details,
     "<ul>",
     sprintf(
       paste0(
@@ -306,14 +331,26 @@ r6_method_begin <- function(block, method) {
   nm <- r6_show_name(method$name)
   c(
     "\\if{html}{\\out{<hr>}}",
-    paste0("\\if{html}{\\out{<a id=\"method-", method$class, "-", nm, "\"></a>}}"),
-    paste0("\\if{latex}{\\out{\\hypertarget{method-", method$class, "-", nm, "}{}}}"),
+    paste0(
+      "\\if{html}{\\out{<a id=\"method-",
+      method$class,
+      "-",
+      nm,
+      "\"></a>}}"
+    ),
+    paste0(
+      "\\if{latex}{\\out{\\hypertarget{method-",
+      method$class,
+      "-",
+      nm,
+      "}{}}}"
+    ),
     paste0("\\subsection{Method \\code{", nm, "()}}{")
   )
 }
 
 r6_method_description <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], function(t) t$tag == "description")
+  det <- purrr::keep(method$tags[[1]], \(t) t$tag == "description")
   # Add an empty line between @description tags, if there isn't one
   # there already
   txt <- map_chr(det, "val")
@@ -331,7 +368,8 @@ r6_method_usage <- function(block, method) {
     "\\subsection{Usage}{",
     paste0(
       "\\if{html}{\\out{<div class=\"r\">}}",
-      "\\preformatted{", sub(paste0("^", fake), name, usage),
+      "\\preformatted{",
+      sub(paste0("^", fake), name, usage),
       "}",
       "\\if{html}{\\out{</div>}}"
     ),
@@ -340,11 +378,13 @@ r6_method_usage <- function(block, method) {
 }
 
 r6_method_details <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], function(t) t$tag == "details")
+  det <- purrr::keep(method$tags[[1]], \(t) t$tag == "details")
   # Add an empty line between @details tags, if there isn't one
   # there already
   txt <- map_chr(det, "val")
-  if (length(txt) == 0) return()
+  if (length(txt) == 0) {
+    return()
+  }
   c(
     "\\subsection{Details}{",
     sub("\n?\n?$", "\n\n", head(txt, -1)),
@@ -354,17 +394,20 @@ r6_method_details <- function(block, method) {
 }
 
 r6_method_params <- function(block, method) {
-  par <- purrr::keep(method$tags[[1]], function(t) t$tag == "param")
+  par <- purrr::keep(method$tags[[1]], \(t) t$tag == "param")
   nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
 
   # Each arg should appear exactly once
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   dup <- unique(mnames[duplicated(mnames)])
   for (m in dup) {
-    warn_roxy_block(block, c(
-      "Must use one @param for each argument",
-      x = "${method$name}({m}) is documented multiple times"
-    ))
+    warn_roxy_block(
+      block,
+      c(
+        "Must use one @param for each argument",
+        x = "${method$name}({m}) is documented multiple times"
+      )
+    )
   }
 
   # Now add the missing ones from the class
@@ -373,7 +416,9 @@ r6_method_params <- function(block, method) {
   is_in_cls <- map_lgl(
     block$tags,
     function(t) {
-      !is.na(t$line) && t$line < block$line && t$tag == "param" &&
+      !is.na(t$line) &&
+        t$line < block$line &&
+        t$tag == "param" &&
         t$val$name %in% miss
     }
   )
@@ -384,13 +429,18 @@ r6_method_params <- function(block, method) {
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   miss <- setdiff(fnames, mnames)
   for (m in miss) {
-    warn_roxy_block(block, c(
-      "Must use one @param for each argument",
-      x = "${method$name}({m}) is not documented"
-    ))
+    warn_roxy_block(
+      block,
+      c(
+        "Must use one @param for each argument",
+        x = "${method$name}({m}) is not documented"
+      )
+    )
   }
 
-  if (length(par) == 0) return()
+  if (length(par) == 0) {
+    return()
+  }
 
   # Order them according to formals
   firstnames <- str_trim(
@@ -414,8 +464,10 @@ r6_method_params <- function(block, method) {
 }
 
 r6_method_return <- function(block, method) {
-  ret <- purrr::keep(method$tags[[1]], function(t) t$tag == "return")
-  if (length(ret) == 0) return()
+  ret <- purrr::keep(method$tags[[1]], \(t) t$tag == "return")
+  if (length(ret) == 0) {
+    return()
+  }
   if (length(ret) > 1) {
     warn_roxy_block(block, "Must use one @return per R6 method")
   }
@@ -428,15 +480,20 @@ r6_method_return <- function(block, method) {
 }
 
 r6_method_examples <- function(block, method) {
-  exa <- purrr::keep(method$tags[[1]], function(t) t$tag == "examples")
-  if (length(exa) == 0) return()
+  exa <- purrr::keep(method$tags[[1]], \(t) t$tag == "examples")
+  if (length(exa) == 0) {
+    return()
+  }
 
   txt <- map_chr(exa, "val")
 
-  c("\\subsection{Examples}{",
+  c(
+    "\\subsection{Examples}{",
     paste0(
       "\\if{html}{\\out{<div class=\"r example copy\">}}\n",
-      "\\preformatted{", txt, "\n",
+      "\\preformatted{",
+      txt,
+      "\n",
       "}\n",
       "\\if{html}{\\out{</div>}}\n",
       collapse = "\n"
@@ -455,8 +512,10 @@ r6_all_examples <- function(block, methods) {
   unlist(lapply(
     seq_len(nrow(methods)),
     function(i) {
-      exa <- purrr::keep(methods$tags[[i]], function(t) t$tag == "examples")
-      if (length(exa) == 0) return()
+      exa <- purrr::keep(methods$tags[[i]], \(t) t$tag == "examples")
+      if (length(exa) == 0) {
+        return()
+      }
       name <- paste0(block$object$alias, "$", r6_show_name(methods$name[i]))
       c(
         "\n## ------------------------------------------------",
@@ -464,11 +523,14 @@ r6_all_examples <- function(block, methods) {
         "## ------------------------------------------------\n",
         paste(map_chr(exa, "val"), collapse = "\n")
       )
-  }))
+    }
+  ))
 }
 
 first_five <- function(x) {
   x <- encodeString(x, quote = "`")
-  if (length(x) > 5) x <- c(x[1:5], "...")
+  if (length(x) > 5) {
+    x <- c(x[1:5], "...")
+  }
   paste(x, collapse = ", ")
 }

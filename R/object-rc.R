@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_rd.roxy_tag_.methods <- function(x, base_path, env) {
-  desc <- lapply(x$val, function(x) docstring(x$value@.Data))
+  desc <- lapply(x$val, \(x) docstring(x$value@.Data))
   usage <- map_chr(x$val, function(x) {
     function_usage(x$value@name, formals(x$value@.Data))
   })
@@ -47,14 +47,22 @@ get_method <- function(obj, method_name) {
 # a character vector.
 docstring <- function(f) {
   stopifnot(is.function(f))
-  if (is.primitive(f)) return(NULL)
+  if (is.primitive(f)) {
+    return(NULL)
+  }
 
   b <- body(f)
-  if (length(b) <= 2 || !identical(b[[1]], quote(`{`))) return(NULL)
+  if (length(b) <= 2 || !identical(b[[1]], quote(`{`))) {
+    return(NULL)
+  }
 
   first <- b[[2]]
-  if (!is.character(first)) return(NULL)
-  if (first == "") return(NULL)
+  if (!is.character(first)) {
+    return(NULL)
+  }
+  if (first == "") {
+    return(NULL)
+  }
 
   trim_docstring(first)
 }
@@ -62,12 +70,16 @@ docstring <- function(f) {
 # Implementation converted from
 # http://www.python.org/dev/peps/pep-0257/#handling-docstring-indentation
 trim_docstring <- function(docstring) {
-  if (docstring == "") return("")
+  if (docstring == "") {
+    return("")
+  }
 
   # Convert tabs to spaces (using four spaces for tabs)
   # and split into a vector of lines:
   lines <- strsplit(gsub("\t", "    ", docstring), "\n")[[1]]
-  if (length(lines) == 1) return(strip(lines))
+  if (length(lines) == 1) {
+    return(strip(lines))
+  }
 
   # Determine minimum indentation (first line doesn't count):
   indent <- min(leadingSpaces(lines[-1]))

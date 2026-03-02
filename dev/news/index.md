@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- Package documentation now correctly handles multiple arbitrary
+  comments in the `comment` argument of
+  [`person()`](https://rdrr.io/r/utils/person.html) in `Authors@R`
+  ([\#1746](https://github.com/r-lib/roxygen2/issues/1746)).
 - roxygen2 now requires R 4.0
   ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
 

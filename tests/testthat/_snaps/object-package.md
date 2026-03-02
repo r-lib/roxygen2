@@ -36,6 +36,15 @@
       person_desc(comment = c(ROR = "03wc8by49", "extra"))
     Output
       [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR}) (extra)"
+    Code
+      # Arbitrary comments (#1746)
+      person_desc(comment = c(acronym = "rajo", "Contributed XY"))
+    Output
+      [1] "H W \\email{h@w.com} (acronym: rajo, Contributed XY)"
+    Code
+      person_desc(comment = c("comment 1", "comment 2"))
+    Output
+      [1] "H W \\email{h@w.com} (comment 1, comment 2)"
 
 # useful message if Authors@R is corrupted
 

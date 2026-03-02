@@ -12,6 +12,23 @@ test_that("@param documents arguments", {
   expect_equal(out$get_value("param"), c(a = "first", z = "last"))
 })
 
+test_that("backtick-quoted @param names are parsed correctly (#1696)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A
+    #' @param `arg 1` first
+    #' @param `arg 2` last
+    a <- function(`arg 1` = 1, `arg 2` = 2) {}
+  "
+  )[[1]]
+
+  expect_equal(
+    out$get_value("param"),
+    c("arg 1" = "first", "arg 2" = "last")
+  )
+})
+
 test_that("grouped args get spaces", {
   out <- roc_proc_text(
     rd_roclet(),

@@ -406,7 +406,7 @@ warn_missing_s3_exports <- function(blocks, env) {
     block_has_tags,
     c("export", "exportS3Method")
   )]
-  s3objects <- map(blocks, \(block) block$object$value)
+  s3objects <- map(s3blocks, \(block) block$object$value)
   s3functions <- Filter(is.function, s3objects)
 
   undocumented <- methods[!methods %in% s3functions]

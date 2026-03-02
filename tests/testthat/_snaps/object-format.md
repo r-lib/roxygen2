@@ -21,3 +21,10 @@
     Output
       [1] "An object of class \\code{data.frame} with 1 rows and 2 columns."
 
+# format escapes braces in class names (#1744)
+
+    Code
+      call_to_format(x <- quote({ }))
+    Output
+      [1] "An object of class \\code{\\{} of length 1."
+

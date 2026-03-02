@@ -21,6 +21,10 @@
   backtick-quoted names that contain spaces,
   e.g. `` @param `arg 1` description ``
   ([\#1696](https://github.com/r-lib/roxygen2/issues/1696)).
+- The warning about undocumented S3 methods no longer errors when the
+  function lacks a srcref, e.g. because a debugger breakpoint is set
+  ([\#1589](https://github.com/r-lib/roxygen2/issues/1589),
+  [\#1710](https://github.com/r-lib/roxygen2/issues/1710)).
 
 ## roxygen2 7.3.3
 

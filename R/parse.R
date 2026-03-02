@@ -22,7 +22,7 @@ parse_package <- function(path = ".", env = env_package(path)) {
   files <- package_files(path)
   list_of_blocks <- lapply(files, tokenize_file)
 
-  blocks <- purrr::flatten(list_of_blocks)
+  blocks <- unlist(list_of_blocks, recursive = FALSE)
 
   if (!is.null(env)) {
     blocks <- lapply(blocks, block_set_env, env = env)

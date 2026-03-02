@@ -28,7 +28,6 @@ Imports:
     knitr,
     methods,
     pkgload (>= 1.0.2),
-    purrr (>= 1.0.0),
     R6 (>= 2.1.2),
     rlang (>= 1.0.6),
     stringi,

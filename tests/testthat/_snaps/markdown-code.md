@@ -17,8 +17,6 @@
       
       Quitting from :1-1
       x <text>:4: @description failed to evaluate inline markdown code.
-      Caused by error in `map_chr()`:
-      i In index: 1.
       Caused by error:
       ! Failed to parse the inline R code: `r 1 + `
       Reason: <text>:2:0: unexpected end of input

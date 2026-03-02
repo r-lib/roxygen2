@@ -68,7 +68,7 @@ roxygenize <- function(
   blocks <- parse_package(base_path, env = NULL)
 
   if (clean) {
-    purrr::walk(roclets, roclet_clean, base_path = base_path)
+    walk(roclets, roclet_clean, base_path = base_path)
   }
 
   roclets <- lapply(
@@ -88,7 +88,7 @@ roxygenize <- function(
     base_path = base_path
   )
 
-  out <- purrr::map2(
+  out <- map2(
     roclets,
     results,
     roclet_output,

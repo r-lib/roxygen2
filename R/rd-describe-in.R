@@ -105,7 +105,7 @@ format.rd_section_minidesc <- function(x, ...) {
   order <- intersect(c("generic", "class", ""), unique(x$value$extends))
   by <- factor(x$value$extends, levels = order)
   subsections <- split(x$value, by)
-  body <- purrr::map2_chr(subsections, names(subsections), format_section)
+  body <- map2_chr(subsections, names(subsections), format_section)
 
   paste0(body, collapse = "\n")
 }

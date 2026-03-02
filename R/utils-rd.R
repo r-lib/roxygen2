@@ -93,7 +93,7 @@ make_as_character_rd <- function() {
   fn <- internal_f("tools", "as.character.Rd")
 
   body <- body(fn)
-  idx <- purrr::detect_index(
+  idx <- detect_index(
     body,
     \(x) is_call(x, "<-", 2) && is_symbol(x[[2]], "TWOARG")
   )

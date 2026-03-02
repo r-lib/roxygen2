@@ -20,7 +20,7 @@ topic_add_name_aliases <- function(topic, block, name) {
   if (length(tags) == 0) {
     aliases <- character()
   } else {
-    vals <- map_chr(tags, "val")
+    vals <- map_chr(tags, \(x) x[["val"]])
     aliases <- unlist(str_split(vals, "\\s+"))
   }
 

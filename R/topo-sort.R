@@ -35,7 +35,7 @@ TopoSort <- R6::R6Class(
           visit(vertex)
         }
       }
-      map_chr(sorted, "name")
+      map_chr(sorted, \(x) x[["name"]])
     }
   )
 )

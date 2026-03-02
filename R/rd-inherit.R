@@ -269,7 +269,7 @@ get_documented_params <- function(topic, only_first = FALSE) {
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
     if (only_first) {
-      documented <- map_chr(documented, 1)
+      documented <- map_chr(documented, \(x) x[[1]])
     } else {
       documented <- unlist(documented)
     }
@@ -371,8 +371,16 @@ find_sections <- function(topic) {
   if (inherits(topic, "Rd")) {
     tag <- get_tags(topic, "\\section")
 
-    titles <- map_chr(map(tag, 1), rd2text, package = attr(topic, "package"))
-    contents <- map_chr(map(tag, 2), rd2text, package = attr(topic, "package"))
+    titles <- map_chr(
+      map(tag, \(x) x[[1]]),
+      rd2text,
+      package = attr(topic, "package")
+    )
+    contents <- map_chr(
+      map(tag, \(x) x[[2]]),
+      rd2text,
+      package = attr(topic, "package")
+    )
 
     list(title = titles, content = contents)
   } else {

@@ -22,8 +22,7 @@ vignette_roclet <- function() {
 }
 
 #' @export
-roclet_process.roclet_vignette <- function(x, blocks, env, base_path) {
-}
+roclet_process.roclet_vignette <- function(x, blocks, env, base_path) {}
 
 #' @export
 roclet_output.roclet_vignette <- function(x, results, base_path, ...) {
@@ -37,26 +36,37 @@ vign_outdated <- function(vign) {
   name <- tools::file_path_sans_ext(basename(vign))
 
   # Currently, the final product of a vignette can only be pdf or html
-  related <- dir(dirname(vign), pattern = paste0(name, "\\.(pdf|html)$"),
-    full.names = TRUE)
+  related <- dir(
+    dirname(vign),
+    pattern = paste0(name, "\\.(pdf|html)$"),
+    full.names = TRUE
+  )
   related <- setdiff(related, vign)
 
   length(related) == 0 || mtime(vign) > mtime(related)
 }
 
 vign_update <- function(vign) {
-  if (!vign_outdated(vign)) return(FALSE)
+  if (!vign_outdated(vign)) {
+    return(FALSE)
+  }
 
   cli::cli_inform("Rebuilding {.file {basename(vign)}}")
-  output <- tools::buildVignette(vign, dirname(vign), tangle = FALSE,
-    clean = FALSE)
+  output <- tools::buildVignette(
+    vign,
+    dirname(vign),
+    tangle = FALSE,
+    clean = FALSE
+  )
 
   TRUE
 }
 
 vign_update_all <- function(pkg_path) {
   vig_path <- file.path(pkg_path, "vignettes")
-  if (!file.exists(vig_path)) return()
+  if (!file.exists(vig_path)) {
+    return()
+  }
 
   if (file.exists(file.path(vig_path, "Makefile"))) {
     cli::cli_inform("Updating vignettes with make")

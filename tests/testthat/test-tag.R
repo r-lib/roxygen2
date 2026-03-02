@@ -32,7 +32,7 @@ test_that("brackets in comments are ignored", {
 })
 
 test_that("R comments don't close latex-like tags", {
-  expect_true(rdComplete("A comment \\code{#}.", is_code = FALSE))
+  expect_true(rdComplete(r"(A comment \code{#}.)", is_code = FALSE))
 })
 
 test_that("newline ends comment", {
@@ -40,7 +40,7 @@ test_that("newline ends comment", {
 })
 
 test_that("escape disables comment", {
-  expect_false(rdComplete("\\%{", is_code = FALSE))
+  expect_false(rdComplete(r"(\%{)", is_code = FALSE))
 })
 
 test_that("strings must be closed in code", {

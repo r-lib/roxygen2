@@ -17,14 +17,13 @@ package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
 }
 
 package_authors <- function(authors) {
-  authors <- tryCatch(eval(parse(text = authors %||% "")),
-    error = function(e) {
-      cli::cli_inform(c(x = "Failed to evaluate Authors@R."), parent = e)
-      NULL
-    }
-  )
-  if (is.null(authors))
+  authors <- tryCatch(eval(parse(text = authors %||% "")), error = function(e) {
+    cli::cli_inform(c(x = "Failed to evaluate Authors@R."), parent = e)
+    NULL
+  })
+  if (is.null(authors)) {
     return()
+  }
 
   desc <- map_chr(unclass(authors), author_desc)
   type <- map_chr(unclass(authors), author_type)
@@ -66,16 +65,31 @@ author_desc <- function(x) {
       }
       x$comment <- x$comment[!names(x$comment) %in% "ORCID"]
     }
+    if (has_name(x$comment, "ROR")) {
+      ror <- x$comment[["ROR"]]
+
+      if (grepl("https?://", ror)) {
+        desc <- paste0(desc, " (\\href{", ror, "}{ROR})")
+      } else {
+        desc <- paste0(desc, " (\\href{https://ror.org/", ror, "}{ROR})")
+      }
+      x$comment <- x$comment[!names(x$comment) %in% "ROR"]
+    }
 
     if (length(x$comment) > 0) {
-      desc <- paste0(desc, " (", x$comment, ")")
+      sep <- ifelse(nzchar(names2(x$comment)), ": ", "")
+      comments <- paste0(names2(x$comment), sep, x$comment)
+      desc <- paste0(desc, " (", paste(comments, collapse = ", "), ")")
     }
   }
 
   extra_roles <- setdiff(x$role, c("cre", "aut"))
   if (length(extra_roles) > 0) {
     desc <- paste0(
-      desc, " [", paste0(role_lookup[extra_roles], collapse = ", "), "]"
+      desc,
+      " [",
+      paste0(role_lookup[extra_roles], collapse = ", "),
+      "]"
     )
   }
 
@@ -364,11 +378,13 @@ role_lookup <- c(
 )
 
 itemize <- function(header, x) {
-  if (length(x) == 0)
+  if (length(x) == 0) {
     return()
+  }
 
   paste0(
-    header, "\n",
+    header,
+    "\n",
     "\\itemize{\n",
     paste0("  \\item ", x, "\n", collapse = ""),
     "}\n"
@@ -398,7 +414,13 @@ package_url_parse <- function(x) {
     # Extract arxiv id, split by space
     arxiv_id <- str_split_fixed(match, " ", n = 2)[, 1]
 
-    paste0("\\href{https://arxiv.org/abs/", escape(arxiv_id), "}{arXiv:", match, "}")
+    paste0(
+      "\\href{https://arxiv.org/abs/",
+      escape(arxiv_id),
+      "}{arXiv:",
+      match,
+      "}"
+    )
   })
 
   x

@@ -1,4 +1,3 @@
-
 #' Find the Rd file of a topic
 #'
 #' @param pkg Package to search in, or `NA` if no package was specified.
@@ -55,7 +54,11 @@ try_find_topic_in_package <- function(pkg, topic, tag) {
   path <- tryCatch(
     find_topic_in_package(pkg, topic),
     error = function(err) {
-      warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}", parent = err)
+      warn_roxy_tag(
+        tag,
+        "refers to unavailable topic {pkg}::{topic}",
+        parent = err
+      )
       topic
     }
   )

@@ -1,4 +1,3 @@
-
 #' Class A
 #'
 #' @description
@@ -18,14 +17,14 @@ A <- R6::R6Class(
     #' @description A method 1.
     #' @examples
     #' ## Example for meth1
-    meth1 = function(Z) { },
+    meth1 = function(Z) {},
     #' @description Method 2 description.
     #' @details Method 2 details.
     #' @param Z Overriding Z argument for meth2.
     #' @param ... Rest.
     #' @examples
     #' ## Example for meth2
-    meth2 = function(Z = 10, ...) { },
+    meth2 = function(Z = 10, ...) {},
     #' @field field2 A field 2.
     field2 = "foobar",
     #' @details Method 3 details.
@@ -33,17 +32,17 @@ A <- R6::R6Class(
     #' @param duplicate Twice
     #' @return twice.
     #' @return really?
-    meth3 = function(duplicate, missing) { },
+    meth3 = function(duplicate, missing) {},
     #' @field field3 A field 3.
     field3 = "baz"
   ),
   active = list(
     #' @field active1 A binding 1.
-    active1 = function(x) { },
+    active1 = function(x) {},
     #' @field active2 A binding 2.
-    active2 = function(x) { },
+    active2 = function(x) {},
     #' @field active3 A binding 2.
-    active3 = function(x) { }
+    active3 = function(x) {}
   )
 )
 
@@ -65,17 +64,17 @@ B <- R6::R6Class(
     field4 = NULL,
     #' @description B method 1.
     #' @param Z Still zzzzzzzz.
-    meth1 = function(Z) { },
+    meth1 = function(Z) {},
     #' @description A method 4.
-    meth4 = function() { }
+    meth4 = function() {}
   ),
   active = list(
     #' @field active1 B binding 1.
-    active1 = function(x) { },
+    active1 = function(x) {},
     #' @field active4 B binding 4.
-    active4 = function(x) { },
+    active4 = function(x) {},
     #' @field active5 B binding 5.
-    active5 = function(x) { }
+    active5 = function(x) {}
   )
 )
 
@@ -98,27 +97,27 @@ C <- R6::R6Class(
     #' @description C method 2.
     #' @param Z zzzzz
     #' @param ... etc
-    meth2 = function(Z = 10, ...) { },
+    meth2 = function(Z = 10, ...) {},
     #' @field field5 C field 5.
     field5 = "foobar",
     #' @description C method 5.
-    meth5 = function() { },
+    meth5 = function() {},
     undocumented_field = NULL,
-    undocumented_method = function() { },
+    undocumented_method = function() {},
     #' @field duplicatefield Multiple.
     #' @field duplicatefield times.
     duplicatefield = NULL
   ),
   active = list(
     #' @field active2 C binding 2.
-    active2 = function(x) { },
+    active2 = function(x) {},
     #' @field active4 C binding 4.
-    active4 = function(x) { },
+    active4 = function(x) {},
     #' @field active6 C binding 6.
-    active6 = function(x) { },
-    undocumented_binding = function(x) { },
+    active6 = function(x) {},
+    undocumented_binding = function(x) {},
     #' @field duplicate_binding Double.
     #' @field duplicate_binding Double double.
-    duplicate_binding = function(x) { }
+    duplicate_binding = function(x) {}
   )
 )

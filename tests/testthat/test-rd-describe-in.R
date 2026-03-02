@@ -7,27 +7,35 @@ test_that("@describeIn suggests @rdname", {
 })
 
 test_that("@describeIn generic destination captures s3 method source", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     f <- function(x) UseMethod('f')
 
     #' @describeIn f Method for a
     #'
     f.a <- function(x) 1
-  ")[[1]]
+  "
+  )[[1]]
   expect_equal(out$get_value("minidesc")$extends, "generic")
   expect_equal(out$get_value("minidesc")$generic, "f")
   expect_equal(out$get_value("minidesc")$class, "a")
 })
 
 test_that("@describeIn generic destination captures s4 method source", {
-  out <- roc_proc_text(rd_roclet(), "
-    #' Title
-    setGeneric('f', function(x) standardGeneric('f'))
+  suppressMessages(
+    out <- roc_proc_text(
+      rd_roclet(),
+      "
+      #' Title
+      setGeneric('f', function(x) standardGeneric('f'))
 
-    #' @describeIn f Method for a
-    setMethod(f, signature('a'), function(x) 1)
-  ")[[1]]
+      #' @describeIn f Method for a
+      setMethod(f, signature('a'), function(x) 1)
+    "
+    )[[1]]
+  )
   out$get_value("minidesc")
 
   expect_equal(out$get_value("minidesc")$extends, "generic")
@@ -36,14 +44,17 @@ test_that("@describeIn generic destination captures s4 method source", {
 })
 
 test_that("@describeIn constructor destination captures s3 method source", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     boo <- function() structure(list(), class = 'boo')
 
     #' @describeIn boo mean method
     #'
     mean.boo <- function(x) 1
-    ")[[1]]
+    "
+  )[[1]]
 
   expect_equal(out$get_value("minidesc")$extends, "class")
   expect_equal(out$get_value("minidesc")$generic, "mean")
@@ -51,7 +62,9 @@ test_that("@describeIn constructor destination captures s3 method source", {
 })
 
 test_that("@describeIn constructor destination captures s4 method source", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     setGeneric('mean')
 
     #' Title
@@ -59,7 +72,8 @@ test_that("@describeIn constructor destination captures s4 method source", {
 
     #' @describeIn a mean method
     setMethod('mean', 'a', function(x) 1)
-    ")[[1]]
+    "
+  )[[1]]
   out$get_value("minidesc")
   expect_equal(out$get_value("minidesc")$extends, "class")
   expect_equal(out$get_value("minidesc")$generic, "mean")
@@ -67,13 +81,16 @@ test_that("@describeIn constructor destination captures s4 method source", {
 })
 
 test_that("@describeIn function destination captures function source", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     f <- function(x) 1
 
     #' @describeIn f A
     f2 <- function(x) 1
-    ")[[1]]
+    "
+  )[[1]]
 
   expect_equal(out$get_value("minidesc")$name, "f2()")
   expect_equal(out$get_value("minidesc")$extends, "")
@@ -82,32 +99,40 @@ test_that("@describeIn function destination captures function source", {
 })
 
 test_that("@describeIn class captures function name with data", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #' @name f
     NULL
 
     #' @describeIn f A
     f2 <- function(x) 1
-    ")[[1]]
+    "
+  )[[1]]
 
   expect_equal(out$get_value("minidesc")$name, "f2()")
 })
 
 test_that("@describeIn class captures function description", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
   #' Title
   f <- function(x) 1
 
   #' @describeIn f A
   f2 <- function(x) 1
-  ")[[1]]
+  "
+  )[[1]]
 
   expect_equal(out$get_value("minidesc")$desc, "A")
 })
 
 test_that("Multiple @describeIn functions combined into one", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Power
     #' @param x base
     #' @param exp exponent
@@ -125,7 +150,9 @@ test_that("Multiple @describeIn functions combined into one", {
 })
 
 test_that("multiple methods and others are combined into a generic", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Zap generic
     #'
     #' @param x Object to zap.
@@ -149,7 +176,9 @@ test_that("multiple methods and others are combined into a generic", {
 })
 
 test_that("multiple methods and others are combined into a class constructor", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Class constructor
     #'
     #' @param x x
@@ -166,11 +195,14 @@ test_that("multiple methods and others are combined into a class constructor", {
 
     #' @describeIn foo function
     is_foo <- function(x) {}
-  ")[[1]]
+  "
+  )[[1]]
   expect_snapshot(out$get_section("minidesc"))
 
   # more complicated with disambiguated class name "pkg_class"
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Class constructor with disambiguated class
     #'
     #' @param x x
@@ -186,7 +218,9 @@ test_that("multiple methods and others are combined into a class constructor", {
 })
 
 test_that("infix and replacement names get nice label", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' foo
     foo <- 100
 
@@ -196,13 +230,16 @@ test_that("infix and replacement names get nice label", {
     #' @describeIn foo replacement for foo
     `foo<-` <- function(x, value) 10
 
-    ")[[1]]
+    "
+  )[[1]]
   expect_snapshot(out$get_section("minidesc"))
 })
 
 test_that("s4 methods get nice label", {
   withr::defer(removeClass("foo1"))
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
       #' Class
       #'
       setClass('foo1', slots = c(id = 'character'), where = .GlobalEnv)
@@ -212,12 +249,15 @@ test_that("s4 methods get nice label", {
 
       #' @describeIn foo1 function
       setMethod('m_id', 'foo1', function(x) x@id)
-    ")[[1]]
+    "
+  )[[1]]
   expect_snapshot(out$get_section("minidesc"))
 
   withr::defer(removeClass("foo2"))
   withr::defer(removeClass("foo3"))
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     setClass('foo2', where = .GlobalEnv)
     setClass('foo3', where = .GlobalEnv)
 
@@ -228,7 +268,8 @@ test_that("s4 methods get nice label", {
     setMethod('bar1', c('foo2', 'foo3'), function(x, y) 1)
     #' @describeIn bar1 method2
     setMethod('bar1', c('foo3', 'foo2'), function(x, y) 1)
-  ")[[1]]
+  "
+  )[[1]]
   expect_snapshot(out$get_section("minidesc"))
 })
 

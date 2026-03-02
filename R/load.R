@@ -90,7 +90,8 @@ find_load_strategy <- function(x, option = roxy_meta_get("load", "pkgload")) {
     }
   }
 
-  switch(x,
+  switch(
+    x,
     pkgload = load_pkgload,
     source = load_source,
     installed = load_installed,

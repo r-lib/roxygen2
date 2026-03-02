@@ -75,8 +75,11 @@ load_options <- function(base_path = ".") {
   unknown_opts <- setdiff(names(opts), names(defaults))
   if (length(unknown_opts) > 0) {
     warn(paste0(
-      "Unknown Roxygen options ", paste(unknown_opts, collapse = ", "), ".\n",
-      "Supported options: ", paste(names(defaults), collapse = ", ")
+      "Unknown Roxygen options ",
+      paste(unknown_opts, collapse = ", "),
+      ".\n",
+      "Supported options: ",
+      paste(names(defaults), collapse = ", ")
     ))
   }
 

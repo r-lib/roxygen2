@@ -37,7 +37,9 @@ test_that("@section-s with identical titles are merged", {
 })
 
 test_that("@section-s with different titles are kept as they are", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Foo
     #'
     #' @section A: 1
@@ -47,7 +49,8 @@ test_that("@section-s with different titles are kept as they are", {
     #' @rdname foo
     #' @section C: 3
     bar <- function(x) x
-  ")[[1]]
+  "
+  )[[1]]
 
   expect_equal(
     out$get_section("section"),

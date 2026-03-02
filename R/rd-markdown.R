@@ -90,7 +90,6 @@ format.rd_section_source <- function(x, ...) {
 
 #' @export
 roxy_tag_parse.roxy_tag_title <- function(x) {
-
   if (str_count(x$raw, "\n\n") >= 1) {
     warn_roxy_tag(x, "must be a single paragraph")
   }
@@ -143,7 +142,7 @@ rd_section_markdown <- function(name, value) {
     name <- c(name, rep("section", length(value) - 1))
     value <- c(
       list(value[[1]]),
-      map2(titles[-1], value[-1], ~ list(title = .x, content = .y))
+      map2(titles[-1], value[-1], \(x, y) list(title = x, content = y))
     )
 
     if (value[[1]] == "") {
@@ -154,4 +153,3 @@ rd_section_markdown <- function(name, value) {
 
   map2(name, value, rd_section)
 }
-

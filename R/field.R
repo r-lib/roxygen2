@@ -70,13 +70,10 @@ format_collapse <- function(x, ..., indent = 0, exdent = 0) {
 }
 
 rd_section_description <- function(name, dt, dd) {
-  if (length(dt) == 0) return("")
+  if (length(dt) == 0) {
+    return("")
+  }
 
   items <- paste0("\\item{\\code{", dt, "}}{", dd, "}", collapse = "\n\n")
-  paste0("\\section{", name, "}{\n\n",
-    "\\describe{\n",
-    items,
-    "\n}}\n"
-  )
+  paste0("\\section{", name, "}{\n\n", "\\describe{\n", items, "\n}}\n")
 }
-

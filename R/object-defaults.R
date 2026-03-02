@@ -74,8 +74,11 @@ object_defaults.package <- function(x, block) {
 
 #' @export
 object_defaults.import <- function(x, block) {
-
-  importFrom <- roxy_generated_tag(block, "importFrom", c(x$value$pkg, x$value$fun))
+  importFrom <- roxy_generated_tag(
+    block,
+    "importFrom",
+    c(x$value$pkg, x$value$fun)
+  )
 
   if (block_has_tags(block, c("rdname", "name"))) {
     obj <- object_from_name(x$value$fun, asNamespace(x$value$pkg), block)
@@ -88,7 +91,11 @@ object_defaults.import <- function(x, block) {
     roxy_generated_tag(block, "name", "reexports"),
     roxy_generated_tag(block, "keywords", "internal"),
     roxy_generated_tag(block, "title", "Objects exported from other packages"),
-    roxy_generated_tag(block, ".reexport", list(pkg = x$value$pkg, fun = x$value$fun))
+    roxy_generated_tag(
+      block,
+      ".reexport",
+      list(pkg = x$value$pkg, fun = x$value$fun)
+    )
   )
 }
 
@@ -103,8 +110,9 @@ object_defaults.s4class <- function(x, block) {
 object_defaults.rcclass <- function(x, block) {
   list(
     roxy_generated_tag(block, "docType", "class"),
-    if (!is.null(x$methods))
+    if (!is.null(x$methods)) {
       roxy_generated_tag(block, ".methods", x$methods)
+    }
   )
 }
 

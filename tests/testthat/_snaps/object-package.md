@@ -12,17 +12,39 @@
       [1] "H W \\email{h@w.com} [contributor]"
     Code
       # ORCID comments
-      person_desc(comment = c(ORCID = "1234"))
+      person_desc(comment = c(ORCID = "0000-0003-4757-117X"))
     Output
-      [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID})"
+      [1] "H W \\email{h@w.com} (\\href{https://orcid.org/0000-0003-4757-117X}{ORCID})"
     Code
-      person_desc(comment = c(ORCID = "https://orcid.org/1234"))
+      person_desc(comment = c(ORCID = "https://orcid.org/0000-0003-4757-117X"))
     Output
-      [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID})"
+      [1] "H W \\email{h@w.com} (\\href{https://orcid.org/0000-0003-4757-117X}{ORCID})"
     Code
-      person_desc(comment = c(ORCID = "1234", "extra"))
+      person_desc(comment = c(ORCID = "0000-0003-4757-117X", "extra"))
     Output
-      [1] "H W \\email{h@w.com} (\\href{https://orcid.org/1234}{ORCID}) (extra)"
+      [1] "H W \\email{h@w.com} (\\href{https://orcid.org/0000-0003-4757-117X}{ORCID}) (extra)"
+    Code
+      # ROR comments
+      person_desc(comment = c(ROR = "03wc8by49"))
+    Output
+      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR})"
+    Code
+      person_desc(comment = c(ROR = "https://ror.org/03wc8by49"))
+    Output
+      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR})"
+    Code
+      person_desc(comment = c(ROR = "03wc8by49", "extra"))
+    Output
+      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR}) (extra)"
+    Code
+      # Arbitrary comments (#1746)
+      person_desc(comment = c(acronym = "rajo", "Contributed XY"))
+    Output
+      [1] "H W \\email{h@w.com} (acronym: rajo, Contributed XY)"
+    Code
+      person_desc(comment = c("comment 1", "comment 2"))
+    Output
+      [1] "H W \\email{h@w.com} (comment 1, comment 2)"
 
 # useful message if Authors@R is corrupted
 

@@ -17,19 +17,27 @@ test_that("description block gets empty tag", {
 })
 
 test_that("multi line tags collapsed into one", {
-  x <- tokenise_block(c(
-    "#' @tag abc",
-    "#'   def"),
-    file = "", offset = 0L)
+  x <- tokenise_block(
+    c(
+      "#' @tag abc",
+      "#'   def"
+    ),
+    file = "",
+    offset = 0L
+  )
   expect_equal(length(x), 1)
   expect_equal(x[[1]]$raw, "abc\n  def")
 })
 
 test_that("description block gets empty tag when followed by tag", {
-  x <- tokenise_block(c(
-    "#' abc",
-    "#' @xyz abc"),
-    file = "", offset = 0L)
+  x <- tokenise_block(
+    c(
+      "#' abc",
+      "#' @xyz abc"
+    ),
+    file = "",
+    offset = 0L
+  )
   expect_equal(length(x), 2)
 
   expect_equal(x[[1]]$tag, "")
@@ -53,45 +61,56 @@ test_that("need one or more #", {
 })
 
 test_that("@@ becomes @", {
-  expect_equal(tokenise_block("#' @tag @@", file = "", offset = 0L)[[1]]$raw, "@")
+  expect_equal(
+    tokenise_block("#' @tag @@", file = "", offset = 0L)[[1]]$raw,
+    "@"
+  )
 })
 
 # Inline comments ---------------------------------------------------------
 
 test_that("Inline comments are supported", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Description
     a <- function(x) {
       #' @param x an integer
       stopifnot(is.integer(x))
-    }")[[1]]
+    }"
+  )[[1]]
   expect_equal(out$get_value("param"), c(x = "an integer"))
 })
 
 test_that("Inline comments just before the closing brace are allowed", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Description
     a <- function(x) {
       #' @param x an integer
       stopifnot(is.integer(x))
 
       #' @seealso somewhere
-    }")[[1]]
+    }"
+  )[[1]]
   expect_equal(out$get_value("seealso"), "somewhere")
 })
 
 test_that("Inline comments do not extend past the closing brace", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Description
     a <- function(x) {
       #' @param x an integer
       stopifnot(is.integer(x))
-    }; #' @seealso somewhere")[[1]]
+    }; #' @seealso somewhere"
+  )[[1]]
   expect_null(out$get_value("seealso"))
 })
 
 test_that("Line numbers are ok", {
-
   check_line_nums <- function(block, lines) {
     for (t in names(lines)) {
       expect_equal(block_get_tag(block, t)$line, lines[[t]], info = t)

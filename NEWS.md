@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* Package documentation now correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
 * roxygen2 now requires R 4.0 (#1632).
 
 # roxygen2 7.3.3

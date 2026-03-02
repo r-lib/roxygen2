@@ -2,6 +2,7 @@
 #'
 #' To create a new roclet, you will need to create a constructor function
 #' that wraps `roclet`, and then implement the methods described below.
+#' See `vignette("extending")` for more details.
 #'
 #' @section Methods:
 #'
@@ -35,6 +36,12 @@ NULL
 
 #' @export
 #' @rdname roclet
+#' @param subclass Class of the roclet, character vector.
+#' @examples
+#' # Custom roclet
+#' custom_roclet <- roclet("custom")
+#' # Roclet that extends the existing Rd roclet.
+#' supercharged_rd_roclet <- roclet(c("cool", "rd"))
 roclet <- function(subclass, ...) {
   structure(list(...), class = c(paste0("roclet_", subclass), "roclet"))
 }

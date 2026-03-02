@@ -22,6 +22,8 @@ roclet_clean(x, base_path)
 roclet_tags(x)
 }
 \arguments{
+\item{subclass}{Class of the roclet, character vector.}
+
 \item{x}{A \code{roclet} object.}
 
 \item{blocks}{A list of \link{roxy_block} objects.}
@@ -35,6 +37,7 @@ roclet_tags(x)
 \description{
 To create a new roclet, you will need to create a constructor function
 that wraps \code{roclet}, and then implement the methods described below.
+See \code{vignette("extending")} for more details.
 }
 \section{Methods}{
 
@@ -57,4 +60,10 @@ method for each tag.
 }
 }
 
+\examples{
+# Custom roclet
+custom_roclet <- roclet("custom")
+# Roclet that extends the existing Rd roclet.
+supercharged_rd_roclet <- roclet(c("cool", "rd"))
+}
 \keyword{internal}

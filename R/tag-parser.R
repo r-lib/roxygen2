@@ -31,8 +31,18 @@ tag_value <- function(x) {
 
 # Also recorded in tags.yml
 inherit_components <- c(
-  "params", "return", "title", "description", "details", "seealso",
-  "sections", "references", "examples", "author", "source", "note",
+  "params",
+  "return",
+  "title",
+  "description",
+  "details",
+  "seealso",
+  "sections",
+  "references",
+  "examples",
+  "author",
+  "source",
+  "note",
   "format"
 )
 
@@ -55,7 +65,10 @@ tag_inherit <- function(x) {
     } else {
       unknown <- setdiff(fields, all)
       if (length(unknown) > 0) {
-        warn_roxy_tag(x, "attempts to inherit from unknown type {.str {unknown}}")
+        warn_roxy_tag(
+          x,
+          "attempts to inherit from unknown type {.str {unknown}}"
+        )
         fields <- intersect(fields, all)
       }
     }
@@ -104,26 +117,46 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
       warn_roxy_tag(x, "requires two parts: {first} and {second}")
     }
     NULL
-  } else if (required && !str_detect(x$raw, "[[:space:]]+")) {
-    warn_roxy_tag(x, "requires two parts: {first} and {second}")
-    NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    pieces <- str_split_fixed(str_trim(x$raw), "[[:space:]]+", 2)
-    pieces[is.na(pieces)] <- ""
+    pieces <- split_two_part(str_trim(x$raw))
+
+    if (required && pieces[[2]] == "") {
+      warn_roxy_tag(x, "requires two parts: {first} and {second}")
+      return(NULL)
+    }
 
     if (markdown) {
-      pieces[,2] <- markdown_if_active(pieces[,2], x)
+      pieces[, 2] <- markdown_if_active(pieces[, 2], x)
     }
 
     x$val <- list(
-      pieces[, 1],
-      trim_docstring(pieces[,2])
+      name = pieces[, 1],
+      description = trim_docstring(pieces[, 2])
     )
-    names(x$val) <- c("name", "description")
     x
+  }
+}
+
+# Split a string into two parts: a name and a description.
+# Handles backtick-quoted names that may contain spaces (e.g. `arg 1`).
+split_two_part <- function(x) {
+  if (grepl("^`", x)) {
+    match <- regexpr("^`[^`]*`", x)
+    if (match == -1L || attr(match, "match.length") == -1L) {
+      # No closing backtick; fall back to space splitting
+      str_split_fixed(x, "[[:space:]]+", 2)
+    } else {
+      end <- attr(match, "match.length")
+      # Strip backticks so name matches names(formals(fn))
+      name <- substr(x, 2, end - 1)
+      rest <- str_trim(substr(x, end + 1, nchar(x)))
+      matrix(c(name, rest), nrow = 1)
+    }
+  } else {
+    str_split_fixed(x, "[[:space:]]+", 2)
   }
 }
 
@@ -163,10 +196,13 @@ tag_words_line <- function(x) {
   n_lines <- str_count(x$val, "\n")
   if (n_lines >= 1) {
     first_line <- str_split(x$val, "\n")[[1]][[1]]
-    warn_roxy_tag(x, c(
-      "must be a single line, not {n_lines + 1}",
-      i = "The first line is {.str {first_line}}"
-    ))
+    warn_roxy_tag(
+      x,
+      c(
+        "must be a single line, not {n_lines + 1}",
+        i = "The first line is {.str {first_line}}"
+      )
+    )
     NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
@@ -197,13 +233,16 @@ tag_code <- function(x) {
     warn_roxy_tag(x, "requires a value")
     NULL
   } else {
-    tryCatch({
-      x$val <- parse(text = x$raw)
-      x
-    }, error = function(e) {
-      warn_roxy_tag(x, "failed to parse", parent = e)
-      NULL
-    })
+    tryCatch(
+      {
+        x$val <- parse(text = x$raw)
+        x
+      },
+      error = function(e) {
+        warn_roxy_tag(x, "failed to parse", parent = e)
+        NULL
+      }
+    )
   }
 }
 

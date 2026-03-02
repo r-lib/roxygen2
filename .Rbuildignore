@@ -22,3 +22,6 @@
 ^Meta$
 ^LICENSE\.md$
 ^CRAN-SUBMISSION$
+^\.claude$
+^[.]?air[.]toml$
+^\.vscode$

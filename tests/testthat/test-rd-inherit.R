@@ -8,14 +8,16 @@ test_that("can round-trip Rd", {
   expect_equal(
     lines,
     c(
-      "% Comment",   # Latex comments shouldn't be escaped
+      "% Comment", # Latex comments shouldn't be escaped
       "\\code{\\\\}" # Backslashes in code should be
     )
   )
 })
 
 test_that("\\links are transformed", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' @inheritParams digest::sha1
@@ -77,19 +79,23 @@ test_that("warns on unknown inherit type", {
 })
 
 test_that("no options gives default values", {
-  block <- parse_text("
+  block <- parse_text(
+    "
     #' @inherit fun
     NULL
-  ")[[1]]
+  "
+  )[[1]]
 
   expect_equal(block_get_tag_value(block, "inherit")$fields, inherit_components)
 })
 
 test_that("some options overrides defaults", {
-  block <- parse_text("
+  block <- parse_text(
+    "
     #' @inherit fun return
     NULL
-  ")[[1]]
+  "
+  )[[1]]
 
   expect_equal(block_get_tag_value(block, "inherit")$fields, "return")
 })
@@ -98,7 +104,9 @@ test_that("some options overrides defaults", {
 # Inherit return values ---------------------------------------------------
 
 test_that("can inherit return values from roxygen topic", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' @return ABC
@@ -108,14 +116,17 @@ test_that("can inherit return values from roxygen topic", {
     #'
     #' @inherit a
     b <- function(y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_equal(out$get_value("value"), "ABC")
 })
 
 
 test_that("takes value from first with return", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A1
     #' @return A
     a1 <- function(x) {}
@@ -132,17 +143,21 @@ test_that("takes value from first with return", {
     #' @inherit b
     #' @inherit a1
     c <- function(y) {}
-  ")[[3]]
+  "
+  )[[3]]
 
   expect_equal(out$get_value("value"), "B")
 })
 
 test_that("can inherit return value from external function", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A1
     #' @inherit base::mean
     a1 <- function(x) {}
-  ")[[1]]
+  "
+  )[[1]]
 
   expect_match(out$get_value("value"), "before the mean is computed.$")
   expect_match(out$get_value("value"), "^If \\\\code")
@@ -152,7 +167,9 @@ test_that("can inherit return value from external function", {
 # Inherit seealso ---------------------------------------------------------
 
 test_that("can inherit return values from roxygen topic", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' @seealso ABC
@@ -162,7 +179,8 @@ test_that("can inherit return values from roxygen topic", {
     #'
     #' @inherit a
     b <- function(y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_equal(out$get_value("seealso"), "ABC")
 })
@@ -170,7 +188,9 @@ test_that("can inherit return values from roxygen topic", {
 # Inherit description and details -----------------------------------------
 
 test_that("can inherit description from roxygen topic", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' B
@@ -181,13 +201,16 @@ test_that("can inherit description from roxygen topic", {
     #' @title C
     #' @inherit a description
     b <- function(y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_equal(out$get_value("description"), "B")
 })
 
 test_that("inherits description if omitted", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' B
@@ -198,13 +221,16 @@ test_that("inherits description if omitted", {
     #' C
     #' @inherit a description
     b <- function(y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_equal(out$get_value("description"), "B")
 })
 
 test_that("can inherit details from roxygen topic", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' B
@@ -220,18 +246,20 @@ test_that("can inherit details from roxygen topic", {
     #'
     #' @inherit a details
     b <- function(y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_equal(out$get_value("description"), "E")
   expect_equal(out$get_value("details"), "C")
 })
 
 
-
 # Inherit sections --------------------------------------------------------
 
 test_that("inherits missing sections", {
-    out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #' @section A:1
     #' @section B:1
@@ -242,7 +270,8 @@ test_that("inherits missing sections", {
     #' @section A:2
     #' @inherit a sections
     b <- function(y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   section <- out$get_value("section")
   expect_equal(section$title, c("A", "B"))
@@ -250,7 +279,9 @@ test_that("inherits missing sections", {
 })
 
 test_that("can inherit single section", {
-    out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #' @section A:1
     #' @section B:1
@@ -260,7 +291,8 @@ test_that("can inherit single section", {
     #'
     #' @inheritSection a B
     b <- function(y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   section <- out$get_value("section")
   expect_equal(section$title, "B")
@@ -296,7 +328,9 @@ test_that("match_params can ignore . prefix", {
 })
 
 test_that("multiple @inheritParam tags gathers all params", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' @param x X
@@ -312,7 +346,8 @@ test_that("multiple @inheritParam tags gathers all params", {
     #' @inheritParams a
     #' @inheritParams b
     c <- function(x, y) {}
-    ")
+    "
+  )
 
   params <- out[["c.Rd"]]$get_value("param")
   expect_equal(length(params), 2)
@@ -322,7 +357,9 @@ test_that("multiple @inheritParam tags gathers all params", {
 })
 
 test_that("multiple @inheritParam tags gathers all params", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' @param x X
@@ -338,12 +375,15 @@ test_that("multiple @inheritParam tags gathers all params", {
     #' @inheritParams a
     #' @inheritParams b
     c <- function(.x, y) {}
-    ")[[3]]
+    "
+  )[[3]]
   expect_equal(out$get_value("param"), c(.x = "X", y = "Y"))
 })
 
 test_that("@inheritParam preserves mixed names", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #' @param .x,x X
     a <- function(x, .x) {}
@@ -351,13 +391,16 @@ test_that("@inheritParam preserves mixed names", {
     #' B
     #' @inheritParams a
     b <- function(x, .x) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_equal(out$get_value("param"), c(".x,x" = "X"))
 })
 
 test_that("can inherit from same arg twice", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' @param x X
@@ -373,12 +416,15 @@ test_that("can inherit from same arg twice", {
     #' @inheritParams a
     #' @rdname b
     c <- function(.x) {}
-    ")[[2]]
+    "
+  )[[2]]
   expect_equal(out$get_value("param"), c("x,.x" = "X"))
 })
 
 test_that("@inheritParams can inherit from inherited params", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' C
     #'
     #' @inheritParams b
@@ -393,17 +439,21 @@ test_that("@inheritParams can inherit from inherited params", {
     #'
     #' @param x X
     a <- function(x) {}
-    ")
+    "
+  )
 
   expect_equal(out[["c.Rd"]]$get_value("param"), c(x = "X"))
 })
 
 test_that("multiple @inheritParam inherits from existing topics", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' My mean
     #'
     #' @inheritParams base::mean
-    mymean <- function(x, trim) {}")[[1]]
+    mymean <- function(x, trim) {}"
+  )[[1]]
   params <- out$get_value("param")
   expect_equal(length(params), 2)
   expect_equal(sort(names(params)), c("trim", "x"))
@@ -411,7 +461,9 @@ test_that("multiple @inheritParam inherits from existing topics", {
 
 
 test_that("@inheritParam can inherit multivariable arguments", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A
     #' @param x,y X and Y
     A <- function(x, y) {}
@@ -424,7 +476,9 @@ test_that("@inheritParam can inherit multivariable arguments", {
   expect_equal(out$get_value("param"), c("x,y" = "X and Y"))
 
   # Even when the names only match without .
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A
     #' @param x,y X and Y
     A <- function(x, y) {}
@@ -438,7 +492,9 @@ test_that("@inheritParam can inherit multivariable arguments", {
 })
 
 test_that("@inheritParam only inherits exact multiparam matches", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A
     #' @param x,y X and Y
     A <- function(x, y) {}
@@ -453,7 +509,9 @@ test_that("@inheritParam only inherits exact multiparam matches", {
 
 
 test_that("@inheritParam understands compound docs", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' @param x x
@@ -464,7 +522,8 @@ test_that("@inheritParam understands compound docs", {
     #'
     #' @inheritParams x
     #' @param y y
-    y <- function(x, y) {}")[[2]]
+    y <- function(x, y) {}"
+  )[[2]]
   params <- out$get_value("param")
   expect_equal(params, c(x = "x", y = "y"))
 })
@@ -482,7 +541,9 @@ test_that("warned if no params need documentation", {
 })
 
 test_that("argument order, also for incomplete documentation", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' @param y Y
@@ -510,17 +571,20 @@ test_that("argument order, also for incomplete documentation", {
     #' @inheritParams c
     #' @param y Y
     e <- function(x, y, z) {}
-  ")
+  "
+  )
 
-  expect_equal(out[["a.Rd"]]$get_value("param"), c(x="X", y="Y"))
-  expect_equal(out[["b.Rd"]]$get_value("param"), c(y="Y"))
-  expect_equal(out[["c.Rd"]]$get_value("param"), c(x="X"))
-  expect_equal(out[["d.Rd"]]$get_value("param"), c(y="Y", z="Z"))
-  expect_equal(out[["e.Rd"]]$get_value("param"), c(x="X", y="Y"))
+  expect_equal(out[["a.Rd"]]$get_value("param"), c(x = "X", y = "Y"))
+  expect_equal(out[["b.Rd"]]$get_value("param"), c(y = "Y"))
+  expect_equal(out[["c.Rd"]]$get_value("param"), c(x = "X"))
+  expect_equal(out[["d.Rd"]]$get_value("param"), c(y = "Y", z = "Z"))
+  expect_equal(out[["e.Rd"]]$get_value("param"), c(x = "X", y = "Y"))
 })
 
 test_that("argument order with @inheritParam", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' A.
     #'
     #' @param x X
@@ -550,7 +614,8 @@ test_that("argument order with @inheritParam", {
     #' @inheritParams a
     #' @param x C
     c2<- function(x, y) {}
-    ")
+    "
+  )
 
   expect_equal(out[["b1.Rd"]]$get_value("param"), c(x = "X", y = "B"))
   expect_equal(out[["b2.Rd"]]$get_value("param"), c(x = "X", y = "B"))
@@ -560,7 +625,9 @@ test_that("argument order with @inheritParam", {
 
 
 test_that("inherit params ... named \\dots", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Foo
     #'
     #' @param x x
@@ -572,19 +639,21 @@ test_that("inherit params ... named \\dots", {
     #' @inheritParams foo
     #' @param \\dots bar
     bar <- function(x=1, ...) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_equal(
     out$get_value("param"),
     c(x = "x", "\\dots" = "bar")
   )
-
 })
 
 # inheritDotParams --------------------------------------------------------
 
 test_that("can inherit all from single function", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Foo
     #'
     #' @param x x
@@ -595,13 +664,16 @@ test_that("can inherit all from single function", {
     #'
     #' @inheritDotParams foo
     bar <- function(...) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_snapshot_output(test_path("test-rd-inherit-dots.txt"))
 })
 
 test_that("does not produce multiple ... args", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Foo
     #'
     #' @inheritParams bar
@@ -619,13 +691,16 @@ test_that("does not produce multiple ... args", {
     #' @param y y
     #' @param z z
     baz <- function(y, z) {}
-  ")[[1]]
+  "
+  )[[1]]
 
   expect_snapshot_output(test_path("test-rd-inherit-dots-inherit.txt"))
 })
 
 test_that("can inherit dots from several functions", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Foo
     #'
     #' @param x x
@@ -643,13 +718,16 @@ test_that("can inherit dots from several functions", {
     #' @inheritDotParams foo
     #' @inheritDotParams bar
     foobar <- function(...) {}
-  ")[[3]]
+  "
+  )[[3]]
 
   expect_snapshot_output(out$get_section("param"))
 })
 
 test_that("inheritDotParams does not add already-documented params", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Wrapper around original
     #'
     #' @inherit original
@@ -667,7 +745,8 @@ test_that("inheritDotParams does not add already-documented params", {
     #' @param z z description
     #' @export
     original <- function(x, y, z, ...) {}
-  ")[[1]]
+  "
+  )[[1]]
 
   params <- out$get_value("param")
   dot_param <- params[["..."]]
@@ -697,7 +776,9 @@ test_that("useful error for bad inherits", {
 # inherit everything ------------------------------------------------------
 
 test_that("can inherit all from single function", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Foo
     #'
     #' Description
@@ -716,7 +797,8 @@ test_that("can inherit all from single function", {
 
     #' @inherit foo
     bar <- function(x, y) {}
-  ")[[2]]
+  "
+  )[[2]]
 
   expect_named(out$get_value("param"), c("x", "y"))
   expect_equal(out$get_value("title"), "Foo")

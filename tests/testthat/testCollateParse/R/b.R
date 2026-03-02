@@ -1,2 +1,1 @@
-
-b <- function() { }
+b <- function() {}

@@ -3,7 +3,7 @@ select_args_text <- function(fun, select = "", topic) {
 
   tryCatch(
     {
-      parsed <- lapply(pieces, function(x) parse(text = x)[[1]])
+      parsed <- lapply(pieces, \(x) parse(text = x)[[1]])
       select_args(fun, parsed)
     },
     error = function(e) {

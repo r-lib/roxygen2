@@ -201,8 +201,8 @@ In other words, `.x` will inherit documentation for `x`, and `x` will inherit do
 
 ### Inheriting other components
 
-You can use `@inherits foo` to inherit the documentation for every supported tag from another topic.
-Currently, `@inherits` supports inheriting the following tags: `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`.
+You can use `@inherit foo` to inherit the documentation for every supported tag from another topic.
+Currently, `@inherit` supports inheriting the following tags: `r paste0("\x60", roxygen2:::inherit_components, "\x60", collapse = ", ")`.
 
 By supplying a space separated list of components after the function name, you can also choose to inherit only selected components.
 For example, `@inherit foo returns` would just inherit the `@returns` tag, and `@inherit foo seealso source` would inherit the `@seealso` and `@source` tags.

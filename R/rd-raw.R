@@ -17,20 +17,23 @@ format.rd_section_rawRd <- function(x, ...) {
 }
 
 roxy_tag_eval <- function(tag, env = new.env(parent = baseenv())) {
-  tryCatch({
-    out <- roxy_eval(tag$val, env)
+  tryCatch(
+    {
+      out <- roxy_eval(tag$val, env)
 
-    if (!is.character(out)) {
-      warn_roxy_tag(tag, "must evaluate to a character vector")
+      if (!is.character(out)) {
+        warn_roxy_tag(tag, "must evaluate to a character vector")
+        NULL
+      } else if (anyNA(out)) {
+        warn_roxy_tag(tag, "must not contain any missing values")
+        NULL
+      } else {
+        out
+      }
+    },
+    error = function(e) {
+      warn_roxy_tag(tag, "failed to evaluate", parent = e)
       NULL
-    } else if (anyNA(out)) {
-      warn_roxy_tag(tag, "must not contain any missing values")
-      NULL
-    } else {
-      out
     }
-  }, error = function(e) {
-    warn_roxy_tag(tag, "failed to evaluate", parent = e)
-    NULL
-  })
+  )
 }

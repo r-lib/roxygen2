@@ -9,49 +9,88 @@ internal_f <- function(p, f) {
   if (length(a) > 0) a else b
 }
 
-subs <- matrix(ncol = 2, byrow = T, c(
-  # Common special function names
-  '[<-', 'subset',
-  '[', 'sub',
-  '<-', 'set',
+subs <- matrix(
+  ncol = 2,
+  byrow = T,
+  c(
+    # Common special function names
+    '[<-',
+    'subset',
+    '[',
+    'sub',
+    '<-',
+    'set',
 
-  # Infix verbs
-  '!', 'not',
-  '&', 'and',
-  '|', 'or',
-  '*', 'times',
-  '+', 'plus',
-  '^', 'pow',
+    # Infix verbs
+    '!',
+    'not',
+    '&',
+    'and',
+    '|',
+    'or',
+    '*',
+    'times',
+    '+',
+    'plus',
+    '^',
+    'pow',
 
-  # Others
-  '"', 'quote',
-  '#', 'hash',
-  '$', 'cash',
-  '%', 'grapes',
-  "'", 'single-quote',
-  '(', 'open-paren',
-  ')', 'close-paren',
-  ':', 'colon',
-  ';', 'semi-colon',
-  '<', 'less-than',
-  '==', 'equals',
-  '=', 'equals',
-  '>', 'greater-than',
-  '?', 'help',
-  '@', 'at',
-  ']', 'close-brace',
-  '\\', 'backslash',
-  '/', 'slash',
-  '`', 'tick',
-  '{', 'open-curly',
-  '}', 'close',
-  '~', 'twiddle'
-))
+    # Others
+    '"',
+    'quote',
+    '#',
+    'hash',
+    '$',
+    'cash',
+    '%',
+    'grapes',
+    "'",
+    'single-quote',
+    '(',
+    'open-paren',
+    ')',
+    'close-paren',
+    ':',
+    'colon',
+    ';',
+    'semi-colon',
+    '<',
+    'less-than',
+    '==',
+    'equals',
+    '=',
+    'equals',
+    '>',
+    'greater-than',
+    '?',
+    'help',
+    '@',
+    'at',
+    ']',
+    'close-brace',
+    '\\',
+    'backslash',
+    '/',
+    'slash',
+    '`',
+    'tick',
+    '{',
+    'open-curly',
+    '}',
+    'close',
+    '~',
+    'twiddle'
+  )
+)
 subs[, 2] <- paste0("-", subs[, 2], "-")
 
 nice_name <- function(x) {
-  x <- stringi::stri_replace_all_fixed(x, subs[, 1], subs[, 2],
-    vectorize_all = FALSE)
+  x <- stringi::stri_replace_all_fixed(
+    x,
+    subs[, 1],
+    subs[, 2],
+    vectorize_all = FALSE
+  )
 
   # Clean up any remaining
   x <- str_replace_all(x, "[^A-Za-z0-9_.-]+", "-")
@@ -78,7 +117,9 @@ write_if_different <- function(path, contents, command = NULL, check = TRUE) {
   line_ending <- detect_line_ending(path)
   contents <- paste0(paste0(contents, collapse = line_ending), line_ending)
   contents <- enc2utf8(gsub("\r?\n", line_ending, contents))
-  if (same_contents(path, contents)) return(FALSE)
+  if (same_contents(path, contents)) {
+    return(FALSE)
+  }
 
   if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
     cli::cli_inform(c(
@@ -103,7 +144,9 @@ same_contents <- function(path, contents) {
   if (length(contents) != 1) {
     cli::cli_abort("`contents` must be character(1)", .internal = TRUE)
   }
-  if (!file.exists(path)) return(FALSE)
+  if (!file.exists(path)) {
+    return(FALSE)
+  }
 
   text_hash <- cli::hash_sha256(contents)
 
@@ -118,16 +161,21 @@ compact <- function(x) {
 }
 
 invert <- function(x) {
-  if (length(x) == 0) return()
+  if (length(x) == 0) {
+    return()
+  }
   stacked <- utils::stack(x)
   tapply(as.character(stacked$ind), stacked$values, list)
 }
 
 is_namespaced <- function(x) {
-  tryCatch({
-    expr <- parse_expr(x)
-    is_call(expr, "::", n = 2)
-  }, error = function(err) FALSE)
+  tryCatch(
+    {
+      expr <- parse_expr(x)
+      is_call(expr, "::", n = 2)
+    },
+    error = function(err) FALSE
+  )
 }
 
 # Collapse the values associated with duplicated keys
@@ -180,16 +228,28 @@ auto_quote <- function(x) {
 }
 
 is_syntactic <- function(x) make.names(x) == x
-has_quotes <- function(x) str_detect(x, "^(`|'|\").*\\1$")
-strip_quotes <- function(x) str_replace(x, "^(`|'|\")(.*)\\1$", "\\2")
+has_quotes <- function(x) str_detect(x, r"[^(`|'|").*\1$]")
+strip_quotes <- function(x) str_replace(x, r"[^(`|'|")(.*)\1$]", r"(\2)")
 
 base_packages <- function() {
   if (getRversion() >= "4.4.0") {
     asNamespace("tools")$standard_package_names()[["base"]]
   } else {
-    c("base", "compiler", "datasets",
-      "graphics", "grDevices", "grid", "methods", "parallel",
-      "splines", "stats", "stats4", "tcltk", "tools", "utils"
+    c(
+      "base",
+      "compiler",
+      "datasets",
+      "graphics",
+      "grDevices",
+      "grid",
+      "methods",
+      "parallel",
+      "splines",
+      "stats",
+      "stats4",
+      "tcltk",
+      "tools",
+      "utils"
     )
   }
 }

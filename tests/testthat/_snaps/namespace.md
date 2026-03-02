@@ -3,7 +3,7 @@
     Code
       . <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @exportS3Method must be used with an known S3 method.
+      x <text>:2: @exportS3Method must be used with a known S3 method.
 
 # @exportS3Method can extract class from generic
 

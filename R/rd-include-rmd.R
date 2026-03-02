@@ -18,7 +18,9 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
     return(NULL)
   }
 
-  if (section == "") section <- "details"
+  if (section == "") {
+    section <- "details"
+  }
   stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
 
   rmd_path <- tempfile(fileext = ".Rmd")
@@ -56,7 +58,9 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
       output_format = "github_document",
       output_options = c(
         list(html_preview = FALSE),
-        if (utils::packageVersion("rmarkdown") >= "2.12") list(math_method = NULL)
+        if (utils::packageVersion("rmarkdown") >= "2.12") {
+          list(math_method = NULL)
+        }
       ),
       output_file = md_path,
       quiet = TRUE,
@@ -73,8 +77,12 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
 
   tryCatch(
     value <- rmd_eval_rd(md_path, x),
-    error =  function(e) {
-      warn_roxy_tag(x, "failed to process result of {.path {rel_rmd}}", parent = e)
+    error = function(e) {
+      warn_roxy_tag(
+        x,
+        "failed to process result of {.path {rel_rmd}}",
+        parent = e
+      )
     }
   )
 

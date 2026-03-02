@@ -104,18 +104,42 @@ is_replacement_fun <- function(name) {
 }
 is_infix_fun <- function(name) {
   ops <- c(
-    "+", "-", "*", "^", "/",
-    "==", ">", "<", "!=", "<=", ">=",
-    "&", "|",
-    "[[", "[", "$", ":", "::", ":::"
+    "+",
+    "-",
+    "*",
+    "^",
+    "/",
+    "==",
+    ">",
+    "<",
+    "!=",
+    "<=",
+    ">=",
+    "&",
+    "|",
+    "[[",
+    "[",
+    "$",
+    ":",
+    "::",
+    ":::"
   )
   str_detect(name, "^%.*%$") || name %in% ops
 }
 is_padded_infix_fun <- function(name) {
   ops <- c(
-    "+", "-", "*", "/",
-    "==", ">", "<", "!=", "<=", ">=",
-    "&", "|"
+    "+",
+    "-",
+    "*",
+    "/",
+    "==",
+    ">",
+    "<",
+    "!=",
+    "<=",
+    ">=",
+    "&",
+    "|"
   )
   str_detect(name, "^%.*%$") || name %in% ops
 }
@@ -125,7 +149,9 @@ usage_args <- function(args) {
     is.symbol(arg) && deparse(arg) == ""
   }
   arg_to_text <- function(arg) {
-    if (is.missing.arg(arg)) return("")
+    if (is.missing.arg(arg)) {
+      return("")
+    }
     text <- enc2utf8(deparse(arg, backtick = TRUE, width.cutoff = 500L))
     text <- paste0(text, collapse = "\n")
     Encoding(text) <- "UTF-8"
@@ -175,7 +201,12 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
     # Wrap each argument and put on own line
     args <- paste0("  ", args)
     args <- map_chr(args, wrapUsage, width = 90, indent = 4)
-    out <- paste0(format_name(name), "(\n", paste0(args, collapse = ",\n"), "\n)")
+    out <- paste0(
+      format_name(name),
+      "(\n",
+      paste0(args, collapse = ",\n"),
+      "\n)"
+    )
   }
 
   rd(paste0(out, suffix))

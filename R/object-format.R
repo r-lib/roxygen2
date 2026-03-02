@@ -18,14 +18,15 @@ object_format.default <- function(x) {
 }
 
 format_classes <- function(x) {
-  classes <- paste0("\\code{", class(x), "}")
+  classes <- paste0("\\code{", escape_rd_braces(class(x)), "}")
 
   base_classes <- NULL
   if (length(classes) > 1L) {
     base_classes <- paste0(
       " (inherits from ",
       paste(classes[-1L], collapse = ", "),
-      ")")
+      ")"
+    )
   }
 
   paste0(classes[[1L]], base_classes)
@@ -39,6 +40,12 @@ format_dim <- function(x) {
   } else {
     paste0("of length ", length(x))
   }
+}
+
+escape_rd_braces <- function(x) {
+  x <- gsub("{", "\\{", x, fixed = TRUE)
+  x <- gsub("}", "\\}", x, fixed = TRUE)
+  x
 }
 
 # helpers -----------------------------------------------------------------

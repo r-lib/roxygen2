@@ -15,7 +15,7 @@
       
     Message
       
-      Quitting from lines 1-1
+      Quitting from :1-1
       x <text>:4: @description failed to evaluate inline markdown code.
       Caused by error in `map_chr()`:
       i In index: 1.

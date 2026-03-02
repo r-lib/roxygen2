@@ -2,22 +2,30 @@
 # see test-markdown-code.R for evaluated code
 
 test_that("backticks are converted to \\code & \\verb", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some `code` included. `More code.`
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some \\code{code} included. \\verb{More code.}
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("code blocks work", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' @description
@@ -27,11 +35,14 @@ test_that("code blocks work", {
     #' ```
     #' After
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_snapshot_output(cat(out1$get_value("description")))
 
   # And check that extra empty paragraphs don't affect the output
-  out2 <- roc_proc_text(rd_roclet(), "
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' @description
@@ -43,12 +54,15 @@ test_that("code blocks work", {
     #'
     #' After
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equal(out1$get_value("description"), out2$get_value("description"))
 })
 
 test_that("code block with language creates HTML tag", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' @description
@@ -58,20 +72,21 @@ test_that("code block with language creates HTML tag", {
     #' ```
     #' After
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_snapshot_output(cat(out1$get_value("description")))
 })
 
 test_that("inline code escapes %", {
-  expect_equal(markdown("`5%`"), "\\verb{5\\%}")
-  expect_equal(markdown("`'5%'`"), "\\code{'5\\%'}")
-  expect_equal(markdown("`%*%`"), "\\code{\\%*\\%}")
+  expect_equal(markdown("`5%`"), r"(\verb{5\%})")
+  expect_equal(markdown("`'5%'`"), r"(\code{'5\%'})")
+  expect_equal(markdown("`%*%`"), r"(\code{\%*\%})")
 })
 
 test_that("inline verbatim escapes Rd special chars", {
-  expect_equal(markdown("`{`"), "\\verb{\\{}")
-  expect_equal(markdown("`}`"), "\\verb{\\}}")
-  expect_equal(markdown("`\\`"), "\\verb{\\\\}")
+  expect_equal(markdown("`{`"), r"(\verb{\{})")
+  expect_equal(markdown("`}`"), r"(\verb{\}})")
+  expect_equal(markdown("`\\`"), r"(\verb{\\})")
 })
 
 test_that("special operators get \\code{}, not \\verb{}", {
@@ -79,20 +94,25 @@ test_that("special operators get \\code{}, not \\verb{}", {
 })
 
 test_that("inline code works with < and >", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' `SELECT <name> FROM <table>`
     #' @md
     f <- function() 1
-  ")[[1]]
+  "
+  )[[1]]
 
-  expect_equal(out$get_value("title"), "\\verb{SELECT <name> FROM <table>}")
+  expect_equal(out$get_value("title"), r"(\verb{SELECT <name> FROM <table>})")
 })
 
 
 # lists -------------------------------------------------------------------
 
 test_that("itemized lists work", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some
@@ -104,8 +124,11 @@ test_that("itemized lists work", {
     #' * item 2
     #' * item 3
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some
@@ -120,12 +143,15 @@ test_that("itemized lists work", {
     #' \\item item 2
     #' \\item item 3
     #' }
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("numbered lists work", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some
@@ -137,8 +163,11 @@ test_that("numbered lists work", {
     #' 1. item 2
     #' 1. item 3
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some
@@ -153,12 +182,15 @@ test_that("numbered lists work", {
     #' \\item item 2
     #' \\item item 3
     #' }
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("nested lists are OK", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some
@@ -174,8 +206,11 @@ test_that("nested lists are OK", {
     #'    * within
     #' * item 3
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some
@@ -199,7 +234,8 @@ test_that("nested lists are OK", {
     #' \\item item 3
     #' }
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
@@ -207,27 +243,32 @@ test_that("nested lists are OK", {
 # html --------------------------------------------------------------------
 
 test_that("can insert block and inline html", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' <p>This is a paragraph</p>
     #' <p>This is another paragraph</p>
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_snapshot(out$get_section("description"))
 
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' This is a paragraph containing a manually inserted image
     #' before-<img src='foo.png'>-after
     #' @md
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_snapshot(out$get_section("description"))
 })
 
 # tables ------------------------------------------------------------------
-
 
 test_that("can convert table to Rd", {
   txt <- "
@@ -258,75 +299,101 @@ test_that("can convert table to Rd", {
 # inline formatting -------------------------------------------------------
 
 test_that("emphasis works", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some _emphasis_ included. _More emph._
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some \\emph{emphasis} included. \\emph{More emph.}
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("strong (bold) text works", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some **bold** included. **More bold.**
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some \\strong{bold} included. \\strong{More bold.}
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("markdown links are converted", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description, see [http://acme.com]() for details.
     #' And here is a named link: [igraph](http://igraph.org).
     #' Here is another kind of link: <https://log.r-hub.io>.
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description, see \\url{http://acme.com} for details.
     #' And here is a named link: \\href{http://igraph.org}{igraph}.
     #' Here is another kind of link: \\url{https://log.r-hub.io}.
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("images are recognized", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description
     #'
     #' Details with a plot: ![](example.jpg \"Plot title\")
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description
     #'
     #' Details with a plot: \\figure{example.jpg}{Plot title}
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("markdown is parsed in all fields where it is supported", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @title Title **with bold**
     #'
     #' @description Description **with bold**
@@ -357,8 +424,11 @@ test_that("markdown is parsed in all fields where it is supported", {
     #' @field field Field **with bold**
     #'
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @title Title \\strong{with bold}
     #'
     #' @description Description \\strong{with bold}
@@ -387,13 +457,16 @@ test_that("markdown is parsed in all fields where it is supported", {
     #' @slot slot Slot \\strong{with bold}
     #'
     #' @field field Field \\strong{with bold}
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 
 test_that("markdown emphasis is ok", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description with some *keywords* included.
@@ -401,35 +474,44 @@ test_that("markdown emphasis is ok", {
     #'   emphasised*. Or are they?
     #' }
     #' @md
-    foo <- function() {}")[[1]]
-  desc1 <- "Description with some \\emph{keywords} included.
-So far so good. \\preformatted{ *these are not
+    foo <- function() {}"
+  )[[1]]
+  desc1 <- r"(Description with some \emph{keywords} included.
+So far so good. \preformatted{ *these are not
   emphasised*. Or are they?
-}"
+})"
   expect_equal(out1$get_section("description")[[2]], desc1)
 })
 
 test_that("% is automatically escaped", {
-  expect_equal(markdown("5%"), "5\\%")
+  expect_equal(markdown("5%"), r"(5\%)")
 })
 
 test_that("Escaping is kept", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description. It has \\rd \\commands.
     #' @md
-    foo <- function() {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description. It has \\rd \\commands.
-    foo <- function() {}")[[1]]
+    foo <- function() {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
 test_that("Do not pick up `` in arguments \\item #519", {
-  out1 <- roc_proc_text(rd_roclet(), "
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description.
@@ -438,8 +520,11 @@ test_that("Do not pick up `` in arguments \\item #519", {
     #' @param `_arg2` should not be code, either. `But this.`
     #'
     #' @md
-    foo <- function(`_arg1`, `_arg2`) {}")[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+    foo <- function(`_arg1`, `_arg2`) {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description.
@@ -447,7 +532,8 @@ test_that("Do not pick up `` in arguments \\item #519", {
     #' @param `_arg1` should not be code. But \\verb{this should}.
     #' @param `_arg2` should not be code, either. \\verb{But this.}
     #'
-    foo <- function(`_arg1`, `_arg2`) {}")[[1]]
+    foo <- function(`_arg1`, `_arg2`) {}"
+  )[[1]]
   expect_equivalent_rd(out1, out2)
 })
 
@@ -498,7 +584,10 @@ test_that("level >2 markdown headings work in @description", {
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
     out$get_value("description"),
-    "\\subsection{This is good}{\n\nyes\n}"
+    r"(\subsection{This is good}{
+
+yes
+})"
   )
 })
 
@@ -519,7 +608,13 @@ test_that("level >2 markdown headings work in @details", {
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
     out$get_value("details"),
-    "\\subsection{Heading 2}{\n\\subsection{Heading 3}{\n\nText.\n}\n\n}"
+    r"(\subsection{Heading 2}{
+\subsection{Heading 3}{
+
+Text.
+}
+
+})"
   )
 })
 
@@ -539,7 +634,11 @@ test_that("level >2 markdown headings work in @return", {
   out <- roc_proc_text(rd_roclet(), text)[[1]]
   expect_equal_strings(
     out$get_value("value"),
-    "Even this\n\\subsection{Can have a subsection.}{\n\nYes.\n}"
+    r"(Even this
+\subsection{Can have a subsection.}{
+
+Yes.
+})"
   )
 })
 
@@ -641,7 +740,10 @@ test_that("markup in headings", {
 
 test_that("alternative knitr engines", {
   expect_snapshot(
-    print(out1 <- roc_proc_text(rd_roclet(), "
+    print(
+      out1 <- roc_proc_text(
+        rd_roclet(),
+        "
       #' Title
       #'
       #' Description.
@@ -652,14 +754,18 @@ test_that("alternative knitr engines", {
       #' @md
       #' @name x
       NULL
-    "))
+    "
+      )
+    )
   )
 })
 
 test_that("can override default options", {
   local_roxy_meta_set("knitr_chunk_options", list(comment = "###"))
 
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' ```{r}
@@ -667,13 +773,16 @@ test_that("can override default options", {
     #' ```
     #' @md
     foo <- function() { }
-  ")[[1]]
+  "
+  )[[1]]
   expect_match(out$get_section("description")$value, "###", fixed = TRUE)
 })
 
 test_that("image formats work", {
   expect_snapshot(
-    roc_proc_text(rd_roclet(), "
+    roc_proc_text(
+      rd_roclet(),
+      "
       #' Title
       #'
       #' ![](example.svg \"Plot title 1\")
@@ -681,6 +790,7 @@ test_that("image formats work", {
       #' ![](example.PNG \"Plot title 3\")
       #' @md
       foo <- function() { }
-    ")[[1]]
+    "
+    )[[1]]
   )
 })

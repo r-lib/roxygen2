@@ -10,8 +10,9 @@ roxy_tag_parse.roxy_tag_templateVar <- function(x) {
 
 process_templates <- function(block, base_path) {
   tags <- block_get_tags(block, "template")
-  if (length(tags) == 0)
+  if (length(tags) == 0) {
     return(block)
+  }
 
   templates <- map_chr(tags, "val")
   paths <- map_chr(templates, template_find, base_path = base_path)

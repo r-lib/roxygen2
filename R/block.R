@@ -34,11 +34,7 @@
 #' # parse_text() returns a list of blocks, so I extract the first
 #' block <- parse_text(text)[[1]]
 #' block
-roxy_block <- function(tags,
-                       file,
-                       line,
-                       call,
-                       object = NULL) {
+roxy_block <- function(tags, file, line, call, object = NULL) {
   stopifnot(is.list(tags))
   stopifnot(is.character(file), length(file) == 1)
   stopifnot(is.integer(line), length(line) == 1)
@@ -98,7 +94,6 @@ block_set_env <- function(block, env) {
 }
 
 block_evaluate <- function(block, env) {
-
   tags <- block_get_tags(block, "eval")
   if (length(tags) == 0) {
     return(block)
@@ -115,7 +110,9 @@ block_evaluate <- function(block, env) {
   })
 
   # Tokenise and parse
-  tokens <- lapply(results, tokenise_block,
+  tokens <- lapply(
+    results,
+    tokenise_block,
     file = block$file,
     offset = block$line
   )
@@ -143,7 +140,10 @@ block_find_object <- function(block, env) {
 
   # Add in defaults generated from the object
   defaults <- object_defaults(object, block)
-  defaults <- c(defaults, list(roxy_generated_tag(block, "backref", block$file)))
+  defaults <- c(
+    defaults,
+    list(roxy_generated_tag(block, "backref", block$file))
+  )
 
   default_tags <- map_chr(defaults, "tag")
   defaults <- defaults[!default_tags %in% block_tags(block)]
@@ -254,7 +254,13 @@ parse_description <- function(tags) {
   if ("title" %in% tag_names) {
     title <- NULL
   } else if (length(paragraphs) > 0) {
-    title <- roxy_tag("title", paragraphs[1], NULL, intro$file, intro$line + offsets[[1]])
+    title <- roxy_tag(
+      "title",
+      paragraphs[1],
+      NULL,
+      intro$file,
+      intro$line + offsets[[1]]
+    )
     paragraphs <- paragraphs[-1]
     offsets <- offsets[-1]
   } else {
@@ -265,7 +271,13 @@ parse_description <- function(tags) {
   if ("description" %in% tag_names || length(paragraphs) == 0) {
     description <- NULL
   } else if (length(paragraphs) > 0) {
-    description <- roxy_tag("description", paragraphs[1], NULL, intro$file, intro$line + offsets[[1]])
+    description <- roxy_tag(
+      "description",
+      paragraphs[1],
+      NULL,
+      intro$file,
+      intro$line + offsets[[1]]
+    )
     paragraphs <- paragraphs[-1]
     offsets <- offsets[-1]
   }
@@ -279,10 +291,19 @@ parse_description <- function(tags) {
     if (length(didx) > 0) {
       explicit_details <- map_chr(tags[didx], "raw")
       tags <- tags[-didx]
-      details_para <- paste(c(details_para, explicit_details), collapse = "\n\n")
+      details_para <- paste(
+        c(details_para, explicit_details),
+        collapse = "\n\n"
+      )
     }
 
-    details <- roxy_tag("details", details_para, NULL, intro$file, intro$line + offsets[[1]])
+    details <- roxy_tag(
+      "details",
+      details_para,
+      NULL,
+      intro$file,
+      intro$line + offsets[[1]]
+    )
   } else {
     details <- NULL
   }

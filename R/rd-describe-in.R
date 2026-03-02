@@ -1,10 +1,13 @@
 #' @export
 roxy_tag_parse.roxy_tag_describeIn <- function(x) {
   if (!is.na(x$raw) && !str_detect(x$raw, "[[:space:]]+")) {
-    warn_roxy_tag(x, c(
-      "requires a name and description",
-      i = "Did you want @rdname instead?"
-    ))
+    warn_roxy_tag(
+      x,
+      c(
+        "requires a name and description",
+        i = "Did you want @rdname instead?"
+      )
+    )
     NULL
   } else {
     tag_two_part(x, "a topic name", "a description")
@@ -65,11 +68,13 @@ topic_add_describe_in <- function(topic, block, env) {
 #' @return a dataframe with one row for each `@describeIn`, wrapped inside
 #' `rd_section()`
 #' @noRd
-rd_section_minidesc <- function(name,
-                                desc,
-                                extends = c("", "generic", "class"),
-                                generic = "",
-                                class = "") {
+rd_section_minidesc <- function(
+  name,
+  desc,
+  extends = c("", "generic", "class"),
+  generic = "",
+  class = ""
+) {
   stopifnot(is_string(name))
   stopifnot(is_character(desc))
   rlang::arg_match(extends)
@@ -81,8 +86,7 @@ rd_section_minidesc <- function(name,
     desc = desc,
     extends = extends,
     generic = generic,
-    class = class,
-    stringsAsFactors = FALSE
+    class = class
   )
   rd_section("minidesc", data)
 }
@@ -107,7 +111,8 @@ format.rd_section_minidesc <- function(x, ...) {
 }
 
 format_section <- function(df, type) {
-  title <- switch(type,
+  title <- switch(
+    type,
     class = "Methods (by generic)",
     generic = "Methods (by class)",
     "Functions"
@@ -205,7 +210,6 @@ fits_constructor <- function(dest_name, src) {
 }
 
 
-
 object_name <- function(x) {
   UseMethod("object_name")
 }
@@ -223,9 +227,9 @@ object_name.s3generic <- object_name.function
 object_name.s3method <- function(x) {
   method <- attr(x$value, "s3method")
   as.character(function_usage(method[[1]], list(as.name(method[[2]]))))
-#
-#   name <- paste(, collapse = ".")
-#   object_name_fun(name, x)
+  #
+  #   name <- paste(, collapse = ".")
+  #   object_name_fun(name, x)
 }
 #' @export
 object_name.s4generic <- function(x) {

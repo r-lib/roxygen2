@@ -12,7 +12,7 @@ expect_equal_strings <- function(s1, s2, ignore_ws = TRUE) {
   expect_equal(s1, s2)
 }
 
-expect_parse_failure <- function(code)  {
+expect_parse_failure <- function(code) {
   (expect_condition(expect_null(code)))
 }
 

@@ -1,4 +1,3 @@
-
 # object ------------------------------------------------------------------
 
 test_that("has thoughtful print method", {
@@ -15,16 +14,21 @@ test_that("has thoughtful print method", {
 # description block -------------------------------------------------------
 
 test_that("title and description taken from first line if only one", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' title
     #' @name a
-    NULL")[[1]]
+    NULL"
+  )[[1]]
   expect_equal(out$get_value("description"), "title")
   expect_equal(out$get_value("title"), "title")
 })
 
 test_that("description taken from multiple titles if merged", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' T1
     #' @name a
     NULL
@@ -32,73 +36,93 @@ test_that("description taken from multiple titles if merged", {
     #' T2
     #' @name a
     NULL
-    ")[[1]]
+    "
+  )[[1]]
   expect_equal(out$get_value("title"), c("T1", "T2"))
   expect_equal(out$get_value("description"), c("T1", "T2"))
 })
 
 test_that("title, description and details extracted correctly", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' title
     #'
     #' description
     #'
     #' details
     #' @name a
-    NULL")[[1]]
+    NULL"
+  )[[1]]
   expect_equal(out$get_value("description"), "description")
   expect_equal(out$get_value("details"), "details")
 })
 
 test_that("title taken from first paragraph", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Description with sentence.
     #'
     #' That continueth.
     #' @name a
-    NULL")[[1]]
+    NULL"
+  )[[1]]
   expect_equal(out$get_value("title"), "Description with sentence.")
   expect_equal(out$get_value("description"), "That continueth.")
 })
 
 test_that("@title overrides default title", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Would be title
     #' @title Overridden title
     #' @name a
-    NULL")[[1]]
+    NULL"
+  )[[1]]
   expect_equal(out$get_value("title"), "Overridden title")
   expect_equal(out$get_value("description"), "Would be title")
 })
 
 test_that("docs parsed correctly if no blank text", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @title My title
     #' @description My description
     #' @param x value
-    a <- function(x) {}")[[1]]
+    a <- function(x) {}"
+  )[[1]]
 
   expect_equal(out$get_value("title"), "My title")
   expect_equal(out$get_value("description"), "My description")
 })
 
 test_that("question mark ends sentence", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Is a number odd?
-    is.odd <- function(a) {}")[[1]]
+    is.odd <- function(a) {}"
+  )[[1]]
   expect_equal(out$get_value("title"), "Is a number odd?")
-
 })
 
 test_that("no ending punctuation does not produce ellipsis", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Whether a number is odd
-    is.odd <- function(a) {}")[[1]]
+    is.odd <- function(a) {}"
+  )[[1]]
   expect_equal(out$get_value("title"), "Whether a number is odd")
 })
 
 test_that("details are merged if needed", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Title
     #'
     #' Description
@@ -110,7 +134,8 @@ test_that("details are merged if needed", {
     #' @details Details3
     #'
     #' Details4
-    foo <- function(x) {}")[[1]]
+    foo <- function(x) {}"
+  )[[1]]
 
   expect_equal(
     out$get_value("details"),
@@ -121,7 +146,8 @@ test_that("details are merged if needed", {
 test_that("whitespace is not detected as details", {
   expect_silent(
     out <- roc_proc_text(
-      rd_roclet(), "
+      rd_roclet(),
+      "
         #' Title
         #'
         #'
@@ -138,7 +164,9 @@ test_that("whitespace is not detected as details", {
 
 
 test_that("@description and @details are merged", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' Foo
     #'
     #' This.
@@ -150,7 +178,8 @@ test_that("@description and @details are merged", {
     #' @description And that.
     #' @details ORLY?
     bar <- function(y = '%') y
-  ")[[1]]
+  "
+  )[[1]]
 
   expect_equal(out$get_value("description"), c("This.", "And that."))
   expect_equal(out$get_value("details"), c("OBTW.", "ORLY?"))
@@ -158,7 +187,9 @@ test_that("@description and @details are merged", {
 
 test_that("empty description block is silently removed", {
   expect_warning(
-    roc_proc_text(rd_roclet(), "
+    roc_proc_text(
+      rd_roclet(),
+      "
       #'
       #'
       f <- function() {}
@@ -169,7 +200,8 @@ test_that("empty description block is silently removed", {
 })
 
 test_that("description block preserves whitespace", {
-  out <- parse_text("
+  out <- parse_text(
+    "
     #' Title
     #'
     #' Line 1
@@ -226,10 +258,13 @@ test_that("even with explicit title/description", {
 # evaluate ----------------------------------------------------------------
 
 test_that("evaluation occurs during parsing", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     foo <- function() c('@name a', '@title a')
     #' @eval foo()
-    NULL")[[1]]
+    NULL"
+  )[[1]]
 
   expect_equal(out$get_value("title"), "a")
   expect_equal(out$filename, "a.Rd")
@@ -263,19 +298,21 @@ test_that("must return non-NA string", {
 })
 
 test_that("also works with namespace roclet", {
-  out <- roc_proc_text(namespace_roclet(), "
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
     foo <- function() '@export a'
     #' @eval foo()
     #' @name a
     #' @title a
-    NULL")
+    NULL"
+  )
 
   expect_equal(out, "export(a)")
 })
 
 
 # other -------------------------------------------------------------------
-
 
 test_that("warns about duplicate tags", {
   block <- "

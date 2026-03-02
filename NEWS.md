@@ -1,7 +1,6 @@
 # roxygen2 (development version)
 
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
-
 * roxygen2 now requires R 4.0 (#1632).
 
 # roxygen2 7.3.3

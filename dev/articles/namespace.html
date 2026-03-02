@@ -158,7 +158,7 @@ don’t.</p>
 their “export” works a bit differently. S3 methods are exported only in
 the sense that calling the generic with the appropriate class will call
 the method; a user can’t directly access the method definition by typing
-its name. A more technically correctly term would be to say that the
+its name. A more technically correct term would be to say that the
 method is <strong>registered</strong> so that the generics can find
 it.</p>
 <p>You must register, i.e. <code>@export</code>, every S3 method
@@ -320,8 +320,8 @@ is automated by <code>usethis::use_import_from()</code>.</p>
 <span><span class="cn">NULL</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>Note the use of <code>NULL</code> here: you must provide something
-for roxygen2 to document, so we use <code>NULL</code> as place
-holder.</p>
+for roxygen2 to document, so we use <code>NULL</code> as
+placeholder.</p>
 <p>It is possible, but not generally recommended to import all functions
 from a package with <code>@import package</code>. This is risky if you
 import functions from more than one package, because while it might be

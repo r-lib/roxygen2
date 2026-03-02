@@ -54,7 +54,7 @@ While S3 methods are regular functions with a special naming scheme,
 their “export” works a bit differently. S3 methods are exported only in
 the sense that calling the generic with the appropriate class will call
 the method; a user can’t directly access the method definition by typing
-its name. A more technically correctly term would be to say that the
+its name. A more technically correct term would be to say that the
 method is **registered** so that the generics can find it.
 
 You must register, i.e. `@export`, every S3 method regardless of whether
@@ -214,7 +214,7 @@ NULL
 ```
 
 Note the use of `NULL` here: you must provide something for roxygen2 to
-document, so we use `NULL` as place holder.
+document, so we use `NULL` as placeholder.
 
 It is possible, but not generally recommended to import all functions
 from a package with `@import package`. This is risky if you import

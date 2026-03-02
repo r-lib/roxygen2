@@ -10,7 +10,7 @@
 #'
 #' @param name Name of function.
 #' @param env Base environment in which to look for function definition.
-#' @keywords internal
+#' @family extending
 #' @export
 is_s3_generic <- function(name, env = parent.frame()) {
   if (name == "") {

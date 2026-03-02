@@ -1,7 +1,7 @@
 #' Access metadata about built-in tags
 #'
 #' @export
-#' @keywords internal
+#' @family extending
 tags_list <- function(built_in = TRUE) {
   if (isTRUE(built_in)) {
     methods <- attr(methods('roxy_tag_parse'), "info")

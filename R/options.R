@@ -52,7 +52,7 @@
 #'
 #' @param base_path Path to package.
 #' @export
-#' @keywords internal
+#' @family extending
 load_options <- function(base_path = ".") {
   desc <- load_options_description(base_path)
   meta <- load_options_meta(base_path)

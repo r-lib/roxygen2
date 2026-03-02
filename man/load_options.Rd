@@ -56,4 +56,19 @@ Or if longer, you can put in \verb{/man/roxygen/meta.R}:
 }\if{html}{\out{</div>}}
 }
 
-\keyword{internal}
+\seealso{
+Other extending: 
+\code{\link{is_s3_generic}()},
+\code{\link{object}()},
+\code{\link{object_format}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

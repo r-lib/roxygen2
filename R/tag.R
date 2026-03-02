@@ -8,7 +8,7 @@
 #' Define a method for `roxy_tag_parse` to support new tags. See [tag_parsers]
 #' for more details.
 #'
-#' @keywords internal
+#' @family extending
 #' @export
 #' @param tag Tag name. Arguments starting with `.` are reserved for internal
 #'   usage.

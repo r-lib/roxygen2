@@ -17,7 +17,7 @@
 #'    find the code object associated with each block.
 #' @return A list of roxy_block objects
 #' @export
-#' @keywords internal
+#' @family extending
 parse_package <- function(path = ".", env = env_package(path)) {
   files <- package_files(path)
   list_of_blocks <- lapply(files, tokenize_file)

@@ -79,7 +79,7 @@ roclet_tags <- function(x) {
 #' This provides a flexible way of specifying a roclet in a string.
 #'
 #' @param x Arbitrary R code evaluated in roxygen2 package.
-#' @keywords internal
+#' @family extending
 #' @export
 #' @examples
 #' # rd, namespace, and vignette work for backward compatibility
@@ -125,7 +125,7 @@ is.roclet <- function(x) inherits(x, "roclet")
 #' @param input Source string
 #' @param wd Working directory
 #' @export
-#' @keywords internal
+#' @family extending
 roc_proc_text <- function(roclet, input, wd = NULL) {
   stopifnot(is.roclet(roclet))
 

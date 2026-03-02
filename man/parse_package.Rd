@@ -40,4 +40,19 @@ character vector of code. \code{env_package()} and \code{env_file()} provide
 defaults that generate a temporary environment making it possible to
 associate each block with the corresponding live object.
 }
-\keyword{internal}
+\seealso{
+Other extending: 
+\code{\link{is_s3_generic}()},
+\code{\link{load_options}()},
+\code{\link{object}()},
+\code{\link{object_format}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

@@ -6,6 +6,9 @@ Datasets are stored in `data/`, not as regular R objects in the package.
 This means you need to document them in a slightly different way:
 instead of documenting the data directly, you quote the dataset’s name.
 
+For example, this roxygen2 block will documentation for
+`data(diamonds)`:
+
 ``` r
 #' Prices of over 50,000 round cut diamonds
 #'

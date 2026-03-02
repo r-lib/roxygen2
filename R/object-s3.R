@@ -13,19 +13,28 @@
 #' @keywords internal
 #' @export
 is_s3_generic <- function(name, env = parent.frame()) {
-  if (name == "") return(FALSE)
-  if (!exists(name, envir = env, mode = "function")) return(FALSE)
+  if (name == "") {
+    return(FALSE)
+  }
+  if (!exists(name, envir = env, mode = "function")) {
+    return(FALSE)
+  }
 
   f <- get(name, envir = env, mode = "function")
-  if (inherits(f, "groupGenericFunction")) return(TRUE)
+  if (inherits(f, "groupGenericFunction")) {
+    return(TRUE)
+  }
 
   ns_name <- tryCatch(getNamespaceName(environment(f)), error = function(e) "")
-  if (identical(unname(.knownS3Generics[name]), ns_name))
+  if (identical(unname(.knownS3Generics[name]), ns_name)) {
     return(TRUE)
+  }
 
   if (is.primitive(f)) {
-    known_generics <- c(names(.knownS3Generics),
-      internal_f("tools", ".get_internal_S3_generics")())
+    known_generics <- c(
+      names(.knownS3Generics),
+      internal_f("tools", ".get_internal_S3_generics")()
+    )
     return(name %in% known_generics)
   }
 
@@ -34,11 +43,19 @@ is_s3_generic <- function(name, env = parent.frame()) {
 
 calls_use_method <- function(x) {
   # Base cases
-  if (missing(x)) return(FALSE)
-  if (!is.call(x)) return(FALSE)
+  if (missing(x)) {
+    return(FALSE)
+  }
+  if (!is.call(x)) {
+    return(FALSE)
+  }
 
-  if (identical(x[[1]], quote(UseMethod))) return(TRUE)
-  if (length(x) == 1) return(FALSE)
+  if (identical(x[[1]], quote(UseMethod))) {
+    return(TRUE)
+  }
+  if (length(x) == 1) {
+    return(FALSE)
+  }
   # Recursive case: arguments to call
   for (arg in as.list(x[-1])) {
     if (calls_use_method(arg)) return(TRUE)
@@ -62,9 +79,11 @@ find_generic <- function(name, env = parent.frame()) {
   n <- length(pieces)
 
   # No . in name, so can't be method
-  if (n == 1) return(NULL)
+  if (n == 1) {
+    return(NULL)
+  }
 
-  for(i in seq_len(n - 1)) {
+  for (i in seq_len(n - 1)) {
     generic <- paste0(pieces[seq_len(i)], collapse = ".")
     class <- paste0(pieces[(i + 1):n], collapse = ".")
 

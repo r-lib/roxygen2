@@ -19,13 +19,16 @@ test_that("exporting a call to :: produces re-exports documentation", {
 })
 
 test_that("multiple re-exports are combined", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @export
     testthat::expect_lt
 
     #' @export
     testthat::expect_gt
-    ")[[1]]
+    "
+  )[[1]]
 
   expect_equal(
     out$get_section("reexport"),
@@ -39,11 +42,14 @@ test_that("multiple re-exports are combined", {
 
 test_that("description generated correctly", {
   roc <- rd_roclet()
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @importFrom magrittr %>%
     #' @export
     magrittr::`%>%`
-    ")[[1]]
+    "
+  )[[1]]
 
   expect_null(out$get_section("description"))
 })

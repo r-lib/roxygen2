@@ -54,7 +54,12 @@ test_that("tag_two_part() gives useful warnings", {
   local_markdown()
   expect_snapshot({
     tag <- roxy_test_tag("")
-    expect_parse_failure(tag_two_part(tag, "a name", "a value", required = FALSE))
+    expect_parse_failure(tag_two_part(
+      tag,
+      "a name",
+      "a value",
+      required = FALSE
+    ))
     expect_parse_failure(tag_two_part(tag, "a name", "a value"))
   })
 })

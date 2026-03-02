@@ -17,7 +17,7 @@ test_that("extract_r6_methods", {
   expect_equal(
     M$formals,
     I(list(
-      as.pairlist(alist(Z=)),
+      as.pairlist(alist(Z = )),
       as.pairlist(alist(Z = 10, ... = )),
       NULL,
       as.pairlist(alist(deep = FALSE))
@@ -26,7 +26,6 @@ test_that("extract_r6_methods", {
 })
 
 test_that("extract_r6_super_data", {
-
   eval(parse(test_path("roxygen-block-3.R"), keep.source = TRUE))
 
   D <- extract_r6_super_data(C)
@@ -37,15 +36,49 @@ test_that("extract_r6_super_data", {
   expect_equal(D$members$classname, rep(c("B", "A"), c(8, 10)))
   expect_equal(
     D$members$type,
-    c("method", "method", "method", "field", "field", "active", "active",
-      "active", "method", "method", "method", "method", "field", "field",
-      "field", "active", "active", "active")
+    c(
+      "method",
+      "method",
+      "method",
+      "field",
+      "field",
+      "active",
+      "active",
+      "active",
+      "method",
+      "method",
+      "method",
+      "method",
+      "field",
+      "field",
+      "field",
+      "active",
+      "active",
+      "active"
+    )
   )
   expect_equal(
     D$members$name,
-    c("meth4", "meth1", "clone", "field4", "field1", "active5", "active4",
-      "active1", "meth3", "meth2", "meth1", "clone", "field3", "field2",
-      "field1", "active3", "active2", "active1")
+    c(
+      "meth4",
+      "meth1",
+      "clone",
+      "field4",
+      "field1",
+      "active5",
+      "active4",
+      "active1",
+      "meth3",
+      "meth2",
+      "meth1",
+      "clone",
+      "field3",
+      "field2",
+      "field1",
+      "active3",
+      "active2",
+      "active1"
+    )
   )
 })
 
@@ -53,7 +86,7 @@ test_that("extract_r6_fields", {
   C <- R6::R6Class(
     public = list(
       field1 = NULL,
-      meth1 = function() { },
+      meth1 = function() {},
       field2 = "foobar"
     )
   )
@@ -63,7 +96,7 @@ test_that("extract_r6_fields", {
 
   C <- R6::R6Class(
     public = list(
-      meth1 = function() { }
+      meth1 = function() {}
     )
   )
   F <- extract_r6_fields(C)
@@ -81,11 +114,11 @@ test_that("extract_r6_fields", {
 test_that("extract_r6_bindings", {
   C <- R6::R6Class(
     active = list(
-      bind1 = function(x) { },
-      bind2 = function(x) { }
+      bind1 = function(x) {},
+      bind2 = function(x) {}
     ),
     public = list(
-      meth1 = function() { }
+      meth1 = function() {}
     )
   )
   F <- extract_r6_bindings(C)
@@ -94,7 +127,7 @@ test_that("extract_r6_bindings", {
 
   C <- R6::R6Class(
     public = list(
-      meth1 = function() { }
+      meth1 = function() {}
     )
   )
   F <- extract_r6_bindings(C)
@@ -324,7 +357,6 @@ test_that("class with no inherited methods", {
 
 
 test_that("integration test", {
-
   wd <- getwd()
   on.exit(setwd(wd), add = TRUE)
   setwd(test_path())
@@ -340,7 +372,12 @@ test_that("integration test", {
   roc <- roclet_preprocess(roclet_find("rd"))
 
   expect_snapshot(
-    res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path())
+    res <- roclet_process(
+      roc,
+      blocks = blocks,
+      env = env,
+      base_path = test_path()
+    )
   )
 
   tmp <- tempfile()

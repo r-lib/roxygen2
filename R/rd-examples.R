@@ -31,10 +31,13 @@ roxy_tag_parse.roxy_tag_example <- function(x) {
 
   nl <- str_count(x$val, "\n")
   if (any(nl) > 0) {
-    warn_roxy_tag(x, c(
-      "must be a single line",
-      i = "Do you want @examples?"
-    ))
+    warn_roxy_tag(
+      x,
+      c(
+        "must be a single line",
+        i = "Do you want @examples?"
+      )
+    )
     return()
   }
 

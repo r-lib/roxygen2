@@ -16,7 +16,13 @@ roxy_tag_rd.roxy_tag_inheritParams <- function(x, base_path, env) {
 
 #' @export
 roxy_tag_parse.roxy_tag_inheritDotParams <- function(x) {
-  tag_two_part(x, "a source", "an argument list", required = FALSE, markdown = FALSE)
+  tag_two_part(
+    x,
+    "a source",
+    "an argument list",
+    required = FALSE,
+    markdown = FALSE
+  )
 }
 #' @export
 roxy_tag_rd.roxy_tag_inheritDotParams <- function(x, base_path, env) {
@@ -51,7 +57,7 @@ merge.rd_section_inherit <- function(x, y, ...) {
   dedup <- collapse(
     c(x$value$source, y$value$source),
     c(x$value$fields, y$value$fields),
-    function(x) Reduce(union, x)
+    \(x) Reduce(union, x)
   )
 
   rd_section("inherit", list(source = dedup$key, fields = dedup$value))
@@ -73,7 +79,10 @@ format.rd_section_inherit_section <- function(x, ...) NULL
 #' @export
 merge.rd_section_inherit_section <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  rd_section_inherit_section(c(x$value$source, y$value$source), c(x$value$title, y$value$title))
+  rd_section_inherit_section(
+    c(x$value$source, y$value$source),
+    c(x$value$title, y$value$title)
+  )
 }
 
 rd_section_inherit_dot_params <- function(source, args) {
@@ -89,7 +98,10 @@ format.rd_section_inherit_dot_params <- function(x, ...) NULL
 #' @export
 merge.rd_section_inherit_dot_params <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  rd_section_inherit_dot_params(c(x$value$source, y$value$source), c(x$value$args, y$value$args))
+  rd_section_inherit_dot_params(
+    c(x$value$source, y$value$source),
+    c(x$value$args, y$value$args)
+  )
 }
 
 
@@ -97,11 +109,15 @@ merge.rd_section_inherit_dot_params <- function(x, y, ...) {
 
 topics_process_inherit <- function(topics, env) {
   inherits <- function(type) {
-    function(x) x$inherits_from(type)
+    \(x) x$inherits_from(type)
   }
 
-  topics$topo_apply(inherits("return"), inherit_field,
-    roxy_name = "return", rd_name = "value")
+  topics$topo_apply(
+    inherits("return"),
+    inherit_field,
+    roxy_name = "return",
+    rd_name = "value"
+  )
   topics$topo_apply(inherits("title"), inherit_field, "title")
   topics$topo_apply(inherits("description"), inherit_field, "description")
   topics$topo_apply(inherits("details"), inherit_field, "details")
@@ -136,17 +152,24 @@ inherit_params <- function(topic, topics) {
   needed <- topic$get_value("formals")
   missing <- setdiff(needed, documented)
   if (length(missing) == 0) {
-    warn_roxy_topic(topic$get_name(), c(
-      x = "@inheritParams failed",
-      i = "All parameters are already documented; none remain to be inherited."
-    ))
+    warn_roxy_topic(
+      topic$get_name(),
+      c(
+        x = "@inheritParams failed",
+        i = "All parameters are already documented; none remain to be inherited."
+      )
+    )
     return()
   }
 
   # Work through inherited params seeing if any match the parameters
   # we're missing
   for (inheritor in inheritors) {
-    inherited_params <- find_params(inheritor, topics, source = topic$get_name())
+    inherited_params <- find_params(
+      inheritor,
+      topics,
+      source = topic$get_name()
+    )
 
     for (param in inherited_params) {
       match <- match_param(param$name, missing)
@@ -158,7 +181,6 @@ inherit_params <- function(topic, topics) {
     }
     if (length(missing) == 0) break
   }
-
 }
 
 # Ignore . prefix since it's sometimes necessary to add because a
@@ -184,21 +206,24 @@ match_param <- function(from, to) {
 
 inherit_dot_params <- function(topic, topics, env) {
   inheritors <- topic$get_value("inherit_dot_params")
-  if (is.null(inheritors))
+  if (is.null(inheritors)) {
     return()
+  }
 
   # Need to find formals for each source
-  funs <- lapply(inheritors$source, function(x) eval(parse(text = x), envir = env))
+  funs <- lapply(inheritors$source, function(x) {
+    eval(parse(text = x), envir = env)
+  })
   args <- map2(funs, inheritors$args, select_args_text, topic = topic)
 
   # Then pull out the ones we need
   docs <- lapply(inheritors$source, find_params, topics = topics)
   arg_matches <- function(args, docs) {
-    match <- map_lgl(docs, function(x) all(x$name %in% args))
+    match <- map_lgl(docs, \(x) all(x$name %in% args))
     matched <- docs[match]
     setNames(
       lapply(matched, "[[", "value"),
-      map_chr(matched, function(x) paste(x$name, collapse = ","))
+      map_chr(matched, \(x) paste(x$name, collapse = ","))
     )
   }
   docs_selected <- unlist(map2(args, docs, arg_matches))
@@ -216,13 +241,23 @@ inherit_dot_params <- function(topic, topics, env) {
 
   # (2) Show each inherited argument
   arg_names <- paste0("\\code{", names(docs_selected), "}")
-  args <- paste0("    \\item{", arg_names, "}{", docs_selected, "}", collapse = "\n")
+  args <- paste0(
+    "    \\item{",
+    arg_names,
+    "}{",
+    docs_selected,
+    "}",
+    collapse = "\n"
+  )
 
   rd <- paste0(
     "\n",
-    "  Arguments passed on to ", from, "\n",
+    "  Arguments passed on to ",
+    from,
+    "\n",
     "  \\describe{\n",
-    args, "\n",
+    args,
+    "\n",
     "  }"
   )
   topic$add(rd_section("param", c("..." = rd)))
@@ -233,10 +268,11 @@ get_documented_params <- function(topic, only_first = FALSE) {
   documented <- names(topic$get_value("param"))
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
-    if (only_first)
+    if (only_first) {
       documented <- map_chr(documented, 1)
-    else
+    } else {
       documented <- unlist(documented)
+    }
   }
 
   documented[documented == "\\dots"] <- "..."
@@ -250,16 +286,14 @@ find_params <- function(name, topics, source) {
   }
 
   params <- topic_params(topic)
-  if (is.null(params))
+  if (is.null(params)) {
     return()
+  }
 
   param_names <- str_trim(names(params))
   param_names[param_names == "\\dots"] <- "..."
 
-  Map(list,
-    name = strsplit(param_names, ",\\s*"),
-    value = unlist(params)
-  )
+  Map(list, name = strsplit(param_names, ",\\s*"), value = unlist(params))
 }
 
 topic_params <- function(x) {
@@ -270,8 +304,8 @@ topic_params <- function(x) {
     }
     items <- get_tags(arguments[[1]], "\\item")
 
-    values <- map_chr(items, function(y) rd2text(y[[2]], attr(x, "package")))
-    params <- map_chr(items, function(y) rd2text(y[[1]], attr(x, "package")))
+    values <- map_chr(items, \(y) rd2text(y[[2]], attr(x, "package")))
+    params <- map_chr(items, \(y) rd2text(y[[1]], attr(x, "package")))
 
     setNames(values, params)
   } else {
@@ -292,8 +326,9 @@ inherit_sections <- function(topic, topics) {
 
     sections <- find_sections(inheritor)
     needed <- !(sections$title %in% current_secs)
-    if (!any(needed))
+    if (!any(needed)) {
       next
+    }
 
     topic$add(
       rd_section_section(sections$title[needed], sections$content[needed])
@@ -324,7 +359,10 @@ inherit_section <- function(topic, topics) {
     }
 
     topic$add(
-      rd_section_section(new_section$title[selected], new_section$content[selected])
+      rd_section_section(
+        new_section$title[selected],
+        new_section$content[selected]
+      )
     )
   }
 }
@@ -347,8 +385,9 @@ find_sections <- function(topic) {
 
 inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
   # Already has the field, so don't need to inherit
-  if (topic$has_section(rd_name))
+  if (topic$has_section(rd_name)) {
     return()
+  }
 
   # Otherwise, try each try function listed in inherits
   for (inherit_from in topic$inherits_from(roxy_name)) {
@@ -358,8 +397,9 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
     }
 
     inheritee <- find_field(inherit_topic, rd_name)
-    if (is.null(inheritee))
+    if (is.null(inheritee)) {
       next
+    }
 
     topic$add(rd_section(rd_name, inheritee))
     return()
@@ -369,8 +409,9 @@ inherit_field <- function(topic, topics, rd_name, roxy_name = rd_name) {
 find_field <- function(topic, field_name) {
   if (inherits(topic, "Rd")) {
     tag <- get_tags(topic, paste0("\\", field_name))
-    if (length(tag) == 0)
+    if (length(tag) == 0) {
       return()
+    }
 
     value <- tag[[1]]
     attr(value, "Rd_tag") <- NULL
@@ -402,7 +443,10 @@ tweak_links <- function(x, package) {
         topic <- substr(opt, 2, nchar(opt))
 
         if (has_topic(topic, package)) {
-          attr(x, "Rd_option") <- structure(paste0(package, ":", topic), Rd_tag = "TEXT")
+          attr(x, "Rd_option") <- structure(
+            paste0(package, ":", topic),
+            Rd_tag = "TEXT"
+          )
         }
       }
     } else if (length(x) > 0) {
@@ -436,7 +480,10 @@ get_rd <- function(name, topics, source) {
 
 get_rd_from_help <- function(package, alias, source) {
   if (!is_installed(package)) {
-    warn_roxy_topic(source, "@inherits failed because {.pkg {package}} is not installed")
+    warn_roxy_topic(
+      source,
+      "@inherits failed because {.pkg {package}} is not installed"
+    )
     return()
   }
 

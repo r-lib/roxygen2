@@ -27,8 +27,7 @@ tags_metadata <- function() {
     # \n not useful outside of RStudio
     template = sub("\n", "", map_chr(meta, "template", .default = "")),
     vignette = map_chr(meta, "vignette", .default = NA),
-    recommend = map_lgl(meta, "recommend", .default = FALSE),
-    stringsAsFactors = FALSE
+    recommend = map_lgl(meta, "recommend", .default = FALSE)
   )
 }
 
@@ -47,26 +46,39 @@ tags_rd <- function(type) {
     "@description",
     paste0("Learn the full details in `vignette('", type, "')`."),
     "",
-    if (any(tags$recommend)) c(
-      "Key tags:",
-      tags_rd_section(tags[tags$recommend, ], "description")
-    ),
-    if (any(!tags$recommend)) c(
-      "Other less frequently used tags:",
-      "",
-      tags_rd_section(tags[!tags$recommend, ], "description")
-    ),
+    if (any(tags$recommend)) {
+      c(
+        "Key tags:",
+        tags_rd_section(tags[tags$recommend, ], "description")
+      )
+    },
+    if (any(!tags$recommend)) {
+      c(
+        "Other less frequently used tags:",
+        "",
+        tags_rd_section(tags[!tags$recommend, ], "description")
+      )
+    },
     "@usage",
     tags_rd_section(tags, "usage")
   )
 }
 tags_rd_section <- function(tags, section) {
-  if (nrow(tags) == 0) return()
+  if (nrow(tags) == 0) {
+    return()
+  }
 
-  switch(section,
+  switch(
+    section,
     aliases = paste0("  @", tags$tag),
     usage = paste0("#' @", tags$tag, tags$template),
-    description = paste0("* `@", tags$tag, tags$template, "`: ", tags$description)
+    description = paste0(
+      "* `@",
+      tags$tag,
+      tags$template,
+      "`: ",
+      tags$description
+    )
   )
 }
 
@@ -103,4 +115,3 @@ NULL
 #' @eval tags_rd("index-crossref")
 #' @family documentation tags
 NULL
-

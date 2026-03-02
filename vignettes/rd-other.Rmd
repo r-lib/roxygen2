@@ -44,6 +44,7 @@ This means you need to document them in a slightly different way: instead of doc
 #' }
 #' 
 #' @source {ggplot2} tidyverse R package.
+"diamonds"
 ```
 
 Note the use of two additional tags that are particularly useful for documenting data:

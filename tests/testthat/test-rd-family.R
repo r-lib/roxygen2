@@ -66,7 +66,7 @@ test_that("family links to name only, not all aliases", {
 
   seealso <- out$get_value("seealso")
   expect_true(grepl("^Other many aliases:", seealso))
-  expect_equal(str_count(seealso, fixed("\\code{\\link")), 1)
+  expect_equal(str_count(seealso, fixed(r"(\code{\link)")), 1)
 })
 
 test_that("families listed in same order as input", {
@@ -107,7 +107,10 @@ test_that("only functions get () suffix", {
   "
   )
 
-  expect_equal(out[[1]]$get_value("seealso"), "Other a: \n\\code{\\link{bar}}")
+  expect_equal(
+    out[[1]]$get_value("seealso"),
+    "Other a: \n\\code{\\link{bar}}"
+  )
   expect_equal(
     out[[2]]$get_value("seealso"),
     "Other a: \n\\code{\\link{foo}()}"

@@ -132,7 +132,7 @@ test_that("multi-line inline code gives useful warning", {
   expect_snapshot(
     out <- roc_proc_text(rd_roclet(), block)[[1]]
   )
-  expect_equal(out$get_value("description"), "\\verb{r 1 + 1}")
+  expect_equal(out$get_value("description"), r"(\verb{r 1 + 1})")
 })
 
 test_that("inline code gives useful warning", {
@@ -154,7 +154,7 @@ test_that("inline code gives useful warning", {
       x
     }
   )
-  expect_equal(out$get_value("description"), "\\verb{r 1 + }")
+  expect_equal(out$get_value("description"), r"(\verb{r 1 + })")
 })
 
 test_that("interleaving fences and inline code", {

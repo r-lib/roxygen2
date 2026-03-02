@@ -121,7 +121,7 @@ RoxyTopic <- R6::R6Class(
 
       inherit <- self$get_value("inherit")
 
-      inherits_field <- map_lgl(inherit$fields, function(x) type %in% x)
+      inherits_field <- map_lgl(inherit$fields, \(x) type %in% x)
       sources <- inherit$source[inherits_field]
 
       if ("NULL" %in% sources) {

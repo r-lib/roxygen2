@@ -24,7 +24,7 @@ test_that("proper link references are added", {
 test_that("can not have [ inside of link", {
   expect_equal(
     markdown("`[[`. [subset()]"),
-    "\\code{[[}. \\code{\\link[=subset]{subset()}}"
+    r"(\code{[[}. \code{\link[=subset]{subset()}})"
   )
 })
 
@@ -36,33 +36,33 @@ test_that("can escape [ to avoid spurious links", {
 
   expect_equal(
     markdown("\\[ [test] \\]"),
-    "[ \\link{test} ]"
+    r"([ \link{test} ])"
   )
 })
 
 test_that("\\Sexpr with options not converted to links", {
   expect_equal(
-    markdown("\\Sexpr[results=rd]{runif(1)}"),
-    "\\Sexpr[results=rd]{runif(1)}"
+    markdown(r"(\Sexpr[results=rd]{runif(1)})"),
+    r"(\Sexpr[results=rd]{runif(1)})"
   )
 })
 
 test_that("% in links are escaped", {
-  expect_equal(markdown("[x][%%]"), "\\link[=\\%\\%]{x}")
-  expect_equal(markdown("[%][x]"), "\\link[=x]{\\%}")
-  expect_equal(markdown("[%%]"), "\\link{\\%\\%}")
-  expect_equal(markdown("[base::%%]"), "\\link[base:Arithmetic]{base::\\%\\%}")
+  expect_equal(markdown("[x][%%]"), r"(\link[=\%\%]{x})")
+  expect_equal(markdown("[%][x]"), r"(\link[=x]{\%})")
+  expect_equal(markdown("[%%]"), r"(\link{\%\%})")
+  expect_equal(markdown("[base::%%]"), r"(\link[base:Arithmetic]{base::\%\%})")
 })
 
 test_that("{ and } in links are escaped (#1259)", {
   expect_equal(
     markdown("[`foo({ bar })`][x]"),
-    "\\code{\\link[=x]{foo(\\{ bar \\})}}"
+    r"(\code{\link[=x]{foo(\{ bar \})}})"
   )
-  expect_equal(markdown("[`{{`][x]"), "\\code{\\link[=x]{\\{\\{}}")
+  expect_equal(markdown("[`{{`][x]"), r"(\code{\link[=x]{\{\{}})")
 
   # Non code parts are not escaped (invalid Rd)
-  expect_equal(markdown("[foo({ bar })][x]"), "\\link[=x]{foo({ bar })}")
+  expect_equal(markdown("[foo({ bar })][x]"), r"(\link[=x]{foo({ bar })})")
 })
 
 test_that("non-text nodes in links fails", {
@@ -559,7 +559,7 @@ test_that("linking to self is unqualified", {
   rd <- markdown("foo [myself::fun()] and [myself::obj] bar")
   expect_equal(
     rd,
-    "foo \\code{\\link[=fun]{fun()}} and \\link{obj} bar"
+    r"(foo \code{\link[=fun]{fun()}} and \link{obj} bar)"
   )
 })
 

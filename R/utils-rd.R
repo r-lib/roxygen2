@@ -26,8 +26,8 @@ escape.character <- function(x) {
   # wrap_usage uses \u{A0}, the unicode non-breaking space, which
   # is not necessarily valid in windows locales. useBytes is a quick
   # hack to fix the problem.
-  x1 <- gsub("\\", "\\\\", x, fixed = TRUE, useBytes = TRUE)
-  x2 <- gsub("%", "\\%", x1, fixed = TRUE, useBytes = TRUE)
+  x1 <- gsub(r"(\)", r"(\\)", x, fixed = TRUE, useBytes = TRUE)
+  x2 <- gsub("%", r"(\%)", x1, fixed = TRUE, useBytes = TRUE)
 
   rd(x2)
 }
@@ -70,7 +70,7 @@ rd_macro <- function(field, ..., space = FALSE) {
 # Input -------------------------------------------------------------------
 
 get_tags <- function(rd, tag) {
-  Filter(function(x) identical(attr(x, "Rd_tag"), tag), rd)
+  Filter(\(x) identical(attr(x, "Rd_tag"), tag), rd)
 }
 
 # helpers -----------------------------------------------------------------
@@ -95,7 +95,7 @@ make_as_character_rd <- function() {
   body <- body(fn)
   idx <- purrr::detect_index(
     body,
-    ~ is_call(.x, "<-", 2) && is_symbol(.x[[2]], "TWOARG")
+    \(x) is_call(x, "<-", 2) && is_symbol(x[[2]], "TWOARG")
   )
   if (idx == 0) {
     return(fn)

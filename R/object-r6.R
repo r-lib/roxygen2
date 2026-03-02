@@ -71,7 +71,6 @@ extract_r6_methods <- function(x) {
   method_formals <- map(x$public_methods[method_nms], formals)
 
   methods <- data.frame(
-    stringsAsFactors = FALSE,
     type = if (length(method_loc)) "method" else character(),
     class = if (length(method_loc)) {
       x$classname %||% NA_character_
@@ -103,7 +102,6 @@ add_default_method_data <- function(obj, methods) {
       next
     }
     rec <- data.frame(
-      stringsAsFactors = FALSE,
       type = defaults[[mname]]$type %||% "method",
       class = defaults[[mname]]$class %||% obj$classname %||% "unknown",
       name = defaults[[mname]]$name %||% mname,
@@ -120,7 +118,6 @@ add_default_method_data <- function(obj, methods) {
 extract_r6_fields <- function(x) {
   field_nms <- names(x$public_fields)
   data.frame(
-    stringsAsFactors = FALSE,
     type = rep("field", length(field_nms)),
     name = as.character(field_nms),
     class = rep(x$classname %||% NA_character_, length(field_nms)),
@@ -133,7 +130,6 @@ extract_r6_fields <- function(x) {
 extract_r6_bindings <- function(x) {
   bind_nms <- names(x$active)
   data.frame(
-    stringsAsFactors = FALSE,
     type = if (length(bind_nms)) "active" else character(),
     name = as.character(bind_nms),
     class = rep(x$classname %||% NA_character_, length(bind_nms)),
@@ -158,7 +154,6 @@ extract_r6_super_data <- function(x) {
 
   cls <- rbind(
     data.frame(
-      stringsAsFactors = FALSE,
       package = pkg,
       classname = classname
     ),
@@ -173,7 +168,6 @@ extract_r6_super_data <- function(x) {
   names <- c(rsort(method_nms), rsort(field_nms), rsort(active_nms))
   mth <- rbind(
     data.frame(
-      stringsAsFactors = FALSE,
       package = rep(pkg, length(names)),
       classname = rep(classname, length(names)),
       type = types,

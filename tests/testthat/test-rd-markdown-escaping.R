@@ -1,6 +1,5 @@
 tag_df <- function(tag, start, end, argend = NULL) {
   df <- data.frame(
-    stringsAsFactors = FALSE,
     tag = tag,
     start = start,
     end = end
@@ -12,10 +11,10 @@ tag_df <- function(tag, start, end, argend = NULL) {
 }
 
 test_that("find_all_tag_names", {
-  text <- "blah blah \\mytag blah blah"
+  text <- r"(blah blah \mytag blah blah)"
   expect_equal(
     find_all_tag_names(text),
-    tag_df("\\mytag", 11, 16)
+    tag_df(r"(\mytag)", 11, 16)
   )
 })
 
@@ -27,35 +26,35 @@ test_that("find_all_rd_tags", {
     list("\nstill\nnothing\n", character(), numeric(), numeric(), numeric()),
 
     ## One tag
-    list("blah blah \\mytag blah blah", "\\mytag", 11, 16, 16),
-    list("blah blah \\mytag{arg1} blah blah", "\\mytag", 11, 16, 22),
-    list("blah blah \\mytag{arg1}{arg2} blah blah", "\\mytag", 11, 16, 28),
-    list("blah\\mytag", "\\mytag", 5, 10, 10),
-    list("blah \\mytag", "\\mytag", 6, 11, 11),
-    list("blah\\mytag{arg}", "\\mytag", 5, 10, 15),
-    list("\\mytag hoohoo", "\\mytag", 1, 6, 6),
-    list("\\mytag", "\\mytag", 1, 6, 6),
-    list("\\mytag{arg}", "\\mytag", 1, 6, 11),
-    list("blah \\mytag\nblah blah", "\\mytag", 6, 11, 11),
+    list(r"(blah blah \mytag blah blah)", r"(\mytag)", 11, 16, 16),
+    list(r"(blah blah \mytag{arg1} blah blah)", r"(\mytag)", 11, 16, 22),
+    list(r"(blah blah \mytag{arg1}{arg2} blah blah)", r"(\mytag)", 11, 16, 28),
+    list(r"(blah\mytag)", r"(\mytag)", 5, 10, 10),
+    list(r"(blah \mytag)", r"(\mytag)", 6, 11, 11),
+    list(r"(blah\mytag{arg})", r"(\mytag)", 5, 10, 15),
+    list(r"(\mytag hoohoo)", r"(\mytag)", 1, 6, 6),
+    list(r"(\mytag)", r"(\mytag)", 1, 6, 6),
+    list(r"(\mytag{arg})", r"(\mytag)", 1, 6, 11),
+    list("blah \\mytag\nblah blah", r"(\mytag)", 6, 11, 11),
 
     ## Multiple tags
     list(
-      "blah \\tag1 \\tag2{arg} blah",
-      c("\\tag1", "\\tag2"),
+      r"(blah \tag1 \tag2{arg} blah)",
+      c(r"(\tag1)", r"(\tag2)"),
       c(6, 12),
       c(10, 16),
       c(10, 21)
     ),
     list(
-      "blah \\tag1{ \\tag2{arg} } blah",
-      c("\\tag1", "\\tag2"),
+      r"(blah \tag1{ \tag2{arg} } blah)",
+      c(r"(\tag1)", r"(\tag2)"),
       c(6, 13),
       c(10, 17),
       c(24, 22)
     ),
     list(
       "blah \\tag1{\n\\tag2{arg}\n} blah",
-      c("\\tag1", "\\tag2"),
+      c(r"(\tag1)", r"(\tag2)"),
       c(6, 13),
       c(10, 17),
       c(24, 22)
@@ -72,14 +71,14 @@ test_that("find_all_rd_tags", {
 })
 
 test_that("find_fragile_rd_tags", {
-  fragile <- c("\\frag", "\\frag1", "\\frag2")
+  fragile <- c(r"(\frag)", r"(\frag1)", r"(\frag2)")
 
   cases <- list(
-    list("This is \\frag{here}, \\this{arg} not", "\\frag"),
-    list("Embedded \\frag{ into \\frag1{arg} plus }", "\\frag"),
+    list(r"(This is \frag{here}, \this{arg} not)", r"(\frag)"),
+    list(r"(Embedded \frag{ into \frag1{arg} plus })", r"(\frag)"),
     list(
-      "blah \\cmd{ \\frag{arg} \\frag{arg} } \\frag2 blah",
-      c("\\frag", "\\frag", "\\frag2")
+      r"(blah \cmd{ \frag{arg} \frag{arg} } \frag2 blah)",
+      c(r"(\frag)", r"(\frag)", r"(\frag2)")
     )
   )
 

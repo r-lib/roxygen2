@@ -45,7 +45,12 @@ test_that("quoted topics have usage statements", {
   )[[1]]
 
   expect_equal(out$get_value("usage"), rd("f(a = 1, b = 2, c = a + b)"))
-  expect_equal(out$get_rd("usage"), "\\usage{\nf(a = 1, b = 2, c = a + b)\n}")
+  expect_equal(
+    out$get_rd("usage"),
+    r"(\usage{
+f(a = 1, b = 2, c = a + b)
+})"
+  )
 })
 
 # Escaping --------------------------------------------------------------------
@@ -74,7 +79,12 @@ test_that("default usage not double escaped", {
   "
   )[[1]]
 
-  expect_equal(out$get_rd("usage"), "\\usage{\n\\method{mean}{foo}(x)\n}")
+  expect_equal(
+    out$get_rd("usage"),
+    r"(\usage{
+\method{mean}{foo}(x)
+})"
+  )
 })
 
 test_that("% and \\ are escaped in usage", {
@@ -85,7 +95,12 @@ test_that("% and \\ are escaped in usage", {
     a <- function(a='%\\\\') {}"
   )[[1]]
   expect_equal(out$get_value("usage"), escape('a(a = "%\\\\")'))
-  expect_equal(out$get_rd("usage"), "\\usage{\na(a = \"\\%\\\\\\\\\")\n}")
+  expect_equal(
+    out$get_rd("usage"),
+    r"[\usage{
+a(a = "\%\\\\")
+}]"
+  )
 })
 
 test_that("% and \\ not escaped in manual usage", {
@@ -98,7 +113,12 @@ test_that("% and \\ not escaped in manual usage", {
   "
   )[[1]]
   expect_equal(out$get_value("usage"), rd('%\\'))
-  expect_equal(out$get_rd("usage"), '\\usage{\n%\\\n}')
+  expect_equal(
+    out$get_rd("usage"),
+    r"(\usage{
+%\
+})"
+  )
 })
 
 test_that("Special vars removed in rc methods usage", {
@@ -153,11 +173,11 @@ test_that("backticks retained when needed", {
 test_that("% escaped when not in infix function", {
   expect_equal(
     call_to_usage(`%foo%bar` <- function(x, table) {}),
-    "`\\%foo\\%bar`(x, table)"
+    r"(`\%foo\%bar`(x, table))"
   )
   expect_equal(
     call_to_usage(`%foo%bar<-` <- function(x, value) {}),
-    "`\\%foo\\%bar`(x) <- value"
+    r"(`\%foo\%bar`(x) <- value)"
   )
 })
 
@@ -180,12 +200,12 @@ test_that("default usage formats replacement functions correctly", {
 })
 
 test_that("default usage formats infix functions correctly", {
-  expect_equal(call_to_usage("%.%" <- function(a, b) {}), "a \\%.\\% b")
+  expect_equal(call_to_usage("%.%" <- function(a, b) {}), r"(a \%.\% b)")
   expect_equal(call_to_usage(":" <- function(a, b) {}), "a:b")
   expect_equal(call_to_usage("+" <- function(a, b) {}), "a + b")
 
   # even if it contains <-
-  expect_equal(call_to_usage("%<-%" <- function(a, b) {}), "a \\%<-\\% b")
+  expect_equal(call_to_usage("%<-%" <- function(a, b) {}), r"(a \%<-\% b)")
 
   # defaults are ignored
   expect_equal(call_to_usage(":" <- function(a = 1, b = 2) {}), "a:b")
@@ -194,23 +214,23 @@ test_that("default usage formats infix functions correctly", {
 test_that("default usage formats S3 methods correctly", {
   expect_equal(
     call_to_usage(mean.foo <- function(x) {}),
-    "\\method{mean}{foo}(x)"
+    r"(\method{mean}{foo}(x))"
   )
   expect_equal(
     call_to_usage(mean.function <- function(x) {}),
-    "\\method{mean}{`function`}(x)"
+    r"(\method{mean}{`function`}(x))"
   )
   expect_equal(
     call_to_usage("+.foo" <- function(x, b) {}),
-    "\\method{+}{foo}(x, b)"
+    r"(\method{+}{foo}(x, b))"
   )
   expect_equal(
     call_to_usage("%%.foo" <- function(x, b) {}),
-    "\\method{\\%\\%}{foo}(x, b)"
+    r"(\method{\%\%}{foo}(x, b))"
   )
   expect_equal(
     call_to_usage("[<-.foo" <- function(x, value) {}),
-    "\\method{[}{foo}(x) <- value"
+    r"(\method{[}{foo}(x) <- value)"
   )
 })
 
@@ -238,7 +258,7 @@ test_that("default usage correct for S4 methods", {
       setClass("Foo")
       setMethod("sum", "Foo", function(x, ..., na.rm = FALSE) {})
     }),
-    "\\S4method{sum}{Foo}(x, ..., na.rm = FALSE)"
+    r"(\S4method{sum}{Foo}(x, ..., na.rm = FALSE))"
   )
 
   expect_equal(
@@ -246,7 +266,7 @@ test_that("default usage correct for S4 methods", {
       setClass("Foo")
       setMethod("+", "Foo", function(e1, e2) "foo")
     }),
-    "\\S4method{+}{Foo,ANY}(e1, e2)"
+    r"(\S4method{+}{Foo,ANY}(e1, e2))"
   )
 
   expect_equal(
@@ -254,7 +274,7 @@ test_that("default usage correct for S4 methods", {
       setClass("Foo")
       setMethod("[<-", "Foo", function(x, i, j, ..., value) "foo")
     }),
-    "\\S4method{[}{Foo}(x, i, j, ...) <- value"
+    r"(\S4method{[}{Foo}(x, i, j, ...) <- value)"
   )
 
   expect_equal(
@@ -262,7 +282,7 @@ test_that("default usage correct for S4 methods", {
       setGeneric("%&&%", function(x, y) standardGeneric("%&&%"))
       setMethod("%&&%", signature("logical", "logical"), function(x, y) {})
     }),
-    "\\S4method{\\%&&\\%}{logical,logical}(x, y)"
+    r"(\S4method{\%&&\%}{logical,logical}(x, y))"
   )
 })
 
@@ -274,7 +294,7 @@ test_that("default usage correct for S4 methods with different args to generic",
         x - 1
       })
     }),
-    "\\S4method{testfun}{matrix}(x, add = FALSE, ...)"
+    r"(\S4method{testfun}{matrix}(x, add = FALSE, ...))"
   )
 })
 
@@ -284,7 +304,7 @@ test_that("non-syntactic S4 class names are not escaped in usage", {
       setGeneric("rhs", function(x) standardGeneric("rhs"))
       setMethod("rhs", "<-", function(x) x[[3]])
     }),
-    "\\S4method{rhs}{<-}(x)"
+    r"(\S4method{rhs}{<-}(x))"
   )
 })
 

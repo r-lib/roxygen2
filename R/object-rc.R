@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_rd.roxy_tag_.methods <- function(x, base_path, env) {
-  desc <- lapply(x$val, function(x) docstring(x$value@.Data))
+  desc <- lapply(x$val, \(x) docstring(x$value@.Data))
   usage <- map_chr(x$val, function(x) {
     function_usage(x$value@name, formals(x$value@.Data))
   })

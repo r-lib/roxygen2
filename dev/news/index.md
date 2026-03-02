@@ -2,6 +2,11 @@
 
 ## roxygen2 (development version)
 
+- Fixed a performance regression where
+  [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+  was very slow when the package contained large non-function objects
+  like datasets
+  ([\#1720](https://github.com/r-lib/roxygen2/issues/1720)).
 - Package documentation now correctly handles multiple arbitrary
   comments in the `comment` argument of
   [`person()`](https://rdrr.io/r/utils/person.html) in `Authors@R`

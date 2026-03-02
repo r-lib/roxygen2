@@ -32,6 +32,10 @@ test_that("person turned into meaningful text", {
     person_desc(comment = c("ROR" = "03wc8by49"))
     person_desc(comment = c("ROR" = "https://ror.org/03wc8by49"))
     person_desc(comment = c("ROR" = "03wc8by49", "extra"))
+
+    "Arbitrary comments (#1746)"
+    person_desc(comment = c(acronym = "rajo", "Contributed XY"))
+    person_desc(comment = c("comment 1", "comment 2"))
   })
 })
 

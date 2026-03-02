@@ -226,8 +226,8 @@ inherit documentation from `.x`.
 
 ### Inheriting other components
 
-You can use `@inherits foo` to inherit the documentation for every
-supported tag from another topic. Currently, `@inherits` supports
+You can use `@inherit foo` to inherit the documentation for every
+supported tag from another topic. Currently, `@inherit` supports
 inheriting the following tags: `params`, `return`, `title`,
 `description`, `details`, `seealso`, `sections`, `references`,
 `examples`, `author`, `source`, `note`, `format`.

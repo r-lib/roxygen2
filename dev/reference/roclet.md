@@ -1,7 +1,9 @@
 # Build a new roclet.
 
 To create a new roclet, you will need to create a constructor function
-that wraps `roclet`, and then implement the methods described below.
+that wraps `roclet`, and then implement the methods described below. See
+[`vignette("extending")`](https://roxygen2.r-lib.org/dev/articles/extending.md)
+for more details.
 
 ## Usage
 
@@ -20,6 +22,10 @@ roclet_tags(x)
 ```
 
 ## Arguments
+
+- subclass:
+
+  Class of the roclet, character vector.
 
 - x:
 
@@ -64,3 +70,12 @@ roclet_tags(x)
 `roclet_tags()` is no longer used; instead provide a
 [`roxy_tag_parse()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
 method for each tag.
+
+## Examples
+
+``` r
+# Custom roclet
+custom_roclet <- roclet("custom")
+# Roclet that extends the existing Rd roclet.
+supercharged_rd_roclet <- roclet(c("cool", "rd"))
+```

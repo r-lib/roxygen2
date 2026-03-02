@@ -198,19 +198,15 @@ topic$get_section("tip")
 
 Note that there is no namespacing so if you're defining multiple new tags I recommend using your package name as the common prefix.
 
-### Adding new .Rd tags to your workflow
+### Adding new `.Rd` tags to your workflow
 
-To use your new tags in another package, you must tell roxygen to load the package inlcuding your new tags.
-
-If, for example, you created some new tags in *packageFoo*, and would like to use these tags in your documentation for *packageBar*, append this like to the `DESCRIPTION` of *packageBar*:
+To use your new tags in another package, you must tell roxygen to load that package in order to find the new tags. For example, if you created some new tags in {packageFoo}, and would like to use these tags in your documentation for {packageBar}, append this like to the `DESCRIPTION` of {packageBar}:
 
 ```
 Roxygen: list(packages =  "packageFoo")
 ```
 
 See [roxygen2::load_options()] for more details.
-
-Notice that this only covers new `*.Rd` tags; if your workflow also depends on new roclets, see below.
 
 ## Creating a new roclet
 

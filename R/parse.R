@@ -34,6 +34,7 @@ parse_package <- function(path = ".", env = env_package(path)) {
 
 #' @export
 #' @rdname parse_package
+#' @param srcref_path Path to be used as source ref.
 parse_file <- function(file, env = env_file(file), srcref_path = NULL) {
   blocks <- tokenize_file(file, srcref_path = srcref_path)
 

@@ -3,14 +3,18 @@
 \name{tags_list}
 \alias{tags_list}
 \alias{tags_metadata}
-\title{Access metadata about built-in tags}
+\title{Access metadata about built-in or available tags}
 \usage{
 tags_list(built_in = TRUE)
 
 tags_metadata()
 }
+\arguments{
+\item{built_in}{Logical. Whether to restrict the result to built-in tags
+(\code{TRUE}) or to extend it to available tags (\code{FALSE}).}
+}
 \description{
-Access metadata about built-in tags
+Access metadata about built-in or available tags
 }
 \seealso{
 Other extending: 

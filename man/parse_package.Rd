@@ -29,6 +29,8 @@ for real code you'll need to generate the environment yourself.
 You can also set to \code{NULL} if you only want to get the tokenized code
 blocks only. This suppresses evaluation of \verb{@eval} tags, and will not
 find the code object associated with each block.}
+
+\item{srcref_path}{Path to be used as source ref.}
 }
 \value{
 A list of roxy_block objects

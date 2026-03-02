@@ -11,6 +11,10 @@ roxy_meta_get(key = NULL, default = NULL)
 }
 \arguments{
 \item{base_path}{Path to package.}
+
+\item{key}{Key of the options, e.g. \code{"packages"}.}
+
+\item{default}{Default value.}
 }
 \description{
 Options can be stored in the \code{Roxygen} field of the \code{DESCRIPTION}, or

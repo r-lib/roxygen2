@@ -28,6 +28,8 @@ instead of documenting the data directly, you quote the dataset’s name.
 #' }
 #' 
 #' @source {ggplot2} tidyverse R package.
+"diamonds"
+#> [1] "diamonds"
 ```
 
 Note the use of two additional tags that are particularly useful for

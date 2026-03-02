@@ -43,15 +43,15 @@
     Code
       res <- roclet_process(roc, blocks = blocks, env = env, base_path = test_path())
     Message
-      x roxygen-block-3.R:13: Must use one @param for each argument.
+      x roxygen-block-3.R:12: Must use one @param for each argument.
       x $meth3(duplicate) is documented multiple times
-      x roxygen-block-3.R:13: Must use one @param for each argument.
+      x roxygen-block-3.R:12: Must use one @param for each argument.
       x $meth3(missing) is not documented
-      x roxygen-block-3.R:13: Must use one @return per R6 method.
-      x roxygen-block-3.R:92: Undocumented R6 method: undocumented_method.
-      x roxygen-block-3.R:92: Undocumented R6 fields: field2 and undocumented_field.
-      x roxygen-block-3.R:92: R6 field documented multiple times: duplicatefield.
-      x roxygen-block-3.R:92: Unknown R6 field: nosuchfield.
-      x roxygen-block-3.R:92: Undocumented R6 active binding: undocumented_binding.
-      x roxygen-block-3.R:92: R6 active binding documented multiple times: duplicate_binding.
+      x roxygen-block-3.R:12: Must use one @return per R6 method.
+      x roxygen-block-3.R:91: Undocumented R6 method: undocumented_method.
+      x roxygen-block-3.R:91: Undocumented R6 fields: field2 and undocumented_field.
+      x roxygen-block-3.R:91: R6 field documented multiple times: duplicatefield.
+      x roxygen-block-3.R:91: Unknown R6 field: nosuchfield.
+      x roxygen-block-3.R:91: Undocumented R6 active binding: undocumented_binding.
+      x roxygen-block-3.R:91: R6 active binding documented multiple times: duplicate_binding.
 

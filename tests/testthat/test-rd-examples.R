@@ -1,11 +1,14 @@
 test_that("@example loads from specified files", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @name a
     #' @title a
     #'
     #' @example Rd-example-1.R
     #' @example Rd-example-2.R
-    NULL")[[1]]
+    NULL"
+  )[[1]]
 
   examples <- out$get_value("examples")
   expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
@@ -13,37 +16,46 @@ test_that("@example loads from specified files", {
 })
 
 test_that("@example captures examples (#470)", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @name a
     #' @title a
     #' @examples
     #' TRUE
     #' @examples
     #' FALSE
-    NULL")[[1]]
+    NULL"
+  )[[1]]
 
   examples <- out$get_value("examples")
   expect_equal(examples, rd(c("TRUE", "FALSE")))
 })
 
 test_that("@examples and @example interleave", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @name a
     #' @title a
     #' @example Rd-example-1.R
     #' @examples a <- 2
     #' @example Rd-example-2.R
-    NULL")[[1]]
+    NULL"
+  )[[1]]
 
   expect_snapshot_output(out$get_section("examples"))
 })
 
 test_that("@example does not introduce extra empty lines", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @name a
     #' @title a
     #' @example Rd-example-3.R
-    NULL")[[1]]
+    NULL"
+  )[[1]]
 
   expect_equal(str_count(out$get_value("examples"), "\n"), 1L)
 })
@@ -72,7 +84,9 @@ test_that("warns if path doesn't exist", {
 })
 
 test_that("@examplesIf", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @name a
     #' @title a
     #' @examplesIf foo::bar()
@@ -80,7 +94,8 @@ test_that("@examplesIf", {
     #' @examplesIf foobar()
     #' and-this
     #' and-that
-    NULL")[[1]]
+    NULL"
+  )[[1]]
 
   expect_snapshot_output(out$get_section("examples"))
 })
@@ -118,12 +133,15 @@ test_that("only % escaped in @examples", {
 
 test_that("multi-line macros in @example", {
   # https://github.com/r-lib/roxygen2/issues/974
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @name a
     #' @title a
     #'
     #' @example Rd-example-4.txt
-    NULL")[[1]]
+    NULL"
+  )[[1]]
 
   expect_equal(
     format(out$get_section("examples")),

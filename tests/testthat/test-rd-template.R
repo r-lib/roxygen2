@@ -24,7 +24,7 @@ test_that("can find template from name", {
 
   expect_equal(
     template_find(base, "new-path"),
-    file.path(base, "man" , "roxygen", "templates", "new-path.R")
+    file.path(base, "man", "roxygen", "templates", "new-path.R")
   )
 
   expect_error(
@@ -42,12 +42,15 @@ test_that("templates gives useful error if not found", {
 })
 
 test_that("templates replace variables with their values", {
-  out <- roc_proc_text(rd_roclet(), "
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @template values
     #' @templateVar x a
     #' @templateVar y b
     #' @templateVar z c
-    x <- 10")[[1]]
+    x <- 10"
+  )[[1]]
 
   expect_equal(out$get_value("title"), "a")
   expect_equal(out$get_value("param"), c(b = "c"))

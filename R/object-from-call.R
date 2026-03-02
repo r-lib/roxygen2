@@ -8,7 +8,8 @@ object_from_call <- function(call, env, block, file) {
   } else if (is.call(call)) {
     call <- call_match(call, eval(call[[1]], env))
     name <- deparse(call[[1]])
-    switch(name,
+    switch(
+      name,
       "=" = ,
       "<-" = ,
       "<<-" = parser_assignment(call, env, block),
@@ -41,10 +42,13 @@ object_from_call <- function(call, env, block, file) {
     if (block_has_tags(block, "docType")) {
       docType <- block_get_tag_value(block, "docType")
       if (docType == "package") {
-        warn_roxy_block(block, c(
-          '`@docType "package"` is deprecated',
-          i = 'Please document "_PACKAGE" instead.'
-        ))
+        warn_roxy_block(
+          block,
+          c(
+            '`@docType "package"` is deprecated',
+            i = 'Please document "_PACKAGE" instead.'
+          )
+        )
         return(parser_package(file))
       }
     }
@@ -98,7 +102,6 @@ parser_data <- function(call, env, block) {
 }
 
 parser_package <- function(file) {
-
   pkg_path <- dirname(dirname(file))
   value <- list(
     desc = desc::desc(file = pkg_path),
@@ -240,15 +243,25 @@ add_s3_metadata <- function(val, name, env, block) {
 # }
 extract_method_fun <- function(fun) {
   method_body <- body(fun)
-  if (!is_call(method_body, "{")) return(fun)
-  if (length(method_body) < 2) return(fun)
+  if (!is_call(method_body, "{")) {
+    return(fun)
+  }
+  if (length(method_body) < 2) {
+    return(fun)
+  }
 
   first_line <- method_body[[2]]
-  if (!is_call(first_line, name = "<-", n = 2)) return(fun)
-  if (!identical(first_line[[2]], quote(`.local`))) return(fun)
+  if (!is_call(first_line, name = "<-", n = 2)) {
+    return(fun)
+  }
+  if (!identical(first_line[[2]], quote(`.local`))) {
+    return(fun)
+  }
 
   local_fun <- eval(first_line[[3]])
-  if (!is.function(local_fun)) return(fun)
+  if (!is.function(local_fun)) {
+    return(fun)
+  }
 
   local_fun
 }
@@ -290,8 +303,14 @@ print.object <- function(x, ...) {
 }
 
 object_topic <- function(value, alias, type) {
-  switch(type,
-    s4method = paste0(value@generic, ",", paste0(value@defined, collapse = ","), "-method"),
+  switch(
+    type,
+    s4method = paste0(
+      value@generic,
+      ",",
+      paste0(value@defined, collapse = ","),
+      "-method"
+    ),
     s4class = paste0(value@className, "-class"),
     s4generic = value@generic,
     rcclass = paste0(value@className, "-class"),

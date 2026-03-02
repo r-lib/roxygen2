@@ -1,5 +1,11 @@
 # roxygen2 (development version)
 
+* `object_format()` now escapes braces in class names, fixing broken Rd output for data objects with class `{` like `quote({})` (#1744).
+* Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
+* Package documentation now correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
+* roxygen2 now requires R 4.0 (#1632).
+* `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).
+
 # roxygen2 7.3.3
 
 * Package documentation now converts ROR IDs into a useful link (#1698, @maelle).

@@ -1,7 +1,7 @@
 # \links are transformed
 
     \arguments{
-    \item{algo}{The hashing algoritm to be used by \code{\link[digest]{digest}}. Defaults to
+    \item{algo}{The hashing algorithm to be used by \code{\link[digest]{digest}}. Defaults to
     "sha1"}
     } 
 

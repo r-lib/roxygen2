@@ -36,7 +36,9 @@ markdown_activate <- function(tags) {
     md <- FALSE
   } else {
     md <- roxy_meta_get("markdown", FALSE)
-    if (has_md) md <- TRUE
+    if (has_md) {
+      md <- TRUE
+    }
     if (has_nomd) md <- FALSE
   }
 

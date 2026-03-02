@@ -16,15 +16,22 @@ test_that("markdown file can be included", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat("List:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
-      file = tmp)
-  rox <- sprintf("
+  cat(
+    "List:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
+    file = tmp
+  )
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @title Title
     #' @details List:
     #' \\itemize{
@@ -34,7 +41,8 @@ test_that("markdown file can be included", {
     #'
     #' Inline \\code{code} and \\emph{emphasis}.
     #' @name foobar
-    NULL")[[1]]
+    NULL"
+  )[[1]]
   # make sure sections are in the same order
   expect_equal(sort(names(out1$sections)), sort(names(out2$sections)))
   out2$sections <- out2$sections[names(out1$sections)]
@@ -46,7 +54,9 @@ test_that("markdown with headers", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat(sep = "\n", file = tmp,
+  cat(
+    sep = "\n",
+    file = tmp,
     "Text at the front",
     "",
     "# Header 1",
@@ -59,12 +69,16 @@ test_that("markdown with headers", {
     "",
     "# Header 11",
     "",
-    "Text again")
-  rox <- sprintf("
+    "Text again"
+  )
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- "Text at the front"
   exp_secs <- list(
@@ -83,18 +97,24 @@ test_that("subsection within details", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat(sep = "\n", file = tmp,
+  cat(
+    sep = "\n",
+    file = tmp,
     "Text at the front",
     "",
     "",
     "## Subsection in details",
     "",
-    "Some subsection text")
-  rox <- sprintf("
+    "Some subsection text"
+  )
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- paste0(
     "Text at the front",
@@ -108,15 +128,20 @@ test_that("links to functions", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat(sep = "\n", file = tmp,
+  cat(
+    sep = "\n",
+    file = tmp,
     "This is a link: [roxygenize()].",
     "Another one: [stringr::str_length()]"
   )
-  rox <- sprintf("
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- paste0(
     "This is a link: \\code{\\link[=roxygenize]{roxygenize()}}.",
@@ -130,18 +155,23 @@ test_that("links to functions, with anchors", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat(sep = "\n", file = tmp,
+  cat(
+    sep = "\n",
+    file = tmp,
     "This is a link: [roxygenize()].",
     "Another one: [stringr::str_length()]",
     "",
     "[roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html",
     "[stringr::str_length()]: https://stringr.tidyverse.org/reference/str_length.html"
   )
-  rox <- sprintf("
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- paste0(
     "This is a link: \\code{\\link[=roxygenize]{roxygenize()}}.",
@@ -170,18 +200,24 @@ test_that("inline html", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat(sep = "\n", file = tmp,
+  cat(
+    sep = "\n",
+    file = tmp,
     "Text at the front",
     "",
     "",
     "## Subsection in details",
     "",
-    "Some subsection text with <span class='x'>inline html</span>.")
-  rox <- sprintf("
+    "Some subsection text with <span class='x'>inline html</span>."
+  )
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- paste0(
     "Text at the front",
@@ -197,17 +233,23 @@ test_that("html block", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat(sep = "\n", file = tmp,
+  cat(
+    sep = "\n",
+    file = tmp,
     "Text at the front",
     "",
     "<a id=\"test\"></a>",
     "",
-    "Text")
-  rox <- sprintf("
+    "Text"
+  )
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   exp_details <- paste0(
     "Text at the front",
@@ -222,15 +264,22 @@ test_that("include as another section", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat("List:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
-      file = tmp)
-  rox <- sprintf("
+  cat(
+    "List:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
+    file = tmp
+  )
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s description
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
-  out2 <- roc_proc_text(rd_roclet(), "
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
     #' @title Title
     #' @description List:
     #' \\itemize{
@@ -240,7 +289,8 @@ test_that("include as another section", {
     #'
     #' Inline \\code{code} and \\emph{emphasis}.
     #' @name foobar
-    NULL")[[1]]
+    NULL"
+  )[[1]]
   # make sure sections are in the same order
   expect_equal(sort(names(out1$sections)), sort(names(out2$sections)))
   out2$sections <- out2$sections[names(out1$sections)]
@@ -252,9 +302,12 @@ test_that("order of sections is correct", {
 
   tmp <- tempfile(fileext = ".md")
   on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
-  cat("# Rmd\n\nList:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
-      file = tmp)
-  rox <- sprintf("
+  cat(
+    "# Rmd\n\nList:\n\n* item1\n* item2\n\nInline `code` and _emphasis_.\n",
+    file = tmp
+  )
+  rox <- sprintf(
+    "
     #' Title
     #' @description desc
     #' @details details
@@ -264,7 +317,9 @@ test_that("order of sections is correct", {
     #' @section After2:
     #' This is even more after.
     #' @name foobar
-    NULL", tmp)
+    NULL",
+    tmp
+  )
   out1 <- roc_proc_text(rd_roclet(), rox)[[1]]
   expect_match(format(out1), "Rmd.*After.*After2")
 })
@@ -279,18 +334,23 @@ test_that("useful warnings", {
     NULL"
   expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 
-  path <- withr::local_tempfile(fileext = ".Rmd", lines = c(
-    "```{r}",
-    "stop('Error')",
-    "```"
-  ))
+  path <- withr::local_tempfile(
+    fileext = ".Rmd",
+    lines = c(
+      "```{r}",
+      "stop('Error')",
+      "```"
+    )
+  )
   path <- normalizePath(path)
 
-  text <- sprintf("
+  text <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", path
+    NULL",
+    path
   )
   expect_snapshot(
     . <- roc_proc_text(rd_roclet(), text),
@@ -299,7 +359,7 @@ test_that("useful warnings", {
       x <- gsub("file.*\\.Rmd", "<another-temp-path.Rmd>", x)
       line <- grep("~~~", x)[1]
       if (!is.na(line)) {
-        x <- x[1:(line-1)]
+        x <- x[1:(line - 1)]
       }
       x
     }
@@ -312,11 +372,14 @@ test_that("sets width", {
   local_options(width = 123)
   temp_rd <- withr::local_tempfile(lines = "`r getOption('width')`")
 
-  rox <- sprintf("
+  rox <- sprintf(
+    "
     #' Title
     #' @includeRmd %s
     #' @name foobar
-    NULL", temp_rd)
+    NULL",
+    temp_rd
+  )
   out <- roc_proc_text(rd_roclet(), rox)[[1]]
   expect_equal(out$get_value("details"), "80")
 })

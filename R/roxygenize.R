@@ -24,11 +24,12 @@
 #'   created by roxygen before running each roclet.
 #' @return `NULL`
 #' @export
-roxygenize <- function(package.dir = ".",
-                       roclets = NULL,
-                       load_code = NULL,
-                       clean = FALSE) {
-
+roxygenize <- function(
+  package.dir = ".",
+  roclets = NULL,
+  load_code = NULL,
+  clean = FALSE
+) {
   base_path <- normalizePath(package.dir)
   is_first <- roxygen_setup(base_path)
 
@@ -48,8 +49,9 @@ roxygenize <- function(package.dir = ".",
     update_namespace_imports(base_path)
   }
 
-  if (length(roclets) == 0)
+  if (length(roclets) == 0) {
     return(invisible())
+  }
 
   roclets <- lapply(roclets, roclet_find)
 
@@ -69,21 +71,26 @@ roxygenize <- function(package.dir = ".",
     purrr::walk(roclets, roclet_clean, base_path = base_path)
   }
 
-  roclets <- lapply(roclets, roclet_preprocess,
+  roclets <- lapply(
+    roclets,
+    roclet_preprocess,
     blocks = blocks,
     base_path = base_path
   )
 
   blocks <- lapply(blocks, block_set_env, env = env)
 
-  results <- lapply(roclets, roclet_process,
+  results <- lapply(
+    roclets,
+    roclet_process,
     blocks = blocks,
     env = env,
     base_path = base_path
   )
 
   out <- purrr::map2(
-    roclets, results,
+    roclets,
+    results,
     roclet_output,
     base_path = base_path,
     is_first = is_first

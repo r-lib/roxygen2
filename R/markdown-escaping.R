@@ -35,17 +35,58 @@ escape_rd_for_md <- function(text) {
   double_escape_md(protected)
 }
 
-escaped_for_md <- paste0("\\", c(
-  "acronym", "code", "command", "CRANpkg", "deqn", "doi", "dontrun",
-  "dontshow", "donttest", "email", "env", "eqn", "figure", "file",
-  "if", "ifelse", "kbd", "link", "linkS4class", "method",
-  "mjeqn", "mjdeqn", "mjseqn", "mjsdeqn", "mjteqn", "mjtdeqn",
-  "newcommand", "option", "out", "packageAuthor",
-  "packageDescription", "packageDESCRIPTION", "packageIndices",
-  "packageMaintainer", "packageTitle", "pkg", "PR", "preformatted",
-  "renewcommand", "S3method", "S4method", "samp", "special",
-  "testonly", "url", "var", "verb"
-))
+escaped_for_md <- paste0(
+  "\\",
+  c(
+    "acronym",
+    "code",
+    "command",
+    "CRANpkg",
+    "deqn",
+    "doi",
+    "dontrun",
+    "dontshow",
+    "donttest",
+    "email",
+    "env",
+    "eqn",
+    "figure",
+    "file",
+    "if",
+    "ifelse",
+    "kbd",
+    "link",
+    "linkS4class",
+    "method",
+    "mjeqn",
+    "mjdeqn",
+    "mjseqn",
+    "mjsdeqn",
+    "mjteqn",
+    "mjtdeqn",
+    "newcommand",
+    "option",
+    "out",
+    "packageAuthor",
+    "packageDescription",
+    "packageDESCRIPTION",
+    "packageIndices",
+    "packageMaintainer",
+    "packageTitle",
+    "pkg",
+    "PR",
+    "preformatted",
+    "renewcommand",
+    "S3method",
+    "S4method",
+    "samp",
+    "special",
+    "testonly",
+    "url",
+    "var",
+    "verb"
+  )
+)
 
 #' @description
 #' It puts back the protected fragile Rd commands into
@@ -82,7 +123,7 @@ unescape_rd_for_md <- function(rd_text, esc_text) {
 
 find_fragile_rd_tags <- function(text, fragile) {
   tags <- find_all_rd_tags(text)
-  ftags <- tags[ tags$tag %in% fragile, ]
+  ftags <- tags[tags$tag %in% fragile, ]
 
   ## Remove embedded ones
   keep <- map_lgl(seq_len(nrow(ftags)), function(i) {
@@ -107,7 +148,6 @@ find_fragile_rd_tags <- function(text, fragile) {
 #' @noRd
 
 find_all_rd_tags <- function(text) {
-
   text_len <- nchar(text)
 
   ## Find the tag names
@@ -116,8 +156,8 @@ find_all_rd_tags <- function(text) {
   ## Find the end of the argument list for each tag. Note that
   ## tags might be embedded into the arguments of other tags.
   tags$argend <- map_int(seq_len(nrow(tags)), function(i) {
-      tag_plus <- str_sub(text, tags$end[i], text_len)
-      findEndOfTag(tag_plus, is_code = FALSE) + tags$end[i]
+    tag_plus <- str_sub(text, tags$end[i], text_len)
+    findEndOfTag(tag_plus, is_code = FALSE) + tags$end[i]
   })
 
   tags
@@ -137,10 +177,9 @@ find_all_rd_tags <- function(text) {
 
 find_all_tag_names <- function(text) {
   ## Find the tags without arguments first
-  tag_pos <- str_locate_all(text, "\\\\[a-zA-Z][a-zA-Z0-9]*")[[1]]
+  tag_pos <- str_locate_all(text, r"(\\[a-zA-Z][a-zA-Z0-9]*)")[[1]]
 
   data.frame(
-    stringsAsFactors = FALSE,
     tag = str_sub(text, tag_pos[, "start"], tag_pos[, "end"]),
     as.data.frame(tag_pos)
   )
@@ -183,7 +222,7 @@ protect_rd_tags <- function(text, rd_tags) {
 #' @noRd
 
 str_sub_same <- function(str, repl, id) {
-  repl <- repl[ order(repl$start), ]
+  repl <- repl[order(repl$start), ]
 
   if (is.unsorted(repl$end) || is.unsorted(repl$argend)) {
     cli::cli_abort("Replacement intervals must not overlap", .internal = TRUE)
@@ -242,10 +281,10 @@ make_random_string <- function(length = 32) {
 #' "\"" # double quote
 #' '\'' # single quote
 double_escape_md <- function(text) {
-  text <- gsub("\\", "\\\\", text, fixed = TRUE)
+  text <- gsub(r"(\)", r"(\\)", text, fixed = TRUE)
 
   # De-dup escaping used to avoid [] creating a link
-  text <- gsub("\\\\[", "\\[", text, fixed = TRUE)
-  text <- gsub("\\\\]", "\\]", text, fixed = TRUE)
+  text <- gsub(r"(\\[)", r"(\[)", text, fixed = TRUE)
+  text <- gsub(r"(\\])", r"(\])", text, fixed = TRUE)
   text
 }

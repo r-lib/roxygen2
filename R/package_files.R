@@ -15,11 +15,17 @@ r_files <- function(path) {
 
 ignore_files <- function(rfiles, path) {
   rbuildignore <- file.path(path, ".Rbuildignore")
-  if (!file.exists(rbuildignore))
+  if (!file.exists(rbuildignore)) {
     return(rfiles)
+  }
 
   # Strip leading directory and slashes
-  rfiles_relative <- sub(normalizePath(path, winslash = "/"), "", normalizePath(rfiles, winslash = "/"), fixed = TRUE)
+  rfiles_relative <- sub(
+    normalizePath(path, winslash = "/"),
+    "",
+    normalizePath(rfiles, winslash = "/"),
+    fixed = TRUE
+  )
   rfiles_relative <- sub("^[/]*", "", rfiles_relative)
 
   # Remove any files that match any perl-compatible regexp

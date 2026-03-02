@@ -5,7 +5,6 @@ test_that("merged options from can load options from DESCRIPTION", {
 })
 
 test_that("warns on invalid meta.R files", {
-
   expect_warning(
     load_options_meta(test_path("test-options"), "meta-error.R"),
     "Failed to source"

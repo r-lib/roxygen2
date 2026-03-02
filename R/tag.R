@@ -16,7 +16,13 @@
 #' @param val Parsed tag value, typically a character vector, but sometimes
 #'   a list. Usually filled in by `tag_parsers`
 #' @param file,line Location of the tag
-roxy_tag <- function(tag, raw, val = NULL, file = NA_character_, line = NA_character_) {
+roxy_tag <- function(
+  tag,
+  raw,
+  val = NULL,
+  file = NA_character_,
+  line = NA_character_
+) {
   structure(
     list(
       file = file,

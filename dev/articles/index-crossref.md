@@ -7,7 +7,7 @@ through cross-references and indexes.
 
 `@seealso` allows you to point to other useful resources, either on the
 web (using a url) or to related functions (with a function link like
-`[function_name()])`. For [`sum()`](https://rdrr.io/r/base/sum.html),
+`[function_name()]`). For [`sum()`](https://rdrr.io/r/base/sum.html),
 this might look like:
 
 ``` r

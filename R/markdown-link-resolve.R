@@ -2,39 +2,29 @@ resolve_link_package <- function(
   topic,
   me = NULL,
   pkgdir = NULL,
-  state = NULL
+  tag = roxy_tag("unknown", "")
 ) {
   me <- me %||% roxy_meta_get("current_package")
-  # this is  from the roxygen2 tests, should not happen on a real package
-  if (is.null(me) || is.na(me) || me == "") {
-    return(NA_character_)
-  }
 
   # if it is in the current package, then no need for package name, right?
-  if (has_topic(topic, me)) {
+  if (!is.null(me) && has_topic(topic, me)) {
     return(NA_character_)
   }
 
-  # try packages in depends, imports, suggests first, error on name clashes
+  # first look in Depends/Imports/Suggests
   pkgs <- local_pkg_deps(pkgdir)
-
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   pkg_has_topic <- map_chr(pkg_has_topic, function(p) {
     find_reexport_source(topic, p) %||% p
   })
   pkg_has_topic <- unique(pkg_has_topic)
-  base <- base_packages()
-  if (length(pkg_has_topic) == 0) {
-    # fall through to check base packages as well
-  } else if (length(pkg_has_topic) == 1) {
-    if (pkg_has_topic %in% base) {
-      return(NA_character_)
-    } else {
-      return(pkg_has_topic)
-    }
-  } else {
+  if (length(pkg_has_topic) == 1) {
+    return(pkg_has_topic)
+  }
+
+  if (length(pkg_has_topic) > 1) {
     warn_roxy_tag(
-      state$tag,
+      tag,
       c(
         "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg_has_topic}}",
         i = "Qualify topic explicitly with a package name when linking to it."
@@ -43,14 +33,14 @@ resolve_link_package <- function(
     return(NA_character_)
   }
 
-  # try base packages as well, take the first hit,
-  # there should not be any name clashes, anyway
+  # then try base packages, taking the first hit since there shouldn't be name clashes
+  base <- base_packages()
   for (bp in base) {
     if (has_topic(topic, bp)) return(NA_character_)
   }
 
   warn_roxy_tag(
-    state$tag,
+    tag,
     c(
       "Could not resolve link to topic {.val {topic}} in the dependencies or base packages",
       "i" = paste(
@@ -73,7 +63,6 @@ local_pkg_deps <- function(pkgdir = NULL) {
   deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]
   deps$package
 }
-
 
 base_packages <- function() {
   if (getRversion() >= "4.4.0") {

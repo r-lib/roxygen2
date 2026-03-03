@@ -1,42 +1,43 @@
-test_that("resolve_link_package", {
-  # Doesn't work with
-  skip_if_not(
-    is.null(.getNamespace("roxygen2")[[".__DEVTOOLS__"]]),
-    "roxygen2 loaded with devtools"
-  )
-  expect_snapshot({
-    resolve_link_package("roxygenize", "roxygen2", test_path("testMdLinks2"))
-    resolve_link_package("UseMethod", "roxygen2", test_path("testMdLinks2"))
-    resolve_link_package("cli_abort", "roxygen2", test_path("testMdLinks2"))
-  })
-
-  tag <- roxy_tag("title", NULL, NULL, file = "foo.R", line = 10)
-  expect_snapshot({
-    resolve_link_package(
-      "aa3bc042880aa3b64fef1a9",
-      "roxygen2",
-      test_path("testMdLinks2"),
-      list(tag = tag)
-    )
-  })
-  # re-exported topics are identified
+test_that("imported functions qualified with package name", {
   expect_equal(
-    resolve_link_package("process", "testthat", test_path("testMdLinks")),
+    resolve_link_package("cli_abort", pkgdir = test_path("testMdLinks")),
+    "cli"
+  )
+})
+
+test_that("base functions don't need qualification", {
+  # base packages don't need qualification
+  expect_equal(
+    resolve_link_package("mean", pkgdir = test_path("testMdLinks")),
+    NA_character_
+  )
+})
+
+test_that("topics in current package don't need qualification", {
+  expect_equal(
+    resolve_link_package("cli_abort", "cli", pkgdir = test_path("testMdLinks")),
+    NA_character_
+  )
+})
+
+test_that("gives useful warning if no topic found", {
+  expect_snapshot({
+    resolve_link_package("doesntexist", "roxygen2", test_path("testMdLinks"))
+  })
+})
+
+test_that("re-exported topics are identified", {
+  expect_equal(
+    resolve_link_package("process", pkgdir = test_path("testMdLinks")),
     "processx"
   )
 })
 
-test_that("resolve_link_package name clash", {
+test_that("gives useful warning if same name in multiple packages", {
   # skip in case pkgload/rlang changes this
   skip_on_cran()
-  tag <- roxy_tag("title", NULL, NULL, file = "foo.R", line = 10)
   expect_snapshot({
-    resolve_link_package(
-      "pkg_env",
-      "roxygen2",
-      test_path("testMdLinks2"),
-      list(tag = tag)
-    )
+    resolve_link_package("pkg_env", "roxygen2", test_path("testMdLinks"))
   })
 })
 

@@ -1,10 +1,9 @@
-resolve_link_package <- function(
-  topic,
-  me = NULL,
-  pkgdir = NULL,
-  tag = roxy_tag("unknown", "")
-) {
-  pkg <- find_topic_package(topic, me = me, pkgdir = pkgdir)
+resolve_link_package <- function(topic, tag = NULL) {
+  pkg <- roxy_meta_get("current_package")
+  pkg_dir <- roxy_meta_get("current_package_dir")
+  tag <- tag %||% roxy_tag("unknown", "") # only for tests
+
+  pkg <- find_topic_package(topic, pkg = pkg, pkg_dir = pkg_dir)
 
   if (length(pkg) == 0) {
     warn_roxy_tag(
@@ -41,20 +40,14 @@ resolve_link_package <- function(
 # - A single package name: topic found in exactly one dependency
 # - A vector of package names: topic found in multiple dependencies
 # - character(): topic not found anywhere
-find_topic_package <- function(
-  topic,
-  me = NULL,
-  pkgdir = NULL
-) {
-  me <- me %||% roxy_meta_get("current_package")
-
+find_topic_package <- function(topic, pkg, pkg_dir) {
   # if it is in the current package, then no need for package name
-  if (!is.null(me) && has_topic(topic, me)) {
+  if (has_topic(topic, pkg)) {
     return(NA_character_)
   }
 
   # first look in Depends/Imports/Suggests
-  pkgs <- local_pkg_deps(pkgdir)
+  pkgs <- local_pkg_deps(pkg_dir)
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   pkg_has_topic <- map_chr(pkg_has_topic, function(p) {
     find_reexport_source(topic, p) %||% p

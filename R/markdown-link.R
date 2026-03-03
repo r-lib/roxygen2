@@ -140,9 +140,8 @@ parse_link <- function(destination, contents, state) {
   noclass <- str_match(fun, "^(.*)-class$")[1, 2]
 
   if (is.na(pkg)) {
-    pkg <- resolve_link_package(obj, thispkg, tag = state$tag)
-  }
-  if (!is.na(pkg) && pkg == thispkg) {
+    pkg <- resolve_link_package(obj, tag = state$tag)
+  } else if (!is.na(pkg) && pkg == thispkg) {
     pkg <- NA_character_
   }
   file <- find_topic_filename(pkg, obj, state$tag)

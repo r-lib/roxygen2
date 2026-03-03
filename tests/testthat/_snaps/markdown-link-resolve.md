@@ -1,7 +1,7 @@
-# gives useful warning if no topic found
+# useful warning if no topic found
 
     Code
-      resolve_link_package("doesntexist", "roxygen2", test_path("testMdLinks"))
+      resolve_link_package("doesntexist")
     Message
       x NA:NA: @unknown Could not resolve link to topic "doesntexist" in the dependencies or base packages.
       i If you haven't documented "doesntexist" yet, or just changed its name, this is normal. Once "doesntexist" is documented, this warning goes away.
@@ -14,7 +14,7 @@
 # gives useful warning if same name in multiple packages
 
     Code
-      resolve_link_package("pkg_env", "roxygen2", test_path("testMdLinks"))
+      resolve_link_package("pkg_env")
     Message
       x NA:NA: @unknown Topic "pkg_env" is available in multiple packages: pkgload and rlang.
       i Qualify topic explicitly with a package name when linking to it.

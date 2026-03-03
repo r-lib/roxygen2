@@ -111,22 +111,6 @@ parse_link <- function(destination, contents, state) {
     local_bindings(.env = state, in_link_code = TRUE)
   }
 
-  if (!all(xml_name(contents) %in% c("text", "softbreak", "linebreak"))) {
-    incorrect <- setdiff(
-      unique(xml_name(contents)),
-      c("text", "softbreak", "linebreak")
-    )
-
-    warn_roxy_tag(
-      state$tag,
-      c(
-        "markdown links must contain plain text",
-        i = "Problematic link: {destination}"
-      )
-    )
-    return("")
-  }
-
   ## If the supplied link text is the same as the reference text,
   ## then we assume that the link text was automatically generated and
   ## it was not specified explicitly. In this case `()` links are

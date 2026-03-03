@@ -4,9 +4,51 @@ resolve_link_package <- function(
   pkgdir = NULL,
   tag = roxy_tag("unknown", "")
 ) {
+  pkg <- find_topic_package(topic, me = me, pkgdir = pkgdir)
+
+  if (length(pkg) == 0) {
+    warn_roxy_tag(
+      tag,
+      c(
+        "Could not resolve link to topic {.val {topic}} in the dependencies or base packages",
+        "i" = paste(
+          "If you haven't documented {.val {topic}} yet, or just changed its name, this is normal.",
+          "Once {.val {topic}} is documented, this warning goes away."
+        ),
+        "i" = "Make sure that the name of the topic is spelled correctly.",
+        "i" = "Always list the linked package as a dependency.",
+        "i" = "Alternatively, you can fully qualify the link with a package name."
+      )
+    )
+    NA_character_
+  } else if (length(pkg) == 1) {
+    pkg
+  } else {
+    warn_roxy_tag(
+      tag,
+      c(
+        "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg}}",
+        i = "Qualify topic explicitly with a package name when linking to it."
+      )
+    )
+    return(NA_character_)
+  }
+}
+
+# Returns:
+# - NA_character_: topic found in current package or base packages (no
+#   qualification needed)
+# - A single package name: topic found in exactly one dependency
+# - A vector of package names: topic found in multiple dependencies
+# - character(): topic not found anywhere
+find_topic_package <- function(
+  topic,
+  me = NULL,
+  pkgdir = NULL
+) {
   me <- me %||% roxy_meta_get("current_package")
 
-  # if it is in the current package, then no need for package name, right?
+  # if it is in the current package, then no need for package name
   if (!is.null(me) && has_topic(topic, me)) {
     return(NA_character_)
   }
@@ -18,42 +60,16 @@ resolve_link_package <- function(
     find_reexport_source(topic, p) %||% p
   })
   pkg_has_topic <- unique(pkg_has_topic)
-  if (length(pkg_has_topic) == 1) {
+  if (length(pkg_has_topic) >= 1) {
     return(pkg_has_topic)
   }
 
-  if (length(pkg_has_topic) > 1) {
-    warn_roxy_tag(
-      tag,
-      c(
-        "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg_has_topic}}",
-        i = "Qualify topic explicitly with a package name when linking to it."
-      )
-    )
-    return(NA_character_)
-  }
-
-  # then try base packages, taking the first hit since there shouldn't be name clashes
-  base <- base_packages()
-  for (bp in base) {
+  # then try base packages
+  for (bp in base_packages()) {
     if (has_topic(topic, bp)) return(NA_character_)
   }
 
-  warn_roxy_tag(
-    tag,
-    c(
-      "Could not resolve link to topic {.val {topic}} in the dependencies or base packages",
-      "i" = paste(
-        "If you haven't documented {.val {topic}} yet, or just changed its name, this is normal.",
-        "Once {.val {topic}} is documented, this warning goes away."
-      ),
-      "i" = "Make sure that the name of the topic is spelled correctly.",
-      "i" = "Always list the linked package as a dependency.",
-      "i" = "Alternatively, you can fully qualify the link with a package name."
-    )
-  )
-
-  NA_character_
+  character()
 }
 
 local_pkg_deps <- function(pkgdir = NULL) {

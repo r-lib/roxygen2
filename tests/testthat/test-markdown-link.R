@@ -65,13 +65,10 @@ test_that("{ and } in links are escaped (#1259)", {
   expect_equal(markdown("[foo({ bar })][x]"), r"(\link[=x]{foo({ bar })})")
 })
 
-test_that("non-text nodes in links fails", {
-  tag <- roxy_tag("title", NULL, NULL, file = "foo.R", line = 10)
-
-  expect_snapshot({
-    markdown("[`foo` bar][x]", tag = tag)
-    markdown("[__baz__][x]", tag = tag)
-  })
+test_that("non-text nodes in links are supported", {
+  expect_equal(markdown("[`foo` bar][x]"), r"(\link[=x]{\code{foo} bar})")
+  expect_equal(markdown("[__baz__][x]"), r"(\link[=x]{\strong{baz}})")
+  expect_equal(markdown("[_italic_][x]"), r"(\link[=x]{\emph{italic}})")
 })
 
 test_that("commonmark picks up the various link references", {
@@ -549,6 +546,27 @@ test_that("markup in link text", {
     #'
     #' Description, see \\code{\\link[=func]{code link text}}.
     #' And also \\href{https://external.com}{\\verb{code as well}}.
+    foo <- function() {}"
+  )[[1]]
+  expect_equivalent_rd(out1, out2)
+})
+
+test_that("non-code markup in link text", {
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Title
+    #'
+    #' See [*italic text*][func] and [**bold text**][func2].
+    #' @md
+    foo <- function() {}"
+  )[[1]]
+  out2 <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Title
+    #'
+    #' See \\link[=func]{\\emph{italic text}} and \\link[=func2]{\\strong{bold text}}.
     foo <- function() {}"
   )[[1]]
   expect_equivalent_rd(out1, out2)

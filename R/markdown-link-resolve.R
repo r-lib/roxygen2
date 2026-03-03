@@ -75,6 +75,30 @@ local_pkg_deps <- function(pkgdir = NULL) {
   deps$package
 }
 
+
+base_packages <- function() {
+  if (getRversion() >= "4.4.0") {
+    asNamespace("tools")$standard_package_names()[["base"]]
+  } else {
+    c(
+      "base",
+      "compiler",
+      "datasets",
+      "graphics",
+      "grDevices",
+      "grid",
+      "methods",
+      "parallel",
+      "splines",
+      "stats",
+      "stats4",
+      "tcltk",
+      "tools",
+      "utils"
+    )
+  }
+}
+
 # this is mostly from downlit
 is_exported <- function(name, package) {
   name %in% getNamespaceExports(ns_env(package))

@@ -230,26 +230,3 @@ auto_quote <- function(x) {
 is_syntactic <- function(x) make.names(x) == x
 has_quotes <- function(x) str_detect(x, r"[^(`|'|").*\1$]")
 strip_quotes <- function(x) str_replace(x, r"[^(`|'|")(.*)\1$]", r"(\2)")
-
-base_packages <- function() {
-  if (getRversion() >= "4.4.0") {
-    asNamespace("tools")$standard_package_names()[["base"]]
-  } else {
-    c(
-      "base",
-      "compiler",
-      "datasets",
-      "graphics",
-      "grDevices",
-      "grid",
-      "methods",
-      "parallel",
-      "splines",
-      "stats",
-      "stats4",
-      "tcltk",
-      "tools",
-      "utils"
-    )
-  }
-}

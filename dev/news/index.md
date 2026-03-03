@@ -6,6 +6,7 @@
   now escapes braces in class names, fixing broken Rd output for data
   objects with class `{` like `quote({})`
   ([\#1744](https://github.com/r-lib/roxygen2/issues/1744)).
+- roxygen2 no longer depends on purrr.
 - Fixed a performance regression where
   [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
   was very slow when the package contained large non-function objects

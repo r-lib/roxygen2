@@ -1,6 +1,10 @@
 resolve_link_package <- function(topic, tag = NULL) {
   pkg <- roxy_meta_get("current_package")
   pkg_dir <- roxy_meta_get("current_package_dir")
+  if (is.null(pkg) || is.null(pkg_dir)) {
+    # Don't try and link in basic tests
+    return(NA_character_)
+  }
   tag <- tag %||% roxy_tag("unknown", "") # only for tests
 
   pkg <- find_topic_package(topic, pkg = pkg, pkg_dir = pkg_dir)

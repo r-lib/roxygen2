@@ -40,11 +40,6 @@ test_that("resolve_link_package name clash", {
   })
 })
 
-test_that("is_reexported", {
-  expect_false(is_reexported("process", "processx"))
-  expect_true(is_reexported("process", "callr"))
-})
-
 test_that("find_reexport_source", {
   expect_equal(find_reexport_source("process", "callr"), "processx")
 })

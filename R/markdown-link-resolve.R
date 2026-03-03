@@ -99,19 +99,7 @@ base_packages <- function() {
   }
 }
 
-# this is mostly from downlit
-is_exported <- function(name, package) {
-  name %in% getNamespaceExports(ns_env(package))
-}
-
-is_reexported <- function(name, package) {
-  if (package == "base") {
-    return(FALSE)
-  }
-  is_imported <- env_has(ns_imports_env(package), name)
-  is_imported && is_exported(name, package)
-}
-
+# Copied from downlit:::find_reexport_source
 find_reexport_source <- function(topic, package) {
   ns <- ns_env(package)
   if (!env_has(ns, topic, inherit = TRUE)) {

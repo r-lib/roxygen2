@@ -133,10 +133,10 @@ is_markdown_code_node <- function(x) {
 parse_md_pos <- function(text) {
   nums <- map(strsplit(text, "[:-]"), as.integer)
   data.frame(
-    start_line = map_int(nums, 1),
-    start_column = map_int(nums, 2),
-    end_line = map_int(nums, 3),
-    end_column = map_int(nums, 4)
+    start_line = map_int(nums, \(x) x[[1]]),
+    start_column = map_int(nums, \(x) x[[2]]),
+    end_line = map_int(nums, \(x) x[[3]]),
+    end_column = map_int(nums, \(x) x[[4]])
   )
 }
 

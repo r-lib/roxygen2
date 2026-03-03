@@ -55,10 +55,10 @@ test_that("can document lazy data", {
 # imports -----------------------------------------------------------------
 
 test_that("find function imported from another package", {
-  obj <- call_to_object(purrr::map_int)
+  obj <- call_to_object(desc::desc_get)
   expect_s3_class(obj, "import")
-  expect_equal(obj$alias, "map_int")
-  expect_equal(obj$value$pkg, "purrr")
+  expect_equal(obj$alias, "desc_get")
+  expect_equal(obj$value$pkg, "desc")
 })
 
 # assignment ------------------------------------------------------------

@@ -94,7 +94,7 @@ roclet_output.roclet_rd <- function(
 roclet_clean.roclet_rd <- function(x, base_path) {
   rd <- dir(file.path(base_path, "man"), full.names = TRUE)
   rd <- rd[!file.info(rd)$isdir]
-  unlink(purrr::keep(rd, made_by_roxygen))
+  unlink(keep(rd, made_by_roxygen))
 }
 
 # Does this block get an Rd file?

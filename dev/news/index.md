@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- Markdown link text now supports non-code markup like bold and italic,
+  e.g., `[*italic text*][func]` generates
+  `\link[=func]{\emph{italic text}}`, matching R’s support for markup in
+  `\link` text in R 4.5.0.
 - [`object_format()`](https://roxygen2.r-lib.org/dev/reference/object_format.md)
   now escapes braces in class names, fixing broken Rd output for data
   objects with class `{` like `quote({})`

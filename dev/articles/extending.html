@@ -324,6 +324,17 @@ object into text for the <code>.Rd</code> file:</p>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 <p>Note that there is no namespacing so if you’re defining multiple new
 tags I recommend using your package name as the common prefix.</p>
+<div class="section level3">
+<h3 id="adding-new--rd-tags-to-your-workflow">Adding new <code>.Rd</code> tags to your workflow<a class="anchor" aria-label="anchor" href="#adding-new--rd-tags-to-your-workflow"></a>
+</h3>
+<p>To use your new tags in another package, you must tell roxygen to
+load that package in order to find the new tags. For example, if you
+created some new tags in {packageFoo}, and would like to use these tags
+in your documentation for {packageBar}, append this like to the
+<code>DESCRIPTION</code> of {packageBar}:</p>
+<pre><code><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>packages <span class="op">=</span>  <span class="st">"packageFoo"</span><span class="op">)</span></span></code></pre>
+<p>See [roxygen2::load_options()] for more details.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="creating-a-new-roclet">Creating a new roclet<a class="anchor" aria-label="anchor" href="#creating-a-new-roclet"></a>
@@ -341,7 +352,7 @@ the <code>@memo</code> has this syntax:</p>
 <p>As an example:</p>
 <pre><code>@memo [EFFICIENCY] Currently brute-force; find better algorithm.</code></pre>
 <p>As above, we first define a parse method:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roxy_tag_parse.roxy_tag_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^\\[.*\\].*$"</span>, <span class="va">x</span><span class="op">$</span><span class="va">raw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/roxy_tag.html">roxy_tag_warning</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"Invalid memo format"</span><span class="op">)</span></span>
@@ -351,13 +362,13 @@ the <code>@memo</code> has this syntax:</p>
 <span>  <span class="va">parsed</span> <span class="op">&lt;-</span> <span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_match.html" class="external-link">stri_match</a></span><span class="op">(</span>str <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">raw</span>, regex <span class="op">=</span> <span class="st">"\\[(.*)\\](.*)"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
 <span></span>
 <span>  <span class="va">x</span><span class="op">$</span><span class="va">val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    header <span class="op">=</span> <span class="va">parsed</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>    header <span class="op">=</span> <span class="va">parsed</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>    message <span class="op">=</span> <span class="va">parsed</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="op">)</span></span>
 <span>  <span class="va">x</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Then check if it works with <code><a href="../reference/parse_package.html">parse_text()</a></code>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
 <span><span class="st">  #' @memo [TBI] Remember to implement this!</span></span>
 <span><span class="st">  #' @memo [API] Check best API</span></span>
@@ -396,7 +407,7 @@ the <code>@memo</code> has this syntax:</p>
 <p>Next, we create a constructor for the roclet, which uses
 <code><a href="../reference/roclet.html">roclet()</a></code>. Our <code>memo</code> roclet doesn’t have any
 options so this is very simple:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">memo_roclet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/roclet.html">roclet</a></span><span class="op">(</span><span class="st">"memo"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -411,10 +422,10 @@ writing to disk) using the result from
 </ul>
 <p>For this roclet, we’ll have <code><a href="../reference/roclet.html">roclet_process()</a></code> collect all
 the memo tags into a named list:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roclet_process.roclet_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">blocks</span>, <span class="va">env</span>, <span class="va">base_path</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">block</span> <span class="kw">in</span> <span class="va">blocks</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roxy_block.html">block_get_tags</a></span><span class="op">(</span><span class="va">block</span>, <span class="st">"memo"</span><span class="op">)</span></span>
 <span></span>
@@ -423,12 +434,12 @@ the memo tags into a named list:</p>
 <span>      <span class="va">results</span><span class="op">[[</span><span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">header</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">results</span><span class="op">[[</span><span class="va">tag</span><span class="op">$</span><span class="va">val</span><span class="op">$</span><span class="va">header</span><span class="op">]</span><span class="op">]</span>, <span class="va">msg</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="va">results</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>And then have <code><a href="../reference/roclet.html">roclet_output()</a></code> just print them to the
 screen:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roclet_output.roclet_memo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">results</span>, <span class="va">base_path</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">header</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">messages</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">[[</span><span class="va">header</span><span class="op">]</span><span class="op">]</span></span>
@@ -440,7 +451,7 @@ screen:</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Then you can test if it works by using
 <code><a href="../reference/roc_proc_text.html">roc_proc_text()</a></code>:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_proc_text.html">roc_proc_text</a></span><span class="op">(</span><span class="fu">memo_roclet</span><span class="op">(</span><span class="op">)</span>, <span class="st">"</span></span>
 <span><span class="st">#' @memo [TBI] Remember to implement this!</span></span>
 <span><span class="st">#' @memo [API] Check best API</span></span>
@@ -465,17 +476,17 @@ screen:</p>
 <h2 id="adding-a-roclet-to-your-workflow">Adding a roclet to your workflow<a class="anchor" aria-label="anchor" href="#adding-a-roclet-to-your-workflow"></a>
 </h2>
 <p>To use a roclet when developing a package, call</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">roxygen2</span><span class="fu">::</span><span class="fu"><a href="../reference/roxygenize.html">roxygenize</a></span><span class="op">(</span>roclets <span class="op">=</span> <span class="st">"yourPackage::roclet"</span><span class="op">)</span></span></code></pre></div>
 <p>where <code>yourPackage::roclet</code> is the function which creates
 the roclet, e.g. <code>memo_roclet</code> above.</p>
 <p>You can also add the roclet to the target package’s DESCRIPTION file,
 like this:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>roclets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"collate"</span>, <span class="st">"rd"</span>, <span class="st">"namespace"</span>, <span class="st">"yourPackage::roclet"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>roclets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"collate"</span>, <span class="st">"rd"</span>, <span class="st">"namespace"</span>, <span class="st">"yourPackage::roclet"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Optionally, you can add your roclet package to the target package as
 a <code>Suggests:</code> dependency:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_dev_package</span><span class="op">(</span><span class="st">"yourPackage"</span>, type <span class="op">=</span> <span class="st">"Suggests"</span>, remote <span class="op">=</span> <span class="st">"yourGithubID/yourPackage"</span><span class="op">)</span></span></code></pre></div>
 <p>You don’t have to do this, but it will help other developers working
 on the target package.</p>

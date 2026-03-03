@@ -1,3 +1,7 @@
+test_that("don't resolve if current_package not set", {
+  expect_equal(resolve_link_package("cli_abort"), NA_character_)
+})
+
 test_that("topics in current package don't need qualification", {
   local_roxy_meta_set("current_package", "cli")
   expect_equal(resolve_link_package("cli_abort"), NA_character_)
@@ -45,6 +49,6 @@ test_that("gives useful warning if same name in multiple packages", {
 })
 
 test_that("find_reexport_source", {
-  expect_equal(find_reexport_source("process", "callr"), "processx")
-  expect_null(find_reexport_source("list", "base"))
+  expect_equal(find_source("process", "callr"), "processx")
+  expect_equal(find_source("list", "base"), "base")
 })

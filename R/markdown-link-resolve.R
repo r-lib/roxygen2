@@ -1,10 +1,10 @@
 resolve_link_package <- function(topic, tag = NULL) {
   pkg <- roxy_meta_get("current_package")
-  pkg_dir <- roxy_meta_get("current_package_dir")
-  if (is.null(pkg) || is.null(pkg_dir)) {
+  if (is.null(pkg)) {
     # Don't try and link in basic tests
     return(NA_character_)
   }
+  pkg_dir <- roxy_meta_get("current_package_dir")
   tag <- tag %||% roxy_tag("unknown", "") # only for tests
 
   pkg <- find_topic_package(topic, pkg = pkg, pkg_dir = pkg_dir)
@@ -51,11 +51,9 @@ find_topic_package <- function(topic, pkg, pkg_dir) {
   }
 
   # first look in Depends/Imports/Suggests
-  pkgs <- local_pkg_deps(pkg_dir)
+  pkgs <- pkg_deps(pkg_dir)
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
-  pkg_has_topic <- map_chr(pkg_has_topic, function(p) {
-    find_reexport_source(topic, p) %||% p
-  })
+  pkg_has_topic <- map_chr(pkg_has_topic, \(pkg) find_source(topic, pkg))
   pkg_has_topic <- unique(pkg_has_topic)
   if (length(pkg_has_topic) >= 1) {
     return(pkg_has_topic)
@@ -69,7 +67,7 @@ find_topic_package <- function(topic, pkg, pkg_dir) {
   character()
 }
 
-local_pkg_deps <- function(pkgdir = NULL) {
+pkg_deps <- function(pkgdir = NULL) {
   pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
@@ -101,14 +99,14 @@ base_packages <- function() {
 }
 
 # Adapted from downlit:::find_reexport_source
-find_reexport_source <- function(topic, package) {
+find_source <- function(topic, package) {
   if (package %in% base_packages()) {
-    return(NULL)
+    return(package)
   }
 
   ns <- ns_env(package)
   if (!env_has(ns, topic, inherit = TRUE)) {
-    return(NULL)
+    return(package)
   }
 
   obj <- env_get(ns, topic, inherit = TRUE)
@@ -128,7 +126,7 @@ find_reexport_source <- function(topic, package) {
     wpkgs <- vapply(imp, `%in%`, x = topic, FUN.VALUE = logical(1))
 
     if (!any(wpkgs)) {
-      return(NULL)
+      return(package)
     }
     pkgs <- names(wpkgs)[wpkgs]
     # Take the last match, in case imports have name clashes.

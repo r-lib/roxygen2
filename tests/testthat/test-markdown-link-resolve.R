@@ -4,7 +4,6 @@ test_that("resolve_link_package", {
     is.null(.getNamespace("roxygen2")[[".__DEVTOOLS__"]]),
     "roxygen2 loaded with devtools"
   )
-  rm(list = ls(envir = mddata), envir = mddata)
   expect_snapshot({
     resolve_link_package("roxygenize", "roxygen2", test_path("testMdLinks2"))
     resolve_link_package("UseMethod", "roxygen2", test_path("testMdLinks2"))
@@ -21,7 +20,6 @@ test_that("resolve_link_package", {
     )
   })
   # re-exported topics are identified
-  rm(list = ls(envir = mddata), envir = mddata)
   expect_equal(
     resolve_link_package("process", "testthat", test_path("testMdLinks")),
     "processx"

@@ -67,13 +67,7 @@ resolve_link_package <- function(
   NA_character_
 }
 
-# Note that this caches the result regardless of
-# pkgdir! pkgdir is mainly for testing, in which case you
-# need to clear the cache manually.
 local_pkg_deps <- function(pkgdir = NULL) {
-  if (!is.null(mddata[["deps"]])) {
-    return(mddata[["deps"]])
-  }
   pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]

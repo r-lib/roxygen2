@@ -20,8 +20,7 @@ resolve_link_package <- function(
 
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   pkg_has_topic <- map_chr(pkg_has_topic, function(p) {
-    p0 <- find_reexport_source(topic, p)
-    if (is.na(p0)) p else p0
+    find_reexport_source(topic, p) %||% p
   })
   pkg_has_topic <- unique(pkg_has_topic)
   base <- base_packages()
@@ -99,11 +98,15 @@ base_packages <- function() {
   }
 }
 
-# Copied from downlit:::find_reexport_source
+# Adapted from downlit:::find_reexport_source
 find_reexport_source <- function(topic, package) {
+  if (package %in% base_packages()) {
+    return(NULL)
+  }
+
   ns <- ns_env(package)
   if (!env_has(ns, topic, inherit = TRUE)) {
-    return(NA_character_)
+    return(NULL)
   }
 
   obj <- env_get(ns, topic, inherit = TRUE)
@@ -123,7 +126,7 @@ find_reexport_source <- function(topic, package) {
     wpkgs <- vapply(imp, `%in%`, x = topic, FUN.VALUE = logical(1))
 
     if (!any(wpkgs)) {
-      return(NA_character_)
+      return(NULL)
     }
     pkgs <- names(wpkgs)[wpkgs]
     # Take the last match, in case imports have name clashes.

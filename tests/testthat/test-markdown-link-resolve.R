@@ -42,4 +42,5 @@ test_that("resolve_link_package name clash", {
 
 test_that("find_reexport_source", {
   expect_equal(find_reexport_source("process", "callr"), "processx")
+  expect_null(find_reexport_source("list", "base"))
 })

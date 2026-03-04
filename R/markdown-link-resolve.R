@@ -5,7 +5,6 @@ find_package <- function(topic, tag = NULL) {
     return(NA_character_)
   }
   pkg_dir <- roxy_meta_get("current_package_dir")
-  tag <- tag %||% roxy_tag("unknown", "") # only for tests
 
   pkg <- find_package_cached(topic, pkg = pkg, pkg_dir = pkg_dir)
 

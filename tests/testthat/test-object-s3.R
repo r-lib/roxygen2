@@ -49,6 +49,16 @@ test_that("user defined generics detected even if use non-standard", {
   expect_true(is_s3_generic("my_method"))
 })
 
+test_that("S4 generics are not treated as S3 methods", {
+  env <- new.env(parent = globalenv())
+  env$all.equal <- {
+    methods::setGeneric("all.equal")
+    all.equal
+  }
+
+  expect_false(is_s3_method("all.equal", env))
+})
+
 test_that("user defined functions override primitives", {
   c <- function(x) x + 1
   c.test <- function(x) x + 3

@@ -77,6 +77,11 @@ is.s3generic <- function(x) inherits(x, "s3generic")
 is.s3 <- function(x) inherits(x, c("s3method", "s3generic"))
 
 find_generic <- function(name, env = parent.frame()) {
+  # If it's an S4 generic, it's definitely not an S3 method
+  if (methods::isGeneric(name, where = env)) {
+    return(NULL)
+  }
+
   pieces <- str_split(name, fixed("."))[[1]]
   n <- length(pieces)
 

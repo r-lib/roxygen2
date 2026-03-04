@@ -61,10 +61,6 @@ find_package_lookup <- function(topic, pkg, pkg_dir) {
 
   base <- base_packages()
   if (length(pkg_has_topic) == 0) {
-    # no matches, so try base packages
-    for (bp in base) {
-      if (has_topic(topic, bp)) return(NA_character_)
-    }
     character()
   } else if (length(pkg_has_topic) == 1) {
     if (pkg_has_topic %in% base) {
@@ -82,7 +78,7 @@ pkg_deps <- function(pkgdir) {
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
   deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]
-  deps$package
+  c(deps$package, base_packages())
 }
 
 base_packages <- function() {

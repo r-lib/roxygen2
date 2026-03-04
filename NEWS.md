@@ -6,6 +6,7 @@
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
 * Package documentation now correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
 * roxygen2 now requires R 4.0 (#1632).
+* `is_s3_generic()` now recognises `is.character()` as an S3 generic. This primitive generic is not included in base R's own lists of known S3 generics (#1717).
 * `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).
 * The warning about undocumented S3 methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
 

@@ -8,6 +8,7 @@
 * roxygen2 now requires R 4.0 (#1632).
 * `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).
 * The warning about undocumented S3 methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
+* The warning about undocumented S3 methods no longer incorrectly flags S4 methods of S3 generics as unexported (#1715).
 
 # roxygen2 7.3.3
 

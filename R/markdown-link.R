@@ -131,20 +131,21 @@ parse_link <- function(destination, contents, state) {
   thispkg <- roxy_meta_get("current_package") %||% ""
   is_code <- is_code || (grepl("[(][)]$", destination) && !has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1, 2]
-  pkg <- gsub("%", "\\\\%", pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
-  fun <- gsub("%", "\\\\%", fun)
-  is_fun <- grepl("[(][)]$", fun)
-  obj <- sub("[(][)]$", "", fun)
-  s4 <- str_detect(destination, "-class$")
-  noclass <- str_match(fun, "^(.*)-class$")[1, 2]
-
   if (is.na(pkg)) {
     pkg <- find_package(obj, tag = state$tag)
   } else if (!is.na(pkg) && pkg == thispkg) {
     pkg <- NA_character_
   }
+
+  pkg <- gsub("%", "\\\\%", pkg)
+  fun <- gsub("%", "\\\\%", fun)
+  is_fun <- grepl("[(][)]$", fun)
+  obj <- sub("[(][)]$", "", fun)
   file <- find_topic_filename(pkg, obj, state$tag)
+
+  s4 <- str_detect(destination, "-class$")
+  noclass <- str_match(fun, "^(.*)-class$")[1, 2]
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {

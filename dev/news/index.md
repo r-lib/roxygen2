@@ -36,6 +36,9 @@
   function lacks a srcref, e.g. because a debugger breakpoint is set
   ([\#1589](https://github.com/r-lib/roxygen2/issues/1589),
   [\#1710](https://github.com/r-lib/roxygen2/issues/1710)).
+- The warning about undocumented S3 methods no longer incorrectly flags
+  S4 methods of S3 generics as unexported
+  ([\#1715](https://github.com/r-lib/roxygen2/issues/1715)).
 
 ## roxygen2 7.3.3
 

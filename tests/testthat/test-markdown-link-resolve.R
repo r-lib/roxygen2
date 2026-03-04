@@ -1,45 +1,45 @@
 test_that("don't resolve if current_package not set", {
-  expect_equal(resolve_link_package("cli_abort"), NA_character_)
+  expect_equal(find_package("cli_abort"), NA_character_)
 })
 
 test_that("topics in current package don't need qualification", {
   local_roxy_meta_set("current_package", "cli")
-  expect_equal(resolve_link_package("cli_abort"), NA_character_)
+  expect_equal(find_package("cli_abort"), NA_character_)
 })
 
 test_that("imported functions qualified with package name", {
   local_roxy_meta_set("current_package", "testMdLinks")
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
 
-  expect_equal(resolve_link_package("cli_abort"), "cli")
+  expect_equal(find_package("cli_abort"), "cli")
 })
 
 test_that("base functions don't need qualification", {
   local_roxy_meta_set("current_package", "testMdLinks")
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
 
-  expect_equal(resolve_link_package("mean"), NA_character_)
+  expect_equal(find_package("mean"), NA_character_)
 })
 
 test_that("base functions re-exported by deps don't need qualification", {
   local_roxy_meta_set("current_package", "testMdLinks")
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
 
-  expect_equal(resolve_link_package("is.null"), NA_character_)
+  expect_equal(find_package("is.null"), NA_character_)
 })
 
 test_that("useful warning if no topic found", {
   local_roxy_meta_set("current_package", "testMdLinks")
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
 
-  expect_snapshot(resolve_link_package("doesntexist"))
+  expect_snapshot(find_package("doesntexist"))
 })
 
 test_that("re-exported topics are identified", {
   local_roxy_meta_set("current_package", "testMdLinks")
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
 
-  expect_equal(resolve_link_package("process"), "processx")
+  expect_equal(find_package("process"), "processx")
 })
 
 test_that("gives useful warning if same name in multiple packages", {
@@ -48,11 +48,11 @@ test_that("gives useful warning if same name in multiple packages", {
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
 
   expect_equal(
-    find_topic_package("pkg_env", "testMdLinks", test_path("testMdLinks")),
+    find_package_lookup("pkg_env", "testMdLinks", test_path("testMdLinks")),
     c("pkgload", "rlang")
   )
 
-  expect_snapshot(resolve_link_package("pkg_env"))
+  expect_snapshot(find_package("pkg_env"))
 })
 
 test_that("find_source returns base package as-is", {

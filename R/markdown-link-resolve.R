@@ -1,4 +1,4 @@
-resolve_link_package <- function(topic, tag = NULL) {
+find_package <- function(topic, tag = NULL) {
   pkg <- roxy_meta_get("current_package")
   if (is.null(pkg)) {
     # Don't try and link in basic tests
@@ -7,7 +7,7 @@ resolve_link_package <- function(topic, tag = NULL) {
   pkg_dir <- roxy_meta_get("current_package_dir")
   tag <- tag %||% roxy_tag("unknown", "") # only for tests
 
-  pkg <- find_topic_package_cached(topic, pkg = pkg, pkg_dir = pkg_dir)
+  pkg <- find_package_cached(topic, pkg = pkg, pkg_dir = pkg_dir)
 
   if (length(pkg) == 0) {
     warn_roxy_tag(
@@ -34,56 +34,51 @@ resolve_link_package <- function(topic, tag = NULL) {
         i = "Qualify topic explicitly with a package name when linking to it."
       )
     )
-    return(NA_character_)
+    NA_character_
   }
 }
 
-topic_package_cache <- new_environment()
-
-find_topic_package_cached <- function(topic, pkg, pkg_dir) {
+find_package_cache <- new_environment()
+find_package_cached <- function(topic, pkg, pkg_dir) {
   key <- paste0(pkg, "::", topic)
-  env_cache(topic_package_cache, key, find_topic_package(topic, pkg, pkg_dir))
+  env_cache(find_package_cache, key, find_package_lookup(topic, pkg, pkg_dir))
 }
 
-# Returns:
-# - NA_character_: topic found in current package or base packages (no
-#   qualification needed)
-# - A single package name: topic found in exactly one dependency
-# - A vector of package names: topic found in multiple dependencies
-# - character(): topic not found anywhere
-find_topic_package <- function(topic, pkg, pkg_dir) {
+# NA_character() = found, doesn't need qualification
+# character(0) = not found
+# character(1) = one match
+# character(>1) = multiple matches
+find_package_lookup <- function(topic, pkg, pkg_dir) {
   # if it is in the current package, then no need for package name
   if (has_topic(topic, pkg)) {
     return(NA_character_)
   }
 
-  # first look in Depends/Imports/Suggests
   pkgs <- pkg_deps(pkg_dir)
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   pkg_has_topic <- map_chr(pkg_has_topic, \(pkg) find_source(topic, pkg))
   pkg_has_topic <- unique(pkg_has_topic)
+
   base <- base_packages()
-  pkg_has_topic <- setdiff(pkg_has_topic, base)
-  if (length(pkg_has_topic) == 1) {
-    if (pkg_has_topic %in% base) {
-      return(NA_character_)
-    } else {
-      return(pkg_has_topic)
+  if (length(pkg_has_topic) == 0) {
+    # no matches, so try base packages
+    for (bp in base) {
+      if (has_topic(topic, bp)) return(NA_character_)
     }
-  } else if (length(pkg_has_topic) > 1) {
-    return(pkg_has_topic)
+    character()
+  } else if (length(pkg_has_topic) == 1) {
+    if (pkg_has_topic %in% base) {
+      # never qualify links to base packages
+      NA_character_
+    } else {
+      pkg_has_topic
+    }
+  } else {
+    pkg_has_topic
   }
-
-  # then try base packages
-  for (bp in base) {
-    if (has_topic(topic, bp)) return(NA_character_)
-  }
-
-  character()
 }
 
-pkg_deps <- function(pkgdir = NULL) {
-  pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
+pkg_deps <- function(pkgdir) {
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
   deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]
@@ -138,11 +133,11 @@ find_source <- function(topic, package) {
     ## entry that contains `topic`.
     imp <- getNamespaceImports(ns)
     imp <- imp[names(imp) != ""]
-    wpkgs <- vapply(imp, `%in%`, x = topic, FUN.VALUE = logical(1))
-
+    wpkgs <- map_lgl(imp, `%in%`, x = topic)
     if (!any(wpkgs)) {
       return(package)
     }
+
     pkgs <- names(wpkgs)[wpkgs]
     # Take the last match, in case imports have name clashes.
     pkgs[[length(pkgs)]]

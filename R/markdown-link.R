@@ -140,7 +140,7 @@ parse_link <- function(destination, contents, state) {
   noclass <- str_match(fun, "^(.*)-class$")[1, 2]
 
   if (is.na(pkg)) {
-    pkg <- resolve_link_package(obj, tag = state$tag)
+    pkg <- find_package(obj, tag = state$tag)
   } else if (!is.na(pkg) && pkg == thispkg) {
     pkg <- NA_character_
   }

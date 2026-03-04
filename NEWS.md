@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* Markdown link resolution is now cached, fixing a performance regression when documenting packages with many cross-package links (#1724).
 * Markdown link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.
 * `object_format()` now escapes braces in class names, fixing broken Rd output for data objects with class `{` like `quote({})` (#1744).
 * roxygen2 no longer depends on purrr.

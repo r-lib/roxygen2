@@ -22,12 +22,6 @@
   ([\#1746](https://github.com/r-lib/roxygen2/issues/1746)).
 - roxygen2 now requires R 4.0
   ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
-- [`is_s3_generic()`](https://roxygen2.r-lib.org/dev/reference/is_s3_generic.md)
-  now recognises
-  [`is.character()`](https://rdrr.io/r/base/character.html) as an S3
-  generic. This primitive generic is not included in base R’s own lists
-  of known S3 generics
-  ([\#1717](https://github.com/r-lib/roxygen2/issues/1717)).
 - `@param` (and other two-part tags) now correctly handle
   backtick-quoted names that contain spaces,
   e.g. `` @param `arg 1` description ``

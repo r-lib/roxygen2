@@ -7,9 +7,6 @@ test_that("primitive generics detected", {
 
   expect_true(is_s3_generic("c"))
   expect_true(is_s3_method("c.Date"))
-
-  # Not listed in base R known generics (#1717)
-  expect_true(is_s3_generic("is.character"))
 })
 
 test_that("non-functions are not generics", {

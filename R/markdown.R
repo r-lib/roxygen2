@@ -300,7 +300,7 @@ mdxml_node_to_rd <- function(xml, state) {
 
     # Not supported
     block_quote = mdxml_unsupported(xml, state$tag, "block quotes"),
-    hrule = mdxml_unsupported(xml, state$tag, "horizontal rules"),
+    thematic_break = mdxml_unsupported(xml, state$tag, "horizontal rules"),
     mdxml_unknown(xml, state$tag)
   )
 }

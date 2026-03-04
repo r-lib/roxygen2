@@ -552,6 +552,22 @@ test_that("unhandled markdown generates warning", {
   expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
 })
 
+test_that("horizontal rules generate warning (#1707)", {
+  text <- "
+    #' Title
+    #'
+    #' Some text
+    #'
+    #' ------------
+    #'
+    #' More text
+    #' @md
+    #' @name x
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
+})
+
 test_that("level 1 heading in markdown generates warning in some tags", {
   text <- "
     #' Title

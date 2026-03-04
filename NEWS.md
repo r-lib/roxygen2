@@ -6,6 +6,7 @@
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
 * Package documentation now correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
 * roxygen2 now requires R 4.0 (#1632).
+* `@inheritParams` now correctly inherits parameters that are documented together with `\dots` using comma-separated names, e.g. `@param b,\dots description` (#1718).
 * `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).
 * The warning about undocumented S3 methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
 

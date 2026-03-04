@@ -48,7 +48,21 @@ test_that("gives useful warning if same name in multiple packages", {
   expect_snapshot(resolve_link_package("pkg_env"))
 })
 
-test_that("find_reexport_source", {
-  expect_equal(find_source("process", "callr"), "processx")
+test_that("find_source returns base package as-is", {
+  skip_on_cran() # since depends on other packages
+
   expect_equal(find_source("list", "base"), "base")
+  # topic not in namespace
+  expect_equal(find_source("doesnt'exist", "cli"), "cli")
+  # primitive objects are always in base
+  expect_equal(find_source("is_null", "rlang"), "base")
+  # callr re-exports process from processx
+  expect_equal(find_source("process", "callr"), "processx")
+})
+
+test_that("find_source traces re-exported non-function to source package", {
+  # .data is a non-function object exported by rlang, re-exported by others
+  skip_on_cran()
+  skip_if_not_installed("tidyselect")
+  expect_equal(find_source(".data", "tidyselect"), "rlang")
 })

@@ -236,6 +236,8 @@ mdxml_children_to_rd_top <- function(xml, state) {
   if (state$has_sections) {
     secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]] %||% ""
     titles <- c("", state$titles)
+    # strsplit drops trailing empty strings, so pad to match titles length
+    secs <- c(secs, rep("", length(titles) - length(secs)))
     rd <- structure(str_trim(secs), names = titles)
   }
   rd
@@ -295,7 +297,7 @@ mdxml_node_to_rd <- function(xml, state) {
 
     # Not supported
     block_quote = mdxml_unsupported(xml, state$tag, "block quotes"),
-    hrule = mdxml_unsupported(xml, state$tag, "horizontal rules"),
+    thematic_break = mdxml_unsupported(xml, state$tag, "horizontal rules"),
     mdxml_unknown(xml, state$tag)
   )
 }

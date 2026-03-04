@@ -552,6 +552,22 @@ test_that("unhandled markdown generates warning", {
   expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
 })
 
+test_that("horizontal rules generate warning (#1707)", {
+  text <- "
+    #' Title
+    #'
+    #' Some text
+    #'
+    #' ------------
+    #'
+    #' More text
+    #' @md
+    #' @name x
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
+})
+
 test_that("level 1 heading in markdown generates warning in some tags", {
   text <- "
     #' Title
@@ -589,6 +605,19 @@ test_that("level >2 markdown headings work in @description", {
 yes
 })"
   )
+})
+
+test_that("description can start with a heading (#1705)", {
+  text <- "
+    #' Title
+    #'
+    #' # Heading
+    #' @md
+    #' @name x
+    NULL
+  "
+  out <- roc_proc_text(rd_roclet(), text)[[1]]
+  expect_equal(out$get_value("section"), list(title = "Heading", content = ""))
 })
 
 test_that("level >2 markdown headings work in @details", {

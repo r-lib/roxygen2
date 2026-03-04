@@ -7,7 +7,7 @@ resolve_link_package <- function(topic, tag = NULL) {
   pkg_dir <- roxy_meta_get("current_package_dir")
   tag <- tag %||% roxy_tag("unknown", "") # only for tests
 
-  pkg <- find_topic_package(topic, pkg = pkg, pkg_dir = pkg_dir)
+  pkg <- find_topic_package_cached(topic, pkg = pkg, pkg_dir = pkg_dir)
 
   if (length(pkg) == 0) {
     warn_roxy_tag(
@@ -36,6 +36,13 @@ resolve_link_package <- function(topic, tag = NULL) {
     )
     return(NA_character_)
   }
+}
+
+topic_package_cache <- new_environment()
+
+find_topic_package_cached <- function(topic, pkg, pkg_dir) {
+  key <- paste0(pkg, "::", topic)
+  env_cache(topic_package_cache, key, find_topic_package(topic, pkg, pkg_dir))
 }
 
 # Returns:

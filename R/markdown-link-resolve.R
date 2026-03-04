@@ -55,12 +55,20 @@ find_topic_package <- function(topic, pkg, pkg_dir) {
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   pkg_has_topic <- map_chr(pkg_has_topic, \(pkg) find_source(topic, pkg))
   pkg_has_topic <- unique(pkg_has_topic)
-  if (length(pkg_has_topic) >= 1) {
+  base <- base_packages()
+  pkg_has_topic <- setdiff(pkg_has_topic, base)
+  if (length(pkg_has_topic) == 1) {
+    if (pkg_has_topic %in% base) {
+      return(NA_character_)
+    } else {
+      return(pkg_has_topic)
+    }
+  } else if (length(pkg_has_topic) > 1) {
     return(pkg_has_topic)
   }
 
   # then try base packages
-  for (bp in base_packages()) {
+  for (bp in base) {
     if (has_topic(topic, bp)) return(NA_character_)
   }
 

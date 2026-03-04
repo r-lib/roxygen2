@@ -21,6 +21,13 @@ test_that("base functions don't need qualification", {
   expect_equal(resolve_link_package("mean"), NA_character_)
 })
 
+test_that("base functions re-exported by deps don't need qualification", {
+  local_roxy_meta_set("current_package", "testMdLinks")
+  local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
+
+  expect_equal(resolve_link_package("is.null"), NA_character_)
+})
+
 test_that("useful warning if no topic found", {
   local_roxy_meta_set("current_package", "testMdLinks")
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))

@@ -48,7 +48,7 @@ test_that("gives useful warning if same name in multiple packages", {
   local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
 
   expect_equal(
-    find_package_lookup("pkg_env", "testMdLinks", test_path("testMdLinks")),
+    find_package_dep_lookup("pkg_env", test_path("testMdLinks")),
     c("pkgload", "rlang")
   )
 

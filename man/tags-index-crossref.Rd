@@ -39,7 +39,7 @@ Other less frequently used tags:
 }
 }
 \seealso{
-Other documentation tags: 
+Other documentation tags:
 \code{\link{tags-rd}},
 \code{\link{tags-rd-other}},
 \code{\link{tags-reuse}}

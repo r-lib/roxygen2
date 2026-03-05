@@ -54,7 +54,7 @@ Other less frequently used tags:
 }
 }
 \seealso{
-Other documentation tags: 
+Other documentation tags:
 \code{\link{tags-index-crossref}},
 \code{\link{tags-rd}},
 \code{\link{tags-rd-other}}

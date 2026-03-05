@@ -2,13 +2,16 @@
 
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
+* Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
+* Multiple email addresses in `Authors@R` now generate separate `\email{}` tags instead of a single comma-separated one, fixing an `R CMD check` error (#1689).
 * Markdown link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.
 * `object_format()` now escapes braces in class names, fixing broken Rd output for data objects with class `{` like `quote({})` (#1744).
 * roxygen2 no longer depends on purrr.
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
 * Package documentation now correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
 * roxygen2 now requires R 4.0 (#1632).
+* `@inheritParams` now correctly inherits parameters that are documented together with `\dots` using comma-separated names, e.g. `@param b,\dots description` (#1718).
 * `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).
 * The warning about undocumented S3 methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
 * The warning about undocumented S3 methods no longer incorrectly flags S4 methods of S3 generics as unexported (#1715).

@@ -115,7 +115,10 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     # "`r " there.
 
     indent <- nchar(str_extract(line, "^[ ]+"))
-    if (str_sub(line, start - 1 + indent, start + 1 + indent) == "`r ") {
+    if (
+      !is.na(indent) &&
+        str_sub(line, start - 1 + indent, start + 1 + indent) == "`r "
+    ) {
       rcode_pos$start_column[l] <- rcode_pos$start_column[l] + indent
       rcode_pos$end_column[l] <- rcode_pos$end_column[l] + indent
     }

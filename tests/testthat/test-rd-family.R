@@ -130,41 +130,29 @@ test_that("family also included in concepts", {
   expect_equal(out$get_value("concept"), "a")
 })
 
-test_that("custom family prefixes can be set", {
+test_that("custom family prefixes can get colon if needed", {
+  seealso <- function() {
+    out <- roc_proc_text(
+      rd_roclet(),
+      "
+      #' foo
+      #' @family a
+      foo <- function() {}
+
+      #' bar
+      #' @family a
+      bar <- function() {}
+    "
+    )[[1]]
+
+    out$get_value("seealso")
+  }
+
   local_roxy_meta_set("rd_family_title", list(a = "Custom prefix"))
-  out <- roc_proc_text(
-    rd_roclet(),
-    "
-    #' foo
-    #' @family a
-    foo <- function() {}
+  expect_match(seealso(), "^Custom prefix:")
 
-    #' bar
-    #' @family a
-    bar <- function() {}
-  "
-  )[[1]]
-
-  expect_match(out$get_value("seealso"), "^Custom prefix:")
-})
-
-test_that("custom family prefixes with colon are not doubled", {
   local_roxy_meta_set("rd_family_title", list(a = "Custom prefix:"))
-  out <- roc_proc_text(
-    rd_roclet(),
-    "
-    #' foo
-    #' @family a
-    foo <- function() {}
-
-    #' bar
-    #' @family a
-    bar <- function() {}
-  "
-  )[[1]]
-
-  expect_match(out$get_value("seealso"), "^Custom prefix:")
-  expect_no_match(out$get_value("seealso"), "^Custom prefix::")
+  expect_match(seealso(), "^Custom prefix:[^:]")
 })
 
 test_that("custom family prefixes can include Markdown", {

@@ -67,6 +67,13 @@ test_that("can convert DOIs in url", {
   )
 })
 
+test_that("annotated URLs are extracted correctly (#1420)", {
+  expect_equal(
+    package_seealso_urls("https://x (XYZ), https://u (ABC)"),
+    c("\\url{https://x} (XYZ)", "\\url{https://u} (ABC)")
+  )
+})
+
 test_that("can autolink urls on package Description", {
   expect_equal(
     package_url_parse("x <https://x.com> y"),

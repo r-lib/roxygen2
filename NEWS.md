@@ -1,6 +1,7 @@
 # roxygen2 (development version)
 
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
+* Package documentation now only wraps actual URLs in the `URL` field of `DESCRIPTION` (#1420).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
 * Markdown link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.
 * `object_format()` now escapes braces in class names, fixing broken Rd output for data objects with class `{` like `quote({})` (#1744).

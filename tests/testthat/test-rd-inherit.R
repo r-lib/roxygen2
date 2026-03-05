@@ -791,6 +791,23 @@ test_that("useful error for bad inherits", {
   expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
 })
 
+test_that("warns when no params to inherit (#1671)", {
+  text <- "
+    #' Foo
+    #'
+    #' @param ... not used
+    foo <- function(...) {}
+
+    #' Bar
+    #'
+    #' @param y y
+    #' @inheritDotParams foo
+    bar <- function(y, ...) {}
+  "
+  expect_snapshot(out <- roc_proc_text(rd_roclet(), text))
+  expect_false("..." %in% names(out[["bar.Rd"]]$get_value("param")))
+})
+
 
 # inherit everything ------------------------------------------------------
 

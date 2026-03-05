@@ -42,6 +42,14 @@ test_that("re-exported topics are identified", {
   expect_equal(find_package("process"), "processx")
 })
 
+test_that("topics in multiple base packages don't need qualification", {
+  local_roxy_meta_set("current_package", "testMdLinks")
+  local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
+
+  # plot is in both base and graphics
+  expect_equal(find_package("plot"), NA_character_)
+})
+
 test_that("gives useful warning if same name in multiple packages", {
   skip_on_cran() # in case pkgload/rlang changes this
   local_roxy_meta_set("current_package", "testMdLinks")

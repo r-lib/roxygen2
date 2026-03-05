@@ -69,6 +69,9 @@ find_package_dep_lookup <- function(topic, pkg_dir) {
     } else {
       pkg_has_topic
     }
+  } else if (all(pkg_has_topic %in% base)) {
+    # multiple base packages, no qualification needed
+    NA_character_
   } else {
     pkg_has_topic
   }

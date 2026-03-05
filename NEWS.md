@@ -1,6 +1,7 @@
 # roxygen2 (development version)
 
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
+* Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
 * Multiple email addresses in `Authors@R` now generate separate `\email{}` tags instead of a single comma-separated one, fixing an `R CMD check` error (#1689).
 * Markdown link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.

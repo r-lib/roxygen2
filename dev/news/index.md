@@ -4,6 +4,9 @@
 
 - `@description` no longer errors when the markdown text starts with a
   heading ([\#1705](https://github.com/r-lib/roxygen2/issues/1705)).
+- Package documentation now only wraps actual URLs in the `URL` field of
+  `DESCRIPTION`
+  ([\#1420](https://github.com/r-lib/roxygen2/issues/1420)).
 - Inline R code (`` `r expr` ``) in non-indented list continuation lines
   no longer causes an error
   ([\#1651](https://github.com/r-lib/roxygen2/issues/1651)).

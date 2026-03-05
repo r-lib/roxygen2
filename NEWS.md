@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* Package documentation now uses `logo.svg` if available, falling back to `logo.png` (#1640).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
 * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).

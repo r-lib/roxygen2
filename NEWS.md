@@ -1,7 +1,10 @@
 # roxygen2 (development version)
 
 * Package documentation now uses `logo.svg` if available, falling back to `logo.png` (#1640).
+* `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
+* `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
+* Package documentation now only wraps actual URLs in the `URL` field of `DESCRIPTION` (#1420).
 * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
 * Multiple email addresses in `Authors@R` now generate separate `\email{}` tags instead of a single comma-separated one, fixing an `R CMD check` error (#1689).

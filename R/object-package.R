@@ -4,7 +4,8 @@ package_seealso <- function(URL, BugReports) {
 
 package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
   if (!is.null(URL)) {
-    links <- paste0("\\url{", escape(strsplit(URL, ",\\s+")[[1]]), "}")
+    links <- strsplit(URL, ",\\s+")[[1]]
+    links <- vapply(links, wrap_urls, character(1), USE.NAMES = FALSE)
     links <- gsub("\\url\\{https://doi.org/", "\\doi{", links)
   } else {
     links <- character()
@@ -14,6 +15,15 @@ package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
   }
 
   links
+}
+
+wrap_urls <- function(x) {
+  gsub(
+    "(https?://[^\\s,]+|ftp://[^\\s,]+)",
+    "\\\\url{\\1}",
+    escape(x),
+    perl = TRUE
+  )
 }
 
 package_authors <- function(authors) {

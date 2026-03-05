@@ -109,11 +109,11 @@ test_that("only functions get () suffix", {
 
   expect_equal(
     out[[1]]$get_value("seealso"),
-    "Other a: \n\\code{\\link{bar}}"
+    "Other a:\n\\code{\\link{bar}}"
   )
   expect_equal(
     out[[2]]$get_value("seealso"),
-    "Other a: \n\\code{\\link{foo}()}"
+    "Other a:\n\\code{\\link{foo}()}"
   )
 })
 
@@ -131,7 +131,7 @@ test_that("family also included in concepts", {
 })
 
 test_that("custom family prefixes can be set", {
-  local_roxy_meta_set("rd_family_title", list(a = "Custom prefix: "))
+  local_roxy_meta_set("rd_family_title", list(a = "Custom prefix"))
   out <- roc_proc_text(
     rd_roclet(),
     "
@@ -148,10 +148,29 @@ test_that("custom family prefixes can be set", {
   expect_match(out$get_value("seealso"), "^Custom prefix:")
 })
 
+test_that("custom family prefixes with colon are not doubled", {
+  local_roxy_meta_set("rd_family_title", list(a = "Custom prefix:"))
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' foo
+    #' @family a
+    foo <- function() {}
+
+    #' bar
+    #' @family a
+    bar <- function() {}
+  "
+  )[[1]]
+
+  expect_match(out$get_value("seealso"), "^Custom prefix:")
+  expect_no_match(out$get_value("seealso"), "^Custom prefix::")
+})
+
 test_that("custom family prefixes can include Markdown", {
   local_roxy_meta_set(
     "rd_family_title",
-    list(a = "Custom ***strongly emphasized*** prefix: ")
+    list(a = "Custom ***strongly emphasized*** prefix")
   )
   out <- roc_proc_text(
     rd_roclet(),

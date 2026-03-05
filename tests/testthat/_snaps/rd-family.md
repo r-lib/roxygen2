@@ -16,7 +16,7 @@
       foo1
       }
       \seealso{
-      Other a: 
+      Other a:
       \code{\link{Foo3}()},
       \code{\link{foo}()},
       \code{\link{foo2}()}
@@ -36,7 +36,7 @@
       foo2
       }
       \seealso{
-      Other a: 
+      Other a:
       \code{\link{Foo3}()},
       \code{\link{foo}()},
       \code{\link{foo1}()}
@@ -56,7 +56,7 @@
       Foo3
       }
       \seealso{
-      Other a: 
+      Other a:
       \code{\link{foo}()},
       \code{\link{foo1}()},
       \code{\link{foo2}()}
@@ -76,7 +76,7 @@
       foo
       }
       \seealso{
-      Other a: 
+      Other a:
       \code{\link{Foo3}()},
       \code{\link{foo1}()},
       \code{\link{foo2}()}

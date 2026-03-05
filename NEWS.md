@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
 * Markdown link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.

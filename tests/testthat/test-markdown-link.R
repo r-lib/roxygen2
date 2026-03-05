@@ -583,6 +583,16 @@ test_that("linking to self is unqualified", {
   )
 })
 
+test_that("resolved links don't change link text (#1662)", {
+  local_roxy_meta_set("current_package", "testMdLinks")
+  local_roxy_meta_set("current_package_dir", test_path("testMdLinks"))
+
+  expect_equal(
+    markdown("[cli_abort()]"),
+    r"(\code{\link[cli:cli_abort]{cli_abort()}})"
+  )
+})
+
 test_that("percents are escaped in link targets", {
   out1 <- roc_proc_text(
     rd_roclet(),

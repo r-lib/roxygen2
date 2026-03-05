@@ -2,6 +2,7 @@
 
 * Markdown link resolution is now cached, fixing a performance regression when documenting packages with many cross-package links (#1724).
 * Markdown links to operators containing `%` (e.g. `[%in%]`) are now resolved correctly (#1728).
+* Markdown links like `[fun()]` that are automatically resolved to an external package no longer prefix the link text with the package name. For example, `[fun()]` now generates `\link[pkg:fun]{fun()}` instead of `\link[pkg:fun]{pkg::fun()}` (#1662).
 * Markdown link resolution includes base packages in the ambiguity resolution detection, so they will no longer silently match a non-base package (#1725).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).

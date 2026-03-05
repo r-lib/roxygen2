@@ -131,6 +131,7 @@ parse_link <- function(destination, contents, state) {
   thispkg <- roxy_meta_get("current_package") %||% ""
   is_code <- is_code || (grepl("[(][)]$", destination) && !has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1, 2]
+  explicit_pkg <- !is.na(pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   is_fun <- grepl("[(][)]$", fun)
   obj <- sub("[(][)]$", "", fun)
@@ -160,7 +161,7 @@ parse_link <- function(destination, contents, state) {
       if (!is.na(pkg)) paste0(pkg, ":"),
       if (is_fun || !is.na(pkg)) paste0(if (is.na(pkg)) obj else file, "]"),
       "{",
-      if (!is.na(pkg)) paste0(pkg, "::"),
+      if (explicit_pkg && !is.na(pkg)) paste0(pkg, "::"),
       if (s4) noclass else fun,
       "}",
       if (is_code) "}" else ""

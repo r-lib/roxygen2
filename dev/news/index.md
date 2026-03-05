@@ -2,6 +2,9 @@
 
 ## roxygen2 (development version)
 
+- Package documentation now uses `logo.svg` if available, falling back
+  to `logo.png`
+  ([\#1640](https://github.com/r-lib/roxygen2/issues/1640)).
 - `@family` no longer adds a trailing space after the colon in the
   default family prefix
   ([\#1628](https://github.com/r-lib/roxygen2/issues/1628)). Custom

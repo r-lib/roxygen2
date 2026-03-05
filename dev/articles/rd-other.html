@@ -112,9 +112,8 @@
 <p>Datasets are stored in <code>data/</code>, not as regular R objects
 in the package. This means you need to document them in a slightly
 different way: instead of documenting the data directly, you quote the
-dataset’s name.</p>
-<p>For example, this roxygen2 block will documentation for
-<code>data(diamonds)</code>:</p>
+dataset’s name. For example, this is the roxygen2 block used for
+<code>ggplot2::diamonds</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Prices of over 50,000 round cut diamonds</span></span>
 <span><span class="co">#'</span></span>
@@ -139,6 +138,10 @@ dataset’s name.</p>
 <span><span class="co">#' @source {ggplot2} tidyverse R package.</span></span>
 <span><span class="st">"diamonds"</span></span>
 <span><span class="co">#&gt; [1] "diamonds"</span></span></code></pre></div>
+<p>Note that the default usage assumes that you use
+<code>LazyData: true</code> in your <code>DESCRIPTION</code>; this is
+the recommended (modern) style of exposing datasets and doesn’t require
+an explicit <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> call.</p>
 <p>Note the use of two additional tags that are particularly useful for
 documenting data:</p>
 <ul>

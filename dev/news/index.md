@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- `@inheritDotParams` now warns and produces no output when there are no
+  parameters to inherit, instead of generating an empty `\describe`
+  block that caused CRAN HTML validation warnings
+  ([\#1671](https://github.com/r-lib/roxygen2/issues/1671)).
 - `@description` no longer errors when the markdown text starts with a
   heading ([\#1705](https://github.com/r-lib/roxygen2/issues/1705)).
 - Package documentation now only wraps actual URLs in the `URL` field of

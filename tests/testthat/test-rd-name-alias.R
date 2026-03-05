@@ -101,6 +101,29 @@ test_that("@name overides default", {
   expect_setequal(out$get_value("alias"), c("a", "b"))
 })
 
+test_that("explicit @name wins over inferred name in shared @rdname (#1665)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' @rdname foo
+    #' @export
+    bar <- function(x) x
+
+    #' @rdname foo
+    #' @export
+    baz <- function(x) x
+
+    #' A foo
+    #' @param x An x
+    #' @name foo
+    NULL
+  "
+  )[[1]]
+
+  expect_equal(out$get_rd("name"), "\\name{foo}")
+  expect_contains(out$get_value("alias"), c("bar", "baz"))
+})
+
 
 # alias -------------------------------------------------------------------
 

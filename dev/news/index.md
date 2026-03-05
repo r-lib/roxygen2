@@ -2,6 +2,12 @@
 
 ## roxygen2 (development version)
 
+- `@family` no longer adds a trailing space after the colon in the
+  default family prefix
+  ([\#1628](https://github.com/r-lib/roxygen2/issues/1628)). Custom
+  `rd_family_title` values now automatically get a colon appended if
+  they don’t already end with one
+  ([\#1656](https://github.com/r-lib/roxygen2/issues/1656)).
 - `@inheritDotParams` now warns and produces no output when there are no
   parameters to inherit, instead of generating an empty `\describe`
   block that caused CRAN HTML validation warnings

@@ -291,9 +291,13 @@ find_params <- function(name, topics, source) {
   }
 
   param_names <- str_trim(names(params))
-  param_names[param_names == "\\dots"] <- "..."
+  param_names <- strsplit(param_names, ",\\s*")
+  param_names <- lapply(param_names, function(x) {
+    x[x == "\\dots"] <- "..."
+    x
+  })
 
-  Map(list, name = strsplit(param_names, ",\\s*"), value = unlist(params))
+  Map(list, name = param_names, value = unlist(params))
 }
 
 topic_params <- function(x) {

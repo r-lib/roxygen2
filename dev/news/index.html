@@ -74,6 +74,8 @@
 <li>Package documentation now correctly handles multiple arbitrary comments in the <code>comment</code> argument of <code><a href="https://rdrr.io/r/utils/person.html" class="external-link">person()</a></code> in <code>Authors@R</code> (<a href="https://github.com/r-lib/roxygen2/issues/1746" class="external-link">#1746</a>).</li>
 <li>roxygen2 now requires R 4.0 (<a href="https://github.com/r-lib/roxygen2/issues/1632" class="external-link">#1632</a>).</li>
 <li>
+<code>@inheritParams</code> now correctly inherits parameters that are documented together with <code>\dots</code> using comma-separated names, e.g. <code>@param b,\dots description</code> (<a href="https://github.com/r-lib/roxygen2/issues/1718" class="external-link">#1718</a>).</li>
+<li>
 <code>@param</code> (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. <code>@param `arg 1` description</code> (<a href="https://github.com/r-lib/roxygen2/issues/1696" class="external-link">#1696</a>).</li>
 <li>The warning about undocumented S3 methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (<a href="https://github.com/r-lib/roxygen2/issues/1589" class="external-link">#1589</a>, <a href="https://github.com/r-lib/roxygen2/issues/1710" class="external-link">#1710</a>).</li>
 <li>The warning about undocumented S3 methods no longer incorrectly flags S4 methods of S3 generics as unexported (<a href="https://github.com/r-lib/roxygen2/issues/1715" class="external-link">#1715</a>).</li>

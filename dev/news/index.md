@@ -27,6 +27,10 @@
   ([\#1746](https://github.com/r-lib/roxygen2/issues/1746)).
 - roxygen2 now requires R 4.0
   ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
+- `@inheritParams` now correctly inherits parameters that are documented
+  together with `\dots` using comma-separated names,
+  e.g. `@param b,\dots description`
+  ([\#1718](https://github.com/r-lib/roxygen2/issues/1718)).
 - `@param` (and other two-part tags) now correctly handle
   backtick-quoted names that contain spaces,
   e.g. `` @param `arg 1` description ``

@@ -143,7 +143,8 @@ block_to_rd.roxy_block <- function(block, base_path, env) {
     return()
   }
 
-  name <- block_get_tag(block, "name")$val %||% block$object$topic
+  name_tag <- block_get_tag(block, "name")
+  name <- name_tag$val %||% block$object$topic
   if (is.null(name)) {
     warn_roxy_block(
       block,
@@ -156,7 +157,7 @@ block_to_rd.roxy_block <- function(block, base_path, env) {
   }
 
   rd <- RoxyTopic$new()
-  topic_add_name_aliases(rd, block, name)
+  topic_add_name_aliases(rd, block, name, explicit = !is.null(name_tag))
   for (tag in block$tags) {
     rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
   }
@@ -193,14 +194,15 @@ block_to_rd.roxy_block_r6class <- function(block, base_path, env) {
     return()
   }
 
-  name <- block_get_tag(block, "name")$val %||% block$object$topic
+  name_tag <- block_get_tag(block, "name")
+  name <- name_tag$val %||% block$object$topic
   if (is.null(name)) {
     warn_roxy_block(block, "must have a @name")
     return()
   }
 
   rd <- RoxyTopic$new()
-  topic_add_name_aliases(rd, block, name)
+  topic_add_name_aliases(rd, block, name, explicit = !is.null(name_tag))
 
   rd$add(roxy_tag_rd(
     block_get_tag(block, "name"),

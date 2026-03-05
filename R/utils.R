@@ -214,6 +214,10 @@ uuid <- function(nchar = 8) {
   )
 }
 
+paste_c <- function(...) {
+  paste(c(...), collapse = "")
+}
+
 # quoting -----------------------------------------------------------------
 auto_backtick <- function(x) {
   needs_backtick <- !has_quotes(x) & !is_syntactic(x)

@@ -38,22 +38,29 @@ find_package <- function(topic, tag = NULL) {
 }
 
 find_package_cache <- new_environment()
-find_package_cached <- function(topic, pkg, pkg_dir) {
-  # Don't cache lookups in the current package since topics may be
-  # added during the current session
-  if (has_topic(topic, pkg)) {
-    return(NA_character_)
-  }
+find_package_cache_reset <- function() {
+  # run in roxygenize()
+  env_unbind(find_package_cache, env_names(find_package_cache))
 
+  # also reset the cache used by dev_help() (used by has_topic())
+  pkg <- roxy_meta_get("current_package")
+  if (!is.null(pkg)) pkgload::dev_topic_index_reset(pkg)
+}
+find_package_cached <- function(topic, pkg, pkg_dir) {
   key <- paste0(pkg, "::", topic)
-  env_cache(find_package_cache, key, find_package_dep_lookup(topic, pkg_dir))
+  env_cache(find_package_cache, key, find_package_lookup(topic, pkg, pkg_dir))
 }
 
 # NA_character() = found, doesn't need qualification
 # character(0) = not found
 # character(1) = one match
 # character(>1) = multiple matches
-find_package_dep_lookup <- function(topic, pkg_dir) {
+find_package_lookup <- function(topic, pkg, pkg_dir) {
+  # if it is in the current package, then no need for package name
+  if (has_topic(topic, pkg)) {
+    return(NA_character_)
+  }
+
   pkgs <- pkg_deps(pkg_dir)
   pkg_has_topic <- pkgs[map_lgl(pkgs, has_topic, topic = topic)]
   pkg_has_topic <- map_chr(pkg_has_topic, \(pkg) find_source(topic, pkg))

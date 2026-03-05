@@ -507,6 +507,25 @@ test_that("@inheritParam only inherits exact multiparam matches", {
   expect_equal(out$get_value("param"), NULL)
 })
 
+test_that("@inheritParams inherits params documented with dots (#1718)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A
+    #' @param a A variable.
+    #' @param b,\\dots Parameters to pass.
+    A <- function(a, b, ...) {}
+
+    #' B
+    #' @inheritParams A
+    B <- function(a, b, ...) {}
+    "
+  )
+  expect_equal(
+    out[[2]]$get_value("param"),
+    c("a" = "A variable.", "b,..." = "Parameters to pass.")
+  )
+})
 
 test_that("@inheritParam understands compound docs", {
   out <- roc_proc_text(
@@ -770,6 +789,23 @@ test_that("useful error for bad inherits", {
     bar <- function(...) {}
   "
   expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
+})
+
+test_that("warns when no params to inherit (#1671)", {
+  text <- "
+    #' Foo
+    #'
+    #' @param ... not used
+    foo <- function(...) {}
+
+    #' Bar
+    #'
+    #' @param y y
+    #' @inheritDotParams foo
+    bar <- function(y, ...) {}
+  "
+  expect_snapshot(out <- roc_proc_text(rd_roclet(), text))
+  expect_false("..." %in% names(out[["bar.Rd"]]$get_value("param")))
 })
 
 

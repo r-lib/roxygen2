@@ -277,3 +277,18 @@ test_that("doesn't generate NA language", {
   )[[1]]
   expect_false(grepl("NA", out$get_section("description")$value))
 })
+
+test_that("inline code in non-indented list continuation doesn't error (#1651)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Title
+    #'
+    #' - a list
+    #' with non-indented `r 1+1` text
+    #' @md
+    foo <- function() {}
+  "
+  )[[1]]
+  expect_match(out$get_value("description"), "2")
+})

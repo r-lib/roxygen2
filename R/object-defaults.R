@@ -40,9 +40,16 @@ object_defaults.data <- function(x, block) {
 object_defaults.package <- function(x, block) {
   desc <- x$value$desc
 
-  logo_path <- file.path(x$value$path, "man", "figures", "logo.png")
+  logo_path <- file.path(x$value$path, "man", "figures", "logo.svg")
+  if (!file.exists(logo_path)) {
+    logo_path <- file.path(x$value$path, "man", "figures", "logo.png")
+  }
   if (file.exists(logo_path)) {
-    fig <- "\\if{html}{\\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}\n\n"
+    logo_file <- basename(logo_path)
+    fig <- paste_c(
+      c("\\if{html}{\\figure{", logo_file, "}"),
+      "{options: style='float: right' alt='logo' width='120'}}\n\n"
+    )
   } else {
     fig <- ""
   }

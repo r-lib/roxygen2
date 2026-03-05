@@ -132,3 +132,36 @@ test_that("can create package documentation", {
   expect_equal(out$get_value("docType"), "package")
   expect_equal(out$get_value("details"), "Details.")
 })
+
+test_that("package doc prefers logo.svg over logo.png (#1640)", {
+  path <- local_package_copy(test_path("empty"))
+  desc::desc_set(
+    file = path,
+    Package = "roxygendevtest",
+    Title = "Package Title",
+    Description = "Package description."
+  )
+  block <- "
+    #' @details Details.
+    '_PACKAGE'
+  "
+
+  # No logo
+  withr::with_dir(path, blocks <- parse_text(block))
+  out <- roclet_process(rd_roclet(), blocks)[[1]]
+  expect_no_match(out$get_value("description"), "figure")
+
+  # Only png
+  dir.create(file.path(path, "man", "figures"), recursive = TRUE)
+  file.create(file.path(path, "man", "figures", "logo.png"))
+  withr::with_dir(path, blocks <- parse_text(block, env = new.env()))
+  out <- roclet_process(rd_roclet(), blocks)[[1]]
+  expect_match(out$get_value("description"), "logo.png")
+
+  # Both svg and png: svg wins
+  file.create(file.path(path, "man", "figures", "logo.svg"))
+  withr::with_dir(path, blocks <- parse_text(block, env = new.env()))
+  out <- roclet_process(rd_roclet(), blocks)[[1]]
+  expect_match(out$get_value("description"), "logo.svg")
+  expect_no_match(out$get_value("description"), "logo.png")
+})

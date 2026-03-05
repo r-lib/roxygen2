@@ -12,7 +12,7 @@ format.rd_section_family <- function(x, ...) {
 # -------------------------------------------------------------------------
 
 topics_process_family_prefix <- function(family) {
-  default <- paste0("Other ", family, ": ")
+  default <- paste0("Other ", family, ":")
 
   # check for meta (use default prefix when unset)
   meta <- roxy_meta_get("rd_family_title")
@@ -34,7 +34,12 @@ topics_process_family_prefix <- function(family) {
     return(default)
   }
 
-  markdown(prefix, tag = "family")
+  prefix <- markdown(prefix, tag = "family")
+  # Ensure prefix ends with a colon (#1656)
+  if (!grepl(":$", prefix)) {
+    prefix <- paste0(prefix, ":")
+  }
+  prefix
 }
 
 topics_process_family <- function(topics, env) {

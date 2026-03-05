@@ -73,6 +73,16 @@
       x In topic 'bar': @inheritDotsParam failed.
       Caused by error in `FUN()`:
       ! object 'z' not found
+      x In topic 'bar': @inheritDotParams failed.
+      i No arguments inherited from `foo()`.
+
+# warns when no params to inherit (#1671)
+
+    Code
+      out <- roc_proc_text(rd_roclet(), text)
+    Message
+      x In topic 'bar': @inheritDotParams failed.
+      i No arguments inherited from `foo()`.
 
 # useful warnings if can't find topics
 

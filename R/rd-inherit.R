@@ -233,6 +233,17 @@ inherit_dot_params <- function(topic, topics, env) {
   non_documented_params <- setdiff(names(docs_selected), documented)
   docs_selected <- docs_selected[non_documented_params]
 
+  if (length(docs_selected) == 0) {
+    warn_roxy_topic(
+      topic$get_name(),
+      c(
+        x = "@inheritDotParams failed",
+        i = "No arguments inherited from {.fn {inheritors$source}}."
+      )
+    )
+    return()
+  }
+
   # Build the Rd
   # (1) Link to function(s) that was inherited from
   src <- inheritors$source
@@ -291,9 +302,13 @@ find_params <- function(name, topics, source) {
   }
 
   param_names <- str_trim(names(params))
-  param_names[param_names == "\\dots"] <- "..."
+  param_names <- strsplit(param_names, ",\\s*")
+  param_names <- lapply(param_names, function(x) {
+    x[x == "\\dots"] <- "..."
+    x
+  })
 
-  Map(list, name = strsplit(param_names, ",\\s*"), value = unlist(params))
+  Map(list, name = param_names, value = unlist(params))
 }
 
 topic_params <- function(x) {

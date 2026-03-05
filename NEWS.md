@@ -1,9 +1,6 @@
 # roxygen2 (development version)
 
-* Markdown link resolution is now cached, fixing a performance regression when documenting packages with many cross-package links (#1724).
-* Markdown links to operators containing `%` (e.g. `[%in%]`) are now resolved correctly (#1728).
-* Markdown links like `[fun()]` that are automatically resolved to an external package no longer prefix the link text with the package name. For example, `[fun()]` now generates `\link[pkg:fun]{fun()}` instead of `\link[pkg:fun]{pkg::fun()}` (#1662).
-* Markdown link resolution includes base packages in the ambiguity resolution detection, so they will no longer silently match a non-base package (#1725).
+* Markdown links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
 * Markdown link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.

@@ -39,6 +39,17 @@ test_that("person turned into meaningful text", {
   })
 })
 
+test_that("cre+aut person appears in both maintainer and authors (#1588)", {
+  authors <- 'c(
+    person("A", "B", role = c("aut", "cre"), email = "a@b.com"),
+    person("C", "D", role = "aut")
+  )'
+  out <- package_authors(authors)
+  expect_match(out, "Maintainer.*A B")
+  expect_match(out, "Authors.*A B")
+  expect_match(out, "Authors.*C D")
+})
+
 test_that("useful message if Authors@R is corrupted", {
   expect_snapshot({
     package_authors("1 + ")

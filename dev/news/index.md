@@ -36,6 +36,8 @@
   ([\#1671](https://github.com/r-lib/roxygen2/issues/1671)).
 - `@description` no longer errors when the markdown text starts with a
   heading ([\#1705](https://github.com/r-lib/roxygen2/issues/1705)).
+- `@description` and `@details` for R6 methods now support markdown
+  headings ([\#1647](https://github.com/r-lib/roxygen2/issues/1647)).
 - Package documentation now only wraps actual URLs in the `URL` field of
   `DESCRIPTION`
   ([\#1420](https://github.com/r-lib/roxygen2/issues/1420)).

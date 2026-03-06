@@ -76,6 +76,8 @@
 <code>@inheritDotParams</code> now warns and produces no output when there are no parameters to inherit, instead of generating an empty <code>\describe</code> block that caused CRAN HTML validation warnings (<a href="https://github.com/r-lib/roxygen2/issues/1671" class="external-link">#1671</a>).</li>
 <li>
 <code>@description</code> no longer errors when the markdown text starts with a heading (<a href="https://github.com/r-lib/roxygen2/issues/1705" class="external-link">#1705</a>).</li>
+<li>
+<code>@description</code> and <code>@details</code> for R6 methods now support markdown headings (<a href="https://github.com/r-lib/roxygen2/issues/1647" class="external-link">#1647</a>).</li>
 <li>Package documentation now only wraps actual URLs in the <code>URL</code> field of <code>DESCRIPTION</code> (<a href="https://github.com/r-lib/roxygen2/issues/1420" class="external-link">#1420</a>).</li>
 <li>Inline R code (<code>`r expr`</code>) in non-indented list continuation lines no longer causes an error (<a href="https://github.com/r-lib/roxygen2/issues/1651" class="external-link">#1651</a>).</li>
 <li>Markdown horizontal rules (e.g. <code>----</code>) now generate a clear warning instead of an internal error about an unknown <code>thematic_break</code> xml node (<a href="https://github.com/r-lib/roxygen2/issues/1707" class="external-link">#1707</a>).</li>

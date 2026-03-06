@@ -27,6 +27,9 @@
   `rd_family_title` values now automatically get a colon appended if
   they don’t already end with one
   ([\#1656](https://github.com/r-lib/roxygen2/issues/1656)).
+- `@inheritDotParams` now generates an informative warning when the
+  source function can’t be found, instead of a cryptic error
+  ([\#1602](https://github.com/r-lib/roxygen2/issues/1602)).
 - `@inheritDotParams` now warns and produces no output when there are no
   parameters to inherit, instead of generating an empty `\describe`
   block that caused CRAN HTML validation warnings

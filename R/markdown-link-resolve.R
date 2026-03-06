@@ -1,18 +1,17 @@
 find_package <- function(topic, tag = NULL) {
-  pkg <- roxy_meta_get("current_package")
-  if (is.null(pkg)) {
+  cur_pkg <- roxy_meta_get("current_package")
+  cur_pkg_dir <- roxy_meta_get("current_package_dir")
+  if (is.null(cur_pkg)) {
     # Don't try and link in basic tests
     return(NA_character_)
   }
-  pkg_dir <- roxy_meta_get("current_package_dir")
 
-  pkg <- find_package_cached(topic, pkg = pkg, pkg_dir = pkg_dir)
-
+  pkg <- find_package_cached(topic, pkg = cur_pkg, pkg_dir = cur_pkg_dir)
   if (length(pkg) == 0) {
     warn_roxy_tag(
       tag,
       c(
-        "Could not resolve link to topic {.val {topic}} in the dependencies or base packages",
+        "Could not resolve link to topic {.val {topic}} in the dependencies or base packages.",
         "i" = paste(
           "If you haven't documented {.val {topic}} yet, or just changed its name, this is normal.",
           "Once {.val {topic}} is documented, this warning goes away."
@@ -29,7 +28,7 @@ find_package <- function(topic, tag = NULL) {
     warn_roxy_tag(
       tag,
       c(
-        "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg}}",
+        "Topic {.val {topic}} is available in multiple packages: {.pkg {pkg}}.",
         i = "Qualify topic explicitly with a package name when linking to it."
       )
     )
@@ -38,8 +37,8 @@ find_package <- function(topic, tag = NULL) {
 }
 
 find_package_cache <- new_environment()
+# run in roxygenize() because the documented functions might change between runs
 find_package_cache_reset <- function() {
-  # run in roxygenize()
   env_unbind(find_package_cache, env_names(find_package_cache))
 
   # also reset the cache used by dev_help() (used by has_topic())
@@ -51,9 +50,9 @@ find_package_cached <- function(topic, pkg, pkg_dir) {
   env_cache(find_package_cache, key, find_package_lookup(topic, pkg, pkg_dir))
 }
 
-# NA_character() = found, doesn't need qualification
-# character(0) = not found
-# character(1) = one match
+# NA_character  = found, doesn't need qualification
+# character(0)  = not found
+# character(1)  = one match
 # character(>1) = multiple matches
 find_package_lookup <- function(topic, pkg, pkg_dir) {
   # if it is in the current package, then no need for package name
@@ -68,6 +67,7 @@ find_package_lookup <- function(topic, pkg, pkg_dir) {
 
   base <- base_packages()
   if (length(pkg_has_topic) == 0) {
+    # can't find it anywhere
     character()
   } else if (length(pkg_has_topic) == 1) {
     if (pkg_has_topic %in% base) {

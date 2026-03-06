@@ -472,6 +472,15 @@ tweak_links <- function(x, package) {
           )
         }
       }
+    } else if (!is.null(tag) && tag == "\\linkS4class") {
+      topic <- paste0(x[[1]], "-class")
+      if (has_topic(topic, package)) {
+        attr(x, "Rd_tag") <- "\\link"
+        attr(x, "Rd_option") <- structure(
+          paste0(package, ":", topic),
+          Rd_tag = "TEXT"
+        )
+      }
     } else if (length(x) > 0) {
       x[] <- map(x, tweak_links, package = package)
     }

@@ -57,6 +57,15 @@ test_that("relative links converted to absolute", {
     link_to_base("\\link[foo::abbreviate]{abbr}"),
     "\\link[foo::abbreviate]{abbr}\n"
   )
+
+  # linkS4class converted to absolute link (#1634)
+  link_to_methods <- function(x) {
+    rd2text(parse_rd(x), package = "methods")
+  }
+  expect_equal(
+    link_to_methods("\\linkS4class{genericFunction}"),
+    "\\link[methods:genericFunction-class]{genericFunction}\n"
+  )
 })
 
 # tag parsing -------------------------------------------------------------

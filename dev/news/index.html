@@ -63,7 +63,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li>Package documentation now lists a person with both <code>"aut"</code> and <code>"cre"</code> roles in both the Maintainer and Authors sections (<a href="https://github.com/r-lib/roxygen2/issues/1588" class="external-link">#1588</a>).</li>
+<ul><li>
+<code>@inheritParams</code> now correctly updates <code>\linkS4class{}</code> links when inheriting parameter documentation from other packages, converting them to absolute links (<a href="https://github.com/r-lib/roxygen2/issues/1634" class="external-link">#1634</a>).</li>
+<li>Package documentation now lists a person with both <code>"aut"</code> and <code>"cre"</code> roles in both the Maintainer and Authors sections (<a href="https://github.com/r-lib/roxygen2/issues/1588" class="external-link">#1588</a>).</li>
 <li>Markdown links now do a better job of resolving package names: the process is cached for better performance (<a href="https://github.com/r-lib/roxygen2/issues/1724" class="external-link">#1724</a>); it works with infix operators (e.g. <code>[%in%]</code>) (<a href="https://github.com/r-lib/roxygen2/issues/1728" class="external-link">#1728</a>); no longer changes the link text (<a href="https://github.com/r-lib/roxygen2/issues/1662" class="external-link">#1662</a>); and includes base packages when reporting ambiguous functions (<a href="https://github.com/r-lib/roxygen2/issues/1725" class="external-link">#1725</a>).</li>
 <li>Package documentation now uses <code>logo.svg</code> if available, falling back to <code>logo.png</code> (<a href="https://github.com/r-lib/roxygen2/issues/1640" class="external-link">#1640</a>).</li>
 <li>

@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- `@inheritParams` now correctly updates `\linkS4class{}` links when
+  inheriting parameter documentation from other packages, converting
+  them to absolute links
+  ([\#1634](https://github.com/r-lib/roxygen2/issues/1634)).
 - Package documentation now lists a person with both `"aut"` and `"cre"`
   roles in both the Maintainer and Authors sections
   ([\#1588](https://github.com/r-lib/roxygen2/issues/1588)).

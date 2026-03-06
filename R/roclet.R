@@ -1,6 +1,9 @@
 #' Build a new roclet.
 #'
-#' To create a new roclet, you will need to create a constructor function
+#' A roclet is roxygen2's plugin system for processing documentation comments.
+#' Each roclet handles a different output type.
+#' To create a new roclet like the default roclets [rd_roclet()] and [namespace_roclet()],
+#' you will need to create a constructor function
 #' that wraps `roclet`, and then implement the methods described below.
 #' See `vignette("extending")` for more details.
 #'

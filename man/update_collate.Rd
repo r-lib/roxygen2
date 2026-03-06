@@ -25,7 +25,8 @@ collation order.
 }
 \section{Collate}{
 
-This is not a roclet because roclets need the values of objects in a package,
+This is not a \code{\link[=roclet]{roclet()}}, contrary to \code{\link[=rd_roclet]{rd_roclet()}} or \code{\link[=namespace_roclet]{namespace_roclet()}},
+because roclets need the values of objects in a package,
 and those values can not be generated unless you've sourced the files,
 and you can't source the files unless you know the correct order.
 

@@ -204,78 +204,30 @@ The image files must be in the `man/figures` directory:
 ## Function links
 
 Markdown notation can also be used to create links to other help topics.
-There are two basic forms:
+There are three basic forms for linking to topics in the current package or its dependencies.
 
--   `[topic]`: The link text is automatically generated from the topic.
--   `[text][topic]`: You supply the link text.
+| Markdown           | Code | Rd                            |
+|:-------------------|:-----|:------------------------------|
+| `[func()]`         | yes  | `\code{\link[=func]{func()}}` |
+| `[topic]`          | no   | `\link{topic}`                |
+| `` [`topic`] ``    | yes  | `\code{\link{topic}}`         |
 
-If `topic` is not a help topic within the package you are documenting,
-but it is in one of its dependent packages, roxygen2 will try to find
-which package it is coming from to generate a fully qualified link. Fully
-qualified links are required by R 4.5.0 and later.
+R 4.5.0 and later requires that links to all topics outside of your package be explicitly qualified with the package name. roxygen2 will attempt to do this for you by looking at the dependencies of your package. If this fails, e.g. if multiple dependencies document the same topic, you'll need to manually resolve using the syntax below.
 
-If multiple dependent packages document `topic`, then roxygen2 will stop
-with an error. Re-exported functions and objects do not generate an error,
-however, but roxygen2 will link to the package that originally defines the
-re-exported object.
+| Markdown               | Code | Rd                                     |
+|:-----------------------|:-----|:---------------------------------------|
+| `[pkg::func()]`        | yes  | `\code{\link[pkg:func]{pkg::func()}}`  |
+| `[pkg::topic]`         | no   | `\link[pkg:topic]{pkg::topic}`         |
+| `` [`pkg::topic`] ``   | yes  | `\code{\link[pkg:topic]{pkg::topic}}`  |
 
-### Default link text
+You can also provide your own link text. In this case there's no advantage to supplying a function call, as you control the formatting of the text.
 
-First we explore the simplest form: `[ref]`.
-The presence of trailing parentheses, e.g., `[func()]`, signals that the target `func` is a function, which causes two things to happen:
-
--   The link text `func()` is automatically typeset as code.
--   The parentheses are stripped in the derived Rd link target.
-
-+----------------------+---------------------+---------------------------------------------+
-| Markdown             | Links to help\      | Notes                                       |
-|                      | topic for ...       |                                             |
-+:=====================+:====================+:============================================+
-| `[func()]`\          | a function in same\ | Always typeset as code.\                    |
-| `[pkg::func()]`      | package or in `pkg` | Produces Rd: `\code{\link[=func]{func()}}`\ |
-|                      |                     | or `\code{\link[pkg:func]{pkg::func()}}`    |
-+----------------------+---------------------+---------------------------------------------+
-| `[thing]`\           | a topic in same\    | Use for a dataset or general doc page.\     |
-| `[pkg::thing]`       | package or in `pkg` | Not typeset as code.\                       |
-|                      |                     | Produces Rd: `\link{thing}` or\             |
-|                      |                     | `\link[pkg:thing]{pkg::thing}`              |
-+----------------------+---------------------+---------------------------------------------+
-| `` [`thing`] ``\     | a topic in same\    | Same as above, but explicit backticks\      |
-| `` [`pkg::thing`] `` | package or in `pkg` | mean that it **is** typeset as code.\       |
-|                      |                     | Good for documenting a class.\              |
-|                      |                     | Produces Rd: `\code{\link{thing}}` or\      |
-|                      |                     | `\code{\link[pkg:thing]{pkg::thing}}`       |
-+----------------------+---------------------+---------------------------------------------+
-
-### Custom link text
-
-Use the second form `[text][ref]` to link to the topic specified by `ref`, but with `text` as the link text.
-
-+----------------------------+---------------------+-----------------------------------------+
-| Markdown                   | Links to help\      | Notes                                   |
-|                            | topic for ...       |                                         |
-+:===========================+:====================+:========================================+
-| `[text][func()]`\          | a function in same\ | Text is not typeset as code.\           |
-| `[text][pkg::func()]`      | package or in `pkg` | Produces Rd: `\link[=func]{text}` or\   |
-|                            |                     | `\link[pkg:func]{text}`                 |
-+----------------------------+---------------------+-----------------------------------------+
-| `[text][thing]`\           | a topic in same\    | Text is not typeset as code.\           |
-| `[text][pkg::thing]`       | package or in `pkg` | Use for a topic that documents `NULL`\  |
-|                            |                     | and name is set via `@name`,\           |
-|                            |                     | e.g., a dataset or concept.\            |
-|                            |                     | Produces Rd: `\link[=thing]{text}` or\  |
-|                            |                     | `\link[pkg:thing]{text}`                |
-+----------------------------+---------------------+-----------------------------------------+
-| `` [`text`][thing] ``\     | a topic in same\    | Same as above, but explicit backticks\  |
-| `` [`text`][pkg::thing] `` | package or in `pkg` | mean that text is typeset as code.\     |
-|                            |                     | Produces Rd: `\code{\link{=thing}}` or\ |
-|                            |                     | `\code{\link[pkg:thing]{pkg::thing}}`   |
-+----------------------------+---------------------+-----------------------------------------+
-
-### Operators
-
-Links to operators or objects that contain special characters do not currently work.
-So to link to (e.g.) the `%>%` operator in the `magrittr` package, instead of `[magrittr::%>%]`, you will need to use the `Rd` notation: `\code{\link[magrittr]{\%>\%}}`.
+| Markdown                   | Code | Rd                                 |
+|:---------------------------|:-----|:-----------------------------------|
+| `[text][topic]`            | no   | `\link[=topic]{text}`              |
+| `` [`text`][topic] ``      | yes  | `\code{\link[=topic]{text}}`       |
+| `[text][pkg::topic]`       | no   | `\link[pkg:topic]{text}`           |
+| `` [`text`][pkg::topic] `` | yes  | `\code{\link[pkg:topic]{text}}`    |
 
 ## Code chunks
 

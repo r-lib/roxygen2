@@ -37,7 +37,10 @@ package_authors <- function(authors) {
 
   desc <- map_chr(unclass(authors), author_desc)
   type <- map_chr(unclass(authors), author_type)
+  # People who are both maintainer and author should appear in both sections
+  is_cre_aut <- map_lgl(unclass(authors), \(x) all(c("cre", "aut") %in% x$role))
   by_type <- split(desc, type)
+  by_type$aut <- c(desc[is_cre_aut], by_type$aut)
 
   paste(
     c(

@@ -3,7 +3,7 @@
 \name{roxygenize}
 \alias{roxygenize}
 \alias{roxygenise}
-\title{Process a package with the Rd, namespace and collate roclets}
+\title{Process a package to produce Rd files, the NAMESPACE, and to update the Collate field}
 \usage{
 roxygenize(package.dir = ".", roclets = NULL, load_code = NULL, clean = FALSE)
 
@@ -13,9 +13,12 @@ roxygenise(package.dir = ".", roclets = NULL, load_code = NULL, clean = FALSE)
 \item{package.dir}{Location of package top level directory. Default is
 working directory.}
 
-\item{roclets}{Character vector of roclet names to use with package.
+\item{roclets}{Character vector of artefacts to produce and/or plugins to use.
 The default, \code{NULL}, uses the roxygen \code{roclets} option,
-which defaults to \code{c("collate", "namespace", "rd")}.}
+which defaults to \code{c("collate", "namespace", "rd")}:
+updating (if needed) the \code{Collate} field through \code{\link[=update_collate]{update_collate()}},
+producing the \code{NAMESPACE} file through \code{\link[=namespace_roclet]{namespace_roclet()}},
+producing the Rd files through \code{\link[=rd_roclet]{rd_roclet()}}.}
 
 \item{load_code}{A function used to load all the R code in the package
 directory. The default, \code{NULL}, uses the strategy defined by
@@ -29,11 +32,11 @@ created by roxygen before running each roclet.}
 \code{NULL}
 }
 \description{
-This is the workhorse function that uses roclets, the built-in document
-transformation functions, to build all documentation for a package. See
-the documentation for the individual roclets, \code{\link[=rd_roclet]{rd_roclet()}},
+This is the workhorse function that builds manual pages and metadata for a package.
+See the documentation for the individual components: \code{\link[=rd_roclet]{rd_roclet()}},
 \code{\link[=namespace_roclet]{namespace_roclet()}}, and for \code{\link[=update_collate]{update_collate()}},
 for more details.
+You can also provide your own transformation plugins, see \code{vignette("extending")}.
 }
 \details{
 Note that roxygen2 is a dynamic documentation system: it works by

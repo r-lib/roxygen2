@@ -35,7 +35,10 @@ roclet_tags(x)
 \item{results}{Value returned from your \code{roclet_process()} method.}
 }
 \description{
-To create a new roclet, you will need to create a constructor function
+A roclet is roxygen2's plugin system for processing documentation comments.
+Each roclet handles a different output type.
+To create a new roclet like the default roclets \code{\link[=rd_roclet]{rd_roclet()}} and \code{\link[=namespace_roclet]{namespace_roclet()}},
+you will need to create a constructor function
 that wraps \code{roclet}, and then implement the methods described below.
 See \code{vignette("extending")} for more details.
 }

@@ -58,7 +58,7 @@ There are three main ways to run roxygen:
 
 You can mix handwritten Rd and roxygen2; roxygen2 will never overwrite a file it didn't create.
 
-## Basic process
+## Basic process: human readable documentation
 
 There are three steps in the transformation from roxygen comments in your source file to human readable documentation:
 
@@ -75,6 +75,7 @@ example <- "#' Add together two numbers
 #' @param x A number.
 #' @param y A number.
 #' @return A number.
+#' @export
 #' @examples
 #' add(1, 1)
 #' add(10, 1)
@@ -93,7 +94,8 @@ For the example above, this will generate `man/add.Rd` that looks like:
 cat(
   "\x60\x60\x60rd\n",
   format(roxygen2::roc_proc_text(roxygen2::rd_roclet(), example)[[1]]),
-  "\n\x60\x60\x60", sep = ""
+  "\n\x60\x60\x60",
+  sep = ""
 )
 ```
 
@@ -106,3 +108,16 @@ It then parses the file, converts it into HTML and displays it.
 These functions look for an Rd file in *installed* packages.
 This isn't very useful for package development, because you want to use the `.Rd` files in the *source* package.
 For this reason, we recommend that you use roxygen2 in conjunction with devtools: `devtools::load_all()` automatically adds shims so that `?` and friends will look in the development package.
+
+## Basic process: making functions available to users
+
+The example above, that includes an `@export` tag to indicate the `add()` function should be part of the interface of the package available to users, would also be converted by `roxygenize()` into a line in the `NAMESPACE` file:
+
+```{r, echo=FALSE, results="asis"}
+cat(
+  "\x60\x60\x60txt\n",
+  roxygen2::roc_proc_text(roxygen2::namespace_roclet(), example),
+  "\n\x60\x60\x60",
+  sep = ""
+)
+```

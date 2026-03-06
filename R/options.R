@@ -1,4 +1,4 @@
-#' Load roxygen2 options
+#' Load roxygen2 options for [roxygenize()].
 #'
 #' @description
 #' Options can be stored in the `Roxygen` field of the `DESCRIPTION`, or
@@ -10,7 +10,7 @@
 #'
 #' @section Possible options:
 #'
-#' * `roclets` `<character>`: giving names of roclets to run. See
+#' * `roclets` `<character>`: giving names of roclets ([roclet()]) to run. See
 #'    [roclet_find()] for details.
 #'
 #' * `packages` `<character>`: packages to load that implement new tags.

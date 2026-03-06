@@ -1,10 +1,10 @@
-#' Process a package with the Rd, namespace and collate roclets
+#' Process a package to produce Rd files, the NAMESPACE, and to update the Collate field
 #'
-#' This is the workhorse function that uses roclets, the built-in document
-#' transformation functions, to build all documentation for a package. See
-#' the documentation for the individual roclets, [rd_roclet()],
+#' This is the workhorse function that builds manual pages and metadata for a package.
+#' See the documentation for the individual components: [rd_roclet()],
 #' [namespace_roclet()], and for [update_collate()],
 #' for more details.
+#' You can also provide your own transformation plugins, see `vignette("extending")`.
 #'
 #' Note that roxygen2 is a dynamic documentation system: it works by
 #' inspecting loaded objects in the package. This means that you must
@@ -13,9 +13,12 @@
 #'
 #' @param package.dir Location of package top level directory. Default is
 #'   working directory.
-#' @param roclets Character vector of roclet names to use with package.
+#' @param roclets Character vector of artefacts to produce and/or plugins to use.
 #'   The default, `NULL`, uses the roxygen `roclets` option,
-#'   which defaults to `c("collate", "namespace", "rd")`.
+#'   which defaults to `c("collate", "namespace", "rd")`:
+#'   updating (if needed) the `Collate` field through [update_collate()],
+#'   producing the `NAMESPACE` file through [namespace_roclet()],
+#'   producing the Rd files through [rd_roclet()].
 #' @param load_code A function used to load all the R code in the package
 #'   directory. The default, `NULL`, uses the strategy defined by
 #'   the `load` roxygen option, which defaults to [load_pkgload()].

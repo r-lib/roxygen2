@@ -29,6 +29,9 @@ reference:
   - load
 
 - title: Roclets
+  desc: >
+    A roclet is roxygen2's plugin system for processing documentation comments. 
+    Each roclet handles a different output type.
   contents:
   - ends_with("roclet")
 

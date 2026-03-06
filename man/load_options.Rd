@@ -3,7 +3,7 @@
 \name{load_options}
 \alias{load_options}
 \alias{roxy_meta_get}
-\title{Load roxygen2 options}
+\title{Load roxygen2 options for \code{\link[=roxygenize]{roxygenize()}}.}
 \usage{
 load_options(base_path = ".")
 
@@ -23,7 +23,7 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 \section{Possible options}{
 
 \itemize{
-\item \code{roclets} \verb{<character>}: giving names of roclets to run. See
+\item \code{roclets} \verb{<character>}: giving names of roclets (\code{\link[=roclet]{roclet()}}) to run. See
 \code{\link[=roclet_find]{roclet_find()}} for details.
 \item \code{packages} \verb{<character>}: packages to load that implement new tags.
 \item \code{load} \verb{<string>}: how to load R code. See \link{load} for details.

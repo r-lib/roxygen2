@@ -2,6 +2,15 @@
 
 ## roxygen2 (development version)
 
+- Markdown links now do a better job of resolving package names: the
+  process is cached for better performance
+  ([\#1724](https://github.com/r-lib/roxygen2/issues/1724)); it works
+  with infix operators (e.g. `[%in%]`)
+  ([\#1728](https://github.com/r-lib/roxygen2/issues/1728)); no longer
+  changes the link text
+  ([\#1662](https://github.com/r-lib/roxygen2/issues/1662)); and
+  includes base packages when reporting ambiguous functions
+  ([\#1725](https://github.com/r-lib/roxygen2/issues/1725)).
 - Package documentation now uses `logo.svg` if available, falling back
   to `logo.png`
   ([\#1640](https://github.com/r-lib/roxygen2/issues/1640)).

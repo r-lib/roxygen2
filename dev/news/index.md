@@ -2,6 +2,9 @@
 
 ## roxygen2 (development version)
 
+- Package documentation now lists a person with both `"aut"` and `"cre"`
+  roles in both the Maintainer and Authors sections
+  ([\#1588](https://github.com/r-lib/roxygen2/issues/1588)).
 - Markdown links now do a better job of resolving package names: the
   process is cached for better performance
   ([\#1724](https://github.com/r-lib/roxygen2/issues/1724)); it works

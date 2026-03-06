@@ -23,6 +23,9 @@ Useful links:
 
 Authors:
 
+- Hadley Wickham <hadley@posit.co>
+  ([ORCID](https://orcid.org/0000-0003-4757-117X)) \[copyright holder\]
+
 - Peter Danenberg <pcd@roxygen.org> \[copyright holder\]
 
 - Gábor Csárdi <csardi.gabor@gmail.com>

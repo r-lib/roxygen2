@@ -283,7 +283,7 @@ topics_add_package_alias <- function(topics) {
 #' @param env Environment in which to evaluate code (if needed)
 #' @return Methods must return a [rd_section].
 #' @export
-#' @keywords internal
+#' @family extending
 roxy_tag_rd <- function(x, base_path, env) {
   UseMethod("roxy_tag_rd")
 }

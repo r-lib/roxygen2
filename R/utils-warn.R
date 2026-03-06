@@ -1,5 +1,8 @@
 #' @export
 #' @rdname roxy_tag
+#' @param message Warning message
+#' @inheritParams rlang::abort
+#' @param envir passed to `rlang::warn()` as `.envir`.
 warn_roxy_tag <- function(tag, message, parent = NULL, envir = parent.frame()) {
   if (is.null(tag)) {
     names(message)[[1]] <- "x"

@@ -1,7 +1,9 @@
-#' Access metadata about built-in tags
+#' Access metadata about built-in or available tags
 #'
 #' @export
-#' @keywords internal
+#' @family extending
+#' @param built_in Logical. Whether to restrict the result to built-in tags
+#' (`TRUE`) or to extend it to available tags (`FALSE`).
 tags_list <- function(built_in = TRUE) {
   if (isTRUE(built_in)) {
     methods <- attr(methods('roxy_tag_parse'), "info")

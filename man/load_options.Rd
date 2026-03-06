@@ -11,6 +11,10 @@ roxy_meta_get(key = NULL, default = NULL)
 }
 \arguments{
 \item{base_path}{Path to package.}
+
+\item{key}{Key of the options, e.g. \code{"packages"}.}
+
+\item{default}{Default value.}
 }
 \description{
 Options can be stored in the \code{Roxygen} field of the \code{DESCRIPTION}, or
@@ -56,4 +60,19 @@ Or if longer, you can put in \verb{/man/roxygen/meta.R}:
 }\if{html}{\out{</div>}}
 }
 
-\keyword{internal}
+\seealso{
+Other extending: 
+\code{\link{is_s3_generic}()},
+\code{\link{object}()},
+\code{\link{object_format}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

@@ -3,13 +3,32 @@
 \name{tags_list}
 \alias{tags_list}
 \alias{tags_metadata}
-\title{Access metadata about built-in tags}
+\title{Access metadata about built-in or available tags}
 \usage{
 tags_list(built_in = TRUE)
 
 tags_metadata()
 }
-\description{
-Access metadata about built-in tags
+\arguments{
+\item{built_in}{Logical. Whether to restrict the result to built-in tags
+(\code{TRUE}) or to extend it to available tags (\code{FALSE}).}
 }
-\keyword{internal}
+\description{
+Access metadata about built-in or available tags
+}
+\seealso{
+Other extending: 
+\code{\link{is_s3_generic}()},
+\code{\link{load_options}()},
+\code{\link{object}()},
+\code{\link{object_format}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}}
+}
+\concept{extending}

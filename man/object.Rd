@@ -11,9 +11,26 @@ object(value, alias, type)
 
 \item{alias}{Alias for object being documented, in case you create a
 generator function with different name.}
+
+\item{type}{Type of the object, character. E.g. \code{"data"} or \code{"s4method"}.}
 }
 \description{
 These objects are usually created by the parsers, but it is also
 useful to generate them by hand for testing.
 }
-\keyword{internal}
+\seealso{
+Other extending: 
+\code{\link{is_s3_generic}()},
+\code{\link{load_options}()},
+\code{\link{object_format}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

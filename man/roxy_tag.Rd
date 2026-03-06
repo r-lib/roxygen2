@@ -27,6 +27,35 @@ a list. Usually filled in by \code{tag_parsers}}
 \item{file, line}{Location of the tag}
 
 \item{x}{A tag}
+
+\item{...}{Additional data to be stored in the condition object.
+If you supply condition fields, you should usually provide a
+\code{class} argument. You may consider prefixing condition fields
+with the name of your package or organisation to prevent name
+collisions.}
+
+\item{message}{Warning message}
+
+\item{parent}{Supply \code{parent} when you rethrow an error from a
+condition handler (e.g. with \code{\link[rlang:try_fetch]{try_fetch()}}).
+\itemize{
+\item If \code{parent} is a condition object, a \emph{chained error} is
+created, which is useful when you want to enhance an error with
+more details, while still retaining the original information.
+\item If \code{parent} is \code{NA}, it indicates an unchained rethrow, which
+is useful when you want to take ownership over an error and
+rethrow it with a custom message that better fits the
+surrounding context.
+
+Technically, supplying \code{NA} lets \code{abort()} know it is called
+from a condition handler. This helps it create simpler
+backtraces where the condition handling context is hidden by
+default.
+}
+
+For more information about error calls, see \ifelse{html}{\link[rlang:topic-error-chaining]{Including contextual information with error chains}}{\link[rlang:topic-error-chaining]{Including contextual information with error chains}}.}
+
+\item{envir}{passed to \code{rlang::warn()} as \code{.envir}.}
 }
 \description{
 \code{roxy_tag()} is the constructor for tag objects.
@@ -39,4 +68,19 @@ Define a method for \code{roxy_tag_parse} to support new tags. See \link{tag_par
 for more details.
 }
 
-\keyword{internal}
+\seealso{
+Other extending: 
+\code{\link{is_s3_generic}()},
+\code{\link{load_options}()},
+\code{\link{object}()},
+\code{\link{object_format}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

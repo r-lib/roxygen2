@@ -4,29 +4,31 @@ NULL
 #' Roclet: make Rd files
 #'
 #' @description
-#' This roclet is the workhorse of roxygen2, producing the `.Rd` files that
+#' This [roclet()] automates the production of the `.Rd` files that
 #' R uses to document functions, datasets, packages, classes, and more.
 #' See `vignette("rd")` for details.
 #'
-#' Generally you will not call this function directly
-#' but will instead use [roxygenise()] specifying the rd roclet.
+#' It is run by default by [roxygenize()].
 #'
 #' @seealso [tags-rd], [tags-rd-other], [tags-reuse], [tags-index-crossref] for
 #'   tags provided by this roclet.
 #' @export
 #' @examples
-#' #' The length of a string (in characters)
-#' #'
-#' #' @param x A character vector.
-#' #' @returns An integer vector the same length as `x`.
-#' #'   `NA` strings have `NA` length.
-#' #' @seealso [nchar()]
-#' #' @export
-#' #' @examples
-#' #' str_length(letters)
-#' #' str_length(c("i", "like", "programming", NA))
-#' str_length <- function(x) {
-#' }
+#' example <- c("#' Add together two numbers",
+#'   "#' @param x A number.",
+#'   "#' @param y A number.",
+#'   "#' @return A number.",
+#'   "#' @export",
+#'   "#' @examples",
+#'   "#' add(1, 1)",
+#'   "#' add(10, 1)",
+#'   "add <- function(x, y) {",
+#'   "  x + y",
+#'   "}"
+#' )
+#' cat(example, sep = "\n")
+#' # For the example above, `roxygenize()` will generate `man/add.Rd` that looks like:
+#' roxygen2::roc_proc_text(roxygen2::rd_roclet(), example)[[1]]
 rd_roclet <- function() {
   roclet("rd")
 }

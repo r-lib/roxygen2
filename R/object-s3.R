@@ -88,7 +88,7 @@ find_generic <- function(name, env = parent.frame()) {
     return(NULL)
   }
 
-  for (i in seq_len(n - 1)) {
+  for (i in rev(seq_len(n - 1))) {
     generic <- paste0(pieces[seq_len(i)], collapse = ".")
     class <- paste0(pieces[(i + 1):n], collapse = ".")
 

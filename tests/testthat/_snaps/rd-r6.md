@@ -55,3 +55,38 @@
       x roxygen-block-3.R:91: Undocumented R6 active binding: undocumented_binding.
       x roxygen-block-3.R:91: R6 active binding documented multiple times: duplicate_binding.
 
+# method with markdown sections in @description and @details
+
+    Code
+      cat(format(rd$get_section("rawRd")))
+    Output
+      \section{Methods}{
+      \subsection{Public methods}{
+      \itemize{
+      \item \href{#method-C-meth}{\code{C$meth()}}
+      }
+      }
+      \if{html}{\out{<hr>}}
+      \if{html}{\out{<a id="method-C-meth"></a>}}
+      \if{latex}{\out{\hypertarget{method-C-meth}{}}}
+      \subsection{Method \code{meth()}}{
+      Method description.
+      
+      \subsection{Description section}{
+      Description section body.
+      }
+      \subsection{Usage}{
+      \if{html}{\out{<div class="r">}}\preformatted{C$meth()}\if{html}{\out{</div>}}
+      }
+      
+      \subsection{Details}{
+      Some details.
+      
+      \subsection{Details section}{
+      Details section body.
+      }
+      }
+      
+      }
+      }
+

@@ -29,6 +29,13 @@ topic_add_r6_methods <- function(rd, block, env) {
     del <- c(del, i)
   }
 
+  # Markdown sections (# headings) inside @description or @details produce
+  # a multi-element named val. Flatten these into a single string containing
+  # \subsection{} Rd markup so downstream rendering can use map_chr().
+  for (i in seq_along(methods$tags)) {
+    methods$tags[[i]] <- lapply(methods$tags[[i]], r6_flatten_sections)
+  }
+
   methods <- add_default_methods(methods, block)
 
   nodoc <- map_int(methods$tags, length) == 0
@@ -391,6 +398,21 @@ r6_method_details <- function(block, method) {
     utils::tail(txt, 1),
     "}\n"
   )
+}
+
+r6_flatten_sections <- function(tag) {
+  if (!is.character(tag$val) || length(tag$val) <= 1) {
+    return(tag)
+  }
+  titles <- names(tag$val)
+  sections <- vapply(
+    seq_along(tag$val)[-1],
+    \(i) paste0("\\subsection{", titles[[i]], "}{\n", tag$val[[i]], "\n}"),
+    character(1)
+  )
+  parts <- if (nzchar(tag$val[[1]])) c(tag$val[[1]], sections) else sections
+  tag$val <- paste(parts, collapse = "\n\n")
+  tag
 }
 
 r6_method_params <- function(block, method) {

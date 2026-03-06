@@ -80,8 +80,6 @@
       }
       
       \subsection{Details}{
-      Some details.
-      
       \subsection{Details section}{
       Details section body.
       }

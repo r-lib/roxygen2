@@ -401,7 +401,10 @@ r6_method_details <- function(block, method) {
 }
 
 r6_flatten_sections <- function(tag) {
-  if (!is.character(tag$val) || length(tag$val) <= 1) {
+  if (!tag$tag %in% c("description", "details")) {
+    return(tag)
+  }
+  if (length(tag$val) <= 1) {
     return(tag)
   }
   titles <- names(tag$val)

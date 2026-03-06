@@ -403,9 +403,7 @@ test_that("method with markdown sections in @description and @details", {
         #' # Description section
         #'
         #' Description section body.
-        #' @details Some details.
-        #'
-        #' # Details section
+        #' @details # Details section
         #'
         #' Details section body.
         meth = function() { }

@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Hadley Wickham \email{hadley@posit.co} (\href{https://orcid.org/0000-0003-4757-117X}{ORCID}) [copyright holder]
   \item Peter Danenberg \email{pcd@roxygen.org} [copyright holder]
   \item Gábor Csárdi \email{csardi.gabor@gmail.com}
   \item Manuel Eugster [copyright holder]

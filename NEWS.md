@@ -1,6 +1,7 @@
 # roxygen2 (development version)
 
 * `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).
+* Package documentation now lists a person with both `"aut"` and `"cre"` roles in both the Maintainer and Authors sections (#1588).
 * Markdown links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725).
 * Package documentation now uses `logo.svg` if available, falling back to `logo.png` (#1640).
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).

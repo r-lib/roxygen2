@@ -217,7 +217,12 @@ inherit_dot_params <- function(topic, topics, env) {
   args <- map2(funs, inheritors$args, select_args_text, topic = topic)
 
   # Then pull out the ones we need
-  docs <- lapply(inheritors$source, find_params, topics = topics)
+  docs <- lapply(
+    inheritors$source,
+    find_params,
+    topics = topics,
+    source = topic$get_name()
+  )
   arg_matches <- function(args, docs) {
     match <- map_lgl(docs, \(x) all(x$name %in% args))
     matched <- docs[match]
@@ -495,7 +500,10 @@ get_rd <- function(name, topics, source) {
     # Current package
     rd_name <- topics$find_filename(name)
     if (identical(rd_name, NA_character_)) {
-      warn_roxy_topic(source, "@inherits failed to find topic {.str {name}}")
+      warn_roxy_topic(
+        source,
+        "@inherits failed to find topic {.str {name}} in current package"
+      )
     }
     topics$get(rd_name)
   }

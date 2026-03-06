@@ -808,6 +808,14 @@ test_that("warns when no params to inherit (#1671)", {
   expect_false("..." %in% names(out[["bar.Rd"]]$get_value("param")))
 })
 
+test_that("inheritDotParams warns when source not found (#1602)", {
+  text <- "
+    #' Test
+    #' @inheritDotParams format
+    test = function(...) {}
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
+})
 
 # inherit everything ------------------------------------------------------
 

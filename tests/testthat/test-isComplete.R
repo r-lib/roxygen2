@@ -85,18 +85,6 @@ test_that("braces in code must match", {
   expect_true(rdComplete("# {}", is_code = TRUE))
 })
 
-# Integration tests --------------------------------------------------------
-
-test_that("raw strings in @examples don't cause spurious warnings (#1492)", {
-  block <- "
-    #' Title
-    #' @examples
-    #' r'( '{{ )'
-    foo <- function() {}
-  "
-  expect_silent(roc_proc_text(rd_roclet(), block))
-})
-
 # findEndOfTag -------------------------------------------------------------
 
 test_that("handles simple cases", {

@@ -123,6 +123,18 @@ test_that("% in @examples escaped before matching braces test (#213)", {
   expect_equal(out$get_value("examples"), rd("{a \\%\\% b}"))
 })
 
+test_that("raw strings in @examples don't cause spurious warnings (#1492)", {
+  block <- "
+    #' @name a
+    #' @title a
+    #' @examples
+    #' r'( '{{ )'
+    NULL
+  "
+  expect_silent(out <- roc_proc_text(rd_roclet(), block)[[1]])
+  expect_equal(out$get_value("examples"), rd("r'( '{{ )'"))
+})
+
 # escapes ------------------------------------------------------------------
 
 test_that("only % escaped in @examples", {

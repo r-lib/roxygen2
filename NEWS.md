@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* `@examples` no longer warns about unmatched braces inside of raw strings (#1492).
 * `@examples` no longer warns about unmatched braces when braces appear inside strings within R comments, e.g. `# '{greeting}'` (#1492).
 * `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).
 * Package documentation now lists a person with both `"aut"` and `"cre"` roles in both the Maintainer and Authors sections (#1588).

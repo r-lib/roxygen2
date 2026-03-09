@@ -286,157 +286,103 @@ the <code>man/figures</code> directory:</p>
 <h2 id="function-links">Function links<a class="anchor" aria-label="anchor" href="#function-links"></a>
 </h2>
 <p>Markdown notation can also be used to create links to other help
-topics. There are two basic forms:</p>
-<ul>
-<li>
-<code>[topic]</code>: The link text is automatically generated from
-the topic.</li>
-<li>
-<code>[text][topic]</code>: You supply the link text.</li>
-</ul>
-<p>If <code>topic</code> is not a help topic within the package you are
-documenting, but it is in one of its dependent packages, roxygen2 will
-try to find which package it is coming from to generate a fully
-qualified link. Fully qualified links are required by R 4.5.0 and
-later.</p>
-<p>If multiple dependent packages document <code>topic</code>, then
-roxygen2 will stop with an error. Re-exported functions and objects do
-not generate an error, however, but roxygen2 will link to the package
-that originally defines the re-exported object.</p>
-<div class="section level3">
-<h3 id="default-link-text">Default link text<a class="anchor" aria-label="anchor" href="#default-link-text"></a>
-</h3>
-<p>First we explore the simplest form: <code>[ref]</code>. The presence
-of trailing parentheses, e.g., <code>[func()]</code>, signals that the
-target <code>func</code> is a function, which causes two things to
-happen:</p>
-<ul>
-<li>The link text <code>func()</code> is automatically typeset as
-code.</li>
-<li>The parentheses are stripped in the derived Rd link target.</li>
-</ul>
-<table style="width:99%;" class="table">
-<colgroup>
-<col width="25%">
-<col width="23%">
-<col width="50%">
-</colgroup>
+topics. There are three basic forms for linking to topics in the current
+package or its dependencies.</p>
+<table class="table">
 <thead><tr class="header">
 <th align="left">Markdown</th>
-<th align="left">Links to help<br>
-topic for …</th>
-<th align="left">Notes</th>
+<th align="left">Code</th>
+<th align="left">Rd</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">
-<code>[func()]</code><br><code>[pkg::func()]</code>
-</td>
-<td align="left">a function in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Always typeset as code.<br>
-Produces Rd: <code>\code{\link[=func]{func()}}</code><br>
-or <code>\code{\link[pkg:func]{pkg::func()}}</code>
-</td>
+<td align="left"><code>[func()]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[=func]{func()}}</code></td>
 </tr>
 <tr class="even">
-<td align="left">
-<code>[thing]</code><br><code>[pkg::thing]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Use for a dataset or general doc page.<br>
-Not typeset as code.<br>
-Produces Rd: <code>\link{thing}</code> or<br><code>\link[pkg:thing]{pkg::thing}</code>
-</td>
+<td align="left"><code>[topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link{topic}</code></td>
 </tr>
 <tr class="odd">
-<td align="left">
-<code>[`thing`]</code><br><code>[`pkg::thing`]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Same as above, but explicit backticks<br>
-mean that it <strong>is</strong> typeset as code.<br>
-Good for documenting a class.<br>
-Produces Rd: <code>\code{\link{thing}}</code> or<br><code>\code{\link[pkg:thing]{pkg::thing}}</code>
-</td>
+<td align="left"><code>[`topic`]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link{topic}}</code></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section level3">
-<h3 id="custom-link-text">Custom link text<a class="anchor" aria-label="anchor" href="#custom-link-text"></a>
-</h3>
-<p>Use the second form <code>[text][ref]</code> to link to the topic
-specified by <code>ref</code>, but with <code>text</code> as the link
-text.</p>
-<table style="width:99%;" class="table">
+<p>R 4.5.0 and later requires that links to all topics outside of your
+package be explicitly qualified with the package name. roxygen2 will
+attempt to do this for you by looking at the dependencies of your
+package. If this fails, e.g. if multiple dependencies document the same
+topic, you’ll need to manually resolve using the syntax below.</p>
+<table class="table">
 <colgroup>
-<col width="30%">
-<col width="23%">
-<col width="44%">
+<col width="34%">
+<col width="8%">
+<col width="57%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Markdown</th>
-<th align="left">Links to help<br>
-topic for …</th>
-<th align="left">Notes</th>
+<th align="left">Code</th>
+<th align="left">Rd</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">
-<code>[text][func()]</code><br><code>[text][pkg::func()]</code>
-</td>
-<td align="left">a function in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Text is not typeset as code.<br>
-Produces Rd: <code>\link[=func]{text}</code> or<br><code>\link[pkg:func]{text}</code>
-</td>
+<td align="left"><code>[pkg::func()]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[pkg:func]{pkg::func()}}</code></td>
 </tr>
 <tr class="even">
-<td align="left">
-<code>[text][thing]</code><br><code>[text][pkg::thing]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Text is not typeset as code.<br>
-Use for a topic that documents <code>NULL</code><br>
-and name is set via <code>@name</code>,<br>
-e.g., a dataset or concept.<br>
-Produces Rd: <code>\link[=thing]{text}</code> or<br><code>\link[pkg:thing]{text}</code>
-</td>
+<td align="left"><code>[pkg::topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link[pkg:topic]{pkg::topic}</code></td>
 </tr>
 <tr class="odd">
-<td align="left">
-<code>[`text`][thing]</code><br><code>[`text`][pkg::thing]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Same as above, but explicit backticks<br>
-mean that text is typeset as code.<br>
-Produces Rd: <code>\code{\link{=thing}}</code> or<br><code>\code{\link[pkg:thing]{pkg::thing}}</code>
-</td>
+<td align="left"><code>[`pkg::topic`]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[pkg:topic]{pkg::topic}}</code></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section level3">
-<h3 id="operators">Operators<a class="anchor" aria-label="anchor" href="#operators"></a>
-</h3>
-<p>Links to operators or objects that contain special characters do not
-currently work. So to link to (e.g.) the <code>%&gt;%</code> operator in
-the <code>magrittr</code> package, instead of
-<code>[magrittr::%&gt;%]</code>, you will need to use the
-<code>Rd</code> notation:
-<code>\code{\link[magrittr]{\%&gt;\%}}</code>.</p>
-</div>
+<p>You can also provide your own link text. In this case there’s no
+advantage to supplying a function call, as you control the formatting of
+the text.</p>
+<table class="table">
+<colgroup>
+<col width="40%">
+<col width="8%">
+<col width="51%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Markdown</th>
+<th align="left">Code</th>
+<th align="left">Rd</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>[text][topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link[=topic]{text}</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>[`text`][topic]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[=topic]{text}}</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>[text][pkg::topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link[pkg:topic]{text}</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>[`text`][pkg::topic]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[pkg:topic]{text}}</code></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="code-chunks">Code chunks<a class="anchor" aria-label="anchor" href="#code-chunks"></a>

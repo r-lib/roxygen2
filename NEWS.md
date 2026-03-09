@@ -6,6 +6,7 @@
   * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
   * Link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.
   * Links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725).
+  * Links to external packages now use the topic alias instead of the Rd file name as the anchor. This fixes "Non-topic package-anchored link(s)" notes from R CMD check (#1709).
 * Package documentation improvements:
   * Correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
   * Multiple email addresses in `Authors@R` now generate separate `\email{}` tags instead of a single comma-separated one (#1689).

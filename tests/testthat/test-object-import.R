@@ -35,7 +35,7 @@ test_that("multiple re-exports are combined", {
     rd_section_reexport(
       c("testthat", "testthat"),
       c("expect_lt", "expect_gt"),
-      c("comparison-expectations", "comparison-expectations")
+      c("expect_lt", "expect_gt")
     )
   )
 })

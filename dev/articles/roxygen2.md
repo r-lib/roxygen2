@@ -64,7 +64,7 @@ There are three main ways to run roxygen:
 You can mix handwritten Rd and roxygen2; roxygen2 will never overwrite a
 file it didn’t create.
 
-## Basic process
+## Basic process: human readable documentation
 
 There are three steps in the transformation from roxygen comments in
 your source file to human readable documentation:
@@ -84,6 +84,7 @@ to use regular comments for other purposes.
 #' @param x A number.
 #' @param y A number.
 #' @return A number.
+#' @export
 #' @examples
 #' add(1, 1)
 #' add(10, 1)
@@ -135,3 +136,15 @@ want to use the `.Rd` files in the *source* package. For this reason, we
 recommend that you use roxygen2 in conjunction with devtools:
 `devtools::load_all()` automatically adds shims so that `?` and friends
 will look in the development package.
+
+## Basic process: making functions available to users
+
+The example above, that includes an `@export` tag to indicate the
+`add()` function should be part of the interface of the package
+available to users, would also be converted by
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+into a line in the `NAMESPACE` file:
+
+``` txt
+export(add)
+```

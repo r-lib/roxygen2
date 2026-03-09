@@ -1,7 +1,15 @@
-# Build a new roclet.
+# Build a new roclet
+
+Roclets are roxygen2's plugin system for producing different types of
+output, like Rd files
+([`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md))
+or the `NAMESPACE` file
+([`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md)).
 
 To create a new roclet, you will need to create a constructor function
-that wraps `roclet`, and then implement the methods described below. See
+that calls `roclet()`, and then implement the methods described below.
+
+See
 [`vignette("extending")`](https://roxygen2.r-lib.org/dev/articles/extending.md)
 for more details.
 
@@ -53,7 +61,7 @@ roclet_tags(x)
 
 - `roclet_preprocess()` is called after blocks have been parsed but
   before code has been evaluated. This should only be needed if your
-  roclet affects how code will evaluated. Should return a roclet.
+  roclet affects how code will be evaluated. Should return a roclet.
 
 - `roclet_process()` called after blocks have been evaluated; i.e. the
   `@eval` tag has been processed, and the object associated with each

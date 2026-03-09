@@ -1,13 +1,15 @@
-# Process a package with the Rd, namespace and collate roclets
+# Document a package with roxygen2
 
-This is the workhorse function that uses roclets, the built-in document
-transformation functions, to build all documentation for a package. See
-the documentation for the individual roclets,
-[`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md),
+This is the workhorse function that builds manual pages and metadata for
+a package. It is powered by
+[roclets](https://roxygen2.r-lib.org/dev/reference/roclet.md),
+roxygen2's plugin system for producing different types of output. See
+the documentation of the individual components
+([`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md),
 [`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md),
-and for
-[`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md),
-for more details.
+[`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md))
+for more details, or learn how to make your own in
+[`vignette("extending")`](https://roxygen2.r-lib.org/dev/articles/extending.md).
 
 ## Usage
 
@@ -25,9 +27,22 @@ roxygenise(package.dir = ".", roclets = NULL, load_code = NULL, clean = FALSE)
 
 - roclets:
 
-  Character vector of roclet names to use with package. The default,
-  `NULL`, uses the roxygen `roclets` option, which defaults to
-  `c("collate", "namespace", "rd")`.
+  Character vector of
+  [roclets](https://roxygen2.r-lib.org/dev/reference/roclet.md) to use.
+
+  The default, `NULL`, uses the roxygen `roclets` option, which defaults
+  to `c("collate", "namespace", "rd")`. This will update (if needed) the
+  `Collate` field with
+  [`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md),
+  produce the `NAMESPACE` file with
+  [`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md),
+  and produce the Rd files with
+  [`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md).
+
+  (Note that
+  [`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md)
+  is not technically a roclet but is still controlled with this argument
+  for historical reasons.)
 
 - load_code:
 

@@ -1,9 +1,12 @@
 # Roclet: make `NAMESPACE`
 
-This roclet automates the production of a `NAMESPACE` file, which
-controls the functions imported and exported by your package, as
-described in [Writing R
+This [roclet](https://roxygen2.r-lib.org/dev/reference/roclet.md)
+automates the production of a `NAMESPACE` file, which controls the
+functions imported and exported by your package, as described in
+[Writing R
 extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html).
+It is run by default by
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md).
 
 The `NAMESPACE` is generated in two passes: the first generates only
 import directives (because this can be computed without evaluating
@@ -33,6 +36,8 @@ for tags that generate `NAMESPACE` directives.
 #' @export
 foofy <- function(x, y, z) {
 }
+# This results in the following line in `NAMESPACE`:
+# export(foofy)
 
 # You'll also often find global imports living in a file called
 # R/{package}-package.R.
@@ -40,4 +45,8 @@ foofy <- function(x, y, z) {
 #' @import rlang
 NULL
 #> NULL
+
+# This results in the following lines in `NAMESPACE`:
+# importFrom(magrittr,"%>%")
+# import(rlang)
 ```

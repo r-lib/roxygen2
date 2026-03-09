@@ -165,7 +165,7 @@ supplies.</p></li>
 overwrite a file it didn’t create.</p>
 </div>
 <div class="section level2">
-<h2 id="basic-process">Basic process<a class="anchor" aria-label="anchor" href="#basic-process"></a>
+<h2 id="basic-process-human-readable-documentation">Basic process: human readable documentation<a class="anchor" aria-label="anchor" href="#basic-process-human-readable-documentation"></a>
 </h2>
 <p>There are three steps in the transformation from roxygen comments in
 your source file to human readable documentation:</p>
@@ -186,6 +186,7 @@ can continue to use regular comments for other purposes.</p>
 <span><span class="co">#' @param x A number.</span></span>
 <span><span class="co">#' @param y A number.</span></span>
 <span><span class="co">#' @return A number.</span></span>
+<span><span class="co">#' @export</span></span>
 <span><span class="co">#' @examples</span></span>
 <span><span class="co">#' add(1, 1)</span></span>
 <span><span class="co">#' add(10, 1)</span></span>
@@ -232,6 +233,16 @@ development, because you want to use the <code>.Rd</code> files in the
 roxygen2 in conjunction with devtools: <code>devtools::load_all()</code>
 automatically adds shims so that <code>?</code> and friends will look in
 the development package.</p>
+</div>
+<div class="section level2">
+<h2 id="basic-process-making-functions-available-to-users">Basic process: making functions available to users<a class="anchor" aria-label="anchor" href="#basic-process-making-functions-available-to-users"></a>
+</h2>
+<p>The example above, that includes an <code>@export</code> tag to
+indicate the <code>add()</code> function should be part of the interface
+of the package available to users, would also be converted by
+<code><a href="../reference/roxygenize.html">roxygenize()</a></code> into a line in the <code>NAMESPACE</code>
+file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>export(add)</span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

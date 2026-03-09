@@ -77,15 +77,16 @@
 
 - [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
   [`roxygenise()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
-  : Process a package with the Rd, namespace and collate roclets
-- [`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md)
-  : Update Collate field in DESCRIPTION
+  : Document a package with roxygen2
 - [`load_pkgload()`](https://roxygen2.r-lib.org/dev/reference/load.md)
   [`load_installed()`](https://roxygen2.r-lib.org/dev/reference/load.md)
   [`load_source()`](https://roxygen2.r-lib.org/dev/reference/load.md) :
   Load package code
 
 ## Roclets
+
+A roclet is roxygen2’s plugin system for processing documentation
+comments. Each roclet handles a different type of output.
 
 - [`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md)
   :
@@ -94,3 +95,6 @@
 
 - [`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md)
   : Roclet: make Rd files
+
+- [`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md)
+  : Update Collate field in DESCRIPTION

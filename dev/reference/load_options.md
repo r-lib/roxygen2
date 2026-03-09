@@ -23,7 +23,9 @@ roxy_meta_get(key = NULL, default = NULL)
 
 ## Possible options
 
-- `roclets` `<character>`: giving names of roclets to run. See
+- `roclets` `<character>`: giving names of
+  [roclets](https://roxygen2.r-lib.org/dev/reference/roclet.md) to run.
+  See
   [`roclet_find()`](https://roxygen2.r-lib.org/dev/reference/roclet_find.md)
   for details.
 

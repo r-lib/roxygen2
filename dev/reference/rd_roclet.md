@@ -1,13 +1,13 @@
 # Roclet: make Rd files
 
-This roclet is the workhorse of roxygen2, producing the `.Rd` files that
-R uses to document functions, datasets, packages, classes, and more. See
+This [roclet](https://roxygen2.r-lib.org/dev/reference/roclet.md)
+automates the production of the `.Rd` files that R uses to document
+functions, datasets, packages, classes, and more. See
 [`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md) for
 details.
 
-Generally you will not call this function directly but will instead use
-[`roxygenise()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
-specifying the rd roclet.
+It is run by default by
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md).
 
 ## Usage
 
@@ -26,16 +26,15 @@ for tags provided by this roclet.
 ## Examples
 
 ``` r
-#' The length of a string (in characters)
-#'
-#' @param x A character vector.
-#' @returns An integer vector the same length as `x`.
-#'   `NA` strings have `NA` length.
-#' @seealso [nchar()]
+#' Add together two numbers
+#' @param x A number.
+#' @param y A number.
+#' @return A number.
 #' @export
 #' @examples
-#' str_length(letters)
-#' str_length(c("i", "like", "programming", NA))
-str_length <- function(x) {
+#' add(1, 1)
+#' add(10, 1)
+add <- function(x, y) {
+  x + y
 }
 ```

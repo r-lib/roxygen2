@@ -7,13 +7,13 @@
   was very slow when the package contained large non-function objects
   like datasets
   ([\#1720](https://github.com/r-lib/roxygen2/issues/1720)).
-- Inline R code (`` `r expr` ``) in non-indented list continuation lines
-  no longer causes an error
-  ([\#1651](https://github.com/r-lib/roxygen2/issues/1651)).
 - Markdown improvements:
   - Horizontal rules (e.g. `----`) now generate a clear warning instead
     of an internal error about an unknown `thematic_break` xml node
     ([\#1707](https://github.com/r-lib/roxygen2/issues/1707)).
+  - Inline R code (`` `r expr` ``) in non-indented list continuation
+    lines no longer causes an error
+    ([\#1651](https://github.com/r-lib/roxygen2/issues/1651)).
   - Link text now supports non-code markup like bold and italic, e.g.,
     `[*italic text*][func]` generates
     `\link[=func]{\emph{italic text}}`, matching R’s support for markup

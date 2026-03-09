@@ -1,4 +1,4 @@
-#' Load roxygen2 options for [roxygenize()].
+#' Load roxygen2 options
 #'
 #' @description
 #' Options can be stored in the `Roxygen` field of the `DESCRIPTION`, or

@@ -3,7 +3,7 @@
 \name{load_options}
 \alias{load_options}
 \alias{roxy_meta_get}
-\title{Load roxygen2 options for \code{\link[=roxygenize]{roxygenize()}}.}
+\title{Load roxygen2 options}
 \usage{
 load_options(base_path = ".")
 

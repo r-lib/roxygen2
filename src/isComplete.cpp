@@ -11,8 +11,7 @@
 // mode == 0: rdComplete
 // mode == 1: findEndOfTag
 
-int roxygen_parse_tag(std::string string, bool is_code = false,
-		      int mode = 0) {
+int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0) {
   int n = string.length();
 
   char in_string = '\0';
@@ -21,7 +20,7 @@ int roxygen_parse_tag(std::string string, bool is_code = false,
   bool in_latex_comment = false;
   int braces = 0, r_braces = 0;
 
-  for(int i = 0; i < n; i++) {
+  for (int i = 0; i < n; i++) {
     char cur = string[i];
 
     if (in_escape) {
@@ -54,33 +53,54 @@ int roxygen_parse_tag(std::string string, bool is_code = false,
         in_latex_comment = false;
       }
     } else {
-      switch(cur) {
-      case '{':  braces++; break;
-      case '}':  braces--; break;
-      case '\\': in_escape = true; break;
-      case '#':  if (is_code) in_r_comment = true; break;
-      case '%':  in_latex_comment = true; break;
-      case '\'': if (is_code) in_string = '\''; break;
-      case '"':  if (is_code) in_string = '"'; break;
+      switch (cur) {
+      case '{':
+        braces++;
+        break;
+      case '}':
+        braces--;
+        break;
+      case '\\':
+        in_escape = true;
+        break;
+      case '#':
+        if (is_code)
+          in_r_comment = true;
+        break;
+      case '%':
+        in_latex_comment = true;
+        break;
+      case '\'':
+        if (is_code)
+          in_string = '\'';
+        break;
+      case '"':
+        if (is_code)
+          in_string = '"';
+        break;
       }
     }
 
     if (mode == 1) {
       bool complete = braces == 0 && !in_escape && !in_string;
       if (complete && i + 1 < n && string[i + 1] != '{') {
-	return i;
+        return i;
       }
     }
-
   }
 
   bool complete = braces == 0 && !in_escape && !in_string;
 
   if (mode == 0) {
-    if (complete) return 1; else return 0;
-
+    if (complete)
+      return 1;
+    else
+      return 0;
   } else {
-    if (complete) return n - 1; else return -1;
+    if (complete)
+      return n - 1;
+    else
+      return -1;
   }
 }
 

@@ -1,7 +1,7 @@
 #' Roclet: make `NAMESPACE`
 #'
 #' @description
-#' This [roclet()] automates the production of a `NAMESPACE` file, which controls
+#' This [roclet] automates the production of a `NAMESPACE` file, which controls
 #' the functions imported and exported by your package, as described in
 #' [Writing R extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html).
 #' It is run by default by [roxygenize()].

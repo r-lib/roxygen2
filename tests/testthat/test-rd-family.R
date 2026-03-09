@@ -179,6 +179,29 @@ test_that("custom family prefixes can include Markdown", {
   )
 })
 
+test_that("@family with @rdname doesn't produce duplicate seealso (#1530)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Title
+    #' @family a
+    foo <- function() {}
+
+    #' @rdname foo
+    #' @family a
+    bar <- function() {}
+
+    #' baz
+    #' @family a
+    baz <- function() {}
+  "
+  )
+
+  seealso <- out[["foo.Rd"]]$get_value("seealso")
+  expect_length(seealso, 1)
+  expect_match(seealso, "^Other a:")
+})
+
 test_that("careful ordering", {
   out <- roc_proc_text(
     rd_roclet(),

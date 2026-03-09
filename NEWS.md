@@ -22,6 +22,7 @@
 * `@description` and `@details` for R6 methods now support markdown headings (#1647).
 * `@examples` no longer warns about unmatched braces inside of raw strings (#1492).
 * `@examples` no longer warns about unmatched braces when braces appear inside strings within R comments, e.g. `# '{greeting}'` (#1492).
+* `@family` tags no longer generate duplicate "See also" entries when multiple blocks share the same `@rdname` (#1530).
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
 * `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
 * `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).

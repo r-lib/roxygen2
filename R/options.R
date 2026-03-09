@@ -10,7 +10,7 @@
 #'
 #' @section Possible options:
 #'
-#' * `roclets` `<character>`: giving names of roclets ([roclet()]) to run. See
+#' * `roclets` `<character>`: giving names of [roclets][roclet] to run. See
 #'    [roclet_find()] for details.
 #'
 #' * `packages` `<character>`: packages to load that implement new tags.

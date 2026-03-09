@@ -7,28 +7,24 @@
 rd_roclet()
 }
 \description{
-This \code{\link[=roclet]{roclet()}} automates the production of the \code{.Rd} files that
+This \link{roclet} automates the production of the \code{.Rd} files that
 R uses to document functions, datasets, packages, classes, and more.
 See \code{vignette("rd")} for details.
 
 It is run by default by \code{\link[=roxygenize]{roxygenize()}}.
 }
 \examples{
-example <- c("#' Add together two numbers",
-  "#' @param x A number.",
-  "#' @param y A number.",
-  "#' @return A number.",
-  "#' @export",
-  "#' @examples",
-  "#' add(1, 1)",
-  "#' add(10, 1)",
-  "add <- function(x, y) {",
-  "  x + y",
-  "}"
-)
-cat(example, sep = "\n")
-# For the example above, `roxygenize()` will generate `man/add.Rd` that looks like:
-roxygen2::roc_proc_text(roxygen2::rd_roclet(), example)[[1]]
+#' Add together two numbers
+#' @param x A number.
+#' @param y A number.
+#' @return A number.
+#' @export
+#' @examples
+#' add(1, 1)
+#' add(10, 1)
+add <- function(x, y) {
+  x + y
+}
 }
 \seealso{
 \link{tags-rd}, \link{tags-rd-other}, \link{tags-reuse}, \link{tags-index-crossref} for

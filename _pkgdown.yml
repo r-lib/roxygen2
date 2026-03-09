@@ -25,15 +25,15 @@ reference:
 - title: Running roxygen2
   contents:
   - roxygenize
-  - update_collate
   - load
 
 - title: Roclets
   desc: >
     A roclet is roxygen2's plugin system for processing documentation comments. 
-    Each roclet handles a different output type.
+    Each roclet handles a different type of output.
   contents:
   - ends_with("roclet")
+  - update_collate
 
 articles:
 - title: Documentation

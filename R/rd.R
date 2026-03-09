@@ -4,7 +4,7 @@ NULL
 #' Roclet: make Rd files
 #'
 #' @description
-#' This [roclet()] automates the production of the `.Rd` files that
+#' This [roclet] automates the production of the `.Rd` files that
 #' R uses to document functions, datasets, packages, classes, and more.
 #' See `vignette("rd")` for details.
 #'
@@ -14,21 +14,17 @@ NULL
 #'   tags provided by this roclet.
 #' @export
 #' @examples
-#' example <- c("#' Add together two numbers",
-#'   "#' @param x A number.",
-#'   "#' @param y A number.",
-#'   "#' @return A number.",
-#'   "#' @export",
-#'   "#' @examples",
-#'   "#' add(1, 1)",
-#'   "#' add(10, 1)",
-#'   "add <- function(x, y) {",
-#'   "  x + y",
-#'   "}"
-#' )
-#' cat(example, sep = "\n")
-#' # For the example above, `roxygenize()` will generate `man/add.Rd` that looks like:
-#' roxygen2::roc_proc_text(roxygen2::rd_roclet(), example)[[1]]
+#' #' Add together two numbers
+#' #' @param x A number.
+#' #' @param y A number.
+#' #' @return A number.
+#' #' @export
+#' #' @examples
+#' #' add(1, 1)
+#' #' add(10, 1)
+#' add <- function(x, y) {
+#'   x + y
+#' }
 rd_roclet <- function() {
   roclet("rd")
 }

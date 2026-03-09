@@ -22,25 +22,21 @@ See \code{vignette("namespace")} for details.
 \examples{
 # The most common namespace tag is @export, which declares that a function
 # is part of the external interface of your package
-example1 <- c(
-  "#' @export",
-  "foofy <- function(x, y, z) {",
-  "}"
-)
-cat(example1, sep = "\n")
+# @export
+foofy <- function(x, y, z) {
+}
 # This results in the following line in `NAMESPACE`:
-roc_proc_text(namespace_roclet(), example1)
+# export(foofy)
 
 # You'll also often find global imports living in a file called
 # R/{package}-package.R.
-example2 <- c(
-  "#' @importFrom magrittr \%>\%",
-  "#' @import rlang",
-  "NULL"
-)
-cat(example2, sep = "\n")
+#' @importFrom magrittr \%>\%
+#' @import rlang
+NULL
+
 # This results in the following lines in `NAMESPACE`:
-roc_proc_text(namespace_roclet(), example2)
+# importFrom(magrittr,"\%>\%")
+# import(rlang)
 }
 \seealso{
 \link{tags-namespace} for tags that generate \code{NAMESPACE} directives.

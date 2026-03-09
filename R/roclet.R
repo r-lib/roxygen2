@@ -86,7 +86,7 @@ roclet_tags <- function(x) {
   UseMethod("roclet_tags")
 }
 
-#' Create a roclet from a string.
+#' Create a roclet from a string
 #'
 #' This provides a flexible way of specifying a roclet in a string.
 #'
@@ -129,7 +129,7 @@ roclet_find <- function(x) {
 
 is.roclet <- function(x) inherits(x, "roclet")
 
-#' Process roclet on string and capture results.
+#' Process roclet on string and capture results
 #'
 #' Useful for testing.
 #'

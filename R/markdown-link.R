@@ -1,4 +1,4 @@
-#' Add link reference definitions for functions to a markdown text.
+#' Add link reference definitions for functions to a markdown text
 #'
 #' We find the `[text][ref]` and the `[ref]` forms. There must be no
 #' spaces between the closing and opening bracket in the `[text][ref]`

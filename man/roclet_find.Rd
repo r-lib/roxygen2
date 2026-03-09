@@ -2,7 +2,7 @@
 % Please edit documentation in R/roclet.R
 \name{roclet_find}
 \alias{roclet_find}
-\title{Create a roclet from a string.}
+\title{Create a roclet from a string}
 \usage{
 roclet_find(x)
 }

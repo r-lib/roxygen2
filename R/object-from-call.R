@@ -266,7 +266,7 @@ extract_method_fun <- function(fun) {
   local_fun
 }
 
-#' Constructors for S3 object to represent R objects.
+#' Constructors for S3 object to represent R objects
 #'
 #' These objects are usually created by the parsers, but it is also
 #' useful to generate them by hand for testing.

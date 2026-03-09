@@ -1,4 +1,19 @@
-test_that("@docType data automatically adds sensible defaults", {
+test_that("values only get usage", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Title.
+    a <- data.frame(a = 1:10)
+  "
+  )[[1]]
+
+  expect_equal(out$get_value("usage"), rd("a"))
+  expect_null(out$get_value("docType"))
+  expect_null(out$get_value("keyword"))
+  expect_null(out$get_value("format"))
+})
+
+test_that("values can opt-in to @docType data", {
   out <- roc_proc_text(
     rd_roclet(),
     "
@@ -10,19 +25,6 @@ test_that("@docType data automatically adds sensible defaults", {
   )[[1]]
 
   expect_equal(out$get_value("usage"), rd("a"))
-  expect_equal(out$get_value("keyword"), "datasets")
-  expect_false(is.null(out$get_value("format")))
-})
-
-test_that("@docType data automatically added to data objects", {
-  out <- roc_proc_text(
-    rd_roclet(),
-    "
-    #' Title.
-    a <- data.frame(a = 1:10)
-  "
-  )[[1]]
-
   expect_equal(out$get_value("docType"), "data")
 })
 

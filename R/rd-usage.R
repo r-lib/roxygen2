@@ -37,6 +37,11 @@ object_usage.data <- function(x) {
 }
 
 #' @export
+object_usage.value <- function(x) {
+  rd(x$alias)
+}
+
+#' @export
 object_usage.function <- function(x) {
   function_usage(x$alias, formals(x$value), identity)
 }

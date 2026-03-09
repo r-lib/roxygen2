@@ -37,6 +37,13 @@ object_defaults.data <- function(x, block) {
 }
 
 #' @export
+object_defaults.value <- function(x, block) {
+  list(
+    roxy_generated_tag(block, "usage", object_usage(x))
+  )
+}
+
+#' @export
 object_defaults.package <- function(x, block) {
   desc <- x$value$desc
 

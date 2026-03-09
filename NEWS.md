@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* Assigning a non-function value (e.g. `x <- 1:10`) no longer automatically gets `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name.
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
 * Markdown improvements:
   * Horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).

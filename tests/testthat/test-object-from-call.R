@@ -85,11 +85,11 @@ test_that("finds S3 method created with assignment", {
   expect_s3_class(obj, "s3method")
 })
 
-test_that("finds data created with assignment", {
+test_that("finds value created with assignment", {
   obj <- call_to_object({
     foo <- 1:10
   })
-  expect_s3_class(obj, "data")
+  expect_s3_class(obj, "value")
 })
 
 test_that("finds class generator", {

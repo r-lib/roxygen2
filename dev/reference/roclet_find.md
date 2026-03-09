@@ -1,4 +1,4 @@
-# Create a roclet from a string.
+# Create a roclet from a string
 
 This provides a flexible way of specifying a roclet in a string.
 

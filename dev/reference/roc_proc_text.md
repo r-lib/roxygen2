@@ -1,4 +1,4 @@
-# Process roclet on string and capture results.
+# Process roclet on string and capture results
 
 Useful for testing.
 

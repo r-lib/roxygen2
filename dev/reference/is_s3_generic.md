@@ -1,4 +1,4 @@
-# Determine if a function is an S3 generic or S3 method.
+# Determine if a function is an S3 generic or S3 method
 
 `is_s3_generic` compares name to `.knownS3Generics` and
 `.S3PrimitiveGenerics`, then looks at the function body to see if it

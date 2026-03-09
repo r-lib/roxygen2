@@ -18,7 +18,7 @@
 #' @examples
 #' # The most common namespace tag is @@export, which declares that a function
 #' # is part of the external interface of your package
-#' # @export
+#' #' @export
 #' foofy <- function(x, y, z) {
 #' }
 #' # This results in the following line in `NAMESPACE`:

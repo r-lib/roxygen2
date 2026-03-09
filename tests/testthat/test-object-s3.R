@@ -52,8 +52,13 @@ test_that("S4 generics are not treated as S3 methods", {
     methods::setGeneric("all.equal")
     all.equal
   }
+  on.exit(methods::removeGeneric("all.equal"), add = TRUE)
 
   expect_false(is_s3_method("all.equal", env))
+})
+
+test_that("find_generic prefers longest generic name", {
+  expect_equal(find_generic("all.equal.numeric"), c("all.equal", "numeric"))
 })
 
 test_that("user defined functions override primitives", {

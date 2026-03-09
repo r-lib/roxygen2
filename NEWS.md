@@ -10,6 +10,7 @@
 * `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
 * `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
+* S3 method detection now prefers the longest matching generic name, so e.g. `all.equal.numeric` is correctly identified as a method of `all.equal` rather than `all` (#1587).
 * `@description` and `@details` for R6 methods now support markdown headings (#1647).
 * Package documentation now only wraps actual URLs in the `URL` field of `DESCRIPTION` (#1420).
 * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).

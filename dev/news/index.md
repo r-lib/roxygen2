@@ -41,6 +41,10 @@
   ([\#1671](https://github.com/r-lib/roxygen2/issues/1671)).
 - `@description` no longer errors when the markdown text starts with a
   heading ([\#1705](https://github.com/r-lib/roxygen2/issues/1705)).
+- S3 method detection now prefers the longest matching generic name, so
+  e.g. `all.equal.numeric` is correctly identified as a method of
+  `all.equal` rather than `all`
+  ([\#1587](https://github.com/r-lib/roxygen2/issues/1587)).
 - `@description` and `@details` for R6 methods now support markdown
   headings ([\#1647](https://github.com/r-lib/roxygen2/issues/1647)).
 - Package documentation now only wraps actual URLs in the `URL` field of

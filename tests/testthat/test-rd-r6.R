@@ -391,6 +391,51 @@ test_that("integration test", {
   }
 })
 
+test_that("method with markdown sections in @description and @details", {
+  local_roxy_meta_set("markdown", TRUE)
+  text <- "
+    #' @title Title
+    #' @description Description.
+    C <- R6::R6Class('C', cloneable = FALSE,
+      public = list(
+        #' @description Method description.
+        #'
+        #' # Description section
+        #'
+        #' Description section body.
+        #' @details # Details section
+        #'
+        #' Details section body.
+        meth = function() { }
+      )
+    )"
+
+  env <- new.env(parent = globalenv())
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
+  rd <- RoxyTopic$new()
+
+  topic_add_r6_methods(rd, block, env)
+  expect_snapshot(cat(format(rd$get_section("rawRd"))))
+})
+
+test_that("r6_flatten_sections collapses markdown sections", {
+  local_markdown()
+
+  tag <- roxy_tag(
+    "details",
+    "Some details.\n\n# A heading\n\nBody."
+  )
+  tag <- tag_markdown_with_sections(tag)
+  expect_length(tag$val, 2)
+
+  tag <- r6_flatten_sections(tag)
+  expect_length(tag$val, 1)
+  expect_match(tag$val, "Some details.", fixed = TRUE)
+  expect_match(tag$val, "\\subsection{A heading}", fixed = TRUE)
+  expect_match(tag$val, "Body.", fixed = TRUE)
+})
+
 test_that("r6 option", {
   text <- "
     #' @title Title

@@ -84,30 +84,33 @@
       x In topic 'bar': @inheritDotParams failed.
       i No arguments inherited from `foo()`.
 
+# inheritDotParams warns when source not found (#1602)
+
+    Code
+      . <- roc_proc_text(rd_roclet(), text)
+    Message
+      x In topic 'test': @inheritDotParams failed to find topic "format" in current package.
+      x In topic 'test': @inheritDotParams failed.
+      i No arguments inherited from `format()`.
+
 # useful warnings if can't find topics
 
     Code
-      get_rd("base2::attach", source = "source")
+      get_rd("not_installed::pkg", source = "source")
     Message
-      x In topic 'source': @inherits failed because base2 is not installed.
+      x In topic 'source': @inherits failed because not_installed is not installed.
     Output
       NULL
     Code
-      get_rd("base::function_not_found", source = "source")
+      get_rd("base::doesntexist", source = "source")
     Message
-      x In topic 'source': @inherits failed to find topic base::function_not_found.
+      x In topic 'source': @inherits failed to find topic base::doesntexist.
     Output
       NULL
     Code
-      get_rd("function", RoxyTopics$new(), source = "source")
+      get_rd("doesntexist", RoxyTopics$new(), source = "source")
     Message
-      x In topic 'source': @inherits failed to find topic "function".
-    Output
-      NULL
-    Code
-      get_rd("foo::bar()", RoxyTopics$new(), source = "source")
-    Message
-      x In topic 'source': @inherits failed to find topic "foo::bar()".
+      x In topic 'source': @inherits failed to find topic "doesntexist" in current package.
     Output
       NULL
 

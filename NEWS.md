@@ -1,13 +1,17 @@
 # roxygen2 (development version)
 
+* `@examples` no longer warns about unmatched braces inside of raw strings (#1492).
+* `@examples` no longer warns about unmatched braces when braces appear inside strings within R comments, e.g. `# '{greeting}'` (#1492).
 * `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).
 * Package documentation now lists a person with both `"aut"` and `"cre"` roles in both the Maintainer and Authors sections (#1588).
 * Markdown links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725).
 * Package documentation now uses `logo.svg` if available, falling back to `logo.png` (#1640).
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
+* `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
 * `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
 * S3 method detection now prefers the longest matching generic name, so e.g. `all.equal.numeric` is correctly identified as a method of `all.equal` rather than `all` (#1587).
+* `@description` and `@details` for R6 methods now support markdown headings (#1647).
 * Package documentation now only wraps actual URLs in the `URL` field of `DESCRIPTION` (#1420).
 * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
 * Markdown horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).

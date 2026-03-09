@@ -2,30 +2,70 @@
 
 ## roxygen2 (development version)
 
+- Fixed a performance regression where
+  [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+  was very slow when the package contained large non-function objects
+  like datasets
+  ([\#1720](https://github.com/r-lib/roxygen2/issues/1720)).
+- Inline R code (`` `r expr` ``) in non-indented list continuation lines
+  no longer causes an error
+  ([\#1651](https://github.com/r-lib/roxygen2/issues/1651)).
+- Markdown improvements:
+  - Horizontal rules (e.g. `----`) now generate a clear warning instead
+    of an internal error about an unknown `thematic_break` xml node
+    ([\#1707](https://github.com/r-lib/roxygen2/issues/1707)).
+  - Link text now supports non-code markup like bold and italic, e.g.,
+    `[*italic text*][func]` generates
+    `\link[=func]{\emph{italic text}}`, matching R’s support for markup
+    in `\link` text in R 4.5.0.
+  - Links now do a better job of resolving package names: the process is
+    cached for better performance
+    ([\#1724](https://github.com/r-lib/roxygen2/issues/1724)); it works
+    with infix operators (e.g. `[%in%]`)
+    ([\#1728](https://github.com/r-lib/roxygen2/issues/1728)); no longer
+    changes the link text
+    ([\#1662](https://github.com/r-lib/roxygen2/issues/1662)); and
+    includes base packages when reporting ambiguous functions
+    ([\#1725](https://github.com/r-lib/roxygen2/issues/1725)).
+- Package documentation improvements:
+  - Correctly handles multiple arbitrary comments in the `comment`
+    argument of [`person()`](https://rdrr.io/r/utils/person.html) in
+    `Authors@R`
+    ([\#1746](https://github.com/r-lib/roxygen2/issues/1746)).
+  - Multiple email addresses in `Authors@R` now generate separate
+    `\email{}` tags instead of a single comma-separated one
+    ([\#1689](https://github.com/r-lib/roxygen2/issues/1689)).
+  - Lists a person with both `"aut"` and `"cre"` roles in both the
+    Maintainer and Authors sections
+    ([\#1588](https://github.com/r-lib/roxygen2/issues/1588)).
+  - Only wraps actual URLs in the `URL` field of `DESCRIPTION`
+    ([\#1420](https://github.com/r-lib/roxygen2/issues/1420)).
+  - Uses `logo.svg` if available, falling back to `logo.png`
+    ([\#1640](https://github.com/r-lib/roxygen2/issues/1640)).
+- roxygen2 no longer depends on purrr.
+- roxygen2 now requires R 4.0
+  ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
+- S3 method handling improvements:
+  - Method parsing now prefers the longest matching generic name, so
+    e.g. `all.equal.numeric` is correctly identified as a method of
+    `all.equal` rather than `all`
+    ([\#1587](https://github.com/r-lib/roxygen2/issues/1587)).
+  - The warning about undocumented methods no longer errors when the
+    function lacks a srcref, e.g. because a debugger breakpoint is set
+    ([\#1589](https://github.com/r-lib/roxygen2/issues/1589),
+    [\#1710](https://github.com/r-lib/roxygen2/issues/1710)).
+  - The warning about undocumented methods no longer incorrectly flags
+    S4 methods of S3 generics as unexported
+    ([\#1715](https://github.com/r-lib/roxygen2/issues/1715)).
+- `@description` no longer errors when the markdown text starts with a
+  heading ([\#1705](https://github.com/r-lib/roxygen2/issues/1705)).
+- `@description` and `@details` for R6 methods now support markdown
+  headings ([\#1647](https://github.com/r-lib/roxygen2/issues/1647)).
 - `@examples` no longer warns about unmatched braces inside of raw
   strings ([\#1492](https://github.com/r-lib/roxygen2/issues/1492)).
 - `@examples` no longer warns about unmatched braces when braces appear
   inside strings within R comments, e.g. `# '{greeting}'`
   ([\#1492](https://github.com/r-lib/roxygen2/issues/1492)).
-- `@inheritParams` now correctly updates `\linkS4class{}` links when
-  inheriting parameter documentation from other packages, converting
-  them to absolute links
-  ([\#1634](https://github.com/r-lib/roxygen2/issues/1634)).
-- Package documentation now lists a person with both `"aut"` and `"cre"`
-  roles in both the Maintainer and Authors sections
-  ([\#1588](https://github.com/r-lib/roxygen2/issues/1588)).
-- Markdown links now do a better job of resolving package names: the
-  process is cached for better performance
-  ([\#1724](https://github.com/r-lib/roxygen2/issues/1724)); it works
-  with infix operators (e.g. `[%in%]`)
-  ([\#1728](https://github.com/r-lib/roxygen2/issues/1728)); no longer
-  changes the link text
-  ([\#1662](https://github.com/r-lib/roxygen2/issues/1662)); and
-  includes base packages when reporting ambiguous functions
-  ([\#1725](https://github.com/r-lib/roxygen2/issues/1725)).
-- Package documentation now uses `logo.svg` if available, falling back
-  to `logo.png`
-  ([\#1640](https://github.com/r-lib/roxygen2/issues/1640)).
 - `@family` no longer adds a trailing space after the colon in the
   default family prefix
   ([\#1628](https://github.com/r-lib/roxygen2/issues/1628)). Custom
@@ -39,62 +79,22 @@
   parameters to inherit, instead of generating an empty `\describe`
   block that caused CRAN HTML validation warnings
   ([\#1671](https://github.com/r-lib/roxygen2/issues/1671)).
-- `@description` no longer errors when the markdown text starts with a
-  heading ([\#1705](https://github.com/r-lib/roxygen2/issues/1705)).
-- S3 method detection now prefers the longest matching generic name, so
-  e.g. `all.equal.numeric` is correctly identified as a method of
-  `all.equal` rather than `all`
-  ([\#1587](https://github.com/r-lib/roxygen2/issues/1587)).
-- `@description` and `@details` for R6 methods now support markdown
-  headings ([\#1647](https://github.com/r-lib/roxygen2/issues/1647)).
-- Package documentation now only wraps actual URLs in the `URL` field of
-  `DESCRIPTION`
-  ([\#1420](https://github.com/r-lib/roxygen2/issues/1420)).
-- Inline R code (`` `r expr` ``) in non-indented list continuation lines
-  no longer causes an error
-  ([\#1651](https://github.com/r-lib/roxygen2/issues/1651)).
-- Markdown horizontal rules (e.g. `----`) now generate a clear warning
-  instead of an internal error about an unknown `thematic_break` xml
-  node ([\#1707](https://github.com/r-lib/roxygen2/issues/1707)).
-- Multiple email addresses in `Authors@R` now generate separate
-  `\email{}` tags instead of a single comma-separated one, fixing an
-  `R CMD check` error
-  ([\#1689](https://github.com/r-lib/roxygen2/issues/1689)).
-- Markdown link text now supports non-code markup like bold and italic,
-  e.g., `[*italic text*][func]` generates
-  `\link[=func]{\emph{italic text}}`, matching R’s support for markup in
-  `\link` text in R 4.5.0.
-- [`object_format()`](https://roxygen2.r-lib.org/dev/reference/object_format.md)
-  now escapes braces in class names, fixing broken Rd output for data
-  objects with class `{` like `quote({})`
-  ([\#1744](https://github.com/r-lib/roxygen2/issues/1744)).
-- roxygen2 no longer depends on purrr.
-- Fixed a performance regression where
-  [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
-  was very slow when the package contained large non-function objects
-  like datasets
-  ([\#1720](https://github.com/r-lib/roxygen2/issues/1720)).
-- Package documentation now correctly handles multiple arbitrary
-  comments in the `comment` argument of
-  [`person()`](https://rdrr.io/r/utils/person.html) in `Authors@R`
-  ([\#1746](https://github.com/r-lib/roxygen2/issues/1746)).
-- roxygen2 now requires R 4.0
-  ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
 - `@inheritParams` now correctly inherits parameters that are documented
   together with `\dots` using comma-separated names,
   e.g. `@param b,\dots description`
   ([\#1718](https://github.com/r-lib/roxygen2/issues/1718)).
+- `@inheritParams` now correctly updates `\linkS4class{}` links when
+  inheriting parameter documentation from other packages, converting
+  them to absolute links
+  ([\#1634](https://github.com/r-lib/roxygen2/issues/1634)).
 - `@param` (and other two-part tags) now correctly handle
   backtick-quoted names that contain spaces,
   e.g. `` @param `arg 1` description ``
   ([\#1696](https://github.com/r-lib/roxygen2/issues/1696)).
-- The warning about undocumented S3 methods no longer errors when the
-  function lacks a srcref, e.g. because a debugger breakpoint is set
-  ([\#1589](https://github.com/r-lib/roxygen2/issues/1589),
-  [\#1710](https://github.com/r-lib/roxygen2/issues/1710)).
-- The warning about undocumented S3 methods no longer incorrectly flags
-  S4 methods of S3 generics as unexported
-  ([\#1715](https://github.com/r-lib/roxygen2/issues/1715)).
+- [`object_format()`](https://roxygen2.r-lib.org/dev/reference/object_format.md)
+  now escapes braces in class names, fixing broken Rd output for data
+  objects with class `{` like `quote({})`
+  ([\#1744](https://github.com/r-lib/roxygen2/issues/1744)).
 
 ## roxygen2 7.3.3
 

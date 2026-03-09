@@ -63,15 +63,35 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li>
+<ul><li>Fixed a performance regression where <code><a href="../reference/roxygenize.html">roxygenize()</a></code> was very slow when the package contained large non-function objects like datasets (<a href="https://github.com/r-lib/roxygen2/issues/1720" class="external-link">#1720</a>).</li>
+<li>Inline R code (<code>`r expr`</code>) in non-indented list continuation lines no longer causes an error (<a href="https://github.com/r-lib/roxygen2/issues/1651" class="external-link">#1651</a>).</li>
+<li>Markdown improvements:
+<ul><li>Horizontal rules (e.g. <code>----</code>) now generate a clear warning instead of an internal error about an unknown <code>thematic_break</code> xml node (<a href="https://github.com/r-lib/roxygen2/issues/1707" class="external-link">#1707</a>).</li>
+<li>Link text now supports non-code markup like bold and italic, e.g., <code>[*italic text*][func]</code> generates <code>\link[=func]{\emph{italic text}}</code>, matching R’s support for markup in <code>\link</code> text in R 4.5.0.</li>
+<li>Links now do a better job of resolving package names: the process is cached for better performance (<a href="https://github.com/r-lib/roxygen2/issues/1724" class="external-link">#1724</a>); it works with infix operators (e.g. <code>[%in%]</code>) (<a href="https://github.com/r-lib/roxygen2/issues/1728" class="external-link">#1728</a>); no longer changes the link text (<a href="https://github.com/r-lib/roxygen2/issues/1662" class="external-link">#1662</a>); and includes base packages when reporting ambiguous functions (<a href="https://github.com/r-lib/roxygen2/issues/1725" class="external-link">#1725</a>).</li>
+</ul></li>
+<li>Package documentation improvements:
+<ul><li>Correctly handles multiple arbitrary comments in the <code>comment</code> argument of <code><a href="https://rdrr.io/r/utils/person.html" class="external-link">person()</a></code> in <code>Authors@R</code> (<a href="https://github.com/r-lib/roxygen2/issues/1746" class="external-link">#1746</a>).</li>
+<li>Multiple email addresses in <code>Authors@R</code> now generate separate <code>\email{}</code> tags instead of a single comma-separated one (<a href="https://github.com/r-lib/roxygen2/issues/1689" class="external-link">#1689</a>).</li>
+<li>Lists a person with both <code>"aut"</code> and <code>"cre"</code> roles in both the Maintainer and Authors sections (<a href="https://github.com/r-lib/roxygen2/issues/1588" class="external-link">#1588</a>).</li>
+<li>Only wraps actual URLs in the <code>URL</code> field of <code>DESCRIPTION</code> (<a href="https://github.com/r-lib/roxygen2/issues/1420" class="external-link">#1420</a>).</li>
+<li>Uses <code>logo.svg</code> if available, falling back to <code>logo.png</code> (<a href="https://github.com/r-lib/roxygen2/issues/1640" class="external-link">#1640</a>).</li>
+</ul></li>
+<li>roxygen2 no longer depends on purrr.</li>
+<li>roxygen2 now requires R 4.0 (<a href="https://github.com/r-lib/roxygen2/issues/1632" class="external-link">#1632</a>).</li>
+<li>S3 method handling improvements:
+<ul><li>Method parsing now prefers the longest matching generic name, so e.g. <code>all.equal.numeric</code> is correctly identified as a method of <code>all.equal</code> rather than <code>all</code> (<a href="https://github.com/r-lib/roxygen2/issues/1587" class="external-link">#1587</a>).</li>
+<li>The warning about undocumented methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (<a href="https://github.com/r-lib/roxygen2/issues/1589" class="external-link">#1589</a>, <a href="https://github.com/r-lib/roxygen2/issues/1710" class="external-link">#1710</a>).</li>
+<li>The warning about undocumented methods no longer incorrectly flags S4 methods of S3 generics as unexported (<a href="https://github.com/r-lib/roxygen2/issues/1715" class="external-link">#1715</a>).</li>
+</ul></li>
+<li>
+<code>@description</code> no longer errors when the markdown text starts with a heading (<a href="https://github.com/r-lib/roxygen2/issues/1705" class="external-link">#1705</a>).</li>
+<li>
+<code>@description</code> and <code>@details</code> for R6 methods now support markdown headings (<a href="https://github.com/r-lib/roxygen2/issues/1647" class="external-link">#1647</a>).</li>
+<li>
 <code>@examples</code> no longer warns about unmatched braces inside of raw strings (<a href="https://github.com/r-lib/roxygen2/issues/1492" class="external-link">#1492</a>).</li>
 <li>
 <code>@examples</code> no longer warns about unmatched braces when braces appear inside strings within R comments, e.g. <code># '{greeting}'</code> (<a href="https://github.com/r-lib/roxygen2/issues/1492" class="external-link">#1492</a>).</li>
-<li>
-<code>@inheritParams</code> now correctly updates <code>\linkS4class{}</code> links when inheriting parameter documentation from other packages, converting them to absolute links (<a href="https://github.com/r-lib/roxygen2/issues/1634" class="external-link">#1634</a>).</li>
-<li>Package documentation now lists a person with both <code>"aut"</code> and <code>"cre"</code> roles in both the Maintainer and Authors sections (<a href="https://github.com/r-lib/roxygen2/issues/1588" class="external-link">#1588</a>).</li>
-<li>Markdown links now do a better job of resolving package names: the process is cached for better performance (<a href="https://github.com/r-lib/roxygen2/issues/1724" class="external-link">#1724</a>); it works with infix operators (e.g. <code>[%in%]</code>) (<a href="https://github.com/r-lib/roxygen2/issues/1728" class="external-link">#1728</a>); no longer changes the link text (<a href="https://github.com/r-lib/roxygen2/issues/1662" class="external-link">#1662</a>); and includes base packages when reporting ambiguous functions (<a href="https://github.com/r-lib/roxygen2/issues/1725" class="external-link">#1725</a>).</li>
-<li>Package documentation now uses <code>logo.svg</code> if available, falling back to <code>logo.png</code> (<a href="https://github.com/r-lib/roxygen2/issues/1640" class="external-link">#1640</a>).</li>
 <li>
 <code>@family</code> no longer adds a trailing space after the colon in the default family prefix (<a href="https://github.com/r-lib/roxygen2/issues/1628" class="external-link">#1628</a>). Custom <code>rd_family_title</code> values now automatically get a colon appended if they don’t already end with one (<a href="https://github.com/r-lib/roxygen2/issues/1656" class="external-link">#1656</a>).</li>
 <li>
@@ -79,27 +99,13 @@
 <li>
 <code>@inheritDotParams</code> now warns and produces no output when there are no parameters to inherit, instead of generating an empty <code>\describe</code> block that caused CRAN HTML validation warnings (<a href="https://github.com/r-lib/roxygen2/issues/1671" class="external-link">#1671</a>).</li>
 <li>
-<code>@description</code> no longer errors when the markdown text starts with a heading (<a href="https://github.com/r-lib/roxygen2/issues/1705" class="external-link">#1705</a>).</li>
-<li>S3 method detection now prefers the longest matching generic name, so e.g. <code>all.equal.numeric</code> is correctly identified as a method of <code>all.equal</code> rather than <code>all</code> (<a href="https://github.com/r-lib/roxygen2/issues/1587" class="external-link">#1587</a>).</li>
-<li>
-<code>@description</code> and <code>@details</code> for R6 methods now support markdown headings (<a href="https://github.com/r-lib/roxygen2/issues/1647" class="external-link">#1647</a>).</li>
-<li>Package documentation now only wraps actual URLs in the <code>URL</code> field of <code>DESCRIPTION</code> (<a href="https://github.com/r-lib/roxygen2/issues/1420" class="external-link">#1420</a>).</li>
-<li>Inline R code (<code>`r expr`</code>) in non-indented list continuation lines no longer causes an error (<a href="https://github.com/r-lib/roxygen2/issues/1651" class="external-link">#1651</a>).</li>
-<li>Markdown horizontal rules (e.g. <code>----</code>) now generate a clear warning instead of an internal error about an unknown <code>thematic_break</code> xml node (<a href="https://github.com/r-lib/roxygen2/issues/1707" class="external-link">#1707</a>).</li>
-<li>Multiple email addresses in <code>Authors@R</code> now generate separate <code>\email{}</code> tags instead of a single comma-separated one, fixing an <code>R CMD check</code> error (<a href="https://github.com/r-lib/roxygen2/issues/1689" class="external-link">#1689</a>).</li>
-<li>Markdown link text now supports non-code markup like bold and italic, e.g., <code>[*italic text*][func]</code> generates <code>\link[=func]{\emph{italic text}}</code>, matching R’s support for markup in <code>\link</code> text in R 4.5.0.</li>
-<li>
-<code><a href="../reference/object_format.html">object_format()</a></code> now escapes braces in class names, fixing broken Rd output for data objects with class <code>{</code> like <code>quote({})</code> (<a href="https://github.com/r-lib/roxygen2/issues/1744" class="external-link">#1744</a>).</li>
-<li>roxygen2 no longer depends on purrr.</li>
-<li>Fixed a performance regression where <code><a href="../reference/roxygenize.html">roxygenize()</a></code> was very slow when the package contained large non-function objects like datasets (<a href="https://github.com/r-lib/roxygen2/issues/1720" class="external-link">#1720</a>).</li>
-<li>Package documentation now correctly handles multiple arbitrary comments in the <code>comment</code> argument of <code><a href="https://rdrr.io/r/utils/person.html" class="external-link">person()</a></code> in <code>Authors@R</code> (<a href="https://github.com/r-lib/roxygen2/issues/1746" class="external-link">#1746</a>).</li>
-<li>roxygen2 now requires R 4.0 (<a href="https://github.com/r-lib/roxygen2/issues/1632" class="external-link">#1632</a>).</li>
-<li>
 <code>@inheritParams</code> now correctly inherits parameters that are documented together with <code>\dots</code> using comma-separated names, e.g. <code>@param b,\dots description</code> (<a href="https://github.com/r-lib/roxygen2/issues/1718" class="external-link">#1718</a>).</li>
 <li>
+<code>@inheritParams</code> now correctly updates <code>\linkS4class{}</code> links when inheriting parameter documentation from other packages, converting them to absolute links (<a href="https://github.com/r-lib/roxygen2/issues/1634" class="external-link">#1634</a>).</li>
+<li>
 <code>@param</code> (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. <code>@param `arg 1` description</code> (<a href="https://github.com/r-lib/roxygen2/issues/1696" class="external-link">#1696</a>).</li>
-<li>The warning about undocumented S3 methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (<a href="https://github.com/r-lib/roxygen2/issues/1589" class="external-link">#1589</a>, <a href="https://github.com/r-lib/roxygen2/issues/1710" class="external-link">#1710</a>).</li>
-<li>The warning about undocumented S3 methods no longer incorrectly flags S4 methods of S3 generics as unexported (<a href="https://github.com/r-lib/roxygen2/issues/1715" class="external-link">#1715</a>).</li>
+<li>
+<code><a href="../reference/object_format.html">object_format()</a></code> now escapes braces in class names, fixing broken Rd output for data objects with class <code>{</code> like <code>quote({})</code> (<a href="https://github.com/r-lib/roxygen2/issues/1744" class="external-link">#1744</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="7.3.3" id="roxygen2-733">roxygen2 7.3.3<a class="anchor" aria-label="anchor" href="#roxygen2-733"></a></h2><p class="text-muted">CRAN release: 2025-09-03</p>

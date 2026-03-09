@@ -1,13 +1,15 @@
-# Escape Rd markup, to avoid interpreting it as markdown
+# Escape fragile Rd tags
 
-This is needed, if we want to stay compatible with existing markup, even
-if markdown mode is switched on. Fragile Rd tags (tags that may contain
-markup that can be picked up by the markdown parser), are replaced by
-placeholders. After the markdown to Rd conversion is done, the original
-text is put back in place of the placeholders.
+`escape_rd_for_md()` replaces fragile Rd tags with placeholders, to
+avoid interpreting them as markdown. `unescape_rd_for_md()` puts the
+original text back in place of the placeholders after the markdown
+parsing is done. The fragile tags are listed in `escaped_for_md`.
 
-It puts back the protected fragile Rd commands into the text after the
-markdown parsing.
+Some Rd macros are treated specially:
+
+- For `if`, markdown is only allowed in the second argument.
+
+- For `ifelse` markdown is allowed in the second and third arguments.
 
 ## Usage
 
@@ -33,22 +35,8 @@ unescape_rd_for_md(rd_text, esc_text)
 
 ## Value
 
-For `escape_rd_for_md`: A “safe” version of the input text, where each
-fragile Rd tag is replaced by a placeholder. The original text is added
-as an attribute for each placeholder.
+- `escape_rd_for_md`: a "safe" version of the input text, where each
+  fragile Rd tag is replaced by a placeholder. The original text is
+  added as an attribute for each placeholder.
 
-For `unescape_rd_for_md`: Rd text.
-
-## Details
-
-The list of protected Rd tags is in `escaped_for_md`.
-
-Some Rd macros are treated specially:
-
-- For `if`, markdown is only allowed in the second argument.
-
-- For `ifelse` markdown is allowed in the second and third arguments.
-
-See also `roclet-rd.R` for the list of tags that uses the
-markdown-enabled parser. Some tags, e.g. `@aliases`, `@backref`, etc.
-only use the standard Roxygen parser.
+- `unescape_rd_for_md`: the original Rd text.

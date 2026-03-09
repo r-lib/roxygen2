@@ -112,16 +112,27 @@ test_that("@examplesIf warns about unparseable condition", {
 })
 
 test_that("strings in R comments don't affect brace matching (#1492)", {
-  out <- roc_proc_text(
-    rd_roclet(),
-    "
+  block <- "
     #' @name a
     #' @title a
     #' @examples
     #' # {greeting}'
     NULL"
-  )[[1]]
+
+  expect_silent(out <- roc_proc_text(rd_roclet(), block)[[1]])
   expect_equal(out$get_value("examples"), rd("# {greeting}'"))
+})
+
+test_that("braces don't need to match inside of raw strings (#1492)", {
+  block <- "
+    #' @name a
+    #' @title a
+    #' @examples
+    #' r'( '{{ )'
+    NULL
+  "
+  expect_silent(out <- roc_proc_text(rd_roclet(), block)[[1]])
+  expect_equal(out$get_value("examples"), rd("r'( '{{ )'"))
 })
 
 test_that("% in @examples escaped before matching braces test (#213)", {
@@ -134,18 +145,6 @@ test_that("% in @examples escaped before matching braces test (#213)", {
   "
   out <- roc_proc_text(rd_roclet(), block)[[1]]
   expect_equal(out$get_value("examples"), rd("{a \\%\\% b}"))
-})
-
-test_that("raw strings in @examples don't cause spurious warnings (#1492)", {
-  block <- "
-    #' @name a
-    #' @title a
-    #' @examples
-    #' r'( '{{ )'
-    NULL
-  "
-  expect_silent(out <- roc_proc_text(rd_roclet(), block)[[1]])
-  expect_equal(out$get_value("examples"), rd("r'( '{{ )'"))
 })
 
 # escapes ------------------------------------------------------------------

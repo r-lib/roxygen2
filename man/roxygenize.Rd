@@ -3,7 +3,7 @@
 \name{roxygenize}
 \alias{roxygenize}
 \alias{roxygenise}
-\title{Process a package with the Rd, namespace and collate roclets}
+\title{Document a package with roxygen2}
 \usage{
 roxygenize(package.dir = ".", roclets = NULL, load_code = NULL, clean = FALSE)
 
@@ -13,9 +13,16 @@ roxygenise(package.dir = ".", roclets = NULL, load_code = NULL, clean = FALSE)
 \item{package.dir}{Location of package top level directory. Default is
 working directory.}
 
-\item{roclets}{Character vector of roclet names to use with package.
+\item{roclets}{Character vector of \link[=roclet]{roclets} to use.
+
 The default, \code{NULL}, uses the roxygen \code{roclets} option,
-which defaults to \code{c("collate", "namespace", "rd")}.}
+which defaults to \code{c("collate", "namespace", "rd")}. This will update
+(if needed) the \code{Collate} field with \code{\link[=update_collate]{update_collate()}},
+produce the \code{NAMESPACE} file with \code{\link[=namespace_roclet]{namespace_roclet()}}, and
+produce the Rd files with \code{\link[=rd_roclet]{rd_roclet()}}.
+
+(Note that \code{update_collate()} is not technically a roclet but is still
+controlled with this argument for historical reasons.)}
 
 \item{load_code}{A function used to load all the R code in the package
 directory. The default, \code{NULL}, uses the strategy defined by
@@ -29,11 +36,12 @@ created by roxygen before running each roclet.}
 \code{NULL}
 }
 \description{
-This is the workhorse function that uses roclets, the built-in document
-transformation functions, to build all documentation for a package. See
-the documentation for the individual roclets, \code{\link[=rd_roclet]{rd_roclet()}},
-\code{\link[=namespace_roclet]{namespace_roclet()}}, and for \code{\link[=update_collate]{update_collate()}},
-for more details.
+This is the workhorse function that builds manual pages and metadata for a
+package. It is powered by \link[=roclet]{roclets}, roxygen2's plugin system for
+producing different types of output. See the documentation of the
+individual components (\code{\link[=rd_roclet]{rd_roclet()}}, \code{\link[=namespace_roclet]{namespace_roclet()}},
+\code{\link[=update_collate]{update_collate()}}) for more details, or learn how to make your own in
+\code{vignette("extending")}.
 }
 \details{
 Note that roxygen2 is a dynamic documentation system: it works by

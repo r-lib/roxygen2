@@ -2,6 +2,8 @@
 
 ## roxygen2 (development version)
 
+- `@examples` no longer warns about unmatched braces inside of raw
+  strings ([\#1492](https://github.com/r-lib/roxygen2/issues/1492)).
 - `@examples` no longer warns about unmatched braces when braces appear
   inside strings within R comments, e.g. `# '{greeting}'`
   ([\#1492](https://github.com/r-lib/roxygen2/issues/1492)).

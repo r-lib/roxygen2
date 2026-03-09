@@ -56,6 +56,10 @@ test_that("strings in code comments don't need to be closed", {
 test_that("braces in code must match", {
   expect_false(rdComplete("# {", is_code = TRUE))
   expect_true(rdComplete("# {}", is_code = TRUE))
+  expect_false(rdComplete("# {} {", is_code = TRUE))
+
+  # Allow user to close a brace in a comment (needed by `@examplesIf`)
+  expect_true(rdComplete("{ # }", is_code = TRUE))
 })
 
 # findEndOfTag -------------------------------------------------------------

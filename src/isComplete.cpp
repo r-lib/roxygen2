@@ -155,19 +155,15 @@ int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0) {
       break;
 
     case State::RComment:
-      // Inside R comments, braces must match.
-      // R comments are terminated by newline or } not matched by {
+      // We don't trace braces in comment independently to make it possible to
+      // close a multi-line Rd expression in a comment. This is a hack that 
+      // needed to support @examplesIf
       if (cur == '\n') {
         state = State::Rd;
-        r_braces = 0;
       } else if (cur == '{') {
         braces++;
-        r_braces++;
       } else if (cur == '}') {
         braces--;
-        r_braces--;
-        if (r_braces == 0)
-          state = State::Rd;
       }
       break;
 

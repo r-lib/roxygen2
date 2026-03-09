@@ -111,6 +111,19 @@ test_that("@examplesIf warns about unparseable condition", {
   expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
+test_that("strings in R comments don't affect brace matching (#1492)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' @name a
+    #' @title a
+    #' @examples
+    #' # {greeting}'
+    NULL"
+  )[[1]]
+  expect_equal(out$get_value("examples"), rd("# {greeting}'"))
+})
+
 test_that("% in @examples escaped before matching braces test (#213)", {
   block <- "
     #' @name a

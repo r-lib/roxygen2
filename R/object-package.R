@@ -406,9 +406,12 @@ itemize <- function(header, x) {
 
 package_url_parse <- function(x) {
   # <doi:XX.XXX> -> \doi{XX.XXX} to avoid CRAN Notes, etc.
+  # URL-decode %XX sequences because \doi{} is fully verbatim:
+  # raw % starts an Rd comment and \% is not supported (#1321)
   x <- str_replace_all(x, "<(doi|DOI):(.*?)>", function(match) {
     match <- str_remove_all(match, "^<(doi|DOI):|>$")
-    paste0("\\doi{", escape(match), "}")
+    match <- utils::URLdecode(match)
+    paste0("\\doi{", match, "}")
   })
 
   # <http:XX.XXX> -> \url{http:XX.XXX}

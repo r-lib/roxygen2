@@ -99,7 +99,14 @@ test_that("can autolink urls on package Description", {
 test_that("can autolink DOIs", {
   expect_equal(package_url_parse("x <doi:abcdef> y"), "x \\doi{abcdef} y")
   expect_equal(package_url_parse("x <DOI:abcdef> y"), "x \\doi{abcdef} y")
-  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{\\%3C-\\%3E} y")
+  # URL-decodes %XX sequences since \doi{} can't contain % (#1321)
+  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{<->} y")
+  expect_equal(
+    package_url_parse(
+      "x <doi:10.1175/1520-0469(1996)053%3C2365:PORWON%3E2.0.CO;2>"
+    ),
+    "x \\doi{10.1175/1520-0469(1996)053<2365:PORWON>2.0.CO;2}"
+  )
 })
 
 test_that("can autolink arxiv", {

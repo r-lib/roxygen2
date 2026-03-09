@@ -49,6 +49,33 @@ test_that("braces in strings don't need to match in code", {
   expect_true(rdComplete("'{{'", is_code = TRUE))
 })
 
+test_that("raw strings are handled in code", {
+  expect_true(rdComplete('r"(text)"', is_code = TRUE))
+  expect_true(rdComplete('r"{text}"', is_code = TRUE))
+  expect_true(rdComplete('r"["text]"', is_code = TRUE))
+  expect_true(rdComplete('R"(text)"', is_code = TRUE))
+  expect_true(rdComplete('r"--(text)--"', is_code = TRUE))
+  expect_true(rdComplete("r'(text)'", is_code = TRUE))
+})
+
+test_that("incomplete raw strings are detected in code", {
+  expect_false(rdComplete('r"', is_code = TRUE))
+  expect_false(rdComplete('r"(', is_code = TRUE))
+
+  expect_false(rdComplete('r"(text', is_code = TRUE))
+  expect_false(rdComplete('r"(text)', is_code = TRUE))
+  expect_false(rdComplete('r"(text)\'', is_code = TRUE))
+
+  expect_false(rdComplete('r"--(text)--', is_code = TRUE))
+  expect_false(rdComplete('r"--(text)-"', is_code = TRUE))
+  expect_false(rdComplete('r"--(text)-', is_code = TRUE))
+  expect_false(rdComplete('r"--(text)"', is_code = TRUE))
+})
+
+test_that("braces in raw strings don't need to match in code", {
+  expect_true(rdComplete('r"({)"', is_code = TRUE))
+})
+
 test_that("strings in code comments don't need to be closed", {
   expect_true(rdComplete("# '", is_code = TRUE))
 })
@@ -56,6 +83,18 @@ test_that("strings in code comments don't need to be closed", {
 test_that("braces in code must match", {
   expect_false(rdComplete("# {", is_code = TRUE))
   expect_true(rdComplete("# {}", is_code = TRUE))
+})
+
+# Integration tests --------------------------------------------------------
+
+test_that("raw strings in @examples don't cause spurious warnings (#1492)", {
+  block <- "
+    #' Title
+    #' @examples
+    #' r'( '{{ )'
+    foo <- function() {}
+  "
+  expect_silent(roc_proc_text(rd_roclet(), block))
 })
 
 # findEndOfTag -------------------------------------------------------------

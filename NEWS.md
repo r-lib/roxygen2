@@ -4,6 +4,7 @@
 * Documenting data objects now generates `\usage{data(mydata)}` when the package doesn't have `LazyData: true` in its DESCRIPTION (#1425).
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
 * Markdown improvements:
+  * Indented bullet lists in `@param` and other two-part tags are no longer incorrectly nested (#1102).
   * Horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
   * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
   * Link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.

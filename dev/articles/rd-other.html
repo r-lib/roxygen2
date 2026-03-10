@@ -138,10 +138,11 @@ dataset’s name. For example, this is the roxygen2 block used for
 <span><span class="co">#' @source {ggplot2} tidyverse R package.</span></span>
 <span><span class="st">"diamonds"</span></span>
 <span><span class="co">#&gt; [1] "diamonds"</span></span></code></pre></div>
-<p>Note that the default usage assumes that you use
-<code>LazyData: true</code> in your <code>DESCRIPTION</code>; this is
-the recommended (modern) style of exposing datasets and doesn’t require
-an explicit <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> call.</p>
+<p>The default usage depends on the <code>LazyData</code> setting in
+your <code>DESCRIPTION</code>. If you have <code>LazyData: true</code>,
+the usage will be just the dataset name (e.g. <code>diamonds</code>).
+Otherwise, the usage will be wrapped in <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code>
+(e.g. <code>data(diamonds)</code>).</p>
 <p>Note the use of two additional tags that are particularly useful for
 documenting data:</p>
 <ul>

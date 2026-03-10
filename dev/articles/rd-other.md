@@ -33,10 +33,10 @@ For example, this is the roxygen2 block used for `ggplot2::diamonds`:
 #> [1] "diamonds"
 ```
 
-Note that the default usage assumes that you use `LazyData: true` in
-your `DESCRIPTION`; this is the recommended (modern) style of exposing
-datasets and doesn’t require an explicit
-[`data()`](https://rdrr.io/r/utils/data.html) call.
+The default usage depends on the `LazyData` setting in your
+`DESCRIPTION`. If you have `LazyData: true`, the usage will be just the
+dataset name (e.g. `diamonds`). Otherwise, the usage will be wrapped in
+[`data()`](https://rdrr.io/r/utils/data.html) (e.g. `data(diamonds)`).
 
 Note the use of two additional tags that are particularly useful for
 documenting data:

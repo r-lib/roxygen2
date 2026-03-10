@@ -63,7 +63,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li>Assigning a non-function value (e.g. <code>x &lt;- 1:10</code>) no longer automatically gets <code>\docType{data}</code>, <code>\keyword{datasets}</code>, or a <code>\format{}</code> section (<a href="https://github.com/r-lib/roxygen2/issues/1666" class="external-link">#1666</a>). To documenting a dataset, use the modern approach (&gt;= 2013) where you document a string containing the dataset name.</li>
+<ul><li>Documenting values (e.g. <code>x &lt;- 1:10</code>) no longer adds <code>\docType{data}</code>, <code>\keyword{datasets}</code>, or a <code>\format{}</code> section (<a href="https://github.com/r-lib/roxygen2/issues/1666" class="external-link">#1666</a>). To documenting a dataset, use the modern approach (&gt;= 2013) where you document a string containing the dataset name (e.g. “diamonds”).</li>
+<li>Documenting data objects now generates <code>\usage{data(mydata)}</code> when the package doesn’t have <code>LazyData: true</code> in its DESCRIPTION (<a href="https://github.com/r-lib/roxygen2/issues/1425" class="external-link">#1425</a>).</li>
 <li>Fixed a performance regression where <code><a href="../reference/roxygenize.html">roxygenize()</a></code> was very slow when the package contained large non-function objects like datasets (<a href="https://github.com/r-lib/roxygen2/issues/1720" class="external-link">#1720</a>).</li>
 <li>Markdown improvements:
 <ul><li>Horizontal rules (e.g. <code>----</code>) now generate a clear warning instead of an internal error about an unknown <code>thematic_break</code> xml node (<a href="https://github.com/r-lib/roxygen2/issues/1707" class="external-link">#1707</a>).</li>

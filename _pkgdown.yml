@@ -25,6 +25,7 @@ reference:
 - title: Running roxygen2
   contents:
   - roxygenize
+  - needs_roxygenize
   - load
 
 - title: Roclets

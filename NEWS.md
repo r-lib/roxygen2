@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).
 * Documenting values (e.g. `x <- 1:10`) no longer adds `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name (e.g. "diamonds").
 * Documenting data objects now generates `\usage{data(mydata)}` when the package doesn't have `LazyData: true` in its DESCRIPTION (#1425).
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).

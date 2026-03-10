@@ -27,6 +27,10 @@
     ([\#1662](https://github.com/r-lib/roxygen2/issues/1662)); and
     includes base packages when reporting ambiguous functions
     ([\#1725](https://github.com/r-lib/roxygen2/issues/1725)).
+  - Links to external packages now use the topic alias instead of the Rd
+    file name as the anchor. This fixes “Non-topic package-anchored
+    link(s)” notes from R CMD check
+    ([\#1709](https://github.com/r-lib/roxygen2/issues/1709)).
 - Package documentation improvements:
   - Correctly handles multiple arbitrary comments in the `comment`
     argument of [`person()`](https://rdrr.io/r/utils/person.html) in

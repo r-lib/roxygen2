@@ -47,7 +47,7 @@ This means you need to document them in a slightly different way: instead of doc
 "diamonds"
 ```
 
-Note that the default usage assumes that you use `LazyData: true` in your `DESCRIPTION`; this is the recommended (modern) style of exposing datasets and doesn't require an explicit `data()` call.
+The default usage depends on the `LazyData` setting in your `DESCRIPTION`. If you have `LazyData: true`, the usage will be just the dataset name (e.g. `diamonds`). Otherwise, the usage will be wrapped in `data()` (e.g. `data(diamonds)`).
 
 Note the use of two additional tags that are particularly useful for documenting data:
 

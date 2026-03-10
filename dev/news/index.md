@@ -76,6 +76,9 @@
 - `@examples` no longer warns about unmatched braces when braces appear
   inside strings within R comments, e.g. `# '{greeting}'`
   ([\#1492](https://github.com/r-lib/roxygen2/issues/1492)).
+- `@family` tags no longer generate duplicate “See also” entries when
+  multiple blocks share the same `@rdname`
+  ([\#1530](https://github.com/r-lib/roxygen2/issues/1530)).
 - `@family` no longer adds a trailing space after the colon in the
   default family prefix
   ([\#1628](https://github.com/r-lib/roxygen2/issues/1628)). Custom

@@ -95,6 +95,8 @@
 <li>
 <code>@examples</code> no longer warns about unmatched braces when braces appear inside strings within R comments, e.g. <code># '{greeting}'</code> (<a href="https://github.com/r-lib/roxygen2/issues/1492" class="external-link">#1492</a>).</li>
 <li>
+<code>@family</code> tags no longer generate duplicate “See also” entries when multiple blocks share the same <code>@rdname</code> (<a href="https://github.com/r-lib/roxygen2/issues/1530" class="external-link">#1530</a>).</li>
+<li>
 <code>@family</code> no longer adds a trailing space after the colon in the default family prefix (<a href="https://github.com/r-lib/roxygen2/issues/1628" class="external-link">#1628</a>). Custom <code>rd_family_title</code> values now automatically get a colon appended if they don’t already end with one (<a href="https://github.com/r-lib/roxygen2/issues/1656" class="external-link">#1656</a>).</li>
 <li>
 <code>@inheritDotParams</code> now generates an informative warning when the source function can’t be found, instead of a cryptic error (<a href="https://github.com/r-lib/roxygen2/issues/1602" class="external-link">#1602</a>).</li>

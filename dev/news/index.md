@@ -2,6 +2,12 @@
 
 ## roxygen2 (development version)
 
+- Assigning a non-function value (e.g. `x <- 1:10`) no longer
+  automatically gets `\docType{data}`, `\keyword{datasets}`, or a
+  `\format{}` section
+  ([\#1666](https://github.com/r-lib/roxygen2/issues/1666)). To
+  documenting a dataset, use the modern approach (\>= 2013) where you
+  document a string containing the dataset name.
 - Fixed a performance regression where
   [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
   was very slow when the package contained large non-function objects

@@ -73,7 +73,8 @@
 <li>Links to external packages now use the topic alias instead of the Rd file name as the anchor. This fixes “Non-topic package-anchored link(s)” notes from R CMD check (<a href="https://github.com/r-lib/roxygen2/issues/1709" class="external-link">#1709</a>).</li>
 </ul></li>
 <li>Package documentation improvements:
-<ul><li>Correctly handles multiple arbitrary comments in the <code>comment</code> argument of <code><a href="https://rdrr.io/r/utils/person.html" class="external-link">person()</a></code> in <code>Authors@R</code> (<a href="https://github.com/r-lib/roxygen2/issues/1746" class="external-link">#1746</a>).</li>
+<ul><li>DOIs containing percent-encoded characters (e.g. <code>%3C</code>) in <code>DESCRIPTION</code> no longer generate invalid Rd (<a href="https://github.com/r-lib/roxygen2/issues/1321" class="external-link">#1321</a>).</li>
+<li>Correctly handles multiple arbitrary comments in the <code>comment</code> argument of <code><a href="https://rdrr.io/r/utils/person.html" class="external-link">person()</a></code> in <code>Authors@R</code> (<a href="https://github.com/r-lib/roxygen2/issues/1746" class="external-link">#1746</a>).</li>
 <li>Multiple email addresses in <code>Authors@R</code> now generate separate <code>\email{}</code> tags instead of a single comma-separated one (<a href="https://github.com/r-lib/roxygen2/issues/1689" class="external-link">#1689</a>).</li>
 <li>Lists a person with both <code>"aut"</code> and <code>"cre"</code> roles in both the Maintainer and Authors sections (<a href="https://github.com/r-lib/roxygen2/issues/1588" class="external-link">#1588</a>).</li>
 <li>Only wraps actual URLs in the <code>URL</code> field of <code>DESCRIPTION</code> (<a href="https://github.com/r-lib/roxygen2/issues/1420" class="external-link">#1420</a>).</li>

@@ -38,6 +38,9 @@
     link(s)” notes from R CMD check
     ([\#1709](https://github.com/r-lib/roxygen2/issues/1709)).
 - Package documentation improvements:
+  - DOIs containing percent-encoded characters (e.g. `%3C`) in
+    `DESCRIPTION` no longer generate invalid Rd
+    ([\#1321](https://github.com/r-lib/roxygen2/issues/1321)).
   - Correctly handles multiple arbitrary comments in the `comment`
     argument of [`person()`](https://rdrr.io/r/utils/person.html) in
     `Authors@R`

@@ -42,12 +42,12 @@ find_topic_filename <- function(pkg, topic, tag = NULL) {
 #' @noRd
 
 find_topic_in_package <- function(pkg, topic) {
-  # This is needed because we have the escaped text here, and parse_Rd will
-  # un-escape it properly.
-  on.exit(close(con), add = TRUE)
-  con <- textConnection(topic)
-  raw_topic <- str_trim(tools::parse_Rd(con)[[1]][1])
-  basename(utils::help((raw_topic), (pkg))[1])
+  help_path <- utils::help((topic), (pkg))[1]
+  if (is.na(basename(help_path))) {
+    NA_character_
+  } else {
+    topic
+  }
 }
 
 try_find_topic_in_package <- function(pkg, topic, tag) {

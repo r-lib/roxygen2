@@ -51,9 +51,16 @@ test_that("% in links are escaped", {
   expect_equal(markdown("[x][%%]"), r"(\link[=\%\%]{x})")
   expect_equal(markdown("[%][x]"), r"(\link[=x]{\%})")
   expect_equal(markdown("[%%]"), r"(\link{\%\%})")
-  expect_equal(markdown("[base::%%]"), r"(\link[base:Arithmetic]{base::\%\%})")
+  expect_equal(markdown("[base::%%]"), r"(\link[base:\%\%]{base::\%\%})")
   # %in% can be resolved to base package (#1728)
   expect_equal(markdown("[%in%]"), r"(\link{\%in\%})")
+})
+
+test_that("links to topic, not filename", {
+  expect_equal(
+    markdown("[tools::CRAN_package_db]"),
+    r"(\link[tools:CRAN_package_db]{tools::CRAN_package_db})"
+  )
 })
 
 test_that("{ and } in links are escaped (#1259)", {

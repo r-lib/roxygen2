@@ -9,6 +9,7 @@
   * Links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725).
   * Links to external packages now use the topic alias instead of the Rd file name as the anchor. This fixes "Non-topic package-anchored link(s)" notes from R CMD check (#1709).
 * Package documentation improvements:
+  * DOIs containing percent-encoded characters (e.g. `%3C`) in `DESCRIPTION` no longer generate invalid Rd (#1321).
   * Correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
   * Multiple email addresses in `Authors@R` now generate separate `\email{}` tags instead of a single comma-separated one (#1689).
   * Lists a person with both `"aut"` and `"cre"` roles in both the Maintainer and Authors sections (#1588).

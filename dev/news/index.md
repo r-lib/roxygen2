@@ -16,6 +16,9 @@
   like datasets
   ([\#1720](https://github.com/r-lib/roxygen2/issues/1720)).
 - Markdown improvements:
+  - Indented bullet lists in `@param` and other two-part tags are no
+    longer incorrectly nested
+    ([\#1102](https://github.com/r-lib/roxygen2/issues/1102)).
   - Horizontal rules (e.g. `----`) now generate a clear warning instead
     of an internal error about an unknown `thematic_break` xml node
     ([\#1707](https://github.com/r-lib/roxygen2/issues/1707)).

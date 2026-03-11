@@ -1,37 +1,42 @@
 #' Update Collate field in DESCRIPTION
 #'
 #' @description
-#' By default, R loads files in alphabetical order. Unfortunately not every
-#' alphabet puts letters in the same order, so you can't rely on alphabetic
-#' ordering if you need one file loaded before another. (This usually doesn't
-#' matter but is important for S4, where you need to make sure that classes are
-#' loaded before subclasses and generics are defined before methods.).
-#' You can override the default alphabetical ordering with `@include before.R`,
-#' which specify that `before.R` must be loaded before the current file.
+#' By default, R loads files in alphabetical order. This is fine if your
+#' package doesn't have any cross-file dependencies, but if you're using a tool
+#' like S4, you'll need to make sure that classes are loaded before subclasses
+#' and generics are defined before methods. You can do this by hand by setting
+#' the `Collate` field in the `DESCRIPTION` or automate it by using `@include`
+#' tags to specify the cross-file dependencies:
 #'
-#' Generally, you will not need to run this function yourself; it should be
-#' run automatically by any package that needs to load your R files in
-#' collation order.
+#' ```R
+#' #' @include before.R
+#' NULL
+#' ```
 #'
-#' @section Collate:
-#' This is not a roclet because roclets need the values of objects in a package,
-#' and those values can not be generated unless you've sourced the files,
-#' and you can't source the files unless you know the correct order.
-#'
-#' If there are no `@include` tags, roxygen2 will leave collate as is.
-#' This makes it easier to use roxygen2 with an existing collate directive,
+#' If there are no `@include` tags, roxygen2 will leave the `Collate` field as
+#' is. This makes it easier to use roxygen2 with an existing collate directive,
 #' but if you remove all your `@include` tags, you'll need to also
 #' manually delete the collate field.
 #'
+#' Generally, you should not need to run this function yourself; it will be
+#' run automatically by any package that needs to load your R files in
+#' collation order.
+#'
+#' `update_collate()` is not not technically a [roclet], like [rd_roclet()]
+#' and [namespace_roclet()], because you have to be able to load the pacakge
+#' before you can process it with roclets. However, because it was historical
+#' implemented as a roclet, it's still controlled by the `roclets` argument of
+#' [roxygenize()].
+#'
 #' @param base_path Path to package directory.
 #' @examples
-#' #' If `example-a.R', `example-b.R' and `example-c.R' live in R/
-#' #' and we're in `example-a.R`, then the following @@include statement
+#' #' If `example-a.R`, `example-b.R` and `example-c.R` live in `R/`
+#' #' and we're in `example-a.R`, then the following @include tag
 #' #' ensures that example-b and example-c are sourced before example-a.
-#' #' @@include example-b.R example-c.R
+#' #' @include example-b.R example-c.R
 #' NULL
 #' @export
-#' @aliases @@include
+#' @aliases @include
 update_collate <- function(base_path) {
   if (!file.exists(base_path)) {
     cli::cli_abort("{.path {base_path}} doesn't exist")

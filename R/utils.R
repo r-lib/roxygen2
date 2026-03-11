@@ -214,6 +214,10 @@ uuid <- function(nchar = 8) {
   )
 }
 
+paste_c <- function(...) {
+  paste(c(...), collapse = "")
+}
+
 # quoting -----------------------------------------------------------------
 auto_backtick <- function(x) {
   needs_backtick <- !has_quotes(x) & !is_syntactic(x)
@@ -230,41 +234,3 @@ auto_quote <- function(x) {
 is_syntactic <- function(x) make.names(x) == x
 has_quotes <- function(x) str_detect(x, r"[^(`|'|").*\1$]")
 strip_quotes <- function(x) str_replace(x, r"[^(`|'|")(.*)\1$]", r"(\2)")
-
-base_packages <- function() {
-  if (getRversion() >= "4.4.0") {
-    asNamespace("tools")$standard_package_names()[["base"]]
-  } else {
-    c(
-      "base",
-      "compiler",
-      "datasets",
-      "graphics",
-      "grDevices",
-      "grid",
-      "methods",
-      "parallel",
-      "splines",
-      "stats",
-      "stats4",
-      "tcltk",
-      "tools",
-      "utils"
-    )
-  }
-}
-
-# Note that this caches the result regardless of
-# pkgdir! pkgdir is mainly for testing, in which case you
-# need to clear the cache manually.
-
-local_pkg_deps <- function(pkgdir = NULL) {
-  if (!is.null(mddata[["deps"]])) {
-    return(mddata[["deps"]])
-  }
-  pkgdir <- pkgdir %||% roxy_meta_get("current_package_dir")
-  deps <- desc::desc_get_deps(pkgdir)
-  deps <- deps[deps$package != "R", ]
-  deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]
-  deps$package
-}

@@ -39,6 +39,17 @@ test_that("person turned into meaningful text", {
   })
 })
 
+test_that("cre+aut person appears in both maintainer and authors (#1588)", {
+  authors <- 'c(
+    person("A", "B", role = c("aut", "cre"), email = "a@b.com"),
+    person("C", "D", role = "aut")
+  )'
+  out <- package_authors(authors)
+  expect_match(out, "Maintainer.*A B")
+  expect_match(out, "Authors.*A B")
+  expect_match(out, "Authors.*C D")
+})
+
 test_that("useful message if Authors@R is corrupted", {
   expect_snapshot({
     package_authors("1 + ")
@@ -67,6 +78,13 @@ test_that("can convert DOIs in url", {
   )
 })
 
+test_that("annotated URLs are extracted correctly (#1420)", {
+  expect_equal(
+    package_seealso_urls("https://x (XYZ), https://u (ABC)"),
+    c("\\url{https://x} (XYZ)", "\\url{https://u} (ABC)")
+  )
+})
+
 test_that("can autolink urls on package Description", {
   expect_equal(
     package_url_parse("x <https://x.com> y"),
@@ -81,7 +99,14 @@ test_that("can autolink urls on package Description", {
 test_that("can autolink DOIs", {
   expect_equal(package_url_parse("x <doi:abcdef> y"), "x \\doi{abcdef} y")
   expect_equal(package_url_parse("x <DOI:abcdef> y"), "x \\doi{abcdef} y")
-  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{\\%3C-\\%3E} y")
+  # URL-decodes %XX sequences since \doi{} can't contain % (#1321)
+  expect_equal(package_url_parse("x <DOI:%3C-%3E> y"), "x \\doi{<->} y")
+  expect_equal(
+    package_url_parse(
+      "x <doi:10.1175/1520-0469(1996)053%3C2365:PORWON%3E2.0.CO;2>"
+    ),
+    "x \\doi{10.1175/1520-0469(1996)053<2365:PORWON>2.0.CO;2}"
+  )
 })
 
 test_that("can autolink arxiv", {
@@ -115,6 +140,6 @@ test_that("multiple email addresses for a person are acceptable #1487", {
   me <- person("me", email = c("one@email.me", "two@email.me"))
   expect_equal(
     author_desc(unclass(me)[[1]]),
-    "me \\email{one@email.me, two@email.me}"
+    "me \\email{one@email.me} \\email{two@email.me}"
   )
 })

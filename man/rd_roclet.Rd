@@ -7,25 +7,23 @@
 rd_roclet()
 }
 \description{
-This roclet is the workhorse of roxygen2, producing the \code{.Rd} files that
+This \link{roclet} automates the production of the \code{.Rd} files that
 R uses to document functions, datasets, packages, classes, and more.
 See \code{vignette("rd")} for details.
 
-Generally you will not call this function directly
-but will instead use \code{\link[=roxygenise]{roxygenise()}} specifying the rd roclet.
+It is run by default by \code{\link[=roxygenize]{roxygenize()}}.
 }
 \examples{
-#' The length of a string (in characters)
-#'
-#' @param x A character vector.
-#' @returns An integer vector the same length as `x`.
-#'   `NA` strings have `NA` length.
-#' @seealso [nchar()]
+#' Add together two numbers
+#' @param x A number.
+#' @param y A number.
+#' @return A number.
 #' @export
 #' @examples
-#' str_length(letters)
-#' str_length(c("i", "like", "programming", NA))
-str_length <- function(x) {
+#' add(1, 1)
+#' add(10, 1)
+add <- function(x, y) {
+  x + y
 }
 }
 \seealso{

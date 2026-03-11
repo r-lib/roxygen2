@@ -168,7 +168,8 @@ inherit_params <- function(topic, topics) {
     inherited_params <- find_params(
       inheritor,
       topics,
-      source = topic$get_name()
+      source = topic$get_name(),
+      tag = "@inheritParams"
     )
 
     for (param in inherited_params) {
@@ -217,7 +218,13 @@ inherit_dot_params <- function(topic, topics, env) {
   args <- map2(funs, inheritors$args, select_args_text, topic = topic)
 
   # Then pull out the ones we need
-  docs <- lapply(inheritors$source, find_params, topics = topics)
+  docs <- lapply(
+    inheritors$source,
+    find_params,
+    topics = topics,
+    source = topic$get_name(),
+    tag = "@inheritDotParams"
+  )
   arg_matches <- function(args, docs) {
     match <- map_lgl(docs, \(x) all(x$name %in% args))
     matched <- docs[match]
@@ -232,6 +239,17 @@ inherit_dot_params <- function(topic, topics, env) {
   documented <- get_documented_params(topic)
   non_documented_params <- setdiff(names(docs_selected), documented)
   docs_selected <- docs_selected[non_documented_params]
+
+  if (length(docs_selected) == 0) {
+    warn_roxy_topic(
+      topic$get_name(),
+      c(
+        x = "@inheritDotParams failed",
+        i = "No arguments inherited from {.fn {inheritors$source}}."
+      )
+    )
+    return()
+  }
 
   # Build the Rd
   # (1) Link to function(s) that was inherited from
@@ -269,7 +287,7 @@ get_documented_params <- function(topic, only_first = FALSE) {
   if (length(documented) > 0) {
     documented <- strsplit(documented, ",")
     if (only_first) {
-      documented <- map_chr(documented, 1)
+      documented <- map_chr(documented, \(x) x[[1]])
     } else {
       documented <- unlist(documented)
     }
@@ -279,8 +297,8 @@ get_documented_params <- function(topic, only_first = FALSE) {
   documented
 }
 
-find_params <- function(name, topics, source) {
-  topic <- get_rd(name, topics, source = source)
+find_params <- function(name, topics, source, tag = "@inherits") {
+  topic <- get_rd(name, topics, source = source, tag = tag)
   if (is.null(topic)) {
     return()
   }
@@ -291,9 +309,13 @@ find_params <- function(name, topics, source) {
   }
 
   param_names <- str_trim(names(params))
-  param_names[param_names == "\\dots"] <- "..."
+  param_names <- strsplit(param_names, ",\\s*")
+  param_names <- lapply(param_names, function(x) {
+    x[x == "\\dots"] <- "..."
+    x
+  })
 
-  Map(list, name = strsplit(param_names, ",\\s*"), value = unlist(params))
+  Map(list, name = param_names, value = unlist(params))
 }
 
 topic_params <- function(x) {
@@ -371,8 +393,16 @@ find_sections <- function(topic) {
   if (inherits(topic, "Rd")) {
     tag <- get_tags(topic, "\\section")
 
-    titles <- map_chr(map(tag, 1), rd2text, package = attr(topic, "package"))
-    contents <- map_chr(map(tag, 2), rd2text, package = attr(topic, "package"))
+    titles <- map_chr(
+      map(tag, \(x) x[[1]]),
+      rd2text,
+      package = attr(topic, "package")
+    )
+    contents <- map_chr(
+      map(tag, \(x) x[[2]]),
+      rd2text,
+      package = attr(topic, "package")
+    )
 
     list(title = titles, content = contents)
   } else {
@@ -449,6 +479,15 @@ tweak_links <- function(x, package) {
           )
         }
       }
+    } else if (!is.null(tag) && tag == "\\linkS4class") {
+      topic <- paste0(x[[1]], "-class")
+      if (has_topic(topic, package)) {
+        attr(x, "Rd_tag") <- "\\link"
+        attr(x, "Rd_option") <- structure(
+          paste0(package, ":", topic),
+          Rd_tag = "TEXT"
+        )
+      }
     } else if (length(x) > 0) {
       x[] <- map(x, tweak_links, package = package)
     }
@@ -460,36 +499,39 @@ tweak_links <- function(x, package) {
 
 # Find info in Rd or topic ------------------------------------------------
 
-get_rd <- function(name, topics, source) {
+get_rd <- function(name, topics, source, tag = "@inherits") {
   if (is_namespaced(name)) {
     # External package
     parsed <- parse_expr(name)
     pkg <- as.character(parsed[[2]])
     fun <- as.character(parsed[[3]])
 
-    get_rd_from_help(pkg, fun, source)
+    get_rd_from_help(pkg, fun, source, tag = tag)
   } else {
     # Current package
     rd_name <- topics$find_filename(name)
     if (identical(rd_name, NA_character_)) {
-      warn_roxy_topic(source, "@inherits failed to find topic {.str {name}}")
+      warn_roxy_topic(
+        source,
+        "{tag} failed to find topic {.str {name}} in current package"
+      )
     }
     topics$get(rd_name)
   }
 }
 
-get_rd_from_help <- function(package, alias, source) {
+get_rd_from_help <- function(package, alias, source, tag = "@inherits") {
   if (!is_installed(package)) {
     warn_roxy_topic(
       source,
-      "@inherits failed because {.pkg {package}} is not installed"
+      "{tag} failed because {.pkg {package}} is not installed"
     )
     return()
   }
 
   help <- utils::help((alias), (package))
   if (length(help) == 0) {
-    warn_roxy_topic(source, "@inherits failed to find topic {package}::{alias}")
+    warn_roxy_topic(source, "{tag} failed to find topic {package}::{alias}")
     return()
   }
 

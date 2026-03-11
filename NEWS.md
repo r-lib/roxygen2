@@ -1,11 +1,42 @@
 # roxygen2 (development version)
 
-* `object_format()` now escapes braces in class names, fixing broken Rd output for data objects with class `{` like `quote({})` (#1744).
+* Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.
+* Assigning a non-function value (e.g. `x <- 1:10`) no longer automatically gets `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name.
+* Documenting values (e.g. `x <- 1:10`) no longer adds `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name (e.g. "diamonds").
+* Documenting data objects now generates `\usage{data(mydata)}` when the package doesn't have `LazyData: true` in its DESCRIPTION (#1425).
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
-* Package documentation now correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
+* Markdown improvements:
+  * Indented bullet lists in `@param` and other two-part tags are no longer incorrectly nested (#1102).
+  * Horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
+  * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
+  * Link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.
+  * Links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725).
+  * Links to external packages now use the topic alias instead of the Rd file name as the anchor. This fixes "Non-topic package-anchored link(s)" notes from R CMD check (#1709).
+* Package documentation improvements:
+  * DOIs containing percent-encoded characters (e.g. `%3C`) in `DESCRIPTION` no longer generate invalid Rd (#1321).
+  * Correctly handles multiple arbitrary comments in the `comment` argument of `person()` in `Authors@R` (#1746).
+  * Multiple email addresses in `Authors@R` now generate separate `\email{}` tags instead of a single comma-separated one (#1689).
+  * Lists a person with both `"aut"` and `"cre"` roles in both the Maintainer and Authors sections (#1588).
+  * Only wraps actual URLs in the `URL` field of `DESCRIPTION` (#1420).
+  * Uses `logo.svg` if available, falling back to `logo.png` (#1640).
+* roxygen2 no longer depends on purrr.
 * roxygen2 now requires R 4.0 (#1632).
+* S3 method handling improvements:
+  * Method parsing now prefers the longest matching generic name, so e.g. `all.equal.numeric` is correctly identified as a method of `all.equal` rather than `all` (#1587).
+  * The warning about undocumented methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
+  * The warning about undocumented methods no longer incorrectly flags S4 methods of S3 generics as unexported (#1715).
+* `@description` no longer errors when the markdown text starts with a heading (#1705).
+* `@description` and `@details` for R6 methods now support markdown headings (#1647).
+* `@examples` no longer warns about unmatched braces inside of raw strings (#1492).
+* `@examples` no longer warns about unmatched braces when braces appear inside strings within R comments, e.g. `# '{greeting}'` (#1492).
+* `@family` tags no longer generate duplicate "See also" entries when multiple blocks share the same `@rdname` (#1530).
+* `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
+* `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
+* `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
+* `@inheritParams` now correctly inherits parameters that are documented together with `\dots` using comma-separated names, e.g. `@param b,\dots description` (#1718).
+* `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).
 * `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).
-* The warning about undocumented S3 methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
+* `object_format()` now escapes braces in class names, fixing broken Rd output for data objects with class `{` like `quote({})` (#1744).
 
 # roxygen2 7.3.3
 

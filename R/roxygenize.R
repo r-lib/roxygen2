@@ -1,10 +1,11 @@
-#' Process a package with the Rd, namespace and collate roclets
+#' Document a package with roxygen2
 #'
-#' This is the workhorse function that uses roclets, the built-in document
-#' transformation functions, to build all documentation for a package. See
-#' the documentation for the individual roclets, [rd_roclet()],
-#' [namespace_roclet()], and for [update_collate()],
-#' for more details.
+#' This is the workhorse function that builds manual pages and metadata for a
+#' package. It is powered by [roclets][roclet], roxygen2's plugin system for
+#' producing different types of output. See the documentation of the
+#' individual components ([rd_roclet()], [namespace_roclet()],
+#' [update_collate()]) for more details, or learn how to make your own in
+#' `vignette("extending")`.
 #'
 #' Note that roxygen2 is a dynamic documentation system: it works by
 #' inspecting loaded objects in the package. This means that you must
@@ -13,9 +14,16 @@
 #'
 #' @param package.dir Location of package top level directory. Default is
 #'   working directory.
-#' @param roclets Character vector of roclet names to use with package.
+#' @param roclets Character vector of [roclets][roclet] to use.
+#'
 #'   The default, `NULL`, uses the roxygen `roclets` option,
-#'   which defaults to `c("collate", "namespace", "rd")`.
+#'   which defaults to `c("collate", "namespace", "rd")`. This will update
+#'   (if needed) the `Collate` field with [update_collate()],
+#'   produce the `NAMESPACE` file with [namespace_roclet()], and
+#'   produce the Rd files with [rd_roclet()].
+#'
+#'   (Note that `update_collate()` is not technically a roclet but is still
+#'   controlled with this argument for historical reasons.)
 #' @param load_code A function used to load all the R code in the package
 #'   directory. The default, `NULL`, uses the strategy defined by
 #'   the `load` roxygen option, which defaults to [load_pkgload()].
@@ -33,6 +41,7 @@ roxygenize <- function(
   base_path <- normalizePath(package.dir)
   is_first <- roxygen_setup(base_path)
 
+  find_package_cache_reset()
   roxy_meta_load(base_path)
   # Load required packages for method registration
   packages <- roxy_meta_get("packages")
@@ -40,7 +49,7 @@ roxygenize <- function(
 
   roclets <- roclets %||% roxy_meta_get("roclets")
 
-  # To load code, we need a up-to-date Collate field and NAMESPACE
+  # To load code, we need an up-to-date Collate field and NAMESPACE
   if ("collate" %in% roclets) {
     update_collate(base_path)
     roclets <- setdiff(roclets, "collate")
@@ -68,7 +77,7 @@ roxygenize <- function(
   blocks <- parse_package(base_path, env = NULL)
 
   if (clean) {
-    purrr::walk(roclets, roclet_clean, base_path = base_path)
+    walk(roclets, roclet_clean, base_path = base_path)
   }
 
   roclets <- lapply(
@@ -88,7 +97,7 @@ roxygenize <- function(
     base_path = base_path
   )
 
-  out <- purrr::map2(
+  out <- map2(
     roclets,
     results,
     roclet_output,

@@ -57,6 +57,15 @@ test_that("relative links converted to absolute", {
     link_to_base("\\link[foo::abbreviate]{abbr}"),
     "\\link[foo::abbreviate]{abbr}\n"
   )
+
+  # linkS4class converted to absolute link (#1634)
+  link_to_methods <- function(x) {
+    rd2text(parse_rd(x), package = "methods")
+  }
+  expect_equal(
+    link_to_methods("\\linkS4class{genericFunction}"),
+    "\\link[methods:genericFunction-class]{genericFunction}\n"
+  )
 })
 
 # tag parsing -------------------------------------------------------------
@@ -507,6 +516,25 @@ test_that("@inheritParam only inherits exact multiparam matches", {
   expect_equal(out$get_value("param"), NULL)
 })
 
+test_that("@inheritParams inherits params documented with dots (#1718)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A
+    #' @param a A variable.
+    #' @param b,\\dots Parameters to pass.
+    A <- function(a, b, ...) {}
+
+    #' B
+    #' @inheritParams A
+    B <- function(a, b, ...) {}
+    "
+  )
+  expect_equal(
+    out[[2]]$get_value("param"),
+    c("a" = "A variable.", "b,..." = "Parameters to pass.")
+  )
+})
 
 test_that("@inheritParam understands compound docs", {
   out <- roc_proc_text(
@@ -772,6 +800,31 @@ test_that("useful error for bad inherits", {
   expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
 })
 
+test_that("warns when no params to inherit (#1671)", {
+  text <- "
+    #' Foo
+    #'
+    #' @param ... not used
+    foo <- function(...) {}
+
+    #' Bar
+    #'
+    #' @param y y
+    #' @inheritDotParams foo
+    bar <- function(y, ...) {}
+  "
+  expect_snapshot(out <- roc_proc_text(rd_roclet(), text))
+  expect_false("..." %in% names(out[["bar.Rd"]]$get_value("param")))
+})
+
+test_that("inheritDotParams warns when source not found (#1602)", {
+  text <- "
+    #' Test
+    #' @inheritDotParams format
+    test = function(...) {}
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
+})
 
 # inherit everything ------------------------------------------------------
 
@@ -816,10 +869,9 @@ test_that("can inherit all from single function", {
 
 test_that("useful warnings if can't find topics", {
   expect_snapshot({
-    get_rd("base2::attach", source = "source")
-    get_rd("base::function_not_found", source = "source")
-    get_rd("function", RoxyTopics$new(), source = "source")
-    get_rd("foo::bar()", RoxyTopics$new(), source = "source")
+    get_rd("not_installed::pkg", source = "source")
+    get_rd("base::doesntexist", source = "source")
+    get_rd("doesntexist", RoxyTopics$new(), source = "source")
   })
 })
 

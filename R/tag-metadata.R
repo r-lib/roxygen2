@@ -24,12 +24,12 @@ tags_metadata <- function() {
 
   meta <- yaml::read_yaml(yaml_path())
   data.frame(
-    tag = map_chr(meta, "name"),
-    description = map_chr(meta, "description"),
+    tag = map_chr(meta, \(x) x[["name"]]),
+    description = map_chr(meta, \(x) x[["description"]]),
     # \n not useful outside of RStudio
-    template = sub("\n", "", map_chr(meta, "template", .default = "")),
-    vignette = map_chr(meta, "vignette", .default = NA),
-    recommend = map_lgl(meta, "recommend", .default = FALSE)
+    template = sub("\n", "", map_chr(meta, \(x) x[["template"]] %||% "")),
+    vignette = map_chr(meta, \(x) x[["vignette"]] %||% NA_character_),
+    recommend = map_lgl(meta, \(x) x[["recommend"]] %||% FALSE)
   )
 }
 

@@ -29,6 +29,13 @@ topic_add_r6_methods <- function(rd, block, env) {
     del <- c(del, i)
   }
 
+  # Markdown sections (# headings) inside @description or @details produce
+  # a multi-element named val. Flatten these into a single string containing
+  # \subsection{} Rd markup so downstream rendering can use map_chr().
+  for (i in seq_along(methods$tags)) {
+    methods$tags[[i]] <- lapply(methods$tags[[i]], r6_flatten_sections)
+  }
+
   methods <- add_default_methods(methods, block)
 
   nodoc <- map_int(methods$tags, length) == 0
@@ -108,7 +115,7 @@ r6_superclass <- function(block, r6data, env) {
   push(paste0("\\section{", title, "}{"))
 
   pkgs <- super$classes$package[match(cls, super$classes$classname)]
-  has_topic <- purrr::map2_lgl(cls, pkgs, has_topic)
+  has_topic <- map2_lgl(cls, pkgs, has_topic)
 
   path <- ifelse(
     has_topic,
@@ -128,12 +135,12 @@ r6_fields <- function(block, r6data) {
   fields <- self$name[self$type == "field"]
   active <- self$name[self$type == "active"]
 
-  tags <- purrr::keep(
+  tags <- keep(
     block$tags,
     function(t) t$tag == "field" && !t$val$name %in% active
   )
 
-  labels <- gsub(",", ", ", map_chr(tags, c("val", "name")))
+  labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
   docd <- str_trim(unlist(strsplit(labels, ",")))
 
   # Check for missing fields
@@ -160,7 +167,7 @@ r6_fields <- function(block, r6data) {
 
   # We keep the order of the documentation
 
-  vals <- map_chr(tags, c("val", "description"))
+  vals <- map_chr(tags, \(x) x[["val"]][["description"]])
   c(
     "\\section{Public fields}{",
     "\\if{html}{\\out{<div class=\"r6-fields\">}}",
@@ -177,12 +184,12 @@ r6_active_bindings <- function(block, r6data) {
   fields <- self$name[self$type == "field"]
   active <- self$name[self$type == "active"]
 
-  tags <- purrr::keep(
+  tags <- keep(
     block$tags,
     function(t) t$tag == "field" && !t$val$name %in% fields
   )
 
-  labels <- gsub(",", ", ", map_chr(tags, c("val", "name")))
+  labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
   docd <- str_trim(unlist(strsplit(labels, ",")))
 
   # Check for missing bindings
@@ -206,7 +213,7 @@ r6_active_bindings <- function(block, r6data) {
 
   # We keep the order of the documentation
 
-  vals <- map_chr(tags, c("val", "description"))
+  vals <- map_chr(tags, \(x) x[["val"]][["description"]])
   c(
     "\\section{Active bindings}{",
     "\\if{html}{\\out{<div class=\"r6-active-bindings\">}}",
@@ -350,10 +357,10 @@ r6_method_begin <- function(block, method) {
 }
 
 r6_method_description <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], \(t) t$tag == "description")
+  det <- keep(method$tags[[1]], \(t) t$tag == "description")
   # Add an empty line between @description tags, if there isn't one
   # there already
-  txt <- map_chr(det, "val")
+  txt <- map_chr(det, \(x) x[["val"]])
   c(
     sub("\n?\n?$", "\n\n", head(txt, -1)),
     utils::tail(txt, 1)
@@ -378,10 +385,10 @@ r6_method_usage <- function(block, method) {
 }
 
 r6_method_details <- function(block, method) {
-  det <- purrr::keep(method$tags[[1]], \(t) t$tag == "details")
+  det <- keep(method$tags[[1]], \(t) t$tag == "details")
   # Add an empty line between @details tags, if there isn't one
   # there already
-  txt <- map_chr(det, "val")
+  txt <- map_chr(det, \(x) x[["val"]])
   if (length(txt) == 0) {
     return()
   }
@@ -393,9 +400,27 @@ r6_method_details <- function(block, method) {
   )
 }
 
+r6_flatten_sections <- function(tag) {
+  if (!tag$tag %in% c("description", "details")) {
+    return(tag)
+  }
+  if (length(tag$val) <= 1) {
+    return(tag)
+  }
+  titles <- names(tag$val)
+  sections <- vapply(
+    seq_along(tag$val)[-1],
+    \(i) paste0("\\subsection{", titles[[i]], "}{\n", tag$val[[i]], "\n}"),
+    character(1)
+  )
+  parts <- if (nzchar(tag$val[[1]])) c(tag$val[[1]], sections) else sections
+  tag$val <- paste(parts, collapse = "\n\n")
+  tag
+}
+
 r6_method_params <- function(block, method) {
-  par <- purrr::keep(method$tags[[1]], \(t) t$tag == "param")
-  nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
+  par <- keep(method$tags[[1]], \(t) t$tag == "param")
+  nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
 
   # Each arg should appear exactly once
   mnames <- str_trim(unlist(strsplit(nms, ",")))
@@ -425,7 +450,7 @@ r6_method_params <- function(block, method) {
   par <- c(par, block$tags[is_in_cls])
 
   # Check if anything is missing
-  nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
+  nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   miss <- setdiff(fnames, mnames)
   for (m in miss) {
@@ -444,12 +469,12 @@ r6_method_params <- function(block, method) {
 
   # Order them according to formals
   firstnames <- str_trim(
-    map_chr(strsplit(map_chr(par, c("val", "name")), ","), 1)
+    map_chr(strsplit(map_chr(par, \(x) x[["val"]][["name"]]), ","), \(x) x[[1]])
   )
   par <- par[order(match(firstnames, fnames))]
 
-  val <- map_chr(par, c("val", "description"))
-  nms <- gsub(",", ", ", map_chr(par, c("val", "name")))
+  val <- map_chr(par, \(x) x[["val"]][["description"]])
+  nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
 
   # Ready to go
   c(
@@ -464,7 +489,7 @@ r6_method_params <- function(block, method) {
 }
 
 r6_method_return <- function(block, method) {
-  ret <- purrr::keep(method$tags[[1]], \(t) t$tag == "return")
+  ret <- keep(method$tags[[1]], \(t) t$tag == "return")
   if (length(ret) == 0) {
     return()
   }
@@ -480,12 +505,12 @@ r6_method_return <- function(block, method) {
 }
 
 r6_method_examples <- function(block, method) {
-  exa <- purrr::keep(method$tags[[1]], \(t) t$tag == "examples")
+  exa <- keep(method$tags[[1]], \(t) t$tag == "examples")
   if (length(exa) == 0) {
     return()
   }
 
-  txt <- map_chr(exa, "val")
+  txt <- map_chr(exa, \(x) x[["val"]])
 
   c(
     "\\subsection{Examples}{",
@@ -512,7 +537,7 @@ r6_all_examples <- function(block, methods) {
   unlist(lapply(
     seq_len(nrow(methods)),
     function(i) {
-      exa <- purrr::keep(methods$tags[[i]], \(t) t$tag == "examples")
+      exa <- keep(methods$tags[[i]], \(t) t$tag == "examples")
       if (length(exa) == 0) {
         return()
       }
@@ -521,7 +546,7 @@ r6_all_examples <- function(block, methods) {
         "\n## ------------------------------------------------",
         paste0("## Method `", name, "`"),
         "## ------------------------------------------------\n",
-        paste(map_chr(exa, "val"), collapse = "\n")
+        paste(map_chr(exa, \(x) x[["val"]]), collapse = "\n")
       )
     }
   ))

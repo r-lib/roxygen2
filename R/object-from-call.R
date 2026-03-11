@@ -84,7 +84,7 @@ object_from_name <- function(name, env, block) {
       type <- "function"
     }
   } else {
-    type <- "data"
+    type <- "value"
   }
 
   object(value, name, type)
@@ -266,7 +266,7 @@ extract_method_fun <- function(fun) {
   local_fun
 }
 
-#' Constructors for S3 object to represent R objects.
+#' Constructors for S3 object to represent R objects
 #'
 #' These objects are usually created by the parsers, but it is also
 #' useful to generate them by hand for testing.
@@ -323,6 +323,7 @@ object_topic <- function(value, alias, type) {
     `function` = alias,
     package = alias,
     data = alias,
+    value = alias,
     cli::cli_abort("Unsupported type {.str {type}}", .internal = TRUE)
   )
 }

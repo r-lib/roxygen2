@@ -4,7 +4,8 @@ package_seealso <- function(URL, BugReports) {
 
 package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
   if (!is.null(URL)) {
-    links <- paste0("\\url{", escape(strsplit(URL, ",\\s+")[[1]]), "}")
+    links <- strsplit(URL, ",\\s+")[[1]]
+    links <- vapply(links, wrap_urls, character(1), USE.NAMES = FALSE)
     links <- gsub("\\url\\{https://doi.org/", "\\doi{", links)
   } else {
     links <- character()
@@ -14,6 +15,15 @@ package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
   }
 
   links
+}
+
+wrap_urls <- function(x) {
+  gsub(
+    "(https?://[^\\s,]+|ftp://[^\\s,]+)",
+    "\\\\url{\\1}",
+    escape(x),
+    perl = TRUE
+  )
 }
 
 package_authors <- function(authors) {
@@ -27,7 +37,10 @@ package_authors <- function(authors) {
 
   desc <- map_chr(unclass(authors), author_desc)
   type <- map_chr(unclass(authors), author_type)
+  # People who are both maintainer and author should appear in both sections
+  is_cre_aut <- map_lgl(unclass(authors), \(x) all(c("cre", "aut") %in% x$role))
   by_type <- split(desc, type)
+  by_type$aut <- c(desc[is_cre_aut], by_type$aut)
 
   paste(
     c(
@@ -51,7 +64,7 @@ author_desc <- function(x) {
   }
 
   if (!is.null(x$email)) {
-    desc <- paste0(desc, " \\email{", paste(x$email, collapse = ", "), "}")
+    desc <- paste0(desc, " ", paste0("\\email{", x$email, "}", collapse = " "))
   }
 
   if (!is.null(x$comment)) {
@@ -393,9 +406,12 @@ itemize <- function(header, x) {
 
 package_url_parse <- function(x) {
   # <doi:XX.XXX> -> \doi{XX.XXX} to avoid CRAN Notes, etc.
+  # URL-decode %XX sequences because \doi{} is fully verbatim:
+  # raw % starts an Rd comment and \% is not supported (#1321)
   x <- str_replace_all(x, "<(doi|DOI):(.*?)>", function(match) {
     match <- str_remove_all(match, "^<(doi|DOI):|>$")
-    paste0("\\doi{", escape(match), "}")
+    match <- utils::URLdecode(match)
+    paste0("\\doi{", match, "}")
   })
 
   # <http:XX.XXX> -> \url{http:XX.XXX}

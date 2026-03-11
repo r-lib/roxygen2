@@ -33,6 +33,15 @@ object_usage.default <- function(x) {
 
 #' @export
 object_usage.data <- function(x) {
+  if (roxy_meta_get("lazy_data", FALSE)) {
+    rd(x$alias)
+  } else {
+    rd(paste0("data(", x$alias, ")"))
+  }
+}
+
+#' @export
+object_usage.value <- function(x) {
   rd(x$alias)
 }
 
@@ -124,7 +133,7 @@ is_infix_fun <- function(name) {
     "::",
     ":::"
   )
-  str_detect(name, "^%.*%$") || name %in% ops
+  str_detect(name, "^%.*%$") | name %in% ops
 }
 is_padded_infix_fun <- function(name) {
   ops <- c(

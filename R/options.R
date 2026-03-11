@@ -10,7 +10,7 @@
 #'
 #' @section Possible options:
 #'
-#' * `roclets` `<character>`: giving names of roclets to run. See
+#' * `roclets` `<character>`: giving names of [roclets][roclet] to run. See
 #'    [roclet_find()] for details.
 #'
 #' * `packages` `<character>`: packages to load that implement new tags.
@@ -69,7 +69,8 @@ load_options <- function(base_path = ".") {
     current_package_dir = NA_character_,
     rd_family_title = list(),
     knitr_chunk_options = NULL,
-    restrict_image_formats = TRUE
+    restrict_image_formats = TRUE,
+    lazy_data = FALSE
   )
 
   unknown_opts <- setdiff(names(opts), names(defaults))
@@ -88,7 +89,7 @@ load_options <- function(base_path = ".") {
 
 load_options_description <- function(base_path = ".") {
   desc_path <- file.path(base_path, "DESCRIPTION")
-  dcf <- read.dcf(desc_path, fields = c("Roxygen", "Package"))
+  dcf <- read.dcf(desc_path, fields = c("Roxygen", "Package", "LazyData"))
   desc_opts <- dcf[[1, 1]]
 
   if (is.na(desc_opts)) {
@@ -99,6 +100,7 @@ load_options_description <- function(base_path = ".") {
 
   opts$current_package <- dcf[[1, 2]]
   opts$current_package_dir <- normalizePath(base_path)
+  opts$lazy_data <- identical(dcf[[1, 3]], "true")
   opts
 }
 

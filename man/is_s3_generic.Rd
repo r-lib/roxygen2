@@ -3,7 +3,7 @@
 \name{is_s3_generic}
 \alias{is_s3_generic}
 \alias{is_s3_method}
-\title{Determine if a function is an S3 generic or S3 method.}
+\title{Determine if a function is an S3 generic or S3 method}
 \usage{
 is_s3_generic(name, env = parent.frame())
 

@@ -82,6 +82,14 @@
       x <text>:4: @description markdown translation failed.
       x block quotes are not currently supported
 
+# horizontal rules generate warning (#1707)
+
+    Code
+      . <- roc_proc_text(rd_roclet(), text)
+    Message
+      x <text>:6: @details markdown translation failed.
+      x horizontal rules are not currently supported
+
 # level 1 heading in markdown generates warning in some tags
 
     Code

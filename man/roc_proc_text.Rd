@@ -2,7 +2,7 @@
 % Please edit documentation in R/roclet.R
 \name{roc_proc_text}
 \alias{roc_proc_text}
-\title{Process roclet on string and capture results.}
+\title{Process roclet on string and capture results}
 \usage{
 roc_proc_text(roclet, input, wd = NULL)
 }

@@ -1,4 +1,4 @@
-#' Determine if a function is an S3 generic or S3 method.
+#' Determine if a function is an S3 generic or S3 method
 #'
 #' @description
 #' `is_s3_generic` compares name to `.knownS3Generics` and
@@ -75,6 +75,11 @@ is.s3generic <- function(x) inherits(x, "s3generic")
 is.s3 <- function(x) inherits(x, c("s3method", "s3generic"))
 
 find_generic <- function(name, env = parent.frame()) {
+  # If it's an S4 generic, it's definitely not an S3 method
+  if (methods::isGeneric(name, where = env)) {
+    return(NULL)
+  }
+
   pieces <- str_split(name, fixed("."))[[1]]
   n <- length(pieces)
 
@@ -83,7 +88,7 @@ find_generic <- function(name, env = parent.frame()) {
     return(NULL)
   }
 
-  for (i in seq_len(n - 1)) {
+  for (i in rev(seq_len(n - 1))) {
     generic <- paste0(pieces[seq_len(i)], collapse = ".")
     class <- paste0(pieces[(i + 1):n], collapse = ".")
 

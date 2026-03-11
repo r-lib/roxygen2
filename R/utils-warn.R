@@ -4,6 +4,12 @@
 #' @inheritParams rlang::abort
 #' @param envir passed to `rlang::warn()` as `.envir`.
 warn_roxy_tag <- function(tag, message, parent = NULL, envir = parent.frame()) {
+  if (is.null(tag)) {
+    names(message)[[1]] <- "x"
+    cli::cli_inform(message, parent = parent, .envir = envir)
+    return(invisible())
+  }
+
   tag_name <- cli::format_inline("{.strong @{tag$tag}} ")
   if (is.null(tag$raw)) {
     tag_name <- paste(tag_name, "(automatically generated) ")

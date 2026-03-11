@@ -2,7 +2,7 @@
 % Please edit documentation in R/object-from-call.R
 \name{object}
 \alias{object}
-\title{Constructors for S3 object to represent R objects.}
+\title{Constructors for S3 object to represent R objects}
 \usage{
 object(value, alias, type)
 }

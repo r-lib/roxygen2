@@ -76,6 +76,11 @@ roxy_tag_rd.roxy_tag_seealso <- function(x, base_path, env) {
 format.rd_section_seealso <- function(x, ...) {
   format_collapse(x, ...)
 }
+#' @export
+merge.rd_section_seealso <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  rd_section(x$type, unique(c(x$value, y$value)))
+}
 
 #' @export
 roxy_tag_parse.roxy_tag_source <- function(x) tag_markdown(x)

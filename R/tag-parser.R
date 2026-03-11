@@ -128,13 +128,14 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
       return(NULL)
     }
 
+    pieces[, 2] <- trim_docstring(pieces[, 2])
     if (markdown) {
       pieces[, 2] <- markdown_if_active(pieces[, 2], x)
     }
 
     x$val <- list(
       name = pieces[, 1],
-      description = trim_docstring(pieces[, 2])
+      description = pieces[, 2]
     )
     x
   }

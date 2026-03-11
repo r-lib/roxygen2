@@ -20,11 +20,11 @@ knitr::opts_chunk$set(
 ## Datasets
 
 Datasets are stored in `data/`, not as regular R objects in the package.
-This means you need to document them in a slightly different way: instead of documenting the data directly, you quote the dataset's name.
-
-For example, this roxygen2 block will documentation for `data(diamonds)`:
+This means you need to document them in a slightly different way: instead of documenting the data directly, you quote the dataset's name. For example, this is the roxygen2 block used for `ggplot2::diamonds`:
 
 ```{r}
+#| eval: false
+
 #' Prices of over 50,000 round cut diamonds
 #'
 #' A dataset containing the prices and other attributes of almost 54,000
@@ -49,6 +49,8 @@ For example, this roxygen2 block will documentation for `data(diamonds)`:
 "diamonds"
 ```
 
+The default usage depends on the `LazyData` setting in your `DESCRIPTION`. If you have `LazyData: true`, the usage will be just the dataset name (e.g. `diamonds`). Otherwise, the usage will be wrapped in `data()` (e.g. `data(diamonds)`).
+
 Note the use of two additional tags that are particularly useful for documenting data:
 
 -   `@format`, which gives an overview of the structure of the dataset.
@@ -67,7 +69,9 @@ Use `usethis::use_package_doc()` to set up automatically.
 
 Here's an example:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
+
 #' @keywords internal 
 "_PACKAGE"
 ```
@@ -109,6 +113,8 @@ Use `@slot` to document the slots of the class.
 Here's a simple example:
 
 ```{r}
+#| eval: false
+
 #' An S4 class to represent a bank account
 #'
 #' @slot balance A length-one numeric vector
@@ -162,6 +168,8 @@ roxygen2 automatically generates additional sections for an R6 class:
 An example from the R6 tutorial:
 
 ```{r}
+#| eval: false
+
 #' R6 Class Representing a Person
 #'
 #' @description
@@ -169,7 +177,6 @@ An example from the R6 tutorial:
 #'
 #' @details
 #' A person can also greet you.
-
 Person <- R6::R6Class("Person",
 public = list(
 

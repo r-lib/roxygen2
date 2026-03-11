@@ -55,10 +55,10 @@ test_that("can document lazy data", {
 # imports -----------------------------------------------------------------
 
 test_that("find function imported from another package", {
-  obj <- call_to_object(purrr::map_int)
+  obj <- call_to_object(desc::desc_get)
   expect_s3_class(obj, "import")
-  expect_equal(obj$alias, "map_int")
-  expect_equal(obj$value$pkg, "purrr")
+  expect_equal(obj$alias, "desc_get")
+  expect_equal(obj$value$pkg, "desc")
 })
 
 # assignment ------------------------------------------------------------
@@ -85,11 +85,11 @@ test_that("finds S3 method created with assignment", {
   expect_s3_class(obj, "s3method")
 })
 
-test_that("finds data created with assignment", {
+test_that("finds value created with assignment", {
   obj <- call_to_object({
     foo <- 1:10
   })
-  expect_s3_class(obj, "data")
+  expect_s3_class(obj, "value")
 })
 
 test_that("finds class generator", {

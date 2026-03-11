@@ -17,8 +17,6 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
   )
 }
 
-mddata <- new.env(parent = emptyenv())
-
 #' Expand the embedded inline code
 #'
 #' @details
@@ -70,7 +68,6 @@ mddata <- new.env(parent = emptyenv())
 #' @keywords internal
 
 markdown_pass1 <- function(text) {
-  rm(list = ls(envir = mddata), envir = mddata)
   text <- paste(text, collapse = "\n")
   mdxml <- xml_ns_strip(md_to_mdxml(text, sourcepos = TRUE))
   code_nodes <- xml_find_all(mdxml, ".//code | .//code_block")
@@ -115,7 +112,10 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     # "`r " there.
 
     indent <- nchar(str_extract(line, "^[ ]+"))
-    if (str_sub(line, start - 1 + indent, start + 1 + indent) == "`r ") {
+    if (
+      !is.na(indent) &&
+        str_sub(line, start - 1 + indent, start + 1 + indent) == "`r "
+    ) {
       rcode_pos$start_column[l] <- rcode_pos$start_column[l] + indent
       rcode_pos$end_column[l] <- rcode_pos$end_column[l] + indent
     }
@@ -133,10 +133,10 @@ is_markdown_code_node <- function(x) {
 parse_md_pos <- function(text) {
   nums <- map(strsplit(text, "[:-]"), as.integer)
   data.frame(
-    start_line = map_int(nums, 1),
-    start_column = map_int(nums, 2),
-    end_line = map_int(nums, 3),
-    end_column = map_int(nums, 4)
+    start_line = map_int(nums, \(x) x[[1]]),
+    start_column = map_int(nums, \(x) x[[2]]),
+    end_line = map_int(nums, \(x) x[[3]]),
+    end_column = map_int(nums, \(x) x[[4]])
   )
 }
 
@@ -239,6 +239,8 @@ mdxml_children_to_rd_top <- function(xml, state) {
   if (state$has_sections) {
     secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]] %||% ""
     titles <- c("", state$titles)
+    # strsplit drops trailing empty strings, so pad to match titles length
+    secs <- c(secs, rep("", length(titles) - length(secs)))
     rd <- structure(str_trim(secs), names = titles)
   }
   rd
@@ -298,7 +300,7 @@ mdxml_node_to_rd <- function(xml, state) {
 
     # Not supported
     block_quote = mdxml_unsupported(xml, state$tag, "block quotes"),
-    hrule = mdxml_unsupported(xml, state$tag, "horizontal rules"),
+    thematic_break = mdxml_unsupported(xml, state$tag, "horizontal rules"),
     mdxml_unknown(xml, state$tag)
   )
 }

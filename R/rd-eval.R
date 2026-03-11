@@ -4,8 +4,8 @@ roxy_eval <- function(expr, env) {
 }
 
 roxy_knit <- function(text, envir, options) {
-  old_opts <- purrr::exec(opts_chunk$set, options)
-  withr::defer(purrr::exec(opts_chunk$set, old_opts))
+  old_opts <- exec(opts_chunk$set, !!!options)
+  withr::defer(exec(opts_chunk$set, !!!old_opts))
 
   local_reproducible_output()
   knit(text = text, quiet = TRUE, envir = envir)

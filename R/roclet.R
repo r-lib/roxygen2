@@ -1,14 +1,19 @@
-#' Build a new roclet.
+#' Build a new roclet
 #'
-#' To create a new roclet, you will need to create a constructor function
-#' that wraps `roclet`, and then implement the methods described below.
+#' @description
+#' Roclets are roxygen2's plugin system for producing different types of output,
+#' like Rd files ([rd_roclet()]) or the `NAMESPACE` file ([namespace_roclet()]).
+#'
+#' To create a new roclet, you will need to create a constructor function that
+#' calls `roclet()`, and then implement the methods described below.
+#'
 #' See `vignette("extending")` for more details.
 #'
 #' @section Methods:
 #'
 #' * `roclet_preprocess()` is called after blocks have been parsed but before
 #'   code has been evaluated. This should only be needed if your roclet affects
-#'   how code will evaluated. Should return a roclet.
+#'   how code will be evaluated. Should return a roclet.
 #'
 #' * `roclet_process()` called after blocks have been evaluated; i.e. the
 #'   `@eval` tag has been processed, and the object associated with each block
@@ -81,7 +86,7 @@ roclet_tags <- function(x) {
   UseMethod("roclet_tags")
 }
 
-#' Create a roclet from a string.
+#' Create a roclet from a string
 #'
 #' This provides a flexible way of specifying a roclet in a string.
 #'
@@ -124,7 +129,7 @@ roclet_find <- function(x) {
 
 is.roclet <- function(x) inherits(x, "roclet")
 
-#' Process roclet on string and capture results.
+#' Process roclet on string and capture results
 #'
 #' Useful for testing.
 #'

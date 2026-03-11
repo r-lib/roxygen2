@@ -141,21 +141,17 @@ parse_link <- function(destination, contents, state) {
   }
   check_topic(pkg, topic, state$tag)
 
-  pkg <- gsub("%", "\\\\%", pkg)
-  fun <- gsub("%", "\\\\%", fun)
-  topic <- gsub("%", "\\\\%", topic)
-  noclass <- gsub("%", "\\\\%", noclass)
-
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {
     text <- if (s4) noclass else fun
     if (explicit_pkg && !is.na(pkg)) {
       text <- paste0(pkg, "::", text)
     }
+    text <- escape(text)
   } else {
     text <- mdxml_link_text(contents, state)
   }
-  rd_link(pkg, topic, text, code = is_code)
+  rd_link(pkg, escape(topic), text, code = is_code)
 }
 
 check_topic <- function(pkg, topic, tag = NULL) {
@@ -187,7 +183,6 @@ rd_link <- function(pkg, topic, text, code = FALSE) {
   }
   out
 }
-
 
 #' Dummy page to test roxygen's markdown formatting
 #'

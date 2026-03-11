@@ -633,6 +633,7 @@ test_that("generates informative warnings", {
 })
 
 test_that("rd_link() builds correct Rd links", {
+  expect_equal(rd_link(NA, "topic", "topic"), "\\link{topic}")
   expect_equal(rd_link("pkg", "topic", "text"), "\\link[pkg:topic]{text}")
-  expect_equal(rd_link(NA_character_, "topic", "text"), "\\link[=topic]{text}")
+  expect_equal(rd_link(NA, "topic", "text"), "\\link[=topic]{text}")
 })

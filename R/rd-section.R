@@ -23,7 +23,8 @@ roxy_tag_rd.roxy_tag_section <- function(x, base_path, env) {
 }
 
 rd_section_section <- function(title, content) {
-  stopifnot(is.character(title), is.character(content))
+  check_character(title)
+  check_character(content)
   stopifnot(length(title) == length(content))
 
   rd_section("section", list(title = title, content = content))

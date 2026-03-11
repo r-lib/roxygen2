@@ -39,7 +39,7 @@ print.rd_section <- function(x, ...) {
 
 #' @export
 format.rd_section <- function(x, ...) {
-  cli::cli_abort("`format.{class(x)[[1]]}` method not found")
+  cli::cli_abort("{.fn format.{class(x)[[1]]}} method not found.")
 }
 
 #' @export

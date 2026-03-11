@@ -46,7 +46,7 @@ get_method <- function(obj, method_name) {
 # if it's a call to {, with more than 1 element, and the first element is
 # a character vector.
 docstring <- function(f) {
-  stopifnot(is.function(f))
+  check_function(f)
   if (is.primitive(f)) {
     return(NULL)
   }

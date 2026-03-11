@@ -38,6 +38,11 @@ roxygenize <- function(
   load_code = NULL,
   clean = FALSE
 ) {
+  check_string(package.dir)
+  check_character(roclets, allow_null = TRUE)
+  load_code <- find_load_strategy(load_code)
+  check_bool(clean)
+
   base_path <- normalizePath(package.dir)
   is_first <- roxygen_setup(base_path)
 
@@ -69,7 +74,6 @@ roxygenize <- function(
   }
 
   # Now load code
-  load_code <- find_load_strategy(load_code)
   env <- load_code(base_path)
   local_roxy_meta_set("env", env)
 

@@ -24,7 +24,7 @@ topics_process_family_prefix <- function(family) {
   valid <- is.character(meta) || is.list(meta)
   if (!valid) {
     cli::cli_abort(
-      "{.code rd_family_title} is set, but is not a named list / vector"
+      "{.code rd_family_title} is set, but is not a named list / vector."
     )
   }
 

@@ -4,7 +4,7 @@
       update_collate("doesn't-exist")
     Condition
       Error in `update_collate()`:
-      ! 'doesn't-exist' doesn't exist
+      ! 'doesn't-exist' doesn't exist.
 
 # DESCRIPTION file is re-written only if collate changes
 

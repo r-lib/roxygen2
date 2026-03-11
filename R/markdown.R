@@ -184,7 +184,7 @@ str_set_all_pos <- function(text, pos, value, nodes) {
   # continuation lines: https://github.com/commonmark/cmark/issues/296
   types <- xml_name(nodes)
   if (any(types == "code" & pos$start_line != pos$end_line)) {
-    cli::cli_abort("multi-line `r ` markup is not supported", call = NULL)
+    cli::cli_abort("Multi-line `r ` markup is not supported.", call = NULL)
   }
 
   # Need to split the string, because of the potential multi-line

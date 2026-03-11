@@ -5,7 +5,7 @@
     Message
       x <text>:4: @description failed to evaluate inline markdown code.
       Caused by error:
-      ! multi-line `r ` markup is not supported
+      ! Multi-line `r ` markup is not supported.
 
 # inline code gives useful warning
 

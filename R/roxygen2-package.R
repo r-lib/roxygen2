@@ -6,6 +6,7 @@
 ## usethis namespace: start
 #' @importFrom knitr knit
 #' @importFrom knitr opts_chunk
+#' @importFrom lifecycle deprecated
 #' @importFrom R6 R6Class
 #' @importFrom stats setNames
 #' @importFrom utils head

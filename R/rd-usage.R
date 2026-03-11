@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_parse.roxy_tag_usage <- function(x) {
-  x <- tag_value(x)
+  x <- tag_value(x, multiline = TRUE)
   x$val <- rd(x$val)
   x
 }

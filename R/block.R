@@ -224,7 +224,7 @@ roxy_tag_parse.roxy_tag_eval <- function(x) {
 
 #' @export
 roxy_tag_parse.roxy_tag_include <- function(x) {
-  tag_value(x)
+  tag_words(x, min = 1)
 }
 
 parse_description <- function(tags) {

@@ -44,3 +44,10 @@
       1: 1 +
          ^
 
+# @examplesIf warns on empty body (#1695)
+
+    Code
+      . <- roc_proc_text(rd_roclet(), block)
+    Message
+      x <text>:4: @examplesIf requires example code after the condition.
+

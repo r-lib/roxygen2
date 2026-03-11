@@ -33,6 +33,14 @@
     Message
       x <text>:2: @importFrom must have at least 2 words, not 1.
 
+# multiline importFrom generates warning
+
+    Code
+      . <- roc_proc_text(namespace_roclet(), block)
+    Message
+      x <text>:2: @importFrom must be 1 line, not 2.
+      i The first line is "test test1"
+
 # can regenerate NAMESPACE even if its broken
 
     Code

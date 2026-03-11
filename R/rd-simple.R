@@ -32,10 +32,10 @@ format.rd_section_encoding <- function(x, ...) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_keywords <- function(x) tag_value(x)
+roxy_tag_parse.roxy_tag_keywords <- function(x) tag_words(x, min = 1)
 #' @export
 roxy_tag_rd.roxy_tag_keywords <- function(x, base_path, env) {
-  rd_section("keyword", str_split(x$val, "\\s+")[[1]])
+  rd_section("keyword", x$val)
 }
 #' @export
 format.rd_section_keyword <- function(x, ...) {

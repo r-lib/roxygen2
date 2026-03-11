@@ -16,7 +16,7 @@
 \alias{tag_markdown_with_sections}
 \title{Parse tags}
 \usage{
-tag_value(x)
+tag_value(x, multiline = FALSE)
 
 tag_inherit(x)
 
@@ -26,7 +26,7 @@ tag_two_part(x, first, second, required = TRUE, markdown = TRUE)
 
 tag_name_description(x)
 
-tag_words(x, min = 0, max = Inf)
+tag_words(x, min = 0, max = Inf, multiline = FALSE)
 
 tag_words_line(x)
 
@@ -42,6 +42,10 @@ tag_markdown_with_sections(x)
 }
 \arguments{
 \item{x}{A \link{roxy_tag} object to parse}
+
+\item{multiline}{If \code{FALSE} (the default), tags that span multiple lines
+will generate a warning. Set to \code{TRUE} for tags where multiline content
+is expected (e.g., \verb{@usage}, \verb{@rawRd}).}
 
 \item{first, second}{Name of first and second parts of two part tags}
 

@@ -111,6 +111,16 @@ test_that("@examplesIf warns about unparseable condition", {
   expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
+test_that("@examplesIf warns on empty body (#1695)", {
+  block <- "
+    #' @name a
+    #' @title a
+    #' @examplesIf interactive()
+    NULL
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
+})
+
 test_that("strings in R comments don't affect brace matching (#1492)", {
   block <- "
     #' @name a

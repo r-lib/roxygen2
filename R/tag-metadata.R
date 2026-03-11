@@ -43,8 +43,7 @@ tags_rd <- function(type) {
 
   c(
     paste0("@name tags-", type),
-    "@aliases",
-    tags_rd_section(tags, "aliases"),
+    paste0("@aliases ", tags_rd_section(tags, "aliases")),
     "@description",
     paste0("Learn the full details in `vignette('", type, "')`."),
     "",
@@ -72,7 +71,7 @@ tags_rd_section <- function(tags, section) {
 
   switch(
     section,
-    aliases = paste0("  @", tags$tag),
+    aliases = paste0("@", tags$tag, collapse = " "),
     usage = paste0("#' @", tags$tag, tags$template),
     description = paste0(
       "* `@",

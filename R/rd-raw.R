@@ -6,7 +6,7 @@ roxy_tag_rd.roxy_tag_evalRd <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_rawRd <- function(x) tag_value(x)
+roxy_tag_parse.roxy_tag_rawRd <- function(x) tag_value(x, multiline = TRUE)
 #' @export
 roxy_tag_rd.roxy_tag_rawRd <- function(x, base_path, env) {
   rd_section(x$tag, x$val)

@@ -1,5 +1,8 @@
 # roxygen2 (development version)
 
+* Tags that expect single-line input now warn when they span multiple lines, catching common mistakes. Affected tags: `@aliases`, `@concept`, `@encoding`, `@export`, `@exportClass`, `@exportMethod`, `@exportPattern`, `@exportS3Method`, `@importFrom`, `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@inheritParams`, `@keywords`, `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and `@useDynLib` (#1642, #1688). This may break some existing usage, but it prevents a wide class of otherwise silent errors.
+* `@examplesIf` now warns when there is no example code after the condition (#1695).
+* `tag_words_line()` is deprecated in favour of `tag_words()`, which now checks for single-line content by default. Use `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)` if your tag legitimately spans multiple lines.
 * Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.
 * Assigning a non-function value (e.g. `x <- 1:10`) no longer automatically gets `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name.
 * Documenting values (e.g. `x <- 1:10`) no longer adds `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name (e.g. "diamonds").

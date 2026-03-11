@@ -1,3 +1,19 @@
+test_that("`Rd` prefix produces \\Sexpr", {
+  out1 <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' @title Title
+    #' @description Description `Rd foo()`
+    #' @md
+    foo <- function() NULL
+  "
+  )[[1]]
+  expect_equal(
+    out1$get_value("description"),
+    "Description \\Sexpr[stage=render,results=rd]{foo()}"
+  )
+})
+
 test_that("can eval inline code", {
   out1 <- roc_proc_text(
     rd_roclet(),

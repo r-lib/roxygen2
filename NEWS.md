@@ -6,6 +6,7 @@
 * Documenting data objects now generates `\usage{data(mydata)}` when the package doesn't have `LazyData: true` in its DESCRIPTION (#1425).
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
 * Markdown improvements:
+  * `` `Rd expr` `` inline code now generates `\Sexpr[stage=render,results=rd]{expr}`, providing a convenient syntax for evaluating R code at documentation render time (#1214).
   * Indented bullet lists in `@param` and other two-part tags are no longer incorrectly nested (#1102).
   * Horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
   * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).

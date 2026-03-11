@@ -298,6 +298,12 @@ The result is equivalent to writing the following by hand:
 This is a powerful technique for reducing duplication because you can flexibly parameterise the function however best meets your needs.
 Note that the evaluation environment is deliberately a child of the package that you're documenting so you can call internal functions.
 
+## Inline Rd code
+
+You can use `` `Rd ` `` to insert code that is evaluated at documentation render time (i.e. when the user views the help page) rather than at build time.
+For example, `` `Rd myFun()` `` will generate `\Sexpr[stage=render,results=rd]{myFun()}` in the Rd file.
+This is useful for documentation that needs to reflect the current state of the system, not the state when the package was built.
+
 ## Child documents
 
 You can use the same `.Rmd` or `.md` document in the documentation, `README.Rmd`, and vignettes by using child documents:

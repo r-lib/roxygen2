@@ -13,6 +13,6 @@
     below to see their documentation.
     
     \describe{
-      \item{testthat}{\code{\link[testthat]{auto_test}}}
+      \item{testthat}{\code{\link[testthat:auto_test]{auto_test}()}}
     }}
 

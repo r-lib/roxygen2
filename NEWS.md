@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.
+* Assigning a non-function value (e.g. `x <- 1:10`) no longer automatically gets `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name.
 * Documenting values (e.g. `x <- 1:10`) no longer adds `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name (e.g. "diamonds").
 * Documenting data objects now generates `\usage{data(mydata)}` when the package doesn't have `LazyData: true` in its DESCRIPTION (#1425).
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).

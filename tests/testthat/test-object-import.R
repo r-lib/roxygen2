@@ -7,7 +7,7 @@ test_that("exporting a call to :: produces re-exports documentation", {
 
   expect_equal(
     out$get_section("reexport"),
-    rd_section_reexport("testthat", "auto_test", "auto_test")
+    rd_section_reexport("testthat", "auto_test")
   )
   expect_equal(out$get_value("title"), "Objects exported from other packages")
   expect_equal(out$get_value("keyword"), "internal")
@@ -34,7 +34,6 @@ test_that("multiple re-exports are combined", {
     out$get_section("reexport"),
     rd_section_reexport(
       c("testthat", "testthat"),
-      c("expect_lt", "expect_gt"),
       c("expect_lt", "expect_gt")
     )
   )
@@ -52,4 +51,15 @@ test_that("description generated correctly", {
   )[[1]]
 
   expect_null(out$get_section("description"))
+})
+
+test_that("reexported functions get () but infix operators don't", {
+  expect_equal(
+    reexport_link("pkg", "fun"),
+    "\\code{\\link[pkg:fun]{fun}()}"
+  )
+  expect_equal(
+    reexport_link("pkg", "%op%"),
+    "\\code{\\link[pkg:\\%op\\%]{\\%op\\%}}"
+  )
 })

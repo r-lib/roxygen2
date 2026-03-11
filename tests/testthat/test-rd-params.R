@@ -52,6 +52,26 @@ test_that("empty @param generates warning", {
   expect_snapshot(. <- roc_proc_text(rd_roclet(), block))
 })
 
+test_that("indented @param bullet list is not nested (#1102)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Foo
+    #' @md
+    #' @param foo
+    #'   * A
+    #'   * B
+    #'   * C
+    a <- function(foo) {}
+  "
+  )[[1]]
+
+  expect_match(out$get_rd("param"), "\\item A", fixed = TRUE)
+  expect_match(out$get_rd("param"), "\\item B", fixed = TRUE)
+  expect_match(out$get_rd("param"), "\\item C", fixed = TRUE)
+  expect_no_match(out$get_rd("param"), "itemize\\{\n\\\\item B")
+})
+
 test_that("data objects don't get params", {
   out <- roc_proc_text(
     rd_roclet(),

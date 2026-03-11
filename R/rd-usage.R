@@ -33,7 +33,11 @@ object_usage.default <- function(x) {
 
 #' @export
 object_usage.data <- function(x) {
-  rd(x$alias)
+  if (roxy_meta_get("lazy_data", FALSE)) {
+    rd(x$alias)
+  } else {
+    rd(paste0("data(", x$alias, ")"))
+  }
 }
 
 #' @export

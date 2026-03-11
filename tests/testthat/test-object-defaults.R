@@ -39,8 +39,31 @@ test_that("@docType data automatically added to data objects created elsewhere",
   )[[1]]
 
   expect_equal(out$get_value("docType"), "data")
-  expect_equal(out$get_value("usage"), rd("a"))
+  expect_equal(out$get_value("usage"), rd("data(a)"))
   expect_equal(out$get_value("keyword"), "datasets")
+})
+
+test_that("data usage wraps in data() when LazyData is false", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    a <- data.frame(a = 1:10)
+    #' Title.
+    'a'
+  "
+  )[[1]]
+  expect_equal(out$get_value("usage"), rd("data(a)"))
+
+  local_roxy_meta_set("lazy_data", TRUE)
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    a <- data.frame(a = 1:10)
+    #' Title.
+    'a'
+  "
+  )[[1]]
+  expect_equal(out$get_value("usage"), rd("a"))
 })
 
 # Reference classes ----------------------------------------------------------

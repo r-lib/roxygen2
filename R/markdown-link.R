@@ -171,6 +171,21 @@ check_topic <- function(pkg, topic, tag = NULL) {
   invisible()
 }
 
+fun_suffix <- function(name, env) {
+  if (is_infix_fun(name)) {
+    name
+  } else if (!env_has(env, name)) {
+    name
+  } else {
+    obj <- env_get(env, name)
+    if (!is.function(obj)) {
+      name
+    } else {
+      paste0(name, "()")
+    }
+  }
+}
+
 rd_link <- function(pkg, topic, text, code = FALSE) {
   if (is.na(pkg) && topic == text) {
     out <- paste0("\\link{", text, "}")

@@ -53,10 +53,16 @@ test_that("description generated correctly", {
   expect_null(out$get_section("description"))
 })
 
-test_that("reexported functions get () but infix operators don't", {
+test_that("only non-infix reexported functions get ()", {
+  skip_on_cran()
+
   expect_equal(
-    reexport_link("pkg", "fun"),
-    "\\code{\\link[pkg:fun]{fun()}}"
+    reexport_link("testthat", "test_that"),
+    "\\code{\\link[testthat:test_that]{test_that()}}"
+  )
+  expect_equal(
+    reexport_link("testthat", "CheckReporter"),
+    "\\code{\\link[testthat:CheckReporter]{CheckReporter}}"
   )
   expect_equal(
     reexport_link("pkg", "%op%"),

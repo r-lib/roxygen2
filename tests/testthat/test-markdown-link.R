@@ -637,3 +637,11 @@ test_that("rd_link() builds correct Rd links", {
   expect_equal(rd_link("pkg", "topic", "text"), "\\link[pkg:topic]{text}")
   expect_equal(rd_link(NA, "topic", "text"), "\\link[=topic]{text}")
 })
+
+test_that("fun_suffix() adds () only to non-infix functions", {
+  env <- env(f = function() NULL, x = 1, `%op%` = function(a, b) NULL)
+  expect_equal(fun_suffix("f", env), "f()")
+  expect_equal(fun_suffix("x", env), "x")
+  expect_equal(fun_suffix("%op%", env), "%op%")
+  expect_equal(fun_suffix("missing", env), "missing")
+})

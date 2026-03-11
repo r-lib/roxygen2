@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* All generated links now use the same code path. This will lead to some minor differences when you re-document, but overall the links will now be more consistent (#1792).
 * Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.
 * Assigning a non-function value (e.g. `x <- 1:10`) no longer automatically gets `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name.
 * Documenting values (e.g. `x <- 1:10`) no longer adds `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name (e.g. "diamonds").

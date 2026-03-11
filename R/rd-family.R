@@ -65,9 +65,7 @@ topics_process_family <- function(topics, env) {
       by_file <- map_chr(
         other_aliases[order_c(other_aliases_order)],
         function(x) {
-          obj <- find_object(x[1], env)
-          suffix <- if (is.function(obj$value)) "()" else ""
-          rd_link(NA, escape(x[1]), paste0(escape(x[1]), suffix), code = TRUE)
+          rd_link(NA, escape(x[1]), escape(fun_suffix(x[1], env)), code = TRUE)
         }
       )
       links <- paste(by_file, collapse = ",\n")

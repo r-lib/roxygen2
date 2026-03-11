@@ -44,6 +44,6 @@ format.rd_section_reexport <- function(x, ...) {
 }
 
 reexport_link <- function(pkg, fun) {
-  suffix <- ifelse(is_infix_fun(fun), "", "()")
-  rd_link(pkg, escape(fun), paste0(escape(fun), suffix), code = TRUE)
+  env <- tryCatch(asNamespace(pkg), error = function(e) emptyenv())
+  rd_link(pkg, escape(fun), escape(fun_suffix(fun, env)), code = TRUE)
 }

@@ -458,6 +458,16 @@ that the evaluation environment is deliberately a child of the package
 that you’re documenting so you can call internal functions.</p>
 </div>
 <div class="section level2">
+<h2 id="inline-rd-code">Inline Rd code<a class="anchor" aria-label="anchor" href="#inline-rd-code"></a>
+</h2>
+<p>You can use <code>`Rd `</code> to insert code that is evaluated at
+documentation render time (i.e. when the user views the help page)
+rather than at build time. For example, <code>`Rd myFun()`</code> will
+generate <code>\Sexpr[stage=render,results=rd]{myFun()}</code> in the Rd
+file. This is useful for documentation that needs to reflect the current
+state of the system, not the state when the package was built.</p>
+</div>
+<div class="section level2">
 <h2 id="child-documents">Child documents<a class="anchor" aria-label="anchor" href="#child-documents"></a>
 </h2>
 <p>You can use the same <code>.Rmd</code> or <code>.md</code> document

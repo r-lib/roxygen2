@@ -26,6 +26,10 @@
   like datasets
   ([\#1720](https://github.com/r-lib/roxygen2/issues/1720)).
 - Markdown improvements:
+  - `` `Rd expr` `` inline code now generates
+    `\Sexpr[stage=render,results=rd]{expr}`, providing a convenient
+    syntax for evaluating R code at documentation render time
+    ([\#1214](https://github.com/r-lib/roxygen2/issues/1214)).
   - Indented bullet lists in `@param` and other two-part tags are no
     longer incorrectly nested
     ([\#1102](https://github.com/r-lib/roxygen2/issues/1102)).

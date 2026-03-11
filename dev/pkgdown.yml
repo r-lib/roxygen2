@@ -10,7 +10,7 @@ articles:
   rd: rd.html
   reuse: reuse.html
   roxygen2: roxygen2.html
-last_built: 2026-03-11T16:42Z
+last_built: 2026-03-11T16:45Z
 urls:
   reference: https://roxygen2.r-lib.org/reference
   article: https://roxygen2.r-lib.org/articles

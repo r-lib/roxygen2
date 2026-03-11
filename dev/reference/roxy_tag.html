@@ -108,6 +108,38 @@ a list. Usually filled in by <code>tag_parsers</code></p></dd>
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A tag</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Additional data to be stored in the condition object.
+If you supply condition fields, you should usually provide a
+<code>class</code> argument. You may consider prefixing condition fields
+with the name of your package or organisation to prevent name
+collisions.</p></dd>
+
+
+<dt id="arg-message">message<a class="anchor" aria-label="anchor" href="#arg-message"></a></dt>
+<dd><p>Warning message</p></dd>
+
+
+<dt id="arg-parent">parent<a class="anchor" aria-label="anchor" href="#arg-parent"></a></dt>
+<dd><p>Supply <code>parent</code> when you rethrow an error from a
+condition handler (e.g. with <code><a href="https://rlang.r-lib.org/reference/try_fetch.html" class="external-link">try_fetch()</a></code>).</p><ul><li><p>If <code>parent</code> is a condition object, a <em>chained error</em> is
+created, which is useful when you want to enhance an error with
+more details, while still retaining the original information.</p></li>
+<li><p>If <code>parent</code> is <code>NA</code>, it indicates an unchained rethrow, which
+is useful when you want to take ownership over an error and
+rethrow it with a custom message that better fits the
+surrounding context.</p>
+<p>Technically, supplying <code>NA</code> lets <code>abort()</code> know it is called
+from a condition handler. This helps it create simpler
+backtraces where the condition handling context is hidden by
+default.</p></li>
+</ul><p>For more information about error calls, see <a href="https://rlang.r-lib.org/reference/topic-error-chaining.html" class="external-link">Including contextual information with error chains</a>.</p></dd>
+
+
+<dt id="arg-envir">envir<a class="anchor" aria-label="anchor" href="#arg-envir"></a></dt>
+<dd><p>passed to <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::warn()</a></code> as <code>.envir</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
@@ -115,6 +147,19 @@ a list. Usually filled in by <code>tag_parsers</code></p></dd>
 
 <p>Define a method for <code>roxy_tag_parse</code> to support new tags. See <a href="tag_parsers.html">tag_parsers</a>
 for more details.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other extending:
+<code><a href="load_options.html">load_options()</a></code>,
+<code><a href="parse_package.html">parse_package()</a></code>,
+<code><a href="rd_section.html">rd_section()</a></code>,
+<code><a href="roc_proc_text.html">roc_proc_text()</a></code>,
+<code><a href="roclet_find.html">roclet_find()</a></code>,
+<code><a href="roxy_block.html">roxy_block()</a></code>,
+<code><a href="roxy_tag_rd.html">roxy_tag_rd()</a></code>,
+<code><a href="tag_parsers.html">tag_parsers</a></code>,
+<code><a href="tags_list.html">tags_list()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -156,6 +156,10 @@ generate:
   [`@templateVar`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
   : Tags that help you reuse documentation
 
+- [`tags_list()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)
+  [`tags_metadata()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)
+  : Access metadata about built-in or available tags
+
 ## Running roxygen2
 
 - [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
@@ -181,6 +185,66 @@ comments. Each roclet handles a different type of output.
 
 - [`update_collate()`](https://roxygen2.r-lib.org/dev/reference/update_collate.md)
   : Update Collate field in DESCRIPTION
+
+## Developing/extending roxygen2
+
+- [`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md)
+  [`roxy_meta_get()`](https://roxygen2.r-lib.org/dev/reference/load_options.md)
+  : Load roxygen2 options
+
+- [`parse_package()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md)
+  [`parse_file()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md)
+  [`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md)
+  [`env_file()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md)
+  [`env_package()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md)
+  : Parse a package, file, or inline code
+
+- [`rd_section()`](https://roxygen2.r-lib.org/dev/reference/rd_section.md)
+  :
+
+  Construct an `rd_section` object
+
+- [`roc_proc_text()`](https://roxygen2.r-lib.org/dev/reference/roc_proc_text.md)
+  : Process roclet on string and capture results
+
+- [`roclet_find()`](https://roxygen2.r-lib.org/dev/reference/roclet_find.md)
+  : Create a roclet from a string
+
+- [`roxy_block()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md)
+  [`block_has_tags()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md)
+  [`block_get_tags()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md)
+  [`block_get_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md)
+  [`block_get_tag_value()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md)
+  : Blocks
+
+- [`roxy_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
+  [`roxy_tag_parse()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
+  [`roxy_tag_warning()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
+  [`warn_roxy_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
+  :
+
+  `roxy_tag` S3 constructor
+
+- [`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md)
+  : Generate Rd output from a tag
+
+- [`tag_value()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_inherit()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_name()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_two_part()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_name_description()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_words()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_words_line()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_toggle()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_code()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_examples()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_markdown()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  [`tag_markdown_with_sections()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  : Parse tags
+
+- [`tags_list()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)
+  [`tags_metadata()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)
+  : Access metadata about built-in or available tags
 
 # Articles
 

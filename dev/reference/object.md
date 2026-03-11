@@ -19,3 +19,7 @@ object(value, alias, type)
 
   Alias for object being documented, in case you create a generator
   function with different name.
+
+- type:
+
+  Type of the object, character. E.g. `"data"` or `"s4method"`.

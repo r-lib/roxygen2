@@ -21,6 +21,14 @@ roxy_meta_get(key = NULL, default = NULL)
 
   Path to package.
 
+- key:
+
+  Key of the options, e.g. `"packages"`.
+
+- default:
+
+  Default value.
+
 ## Possible options
 
 - `roclets` `<character>`: giving names of
@@ -65,3 +73,16 @@ Or if longer, you can put in `/man/roxygen/meta.R`:
       markdown = TRUE,
       load = "installed"
     )
+
+## See also
+
+Other extending:
+[`parse_package()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md),
+[`rd_section()`](https://roxygen2.r-lib.org/dev/reference/rd_section.md),
+[`roc_proc_text()`](https://roxygen2.r-lib.org/dev/reference/roc_proc_text.md),
+[`roclet_find()`](https://roxygen2.r-lib.org/dev/reference/roclet_find.md),
+[`roxy_block()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md),
+[`roxy_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md),
+[`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md),
+[`tag_parsers`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md),
+[`tags_list()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)

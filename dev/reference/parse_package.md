@@ -37,6 +37,23 @@ env_package(path)
   blocks only. This suppresses evaluation of `@eval` tags, and will not
   find the code object associated with each block.
 
+- srcref_path:
+
+  Path to be used as source ref.
+
 ## Value
 
 A list of roxy_block objects
+
+## See also
+
+Other extending:
+[`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md),
+[`rd_section()`](https://roxygen2.r-lib.org/dev/reference/rd_section.md),
+[`roc_proc_text()`](https://roxygen2.r-lib.org/dev/reference/roc_proc_text.md),
+[`roclet_find()`](https://roxygen2.r-lib.org/dev/reference/roclet_find.md),
+[`roxy_block()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md),
+[`roxy_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md),
+[`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md),
+[`tag_parsers`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md),
+[`tags_list()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)

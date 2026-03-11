@@ -33,3 +33,16 @@ sections can not be combined with
 `rd_section(x$type, c(x$value, y$value))`. See
 [`vignette("extending")`](https://roxygen2.r-lib.org/dev/articles/extending.md)
 for more details.
+
+## See also
+
+Other extending:
+[`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md),
+[`parse_package()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md),
+[`roc_proc_text()`](https://roxygen2.r-lib.org/dev/reference/roc_proc_text.md),
+[`roclet_find()`](https://roxygen2.r-lib.org/dev/reference/roclet_find.md),
+[`roxy_block()`](https://roxygen2.r-lib.org/dev/reference/roxy_block.md),
+[`roxy_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md),
+[`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md),
+[`tag_parsers`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md),
+[`tags_list()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)

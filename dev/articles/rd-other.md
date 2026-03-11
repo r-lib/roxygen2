@@ -30,7 +30,6 @@ For example, this is the roxygen2 block used for `ggplot2::diamonds`:
 #' 
 #' @source {ggplot2} tidyverse R package.
 "diamonds"
-#> [1] "diamonds"
 ```
 
 The default usage depends on the `LazyData` setting in your
@@ -186,7 +185,6 @@ An example from the R6 tutorial:
 #'
 #' @details
 #' A person can also greet you.
-
 Person <- R6::R6Class("Person",
 public = list(
 

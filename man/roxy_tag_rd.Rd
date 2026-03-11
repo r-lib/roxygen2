@@ -21,11 +21,8 @@ Provide a method for this generic if you want a tag to generate output
 in \code{.Rd} files. See \code{vignette("extending")} for more details.
 }
 \seealso{
-Other extending: 
-\code{\link{is_s3_generic}()},
+Other extending:
 \code{\link{load_options}()},
-\code{\link{object}()},
-\code{\link{object_format}()},
 \code{\link{parse_package}()},
 \code{\link{rd_section}()},
 \code{\link{roc_proc_text}()},

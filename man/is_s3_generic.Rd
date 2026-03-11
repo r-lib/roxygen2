@@ -22,19 +22,4 @@ calls \code{\link[=UseMethod]{UseMethod()}}.
 \code{is_s3_method} builds names of all possible generics for that function
 and then checks if any of them actually is a generic.
 }
-\seealso{
-Other extending: 
-\code{\link{load_options}()},
-\code{\link{object}()},
-\code{\link{object_format}()},
-\code{\link{parse_package}()},
-\code{\link{rd_section}()},
-\code{\link{roc_proc_text}()},
-\code{\link{roclet_find}()},
-\code{\link{roxy_block}()},
-\code{\link{roxy_tag}()},
-\code{\link{roxy_tag_rd}()},
-\code{\link{tag_parsers}},
-\code{\link{tags_list}()}
-}
-\concept{extending}
+\keyword{internal}

@@ -28,11 +28,8 @@ roclet_find("roxygen2::rd_roclet")
 roclet_find("roxygen2::rd_roclet()")
 }
 \seealso{
-Other extending: 
-\code{\link{is_s3_generic}()},
+Other extending:
 \code{\link{load_options}()},
-\code{\link{object}()},
-\code{\link{object_format}()},
 \code{\link{parse_package}()},
 \code{\link{rd_section}()},
 \code{\link{roc_proc_text}()},

@@ -275,7 +275,7 @@ extract_method_fun <- function(fun) {
 #' @param alias Alias for object being documented, in case you create a
 #'   generator function with different name.
 #' @export
-#' @family extending
+#' @keywords internal
 #' @param type Type of the object, character. E.g. `"data"` or `"s4method"`.
 object <- function(value, alias, type) {
   structure(

@@ -61,10 +61,7 @@ Or if longer, you can put in \verb{/man/roxygen/meta.R}:
 }
 
 \seealso{
-Other extending: 
-\code{\link{is_s3_generic}()},
-\code{\link{object}()},
-\code{\link{object_format}()},
+Other extending:
 \code{\link{parse_package}()},
 \code{\link{rd_section}()},
 \code{\link{roc_proc_text}()},

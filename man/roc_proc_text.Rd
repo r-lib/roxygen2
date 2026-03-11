@@ -17,11 +17,8 @@ roc_proc_text(roclet, input, wd = NULL)
 Useful for testing.
 }
 \seealso{
-Other extending: 
-\code{\link{is_s3_generic}()},
+Other extending:
 \code{\link{load_options}()},
-\code{\link{object}()},
-\code{\link{object_format}()},
 \code{\link{parse_package}()},
 \code{\link{rd_section}()},
 \code{\link{roclet_find}()},

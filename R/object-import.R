@@ -45,10 +45,5 @@ format.rd_section_reexport <- function(x, ...) {
 
 reexport_link <- function(pkg, fun) {
   suffix <- ifelse(is_infix_fun(fun), "", "()")
-
-  paste_c(
-    "\\code{",
-    c("\\link[", pkg, ":", escape(fun), "]{", escape(fun), "}"),
-    c(suffix, "}")
-  )
+  rd_link(pkg, escape(fun), paste0(escape(fun), suffix), code = TRUE)
 }

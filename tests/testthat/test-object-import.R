@@ -56,7 +56,7 @@ test_that("description generated correctly", {
 test_that("reexported functions get () but infix operators don't", {
   expect_equal(
     reexport_link("pkg", "fun"),
-    "\\code{\\link[pkg:fun]{fun}()}"
+    "\\code{\\link[pkg:fun]{fun()}}"
   )
   expect_equal(
     reexport_link("pkg", "%op%"),

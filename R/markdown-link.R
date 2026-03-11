@@ -4,28 +4,25 @@
 #' spaces between the closing and opening bracket in the `[text][ref]`
 #' form.
 #'
-#' Starting from R 4.0.2-ish, explicit cross-package links to topics are not
-#' allowed, so for each such linked topic, we look up the linked file.
-#'
 #' These are the link references we add:
 #' ```
 #' MARKDOWN           LINK TEXT  CODE RD
 #' --------           ---------  ---- --
 #' [fun()]            fun()       T   \\link[=fun]{fun()} or
-#'                                    \\link[pkg:file]{pkg::fun()}
+#'                                    \\link[pkg:fun]{pkg::fun()}
 #' [obj]              obj         F   \\link{obj} or
-#'                                    \\link[pkg:file]{pkg::obj}
-#' [pkg::fun()]       pkg::fun()  T   \\link[pkg:file]{pkg::fun()}
-#' [pkg::obj]         pkg::obj    F   \\link[pkg:file]{pkg::obj}
+#'                                    \\link[pkg:obj]{pkg::obj}
+#' [pkg::fun()]       pkg::fun()  T   \\link[pkg:fun]{pkg::fun()}
+#' [pkg::obj]         pkg::obj    F   \\link[pkg:obj]{pkg::obj}
 #' [text][fun()]      text        F   \\link[=fun]{text} or
-#'                                    \\link[pkg:file]{text}
+#'                                    \\link[pkg:fun]{text}
 #' [text][obj]        text        F   \\link[=obj]{text} or
-#'                                    \\link[pkg:file]{text}
-#' [text][pkg::fun()] text        F   \\link[pkg:file]{text}
-#' [text][pkg::obj]   text        F   \\link[pkg:file]{text}
-#' [s4-class]         s4          F   \\linkS4class{s4} or
-#'                                    \\link[pkg:file]{s4}
-#' [pkg::s4-class]    pkg::s4     F   \\link[pkg:file]{pkg::s4}
+#'                                    \\link[pkg:obj]{text}
+#' [text][pkg::fun()] text        F   \\link[pkg:fun]{text}
+#' [text][pkg::obj]   text        F   \\link[pkg:obj]{text}
+#' [s4-class]         s4          F   \\link[=s4-class]{s4} or
+#'                                    \\link[pkg:s4-class]{s4}
+#' [pkg::s4-class]    pkg::s4     F   \\link[pkg:s4-class]{pkg::s4}
 #' ```
 #'
 #' For the links with two RD variants the first version is used for
@@ -92,7 +89,6 @@ add_linkrefs_to_md <- function(text) {
 #' @param contents An XML node, containing the contents of the link.
 #'
 #' @noRd
-
 parse_link <- function(destination, contents, state) {
   ## Not a [] or [][] type link, remove prefix if it is
   if (!grepl("^R:", destination)) {
@@ -127,7 +123,7 @@ parse_link <- function(destination, contents, state) {
   ## `s4` is TRUE if we link to an S4 class (i.e. have -class suffix)
   ## `noclass` is fun with -class removed
 
-  thispkg <- roxy_meta_get("current_package") %||% ""
+  thispkg <- roxy_meta_get("current_package", "")
   is_code <- is_code || (grepl("[(][)]$", destination) && !has_link_text)
   pkg <- str_match(destination, "^(.*)::")[1, 2]
   explicit_pkg <- !is.na(pkg)
@@ -143,8 +139,7 @@ parse_link <- function(destination, contents, state) {
   } else if (!is.na(pkg) && pkg == thispkg) {
     pkg <- NA_character_
   }
-  # Called for its side-effect of checking that the topic exists
-  find_topic_filename(pkg, topic, state$tag)
+  check_topic(pkg, topic, state$tag)
 
   pkg <- gsub("%", "\\\\%", pkg)
   fun <- gsub("%", "\\\\%", fun)
@@ -153,36 +148,46 @@ parse_link <- function(destination, contents, state) {
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {
-    paste0(
-      if (is_code) "\\code{",
-      if (s4 && is.na(pkg)) "\\linkS4class" else "\\link",
-      if (is_fun || !is.na(pkg)) "[",
-      if (is_fun && is.na(pkg)) "=",
-      if (!is.na(pkg)) paste0(pkg, ":"),
-      if (is_fun || !is.na(pkg)) paste0(topic, "]"),
-      "{",
-      if (explicit_pkg && !is.na(pkg)) paste0(pkg, "::"),
-      if (s4) noclass else fun,
-      "}",
-      if (is_code) "}" else ""
-    )
+    text <- if (s4) noclass else fun
+    if (explicit_pkg && !is.na(pkg)) {
+      text <- paste0(pkg, "::", text)
+    }
   } else {
-    contents <- mdxml_link_text(contents, state)
-
-    list(
-      paste0(
-        if (is_code) "\\code{",
-        "\\link[",
-        if (is.na(pkg)) "=" else paste0(pkg, ":"),
-        topic,
-        "]{"
-      ),
-      contents,
-      "}",
-      if (is_code) "}" else ""
-    )
+    text <- mdxml_link_text(contents, state)
   }
+  rd_link(pkg, topic, text, code = is_code)
 }
+
+check_topic <- function(pkg, topic, tag = NULL) {
+  if (is.na(pkg) || identical(roxy_meta_get("current_package"), pkg)) {
+    return(invisible())
+  }
+
+  if (!is_installed(pkg)) {
+    warn_roxy_tag(tag, "refers to un-installed package {pkg}")
+    return(invisible())
+  }
+
+  help_path <- utils::help((topic), (pkg))[1]
+  if (is.na(basename(help_path))) {
+    warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}")
+  }
+  invisible()
+}
+
+rd_link <- function(pkg, topic, text, code = FALSE) {
+  if (is.na(pkg) && topic == text) {
+    out <- paste0("\\link{", text, "}")
+  } else {
+    anchor <- if (is.na(pkg)) paste0("=", topic) else paste0(pkg, ":", topic)
+    out <- paste0("\\link[", anchor, "]{", text, "}")
+  }
+  if (code) {
+    out <- paste0("\\code{", out, "}")
+  }
+  out
+}
+
 
 #' Dummy page to test roxygen's markdown formatting
 #'

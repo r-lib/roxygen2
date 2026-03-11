@@ -5,12 +5,8 @@
       "\n    #' Title\n    #'\n    #' See [11pkg::function()], [11pkg::object].\n    #' @md\n    foo <- function() {}")[[
         1]]
     Message
-      x <text>:4: @description refers to unavailable topic 11pkg::function.
-      Caused by error in `find.package()`:
-      ! there is no package called '11pkg'
-      x <text>:4: @description refers to unavailable topic 11pkg::object.
-      Caused by error in `find.package()`:
-      ! there is no package called '11pkg'
+      x <text>:4: @description refers to un-installed package 11pkg.
+      x <text>:4: @description refers to un-installed package 11pkg.
 
 ---
 
@@ -18,4 +14,16 @@
       out1 <- roc_proc_text(rd_roclet(), block)[[1]]
     Message
       x <text>:4: @description refers to unavailable topic stringr::bar111.
+
+# generates informative warnings
+
+    Code
+      tag <- roxy_test_tag()
+      check_topic("11papaya", "foo", tag)
+    Message
+      x test.R:1: @test refers to un-installed package 11papaya.
+    Code
+      check_topic("stringr", "foofofofoo", tag)
+    Message
+      x test.R:1: @test refers to unavailable topic stringr::foofofofoo.
 

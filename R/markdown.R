@@ -334,9 +334,15 @@ mdxml_break <- function(state) {
 mdxml_code <- function(xml, tag) {
   code <- xml_text(xml)
 
-  # See escaping details at
-  # https://cran.rstudio.com/doc/manuals/r-devel/R-exts.html#Insertions
-  if (can_parse(code) || code %in% special) {
+  if (grepl("^Rd ", code)) {
+    paste0(
+      "\\Sexpr[stage=render,results=rd]{",
+      substr(code, 4, nchar(code)),
+      "}"
+    )
+  } else if (can_parse(code) || code %in% special) {
+    # See escaping details at
+    # https://cran.rstudio.com/doc/manuals/r-devel/R-exts.html#Insertions
     paste0("\\code{", gsub("%", "\\\\%", code), "}")
   } else {
     paste0("\\verb{", escape_verb(code), "}")

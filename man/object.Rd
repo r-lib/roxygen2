@@ -11,6 +11,8 @@ object(value, alias, type)
 
 \item{alias}{Alias for object being documented, in case you create a
 generator function with different name.}
+
+\item{type}{Type of the object, character. E.g. \code{"data"} or \code{"s4method"}.}
 }
 \description{
 These objects are usually created by the parsers, but it is also

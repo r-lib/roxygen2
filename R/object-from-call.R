@@ -276,6 +276,7 @@ extract_method_fun <- function(fun) {
 #'   generator function with different name.
 #' @export
 #' @keywords internal
+#' @param type Type of the object, character. E.g. `"data"` or `"s4method"`.
 object <- function(value, alias, type) {
   structure(
     list(

@@ -60,4 +60,16 @@ text <- "
 block <- parse_text(text)[[1]]
 block
 }
-\keyword{internal}
+\seealso{
+Other extending:
+\code{\link{load_options}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

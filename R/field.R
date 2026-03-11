@@ -16,7 +16,7 @@
 #'   extensions, this should include the package name.
 #' @param value Section data. Only used by `format()` and `merge()` methods.
 #' @export
-#' @keywords internal
+#' @family extending
 rd_section <- function(type, value) {
   if (is.null(value) || identical(value, "NULL")) {
     # NULL is special sentinel value that suppresses output of that field

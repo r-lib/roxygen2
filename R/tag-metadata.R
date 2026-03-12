@@ -43,44 +43,28 @@ tags_rd <- function(type) {
 
   c(
     paste0("@name tags-", type),
-    paste0("@aliases ", tags_rd_section(tags, "aliases")),
+    paste0("@aliases ", "@", tags$tag),
     "@description",
     paste0("Learn the full details in `vignette('", type, "')`."),
     "",
     if (any(tags$recommend)) {
       c(
         "Key tags:",
-        tags_rd_section(tags[tags$recommend, ], "description")
+        tags_rd_desc(tags[tags$recommend, ])
       )
     },
     if (any(!tags$recommend)) {
       c(
         "Other less frequently used tags:",
-        "",
-        tags_rd_section(tags[!tags$recommend, ], "description")
+        tags_rd_desc(tags[!tags$recommend, ])
       )
     },
     "@usage",
-    tags_rd_section(tags, "usage")
+    paste0("#' @", tags$tag, tags$template)
   )
 }
-tags_rd_section <- function(tags, section) {
-  if (nrow(tags) == 0) {
-    return()
-  }
-
-  switch(
-    section,
-    aliases = paste0("@", tags$tag, collapse = " "),
-    usage = paste0("#' @", tags$tag, tags$template),
-    description = paste0(
-      "* `@",
-      tags$tag,
-      tags$template,
-      "`: ",
-      tags$description
-    )
-  )
+tags_rd_desc <- function(tags, section) {
+  paste0("* `@", tags$tag, tags$template, "`: ", tags$description)
 }
 
 #' Tags for documenting functions

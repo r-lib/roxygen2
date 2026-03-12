@@ -118,6 +118,8 @@ write_if_different <- function(path, contents, command = NULL, check = TRUE) {
   contents <- paste0(paste0(contents, collapse = line_ending), line_ending)
   contents <- enc2utf8(gsub("\r?\n", line_ending, contents))
   if (same_contents(path, contents)) {
+    # Touch so mtime reflects last run, even though file wasn't changed
+    Sys.setFileTime(path, Sys.time())
     return(FALSE)
   }
 

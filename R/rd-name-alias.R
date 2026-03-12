@@ -1,5 +1,5 @@
 #' @export
-roxy_tag_parse.roxy_tag_aliases <- function(x) tag_value(x)
+roxy_tag_parse.roxy_tag_aliases <- function(x) tag_words(x, min = 1)
 #' @export
 format.rd_section_alias <- function(x, ...) {
   x$value <- str_replace_all(x$value, fixed("%"), "\\%")
@@ -20,8 +20,7 @@ topic_add_name_aliases <- function(topic, block, name) {
   if (length(tags) == 0) {
     aliases <- character()
   } else {
-    vals <- map_chr(tags, \(x) x[["val"]])
-    aliases <- unlist(str_split(vals, "\\s+"))
+    aliases <- unlist(map(tags, \(x) x[["val"]]))
   }
 
   if (any(aliases == "NULL")) {

@@ -284,22 +284,13 @@ test_that("poorly formed importFrom throws error", {
   expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
-test_that("multiline importFrom parsed correctly", {
-  out <- roc_proc_text(
-    namespace_roclet(),
-    "
+test_that("multiline importFrom generates warning", {
+  block <- "
     #' @importFrom test test1
     #'   test2
     NULL
   "
-  )
-  expect_equal(
-    sort(out),
-    sort(c(
-      "importFrom(test,test1)",
-      "importFrom(test,test2)"
-    ))
-  )
+  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
 test_that("useDynLib imports only selected functions", {

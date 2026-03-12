@@ -36,11 +36,18 @@
 # @examplesIf warns about unparseable condition
 
     Code
-      . <- roc_proc_text(rd_roclet(), block)
+      out <- roc_proc_text(rd_roclet(), block)
     Message
       x <text>:4: @examplesIf condition failed to parse.
       Caused by error in `parse()`:
       ! <text>:2:0: unexpected end of input
       1: 1 +
          ^
+
+# @examplesIf warns on empty body (#1695)
+
+    Code
+      out <- roc_proc_text(rd_roclet(), block)
+    Message
+      x <text>:4: @examplesIf requires example code after the condition.
 

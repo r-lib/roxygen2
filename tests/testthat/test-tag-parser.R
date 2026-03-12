@@ -20,7 +20,6 @@ test_that("tags check for mismatched parents gives useful warnings", {
     expect_parse_failure(tag_name(tag))
     expect_parse_failure(tag_two_part(tag))
     expect_parse_failure(tag_words(tag))
-    expect_parse_failure(tag_words_line(tag))
     expect_parse_failure(tag_examples(tag))
 
     "markdown tags return empty values"
@@ -72,13 +71,30 @@ test_that("tag_words() gives useful warnings", {
   })
 })
 
-test_that("tag_words_line() gives useful warnings", {
+test_that("tag_words() warns on multi-line content", {
   expect_snapshot({
     tag <- roxy_test_tag("a\nb")
-    expect_parse_failure(tag_words_line(tag))
+    expect_parse_failure(tag_words(tag))
 
-    tag <- roxy_test_tag("a\nb\n2")
-    expect_parse_failure(tag_words_line(tag))
+    tag <- roxy_test_tag("a\nb\nc")
+    expect_parse_failure(tag_words(tag))
+  })
+})
+
+test_that("tag_value() warns on multi-line content", {
+  expect_snapshot({
+    tag <- roxy_test_tag("a\nb")
+    expect_parse_failure(tag_value(tag))
+
+    tag <- roxy_test_tag("a\nb\nc")
+    expect_parse_failure(tag_value(tag))
+  })
+})
+
+test_that("tag_words_line() is deprecated", {
+  expect_snapshot({
+    tag <- roxy_test_tag("a b")
+    tag_words_line(tag)
   })
 })
 

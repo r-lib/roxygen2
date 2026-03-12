@@ -16,17 +16,27 @@ NULL
 
 #' @export
 #' @rdname tag_parsers
-tag_value <- function(x) {
-  if (str_trim(x$raw) == "") {
+#' @param multiline If `FALSE` (the default), tags that span multiple lines
+#'   will generate a warning. Set to `TRUE` for tags where multiline content
+#'   is expected (e.g., `@usage`, `@rawRd`).
+tag_value <- function(x, multiline = FALSE) {
+  x$val <- str_trim(x$raw)
+
+  if (x$val == "") {
     warn_roxy_tag(x, "requires a value")
-    NULL
-  } else if (!rdComplete(x$raw, is_code = FALSE)) {
-    warn_roxy_tag(x, "has mismatched braces or quotes")
-    NULL
-  } else {
-    x$val <- str_trim(x$raw)
-    x
+    return(NULL)
   }
+
+  if (!multiline && warn_if_multiline(x, x$val)) {
+    return(NULL)
+  }
+
+  if (!rdComplete(x$raw, is_code = FALSE)) {
+    warn_roxy_tag(x, "has mismatched braces or quotes")
+    return(NULL)
+  }
+
+  x
 }
 
 # Also recorded in tags.yml
@@ -170,13 +180,19 @@ tag_name_description <- function(x) {
 #' @export
 #' @rdname tag_parsers
 #' @param min,max Minimum and maximum number of words
-tag_words <- function(x, min = 0, max = Inf) {
+tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
+  val <- str_trim(x$raw)
+
+  if (!multiline && warn_if_multiline(x, val)) {
+    return(NULL)
+  }
+
   if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     return(NULL)
   }
 
-  words <- str_split(str_trim(x$raw), "\\s+")[[1]]
+  words <- str_split(val, "\\s+")[[1]]
   if (length(words) < min) {
     warn_roxy_tag(x, "must have at least {min} word{?s}, not {length(words)}")
     NULL
@@ -192,25 +208,25 @@ tag_words <- function(x, min = 0, max = Inf) {
 #' @export
 #' @rdname tag_parsers
 tag_words_line <- function(x) {
-  x$val <- str_trim(x$raw)
+  lifecycle::deprecate_warn("7.4.0", "tag_words_line()", "tag_words()")
+  tag_words(x)
+}
 
-  n_lines <- str_count(x$val, "\n")
+# Returns TRUE (and warns) if val contains multiple lines, FALSE otherwise.
+warn_if_multiline <- function(x, val) {
+  n_lines <- str_count(val, "\n")
   if (n_lines >= 1) {
-    first_line <- str_split(x$val, "\n")[[1]][[1]]
+    first_line <- str_split(val, "\n")[[1]][[1]]
     warn_roxy_tag(
       x,
       c(
-        "must be a single line, not {n_lines + 1}",
+        "must be only 1 line long, not {n_lines + 1}",
         i = "The first line is {.str {first_line}}"
       )
     )
-    NULL
-  } else if (!rdComplete(x$raw, is_code = FALSE)) {
-    warn_roxy_tag(x, "has mismatched braces or quotes")
-    NULL
+    TRUE
   } else {
-    x$val <- str_split(x$val, "\\s+")[[1]]
-    x
+    FALSE
   }
 }
 

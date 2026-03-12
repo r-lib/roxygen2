@@ -7,12 +7,23 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   lines <- unlist(strsplit(x$raw, "\r?\n"))
 
   condition <- lines[1]
-  tryCatch(
-    suppressWarnings(parse(text = condition)),
-    error = function(err) {
-      warn_roxy_tag(x, "condition failed to parse", parent = err)
-    }
+  parse_err <- tryCatch(
+    {
+      suppressWarnings(parse(text = condition))
+      NULL
+    },
+    error = function(err) err
   )
+  if (!is.null(parse_err)) {
+    warn_roxy_tag(x, "condition failed to parse", parent = parse_err)
+    return(NULL)
+  }
+
+  example_lines <- lines[-1]
+  if (length(example_lines) == 0 || all(str_trim(example_lines) == "")) {
+    warn_roxy_tag(x, "requires example code after the condition")
+    return(NULL)
+  }
 
   x$raw <- paste(
     c(
@@ -27,7 +38,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
 }
 #' @export
 roxy_tag_parse.roxy_tag_example <- function(x) {
-  x <- tag_value(x)
+  x <- tag_value(x, multiline = TRUE)
 
   nl <- str_count(x$val, "\n")
   if (any(nl) > 0) {

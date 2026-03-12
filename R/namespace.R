@@ -160,7 +160,7 @@ roxy_tag_ns.roxy_tag_evalNamespace <- function(x, block, env) {
 
 #' @export
 roxy_tag_parse.roxy_tag_export <- function(x) {
-  tag_words_line(x)
+  tag_words(x)
 }
 #' @export
 roxy_tag_ns.roxy_tag_export <- function(x, block, env) {

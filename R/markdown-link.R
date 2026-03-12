@@ -120,33 +120,34 @@ parse_link <- function(destination, contents, state) {
   ## if (is_code) then we'll need \\code
   ## `pkg` is package or NA
   ## `fun` is fun() or topic (fun is with parens)
-  ## `is_fun` is TRUE for fun(), FALSE for topic
   ## `topic` is fun or topic (fun is without parens)
   ## `s4` is TRUE if we link to an S4 class (i.e. have -class suffix)
   ## `noclass` is fun with -class removed
 
-  thispkg <- roxy_meta_get("current_package", "")
   is_code <- is_code || (grepl("[(][)]$", destination) && !has_link_text)
+
   pkg <- str_match(destination, "^(.*)::")[1, 2]
   explicit_pkg <- !is.na(pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
-  is_fun <- grepl("[(][)]$", fun)
   topic <- sub("[(][)]$", "", fun)
-  s4 <- str_detect(destination, "-class$")
-  noclass <- str_match(fun, "^(.*)-class$")[1, 2]
+  if (!has_link_text && str_detect(destination, "-class$")) {
+    fun <- str_match(fun, "^(.*)-class$")[1, 2]
+  }
 
-  # Lookup topic using unescaped names, then escape % for Rd output
+  # Standardise links: cross-packagae always get prefix;
+  # within package never gets prefix
   if (is.na(pkg)) {
     pkg <- find_package(topic, tag = state$tag)
-  } else if (!is.na(pkg) && pkg == thispkg) {
+  } else if (identical(pkg, roxy_meta_get("current_package"))) {
     pkg <- NA_character_
+    explicit_pkg <- FALSE
   }
   check_topic(pkg, topic, state$tag)
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {
-    text <- if (s4) noclass else fun
-    if (explicit_pkg && !is.na(pkg)) {
+    text <- fun
+    if (explicit_pkg) {
       text <- paste0(pkg, "::", text)
     }
     text <- escape(text)

@@ -21,7 +21,7 @@ roxy_tag_rd.roxy_tag_includeRmd <- function(x, base_path, env) {
   if (section == "") {
     section <- "details"
   }
-  stopifnot(is.character(rmd), length(rmd) == 1, !is.na(rmd))
+  check_string(rmd)
 
   rmd_path <- tempfile(fileext = ".Rmd")
   md_path <- tempfile(fileext = ".md")

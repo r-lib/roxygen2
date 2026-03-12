@@ -1,0 +1,3 @@
+#' Title
+#' @export
+foo <- function() {}

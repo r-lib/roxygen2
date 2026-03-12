@@ -57,7 +57,7 @@
 
     \arguments{
     \item{...}{
-      Arguments passed on to \code{\link[=foo]{foo}}, \code{\link[=bar]{bar}}
+      Arguments passed on to \code{\link{foo}}, \code{\link{bar}}
       \describe{
         \item{\code{x}}{x}
         \item{\code{y}}{y1}

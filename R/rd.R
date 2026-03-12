@@ -128,7 +128,7 @@ block_to_rd <- function(block, base_path, env) {
 #' @export
 
 block_to_rd.default <- function(block, ...) {
-  cli::cli_abort("Unknown block type", .internal = TRUE)
+  cli::cli_abort("Unknown block type.", .internal = TRUE)
 }
 
 #' @export

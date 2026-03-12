@@ -3,6 +3,8 @@
 * Tags that expect single-line input now warn when they span multiple lines, catching common mistakes. Affected tags: `@aliases`, `@concept`, `@encoding`, `@exportClass`, `@exportMethod`, `@exportPattern`, `@exportS3Method`, `@importFrom`, `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@inheritParams`, `@keywords`, `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and `@useDynLib` (#1642, #1688). This may break some existing usage, but it prevents a wide class of otherwise silent errors.
 * `@examplesIf` now warns when there is no example code after the condition (#1695).
 * `tag_words_line()` is deprecated in favour of `tag_words()`, which now checks for single-line content by default. Use `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)` if your tag legitimately spans multiple lines.
+* New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).
+* All generated links now use the same code path. This will lead to some minor differences when you re-document, but overall the links will now be more consistent (#1792).
 * Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.
 * Assigning a non-function value (e.g. `x <- 1:10`) no longer automatically gets `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name.
 * Documenting values (e.g. `x <- 1:10`) no longer adds `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name (e.g. "diamonds").
@@ -24,7 +26,7 @@
   * Only wraps actual URLs in the `URL` field of `DESCRIPTION` (#1420).
   * Uses `logo.svg` if available, falling back to `logo.png` (#1640).
 * roxygen2 no longer depends on purrr.
-* roxygen2 now requires R 4.0 (#1632).
+* roxygen2 now requires R 4.1 (#1632).
 * S3 method handling improvements:
   * Method parsing now prefers the longest matching generic name, so e.g. `all.equal.numeric` is correctly identified as a method of `all.equal` rather than `all` (#1587).
   * The warning about undocumented methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).

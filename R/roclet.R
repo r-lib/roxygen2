@@ -108,6 +108,8 @@ roclet_tags <- function(x) {
 #' # to call the function
 #' roclet_find("roxygen2::rd_roclet()")
 roclet_find <- function(x) {
+  check_string(x)
+
   env <- new.env(parent = getNamespace("roxygen2"))
   env$rd <- rd_roclet
   env$namespace <- namespace_roclet
@@ -121,7 +123,7 @@ roclet_find <- function(x) {
   }
 
   if (!is.roclet(res)) {
-    cli::cli_abort("Must return a roclet")
+    cli::cli_abort("Must return a roclet.")
   }
 
   res

@@ -1,7 +1,7 @@
 markdown <- function(text, tag = NULL, sections = FALSE) {
   tag <- tag %||% list(file = NA, line = NA)
   expanded_text <- tryCatch(
-    markdown_pass1(text),
+    markdown_evaluate(text),
     error = function(e) {
       warn_roxy_tag(tag, "failed to evaluate inline markdown code", parent = e)
       text
@@ -184,7 +184,7 @@ str_set_all_pos <- function(text, pos, value, nodes) {
   # continuation lines: https://github.com/commonmark/cmark/issues/296
   types <- xml_name(nodes)
   if (any(types == "code" & pos$start_line != pos$end_line)) {
-    cli::cli_abort("multi-line `r ` markup is not supported", call = NULL)
+    cli::cli_abort("Multi-line `r ` markup is not supported.", call = NULL)
   }
 
   # Need to split the string, because of the potential multi-line
@@ -478,17 +478,13 @@ mdxml_link <- function(xml, state) {
   link <- parse_link(dest, contents, state)
 
   if (!is.null(link)) {
-    paste0(link, collapse = "")
+    link
   } else if (dest == "" || dest == xml_text(xml)) {
     paste0("\\url{", escape_comment(xml_text(xml)), "}")
   } else {
-    paste0(
-      "\\href{",
-      escape_comment(dest),
-      "}",
-      "{",
-      mdxml_link_text(contents, state),
-      "}"
+    paste_c(
+      c("\\href{", escape_comment(dest), "}"),
+      c("{", mdxml_link_text(contents, state), "}")
     )
   }
 }

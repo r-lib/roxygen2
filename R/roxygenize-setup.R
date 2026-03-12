@@ -5,7 +5,8 @@ roxygen_setup <- function(
 ) {
   if (!file.exists(file.path(path, "DESCRIPTION"))) {
     cli::cli_abort(
-      "{.arg package.dir} ({.path {path}}) does not contain a DESCRIPTION"
+      "{.arg package.dir} ({.path {path}}) does not contain a DESCRIPTION file.",
+      call = frame
     )
   }
 

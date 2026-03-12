@@ -162,7 +162,7 @@ RoxyTopic <- R6::R6Class(
         # skip
       } else {
         cli::cli_abort(
-          "Don't know how to add object of type {.cls {class(x)[1]}}",
+          "Don't know how to add object of type {.cls {class(x)[1]}}.",
           .internal = TRUE
         )
       }

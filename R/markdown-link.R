@@ -49,6 +49,20 @@
 #'   appended.
 #'
 #' @noRd
+NULL
+
+
+# Append link references for R functions ---------------------------------------
+
+add_linkrefs_to_md <- function(text) {
+  ref_lines <- get_md_linkrefs(text)
+  if (length(ref_lines) == 0) {
+    return(text)
+  }
+  ref_text <- paste0(ref_lines, collapse = "\n")
+  paste0(text, "\n\n", ref_text, "\n")
+}
+
 get_md_linkrefs <- function(text) {
   refs <- str_match_all(
     text,
@@ -58,7 +72,7 @@ get_md_linkrefs <- function(text) {
         (?<=[^\\]\\\\]|^)       # must not be preceded by ] or \
         \\[([^\\]\\[]+)\\]      # match anything inside of []
         (?:\\[([^\\]\\[]+)\\])? # match optional second pair of []
-        (?=[^\\[{]|$)            # must not be followed by [ or {
+        (?=[^\\[{]|$)           # must not be followed by [ or {
       "
     )
   )[[1]]
@@ -75,23 +89,8 @@ get_md_linkrefs <- function(text) {
   paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
 }
 
-add_linkrefs_to_md <- function(text) {
-  ref_lines <- get_md_linkrefs(text)
-  if (length(ref_lines) == 0) {
-    return(text)
-  }
-  ref_text <- paste0(ref_lines, collapse = "\n")
-  paste0(text, "\n\n", ref_text, "\n")
-}
+# Link parsing -----------------------------------------------------------------
 
-#' Parse a MarkDown link, to see if we should create an Rd link
-#'
-#' See the table above.
-#'
-#' @param destination string constant, the "url" of the link
-#' @param contents An XML node, containing the contents of the link.
-#'
-#' @noRd
 parse_link <- function(destination, contents, state) {
   ## Not a [] or [][] type link, remove prefix if it is
   if (!grepl("^R:", destination)) {

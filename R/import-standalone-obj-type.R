@@ -301,7 +301,7 @@ obj_type_oo <- function(x) {
 #'   character vector of expected types, in which case the error
 #'   message mentions all of them in an "or" enumeration.
 #' @param show_value Passed to `value` argument of `obj_type_friendly()`.
-#' @param ... Arguments passed to [abort()].
+#' @param ... Arguments passed to [rlang::abort()].
 #' @inheritParams args_error_context
 #' @noRd
 stop_input_type <- function(

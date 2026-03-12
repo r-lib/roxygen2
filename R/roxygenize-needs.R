@@ -19,31 +19,9 @@
 needs_roxygenize <- function(package.dir = ".") {
   base_path <- normalizePath(package.dir)
   man_path <- file.path(base_path, "man")
-
   rd_files <- sort(dir(man_path, pattern = "\\.Rd$", full.names = TRUE))
-  if (length(rd_files) == 0) {
-    return(invisible(FALSE))
-  }
-
-  out_of_date <- character()
-
-  for (rd_file in rd_files) {
-    if (!made_by_roxygen(rd_file)) {
-      next
-    }
-
-    source_files <- rd_backref_sources(rd_file, base_path)
-    if (length(source_files) == 0) {
-      next
-    }
-
-    rd_mtime <- file.mtime(rd_file)
-    source_mtimes <- file.mtime(source_files)
-
-    if (any(source_mtimes > rd_mtime)) {
-      out_of_date <- c(out_of_date, basename(rd_file))
-    }
-  }
+  outdated <- map_lgl(rd_files, rd_outdated, base_path = base_path)
+  out_of_date <- basename(rd_files[outdated])
 
   if (length(out_of_date) > 0) {
     cli::cli_inform(c(
@@ -56,12 +34,29 @@ needs_roxygenize <- function(package.dir = ".") {
   invisible(FALSE)
 }
 
-rd_backref_sources <- function(rd_file, base_path) {
+rd_outdated <- function(rd_file, base_path) {
   lines <- read_lines(rd_file, n = 10)
-  backref_lines <- lines[grepl(
-    "^%\\s*(Please edit documentation in|  )",
-    lines
-  )]
+  source_files <- rd_backref_sources(lines, base_path)
+  if (length(source_files) == 0) {
+    return(FALSE)
+  }
+
+  if (!all(file.exists(source_files))) {
+    return(TRUE)
+  }
+
+  rd_mtime <- file.mtime(rd_file)
+  source_mtimes <- file.mtime(source_files)
+  any(source_mtimes > rd_mtime)
+}
+
+rd_backref_sources <- function(lines, base_path) {
+  if (!check_made_by(lines[[1]])) {
+    return(character())
+  }
+
+  backref_regexp <- "^%\\s*(Please edit documentation in|  )"
+  backref_lines <- lines[grepl(backref_regexp, lines)]
   if (length(backref_lines) == 0) {
     return(character())
   }

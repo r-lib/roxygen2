@@ -292,7 +292,7 @@ foo <- function(x) NULL
 
 The result is equivalent to writing the following by hand:
 
-```{r code = roxygen2:::markdown_pass1(backtick)}
+```{r code = roxygen2:::markdown_evaluate(backtick)}
 ```
 
 This is a powerful technique for reducing duplication because you can flexibly parameterise the function however best meets your needs.

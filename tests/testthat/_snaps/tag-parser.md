@@ -171,7 +171,7 @@
     Output
       <message/rlang_message>
       Message:
-      x test.R:1: @test must be 1 line, not 2.
+      x test.R:1: @test must be only 1 line long, not 2.
       i The first line is "a"
     Code
       tag <- roxy_test_tag("a\nb\nc")
@@ -179,7 +179,7 @@
     Output
       <message/rlang_message>
       Message:
-      x test.R:1: @test must be 1 line, not 3.
+      x test.R:1: @test must be only 1 line long, not 3.
       i The first line is "a"
 
 # tag_value() warns on multi-line content
@@ -190,7 +190,7 @@
     Output
       <message/rlang_message>
       Message:
-      x test.R:1: @test must be 1 line, not 2.
+      x test.R:1: @test must be only 1 line long, not 2.
       i The first line is "a"
     Code
       tag <- roxy_test_tag("a\nb\nc")
@@ -198,7 +198,7 @@
     Output
       <message/rlang_message>
       Message:
-      x test.R:1: @test must be 1 line, not 3.
+      x test.R:1: @test must be only 1 line long, not 3.
       i The first line is "a"
 
 # tag_words_line() is deprecated

@@ -38,7 +38,7 @@
     Code
       . <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @importFrom must be 1 line, not 2.
+      x <text>:2: @importFrom must be only 1 line long, not 2.
       i The first line is "test test1"
 
 # can regenerate NAMESPACE even if its broken

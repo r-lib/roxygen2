@@ -220,7 +220,7 @@ warn_if_multiline <- function(x, val) {
     warn_roxy_tag(
       x,
       c(
-        "must be 1 line, not {n_lines + 1}",
+        "must be only 1 line long, not {n_lines + 1}",
         i = "The first line is {.str {first_line}}"
       )
     )

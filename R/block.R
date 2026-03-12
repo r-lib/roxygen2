@@ -224,7 +224,9 @@ roxy_tag_parse.roxy_tag_eval <- function(x) {
 
 #' @export
 roxy_tag_parse.roxy_tag_include <- function(x) {
-  tag_words(x, min = 1)
+  # Used to silence warning about undefined tag
+  # Actual implementation in find_includes()
+  NULL
 }
 
 parse_description <- function(tags) {

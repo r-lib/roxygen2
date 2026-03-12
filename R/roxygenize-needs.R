@@ -55,22 +55,18 @@ rd_outdated <- function(rd_file, base_path) {
 }
 
 rd_backref_sources <- function(lines, base_path) {
-  if (!check_made_by(lines[[1]])) {
+  if (length(lines) == 0 || !check_made_by(lines[[1]])) {
     return(character())
   }
 
-  backref_regexp <- "^%\\s*(Please edit documentation in|  )"
-  backref_lines <- lines[grepl(backref_regexp, lines)]
-  if (length(backref_lines) == 0) {
+  regexp <- "^%\\s*(Please edit documentation in|  )"
+  lines <- lines[grepl(regexp, lines)]
+  if (length(lines) == 0) {
     return(character())
   }
 
-  text <- paste(backref_lines, collapse = " ")
-  text <- sub("^%\\s*Please edit documentation in\\s+", "", text)
-  # Clean up continuation line prefixes
-  text <- gsub("\\s*%\\s*", " ", text)
-
-  files <- strsplit(text, ",\\s*")[[1]]
+  lines <- gsub("^%(\\s*Please edit documentation in)?", "", lines)
+  files <- unlist(strsplit(lines, ","))
   files <- trimws(files)
   files <- files[nzchar(files)]
 

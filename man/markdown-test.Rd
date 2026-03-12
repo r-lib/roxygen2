@@ -13,7 +13,7 @@ Link to another package, function: \code{\link[desc:desc]{desc::desc()}}.
 Link to another package, non-function: \link[desc:desc]{desc::desc}.
 
 Link with link text: \link[=roxygenize]{this great function},
-\code{\link[=roxygenize]{roxygenize}}, or \link[=roxygenize]{that great function}.
+\code{\link{roxygenize}}, or \link[=roxygenize]{that great function}.
 
 In another package: \link[desc:desc]{and this one}.
 

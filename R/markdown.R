@@ -478,17 +478,13 @@ mdxml_link <- function(xml, state) {
   link <- parse_link(dest, contents, state)
 
   if (!is.null(link)) {
-    paste0(link, collapse = "")
+    link
   } else if (dest == "" || dest == xml_text(xml)) {
     paste0("\\url{", escape_comment(xml_text(xml)), "}")
   } else {
-    paste0(
-      "\\href{",
-      escape_comment(dest),
-      "}",
-      "{",
-      mdxml_link_text(contents, state),
-      "}"
+    paste_c(
+      c("\\href{", escape_comment(dest), "}"),
+      c("{", mdxml_link_text(contents, state), "}")
     )
   }
 }

@@ -17,9 +17,9 @@
       }
       \seealso{
       Other a:
-      \code{\link{Foo3}()},
-      \code{\link{foo}()},
-      \code{\link{foo2}()}
+      \code{\link[=Foo3]{Foo3()}},
+      \code{\link[=foo]{foo()}},
+      \code{\link[=foo2]{foo2()}}
       }
       \concept{a}
       
@@ -37,9 +37,9 @@
       }
       \seealso{
       Other a:
-      \code{\link{Foo3}()},
-      \code{\link{foo}()},
-      \code{\link{foo1}()}
+      \code{\link[=Foo3]{Foo3()}},
+      \code{\link[=foo]{foo()}},
+      \code{\link[=foo1]{foo1()}}
       }
       \concept{a}
       
@@ -57,9 +57,9 @@
       }
       \seealso{
       Other a:
-      \code{\link{foo}()},
-      \code{\link{foo1}()},
-      \code{\link{foo2}()}
+      \code{\link[=foo]{foo()}},
+      \code{\link[=foo1]{foo1()}},
+      \code{\link[=foo2]{foo2()}}
       }
       \concept{a}
       
@@ -77,9 +77,9 @@
       }
       \seealso{
       Other a:
-      \code{\link{Foo3}()},
-      \code{\link{foo1}()},
-      \code{\link{foo2}()}
+      \code{\link[=Foo3]{Foo3()}},
+      \code{\link[=foo1]{foo1()}},
+      \code{\link[=foo2]{foo2()}}
       }
       \concept{a}
       

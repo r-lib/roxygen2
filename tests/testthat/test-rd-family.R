@@ -113,7 +113,7 @@ test_that("only functions get () suffix", {
   )
   expect_equal(
     out[[2]]$get_value("seealso"),
-    "Other a:\n\\code{\\link{foo}()}"
+    "Other a:\n\\code{\\link[=foo]{foo()}}"
   )
 })
 

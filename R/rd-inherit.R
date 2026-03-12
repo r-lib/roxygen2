@@ -257,8 +257,15 @@ inherit_dot_params <- function(topic, topics, env) {
   # Build the Rd
   # (1) Link to function(s) that was inherited from
   src <- inheritors$source
-  dest <- map_chr(src, resolve_qualified_link)
-  from <- paste0("\\code{\\link[", dest, "]{", src, "}}", collapse = ", ")
+  from <- map_chr(src, function(x) {
+    if (is_namespaced(x)) {
+      parts <- str_split_fixed(x, "::", n = 2)
+      rd_link(parts[1], parts[2], x, code = TRUE)
+    } else {
+      rd_link(NA_character_, x, x, code = TRUE)
+    }
+  })
+  from <- paste0(from, collapse = ", ")
 
   # (2) Show each inherited argument
   arg_names <- paste0("\\code{", names(docs_selected), "}")

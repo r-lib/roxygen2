@@ -36,8 +36,8 @@
 #' block
 roxy_block <- function(tags, file, line, call, object = NULL) {
   stopifnot(is.list(tags))
-  stopifnot(is.character(file), length(file) == 1)
-  stopifnot(is.integer(line), length(line) == 1)
+  check_string(file)
+  check_number_whole(line)
 
   structure(
     list(

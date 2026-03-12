@@ -1,6 +1,6 @@
 internal_f <- function(p, f) {
-  stopifnot(is.character(p), length(p) == 1)
-  stopifnot(is.character(f), length(f) == 1)
+  check_string(p)
+  check_string(f)
 
   get(f, envir = asNamespace(p))
 }
@@ -144,7 +144,7 @@ write_if_different <- function(path, contents, command = NULL, check = TRUE) {
 
 same_contents <- function(path, contents) {
   if (length(contents) != 1) {
-    cli::cli_abort("`contents` must be character(1)", .internal = TRUE)
+    cli::cli_abort("{.arg contents} must be a single string.", .internal = TRUE)
   }
   if (!file.exists(path)) {
     return(FALSE)
@@ -182,7 +182,7 @@ is_namespaced <- function(x) {
 
 # Collapse the values associated with duplicated keys
 collapse <- function(key, value, fun, ...) {
-  stopifnot(is.character(key))
+  check_character(key)
   stopifnot(length(key) == length(value))
 
   dedup <- tapply(value, key, fun, ..., simplify = FALSE)

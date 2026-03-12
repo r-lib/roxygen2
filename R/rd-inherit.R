@@ -43,7 +43,8 @@ roxy_tag_rd.roxy_tag_inheritSection <- function(x, base_path, env) {
 
 # For each unique source, list which fields it inherits from
 rd_section_inherit <- function(source, fields) {
-  stopifnot(is.character(source), is.list(fields))
+  check_character(source)
+  stopifnot(is.list(fields))
   stopifnot(!anyDuplicated(source))
   stopifnot(length(source) == length(fields))
 
@@ -67,7 +68,8 @@ merge.rd_section_inherit <- function(x, y, ...) {
 format.rd_section_inherit <- function(x, ...) NULL
 
 rd_section_inherit_section <- function(source, title) {
-  stopifnot(is.character(source), is.character(title))
+  check_character(source)
+  check_character(title)
   stopifnot(length(source) == length(title))
 
   rd_section("inherit_section", list(source = source, title = title))
@@ -86,7 +88,8 @@ merge.rd_section_inherit_section <- function(x, y, ...) {
 }
 
 rd_section_inherit_dot_params <- function(source, args) {
-  stopifnot(is.character(source), is.character(args))
+  check_character(source)
+  check_character(args)
   stopifnot(length(source) == length(args))
 
   rd_section("inherit_dot_params", list(source = source, args = args))
@@ -254,8 +257,15 @@ inherit_dot_params <- function(topic, topics, env) {
   # Build the Rd
   # (1) Link to function(s) that was inherited from
   src <- inheritors$source
-  dest <- map_chr(src, resolve_qualified_link)
-  from <- paste0("\\code{\\link[", dest, "]{", src, "}}", collapse = ", ")
+  from <- map_chr(src, function(x) {
+    if (is_namespaced(x)) {
+      parts <- str_split_fixed(x, "::", n = 2)
+      rd_link(parts[1], parts[2], x, code = TRUE)
+    } else {
+      rd_link(NA_character_, x, x, code = TRUE)
+    }
+  })
+  from <- paste0(from, collapse = ", ")
 
   # (2) Show each inherited argument
   arg_names <- paste0("\\code{", names(docs_selected), "}")

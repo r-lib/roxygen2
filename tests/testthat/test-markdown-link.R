@@ -285,7 +285,7 @@ test_that("a weird markdown link bug is fixed", {
     #' Link to another package, non-function: \\link[desc:desc]{desc::desc}.
     #'
     #' Link with link text: \\link[=roxygenize]{this great function},
-    #' \\code{\\link[=roxygenize]{roxygenize}}, or \\link[=roxygenize]{that great function}.
+    #' \\code{\\link{roxygenize}}, or \\link[=roxygenize]{that great function}.
     #'
     #' In another package: \\link[desc:desc]{and this one}.
     #'
@@ -344,7 +344,7 @@ test_that("markdown code as link text is rendered as code", {
     #' Title
     #'
     #' Description, see \\code{\\link[=dest]{name}},
-    #' \\code{\\link[=function]{function}},
+    #' \\code{\\link{function}},
     #' \\code{\\link[stats:filter]{filter}},
     #' \\code{\\link[pkg:bar]{bar}},
     #' \\code{\\link[=terms.object]{terms}},
@@ -473,7 +473,7 @@ test_that("links to S4 classes are OK", {
     "
     #' Title
     #'
-    #' Description, see \\linkS4class{linktos4} as well.
+    #' Description, see \\link[=linktos4-class]{linktos4} as well.
     foo <- function() {}"
   )[[1]]
   expect_equivalent_rd(out1, out2)
@@ -620,4 +620,28 @@ test_that("percents are escaped in link targets", {
     foo <- function() {}"
   )[[1]]
   expect_equivalent_rd(out1, out2)
+})
+
+# Helpers ----------------------------------------------------------------------
+
+test_that("generates informative warnings", {
+  expect_snapshot({
+    tag <- roxy_test_tag()
+    check_topic("11papaya", "foo", tag)
+    check_topic("stringr", "foofofofoo", tag)
+  })
+})
+
+test_that("rd_link() builds correct Rd links", {
+  expect_equal(rd_link(NA, "topic", "topic"), "\\link{topic}")
+  expect_equal(rd_link("pkg", "topic", "text"), "\\link[pkg:topic]{text}")
+  expect_equal(rd_link(NA, "topic", "text"), "\\link[=topic]{text}")
+})
+
+test_that("fun_suffix() adds () only to non-infix functions", {
+  env <- env(f = function() NULL, x = 1, `%op%` = function(a, b) NULL)
+  expect_equal(fun_suffix("f", env), "f()")
+  expect_equal(fun_suffix("x", env), "x")
+  expect_equal(fun_suffix("%op%", env), "%op%")
+  expect_equal(fun_suffix("missing", env), "missing")
 })

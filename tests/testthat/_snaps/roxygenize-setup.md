@@ -3,8 +3,8 @@
     Code
       roxygen_setup(path)
     Condition
-      Error in `roxygen_setup()`:
-      ! `package.dir` ('<path>') does not contain a DESCRIPTION
+      Error:
+      ! `package.dir` ('<path>') does not contain a DESCRIPTION file.
 
 # informs about initial setup
 

@@ -16,7 +16,7 @@ select_args_text <- function(fun, select = "", topic) {
 # Figure out which arguments that the user wants given a function and
 # unevaluated list
 select_args <- function(fun, select = list()) {
-  stopifnot(is.function(fun))
+  check_function(fun)
   stopifnot(is.list(select))
 
   args <- names(formals(fun))
@@ -52,16 +52,16 @@ select_args <- function(fun, select = list()) {
 select_check <- function(x, call) {
   if (!is.numeric(x)) {
     cli::cli_abort(c(
-      "Argument specification must evaluate to a numeric vector",
-      "Problem in {.code {deparse(call)}}"
+      "Argument specification must evaluate to a numeric vector.",
+      "Problem in {.code {deparse(call)}}."
     ))
   }
 
   if (!(all(x > 0) || all(x < 0))) {
     cli::cli_abort(
       c(
-        "Argument specification must be all positive or all negative, not a mixture",
-        i = "Problem in {.code {deparse(call)}}"
+        "Argument specification must be all positive or all negative, not a mixture.",
+        i = "Problem in {.code {deparse(call)}}."
       ),
       call = NULL
     )

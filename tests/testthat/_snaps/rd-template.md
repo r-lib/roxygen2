@@ -11,5 +11,5 @@
       roc_proc_text(rd_roclet(), block)
     Condition
       Error:
-      ! Can't find template "doesn't-exist"
+      ! Can't find template "doesn't-exist".
 

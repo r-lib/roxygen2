@@ -1,7 +1,7 @@
 markdown <- function(text, tag = NULL, sections = FALSE) {
   tag <- tag %||% list(file = NA, line = NA)
   expanded_text <- tryCatch(
-    markdown_pass1(text),
+    markdown_evaluate(text),
     error = function(e) {
       warn_roxy_tag(tag, "failed to evaluate inline markdown code", parent = e)
       text

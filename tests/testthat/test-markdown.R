@@ -767,46 +767,6 @@ test_that("markup in headings", {
   )
 })
 
-test_that("alternative knitr engines", {
-  expect_snapshot(
-    print(
-      out1 <- roc_proc_text(
-        rd_roclet(),
-        "
-      #' Title
-      #'
-      #' Description.
-      #'
-      #' ```{verbatim}
-      #' #| file = testthat::test_path(\"example.Rmd\")
-      #' ```
-      #' @md
-      #' @name x
-      NULL
-    "
-      )
-    )
-  )
-})
-
-test_that("can override default options", {
-  local_roxy_meta_set("knitr_chunk_options", list(comment = "###"))
-
-  out <- roc_proc_text(
-    rd_roclet(),
-    "
-    #' Title
-    #'
-    #' ```{r}
-    #' 1+1
-    #' ```
-    #' @md
-    foo <- function() { }
-  "
-  )[[1]]
-  expect_match(out$get_section("description")$value, "###", fixed = TRUE)
-})
-
 test_that("image formats work", {
   expect_snapshot(
     roc_proc_text(

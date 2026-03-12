@@ -4,22 +4,26 @@
 \alias{needs_roxygenize}
 \title{Check if documentation needs to be updated}
 \usage{
-needs_roxygenize(package.dir = ".")
+needs_roxygenize(package.dir = ".", quiet = FALSE)
 }
 \arguments{
 \item{package.dir}{Location of package top level directory. Default is
 working directory.}
+
+\item{quiet}{If \code{TRUE}, suppresses the message listing out-of-date
+man pages.}
 }
 \value{
 A logical value, invisibly. \code{TRUE} if any man pages appear
 to be out of date; \code{FALSE} otherwise.
 }
 \description{
-A lightweight check that compares modification times of \code{.Rd} files
-in \verb{man/} with the source files listed in their backrefs. This is
-much faster than running \code{\link[=roxygenize]{roxygenize()}} but may report false
-positives, e.g. if you've changed a roxygen template or an
-inherited documentation topic.
+A lightweight check that compares modification times of \code{.Rd} files in
+\verb{man/} with the source files listed in their backrefs. This is much faster
+than running \code{\link[=roxygenize]{roxygenize()}} but can suffer from both false negatives (e.g.
+if an inherited documentation topic has changed) and false positives (e.g.
+if a source file was modified but the change doesn't affect the
+documentation).
 }
 \examples{
 \dontrun{

@@ -133,7 +133,7 @@ is_infix_fun <- function(name) {
     "::",
     ":::"
   )
-  str_detect(name, "^%.*%$") || name %in% ops
+  str_detect(name, "^%.*%$") | name %in% ops
 }
 is_padded_infix_fun <- function(name) {
   ops <- c(

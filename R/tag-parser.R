@@ -11,7 +11,7 @@
 #' @param x A [roxy_tag] object to parse
 #' @returns A [roxy_tag] object with the `val` field set to the parsed value.
 #' @name tag_parsers
-#' @keywords internal
+#' @family extending
 NULL
 
 #' @export
@@ -128,13 +128,14 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
       return(NULL)
     }
 
+    pieces[, 2] <- trim_docstring(pieces[, 2])
     if (markdown) {
       pieces[, 2] <- markdown_if_active(pieces[, 2], x)
     }
 
     x$val <- list(
       name = pieces[, 1],
-      description = trim_docstring(pieces[, 2])
+      description = pieces[, 2]
     )
     x
   }

@@ -27,4 +27,16 @@ sections can not be combined with \code{rd_section(x$type, c(x$value, y$value))}
 See \code{vignette("extending")} for more details.
 }
 
-\keyword{internal}
+\seealso{
+Other extending:
+\code{\link{load_options}()},
+\code{\link{parse_package}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

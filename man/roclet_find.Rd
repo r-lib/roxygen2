@@ -27,4 +27,16 @@ roclet_find("roxygen2::rd_roclet")
 # to call the function
 roclet_find("roxygen2::rd_roclet()")
 }
-\keyword{internal}
+\seealso{
+Other extending:
+\code{\link{load_options}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

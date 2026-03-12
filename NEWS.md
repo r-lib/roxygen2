@@ -1,10 +1,14 @@
 # roxygen2 (development version)
 
 * New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).
+* Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.
+* Assigning a non-function value (e.g. `x <- 1:10`) no longer automatically gets `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name.
 * Documenting values (e.g. `x <- 1:10`) no longer adds `\docType{data}`, `\keyword{datasets}`, or a `\format{}` section (#1666). To documenting a dataset, use the modern approach (>= 2013) where you document a string containing the dataset name (e.g. "diamonds").
 * Documenting data objects now generates `\usage{data(mydata)}` when the package doesn't have `LazyData: true` in its DESCRIPTION (#1425).
 * Fixed a performance regression where `roxygenize()` was very slow when the package contained large non-function objects like datasets (#1720).
 * Markdown improvements:
+  * `` `Rd expr` `` inline code now generates `\Sexpr[stage=render,results=rd]{expr}`, providing a convenient syntax for evaluating R code at documentation render time (#1214).
+  * Indented bullet lists in `@param` and other two-part tags are no longer incorrectly nested (#1102).
   * Horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
   * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
   * Link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.

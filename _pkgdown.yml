@@ -36,6 +36,10 @@ reference:
   - ends_with("roclet")
   - update_collate
 
+- title: Developing/extending roxygen2
+  contents:
+  - has_concept("extending")
+
 articles:
 - title: Documentation
   navbar: Documentation

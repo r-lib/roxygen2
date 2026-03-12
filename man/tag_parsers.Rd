@@ -66,4 +66,16 @@ To create a new \verb{@mytag} define \code{roxy_tag_parse.roxy_tag_mytag()}. It 
 either call one of the functions here, or directly set \code{x$val}.
 }
 
-\keyword{internal}
+\seealso{
+Other extending:
+\code{\link{load_options}()},
+\code{\link{parse_package}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tags_list}()}
+}
+\concept{extending}

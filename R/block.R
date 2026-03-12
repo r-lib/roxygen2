@@ -19,7 +19,7 @@
 #' @param block A `roxy_block` to manipulate.
 #' @param tag A single tag name.
 #' @export
-#' @keywords internal
+#' @family extending
 #' @examples
 #' # The easiest way to see the structure of a roxy_block is to create one
 #' # using parse_text:

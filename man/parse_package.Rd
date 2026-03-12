@@ -29,6 +29,8 @@ for real code you'll need to generate the environment yourself.
 You can also set to \code{NULL} if you only want to get the tokenized code
 blocks only. This suppresses evaluation of \verb{@eval} tags, and will not
 find the code object associated with each block.}
+
+\item{srcref_path}{Path to be used as source ref.}
 }
 \value{
 A list of roxy_block objects
@@ -40,4 +42,16 @@ character vector of code. \code{env_package()} and \code{env_file()} provide
 defaults that generate a temporary environment making it possible to
 associate each block with the corresponding live object.
 }
-\keyword{internal}
+\seealso{
+Other extending:
+\code{\link{load_options}()},
+\code{\link{rd_section}()},
+\code{\link{roc_proc_text}()},
+\code{\link{roclet_find}()},
+\code{\link{roxy_block}()},
+\code{\link{roxy_tag}()},
+\code{\link{roxy_tag_rd}()},
+\code{\link{tag_parsers}},
+\code{\link{tags_list}()}
+}
+\concept{extending}

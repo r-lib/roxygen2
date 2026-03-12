@@ -29,9 +29,8 @@ find_topic_filename <- function(pkg, topic, tag = NULL) {
 
 #' Find a help topic in a package
 #'
-#' This is used by both `find_topic_filename()` and
-#' `format.rd_section_reexport()` that creates the re-exports page. The error
-#' messages are different for the two, so errors are not handled here.
+#' This is used by `find_topic_filename()`. The error messages are different
+#' for the two callers, so errors are not handled here.
 #'
 #' @param pkg Package name. This cannot be `NA`.
 #' @inheritParams find_topic_filename

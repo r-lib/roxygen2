@@ -52,7 +52,7 @@
 #'
 #' @param base_path Path to package.
 #' @export
-#' @keywords internal
+#' @family extending
 load_options <- function(base_path = ".") {
   desc <- load_options_description(base_path)
   meta <- load_options_meta(base_path)
@@ -134,6 +134,8 @@ roxy_meta <- new_environment()
 
 #' @export
 #' @rdname load_options
+#' @param key Key of the options, e.g. `"packages"`.
+#' @param default Default value.
 roxy_meta_get <- function(key = NULL, default = NULL) {
   env_get(roxy_meta, key, default = default)
 }

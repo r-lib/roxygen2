@@ -4,36 +4,40 @@
 #' spaces between the closing and opening bracket in the `[text][ref]`
 #' form.
 #'
-#' These are the link references we add:
+#' These are the link references we add for local links:
+#'
 #' ```
 #' MARKDOWN           LINK TEXT  CODE RD
 #' --------           ---------  ---- --
-#' [fun()]            fun()       T   \\link[=fun]{fun()} or
-#'                                    \\link[pkg:fun]{pkg::fun()}
-#' [obj]              obj         F   \\link{obj} or
-#'                                    \\link[pkg:obj]{pkg::obj}
+#' [fun()]            fun()       T   \\link[=fun]{fun()}
+#' [obj]              obj         F   \\link{obj}
+#' [`obj`]            obj         T   \\link{obj}
+#' [text][fun()]      text        F   \\link[=fun]{text}
+#' [text][obj]        text        F   \\link[=obj]{text}
+#' [s4-class]         s4          F   \\link[=s4-class]{s4}
+#' ```
+#'
+#' And for cross-package links:
+#'
+#' ```
+#' MARKDOWN           LINK TEXT  CODE RD
+#' --------           ---------  ---- --
+#' [fun()]            fun()       T   \\link[pkg:fun]{pkg::fun()}
+#' [obj]              obj         F   \\link[pkg:obj]{pkg::obj}
+#' [`obj`]            obj         T   \\link[pkg:obj]{pkg::obj}
 #' [pkg::fun()]       pkg::fun()  T   \\link[pkg:fun]{pkg::fun()}
 #' [pkg::obj]         pkg::obj    F   \\link[pkg:obj]{pkg::obj}
-#' [text][fun()]      text        F   \\link[=fun]{text} or
-#'                                    \\link[pkg:fun]{text}
-#' [text][obj]        text        F   \\link[=obj]{text} or
-#'                                    \\link[pkg:obj]{text}
+#' [text][fun()]      text        F   \\link[pkg:fun]{text}
+#' [text][obj]        text        F   \\link[pkg:obj]{text}
 #' [text][pkg::fun()] text        F   \\link[pkg:fun]{text}
 #' [text][pkg::obj]   text        F   \\link[pkg:obj]{text}
-#' [s4-class]         s4          F   \\link[=s4-class]{s4} or
-#'                                    \\link[pkg:s4-class]{s4}
+#' [s4-class]         s4          F   \\link[pkg:s4-class]{s4}
 #' [pkg::s4-class]    pkg::s4     F   \\link[pkg:s4-class]{pkg::s4}
 #' ```
 #'
-#' For the links with two RD variants the first version is used for
-#' within-package links, and the second version is used for cross-package
-#' links.
-#'
 #' The reference links will always look like `R:ref` for `[ref]` and
-#' `[text][ref]`. These are explicitly tested in `test-rd-markdown-links.R`.
-#'
-#' We add in a special `R:` marker to the URL. This way we don't
-#' pick up other links, that were specified via `<url>` or
+#' `[text][ref]`. We add in a special `R:` marker to the URL to avoid
+#' picking up other links, that were specified via `<url>` or
 #' `[text](link)`. In the parsed XML tree these look the same as
 #' our `[link]` and `[text][link]` links.
 #'
@@ -45,7 +49,6 @@
 #'   appended.
 #'
 #' @noRd
-
 get_md_linkrefs <- function(text) {
   refs <- str_match_all(
     text,

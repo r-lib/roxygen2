@@ -79,7 +79,7 @@
   - Uses `logo.svg` if available, falling back to `logo.png`
     ([\#1640](https://github.com/r-lib/roxygen2/issues/1640)).
 - roxygen2 no longer depends on purrr.
-- roxygen2 now requires R 4.0
+- roxygen2 now requires R 4.1
   ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
 - S3 method handling improvements:
   - Method parsing now prefers the longest matching generic name, so

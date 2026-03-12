@@ -9,6 +9,8 @@
 #' documentation).
 #'
 #' @inheritParams roxygenize
+#' @param quiet If `TRUE`, suppresses the message listing out-of-date
+#'   man pages.
 #' @return A logical value, invisibly. `TRUE` if any man pages appear
 #'   to be out of date; `FALSE` otherwise.
 #' @export
@@ -16,22 +18,24 @@
 #' \dontrun{
 #' needs_roxygenize()
 #' }
-needs_roxygenize <- function(package.dir = ".") {
+needs_roxygenize <- function(package.dir = ".", quiet = FALSE) {
+  check_string(package.dir)
+  check_bool(quiet)
+
   base_path <- normalizePath(package.dir)
   man_path <- file.path(base_path, "man")
   rd_files <- sort(dir(man_path, pattern = "\\.Rd$", full.names = TRUE))
   outdated <- map_lgl(rd_files, rd_outdated, base_path = base_path)
   out_of_date <- basename(rd_files[outdated])
 
-  if (length(out_of_date) > 0) {
+  if (length(out_of_date) > 0 && !quiet) {
     cli::cli_inform(c(
       "!" = "{length(out_of_date)} man page{?s} may be out of date:",
       set_names(out_of_date, "*")
     ))
-    return(invisible(TRUE))
   }
 
-  invisible(FALSE)
+  invisible(length(out_of_date) > 0)
 }
 
 rd_outdated <- function(rd_file, base_path) {

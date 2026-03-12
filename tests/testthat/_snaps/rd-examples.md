@@ -36,7 +36,7 @@
 # @examplesIf warns about unparseable condition
 
     Code
-      . <- roc_proc_text(rd_roclet(), block)
+      out <- roc_proc_text(rd_roclet(), block)
     Message
       x <text>:4: @examplesIf condition failed to parse.
       Caused by error in `parse()`:
@@ -47,7 +47,7 @@
 # @examplesIf warns on empty body (#1695)
 
     Code
-      . <- roc_proc_text(rd_roclet(), block)
+      out <- roc_proc_text(rd_roclet(), block)
     Message
       x <text>:4: @examplesIf requires example code after the condition.
 

@@ -74,7 +74,7 @@ returning <code>NULL</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tag_value</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tag_value</span><span class="op">(</span><span class="va">x</span>, multiline <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tag_inherit</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
@@ -84,7 +84,7 @@ returning <code>NULL</code>.</p>
 <span></span>
 <span><span class="fu">tag_name_description</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tag_words</span><span class="op">(</span><span class="va">x</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span><span class="fu">tag_words</span><span class="op">(</span><span class="va">x</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="cn">Inf</span>, multiline <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tag_words_line</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
@@ -105,6 +105,12 @@ returning <code>NULL</code>.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A <a href="roxy_tag.html">roxy_tag</a> object to parse</p></dd>
+
+
+<dt id="arg-multiline">multiline<a class="anchor" aria-label="anchor" href="#arg-multiline"></a></dt>
+<dd><p>If <code>FALSE</code> (the default), tags that span multiple lines
+will generate a warning. Set to <code>TRUE</code> for tags where multiline content
+is expected (e.g., <code>@usage</code>, <code>@rawRd</code>).</p></dd>
 
 
 <dt id="arg-first-second">first, second<a class="anchor" aria-label="anchor" href="#arg-first-second"></a></dt>

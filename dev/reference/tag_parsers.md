@@ -7,7 +7,7 @@ warning and returning `NULL`.
 ## Usage
 
 ``` r
-tag_value(x)
+tag_value(x, multiline = FALSE)
 
 tag_inherit(x)
 
@@ -17,7 +17,7 @@ tag_two_part(x, first, second, required = TRUE, markdown = TRUE)
 
 tag_name_description(x)
 
-tag_words(x, min = 0, max = Inf)
+tag_words(x, min = 0, max = Inf, multiline = FALSE)
 
 tag_words_line(x)
 
@@ -38,6 +38,12 @@ tag_markdown_with_sections(x)
 
   A [roxy_tag](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
   object to parse
+
+- multiline:
+
+  If `FALSE` (the default), tags that span multiple lines will generate
+  a warning. Set to `TRUE` for tags where multiline content is expected
+  (e.g., `@usage`, `@rawRd`).
 
 - first, second:
 

@@ -2,6 +2,25 @@
 
 ## roxygen2 (development version)
 
+- Tags that expect single-line input now warn when they span multiple
+  lines, catching common mistakes. Affected tags: `@aliases`,
+  `@concept`, `@encoding`, `@exportClass`, `@exportMethod`,
+  `@exportPattern`, `@exportS3Method`, `@importFrom`,
+  `@importClassesFrom`, `@importMethodsFrom`, `@include`,
+  `@inheritParams`, `@keywords`, `@method`, `@name`, `@order`,
+  `@rdname`, `@S3method`, `@template`, and `@useDynLib`
+  ([\#1642](https://github.com/r-lib/roxygen2/issues/1642),
+  [\#1688](https://github.com/r-lib/roxygen2/issues/1688)). This may
+  break some existing usage, but it prevents a wide class of otherwise
+  silent errors.
+- `@examplesIf` now warns when there is no example code after the
+  condition ([\#1695](https://github.com/r-lib/roxygen2/issues/1695)).
+- [`tag_words_line()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)
+  is deprecated in favour of
+  [`tag_words()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md),
+  which now checks for single-line content by default. Use
+  `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)`
+  if your tag legitimately spans multiple lines.
 - New
   [`needs_roxygenize()`](https://roxygen2.r-lib.org/dev/reference/needs_roxygenize.md)
   provides a lightweight check that man pages are up-to-date by

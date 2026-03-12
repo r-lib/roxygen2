@@ -43,7 +43,8 @@ roxy_tag_rd.roxy_tag_inheritSection <- function(x, base_path, env) {
 
 # For each unique source, list which fields it inherits from
 rd_section_inherit <- function(source, fields) {
-  stopifnot(is.character(source), is.list(fields))
+  check_character(source)
+  stopifnot(is.list(fields))
   stopifnot(!anyDuplicated(source))
   stopifnot(length(source) == length(fields))
 
@@ -67,7 +68,8 @@ merge.rd_section_inherit <- function(x, y, ...) {
 format.rd_section_inherit <- function(x, ...) NULL
 
 rd_section_inherit_section <- function(source, title) {
-  stopifnot(is.character(source), is.character(title))
+  check_character(source)
+  check_character(title)
   stopifnot(length(source) == length(title))
 
   rd_section("inherit_section", list(source = source, title = title))
@@ -86,7 +88,8 @@ merge.rd_section_inherit_section <- function(x, y, ...) {
 }
 
 rd_section_inherit_dot_params <- function(source, args) {
-  stopifnot(is.character(source), is.character(args))
+  check_character(source)
+  check_character(args)
   stopifnot(length(source) == length(args))
 
   rd_section("inherit_dot_params", list(source = source, args = args))

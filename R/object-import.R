@@ -1,6 +1,7 @@
 # Re-export ----------------------------------------------------------------
 rd_section_reexport <- function(pkg, fun) {
-  stopifnot(is.character(pkg), is.character(fun))
+  check_character(pkg)
+  check_character(fun)
   stopifnot(length(pkg) == length(fun))
 
   rd_section("reexport", list(pkg = pkg, fun = fun))

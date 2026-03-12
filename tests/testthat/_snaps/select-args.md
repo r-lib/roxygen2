@@ -15,8 +15,8 @@
     Message
       x In topic 'test': @inheritDotsParam failed.
       Caused by error in `select_check()`:
-      ! Argument specification must evaluate to a numeric vector
-      Problem in `"a"`
+      ! Argument specification must evaluate to a numeric vector.
+      Problem in `"a"`.
     Output
       character(0)
     Code
@@ -24,8 +24,8 @@
     Message
       x In topic 'test': @inheritDotsParam failed.
       Caused by error:
-      ! Argument specification must be all positive or all negative, not a mixture
-      i Problem in `-x:z`
+      ! Argument specification must be all positive or all negative, not a mixture.
+      i Problem in `-x:z`.
     Output
       character(0)
 

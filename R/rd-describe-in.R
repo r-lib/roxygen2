@@ -75,11 +75,11 @@ rd_section_minidesc <- function(
   generic = "",
   class = ""
 ) {
-  stopifnot(is_string(name))
-  stopifnot(is_character(desc))
+  check_string(name)
+  check_character(desc)
   rlang::arg_match(extends)
-  stopifnot(is_string(generic))
-  stopifnot(is_string(class))
+  check_string(generic)
+  check_string(class)
 
   data <- data.frame(
     name = name,

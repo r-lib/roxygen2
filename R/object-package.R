@@ -54,7 +54,7 @@ package_authors <- function(authors) {
 
 author_desc <- function(x) {
   if (inherits(x, "person")) {
-    cli::cli_abort("Person class must be stripped", .internal = FALSE)
+    cli::cli_abort("Person class must be stripped.", .internal = FALSE)
   }
 
   desc <- paste0(x$given, collapse = " ")

@@ -24,7 +24,7 @@ test_that("look up string", {
   expect_equal(find_load_strategy("installed"), load_installed)
   expect_equal(find_load_strategy("pkgload"), load_pkgload)
   expect_equal(find_load_strategy("source"), load_source)
-  expect_error(find_load_strategy("blahblahb"), "Unknown value")
+  expect_snapshot(find_load_strategy("blahblahb"), error = TRUE)
 })
 
 test_that("NULL uses option", {
@@ -32,6 +32,11 @@ test_that("NULL uses option", {
 })
 
 test_that("informative errors for bad inputs", {
-  expect_error(find_load_strategy(1), "string or function")
-  expect_error(find_load_strategy(NULL, list()), "string")
+  expect_snapshot(
+    {
+      find_load_strategy(1)
+      find_load_strategy(NULL, list())
+    },
+    error = TRUE
+  )
 })

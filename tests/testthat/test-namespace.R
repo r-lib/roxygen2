@@ -386,7 +386,7 @@ test_that("rawNamespace does not break idempotency", {
 
   lines_orig <- read_lines(NAMESPACE)
 
-  expect_no_error(suppressMessages(roxygenize(test_pkg, namespace_roclet())))
+  expect_no_error(suppressMessages(roxygenize(test_pkg, "namespace")))
 
   # contents unchanged
   expect_equal(read_lines(NAMESPACE), lines_orig)

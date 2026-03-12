@@ -74,20 +74,20 @@ sys_source <- function(file, envir = baseenv()) {
 
 # Helpers -----------------------------------------------------------------
 
-find_load_strategy <- function(x, option = roxy_meta_get("load", "pkgload")) {
+find_load_strategy <- function(
+  x,
+  option = roxy_meta_get("load", "pkgload"),
+  call = caller_env()
+) {
   if (is.function(x)) {
     return(x)
   }
 
   if (is.null(x)) {
     x <- option
-    if (!is.character(x) || length(x) != 1) {
-      cli::cli_abort("roxygen2 {.code load} option must be a string")
-    }
+    check_string(x, arg = I("roxygen2 `load` option"), call = call)
   } else {
-    if (!is.character(x) || length(x) != 1) {
-      cli::cli_abort("{.code load_code} must be a string or function")
-    }
+    check_string(x, arg = "load_code", call = call)
   }
 
   switch(
@@ -95,6 +95,9 @@ find_load_strategy <- function(x, option = roxy_meta_get("load", "pkgload")) {
     pkgload = load_pkgload,
     source = load_source,
     installed = load_installed,
-    cli::cli_abort("Unknown value of {.code load} option")
+    cli::cli_abort(
+      "Unknown value of {.code load} option: {.str {x}}.",
+      call = call
+    )
   )
 }

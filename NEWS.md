@@ -22,7 +22,7 @@
   * Only wraps actual URLs in the `URL` field of `DESCRIPTION` (#1420).
   * Uses `logo.svg` if available, falling back to `logo.png` (#1640).
 * roxygen2 no longer depends on purrr.
-* roxygen2 now requires R 4.0 (#1632).
+* roxygen2 now requires R 4.1 (#1632).
 * S3 method handling improvements:
   * Method parsing now prefers the longest matching generic name, so e.g. `all.equal.numeric` is correctly identified as a method of `all.equal` rather than `all` (#1587).
   * The warning about undocumented methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).

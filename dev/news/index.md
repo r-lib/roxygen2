@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- All generated links now use the same code path. This will lead to some
+  minor differences when you re-document, but overall the links will now
+  be more consistent
+  ([\#1792](https://github.com/r-lib/roxygen2/issues/1792)).
 - Reexported functions now display with `()` appended (e.g., `fun()`
   instead of `fun`) on the reexports page, except for infix operators
   like `%>%` ([\#1222](https://github.com/r-lib/roxygen2/issues/1222)).

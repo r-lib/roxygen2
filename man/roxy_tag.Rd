@@ -70,14 +70,14 @@ for more details.
 
 \seealso{
 Other extending:
-\code{\link{load_options}()},
-\code{\link{parse_package}()},
-\code{\link{rd_section}()},
-\code{\link{roc_proc_text}()},
-\code{\link{roclet_find}()},
-\code{\link{roxy_block}()},
-\code{\link{roxy_tag_rd}()},
+\code{\link[=load_options]{load_options()}},
+\code{\link[=parse_package]{parse_package()}},
+\code{\link[=rd_section]{rd_section()}},
+\code{\link[=roc_proc_text]{roc_proc_text()}},
+\code{\link[=roclet_find]{roclet_find()}},
+\code{\link[=roxy_block]{roxy_block()}},
+\code{\link[=roxy_tag_rd]{roxy_tag_rd()}},
 \code{\link{tag_parsers}},
-\code{\link{tags_list}()}
+\code{\link[=tags_list]{tags_list()}}
 }
 \concept{extending}

@@ -2,6 +2,11 @@
 
 ## roxygen2 (development version)
 
+- New
+  [`needs_roxygenize()`](https://roxygen2.r-lib.org/dev/reference/needs_roxygenize.md)
+  provides a lightweight check that man pages are up-to-date by
+  comparing modification times of `.Rd` files with their source files
+  ([\#1411](https://github.com/r-lib/roxygen2/issues/1411)).
 - All generated links now use the same code path. This will lead to some
   minor differences when you re-document, but overall the links will now
   be more consistent

@@ -82,6 +82,8 @@
 - [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
   [`roxygenise()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
   : Document a package with roxygen2
+- [`needs_roxygenize()`](https://roxygen2.r-lib.org/dev/reference/needs_roxygenize.md)
+  : Check if documentation needs to be updated
 - [`load_pkgload()`](https://roxygen2.r-lib.org/dev/reference/load.md)
   [`load_installed()`](https://roxygen2.r-lib.org/dev/reference/load.md)
   [`load_source()`](https://roxygen2.r-lib.org/dev/reference/load.md) :

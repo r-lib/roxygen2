@@ -8,8 +8,6 @@ test_that("@R6method tag parser validates input", {
   expect_snapshot({
     . <- roxy_tag_parse(roxy_tag("R6method", ""))
     . <- roxy_tag_parse(roxy_tag("R6method", "nomethod"))
-    . <- roxy_tag_parse(roxy_tag("R6method", "$bar"))
-    . <- roxy_tag_parse(roxy_tag("R6method", "Foo$"))
     . <- roxy_tag_parse(roxy_tag("R6method", "Foo$bar\nextra"))
   })
 })

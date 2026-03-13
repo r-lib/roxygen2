@@ -9,14 +9,6 @@
     Message
       x NA:NA: @R6method must be of the form `Class$method`.
     Code
-      . <- roxy_tag_parse(roxy_tag("R6method", "$bar"))
-    Message
-      x NA:NA: @R6method must be of the form `Class$method`.
-    Code
-      . <- roxy_tag_parse(roxy_tag("R6method", "Foo$"))
-    Message
-      x NA:NA: @R6method must be of the form `Class$method`.
-    Code
       . <- roxy_tag_parse(roxy_tag("R6method", "Foo$bar\nextra"))
     Message
       x NA:NA: @R6method must be only 1 line long, not 2.

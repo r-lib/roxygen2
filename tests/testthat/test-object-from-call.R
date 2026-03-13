@@ -269,8 +269,8 @@ test_that("recognises R6$set() calls", {
 
 test_that("ignores non-R6 $ calls", {
   obj <- call_to_object({
-    x <- list()
-    x$foo <- 1
+    x <- list(set = function(...) {})
+    x$set(x)
   })
   expect_null(obj)
 })

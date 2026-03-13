@@ -1,32 +1,41 @@
+r6_tags <- c("description", "details", "param", "return", "examples")
+
 topic_add_r6_methods <- function(rd, block, env) {
   r6data <- block_get_tag_value(block, ".r6data")
   self <- r6data$self
   methods <- self[self$type == "method", ]
   methods <- methods[order(methods$file, methods$line), ]
-  methods$tags <- replicate(nrow(methods), list(), simplify = FALSE)
-
-  r6_tags <- c("description", "details", "param", "return", "examples")
+  methods$tags <- rep(list(list()), nrow(methods))
 
   del <- integer()
   for (i in seq_along(block$tags)) {
     tag <- block$tags[[i]]
-    # Not inline?
-    if (is.na(tag$line) || tag$line < block$line) {
-      next
+
+    # Tags from external @R6method blocks are stamped with the method name;
+    # inline tags use positional matching
+    if (!is.null(tag$r6method)) {
+      meth <- tag$r6method
+    } else {
+      # Not inline
+      if (is.na(tag$line) || tag$line < block$line) {
+        next
+      }
+
+      # Not a method tag?
+      if (!tag$tag %in% r6_tags) {
+        next
+      }
+
+      meth <- find_method_for_tag(methods, tag)
     }
-    # Not a method tag?
-    if (!tag$tag %in% r6_tags) {
-      next
-    }
+
     del <- c(del, i)
-    meth <- find_method_for_tag(methods, tag)
-    if (is.na(meth)) {
+    midx <- which(meth == methods$name)
+    if (length(midx) == 0) {
       warn_roxy_tag(tag, "Cannot find matching R6 method")
       next
     }
-    midx <- which(meth == methods$name)
     methods$tags[[midx]] <- c(methods$tags[[midx]], list(tag))
-    del <- c(del, i)
   }
 
   # Markdown sections (# headings) inside @description or @details produce

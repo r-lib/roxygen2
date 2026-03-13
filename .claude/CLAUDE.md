@@ -2,31 +2,37 @@
 
 ### Key commands
 
-```
+Use the mcp R REPL tool to run R code, if available. Note that it's sandboxed so can't write to the file system.
+
+Inside of R:
+
+```r
 # To run code
-Rscript -e "devtools::load_all(); code"
+devtools::load_all(); code
 
 # To run all tests
-Rscript -e "devtools::test()"
+devtools::test()
 
 # To run all tests for files starting with {name}
-Rscript -e "devtools::test(filter = '^{name}')"
+devtools::test(filter = '^{name}')
 
 # To run all tests for R/{name}.R
-Rscript -e "devtools::test_active_file('R/{name}.R')"
+devtools::test_active_file('R/{name}.R')
 
 # To run a single test "blah" for R/{name}.R
-Rscript -e "devtools::test_active_file('R/{name}.R', desc = 'blah')"
+devtools::test_active_file('R/{name}.R', desc = 'blah')
 
 # To redocument the package
-Rscript -e "devtools::document()"
+devtools::document()
 
 # To check pkgdown documentation
-Rscript -e "pkgdown::check_pkgdown()"
+pkgdown::check_pkgdown()
 
 # To check the package with R CMD check
-Rscript -e "devtools::check()"
+devtools::check()
+```
 
+```
 # To format code
 air format .
 ```

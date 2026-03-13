@@ -5,6 +5,7 @@
 \alias{@field}
 \alias{@format}
 \alias{@method}
+\alias{@R6method}
 \alias{@slot}
 \alias{@source}
 \title{Tags for documenting datasets and classes}
@@ -12,6 +13,7 @@
 #' @field ${1:name} ${2:description}
 #' @format ${1:description}
 #' @method ${1:generic} ${2:class}
+#' @R6method ${1:Class}$${2:method}
 #' @slot ${1:name} ${2:description}
 #' @source ${1:description}
 }
@@ -25,6 +27,11 @@ Key tags:
 \item \verb{@method $\{1:generic\} $\{2:class\}}: Force a function to be recognised as an S3 method. This affects the default usage and the \code{NAMESPACE} directive produced by \verb{@export}. Only needed if automatic detection fails.
 \item \verb{@slot $\{1:name\} $\{2:description\}}: Describe the slot of an S4 class.
 \item \verb{@source $\{1:description\}}: Describe where the dataset came from. Provide a link to the original source (if possible) and briefly describe any manipulation that you performed when importing the data.
+}
+
+Other less frequently used tags:
+\itemize{
+\item \verb{@R6method $\{1:Class\}$$\{2:method\}}: Document an R6 method that can't be discovered by introspection, such as methods added via \verb{$set()} or fields that become methods at runtime.
 }
 }
 \seealso{

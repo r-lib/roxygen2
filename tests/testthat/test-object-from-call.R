@@ -255,3 +255,31 @@ test_that("fails gracefully on bad inputs", {
   expect_equal(extract_method_fun(fun4), fun4)
   expect_equal(extract_method_fun(fun5), fun5)
 })
+
+# R6 $set() ---------------------------------------------------------------
+
+test_that("recognises R6$set() calls", {
+  obj <- call_to_object({
+    C <- R6::R6Class("C", public = list(m = function() {}))
+    C$set("public", "meth", function(x) {})
+  })
+  expect_s3_class(obj, "r6method")
+  expect_equal(obj$value, list(class = "C", method = "meth"))
+})
+
+test_that("ignores non-R6 $ calls", {
+  obj <- call_to_object({
+    x <- list()
+    x$foo <- 1
+  })
+  expect_null(obj)
+})
+
+test_that("ignores $set() with non-string method name", {
+  obj <- call_to_object({
+    C <- R6::R6Class("C", public = list(m = function() {}))
+    name <- "meth"
+    C$set("public", name, function(x) {})
+  })
+  expect_null(obj)
+})

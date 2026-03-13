@@ -5,6 +5,8 @@ object_from_call <- function(call, env, block, file) {
     } else {
       parser_data(call, env, file)
     }
+  } else if (is_set_call(call)) {
+    parser_r6_set(call, env)
   } else if (is.call(call)) {
     call <- call_match(call, eval(call[[1]], env))
     name <- deparse(call[[1]])
@@ -91,6 +93,30 @@ object_from_name <- function(name, env, block) {
 }
 
 # Parsers for individual calls --------------------------------------------
+
+is_set_call <- function(call) {
+  is_call(call) &&
+    is_call(call[[1]], "$", n = 2) &&
+    is_symbol(call[[1]][[3]], "set")
+}
+
+parser_r6_set <- function(call, env) {
+  lhs <- call[[1]]
+
+  obj_name <- deparse(lhs[[2]])
+  obj <- tryCatch(get(obj_name, envir = env), error = function(e) NULL)
+  if (!inherits(obj, "R6ClassGenerator")) {
+    return(NULL)
+  }
+  class_name <- obj$classname
+
+  method_name <- call[[3]]
+  if (!is.character(method_name)) {
+    return(NULL)
+  }
+
+  object(list(class = class_name, method = method_name), NULL, "r6method")
+}
 
 parser_data <- function(call, env, block) {
   if (isNamespace(env)) {
@@ -316,6 +342,7 @@ object_topic <- function(value, alias, type) {
     s4generic = value@generic,
     rcclass = paste0(value@className, "-class"),
     r6class = alias,
+    r6method = alias,
     rcmethod = value@name,
     s3generic = alias,
     s3method = alias,

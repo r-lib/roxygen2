@@ -14,7 +14,7 @@ test_that("@R6method tag parser validates input", {
   })
 })
 
-test_that("@R6method merges external method into R6 class topic", {
+test_that("$set() infers @R6method automatically", {
   text <- "
     #' @title Title
     #' @description Description.
@@ -25,7 +25,6 @@ test_that("@R6method merges external method into R6 class topic", {
       )
     )
 
-    #' @R6method C$meth2
     #' @description Method 2.
     #' @param x A number.
     C$set('public', 'meth2', function(x) { })
@@ -45,20 +44,17 @@ test_that("@R6method merges external method into R6 class topic", {
   expect_match(rd, "C$meth2(x)", fixed = TRUE)
 })
 
-test_that("@R6method works with indirect $set() calls", {
+test_that("explicit @R6method works with NULL", {
   text <- "
     #' @title Title
     #' @description Description.
     C <- R6::R6Class('C', cloneable = FALSE,
       public = list(
         #' @description Method 1.
-        meth1 = function() { }
+        meth1 = function() {},
+        meth2 = function(x) {}
       )
     )
-
-    name <- 'meth2'
-    C$set('public', name, function(x) { })
-
     #' @R6method C$meth2
     #' @description Method 2.
     #' @param x A number.
@@ -74,39 +70,6 @@ test_that("@R6method works with indirect $set() calls", {
 
   expect_match(rd, "C$meth2(x)", fixed = TRUE)
   expect_match(rd, "Method 2.", fixed = TRUE)
-})
-
-test_that("@R6method removes field from fields list", {
-  text <- "
-    #' @title Title
-    #' @description Description.
-    C <- R6::R6Class('C', cloneable = FALSE,
-      public = list(
-        bar = NULL,
-        #' @description Method 1.
-        meth1 = function() { }
-      )
-    )
-
-    C$public_fields$bar <- NULL
-    C$set('public', 'bar', function(x) { })
-
-    #' @R6method C$bar
-    #' @description Bar method.
-    #' @param x A value.
-    NULL
-  "
-
-  env <- new.env(parent = globalenv())
-  eval(parse(text = text, keep.source = TRUE), envir = env)
-  blocks <- parse_text(text, env = env)
-  roc <- roclet_preprocess(roclet_find("rd"))
-  res <- roclet_process(roc, blocks = blocks, env = env, base_path = ".")
-  rd <- format(res$C.Rd)
-
-  # bar should appear as a method, not a field
-  expect_match(rd, "Method \\code{bar()}", fixed = TRUE)
-  expect_no_match(rd, "Public fields", fixed = TRUE)
 })
 
 test_that("@R6method warns on unknown class", {

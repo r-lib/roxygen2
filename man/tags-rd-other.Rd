@@ -31,7 +31,7 @@ Key tags:
 
 Other less frequently used tags:
 \itemize{
-\item \verb{@R6method $\{1:Class\}$$\{2:method\}}: Document an R6 method that can't be discovered by introspection, such as methods added via \verb{$set()} or fields that become methods at runtime.
+\item \verb{@R6method $\{1:Class\}$$\{2:method\}}: Document an R6 method that can't be discovered by introspection, such as methods added via \verb{$set()}.
 }
 }
 \seealso{

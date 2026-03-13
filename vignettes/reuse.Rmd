@@ -72,7 +72,7 @@ This tends to work better if you have a "primary" function with some variants or
 
 ```{r, eval = FALSE}
 #' Logarithms
-#' 
+#'
 #' @param x A numeric vector
 #' @export
 log <- function(x, base) ...
@@ -238,6 +238,25 @@ It's most common to inherit from other documentation topics within the current p
 When inheriting documentation from another package bear in mind that you're now taking a fairly strong dependency on an external package, and to ensure every developer produces the same documentation you'll need to make sure that they all have the same version of the package installed.
 And if the package changes the name of the topic or section, your documentation will require an update.
 For those reasons, this technique is best used sparingly.
+
+## Custom tags
+
+Creating a custom tag might be a strategy for repeating yourself less.
+
+For instance you could create a tag that allows
+
+```r
+#' @git rebase
+```
+
+to create this Rd section:
+
+```latex
+\section{Related Git documentation}
+{\href{https://git-scm.com/docs/git-rebase#_interactive_mode}{\code{git rebase -i}}.}
+```
+
+See `vignette("extending")` for more details.
 
 ## Inline code
 

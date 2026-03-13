@@ -31,6 +31,8 @@ rd_roclet <- function() {
 
 #' @export
 roclet_process.roclet_rd <- function(x, blocks, env, base_path) {
+  blocks <- merge_external_r6methods(blocks)
+
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 

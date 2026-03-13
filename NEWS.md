@@ -1,8 +1,9 @@
 # roxygen2 (development version)
-
 * Tags that expect single-line input now warn when they span multiple lines, catching common mistakes. Affected tags: `@aliases`, `@concept`, `@encoding`, `@exportClass`, `@exportMethod`, `@exportPattern`, `@exportS3Method`, `@importFrom`, `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@inheritParams`, `@keywords`, `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and `@useDynLib` (#1642, #1688). This may break some existing usage, but it prevents a wide class of otherwise silent errors.
 * `@examplesIf` now warns when there is no example code after the condition (#1695).
 * `tag_words_line()` is deprecated in favour of `tag_words()`, which now checks for single-line content by default. Use `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)` if your tag legitimately spans multiple lines.
+* R6 improvements:
+  * `initialize()` method parameters now automatically inherit documentation from `@field` tags with the same name, reducing the need to duplicate descriptions. Explicit `@param` tags still take precedence (#1004).
 * New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).
 * All generated links now use the same code path. This will lead to some minor differences when you re-document, but overall the links will now be more consistent (#1792).
 * Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.

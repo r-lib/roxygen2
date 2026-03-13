@@ -437,6 +437,9 @@ r6_method_params <- function(block, method) {
 
   # Now add the missing ones from the class
   fnames <- names(method$formals[[1]])
+  if (length(fnames) == 0) {
+    return()
+  }
   miss <- setdiff(fnames, mnames)
   is_in_cls <- map_lgl(
     block$tags,
@@ -449,7 +452,25 @@ r6_method_params <- function(block, method) {
   )
   par <- c(par, block$tags[is_in_cls])
 
-  # Check if anything is missing
+  # For initialize(), inherit from @field tags for any still-missing params
+  if (method$name == "initialize") {
+    nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
+    mnames <- str_trim(unlist(strsplit(nms, ",")))
+    miss <- setdiff(fnames, mnames)
+
+    if (length(miss) > 0) {
+      field_tags <- keep(block$tags, function(t) {
+        t$tag == "field" && t$val$name %in% miss
+      })
+      field_as_param <- lapply(field_tags, function(t) {
+        val <- list(name = t$val$name, description = t$val$description)
+        roxy_generated_tag(block, "param", val)
+      })
+      par <- c(par, field_as_param)
+    }
+  }
+
+  # Check if anything is still missing
   nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
   mnames <- str_trim(unlist(strsplit(nms, ",")))
   miss <- setdiff(fnames, mnames)
@@ -461,10 +482,6 @@ r6_method_params <- function(block, method) {
         x = "${method$name}({m}) is not documented"
       )
     )
-  }
-
-  if (length(par) == 0) {
-    return()
   }
 
   # Order them according to formals

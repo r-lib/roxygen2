@@ -436,6 +436,67 @@ test_that("r6_flatten_sections collapses markdown sections", {
   expect_match(tag$val, "Body.", fixed = TRUE)
 })
 
+test_that("initialize() inherits param docs from @field tags", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @field x A field.
+    #' @field y Another field.
+    C <- R6::R6Class(
+      public = list(
+        x = NULL,
+        y = NULL,
+        #' @description Create a new object.
+        initialize = function(x, y) {
+          self$x <- x
+          self$y <- y
+        }
+      )
+    )"
+
+  env <- new.env(parent = globalenv())
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_silent(topic_add_r6_methods(rd, block, env))
+  doc <- format(rd)
+  expect_match(doc, "code{x}}{A field.", fixed = TRUE)
+  expect_match(doc, "code{y}}{Another field.", fixed = TRUE)
+})
+
+test_that("initialize() @param takes precedence over @field", {
+  text <- "
+    #' @title Title
+    #' @description Description.
+    #' @field x A field.
+    C <- R6::R6Class(
+      public = list(
+        x = NULL,
+        #' @description Create a new object.
+        #' @param x Initial value for x.
+        initialize = function(x) {
+          self$x <- x
+        }
+      )
+    )"
+
+  env <- new.env(parent = globalenv())
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
+  rd <- RoxyTopic$new()
+
+  expect_silent(topic_add_r6_methods(rd, block, env))
+  doc <- format(rd)
+  # @param should appear in the Arguments section, not the @field description
+  expect_match(doc, "code{x}}{Initial value for x.", fixed = TRUE)
+  expect_false(grepl(
+    "arguments.*code\\{x\\}\\}\\{A field",
+    doc,
+    ignore.case = TRUE
+  ))
+})
+
 test_that("r6 option", {
   text <- "
     #' @title Title

@@ -68,6 +68,10 @@
 <code>@examplesIf</code> now warns when there is no example code after the condition (<a href="https://github.com/r-lib/roxygen2/issues/1695" class="external-link">#1695</a>).</li>
 <li>
 <code><a href="../reference/tag_parsers.html">tag_words_line()</a></code> is deprecated in favour of <code><a href="../reference/tag_parsers.html">tag_words()</a></code>, which now checks for single-line content by default. Use <code>tag_words(x, multiline = TRUE)</code> or <code>tag_value(x, multiline = TRUE)</code> if your tag legitimately spans multiple lines.</li>
+<li>R6 improvements:
+<ul><li>
+<code>initialize()</code> method parameters now automatically inherit documentation from <code>@field</code> tags with the same name, reducing the need to duplicate descriptions. Explicit <code>@param</code> tags still take precedence (<a href="https://github.com/r-lib/roxygen2/issues/1004" class="external-link">#1004</a>).</li>
+</ul></li>
 <li>New <code><a href="../reference/needs_roxygenize.html">needs_roxygenize()</a></code> provides a lightweight check that man pages are up-to-date by comparing modification times of <code>.Rd</code> files with their source files (<a href="https://github.com/r-lib/roxygen2/issues/1411" class="external-link">#1411</a>).</li>
 <li>All generated links now use the same code path. This will lead to some minor differences when you re-document, but overall the links will now be more consistent (<a href="https://github.com/r-lib/roxygen2/issues/1792" class="external-link">#1792</a>).</li>
 <li>Reexported functions now display with <code>()</code> appended (e.g., <code>fun()</code> instead of <code>fun</code>) on the reexports page, except for infix operators like <code>%&gt;%</code> (<a href="https://github.com/r-lib/roxygen2/issues/1222" class="external-link">#1222</a>). They also use modern (&gt;= 4.1.0) linking style.</li>

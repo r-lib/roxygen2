@@ -21,6 +21,12 @@
   which now checks for single-line content by default. Use
   `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)`
   if your tag legitimately spans multiple lines.
+- R6 improvements:
+  - `initialize()` method parameters now automatically inherit
+    documentation from `@field` tags with the same name, reducing the
+    need to duplicate descriptions. Explicit `@param` tags still take
+    precedence
+    ([\#1004](https://github.com/r-lib/roxygen2/issues/1004)).
 - New
   [`needs_roxygenize()`](https://roxygen2.r-lib.org/dev/reference/needs_roxygenize.md)
   provides a lightweight check that man pages are up-to-date by

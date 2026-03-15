@@ -1,16 +1,16 @@
-# R6 edge cases, class without (documented) fields
+# undocumented field warns
 
     Code
-      topic_add_r6_methods(rd, block, environment())
+      invisible(r6_doc(text))
     Message
-      x <text>:7: Undocumented R6 field: undocumented_field.
+      x <text>:6: Undocumented R6 field: undocumented_field.
 
 # warning if no method comes after the docs
 
     Code
       topic_add_r6_methods(rd, block, environment())
     Message
-      x <text>:10: @description Cannot find matching R6 method.
+      x <text>:9: @description Cannot find matching R6 method.
 
 # class with no inherited methods
 

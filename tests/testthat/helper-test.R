@@ -31,3 +31,15 @@ local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {
 
   normalizePath(pkg_path, winslash = "/")
 }
+
+r6_topic <- function(text, env = new.env(parent = globalenv())) {
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
+  rd <- RoxyTopic$new()
+  topic_add_r6_methods(rd, block, env)
+  rd
+}
+
+r6_doc <- function(text, env = new.env(parent = globalenv())) {
+  format(r6_topic(text, env))
+}

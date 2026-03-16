@@ -231,7 +231,7 @@ You can also provide your own link text. In this case there's no advantage to su
 
 ## Code chunks
 
-You can insert executable code with ```` ```{r} ````, just like in knitr documents.
+You can insert executable code with ```` ```{r} ```` just like in knitr documents.
 For example:
 
 ```{r echo=FALSE}
@@ -266,6 +266,8 @@ Make sure to omit the cache from the package with `usethis::use_build_ignore()`.
 Note that knitr will call the appropriate `print()` or (if available) `knitr::knit_print()` method on the result.
 This may generate markdown not supported by roxygen2.
 If needed, override the automatic methods to have your R calls return your own markdown as a character vector, wrapped in `knitr::asis_output()`.
+
+You can also use `` `r ` `` to insert the results of running R code. This is particularly useful for reducing duplication in your documentation so is documented in `vignette("reuse")`.
 
 ### Chunk options
 

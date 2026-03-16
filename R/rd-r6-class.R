@@ -2,8 +2,8 @@ rd_r6_class <- function(
   class_name,
   alias,
   superclasses = data.frame(),
-  fields = list(),
-  active_bindings = list(),
+  fields = rd_r6_fields(),
+  active_bindings = rd_r6_bindings(),
   methods = list(),
   inherited_methods = data.frame()
 ) {
@@ -27,12 +27,8 @@ format.rd_r6_class <- function(x, ...) {
   push <- function(...) lines <<- c(lines, ...)
 
   push(format_r6_superclasses(x))
-  push(format_r6_field_section(x$fields, "Public fields", "r6-fields"))
-  push(format_r6_field_section(
-    x$active_bindings,
-    "Active bindings",
-    "r6-active-bindings"
-  ))
+  push(format(x$fields))
+  push(format(x$active_bindings))
 
   if (length(x$methods) > 0) {
     push("\\section{Methods}{")

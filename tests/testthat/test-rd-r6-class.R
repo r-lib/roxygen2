@@ -8,8 +8,8 @@ test_that("can construct empty class", {
 
   expect_s3_class(docs, "rd_r6_class")
   expect_length(docs$methods, 0)
-  expect_length(docs$fields, 0)
-  expect_length(docs$active_bindings, 0)
+  expect_equal(docs$fields, rd_r6_fields())
+  expect_equal(docs$active_bindings, rd_r6_bindings())
 })
 
 test_that("warns about unmatched components ", {
@@ -50,10 +50,10 @@ test_that("format.rd_r6_class with fields", {
   docs <- rd_r6_class(
     class_name = "Foo",
     alias = "Foo",
-    fields = list(
+    fields = rd_r6_fields(list(
       rd_r6_field("x", "A number."),
       rd_r6_field("y", "A string.")
-    )
+    ))
   )
   expect_snapshot(cat(format(docs), sep = "\n"))
 })
@@ -62,7 +62,7 @@ test_that("format.rd_r6_class with active bindings", {
   docs <- rd_r6_class(
     class_name = "Foo",
     alias = "Foo",
-    active_bindings = list(rd_r6_field("val", "A value."))
+    active_bindings = rd_r6_bindings(list(rd_r6_field("val", "A value.")))
   )
   expect_snapshot(cat(format(docs), sep = "\n"))
 })

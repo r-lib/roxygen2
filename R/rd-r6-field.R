@@ -26,12 +26,12 @@ r6_extract_fields <- function(block, r6data) {
     warn_roxy_block(block, "Unknown R6 field{?s}: {xtra}")
   }
 
-  lapply(tags, function(t) {
+  rd_r6_fields(lapply(tags, function(t) {
     rd_r6_field(
       name = gsub(",", ", ", t$val$name),
       description = t$val$description
     )
-  })
+  }))
 }
 
 r6_extract_active_bindings <- function(block, r6data) {
@@ -60,15 +60,23 @@ r6_extract_active_bindings <- function(block, r6data) {
     )
   }
 
-  lapply(tags, function(t) {
+  rd_r6_bindings(lapply(tags, function(t) {
     rd_r6_field(
       name = gsub(",", ", ", t$val$name),
       description = t$val$description
     )
-  })
+  }))
 }
 
 # Rd ---------------------------------------------------------------------------
+
+rd_r6_fields <- function(fields = list()) {
+  structure(list(fields = fields), class = "rd_r6_fields")
+}
+
+rd_r6_bindings <- function(bindings = list()) {
+  structure(list(fields = bindings), class = "rd_r6_bindings")
+}
 
 rd_r6_field <- function(name, description) {
   structure(
@@ -80,6 +88,16 @@ rd_r6_field <- function(name, description) {
 #' @export
 format.rd_r6_field <- function(x, ...) {
   paste0("\\item{\\code{", x$name, "}}{", x$description, "}")
+}
+
+#' @export
+format.rd_r6_fields <- function(x, ...) {
+  format_r6_field_section(x$fields, "Public fields", "r6-fields")
+}
+
+#' @export
+format.rd_r6_bindings <- function(x, ...) {
+  format_r6_field_section(x$fields, "Active bindings", "r6-active-bindings")
 }
 
 format_r6_field_section <- function(fields, title, css_class) {

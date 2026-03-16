@@ -1,7 +1,7 @@
 rd_r6_class <- function(
   class,
   alias = class,
-  superclasses = data.frame(),
+  superclasses = rd_r6_super(class),
   fields = rd_r6_fields(),
   active_bindings = rd_r6_bindings(),
   methods = list(),
@@ -26,7 +26,7 @@ format.rd_r6_class <- function(x, ...) {
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
 
-  push(format_r6_superclasses(x))
+  push(format(x$superclasses))
   push(format(x$fields))
   push(format(x$active_bindings))
 
@@ -91,7 +91,7 @@ r6_class_from_block <- function(block, env) {
 
   fields <- r6_extract_fields(block, r6data)
   active_bindings <- r6_extract_active_bindings(block, r6data)
-  superclasses <- r6_extract_superclasses(r6data, env)
+  superclasses <- r6_extract_superclasses(r6data, env, class)
   inherited_methods <- r6_extract_inherited_methods(r6data)
 
   methods <- lapply(
@@ -108,22 +108,6 @@ r6_class_from_block <- function(block, env) {
     methods = methods,
     inherited_methods = inherited_methods
   )
-}
-
-r6_extract_superclasses <- function(r6data, env) {
-  super <- r6data$super
-  cls <- unique(super$classes$classname)
-  if (length(cls) == 0) {
-    return(data.frame(
-      package = character(),
-      classname = character(),
-      has_topic = logical()
-    ))
-  }
-
-  pkgs <- super$classes$package[match(cls, super$classes$classname)]
-  ht <- map2_lgl(cls, pkgs, has_topic)
-  data.frame(package = pkgs, classname = cls, has_topic = ht)
 }
 
 r6_extract_inherited_methods <- function(r6data) {
@@ -150,31 +134,6 @@ r6_extract_inherited_methods <- function(r6data) {
 }
 
 # Format helpers -----------------------------------------------------------
-
-format_r6_superclasses <- function(x) {
-  if (nrow(x$superclasses) == 0) {
-    return()
-  }
-
-  cls <- x$superclasses$classname
-  pkgs <- x$superclasses$package
-  ht <- x$superclasses$has_topic
-
-  title <- if (length(cls) > 1) "Super classes" else "Super class"
-
-  path <- ifelse(
-    ht,
-    sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls),
-    sprintf("\\code{%s::%s}", pkgs, cls)
-  )
-  me <- sprintf("\\code{%s}", x$class)
-
-  c(
-    paste0("\\section{", title, "}{"),
-    paste(c(rev(path), me), collapse = " -> "),
-    "}"
-  )
-}
 
 format_r6_method_list <- function(x) {
   nms <- r6_show_name(map_chr(x$methods, \(m) m$name))

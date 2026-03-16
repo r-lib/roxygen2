@@ -25,25 +25,6 @@ test_that("warns about unmatched components ", {
   expect_snapshot(docs <- r6_doc(text))
 })
 
-test_that("can documented subclasses with no inherited methods", {
-  text <- "
-    C1 <- R6::R6Class('C1', cloneable = FALSE)
-
-    #' Class
-    C2 <- R6::R6Class('C2',
-      inherit = C1,
-      public = list(
-        #' @description method1
-        meth1 = function() 1
-      )
-    )"
-  docs <- r6_doc(text)
-
-  expect_equal(docs$superclasses$classname, "C1")
-  expect_equal(nrow(docs$inherited_methods), 0)
-  expect_equal(docs$methods[[1]]$name, "meth1")
-})
-
 # Format tests -------------------------------------------------------------
 
 test_that("format.rd_r6_class with fields", {

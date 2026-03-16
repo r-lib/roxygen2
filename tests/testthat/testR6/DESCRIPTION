@@ -1,0 +1,6 @@
+Package: testR6
+Title: Test R6 class documentation
+License: MIT
+Version: 0.1
+Encoding: UTF-8
+Imports: R6

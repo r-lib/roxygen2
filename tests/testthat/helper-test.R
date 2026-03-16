@@ -16,6 +16,12 @@ expect_parse_failure <- function(code) {
   (expect_condition(expect_null(code)))
 }
 
+r6_doc <- function(text, env = new.env(parent = globalenv())) {
+  eval(parse(text = text, keep.source = TRUE), envir = env)
+  block <- parse_text(text, env = env)[[1]]
+  r6_class_from_block(block, env)
+}
+
 local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {
   temp_path <- withr::local_tempdir(.local_envir = env)
 

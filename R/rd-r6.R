@@ -13,7 +13,7 @@ topic_add_r6_methods <- function(rd, block, env) {
   rd$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
 
   # Add combined examples for all methods
-  ex_lines <- r6_all_examples(docs)
+  ex_lines <- r6_all_examples(docs$methods)
   if (length(ex_lines) > 0) {
     ex_txt <- paste0(ex_lines, collapse = "\n")
     rd$add(rd_section("examples", ex_txt), overwrite = FALSE)

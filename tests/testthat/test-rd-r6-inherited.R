@@ -17,8 +17,8 @@ test_that("can extract inherited methods", {
     )"
   docs <- r6_doc(text)
 
-  expect_s3_class(docs$inherited_methods, "rd_r6_inherited")
-  expect_equal(docs$inherited_methods$name, "only_a")
+  expect_s3_class(docs$methods$inherited, "rd_r6_inherited")
+  expect_equal(docs$methods$inherited$name, "only_a")
 })
 
 test_that("no inherited methods when none exist", {
@@ -34,7 +34,7 @@ test_that("no inherited methods when none exist", {
       )
     )"
   docs <- r6_doc(text)
-  expect_equal(docs$inherited_methods, rd_r6_inherited())
+  expect_equal(docs$methods$inherited, rd_r6_inherited())
 })
 
 test_that("format.rd_r6_inherited renders method list", {

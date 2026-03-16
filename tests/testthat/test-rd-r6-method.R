@@ -12,7 +12,7 @@ test_that("r6_method_from_row extracts all components", {
       )
     )"
   docs <- r6_doc(text)
-  method <- docs$methods[[1]]
+  method <- docs$methods$self[[1]]
 
   expect_equal(method$name, "greet")
   expect_equal(method$class, "C")
@@ -67,7 +67,7 @@ test_that("initialize() inherits params from @field", {
       )
     )"
   docs <- r6_doc(text)
-  init <- docs$methods[[1]]
+  init <- docs$methods$self[[1]]
   expect_equal(
     init$params,
     list(
@@ -92,7 +92,7 @@ test_that("initialize() @param takes precedence over @field", {
       )
     )"
   docs <- r6_doc(text)
-  init <- docs$methods[[1]]
+  init <- docs$methods$self[[1]]
   expect_equal(
     init$params,
     list(list(name = "x", description = "Custom description."))

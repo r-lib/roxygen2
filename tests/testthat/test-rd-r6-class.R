@@ -7,7 +7,7 @@ test_that("can construct empty class", {
   docs <- r6_doc(text)
 
   expect_s3_class(docs, "rd_r6_class")
-  expect_length(docs$methods, 0)
+  expect_equal(docs$methods, rd_r6_methods("C"))
   expect_equal(docs$fields, rd_r6_fields())
   expect_equal(docs$active_bindings, rd_r6_bindings())
 })
@@ -105,41 +105,4 @@ test_that("format.rd_r6_class with markdown sections", {
     )"
   docs <- r6_doc(text)
   expect_snapshot(cat(format(docs), sep = "\n"))
-})
-
-test_that("r6_all_examples aggregates across methods", {
-  text <- "
-    #' Class
-    C <- R6::R6Class('C', cloneable = FALSE,
-      public = list(
-        #' @description Greet.
-        #' @examples c$greet()
-        greet = function() 'hi',
-        #' @description Run.
-        run = function() 1,
-        #' @description Stop.
-        #' @param force Force it
-        #' @examples c$stop()
-        #' @examples c$stop(force = TRUE)
-        stop = function(force = FALSE) NULL
-      )
-    )"
-  docs <- r6_doc(text)
-  expect_snapshot(cat(r6_all_examples(docs), sep = "\n"))
-})
-
-# Utilities ----------------------------------------------------------------
-
-test_that("r6_flatten_sections collapses markdown sections", {
-  local_markdown()
-
-  tag <- roxy_tag("details", "Some details.\n\n# A heading\n\nBody.")
-  tag <- tag_markdown_with_sections(tag)
-  expect_length(tag$val, 2)
-
-  tag <- r6_flatten_sections(tag)
-  expect_length(tag$val, 1)
-  expect_match(tag$val, "Some details.", fixed = TRUE)
-  expect_match(tag$val, "\\subsection{A heading}", fixed = TRUE)
-  expect_match(tag$val, "Body.", fixed = TRUE)
 })

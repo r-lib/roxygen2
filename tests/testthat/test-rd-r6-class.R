@@ -48,8 +48,7 @@ test_that("can documented subclasses with no inherited methods", {
 
 test_that("format.rd_r6_class with fields", {
   docs <- rd_r6_class(
-    class_name = "Foo",
-    alias = "Foo",
+    class = "Foo",
     fields = rd_r6_fields(list(
       rd_r6_field("x", "A number."),
       rd_r6_field("y", "A string.")
@@ -60,8 +59,7 @@ test_that("format.rd_r6_class with fields", {
 
 test_that("format.rd_r6_class with active bindings", {
   docs <- rd_r6_class(
-    class_name = "Foo",
-    alias = "Foo",
+    class = "Foo",
     active_bindings = rd_r6_bindings(list(rd_r6_field("val", "A value.")))
   )
   expect_snapshot(cat(format(docs), sep = "\n"))

@@ -1,6 +1,6 @@
 rd_r6_class <- function(
-  class_name,
-  alias,
+  class,
+  alias = class,
   superclasses = data.frame(),
   fields = rd_r6_fields(),
   active_bindings = rd_r6_bindings(),
@@ -9,7 +9,7 @@ rd_r6_class <- function(
 ) {
   structure(
     list(
-      class_name = class_name,
+      class = class,
       alias = alias,
       superclasses = superclasses,
       fields = fields,
@@ -48,7 +48,7 @@ format.rd_r6_class <- function(x, ...) {
 r6_class_from_block <- function(block, env) {
   r6data <- block_get_tag_value(block, ".r6data")
   self <- r6data$self
-  class_name <- block$object$value$classname
+  class <- block$object$value$classname
   alias <- block$object$alias
 
   # Associate inline tags with methods
@@ -100,7 +100,7 @@ r6_class_from_block <- function(block, env) {
   )
 
   rd_r6_class(
-    class_name = class_name,
+    class = class,
     alias = alias,
     superclasses = superclasses,
     fields = fields,
@@ -167,7 +167,7 @@ format_r6_superclasses <- function(x) {
     sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls),
     sprintf("\\code{%s::%s}", pkgs, cls)
   )
-  me <- sprintf("\\code{%s}", x$class_name)
+  me <- sprintf("\\code{%s}", x$class)
 
   c(
     paste0("\\section{", title, "}{"),

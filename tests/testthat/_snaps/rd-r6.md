@@ -247,14 +247,12 @@
       \item \href{#method-B-clone}{\code{B$clone()}}
       }
       }
-      \if{html}{\out{
-      <details open><summary>Inherited methods</summary>
+      \if{html}{\out{<details open><summary>Inherited methods</summary>
       <ul>
       <li><span class="pkg-link" data-pkg="testR6" data-topic="A" data-id="meth2"><a href='../../testR6/html/A.html#method-A-meth2'><code>testR6::A$meth2()</code></a></span></li>
       <li><span class="pkg-link" data-pkg="testR6" data-topic="A" data-id="meth3"><a href='../../testR6/html/A.html#method-A-meth3'><code>testR6::A$meth3()</code></a></span></li>
       </ul>
-      </details>
-      }}
+      </details>}}
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-B-meth1}{}}}
@@ -365,15 +363,13 @@
       \item \href{#method-C-undocumented_method}{\code{C$undocumented_method()}}
       }
       }
-      \if{html}{\out{
-      <details open><summary>Inherited methods</summary>
+      \if{html}{\out{<details open><summary>Inherited methods</summary>
       <ul>
       <li><span class="pkg-link" data-pkg="testR6" data-topic="A" data-id="meth3"><a href='../../testR6/html/A.html#method-A-meth3'><code>testR6::A$meth3()</code></a></span></li>
       <li><span class="pkg-link" data-pkg="testR6" data-topic="B" data-id="meth1"><a href='../../testR6/html/B.html#method-B-meth1'><code>testR6::B$meth1()</code></a></span></li>
       <li><span class="pkg-link" data-pkg="testR6" data-topic="B" data-id="meth4"><a href='../../testR6/html/B.html#method-B-meth4'><code>testR6::B$meth4()</code></a></span></li>
       </ul>
-      </details>
-      }}
+      </details>}}
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth2"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth2}{}}}

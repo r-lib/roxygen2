@@ -76,13 +76,11 @@
       \item \href{#method-B-clone}{\code{B$clone()}}
       }
       }
-      \if{html}{\out{
-      <details open><summary>Inherited methods</summary>
+      \if{html}{\out{<details open><summary>Inherited methods</summary>
       <ul>
       <li><span class="pkg-link" data-pkg="R_GlobalEnv" data-topic="A" data-id="only_a"><a href='../../R_GlobalEnv/html/A.html#method-A-only_a'><code>R_GlobalEnv::A$only_a()</code></a></span></li>
       </ul>
-      </details>
-      }}
+      </details>}}
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-shared"></a>}}
       \if{latex}{\out{\hypertarget{method-B-shared}{}}}

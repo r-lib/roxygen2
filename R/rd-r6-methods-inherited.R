@@ -21,33 +21,24 @@ format.rd_r6_inherited <- function(x, ...) {
     "><summary>Inherited methods</summary>"
   )
 
-  c(
-    "\\if{html}{\\out{",
-    details,
-    "<ul>",
+  anchor <- sprintf("method-%s-%s", x$classname, x$name)
+  href <- sprintf("../../%s/html/%s.html#%s", x$package, x$classname, anchor)
+  label <- sprintf("%s::%s$%s()", x$package, x$classname, x$name)
+
+  items <- paste0(
+    "<li>",
     sprintf(
-      paste0(
-        "<li>",
-        "<span class=\"pkg-link\" data-pkg=\"%s\" data-topic=\"%s\" data-id=\"%s\">",
-        "<a href='../../%s/html/%s.html#method-%s-%s'><code>%s::%s$%s()</code></a>",
-        "</span>",
-        "</li>"
-      ),
-      x$package,
-      x$classname,
-      x$name,
-      x$package,
-      x$classname,
-      x$classname,
-      x$name,
+      '<span class="pkg-link" data-pkg="%s" data-topic="%s" data-id="%s">',
       x$package,
       x$classname,
       x$name
     ),
-    "</ul>",
-    "</details>",
-    "}}"
+    sprintf("<a href='%s'><code>%s</code></a>", href, label),
+    "</span>",
+    "</li>"
   )
+
+  rd_if_html(paste(c(details, "<ul>", items, "</ul>", "</details>"), collapse = "\n"))
 }
 
 r6_extract_inherited_methods <- function(r6data) {

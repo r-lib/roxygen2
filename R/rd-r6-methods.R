@@ -11,24 +11,22 @@ format.rd_r6_methods <- function(x, ...) {
     return()
   }
 
+  lines <- character()
+  push <- function(...) lines <<- c(lines, ...)
+
   nms <- r6_show_name(map_chr(x$self, \(m) m$name))
   classes <- map_chr(x$self, \(m) m$class)
-
   dest <- sprintf("method-%s-%s", classes, nms)
   code <- sprintf("\\code{%s$%s()}", x$alias, nms)
-  method_list <- c(
+
+  push("\\section{Methods}{")
+  push(
     "\\subsection{Public methods}{",
     "\\itemize{",
     sprintf("\\item \\href{#%s}{%s}", dest, code),
     "}",
     "}"
   )
-
-  lines <- character()
-  push <- function(...) lines <<- c(lines, ...)
-
-  push("\\section{Methods}{")
-  push(method_list)
   push(format(x$inherited))
   for (method in x$self) {
     push(format(method))

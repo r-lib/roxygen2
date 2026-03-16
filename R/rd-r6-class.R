@@ -5,7 +5,7 @@ rd_r6_class <- function(
   fields = rd_r6_fields(),
   active_bindings = rd_r6_bindings(),
   methods = list(),
-  inherited_methods = data.frame()
+  inherited_methods = rd_r6_inherited()
 ) {
   structure(
     list(
@@ -33,7 +33,7 @@ format.rd_r6_class <- function(x, ...) {
   if (length(x$methods) > 0) {
     push("\\section{Methods}{")
     push(format_r6_method_list(x))
-    push(format_r6_inherited_methods(x$inherited_methods))
+    push(format(x$inherited_methods))
     for (method in x$methods) {
       push(format(method))
     }
@@ -110,29 +110,6 @@ r6_class_from_block <- function(block, env) {
   )
 }
 
-r6_extract_inherited_methods <- function(r6data) {
-  super <- r6data$super
-  empty <- data.frame(
-    package = character(),
-    classname = character(),
-    name = character()
-  )
-  if (is.null(super)) {
-    return(empty)
-  }
-
-  super_meth <- super$members[super$members$type == "method", ]
-  self <- r6data$self
-  super_meth <- super_meth[!super_meth$name %in% self$name, ]
-  super_meth <- super_meth[!duplicated(super_meth$name), ]
-  if (nrow(super_meth) == 0) {
-    return(empty)
-  }
-
-  super_meth <- super_meth[rev(seq_len(nrow(super_meth))), ]
-  super_meth[, c("package", "classname", "name")]
-}
-
 # Format helpers -----------------------------------------------------------
 
 format_r6_method_list <- function(x) {
@@ -151,47 +128,6 @@ format_r6_method_list <- function(x) {
     ),
     "}",
     "}"
-  )
-}
-
-format_r6_inherited_methods <- function(inherited_methods) {
-  if (nrow(inherited_methods) == 0) {
-    return()
-  }
-
-  im <- inherited_methods
-  details <- paste0(
-    "<details",
-    if (nrow(im) <= 5) " open",
-    "><summary>Inherited methods</summary>"
-  )
-
-  c(
-    "\\if{html}{\\out{",
-    details,
-    "<ul>",
-    sprintf(
-      paste0(
-        "<li>",
-        "<span class=\"pkg-link\" data-pkg=\"%s\" data-topic=\"%s\" data-id=\"%s\">",
-        "<a href='../../%s/html/%s.html#method-%s-%s'><code>%s::%s$%s()</code></a>",
-        "</span>",
-        "</li>"
-      ),
-      im$package,
-      im$classname,
-      im$name,
-      im$package,
-      im$classname,
-      im$classname,
-      im$name,
-      im$package,
-      im$classname,
-      im$name
-    ),
-    "</ul>",
-    "</details>",
-    "}}"
   )
 }
 

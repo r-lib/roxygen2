@@ -8,8 +8,6 @@ rd_r6_class <- function(
 ) {
   structure(
     list(
-      class = class,
-      alias = alias,
       superclasses = superclasses,
       fields = fields,
       active_bindings = active_bindings,

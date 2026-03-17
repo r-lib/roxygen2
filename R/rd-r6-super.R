@@ -27,11 +27,17 @@ format.rd_r6_super <- function(x, ...) {
 
   title <- if (length(cls) > 1) "Super classes" else "Super class"
 
-  path <- ifelse(
-    ht,
-    sprintf("\\code{\\link[%s:%s]{%s::%s}}", pkgs, cls, pkgs, cls),
-    sprintf("\\code{%s::%s}", pkgs, cls)
-  )
+  self_pkg <- roxy_meta_get("current_package") %||% ""
+  same_pkg <- pkgs == self_pkg
+
+  label <- ifelse(same_pkg, cls, paste0(pkgs, "::", cls))
+  path <- map_chr(seq_along(cls), function(i) {
+    if (ht[[i]]) {
+      rd_link(pkgs[[i]], cls[[i]], label[[i]], code = TRUE)
+    } else {
+      paste0("\\code{", label[[i]], "}")
+    }
+  })
   me <- sprintf("\\code{%s}", x$class)
 
   c(

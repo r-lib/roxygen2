@@ -217,7 +217,7 @@
       A method 4.
       }
       \section{Super class}{
-      \code{testR6::A} -> \code{B}
+      \code{A} -> \code{B}
       }
       \section{Public fields}{
       \if{html}{\out{<div class="r6-fields">}}
@@ -323,7 +323,7 @@
       C method 5.
       }
       \section{Super classes}{
-      \code{testR6::A} -> \code{testR6::B} -> \code{C}
+      \code{A} -> \code{B} -> \code{C}
       }
       \section{Public fields}{
       \if{html}{\out{<div class="r6-fields">}}

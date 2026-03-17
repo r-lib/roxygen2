@@ -33,6 +33,17 @@ test_that("format.rd_r6_super with one superclass", {
   expect_snapshot(cat(format(supers), sep = "\n"))
 })
 
+test_that("format.rd_r6_super omits pkg:: for same-package classes", {
+  local_roxy_meta_set("current_package", "mypkg")
+  supers <- rd_r6_super(
+    "Child",
+    package = c("mypkg", "otherpkg"),
+    classname = c("Parent", "GrandParent"),
+    has_topic = c(FALSE, FALSE)
+  )
+  expect_snapshot(cat(format(supers), sep = "\n"))
+})
+
 test_that("format.rd_r6_super returns nothing when empty", {
   expect_null(format(rd_r6_super("Foo")))
 })

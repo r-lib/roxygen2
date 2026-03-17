@@ -12,6 +12,20 @@ test_that("can construct empty class", {
   expect_equal(docs$active_bindings, rd_r6_bindings())
 })
 
+test_that("class with only active bindings doesn't error (#1610)", {
+  text <- "
+    #' Class
+    C <- R6::R6Class('C',
+      active = list(
+        #' @field x A value.
+        x = function(val) val
+      ),
+      cloneable = FALSE
+    )"
+  docs <- r6_doc(text)
+  expect_equal(docs$methods, rd_r6_methods("C"))
+})
+
 test_that("warns about unmatched components ", {
   text <- "
     #' Class

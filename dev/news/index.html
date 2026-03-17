@@ -69,7 +69,8 @@
 <li>
 <code><a href="../reference/tag_parsers.html">tag_words_line()</a></code> is deprecated in favour of <code><a href="../reference/tag_parsers.html">tag_words()</a></code>, which now checks for single-line content by default. Use <code>tag_words(x, multiline = TRUE)</code> or <code>tag_value(x, multiline = TRUE)</code> if your tag legitimately spans multiple lines.</li>
 <li>R6 improvements:
-<ul><li>
+<ul><li>R6 classes with only active bindings and <code>cloneable = FALSE</code> no longer error during documentation (<a href="https://github.com/r-lib/roxygen2/issues/1610" class="external-link">#1610</a>).</li>
+<li>
 <code>initialize()</code> method parameters now automatically inherit documentation from <code>@field</code> tags with the same name, reducing the need to duplicate descriptions. Explicit <code>@param</code> tags still take precedence (<a href="https://github.com/r-lib/roxygen2/issues/1004" class="external-link">#1004</a>).</li>
 </ul></li>
 <li>New <code><a href="../reference/needs_roxygenize.html">needs_roxygenize()</a></code> provides a lightweight check that man pages are up-to-date by comparing modification times of <code>.Rd</code> files with their source files (<a href="https://github.com/r-lib/roxygen2/issues/1411" class="external-link">#1411</a>).</li>

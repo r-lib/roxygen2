@@ -22,6 +22,9 @@
   `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)`
   if your tag legitimately spans multiple lines.
 - R6 improvements:
+  - R6 classes with only active bindings and `cloneable = FALSE` no
+    longer error during documentation
+    ([\#1610](https://github.com/r-lib/roxygen2/issues/1610)).
   - `initialize()` method parameters now automatically inherit
     documentation from `@field` tags with the same name, reducing the
     need to duplicate descriptions. Explicit `@param` tags still take

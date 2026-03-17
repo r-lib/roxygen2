@@ -5,6 +5,7 @@
 * R6 improvements:
   * The "Super classes" section now omits the `pkg::` prefix for parent classes from the same package, making the inheritance chain easier to read (#1567).
   * R6 classes with only active bindings and `cloneable = FALSE` no longer error during documentation (#1610).
+  * Inherited method links now only link to parent classes that have documentation, avoiding broken links when parent classes are undocumented (#963, #1155).
   * `initialize()` method parameters now automatically inherit documentation from `@field` tags with the same name, reducing the need to duplicate descriptions. Explicit `@param` tags still take precedence (#1004).
 * New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).
 * All generated links now use the same code path. This will lead to some minor differences when you re-document, but overall the links will now be more consistent (#1792).

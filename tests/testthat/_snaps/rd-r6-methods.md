@@ -12,7 +12,7 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Foo-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Foo-run}{}}}
-      \subsection{\code{run()}}{
+      \subsection{\code{$run()}}{
       Run it.
       \if{html}{\out{<div class="r">}}
       \preformatted{Foo$run()}

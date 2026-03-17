@@ -43,7 +43,7 @@ format.rd_r6_method <- function(x, ...) {
   push(rd_if_html("<hr>"))
   push(rd_if_html('<a id="', id, '"></a>'))
   push(rd_if_latex("\\hypertarget{", id, "}{}"))
-  push(paste0("\\subsection{\\code{", nm, "()}}{"))
+  push(paste0("\\subsection{\\code{$", nm, "()}}{"))
 
   # Description
   if (length(x$description) > 0) {

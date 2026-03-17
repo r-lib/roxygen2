@@ -24,7 +24,7 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Person-greet"></a>}}
       \if{latex}{\out{\hypertarget{method-Person-greet}{}}}
-      \subsection{\code{greet()}}{
+      \subsection{\code{$greet()}}{
       Say hello.
       \if{html}{\out{<div class="r">}}
       \preformatted{Person$greet(who, how = "nicely")}
@@ -45,7 +45,7 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Foo-new"></a>}}
       \if{latex}{\out{\hypertarget{method-Foo-new}{}}}
-      \subsection{\code{new()}}{
+      \subsection{\code{$new()}}{
       Create object.
       \if{html}{\out{<div class="r">}}
       \preformatted{Foo$new()}
@@ -60,7 +60,7 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Job-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Job-run}{}}}
-      \subsection{\code{run()}}{
+      \subsection{\code{$run()}}{
       Run the job.
       \if{html}{\out{<div class="r">}}
       \preformatted{Job$run()}
@@ -90,7 +90,7 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Job-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Job-run}{}}}
-      \subsection{\code{run()}}{
+      \subsection{\code{$run()}}{
       Run.
       \if{html}{\out{<div class="r">}}
       \preformatted{Job$run()}

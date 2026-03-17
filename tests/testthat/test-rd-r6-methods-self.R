@@ -24,6 +24,35 @@ test_that("r6_method_from_row extracts all components", {
   expect_equal(method$examples, "c$greet('world')")
 })
 
+test_that("@returns works as method-level tag (#1148)", {
+  text <- "
+    #' Class
+    C <- R6::R6Class('C', cloneable = FALSE,
+      public = list(
+        #' @description Run.
+        #' @returns The result.
+        run = function() 1
+      )
+    )"
+  docs <- r6_doc(text)
+  expect_equal(docs$methods$self[[1]]$return, "The result.")
+})
+
+test_that("warns about multiple @return(s) tags", {
+  text <- "
+    #' Class
+    C <- R6::R6Class('C', cloneable = FALSE,
+      public = list(
+        #' @description Run.
+        #' @return First.
+        #' @returns Second.
+        run = function() 1
+      )
+    )"
+  expect_snapshot(docs <- r6_doc(text))
+  expect_equal(docs$methods$self[[1]]$return, "First.")
+})
+
 test_that("warns about undocumented params", {
   text <- "
     #' Class

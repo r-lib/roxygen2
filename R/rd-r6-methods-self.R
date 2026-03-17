@@ -119,9 +119,9 @@ r6_method_from_row <- function(method, alias, block) {
 
   params <- r6_resolve_params(method, block)
 
-  ret_tags <- keep(tags, \(t) t$tag == "return")
+  ret_tags <- keep(tags, \(t) t$tag %in% c("return", "returns"))
   if (length(ret_tags) > 1) {
-    warn_roxy_block(block, "Must use one @return per R6 method")
+    warn_roxy_block(block, "Must use one @return(s) per R6 method")
   }
   ret <- if (length(ret_tags) > 0) ret_tags[[1]]$val else NULL
 

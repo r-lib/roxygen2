@@ -8,7 +8,7 @@
       x $meth3(duplicate) is documented multiple times
       x classes.R:12: Must use one @param for each argument.
       x $meth3(missing) is not documented
-      x classes.R:12: Must use one @return per R6 method.
+      x classes.R:12: Must use one @return(s) per R6 method.
       x classes.R:91: Undocumented R6 fields: field2 and undocumented_field.
       x classes.R:91: R6 field documented multiple times: duplicatefield.
       x classes.R:91: Unknown R6 field: nosuchfield.
@@ -30,24 +30,13 @@
       \name{A}
       \alias{A}
       \title{Class A}
-      \value{
-      twice.
-      
-      really?
-      }
       \description{
-      A method 1.
-      
-      Method 2 description.
+      Class A description.
       }
       \details{
-      Method 2 details.
-      
-      Method 3 details.
+      Class A details
       }
       \examples{
-      ## Example for meth1
-      ## Example for meth2
       
       ## ------------------------------------------------
       ## Method `A$meth1`
@@ -212,9 +201,10 @@
       \alias{B}
       \title{Class B}
       \description{
-      B method 1.
-      
-      A method 4.
+      Class B Description.
+      }
+      \details{
+      Class B details.
       }
       \section{Super class}{
       \code{testR6::A} -> \code{B}
@@ -318,9 +308,10 @@
       \alias{C}
       \title{Class C}
       \description{
-      C method 2.
-      
-      C method 5.
+      Class C Description.
+      }
+      \details{
+      Classs C details.
       }
       \section{Super classes}{
       \code{testR6::A} -> \code{testR6::B} -> \code{C}

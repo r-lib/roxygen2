@@ -3,7 +3,7 @@ topic_add_r6_methods <- function(rd, block, env) {
 
   # Add class-level tags
   for (tag in block$tags) {
-    if (is_class_tag(tag, block)) {
+    if (r6_tag_type(tag, block) == "class") {
       rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
     }
   }
@@ -20,12 +20,23 @@ topic_add_r6_methods <- function(rd, block, env) {
   }
 }
 
-is_class_tag <- function(tag, block) {
-  if (tag$tag %in% c("param", "field")) {
-    FALSE
-  } else if (tag$tag %in% c("description", "details", "return", "examples")) {
-    !is.na(tag$line) && tag$line >= block$line
+# Classify an R6 block tag:
+# - "class": top-level Rd (e.g. @title, @description before class body)
+# - "method": inline tag associated with a method
+# - "other": @field/@param tags consumed by field/param extraction
+r6_tag_type <- function(tag, block) {
+  inline <- !is.na(tag$line) && tag$line >= block$line
+  method_tags <- c(
+    "description", "details", "param", "return", "returns", "examples"
+  )
+
+  if (tag$tag == "field") {
+    "other"
+  } else if (tag$tag %in% method_tags && inline) {
+    "method"
+  } else if (tag$tag == "param") {
+    "other"
   } else {
-    TRUE
+    "class"
   }
 }

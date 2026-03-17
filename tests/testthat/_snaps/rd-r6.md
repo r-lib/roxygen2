@@ -95,22 +95,16 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth1}{}}}
-      \subsection{Method \code{meth1()}}{
+      \subsection{\code{meth1()}}{
       A method 1.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{A$meth1(Z)}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{Z}}{zzzzzzz}
       }
       \if{html}{\out{</div>}}
-      }
-      
       \subsection{Examples}{
       \if{html}{\out{<div class="r example copy">}}
       \preformatted{## Example for meth1
@@ -122,23 +116,17 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth2"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth2}{}}}
-      \subsection{Method \code{meth2()}}{
+      \subsection{\code{meth2()}}{
       Method 2 description.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{A$meth2(Z = 10, ...)}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{Z}}{Overriding Z argument for meth2.}
       \item{\code{...}}{Rest.}
       }
       \if{html}{\out{</div>}}
-      }
-      
       \subsection{Details}{
       Method 2 details.
       }
@@ -154,22 +142,16 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth3"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth3}{}}}
-      \subsection{Method \code{meth3()}}{
-      \subsection{Usage}{
+      \subsection{\code{meth3()}}{
       \if{html}{\out{<div class="r">}}
       \preformatted{A$meth3(duplicate, missing)}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{duplicate}}{This one is}
       \item{\code{duplicate}}{Twice}
       }
       \if{html}{\out{</div>}}
-      }
-      
       \subsection{Details}{
       Method 3 details.
       }
@@ -182,22 +164,16 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-clone"></a>}}
       \if{latex}{\out{\hypertarget{method-A-clone}{}}}
-      \subsection{Method \code{clone()}}{
+      \subsection{\code{clone()}}{
       The objects of this class are cloneable with this method.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{A$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{deep}}{Whether to make a deep clone.}
       }
       \if{html}{\out{</div>}}
-      }
-      
       }
       }
 
@@ -256,54 +232,39 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-B-meth1}{}}}
-      \subsection{Method \code{meth1()}}{
+      \subsection{\code{meth1()}}{
       B method 1.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{B$meth1(Z)}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{Z}}{Still zzzzzzzz.}
       }
       \if{html}{\out{</div>}}
       }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-meth4"></a>}}
       \if{latex}{\out{\hypertarget{method-B-meth4}{}}}
-      \subsection{Method \code{meth4()}}{
+      \subsection{\code{meth4()}}{
       A method 4.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{B$meth4()}
       \if{html}{\out{</div>}}
       }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-clone"></a>}}
       \if{latex}{\out{\hypertarget{method-B-clone}{}}}
-      \subsection{Method \code{clone()}}{
+      \subsection{\code{clone()}}{
       The objects of this class are cloneable with this method.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{B$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{deep}}{Whether to make a deep clone.}
       }
       \if{html}{\out{</div>}}
-      }
-      
       }
       }
 
@@ -373,15 +334,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth2"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth2}{}}}
-      \subsection{Method \code{meth2()}}{
+      \subsection{\code{meth2()}}{
       C method 2.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{C$meth2(Z = 10, ...)}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{Z}}{zzzzz}
@@ -389,30 +346,22 @@
       }
       \if{html}{\out{</div>}}
       }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth5"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth5}{}}}
-      \subsection{Method \code{meth5()}}{
+      \subsection{\code{meth5()}}{
       C method 5.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{C$meth5()}
       \if{html}{\out{</div>}}
       }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-undocumented_method"></a>}}
       \if{latex}{\out{\hypertarget{method-C-undocumented_method}{}}}
-      \subsection{Method \code{undocumented_method()}}{
-      \subsection{Usage}{
+      \subsection{\code{undocumented_method()}}{
       \if{html}{\out{<div class="r">}}
       \preformatted{C$undocumented_method()}
       \if{html}{\out{</div>}}
-      }
-      
       }
       }
 

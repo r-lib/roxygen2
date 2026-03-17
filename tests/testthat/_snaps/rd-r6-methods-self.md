@@ -24,23 +24,17 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Person-greet"></a>}}
       \if{latex}{\out{\hypertarget{method-Person-greet}{}}}
-      \subsection{Method \code{greet()}}{
+      \subsection{\code{greet()}}{
       Say hello.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{Person$greet(who, how = "nicely")}
       \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Arguments}{
       \if{html}{\out{<div class="arguments">}}
       \describe{
       \item{\code{who}}{Name to greet.}
       \item{\code{how}}{Greeting style.}
       }
       \if{html}{\out{</div>}}
-      }
-      
       }
 
 # format.rd_r6_method renames initialize to new
@@ -51,14 +45,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Foo-new"></a>}}
       \if{latex}{\out{\hypertarget{method-Foo-new}{}}}
-      \subsection{Method \code{new()}}{
+      \subsection{\code{new()}}{
       Create object.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{Foo$new()}
       \if{html}{\out{</div>}}
-      }
-      
       }
 
 # format.rd_r6_method includes optional sections
@@ -69,14 +60,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Job-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Job-run}{}}}
-      \subsection{Method \code{run()}}{
+      \subsection{\code{run()}}{
       Run the job.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{Job$run()}
       \if{html}{\out{</div>}}
-      }
-      
       \subsection{Details}{
       Some details.
       }
@@ -102,13 +90,10 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Job-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Job-run}{}}}
-      \subsection{Method \code{run()}}{
+      \subsection{\code{run()}}{
       Run.
-      \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
       \preformatted{Job$run()}
       \if{html}{\out{</div>}}
-      }
-      
       }
 

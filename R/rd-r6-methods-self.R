@@ -43,7 +43,7 @@ format.rd_r6_method <- function(x, ...) {
   push(rd_if_html("<hr>"))
   push(rd_if_html('<a id="', id, '"></a>'))
   push(rd_if_latex("\\hypertarget{", id, "}{}"))
-  push(paste0("\\subsection{Method \\code{", nm, "()}}{"))
+  push(paste0("\\subsection{\\code{", nm, "()}}{"))
 
   # Description
   if (length(x$description) > 0) {
@@ -57,8 +57,7 @@ format.rd_r6_method <- function(x, ...) {
   usage_name <- paste0(x$alias, "$", nm)
   fake <- paste(rep("X", nchar(usage_name)), collapse = "")
   usage <- format(function_usage(fake, x$formals))
-  push_subsection(
-    "Usage",
+  push(
     rd_if_html('<div class="r">'),
     paste0("\\preformatted{", sub(paste0("^", fake), usage_name, usage), "}"),
     rd_if_html("</div>")
@@ -68,8 +67,7 @@ format.rd_r6_method <- function(x, ...) {
   if (length(x$params) > 0) {
     nms <- map_chr(x$params, \(p) p$name)
     vals <- map_chr(x$params, \(p) p$description)
-    push_subsection(
-      "Arguments",
+    push(
       rd_if_html('<div class="arguments">'),
       "\\describe{",
       paste0("\\item{\\code{", nms, "}}{", vals, "}"),

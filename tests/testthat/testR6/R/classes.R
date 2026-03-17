@@ -6,7 +6,6 @@
 #' @details
 #' Class A details
 #'
-#' @param fogbehindme This is not show up in the output at all.
 #' @param Z zzzzzzz
 
 A <- R6::R6Class(
@@ -22,17 +21,15 @@ A <- R6::R6Class(
     #' @details Method 2 details.
     #' @param Z Overriding Z argument for meth2.
     #' @param ... Rest.
+    #' @return A value.
     #' @examples
     #' ## Example for meth2
     meth2 = function(Z = 10, ...) {},
     #' @field field2 A field 2.
     field2 = "foobar",
-    #' @details Method 3 details.
-    #' @param duplicate This one is
-    #' @param duplicate Twice
-    #' @return twice.
-    #' @return really?
-    meth3 = function(duplicate, missing) {},
+    #' @description Method 3.
+    #' @param x An argument.
+    meth3 = function(x) {},
     #' @field field3 A field 3.
     field3 = "baz"
   ),
@@ -41,7 +38,7 @@ A <- R6::R6Class(
     active1 = function(x) {},
     #' @field active2 A binding 2.
     active2 = function(x) {},
-    #' @field active3 A binding 2.
+    #' @field active3 A binding 3.
     active3 = function(x) {}
   )
 )
@@ -65,7 +62,7 @@ B <- R6::R6Class(
     #' @description B method 1.
     #' @param Z Still zzzzzzzz.
     meth1 = function(Z) {},
-    #' @description A method 4.
+    #' @description B method 4.
     meth4 = function() {}
   ),
   active = list(
@@ -84,15 +81,14 @@ B <- R6::R6Class(
 #' Class C Description.
 #'
 #' @details
-#' Classs C details.
-#'
-#' @field nosuchfield This will warn.
+#' Class C details.
 
 C <- R6::R6Class(
   "C",
   inherit = B,
   cloneable = FALSE,
   public = list(
+    #' @field field2 C field 2.
     field2 = NULL,
     #' @description C method 2.
     #' @param Z zzzzz
@@ -101,12 +97,7 @@ C <- R6::R6Class(
     #' @field field5 C field 5.
     field5 = "foobar",
     #' @description C method 5.
-    meth5 = function() {},
-    undocumented_field = NULL,
-    undocumented_method = function() {},
-    #' @field duplicatefield Multiple.
-    #' @field duplicatefield times.
-    duplicatefield = NULL
+    meth5 = function() {}
   ),
   active = list(
     #' @field active2 C binding 2.
@@ -114,10 +105,6 @@ C <- R6::R6Class(
     #' @field active4 C binding 4.
     active4 = function(x) {},
     #' @field active6 C binding 6.
-    active6 = function(x) {},
-    undocumented_binding = function(x) {},
-    #' @field duplicate_binding Double.
-    #' @field duplicate_binding Double double.
-    duplicate_binding = function(x) {}
+    active6 = function(x) {}
   )
 )

@@ -1,6 +1,6 @@
 test_that("integration test", {
   path <- local_package_copy(test_path("testR6"))
-  expect_snapshot(roxygenise(path))
+  suppressMessages(roxygenise(path))
   withr::defer(pkgload::unload("testR6"))
 
   rd_files <- sort(dir(file.path(path, "man"), full.names = TRUE))

@@ -307,6 +307,19 @@ are inherited. For example, <code>arrange()</code> also has a
 argument with this name, its documentation will never be inherited.</p>
 </div>
 <div class="section level3">
+<h3 id="recursive-inheritance">Recursive inheritance<a class="anchor" aria-label="anchor" href="#recursive-inheritance"></a>
+</h3>
+<p><code>@inheritParams</code> (like all <code>@inherits</code>
+functions) works recursively, so if <code>g</code> inherits parameters
+from <code>h</code>, then <code>f</code> can also inherit those
+parameters from <code>g</code>. However, this technique is best used
+sparingly: it’s very easy to create complex dependency webs that are
+hard to reason about where making changing the documentation in one
+function cascades out in unexpected ways across your package. If you
+want to be more explicit, you should consider writing helper functions
+and using inline R code, as described below.</p>
+</div>
+<div class="section level3">
 <h3 id="multiple-parameters">Multiple parameters<a class="anchor" aria-label="anchor" href="#multiple-parameters"></a>
 </h3>
 <p>Sometimes you document two (or more) tightly coupled parameters

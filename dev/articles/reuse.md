@@ -192,6 +192,17 @@ inherited. For example, `arrange()` also has a `.by_group` argument.
 Since no other function in dplyr has an argument with this name, its
 documentation will never be inherited.
 
+### Recursive inheritance
+
+`@inheritParams` (like all `@inherits` functions) works recursively, so
+if `g` inherits parameters from `h`, then `f` can also inherit those
+parameters from `g`. However, this technique is best used sparingly:
+it’s very easy to create complex dependency webs that are hard to reason
+about where making changing the documentation in one function cascades
+out in unexpected ways across your package. If you want to be more
+explicit, you should consider writing helper functions and using inline
+R code, as described below.
+
 ### Multiple parameters
 
 Sometimes you document two (or more) tightly coupled parameters

@@ -1,6 +1,56 @@
 # A `RoxyTopic` is an ordered collection of unique rd_sections
 
-A `RoxyTopic` object corresponds to a generated `.Rd` file.
+Format the `.Rd` file. It considers the sections in particular order,
+even though Rd tools will reorder them again.
+
+Check if an `.Rd` file is valid
+
+Check if an `.Rd` file has a certain section.
+
+Query a section.
+
+Query the value of a section. This is the value of the
+[rd_section](https://roxygen2.r-lib.org/dev/reference/rd_section.md)
+object.
+
+Get the Rd code of a section.
+
+Get the value of the `name` section. This is the name of the Rd topic.
+
+Query the topics this topic inherits `type` from.
+
+Query the topics this topic inherits sections from.
+
+Add one or more sections to the topic.
+
+Add a section.
+
+## Value
+
+Character string.
+
+Logical flag, `TRUE` for valid `.Rd` files
+
+Logical flag.
+
+The [rd_section](https://roxygen2.r-lib.org/dev/reference/rd_section.md)
+object representing the section, or `NULL` if the topic has no such
+section.
+
+Value.
+
+Character vector, one element per line.
+
+Character scalar.
+
+A character vector of topic names.
+
+A character vector of topic names.
+
+## Details
+
+Ensures that each type of name (as given by its name), only appears once
+in `self$sections`. This method if for internal use only.
 
 ## Public fields
 

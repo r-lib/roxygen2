@@ -172,7 +172,7 @@ to work better if you have a “primary” function with some variants or
 some helpers.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Logarithms</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' @param x A numeric vector</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">log</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">base</span><span class="op">)</span> <span class="va">...</span></span>
@@ -429,19 +429,32 @@ is best used sparingly.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="custom-tags">Custom tags<a class="anchor" aria-label="anchor" href="#custom-tags"></a>
+</h2>
+<p>Creating a custom tag might be a strategy for repeating yourself
+less.</p>
+<p>For instance you could create a tag that allows</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @git rebase</span></span></code></pre></div>
+<p>to create this Rd section:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">\section</span>{Related Git documentation}</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>{<span class="fu">\href</span>{https://git-scm.com/docs/git-rebase#_interactive_mode}{<span class="fu">\code</span>{git rebase -i}}.}</span></code></pre></div>
+<p>See <code><a href="../articles/extending.html">vignette("extending")</a></code> for more details.</p>
+</div>
+<div class="section level2">
 <h2 id="inline-code">Inline code<a class="anchor" aria-label="anchor" href="#inline-code"></a>
 </h2>
 <p>To insert code inline, enclose it in <code>`r `</code>. Roxygen will
 interpret the rest of the text within backticks as R code and evaluate
 it, and replace the backtick expression with its value. Here’s a simple
 example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title `r 1 + 1`</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description `r 2 + 2`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>This is equivalent to writing:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title 2</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Description 4</span></span>
@@ -449,18 +462,18 @@ example:</p>
 <p>The resulting text, together with the whole tag is interpreted as
 markdown, as usual. This means that you can use R to dynamically write
 markdown. For example if you defined this function in your package:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alphabet</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"`"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">]</span>, <span class="st">"`"</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>You could then write:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `r alphabet(5)`</span></span>
 <span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>The result is equivalent to writing the following by hand:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Title</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`</span></span>
@@ -483,7 +496,7 @@ that <code>`Rd myFun()`</code>
 generates<code>\Sexpr[stage=render,results=rd]{myFun()}</code>.</p>
 <p>Here’s a simple example, which will greet the user appropriately,
 depending on the time of day:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">greeting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">hour</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXlt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">$</span><span class="va">hour</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">hour</span> <span class="op">&lt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op">{</span></span>

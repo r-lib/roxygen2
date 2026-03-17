@@ -66,7 +66,7 @@ helpers.
 
 ``` r
 #' Logarithms
-#' 
+#'
 #' @param x A numeric vector
 #' @export
 log <- function(x, base) ...
@@ -299,6 +299,27 @@ make sure that they all have the same version of the package installed.
 And if the package changes the name of the topic or section, your
 documentation will require an update. For those reasons, this technique
 is best used sparingly.
+
+## Custom tags
+
+Creating a custom tag might be a strategy for repeating yourself less.
+
+For instance you could create a tag that allows
+
+``` r
+#' @git rebase
+```
+
+to create this Rd section:
+
+``` latex
+\section{Related Git documentation}
+{\href{https://git-scm.com/docs/git-rebase#_interactive_mode}{\code{git rebase -i}}.}
+```
+
+See
+[`vignette("extending")`](https://roxygen2.r-lib.org/dev/articles/extending.md)
+for more details.
 
 ## Inline code
 

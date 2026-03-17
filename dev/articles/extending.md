@@ -1,31 +1,63 @@
 # Extending roxygen2
 
-## Basics
+roxygen2 is extensible, and this vignette will show you how. It starts
+with an introduction to the basic workflow of
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+and the key data structures that power it. Then we’ll show you how you
+can use its two extension points:
 
-Roxygen is extensible with user-defined **roclets**. It means that you
-can take advantage of Roxygen’s parser and extend it with your own
-`@tags`.
+- Add a new tag to generate a new top-level section in an `.Rd` file.
+  This allows you to repeat yourself less when documenting your package.
+  (See
+  [`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md)
+  for other techniques.)
 
-There are two primary ways to extend roxygen2:
-
-- Add a new tag that generates a new top-level section in `.Rd` files.
-
-- Add a new roclet that does anything you like.
-
-This vignette will introduce you to the key data structures in roxygen2,
-and then show you how to use these two extension points. This vignette
-is very rough, so you are expected to have also read some roxygen2
-source code to understand all the extension points. Hopefully, it’s
-useful enough to help you get started, and if you have problems, please
-[file an issue](https://github.com/r-lib/roxygen2/issues/new)!
+- Add a new roclet. This lets you take full advantage of the
+  computational machinery behind
+  [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+  to compute anything you want or produce any artefact you can imagine.
 
 ``` r
 library(roxygen2)
 ```
 
+## How `roxygenize()` works
+
+You’ve probably used
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+(or `devtools::document()`) a bunch without ever really thinking about
+what’s going on behind the scenes. But if you’re going to extend
+roxygen2, you’ll need to know exactly what’s happening:
+
+- Loads the package under roxygenizing, as well as any further packages
+  (“packages” in
+  [`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md)).
+
+- Parses all R files in the package, using available tags.
+
+- Finds the roclets (see
+  [`roclet()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)) from
+  its `roclets` argument or the “roclets” option
+  ([`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md)).
+  It defaults to using the Collate “roclet”, the Rd roclet, and
+  NAMESPACE roclet, but you can also add your own.
+
+- Runs the different methods of all those roclets, in order and
+  independently: clean (`roclet_clean`), preprocess
+  ([`roclet_preprocess()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)),
+  process
+  ([`roclet_process()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)),
+  and output
+  ([`roclet_output()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)).
+  Only process and output are routinely used. For example, if you think
+  of the Rd roclet, its process method digests information from the tag
+  parsing, combines inherits, etc. to create the content of each
+  documentation topic, and its output method writes those topics to
+  disk.
+
 ## Key data structures
 
-Before we talk about extending roxygen2, we need to first discuss two
+Before we dive into extending roxygen2, we need to first discuss two
 important data structures that power roxygen: tags and blocks.
 
 ### Tags
@@ -60,8 +92,9 @@ str(roxy_tag("name", "Hadley"))
 #>  - attr(*, "class")= chr [1:2] "roxy_tag_name" "roxy_tag"
 ```
 
-However, you should rarely need to do so, because you’ll typically have
-them given to you in a block object, as you’ll see shortly.
+However, you should rarely need to do so (except in tests), because
+you’ll typically have them given to you in a block object, as you’ll see
+shortly.
 
 ### Blocks
 
@@ -108,10 +141,20 @@ block
 #>     $alias f
 ```
 
+You’ll notice that some of the tags didn’t exist in the original block:
+
+- `@title` and `@description` are extracted from the text that appears
+  before the first explicit tag.
+- `@usage` is generated automatically from the function formals.
+- `@.formals` is an “internal” tag that doesn’t generate any output but
+  is used to pass some important data around.
+- `@backref` stores the source location of the block so we can later
+  record which `.R` files contributed to each `.Rd` file.
+
 ## Adding a new `.Rd` tag
 
-The easiest way to extend roxygen2 is to create a new tag that adds
-output to `.Rd` files. This requires two steps:
+The most common way to extend roxygen2 is to create a new tag that adds
+output to `.Rd` files. This requires defining a few methods:
 
 1.  Define a
     [`roxy_tag_parse()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
@@ -120,6 +163,11 @@ output to `.Rd` files. This requires two steps:
 2.  Define a
     [`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md)
     method that describes how to convert the tag into `.Rd` commands.
+
+3.  If the tag’s content is meant to appear in a custom section (as
+    opposed to, say, the examples section), define a
+    [`format()`](https://rdrr.io/r/base/format.html) method that
+    describes how to create the `.Rd` string.
 
 To illustrate the basic idea, we’ll create a new `@tip` tag that will
 create a bulleted list of tips about how to use a function. The idea is
@@ -130,7 +178,7 @@ to take something like this:
 #' @tip You can compute means of dates and date-times!
 ```
 
-And generate Rd like this:
+That generates Rd like this:
 
 ``` latex
 \section{Tips and tricks}{
@@ -145,7 +193,7 @@ The first step is to define a method for
 [`roxy_tag_parse()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md)
 that describes how to parse the tag text. The name of the class will be
 `roxy_tag_{tag}`, which in this case is `roxy_tag_tip`. This function
-takes a `roxy_tag` as input, and it’s job is to set `x$val` to a
+takes a `roxy_tag` as input, and its job is to set `x$val` to a
 convenient parsed value that will be used later by the roclet. Here we
 want to process the text using Markdown so we can just use
 [`tag_markdown()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md):
@@ -156,7 +204,10 @@ roxy_tag_parse.roxy_tag_tip <- function(x) {
 }
 ```
 
-We check this works by using
+(There are lots of other built in options that you can read about in
+[`?tag_markdown`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md).)
+
+We can check this works by using
 [`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
 
 ``` r
@@ -196,15 +247,16 @@ str(block$tags[[2]])
 #>  - attr(*, "class")= chr [1:2] "roxy_tag_tip" "roxy_tag"
 ```
 
-(Here I explicitly turn Markdown parsing on using `@md`; it’s usually
-turned on for a package using roxygen options).
+Here I explicitly turn Markdown parsing on using `@md`; it’s usually
+turned on for a package using roxygen2’s
+[`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md).
 
 Next, we define a method for
 [`roxy_tag_rd()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag_rd.md),
 which must create an
 [`rd_section()`](https://roxygen2.r-lib.org/dev/reference/rd_section.md).
-We’re going to create a new section called `tip`. It will contain a
-character vector of tips:
+We’re going to create a new custom section called `tip`. It will contain
+a character vector of tips:
 
 ``` r
 roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
@@ -214,13 +266,18 @@ roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
 
 This additional layer is needed because there can be multiple tags of
 the same type in a single block, and multiple blocks can contribute to
-the same `.Rd` file. The job of the `rd_section` is to combine all the
-tags into a single top-level Rd section. Each tag generates an
-`rd_section` which is then combined with any previous section using
-[`merge()`](https://rdrr.io/r/base/merge.html). The default
-`merge.rd_section()` just concatenates the values together
+the same `.Rd` file. The job of
+[`rd_section()`](https://roxygen2.r-lib.org/dev/reference/rd_section.md)
+is to combine all the tags into a single top-level Rd section. Each tag
+generates an `rd_section` which is then combined with any previous
+section using [`merge()`](https://rdrr.io/r/base/merge.html). The
+default `merge.rd_section()` just concatenates the values together
 (`rd_section(x$type, c(x$value, y$value))`); you can override this
 method if you need more sophisticated behaviour.
+
+We called the custom section “tip” just like our tag, but we needn’t
+have done so: it really depends on how you want to map the input tags to
+output Rd code.
 
 We then need to define a
 [`format()`](https://rdrr.io/r/base/format.html) method to convert this
@@ -255,37 +312,55 @@ topic$get_section("tip")
 Note that there is no namespacing so if you’re defining multiple new
 tags I recommend using your package name as the common prefix.
 
-### Adding new `.Rd` tags to your workflow
+### Using your new tag
 
-To use your new tags in another package, you must tell roxygen to load
-that package in order to find the new tags. For example, if you created
-some new tags in {packageFoo}, and would like to use these tags in your
-documentation for {packageBar}, append this like to the `DESCRIPTION` of
-{packageBar}:
+Now that the three methods are created, we still need to make them
+available to
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md).
+First, you need to export the method:
+
+- If the package defining the tag *imports* roxygen2, use `@export`.
+- If the package defining the tag only *suggests* roxygen2, use
+  `@exportMethod`.
+
+Next, you’ll need to load the tag-defining package in the package where
+you want to use it. For example, if you created some new tags in
+{packageFoo}, and would like to use these tags in your documentation for
+{packageBar}, append this line to the `DESCRIPTION` of {packageBar}:
 
     Roxygen: list(packages =  "packageFoo")
 
-See \[roxygen2::load_options()\] for more details.
+See
+[`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md)
+for more details.
 
 ## Creating a new roclet
 
 Creating a new roclet is usually a two part process. First, you define
-new tags that your roclet will work with. Second, you define a roclet
-that tells roxygen how to process an entire package.
+new tags that your roclet will work with, unless your roclet only needs
+information from existing tags, or only needs the path to the package
+source[¹](#fn1). Second, you define a roclet that tells
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+what to compute and produce based on this information.
 
 ### Custom tags
 
-In this example we will make a new `@memo` tag to enable printing the
-memos at the console when the roclet runs. We choose that the `@memo`
-has this syntax:
+In this example we will make a new `@memo` tag which helps you to
+remember what you’re planning to work on in the future by displaying
+notes when you document your package. We choose this syntax for `@memo`:
 
-    @memo [Headline] Description
+``` r
+#' @memo [Headline] Description
+```
 
-As an example:
+For example:
 
-    @memo [EFFICIENCY] Currently brute-force; find better algorithm.
+``` r
+#' @memo [EFFICIENCY] Currently brute-force; find better algorithm.
+```
 
-As above, we first define a parse method:
+As above, we first define a parse method. This time we use custom format
+based on a regular expression:
 
 ``` r
 roxy_tag_parse.roxy_tag_memo <- function(x) {
@@ -304,7 +379,7 @@ roxy_tag_parse.roxy_tag_memo <- function(x) {
 }
 ```
 
-Then check if it works with
+Then we check it works with
 [`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
 
 ``` r
@@ -340,6 +415,9 @@ str(block$tags[[1]])
 #>   ..$ message: chr " Remember to implement this!"
 #>  - attr(*, "class")= chr [1:2] "roxy_tag_memo" "roxy_tag"
 ```
+
+We don’t need a format method because our tag won’t be used to produce
+Rd sections[²](#fn2).
 
 ### The roclet
 
@@ -387,7 +465,7 @@ roclet_process.roclet_memo <- function(x, blocks, env, base_path) {
 
 And then have
 [`roclet_output()`](https://roxygen2.r-lib.org/dev/reference/roclet.md)
-just print them to the screen:
+print them to the screen:
 
 ``` r
 roclet_output.roclet_memo <- function(x, results, base_path, ...) {
@@ -405,7 +483,9 @@ Then you can test if it works by using
 [`roc_proc_text()`](https://roxygen2.r-lib.org/dev/reference/roc_proc_text.md):
 
 ``` r
-results <- roc_proc_text(memo_roclet(), "
+results <- roc_proc_text(
+  memo_roclet(),
+  "
 #' @memo [TBI] Remember to implement this!
 #' @memo [API] Check best API
 f <- function(x, y) {
@@ -416,7 +496,8 @@ f <- function(x, y) {
 g <- function(x, y) {
   # ...
 }
-")
+"
+)
 roclet_output(memo_roclet(), results)
 #> TBI: 
 #>  * [<text>:2]  Remember to implement this!
@@ -443,12 +524,48 @@ like this:
 Roxygen: list(roclets = c("collate", "rd", "namespace", "yourPackage::roclet"))
 ```
 
-Optionally, you can add your roclet package to the target package as a
-`Suggests:` dependency:
+See
+[`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md)
+for more details.
+
+Your package only needs to be installed when the user documents the
+package, which doesn’t correspond precisely to any field in the
+`DESCRIPTION`. However, you can think of it as a development dependency
+and hence put it in the `Suggests:` field:
 
 ``` r
-usethis::use_dev_package("yourPackage", type = "Suggests", remote = "yourGithubID/yourPackage")
+usethis::use_package("yourPackage", type = "Suggests")
 ```
 
 You don’t have to do this, but it will help other developers working on
 the target package.
+
+## Conclusion: further extension ideas
+
+This vignette is quite rough, so you might want to also read some
+roxygen2 source code to understand all the extension points.
+
+Do not hesitate to also look for examples of roxygen2 extensions. For
+instance, the [roxygenlabs](https://github.com/gaborcsardi/roxygenlabs)
+package (former incubator of roxygen2 features) used a third extension
+point: it *extended* the Rd roclet with further methods, thus creating a
+supercharged Rd roclet rather than a brand-new roclet. Or, the
+[plumber2](https://github.com/posit-dev/plumber2) package only uses the
+parsing features from roxygen2, and does not use
+[`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+at all.
+
+------------------------------------------------------------------------
+
+1.  For example, the no-longer recommended
+    [`vignette_roclet()`](https://roxygen2.r-lib.org/dev/reference/vignette_roclet.md)
+    only needs the path to the package source as input; it does not use
+    information from the tag parsing step. Or the {roxylint} package
+    only uses existing tags; its job is to warn you about suboptimal
+    roxygen2 style.
+
+2.  Some tags in roxygen2 itself, like `@importFrom`, are not meant for
+    the
+    \[[`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md)\]
+    (`@importFrom` is meant for the
+    [`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md)).

@@ -16,7 +16,6 @@ test_that("r6_method_from_row extracts all components", {
 
   expect_equal(method$name, "greet")
   expect_equal(method$class, "C")
-  expect_equal(method$alias, "C")
   expect_equal(method$description, "Say hello.")
   expect_equal(method$details, "Be polite.")
   expect_equal(method$params, list(list(name = "who", description = "Name.")))
@@ -103,7 +102,6 @@ test_that("format.rd_r6_method produces method subsection", {
   method <- rd_r6_method(
     name = "greet",
     class = "Person",
-    alias = "Person",
     formals = as.pairlist(alist(who = , how = "nicely")),
     description = "Say hello.",
     params = list(
@@ -118,7 +116,6 @@ test_that("format.rd_r6_method renames initialize to new", {
   method <- rd_r6_method(
     name = "initialize",
     class = "Foo",
-    alias = "Foo",
     formals = NULL,
     description = "Create object."
   )
@@ -129,7 +126,6 @@ test_that("format.rd_r6_method includes optional sections", {
   method <- rd_r6_method(
     name = "run",
     class = "Job",
-    alias = "Job",
     formals = NULL,
     description = "Run the job.",
     details = "Some details.",
@@ -143,7 +139,6 @@ test_that("format.rd_r6_method omits empty optional sections", {
   method <- rd_r6_method(
     name = "run",
     class = "Job",
-    alias = "Job",
     formals = NULL,
     description = "Run."
   )

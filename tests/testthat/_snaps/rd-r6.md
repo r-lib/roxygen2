@@ -50,13 +50,13 @@
       ## Example for meth2
       
       ## ------------------------------------------------
-      ## Method `A$meth1`
+      ## Method `obj$meth1()`
       ## ------------------------------------------------
       
       ## Example for meth1
       
       ## ------------------------------------------------
-      ## Method `A$meth2`
+      ## Method `obj$meth2()`
       ## ------------------------------------------------
       
       ## Example for meth2
@@ -99,7 +99,7 @@
       A method 1.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{A$meth1(Z)}
+      \preformatted{obj$meth1(Z)}
       \if{html}{\out{</div>}}
       }
       
@@ -126,7 +126,7 @@
       Method 2 description.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{A$meth2(Z = 10, ...)}
+      \preformatted{obj$meth2(Z = 10, ...)}
       \if{html}{\out{</div>}}
       }
       
@@ -157,7 +157,7 @@
       \subsection{Method \code{meth3()}}{
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{A$meth3(duplicate, missing)}
+      \preformatted{obj$meth3(duplicate, missing)}
       \if{html}{\out{</div>}}
       }
       
@@ -186,7 +186,7 @@
       The objects of this class are cloneable with this method.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{A$clone(deep = FALSE)}
+      \preformatted{obj$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
       }
       
@@ -260,7 +260,7 @@
       B method 1.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{B$meth1(Z)}
+      \preformatted{obj$meth1(Z)}
       \if{html}{\out{</div>}}
       }
       
@@ -280,7 +280,7 @@
       A method 4.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{B$meth4()}
+      \preformatted{obj$meth4()}
       \if{html}{\out{</div>}}
       }
       
@@ -292,7 +292,7 @@
       The objects of this class are cloneable with this method.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{B$clone(deep = FALSE)}
+      \preformatted{obj$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
       }
       
@@ -377,7 +377,7 @@
       C method 2.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{C$meth2(Z = 10, ...)}
+      \preformatted{obj$meth2(Z = 10, ...)}
       \if{html}{\out{</div>}}
       }
       
@@ -398,7 +398,7 @@
       C method 5.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{C$meth5()}
+      \preformatted{obj$meth5()}
       \if{html}{\out{</div>}}
       }
       
@@ -409,10 +409,9 @@
       \subsection{Method \code{undocumented_method()}}{
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{C$undocumented_method()}
+      \preformatted{obj$undocumented_method()}
       \if{html}{\out{</div>}}
       }
       
       }
       }
-

@@ -1,7 +1,6 @@
 rd_r6_method <- function(
   name,
   class,
-  alias,
   formals,
   description = character(),
   details = character(),
@@ -13,7 +12,6 @@ rd_r6_method <- function(
     list(
       name = name,
       class = class,
-      alias = alias,
       formals = formals,
       description = description,
       details = details,
@@ -27,7 +25,6 @@ rd_r6_method <- function(
 
 #' @export
 format.rd_r6_method <- function(x, ...) {
-  nm <- r6_show_name(x$name)
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
   push_subsection <- function(title, ...) {
@@ -39,10 +36,13 @@ format.rd_r6_method <- function(x, ...) {
   }
 
   # Anchor and heading
-  id <- paste0("method-", x$class, "-", nm)
+
+  id <- paste0("method-", x$class, "-", x$name)
   push(rd_if_html("<hr>"))
   push(rd_if_html('<a id="', id, '"></a>'))
   push(rd_if_latex("\\hypertarget{", id, "}{}"))
+
+  nm <- if (x$name == "initialize") x$class else x$name
   push(paste0("\\subsection{Method \\code{", nm, "()}}{"))
 
   # Description
@@ -54,13 +54,13 @@ format.rd_r6_method <- function(x, ...) {
   }
 
   # Usage
-  usage_name <- paste0(x$alias, "$", nm)
-  fake <- paste(rep("X", nchar(usage_name)), collapse = "")
+  usage_nm <- r6_method_name(x$class, x$name)
+  fake <- paste(rep("X", nchar(usage_nm)), collapse = "")
   usage <- format(function_usage(fake, x$formals))
   push_subsection(
     "Usage",
     rd_if_html('<div class="r">'),
-    paste0("\\preformatted{", sub(paste0("^", fake), usage_name, usage), "}"),
+    paste0("\\preformatted{", sub(paste0("^", fake), usage_nm, usage), "}"),
     rd_if_html("</div>")
   )
 
@@ -108,7 +108,7 @@ format.rd_r6_method <- function(x, ...) {
   lines
 }
 
-r6_method_from_row <- function(method, alias, block) {
+r6_method_from_row <- function(method, block) {
   tags <- method$tags[[1]]
 
   desc_tags <- keep(tags, \(t) t$tag == "description")
@@ -131,7 +131,6 @@ r6_method_from_row <- function(method, alias, block) {
   rd_r6_method(
     name = method$name,
     class = method$class,
-    alias = alias,
     formals = method$formals[[1]],
     description = description,
     details = details,
@@ -223,8 +222,12 @@ r6_resolve_params <- function(method, block) {
 }
 
 # vectorized
-r6_show_name <- function(names) {
-  ifelse(names == "initialize", "new", names)
+r6_method_name <- function(class, method) {
+  if (method == "initialize") {
+    class
+  } else {
+    paste0("obj$", method)
+  }
 }
 
 rd_if_html <- function(...) {

@@ -54,7 +54,7 @@
       method1
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{C2$meth1()}
+      \preformatted{obj$meth1()}
       \if{html}{\out{</div>}}
       }
       
@@ -88,7 +88,7 @@
       Method from B.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{B$shared()}
+      \preformatted{obj$shared()}
       \if{html}{\out{</div>}}
       }
       
@@ -100,7 +100,7 @@
       The objects of this class are cloneable with this method.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{B$clone(deep = FALSE)}
+      \preformatted{obj$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
       }
       
@@ -137,7 +137,7 @@
       }
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{C$meth()}
+      \preformatted{obj$meth()}
       \if{html}{\out{</div>}}
       }
       
@@ -149,4 +149,3 @@
       
       }
       }
-

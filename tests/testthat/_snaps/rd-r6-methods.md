@@ -16,7 +16,7 @@
       Run it.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{Foo$run()}
+      \preformatted{obj$run()}
       \if{html}{\out{</div>}}
       }
       
@@ -30,15 +30,14 @@
     Output
       
       ## ------------------------------------------------
-      ## Method `C$greet`
+      ## Method `obj$greet()`
       ## ------------------------------------------------
       
       c$greet()
       
       ## ------------------------------------------------
-      ## Method `C$stop`
+      ## Method `obj$stop()`
       ## ------------------------------------------------
       
       c$stop()
       c$stop(force = TRUE)
-

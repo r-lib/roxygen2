@@ -28,7 +28,7 @@
       Say hello.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{Person$greet(who, how = "nicely")}
+      \preformatted{obj$greet(who, how = "nicely")}
       \if{html}{\out{</div>}}
       }
       
@@ -49,13 +49,13 @@
       cat(format(method), sep = "\n")
     Output
       \if{html}{\out{<hr>}}
-      \if{html}{\out{<a id="method-Foo-new"></a>}}
-      \if{latex}{\out{\hypertarget{method-Foo-new}{}}}
-      \subsection{Method \code{new()}}{
+      \if{html}{\out{<a id="method-Foo-initialize"></a>}}
+      \if{latex}{\out{\hypertarget{method-Foo-initialize}{}}}
+      \subsection{Method \code{Foo()}}{
       Create object.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{Foo$new()}
+      \preformatted{Foo()}
       \if{html}{\out{</div>}}
       }
       
@@ -73,7 +73,7 @@
       Run the job.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{Job$run()}
+      \preformatted{obj$run()}
       \if{html}{\out{</div>}}
       }
       
@@ -106,9 +106,8 @@
       Run.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{Job$run()}
+      \preformatted{obj$run()}
       \if{html}{\out{</div>}}
       }
       
       }
-

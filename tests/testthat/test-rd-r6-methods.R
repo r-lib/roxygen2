@@ -5,7 +5,6 @@ test_that("format.rd_r6_methods with one method", {
       rd_r6_method(
         name = "run",
         class = "Foo",
-        alias = "Foo",
         formals = NULL,
         description = "Run it."
       )

@@ -8,6 +8,7 @@
 #'
 #' @param fogbehindme This is not show up in the output at all.
 #' @param Z zzzzzzz
+#' @example example.R
 
 A <- R6::R6Class(
   "A",

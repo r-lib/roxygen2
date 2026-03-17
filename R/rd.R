@@ -219,7 +219,7 @@ block_to_rd.roxy_block_r6class <- function(block, base_path, env) {
     return()
   }
 
-  topic_add_r6_methods(rd, block, env)
+  topic_add_r6_methods(rd, block, env, base_path)
 
   describe_rdname <- topic_add_describe_in(rd, block, env)
   filename <- describe_rdname %||%

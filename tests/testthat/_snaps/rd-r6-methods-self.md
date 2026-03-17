@@ -55,7 +55,7 @@
       Create object.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{Foo()}
+      \preformatted{Foo$new()}
       \if{html}{\out{</div>}}
       }
       
@@ -111,3 +111,4 @@
       }
       
       }
+

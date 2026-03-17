@@ -224,7 +224,7 @@ r6_resolve_params <- function(method, block) {
 # vectorized
 r6_method_name <- function(class, method) {
   if (method == "initialize") {
-    class
+    paste0(class, "$new")
   } else {
     paste0("obj$", method)
   }

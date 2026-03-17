@@ -41,3 +41,4 @@
       
       c$stop()
       c$stop(force = TRUE)
+

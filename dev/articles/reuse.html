@@ -460,12 +460,35 @@ that you’re documenting so you can call internal functions.</p>
 <div class="section level2">
 <h2 id="inline-rd-code">Inline Rd code<a class="anchor" aria-label="anchor" href="#inline-rd-code"></a>
 </h2>
-<p>You can use <code>`Rd `</code> to insert code that is evaluated at
-documentation render time (i.e. when the user views the help page)
-rather than at build time. For example, <code>`Rd myFun()`</code> will
-generate <code>\Sexpr[stage=render,results=rd]{myFun()}</code> in the Rd
-file. This is useful for documentation that needs to reflect the current
-state of the system, not the state when the package was built.</p>
+<p>You can use <code>`Rd `</code> to run code that is evaluated when a
+user views the help page, rather than when roxygen2 builds the
+documentation. This is useful for documentation that needs to be
+dynamic, reflecting the current state of R, of the user’s library and
+system (e.g. what dependencies are installed), not the state when the
+package was built. It works by using the <code>\Sexpr</code> tag, so
+that <code>`Rd myFun()`</code>
+generates<code>\Sexpr[stage=render,results=rd]{myFun()}</code>.</p>
+<p>Here’s a simple example, which will greet the user appropriately,
+depending on the time of day:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">greeting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">hour</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXlt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">$</span><span class="va">hour</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">hour</span> <span class="op">&lt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="st">"Good morning!"</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">hour</span> <span class="op">&lt;</span> <span class="fl">18</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="st">"Good afternoon!"</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="st">"Good evening!"</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#' Title</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' `Rd roxygen2:::greeting()`</span></span>
+<span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span></code></pre></div>
+<p>Note that compared to inline R code, the function is run in the
+global environment by R’s documentation system, not inside the package
+namespace by roxygen2. This generally means that you’ll want to use
+<code>:::</code> to explicitly call an internal function.</p>
 </div>
 <div class="section level2">
 <h2 id="child-documents">Child documents<a class="anchor" aria-label="anchor" href="#child-documents"></a>

@@ -244,7 +244,7 @@ the text.
 
 ## Code chunks
 
-You can insert executable code with ```` ```{r} ````, just like in knitr
+You can insert executable code with ```` ```{r} ```` just like in knitr
 documents. For example:
 
 ``` r
@@ -296,6 +296,11 @@ method on the result. This may generate markdown not supported by
 roxygen2. If needed, override the automatic methods to have your R calls
 return your own markdown as a character vector, wrapped in
 [`knitr::asis_output()`](https://rdrr.io/pkg/knitr/man/asis_output.html).
+
+You can also use `` `r ` `` to insert the results of running R code.
+This is particularly useful for reducing duplication in your
+documentation so is documented in
+[`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md).
 
 ### Chunk options
 

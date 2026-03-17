@@ -301,7 +301,7 @@ Note that the evaluation environment is deliberately a child of the package that
 ## Inline Rd code
 
 You can use `` `Rd ` `` to run code that is evaluated when a user views the help page, rather than when roxygen2 builds the documentation.
-This is useful for documentation that needs to be dynamic, reflecting the current state of R, not the state when the package was built.
+This is useful for documentation that needs to be dynamic, reflecting the current state of R, of the user's library and system (e.g. what dependencies are installed), not the state when the package was built.
 It works by using the `\Sexpr` tag, so that `` `Rd myFun()` `` generates`\Sexpr[stage=render,results=rd]{myFun()}`.
 
 Here's a simple example, which will greet the user appropriately, depending on the time of day:
@@ -324,7 +324,7 @@ greeting <- function() {
 foo <- function() NULL
 ```
 
-Note that compared to inline R code, the function is run in the global environment by R's documentation sysytem, not inside the package namespace by roxygen2. 
+Note that compared to inline R code, the function is run in the global environment by R's documentation system, not inside the package namespace by roxygen2. 
 This generally means that you'll want to use `:::` to explicitly call an internal function.
 
 ## Child documents

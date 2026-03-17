@@ -22,6 +22,9 @@
   `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)`
   if your tag legitimately spans multiple lines.
 - R6 improvements:
+  - The “Super classes” section now omits the `pkg::` prefix for parent
+    classes from the same package, making the inheritance chain easier
+    to read ([\#1567](https://github.com/r-lib/roxygen2/issues/1567)).
   - R6 classes with only active bindings and `cloneable = FALSE` no
     longer error during documentation
     ([\#1610](https://github.com/r-lib/roxygen2/issues/1610)).

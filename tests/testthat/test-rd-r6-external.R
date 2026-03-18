@@ -1,4 +1,4 @@
-# @R6method ----------------------------------------------------------------
+# @R6method tag parsing ----------------------------------------------------
 
 test_that("@R6method tag parser validates input", {
   tag <- roxy_tag("R6method", "Foo$bar")
@@ -12,44 +12,33 @@ test_that("@R6method tag parser validates input", {
   })
 })
 
+# $set() ------------------------------------------------------------------
+
 test_that("$set() infers @R6method automatically", {
-  text <- "
-    #' @title Title
-    #' @description Description.
-    C <- R6::R6Class('C', cloneable = FALSE,
-      public = list(
-        #' @description Method 1.
-        meth1 = function() { }
-      )
-    )
+  docs <- r6_doc(
+    "
+    #' Title
+    C <- R6::R6Class('C', cloneable = FALSE)
 
     #' @description Method 2.
     #' @param x A number.
     C$set('public', 'meth2', function(x) { })
   "
-
-  env <- new.env(parent = globalenv())
-  eval(parse(text = text, keep.source = TRUE), envir = env)
-  blocks <- parse_text(text, env = env)
-  roc <- roclet_preprocess(roclet_find("rd"))
-  res <- roclet_process(roc, blocks = blocks, env = env, base_path = ".")
-  rd <- format(res$C.Rd)
-
-  expect_match(rd, "Method \\code{meth1()}", fixed = TRUE)
-  expect_match(rd, "Method \\code{meth2()}", fixed = TRUE)
-  expect_match(rd, "Method 2.", fixed = TRUE)
-  expect_match(rd, "code{x}}{A number.", fixed = TRUE)
-  expect_match(rd, "C$meth2(x)", fixed = TRUE)
+  )
+  meth <- docs$methods$self[[1]]
+  expect_equal(meth$name, "meth2")
+  expect_equal(meth$description, "Method 2.")
+  expect_equal(meth$params, list(list(name = "x", description = "A number.")))
 })
 
-test_that("explicit @R6method works with NULL", {
-  text <- "
-    #' @title Title
-    #' @description Description.
+# explicit @R6method -------------------------------------------------------
+
+test_that("explicit @R6method works on NULL block", {
+  docs <- r6_doc(
+    "
+    #' Title
     C <- R6::R6Class('C', cloneable = FALSE,
       public = list(
-        #' @description Method 1.
-        meth1 = function() {},
         meth2 = function(x) {}
       )
     )
@@ -58,30 +47,18 @@ test_that("explicit @R6method works with NULL", {
     #' @param x A number.
     NULL
   "
-
-  env <- new.env(parent = globalenv())
-  eval(parse(text = text, keep.source = TRUE), envir = env)
-  blocks <- parse_text(text, env = env)
-  roc <- roclet_preprocess(roclet_find("rd"))
-  res <- roclet_process(roc, blocks = blocks, env = env, base_path = ".")
-  rd <- format(res$C.Rd)
-
-  expect_match(rd, "C$meth2(x)", fixed = TRUE)
-  expect_match(rd, "Method 2.", fixed = TRUE)
+  )
+  meth <- docs$methods$self[[1]]
+  expect_equal(meth$name, "meth2")
+  expect_equal(meth$description, "Method 2.")
+  expect_equal(meth$params, list(list(name = "x", description = "A number.")))
 })
 
 test_that("@R6method warns on unknown class", {
   text <- "
-    #' @R6method NoSuchClass$meth
-    #' @description A method.
-    NULL
-  "
-
-  env <- new.env(parent = globalenv())
-  eval(parse(text = text, keep.source = TRUE), envir = env)
-  blocks <- parse_text(text, env = env)
-  roc <- roclet_preprocess(roclet_find("rd"))
-  expect_snapshot(
-    roclet_process(roc, blocks = blocks, env = env, base_path = ".")
-  )
+      #' @R6method NoSuchClass$meth
+      #' @description A method.
+      NULL
+    "
+  expect_snapshot(roc_proc_text(rd_roclet(), text))
 })

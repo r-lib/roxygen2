@@ -17,7 +17,7 @@
 # @R6method warns on unknown class
 
     Code
-      roclet_process(roc, blocks = blocks, env = env, base_path = ".")
+      roc_proc_text(rd_roclet(), text)
     Message
       x <text>:2: @R6method Can't find R6 class <NoSuchClass>.
     Output

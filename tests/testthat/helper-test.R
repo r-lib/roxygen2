@@ -18,7 +18,8 @@ expect_parse_failure <- function(code) {
 
 r6_doc <- function(text, env = new.env(parent = globalenv())) {
   eval(parse(text = text, keep.source = TRUE), envir = env)
-  block <- parse_text(text, env = env)[[1]]
+  blocks <- merge_external_r6methods(parse_text(text, env = env))
+  block <- Filter(function(b) inherits(b, "roxy_block_r6class"), blocks)[[1]]
   r6_class_from_block(block, env)
 }
 

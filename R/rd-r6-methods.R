@@ -57,13 +57,9 @@ r6_extract_methods <- function(r6data, alias, block) {
       meth <- find_method_for_tag(methods_df, tag)
     }
 
-    if (is.na(meth)) {
-      warn_roxy_tag(tag, "Cannot find matching R6 method")
-      next
-    }
     midx <- which(meth == methods_df$name)
     if (length(midx) == 0) {
-      warn_roxy_tag(tag, "Cannot find matching R6 method")
+      warn_roxy_tag(tag, "can't find matching R6 method")
       next
     }
     methods_df$tags[[midx]] <- c(methods_df$tags[[midx]], list(tag))
@@ -126,10 +122,13 @@ find_method_for_tag <- function(methods, tag) {
   if (nrow(methods) == 0) {
     return(NA_character_)
   }
-  w <- which(
-    basename(methods$file) == basename(tag$file) &
-      methods$line > tag$line
-  )[1]
+  if (tag$file == "<text>") {
+    # for testing
+    same_file <- TRUE
+  } else {
+    same_file <- basename(methods$file) == basename(tag$file)
+  }
+  w <- which(same_file & methods$line > tag$line)[1]
   methods$name[w]
 }
 

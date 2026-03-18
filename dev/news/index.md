@@ -28,6 +28,10 @@
   - R6 classes with only active bindings and `cloneable = FALSE` no
     longer error during documentation
     ([\#1610](https://github.com/r-lib/roxygen2/issues/1610)).
+  - Inherited method links now only link to parent classes that have
+    documentation, avoiding broken links when parent classes are
+    undocumented ([\#963](https://github.com/r-lib/roxygen2/issues/963),
+    [\#1155](https://github.com/r-lib/roxygen2/issues/1155)).
   - `initialize()` method parameters now automatically inherit
     documentation from `@field` tags with the same name, reducing the
     need to duplicate descriptions. Explicit `@param` tags still take

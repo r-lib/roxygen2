@@ -44,7 +44,7 @@ A `RoxyTopic` object corresponds to a generated `.Rd` file.
 
 ------------------------------------------------------------------------
 
-### Method [`format()`](https://rdrr.io/r/base/format.html)
+### `RoxyTopic$format()`
 
 Format the `.Rd` file. It considers the sections in particular order,
 even though Rd tools will reorder them again.
@@ -68,7 +68,7 @@ Character string.
 
 ------------------------------------------------------------------------
 
-### Method `is_valid()`
+### `RoxyTopic$is_valid()`
 
 Check if an `.Rd` file is valid
 
@@ -82,7 +82,7 @@ Logical flag, `TRUE` for valid `.Rd` files
 
 ------------------------------------------------------------------------
 
-### Method `has_section()`
+### `RoxyTopic$has_section()`
 
 Check if an `.Rd` file has a certain section.
 
@@ -102,7 +102,7 @@ Logical flag.
 
 ------------------------------------------------------------------------
 
-### Method `get_section()`
+### `RoxyTopic$get_section()`
 
 Query a section.
 
@@ -124,7 +124,7 @@ section.
 
 ------------------------------------------------------------------------
 
-### Method `get_value()`
+### `RoxyTopic$get_value()`
 
 Query the value of a section. This is the value of the
 [rd_section](https://roxygen2.r-lib.org/dev/reference/rd_section.md)
@@ -146,7 +146,7 @@ Value.
 
 ------------------------------------------------------------------------
 
-### Method `get_rd()`
+### `RoxyTopic$get_rd()`
 
 Get the Rd code of a section.
 
@@ -166,7 +166,7 @@ Character vector, one element per line.
 
 ------------------------------------------------------------------------
 
-### Method `get_name()`
+### `RoxyTopic$get_name()`
 
 Get the value of the `name` section. This is the name of the Rd topic.
 
@@ -180,7 +180,7 @@ Character scalar.
 
 ------------------------------------------------------------------------
 
-### Method `inherits_from()`
+### `RoxyTopic$inherits_from()`
 
 Query the topics this topic inherits `type` from.
 
@@ -200,7 +200,7 @@ A character vector of topic names.
 
 ------------------------------------------------------------------------
 
-### Method `inherits_section_from()`
+### `RoxyTopic$inherits_section_from()`
 
 Query the topics this topic inherits sections from.
 
@@ -214,7 +214,7 @@ A character vector of topic names.
 
 ------------------------------------------------------------------------
 
-### Method `add()`
+### `RoxyTopic$add()`
 
 Add one or more sections to the topic.
 
@@ -244,7 +244,7 @@ Add one or more sections to the topic.
 
 ------------------------------------------------------------------------
 
-### Method `add_section()`
+### `RoxyTopic$add_section()`
 
 Add a section.
 
@@ -275,7 +275,7 @@ in `self$sections`. This method if for internal use only.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `RoxyTopic$clone()`
 
 The objects of this class are cloneable with this method.
 

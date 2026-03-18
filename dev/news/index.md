@@ -22,6 +22,10 @@
   `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)`
   if your tag legitimately spans multiple lines.
 - R6 improvements:
+  - R6 method usage now shows `ClassName$new(args)` for constructors and
+    `obj$method(args)` for other methods, making it clearer how each
+    method is actually called
+    ([\#1026](https://github.com/r-lib/roxygen2/issues/1026)).
   - `@returns` now works as a method-level tag in R6 classes, just like
     `@return` ([\#1148](https://github.com/r-lib/roxygen2/issues/1148)).
   - The “Super classes” section now omits the `pkg::` prefix for parent

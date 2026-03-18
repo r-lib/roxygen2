@@ -278,6 +278,7 @@ inherit_dot_params <- function(topic, topics, env) {
     collapse = "\n"
   )
 
+  # NOTE: this rd structure is used by RStudio for parameter completions
   rd <- paste0(
     "\n",
     "  Arguments passed on to ",

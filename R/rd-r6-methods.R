@@ -43,13 +43,9 @@ r6_extract_methods <- function(r6data, alias, block) {
   methods_df$tags <- replicate(nrow(methods_df), list(), simplify = FALSE)
 
   # Associate inline tags with methods
-  r6_tags <- c("description", "details", "param", "return", "examples")
   for (i in seq_along(block$tags)) {
     tag <- block$tags[[i]]
-    if (is.na(tag$line) || tag$line < block$line) {
-      next
-    }
-    if (!tag$tag %in% r6_tags) {
+    if (r6_tag_type(tag, block) != "method") {
       next
     }
     meth <- find_method_for_tag(methods_df, tag)

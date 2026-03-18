@@ -46,5 +46,7 @@ format.rd_section_reexport <- function(x, ...) {
 
 reexport_link <- function(pkg, fun) {
   env <- tryCatch(asNamespace(pkg), error = function(e) emptyenv())
-  rd_link(pkg, escape(fun), escape(fun_suffix(fun, env)), code = TRUE)
+  map_chr(seq_along(fun), function(i) {
+    rd_link(pkg[[i]], escape(fun[[i]]), escape(fun_suffix(fun[[i]], env)), code = TRUE)
+  })
 }

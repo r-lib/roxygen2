@@ -1,3 +1,10 @@
+# warns about multiple @return(s) tags
+
+    Code
+      docs <- r6_doc(text)
+    Message
+      x <text>:3: Must use one @return(s) per R6 method.
+
 # warns about undocumented params
 
     Code

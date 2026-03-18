@@ -3,55 +3,8 @@
 \name{RoxyTopic}
 \alias{RoxyTopic}
 \title{A \code{RoxyTopic} is an ordered collection of unique rd_sections}
-\value{
-Character string.
-
-Logical flag, \code{TRUE} for valid \code{.Rd} files
-
-Logical flag.
-
-The \link{rd_section} object representing the section, or \code{NULL}
-if the topic has no such section.
-
-Value.
-
-Character vector, one element per line.
-
-Character scalar.
-
-A character vector of topic names.
-
-A character vector of topic names.
-}
 \description{
-Format the \code{.Rd} file. It considers the sections in
-particular order, even though Rd tools will reorder them again.
-
-Check if an \code{.Rd} file is valid
-
-Check if an \code{.Rd} file has a certain section.
-
-Query a section.
-
-Query the value of a section. This is the value of
-the \link{rd_section} object.
-
-Get the Rd code of a section.
-
-Get the value of the \code{name} section. This is the name
-of the Rd topic.
-
-Query the topics this topic inherits \code{type} from.
-
-Query the topics this topic inherits sections from.
-
-Add one or more sections to the topic.
-
-Add a section.
-}
-\details{
-Ensures that each type of name (as given by its name), only appears
-once in \code{self$sections}. This method if for internal use only.
+A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 }
 \keyword{internal}
 \section{Public fields}{

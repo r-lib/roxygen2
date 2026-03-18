@@ -78,7 +78,7 @@
       }
       \if{html}{\out{<details open><summary>Inherited methods</summary>
       <ul>
-      <li><span class="pkg-link" data-pkg="R_GlobalEnv" data-topic="A" data-id="only_a"><a href='../../R_GlobalEnv/html/A.html#method-A-only_a'><code>R_GlobalEnv::A$only_a()</code></a></span></li>
+      <li><code>R_GlobalEnv::A$only_a()</code></li>
       </ul>
       </details>}}
       \if{html}{\out{<hr>}}

@@ -12,6 +12,43 @@ test_that("can construct empty class", {
   expect_equal(docs$active_bindings, rd_r6_bindings())
 })
 
+test_that("class description is not duplicated", {
+  text <- "
+    #' Title
+    #'
+    #' Description
+    foo <- R6::R6Class(
+      public = list(
+        #' @description foo
+        foo = function() {}
+      )
+    )
+  "
+
+  out <- roc_proc_text(rd_roclet(), text)[[1]]
+  expect_equal(out$get_value("description"), "Description")
+})
+
+test_that("title-only class has single description", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Title
+    foo <- R6::R6Class(cloneable = FALSE)
+  "
+  )[[1]]
+  expect_equal(out$get_value("description"), "Title")
+
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' @title Title
+    foo <- R6::R6Class(cloneable = FALSE)
+  "
+  )[[1]]
+  expect_equal(out$get_value("description"), "Title")
+})
+
 test_that("class with only active bindings doesn't error (#1610)", {
   text <- "
     #' Class

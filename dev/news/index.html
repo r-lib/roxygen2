@@ -69,7 +69,9 @@
 <li>
 <code><a href="../reference/tag_parsers.html">tag_words_line()</a></code> is deprecated in favour of <code><a href="../reference/tag_parsers.html">tag_words()</a></code>, which now checks for single-line content by default. Use <code>tag_words(x, multiline = TRUE)</code> or <code>tag_value(x, multiline = TRUE)</code> if your tag legitimately spans multiple lines.</li>
 <li>R6 improvements:
-<ul><li>The “Super classes” section now omits the <code>pkg::</code> prefix for parent classes from the same package, making the inheritance chain easier to read (<a href="https://github.com/r-lib/roxygen2/issues/1567" class="external-link">#1567</a>).</li>
+<ul><li>
+<code>@returns</code> now works as a method-level tag in R6 classes, just like <code>@return</code> (<a href="https://github.com/r-lib/roxygen2/issues/1148" class="external-link">#1148</a>).</li>
+<li>The “Super classes” section now omits the <code>pkg::</code> prefix for parent classes from the same package, making the inheritance chain easier to read (<a href="https://github.com/r-lib/roxygen2/issues/1567" class="external-link">#1567</a>).</li>
 <li>R6 classes with only active bindings and <code>cloneable = FALSE</code> no longer error during documentation (<a href="https://github.com/r-lib/roxygen2/issues/1610" class="external-link">#1610</a>).</li>
 <li>
 <code>@example</code> (singular, with a file path) now works correctly in R6 class documentation (<a href="https://github.com/r-lib/roxygen2/issues/1158" class="external-link">#1158</a>).</li>

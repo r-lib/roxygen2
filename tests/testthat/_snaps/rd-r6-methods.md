@@ -12,11 +12,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Foo-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Foo-run}{}}}
-      \subsection{Method \code{run()}}{
+      \subsection{\code{Foo$run()}}{
       Run it.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$run()}
+      \preformatted{Foo$run()}
       \if{html}{\out{</div>}}
       }
       
@@ -30,13 +30,13 @@
     Output
       
       ## ------------------------------------------------
-      ## Method `obj$greet()`
+      ## Method `C$greet()`
       ## ------------------------------------------------
       
       c$greet()
       
       ## ------------------------------------------------
-      ## Method `obj$stop()`
+      ## Method `C$stop()`
       ## ------------------------------------------------
       
       c$stop()

@@ -36,14 +36,14 @@ format.rd_r6_method <- function(x, ...) {
   }
 
   # Anchor and heading
+  call <- r6_method_name(x$class, x$name)
 
   id <- paste0("method-", x$class, "-", x$name)
   push(rd_if_html("<hr>"))
   push(rd_if_html('<a id="', id, '"></a>'))
   push(rd_if_latex("\\hypertarget{", id, "}{}"))
 
-  nm <- if (x$name == "initialize") x$class else x$name
-  push(paste0("\\subsection{Method \\code{", nm, "()}}{"))
+  push(paste0("\\subsection{\\code{", call, "()}}{"))
 
   # Description
   if (length(x$description) > 0) {
@@ -54,13 +54,12 @@ format.rd_r6_method <- function(x, ...) {
   }
 
   # Usage
-  usage_nm <- r6_method_name(x$class, x$name)
-  fake <- paste(rep("X", nchar(usage_nm)), collapse = "")
+  fake <- paste(rep("X", nchar(call)), collapse = "")
   usage <- format(function_usage(fake, x$formals))
   push_subsection(
     "Usage",
     rd_if_html('<div class="r">'),
-    paste0("\\preformatted{", sub(paste0("^", fake), usage_nm, usage), "}"),
+    paste0("\\preformatted{", sub(paste0("^", fake), call, usage), "}"),
     rd_if_html("</div>")
   )
 
@@ -221,13 +220,8 @@ r6_resolve_params <- function(method, block) {
   })
 }
 
-# vectorized
 r6_method_name <- function(class, method) {
-  if (method == "initialize") {
-    paste0(class, "$new")
-  } else {
-    paste0("obj$", method)
-  }
+  paste0(class, "$", ifelse(method == "initialize", "new", method))
 }
 
 rd_if_html <- function(...) {

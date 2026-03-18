@@ -50,11 +50,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C2-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-C2-meth1}{}}}
-      \subsection{Method \code{meth1()}}{
+      \subsection{\code{C2$meth1()}}{
       method1
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth1()}
+      \preformatted{C2$meth1()}
       \if{html}{\out{</div>}}
       }
       
@@ -84,11 +84,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-shared"></a>}}
       \if{latex}{\out{\hypertarget{method-B-shared}{}}}
-      \subsection{Method \code{shared()}}{
+      \subsection{\code{B$shared()}}{
       Method from B.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$shared()}
+      \preformatted{B$shared()}
       \if{html}{\out{</div>}}
       }
       
@@ -96,11 +96,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-clone"></a>}}
       \if{latex}{\out{\hypertarget{method-B-clone}{}}}
-      \subsection{Method \code{clone()}}{
+      \subsection{\code{B$clone()}}{
       The objects of this class are cloneable with this method.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$clone(deep = FALSE)}
+      \preformatted{B$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
       }
       
@@ -129,7 +129,7 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth}{}}}
-      \subsection{Method \code{meth()}}{
+      \subsection{\code{C$meth()}}{
       Method description.
       
       \subsection{Description section}{
@@ -137,7 +137,7 @@
       }
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth()}
+      \preformatted{C$meth()}
       \if{html}{\out{</div>}}
       }
       

@@ -18,13 +18,13 @@
       a <- A$new()
       
       ## ------------------------------------------------
-      ## Method `obj$meth1()`
+      ## Method `A$meth1()`
       ## ------------------------------------------------
       
       ## Example for meth1
       
       ## ------------------------------------------------
-      ## Method `obj$meth2()`
+      ## Method `A$meth2()`
       ## ------------------------------------------------
       
       ## Example for meth2
@@ -63,11 +63,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth1}{}}}
-      \subsection{Method \code{meth1()}}{
+      \subsection{\code{A$meth1()}}{
       A method 1.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth1(Z)}
+      \preformatted{A$meth1(Z)}
       \if{html}{\out{</div>}}
       }
       
@@ -90,11 +90,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth2"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth2}{}}}
-      \subsection{Method \code{meth2()}}{
+      \subsection{\code{A$meth2()}}{
       Method 2 description.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth2(Z = 10, ...)}
+      \preformatted{A$meth2(Z = 10, ...)}
       \if{html}{\out{</div>}}
       }
       
@@ -126,11 +126,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth3"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth3}{}}}
-      \subsection{Method \code{meth3()}}{
+      \subsection{\code{A$meth3()}}{
       Method 3.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth3(x)}
+      \preformatted{A$meth3(x)}
       \if{html}{\out{</div>}}
       }
       
@@ -146,11 +146,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-clone"></a>}}
       \if{latex}{\out{\hypertarget{method-A-clone}{}}}
-      \subsection{Method \code{clone()}}{
+      \subsection{\code{A$clone()}}{
       The objects of this class are cloneable with this method.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$clone(deep = FALSE)}
+      \preformatted{A$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
       }
       
@@ -221,11 +221,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-B-meth1}{}}}
-      \subsection{Method \code{meth1()}}{
+      \subsection{\code{B$meth1()}}{
       B method 1.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth1(Z)}
+      \preformatted{B$meth1(Z)}
       \if{html}{\out{</div>}}
       }
       
@@ -241,11 +241,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-meth4"></a>}}
       \if{latex}{\out{\hypertarget{method-B-meth4}{}}}
-      \subsection{Method \code{meth4()}}{
+      \subsection{\code{B$meth4()}}{
       B method 4.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth4()}
+      \preformatted{B$meth4()}
       \if{html}{\out{</div>}}
       }
       
@@ -253,11 +253,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-clone"></a>}}
       \if{latex}{\out{\hypertarget{method-B-clone}{}}}
-      \subsection{Method \code{clone()}}{
+      \subsection{\code{B$clone()}}{
       The objects of this class are cloneable with this method.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$clone(deep = FALSE)}
+      \preformatted{B$clone(deep = FALSE)}
       \if{html}{\out{</div>}}
       }
       
@@ -328,11 +328,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth2"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth2}{}}}
-      \subsection{Method \code{meth2()}}{
+      \subsection{\code{C$meth2()}}{
       C method 2.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth2(Z = 10, ...)}
+      \preformatted{C$meth2(Z = 10, ...)}
       \if{html}{\out{</div>}}
       }
       
@@ -349,11 +349,11 @@
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth5"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth5}{}}}
-      \subsection{Method \code{meth5()}}{
+      \subsection{\code{C$meth5()}}{
       C method 5.
       \subsection{Usage}{
       \if{html}{\out{<div class="r">}}
-      \preformatted{obj$meth5()}
+      \preformatted{C$meth5()}
       \if{html}{\out{</div>}}
       }
       

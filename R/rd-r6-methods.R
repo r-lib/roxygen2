@@ -17,7 +17,7 @@ format.rd_r6_methods <- function(x, ...) {
   nms <- map_chr(x$self, \(m) m$name)
   classes <- map_chr(x$self, \(m) m$class)
   dest <- sprintf("method-%s-%s", classes, nms)
-  code <- sprintf("\\code{%s$%s()}", x$alias, nms)
+  code <- sprintf("\\code{%s()}", r6_method_name(classes, nms))
 
   push("\\section{Methods}{")
   push(
@@ -144,10 +144,9 @@ r6_all_examples <- function(methods) {
     if (length(method$examples) == 0) {
       return()
     }
-    name <- paste0(r6_method_name(methods$class, method$name), "()")
     c(
       "\n## ------------------------------------------------",
-      paste0("## Method `", name, "`"),
+      paste0("## Method `", r6_method_name(method$class, method$name), "()`"),
       "## ------------------------------------------------\n",
       paste(method$examples, collapse = "\n")
     )

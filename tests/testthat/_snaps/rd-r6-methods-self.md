@@ -32,23 +32,22 @@
       \if{html}{\out{<a id="method-Person-greet"></a>}}
       \if{latex}{\out{\hypertarget{method-Person-greet}{}}}
       \subsection{\code{Person$greet()}}{
-      Say hello.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{Person$greet(who, how = "nicely")}
-      \if{html}{\out{</div>}}
+        Say hello.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{Person$greet(who, how = "nicely")}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{who}}{Name to greet.}
+            \item{\code{how}}{Greeting style.}
+          }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{who}}{Name to greet.}
-      \item{\code{how}}{Greeting style.}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
 
 # format.rd_r6_method renames initialize to new
 
@@ -59,14 +58,14 @@
       \if{html}{\out{<a id="method-Foo-initialize"></a>}}
       \if{latex}{\out{\hypertarget{method-Foo-initialize}{}}}
       \subsection{\code{Foo$new()}}{
-      Create object.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{Foo$new()}
-      \if{html}{\out{</div>}}
+        Create object.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{Foo$new()}
+          \if{html}{\out{</div>}}
+        }
       }
       
-      }
 
 # format.rd_r6_method includes optional sections
 
@@ -77,29 +76,26 @@
       \if{html}{\out{<a id="method-Job-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Job-run}{}}}
       \subsection{\code{Job$run()}}{
-      Run the job.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{Job$run()}
-      \if{html}{\out{</div>}}
+        Run the job.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{Job$run()}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Details}{
+          Some details.
+        }
+        \subsection{Returns}{
+          The result.
+        }
+        \subsection{Examples}{
+          \if{html}{\out{<div class="r example copy">}}
+          \preformatted{job$run()
+      }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Details}{
-      Some details.
-      }
-      
-      \subsection{Returns}{
-      The result.
-      }
-      
-      \subsection{Examples}{
-      \if{html}{\out{<div class="r example copy">}}
-      \preformatted{job$run()
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
 
 # format.rd_r6_method omits empty optional sections
 
@@ -110,12 +106,12 @@
       \if{html}{\out{<a id="method-Job-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Job-run}{}}}
       \subsection{\code{Job$run()}}{
-      Run.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{Job$run()}
-      \if{html}{\out{</div>}}
+        Run.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{Job$run()}
+          \if{html}{\out{</div>}}
+        }
       }
       
-      }
 

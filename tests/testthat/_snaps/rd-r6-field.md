@@ -47,13 +47,13 @@
       cat(format(fields), sep = "\n")
     Output
       \section{Public fields}{
-      \if{html}{\out{<div class="r6-fields">}}
-      \describe{
-      \item{\code{x}}{A number.}
+        \if{html}{\out{<div class="r6-fields">}}
+        \describe{
+          \item{\code{x}}{A number.}
       
-      \item{\code{y}}{A string.}
-      }
-      \if{html}{\out{</div>}}
+          \item{\code{y}}{A string.}
+        }
+        \if{html}{\out{</div>}}
       }
 
 # format.rd_r6_bindings produces Active bindings section
@@ -62,10 +62,10 @@
       cat(format(bindings), sep = "\n")
     Output
       \section{Active bindings}{
-      \if{html}{\out{<div class="r6-active-bindings">}}
-      \describe{
-      \item{\code{val}}{A value.}
-      }
-      \if{html}{\out{</div>}}
+        \if{html}{\out{<div class="r6-active-bindings">}}
+        \describe{
+          \item{\code{val}}{A value.}
+        }
+        \if{html}{\out{</div>}}
       }
 

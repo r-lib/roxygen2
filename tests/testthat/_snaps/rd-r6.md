@@ -28,141 +28,137 @@
       ## ------------------------------------------------
       
       ## Example for meth2
+      ## Second line
+      ## Third line
       }
       \section{Public fields}{
-      \if{html}{\out{<div class="r6-fields">}}
-      \describe{
-      \item{\code{field1}}{A field 1.}
+        \if{html}{\out{<div class="r6-fields">}}
+        \describe{
+          \item{\code{field1}}{A field 1.}
       
-      \item{\code{field2}}{A field 2.}
+          \item{\code{field2}}{A field 2.}
       
-      \item{\code{field3}}{A field 3.}
-      }
-      \if{html}{\out{</div>}}
+          \item{\code{field3}}{A field 3.}
+        }
+        \if{html}{\out{</div>}}
       }
       \section{Active bindings}{
-      \if{html}{\out{<div class="r6-active-bindings">}}
-      \describe{
-      \item{\code{active1}}{A binding 1.}
+        \if{html}{\out{<div class="r6-active-bindings">}}
+        \describe{
+          \item{\code{active1}}{A binding 1.}
       
-      \item{\code{active2}}{A binding 2.}
+          \item{\code{active2}}{A binding 2.}
       
-      \item{\code{active3}}{A binding 3.}
-      }
-      \if{html}{\out{</div>}}
+          \item{\code{active3}}{A binding 3.}
+        }
+        \if{html}{\out{</div>}}
       }
       \section{Methods}{
       \subsection{Public methods}{
-      \itemize{
-      \item \href{#method-A-meth1}{\code{A$meth1()}}
-      \item \href{#method-A-meth2}{\code{A$meth2()}}
-      \item \href{#method-A-meth3}{\code{A$meth3()}}
-      \item \href{#method-A-clone}{\code{A$clone()}}
-      }
+        \itemize{
+          \item \href{#method-A-meth1}{\code{A$meth1()}}
+          \item \href{#method-A-meth2}{\code{A$meth2()}}
+          \item \href{#method-A-meth3}{\code{A$meth3()}}
+          \item \href{#method-A-clone}{\code{A$clone()}}
+        }
       }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth1}{}}}
       \subsection{\code{A$meth1()}}{
-      A method 1.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{A$meth1(Z)}
-      \if{html}{\out{</div>}}
+        A method 1.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{A$meth1(Z)}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{Z}}{zzzzzzz}
+          }
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Examples}{
+          \if{html}{\out{<div class="r example copy">}}
+          \preformatted{## Example for meth1
+      }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{Z}}{zzzzzzz}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Examples}{
-      \if{html}{\out{<div class="r example copy">}}
-      \preformatted{## Example for meth1
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth2"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth2}{}}}
       \subsection{\code{A$meth2()}}{
-      Method 2 description.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{A$meth2(Z = 10, ...)}
-      \if{html}{\out{</div>}}
+        Method 2 description.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{A$meth2(Z = 10, ...)}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{Z}}{Overriding Z argument for meth2.}
+            \item{\code{...}}{Rest.}
+          }
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Details}{
+          Method 2 details.
+        }
+        \subsection{Returns}{
+          A value.
+        }
+        \subsection{Examples}{
+          \if{html}{\out{<div class="r example copy">}}
+          \preformatted{## Example for meth2
+      ## Second line
+      ## Third line
+      }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{Z}}{Overriding Z argument for meth2.}
-      \item{\code{...}}{Rest.}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      \subsection{Details}{
-      Method 2 details.
-      }
-      
-      \subsection{Returns}{
-      A value.
-      }
-      
-      \subsection{Examples}{
-      \if{html}{\out{<div class="r example copy">}}
-      \preformatted{## Example for meth2
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-meth3"></a>}}
       \if{latex}{\out{\hypertarget{method-A-meth3}{}}}
       \subsection{\code{A$meth3()}}{
-      Method 3.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{A$meth3(x)}
-      \if{html}{\out{</div>}}
+        Method 3.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{A$meth3(x)}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{x}}{An argument.}
+          }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{x}}{An argument.}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-A-clone"></a>}}
       \if{latex}{\out{\hypertarget{method-A-clone}{}}}
       \subsection{\code{A$clone()}}{
-      The objects of this class are cloneable with this method.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{A$clone(deep = FALSE)}
-      \if{html}{\out{</div>}}
+        The objects of this class are cloneable with this method.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{A$clone(deep = FALSE)}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{deep}}{Whether to make a deep clone.}
+          }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{deep}}{Whether to make a deep clone.}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
       }
 
 ---
@@ -185,91 +181,89 @@
       \code{A} -> \code{B}
       }
       \section{Public fields}{
-      \if{html}{\out{<div class="r6-fields">}}
-      \describe{
-      \item{\code{field1}}{B field 1.}
+        \if{html}{\out{<div class="r6-fields">}}
+        \describe{
+          \item{\code{field1}}{B field 1.}
       
-      \item{\code{field4}}{B field 4.}
-      }
-      \if{html}{\out{</div>}}
+          \item{\code{field4}}{B field 4.}
+        }
+        \if{html}{\out{</div>}}
       }
       \section{Active bindings}{
-      \if{html}{\out{<div class="r6-active-bindings">}}
-      \describe{
-      \item{\code{active1}}{B binding 1.}
+        \if{html}{\out{<div class="r6-active-bindings">}}
+        \describe{
+          \item{\code{active1}}{B binding 1.}
       
-      \item{\code{active4}}{B binding 4.}
+          \item{\code{active4}}{B binding 4.}
       
-      \item{\code{active5}}{B binding 5.}
-      }
-      \if{html}{\out{</div>}}
+          \item{\code{active5}}{B binding 5.}
+        }
+        \if{html}{\out{</div>}}
       }
       \section{Methods}{
       \subsection{Public methods}{
-      \itemize{
-      \item \href{#method-B-meth1}{\code{B$meth1()}}
-      \item \href{#method-B-meth4}{\code{B$meth4()}}
-      \item \href{#method-B-clone}{\code{B$clone()}}
-      }
+        \itemize{
+          \item \href{#method-B-meth1}{\code{B$meth1()}}
+          \item \href{#method-B-meth4}{\code{B$meth4()}}
+          \item \href{#method-B-clone}{\code{B$clone()}}
+        }
       }
       \if{html}{\out{<details open><summary>Inherited methods</summary>
       <ul>
-      <li><code>A$meth2()</code></li>
-      <li><code>A$meth3()</code></li>
+        <li><code>A$meth2()</code></li>
+        <li><code>A$meth3()</code></li>
       </ul>
       </details>}}
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-meth1"></a>}}
       \if{latex}{\out{\hypertarget{method-B-meth1}{}}}
       \subsection{\code{B$meth1()}}{
-      B method 1.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{B$meth1(Z)}
-      \if{html}{\out{</div>}}
+        B method 1.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{B$meth1(Z)}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{Z}}{Still zzzzzzzz.}
+          }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{Z}}{Still zzzzzzzz.}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-meth4"></a>}}
       \if{latex}{\out{\hypertarget{method-B-meth4}{}}}
       \subsection{\code{B$meth4()}}{
-      B method 4.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{B$meth4()}
-      \if{html}{\out{</div>}}
+        B method 4.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{B$meth4()}
+          \if{html}{\out{</div>}}
+        }
       }
       
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-B-clone"></a>}}
       \if{latex}{\out{\hypertarget{method-B-clone}{}}}
       \subsection{\code{B$clone()}}{
-      The objects of this class are cloneable with this method.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{B$clone(deep = FALSE)}
-      \if{html}{\out{</div>}}
+        The objects of this class are cloneable with this method.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{B$clone(deep = FALSE)}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{deep}}{Whether to make a deep clone.}
+          }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{deep}}{Whether to make a deep clone.}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
       }
 
 ---
@@ -292,71 +286,70 @@
       \code{A} -> \code{B} -> \code{C}
       }
       \section{Public fields}{
-      \if{html}{\out{<div class="r6-fields">}}
-      \describe{
-      \item{\code{field2}}{C field 2.}
+        \if{html}{\out{<div class="r6-fields">}}
+        \describe{
+          \item{\code{field2}}{C field 2.}
       
-      \item{\code{field5}}{C field 5.}
-      }
-      \if{html}{\out{</div>}}
+          \item{\code{field5}}{C field 5.}
+        }
+        \if{html}{\out{</div>}}
       }
       \section{Active bindings}{
-      \if{html}{\out{<div class="r6-active-bindings">}}
-      \describe{
-      \item{\code{active2}}{C binding 2.}
+        \if{html}{\out{<div class="r6-active-bindings">}}
+        \describe{
+          \item{\code{active2}}{C binding 2.}
       
-      \item{\code{active4}}{C binding 4.}
+          \item{\code{active4}}{C binding 4.}
       
-      \item{\code{active6}}{C binding 6.}
-      }
-      \if{html}{\out{</div>}}
+          \item{\code{active6}}{C binding 6.}
+        }
+        \if{html}{\out{</div>}}
       }
       \section{Methods}{
       \subsection{Public methods}{
-      \itemize{
-      \item \href{#method-C-meth2}{\code{C$meth2()}}
-      \item \href{#method-C-meth5}{\code{C$meth5()}}
-      }
+        \itemize{
+          \item \href{#method-C-meth2}{\code{C$meth2()}}
+          \item \href{#method-C-meth5}{\code{C$meth5()}}
+        }
       }
       \if{html}{\out{<details open><summary>Inherited methods</summary>
       <ul>
-      <li><code>A$meth3()</code></li>
-      <li><code>B$meth1()</code></li>
-      <li><code>B$meth4()</code></li>
+        <li><code>A$meth3()</code></li>
+        <li><code>B$meth1()</code></li>
+        <li><code>B$meth4()</code></li>
       </ul>
       </details>}}
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth2"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth2}{}}}
       \subsection{\code{C$meth2()}}{
-      C method 2.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{C$meth2(Z = 10, ...)}
-      \if{html}{\out{</div>}}
+        C method 2.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{C$meth2(Z = 10, ...)}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Arguments}{
+          \if{html}{\out{<div class="arguments">}}
+          \describe{
+            \item{\code{Z}}{zzzzz}
+            \item{\code{...}}{etc}
+          }
+          \if{html}{\out{</div>}}
+        }
       }
       
-      \subsection{Arguments}{
-      \if{html}{\out{<div class="arguments">}}
-      \describe{
-      \item{\code{Z}}{zzzzz}
-      \item{\code{...}}{etc}
-      }
-      \if{html}{\out{</div>}}
-      }
-      
-      }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-C-meth5"></a>}}
       \if{latex}{\out{\hypertarget{method-C-meth5}{}}}
       \subsection{\code{C$meth5()}}{
-      C method 5.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{C$meth5()}
-      \if{html}{\out{</div>}}
+        C method 5.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{C$meth5()}
+          \if{html}{\out{</div>}}
+        }
       }
       
-      }
       }
 

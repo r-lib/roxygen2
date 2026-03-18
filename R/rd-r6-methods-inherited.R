@@ -21,24 +21,41 @@ format.rd_r6_inherited <- function(x, ...) {
     "><summary>Inherited methods</summary>"
   )
 
-  anchor <- sprintf("method-%s-%s", x$classname, x$name)
-  href <- sprintf("../../%s/html/%s.html#%s", x$package, x$classname, anchor)
-  label <- sprintf("%s::%s$%s()", x$package, x$classname, x$name)
+  # Which parent classes are documented?
+  cls <- unique(x$classname)
+  pkgs <- x$package[match(cls, x$classname)]
+  ht <- map2_lgl(cls, pkgs, has_topic)
+  topic_ok <- ht[match(x$classname, cls)]
 
-  items <- paste0(
-    "<li>",
-    sprintf(
-      '<span class="pkg-link" data-pkg="%s" data-topic="%s" data-id="%s">',
-      x$package,
-      x$classname,
-      x$name
-    ),
-    sprintf("<a href='%s'><code>%s</code></a>", href, label),
-    "</span>",
-    "</li>"
+  # Build display components for each inherited method
+  anchor <- sprintf("method-%s-%s", x$classname, x$name)
+  self_pkg <- roxy_meta_get("current_package") %||% ""
+  same_pkg <- x$package == self_pkg
+  prefix <- ifelse(same_pkg, "", paste0(x$package, "::"))
+  label <- sprintf("%s%s$%s()", prefix, x$classname, x$name)
+
+  # Linked version: clickable reference to parent class docs
+  href <- sprintf("../../%s/html/%s.html#%s", x$package, x$classname, anchor)
+  data_attrs <- paste(
+    sprintf('data-pkg="%s"', x$package),
+    sprintf('data-topic="%s"', x$classname),
+    sprintf('data-id="%s"', x$name)
+  )
+  linked <- sprintf(
+    '<span class="pkg-link" %s><a href=\'%s\'><code>%s</code></a></span>',
+    data_attrs,
+    href,
+    label
   )
 
-  rd_if_html(paste(c(details, "<ul>", items, "</ul>", "</details>"), collapse = "\n"))
+  # Plain version: just the method name, no link
+  plain <- sprintf("<code>%s</code>", label)
+  items <- paste0("<li>", ifelse(topic_ok, linked, plain), "</li>")
+
+  rd_if_html(paste(
+    c(details, "<ul>", items, "</ul>", "</details>"),
+    collapse = "\n"
+  ))
 }
 
 r6_extract_inherited_methods <- function(r6data) {

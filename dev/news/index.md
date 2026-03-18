@@ -28,6 +28,9 @@
   - R6 classes with only active bindings and `cloneable = FALSE` no
     longer error during documentation
     ([\#1610](https://github.com/r-lib/roxygen2/issues/1610)).
+  - `@example` (singular, with a file path) now works correctly in R6
+    class documentation
+    ([\#1158](https://github.com/r-lib/roxygen2/issues/1158)).
   - Inherited method links now only link to parent classes that have
     documentation, avoiding broken links when parent classes are
     undocumented ([\#963](https://github.com/r-lib/roxygen2/issues/963),

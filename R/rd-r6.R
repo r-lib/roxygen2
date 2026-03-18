@@ -1,9 +1,9 @@
 topic_add_r6_methods <- function(rd, block, env, base_path) {
   docs <- r6_class_from_block(block, env)
 
-  # Add class-level tags
+  # Add class-level tags (skip tags stamped for a specific method)
   for (tag in block$tags) {
-    if (r6_tag_type(tag, block) == "class") {
+    if (is.null(tag$r6method) && r6_tag_type(tag, block) == "class") {
       rd$add(roxy_tag_rd(tag, env = env, base_path = base_path))
     }
   }

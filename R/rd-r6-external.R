@@ -21,15 +21,6 @@ roxy_tag_parse.roxy_tag_R6method <- function(x) {
 
 # Merge external @R6method blocks into their target R6 class blocks -----------
 
-r6_method_tags <- c(
-  "description",
-  "details",
-  "param",
-  "return",
-  "returns",
-  "examples"
-)
-
 merge_external_r6methods <- function(blocks) {
   is_external <- map_lgl(blocks, function(b) {
     block_has_tags(b, "R6method") && !inherits(b, "roxy_block_r6class")
@@ -65,10 +56,10 @@ merge_external_r6methods <- function(blocks) {
     }
 
     target <- blocks[[idx]]
-    # Transplant R6 doc tags from external block into target block,
-    # stamping each with the method name so r6_extract_methods()
-    # can assign them without positional scoping
-    ext_tags <- keep(ext_block$tags, \(t) t$tag %in% r6_method_tags)
+    # Stamp all tags with the method name so r6_extract_methods()
+    # can assign them by name; non-method tags will be filtered out
+    # by the existing r6_tag_type() logic
+    ext_tags <- discard(ext_block$tags, \(t) t$tag == "R6method")
     for (j in seq_along(ext_tags)) {
       ext_tags[[j]]$r6method <- methodname
     }

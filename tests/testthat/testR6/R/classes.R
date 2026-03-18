@@ -7,6 +7,7 @@
 #' Class A details
 #'
 #' @param Z zzzzzzz
+#' @example example.R
 
 A <- R6::R6Class(
   "A",

@@ -1,4 +1,4 @@
-topic_add_r6_methods <- function(rd, block, env) {
+topic_add_r6_methods <- function(rd, block, env, base_path) {
   docs <- r6_class_from_block(block, env)
 
   # Add class-level tags

@@ -42,7 +42,7 @@ Format the \code{.Rd} file. It considers the sections in
 particular order, even though Rd tools will reorder them again.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$format(...)}
+\preformatted{obj$format(...)}
 \if{html}{\out{</div>}}
 }
 
@@ -67,7 +67,7 @@ Character string.
 Check if an \code{.Rd} file is valid
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$is_valid()}
+\preformatted{obj$is_valid()}
 \if{html}{\out{</div>}}
 }
 
@@ -83,7 +83,7 @@ Logical flag, \code{TRUE} for valid \code{.Rd} files
 Check if an \code{.Rd} file has a certain section.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$has_section(type)}
+\preformatted{obj$has_section(type)}
 \if{html}{\out{</div>}}
 }
 
@@ -107,7 +107,7 @@ Logical flag.
 Query a section.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_section(type)}
+\preformatted{obj$get_section(type)}
 \if{html}{\out{</div>}}
 }
 
@@ -133,7 +133,7 @@ Query the value of a section. This is the value of
 the \link{rd_section} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_value(type)}
+\preformatted{obj$get_value(type)}
 \if{html}{\out{</div>}}
 }
 
@@ -157,7 +157,7 @@ Value.
 Get the Rd code of a section.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_rd(type)}
+\preformatted{obj$get_rd(type)}
 \if{html}{\out{</div>}}
 }
 
@@ -182,7 +182,7 @@ Get the value of the \code{name} section. This is the name
 of the Rd topic.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_name()}
+\preformatted{obj$get_name()}
 \if{html}{\out{</div>}}
 }
 
@@ -198,7 +198,7 @@ Character scalar.
 Query the topics this topic inherits \code{type} from.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$inherits_from(type)}
+\preformatted{obj$inherits_from(type)}
 \if{html}{\out{</div>}}
 }
 
@@ -222,7 +222,7 @@ A character vector of topic names.
 Query the topics this topic inherits sections from.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$inherits_section_from()}
+\preformatted{obj$inherits_section_from()}
 \if{html}{\out{</div>}}
 }
 
@@ -238,7 +238,7 @@ A character vector of topic names.
 Add one or more sections to the topic.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$add(x, block = "???", overwrite = FALSE)}
+\preformatted{obj$add(x, block = "???", overwrite = FALSE)}
 \if{html}{\out{</div>}}
 }
 
@@ -264,7 +264,7 @@ then the two sections will be merged.}
 Add a section.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$add_section(section, block = "???", overwrite = FALSE)}
+\preformatted{obj$add_section(section, block = "???", overwrite = FALSE)}
 \if{html}{\out{</div>}}
 }
 
@@ -292,7 +292,7 @@ once in \code{self$sections}. This method if for internal use only.
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$clone(deep = FALSE)}
+\preformatted{obj$clone(deep = FALSE)}
 \if{html}{\out{</div>}}
 }
 

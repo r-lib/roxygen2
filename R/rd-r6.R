@@ -27,7 +27,12 @@ topic_add_r6_methods <- function(rd, block, env, base_path) {
 r6_tag_type <- function(tag, block) {
   inline <- !is.na(tag$line) && tag$line >= block$line
   method_tags <- c(
-    "description", "details", "param", "return", "returns", "examples"
+    "description",
+    "details",
+    "param",
+    "return",
+    "returns",
+    "examples"
   )
 
   if (tag$tag == "field") {

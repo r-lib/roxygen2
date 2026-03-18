@@ -45,15 +45,27 @@ r6_extract_methods <- function(r6data, alias, block) {
   # Associate inline tags with methods
   for (i in seq_along(block$tags)) {
     tag <- block$tags[[i]]
-    if (r6_tag_type(tag, block) != "method") {
-      next
+
+    # Tags from external @R6method blocks are stamped with the method name;
+    # inline tags use positional matching
+    if (!is.null(tag$r6method)) {
+      meth <- tag$r6method
+    } else {
+      if (r6_tag_type(tag, block) != "method") {
+        next
+      }
+      meth <- find_method_for_tag(methods_df, tag)
     }
-    meth <- find_method_for_tag(methods_df, tag)
+
     if (is.na(meth)) {
       warn_roxy_tag(tag, "Cannot find matching R6 method")
       next
     }
     midx <- which(meth == methods_df$name)
+    if (length(midx) == 0) {
+      warn_roxy_tag(tag, "Cannot find matching R6 method")
+      next
+    }
     methods_df$tags[[midx]] <- c(methods_df$tags[[midx]], list(tag))
   }
 

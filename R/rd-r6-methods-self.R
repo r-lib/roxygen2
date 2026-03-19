@@ -115,10 +115,22 @@ r6_method_from_row <- function(method, block) {
   tags <- method$tags[[1]]
 
   desc_tags <- keep(tags, \(t) t$tag == "description")
-  description <- map_chr(desc_tags, \(x) x[["val"]])
+  description <- vapply(
+    desc_tags,
+    `[[`,
+    "val",
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 
   det_tags <- keep(tags, \(t) t$tag == "details")
-  details <- map_chr(det_tags, \(x) x[["val"]])
+  details <- vapply(
+    det_tags,
+    `[[`,
+    "val",
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 
   params <- r6_resolve_params(method, block)
 
@@ -129,7 +141,13 @@ r6_method_from_row <- function(method, block) {
   ret <- if (length(ret_tags) > 0) ret_tags[[1]]$val else NULL
 
   exa_tags <- keep(tags, \(t) t$tag == "examples")
-  examples <- map_chr(exa_tags, \(x) x[["val"]])
+  examples <- vapply(
+    exa_tags,
+    `[[`,
+    "val",
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 
   rd_r6_method(
     name = method$name,
@@ -212,7 +230,13 @@ r6_resolve_params <- function(method, block) {
 
   # Order them according to formals
   firstnames <- trimws(
-    map_chr(strsplit(map_chr(par, \(x) x[["val"]][["name"]]), ","), \(x) x[[1]])
+    vapply(
+      strsplit(map_chr(par, \(x) x[["val"]][["name"]]), ","),
+      `[[`,
+      1L,
+      FUN.VALUE = character(1),
+      USE.NAMES = FALSE
+    )
   )
   par <- par[order(match(firstnames, fnames))]
 

@@ -14,7 +14,13 @@ process_templates <- function(block, base_path) {
     return(block)
   }
 
-  templates <- map_chr(tags, \(x) x[["val"]])
+  templates <- vapply(
+    tags,
+    `[[`,
+    "val",
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
   paths <- map_chr(templates, template_find, base_path = base_path)
 
   var_tags <- block_get_tags(block, "templateVar")

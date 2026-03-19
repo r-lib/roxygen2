@@ -235,7 +235,15 @@ markdown_pass2 <- function(text, tag = NULL, sections = FALSE) {
   state$has_sections <- sections
   rd <- mdxml_children_to_rd_top(mdxml, state)
 
-  map_chr(rd, unescape_rd_for_md, text)
+  out <- vapply(
+    rd,
+    unescape_rd_for_md,
+    character(1),
+    esc_text = text,
+    USE.NAMES = FALSE
+  )
+  names(out) <- names(rd)
+  out
 }
 
 md_to_mdxml <- function(x, ...) {
@@ -250,7 +258,14 @@ md_to_mdxml <- function(x, ...) {
 
 mdxml_children_to_rd_top <- function(xml, state) {
   state$section_tag <- uuid()
-  out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
+  children <- xml_children(xml)
+  out <- vapply(
+    children,
+    mdxml_node_to_rd,
+    character(1),
+    state = state,
+    USE.NAMES = FALSE
+  )
   out <- c(out, mdxml_close_sections(state))
   rd <- trimws(paste0(out, collapse = ""))
   if (state$has_sections) {
@@ -264,7 +279,14 @@ mdxml_children_to_rd_top <- function(xml, state) {
 }
 
 mdxml_children_to_rd <- function(xml, state) {
-  out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
+  children <- xml_children(xml)
+  out <- vapply(
+    children,
+    mdxml_node_to_rd,
+    character(1),
+    state = state,
+    USE.NAMES = FALSE
+  )
   paste0(out, collapse = "")
 }
 
@@ -483,7 +505,16 @@ mdxml_item <- function(xml, state) {
   } else if (xml_name(children[[1]]) == "paragraph") {
     cnts <- paste0(
       mdxml_children_to_rd(children[[1]], state),
-      paste0(map_chr(children[-1], mdxml_node_to_rd, state), collapse = "")
+      paste0(
+        vapply(
+          children[-1],
+          mdxml_node_to_rd,
+          character(1),
+          state = state,
+          USE.NAMES = FALSE
+        ),
+        collapse = ""
+      )
     )
   } else {
     cnts <- mdxml_children_to_rd(xml, state)
@@ -518,7 +549,13 @@ mdxml_link_text <- function(xml_contents, state) {
   on.exit(state$inlink <- inlink, add = TRUE)
   state$inlink <- TRUE
 
-  text <- map_chr(xml_contents, mdxml_node_to_rd, state)
+  text <- vapply(
+    xml_contents,
+    mdxml_node_to_rd,
+    character(1),
+    state = state,
+    USE.NAMES = FALSE
+  )
   paste0(text, collapse = "")
 }
 
@@ -583,7 +620,13 @@ mdxml_heading <- function(xml, state) {
     return(escape_comment(xml_text(xml)))
   }
 
-  txt <- map_chr(xml_contents(xml), mdxml_node_to_rd, state)
+  txt <- vapply(
+    xml_contents(xml),
+    mdxml_node_to_rd,
+    character(1),
+    state = state,
+    USE.NAMES = FALSE
+  )
   if (level == 1) {
     state$titles <- c(state$titles, paste(txt, collapse = ""))
   }

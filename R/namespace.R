@@ -104,7 +104,7 @@ namespace_imports_blocks <- function(srcref) {
 
   import_tags <- c(import_directives, "rawNamespace")
   tokens_filtered <- lapply(tokens, function(tokens) {
-    tokens[map_lgl(tokens, \(x) x$tag %in% import_tags)]
+    tokens[vapply(tokens, \(x) x$tag %in% import_tags, logical(1))]
   })
 
   compact(lapply(tokens_filtered, function(tokens) {

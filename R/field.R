@@ -55,7 +55,7 @@ format_rd <- function(x, ..., sort = TRUE) {
     x$value <- sort_c(x$value)
   }
 
-  map_chr(x$value, rd_macro, field = x$type)
+  vapply(x$value, rd_macro, character(1), field = x$type, USE.NAMES = FALSE)
 }
 
 format_first <- function(x, ...) {

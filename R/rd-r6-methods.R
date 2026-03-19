@@ -14,8 +14,20 @@ format.rd_r6_methods <- function(x, ...) {
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
 
-  nms <- map_chr(x$self, \(m) m$name)
-  classes <- map_chr(x$self, \(m) m$class)
+  nms <- vapply(
+    x$self,
+    `[[`,
+    "name",
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
+  classes <- vapply(
+    x$self,
+    `[[`,
+    "class",
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
   dest <- sprintf("method-%s-%s", classes, nms)
   code <- sprintf("\\code{%s()}", r6_method_name(classes, nms))
 

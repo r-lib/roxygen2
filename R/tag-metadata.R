@@ -24,8 +24,20 @@ tags_metadata <- function() {
 
   meta <- yaml::read_yaml(yaml_path())
   data.frame(
-    tag = map_chr(meta, \(x) x[["name"]]),
-    description = map_chr(meta, \(x) x[["description"]]),
+    tag = vapply(
+      meta,
+      `[[`,
+      "name",
+      FUN.VALUE = character(1),
+      USE.NAMES = FALSE
+    ),
+    description = vapply(
+      meta,
+      `[[`,
+      "description",
+      FUN.VALUE = character(1),
+      USE.NAMES = FALSE
+    ),
     # \n not useful outside of RStudio
     template = sub("\n", "", map_chr(meta, \(x) x[["template"]] %||% "")),
     vignette = map_chr(meta, \(x) x[["vignette"]] %||% NA_character_),

@@ -146,9 +146,7 @@ r6_method_from_row <- function(method, block) {
 r6_resolve_params <- function(method, block) {
   tags <- method$tags[[1]]
   par <- keep(tags, \(t) t$tag == "param")
-  nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
-
-  mnames <- str_trim(unlist(strsplit(nms, ",")))
+  mnames <- unlist(lapply(par, tag_names))
   dup <- unique(mnames[duplicated(mnames)])
   for (m in dup) {
     warn_roxy_block(
@@ -172,21 +170,20 @@ r6_resolve_params <- function(method, block) {
     function(t) {
       !is.na(t$line) &&
         t$line < block$line &&
-        t$tag == "param" &&
-        t$val$name %in% miss
+        tag_is(t, "param") &&
+        tag_has_name(t, miss)
     }
   )
   par <- c(par, block$tags[is_in_cls])
 
   # For initialize(), inherit from @field tags for any still-missing params
   if (method$name == "initialize") {
-    nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
-    mnames <- str_trim(unlist(strsplit(nms, ",")))
+    mnames <- unlist(lapply(par, tag_names))
     miss <- setdiff(fnames, mnames)
 
     if (length(miss) > 0) {
       field_tags <- keep(block$tags, function(t) {
-        t$tag == "field" && t$val$name %in% miss
+        tag_is(t, "field") && tag_has_name(t, miss)
       })
       field_as_param <- lapply(field_tags, function(t) {
         val <- list(name = t$val$name, description = t$val$description)
@@ -197,8 +194,7 @@ r6_resolve_params <- function(method, block) {
   }
 
   # Check if anything is still missing
-  nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
-  mnames <- str_trim(unlist(strsplit(nms, ",")))
+  mnames <- unlist(lapply(par, tag_names))
   miss <- setdiff(fnames, mnames)
   for (m in miss) {
     warn_roxy_block(
@@ -211,8 +207,7 @@ r6_resolve_params <- function(method, block) {
   }
 
   # Order them according to formals
-  firstnames <- str_trim(
-    map_chr(strsplit(map_chr(par, \(x) x[["val"]][["name"]]), ","), \(x) x[[1]])
+  firstnames <- map_chr(par, \(t) tag_names(t)[[1]]
   )
   par <- par[order(match(firstnames, fnames))]
 

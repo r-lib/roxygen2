@@ -3,13 +3,9 @@ r6_extract_fields <- function(block, r6data) {
   fields <- self$name[self$type == "field"]
   active <- self$name[self$type == "active"]
 
-  tags <- keep(
-    block$tags,
-    function(t) t$tag == "field" && !t$val$name %in% active
-  )
+  tags <- keep(block$tags, \(t) tag_is(t, "field") && !tag_has_name(t, active))
 
-  labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
-  docd <- str_trim(unlist(strsplit(labels, ",")))
+  docd <- unlist(lapply(tags, tag_names))
 
   miss <- setdiff(fields, docd)
   if (length(miss) > 0) {
@@ -39,13 +35,9 @@ r6_extract_active_bindings <- function(block, r6data) {
   fields <- self$name[self$type == "field"]
   active <- self$name[self$type == "active"]
 
-  tags <- keep(
-    block$tags,
-    function(t) t$tag == "field" && !t$val$name %in% fields
-  )
+  tags <- keep(block$tags, \(t) tag_is(t, "field") && !tag_has_name(t, fields))
 
-  labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
-  docd <- str_trim(unlist(strsplit(labels, ",")))
+  docd <- unlist(lapply(tags, tag_names))
 
   miss <- setdiff(active, docd)
   if (length(miss) > 0) {

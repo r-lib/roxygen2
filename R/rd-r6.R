@@ -27,7 +27,12 @@ topic_add_r6_methods <- function(rd, block, env, base_path) {
 r6_tag_type <- function(tag, block) {
   inline <- !is.na(tag$line) && tag$line >= block$line
   method_tags <- c(
-    "description", "details", "param", "return", "returns", "examples"
+    "description",
+    "details",
+    "param",
+    "return",
+    "returns",
+    "examples"
   )
 
   if (tag$tag == "field") {
@@ -39,4 +44,16 @@ r6_tag_type <- function(tag, block) {
   } else {
     "class"
   }
+}
+
+tag_is <- function(tag, name) {
+  tag$tag == name
+}
+
+tag_names <- function(tag) {
+  str_trim(strsplit(tag$val$name, ",")[[1]])
+}
+
+tag_has_name <- function(tag, names) {
+  any(tag_names(tag) %in% names)
 }

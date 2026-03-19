@@ -20,6 +20,23 @@ test_that("r6_extract_fields builds rd_r6_field objects", {
   )
 })
 
+test_that("comma-separated @field works (#1600)", {
+  text <- "
+    #' Class
+    C <- R6::R6Class(
+      public = list(
+        #' @field var_1,var_2 do something vars
+        var_1 = 1,
+        var_2 = 2
+      )
+    )"
+  expect_silent(docs <- r6_doc(text))
+  expect_equal(
+    docs$fields,
+    rd_r6_fields(list(rd_r6_field("var_1, var_2", "do something vars")))
+  )
+})
+
 test_that("r6_extract_active_bindings builds rd_r6_field objects", {
   text <- "
     #' @field bind1 Active binding.

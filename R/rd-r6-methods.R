@@ -22,9 +22,9 @@ format.rd_r6_methods <- function(x, ...) {
   push("\\section{Methods}{")
   push(
     "\\subsection{Public methods}{",
-    "\\itemize{",
-    sprintf("\\item \\href{#%s}{%s}", dest, code),
-    "}",
+    "  \\itemize{",
+    sprintf("    \\item \\href{#%s}{%s}", dest, code),
+    "  }",
     "}"
   )
   push(format(x$inherited))

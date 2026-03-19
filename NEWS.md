@@ -37,7 +37,7 @@
 * roxygen2 no longer depends on purrr.
 * roxygen2 now requires R 4.1 (#1632).
 * S3 method handling improvements:
-  * Method parsing now prefers the longest matching generic name, so e.g. `all.equal.numeric` is correctly identified as a method of `all.equal` rather than `all` (#1587).
+  * Methods of `all.equal()` (e.g. `all.equal.numeric`) are now correctly identified as methods of `all.equal()`, `all()` (#1587).
   * The warning about undocumented methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
   * The warning about undocumented methods no longer incorrectly flags S4 methods of S3 generics as unexported (#1715).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
@@ -48,6 +48,7 @@
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
 * `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
 * `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
+* `@inheritDotParams` now correctly matches parameters that are documented with a dot-prefixed alias (e.g., `.by, by`) but whose formal argument lacks the dot (e.g., `by`), as is common in the tidyverse (#1826).
 * `@inheritParams` now correctly inherits parameters that are documented together with `\dots` using comma-separated names, e.g. `@param b,\dots description` (#1718).
 * `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).
 * `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).

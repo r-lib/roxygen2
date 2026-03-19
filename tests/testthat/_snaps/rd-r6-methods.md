@@ -5,22 +5,22 @@
     Output
       \section{Methods}{
       \subsection{Public methods}{
-      \itemize{
-      \item \href{#method-Foo-run}{\code{Foo$run()}}
-      }
+        \itemize{
+          \item \href{#method-Foo-run}{\code{Foo$run()}}
+        }
       }
       \if{html}{\out{<hr>}}
       \if{html}{\out{<a id="method-Foo-run"></a>}}
       \if{latex}{\out{\hypertarget{method-Foo-run}{}}}
       \subsection{\code{Foo$run()}}{
-      Run it.
-      \subsection{Usage}{
-      \if{html}{\out{<div class="r">}}
-      \preformatted{Foo$run()}
-      \if{html}{\out{</div>}}
+        Run it.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{Foo$run()}
+          \if{html}{\out{</div>}}
+        }
       }
       
-      }
       }
 
 # r6_all_examples aggregates across methods

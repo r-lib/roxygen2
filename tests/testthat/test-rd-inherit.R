@@ -817,6 +817,27 @@ test_that("warns when no params to inherit (#1671)", {
   expect_false("..." %in% names(out[["bar.Rd"]]$get_value("param")))
 })
 
+test_that("inheritDotParams matches when doc uses dotted name but formal doesn't (#1826)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Foo
+    #'
+    #' @param x x
+    #' @param .y,y doc for y
+    foo <- function(x, y) {}
+
+    #' Bar
+    #'
+    #' @inheritDotParams foo
+    bar <- function(...) {}
+  "
+  )[[2]]
+
+  dot_param <- out$get_value("param")[["..."]]
+  expect_match(dot_param, "item{\\code{y}}", fixed = TRUE)
+})
+
 test_that("inheritDotParams warns when source not found (#1602)", {
   text <- "
     #' Test

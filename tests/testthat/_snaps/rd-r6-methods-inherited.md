@@ -5,8 +5,8 @@
     Output
       \if{html}{\out{<details open><summary>Inherited methods</summary>
       <ul>
-      <li><code>pkg::A$foo()</code></li>
-      <li><code>pkg::A$bar()</code></li>
+        <li><code>pkg::A$foo()</code></li>
+        <li><code>pkg::A$bar()</code></li>
       </ul>
       </details>}}
 

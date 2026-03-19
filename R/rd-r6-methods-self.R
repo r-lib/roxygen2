@@ -29,9 +29,9 @@ format.rd_r6_method <- function(x, ...) {
   push <- function(...) lines <<- c(lines, ...)
   push_subsection <- function(title, ...) {
     push(
-      paste0("\\subsection{", title, "}{"),
-      ...,
-      "}\n"
+      paste0("  \\subsection{", title, "}{"),
+      paste0("    ", c(...)),
+      "  }"
     )
   }
 
@@ -48,8 +48,12 @@ format.rd_r6_method <- function(x, ...) {
   # Description
   if (length(x$description) > 0) {
     push(
-      sub("\n?\n?$", "\n\n", head(x$description, -1)),
-      utils::tail(x$description, 1)
+      paste0(
+        "  ",
+        sub("\n?\n?$", "\n\n", head(x$description, -1)),
+        recycle0 = TRUE
+      ),
+      paste0("  ", utils::tail(x$description, 1), recycle0 = TRUE)
     )
   }
 
@@ -71,7 +75,7 @@ format.rd_r6_method <- function(x, ...) {
       "Arguments",
       rd_if_html('<div class="arguments">'),
       "\\describe{",
-      paste0("\\item{\\code{", nms, "}}{", vals, "}"),
+      paste0("  \\item{\\code{", nms, "}}{", vals, "}"),
       "}",
       rd_if_html("</div>")
     )
@@ -102,7 +106,7 @@ format.rd_r6_method <- function(x, ...) {
   }
 
   # End
-  push("}")
+  push("}\n")
 
   lines
 }

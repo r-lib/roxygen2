@@ -50,7 +50,7 @@ format.rd_r6_inherited <- function(x, ...) {
 
   # Plain version: just the method name, no link
   plain <- sprintf("<code>%s</code>", label)
-  items <- paste0("<li>", ifelse(topic_ok, linked, plain), "</li>")
+  items <- paste0("  <li>", ifelse(topic_ok, linked, plain), "</li>")
 
   rd_if_html(paste(
     c(details, "<ul>", items, "</ul>", "</details>"),

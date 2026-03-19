@@ -14,17 +14,17 @@ format.rd_r6_methods <- function(x, ...) {
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
 
-  nms <- r6_show_name(map_chr(x$self, \(m) m$name))
+  nms <- map_chr(x$self, \(m) m$name)
   classes <- map_chr(x$self, \(m) m$class)
   dest <- sprintf("method-%s-%s", classes, nms)
-  code <- sprintf("\\code{%s$%s()}", x$alias, nms)
+  code <- sprintf("\\code{%s()}", r6_method_name(classes, nms))
 
   push("\\section{Methods}{")
   push(
     "\\subsection{Public methods}{",
-    "\\itemize{",
-    sprintf("\\item \\href{#%s}{%s}", dest, code),
-    "}",
+    "  \\itemize{",
+    sprintf("    \\item \\href{#%s}{%s}", dest, code),
+    "  }",
     "}"
   )
   push(format(x$inherited))
@@ -74,7 +74,7 @@ r6_extract_methods <- function(r6data, alias, block) {
 
   self_methods <- lapply(
     seq_len(nrow(methods_df)),
-    function(i) r6_method_from_row(methods_df[i, ], alias, block)
+    function(i) r6_method_from_row(methods_df[i, ], block)
   )
   inherited <- r6_extract_inherited_methods(r6data)
   rd_r6_methods(alias, self = self_methods, inherited = inherited)
@@ -147,10 +147,9 @@ r6_all_examples <- function(methods) {
     if (length(method$examples) == 0) {
       return()
     }
-    name <- paste0(methods$alias, "$", r6_show_name(method$name))
     c(
       "\n## ------------------------------------------------",
-      paste0("## Method `", name, "`"),
+      paste0("## Method `", r6_method_name(method$class, method$name), "()`"),
       "## ------------------------------------------------\n",
       paste(method$examples, collapse = "\n")
     )

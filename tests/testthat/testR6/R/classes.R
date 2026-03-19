@@ -25,6 +25,8 @@ A <- R6::R6Class(
     #' @return A value.
     #' @examples
     #' ## Example for meth2
+    #' ## Second line
+    #' ## Third line
     meth2 = function(Z = 10, ...) {},
     #' @field field2 A field 2.
     field2 = "foobar",

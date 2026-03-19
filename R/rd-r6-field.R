@@ -107,11 +107,11 @@ format_r6_field_section <- function(fields, title, css_class) {
 
   c(
     paste0("\\section{", title, "}{"),
-    rd_if_html(paste0('<div class="', css_class, '">')),
-    "\\describe{",
-    paste0(map_chr(fields, format), collapse = "\n\n"),
-    "}",
-    rd_if_html("</div>"),
+    paste0("  ", rd_if_html(paste0('<div class="', css_class, '">'))),
+    "  \\describe{",
+    paste0("    ", map_chr(fields, format), collapse = "\n\n"),
+    "  }",
+    paste0("  ", rd_if_html("</div>")),
     "}"
   )
 }

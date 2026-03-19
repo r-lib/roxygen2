@@ -340,7 +340,7 @@ mdxml_code <- function(xml, tag) {
       substr(code, 4, nchar(code)),
       "}"
     )
-  } else if (can_parse(code) || code %in% special) {
+  } else if (can_parse(code) || !is.null(special[[code]])) {
     # See escaping details at
     # https://cran.rstudio.com/doc/manuals/r-devel/R-exts.html#Insertions
     paste0("\\code{", gsub("%", "\\\\%", code), "}")
@@ -349,45 +349,16 @@ mdxml_code <- function(xml, tag) {
   }
 }
 
-special <- c(
-  "-",
-  ":",
-  "::",
-  ":::",
-  "!",
-  "!=",
-  "(",
-  "[",
-  "[[",
-  "@",
-  "*",
-  "/",
-  "&",
-  "&&",
-  "%*%",
-  "%/%",
-  "%%",
-  "%in%",
-  "%o%",
-  "%x%",
-  "^",
-  "+",
-  "<",
-  "<=",
-  "=",
-  "==",
-  ">",
-  ">=",
-  "|",
-  "||",
-  "~",
-  "$",
-  "for",
-  "function",
-  "if",
-  "repeat",
-  "while"
-)
+special <- new.env(parent = emptyenv())
+for (.special_val in c(
+  "-", ":", "::", ":::", "!", "!=", "(", "[", "[[", "@", "*", "/",
+  "&", "&&", "%*%", "%/%", "%%", "%in%", "%o%", "%x%", "^", "+",
+  "<", "<=", "=", "==", ">", ">=", "|", "||", "~", "$",
+  "for", "function", "if", "repeat", "while"
+)) {
+  special[[.special_val]] <- TRUE
+}
+rm(.special_val)
 
 mdxml_code_block <- function(xml, state) {
   info <- xml_attr(xml, "info", default = "")[1]

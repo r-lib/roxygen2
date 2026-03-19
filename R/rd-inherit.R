@@ -229,11 +229,11 @@ inherit_dot_params <- function(topic, topics, env) {
     tag = "@inheritDotParams"
   )
   arg_matches <- function(args, docs) {
-    match <- map_lgl(docs, \(x) all(x$name %in% args))
-    matched <- docs[match]
+    matched_names <- lapply(docs, \(x) match_param(x$name, args))
+    match <- !map_lgl(matched_names, is.null)
     setNames(
-      lapply(matched, "[[", "value"),
-      map_chr(matched, \(x) paste(x$name, collapse = ","))
+      lapply(docs[match], "[[", "value"),
+      map_chr(matched_names[match], paste, collapse = ",")
     )
   }
   docs_selected <- unlist(map2(args, docs, arg_matches))

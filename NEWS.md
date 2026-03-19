@@ -46,6 +46,7 @@
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
 * `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
 * `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
+* `@inheritDotParams` now correctly matches parameters that are documented with a dot-prefixed alias (e.g., `.by, by`) but whose formal argument lacks the dot (e.g., `by`), as is common in the tidyverse (#1826).
 * `@inheritParams` now correctly inherits parameters that are documented together with `\dots` using comma-separated names, e.g. `@param b,\dots description` (#1718).
 * `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).
 * `@param` (and other two-part tags) now correctly handle backtick-quoted names that contain spaces, e.g. `` @param `arg 1` description `` (#1696).

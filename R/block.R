@@ -145,7 +145,7 @@ block_find_object <- function(block, env) {
     list(roxy_generated_tag(block, "backref", block$file))
   )
 
-  default_tags <- map_chr(defaults, \(x) x[["tag"]])
+  default_tags <- vapply(defaults, `[[`, "tag", FUN.VALUE = character(1), USE.NAMES = FALSE)
   defaults <- defaults[!default_tags %in% block_tags(block)]
 
   block$tags <- c(block$tags, defaults)
@@ -155,7 +155,7 @@ block_find_object <- function(block, env) {
 # block accessors ---------------------------------------------------------
 
 block_tags <- function(block) {
-  map_chr(block$tags, \(x) x[["tag"]])
+  vapply(block$tags, `[[`, "tag", FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 
 #' @export
@@ -291,7 +291,7 @@ parse_description <- function(tags) {
     # Find explicit @details tags
     didx <- which(tag_names == "details")
     if (length(didx) > 0) {
-      explicit_details <- map_chr(tags[didx], \(x) x[["raw"]])
+      explicit_details <- vapply(tags[didx], `[[`, "raw", FUN.VALUE = character(1), USE.NAMES = FALSE)
       tags <- tags[-didx]
       details_para <- paste(
         c(details_para, explicit_details),

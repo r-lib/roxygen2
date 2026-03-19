@@ -25,7 +25,7 @@ local_markdown <- function(env = parent.frame()) {
 markdown_activate <- function(tags) {
   ## markdown on/off based on global flag and presence of @md & @nomd
 
-  names <- map_chr(tags, \(x) x[["tag"]])
+  names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1), USE.NAMES = FALSE)
   has_md <- "md" %in% names
   has_nomd <- "noMd" %in% names
 

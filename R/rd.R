@@ -102,19 +102,22 @@ needs_doc <- function(block) {
     return(FALSE)
   }
 
-  any(tag_names %in% c(
-    "description",
-    "param",
-    "return",
-    "title",
-    "example",
-    "examples",
-    "name",
-    "rdname",
-    "details",
-    "inherit",
-    "describeIn"
-  ))
+  any(
+    tag_names %in%
+      c(
+        "description",
+        "param",
+        "return",
+        "title",
+        "example",
+        "examples",
+        "name",
+        "rdname",
+        "details",
+        "inherit",
+        "describeIn"
+      )
+  )
 }
 
 # Tag processing functions ------------------------------------------------

@@ -175,7 +175,10 @@ split_first_word <- function(x) {
   if (m == -1L) {
     matrix(c(x, ""), nrow = 1)
   } else {
-    matrix(c(substr(x, 1, m - 1L), substr(x, m + attr(m, "match.length"), nchar(x))), nrow = 1)
+    matrix(
+      c(substr(x, 1, m - 1L), substr(x, m + attr(m, "match.length"), nchar(x))),
+      nrow = 1
+    )
   }
 }
 

@@ -66,7 +66,7 @@ tag_inherit <- function(x) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    pieces <- str_split(trimws(x$raw), "\\s+")[[1]]
+    pieces <- strsplit(trimws(x$raw), "\\s+")[[1]]
     fields <- pieces[-1]
 
     all <- inherit_components
@@ -95,21 +95,20 @@ tag_inherit <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_name <- function(x) {
-  if (trimws(x$raw) == "") {
+  val <- trimws(x$raw)
+  if (val == "") {
     warn_roxy_tag(x, "requires a value")
     NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
+  } else if (grepl("\\s", val)) {
+    n <- length(strsplit(val, "\\s+")[[1]])
+    warn_roxy_tag(x, "must have only one argument, not {n}")
+    NULL
   } else {
-    n <- str_count(x$raw, "\\s+")
-    if (n > 1) {
-      warn_roxy_tag(x, "must have only one argument, not {n}")
-      NULL
-    } else {
-      x$val <- trimws(x$raw)
-      x
-    }
+    x$val <- val
+    x
   }
 }
 
@@ -158,7 +157,7 @@ split_two_part <- function(x) {
     match <- regexpr("^`[^`]*`", x)
     if (match == -1L || attr(match, "match.length") == -1L) {
       # No closing backtick; fall back to space splitting
-      str_split_fixed(x, "[[:space:]]+", 2)
+      split_first_word(x)
     } else {
       end <- attr(match, "match.length")
       # Strip backticks so name matches names(formals(fn))
@@ -167,7 +166,16 @@ split_two_part <- function(x) {
       matrix(c(name, rest), nrow = 1)
     }
   } else {
-    str_split_fixed(x, "[[:space:]]+", 2)
+    split_first_word(x)
+  }
+}
+
+split_first_word <- function(x) {
+  m <- regexpr("[[:space:]]+", x)
+  if (m == -1L) {
+    matrix(c(x, ""), nrow = 1)
+  } else {
+    matrix(c(substr(x, 1, m - 1L), substr(x, m + attr(m, "match.length"), nchar(x))), nrow = 1)
   }
 }
 
@@ -192,7 +200,7 @@ tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
     return(NULL)
   }
 
-  words <- str_split(val, "\\s+")[[1]]
+  words <- if (nzchar(val)) strsplit(val, "\\s+")[[1]] else ""
   if (length(words) < min) {
     warn_roxy_tag(x, "must have at least {min} word{?s}, not {length(words)}")
     NULL
@@ -214,9 +222,10 @@ tag_words_line <- function(x) {
 
 # Returns TRUE (and warns) if val contains multiple lines, FALSE otherwise.
 warn_if_multiline <- function(x, val) {
-  n_lines <- str_count(val, "\n")
+  lines <- strsplit(val, "\n", fixed = TRUE)[[1]]
+  n_lines <- length(lines) - 1L
   if (n_lines >= 1) {
-    first_line <- str_split(val, "\n")[[1]][[1]]
+    first_line <- lines[[1]]
     warn_roxy_tag(
       x,
       c(

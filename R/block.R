@@ -248,8 +248,8 @@ parse_description <- function(tags) {
   tags <- tags[-1]
   tag_names <- tag_names[-1]
 
-  paragraphs <- str_split(intro$val, fixed('\n\n'))[[1]]
-  lines <- str_count(paragraphs, "\n") + rep(2, length(paragraphs))
+  paragraphs <- strsplit(intro$val, "\n\n", fixed = TRUE)[[1]]
+  lines <- lengths(strsplit(paragraphs, "\n", fixed = TRUE)) + 1L
   offsets <- c(0, cumsum(lines))
 
   # 1st paragraph = title (unless has @title)

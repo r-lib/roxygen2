@@ -44,7 +44,7 @@
       \section{Methods}{
       \subsection{Public methods}{
         \itemize{
-          \item \href{#method-C2-meth1}{\code{C2$meth1()}}
+          \item \href{#method-C2-meth1}{\code{C2$meth1()}}: method1
         }
       }
       \if{html}{\out{<hr>}}
@@ -72,8 +72,8 @@
       \section{Methods}{
       \subsection{Public methods}{
         \itemize{
-          \item \href{#method-B-shared}{\code{B$shared()}}
-          \item \href{#method-B-clone}{\code{B$clone()}}
+          \item \href{#method-B-shared}{\code{B$shared()}}: Method from B.
+          \item \href{#method-B-clone}{\code{B$clone()}}: The objects of this class are cloneable with this method.
         }
       }
       \if{html}{\out{<details open><summary>Inherited methods</summary>
@@ -122,7 +122,7 @@
       \section{Methods}{
       \subsection{Public methods}{
         \itemize{
-          \item \href{#method-C-meth}{\code{C$meth()}}
+          \item \href{#method-C-meth}{\code{C$meth()}}: Method description.
         }
       }
       \if{html}{\out{<hr>}}

@@ -56,10 +56,10 @@
       \section{Methods}{
       \subsection{Public methods}{
         \itemize{
-          \item \href{#method-A-meth1}{\code{A$meth1()}}
-          \item \href{#method-A-meth2}{\code{A$meth2()}}
-          \item \href{#method-A-meth3}{\code{A$meth3()}}
-          \item \href{#method-A-clone}{\code{A$clone()}}
+          \item \href{#method-A-meth1}{\code{A$meth1()}}: A method 1.
+          \item \href{#method-A-meth2}{\code{A$meth2()}}: Method 2 description.
+          \item \href{#method-A-meth3}{\code{A$meth3()}}: Method 3.
+          \item \href{#method-A-clone}{\code{A$clone()}}: The objects of this class are cloneable with this method.
         }
       }
       \if{html}{\out{<hr>}}
@@ -203,9 +203,9 @@
       \section{Methods}{
       \subsection{Public methods}{
         \itemize{
-          \item \href{#method-B-meth1}{\code{B$meth1()}}
-          \item \href{#method-B-meth4}{\code{B$meth4()}}
-          \item \href{#method-B-clone}{\code{B$clone()}}
+          \item \href{#method-B-meth1}{\code{B$meth1()}}: B method 1.
+          \item \href{#method-B-meth4}{\code{B$meth4()}}: B method 4.
+          \item \href{#method-B-clone}{\code{B$clone()}}: The objects of this class are cloneable with this method.
         }
       }
       \if{html}{\out{<details open><summary>Inherited methods</summary>
@@ -308,8 +308,8 @@
       \section{Methods}{
       \subsection{Public methods}{
         \itemize{
-          \item \href{#method-C-meth2}{\code{C$meth2()}}
-          \item \href{#method-C-meth5}{\code{C$meth5()}}
+          \item \href{#method-C-meth2}{\code{C$meth2()}}: C method 2.
+          \item \href{#method-C-meth5}{\code{C$meth5()}}: C method 5.
         }
       }
       \if{html}{\out{<details open><summary>Inherited methods</summary>

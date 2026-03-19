@@ -20,18 +20,21 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 \section{Methods}{
 \subsection{Public methods}{
   \itemize{
-    \item \href{#method-RoxyTopic-format}{\code{RoxyTopic$format()}}
-    \item \href{#method-RoxyTopic-is_valid}{\code{RoxyTopic$is_valid()}}
-    \item \href{#method-RoxyTopic-has_section}{\code{RoxyTopic$has_section()}}
-    \item \href{#method-RoxyTopic-get_section}{\code{RoxyTopic$get_section()}}
-    \item \href{#method-RoxyTopic-get_value}{\code{RoxyTopic$get_value()}}
-    \item \href{#method-RoxyTopic-get_rd}{\code{RoxyTopic$get_rd()}}
-    \item \href{#method-RoxyTopic-get_name}{\code{RoxyTopic$get_name()}}
-    \item \href{#method-RoxyTopic-inherits_from}{\code{RoxyTopic$inherits_from()}}
-    \item \href{#method-RoxyTopic-inherits_section_from}{\code{RoxyTopic$inherits_section_from()}}
-    \item \href{#method-RoxyTopic-add}{\code{RoxyTopic$add()}}
-    \item \href{#method-RoxyTopic-add_section}{\code{RoxyTopic$add_section()}}
-    \item \href{#method-RoxyTopic-clone}{\code{RoxyTopic$clone()}}
+    \item \href{#method-RoxyTopic-format}{\code{RoxyTopic$format()}}: Format the \code{.Rd} file. It considers the sections in
+particular order, even though Rd tools will reorder them again.
+    \item \href{#method-RoxyTopic-is_valid}{\code{RoxyTopic$is_valid()}}: Check if an \code{.Rd} file is valid
+    \item \href{#method-RoxyTopic-has_section}{\code{RoxyTopic$has_section()}}: Check if an \code{.Rd} file has a certain section.
+    \item \href{#method-RoxyTopic-get_section}{\code{RoxyTopic$get_section()}}: Query a section.
+    \item \href{#method-RoxyTopic-get_value}{\code{RoxyTopic$get_value()}}: Query the value of a section. This is the value of
+the \link{rd_section} object.
+    \item \href{#method-RoxyTopic-get_rd}{\code{RoxyTopic$get_rd()}}: Get the Rd code of a section.
+    \item \href{#method-RoxyTopic-get_name}{\code{RoxyTopic$get_name()}}: Get the value of the \code{name} section. This is the name
+of the Rd topic.
+    \item \href{#method-RoxyTopic-inherits_from}{\code{RoxyTopic$inherits_from()}}: Query the topics this topic inherits \code{type} from.
+    \item \href{#method-RoxyTopic-inherits_section_from}{\code{RoxyTopic$inherits_section_from()}}: Query the topics this topic inherits sections from.
+    \item \href{#method-RoxyTopic-add}{\code{RoxyTopic$add()}}: Add one or more sections to the topic.
+    \item \href{#method-RoxyTopic-add_section}{\code{RoxyTopic$add_section()}}: Add a section.
+    \item \href{#method-RoxyTopic-clone}{\code{RoxyTopic$clone()}}: The objects of this class are cloneable with this method.
   }
 }
 \if{html}{\out{<hr>}}

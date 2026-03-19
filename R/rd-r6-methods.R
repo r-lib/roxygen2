@@ -18,12 +18,15 @@ format.rd_r6_methods <- function(x, ...) {
   classes <- map_chr(x$self, \(m) m$class)
   dest <- sprintf("method-%s-%s", classes, nms)
   code <- sprintf("\\code{%s()}", r6_method_name(classes, nms))
+  descs <- map_chr(x$self, \(m) r6_short_description(m$description))
+  items <- sprintf("    \\item \\href{#%s}{%s}", dest, code)
+  items <- ifelse(nzchar(descs), paste0(items, ": ", descs), items)
 
   push("\\section{Methods}{")
   push(
     "\\subsection{Public methods}{",
     "  \\itemize{",
-    sprintf("    \\item \\href{#%s}{%s}", dest, code),
+    items,
     "  }",
     "}"
   )
@@ -140,6 +143,16 @@ r6_flatten_sections <- function(tag) {
   parts <- if (nzchar(tag$val[[1]])) c(tag$val[[1]], sections) else sections
   tag$val <- paste(parts, collapse = "\n\n")
   tag
+}
+
+r6_short_description <- function(description) {
+  if (length(description) == 0) {
+    return("")
+  }
+  # Take first element and extract the first paragraph
+  first <- description[[1]]
+  first <- strsplit(first, "\n\n")[[1]][[1]]
+  first
 }
 
 r6_all_examples <- function(methods) {

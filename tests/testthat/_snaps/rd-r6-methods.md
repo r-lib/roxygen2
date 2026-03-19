@@ -6,7 +6,7 @@
       \section{Methods}{
       \subsection{Public methods}{
         \itemize{
-          \item \href{#method-Foo-run}{\code{Foo$run()}}
+          \item \href{#method-Foo-run}{\code{Foo$run()}}: Run it.
         }
       }
       \if{html}{\out{<hr>}}

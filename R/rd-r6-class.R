@@ -2,8 +2,8 @@ rd_r6_class <- function(
   class,
   alias = class,
   superclasses = rd_r6_super(class),
-  fields = rd_r6_fields(),
-  active_bindings = rd_r6_bindings(),
+  fields = rd_r6_fields(type = "field"),
+  active_bindings = rd_r6_fields(type = "active"),
   methods = rd_r6_methods(alias)
 ) {
   structure(
@@ -38,8 +38,8 @@ r6_class_from_block <- function(block, env) {
     class = class,
     alias = alias,
     superclasses = r6_extract_superclasses(r6data, env, class),
-    fields = r6_extract_fields(block, r6data),
-    active_bindings = r6_extract_active_bindings(block, r6data),
+    fields = r6_extract_field_tags(block, r6data, type = "field"),
+    active_bindings = r6_extract_field_tags(block, r6data, type = "active"),
     methods = r6_extract_methods(r6data, alias, block)
   )
 }

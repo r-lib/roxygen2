@@ -9,7 +9,7 @@ test_that("can construct empty class", {
   expect_s3_class(docs, "rd_r6_class")
   expect_equal(docs$methods, rd_r6_methods("C"))
   expect_equal(docs$fields, rd_r6_fields())
-  expect_equal(docs$active_bindings, rd_r6_bindings())
+  expect_equal(docs$active_bindings, rd_r6_fields(type = "active"))
 })
 
 test_that("class with only active bindings doesn't error (#1610)", {
@@ -55,7 +55,7 @@ test_that("format.rd_r6_class with fields", {
 test_that("format.rd_r6_class with active bindings", {
   docs <- rd_r6_class(
     class = "Foo",
-    active_bindings = rd_r6_bindings(list(rd_r6_field("val", "A value.")))
+    active_bindings = rd_r6_fields(list(rd_r6_field("val", "A value.")), type = "active")
   )
   expect_snapshot(cat(format(docs), sep = "\n"))
 })

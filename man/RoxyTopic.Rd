@@ -8,301 +8,282 @@ A \code{RoxyTopic} object corresponds to a generated \code{.Rd} file.
 }
 \keyword{internal}
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{sections}}{Named list of sections. Each item must be an
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{sections}}{Named list of sections. Each item must be an
 \code{\link[=rd_section]{rd_section()}} object.}
 
-\item{\code{filename}}{Path to the \code{.Rd} file to generate.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{filename}}{Path to the \code{.Rd} file to generate.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-RoxyTopic-format}{\code{RoxyTopic$format()}}
-\item \href{#method-RoxyTopic-is_valid}{\code{RoxyTopic$is_valid()}}
-\item \href{#method-RoxyTopic-has_section}{\code{RoxyTopic$has_section()}}
-\item \href{#method-RoxyTopic-get_section}{\code{RoxyTopic$get_section()}}
-\item \href{#method-RoxyTopic-get_value}{\code{RoxyTopic$get_value()}}
-\item \href{#method-RoxyTopic-get_rd}{\code{RoxyTopic$get_rd()}}
-\item \href{#method-RoxyTopic-get_name}{\code{RoxyTopic$get_name()}}
-\item \href{#method-RoxyTopic-inherits_from}{\code{RoxyTopic$inherits_from()}}
-\item \href{#method-RoxyTopic-inherits_section_from}{\code{RoxyTopic$inherits_section_from()}}
-\item \href{#method-RoxyTopic-add}{\code{RoxyTopic$add()}}
-\item \href{#method-RoxyTopic-add_section}{\code{RoxyTopic$add_section()}}
-\item \href{#method-RoxyTopic-clone}{\code{RoxyTopic$clone()}}
-}
+  \itemize{
+    \item \href{#method-RoxyTopic-format}{\code{RoxyTopic$format()}}
+    \item \href{#method-RoxyTopic-is_valid}{\code{RoxyTopic$is_valid()}}
+    \item \href{#method-RoxyTopic-has_section}{\code{RoxyTopic$has_section()}}
+    \item \href{#method-RoxyTopic-get_section}{\code{RoxyTopic$get_section()}}
+    \item \href{#method-RoxyTopic-get_value}{\code{RoxyTopic$get_value()}}
+    \item \href{#method-RoxyTopic-get_rd}{\code{RoxyTopic$get_rd()}}
+    \item \href{#method-RoxyTopic-get_name}{\code{RoxyTopic$get_name()}}
+    \item \href{#method-RoxyTopic-inherits_from}{\code{RoxyTopic$inherits_from()}}
+    \item \href{#method-RoxyTopic-inherits_section_from}{\code{RoxyTopic$inherits_section_from()}}
+    \item \href{#method-RoxyTopic-add}{\code{RoxyTopic$add()}}
+    \item \href{#method-RoxyTopic-add_section}{\code{RoxyTopic$add_section()}}
+    \item \href{#method-RoxyTopic-clone}{\code{RoxyTopic$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-format"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-format}{}}}
 \subsection{\code{RoxyTopic$format()}}{
-Format the \code{.Rd} file. It considers the sections in
+  Format the \code{.Rd} file. It considers the sections in
 particular order, even though Rd tools will reorder them again.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$format(...)}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Passed to the \code{format()} methods of the \code{\link[=rd_section]{rd_section()}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$format(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Passed to the \code{format()} methods of the \code{\link[=rd_section]{rd_section()}}
 objects, the sections.}
-}
-\if{html}{\out{</div>}}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Character string.
+  }
 }
 
-\subsection{Returns}{
-Character string.
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-is_valid"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-is_valid}{}}}
 \subsection{\code{RoxyTopic$is_valid()}}{
-Check if an \code{.Rd} file is valid
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$is_valid()}
-\if{html}{\out{</div>}}
+  Check if an \code{.Rd} file is valid
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$is_valid()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Logical flag, \code{TRUE} for valid \code{.Rd} files
+  }
 }
 
-\subsection{Returns}{
-Logical flag, \code{TRUE} for valid \code{.Rd} files
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-has_section"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-has_section}{}}}
 \subsection{\code{RoxyTopic$has_section()}}{
-Check if an \code{.Rd} file has a certain section.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$has_section(type)}
-\if{html}{\out{</div>}}
+  Check if an \code{.Rd} file has a certain section.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$has_section(type)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{type}}{Section type, a character scalar.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Logical flag.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{type}}{Section type, a character scalar.}
-}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Logical flag.
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-get_section"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-get_section}{}}}
 \subsection{\code{RoxyTopic$get_section()}}{
-Query a section.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_section(type)}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{type}}{Section type, a character scalar.}
-}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The \link{rd_section} object representing the section, or \code{NULL}
+  Query a section.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$get_section(type)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{type}}{Section type, a character scalar.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The \link{rd_section} object representing the section, or \code{NULL}
 if the topic has no such section.
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-get_value"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-get_value}{}}}
 \subsection{\code{RoxyTopic$get_value()}}{
-Query the value of a section. This is the value of
+  Query the value of a section. This is the value of
 the \link{rd_section} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_value(type)}
-\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$get_value(type)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{type}}{Section type, a character scalar.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Value.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{type}}{Section type, a character scalar.}
-}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Value.
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-get_rd"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-get_rd}{}}}
 \subsection{\code{RoxyTopic$get_rd()}}{
-Get the Rd code of a section.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_rd(type)}
-\if{html}{\out{</div>}}
+  Get the Rd code of a section.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$get_rd(type)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{type}}{Section type, a character scalar.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Character vector, one element per line.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{type}}{Section type, a character scalar.}
-}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Character vector, one element per line.
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-get_name"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-get_name}{}}}
 \subsection{\code{RoxyTopic$get_name()}}{
-Get the value of the \code{name} section. This is the name
+  Get the value of the \code{name} section. This is the name
 of the Rd topic.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$get_name()}
-\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$get_name()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Character scalar.
+  }
 }
 
-\subsection{Returns}{
-Character scalar.
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-inherits_from"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-inherits_from}{}}}
 \subsection{\code{RoxyTopic$inherits_from()}}{
-Query the topics this topic inherits \code{type} from.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$inherits_from(type)}
-\if{html}{\out{</div>}}
+  Query the topics this topic inherits \code{type} from.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$inherits_from(type)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{type}}{Section type, a character scalar.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A character vector of topic names.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{type}}{Section type, a character scalar.}
-}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-A character vector of topic names.
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-inherits_section_from"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-inherits_section_from}{}}}
 \subsection{\code{RoxyTopic$inherits_section_from()}}{
-Query the topics this topic inherits sections from.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$inherits_section_from()}
-\if{html}{\out{</div>}}
+  Query the topics this topic inherits sections from.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$inherits_section_from()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A character vector of topic names.
+  }
 }
 
-\subsection{Returns}{
-A character vector of topic names.
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-add"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-add}{}}}
 \subsection{\code{RoxyTopic$add()}}{
-Add one or more sections to the topic.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$add(x, block = "???", overwrite = FALSE)}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{x}}{Section(s) to add. It may be
+  Add one or more sections to the topic.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$add(x, block = "???", overwrite = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{x}}{Section(s) to add. It may be
 another \code{RoxyTopic} object, all of its sections will be added;
 or an \link{rd_section} object;
 or a list of \link{rd_section} objects to add.}
-\item{\code{block}}{Name of block to use in error messages.}
-\item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
+      \item{\code{block}}{Name of block to use in error messages.}
+      \item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
 then the two sections will be merged.}
-}
-\if{html}{\out{</div>}}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-add_section"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-add_section}{}}}
 \subsection{\code{RoxyTopic$add_section()}}{
-Add a section.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$add_section(section, block = "???", overwrite = FALSE)}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{section}}{\link{rd_section} object to add.}
-\item{\code{block}}{Name of block to use in error messages.}
-\item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
+  Add a section.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$add_section(section, block = "???", overwrite = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{section}}{\link{rd_section} object to add.}
+      \item{\code{block}}{Name of block to use in error messages.}
+      \item{\code{overwrite}}{Whether to overwrite an existing section. If \code{FALSE}
 then the two sections will be merged.}
-}
-\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Ensures that each type of name (as given by its name), only appears
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    Ensures that each type of name (as given by its name), only appears
 once in \code{self$sections}. This method if for internal use only.
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RoxyTopic-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-RoxyTopic-clone}{}}}
 \subsection{\code{RoxyTopic$clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}
-\preformatted{RoxyTopic$clone(deep = FALSE)}
-\if{html}{\out{</div>}}
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{RoxyTopic$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-
-}
 }

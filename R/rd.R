@@ -34,6 +34,11 @@ roclet_process.roclet_rd <- function(x, blocks, env, base_path) {
   # Convert each block into a topic, indexed by filename
   topics <- RoxyTopics$new()
 
+  # Sort R6 blocks so superclasses are processed before subclasses
+  blocks <- r6_topo_sort_blocks(blocks)
+  # Store for resolved R6 docs so subclasses can inherit from superclasses
+  local_roxy_meta_set("r6_docs", list())
+
   for (block in blocks) {
     rd <- block_to_rd(block, base_path, env)
     topics$add(rd, block)

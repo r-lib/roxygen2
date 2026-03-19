@@ -173,3 +173,165 @@ test_that("format.rd_r6_method omits empty optional sections", {
   )
   expect_snapshot(cat(format(method), sep = "\n"))
 })
+
+# Superclass param inheritance -----------------------------------------------
+
+test_that("method inherits params from superclass method", {
+  text <- "
+    #' Parent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @description Do something.
+        #' @param x An x value.
+        #' @param y A y value.
+        run = function(x, y) NULL
+      )
+    )
+
+    #' Child
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        #' @description Do something else.
+        run = function(x, y) NULL
+      )
+    )"
+  docs <- r6_doc(text)
+  method <- docs$methods$self[[1]]
+  expect_equal(
+    method$params,
+    list(
+      list(name = "x", description = "An x value."),
+      list(name = "y", description = "A y value.")
+    )
+  )
+})
+
+test_that("method inherits only missing params from superclass", {
+  text <- "
+    #' Parent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @description Do something.
+        #' @param x An x value.
+        #' @param y A y value.
+        run = function(x, y) NULL
+      )
+    )
+
+    #' Child
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        #' @description Do something else.
+        #' @param x Overridden x.
+        run = function(x, y) NULL
+      )
+    )"
+  docs <- r6_doc(text)
+  method <- docs$methods$self[[1]]
+  expect_equal(
+    method$params,
+    list(
+      list(name = "x", description = "Overridden x."),
+      list(name = "y", description = "A y value.")
+    )
+  )
+})
+
+test_that("method inherits class-level params from superclass", {
+  text <- "
+    #' Parent
+    #' @param x An x value.
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @description Do something.
+        run = function(x) NULL
+      )
+    )
+
+    #' Child
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        #' @description Do something else.
+        run = function(x) NULL
+      )
+    )"
+  docs <- r6_doc(text)
+  method <- docs$methods$self[[1]]
+  expect_equal(
+    method$params,
+    list(list(name = "x", description = "An x value."))
+  )
+})
+
+test_that("initialize() inherits params from superclass initialize()", {
+  text <- "
+    #' Parent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @description Create.
+        #' @param x An x value.
+        #' @param y A y value.
+        initialize = function(x, y) NULL
+      )
+    )
+
+    #' Child
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        #' @description Create child.
+        #' @param z A z value.
+        initialize = function(x, y, z) NULL
+      )
+    )"
+  docs <- r6_doc(text)
+  init <- docs$methods$self[[1]]
+  expect_equal(
+    init$params,
+    list(
+      list(name = "x", description = "An x value."),
+      list(name = "y", description = "A y value."),
+      list(name = "z", description = "A z value.")
+    )
+  )
+})
+
+test_that("method inherits params through multiple levels", {
+  text <- "
+    #' Grandparent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @description Do something.
+        #' @param x An x value.
+        run = function(x) NULL
+      )
+    )
+
+    #' Parent
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        #' @description Do something.
+        #' @param x An x value.
+        run = function(x) NULL
+      )
+    )
+
+    #' Child
+    C <- R6::R6Class('C', cloneable = FALSE,
+      inherit = B,
+      public = list(
+        #' @description Do something else.
+        run = function(x) NULL
+      )
+    )"
+  docs <- r6_doc(text)
+  method <- docs$methods$self[[1]]
+  expect_equal(
+    method$params,
+    list(list(name = "x", description = "An x value."))
+  )
+})

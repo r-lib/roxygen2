@@ -1,5 +1,14 @@
 topic_add_r6_methods <- function(rd, block, env, base_path) {
   docs <- r6_class_from_block(block, env)
+
+  # Store resolved docs so subclasses can inherit
+  classname <- block$object$value$classname
+  if (!is.null(classname)) {
+    r6_docs <- roxy_meta_get("r6_docs", list())
+    r6_docs[[classname]] <- docs
+    roxy_meta_set("r6_docs", r6_docs)
+  }
+
   block <- r6_fix_intro(block)
 
   # Add class-level tags
@@ -64,4 +73,35 @@ r6_tag_type <- function(tag, block) {
   } else {
     "class"
   }
+}
+
+# Topological sort ---------------------------------------------------------
+
+# Sort blocks so R6 superclasses are processed before subclasses.
+r6_topo_sort_blocks <- function(blocks) {
+  is_r6 <- map_lgl(blocks, \(b) inherits(b, "roxy_block_r6class"))
+  if (sum(is_r6) <= 1) {
+    return(blocks)
+  }
+
+  r6_indices <- which(is_r6)
+  r6_blocks <- blocks[r6_indices]
+
+  classnames <- map_chr(r6_blocks, \(b) b$object$value$classname %||% "")
+  parents <- map_chr(r6_blocks, \(b) {
+    inherit <- b$object$value$inherit
+    if (is.null(inherit)) NA_character_ else as.character(inherit)
+  })
+
+  topo <- TopoSort$new()
+  for (i in seq_along(classnames)) {
+    topo$add(classnames[i])
+    if (!is.na(parents[i]) && parents[i] %in% classnames) {
+      topo$add_ancestor(classnames[i], parents[i])
+    }
+  }
+  sorted <- topo$sort()
+
+  blocks[r6_indices] <- r6_blocks[match(sorted, classnames)]
+  blocks
 }

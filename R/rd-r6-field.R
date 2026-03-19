@@ -8,8 +8,22 @@ r6_extract_fields <- function(block, r6data) {
     function(t) t$tag == "field" && !t$val$name %in% active
   )
 
-  labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
-  docd <- str_trim(unlist(strsplit(labels, ",")))
+  rd_fields <- lapply(tags, function(t) {
+    rd_r6_field(
+      name = gsub(",", ", ", t$val$name),
+      description = t$val$description
+    )
+  })
+
+  docd <- r6_field_names(rd_fields)
+
+  # Inherit undocumented fields from superclass
+  miss <- setdiff(fields, docd)
+  if (length(miss) > 0) {
+    inherited <- r6_find_super_fields(miss, r6data, "fields")
+    rd_fields <- c(rd_fields, inherited)
+    docd <- r6_field_names(rd_fields)
+  }
 
   miss <- setdiff(fields, docd)
   if (length(miss) > 0) {
@@ -26,12 +40,7 @@ r6_extract_fields <- function(block, r6data) {
     warn_roxy_block(block, "Unknown R6 field{?s}: {xtra}")
   }
 
-  rd_r6_fields(lapply(tags, function(t) {
-    rd_r6_field(
-      name = gsub(",", ", ", t$val$name),
-      description = t$val$description
-    )
-  }))
+  rd_r6_fields(rd_fields)
 }
 
 r6_extract_active_bindings <- function(block, r6data) {
@@ -44,8 +53,22 @@ r6_extract_active_bindings <- function(block, r6data) {
     function(t) t$tag == "field" && !t$val$name %in% fields
   )
 
-  labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
-  docd <- str_trim(unlist(strsplit(labels, ",")))
+  rd_fields <- lapply(tags, function(t) {
+    rd_r6_field(
+      name = gsub(",", ", ", t$val$name),
+      description = t$val$description
+    )
+  })
+
+  docd <- r6_field_names(rd_fields)
+
+  # Inherit undocumented active bindings from superclass
+  miss <- setdiff(active, docd)
+  if (length(miss) > 0) {
+    inherited <- r6_find_super_fields(miss, r6data, "active_bindings")
+    rd_fields <- c(rd_fields, inherited)
+    docd <- r6_field_names(rd_fields)
+  }
 
   miss <- setdiff(active, docd)
   if (length(miss) > 0) {
@@ -60,12 +83,12 @@ r6_extract_active_bindings <- function(block, r6data) {
     )
   }
 
-  rd_r6_bindings(lapply(tags, function(t) {
-    rd_r6_field(
-      name = gsub(",", ", ", t$val$name),
-      description = t$val$description
-    )
-  }))
+  rd_r6_bindings(rd_fields)
+}
+
+r6_field_names <- function(rd_fields) {
+  labels <- map_chr(rd_fields, \(x) x$name)
+  str_trim(unlist(strsplit(labels, ",")))
 }
 
 # Rd ---------------------------------------------------------------------------
@@ -114,4 +137,39 @@ format_r6_field_section <- function(fields, title, css_class) {
     paste0("  ", rd_if_html("</div>")),
     "}"
   )
+}
+
+# Superclass field inheritance -----------------------------------------------
+
+r6_find_super_fields <- function(missing, r6data, section) {
+  r6_docs <- roxy_meta_get("r6_docs", list())
+  if (length(r6_docs) == 0) {
+    return(list())
+  }
+
+  super <- r6data$super
+  if (is.null(super)) {
+    return(list())
+  }
+
+  result <- list()
+
+  for (i in seq_len(nrow(super$classes))) {
+    classname <- super$classes$classname[i]
+    super_doc <- r6_docs[[classname]]
+    if (is.null(super_doc)) {
+      next
+    }
+
+    for (field in super_doc[[section]]$fields) {
+      if (field$name %in% missing) {
+        result <- c(result, list(field))
+        missing <- setdiff(missing, field$name)
+      }
+    }
+
+    if (length(missing) == 0) break
+  }
+
+  result
 }

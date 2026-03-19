@@ -10,6 +10,7 @@
   * `@example` (singular, with a file path) now works correctly in R6 class documentation (#1158).
   * Inherited method links now only link to parent classes that have documentation, avoiding broken links when parent classes are undocumented (#963, #1155).
   * `initialize()` method parameters now automatically inherit documentation from `@field` tags with the same name, reducing the need to duplicate descriptions. Explicit `@param` tags still take precedence (#1004).
+  * R6 subclass methods now automatically inherit parameter documentation from the same-named superclass method when parameters are not documented locally. Fields and active bindings also inherit documentation from superclasses (#996).
 * New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).
 * All generated links now use the same code path. This will lead to some minor differences when you re-document, but overall the links will now be more consistent (#1792).
 * Reexported functions now display with `()` appended (e.g., `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use modern (>= 4.1.0) linking style.

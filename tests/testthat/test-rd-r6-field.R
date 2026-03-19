@@ -126,3 +126,78 @@ test_that("format.rd_r6_bindings produces Active bindings section", {
 test_that("format.rd_r6_bindings returns nothing when empty", {
   expect_null(format(rd_r6_bindings()))
 })
+
+# Superclass field inheritance -----------------------------------------------
+
+test_that("fields inherit docs from superclass", {
+  text <- "
+    #' Parent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @field x A field.
+        x = NULL
+      )
+    )
+
+    #' Child
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        x = NULL
+      )
+    )"
+  expect_silent(docs <- r6_doc(text))
+  expect_equal(
+    docs$fields,
+    rd_r6_fields(list(rd_r6_field("x", "A field.")))
+  )
+})
+
+test_that("field docs in subclass override superclass", {
+  text <- "
+    #' Parent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @field x Parent field.
+        x = NULL
+      )
+    )
+
+    #' Child
+    #' @field x Child field.
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        x = NULL
+      )
+    )"
+  docs <- r6_doc(text)
+  expect_equal(
+    docs$fields,
+    rd_r6_fields(list(rd_r6_field("x", "Child field.")))
+  )
+})
+
+test_that("active bindings inherit docs from superclass", {
+  text <- "
+    #' Parent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      active = list(
+        #' @field val A value.
+        val = function(x) x
+      )
+    )
+
+    #' Child
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      active = list(
+        val = function(x) x * 2
+      )
+    )"
+  expect_silent(docs <- r6_doc(text))
+  expect_equal(
+    docs$active_bindings,
+    rd_r6_bindings(list(rd_r6_field("val", "A value.")))
+  )
+})

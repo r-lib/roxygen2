@@ -16,10 +16,32 @@ expect_parse_failure <- function(code) {
   (expect_condition(expect_null(code)))
 }
 
-r6_doc <- function(text, env = new.env(parent = globalenv())) {
+r6_doc <- function(text, env = new.env(parent = globalenv()), n = NULL) {
   eval(parse(text = text, keep.source = TRUE), envir = env)
-  block <- parse_text(text, env = env)[[1]]
-  r6_class_from_block(block, env)
+  blocks <- parse_text(text, env = env)
+
+  # Sort blocks so superclasses are processed first
+  blocks <- r6_topo_sort_blocks(blocks)
+
+  # Process all R6 blocks before the target, storing resolved docs
+  local_roxy_meta_set("r6_docs", list())
+  target <- n %||% length(blocks)
+  for (i in seq_along(blocks)) {
+    block <- blocks[[i]]
+    if (!inherits(block, "roxy_block_r6class")) {
+      next
+    }
+    docs <- r6_class_from_block(block, env)
+    classname <- block$object$value$classname
+    if (!is.null(classname)) {
+      r6_docs <- roxy_meta_get("r6_docs", list())
+      r6_docs[[classname]] <- docs
+      roxy_meta_set("r6_docs", r6_docs)
+    }
+    if (i == target) return(docs)
+  }
+
+  r6_class_from_block(blocks[[target]], env)
 }
 
 local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {

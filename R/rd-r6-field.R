@@ -26,6 +26,9 @@ r6_extract_fields <- function(block, r6data) {
     warn_roxy_block(block, "Unknown R6 field{?s}: {xtra}")
   }
 
+  # @field name NULL suppresses documentation for that field
+  tags <- discard(tags, function(t) toupper(t$val$description) == "NULL")
+
   rd_r6_fields(lapply(tags, function(t) {
     rd_r6_field(
       name = gsub(",", ", ", t$val$name),
@@ -59,6 +62,9 @@ r6_extract_active_bindings <- function(block, r6data) {
       "R6 active binding{?s} documented multiple times: {dup}"
     )
   }
+
+  # @field name NULL suppresses documentation for that binding
+  tags <- discard(tags, function(t) toupper(t$val$description) == "NULL")
 
   rd_r6_bindings(lapply(tags, function(t) {
     rd_r6_field(

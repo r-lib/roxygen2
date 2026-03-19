@@ -38,6 +38,23 @@ test_that("r6_all_examples aggregates across methods", {
   expect_snapshot(cat(r6_all_examples(docs$methods), sep = "\n"))
 })
 
+test_that("@noRd suppresses method documentation", {
+  text <- "
+    #' Class
+    C <- R6::R6Class('C', cloneable = FALSE,
+      public = list(
+        #' @description Greet.
+        greet = function() 'hi',
+        #' @noRd
+        initialize = function(x) NULL
+      )
+    )"
+  expect_silent(docs <- r6_doc(text))
+
+  nms <- map_chr(docs$methods$self, \(m) m$name)
+  expect_equal(nms, "greet")
+})
+
 test_that("r6_flatten_sections collapses markdown sections", {
   local_markdown()
 

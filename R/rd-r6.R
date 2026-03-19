@@ -52,7 +52,14 @@ r6_fix_intro <- function(block) {
 # - "other": @field/@param tags consumed by field/param extraction
 r6_tag_type <- function(tag, block) {
   inline <- !is.na(tag$line) && tag$line >= block$line
-  method_tags <- c("description", "details", "return", "returns", "examples")
+  method_tags <- c(
+    "description",
+    "details",
+    "return",
+    "returns",
+    "examples",
+    "noRd"
+  )
 
   if (tag$tag %in% c("field", "name", "title")) {
     "other"

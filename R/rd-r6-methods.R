@@ -72,6 +72,12 @@ r6_extract_methods <- function(r6data, alias, block) {
     )
   }
 
+  # Methods with @noRd are deliberately suppressed
+  has_noRd <- map_lgl(methods_df$tags, function(tags) {
+    any(map_lgl(tags, \(t) t$tag == "noRd"))
+  })
+  methods_df <- methods_df[!has_noRd, ]
+
   self_methods <- lapply(
     seq_len(nrow(methods_df)),
     function(i) r6_method_from_row(methods_df[i, ], block)

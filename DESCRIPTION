@@ -49,9 +49,10 @@ VignetteBuilder:
     knitr
 Config/Needs/development: testthat
 Config/Needs/website: tidyverse/tidytemplate
+Config/roxygen2/load: installed
+Config/roxygen2/markdown: TRUE
+Config/roxygen2/version: 7.3.3.9000
 Config/testthat/edition: 3
 Config/testthat/parallel: TRUE
 Encoding: UTF-8
 Language: en-GB
-Roxygen: list(markdown = TRUE, load = "installed")
-RoxygenNote: 7.3.3.9000

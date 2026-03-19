@@ -226,7 +226,7 @@ Now that the three methods are created, we still need to make them available to 
 Next, you'll need to load the tag-defining package in the package where you want to use it. For example, if you created some new tags in {packageFoo}, and would like to use these tags in your documentation for {packageBar}, append this line to the `DESCRIPTION` of {packageBar}:
 
 ```
-Roxygen: list(packages =  "packageFoo")
+Config/roxygen2/packages: packageFoo
 ```
 
 See `load_options()` for more details.
@@ -393,7 +393,7 @@ where `yourPackage::roclet` is the function which creates the roclet, e.g. `memo
 You can also add the roclet to the target package's DESCRIPTION file, like this:
 
 ```r
-Roxygen: list(roclets = c("collate", "rd", "namespace", "yourPackage::roclet"))
+Config/roxygen2/roclets: collate, rd, namespace, yourPackage::roclet
 ```
 
 See `load_options()` for more details.

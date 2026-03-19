@@ -114,10 +114,13 @@ find_method_for_tag <- function(methods, tag) {
   if (nrow(methods) == 0) {
     return(NA_character_)
   }
-  w <- which(
-    basename(methods$file) == basename(tag$file) &
-      methods$line > tag$line
-  )[1]
+  if (tag$file == "<text>") {
+    # for testing
+    same_file <- TRUE
+  } else {
+    same_file <- basename(methods$file) == basename(tag$file)
+  }
+  w <- which(same_file & methods$line > tag$line)[1]
   methods$name[w]
 }
 

@@ -97,26 +97,24 @@ roclet_clean.roclet_rd <- function(x, base_path) {
 
 # Does this block get an Rd file?
 needs_doc <- function(block) {
-  if (block_has_tags(block, "noRd")) {
+  tag_names <- block_tags(block)
+  if ("noRd" %in% tag_names) {
     return(FALSE)
   }
 
-  block_has_tags(
-    block,
-    c(
-      "description",
-      "param",
-      "return",
-      "title",
-      "example",
-      "examples",
-      "name",
-      "rdname",
-      "details",
-      "inherit",
-      "describeIn"
-    )
-  )
+  any(tag_names %in% c(
+    "description",
+    "param",
+    "return",
+    "title",
+    "example",
+    "examples",
+    "name",
+    "rdname",
+    "details",
+    "inherit",
+    "describeIn"
+  ))
 }
 
 # Tag processing functions ------------------------------------------------

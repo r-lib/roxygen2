@@ -168,6 +168,10 @@
   parameters to inherit, instead of generating an empty `\describe`
   block that caused CRAN HTML validation warnings
   ([\#1671](https://github.com/r-lib/roxygen2/issues/1671)).
+- `@inheritDotParams` now correctly matches parameters that are
+  documented with a dot-prefixed alias (e.g., `.by, by`) but whose
+  formal argument lacks the dot (e.g., `by`), as is common in the
+  tidyverse ([\#1826](https://github.com/r-lib/roxygen2/issues/1826)).
 - `@inheritParams` now correctly inherits parameters that are documented
   together with `\dots` using comma-separated names,
   e.g. `@param b,\dots description`

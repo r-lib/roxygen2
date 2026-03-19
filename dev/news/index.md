@@ -131,9 +131,10 @@
 - roxygen2 now requires R 4.1
   ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)).
 - S3 method handling improvements:
-  - Method parsing now prefers the longest matching generic name, so
-    e.g. `all.equal.numeric` is correctly identified as a method of
-    `all.equal` rather than `all`
+  - Methods of [`all.equal()`](https://rdrr.io/r/base/all.equal.html)
+    (e.g. `all.equal.numeric`) are now correctly identified as methods
+    of [`all.equal()`](https://rdrr.io/r/base/all.equal.html),
+    [`all()`](https://rdrr.io/r/base/all.html)
     ([\#1587](https://github.com/r-lib/roxygen2/issues/1587)).
   - The warning about undocumented methods no longer errors when the
     function lacks a srcref, e.g. because a debugger breakpoint is set

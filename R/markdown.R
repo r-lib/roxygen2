@@ -1,5 +1,17 @@
 markdown <- function(text, tag = NULL, sections = FALSE) {
   tag <- tag %||% list(file = NA, line = NA)
+
+  # Fast path: if no markdown features, skip XML parsing
+  # We only need to escape % for Rd
+  if (!sections && !needs_markdown(text)) {
+    trimmed <- trimws(text)
+    if (nzchar(trimmed)) {
+      return(escape_comment(text))
+    } else {
+      return("")
+    }
+  }
+
   expanded_text <- tryCatch(
     markdown_evaluate(text),
     error = function(e) {
@@ -15,6 +27,11 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
       text
     }
   )
+}
+
+# Check if text needs full markdown processing
+needs_markdown <- function(text) {
+  grepl("[`*_\\[#|]|\\\\", text)
 }
 
 #' Expand the embedded inline code

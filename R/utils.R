@@ -123,7 +123,7 @@ write_if_different <- function(path, contents, command = NULL, check = TRUE) {
     return(FALSE)
   }
 
-  if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
+  if (!grepl("^[a-zA-Z][a-zA-Z0-9_.-]*$", name)) {
     cli::cli_inform(c(
       x = "Skipping {.path {name}}",
       i = "Invalid file name"
@@ -159,7 +159,7 @@ same_contents <- function(path, contents) {
 }
 
 compact <- function(x) {
-  x[!map_lgl(x, is.null)]
+  x[!vapply(x, is.null, logical(1))]
 }
 
 invert <- function(x) {

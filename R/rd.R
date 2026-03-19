@@ -76,8 +76,8 @@ roclet_output.roclet_rd <- function(
     # Automatically delete any files in man directory that were generated
     # by roxygen in the past, but weren't generated in this sweep.
 
-    old_paths <- setdiff(dir(man, full.names = TRUE), paths)
-    old_paths <- old_paths[!file.info(old_paths)$isdir]
+    old_paths <- setdiff(dir(man, full.names = TRUE, no.. = TRUE), paths)
+    old_paths <- old_paths[!dir.exists(old_paths)]
     old_roxygen <- Filter(made_by_roxygen, old_paths)
     if (length(old_roxygen) > 0) {
       cli::cli_inform("Deleting {.file {basename(old_roxygen)}}")
@@ -90,8 +90,8 @@ roclet_output.roclet_rd <- function(
 
 #' @export
 roclet_clean.roclet_rd <- function(x, base_path) {
-  rd <- dir(file.path(base_path, "man"), full.names = TRUE)
-  rd <- rd[!file.info(rd)$isdir]
+  rd <- dir(file.path(base_path, "man"), full.names = TRUE, no.. = TRUE)
+  rd <- rd[!dir.exists(rd)]
   unlink(keep(rd, made_by_roxygen))
 }
 

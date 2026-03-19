@@ -100,7 +100,7 @@ format.rd_r6_method <- function(x, ...) {
     push_subsection(
       "Examples",
       rd_if_html('<div class="r example copy">'),
-      paste0("\\preformatted{", x$examples, "\n", "}"),
+      paste0("\\preformatted{", strip_rd_example_tags(x$examples), "\n", "}"),
       rd_if_html("</div>")
     )
   }

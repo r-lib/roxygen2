@@ -80,14 +80,14 @@ int scan_raw_string(std::string string, int i) {
 // mode == 0: rdComplete
 // mode == 1: findEndOfTag
 
-int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0) {
+int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0, int start = 0) {
   int n = string.length();
 
   State state = State::Rd;
   char string_delim = '\0';
   int braces = 0, r_braces = 0;
 
-  for (int i = 0; i < n; i++) {
+  for (int i = start; i < n; i++) {
     char cur = string[i];
 
     switch (state) {
@@ -191,8 +191,8 @@ int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0) {
 }
 
 [[cpp11::register]]
-int findEndOfTag(std::string string, bool is_code) {
-  return roxygen_parse_tag(string, is_code, 1);
+int findEndOfTag(std::string string, bool is_code, int start = 0) {
+  return roxygen_parse_tag(string, is_code, 1, start);
 }
 
 [[cpp11::register]]

@@ -13,10 +13,10 @@ extern "C" SEXP _roxygen2_escapeExamples(SEXP x) {
   END_CPP11
 }
 // isComplete.cpp
-int findEndOfTag(std::string string, bool is_code);
-extern "C" SEXP _roxygen2_findEndOfTag(SEXP string, SEXP is_code) {
+int findEndOfTag(std::string string, bool is_code, int start);
+extern "C" SEXP _roxygen2_findEndOfTag(SEXP string, SEXP is_code, SEXP start) {
   BEGIN_CPP11
-    return cpp11::as_sexp(findEndOfTag(cpp11::as_cpp<cpp11::decay_t<std::string>>(string), cpp11::as_cpp<cpp11::decay_t<bool>>(is_code)));
+    return cpp11::as_sexp(findEndOfTag(cpp11::as_cpp<cpp11::decay_t<std::string>>(string), cpp11::as_cpp<cpp11::decay_t<bool>>(is_code), cpp11::as_cpp<cpp11::decay_t<int>>(start)));
   END_CPP11
 }
 // isComplete.cpp
@@ -58,7 +58,7 @@ extern "C" SEXP _roxygen2_wrapUsage(SEXP string, SEXP width, SEXP indent) {
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
     {"_roxygen2_escapeExamples", (DL_FUNC) &_roxygen2_escapeExamples, 1},
-    {"_roxygen2_findEndOfTag",   (DL_FUNC) &_roxygen2_findEndOfTag,   2},
+    {"_roxygen2_findEndOfTag",   (DL_FUNC) &_roxygen2_findEndOfTag,   3},
     {"_roxygen2_find_includes",  (DL_FUNC) &_roxygen2_find_includes,  1},
     {"_roxygen2_leadingSpaces",  (DL_FUNC) &_roxygen2_leadingSpaces,  1},
     {"_roxygen2_rdComplete",     (DL_FUNC) &_roxygen2_rdComplete,     2},

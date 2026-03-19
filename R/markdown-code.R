@@ -49,6 +49,10 @@
 #' @keywords internal
 markdown_evaluate <- function(text) {
   text <- paste(text, collapse = "\n")
+  # Fast pre-check: skip XML parsing if no inline R code or code blocks possible
+  if (!grepl("`r ", text, fixed = TRUE) && !grepl("```\\{", text)) {
+    return(text)
+  }
   mdxml <- xml_ns_strip(md_to_mdxml(text, sourcepos = TRUE))
   code_nodes <- xml_find_all(mdxml, ".//code | .//code_block")
   rcode_nodes <- keep(code_nodes, is_markdown_code_node)

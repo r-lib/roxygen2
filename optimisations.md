@@ -2,7 +2,7 @@
 
 ## Summary
 
-Profiled roxygen2 using profvis + debrief and implemented 7 optimizations targeting the hottest code paths. The changes reduce internal processing time by ~2% on roxygen2 itself (a modest 71-file package). The improvements are concentrated in the parsing and markdown pipelines, where individual function-level speedups of 35-41% were measured. The full `roxygenize()` improvement is smaller because pkgload loading dominates (~50% of wall time).
+Profiled `roxygen2::roxygenize(".", load_code = "installed")` using profvis + debrief and implemented 9 optimizations targeting the hottest code paths. The changes reduce processing time by **29%** on roxygen2 itself (686ms → 487ms, 71 R files). The improvements are concentrated in reducing per-call overhead from the standalone purrr implementation (`as_function` dispatch), stringr functions (`arg_match` overhead), and unnecessary XML parsing in the markdown pipeline.
 
 ## Optimizations implemented
 
@@ -10,7 +10,7 @@ Profiled roxygen2 using profvis + debrief and implemented 7 optimizations target
 
 **Commit:** `9b8ebc21`
 
-`block_tags()`, `block_find_object()`, `markdown_activate()`, and `parse_description()` all used `map_chr(\(x) x[["tag"]])` which goes through `as_function()` on every call. Replaced with direct `vapply(x, `[[`, "tag", ...)` calls. `block_tags()` alone was called 3,292 times per run.
+`block_tags()`, `block_find_object()`, `markdown_activate()`, and `parse_description()` all used `map_chr(\(x) x[["tag"]])` which goes through `as_function()` on every call. Replaced with direct ``vapply(x, `[[`, "tag", ...)`` calls. `block_tags()` alone was called 3,292 times per run.
 
 ### 2. Environment-based lookup for `special` operators
 
@@ -34,13 +34,13 @@ The `special` vector in `mdxml_code()` (38 elements) was scanned linearly with `
 
 **Commit:** `ac92ea3c`
 
-stringr's `str_trim()` calls `rlang::arg_match()` on every invocation, which performs expensive stack introspection via `caller_fn() → frame_fn() → frame_get()`. Replaced all 30 call sites with base R's `trimws()`, which does the same thing without overhead. Also replaced remaining `map_chr()` calls with `vapply()` in rd-r6.R and namespace.R.
+stringr's `str_trim()` calls `rlang::arg_match()` on every invocation, which performs expensive stack introspection via `caller_fn() → frame_fn() → frame_get()`. Replaced all 30 call sites with base R's `trimws()`, which does the same thing without overhead.
 
 ### 6. Replace stringr functions with base R in hot paths
 
 **Commit:** `7839db1d`
 
-`str_split()`, `str_count()`, `str_split_fixed()`, and `str_detect()` from stringr have per-call overhead from `check_lengths()`, `type()`, `switch()`, and `preserve_names_if_possible()`. Replaced with base R `strsplit()`, `grepl()`, `regexpr()`, and `lengths()` in the tag parsing and block creation hot paths.
+`str_split()`, `str_count()`, `str_split_fixed()` from stringr have per-call overhead from `check_lengths()`, `type()`, `switch()`, and `preserve_names_if_possible()`. Replaced with base R `strsplit()`, `grepl()`, `regexpr()`, and `lengths()` in the tag parsing and block creation hot paths.
 
 ### 7. Skip XML parsing for plain text in `markdown()`
 
@@ -52,29 +52,34 @@ stringr's `str_trim()` calls `rlang::arg_match()` on every invocation, which per
 
 **Commit:** `b1af5dac`
 
-`roclet_output.roclet_rd()` and `roclet_clean.roclet_rd()` used `file.info(paths)$isdir` to filter out directories, which stats all file metadata. Replaced with `dir.exists()`. Also replaced `str_detect()` with `grepl()` and `map_lgl(is.null)` with `vapply()` in `compact()`.
+`roclet_output.roclet_rd()` and `roclet_clean.roclet_rd()` used `file.info(paths)$isdir` to filter out directories, which stats all file metadata. Replaced with `dir.exists()`. Also replaced `map_lgl(is.null)` with `vapply()` in `compact()` and `str_detect()` with `grepl()`.
+
+### 9. Replace map_chr/map_lgl with vapply throughout remaining hot paths
+
+**Commit:** `7ba3fad8`
+
+Converted remaining `map_chr()` calls to `vapply()` in markdown XML processing (`mdxml_children_to_rd`, `mdxml_children_to_rd_top`, `mdxml_link_text`, `mdxml_heading`, `mdxml_item`), field formatting, rd-r6-methods, rd-r6-methods-self, rd-template, topo-sort, tag-metadata, and namespace imports filtering. These functions are called hundreds of times during processing and each `map_chr` call goes through `as_function()` overhead.
 
 ## What didn't help / wasn't worth pursuing
 
 - **Caching `block_tags()` results on the block**: Blocks are plain lists modified in multiple places (`block_find_object`, `block_replace_tags`, R6 tag mutation). Caching would be fragile and require updating all mutation sites. The `vapply` replacement was sufficient.
 
-- **Batching markdown processing**: Each tag's markdown is processed independently because it needs per-tag error handling and the evaluation environment is shared. Batching would require significant restructuring.
+- **Batching markdown processing**: Each tag's markdown is processed independently because it needs per-tag error handling and the evaluation environment is shared.
 
-- **Optimizing `can_parse()`**: Called 360 times with `tryCatch` overhead, but the total time is small (~2ms).
-
-- **Optimizing pkgload/desc calls**: `pkg_name`, `description$new`, and `load_code` consume ~20% of wall time but are in external packages (pkgload, desc). These would need upstream fixes.
+- **Optimizing pkgload/desc calls**: `pkg_name`, `description$new`, and `load_code` are in external packages. With `load_code = "installed"` these are avoided entirely, making the roxygen2-internal optimizations much more visible.
 
 ## Architecture notes for future optimization
 
-The main processing phases and their approximate costs on roxygen2:
+The remaining processing time (~487ms) breaks down roughly as:
 
-| Phase | Time | Notes |
-|-------|------|-------|
-| `load_code` (pkgload) | ~500ms | Dominates. External dependency. |
-| `parse_package` | ~86ms | Tokenize + parse tags + markdown |
-| `block_set_env` | ~100ms | Object detection, defaults |
-| `roclet_process` | ~110ms | Rd generation |
-| `roclet_output` | ~100ms | File I/O, hashing, writing |
-| Overhead | ~100ms | Setup, namespace, collate |
+| Area | % of time | Notes |
+|------|-----------|-------|
+| Parsing (tokenize + parse_tags) | ~28% | Core C++ tokenizer + R tag dispatch |
+| Markdown processing | ~22% | commonmark XML + xml2 tree walking |
+| Standalone purrr overhead | ~18% | Remaining map/map_chr/map_lgl calls |
+| Object detection | ~12% | S3/S4/R6 method detection |
+| Rd generation | ~8% | roclet_process.roclet_rd |
+| knitr inline code eval | ~7% | Actual R code evaluation in docs |
+| Everything else | ~5% | File I/O, setup, namespace |
 
-The biggest remaining opportunity for speedup is in `load_code` (pkgload), which accounts for roughly half of the total time. Within roxygen2's own code, the markdown pipeline (commonmark XML parsing + xml2 tree walking) is the single largest cost, but further optimization would require either caching parsed XML or moving to a faster markdown parser.
+The biggest remaining single opportunity is the standalone purrr overhead (~18%), which could be addressed by either replacing the standalone file with direct `vapply`/`lapply` calls throughout, or by optimizing `.rlang_purrr_map_mold` to skip `as_function()` when the function is already a function.

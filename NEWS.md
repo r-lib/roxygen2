@@ -35,7 +35,7 @@
 * roxygen2 no longer depends on purrr.
 * roxygen2 now requires R 4.1 (#1632).
 * S3 method handling improvements:
-  * Method parsing now prefers the longest matching generic name, so e.g. `all.equal.numeric` is correctly identified as a method of `all.equal` rather than `all` (#1587).
+  * Methods of `all.equal()` (e.g. `all.equal.numeric`) are now correctly identified as methods of `all.equal()`, `all()` (#1587).
   * The warning about undocumented methods no longer errors when the function lacks a srcref, e.g. because a debugger breakpoint is set (#1589, #1710).
   * The warning about undocumented methods no longer incorrectly flags S4 methods of S3 generics as unexported (#1715).
 * `@description` no longer errors when the markdown text starts with a heading (#1705).

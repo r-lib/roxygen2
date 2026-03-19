@@ -80,6 +80,12 @@ find_generic <- function(name, env = parent.frame()) {
     return(NULL)
   }
 
+  # special case all.equal() methods to avoid treating as all() methods (#1587)
+  if (startsWith(name, "all.equal.") && is_s3_generic("all.equal", env)) {
+    method <- substr(name, nchar("all.equal.") + 1, nchar(name))
+    return(c("all.equal", method))
+  }
+
   pieces <- str_split(name, fixed("."))[[1]]
   n <- length(pieces)
 
@@ -88,7 +94,7 @@ find_generic <- function(name, env = parent.frame()) {
     return(NULL)
   }
 
-  for (i in rev(seq_len(n - 1))) {
+  for (i in seq_len(n - 1)) {
     generic <- paste0(pieces[seq_len(i)], collapse = ".")
     class <- paste0(pieces[(i + 1):n], collapse = ".")
 

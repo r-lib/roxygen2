@@ -148,7 +148,7 @@ r6_resolve_params <- function(method, block) {
   par <- keep(tags, \(t) t$tag == "param")
   nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
 
-  mnames <- str_trim(unlist(strsplit(nms, ",")))
+  mnames <- trimws(unlist(strsplit(nms, ",")))
   dup <- unique(mnames[duplicated(mnames)])
   for (m in dup) {
     warn_roxy_block(
@@ -181,7 +181,7 @@ r6_resolve_params <- function(method, block) {
   # For initialize(), inherit from @field tags for any still-missing params
   if (method$name == "initialize") {
     nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
-    mnames <- str_trim(unlist(strsplit(nms, ",")))
+    mnames <- trimws(unlist(strsplit(nms, ",")))
     miss <- setdiff(fnames, mnames)
 
     if (length(miss) > 0) {
@@ -198,7 +198,7 @@ r6_resolve_params <- function(method, block) {
 
   # Check if anything is still missing
   nms <- gsub(",", ", ", map_chr(par, \(x) x[["val"]][["name"]]))
-  mnames <- str_trim(unlist(strsplit(nms, ",")))
+  mnames <- trimws(unlist(strsplit(nms, ",")))
   miss <- setdiff(fnames, mnames)
   for (m in miss) {
     warn_roxy_block(
@@ -211,7 +211,7 @@ r6_resolve_params <- function(method, block) {
   }
 
   # Order them according to formals
-  firstnames <- str_trim(
+  firstnames <- trimws(
     map_chr(strsplit(map_chr(par, \(x) x[["val"]][["name"]]), ","), \(x) x[[1]])
   )
   par <- par[order(match(firstnames, fnames))]

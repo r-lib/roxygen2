@@ -319,7 +319,7 @@ find_params <- function(name, topics, source, tag = "@inherits") {
     return()
   }
 
-  param_names <- str_trim(names(params))
+  param_names <- trimws(names(params))
   param_names <- strsplit(param_names, ",\\s*")
   param_names <- lapply(param_names, function(x) {
     x[x == "\\dots"] <- "..."
@@ -457,7 +457,7 @@ find_field <- function(topic, field_name) {
     value <- tag[[1]]
     attr(value, "Rd_tag") <- NULL
 
-    str_trim(rd2text(value, attr(topic, "package")))
+    trimws(rd2text(value, attr(topic, "package")))
   } else {
     topic$get_value(field_name)
   }

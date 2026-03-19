@@ -26,8 +26,8 @@ topic_add_r6_methods <- function(rd, block, env, base_path) {
 # This function detects that case and promotes the class-level @details back
 # to @description.
 r6_fix_intro <- function(block) {
-  types <- map_chr(block$tags, \(t) r6_tag_type(t, block))
-  tags <- map_chr(block$tags, \(t) t$tag)
+  types <- vapply(block$tags, r6_tag_type, character(1), block = block, USE.NAMES = FALSE)
+  tags <- vapply(block$tags, `[[`, "tag", FUN.VALUE = character(1), USE.NAMES = FALSE)
 
   has_class_desc <- any(tags == "description" & types == "class")
   has_class_details <- any(tags == "details" & types == "class")

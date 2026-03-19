@@ -93,5 +93,5 @@ first_time <- function(path) {
 }
 
 roxygen_version <- function(path = ".") {
-  stringr::str_trim(desc::desc_get("RoxygenNote", path)[[1]])
+  trimws(desc::desc_get("RoxygenNote", path)[[1]])
 }

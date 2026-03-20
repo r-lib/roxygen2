@@ -18,3 +18,22 @@
 **Result:** 11x faster for `markdown_evaluate()`, saving ~12ms per `roxygenize()` run. All 1105 tests pass.
 
 **Verdict:** SUCCESS — committed.
+
+## Experiment 2: Skip Rd tag escaping in `escape_rd_for_md()` for text without backslashes
+
+**Hypothesis:** `escape_rd_for_md()` searches for Rd macros (e.g., `\code{}`, `\link{}`) to protect them from markdown parsing. But most roxygen text doesn't contain any Rd macros. A fast `grepl("\\", text, fixed = TRUE)` check can skip all the work.
+
+**Data:** Of 240 calls during `roxygenize()` on roxygen2, only 4 contain backslashes (236 are plain text).
+
+**Change:** Added early return in `escape_rd_for_md()` when text contains no backslash character, attaching the required empty attribute structure for `unescape_rd_for_md()`.
+
+**Microbenchmark (per call, simple text):**
+
+| Version | min | median |
+|---------|-----|--------|
+| Before | 106µs | 121µs |
+| After | 1.1µs | 1.3µs |
+
+**Result:** 92x faster for simple text, saving ~28ms per `roxygenize()` run (236 × 120µs). All 1105 tests pass.
+
+**Verdict:** SUCCESS — committed.

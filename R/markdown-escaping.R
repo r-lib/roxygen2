@@ -20,7 +20,18 @@
 #' * `unescape_rd_for_md`: the original Rd text.
 #' @rdname markdown-internals
 #' @keywords internal
+empty_rd_tags <- data.frame(
+  tag = character(),
+  start = integer(),
+  end = integer(),
+  argend = integer()
+)
+
 escape_rd_for_md <- function(text) {
+  if (!grepl("\\", text, fixed = TRUE)) {
+    attr(text, "roxygen-markdown-subst") <- list(tags = empty_rd_tags, id = "")
+    return(text)
+  }
   rd_tags <- find_fragile_rd_tags(text, escaped_for_md)
   protected <- protect_rd_tags(text, rd_tags)
   double_escape_md(protected)

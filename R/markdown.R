@@ -111,10 +111,11 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     # the real "`r " left by six characters, there happens to be another
     # "`r " there.
 
-    indent <- nchar(str_extract(line, "^[ ]+"))
+    m <- regexpr("^[ ]+", line)
+    indent <- attr(m, "match.length")
     if (
-      !is.na(indent) &&
-        str_sub(line, start - 1 + indent, start + 1 + indent) == "`r "
+      m > 0L &&
+        substr(line, start - 1 + indent, start + 1 + indent) == "`r "
     ) {
       rcode_pos$start_column[l] <- rcode_pos$start_column[l] + indent
       rcode_pos$end_column[l] <- rcode_pos$end_column[l] + indent

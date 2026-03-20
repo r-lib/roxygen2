@@ -328,7 +328,7 @@ you want to use it. For example, if you created some new tags in
 {packageFoo}, and would like to use these tags in your documentation for
 {packageBar}, append this line to the `DESCRIPTION` of {packageBar}:
 
-    Roxygen: list(packages =  "packageFoo")
+    Config/roxygen2/packages: packageFoo
 
 See
 [`load_options()`](https://roxygen2.r-lib.org/dev/reference/load_options.md)
@@ -521,7 +521,7 @@ You can also add the roclet to the target package’s DESCRIPTION file,
 like this:
 
 ``` r
-Roxygen: list(roclets = c("collate", "rd", "namespace", "yourPackage::roclet"))
+Config/roxygen2/roclets: collate, rd, namespace, yourPackage::roclet
 ```
 
 See

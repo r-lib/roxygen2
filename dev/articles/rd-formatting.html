@@ -116,7 +116,7 @@ this vignette to figure out what’s going on and how to fix it.</p>
 </h2>
 <p>To turn on Markdown support for a package, insert this entry into the
 <code>DESCRIPTION</code> file of the package:</p>
-<pre><code><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>markdown <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="va">Config</span><span class="op">/</span><span class="va">roxygen2</span><span class="op">/</span><span class="va">markdown</span><span class="op">:</span> <span class="cn">TRUE</span></span></code></pre>
 <p>If you use devtools/usethis, this will be automatically inserted for
 you when you create a new package. If you’re updating an existing
 package, we recommend <code>usethis::use_roxygen_md()</code> which will

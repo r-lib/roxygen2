@@ -162,8 +162,8 @@ documentation goes. See the next section for more details.
   otherwise.
 
 - To turn off the special handling of R6 classes and go back to the
-  roxygen2 6.x.x behavior, use the `r6 = FALSE` option in `DESCRIPTION`,
-  in the `Roxygen` entry: `Roxygen: list(r6 = FALSE)`.
+  roxygen2 6.x.x behavior, use `Config/roxygen2/r6: FALSE` in
+  `DESCRIPTION`.
 
 roxygen2 automatically generates additional sections for an R6 class:
 

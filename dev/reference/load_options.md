@@ -1,9 +1,8 @@
 # Load roxygen2 options
 
-Options can be stored in the `Roxygen` field of the `DESCRIPTION`, or in
-`man/roxygen/meta.R`. In either case, the code is parsed and evaluated
-in a child of the base environment. Call `roxy_meta_get()` to access
-current option values from within tag and roclet methods.
+Options can be stored in `DESCRIPTION` using `Config/roxygen2/` fields,
+or in `man/roxygen/meta.R`. Call `roxy_meta_get()` to access current
+option values from within tag and roclet methods.
 
 Options in `man/roxygen/meta.R` override those present in `DESCRIPTION`.
 
@@ -63,15 +62,17 @@ roxy_meta_get(key = NULL, default = NULL)
 
 ## How to set
 
-Either set in `DESCRIPTION`:
+Either set in `DESCRIPTION` using `Config/roxygen2/` fields:
 
-    Roxygen: list(markdown = TRUE, load = "installed")
+    Config/roxygen2/markdown: TRUE
+    Config/roxygen2/load: installed
 
-Or if longer, you can put in `/man/roxygen/meta.R`:
+Or if you need more complex options (like `rd_family_title` or
+`knitr_chunk_options`), put them in `man/roxygen/meta.R`:
 
     list(
-      markdown = TRUE,
-      load = "installed"
+      rd_family_title = list(models = "Model functions"),
+      knitr_chunk_options = list(fig.width = 7)
     )
 
 ## See also

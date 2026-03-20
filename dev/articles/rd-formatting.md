@@ -11,7 +11,7 @@ this vignette to figure out what’s going on and how to fix it.
 To turn on Markdown support for a package, insert this entry into the
 `DESCRIPTION` file of the package:
 
-    Roxygen: list(markdown = TRUE)
+    Config/roxygen2/markdown: TRUE
 
 If you use devtools/usethis, this will be automatically inserted for you
 when you create a new package. If you’re updating an existing package,

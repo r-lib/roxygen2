@@ -391,7 +391,7 @@ where you want to use it. For example, if you created some new tags in
 {packageFoo}, and would like to use these tags in your documentation for
 {packageBar}, append this line to the <code>DESCRIPTION</code> of
 {packageBar}:</p>
-<pre><code><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>packages <span class="op">=</span>  <span class="st">"packageFoo"</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="va">Config</span><span class="op">/</span><span class="va">roxygen2</span><span class="op">/</span><span class="va">packages</span><span class="op">:</span> <span class="va">packageFoo</span></span></code></pre>
 <p>See <code><a href="../reference/load_options.html">load_options()</a></code> for more details.</p>
 </div>
 </div>
@@ -560,8 +560,7 @@ screen:</p>
 the roclet, e.g. <code>memo_roclet</code> above.</p>
 <p>You can also add the roclet to the target package’s DESCRIPTION file,
 like this:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>roclets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"collate"</span>, <span class="st">"rd"</span>, <span class="st">"namespace"</span>, <span class="st">"yourPackage::roclet"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>Config<span class="sc">/</span>roxygen2<span class="sc">/</span>roclets<span class="sc">:</span> collate, rd, namespace, yourPackage<span class="sc">::</span>roclet</span></code></pre></div>
 <p>See <code><a href="../reference/load_options.html">load_options()</a></code> for more details.</p>
 <p>Your package only needs to be installed when the user documents the
 package, which doesn’t correspond precisely to any field in the

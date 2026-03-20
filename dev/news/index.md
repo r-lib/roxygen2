@@ -2,6 +2,12 @@
 
 ## roxygen2 (development version)
 
+- roxygen2 options can now be set using `Config/roxygen2/` fields in
+  DESCRIPTION (e.g. `Config/roxygen2/markdown: TRUE`) instead of the
+  `Roxygen` field. The old `Roxygen` field is still supported.
+  Similarly, the roxygen2 version is now stored in
+  `Config/roxygen2/version` instead of `RoxygenNote`
+  ([\#1328](https://github.com/r-lib/roxygen2/issues/1328)).
 - Tags that expect single-line input now warn when they span multiple
   lines, catching common mistakes. Affected tags: `@aliases`,
   `@concept`, `@encoding`, `@exportClass`, `@exportMethod`,

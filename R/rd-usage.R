@@ -109,7 +109,7 @@ function_usage <- function(name, formals, format_name = identity) {
 }
 
 is_replacement_fun <- function(name) {
-  str_detect(name, fixed("<-"))
+  grepl("<-", name, fixed = TRUE)
 }
 is_infix_fun <- function(name) {
   ops <- c(
@@ -133,7 +133,7 @@ is_infix_fun <- function(name) {
     "::",
     ":::"
   )
-  str_detect(name, "^%.*%$") | name %in% ops
+  grepl("^%.*%$", name) | name %in% ops
 }
 is_padded_infix_fun <- function(name) {
   ops <- c(
@@ -150,7 +150,7 @@ is_padded_infix_fun <- function(name) {
     "&",
     "|"
   )
-  str_detect(name, "^%.*%$") || name %in% ops
+  grepl("^%.*%$", name) || name %in% ops
 }
 
 usage_args <- function(args) {
@@ -203,7 +203,7 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
   args <- args_string(usage_args(formals))
   bare <- args_call(name, args)
 
-  if (!str_detect(bare, "\n") && nchar(bare, type = "width") < width) {
+  if (!grepl("\n", bare, fixed = TRUE) && nchar(bare, type = "width") < width) {
     # Don't need to wrap
     out <- args_call(format_name(name), args)
   } else {

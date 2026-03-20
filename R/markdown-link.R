@@ -130,7 +130,7 @@ parse_link <- function(destination, contents, state) {
   explicit_pkg <- !is.na(pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   topic <- sub("[(][)]$", "", fun)
-  if (!has_link_text && str_detect(destination, "-class$")) {
+  if (!has_link_text && grepl("-class$", destination)) {
     fun <- str_match(fun, "^(.*)-class$")[1, 2]
   }
 

@@ -224,7 +224,7 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
       return()
     }
 
-    if (!str_detect(x$val, "::")) {
+    if (!grepl("::", x$val, fixed = TRUE)) {
       warn_roxy_tag(x, "must have form package::generic")
       return()
     }
@@ -232,7 +232,7 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
     generic <- str_split(x$val, "::")[[1]]
     generic_re <- paste0("^", generic[[2]], "\\.")
 
-    if (!str_detect(obj$alias, generic_re)) {
+    if (!grepl(generic_re, obj$alias)) {
       warn_roxy_tag(
         x,
         "generic ({.str {generic[[2]]}}) doesn't match function ({.str {obj$alias}})",

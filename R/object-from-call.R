@@ -209,7 +209,7 @@ add_s3_metadata <- function(val, name, env, block) {
 
   if (block_has_tags(block, "exportS3Method")) {
     method <- block_get_tag_value(block, "exportS3Method")
-    if (length(method) == 1 && str_detect(method, "::")) {
+    if (length(method) == 1 && grepl("::", method, fixed = TRUE)) {
       generic <- strsplit(method, "::")[[1]][[2]]
       class <- gsub(paste0("^", generic, "\\."), "", name)
       return(s3_method(val, c(generic, class)))

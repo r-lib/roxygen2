@@ -84,7 +84,7 @@ write_if_different <- function(path, contents, command = NULL, check = TRUE) {
     return(FALSE)
   }
 
-  if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
+  if (!grepl("^[a-zA-Z][a-zA-Z0-9_.-]*$", name)) {
     cli::cli_inform(c(
       x = "Skipping {.path {name}}",
       i = "Invalid file name"
@@ -195,5 +195,5 @@ auto_quote <- function(x) {
 }
 
 is_syntactic <- function(x) make.names(x) == x
-has_quotes <- function(x) str_detect(x, r"[^(`|'|").*\1$]")
+has_quotes <- function(x) grepl(r"[^(`|'|").*\1$]", x)
 strip_quotes <- function(x) str_replace(x, r"[^(`|'|")(.*)\1$]", r"(\2)")

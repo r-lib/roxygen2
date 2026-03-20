@@ -79,7 +79,7 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     start <- rcode_pos$start_column[l]
 
     # Maybe correct? At some point this will be fixed upstream, hopefully.
-    if (str_sub(line, start - 1, start + 1) == "`r ") {
+    if (substr(line, start - 1, start + 1) == "`r ") {
       next
     }
 
@@ -107,7 +107,7 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
 
 is_markdown_code_node <- function(x) {
   info <- xml_attr(x, "info")
-  str_sub(xml_text(x), 1, 2) == "r " ||
+  substr(xml_text(x), 1, 2) == "r " ||
     (!is.na(info) && grepl("^[{][a-zA-z]+[}, ]", info))
 }
 

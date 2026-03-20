@@ -119,7 +119,7 @@ find_fragile_rd_tags <- function(text, fragile) {
   ftags <- ftags[keep, ]
 
   if (nrow(ftags)) {
-    ftags$text <- str_sub(text, ftags$start, ftags$argend)
+    ftags$text <- substring(text, ftags$start, ftags$argend)
   }
 
   ftags
@@ -142,7 +142,7 @@ find_all_rd_tags <- function(text) {
   ## Find the end of the argument list for each tag. Note that
   ## tags might be embedded into the arguments of other tags.
   tags$argend <- map_int(seq_len(nrow(tags)), function(i) {
-    tag_plus <- str_sub(text, tags$end[i], text_len)
+    tag_plus <- substr(text, tags$end[i], text_len)
     findEndOfTag(tag_plus, is_code = FALSE) + tags$end[i]
   })
 
@@ -165,10 +165,14 @@ find_all_tag_names <- function(text) {
   ## Find the tags without arguments first
   tag_pos <- str_locate_all(text, r"(\\[a-zA-Z][a-zA-Z0-9]*)")[[1]]
 
-  data.frame(
-    tag = str_sub(text, tag_pos[, "start"], tag_pos[, "end"]),
-    as.data.frame(tag_pos)
-  )
+  if (nrow(tag_pos) == 0) {
+    data.frame(tag = character(), start = integer(), end = integer())
+  } else {
+    data.frame(
+      tag = substring(text, tag_pos[, "start"], tag_pos[, "end"]),
+      as.data.frame(tag_pos)
+    )
+  }
 }
 
 #' Replace fragile Rd tags with placeholders
@@ -217,7 +221,11 @@ str_sub_same <- function(str, repl, id) {
   for (i in seq_len(nrow(repl))) {
     ## The trailing - is needed, to distinguish between -1 and -10
     new_text <- paste0(id, "-", i, "-")
-    str_sub(str, repl$start[i], repl$argend[i]) <- new_text
+    str <- paste0(
+      substr(str, 1, repl$start[i] - 1),
+      new_text,
+      substr(str, repl$argend[i] + 1, nchar(str))
+    )
 
     ## Need to shift other coordinates (we shift everything,
     ## it is just simpler).

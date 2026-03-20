@@ -71,3 +71,22 @@
 **Result:** 24x faster per call, saving ~3.4ms per `roxygenize()` run (280 calls × 12µs). All 1105 tests pass.
 
 **Verdict:** SUCCESS — committed.
+
+## Experiment 5: Skip link-reference regex in `get_md_linkrefs()` when no `[` present
+
+**Hypothesis:** `get_md_linkrefs()` runs a complex regex via `str_match_all()` on every tag's text to find markdown link references like `[function()]`. Most tags don't contain `[` at all.
+
+**Data:** Of 240 calls, only 35 contain `[` (205 are plain text without brackets).
+
+**Change:** Added early return when `grepl("[", text, fixed = TRUE)` is FALSE.
+
+**Microbenchmark (per call, simple text):**
+
+| Version | min | median |
+|---------|-----|--------|
+| Before | 19.4µs | 23.3µs |
+| After | 779ns | 1.4µs |
+
+**Result:** 17x faster for plain text, saving ~4.5ms per `roxygenize()` run (205 × 22µs). All 1105 tests pass.
+
+**Verdict:** SUCCESS — committed.

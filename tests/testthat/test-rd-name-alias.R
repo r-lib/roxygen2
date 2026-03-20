@@ -114,8 +114,8 @@ test_that("aliases split into pieces", {
     NULL"
   )[[1]]
 
-  expect_match(out$get_value("alias"), fixed("a"), all = FALSE)
-  expect_match(out$get_value("alias"), fixed("b"), all = FALSE)
+  expect_match(out$get_value("alias"), "a", all = FALSE, fixed = TRUE)
+  expect_match(out$get_value("alias"), "b", all = FALSE, fixed = TRUE)
 })
 
 test_that("aliases escaped, not quoted", {

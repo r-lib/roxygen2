@@ -11,8 +11,8 @@ test_that("@example loads from specified files", {
   )[[1]]
 
   examples <- out$get_value("examples")
-  expect_match(examples, fixed("example <- 'example1'"), all = FALSE)
-  expect_match(examples, fixed("example <- 'example2'"), all = FALSE)
+  expect_match(examples, "example <- 'example1'", all = FALSE, fixed = TRUE)
+  expect_match(examples, "example <- 'example2'", all = FALSE, fixed = TRUE)
 })
 
 test_that("@example captures examples (#470)", {

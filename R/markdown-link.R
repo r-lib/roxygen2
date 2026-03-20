@@ -87,8 +87,7 @@ get_md_linkrefs <- function(text) {
   }
 
   ## For the [fun] form the link text is the same as the destination.
-  # Need to check both NA and "" for different versions of stringr
-  refs[, 3] <- ifelse(is.na(refs[, 3]) | refs[, 3] == "", refs[, 2], refs[, 3])
+  refs[, 3] <- ifelse(refs[, 3] == "", refs[, 2], refs[, 3])
 
   refs3encoded <- map_chr(refs[, 3], URLencode)
   paste0("[", refs[, 3], "]: ", "R:", refs3encoded)

@@ -1,6 +1,3 @@
-#' @import stringr
-NULL
-
 #' Roclet: make Rd files
 #'
 #' @description

@@ -206,10 +206,6 @@ str_split_fixed <- function(x, pattern, n) {
 }
 
 str_count <- function(x, pattern, fixed = FALSE) {
-  if (inherits(pattern, "stringr_fixed")) {
-    pattern <- as.character(pattern)
-    fixed <- TRUE
-  }
   m <- gregexpr(pattern, x, fixed = fixed)
   vapply(m, \(i) sum(i > 0L), integer(1))
 }

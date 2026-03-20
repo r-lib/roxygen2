@@ -54,3 +54,20 @@
 **Result:** ~17% faster for `is_s3_generic()` calls, saving ~3ms per `roxygenize()` run. Savings scale with package size (more S3 methods = more cache hits). All 1105 tests pass.
 
 **Verdict:** SUCCESS — committed. Small but clean improvement.
+
+## Experiment 4: Use base `strsplit()` instead of `stringr::str_split()` in `find_generic()`
+
+**Hypothesis:** `stringr::str_split()` has overhead from the stringr/stringi infrastructure. For a simple fixed-character split, base `strsplit()` is faster.
+
+**Change:** Replaced `str_split(name, fixed("."))[[1]]` with `strsplit(name, ".", fixed = TRUE)[[1]]` in `find_generic()`.
+
+**Microbenchmark (per call):**
+
+| Version | min | median |
+|---------|-----|--------|
+| str_split | 10.5µs | 12.6µs |
+| strsplit | 410ns | 533ns |
+
+**Result:** 24x faster per call, saving ~3.4ms per `roxygenize()` run (280 calls × 12µs). All 1105 tests pass.
+
+**Verdict:** SUCCESS — committed.

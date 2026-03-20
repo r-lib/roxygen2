@@ -263,7 +263,7 @@ roxy_tag_parse.roxy_tag_memo <- function(x) {
     return()
   }
 
-  parsed <- stringi::stri_match(str = x$raw, regex = "\\[(.*)\\](.*)")[1, ]
+  parsed <- regmatches(x$raw, regexec("\\[(.*)\\](.*)", x$raw))[[1]]
 
   x$val <- list(
     header = parsed[[2]],

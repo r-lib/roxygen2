@@ -1,5 +1,16 @@
 # Optimization results
 
+## Overall results
+
+End-to-end `roxygenize(load_code = "source")` on the roxygen2 package itself (10 iterations, `devtools::load_all()` in a clean R subprocess):
+
+| Version | min | median | Improvement |
+|---------|-----|--------|-------------|
+| Before (main) | 863ms | 936ms | — |
+| After (all experiments) | 805ms | 839ms | 10.4% faster |
+
+The optimizations are all fast-path short-circuits that avoid expensive work when it's not needed. They have the largest impact on packages where most roxygen tags contain simple text without inline R code, Rd macros, or markdown links (which is the common case).
+
 ## Experiment 1: Skip XML parsing in `markdown_evaluate()` for text without inline R code
 
 **Hypothesis:** `markdown_evaluate()` parses every tag's text to XML to check for inline R code (`\`r ...\``), but the vast majority of tags don't contain any. A fast `grepl()` pre-check can skip the expensive XML parsing.

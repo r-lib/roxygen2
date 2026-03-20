@@ -3,9 +3,6 @@
 \name{double_escape_md}
 \alias{double_escape_md}
 \title{Check markdown escaping}
-\value{
-Double-escaped text.
-}
 \description{
 This is a regression test for Markdown escaping.
 

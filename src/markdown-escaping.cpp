@@ -1,13 +1,9 @@
 #include <cpp11/R.hpp>
 #include <cpp11/list.hpp>
 #include <cpp11/strings.hpp>
-#include <algorithm>
 #include <string>
 #include <unordered_set>
 #include <vector>
-
-// Declared in isComplete.cpp
-int roxygen_parse_tag(std::string string, bool is_code, int mode);
 
 // Rd tags that are "fragile" and must be protected from markdown parsing.
 // If you update this list, also update the hardcoded list in vignettes/rd-formatting.Rmd.
@@ -35,132 +31,152 @@ static const std::unordered_set<std::string> fragile_tags = {
 };
 // clang-format on
 
-struct TagInfo {
-  std::string tag;
-  int start;  // 1-based, start of tag (the backslash)
-  int end;    // 1-based, end of tag name
-  int argend; // 1-based, end of arguments
-};
-
-// Find all \tagname patterns in text (where tagname matches [a-zA-Z][a-zA-Z0-9]*)
-static std::vector<TagInfo> find_tag_names(const std::string& text) {
-  std::vector<TagInfo> tags;
+// Double-escape a backslash into the output buffer, except \[ and \]
+static void double_escape_char(std::string& out, const std::string& text, int& i) {
   int n = text.length();
-
-  for (int i = 0; i < n; i++) {
-    if (text[i] == '\\' && i + 1 < n && std::isalpha(text[i + 1])) {
-      int start = i; // 0-based start
-      int j = i + 1;
-      while (j < n && std::isalnum(text[j])) {
-        j++;
-      }
-      TagInfo info;
-      info.tag = text.substr(start, j - start);
-      info.start = start + 1; // Convert to 1-based
-      info.end = j;           // 1-based (j-1 is 0-based end, +1 for 1-based)
-      tags.push_back(info);
-      i = j - 1; // Will be incremented by for loop
-    }
+  if (i + 1 < n && (text[i + 1] == '[' || text[i + 1] == ']')) {
+    out += '\\';
+    out += text[i + 1];
+    i++;
+  } else {
+    out += '\\';
+    out += '\\';
   }
-
-  return tags;
 }
 
-// Apply double-escaping for markdown:
-// - Double all backslashes
-// - But un-double \[ and \] (they should stay single-escaped)
-static std::string double_escape(const std::string& text) {
-  std::string result;
-  result.reserve(text.length() + text.length() / 4);
-
-  int n = text.length();
-  for (int i = 0; i < n; i++) {
-    if (text[i] == '\\') {
-      if (i + 1 < n && (text[i + 1] == '[' || text[i + 1] == ']')) {
-        // Don't double-escape \[ and \]
-        result += '\\';
-        result += text[i + 1];
-        i++;
-      } else {
-        result += '\\';
-        result += '\\';
-      }
-    } else {
-      result += text[i];
-    }
-  }
-
-  return result;
-}
-
+// Single-pass escape: scans text once, double-escaping normal text and
+// replacing top-level fragile Rd tags with placeholders.
+//
+// Uses a simple state machine for the Rd parser (is_code=false):
+// - RD: normal Rd text inside a tag
+// - RD_ESCAPE: just saw \ inside a tag (skip one char for brace counting)
+// - RD_COMMENT: inside a % comment (braces not counted)
 [[cpp11::register]]
 cpp11::list escape_rd_for_md_c(std::string text) {
   using namespace cpp11;
 
-  // Find all tag names
-  std::vector<TagInfo> all_tags = find_tag_names(text);
+  int n = text.length();
+  std::string output;
+  output.reserve(n + n / 4);
+  std::vector<std::string> captures;
+  std::string id = "ROXYGEN-PLACEHOLDER";
 
-  // Filter to fragile tags and find their argument ends
-  std::vector<TagInfo> ftags;
-  int text_len = text.length();
-  for (auto& tag : all_tags) {
-    if (fragile_tags.count(tag.tag)) {
-      // Find end of arguments using existing C++ parser
-      // end is 1-based, substr needs 0-based
-      std::string tag_plus = text.substr(tag.end - 1, text_len - tag.end + 1);
-      int result = roxygen_parse_tag(tag_plus, false, 1);
-      tag.argend = result + tag.end;
-      ftags.push_back(tag);
+  // State for capturing inside a fragile tag
+  enum class Sub { RD, RD_ESCAPE, RD_COMMENT };
+  bool capturing = false;
+  std::string capture_buf;
+  int braces = 0;
+  Sub sub = Sub::RD;
+
+  int i = 0;
+  while (i < n) {
+    if (!capturing) {
+      // NORMAL mode: double-escape text, detect fragile tags
+      if (text[i] == '\\' && i + 1 < n && std::isalpha(text[i + 1])) {
+        // Read tag name
+        int tag_start = i;
+        int j = i + 1;
+        while (j < n && std::isalnum(text[j])) {
+          j++;
+        }
+        std::string tag_name = text.substr(tag_start, j - tag_start);
+
+        if (fragile_tags.count(tag_name)) {
+          // Start capturing this fragile tag
+          capturing = true;
+          braces = 0;
+          sub = Sub::RD;
+          capture_buf = tag_name;
+          i = j;
+
+          // Check if the tag has arguments (next char must be '{')
+          if (i >= n || text[i] != '{') {
+            // Tag is complete with no arguments
+            captures.push_back(capture_buf);
+            output += id + "-" + std::to_string(captures.size()) + "-";
+            capturing = false;
+          }
+          continue;
+        } else {
+          // Not fragile: double-escape the backslash, output tag name
+          double_escape_char(output, text, i);
+          i++;
+          // Output the rest of the tag name (alpha chars after the \)
+          while (i < n && std::isalnum(text[i])) {
+            output += text[i];
+            i++;
+          }
+          continue;
+        }
+      } else if (text[i] == '\\') {
+        double_escape_char(output, text, i);
+        i++;
+        continue;
+      } else {
+        output += text[i];
+        i++;
+        continue;
+      }
+    } else {
+      // CAPTURE mode: accumulate text, track Rd state machine
+      capture_buf += text[i];
+
+      switch (sub) {
+      case Sub::RD:
+        if (text[i] == '{') {
+          braces++;
+        } else if (text[i] == '}') {
+          braces--;
+        } else if (text[i] == '\\') {
+          sub = Sub::RD_ESCAPE;
+        } else if (text[i] == '%') {
+          sub = Sub::RD_COMMENT;
+        }
+        break;
+      case Sub::RD_ESCAPE:
+        sub = Sub::RD;
+        break;
+      case Sub::RD_COMMENT:
+        if (text[i] == '\n') {
+          sub = Sub::RD;
+        }
+        break;
+      }
+
+      // Check if the tag is complete
+      bool complete = braces == 0 && (sub == Sub::RD || sub == Sub::RD_COMMENT);
+      if (complete && (i + 1 >= n || text[i + 1] != '{')) {
+        captures.push_back(capture_buf);
+        output += id + "-" + std::to_string(captures.size()) + "-";
+        capturing = false;
+      }
+
+      i++;
     }
   }
 
-  // Remove embedded fragile tags (a fragile tag inside another fragile tag)
-  std::vector<TagInfo> kept;
-  for (size_t i = 0; i < ftags.size(); i++) {
-    int count = 0;
-    for (size_t j = 0; j < ftags.size(); j++) {
-      if (ftags[j].start <= ftags[i].start &&
-          ftags[j].argend >= ftags[i].argend) {
-        count++;
+  // If we were still capturing at end of string (incomplete tag), flush as-is
+  if (capturing) {
+    // Double-escape the capture buffer since it wasn't a complete tag
+    for (int k = 0; k < (int)capture_buf.length(); k++) {
+      if (capture_buf[k] == '\\') {
+        double_escape_char(output, capture_buf, k);
+      } else {
+        output += capture_buf[k];
       }
     }
-    if (count == 1) {
-      kept.push_back(ftags[i]);
-    }
   }
 
-  // If no fragile tags found, just double-escape and return
-  if (kept.empty()) {
-    std::string escaped = double_escape(text);
-    writable::strings tag_texts;
-    writable::list result({"text"_nm = escaped, "id"_nm = "", "tags"_nm = tag_texts});
-    return result;
+  writable::strings tag_texts(captures.size());
+  for (size_t j = 0; j < captures.size(); j++) {
+    tag_texts[j] = captures[j];
   }
 
-  // Sort by start position
-  std::sort(
-      kept.begin(), kept.end(),
-      [](const TagInfo& a, const TagInfo& b) { return a.start < b.start; });
-
-  // Extract original text spans before replacement
-  writable::strings tag_texts(kept.size());
-  for (size_t i = 0; i < kept.size(); i++) {
-    tag_texts[i] = text.substr(kept[i].start - 1, kept[i].argend - kept[i].start + 1);
-  }
-
-  static int counter = 0;
-  std::string id = "ROXYGEN-PLACEHOLDER-" + std::to_string(counter++);
-
-  // Replace fragile tags with placeholders (right to left to preserve indices)
-  for (int i = kept.size() - 1; i >= 0; i--) {
-    std::string placeholder = id + "-" + std::to_string(i + 1) + "-";
-    text.replace(kept[i].start - 1, kept[i].argend - kept[i].start + 1, placeholder);
-  }
-
-  // Double-escape
-  std::string escaped = double_escape(text);
-
-  writable::list result({"text"_nm = escaped, "id"_nm = id, "tags"_nm = tag_texts});
+  writable::list result({
+    "text"_nm = output,
+    "id"_nm = captures.empty() ? "" : id,
+    "tags"_nm = tag_texts
+  });
   return result;
 }
 

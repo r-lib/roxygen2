@@ -54,10 +54,10 @@ nice_name <- function(x) {
   }
 
   # Clean up any remaining
-  x <- str_replace_all(x, "[^A-Za-z0-9_.-]+", "-")
-  x <- str_replace_all(x, "-+", "-")
-  x <- str_replace_all(x, "^-|-$", "")
-  x <- str_replace_all(x, "^\\.", "dot-")
+  x <- gsub("[^A-Za-z0-9_.-]+", "-", x)
+  x <- gsub("-+", "-", x)
+  x <- gsub("^-|-$", "", x)
+  x <- gsub("^\\.", "dot-", x)
   x
 }
 
@@ -191,6 +191,14 @@ auto_backtick <- function(x) {
 auto_quote <- function(x) {
   needs_quotes <- !has_quotes(x) & !is_syntactic(x)
   x[needs_quotes] <- encodeString(x[needs_quotes], quote = '"')
+  x
+}
+
+re_replace_all <- function(x, pattern, fun) {
+  m <- gregexpr(pattern, x, perl = TRUE)
+  regmatches(x, m) <- lapply(regmatches(x, m), \(matches) {
+    vapply(matches, fun, character(1))
+  })
   x
 }
 

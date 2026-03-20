@@ -22,10 +22,7 @@
 escape_rd_for_md <- function(text) {
   result <- escape_rd_for_md_c(text)
   out <- result$text
-  attr(out, "roxygen-markdown-subst") <- list(
-    tags = data.frame(text = as.character(result$tags)),
-    id = result$id
-  )
+  attr(out, "roxygen-markdown-subst") <- as.character(result$tags)
   out
 }
 
@@ -34,8 +31,7 @@ escape_rd_for_md <- function(text) {
 #'   `escape_rd_for_md()`.
 #' @rdname markdown-internals
 unescape_rd_for_md <- function(rd_text, esc_text) {
-  subst <- attr(esc_text, "roxygen-markdown-subst")
-  unescape_rd_for_md_c(rd_text, subst$id, subst$tags$text)
+  unescape_rd_for_md_c(rd_text, attr(esc_text, "roxygen-markdown-subst"))
 }
 
 #' Check markdown escaping

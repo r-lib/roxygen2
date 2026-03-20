@@ -31,6 +31,8 @@ static const std::unordered_set<std::string> fragile_tags = {
 };
 // clang-format on
 
+static const std::string placeholder_id = "ROXYGEN-PLACEHOLDER";
+
 // Double-escape a backslash into the output buffer, except \[ and \]
 static void double_escape_char(std::string& out, const std::string& text, int& i) {
   int n = text.length();
@@ -46,11 +48,6 @@ static void double_escape_char(std::string& out, const std::string& text, int& i
 
 // Single-pass escape: scans text once, double-escaping normal text and
 // replacing top-level fragile Rd tags with placeholders.
-//
-// Uses a simple state machine for the Rd parser (is_code=false):
-// - RD: normal Rd text inside a tag
-// - RD_ESCAPE: just saw \ inside a tag (skip one char for brace counting)
-// - RD_COMMENT: inside a % comment (braces not counted)
 [[cpp11::register]]
 cpp11::list escape_rd_for_md_c(std::string text) {
   using namespace cpp11;
@@ -59,9 +56,11 @@ cpp11::list escape_rd_for_md_c(std::string text) {
   std::string output;
   output.reserve(n + n / 4);
   std::vector<std::string> captures;
-  std::string id = "ROXYGEN-PLACEHOLDER";
 
   // State for capturing inside a fragile tag
+  // - RD: normal Rd text inside a tag
+  // - RD_ESCAPE: just saw \ inside a tag (skip one char for brace counting)
+  // - RD_COMMENT: inside a % comment (braces not counted)
   enum class Sub { RD, RD_ESCAPE, RD_COMMENT };
   bool capturing = false;
   std::string capture_buf;
@@ -93,7 +92,7 @@ cpp11::list escape_rd_for_md_c(std::string text) {
           if (i >= n || text[i] != '{') {
             // Tag is complete with no arguments
             captures.push_back(capture_buf);
-            output += id + "-" + std::to_string(captures.size()) + "-";
+            output += placeholder_id + "-" + std::to_string(captures.size()) + "-";
             capturing = false;
           }
           continue;
@@ -147,7 +146,7 @@ cpp11::list escape_rd_for_md_c(std::string text) {
       bool complete = braces == 0 && (sub == Sub::RD || sub == Sub::RD_COMMENT);
       if (complete && (i + 1 >= n || text[i + 1] != '{')) {
         captures.push_back(capture_buf);
-        output += id + "-" + std::to_string(captures.size()) + "-";
+        output += placeholder_id + "-" + std::to_string(captures.size()) + "-";
         capturing = false;
       }
 
@@ -174,22 +173,45 @@ cpp11::list escape_rd_for_md_c(std::string text) {
 
   writable::list result({
     "text"_nm = output,
-    "id"_nm = captures.empty() ? "" : id,
     "tags"_nm = tag_texts
   });
   return result;
 }
 
 [[cpp11::register]]
-std::string unescape_rd_for_md_c(std::string rd_text, std::string id,
-                                  cpp11::strings tags) {
-  for (R_xlen_t i = 0; i < tags.size(); i++) {
-    std::string ph = id + "-" + std::to_string(i + 1) + "-";
-    std::string replacement(tags[i]);
-    size_t pos = rd_text.find(ph);
-    if (pos != std::string::npos) {
-      rd_text.replace(pos, ph.length(), replacement);
-    }
+std::string unescape_rd_for_md_c(std::string rd_text, cpp11::strings tags) {
+  if (tags.size() == 0) {
+    return rd_text;
   }
-  return rd_text;
+
+  int id_len = placeholder_id.length();
+  int n = rd_text.length();
+  std::string output;
+  output.reserve(n);
+
+  int i = 0;
+  while (i < n) {
+    // Check if we're at the start of a placeholder
+    if (rd_text[i] == placeholder_id[0] && i + id_len < n &&
+        rd_text.compare(i, id_len, placeholder_id) == 0 &&
+        rd_text[i + id_len] == '-') {
+      // Parse the number between the two dashes: ROXYGEN-PLACEHOLDER-NUMBER-
+      int j = i + id_len + 1;
+      int num = 0;
+      while (j < n && rd_text[j] >= '0' && rd_text[j] <= '9') {
+        num = num * 10 + (rd_text[j] - '0');
+        j++;
+      }
+      // Check for trailing dash and valid tag index
+      if (j < n && rd_text[j] == '-' && num >= 1 && num <= tags.size()) {
+        output += std::string(tags[num - 1]);
+        i = j + 1;
+        continue;
+      }
+    }
+    output += rd_text[i];
+    i++;
+  }
+
+  return output;
 }

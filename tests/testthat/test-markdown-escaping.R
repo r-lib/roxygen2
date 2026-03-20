@@ -1,7 +1,6 @@
 test_that("empty string passes through", {
   result <- escape_rd_for_md_c("")
   expect_equal(result$text, "")
-  expect_equal(result$id, "")
   expect_equal(as.character(result$tags), character())
 })
 
@@ -29,7 +28,7 @@ test_that("non-fragile tags are double-escaped, not captured", {
 
 test_that("fragile tag with one argument", {
   result <- escape_rd_for_md_c(r"(\code{foo()})")
-  expect_match(result$text, paste0(result$id, "-1-"))
+  expect_match(result$text, "ROXYGEN-PLACEHOLDER-1-")
   expect_equal(as.character(result$tags), r"(\code{foo()})")
 })
 
@@ -99,8 +98,7 @@ test_that("round-trip escape/unescape preserves Rd tags", {
 })
 
 test_that("unescape_rd_for_md_c restores placeholders", {
-  id <- "TESTID"
-  rd_text <- paste0("See ", id, "-1- for details")
-  result <- unescape_rd_for_md_c(rd_text, id, r"(\code{foo()})")
+  rd_text <- "See ROXYGEN-PLACEHOLDER-1- for details"
+  result <- unescape_rd_for_md_c(rd_text, r"(\code{foo()})")
   expect_equal(result, r"(See \code{foo()} for details)")
 })

@@ -41,10 +41,10 @@ extern "C" SEXP _roxygen2_escape_rd_for_md_c(SEXP text) {
   END_CPP11
 }
 // markdown-escaping.cpp
-std::string unescape_rd_for_md_c(std::string rd_text, std::string id, cpp11::strings tags);
-extern "C" SEXP _roxygen2_unescape_rd_for_md_c(SEXP rd_text, SEXP id, SEXP tags) {
+std::string unescape_rd_for_md_c(std::string rd_text, cpp11::strings tags);
+extern "C" SEXP _roxygen2_unescape_rd_for_md_c(SEXP rd_text, SEXP tags) {
   BEGIN_CPP11
-    return cpp11::as_sexp(unescape_rd_for_md_c(cpp11::as_cpp<cpp11::decay_t<std::string>>(rd_text), cpp11::as_cpp<cpp11::decay_t<std::string>>(id), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(tags)));
+    return cpp11::as_sexp(unescape_rd_for_md_c(cpp11::as_cpp<cpp11::decay_t<std::string>>(rd_text), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(tags)));
   END_CPP11
 }
 // parser2.cpp
@@ -78,7 +78,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_roxygen2_leadingSpaces",        (DL_FUNC) &_roxygen2_leadingSpaces,        1},
     {"_roxygen2_rdComplete",           (DL_FUNC) &_roxygen2_rdComplete,           2},
     {"_roxygen2_tokenise_block",       (DL_FUNC) &_roxygen2_tokenise_block,       3},
-    {"_roxygen2_unescape_rd_for_md_c", (DL_FUNC) &_roxygen2_unescape_rd_for_md_c, 3},
+    {"_roxygen2_unescape_rd_for_md_c", (DL_FUNC) &_roxygen2_unescape_rd_for_md_c, 2},
     {"_roxygen2_wrapUsage",            (DL_FUNC) &_roxygen2_wrapUsage,            3},
     {NULL, NULL, 0}
 };

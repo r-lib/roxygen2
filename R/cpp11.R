@@ -20,8 +20,8 @@ escape_rd_for_md_c <- function(text) {
   .Call(`_roxygen2_escape_rd_for_md_c`, text)
 }
 
-unescape_rd_for_md_c <- function(rd_text, id, tags) {
-  .Call(`_roxygen2_unescape_rd_for_md_c`, rd_text, id, tags)
+unescape_rd_for_md_c <- function(rd_text, tags) {
+  .Call(`_roxygen2_unescape_rd_for_md_c`, rd_text, tags)
 }
 
 tokenise_block <- function(lines, file, offset) {

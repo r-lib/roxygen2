@@ -163,7 +163,15 @@ find_all_rd_tags <- function(text) {
 
 find_all_tag_names <- function(text) {
   ## Find the tags without arguments first
-  tag_pos <- str_locate_all(text, r"(\\[a-zA-Z][a-zA-Z0-9]*)")[[1]]
+  m <- gregexpr(r"(\\[a-zA-Z][a-zA-Z0-9]*)", text)[[1]]
+  if (m[[1]] == -1L) {
+    tag_pos <- matrix(integer(), ncol = 2, dimnames = list(NULL, c("start", "end")))
+  } else {
+    tag_pos <- cbind(
+      start = as.integer(m),
+      end = as.integer(m) + attr(m, "match.length") - 1L
+    )
+  }
 
   if (nrow(tag_pos) == 0) {
     data.frame(tag = character(), start = integer(), end = integer())

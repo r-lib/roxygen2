@@ -66,7 +66,7 @@ tag_inherit <- function(x) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    pieces <- str_split(trimws(x$raw), "\\s+")[[1]]
+    pieces <- strsplit(trimws(x$raw), "\\s+")[[1]]
     fields <- pieces[-1]
 
     all <- inherit_components
@@ -192,7 +192,7 @@ tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
     return(NULL)
   }
 
-  words <- str_split(val, "\\s+")[[1]]
+  words <- if (nzchar(val)) strsplit(val, "\\s+")[[1]] else ""
   if (length(words) < min) {
     warn_roxy_tag(x, "must have at least {min} word{?s}, not {length(words)}")
     NULL
@@ -216,7 +216,7 @@ tag_words_line <- function(x) {
 warn_if_multiline <- function(x, val) {
   n_lines <- str_count(val, "\n")
   if (n_lines >= 1) {
-    first_line <- str_split(val, "\n")[[1]][[1]]
+    first_line <- strsplit(val, "\n", fixed = TRUE)[[1]][[1]]
     warn_roxy_tag(
       x,
       c(

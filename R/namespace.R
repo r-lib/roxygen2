@@ -229,7 +229,7 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
       return()
     }
 
-    generic <- str_split(x$val, "::")[[1]]
+    generic <- strsplit(x$val, "::", fixed = TRUE)[[1]]
     generic_re <- paste0("^", generic[[2]], "\\.")
 
     if (!grepl(generic_re, obj$alias)) {

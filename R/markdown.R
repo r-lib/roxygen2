@@ -88,7 +88,7 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     return(rcode_pos)
   }
 
-  lines <- str_split(text, fixed("\n"))[[1]]
+  lines <- strsplit(text, "\n", fixed = TRUE)[[1]]
 
   for (l in seq_len(nrow(rcode_pos))) {
     # Do not try to fix multi-line code, we error for that (below)
@@ -189,7 +189,7 @@ str_set_all_pos <- function(text, pos, value, nodes) {
 
   # Need to split the string, because of the potential multi-line
   # code tags, and then also recode the positions
-  lens <- nchar(str_split(text, fixed("\n"))[[1]])
+  lens <- nchar(strsplit(text, "\n", fixed = TRUE)[[1]])
   shifts <- c(0, cumsum(lens + 1L))
   shifts <- shifts[-length(shifts)]
   start <- shifts[pos$start_line] + pos$start_column

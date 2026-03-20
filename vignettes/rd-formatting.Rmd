@@ -305,7 +305,7 @@ If you want to avoid this restriction, set the `restrict_image_formats` roxygen2
 
 ### Some Rd tags can't contain markdown
 
-When mixing `Rd` and Markdown notation, most `Rd` tags may contain Markdown markup, the ones that can *not* are: `r paste0("\x60", roxygen2:::escaped_for_md, "\x60", collapse = ", ")`.
+When mixing `Rd` and Markdown notation, most `Rd` tags may contain Markdown markup, the ones that can *not* are: `\acronym`, `\code`, `\command`, `\CRANpkg`, `\deqn`, `\doi`, `\dontrun`, `\dontshow`, `\donttest`, `\email`, `\env`, `\eqn`, `\figure`, `\file`, `\if`, `\ifelse`, `\kbd`, `\link`, `\linkS4class`, `\method`, `\mjeqn`, `\mjdeqn`, `\mjseqn`, `\mjsdeqn`, `\mjteqn`, `\mjtdeqn`, `\newcommand`, `\option`, `\out`, `\packageAuthor`, `\packageDescription`, `\packageDESCRIPTION`, `\packageIndices`, `\packageMaintainer`, `\packageTitle`, `\pkg`, `\PR`, `\preformatted`, `\renewcommand`, `\S3method`, `\S4method`, `\samp`, `\special`, `\testonly`, `\url`, `\var`, `\verb`.
 
 ### Mixing Markdown and `Rd` markup
 

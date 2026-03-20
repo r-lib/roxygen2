@@ -60,7 +60,7 @@ rd_macro <- function(field, ..., space = FALSE) {
   if (space) {
     values <- paste0("\n", paste0(..., collapse = "\n"), "\n")
   } else {
-    values <- str_trim(c(...))
+    values <- trimws(c(...))
   }
 
   paste0("\\", field, paste0("{", values, "}", collapse = ""))

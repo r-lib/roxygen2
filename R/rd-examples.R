@@ -20,7 +20,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   }
 
   example_lines <- lines[-1]
-  if (length(example_lines) == 0 || all(str_trim(example_lines) == "")) {
+  if (length(example_lines) == 0 || all(trimws(example_lines) == "")) {
     warn_roxy_tag(x, "requires example code after the condition")
     return(NULL)
   }

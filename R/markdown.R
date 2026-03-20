@@ -235,13 +235,13 @@ mdxml_children_to_rd_top <- function(xml, state) {
   state$section_tag <- uuid()
   out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
   out <- c(out, mdxml_close_sections(state))
-  rd <- str_trim(paste0(out, collapse = ""))
+  rd <- trimws(paste0(out, collapse = ""))
   if (state$has_sections) {
     secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]] %||% ""
     titles <- c("", state$titles)
     # strsplit drops trailing empty strings, so pad to match titles length
     secs <- c(secs, rep("", length(titles) - length(secs)))
-    rd <- structure(str_trim(secs), names = titles)
+    rd <- structure(trimws(secs), names = titles)
   }
   rd
 }

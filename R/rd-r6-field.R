@@ -9,7 +9,7 @@ r6_extract_fields <- function(block, r6data) {
   )
 
   labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
-  docd <- str_trim(unlist(strsplit(labels, ",")))
+  docd <- trimws(unlist(strsplit(labels, ",")))
 
   miss <- setdiff(fields, docd)
   if (length(miss) > 0) {
@@ -45,7 +45,7 @@ r6_extract_active_bindings <- function(block, r6data) {
   )
 
   labels <- gsub(",", ", ", map_chr(tags, \(x) x[["val"]][["name"]]))
-  docd <- str_trim(unlist(strsplit(labels, ",")))
+  docd <- trimws(unlist(strsplit(labels, ",")))
 
   miss <- setdiff(active, docd)
   if (length(miss) > 0) {

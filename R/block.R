@@ -240,7 +240,7 @@ parse_description <- function(tags) {
   }
 
   intro <- tags[[1]]
-  intro$val <- str_trim(intro$raw)
+  intro$val <- trimws(intro$raw)
   if (intro$val == "") {
     return(tags[-1])
   }

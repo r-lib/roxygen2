@@ -37,3 +37,20 @@
 **Result:** 92x faster for simple text, saving ~28ms per `roxygenize()` run (236 × 120µs). All 1105 tests pass.
 
 **Verdict:** SUCCESS — committed.
+
+## Experiment 3: Cache `is_s3_generic()` results during `roxygenize()`
+
+**Hypothesis:** `is_s3_generic()` is called 729 times during `roxygenize()` on roxygen2, with only 301 unique names (59% redundancy). Each call involves `exists()`, `get()`, `tryCatch(getNamespaceName(...))`, and potentially recursive `calls_use_method()`. Caching results by name avoids redundant work.
+
+**Change:** Added an environment-based cache that is activated during `roxygenize()` and cleared afterwards. The cache is inactive during direct calls (e.g., in tests) to avoid cross-environment contamination.
+
+**Microbenchmark (729 calls matching a real roxygenize run):**
+
+| Version | min | median |
+|---------|-----|--------|
+| Before | 16.4ms | 17.3ms |
+| After | 13.6ms | 14.3ms |
+
+**Result:** ~17% faster for `is_s3_generic()` calls, saving ~3ms per `roxygenize()` run. Savings scale with package size (more S3 methods = more cache hits). All 1105 tests pass.
+
+**Verdict:** SUCCESS — committed. Small but clean improvement.

@@ -1,3 +1,14 @@
+s3_generic_cache <- new_environment()
+
+s3_generic_cache_reset <- function() {
+  env_unbind(s3_generic_cache, env_names(s3_generic_cache))
+  s3_generic_cache$active <- TRUE
+}
+
+s3_generic_cache_clear <- function() {
+  env_unbind(s3_generic_cache, env_names(s3_generic_cache))
+}
+
 #' Determine if a function is an S3 generic or S3 method
 #'
 #' @description
@@ -16,6 +27,24 @@ is_s3_generic <- function(name, env = parent.frame()) {
   if (name == "") {
     return(FALSE)
   }
+
+  if (isTRUE(s3_generic_cache$active)) {
+    cached <- env_get(s3_generic_cache, name, default = NULL)
+    if (!is.null(cached)) {
+      return(cached)
+    }
+  }
+
+  result <- is_s3_generic_impl(name, env)
+
+  if (isTRUE(s3_generic_cache$active)) {
+    env_poke(s3_generic_cache, name, result)
+  }
+
+  result
+}
+
+is_s3_generic_impl <- function(name, env) {
   if (!exists(name, envir = env, mode = "function")) {
     return(FALSE)
   }

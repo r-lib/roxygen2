@@ -83,7 +83,7 @@ object_usage.s4method <- function(x) {
 
 function_usage <- function(name, formals, format_name = identity) {
   if (is_replacement_fun(name) && !is_infix_fun(name)) {
-    name <- str_replace(name, fixed("<-"), "")
+    name <- sub("<-", "", name, fixed = TRUE)
     if (identical(format_name, identity)) {
       name <- auto_backtick(name)
     }

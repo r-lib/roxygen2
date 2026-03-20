@@ -240,7 +240,7 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
       return()
     }
 
-    class <- str_remove(obj$alias, generic_re)
+    class <- sub(generic_re, "", obj$alias)
     method <- c(x$val, class)
   } else {
     method <- x$val

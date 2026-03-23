@@ -7,6 +7,7 @@
   * R6 method usage now shows `ClassName$new(args)` for constructors and `obj$method(args)` for other methods, making it clearer how each method is actually called (#1026).
   * `@returns` now works as a method-level tag in R6 classes, just like `@return` (#1148).
   * The "Super classes" section now omits the `pkg::` prefix for parent classes from the same package, making the inheritance chain easier to read (#1567).
+  * `@field` with comma-separated names (e.g., `@field var_1,var_2 description`) no longer produces spurious warnings about undocumented active bindings or unknown fields (#1600).
   * R6 classes with only active bindings and `cloneable = FALSE` no longer error during documentation (#1610).
   * `@example` (singular, with a file path) now works correctly in R6 class documentation (#1158).
   * Inherited method links now only link to parent classes that have documentation, avoiding broken links when parent classes are undocumented (#963, #1155).

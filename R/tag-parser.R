@@ -104,7 +104,7 @@ tag_name <- function(x) {
   } else {
     n <- str_count(x$raw, "\\s+")
     if (n > 1) {
-      warn_roxy_tag(x, "must have only one argument, not {n}")
+      warn_roxy_tag(x, "must have only one argument, not {n + 1}")
       NULL
     } else {
       x$val <- trimws(x$raw)

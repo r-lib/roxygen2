@@ -17,10 +17,9 @@ roxy_meta_get(key = NULL, default = NULL)
 \item{default}{Default value.}
 }
 \description{
-Options can be stored in the \code{Roxygen} field of the \code{DESCRIPTION}, or
-in \code{man/roxygen/meta.R}. In either case, the code is parsed and evaluated
-in a child of the base environment. Call \code{roxy_meta_get()} to access
-current option values from within tag and roclet methods.
+Options can be stored in \code{DESCRIPTION} using \verb{Config/roxygen2/} fields,
+or in \code{man/roxygen/meta.R}. Call \code{roxy_meta_get()} to access current
+option values from within tag and roclet methods.
 
 Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION}.
 }
@@ -46,16 +45,18 @@ manual. (This only applies to images supplied via markdown.)
 
 \section{How to set}{
 
-Either set in \code{DESCRIPTION}:
+Either set in \code{DESCRIPTION} using \verb{Config/roxygen2/} fields:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{Roxygen: list(markdown = TRUE, load = "installed")
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Config/roxygen2/markdown: TRUE
+Config/roxygen2/load: installed
 }\if{html}{\out{</div>}}
 
-Or if longer, you can put in \verb{/man/roxygen/meta.R}:
+Or if you need more complex options (like \code{rd_family_title} or
+\code{knitr_chunk_options}), put them in \code{man/roxygen/meta.R}:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(
-  markdown = TRUE,
-  load = "installed"
+  rd_family_title = list(models = "Model functions"),
+  knitr_chunk_options = list(fig.width = 7)
 )
 }\if{html}{\out{</div>}}
 }

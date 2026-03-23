@@ -1,4 +1,5 @@
 # roxygen2 (development version)
+* roxygen2 options can now be set using `Config/roxygen2/` fields in DESCRIPTION (e.g. `Config/roxygen2/markdown: TRUE`) instead of the `Roxygen` field. The old `Roxygen` field is still supported. Similarly, the roxygen2 version is now stored in `Config/roxygen2/version` instead of `RoxygenNote` (#1328).
 * Tags that expect single-line input now warn when they span multiple lines, catching common mistakes. Affected tags: `@aliases`, `@concept`, `@encoding`, `@exportClass`, `@exportMethod`, `@exportPattern`, `@exportS3Method`, `@importFrom`, `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@inheritParams`, `@keywords`, `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and `@useDynLib` (#1642, #1688). This may break some existing usage, but it prevents a wide class of otherwise silent errors.
 * `@examplesIf` now warns when there is no example code after the condition (#1695).
 * `tag_words_line()` is deprecated in favour of `tag_words()`, which now checks for single-line content by default. Use `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)` if your tag legitimately spans multiple lines.
@@ -6,9 +7,11 @@
   * R6 method usage now shows `ClassName$new(args)` for constructors and `obj$method(args)` for other methods, making it clearer how each method is actually called (#1026).
   * `@returns` now works as a method-level tag in R6 classes, just like `@return` (#1148).
   * The "Super classes" section now omits the `pkg::` prefix for parent classes from the same package, making the inheritance chain easier to read (#1567).
+  * `@field` with comma-separated names (e.g., `@field var_1,var_2 description`) no longer produces spurious warnings about undocumented active bindings or unknown fields (#1600).
   * R6 classes with only active bindings and `cloneable = FALSE` no longer error during documentation (#1610).
   * `@example` (singular, with a file path) now works correctly in R6 class documentation (#1158).
   * R6 method examples displayed in method subsections now strip `\dontrun{}`, `\donttest{}`, and `\dontshow{}` wrappers, since these Rd macros are not interpreted inside `\preformatted{}` blocks (#1072).
+  * You can now use `@noRd` before an R6 method to suppress its documentation, and `@field name NULL` to suppress documentation for a field or active binding (#1067).
   * Inherited method links now only link to parent classes that have documentation, avoiding broken links when parent classes are undocumented (#963, #1155).
   * `initialize()` method parameters now automatically inherit documentation from `@field` tags with the same name, reducing the need to duplicate descriptions. Explicit `@param` tags still take precedence (#1004).
 * New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).

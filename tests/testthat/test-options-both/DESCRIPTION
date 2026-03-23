@@ -1,0 +1,3 @@
+Package: testOptionsBoth
+Roxygen: list(old_usage = TRUE, markdown = TRUE)
+Config/roxygen2/markdown: FALSE

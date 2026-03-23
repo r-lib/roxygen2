@@ -17,13 +17,12 @@ format.rd_section_backref <- function(x, ...) {
     fsep = "/"
   )
 
-  lines <- stringi::stri_wrap(
+  lines <- strwrap(
     paste0("Please edit documentation in ", paste(filename, collapse = ", ")),
     initial = "% ",
     prefix = "%   ",
-    width = 80,
-    whitespace_only = TRUE
+    width = 80
   )
 
-  paste0(paste0(lines, collapse = "\n"))
+  paste0(lines, collapse = "\n")
 }

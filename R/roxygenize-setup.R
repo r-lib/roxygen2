@@ -70,8 +70,11 @@ update_roxygen_version <- function(path, cur_version = NULL) {
       cli::cli_rule()
     }
 
-    cli::cli_inform(c(i = "Setting {.field RoxygenNote} to {.val {cur}}"))
-    desc::desc_set(RoxygenNote = cur, file = path)
+    cli::cli_inform(c(
+      i = "Setting {.field Config/roxygen2/version} to {.val {cur}}"
+    ))
+    desc::desc_set("Config/roxygen2/version" = cur, file = path)
+    desc::desc_del("RoxygenNote", file = path)
   }
 }
 
@@ -93,5 +96,9 @@ first_time <- function(path) {
 }
 
 roxygen_version <- function(path = ".") {
-  stringr::str_trim(desc::desc_get("RoxygenNote", path)[[1]])
+  version <- desc::desc_get("Config/roxygen2/version", file = path)[[1]]
+  if (is.na(version)) {
+    version <- desc::desc_get("RoxygenNote", file = path)[[1]]
+  }
+  stringr::str_trim(version)
 }

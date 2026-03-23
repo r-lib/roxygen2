@@ -21,7 +21,7 @@ When it doesn't, you can read this vignette to figure out what's going on and ho
 
 To turn on Markdown support for a package, insert this entry into the `DESCRIPTION` file of the package:
 
-    Roxygen: list(markdown = TRUE)
+    Config/roxygen2/markdown: TRUE
 
 If you use devtools/usethis, this will be automatically inserted for you when you create a new package.
 If you're updating an existing package, we recommend `usethis::use_roxygen_md()` which will modify the `DESCRIPTION` and prompt you to use the [roxygen2md](https://roxygen2md.r-lib.org) package to convert your existing docs.

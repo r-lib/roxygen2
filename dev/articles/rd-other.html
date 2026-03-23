@@ -256,12 +256,15 @@ method.</p></li>
 <code>@details</code>, <code>@param</code>, <code>@return</code> and
 <code>@examples</code> tags. These are used to create a subsection for
 the method, within a separate ‘Methods’ section. All roxygen comment
-lines of a method documentation must appear after a tag.</p></li>
+lines of a method documentation must appear after a tag. By default,
+roxygen2 will warn about any undocumented methods; if you want to have a
+method without documentation, use <code>@noRd</code>.</p></li>
 <li><p><code>@param</code> tags that appear before the class definition
 are automatically inherited by all methods, if needed.</p></li>
 <li><p>R6 fields and active bindings can make use of the
-<code>@field</code> tag. Their documentation should also be
-in-line.</p></li>
+<code>@field</code> tag. Their documentation should also be in-line. To
+suppress documentation of a field, use
+<code>@field name NULL</code>.</p></li>
 <li><p>roxygen2 checks that all public methods, public fields, active
 bindings and all method arguments are documented, and issues warnings
 otherwise.</p></li>

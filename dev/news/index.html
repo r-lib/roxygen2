@@ -79,6 +79,7 @@
 <li>R6 classes with only active bindings and <code>cloneable = FALSE</code> no longer error during documentation (<a href="https://github.com/r-lib/roxygen2/issues/1610" class="external-link">#1610</a>).</li>
 <li>
 <code>@example</code> (singular, with a file path) now works correctly in R6 class documentation (<a href="https://github.com/r-lib/roxygen2/issues/1158" class="external-link">#1158</a>).</li>
+<li>You can now use <code>@noRd</code> before an R6 method to suppress its documentation, and <code>@field name NULL</code> to suppress documentation for a field or active binding (<a href="https://github.com/r-lib/roxygen2/issues/1067" class="external-link">#1067</a>).</li>
 <li>Inherited method links now only link to parent classes that have documentation, avoiding broken links when parent classes are undocumented (<a href="https://github.com/r-lib/roxygen2/issues/963" class="external-link">#963</a>, <a href="https://github.com/r-lib/roxygen2/issues/1155" class="external-link">#1155</a>).</li>
 <li>
 <code>initialize()</code> method parameters now automatically inherit documentation from <code>@field</code> tags with the same name, reducing the need to duplicate descriptions. Explicit <code>@param</code> tags still take precedence (<a href="https://github.com/r-lib/roxygen2/issues/1004" class="external-link">#1004</a>).</li>

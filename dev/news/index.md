@@ -47,6 +47,10 @@
   - `@example` (singular, with a file path) now works correctly in R6
     class documentation
     ([\#1158](https://github.com/r-lib/roxygen2/issues/1158)).
+  - R6 method examples displayed in method subsections now strip
+    `\dontrun{}`, `\donttest{}`, and `\dontshow{}` wrappers, since these
+    Rd macros are not interpreted inside `\preformatted{}` blocks
+    ([\#1072](https://github.com/r-lib/roxygen2/issues/1072)).
   - You can now use `@noRd` before an R6 method to suppress its
     documentation, and `@field name NULL` to suppress documentation for
     a field or active binding

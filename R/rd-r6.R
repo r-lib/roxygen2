@@ -72,3 +72,15 @@ r6_tag_type <- function(tag, block) {
     "class"
   }
 }
+
+tag_is <- function(tag, name) {
+  tag$tag == name
+}
+
+tag_names <- function(tag) {
+  str_trim(strsplit(tag$val$name, ",")[[1]])
+}
+
+tag_has_name <- function(tag, names) {
+  any(tag_names(tag) %in% names)
+}

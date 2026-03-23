@@ -34,3 +34,14 @@ test_that("informs about major changes in 7.0.0", {
 
   expect_snapshot(roxygen_setup(path, cur_version = "8.0.0"))
 })
+
+test_that("removes old RoxygenNote field", {
+  path <- local_package_copy(test_path("empty"))
+  desc::desc_set(file = path, RoxygenNote = "7.0.0")
+
+  suppressMessages(roxygen_setup(path, cur_version = "8.0.0"))
+
+  desc <- desc::desc(file = path)
+  expect_false(desc$has_fields("RoxygenNote"))
+  expect_equal(desc$get("Config/roxygen2/version")[[1]], "8.0.0")
+})

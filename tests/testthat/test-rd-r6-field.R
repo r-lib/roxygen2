@@ -75,7 +75,7 @@ test_that("@field name NULL suppresses field documentation", {
     )"
   block <- parse_text(text)[[1]]
   r6data <- block_get_tag_value(block, ".r6data")
-  expect_silent(fields <- r6_extract_fields(block, r6data))
+  expect_silent(fields <- r6_extract_field_tags(block, r6data, "field"))
   expect_equal(
     fields,
     rd_r6_fields(list(rd_r6_field("field1", "Foo.")))

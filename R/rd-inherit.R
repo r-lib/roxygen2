@@ -259,7 +259,7 @@ inherit_dot_params <- function(topic, topics, env) {
   src <- inheritors$source
   from <- map_chr(src, function(x) {
     if (is_namespaced(x)) {
-      parts <- str_split_fixed(x, "::", n = 2)
+      parts <- str_split_half(x, "::")
       rd_link(parts[1], parts[2], x, code = TRUE)
     } else {
       rd_link(NA_character_, x, x, code = TRUE)

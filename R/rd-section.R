@@ -5,10 +5,7 @@ roxy_tag_parse.roxy_tag_section <- function(x) {
 
 #' @export
 roxy_tag_rd.roxy_tag_section <- function(x, base_path, env) {
-  pieces <- strsplit(x$val, ":", fixed = TRUE)[[1]]
-  if (length(pieces) > 2) {
-    pieces <- c(pieces[[1]], paste(pieces[-1], collapse = ":"))
-  }
+  pieces <- str_split_half(x$val, ":")
   title <- strsplit(pieces[1], "\n", fixed = TRUE)[[1]]
 
   if (length(title) > 1) {

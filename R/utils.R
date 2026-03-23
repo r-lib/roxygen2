@@ -194,15 +194,16 @@ auto_quote <- function(x) {
   x
 }
 
-str_split_fixed <- function(x, pattern, n) {
+str_split_half <- function(x, pattern) {
   m <- regexpr(pattern, x)
-  if (n == 2 && m > 0L) {
-    first <- substr(x, 1, m - 1)
-    rest <- substr(x, m + attr(m, "match.length"), nchar(x))
-    matrix(c(first, rest), nrow = 1)
+  if (m > 0L) {
+    left <- substr(x, 1, m - 1)
+    right <- substr(x, m + attr(m, "match.length"), nchar(x))
   } else {
-    matrix(c(x, rep("", n - 1)), nrow = 1)
+    left <- x
+    right <- ""
   }
+  c(left, right)
 }
 
 str_count <- function(x, pattern, fixed = FALSE) {

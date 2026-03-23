@@ -138,14 +138,14 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
       return(NULL)
     }
 
-    pieces[, 2] <- trim_docstring(pieces[, 2])
+    pieces[[2]] <- trim_docstring(pieces[[2]])
     if (markdown) {
-      pieces[, 2] <- markdown_if_active(pieces[, 2], x)
+      pieces[[2]] <- markdown_if_active(pieces[[2]], x)
     }
 
     x$val <- list(
-      name = pieces[, 1],
-      description = pieces[, 2]
+      name = pieces[[1]],
+      description = pieces[[2]]
     )
     x
   }
@@ -158,16 +158,16 @@ split_two_part <- function(x) {
     match <- regexpr("^`[^`]*`", x)
     if (match == -1L || attr(match, "match.length") == -1L) {
       # No closing backtick; fall back to space splitting
-      str_split_fixed(x, "[[:space:]]+", 2)
+      str_split_half(x, "[[:space:]]+")
     } else {
       end <- attr(match, "match.length")
       # Strip backticks so name matches names(formals(fn))
       name <- substr(x, 2, end - 1)
       rest <- trimws(substr(x, end + 1, nchar(x)))
-      matrix(c(name, rest), nrow = 1)
+      c(name, rest)
     }
   } else {
-    str_split_fixed(x, "[[:space:]]+", 2)
+    str_split_half(x, "[[:space:]]+")
   }
 }
 
@@ -216,7 +216,7 @@ tag_words_line <- function(x) {
 warn_if_multiline <- function(x, val) {
   n_lines <- str_count(val, "\n")
   if (n_lines >= 1) {
-    first_line <- strsplit(val, "\n", fixed = TRUE)[[1]][[1]]
+    first_line <- str_split_half(val, "\n")[[1]]
     warn_roxy_tag(
       x,
       c(

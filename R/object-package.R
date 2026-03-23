@@ -428,7 +428,7 @@ package_url_parse <- function(x) {
     # Special cases has <arxiv:id [code]>.
     # See https://CRAN.R-project.org/package=ciccr
     # Extract arxiv id, split by space
-    arxiv_id <- strsplit(match, " ", fixed = TRUE)[[1]][[1]]
+    arxiv_id <- str_split_half(match, " ")[[1]]
 
     paste0(
       "\\href{https://arxiv.org/abs/",

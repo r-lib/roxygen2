@@ -33,6 +33,20 @@ extern "C" SEXP _roxygen2_leadingSpaces(SEXP lines) {
     return cpp11::as_sexp(leadingSpaces(cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(lines)));
   END_CPP11
 }
+// markdown-escaping.cpp
+cpp11::list escape_rd_for_md_c(std::string text);
+extern "C" SEXP _roxygen2_escape_rd_for_md_c(SEXP text) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(escape_rd_for_md_c(cpp11::as_cpp<cpp11::decay_t<std::string>>(text)));
+  END_CPP11
+}
+// markdown-escaping.cpp
+std::string unescape_rd_for_md_c(std::string rd_text, cpp11::strings tags);
+extern "C" SEXP _roxygen2_unescape_rd_for_md_c(SEXP rd_text, SEXP tags) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(unescape_rd_for_md_c(cpp11::as_cpp<cpp11::decay_t<std::string>>(rd_text), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(tags)));
+  END_CPP11
+}
 // parser2.cpp
 cpp11::list tokenise_block(cpp11::strings lines, std::string file, int offset);
 extern "C" SEXP _roxygen2_tokenise_block(SEXP lines, SEXP file, SEXP offset) {
@@ -57,13 +71,15 @@ extern "C" SEXP _roxygen2_wrapUsage(SEXP string, SEXP width, SEXP indent) {
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_roxygen2_escapeExamples", (DL_FUNC) &_roxygen2_escapeExamples, 1},
-    {"_roxygen2_findEndOfTag",   (DL_FUNC) &_roxygen2_findEndOfTag,   2},
-    {"_roxygen2_find_includes",  (DL_FUNC) &_roxygen2_find_includes,  1},
-    {"_roxygen2_leadingSpaces",  (DL_FUNC) &_roxygen2_leadingSpaces,  1},
-    {"_roxygen2_rdComplete",     (DL_FUNC) &_roxygen2_rdComplete,     2},
-    {"_roxygen2_tokenise_block", (DL_FUNC) &_roxygen2_tokenise_block, 3},
-    {"_roxygen2_wrapUsage",      (DL_FUNC) &_roxygen2_wrapUsage,      3},
+    {"_roxygen2_escapeExamples",       (DL_FUNC) &_roxygen2_escapeExamples,       1},
+    {"_roxygen2_escape_rd_for_md_c",   (DL_FUNC) &_roxygen2_escape_rd_for_md_c,   1},
+    {"_roxygen2_findEndOfTag",         (DL_FUNC) &_roxygen2_findEndOfTag,         2},
+    {"_roxygen2_find_includes",        (DL_FUNC) &_roxygen2_find_includes,        1},
+    {"_roxygen2_leadingSpaces",        (DL_FUNC) &_roxygen2_leadingSpaces,        1},
+    {"_roxygen2_rdComplete",           (DL_FUNC) &_roxygen2_rdComplete,           2},
+    {"_roxygen2_tokenise_block",       (DL_FUNC) &_roxygen2_tokenise_block,       3},
+    {"_roxygen2_unescape_rd_for_md_c", (DL_FUNC) &_roxygen2_unescape_rd_for_md_c, 2},
+    {"_roxygen2_wrapUsage",            (DL_FUNC) &_roxygen2_wrapUsage,            3},
     {NULL, NULL, 0}
 };
 }

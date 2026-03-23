@@ -3,19 +3,9 @@
 \name{double_escape_md}
 \alias{double_escape_md}
 \title{Check markdown escaping}
-\usage{
-double_escape_md(text)
-}
-\arguments{
-\item{text}{Input text.}
-}
-\value{
-Double-escaped text.
-}
 \description{
 This is a regression test for Markdown escaping.
-}
-\details{
+
 Each of the following bullets should look the same when rendered:
 \itemize{
 \item Backticks: \verb{\\}, \verb{\\\%}, \verb{\\$}, \verb{\\_}
@@ -23,6 +13,7 @@ Each of the following bullets should look the same when rendered:
 }
 
 [ this isn't a link ]
+
 \[ neither is this \]
 }
 \examples{

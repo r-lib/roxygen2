@@ -6,6 +6,10 @@ object_from_call <- function(call, env, block, file) {
       parser_data(call, env, file)
     }
   } else if (is.call(call)) {
+    if (is_s7_method_call(call)) {
+      return(parser_s7_method(call, env, block))
+    }
+
     call <- call_match(call, eval(call[[1]], env))
     name <- deparse(call[[1]])
     switch(
@@ -115,11 +119,6 @@ parser_package <- function(file) {
 }
 
 parser_assignment <- function(call, env, block) {
-  # method(generic, class) <- fn is an S7 method registration
-  if (is.call(call[[2]]) && is_s7_method_call(call[[2]])) {
-    return(parser_s7_method(call, env, block))
-  }
-
   name <- as.character(call[[2]])
 
   # If it's a compound assignment like x[[2]] <- ignore it
@@ -208,8 +207,10 @@ parser_setConstructorS3 <- function(call, env, block) {
   object(get(name, env), name, "function")
 }
 
+# method(generic, class) <- fn
+# `<-`(method(generic, class), fn)
 is_s7_method_call <- function(call) {
-  is_call(call, "method", ns = c("", "S7"))
+  is_call(call, "<-", n = 2) && is_call(call[[2]], "method", ns = c("", "S7"))
 }
 
 parser_s7_method <- function(call, env, block) {

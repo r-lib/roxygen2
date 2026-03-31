@@ -241,12 +241,7 @@ parser_s7_method <- function(call, env, block) {
 }
 
 s7_method <- function(fn, generic, classes) {
-  structure(
-    fn,
-    generic = generic,
-    classes = classes,
-    class = c("s7method", "function")
-  )
+  list(fn = fn, generic = generic, classes = classes)
 }
 
 # https://github.com/RConsortium/S7/issues/594
@@ -382,7 +377,7 @@ object_topic <- function(value, alias, type) {
     rcmethod = value@name,
     s7class = alias,
     s7generic = alias,
-    s7method = method_topic(attr(value, "generic"), attr(value, "classes")),
+    s7method = method_topic(value$generic, value$classes),
     s3generic = alias,
     s3method = alias,
     import = alias,

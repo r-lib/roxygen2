@@ -120,7 +120,12 @@ object_defaults.s7class <- object_defaults.function
 object_defaults.s7generic <- object_defaults.function
 
 #' @export
-object_defaults.s7method <- object_defaults.function
+object_defaults.s7method <- function(x, block) {
+  list(
+    roxy_generated_tag(block, "usage", object_usage(x)),
+    roxy_generated_tag(block, ".formals", names(formals(x$value$fn)))
+  )
+}
 
 #' @export
 object_defaults.s4class <- function(x, block) {

@@ -83,8 +83,8 @@ object_usage.s7generic <- object_usage.function
 
 #' @export
 object_usage.s7method <- function(x) {
-  generic <- attr(x$value, "generic")
-  classes <- attr(x$value, "classes")
+  generic <- x$value$generic
+  classes <- x$value$classes
 
   formatted <- vapply(classes, s7_format_class, character(1))
   if (length(formatted) == 1) {
@@ -96,7 +96,7 @@ object_usage.s7method <- function(x) {
     )
   }
 
-  usage <- function_usage(generic, formals(x$value), identity)
+  usage <- function_usage(generic, formals(x$value$fn), identity)
   rd(paste0(comment, "\n", usage))
 }
 

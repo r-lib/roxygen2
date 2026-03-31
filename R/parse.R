@@ -85,7 +85,7 @@ order_blocks <- function(blocks) {
     }
   }
 
-  ord <- vapply(blocks, block_order, double(1))
+  ord <- map_dbl(blocks, block_order)
   blocks[order(ord)]
 }
 

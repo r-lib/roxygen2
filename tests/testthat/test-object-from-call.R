@@ -217,6 +217,7 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
 # S7 ----------------------------------------------------------------------
 
 test_that("finds S7 classes", {
+  skip_unless_r(">= 4.3.0")
   obj <- call_to_object({
     Dog <- S7::new_class(
       "Dog",
@@ -232,6 +233,7 @@ test_that("finds S7 classes", {
 })
 
 test_that("finds S7 generics", {
+  skip_unless_r(">= 4.3.0")
   obj <- call_to_object({
     speak <- S7::new_generic("speak", "x")
   })
@@ -242,6 +244,7 @@ test_that("finds S7 generics", {
 })
 
 test_that("finds S7 methods", {
+  skip_unless_r(">= 4.3.0")
   obj <- call_to_object({
     Dog <- S7::new_class("Dog")
     speak <- S7::new_generic("speak", "x")
@@ -254,6 +257,7 @@ test_that("finds S7 methods", {
 })
 
 test_that("finds S7 multi-dispatch methods", {
+  skip_unless_r(">= 4.3.0")
   obj <- call_to_object({
     Dog <- S7::new_class("Dog")
     Cat <- S7::new_class("Cat")
@@ -266,6 +270,7 @@ test_that("finds S7 multi-dispatch methods", {
 })
 
 test_that("S7 method with unknown class type warns", {
+  skip_unless_r(">= 4.3.0")
   block <- roxy_block(tags = list(), file = "test.R", line = 1, call = quote(x))
   expect_snapshot(s7_class_name(42L, block))
 })

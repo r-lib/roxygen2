@@ -478,6 +478,7 @@ test_that("old wrapping style doesn't change unexpectedly", {
 })
 
 test_that("S7 class usage is constructor", {
+  skip_unless_r(">= 4.3.0")
   expect_equal(
     call_to_usage({
       Dog <- S7::new_class(
@@ -493,6 +494,7 @@ test_that("S7 class usage is constructor", {
 })
 
 test_that("S7 generic usage is function signature", {
+  skip_unless_r(">= 4.3.0")
   expect_equal(
     call_to_usage({
       speak <- S7::new_generic("speak", "x")
@@ -502,6 +504,7 @@ test_that("S7 generic usage is function signature", {
 })
 
 test_that("S7 method usage includes comment", {
+  skip_unless_r(">= 4.3.0")
   expect_equal(
     call_to_usage({
       Dog <- S7::new_class("Dog")
@@ -513,6 +516,7 @@ test_that("S7 method usage includes comment", {
 })
 
 test_that("S7 multi-dispatch method usage includes all classes", {
+  skip_unless_r(">= 4.3.0")
   expect_equal(
     call_to_usage({
       Dog <- S7::new_class("Dog")
@@ -525,6 +529,7 @@ test_that("S7 multi-dispatch method usage includes all classes", {
 })
 
 test_that("S7 union method usage shows member classes", {
+  skip_unless_r(">= 4.3.0")
   expect_equal(
     call_to_usage({
       Dog <- S7::new_class("Dog")

@@ -221,17 +221,12 @@ parser_s7_method <- function(call, env, block) {
   generic_name <- generic@name
 
   # Evaluate class spec: either a single class, a union, or list() for
-  # multi-dispatch. Unions and S3 class wrappers are also lists, so only
-  # treat bare lists as multi-dispatch.
+  # multi-dispatch
   classes <- eval(class_spec, env)
-  if (
-    !is.list(classes) ||
-      inherits(classes, "S7_union") ||
-      inherits(classes, "S7_S3_class")
-  ) {
+  if (!is_bare_list(classes)) {
     classes <- list(classes)
   }
-  class_names <- vapply(classes, s7_class_name, character(1), block = block)
+  class_names <- lapply(classes, s7_class_name, block = block)
 
   # Get the method function
   fn <- eval(call[[3]], env)
@@ -251,9 +246,8 @@ s7_class_name <- function(cls, block) {
     # Regular S7 class + base wrappers
     name
   } else if (inherits(cls, "S7_union")) {
-    # Unions don't have a nameOfClass; combine member names
-    member_names <- vapply(cls$classes, nameOfClass, character(1))
-    paste0(member_names, collapse = "/")
+    # Unions return vector of member names, recursing for nested types
+    unlist(lapply(cls$classes, s7_class_name, block = block))
   } else if (inherits(cls, "S7_S3_class")) {
     cls$class
   } else {
@@ -390,7 +384,8 @@ object_topic <- function(value, alias, type) {
 }
 
 method_topic <- function(generic, classes) {
-  paste0(generic, ",", paste0(classes, collapse = ","), "-method")
+  class_strings <- vapply(classes, paste0, character(1), collapse = "/")
+  paste0(generic, ",", paste0(class_strings, collapse = ","), "-method")
 }
 
 call_to_object <- function(code, env = pkg_env(), file = NULL) {

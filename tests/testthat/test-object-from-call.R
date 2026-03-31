@@ -250,7 +250,7 @@ test_that("finds S7 methods", {
   expect_s3_class(obj, "s7method")
   expect_equal(obj$topic, "speak,Dog-method")
   expect_equal(obj$value$generic, "speak")
-  expect_equal(obj$value$classes, "Dog")
+  expect_equal(obj$value$classes, list("Dog"))
 })
 
 test_that("finds S7 multi-dispatch methods", {
@@ -262,7 +262,7 @@ test_that("finds S7 multi-dispatch methods", {
   })
   expect_s3_class(obj, "s7method")
   expect_equal(obj$topic, "greet,Dog,Cat-method")
-  expect_equal(obj$value$classes, c("Dog", "Cat"))
+  expect_equal(obj$value$classes, list("Dog", "Cat"))
 })
 
 test_that("S7 method with unknown class type warns", {

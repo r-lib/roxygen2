@@ -86,7 +86,7 @@ object_usage.s7method <- function(x) {
   generic <- x$value$generic
   classes <- x$value$classes
 
-  formatted <- vapply(classes, s7_format_class, character(1))
+  formatted <- map_chr(classes, \(nms) paste0("<", nms, ">", collapse = "/"))
   if (length(formatted) == 1) {
     comment <- paste0("## S7 method for class ", formatted)
   } else {
@@ -98,13 +98,6 @@ object_usage.s7method <- function(x) {
 
   usage <- function_usage(generic, formals(x$value$fn), identity)
   rd(paste0(comment, "\n", usage))
-}
-
-# Formats a class name for usage comments, wrapping each part in <>.
-# Union names like "Dog/Cat" become "<Dog>/<Cat>".
-s7_format_class <- function(name) {
-  parts <- strsplit(name, "/")[[1]]
-  paste0("<", parts, ">", collapse = "/")
 }
 
 # Function usage ----------------------------------------------------------

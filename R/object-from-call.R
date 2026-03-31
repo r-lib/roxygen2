@@ -214,30 +214,25 @@ is_s7_method_call <- function(call) {
 }
 
 parser_s7_method <- function(call, env, block) {
-  lhs <- call[[2]]
-  generic_sym <- lhs[[2]]
-  class_spec <- lhs[[3]]
+  generic_call <- call[[2]][[2]]
+  class_call <- call[[2]][[3]]
+  method_call <- call[[3]]
 
-  generic <- eval(generic_sym, env)
+  generic <- eval(generic_call, env)
   generic_name <- generic@name
 
   # Evaluate class spec: either a single class, a union, or list() for
   # multi-dispatch
-  classes <- eval(class_spec, env)
+  classes <- eval(class_call, env)
   if (!is_bare_list(classes)) {
     classes <- list(classes)
   }
   class_names <- lapply(classes, s7_class_name, block = block)
 
-  # Get the method function
-  fn <- eval(call[[3]], env)
+  fn <- eval(method_call, env)
 
-  value <- s7_method(fn, generic_name, class_names)
+  value <- list(fn = fn, generic = generic_name, classes = class_names)
   object(value, NULL, "s7method")
-}
-
-s7_method <- function(fn, generic, classes) {
-  list(fn = fn, generic = generic, classes = classes)
 }
 
 # https://github.com/RConsortium/S7/issues/594

@@ -114,6 +114,15 @@ object_defaults.import <- function(x, block) {
 }
 
 #' @export
+object_defaults.s7class <- object_defaults.function
+
+#' @export
+object_defaults.s7generic <- object_defaults.function
+
+#' @export
+object_defaults.s7method <- object_defaults.function
+
+#' @export
 object_defaults.s4class <- function(x, block) {
   list(
     roxy_generated_tag(block, "docType", "class")

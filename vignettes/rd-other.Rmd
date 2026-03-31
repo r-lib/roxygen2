@@ -2,7 +2,7 @@
 title: "Documenting other objects"
 description: > 
   How to document datasets, packages, and the classes,
-  generics, and methods of S3, S4, and R6.
+  generics, and methods of S3, S4, S7, and R6.
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Documenting other objects}
@@ -139,6 +139,79 @@ You can document them in three places:
 
 Use either `@rdname` or `@describeIn` to control where method documentation goes.
 See the next section for more details.
+
+## S7
+
+S7 **classes** are constructor functions, so document them much like
+you'd document any other function. Use `@param` to document the
+constructor arguments (which correspond to class properties), and
+`@returns` to describe the object that is returned. If the class has
+additional properties that are not part of the constructor (e.g.
+read-only computed properties), use `@prop` to document them.
+
+```{r}
+#| eval: false
+
+#' A range
+#'
+#' @param start Start of range.
+#' @param end End of range.
+#' @prop length Length of the range (read-only).
+#' @returns An `Range` S7 object.
+#' @export
+Range <- new_class("Range", properties = list(
+  start = class_numeric,
+  end = class_numeric,
+  length = new_property(getter = function(self) self@end - self@start)
+))
+```
+
+S7 **generics** are also functions, so document them as such.
+It's good practice to document the default method alongside the generic using `@rdname`:
+
+```{r}
+#| eval: false
+
+#' Size of an object
+#'
+#' @param x An object.
+#' @param ... Not used.
+#' @returns A single number.
+#' @export
+size <- new_generic("size", "x")
+
+#' @rdname size
+method(size, class_any) <- function(x, ...) {
+  length(x)
+}
+
+```
+
+S7 **methods** are registered with `method(generic, class) <- fn`. For straightforward implementations, you don't need to document the method separately. You may want to do so, however, if it has a particularly complicated implementation or has many additional arguments that the generic does not.
+In that case, give it its own roxygen block:
+
+```{r}
+#| eval: false
+
+#' Size of a range
+#'
+#' Returns the width of the range, i.e. `end - start`.
+#'
+#' @param x A `Range` object.
+#' @param ... Not used.
+#' @returns A single number.
+method(size, Range) <- function(x, ...) {
+  x@end - x@start
+}
+```
+
+This generates a usage line like `## S7 method for class <Range>`.
+For multi-dispatch methods, all dispatch classes are shown.
+
+Note that S7 methods are registered at load time via
+`S7::methods_register()` in your `.onLoad()` function, not through
+`NAMESPACE` directives. See `vignette("packages", package = "S7")` for
+details.
 
 ## R6
 

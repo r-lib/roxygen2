@@ -214,6 +214,62 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
 })
 
 
+# S7 ----------------------------------------------------------------------
+
+test_that("finds S7 classes", {
+  obj <- call_to_object({
+    Dog <- S7::new_class(
+      "Dog",
+      properties = list(
+        name = S7::class_character,
+        age = S7::class_numeric
+      )
+    )
+  })
+  expect_s3_class(obj, "s7class")
+  expect_equal(obj$topic, "Dog")
+  expect_equal(obj$alias, "Dog")
+})
+
+test_that("finds S7 generics", {
+  obj <- call_to_object({
+    speak <- S7::new_generic("speak", "x")
+  })
+
+  expect_s3_class(obj, "s7generic")
+  expect_equal(obj$topic, "speak")
+  expect_equal(obj$alias, "speak")
+})
+
+test_that("finds S7 methods", {
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    speak <- S7::new_generic("speak", "x")
+    S7::method(speak, Dog) <- function(x) "Woof"
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "speak,Dog-method")
+  expect_equal(attr(obj$value, "generic"), "speak")
+  expect_equal(attr(obj$value, "classes"), "Dog")
+})
+
+test_that("finds S7 multi-dispatch methods", {
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    Cat <- S7::new_class("Cat")
+    greet <- S7::new_generic("greet", c("x", "y"))
+    S7::method(greet, list(Dog, Cat)) <- function(x, y) "hi"
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "greet,Dog,Cat-method")
+  expect_equal(attr(obj$value, "classes"), c("Dog", "Cat"))
+})
+
+test_that("S7 method with unknown class type warns", {
+  block <- roxy_block(tags = list(), file = "test.R", line = 1, call = quote(x))
+  expect_snapshot(s7_class_name(42L, block))
+})
+
 # R.oo / R.methodsS3 ------------------------------------------------------
 
 test_that("can define constructor with R.oo", {

@@ -75,6 +75,38 @@ object_usage.s4method <- function(x) {
   function_usage(x$value@generic, formals(x$value), s4method)
 }
 
+#' @export
+object_usage.s7class <- object_usage.function
+
+#' @export
+object_usage.s7generic <- object_usage.function
+
+#' @export
+object_usage.s7method <- function(x) {
+  generic <- attr(x$value, "generic")
+  classes <- attr(x$value, "classes")
+
+  formatted <- vapply(classes, s7_format_class, character(1))
+  if (length(formatted) == 1) {
+    comment <- paste0("## S7 method for class ", formatted)
+  } else {
+    comment <- paste0(
+      "## S7 method for classes ",
+      paste0(formatted, collapse = ", ")
+    )
+  }
+
+  usage <- function_usage(generic, formals(x$value), identity)
+  rd(paste0(comment, "\n", usage))
+}
+
+# Formats a class name for usage comments, wrapping each part in <>.
+# Union names like "Dog/Cat" become "<Dog>/<Cat>".
+s7_format_class <- function(name) {
+  parts <- strsplit(name, "/")[[1]]
+  paste0("<", parts, ">", collapse = "/")
+}
+
 # Function usage ----------------------------------------------------------
 
 # Usage:

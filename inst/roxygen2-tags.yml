@@ -306,6 +306,13 @@
   vignette: rd
   recommend: true
 
+- name: prop
+  description: >
+    Describe an S7 class property that is not a constructor parameter.
+  template: ' ${1:name} ${2:description}'
+  vignette: rd-other
+  recommend: true
+
 - name: rawNamespace
   description: >
     Insert literal text directly into the `NAMESPACE`.

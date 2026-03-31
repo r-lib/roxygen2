@@ -72,6 +72,10 @@ object_from_name <- function(name, env, block) {
     type <- "s4method"
   } else if (methods::is(value, "standardGeneric")) {
     type <- "s4generic"
+  } else if (inherits(value, "S7_class")) {
+    type <- "s7class"
+  } else if (inherits(value, "S7_generic")) {
+    type <- "s7generic"
   } else if (is.function(value)) {
     # Potential S3 methods/generics need metadata added
     method <- block_get_tag_value(block, "method")
@@ -111,6 +115,11 @@ parser_package <- function(file) {
 }
 
 parser_assignment <- function(call, env, block) {
+  # method(generic, class) <- fn is an S7 method registration
+  if (is.call(call[[2]]) && is_s7_method_call(call[[2]])) {
+    return(parser_s7_method(call, env, block))
+  }
+
   name <- as.character(call[[2]])
 
   # If it's a compound assignment like x[[2]] <- ignore it
@@ -197,6 +206,65 @@ parser_setConstructorS3 <- function(call, env, block) {
   # R.oo::setConstructorS3(name, ...)
   name <- as.character(call[[2]])
   object(get(name, env), name, "function")
+}
+
+is_s7_method_call <- function(call) {
+  is_call(call, "method", ns = c("", "S7"))
+}
+
+parser_s7_method <- function(call, env, block) {
+  lhs <- call[[2]]
+  generic_sym <- lhs[[2]]
+  class_spec <- lhs[[3]]
+
+  generic <- eval(generic_sym, env)
+  generic_name <- generic@name
+
+  # Evaluate class spec: either a single class, a union, or list() for
+  # multi-dispatch. Unions and S3 class wrappers are also lists, so only
+  # treat bare lists as multi-dispatch.
+  classes <- eval(class_spec, env)
+  if (
+    !is.list(classes) ||
+      inherits(classes, "S7_union") ||
+      inherits(classes, "S7_S3_class")
+  ) {
+    classes <- list(classes)
+  }
+  class_names <- vapply(classes, s7_class_name, character(1), block = block)
+
+  # Get the method function
+  fn <- eval(call[[3]], env)
+
+  value <- s7_method(fn, generic_name, class_names)
+  object(value, NULL, "s7method")
+}
+
+s7_method <- function(fn, generic, classes) {
+  structure(
+    fn,
+    generic = generic,
+    classes = classes,
+    class = c("s7method", "function")
+  )
+}
+
+# https://github.com/RConsortium/S7/issues/594
+s7_class_name <- function(cls, block) {
+  name <- nameOfClass(cls)
+  if (!is.null(name)) {
+    # Regular S7 class + base wrappers
+    name
+  } else if (inherits(cls, "S7_union")) {
+    # Unions don't have a nameOfClass; combine member names
+    member_names <- vapply(cls$classes, nameOfClass, character(1))
+    paste0(member_names, collapse = "/")
+  } else if (inherits(cls, "S7_S3_class")) {
+    cls$class
+  } else {
+    warn_roxy_block(block, "Unknown S7 class type")
+    paste0(deparse(cls), collapse = " ")
+  }
 }
 
 # helpers -----------------------------------------------------------------
@@ -306,17 +374,15 @@ print.object <- function(x, ...) {
 object_topic <- function(value, alias, type) {
   switch(
     type,
-    s4method = paste0(
-      value@generic,
-      ",",
-      paste0(value@defined, collapse = ","),
-      "-method"
-    ),
+    s4method = method_topic(value@generic, value@defined),
     s4class = paste0(value@className, "-class"),
     s4generic = value@generic,
     rcclass = paste0(value@className, "-class"),
     r6class = alias,
     rcmethod = value@name,
+    s7class = alias,
+    s7generic = alias,
+    s7method = method_topic(attr(value, "generic"), attr(value, "classes")),
     s3generic = alias,
     s3method = alias,
     import = alias,
@@ -326,6 +392,10 @@ object_topic <- function(value, alias, type) {
     value = alias,
     cli::cli_abort("Unsupported type {.str {type}}.", .internal = TRUE)
   )
+}
+
+method_topic <- function(generic, classes) {
+  paste0(generic, ",", paste0(classes, collapse = ","), "-method")
 }
 
 call_to_object <- function(code, env = pkg_env(), file = NULL) {

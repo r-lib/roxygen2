@@ -18,7 +18,8 @@ rd_roclet()
 ## See also
 
 [tags-rd](https://roxygen2.r-lib.org/dev/reference/tags-rd.md),
-[tags-rd-other](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md),
+[tags-rd-data](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md),
+[tags-rd-oop](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md),
 [tags-reuse](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md),
 [tags-index-crossref](https://roxygen2.r-lib.org/dev/reference/tags-index-crossref.md)
 for tags provided by this roclet.

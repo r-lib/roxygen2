@@ -112,19 +112,22 @@ generate:
 
   Tags for managing the `NAMESPACE`
 
+- [`tags-rd-data`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
+  [`@format`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
+  [`@source`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
+  : Tags for documenting datasets
+
 - [`tags-rd-formatting`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
   [`@md`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
   [`@noMd`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
   [`@section`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
   : Tags related to markdown support
 
-- [`tags-rd-other`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
-  [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
-  [`@format`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
-  [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
-  [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
-  [`@source`](https://roxygen2.r-lib.org/dev/reference/tags-rd-other.md)
-  : Tags for documenting datasets and classes
+- [`tags-rd-oop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
+  [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
+  [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
+  [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md) :
+  Tags for documenting classes
 
 - [`tags-rd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
   [`@description`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)

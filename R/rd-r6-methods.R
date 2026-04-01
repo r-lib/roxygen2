@@ -138,10 +138,9 @@ r6_flatten_sections <- function(tag) {
     return(tag)
   }
   titles <- names(tag$val)
-  sections <- vapply(
+  sections <- map_chr(
     seq_along(tag$val)[-1],
-    \(i) paste0("\\subsection{", titles[[i]], "}{\n", tag$val[[i]], "\n}"),
-    character(1)
+    \(i) paste0("\\subsection{", titles[[i]], "}{\n", tag$val[[i]], "\n}")
   )
   parts <- if (nzchar(tag$val[[1]])) c(tag$val[[1]], sections) else sections
   tag$val <- paste(parts, collapse = "\n\n")

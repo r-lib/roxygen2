@@ -5,7 +5,7 @@ package_seealso <- function(URL, BugReports) {
 package_seealso_urls <- function(URL = NULL, BugReports = NULL) {
   if (!is.null(URL)) {
     links <- strsplit(URL, ",\\s+")[[1]]
-    links <- vapply(links, wrap_urls, character(1), USE.NAMES = FALSE)
+    links <- map_chr(links, wrap_urls)
     links <- gsub("\\url\\{https://doi.org/", "\\doi{", links)
   } else {
     links <- character()

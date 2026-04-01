@@ -153,6 +153,9 @@ read-only computed properties), use `@prop` to document them.
 #| eval: false
 
 #' A range
+#' 
+#' Create a range represented by a numeric `start` and `end`. The start must 
+#' always be less than the end.
 #'
 #' @param start Start of range.
 #' @param end End of range.
@@ -162,7 +165,12 @@ read-only computed properties), use `@prop` to document them.
 Range <- new_class("Range", properties = list(
   start = class_numeric,
   end = class_numeric,
-  length = new_property(getter = function(self) self@end - self@start)
+  length = new_property(getter = function(self) self@end - self@start),
+  validator = function(self) {
+    if (self@start > self@end) {
+      "start must be less than or equal to end"
+    }
+  }
 ))
 ```
 
@@ -173,6 +181,9 @@ It's good practice to document the default method alongside the generic using `@
 #| eval: false
 
 #' Size of an object
+#' 
+#' An S7 generic for determining the size of an object. The default method 
+#' uses [length()], but other classes may have more specific implementations.
 #'
 #' @param x An object.
 #' @param ... Not used.
@@ -184,29 +195,25 @@ size <- new_generic("size", "x")
 method(size, class_any) <- function(x, ...) {
   length(x)
 }
-
 ```
 
-S7 **methods** are registered with `method(generic, class) <- fn`. For straightforward implementations, you don't need to document the method separately. You may want to do so, however, if it has a particularly complicated implementation or has many additional arguments that the generic does not.
-In that case, give it its own roxygen block:
+S7 **methods** are registered with `method(generic, class) <- fn`. You don't need to document methods, but you _may_ want to do so for particularly complicated implementations or methods with extra arguments.
+If you do decided to document a method, give it its own roxygen block:
 
 ```{r}
 #| eval: false
 
 #' Size of a range
 #'
-#' Returns the width of the range, i.e. `end - start`.
+#' The size of a range is its length.
 #'
 #' @param x A `Range` object.
 #' @param ... Not used.
 #' @returns A single number.
 method(size, Range) <- function(x, ...) {
-  x@end - x@start
+  x@length
 }
 ```
-
-This generates a usage line like `## S7 method for class <Range>`.
-For multi-dispatch methods, all dispatch classes are shown.
 
 Note that S7 methods are registered at load time via
 `S7::methods_register()` in your `.onLoad()` function, not through

@@ -47,6 +47,8 @@ roxygenize <- function(
   is_first <- roxygen_setup(base_path)
 
   find_package_cache_reset()
+  s3_generic_cache_reset()
+  withr::defer(s3_generic_cache_clear())
   roxy_meta_load(base_path)
   # Load required packages for method registration
   packages <- roxy_meta_get("packages")

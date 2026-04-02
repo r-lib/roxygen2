@@ -64,6 +64,9 @@ add_linkrefs_to_md <- function(text) {
 }
 
 get_md_linkrefs <- function(text) {
+  if (!grepl("[", text, fixed = TRUE)) {
+    return(character())
+  }
   refs <- str_match_all(
     text,
     regex(

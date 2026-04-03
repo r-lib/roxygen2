@@ -3,7 +3,7 @@
     Code
       docs <- r6_doc(text)
     Message
-      x <text>:6: @description Cannot find matching R6 method.
+      x <text>:6: @description can't find matching R6 method.
 
 # format.rd_r6_class with fields
 

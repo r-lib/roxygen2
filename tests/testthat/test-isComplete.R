@@ -92,12 +92,12 @@ test_that("braces in code must match", {
 # findEndOfTag -------------------------------------------------------------
 
 test_that("handles simple cases", {
-  expect_equal(findEndOfTag("{abc}", is_code = FALSE), 4)
-  expect_equal(findEndOfTag("{abc} rest", is_code = FALSE), 4)
-  expect_equal(findEndOfTag("{a}{b} rest", is_code = FALSE), 5)
-  expect_equal(findEndOfTag("{a{b}c} rest", is_code = FALSE), 6)
+  expect_equal(findEndOfTag("{abc}", is_code = FALSE, start = 0L), 4)
+  expect_equal(findEndOfTag("{abc} rest", is_code = FALSE, start = 0L), 4)
+  expect_equal(findEndOfTag("{a}{b} rest", is_code = FALSE, start = 0L), 5)
+  expect_equal(findEndOfTag("{a{b}c} rest", is_code = FALSE, start = 0L), 6)
 })
 
 test_that("returns -1 for incomplete input", {
-  expect_equal(findEndOfTag("{abc", is_code = FALSE), -1)
+  expect_equal(findEndOfTag("{abc", is_code = FALSE, start = 0L), -1)
 })

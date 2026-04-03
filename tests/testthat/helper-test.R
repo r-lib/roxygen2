@@ -18,7 +18,7 @@ expect_parse_failure <- function(code) {
 
 r6_doc <- function(text, env = new.env(parent = globalenv()), n = NULL) {
   eval(parse(text = text, keep.source = TRUE), envir = env)
-  blocks <- parse_text(text, env = env)
+  blocks <- merge_external_r6methods(parse_text(text, env = env))
 
   # Sort blocks so superclasses are processed first
   blocks <- r6_topo_sort_blocks(blocks)

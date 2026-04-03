@@ -4,11 +4,13 @@
 \alias{tags-rd-oop}
 \alias{@field}
 \alias{@method}
+\alias{@R6method}
 \alias{@slot}
 \title{Tags for documenting classes}
 \usage{
 #' @field ${1:name} ${2:description}
 #' @method ${1:generic} ${2:class}
+#' @R6method ${1:Class}$${2:method}
 #' @slot ${1:name} ${2:description}
 }
 \description{
@@ -19,6 +21,11 @@ Key tags:
 \item \verb{@field $\{1:name\} $\{2:description\}}: Describe a R6 or refClass field.
 \item \verb{@method $\{1:generic\} $\{2:class\}}: Force a function to be recognised as an S3 method. This affects the default usage and the \code{NAMESPACE} directive produced by \verb{@export}. Only needed if automatic detection fails.
 \item \verb{@slot $\{1:name\} $\{2:description\}}: Describe the slot of an S4 class.
+}
+
+Other less frequently used tags:
+\itemize{
+\item \verb{@R6method $\{1:Class\}$$\{2:method\}}: Document an R6 method that can't be discovered by introspection, such as methods added via \verb{$set()}.
 }
 }
 \seealso{

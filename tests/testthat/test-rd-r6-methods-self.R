@@ -52,6 +52,23 @@ test_that("warns about multiple @return(s) tags", {
   expect_equal(docs$methods$self[[1]]$return, "First.")
 })
 
+test_that("class-level @param x,y inherited by methods (#1600)", {
+  text <- "
+    #' Class
+    #' @param x,y Numbers.
+    C <- R6::R6Class('C', cloneable = FALSE,
+      public = list(
+        #' @description Method.
+        meth = function(x, y) {}
+      )
+    )"
+  expect_silent(docs <- r6_doc(text))
+  expect_equal(
+    docs$methods$self[[1]]$params,
+    list(list(name = "x, y", description = "Numbers."))
+  )
+})
+
 test_that("warns about undocumented params", {
   text <- "
     #' Class
@@ -160,6 +177,21 @@ test_that("format.rd_r6_method includes optional sections", {
     details = "Some details.",
     return = "The result.",
     examples = "job$run()"
+  )
+  expect_snapshot(cat(format(method), sep = "\n"))
+})
+
+test_that("format.rd_r6_method strips \\dontrun etc from examples (#1072)", {
+  method <- rd_r6_method(
+    name = "run",
+    class = "Job",
+    formals = NULL,
+    description = "Run the job.",
+    examples = "
+      \\dontrun{donrun()}
+      \\donttest{donttest()}
+      \\dontshow{dontshow()}
+    "
   )
   expect_snapshot(cat(format(method), sep = "\n"))
 })

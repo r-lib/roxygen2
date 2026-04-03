@@ -9,88 +9,49 @@ internal_f <- function(p, f) {
   if (length(a) > 0) a else b
 }
 
-subs <- matrix(
-  ncol = 2,
-  byrow = T,
-  c(
-    # Common special function names
-    '[<-',
-    'subset',
-    '[',
-    'sub',
-    '<-',
-    'set',
+subs <- c(
+  # Common special function names
+  "[<-" = "-subset-",
+  "[" = "-sub-",
+  "<-" = "-set-",
 
-    # Infix verbs
-    '!',
-    'not',
-    '&',
-    'and',
-    '|',
-    'or',
-    '*',
-    'times',
-    '+',
-    'plus',
-    '^',
-    'pow',
+  # Infix verbs
+  "!" = "-not-",
+  "&" = "-and-",
+  "|" = "-or-",
+  "*" = "-times-",
+  "+" = "-plus-",
+  "^" = "-pow-",
 
-    # Others
-    '"',
-    'quote',
-    '#',
-    'hash',
-    '$',
-    'cash',
-    '%',
-    'grapes',
-    "'",
-    'single-quote',
-    '(',
-    'open-paren',
-    ')',
-    'close-paren',
-    ':',
-    'colon',
-    ';',
-    'semi-colon',
-    '<',
-    'less-than',
-    '==',
-    'equals',
-    '=',
-    'equals',
-    '>',
-    'greater-than',
-    '?',
-    'help',
-    '@',
-    'at',
-    ']',
-    'close-brace',
-    '\\',
-    'backslash',
-    '/',
-    'slash',
-    '`',
-    'tick',
-    '{',
-    'open-curly',
-    '}',
-    'close',
-    '~',
-    'twiddle'
-  )
+  # Others
+  '"' = "-quote-",
+  "#" = "-hash-",
+  "$" = "-cash-",
+  "%" = "-grapes-",
+  "'" = "-single-quote-",
+  "(" = "-open-paren-",
+  ")" = "-close-paren-",
+  ":" = "-colon-",
+  ";" = "-semi-colon-",
+  "<" = "-less-than-",
+  "==" = "-equals-",
+  "=" = "-equals-",
+  ">" = "-greater-than-",
+  "?" = "-help-",
+  "@" = "-at-",
+  "]" = "-close-brace-",
+  "\\" = "-backslash-",
+  "/" = "-slash-",
+  "`" = "-tick-",
+  "{" = "-open-curly-",
+  "}" = "-close-",
+  "~" = "-twiddle-"
 )
-subs[, 2] <- paste0("-", subs[, 2], "-")
 
 nice_name <- function(x) {
-  x <- stringi::stri_replace_all_fixed(
-    x,
-    subs[, 1],
-    subs[, 2],
-    vectorize_all = FALSE
-  )
+  for (i in seq_along(subs)) {
+    x <- gsub(names(subs)[[i]], subs[[i]], x, fixed = TRUE)
+  }
 
   # Clean up any remaining
   x <- str_replace_all(x, "[^A-Za-z0-9_.-]+", "-")

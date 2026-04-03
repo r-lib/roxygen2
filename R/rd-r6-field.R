@@ -1,89 +1,53 @@
-r6_extract_fields <- function(block, r6data) {
+r6_extract_field_tags <- function(block, r6data, type = c("field", "active")) {
+  type <- match.arg(type)
+  other_type <- if (type == "field") "active" else "field"
+  label <- if (type == "field") "field" else "active binding"
+
   self <- r6data$self
-  fields <- self$name[self$type == "field"]
-  active <- self$name[self$type == "active"]
+  expected <- self$name[self$type == type]
+  other <- self$name[self$type == other_type]
 
-  tags <- keep(
-    block$tags,
-    function(t) t$tag == "field" && !t$val$name %in% active
-  )
+  tags <- keep(block$tags, \(t) tag_is(t, "field") && !tag_has_name(t, other))
+  docd <- unlist(lapply(tags, tag_names))
 
-  rd_fields <- lapply(tags, function(t) {
+  # Inherit undocumented fields/bindings from superclass
+  section <- if (type == "field") "fields" else "active_bindings"
+  miss <- setdiff(expected, docd)
+  inherited <- list()
+  if (length(miss) > 0) {
+    inherited <- r6_find_super_fields(miss, r6data, section)
+    docd <- c(docd, r6_field_names(inherited))
+  }
+
+  miss <- setdiff(expected, docd)
+  if (length(miss) > 0) {
+    warn_roxy_block(block, "Undocumented R6 {label}{?s}: {miss}")
+  }
+
+  dup <- unique(docd[duplicated(docd)])
+  if (length(dup) > 0) {
+    warn_roxy_block(block, "R6 {label}{?s} documented multiple times: {dup}")
+  }
+
+  if (type == "field") {
+    xtra <- setdiff(docd, expected)
+    if (length(xtra) > 0) {
+      warn_roxy_block(block, "Unknown R6 {label}{?s}: {xtra}")
+    }
+  }
+
+  # @field name NULL suppresses documentation for that field/binding
+  tags <- discard(tags, function(t) toupper(t$val$description) == "NULL")
+
+  items <- lapply(tags, function(t) {
     rd_r6_field(
       name = gsub(",", ", ", t$val$name),
       description = t$val$description
     )
   })
+  items <- c(items, inherited)
 
-  docd <- r6_field_names(rd_fields)
-
-  # Inherit undocumented fields from superclass
-  miss <- setdiff(fields, docd)
-  if (length(miss) > 0) {
-    inherited <- r6_find_super_fields(miss, r6data, "fields")
-    rd_fields <- c(rd_fields, inherited)
-    docd <- r6_field_names(rd_fields)
-  }
-
-  miss <- setdiff(fields, docd)
-  if (length(miss) > 0) {
-    warn_roxy_block(block, "Undocumented R6 field{?s}: {miss}")
-  }
-
-  dup <- unique(docd[duplicated(docd)])
-  if (length(dup) > 0) {
-    warn_roxy_block(block, "R6 field{?s} documented multiple times: {dup}")
-  }
-
-  xtra <- setdiff(docd, fields)
-  if (length(xtra) > 0) {
-    warn_roxy_block(block, "Unknown R6 field{?s}: {xtra}")
-  }
-
-  rd_r6_fields(rd_fields)
-}
-
-r6_extract_active_bindings <- function(block, r6data) {
-  self <- r6data$self
-  fields <- self$name[self$type == "field"]
-  active <- self$name[self$type == "active"]
-
-  tags <- keep(
-    block$tags,
-    function(t) t$tag == "field" && !t$val$name %in% fields
-  )
-
-  rd_fields <- lapply(tags, function(t) {
-    rd_r6_field(
-      name = gsub(",", ", ", t$val$name),
-      description = t$val$description
-    )
-  })
-
-  docd <- r6_field_names(rd_fields)
-
-  # Inherit undocumented active bindings from superclass
-  miss <- setdiff(active, docd)
-  if (length(miss) > 0) {
-    inherited <- r6_find_super_fields(miss, r6data, "active_bindings")
-    rd_fields <- c(rd_fields, inherited)
-    docd <- r6_field_names(rd_fields)
-  }
-
-  miss <- setdiff(active, docd)
-  if (length(miss) > 0) {
-    warn_roxy_block(block, "Undocumented R6 active binding{?s}: {miss}")
-  }
-
-  dup <- unique(docd[duplicated(docd)])
-  if (length(dup) > 0) {
-    warn_roxy_block(
-      block,
-      "R6 active binding{?s} documented multiple times: {dup}"
-    )
-  }
-
-  rd_r6_bindings(rd_fields)
+  rd_r6_fields(items, type = type)
 }
 
 r6_field_names <- function(rd_fields) {
@@ -93,12 +57,9 @@ r6_field_names <- function(rd_fields) {
 
 # Rd ---------------------------------------------------------------------------
 
-rd_r6_fields <- function(fields = list()) {
-  structure(list(fields = fields), class = "rd_r6_fields")
-}
-
-rd_r6_bindings <- function(bindings = list()) {
-  structure(list(fields = bindings), class = "rd_r6_bindings")
+rd_r6_fields <- function(fields = list(), type = c("field", "active")) {
+  type <- match.arg(type)
+  structure(list(fields = fields, type = type), class = "rd_r6_fields")
 }
 
 rd_r6_field <- function(name, description) {
@@ -115,12 +76,11 @@ format.rd_r6_field <- function(x, ...) {
 
 #' @export
 format.rd_r6_fields <- function(x, ...) {
-  format_r6_field_section(x$fields, "Public fields", "r6-fields")
-}
-
-#' @export
-format.rd_r6_bindings <- function(x, ...) {
-  format_r6_field_section(x$fields, "Active bindings", "r6-active-bindings")
+  if (x$type == "field") {
+    format_r6_field_section(x$fields, "Public fields", "r6-fields")
+  } else {
+    format_r6_field_section(x$fields, "Active bindings", "r6-active-bindings")
+  }
 }
 
 format_r6_field_section <- function(fields, title, css_class) {

@@ -1,0 +1,3 @@
+Package: testOptionsConfig
+Config/roxygen2/old_usage: TRUE
+Config/roxygen2/packages: mypkg1, mypkg2

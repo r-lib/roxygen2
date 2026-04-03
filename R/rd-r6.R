@@ -61,7 +61,14 @@ r6_fix_intro <- function(block) {
 # - "other": @field/@param tags consumed by field/param extraction
 r6_tag_type <- function(tag, block) {
   inline <- !is.na(tag$line) && tag$line >= block$line
-  method_tags <- c("description", "details", "return", "returns", "examples")
+  method_tags <- c(
+    "description",
+    "details",
+    "return",
+    "returns",
+    "examples",
+    "noRd"
+  )
 
   if (tag$tag %in% c("field", "name", "title")) {
     "other"
@@ -73,6 +80,18 @@ r6_tag_type <- function(tag, block) {
   } else {
     "class"
   }
+}
+
+tag_is <- function(tag, name) {
+  tag$tag == name
+}
+
+tag_names <- function(tag) {
+  str_trim(strsplit(tag$val$name, ",")[[1]])
+}
+
+tag_has_name <- function(tag, names) {
+  any(tag_names(tag) %in% names)
 }
 
 # Topological sort ---------------------------------------------------------

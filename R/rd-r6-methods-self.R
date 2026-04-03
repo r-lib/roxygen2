@@ -100,7 +100,7 @@ format.rd_r6_method <- function(x, ...) {
     push_subsection(
       "Examples",
       rd_if_html('<div class="r example copy">'),
-      paste0("\\preformatted{", x$examples, "\n", "}"),
+      paste0("\\preformatted{", strip_rd_example_tags(x$examples), "\n", "}"),
       rd_if_html("</div>")
     )
   }
@@ -171,8 +171,8 @@ r6_resolve_params <- function(method, block) {
   cls_tags <- keep(block$tags, function(t) {
     !is.na(t$line) &&
       t$line < block$line &&
-      t$tag == "param" &&
-      t$val$name %in% miss
+      tag_is(t, "param") &&
+      tag_has_name(t, miss)
   })
   params <- c(params, r6_tags_to_params(cls_tags))
 
@@ -186,9 +186,10 @@ r6_resolve_params <- function(method, block) {
   # For initialize(), inherit from @field tags for any still-missing params
   if (method$name == "initialize") {
     miss <- setdiff(fnames, r6_param_names(params))
+
     if (length(miss) > 0) {
       field_tags <- keep(block$tags, function(t) {
-        t$tag == "field" && t$val$name %in% miss
+        tag_is(t, "field") && tag_has_name(t, miss)
       })
       params <- c(params, r6_tags_to_params(field_tags))
     }

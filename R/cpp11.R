@@ -4,8 +4,8 @@ escapeExamples <- function(x) {
   .Call(`_roxygen2_escapeExamples`, x)
 }
 
-findEndOfTag <- function(string, is_code) {
-  .Call(`_roxygen2_findEndOfTag`, string, is_code)
+findEndOfTag <- function(string, is_code, start = 0L) {
+  .Call(`_roxygen2_findEndOfTag`, string, is_code, start)
 }
 
 rdComplete <- function(string, is_code) {

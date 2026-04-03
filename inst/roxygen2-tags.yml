@@ -311,7 +311,7 @@
     Document an R6 method that can't be discovered by introspection,
     such as methods added via `$set()`.
   template: ' ${1:Class}$${2:method}'
-  vignette: rd-other
+  vignette: rd-oop
 
 - name: rawNamespace
   description: >

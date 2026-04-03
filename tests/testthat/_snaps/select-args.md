@@ -1,7 +1,7 @@
 # warns on invalid input
 
     Code
-      select_args_text(sum, "-xlab:", topic)
+      select_args_text(c("x", "na.rm"), "-xlab:", "test")
     Message
       x In topic 'test': @inheritDotsParam failed.
       Caused by error in `parse()`:
@@ -11,7 +11,7 @@
     Output
       character(0)
     Code
-      select_args_text(sum, "\"a\"", topic)
+      select_args_text(c("x", "na.rm"), "\"a\"", "test")
     Message
       x In topic 'test': @inheritDotsParam failed.
       Caused by error in `select_check()`:
@@ -20,7 +20,7 @@
     Output
       character(0)
     Code
-      select_args_text(function(x, y, z) { }, "-x:z", topic)
+      select_args_text(c("x", "y", "z"), "-x:z", "test")
     Message
       x In topic 'test': @inheritDotsParam failed.
       Caused by error:

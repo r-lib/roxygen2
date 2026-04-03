@@ -1,25 +1,27 @@
-select_args_text <- function(fun, select = "", topic) {
+select_args_text <- function(args, select, topic_name) {
+  check_character(args, allow_null = TRUE)
+  check_string(select)
+  check_string(topic_name)
+
   pieces <- strsplit(select, " +")[[1]]
 
   tryCatch(
     {
       parsed <- lapply(pieces, \(x) parse(text = x)[[1]])
-      select_args(fun, parsed)
+      select_args(args, parsed)
     },
     error = function(e) {
-      warn_roxy_topic(topic$get_name(), "@inheritDotsParam failed", parent = e)
+      warn_roxy_topic(topic_name, "@inheritDotsParam failed", parent = e)
       character()
     }
   )
 }
 
-# Figure out which arguments that the user wants given a function and
-# unevaluated list
-select_args <- function(fun, select = list()) {
-  check_function(fun)
+# Figure out which arguments that the user wants given a character vector of
+# arg names and an unevaluated list of selections
+select_args <- function(args, select = list()) {
   stopifnot(is.list(select))
 
-  args <- names(formals(fun))
   args <- args[args != "..."]
 
   if (length(select) == 0) {

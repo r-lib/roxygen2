@@ -218,7 +218,8 @@
 - name: inheritDotParams
   description: >
     Automatically generate documentation for `...` when you're passing dots
-    along to another function.
+    along to another function. We recommend supplying explicit argument names
+    for maximum clarity and consistency.
   template: ' ${1:source} ${2:arg1 arg2 arg3}'
   vignette: reuse
   recommend: true

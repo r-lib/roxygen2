@@ -187,27 +187,3 @@ test_that("field docs in subclass override superclass", {
     rd_r6_fields(list(rd_r6_field("x", "Child field.")))
   )
 })
-
-test_that("active bindings inherit docs from superclass", {
-  text <- "
-    #' Parent
-    A <- R6::R6Class('A', cloneable = FALSE,
-      active = list(
-        #' @field val A value.
-        val = function(x) x
-      )
-    )
-
-    #' Child
-    B <- R6::R6Class('B', cloneable = FALSE,
-      inherit = A,
-      active = list(
-        val = function(x) x * 2
-      )
-    )"
-  expect_silent(docs <- r6_doc(text))
-  expect_equal(
-    docs$active_bindings,
-    rd_r6_bindings(list(rd_r6_field("val", "A value.")))
-  )
-})

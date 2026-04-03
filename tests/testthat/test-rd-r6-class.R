@@ -92,7 +92,10 @@ test_that("format.rd_r6_class with fields", {
 test_that("format.rd_r6_class with active bindings", {
   docs <- rd_r6_class(
     class = "Foo",
-    active_bindings = rd_r6_fields(list(rd_r6_field("val", "A value.")), type = "active")
+    active_bindings = rd_r6_fields(
+      list(rd_r6_field("val", "A value.")),
+      type = "active"
+    )
   )
   expect_snapshot(cat(format(docs), sep = "\n"))
 })

@@ -10,8 +10,8 @@ NULL
 #'
 #' It is run by default by [roxygenize()].
 #'
-#' @seealso [tags-rd], [tags-rd-other], [tags-reuse], [tags-index-crossref] for
-#'   tags provided by this roclet.
+#' @seealso [tags-rd], [tags-rd-data], [tags-rd-oop], [tags-reuse],
+#'   [tags-index-crossref] for tags provided by this roclet.
 #' @export
 #' @examples
 #' #' Add together two numbers

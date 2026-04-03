@@ -143,7 +143,7 @@ find_all_rd_tags <- function(text) {
   ## tags might be embedded into the arguments of other tags.
   tags$argend <- map_int(seq_len(nrow(tags)), function(i) {
     tag_plus <- str_sub(text, tags$end[i], text_len)
-    findEndOfTag(tag_plus, is_code = FALSE) + tags$end[i]
+    findEndOfTag(tag_plus, is_code = FALSE, start = 0L) + tags$end[i]
   })
 
   tags

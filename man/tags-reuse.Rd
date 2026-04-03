@@ -57,6 +57,7 @@ Other less frequently used tags:
 Other documentation tags:
 \code{\link{tags-index-crossref}},
 \code{\link{tags-rd}},
-\code{\link{tags-rd-other}}
+\code{\link{tags-rd-data}},
+\code{\link{tags-rd-oop}}
 }
 \concept{documentation tags}

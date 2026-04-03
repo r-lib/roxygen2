@@ -37,7 +37,7 @@ yaml_path <- function() {
   system.file("roxygen2-tags.yml", package = "roxygen2")
 }
 
-tags_rd <- function(type) {
+tags_rd <- function(type, vignette = type) {
   tags <- tags_metadata()
   tags <- tags[tags$vignette == type & !is.na(tags$vignette), ]
 
@@ -45,7 +45,7 @@ tags_rd <- function(type) {
     paste0("@name tags-", type),
     paste0("@aliases ", "@", tags$tag),
     "@description",
-    paste0("Learn the full details in `vignette('", type, "')`."),
+    paste0("Learn the full details in `vignette('", vignette, "')`."),
     "",
     if (any(tags$recommend)) {
       c(
@@ -73,9 +73,15 @@ tags_rd_desc <- function(tags, section) {
 #' @family documentation tags
 NULL
 
-#' Tags for documenting datasets and classes
+#' Tags for documenting datasets
 #'
-#' @eval tags_rd("rd-other")
+#' @eval tags_rd("rd-data", vignette = "rd-other")
+#' @family documentation tags
+NULL
+
+#' Tags for documenting classes
+#'
+#' @eval tags_rd("rd-oop", vignette = "rd-other")
 #' @family documentation tags
 NULL
 

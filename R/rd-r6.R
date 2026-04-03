@@ -1,14 +1,6 @@
 topic_add_r6_methods <- function(rd, block, env, base_path) {
   docs <- r6_class_from_block(block, env)
 
-  # Store resolved docs so subclasses can inherit
-  classname <- block$object$value$classname
-  if (!is.null(classname)) {
-    r6_docs <- roxy_meta_get("r6_docs", list())
-    r6_docs[[classname]] <- docs
-    roxy_meta_set("r6_docs", r6_docs)
-  }
-
   block <- r6_fix_intro(block)
 
   # Add class-level tags (skip tags stamped for a specific method)
@@ -18,17 +10,12 @@ topic_add_r6_methods <- function(rd, block, env, base_path) {
     }
   }
 
-  # Add docs for each method/field/binding
-  rd_lines <- format(docs)
-  rd$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
-
-  # Add combined examples for all methods
-  ex_lines <- r6_all_examples(docs$methods)
-  if (length(ex_lines) > 0) {
-    ex_txt <- paste0(ex_lines, collapse = "\n")
-    rd$add(rd_section("examples", ex_txt), overwrite = FALSE)
-  }
+  # Store unresolved R6 docs; pass 2 will inherit and format
+  rd$add(rd_section("r6_class", docs))
 }
+
+#' @export
+format.rd_section_r6_class <- function(x, ...) NULL
 
 # When an R6 class has inline @description tags for methods, parse_description()
 # parser puts the class description into @details instead of @description.
@@ -61,7 +48,7 @@ r6_fix_intro <- function(block) {
 # - "other": @field/@param tags consumed by field/param extraction
 r6_tag_type <- function(tag, block) {
   if (!is.null(tag$r6method)) {
-  return("method")
+    return("method")
   }
 
   inline <- !is.na(tag$line) && tag$line >= block$line
@@ -98,33 +85,181 @@ tag_has_name <- function(tag, names) {
   any(tag_names(tag) %in% names)
 }
 
-# Topological sort ---------------------------------------------------------
+# Pass 2: R6 inheritance resolution -----------------------------------------
 
-# Sort blocks so R6 superclasses are processed before subclasses.
-r6_topo_sort_blocks <- function(blocks) {
-  is_r6 <- map_lgl(blocks, \(b) inherits(b, "roxy_block_r6class"))
-  if (sum(is_r6) <= 1) {
-    return(blocks)
+# Resolve R6 superclass inheritance after all blocks have been converted
+# to topics. Mirrors topics_process_inherit() but for R6 field/param docs.
+topics_process_r6_inherit <- function(topics) {
+  r6_deps <- function(topic) {
+    docs <- topic$get_value("r6_class")
+    if (is.null(docs)) {
+      return(character())
+    }
+    docs$superclasses$classname
   }
 
-  r6_indices <- which(is_r6)
-  r6_blocks <- blocks[r6_indices]
+  topics$topo_apply(r6_deps, r6_resolve_topic)
+}
 
-  classnames <- map_chr(r6_blocks, \(b) b$object$value$classname %||% "")
-  parents <- map_chr(r6_blocks, \(b) {
-    inherit <- b$object$value$inherit
-    if (is.null(inherit)) NA_character_ else as.character(inherit)
+r6_resolve_topic <- function(topic, topics) {
+  docs <- topic$get_value("r6_class")
+  if (is.null(docs)) {
+    return()
+  }
+
+  topic_name <- topic$get_name()
+
+  # Collect resolved parent docs from already-processed topics
+  parent_docs <- list()
+  for (classname in docs$superclasses$classname) {
+    parent_file <- topics$find_filename(classname)
+    if (is.na(parent_file)) {
+      next
+    }
+    parent_topic <- topics$get(parent_file)
+    if (is.null(parent_topic)) {
+      next
+    }
+    parent_docs[[classname]] <- parent_topic$get_value("r6_class")
+  }
+
+  # Inherit fields and active bindings
+  docs$fields <- r6_resolve_fields(docs$fields, parent_docs, topic_name)
+  docs$active_bindings <- r6_resolve_fields(
+    docs$active_bindings,
+    parent_docs,
+    topic_name
+  )
+
+  # Inherit method params
+  docs$methods$self <- lapply(docs$methods$self, function(method) {
+    r6_resolve_method_params(method, parent_docs, topic_name)
   })
 
-  topo <- TopoSort$new()
-  for (i in seq_along(classnames)) {
-    topo$add(classnames[i])
-    if (!is.na(parents[i]) && parents[i] %in% classnames) {
-      topo$add_ancestor(classnames[i], parents[i])
-    }
-  }
-  sorted <- topo$sort()
+  # Update stored docs (now resolved, so child classes can read them)
+  topic$sections$r6_class <- rd_section("r6_class", docs)
 
-  blocks[r6_indices] <- r6_blocks[match(sorted, classnames)]
-  blocks
+  # Format and inject into topic
+  rd_lines <- format(docs)
+  topic$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
+
+  # Add combined examples for all methods
+  ex_lines <- r6_all_examples(docs$methods)
+  if (length(ex_lines) > 0) {
+    ex_txt <- paste0(ex_lines, collapse = "\n")
+    topic$add(rd_section("examples", ex_txt), overwrite = FALSE)
+  }
+}
+
+# Field inheritance ----------------------------------------------------------
+
+r6_resolve_fields <- function(fields_obj, parent_docs, topic_name) {
+  label <- if (fields_obj$type == "field") "field" else "active binding"
+  section <- if (fields_obj$type == "field") "fields" else "active_bindings"
+
+  docd <- r6_field_names(fields_obj$fields)
+  expected <- fields_obj$expected
+
+  miss <- setdiff(expected, docd)
+  inherited <- r6_find_super_fields(miss, parent_docs, section)
+  fields_obj$fields <- c(fields_obj$fields, inherited)
+  docd <- c(docd, r6_field_names(inherited))
+
+  miss <- setdiff(expected, docd)
+  if (length(miss) > 0) {
+    warn_roxy_topic(topic_name, "Undocumented R6 {label}{?s}: {miss}")
+  }
+
+  fields_obj
+}
+
+r6_find_super_fields <- function(missing, parent_docs, section) {
+  if (length(missing) == 0 || length(parent_docs) == 0) {
+    return(list())
+  }
+
+  result <- list()
+  for (super_doc in parent_docs) {
+    if (is.null(super_doc)) {
+      next
+    }
+
+    for (field in super_doc[[section]]$fields) {
+      if (field$name %in% missing) {
+        result <- c(result, list(field))
+        missing <- setdiff(missing, field$name)
+      }
+    }
+    if (length(missing) == 0) break
+  }
+
+  result
+}
+
+# Param inheritance ----------------------------------------------------------
+
+r6_resolve_method_params <- function(method, parent_docs, topic_name) {
+  fnames <- names(method$formals)
+  if (length(fnames) == 0) {
+    return(method)
+  }
+
+  miss <- setdiff(fnames, r6_param_names(method$params))
+  if (length(miss) > 0) {
+    inherited <- r6_find_super_params(method$name, miss, parent_docs)
+    method$params <- c(method$params, inherited)
+
+    # Re-order according to formals
+    firstnames <- map_chr(
+      strsplit(map_chr(method$params, \(x) x$name), ","),
+      \(x) str_trim(x[[1]])
+    )
+    method$params <- method$params[order(match(firstnames, fnames))]
+  }
+
+  miss <- setdiff(fnames, r6_param_names(method$params))
+  for (m in miss) {
+    warn_roxy_topic(
+      topic_name,
+      c(
+        "Must use one @param for each argument",
+        x = "{method$name}({m}) is not documented"
+      )
+    )
+  }
+
+  method
+}
+
+r6_find_super_params <- function(method_name, missing, parent_docs) {
+  if (length(parent_docs) == 0) {
+    return(list())
+  }
+
+  for (super_doc in parent_docs) {
+    if (is.null(super_doc)) {
+      next
+    }
+
+    super_method <- Find(
+      \(m) m$name == method_name,
+      super_doc$methods$self
+    )
+    if (is.null(super_method)) {
+      next
+    }
+
+    result <- list()
+    for (param in super_method$params) {
+      param_names <- str_trim(unlist(strsplit(param$name, ",")))
+      if (any(param_names %in% missing)) {
+        result <- c(result, list(param))
+        missing <- setdiff(missing, param_names)
+      }
+    }
+
+    if (length(result) > 0) return(result)
+  }
+
+  list()
 }

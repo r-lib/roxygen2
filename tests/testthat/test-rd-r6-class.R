@@ -8,8 +8,9 @@ test_that("can construct empty class", {
 
   expect_s3_class(docs, "rd_r6_class")
   expect_equal(docs$methods, rd_r6_methods("C"))
-  expect_equal(docs$fields, rd_r6_fields())
-  expect_equal(docs$active_bindings, rd_r6_fields(type = "active"))
+
+  expect_equal(docs$fields$fields, list())
+  expect_equal(docs$active_bindings$fields, list())
 })
 
 test_that("class description is not duplicated", {

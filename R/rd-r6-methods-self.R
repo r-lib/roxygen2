@@ -176,13 +176,6 @@ r6_resolve_params <- function(method, block) {
   })
   params <- c(params, r6_tags_to_params(cls_tags))
 
-  # Inherit from superclass method with the same name
-  miss <- setdiff(fnames, r6_param_names(params))
-  if (length(miss) > 0) {
-    r6data <- block_get_tag_value(block, ".r6data")
-    params <- c(params, r6_find_super_params(method$name, miss, r6data))
-  }
-
   # For initialize(), inherit from @field tags for any still-missing params
   if (method$name == "initialize") {
     miss <- setdiff(fnames, r6_param_names(params))
@@ -193,18 +186,6 @@ r6_resolve_params <- function(method, block) {
       })
       params <- c(params, r6_tags_to_params(field_tags))
     }
-  }
-
-  # Check if anything is still missing
-  miss <- setdiff(fnames, r6_param_names(params))
-  for (m in miss) {
-    warn_roxy_block(
-      block,
-      c(
-        "Must use one @param for each argument",
-        x = "${method$name}({m}) is not documented"
-      )
-    )
   }
 
   # Order them according to formals
@@ -241,49 +222,4 @@ rd_if_html <- function(...) {
 
 rd_if_latex <- function(...) {
   paste0("\\if{latex}{\\out{", ..., "}}")
-}
-
-# Superclass param inheritance -----------------------------------------------
-
-r6_find_super_params <- function(method_name, missing, r6data) {
-  r6_docs <- roxy_meta_get("r6_docs", list())
-  if (length(r6_docs) == 0) {
-    return(list())
-  }
-
-  super <- r6data$super
-  if (is.null(super)) {
-    return(list())
-  }
-
-  for (i in seq_len(nrow(super$classes))) {
-    classname <- super$classes$classname[i]
-    super_doc <- r6_docs[[classname]]
-    if (is.null(super_doc)) {
-      next
-    }
-
-    # Find the matching method in the superclass's resolved docs
-    super_method <- Find(
-      \(m) m$name == method_name,
-      super_doc$methods$self
-    )
-    if (is.null(super_method)) {
-      next
-    }
-
-    # Inherit params that match our missing list
-    result <- list()
-    for (param in super_method$params) {
-      param_names <- str_trim(unlist(strsplit(param$name, ",")))
-      if (any(param_names %in% missing)) {
-        result <- c(result, list(param))
-        missing <- setdiff(missing, param_names)
-      }
-    }
-
-    if (length(result) > 0) return(result)
-  }
-
-  list()
 }

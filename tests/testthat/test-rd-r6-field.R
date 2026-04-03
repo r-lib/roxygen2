@@ -12,11 +12,11 @@ test_that("r6_extract_field_tags builds rd_r6_field objects", {
   r6data <- block_get_tag_value(block, ".r6data")
   expect_silent(fields <- r6_extract_field_tags(block, r6data, "field"))
   expect_equal(
-    fields,
-    rd_r6_fields(list(
+    fields$fields,
+    list(
       rd_r6_field("field1", "Foo."),
       rd_r6_field("field2", "Bar.")
-    ))
+    )
   )
 })
 
@@ -32,8 +32,8 @@ test_that("comma-separated @field works (#1600)", {
     )"
   expect_silent(docs <- r6_doc(text))
   expect_equal(
-    docs$fields,
-    rd_r6_fields(list(rd_r6_field("var_1, var_2", "do something vars")))
+    docs$fields$fields,
+    list(rd_r6_field("var_1, var_2", "do something vars"))
   )
 })
 
@@ -51,13 +51,10 @@ test_that("r6_extract_field_tags builds active binding objects", {
   r6data <- block_get_tag_value(block, ".r6data")
   expect_silent(bindings <- r6_extract_field_tags(block, r6data, "active"))
   expect_equal(
-    bindings,
-    rd_r6_fields(
-      list(
-        rd_r6_field("bind1", "Active binding."),
-        rd_r6_field("bind2", "Active 2.")
-      ),
-      type = "active"
+    bindings$fields,
+    list(
+      rd_r6_field("bind1", "Active binding."),
+      rd_r6_field("bind2", "Active 2.")
     )
   )
 })
@@ -77,8 +74,8 @@ test_that("@field name NULL suppresses field documentation", {
   r6data <- block_get_tag_value(block, ".r6data")
   expect_silent(fields <- r6_extract_field_tags(block, r6data, "field"))
   expect_equal(
-    fields,
-    rd_r6_fields(list(rd_r6_field("field1", "Foo.")))
+    fields$fields,
+    list(rd_r6_field("field1", "Foo."))
   )
 })
 
@@ -91,7 +88,7 @@ test_that("warns about undocumented fields", {
       )
     )"
   expect_snapshot(docs <- r6_doc(text))
-  expect_equal(docs$fields, rd_r6_fields())
+  expect_equal(docs$fields$fields, list())
 })
 
 test_that("warns about fields documented multiple times", {
@@ -158,8 +155,8 @@ test_that("fields inherit docs from superclass", {
     )"
   expect_silent(docs <- r6_doc(text))
   expect_equal(
-    docs$fields,
-    rd_r6_fields(list(rd_r6_field("x", "A field.")))
+    docs$fields$fields,
+    list(rd_r6_field("x", "A field."))
   )
 })
 
@@ -183,7 +180,7 @@ test_that("field docs in subclass override superclass", {
     )"
   docs <- r6_doc(text)
   expect_equal(
-    docs$fields,
-    rd_r6_fields(list(rd_r6_field("x", "Child field.")))
+    docs$fields$fields,
+    list(rd_r6_field("x", "Child field."))
   )
 })

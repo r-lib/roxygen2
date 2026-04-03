@@ -20,28 +20,37 @@ r6_doc <- function(text, env = new.env(parent = globalenv()), n = NULL) {
   eval(parse(text = text, keep.source = TRUE), envir = env)
   blocks <- merge_external_r6methods(parse_text(text, env = env))
 
-  # Sort blocks so superclasses are processed first
-  blocks <- r6_topo_sort_blocks(blocks)
+  # Pass 1: extract local docs (no inheritance)
+  r6_blocks <- Filter(
+    function(b) inherits(b, "roxy_block_r6class"),
+    blocks
+  )
+  all_docs <- lapply(r6_blocks, r6_class_from_block, env = env)
+  names(all_docs) <- map_chr(
+    r6_blocks,
+    \(b) b$object$value$classname %||% b$object$alias %||% ""
+  )
 
-  # Process all R6 blocks before the target, storing resolved docs
-  local_roxy_meta_set("r6_docs", list())
-  target <- n %||% length(blocks)
-  for (i in seq_along(blocks)) {
-    block <- blocks[[i]]
-    if (!inherits(block, "roxy_block_r6class")) {
-      next
-    }
-    docs <- r6_class_from_block(block, env)
-    classname <- block$object$value$classname
-    if (!is.null(classname)) {
-      r6_docs <- roxy_meta_get("r6_docs", list())
-      r6_docs[[classname]] <- docs
-      roxy_meta_set("r6_docs", r6_docs)
-    }
-    if (i == target) return(docs)
+  # Pass 2: resolve inheritance in dependency order
+  target <- n %||% length(r6_blocks)
+  parent_docs <- list()
+  for (i in seq_along(all_docs)) {
+    docs <- all_docs[[i]]
+    topic_name <- names(all_docs)[[i]]
+    docs$fields <- r6_resolve_fields(docs$fields, parent_docs, topic_name)
+    docs$active_bindings <- r6_resolve_fields(
+      docs$active_bindings,
+      parent_docs,
+      topic_name
+    )
+    docs$methods$self <- lapply(docs$methods$self, function(method) {
+      r6_resolve_method_params(method, parent_docs, topic_name)
+    })
+    all_docs[[i]] <- docs
+    parent_docs[[topic_name]] <- docs
   }
 
-  r6_class_from_block(blocks[[target]], env)
+  all_docs[[target]]
 }
 
 local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {

@@ -10,10 +10,10 @@
     Code
       docs <- r6_doc(text)
     Message
-      x <text>:3: Must use one @param for each argument.
-      x $run(x) is not documented
-      x <text>:3: Must use one @param for each argument.
-      x $run(y) is not documented
+      x In topic 'C': Must use one @param for each argument.
+      x run(x) is not documented
+      x In topic 'C': Must use one @param for each argument.
+      x run(y) is not documented
 
 # warns about duplicated params
 

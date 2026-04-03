@@ -10,20 +10,6 @@ r6_extract_field_tags <- function(block, r6data, type = c("field", "active")) {
   tags <- keep(block$tags, \(t) tag_is(t, "field") && !tag_has_name(t, other))
   docd <- unlist(lapply(tags, tag_names))
 
-  # Inherit undocumented fields/bindings from superclass
-  section <- if (type == "field") "fields" else "active_bindings"
-  miss <- setdiff(expected, docd)
-  inherited <- list()
-  if (length(miss) > 0) {
-    inherited <- r6_find_super_fields(miss, r6data, section)
-    docd <- c(docd, r6_field_names(inherited))
-  }
-
-  miss <- setdiff(expected, docd)
-  if (length(miss) > 0) {
-    warn_roxy_block(block, "Undocumented R6 {label}{?s}: {miss}")
-  }
-
   dup <- unique(docd[duplicated(docd)])
   if (length(dup) > 0) {
     warn_roxy_block(block, "R6 {label}{?s} documented multiple times: {dup}")
@@ -45,21 +31,30 @@ r6_extract_field_tags <- function(block, r6data, type = c("field", "active")) {
       description = t$val$description
     )
   })
-  items <- c(items, inherited)
 
-  rd_r6_fields(items, type = type)
+  rd_r6_fields(items, type = type, expected = expected)
 }
 
 r6_field_names <- function(rd_fields) {
+  if (length(rd_fields) == 0) {
+    return(character())
+  }
   labels <- map_chr(rd_fields, \(x) x$name)
   str_trim(unlist(strsplit(labels, ",")))
 }
 
 # Rd ---------------------------------------------------------------------------
 
-rd_r6_fields <- function(fields = list(), type = c("field", "active")) {
+rd_r6_fields <- function(
+  fields = list(),
+  type = c("field", "active"),
+  expected = character()
+) {
   type <- match.arg(type)
-  structure(list(fields = fields, type = type), class = "rd_r6_fields")
+  structure(
+    list(fields = fields, type = type, expected = expected),
+    class = "rd_r6_fields"
+  )
 }
 
 rd_r6_field <- function(name, description) {
@@ -97,39 +92,4 @@ format_r6_field_section <- function(fields, title, css_class) {
     paste0("  ", rd_if_html("</div>")),
     "}"
   )
-}
-
-# Superclass field inheritance -----------------------------------------------
-
-r6_find_super_fields <- function(missing, r6data, section) {
-  r6_docs <- roxy_meta_get("r6_docs", list())
-  if (length(r6_docs) == 0) {
-    return(list())
-  }
-
-  super <- r6data$super
-  if (is.null(super)) {
-    return(list())
-  }
-
-  result <- list()
-
-  for (i in seq_len(nrow(super$classes))) {
-    classname <- super$classes$classname[i]
-    super_doc <- r6_docs[[classname]]
-    if (is.null(super_doc)) {
-      next
-    }
-
-    for (field in super_doc[[section]]$fields) {
-      if (field$name %in% missing) {
-        result <- c(result, list(field))
-        missing <- setdiff(missing, field$name)
-      }
-    }
-
-    if (length(missing) == 0) break
-  }
-
-  result
 }

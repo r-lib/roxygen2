@@ -3,7 +3,7 @@
     Code
       docs <- r6_doc(text)
     Message
-      x <text>:3: Undocumented R6 field: undocumented_field.
+      x In topic 'C': Undocumented R6 field: undocumented_field.
 
 # warns about fields documented multiple times
 
@@ -17,8 +17,8 @@
     Code
       docs <- r6_doc(text)
     Message
-      x <text>:4: Undocumented R6 field: x.
       x <text>:4: Unknown R6 field: nosuch.
+      x In topic 'C': Undocumented R6 field: x.
 
 # format.rd_r6_field produces \item markup
 

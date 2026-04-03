@@ -42,20 +42,15 @@ r6_extract_methods <- function(r6data, alias, block) {
   methods_df <- methods_df[order(methods_df$file, methods_df$line), ]
   methods_df$tags <- replicate(nrow(methods_df), list(), simplify = FALSE)
 
-  # Associate inline tags with methods
+  # Move method tags to methods data structure
   for (i in seq_along(block$tags)) {
     tag <- block$tags[[i]]
-
-    # Tags from external @R6method blocks are stamped with the method name;
-    # inline tags use positional matching
-    if (!is.null(tag$r6method)) {
-      meth <- tag$r6method
-    } else {
-      if (r6_tag_type(tag, block) != "method") {
-        next
-      }
-      meth <- find_method_for_tag(methods_df, tag)
+    if (r6_tag_type(tag, block) != "method") {
+      next
     }
+
+    # Tags from external blocks already have method name; ow need to find
+    meth <- tag$r6method %||% find_method_for_tag(methods_df, tag)
 
     midx <- which(meth == methods_df$name)
     if (length(midx) == 0) {

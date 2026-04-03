@@ -14,11 +14,17 @@ Key tags:
 
 - `@slot ${1:name} ${2:description}`: Describe the slot of an S4 class.
 
+Other less frequently used tags:
+
+- `@R6method ${1:Class}$${2:method}`: Document an R6 method that can't
+  be discovered by introspection, such as methods added via `$set()`.
+
 ## Usage
 
 ``` r
 #' @field ${1:name} ${2:description}
 #' @method ${1:generic} ${2:class}
+#' @R6method ${1:Class}$${2:method}
 #' @slot ${1:name} ${2:description}
 ```
 

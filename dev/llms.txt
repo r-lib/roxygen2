@@ -126,6 +126,7 @@ generate:
 - [`tags-rd-oop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
   [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
   [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
+  [`@R6method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
   [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md) :
   Tags for documenting classes
 

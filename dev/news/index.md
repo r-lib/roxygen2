@@ -32,6 +32,13 @@
     `obj$method(args)` for other methods, making it clearer how each
     method is actually called
     ([\#1026](https://github.com/r-lib/roxygen2/issues/1026)).
+  - Methods added via `$set()` can now be documented by placing a
+    roxygen block directly above the `$set()` call
+    ([\#931](https://github.com/r-lib/roxygen2/issues/931)).
+  - New `@R6method Class$method` tag allows you to document R6 methods
+    anywhere, in case you are generating them in a way that roxygen2
+    doesn’t currently recognize
+    ([\#991](https://github.com/r-lib/roxygen2/issues/991)).
   - `@returns` now works as a method-level tag in R6 classes, just like
     `@return` ([\#1148](https://github.com/r-lib/roxygen2/issues/1148)).
   - The “Super classes” section now omits the `pkg::` prefix for parent

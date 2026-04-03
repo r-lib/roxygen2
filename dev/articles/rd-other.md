@@ -164,9 +164,24 @@ documentation goes. See the next section for more details.
   bindings and all method arguments are documented, and issues warnings
   otherwise.
 
+- If a method is added dynamically with `$set()`, you can document it by
+  placing a roxygen block directly above the `$set()` call. roxygen2
+  will automatically associate the block with the class.
+
+- If roxygen2 can’t automatically discover a method, you can use
+  `@R6method Class$method` to explicitly associate a documentation block
+  with a method. Place it in a standalone roxygen block above `NULL`:
+
+  ``` r
+  #' @R6method Person$set_hair
+  #' @description Change hair color.
+  #' @param val New hair color.
+  NULL
+  ```
+
 - To turn off the special handling of R6 classes and go back to the
-  roxygen2 6.x.x behavior, use `Config/roxygen2/r6: FALSE` in
-  `DESCRIPTION`.
+  roxygen2 6.x.x behavior, add `Config/roxygen2/r6: false` to your
+  `DESCRIPTION` file.
 
 roxygen2 automatically generates additional sections for an R6 class:
 

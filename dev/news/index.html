@@ -71,6 +71,8 @@
 <code><a href="../reference/tag_parsers.html">tag_words_line()</a></code> is deprecated in favour of <code><a href="../reference/tag_parsers.html">tag_words()</a></code>, which now checks for single-line content by default. Use <code>tag_words(x, multiline = TRUE)</code> or <code>tag_value(x, multiline = TRUE)</code> if your tag legitimately spans multiple lines.</li>
 <li>R6 improvements:
 <ul><li>R6 method usage now shows <code>ClassName$new(args)</code> for constructors and <code>obj$method(args)</code> for other methods, making it clearer how each method is actually called (<a href="https://github.com/r-lib/roxygen2/issues/1026" class="external-link">#1026</a>).</li>
+<li>Methods added via <code>$set()</code> can now be documented by placing a roxygen block directly above the <code>$set()</code> call (<a href="https://github.com/r-lib/roxygen2/issues/931" class="external-link">#931</a>).</li>
+<li>New <code>@R6method Class$method</code> tag allows you to document R6 methods anywhere, in case you are generating them in a way that roxygen2 doesn’t currently recognize (<a href="https://github.com/r-lib/roxygen2/issues/991" class="external-link">#991</a>).</li>
 <li>
 <code>@returns</code> now works as a method-level tag in R6 classes, just like <code>@return</code> (<a href="https://github.com/r-lib/roxygen2/issues/1148" class="external-link">#1148</a>).</li>
 <li>The “Super classes” section now omits the <code>pkg::</code> prefix for parent classes from the same package, making the inheritance chain easier to read (<a href="https://github.com/r-lib/roxygen2/issues/1567" class="external-link">#1567</a>).</li>

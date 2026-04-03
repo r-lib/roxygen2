@@ -268,9 +268,24 @@ suppress documentation of a field, use
 <li><p>roxygen2 checks that all public methods, public fields, active
 bindings and all method arguments are documented, and issues warnings
 otherwise.</p></li>
+<li><p>If a method is added dynamically with <code>$set()</code>, you
+can document it by placing a roxygen block directly above the
+<code>$set()</code> call. roxygen2 will automatically associate the
+block with the class.</p></li>
+<li>
+<p>If roxygen2 can’t automatically discover a method, you can use
+<code>@R6method Class$method</code> to explicitly associate a
+documentation block with a method. Place it in a standalone roxygen
+block above <code>NULL</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @R6method Person$set_hair</span></span>
+<span><span class="co">#' @description Change hair color.</span></span>
+<span><span class="co">#' @param val New hair color.</span></span>
+<span><span class="cn">NULL</span></span></code></pre></div>
+</li>
 <li><p>To turn off the special handling of R6 classes and go back to the
-roxygen2 6.x.x behavior, use <code>Config/roxygen2/r6: FALSE</code> in
-<code>DESCRIPTION</code>.</p></li>
+roxygen2 6.x.x behavior, add <code>Config/roxygen2/r6: false</code> to
+your <code>DESCRIPTION</code> file.</p></li>
 </ul>
 <p>roxygen2 automatically generates additional sections for an R6
 class:</p>
@@ -283,7 +298,7 @@ examples. This section is run by <code>R CMD check</code>, so method
 examples must work without errors.</p></li>
 </ul>
 <p>An example from the R6 tutorial:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' R6 Class Representing a Person</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @description</span></span>

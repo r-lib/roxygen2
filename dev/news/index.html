@@ -136,6 +136,8 @@
 <li>
 <code>@inheritDotParams</code> now warns and produces no output when there are no parameters to inherit, instead of generating an empty <code>\describe</code> block that caused CRAN HTML validation warnings (<a href="https://github.com/r-lib/roxygen2/issues/1671" class="external-link">#1671</a>).</li>
 <li>
+<code>@inheritDotParams</code> now uses documented parameters, rather than formals, so it works the same way as <code>@inheritParams</code> (<a href="https://github.com/r-lib/roxygen2/issues/1840" class="external-link">#1840</a>). This may introduce some new false positives (rather than the old approach’s false negatives), which you can prevent by explicitly listing the argument names to inherit.</li>
+<li>
 <code>@inheritDotParams</code> now correctly matches parameters that are documented with a dot-prefixed alias (e.g., <code>.by, by</code>) but whose formal argument lacks the dot (e.g., <code>by</code>), as is common in the tidyverse (<a href="https://github.com/r-lib/roxygen2/issues/1826" class="external-link">#1826</a>).</li>
 <li>
 <code>@inheritParams</code> now correctly inherits parameters that are documented together with <code>\dots</code> using comma-separated names, e.g. <code>@param b,\dots description</code> (<a href="https://github.com/r-lib/roxygen2/issues/1718" class="external-link">#1718</a>).</li>

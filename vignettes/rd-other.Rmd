@@ -91,9 +91,9 @@ Documenting S3 code well requires thinking about three things:
 
 -   **Generics**: mention that the function is a generic and list the
     available methods.
--   **Classes**: document the constructor; don't list methods.
 -   **Methods**: link back to the generic; only document individually
     when the method has unique behavior or arguments.
+-   **Classes**: document the constructor.
 
 ### Generics
 
@@ -140,7 +140,7 @@ package to automatically generate a list of methods, with links to their
 help topics. These examples use inline R code (`` `r ` ``), which generates the list at documentation time (i.e. when you run
 `devtools::document()`). This only requires including doclisting in `Suggests`.
 
-If you want the list to reflect all methods that are loaded at runtime
+If you want the list to dynamically reflect all methods that are currently registered
 (including methods registered by other packages), use an Rd code block
 (`` `Rd ` ``) instead:
 

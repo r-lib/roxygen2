@@ -87,22 +87,114 @@ Some notes:
 
 ## S3
 
--   S3 **generics** are regular functions, so document them as such.
-    If necessary, include a section that provides additional details for developers implementing methods.
+Documenting S3 code well requires thinking about three things:
 
--   S3 **classes** have no formal definition, so document the [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
+-   **Generics**: mention that the function is a generic and list the
+    available methods.
+-   **Classes**: document the constructor; don't list methods.
+-   **Methods**: link back to the generic; only document individually
+    when the method has unique behavior or arguments.
 
--   It is your choice whether or not to document S3 **methods**.
-    Generally, it's not necessary to document straightforward methods for common generics like `print()`.
-    (You should, however, always `@export` S3 methods, even internal ones).
+### Generics
 
-    If your method is more complicated, you should document it by setting `@rdname` or `@describeIn`.
-    For complicated methods, you might document in their own file (i.e. `@name generic.class`; for simpler methods you might document with the generic (i.e. `@rdname generic)`.
-    Learn more about these tags in `vignette("reuse")`.
+S3 **generics** are regular functions, so document them as such.
+The documentation should mention that the function is a generic, because this
+tells the reader that the behavior may vary depending on the input and that
+they can write their own methods. For simple generics, you can do this
+in the description:
 
--   Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use `@method` if there is ambiguity.
-    For example, is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, or the `data.frame` method for `all.equal()`?.
-    If this happens to you, disambiguate with (e.g.) `@method all.equal data.frame`.
+```{r}
+#| eval: false
+
+#' Frobnpolicate an object
+#'
+#' @description
+#' `frobnpolicate()` is an S3 generic that ..., with methods available for
+#' the following classes:
+#' 
+#' `r doclisting::methods_inline("frobnpolicate")`
+```
+
+For more complicated generics, you can use a `# Methods` section to
+provide more detail:
+
+```{r}
+#| eval: false
+
+#' Frobnpolicate an object
+#'
+#' @description
+#' `frobnpolicate()` does ...
+#'
+#' # Methods
+#' `frobnpolicate()` is an S3 generic with methods available for the following 
+#' classes:
+#' 
+#' `r doclisting::methods_list("frobnpolicate")`
+```
+
+You might also want to include a section that provides additional details for developers implementing their own methods.
+
+Both examples above use the [doclisting](https://doclisting.r-lib.org/)
+package to automatically generate a list of methods, with links to their
+help topics. These examples use inline R code (`` `r ` ``), which generates the list at documentation time (i.e. when you run
+`devtools::document()`). This only requires including doclisting in `Suggests`.
+
+If you want the list to reflect all methods that are loaded at runtime
+(including methods registered by other packages), use an Rd code block
+(`` `Rd ` ``) instead:
+
+```{r}
+#| eval: false
+
+#' `Rd doclisting::methods_list("frobnpolicate")`
+```
+
+Using `` `Rd ` `` requires doclisting in `Imports`, and you'll need a dummy call to eliminate the `R CMD check` NOTE about unused imports:
+
+```{r}
+#| eval: false
+
+ignore_unused_imports <- function() {
+  doclisting::methods_list
+}
+```
+
+
+### Classes
+
+S3 **classes** have no formal definition, so document the [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
+Note that you don't need to list methods for a class: in S3, methods
+belong to generics, not to classes. Users should look at the generic's
+help page to learn about available methods.
+
+### Methods
+
+It is your choice whether or not to document S3 **methods**.
+Generally, it's not necessary to document straightforward methods for
+common generics like `print()`. (You should, however, always `@export`
+S3 methods, even internal ones.)
+
+It's good practice, however, to document methods that have unique behavior or arguments. For example, the clock package documents the methods for
+[`date_group()`](https://clock.r-lib.org/reference/date_group.html) on
+their own pages ([Date](https://clock.r-lib.org/reference/date-group.html),
+[POSIXt](https://clock.r-lib.org/reference/posixt-group.html)) because the
+methods accept different `precision` values and have type-specific return
+value semantics and examples. The generic page serves only as a signpost
+linking to the individual method pages.
+
+When documenting a method, always include a link back to the generic
+using `[generic_name()]` so the reader can easily find the full
+documentation and other methods.
+
+### Method disambiguation
+
+Generally, roxygen2 will automatically figure out the generic that the
+method belongs to, and you should only need to use `@method` if there
+is ambiguity. For example, is `all.equal.data.frame()` the
+`equal.data.frame` method for `all()`, or the `data.frame` method for
+`all.equal()`? If this happens to you, disambiguate with (e.g.)
+`@method all.equal data.frame`.
 
 ## S4
 

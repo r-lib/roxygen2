@@ -228,7 +228,9 @@
   description: >
     Inherit argument documentation from another function. Only inherits
     documentation for arguments that aren't already documented locally.
-  template: ' ${1:source}'
+    Optionally followed by a list of argument names to include or exclude,
+    using the same syntax as `@inheritDotParams`.
+  template: ' ${1:source} ${2:arg1 arg2 arg3}'
   vignette: reuse
   recommend: true
 

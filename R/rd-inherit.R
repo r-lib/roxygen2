@@ -8,10 +8,21 @@ roxy_tag_rd.roxy_tag_inherit <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_inheritParams <- function(x) tag_value(x)
+roxy_tag_parse.roxy_tag_inheritParams <- function(x) {
+  tag_two_part(
+    x,
+    "a source",
+    "an argument list",
+    required = FALSE,
+    markdown = FALSE
+  )
+}
 #' @export
 roxy_tag_rd.roxy_tag_inheritParams <- function(x, base_path, env) {
-  rd_section_inherit(x$val, list("params"))
+  list(
+    rd_section_inherit(x$val$name, list("params")),
+    rd_section_inherit_params_args(x$val$name, x$val$description)
+  )
 }
 
 #' @export
@@ -107,6 +118,28 @@ merge.rd_section_inherit_dot_params <- function(x, y, ...) {
   )
 }
 
+rd_section_inherit_params_args <- function(source, args) {
+  check_string(source)
+  check_string(args)
+
+  if (!nzchar(args)) {
+    return(NULL)
+  }
+  rd_section("inherit_params_args", list(source = source, args = args))
+}
+
+#' @export
+format.rd_section_inherit_params_args <- function(x, ...) NULL
+
+#' @export
+merge.rd_section_inherit_params_args <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  rd_section_inherit_params_args(
+    c(x$value$source, y$value$source),
+    c(x$value$args, y$value$args)
+  )
+}
+
 
 # Process inheritance -----------------------------------------------------
 
@@ -174,6 +207,22 @@ inherit_params <- function(topic, topics) {
       source = topic$get_name(),
       tag = "@inheritParams"
     )
+
+    # Apply argument filter if specified via @inheritParams foo args
+    params_args <- topic$get_value("inherit_params_args")
+    args_filter <- params_args$args[params_args$source == inheritor]
+    if (length(args_filter) == 1 && nzchar(args_filter)) {
+      doc_args <- unlist(lapply(inherited_params, "[[", "name"))
+      selected <- select_args_text(
+        doc_args,
+        args_filter,
+        topic_name = topic$get_name()
+      )
+      inherited_params <- Filter(
+        function(p) any(p$name %in% selected),
+        inherited_params
+      )
+    }
 
     for (param in inherited_params) {
       match <- match_param(param$name, missing)

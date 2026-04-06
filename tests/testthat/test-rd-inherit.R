@@ -676,6 +676,88 @@ test_that("inherit params ... named \\dots", {
   )
 })
 
+# inheritParams argument filtering ----------------------------------------
+
+test_that("@inheritParams can include specific args", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A.
+    #'
+    #' @param x X
+    #' @param y Y
+    #' @param z Z
+    a <- function(x, y, z) {}
+
+    #' B
+    #'
+    #' @inheritParams a x z
+    b <- function(x, y, z) {}
+    "
+  )[[2]]
+
+  params <- out$get_value("param")
+  expect_equal(params, c(x = "X", z = "Z"))
+})
+
+test_that("@inheritParams can exclude specific args", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A.
+    #'
+    #' @param x X
+    #' @param y Y
+    #' @param z Z
+    a <- function(x, y, z) {}
+
+    #' B
+    #'
+    #' @inheritParams a -y
+    b <- function(x, y, z) {}
+    "
+  )[[2]]
+
+  params <- out$get_value("param")
+  expect_equal(params, c(x = "X", z = "Z"))
+})
+
+test_that("@inheritParams filtering works with external packages", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' My mean
+    #'
+    #' @inheritParams base::mean -na.rm
+    mymean <- function(x, trim, na.rm) {}"
+  )[[1]]
+
+  params <- out$get_value("param")
+  expect_true("trim" %in% names(params))
+  expect_false("na.rm" %in% names(params))
+})
+
+test_that("@inheritParams without args still works", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A.
+    #'
+    #' @param x X
+    #' @param y Y
+    a <- function(x, y) {}
+
+    #' B
+    #'
+    #' @inheritParams a
+    b <- function(x, y) {}
+    "
+  )[[2]]
+
+  params <- out$get_value("param")
+  expect_equal(params, c(x = "X", y = "Y"))
+})
+
 # inheritDotParams --------------------------------------------------------
 
 test_that("can inherit all from single function", {

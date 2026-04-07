@@ -87,7 +87,7 @@ Some notes:
 
 ## S3
 
-Documenting S3 code well requires thinking about three things:
+Documenting [S3 code](https://adv-r.hadley.nz/s3.html) well requires thinking about three things:
 
 -   **Generics**: mention that the function is a generic and list the
     available methods.

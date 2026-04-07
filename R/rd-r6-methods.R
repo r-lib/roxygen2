@@ -42,18 +42,21 @@ r6_extract_methods <- function(r6data, alias, block) {
   methods_df <- methods_df[order(methods_df$file, methods_df$line), ]
   methods_df$tags <- replicate(nrow(methods_df), list(), simplify = FALSE)
 
-  # Associate inline tags with methods
+  # Move method tags to methods data structure
   for (i in seq_along(block$tags)) {
     tag <- block$tags[[i]]
     if (r6_tag_type(tag, block) != "method") {
       next
     }
-    meth <- find_method_for_tag(methods_df, tag)
-    if (is.na(meth)) {
-      warn_roxy_tag(tag, "Cannot find matching R6 method")
+
+    # Tags from external blocks already have method name; ow need to find
+    meth <- tag$r6method %||% find_method_for_tag(methods_df, tag)
+
+    midx <- which(meth == methods_df$name)
+    if (length(midx) == 0) {
+      warn_roxy_tag(tag, "can't find matching R6 method")
       next
     }
-    midx <- which(meth == methods_df$name)
     methods_df$tags[[midx]] <- c(methods_df$tags[[midx]], list(tag))
   }
 
@@ -71,6 +74,12 @@ r6_extract_methods <- function(r6data, alias, block) {
       "Undocumented R6 method{?s}: {methods_df$name[nodoc]}"
     )
   }
+
+  # Methods with @noRd are deliberately suppressed
+  has_noRd <- map_lgl(methods_df$tags, function(tags) {
+    any(map_lgl(tags, \(t) t$tag == "noRd"))
+  })
+  methods_df <- methods_df[!has_noRd, ]
 
   self_methods <- lapply(
     seq_len(nrow(methods_df)),
@@ -132,10 +141,9 @@ r6_flatten_sections <- function(tag) {
     return(tag)
   }
   titles <- names(tag$val)
-  sections <- vapply(
+  sections <- map_chr(
     seq_along(tag$val)[-1],
-    \(i) paste0("\\subsection{", titles[[i]], "}{\n", tag$val[[i]], "\n}"),
-    character(1)
+    \(i) paste0("\\subsection{", titles[[i]], "}{\n", tag$val[[i]], "\n}")
   )
   parts <- if (nzchar(tag$val[[1]])) c(tag$val[[1]], sections) else sections
   tag$val <- paste(parts, collapse = "\n\n")

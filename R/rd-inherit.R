@@ -214,13 +214,8 @@ inherit_dot_params <- function(topic, topics, env) {
     return()
   }
 
-  # Need to find formals for each source
-  funs <- lapply(inheritors$source, function(x) {
-    eval(parse(text = x), envir = env)
-  })
-  args <- map2(funs, inheritors$args, select_args_text, topic = topic)
-
-  # Then pull out the ones we need
+  # Find documented params for each source — this determines which args are
+  # available, matching how @inheritParams uses docs rather than formals.
   docs <- lapply(
     inheritors$source,
     find_params,
@@ -228,6 +223,18 @@ inherit_dot_params <- function(topic, topics, env) {
     source = topic$get_name(),
     tag = "@inheritDotParams"
   )
+
+  # Get unique documented param names for arg selection
+  doc_args <- lapply(docs, function(d) {
+    unlist(lapply(d, "[[", "name"))
+  })
+  args <- map2(
+    doc_args,
+    inheritors$args,
+    select_args_text,
+    topic_name = topic$get_name()
+  )
+
   arg_matches <- function(args, docs) {
     matched_names <- lapply(docs, \(x) match_param(x$name, args))
     match <- !map_lgl(matched_names, is.null)

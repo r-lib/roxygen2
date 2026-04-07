@@ -5,11 +5,15 @@
 * `tag_words_line()` is deprecated in favour of `tag_words()`, which now checks for single-line content by default. Use `tag_words(x, multiline = TRUE)` or `tag_value(x, multiline = TRUE)` if your tag legitimately spans multiple lines.
 * R6 improvements:
   * R6 method usage now shows `ClassName$new(args)` for constructors and `obj$method(args)` for other methods, making it clearer how each method is actually called (#1026).
+  * Methods added via `$set()` can now be documented by placing a roxygen block directly above the `$set()` call (#931).
+  * New `@R6method Class$method` tag allows you to document R6 methods anywhere, in case you are generating them in a way that roxygen2 doesn't currently recognize (#991).
   * `@returns` now works as a method-level tag in R6 classes, just like `@return` (#1148).
   * The "Super classes" section now omits the `pkg::` prefix for parent classes from the same package, making the inheritance chain easier to read (#1567).
   * `@field` with comma-separated names (e.g., `@field var_1,var_2 description`) no longer produces spurious warnings about undocumented active bindings or unknown fields (#1600).
   * R6 classes with only active bindings and `cloneable = FALSE` no longer error during documentation (#1610).
   * `@example` (singular, with a file path) now works correctly in R6 class documentation (#1158).
+  * R6 method examples displayed in method subsections now strip `\dontrun{}`, `\donttest{}`, and `\dontshow{}` wrappers, since these Rd macros are not interpreted inside `\preformatted{}` blocks (#1072).
+  * You can now use `@noRd` before an R6 method to suppress its documentation, and `@field name NULL` to suppress documentation for a field or active binding (#1067).
   * Inherited method links now only link to parent classes that have documentation, avoiding broken links when parent classes are undocumented (#963, #1155).
   * `initialize()` method parameters now automatically inherit documentation from `@field` tags with the same name, reducing the need to duplicate descriptions. Explicit `@param` tags still take precedence (#1004).
 * New `needs_roxygenize()` provides a lightweight check that man pages are up-to-date by comparing modification times of `.Rd` files with their source files (#1411).
@@ -48,6 +52,7 @@
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
 * `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
 * `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
+* `@inheritDotParams` now uses documented parameters, rather than formals, so it works the same way as `@inheritParams`  (#1840). This may introduce some new false positives (rather than the old approach's false negatives), which you can prevent by explicitly listing the argument names to inherit.
 * `@inheritDotParams` now correctly matches parameters that are documented with a dot-prefixed alias (e.g., `.by, by`) but whose formal argument lacks the dot (e.g., `by`), as is common in the tidyverse (#1826).
 * `@inheritParams` now correctly inherits parameters that are documented together with `\dots` using comma-separated names, e.g. `@param b,\dots description` (#1718).
 * `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).

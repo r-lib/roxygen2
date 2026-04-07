@@ -234,7 +234,7 @@ parse_description <- function(tags) {
     return(tags)
   }
 
-  tag_names <- vapply(tags, `[[`, "tag", FUN.VALUE = character(1))
+  tag_names <- map_chr(tags, \(x) x[["tag"]])
   if (tag_names[1] != "") {
     return(tags)
   }

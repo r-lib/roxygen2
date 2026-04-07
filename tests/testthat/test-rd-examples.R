@@ -159,6 +159,44 @@ test_that("% in @examples escaped before matching braces test (#213)", {
   expect_equal(out$get_value("examples"), rd("{a \\%\\% b}"))
 })
 
+# strip_rd_example_tags -----------------------------------------------------
+
+test_that("strip_rd_example_tags unwraps \\dontrun and \\donttest", {
+  expect_equal(strip_rd_example_tags("\\dontrun{\n1 + 1\n}"), "1 + 1")
+  expect_equal(strip_rd_example_tags("\\donttest{\n1 + 1\n}"), "1 + 1")
+})
+
+test_that("strip_rd_example_tags removes \\dontshow entirely", {
+  expect_equal(strip_rd_example_tags("\\dontshow{\n1 + 1\n}"), "")
+})
+
+test_that("strip_rd_example_tags preserves surrounding code", {
+  expect_equal(
+    strip_rd_example_tags("x <- 1\n\\dontrun{\n1 + 1\n}\ny <- 2"),
+    "x <- 1\n1 + 1\ny <- 2"
+  )
+})
+
+test_that("strip_rd_example_tags handles nested tags", {
+  expect_equal(
+    strip_rd_example_tags("\\dontrun{\n\\dontshow{setup}\n1 + 1\n}"),
+    "1 + 1"
+  )
+})
+
+test_that("strip_rd_example_tags handles examplesIf wrappers", {
+  input <- paste0(
+    "\\dontshow{if (TRUE) withAutoprint(\\{ # examplesIf}\n",
+    "1 + 1\n",
+    "\\dontshow{\\}) # examplesIf}"
+  )
+  expect_equal(strip_rd_example_tags(input), "1 + 1")
+})
+
+test_that("strip_rd_example_tags is no-op with no tags", {
+  expect_equal(strip_rd_example_tags("job$run()"), "job$run()")
+})
+
 # escapes ------------------------------------------------------------------
 
 test_that("only % escaped in @examples", {

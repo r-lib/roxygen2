@@ -97,6 +97,35 @@
       }
       
 
+# format.rd_r6_method strips \dontrun etc from examples (#1072)
+
+    Code
+      cat(format(method), sep = "\n")
+    Output
+      \if{html}{\out{<hr>}}
+      \if{html}{\out{<a id="method-Job-run"></a>}}
+      \if{latex}{\out{\hypertarget{method-Job-run}{}}}
+      \subsection{\code{Job$run()}}{
+        Run the job.
+        \subsection{Usage}{
+          \if{html}{\out{<div class="r">}}
+          \preformatted{Job$run()}
+          \if{html}{\out{</div>}}
+        }
+        \subsection{Examples}{
+          \if{html}{\out{<div class="r example copy">}}
+          \preformatted{      
+      donrun()
+            
+      donttest()
+            
+          
+      }
+          \if{html}{\out{</div>}}
+        }
+      }
+      
+
 # format.rd_r6_method omits empty optional sections
 
     Code

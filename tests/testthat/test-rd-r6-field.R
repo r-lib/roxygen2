@@ -62,6 +62,26 @@ test_that("r6_extract_field_tags builds active binding objects", {
   )
 })
 
+test_that("@field name NULL suppresses field documentation", {
+  text <- "
+    #' Class
+    #' @field field1 Foo.
+    #' @field field2 NULL
+    C <- R6::R6Class(
+      public = list(
+        field1 = NULL,
+        field2 = 'bar'
+      )
+    )"
+  block <- parse_text(text)[[1]]
+  r6data <- block_get_tag_value(block, ".r6data")
+  expect_silent(fields <- r6_extract_field_tags(block, r6data, "field"))
+  expect_equal(
+    fields,
+    rd_r6_fields(list(rd_r6_field("field1", "Foo.")))
+  )
+})
+
 test_that("warns about undocumented fields", {
   text <- "
     #' Class

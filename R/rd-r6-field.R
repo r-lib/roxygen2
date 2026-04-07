@@ -27,6 +27,9 @@ r6_extract_field_tags <- function(block, r6data, type = c("field", "active")) {
     }
   }
 
+  # @field name NULL suppresses documentation for that field/binding
+  tags <- discard(tags, function(t) toupper(t$val$description) == "NULL")
+
   items <- lapply(tags, function(t) {
     rd_r6_field(
       name = gsub(",", ", ", t$val$name),

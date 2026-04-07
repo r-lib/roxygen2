@@ -147,15 +147,27 @@ See the next section for more details.
 -   Method documentation can use the `@description`, `@details`, `@param`, `@return` and `@examples` tags.
     These are used to create a subsection for the method, within a separate 'Methods' section.
     All roxygen comment lines of a method documentation must appear after a tag.
+    By default, roxygen2 will warn about any undocumented methods; if you want to have a method without documentation, use `@noRd`.
 
 -   `@param` tags that appear before the class definition are automatically inherited by all methods, if needed.
 
 -   R6 fields and active bindings can make use of the `@field` tag.
-    Their documentation should also be in-line.
+    Their documentation should also be in-line. To suppress documentation of a field, use `@field name NULL`.
 
 -   roxygen2 checks that all public methods, public fields, active bindings and all method arguments are documented, and issues warnings otherwise.
 
--   To turn off the special handling of R6 classes and go back to the roxygen2 6.x.x behavior, use `Config/roxygen2/r6: FALSE` in `DESCRIPTION`.
+-   If a method is added dynamically with `$set()`, you can document it by placing a roxygen block directly above the `$set()` call. roxygen2 will automatically associate the block with the class.
+
+-   If roxygen2 can't automatically discover a method, you can use `@R6method Class$method` to explicitly associate a documentation block with a method. Place it in a standalone roxygen block above `NULL`:
+
+    ```r
+    #' @R6method Person$set_hair
+    #' @description Change hair color.
+    #' @param val New hair color.
+    NULL
+    ```
+
+-   To turn off the special handling of R6 classes and go back to the roxygen2 6.x.x behavior, add `Config/roxygen2/r6: false` to your `DESCRIPTION` file.
 
 roxygen2 automatically generates additional sections for an R6 class:
 

@@ -27,6 +27,6 @@ add <- function(x, y) {
 }
 }
 \seealso{
-\link{tags-rd}, \link{tags-rd-other}, \link{tags-reuse}, \link{tags-index-crossref} for
-tags provided by this roclet.
+\link{tags-rd}, \link{tags-rd-data}, \link{tags-rd-oop}, \link{tags-reuse},
+\link{tags-index-crossref} for tags provided by this roclet.
 }

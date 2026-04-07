@@ -181,6 +181,21 @@ test_that("format.rd_r6_method includes optional sections", {
   expect_snapshot(cat(format(method), sep = "\n"))
 })
 
+test_that("format.rd_r6_method strips \\dontrun etc from examples (#1072)", {
+  method <- rd_r6_method(
+    name = "run",
+    class = "Job",
+    formals = NULL,
+    description = "Run the job.",
+    examples = "
+      \\dontrun{donrun()}
+      \\donttest{donttest()}
+      \\dontshow{dontshow()}
+    "
+  )
+  expect_snapshot(cat(format(method), sep = "\n"))
+})
+
 test_that("format.rd_r6_method omits empty optional sections", {
   method <- rd_r6_method(
     name = "run",

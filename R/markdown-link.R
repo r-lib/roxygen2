@@ -69,10 +69,10 @@ get_md_linkrefs <- function(text) {
     gregexec(
       paste0(
         "(?x)",
-        "(?<=[^\\]\\\\]|^)",
-        "\\[([^\\]\\[]+)\\]",
-        "(?:\\[([^\\]\\[]+)\\])?",
-        "(?=[^\\[{]|$)"
+        "(?<=[^\\]\\\\]|^)", # must not be preceded by ] or \
+        "\\[([^\\]\\[]+)\\]", # match anything inside of []
+        "(?:\\[([^\\]\\[]+)\\])?", # match optional second pair of []
+        "(?=[^\\[{]|$)" # must not be followed by [ or {
       ),
       text,
       perl = TRUE

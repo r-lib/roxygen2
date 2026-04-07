@@ -82,7 +82,7 @@ tag_is <- function(tag, name) {
 }
 
 tag_names <- function(tag) {
-  str_trim(strsplit(tag$val$name, ",")[[1]])
+  trimws(strsplit(tag$val$name, ",")[[1]])
 }
 
 tag_has_name <- function(tag, names) {

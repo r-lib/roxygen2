@@ -8,6 +8,10 @@ object_from_call <- function(call, env, block, file) {
   } else if (is_set_call(call)) {
     parser_r6_set(call, env)
   } else if (is.call(call)) {
+    if (is_s7_method_call(call)) {
+      return(parser_s7_method(call, env, block))
+    }
+
     call <- call_match(call, eval(call[[1]], env))
     name <- deparse(call[[1]])
     switch(
@@ -74,6 +78,10 @@ object_from_name <- function(name, env, block) {
     type <- "s4method"
   } else if (methods::is(value, "standardGeneric")) {
     type <- "s4generic"
+  } else if (inherits(value, "S7_class")) {
+    type <- "s7class"
+  } else if (inherits(value, "S7_generic")) {
+    type <- "s7generic"
   } else if (is.function(value)) {
     # Potential S3 methods/generics need metadata added
     method <- block_get_tag_value(block, "method")
@@ -225,6 +233,68 @@ parser_setConstructorS3 <- function(call, env, block) {
   object(get(name, env), name, "function")
 }
 
+# method(generic, class) <- fn
+# `<-`(method(generic, class), fn)
+is_s7_method_call <- function(call) {
+  is_call(call, "<-", n = 2) && is_call(call[[2]], "method", ns = c("", "S7"))
+}
+
+parser_s7_method <- function(call, env, block) {
+  generic_call <- call[[2]][[2]]
+  class_call <- call[[2]][[3]]
+  method_call <- call[[3]]
+
+  generic <- eval(generic_call, env)
+  if (inherits(generic, "S7_generic")) {
+    generic_name <- generic@name
+  } else {
+    # S3 or S4 generic passed by name
+    generic_name <- deparse(generic_call)
+  }
+
+  # Evaluate class spec: either a single class, a union, or list() for
+  # multi-dispatch
+  classes <- eval(class_call, env)
+  if (!is_bare_list(classes)) {
+    classes <- list(classes)
+  }
+  class_names <- lapply(classes, s7_class_name, block = block)
+
+  fn <- eval(method_call, env)
+
+  value <- list(fn = fn, generic = generic_name, classes = class_names)
+  aliases <- s7_method_aliases(generic_name, class_names)
+  object(value, aliases, "s7method")
+}
+
+s7_method_aliases <- function(generic, classes) {
+  if (!any(lengths(classes) > 1)) {
+    return(NULL)
+  }
+
+  combos <- expand.grid(classes, stringsAsFactors = FALSE)
+  apply(combos, 1, function(row) {
+    paste0(generic, ",", paste0(row, collapse = ","), "-method")
+  })
+}
+
+# https://github.com/RConsortium/S7/issues/594
+s7_class_name <- function(cls, block) {
+  name <- nameOfClass(cls)
+  if (!is.null(name)) {
+    # Regular S7 class + base wrappers
+    name
+  } else if (inherits(cls, "S7_union")) {
+    # Unions return vector of member names, recursing for nested types
+    unlist(lapply(cls$classes, s7_class_name, block = block))
+  } else if (inherits(cls, "S7_S3_class")) {
+    cls$class
+  } else {
+    warn_roxy_block(block, "Unknown S7 class type")
+    paste0(deparse(cls), collapse = " ")
+  }
+}
+
 # helpers -----------------------------------------------------------------
 
 add_s3_metadata <- function(val, name, env, block) {
@@ -235,8 +305,8 @@ add_s3_metadata <- function(val, name, env, block) {
 
   if (block_has_tags(block, "exportS3Method")) {
     method <- block_get_tag_value(block, "exportS3Method")
-    if (length(method) == 1 && str_detect(method, "::")) {
-      generic <- strsplit(method, "::")[[1]][[2]]
+    if (length(method) == 1 && grepl("::", method, fixed = TRUE)) {
+      generic <- re_split_half(method, "::")[[2]]
       class <- gsub(paste0("^", generic, "\\."), "", name)
       return(s3_method(val, c(generic, class)))
     }
@@ -332,18 +402,16 @@ print.object <- function(x, ...) {
 object_topic <- function(value, alias, type) {
   switch(
     type,
-    s4method = paste0(
-      value@generic,
-      ",",
-      paste0(value@defined, collapse = ","),
-      "-method"
-    ),
+    s4method = method_topic(value@generic, value@defined),
     s4class = paste0(value@className, "-class"),
     s4generic = value@generic,
     rcclass = paste0(value@className, "-class"),
     r6class = alias,
     r6method = alias,
     rcmethod = value@name,
+    s7class = alias,
+    s7generic = alias,
+    s7method = method_topic(value$generic, value$classes),
     s3generic = alias,
     s3method = alias,
     import = alias,
@@ -353,6 +421,11 @@ object_topic <- function(value, alias, type) {
     value = alias,
     cli::cli_abort("Unsupported type {.str {type}}.", .internal = TRUE)
   )
+}
+
+method_topic <- function(generic, classes) {
+  class_strings <- vapply(classes, paste0, character(1), collapse = "/")
+  paste0(generic, ",", paste0(class_strings, collapse = ","), "-method")
 }
 
 call_to_object <- function(code, env = pkg_env(), file = NULL) {

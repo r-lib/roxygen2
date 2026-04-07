@@ -218,7 +218,8 @@
 - name: inheritDotParams
   description: >
     Automatically generate documentation for `...` when you're passing dots
-    along to another function.
+    along to another function. We recommend supplying explicit argument names
+    for maximum clarity and consistency.
   template: ' ${1:source} ${2:arg1 arg2 arg3}'
   vignette: reuse
   recommend: true
@@ -304,6 +305,13 @@
     without spaces.
   template: ' ${1:name} ${2:description}'
   vignette: rd
+  recommend: true
+
+- name: prop
+  description: >
+    Describe an S7 class property that is not a constructor parameter.
+  template: ' ${1:name} ${2:description}'
+  vignette: rd-oop
   recommend: true
 
 - name: R6method

@@ -829,13 +829,29 @@ test_that("inheritDotParams matches when doc uses dotted name but formal doesn't
 
     #' Bar
     #'
-    #' @inheritDotParams foo
+    #' @inheritDotParams foo x y
     bar <- function(...) {}
   "
   )[[2]]
 
   dot_param <- out$get_value("param")[["..."]]
   expect_match(dot_param, "item{\\code{y}}", fixed = TRUE)
+})
+
+test_that("inheritDotParams uses all documented params, not just formals (#1840)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' My mean
+    #'
+    #' @inheritDotParams base::mean
+    mymean <- function(x, ...) {}
+  "
+  )[[1]]
+
+  dot_param <- out$get_value("param")[["..."]]
+  expect_match(dot_param, "\\code{trim}", fixed = TRUE)
+  expect_match(dot_param, "\\code{na.rm}", fixed = TRUE)
 })
 
 test_that("inheritDotParams warns when source not found (#1602)", {

@@ -103,5 +103,5 @@ base_path <- function(path, base) {
   path <- normalizePath(path, winslash = "/")
   base <- normalizePath(base, winslash = "/")
 
-  str_replace(path, fixed(paste0(base, "/")), "")
+  sub(paste0(base, "/"), "", path, fixed = TRUE)
 }

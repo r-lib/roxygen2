@@ -1,3 +1,10 @@
+# uppercase R in inline code gives warning
+
+    Code
+      . <- roc_proc_text(rd_roclet(), text)
+    Message
+      x <text>:2: @title use ` r`, not `R `, for inline code.
+
 # multi-line inline code gives useful warning
 
     Code

@@ -64,26 +64,30 @@ add_linkrefs_to_md <- function(text) {
 }
 
 get_md_linkrefs <- function(text) {
-  refs <- str_match_all(
+  refs <- regmatches(
     text,
-    regex(
-      comments = TRUE,
-      "
-        (?<=[^\\]\\\\]|^)       # must not be preceded by ] or \
-        \\[([^\\]\\[]+)\\]      # match anything inside of []
-        (?:\\[([^\\]\\[]+)\\])? # match optional second pair of []
-        (?=[^\\[{]|$)           # must not be followed by [ or {
-      "
+    gregexec(
+      paste0(
+        "(?x)",
+        "(?<=[^\\]\\\\]|^)", # must not be preceded by ] or \
+        "\\[([^\\]\\[]+)\\]", # match anything inside of []
+        "(?:\\[([^\\]\\[]+)\\])?", # match optional second pair of []
+        "(?=[^\\[{]|$)" # must not be followed by [ or {
+      ),
+      text,
+      perl = TRUE
     )
   )[[1]]
+  if (length(refs) > 0) {
+    refs <- t(refs)
+  }
 
   if (length(refs) == 0) {
     return(character())
   }
 
   ## For the [fun] form the link text is the same as the destination.
-  # Need to check both NA and "" for different versions of stringr
-  refs[, 3] <- ifelse(is.na(refs[, 3]) | refs[, 3] == "", refs[, 2], refs[, 3])
+  refs[, 3] <- ifelse(refs[, 3] == "", refs[, 2], refs[, 3])
 
   refs3encoded <- map_chr(refs[, 3], URLencode)
   paste0("[", refs[, 3], "]: ", "R:", refs3encoded)
@@ -126,12 +130,12 @@ parse_link <- function(destination, contents, state) {
 
   is_code <- is_code || (grepl("[(][)]$", destination) && !has_link_text)
 
-  pkg <- str_match(destination, "^(.*)::")[1, 2]
+  pkg <- regmatches(destination, regexec("^(.*)::", destination))[[1]][2]
   explicit_pkg <- !is.na(pkg)
   fun <- utils::tail(strsplit(destination, "::", fixed = TRUE)[[1]], 1)
   topic <- sub("[(][)]$", "", fun)
-  if (!has_link_text && str_detect(destination, "-class$")) {
-    fun <- str_match(fun, "^(.*)-class$")[1, 2]
+  if (!has_link_text && grepl("-class$", destination)) {
+    fun <- regmatches(fun, regexec("^(.*)-class$", fun))[[1]][2]
   }
 
   # Standardise links: cross-packagae always get prefix;

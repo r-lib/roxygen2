@@ -1,5 +1,10 @@
 # roxygen2 (development version)
 * `vignette("rd-other")` now includes improved advice for documenting S3 generics, classes, and methods, including how to use the new [doclisting](https://doclisting.r-lib.org/) package to automatically list methods for a generic (#1513).
+* Added initial support for S7 classes, generics, and methods (#1484). 
+  * S7 generics are documented like regular functions.
+  * S7 classes are documented like regular functions, but you can use `@prop` to document additional properties that are not constructor parameters. If multiple classes share one page, use `@prop ClassName@prop_name description` to group properties by class. 
+  * S7 methods registered with `method(generic, class) <- fn` are detected automatically and generate usage with `## S7 method for class <ClassName>`.
+* roxygen2 no longer depends on stringr/stringi. This means that no package in the devtools constellation depends on stringr, which in turn means you no longer need stringi, making it a bit easier to install in constrained Linux environments.
 * roxygen2 options can now be set using `Config/roxygen2/` fields in DESCRIPTION (e.g. `Config/roxygen2/markdown: TRUE`) instead of the `Roxygen` field. The old `Roxygen` field is still supported. Similarly, the roxygen2 version is now stored in `Config/roxygen2/version` instead of `RoxygenNote` (#1328).
 * Tags that expect single-line input now warn when they span multiple lines, catching common mistakes. Affected tags: `@aliases`, `@concept`, `@encoding`, `@exportClass`, `@exportMethod`, `@exportPattern`, `@exportS3Method`, `@importFrom`, `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@inheritParams`, `@keywords`, `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and `@useDynLib` (#1642, #1688). This may break some existing usage, but it prevents a wide class of otherwise silent errors.
 * `@examplesIf` now warns when there is no example code after the condition (#1695).
@@ -28,6 +33,7 @@
   * `` `Rd expr` `` inline code now generates `\Sexpr[stage=render,results=rd]{expr}`, providing a convenient syntax for evaluating R code at documentation render time (#1214).
   * Indented bullet lists in `@param` and other two-part tags are no longer incorrectly nested (#1102).
   * Horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
+  * Inline code with uppercase `` `R ` `` now warns that you should use lowercase `` `r ` `` instead, since knitr only supports lowercase.
   * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
   * Link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.
   * Links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725).
@@ -53,6 +59,7 @@
 * `@family` no longer adds a trailing space after the colon in the default family prefix (#1628). Custom `rd_family_title` values now automatically get a colon appended if they don't already end with one (#1656).
 * `@inheritDotParams` now generates an informative warning when the source function can't be found, instead of a cryptic error (#1602).
 * `@inheritDotParams` now warns and produces no output when there are no parameters to inherit, instead of generating an empty `\describe` block that caused CRAN HTML validation warnings (#1671).
+* `@inheritDotParams` now uses documented parameters, rather than formals, so it works the same way as `@inheritParams`  (#1840). This may introduce some new false positives (rather than the old approach's false negatives), which you can prevent by explicitly listing the argument names to inherit.
 * `@inheritDotParams` now correctly matches parameters that are documented with a dot-prefixed alias (e.g., `.by, by`) but whose formal argument lacks the dot (e.g., `by`), as is common in the tidyverse (#1826).
 * `@inheritParams` now correctly inherits parameters that are documented together with `\dots` using comma-separated names, e.g. `@param b,\dots description` (#1718).
 * `@inheritParams` now correctly updates `\linkS4class{}` links when inheriting parameter documentation from other packages, converting them to absolute links (#1634).

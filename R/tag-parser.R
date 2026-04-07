@@ -20,7 +20,7 @@ NULL
 #'   will generate a warning. Set to `TRUE` for tags where multiline content
 #'   is expected (e.g., `@usage`, `@rawRd`).
 tag_value <- function(x, multiline = FALSE) {
-  x$val <- str_trim(x$raw)
+  x$val <- trimws(x$raw)
 
   if (x$val == "") {
     warn_roxy_tag(x, "requires a value")
@@ -59,14 +59,14 @@ inherit_components <- c(
 #' @export
 #' @rdname tag_parsers
 tag_inherit <- function(x) {
-  if (str_trim(x$raw) == "") {
+  if (trimws(x$raw) == "") {
     warn_roxy_tag(x, "requires a value")
     NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    pieces <- str_split(str_trim(x$raw), "\\s+")[[1]]
+    pieces <- strsplit(trimws(x$raw), "\\s+")[[1]]
     fields <- pieces[-1]
 
     all <- inherit_components
@@ -95,19 +95,19 @@ tag_inherit <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_name <- function(x) {
-  if (str_trim(x$raw) == "") {
+  if (trimws(x$raw) == "") {
     warn_roxy_tag(x, "requires a value")
     NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    n <- str_count(x$raw, "\\s+")
+    n <- re_count(x$raw, "\\s+")
     if (n > 1) {
-      warn_roxy_tag(x, "must have only one argument, not {n}")
+      warn_roxy_tag(x, "must have only one argument, not {n + 1}")
       NULL
     } else {
-      x$val <- str_trim(x$raw)
+      x$val <- trimws(x$raw)
       x
     }
   }
@@ -120,7 +120,7 @@ tag_name <- function(x) {
 #'   (FALSE)?
 #' @param markdown Should the second part be parsed as markdown?
 tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
-  if (str_trim(x$raw) == "") {
+  if (trimws(x$raw) == "") {
     if (!required) {
       warn_roxy_tag(x, "requires {first}")
     } else {
@@ -131,21 +131,21 @@ tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    pieces <- split_two_part(str_trim(x$raw))
+    pieces <- split_two_part(trimws(x$raw))
 
     if (required && pieces[[2]] == "") {
       warn_roxy_tag(x, "requires two parts: {first} and {second}")
       return(NULL)
     }
 
-    pieces[, 2] <- trim_docstring(pieces[, 2])
+    pieces[[2]] <- trim_docstring(pieces[[2]])
     if (markdown) {
-      pieces[, 2] <- markdown_if_active(pieces[, 2], x)
+      pieces[[2]] <- markdown_if_active(pieces[[2]], x)
     }
 
     x$val <- list(
-      name = pieces[, 1],
-      description = pieces[, 2]
+      name = pieces[[1]],
+      description = pieces[[2]]
     )
     x
   }
@@ -158,16 +158,16 @@ split_two_part <- function(x) {
     match <- regexpr("^`[^`]*`", x)
     if (match == -1L || attr(match, "match.length") == -1L) {
       # No closing backtick; fall back to space splitting
-      str_split_fixed(x, "[[:space:]]+", 2)
+      re_split_half(x, "[[:space:]]+")
     } else {
       end <- attr(match, "match.length")
       # Strip backticks so name matches names(formals(fn))
       name <- substr(x, 2, end - 1)
-      rest <- str_trim(substr(x, end + 1, nchar(x)))
-      matrix(c(name, rest), nrow = 1)
+      rest <- trimws(substr(x, end + 1, nchar(x)))
+      c(name, rest)
     }
   } else {
-    str_split_fixed(x, "[[:space:]]+", 2)
+    re_split_half(x, "[[:space:]]+")
   }
 }
 
@@ -181,7 +181,7 @@ tag_name_description <- function(x) {
 #' @rdname tag_parsers
 #' @param min,max Minimum and maximum number of words
 tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
-  val <- str_trim(x$raw)
+  val <- trimws(x$raw)
 
   if (!multiline && warn_if_multiline(x, val)) {
     return(NULL)
@@ -192,7 +192,7 @@ tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
     return(NULL)
   }
 
-  words <- str_split(val, "\\s+")[[1]]
+  words <- if (nzchar(val)) strsplit(val, "\\s+")[[1]] else ""
   if (length(words) < min) {
     warn_roxy_tag(x, "must have at least {min} word{?s}, not {length(words)}")
     NULL
@@ -214,9 +214,9 @@ tag_words_line <- function(x) {
 
 # Returns TRUE (and warns) if val contains multiple lines, FALSE otherwise.
 warn_if_multiline <- function(x, val) {
-  n_lines <- str_count(val, "\n")
+  n_lines <- re_count(val, "\n")
   if (n_lines >= 1) {
-    first_line <- str_split(val, "\n")[[1]][[1]]
+    first_line <- re_split_half(val, "\n")[[1]]
     warn_roxy_tag(
       x,
       c(
@@ -233,7 +233,7 @@ warn_if_multiline <- function(x, val) {
 #' @export
 #' @rdname tag_parsers
 tag_toggle <- function(x) {
-  x$val <- str_trim(x$raw)
+  x$val <- trimws(x$raw)
 
   if (x$val != "") {
     warn_roxy_tag(x, "must not be followed by any text")
@@ -246,7 +246,7 @@ tag_toggle <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_code <- function(x) {
-  if (str_trim(x$raw) == "") {
+  if (trimws(x$raw) == "") {
     warn_roxy_tag(x, "requires a value")
     NULL
   } else {
@@ -267,7 +267,7 @@ tag_code <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_examples <- function(x) {
-  if (str_trim(x$raw) == "") {
+  if (trimws(x$raw) == "") {
     warn_roxy_tag(x, "requires a value")
     return(NULL)
   }
@@ -284,7 +284,7 @@ tag_examples <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_markdown <- function(x) {
-  if (str_trim(x$raw) == "") {
+  if (trimws(x$raw) == "") {
     warn_roxy_tag(x, "requires a value")
     NULL
   } else {
@@ -296,7 +296,7 @@ tag_markdown <- function(x) {
 #' @export
 #' @rdname tag_parsers
 tag_markdown_with_sections <- function(x) {
-  if (str_trim(x$raw) == "") {
+  if (trimws(x$raw) == "") {
     warn_roxy_tag(x, "requires a value")
     return(NULL)
   }
@@ -314,7 +314,7 @@ markdown_if_active <- function(text, tag, sections = FALSE) {
         warn_roxy_tag(tag, "has mismatched braces or quotes")
         out[[i]] <- ""
       } else {
-        out[[i]] <- str_trim(out[[i]])
+        out[[i]] <- trimws(out[[i]])
       }
     }
     out
@@ -323,7 +323,7 @@ markdown_if_active <- function(text, tag, sections = FALSE) {
       warn_roxy_tag(tag, "has mismatched braces or quotes")
       ""
     } else {
-      str_trim(text)
+      trimws(text)
     }
   }
 }

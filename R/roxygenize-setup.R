@@ -100,5 +100,5 @@ roxygen_version <- function(path = ".") {
   if (is.na(version)) {
     version <- desc::desc_get("RoxygenNote", file = path)[[1]]
   }
-  stringr::str_trim(version)
+  trimws(version)
 }

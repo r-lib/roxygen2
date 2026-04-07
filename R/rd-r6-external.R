@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_parse.roxy_tag_R6method <- function(x) {
-  raw <- str_trim(x$raw)
+  raw <- trimws(x$raw)
   if (raw == "") {
     warn_roxy_tag(x, "requires a value like {.code Class$method}")
     return(NULL)

@@ -129,7 +129,7 @@
     Output
       <message/rlang_message>
       Message:
-      x test.R:1: @test must have only one argument, not 2.
+      x test.R:1: @test must have only one argument, not 3.
 
 # tag_two_part() gives useful warnings
 

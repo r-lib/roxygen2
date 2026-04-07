@@ -269,6 +269,32 @@ test_that("finds S7 multi-dispatch methods", {
   expect_equal(obj$value$classes, list("Dog", "Cat"))
 })
 
+test_that("S7 union method has aliases for individual classes", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    Cat <- S7::new_class("Cat")
+    Pet <- S7::new_union(Dog, Cat)
+    speak <- S7::new_generic("speak", "x")
+    S7::method(speak, Pet) <- function(x) "hi"
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "speak,Dog/Cat-method")
+  expect_equal(obj$alias, c("speak,Dog-method", "speak,Cat-method"))
+})
+
+test_that("S7 non-union method has no extra aliases", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    speak <- S7::new_generic("speak", "x")
+    S7::method(speak, Dog) <- function(x) "Woof"
+  })
+  expect_equal(obj$topic, "speak,Dog-method")
+  # alias is _extra_ aliases, apart from topic name
+  expect_null(obj$alias)
+})
+
 test_that("S7 method with unknown class type warns", {
   skip_unless_r(">= 4.3.0")
   block <- roxy_block(tags = list(), file = "test.R", line = 1, call = quote(x))

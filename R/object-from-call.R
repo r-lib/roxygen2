@@ -258,7 +258,19 @@ parser_s7_method <- function(call, env, block) {
   fn <- eval(method_call, env)
 
   value <- list(fn = fn, generic = generic_name, classes = class_names)
-  object(value, NULL, "s7method")
+  aliases <- s7_method_aliases(generic_name, class_names)
+  object(value, aliases, "s7method")
+}
+
+s7_method_aliases <- function(generic, classes) {
+  if (!any(lengths(classes) > 1)) {
+    return(NULL)
+  }
+
+  combos <- expand.grid(classes, stringsAsFactors = FALSE)
+  apply(combos, 1, function(row) {
+    paste0(generic, ",", paste0(row, collapse = ","), "-method")
+  })
 }
 
 # https://github.com/RConsortium/S7/issues/594

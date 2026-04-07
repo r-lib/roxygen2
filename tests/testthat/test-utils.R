@@ -8,6 +8,10 @@ test_that("nice_name protects against invalid characters", {
   expect_equal(nice_name("[.a"), "sub-.a")
 })
 
+test_that("nice_name strips ::", {
+  expect_equal(nice_name("print,pkg::Class-method"), "print-pkg-Class-method")
+})
+
 test_that("is_namespaced works as expected", {
   expect_true(is_namespaced("a::b"))
   expect_false(is_namespaced("b::"))

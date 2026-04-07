@@ -14,6 +14,7 @@ subs <- c(
   "[<-" = "-subset-",
   "[" = "-sub-",
   "<-" = "-set-",
+  "::" = "-",
 
   # Infix verbs
   "!" = "-not-",

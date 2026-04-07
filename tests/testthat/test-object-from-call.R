@@ -295,6 +295,17 @@ test_that("S7 non-union method has no extra aliases", {
   expect_null(obj$alias)
 })
 
+test_that("finds S7 methods for S3 generics", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    S7::method(print, Dog) <- function(x, ...) cat("Dog\n")
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "print,Dog-method")
+  expect_equal(obj$value$generic, "print")
+})
+
 test_that("S7 method with unknown class type warns", {
   skip_unless_r(">= 4.3.0")
   block <- roxy_block(tags = list(), file = "test.R", line = 1, call = quote(x))

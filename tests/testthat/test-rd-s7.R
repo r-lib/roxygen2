@@ -30,6 +30,17 @@ test_that("@prop class@name groups by class", {
   expect_snapshot(out$get_section("prop"))
 })
 
+test_that("@prop with mismatched braces warns and doesn't crash", {
+  text <- "
+    #' A class.
+    #'
+    #' @prop a prop a
+    #' }
+    a <- function() {}
+  "
+  expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
+})
+
 test_that("@prop class@name warns on invalid spec", {
   text <- "
     #' A class.

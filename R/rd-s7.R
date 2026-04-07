@@ -1,6 +1,9 @@
 #' @export
 roxy_tag_parse.roxy_tag_prop <- function(x) {
   x <- tag_two_part(x, "a property name", "a description")
+  if (is.null(x)) {
+    return()
+  }
 
   # Optionally specify a class
   if (grepl("@", x$val$name, fixed = TRUE)) {

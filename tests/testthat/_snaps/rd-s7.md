@@ -35,6 +35,13 @@
       }
        
 
+# @prop with mismatched braces warns and doesn't crash
+
+    Code
+      . <- roc_proc_text(rd_roclet(), text)
+    Message
+      x <text>:4: @prop has mismatched braces or quotes.
+
 # @prop class@name warns on invalid spec
 
     Code

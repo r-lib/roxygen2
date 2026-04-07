@@ -245,7 +245,12 @@ parser_s7_method <- function(call, env, block) {
   method_call <- call[[3]]
 
   generic <- eval(generic_call, env)
-  generic_name <- generic@name
+  if (inherits(generic, "S7_generic")) {
+    generic_name <- generic@name
+  } else {
+    # S3 or S4 generic passed by name
+    generic_name <- deparse(generic_call)
+  }
 
   # Evaluate class spec: either a single class, a union, or list() for
   # multi-dispatch

@@ -95,7 +95,7 @@ format.rd_section_source <- function(x, ...) {
 
 #' @export
 roxy_tag_parse.roxy_tag_title <- function(x) {
-  if (str_count(x$raw, "\n\n") >= 1) {
+  if (re_count(x$raw, "\n\n") >= 1) {
     warn_roxy_tag(x, "must be a single paragraph")
   }
 

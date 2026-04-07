@@ -57,7 +57,7 @@ test_that("@example does not introduce extra empty lines", {
     NULL"
   )[[1]]
 
-  expect_equal(str_count(out$get_value("examples"), "\n"), 1L)
+  expect_equal(re_count(out$get_value("examples"), "\n"), 1L)
 })
 
 test_that("@example gives warning if used instead of @examples", {

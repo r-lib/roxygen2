@@ -200,7 +200,7 @@ find_all_tag_names <- function(text) {
 protect_rd_tags <- function(text, rd_tags) {
   id <- make_random_string()
 
-  text <- str_sub_same(text, rd_tags, id)
+  text <- re_sub_same(text, rd_tags, id)
 
   attr(text, "roxygen-markdown-subst") <-
     list(tags = rd_tags, id = id)
@@ -223,7 +223,7 @@ protect_rd_tags <- function(text, rd_tags) {
 #'
 #' @noRd
 
-str_sub_same <- function(str, repl, id) {
+re_sub_same <- function(str, repl, id) {
   repl <- repl[order(repl$start), ]
 
   if (is.unsorted(repl$end) || is.unsorted(repl$argend)) {

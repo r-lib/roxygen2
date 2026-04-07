@@ -194,7 +194,7 @@ auto_quote <- function(x) {
   x
 }
 
-str_split_half <- function(x, pattern) {
+re_split_half <- function(x, pattern) {
   m <- regexpr(pattern, x)
   if (m > 0L) {
     left <- substr(x, 1, m - 1)
@@ -206,7 +206,7 @@ str_split_half <- function(x, pattern) {
   c(left, right)
 }
 
-str_count <- function(x, pattern, fixed = FALSE) {
+re_count <- function(x, pattern, fixed = FALSE) {
   m <- gregexpr(pattern, x, fixed = fixed)
   vapply(m, \(i) sum(i > 0L), integer(1))
 }

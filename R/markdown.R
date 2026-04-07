@@ -78,7 +78,7 @@ markdown_pass1 <- function(text) {
   rcode_pos <- parse_md_pos(map_chr(rcode_nodes, xml_attr, "sourcepos"))
   rcode_pos <- work_around_cmark_sourcepos_bug(text, rcode_pos)
   out <- eval_code_nodes(rcode_nodes)
-  str_set_all_pos(text, rcode_pos, out, rcode_nodes)
+  re_set_all_pos(text, rcode_pos, out, rcode_nodes)
 }
 
 # Work around commonmark sourcepos bug for inline R code
@@ -179,7 +179,7 @@ knitr_chunk_defaults <- function() {
   )
 }
 
-str_set_all_pos <- function(text, pos, value, nodes) {
+re_set_all_pos <- function(text, pos, value, nodes) {
   # Cmark has a bug when reporting source positions for multi-line
   # code tags, and it does not count the indenting space in the
   # continuation lines: https://github.com/commonmark/cmark/issues/296

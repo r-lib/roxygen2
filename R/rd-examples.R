@@ -40,7 +40,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
 roxy_tag_parse.roxy_tag_example <- function(x) {
   x <- tag_value(x, multiline = TRUE)
 
-  nl <- str_count(x$val, "\n")
+  nl <- re_count(x$val, "\n")
   if (any(nl) > 0) {
     warn_roxy_tag(
       x,

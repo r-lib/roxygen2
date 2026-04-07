@@ -102,7 +102,7 @@ tag_name <- function(x) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    n <- str_count(x$raw, "\\s+")
+    n <- re_count(x$raw, "\\s+")
     if (n > 1) {
       warn_roxy_tag(x, "must have only one argument, not {n + 1}")
       NULL
@@ -158,7 +158,7 @@ split_two_part <- function(x) {
     match <- regexpr("^`[^`]*`", x)
     if (match == -1L || attr(match, "match.length") == -1L) {
       # No closing backtick; fall back to space splitting
-      str_split_half(x, "[[:space:]]+")
+      re_split_half(x, "[[:space:]]+")
     } else {
       end <- attr(match, "match.length")
       # Strip backticks so name matches names(formals(fn))
@@ -167,7 +167,7 @@ split_two_part <- function(x) {
       c(name, rest)
     }
   } else {
-    str_split_half(x, "[[:space:]]+")
+    re_split_half(x, "[[:space:]]+")
   }
 }
 
@@ -214,9 +214,9 @@ tag_words_line <- function(x) {
 
 # Returns TRUE (and warns) if val contains multiple lines, FALSE otherwise.
 warn_if_multiline <- function(x, val) {
-  n_lines <- str_count(val, "\n")
+  n_lines <- re_count(val, "\n")
   if (n_lines >= 1) {
-    first_line <- str_split_half(val, "\n")[[1]]
+    first_line <- re_split_half(val, "\n")[[1]]
     warn_roxy_tag(
       x,
       c(

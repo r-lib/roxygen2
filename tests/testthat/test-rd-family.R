@@ -24,7 +24,7 @@ test_that("long families are wrapped", {
 
   seealso <- out$get_value("seealso")
   expect_true(grepl("^Other Long family name:", seealso))
-  expect_equal(str_count(seealso, "\n"), 3)
+  expect_equal(re_count(seealso, "\n"), 3)
 })
 
 test_that("special names escaped in family tag", {

@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- roxygen2 no longer depends on stringr/stringi. This means that no
+  package in the devtools constellation depends on stringr, which in
+  turn means you no longer need stringi, making it a bit easier to
+  install in constrained Linux environments.
 - roxygen2 options can now be set using `Config/roxygen2/` fields in
   DESCRIPTION (e.g. `Config/roxygen2/markdown: TRUE`) instead of the
   `Roxygen` field. The old `Roxygen` field is still supported.

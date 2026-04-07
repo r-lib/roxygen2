@@ -4,6 +4,13 @@ object_defaults <- function(x, block) UseMethod("object_defaults")
 object_defaults.default <- function(x, block) list()
 
 #' @export
+object_defaults.r6method <- function(x, block) {
+  list(
+    roxy_generated_tag(block, "R6method", x$value)
+  )
+}
+
+#' @export
 object_defaults.function <- function(x, block) {
   list(
     roxy_generated_tag(block, "usage", object_usage(x)),

@@ -2,6 +2,17 @@
 
 ## roxygen2 (development version)
 
+- Added initial support for S7 classes, generics, and methods
+  ([\#1484](https://github.com/r-lib/roxygen2/issues/1484)).
+  - S7 generics are documented like regular functions.
+  - S7 classes are documented like regular functions, but you can use
+    `@prop` to document additional properties that are not constructor
+    parameters. If multiple classes share one page, use
+    `@prop ClassName@prop_name description` to group properties by
+    class.
+  - S7 methods registered with `method(generic, class) <- fn` are
+    detected automatically and generate usage with
+    `## S7 method for class <ClassName>`.
 - roxygen2 no longer depends on stringr/stringi. This means that no
   package in the devtools constellation depends on stringr, which in
   turn means you no longer need stringi, making it a bit easier to

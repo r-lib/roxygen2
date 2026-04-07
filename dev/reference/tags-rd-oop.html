@@ -3,6 +3,7 @@
 Key tags:
 @field ${1:name} ${2:description}: Describe a R6 or refClass field.
 @method ${1:generic} ${2:class}: Force a function to be recognised as an S3 method. This affects the default usage and the NAMESPACE directive produced by @export. Only needed if automatic detection fails.
+@prop ${1:name} ${2:description}: Describe an S7 class property that is not a constructor parameter.
 @slot ${1:name} ${2:description}: Describe the slot of an S4 class.
 
 
@@ -13,6 +14,7 @@ Other less frequently used tags:
 Key tags:
 @field ${1:name} ${2:description}: Describe a R6 or refClass field.
 @method ${1:generic} ${2:class}: Force a function to be recognised as an S3 method. This affects the default usage and the NAMESPACE directive produced by @export. Only needed if automatic detection fails.
+@prop ${1:name} ${2:description}: Describe an S7 class property that is not a constructor parameter.
 @slot ${1:name} ${2:description}: Describe the slot of an S4 class.
 
 
@@ -86,6 +88,7 @@ Other less frequently used tags:
     <p>Learn the full details in <code><a href="../articles/rd-other.html">vignette('rd-other')</a></code>.</p>
 <p>Key tags:</p><ul><li><p><code>@field ${1:name} ${2:description}</code>: Describe a R6 or refClass field.</p></li>
 <li><p><code>@method ${1:generic} ${2:class}</code>: Force a function to be recognised as an S3 method. This affects the default usage and the <code>NAMESPACE</code> directive produced by <code>@export</code>. Only needed if automatic detection fails.</p></li>
+<li><p><code>@prop ${1:name} ${2:description}</code>: Describe an S7 class property that is not a constructor parameter.</p></li>
 <li><p><code>@slot ${1:name} ${2:description}</code>: Describe the slot of an S4 class.</p></li>
 </ul><p>Other less frequently used tags:</p><ul><li><p><code>@R6method ${1:Class}$${2:method}</code>: Document an R6 method that can't be discovered by introspection, such as methods added via <code>$set()</code>.</p></li>
 </ul></div>
@@ -94,6 +97,7 @@ Other less frequently used tags:
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co">#' @field ${1:name} ${2:description}</span></span>
 <span><span class="co">#' @method ${1:generic} ${2:class}</span></span>
+<span><span class="co">#' @prop ${1:name} ${2:description}</span></span>
 <span><span class="co">#' @R6method ${1:Class}$${2:method}</span></span>
 <span><span class="co">#' @slot ${1:name} ${2:description}</span></span></code></pre></div>
     </div>

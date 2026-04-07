@@ -18,9 +18,9 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Documenting other objects">
-<meta name="description" content="How to document datasets, packages, and the classes, generics, and methods of S3, S4, and R6.
+<meta name="description" content="How to document datasets, packages, and the classes, generics, and methods of S3, S4, S7, and R6.
 ">
-<meta property="og:description" content="How to document datasets, packages, and the classes, generics, and methods of S3, S4, and R6.
+<meta property="og:description" content="How to document datasets, packages, and the classes, generics, and methods of S3, S4, S7, and R6.
 ">
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png">
 <meta name="robots" content="noindex">
@@ -246,6 +246,80 @@ control where method documentation goes. See the next section for more
 details.</p>
 </div>
 <div class="section level2">
+<h2 id="s7">S7<a class="anchor" aria-label="anchor" href="#s7"></a>
+</h2>
+<p>S7 <strong>classes</strong> are constructor functions, so document
+them much like you’d document any other function. Use
+<code>@param</code> to document the constructor arguments (which
+correspond to class properties), and <code>@returns</code> to describe
+the object that is returned. If the class has additional properties that
+are not part of the constructor (e.g. read-only computed properties),
+use <code>@prop</code> to document them.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' A range</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' Create a range represented by a numeric `start` and `end`. The start must</span></span>
+<span><span class="co">#' always be less than the end.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param start Start of range.</span></span>
+<span><span class="co">#' @param end End of range.</span></span>
+<span><span class="co">#' @prop length Length of the range (read-only).</span></span>
+<span><span class="co">#' @returns An `Range` S7 object.</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">Range</span> <span class="op">&lt;-</span> <span class="fu">new_class</span><span class="op">(</span><span class="st">"Range"</span>, properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  start <span class="op">=</span> <span class="va">class_numeric</span>,</span>
+<span>  end <span class="op">=</span> <span class="va">class_numeric</span>,</span>
+<span>  length <span class="op">=</span> <span class="fu">new_property</span><span class="op">(</span>getter <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">self</span><span class="op">)</span> <span class="va">self</span><span class="op">@</span><span class="va">end</span> <span class="op">-</span> <span class="va">self</span><span class="op">@</span><span class="va">start</span><span class="op">)</span>,</span>
+<span>  validator <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">self</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">self</span><span class="op">@</span><span class="va">start</span> <span class="op">&gt;</span> <span class="va">self</span><span class="op">@</span><span class="va">end</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="st">"start must be less than or equal to end"</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>If multiple classes share one Rd page (via <code>@rdname</code>), you
+can prefix the property name with the class name to group properties by
+class, e.g. <code>@prop ClassName@prop_name description</code>.</p>
+<p>S7 <strong>generics</strong> are also functions, so document them as
+such. It’s good practice to document the default method alongside the
+generic using <code>@rdname</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Size of an object</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' An S7 generic for determining the size of an object. The default method </span></span>
+<span><span class="co">#' uses [length()], but other classes may have more specific implementations.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param x An object.</span></span>
+<span><span class="co">#' @param ... Not used.</span></span>
+<span><span class="co">#' @returns A single number.</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu">new_generic</span><span class="op">(</span><span class="st">"size"</span>, <span class="st">"x"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#' @rdname size</span></span>
+<span><span class="fu">method</span><span class="op">(</span><span class="va">size</span>, <span class="va">class_any</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>S7 <strong>methods</strong> are registered with
+<code>method(generic, class) &lt;- fn</code>. You don’t need to document
+methods, but you <em>may</em> want to do so for particularly complicated
+implementations or methods with extra arguments. If you do decided to
+document a method, give it its own roxygen block:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Size of a range</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' The size of a range is its length.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param x A `Range` object.</span></span>
+<span><span class="co">#' @param ... Not used.</span></span>
+<span><span class="co">#' @returns A single number.</span></span>
+<span><span class="fu">method</span><span class="op">(</span><span class="va">size</span>, <span class="va">Range</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span><span class="op">@</span><span class="va">length</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Note that S7 methods are registered at load time via
+<code><a href="https://rconsortium.github.io/S7/reference/methods_register.html" class="external-link">S7::methods_register()</a></code> in your <code>.onLoad()</code>
+function, not through <code>NAMESPACE</code> directives. See
+<code><a href="https://rconsortium.github.io/S7/articles/packages.html" class="external-link">vignette("packages", package = "S7")</a></code> for details.</p>
+</div>
+<div class="section level2">
 <h2 id="r6">R6<a class="anchor" aria-label="anchor" href="#r6"></a>
 </h2>
 <ul>
@@ -277,7 +351,7 @@ block with the class.</p></li>
 <code>@R6method Class$method</code> to explicitly associate a
 documentation block with a method. Place it in a standalone roxygen
 block above <code>NULL</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @R6method Person$set_hair</span></span>
 <span><span class="co">#' @description Change hair color.</span></span>
 <span><span class="co">#' @param val New hair color.</span></span>
@@ -298,7 +372,7 @@ examples. This section is run by <code>R CMD check</code>, so method
 examples must work without errors.</p></li>
 </ul>
 <p>An example from the R6 tutorial:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' R6 Class Representing a Person</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @description</span></span>

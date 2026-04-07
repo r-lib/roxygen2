@@ -18,7 +18,8 @@ Key tags:
 
 - `@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}`: Automatically
   generate documentation for `...` when you're passing dots along to
-  another function.
+  another function. We recommend supplying explicit argument names for
+  maximum clarity and consistency.
 
 - `@inheritParams ${1:source}`: Inherit argument documentation from
   another function. Only inherits documentation for arguments that

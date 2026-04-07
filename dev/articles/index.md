@@ -12,7 +12,7 @@
   objects](https://roxygen2.r-lib.org/dev/articles/rd-other.md):
 
   How to document datasets, packages, and the classes, generics, and
-  methods of S3, S4, and R6.
+  methods of S3, S4, S7, and R6.
 
 - [Reusing
   documentation](https://roxygen2.r-lib.org/dev/articles/reuse.md):

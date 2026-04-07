@@ -141,6 +141,89 @@ methods must be documented. You can document them in three places:
 Use either `@rdname` or `@describeIn` to control where method
 documentation goes. See the next section for more details.
 
+## S7
+
+S7 **classes** are constructor functions, so document them much like
+you’d document any other function. Use `@param` to document the
+constructor arguments (which correspond to class properties), and
+`@returns` to describe the object that is returned. If the class has
+additional properties that are not part of the constructor (e.g.
+read-only computed properties), use `@prop` to document them.
+
+``` r
+#' A range
+#'
+#' Create a range represented by a numeric `start` and `end`. The start must
+#' always be less than the end.
+#'
+#' @param start Start of range.
+#' @param end End of range.
+#' @prop length Length of the range (read-only).
+#' @returns An `Range` S7 object.
+#' @export
+Range <- new_class("Range", properties = list(
+  start = class_numeric,
+  end = class_numeric,
+  length = new_property(getter = function(self) self@end - self@start),
+  validator = function(self) {
+    if (self@start > self@end) {
+      "start must be less than or equal to end"
+    }
+  }
+))
+```
+
+If multiple classes share one Rd page (via `@rdname`), you can prefix
+the property name with the class name to group properties by class,
+e.g. `@prop ClassName@prop_name description`.
+
+S7 **generics** are also functions, so document them as such. It’s good
+practice to document the default method alongside the generic using
+`@rdname`:
+
+``` r
+#' Size of an object
+#' 
+#' An S7 generic for determining the size of an object. The default method 
+#' uses [length()], but other classes may have more specific implementations.
+#'
+#' @param x An object.
+#' @param ... Not used.
+#' @returns A single number.
+#' @export
+size <- new_generic("size", "x")
+
+#' @rdname size
+method(size, class_any) <- function(x, ...) {
+  length(x)
+}
+```
+
+S7 **methods** are registered with `method(generic, class) <- fn`. You
+don’t need to document methods, but you *may* want to do so for
+particularly complicated implementations or methods with extra
+arguments. If you do decided to document a method, give it its own
+roxygen block:
+
+``` r
+#' Size of a range
+#'
+#' The size of a range is its length.
+#'
+#' @param x A `Range` object.
+#' @param ... Not used.
+#' @returns A single number.
+method(size, Range) <- function(x, ...) {
+  x@length
+}
+```
+
+Note that S7 methods are registered at load time via
+[`S7::methods_register()`](https://rconsortium.github.io/S7/reference/methods_register.html)
+in your `.onLoad()` function, not through `NAMESPACE` directives. See
+[`vignette("packages", package = "S7")`](https://rconsortium.github.io/S7/articles/packages.html)
+for details.
+
 ## R6
 
 - R6 methods can be documented in-line, i.e. the method’s documentation

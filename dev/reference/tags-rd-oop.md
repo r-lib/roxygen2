@@ -12,6 +12,9 @@ Key tags:
   directive produced by `@export`. Only needed if automatic detection
   fails.
 
+- `@prop ${1:name} ${2:description}`: Describe an S7 class property that
+  is not a constructor parameter.
+
 - `@slot ${1:name} ${2:description}`: Describe the slot of an S4 class.
 
 Other less frequently used tags:
@@ -24,6 +27,7 @@ Other less frequently used tags:
 ``` r
 #' @field ${1:name} ${2:description}
 #' @method ${1:generic} ${2:class}
+#' @prop ${1:name} ${2:description}
 #' @R6method ${1:Class}$${2:method}
 #' @slot ${1:name} ${2:description}
 ```

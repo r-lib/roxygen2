@@ -20,7 +20,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
   }
 
   example_lines <- lines[-1]
-  if (length(example_lines) == 0 || all(str_trim(example_lines) == "")) {
+  if (length(example_lines) == 0 || all(trimws(example_lines) == "")) {
     warn_roxy_tag(x, "requires example code after the condition")
     return(NULL)
   }
@@ -40,7 +40,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
 roxy_tag_parse.roxy_tag_example <- function(x) {
   x <- tag_value(x, multiline = TRUE)
 
-  nl <- str_count(x$val, "\n")
+  nl <- re_count(x$val, "\n")
   if (any(nl) > 0) {
     warn_roxy_tag(
       x,

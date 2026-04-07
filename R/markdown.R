@@ -78,7 +78,7 @@ markdown_pass1 <- function(text) {
   rcode_pos <- parse_md_pos(map_chr(rcode_nodes, xml_attr, "sourcepos"))
   rcode_pos <- work_around_cmark_sourcepos_bug(text, rcode_pos)
   out <- eval_code_nodes(rcode_nodes)
-  str_set_all_pos(text, rcode_pos, out, rcode_nodes)
+  re_set_all_pos(text, rcode_pos, out, rcode_nodes)
 }
 
 # Work around commonmark sourcepos bug for inline R code
@@ -88,7 +88,7 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     return(rcode_pos)
   }
 
-  lines <- str_split(text, fixed("\n"))[[1]]
+  lines <- strsplit(text, "\n", fixed = TRUE)[[1]]
 
   for (l in seq_len(nrow(rcode_pos))) {
     # Do not try to fix multi-line code, we error for that (below)
@@ -99,7 +99,7 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     start <- rcode_pos$start_column[l]
 
     # Maybe correct? At some point this will be fixed upstream, hopefully.
-    if (str_sub(line, start - 1, start + 1) == "`r ") {
+    if (substr(line, start - 1, start + 1) == "`r ") {
       next
     }
 
@@ -111,10 +111,11 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
     # the real "`r " left by six characters, there happens to be another
     # "`r " there.
 
-    indent <- nchar(str_extract(line, "^[ ]+"))
+    m <- regexpr("^[ ]+", line)
+    indent <- attr(m, "match.length")
     if (
-      !is.na(indent) &&
-        str_sub(line, start - 1 + indent, start + 1 + indent) == "`r "
+      m > 0L &&
+        substr(line, start - 1 + indent, start + 1 + indent) == "`r "
     ) {
       rcode_pos$start_column[l] <- rcode_pos$start_column[l] + indent
       rcode_pos$end_column[l] <- rcode_pos$end_column[l] + indent
@@ -126,7 +127,7 @@ work_around_cmark_sourcepos_bug <- function(text, rcode_pos) {
 
 is_markdown_code_node <- function(x) {
   info <- xml_attr(x, "info")
-  str_sub(xml_text(x), 1, 2) == "r " ||
+  substr(xml_text(x), 1, 2) == "r " ||
     (!is.na(info) && grepl("^[{][a-zA-z]+[}, ]", info))
 }
 
@@ -178,7 +179,7 @@ knitr_chunk_defaults <- function() {
   )
 }
 
-str_set_all_pos <- function(text, pos, value, nodes) {
+re_set_all_pos <- function(text, pos, value, nodes) {
   # Cmark has a bug when reporting source positions for multi-line
   # code tags, and it does not count the indenting space in the
   # continuation lines: https://github.com/commonmark/cmark/issues/296
@@ -189,7 +190,7 @@ str_set_all_pos <- function(text, pos, value, nodes) {
 
   # Need to split the string, because of the potential multi-line
   # code tags, and then also recode the positions
-  lens <- nchar(str_split(text, fixed("\n"))[[1]])
+  lens <- nchar(strsplit(text, "\n", fixed = TRUE)[[1]])
   shifts <- c(0, cumsum(lens + 1L))
   shifts <- shifts[-length(shifts)]
   start <- shifts[pos$start_line] + pos$start_column
@@ -235,13 +236,13 @@ mdxml_children_to_rd_top <- function(xml, state) {
   state$section_tag <- uuid()
   out <- map_chr(xml_children(xml), mdxml_node_to_rd, state)
   out <- c(out, mdxml_close_sections(state))
-  rd <- str_trim(paste0(out, collapse = ""))
+  rd <- trimws(paste0(out, collapse = ""))
   if (state$has_sections) {
     secs <- strsplit(rd, state$section_tag, fixed = TRUE)[[1]] %||% ""
     titles <- c("", state$titles)
     # strsplit drops trailing empty strings, so pad to match titles length
     secs <- c(secs, rep("", length(titles) - length(secs)))
-    rd <- structure(str_trim(secs), names = titles)
+    rd <- structure(trimws(secs), names = titles)
   }
   rd
 }

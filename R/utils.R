@@ -54,10 +54,10 @@ nice_name <- function(x) {
   }
 
   # Clean up any remaining
-  x <- str_replace_all(x, "[^A-Za-z0-9_.-]+", "-")
-  x <- str_replace_all(x, "-+", "-")
-  x <- str_replace_all(x, "^-|-$", "")
-  x <- str_replace_all(x, "^\\.", "dot-")
+  x <- gsub("[^A-Za-z0-9_.-]+", "-", x)
+  x <- gsub("-+", "-", x)
+  x <- gsub("^-|-$", "", x)
+  x <- gsub("^\\.", "dot-", x)
   x
 }
 
@@ -84,7 +84,7 @@ write_if_different <- function(path, contents, command = NULL, check = TRUE) {
     return(FALSE)
   }
 
-  if (!str_detect(name, "^[a-zA-Z][a-zA-Z0-9_.-]*$")) {
+  if (!grepl("^[a-zA-Z][a-zA-Z0-9_.-]*$", name)) {
     cli::cli_inform(c(
       x = "Skipping {.path {name}}",
       i = "Invalid file name"
@@ -194,6 +194,31 @@ auto_quote <- function(x) {
   x
 }
 
+re_split_half <- function(x, pattern) {
+  m <- regexpr(pattern, x)
+  if (m > 0L) {
+    left <- substr(x, 1, m - 1)
+    right <- substr(x, m + attr(m, "match.length"), nchar(x))
+  } else {
+    left <- x
+    right <- ""
+  }
+  c(left, right)
+}
+
+re_count <- function(x, pattern, fixed = FALSE) {
+  m <- gregexpr(pattern, x, fixed = fixed)
+  vapply(m, \(i) sum(i > 0L), integer(1))
+}
+
+re_replace_all <- function(x, pattern, fun) {
+  m <- gregexpr(pattern, x, perl = TRUE)
+  regmatches(x, m) <- lapply(regmatches(x, m), \(matches) {
+    vapply(matches, fun, character(1))
+  })
+  x
+}
+
 is_syntactic <- function(x) make.names(x) == x
-has_quotes <- function(x) str_detect(x, r"[^(`|'|").*\1$]")
-strip_quotes <- function(x) str_replace(x, r"[^(`|'|")(.*)\1$]", r"(\2)")
+has_quotes <- function(x) grepl(r"[^(`|'|").*\1$]", x)
+strip_quotes <- function(x) sub(r"[^(`|'|")(.*)\1$]", r"(\2)", x)

@@ -266,7 +266,7 @@ inherit_dot_params <- function(topic, topics, env) {
   src <- inheritors$source
   from <- map_chr(src, function(x) {
     if (is_namespaced(x)) {
-      parts <- str_split_fixed(x, "::", n = 2)
+      parts <- re_split_half(x, "::")
       rd_link(parts[1], parts[2], x, code = TRUE)
     } else {
       rd_link(NA_character_, x, x, code = TRUE)
@@ -326,7 +326,7 @@ find_params <- function(name, topics, source, tag = "@inherits") {
     return()
   }
 
-  param_names <- str_trim(names(params))
+  param_names <- trimws(names(params))
   param_names <- strsplit(param_names, ",\\s*")
   param_names <- lapply(param_names, function(x) {
     x[x == "\\dots"] <- "..."
@@ -464,7 +464,7 @@ find_field <- function(topic, field_name) {
     value <- tag[[1]]
     attr(value, "Rd_tag") <- NULL
 
-    str_trim(rd2text(value, attr(topic, "package")))
+    trimws(rd2text(value, attr(topic, "package")))
   } else {
     topic$get_value(field_name)
   }

@@ -13,7 +13,7 @@
     Code
       out1 <- roc_proc_text(rd_roclet(), block)[[1]]
     Message
-      x <text>:4: @description refers to unavailable topic stringr::bar111.
+      x <text>:4: @description refers to unavailable topic cli::bar111.
 
 # generates informative warnings
 
@@ -23,7 +23,7 @@
     Message
       x test.R:1: @test refers to un-installed package 11papaya.
     Code
-      check_topic("stringr", "foofofofoo", tag)
+      check_topic("cli", "foofofofoo", tag)
     Message
-      x test.R:1: @test refers to unavailable topic stringr::foofofofoo.
+      x test.R:1: @test refers to unavailable topic cli::foofofofoo.
 

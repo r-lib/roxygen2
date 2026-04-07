@@ -5,8 +5,8 @@ roxy_tag_parse.roxy_tag_section <- function(x) {
 
 #' @export
 roxy_tag_rd.roxy_tag_section <- function(x, base_path, env) {
-  pieces <- str_split(x$val, ":", n = 2)[[1]]
-  title <- str_split(pieces[1], "\n")[[1]]
+  pieces <- re_split_half(x$val, ":")
+  title <- strsplit(pieces[1], "\n", fixed = TRUE)[[1]]
 
   if (length(title) > 1) {
     warn_roxy_tag(

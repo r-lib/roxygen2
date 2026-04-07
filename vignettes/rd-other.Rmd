@@ -153,8 +153,8 @@ read-only computed properties), use `@prop` to document them.
 #| eval: false
 
 #' A range
-#' 
-#' Create a range represented by a numeric `start` and `end`. The start must 
+#'
+#' Create a range represented by a numeric `start` and `end`. The start must
 #' always be less than the end.
 #'
 #' @param start Start of range.
@@ -173,6 +173,10 @@ Range <- new_class("Range", properties = list(
   }
 ))
 ```
+
+If multiple classes share one Rd page (via `@rdname`), you can prefix
+the property name with the class name to group properties by class,
+e.g. `@prop ClassName@prop_name description`.
 
 S7 **generics** are also functions, so document them as such.
 It's good practice to document the default method alongside the generic using `@rdname`:

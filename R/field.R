@@ -73,7 +73,16 @@ rd_section_description <- function(name, dt, dd) {
   if (length(dt) == 0) {
     return("")
   }
+  paste0("\\section{", name, "}{\n\n", rd_enumerate(dt, dd), "}\n")
+}
+rd_subsection_description <- function(name, dt, dd) {
+  if (length(dt) == 0) {
+    return("")
+  }
+  paste0("\\subsection{", name, "}{\n\n", rd_enumerate(dt, dd), "\n}\n")
+}
 
+rd_enumerate <- function(dt, dd) {
   items <- paste0("\\item{\\code{", dt, "}}{", dd, "}", collapse = "\n\n")
-  paste0("\\section{", name, "}{\n\n", "\\describe{\n", items, "\n}}\n")
+  paste0("\\describe{\n", items, "\n}")
 }

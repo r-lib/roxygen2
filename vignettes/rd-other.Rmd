@@ -137,11 +137,12 @@ You might also want to include a section that provides additional details for de
 
 Both examples above use the [doclisting](https://doclisting.r-lib.org/)
 package to automatically generate a list of methods, with links to their
-help topics. These examples use inline R code (`` `r ` ``), which generates the list at documentation time (i.e. when you run
+help topics. These examples use [inline R code](reuse.html#inline-code) (`` `r ` ``), which generates the list at documentation time (i.e. when you run
 `devtools::document()`). This only requires including doclisting in `Suggests`.
 
 If you want the list to dynamically reflect all methods that are currently registered
-(including methods registered by other packages), use an Rd code block
+(including methods registered by other packages), use an [inline Rd code](
+  reuse.html#inline-rd-code) block
 (`` `Rd ` ``) instead:
 
 ```{r}

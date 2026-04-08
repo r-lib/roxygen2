@@ -7,7 +7,8 @@
 #'
 #' It is run by default by [roxygenize()].
 #'
-#' @seealso [tags-rd], [tags-rd-data], [tags-rd-oop], [tags-reuse],
+#' @seealso [tags-rd-functions], [tags-rd-datasets], [tags-rd-S3], [tags-rd-S4],
+#'   [tags-rd-S7], [tags-rd-R6], [tags-reuse],
 #'   [tags-index-crossref] for tags provided by this roclet.
 #' @export
 #' @examples

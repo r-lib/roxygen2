@@ -40,9 +40,12 @@ Other less frequently used tags:
 }
 \seealso{
 Other documentation tags:
-\code{\link{tags-rd}},
-\code{\link{tags-rd-data}},
-\code{\link{tags-rd-oop}},
+\code{\link{tags-rd-R6}},
+\code{\link{tags-rd-S3}},
+\code{\link{tags-rd-S4}},
+\code{\link{tags-rd-S7}},
+\code{\link{tags-rd-datasets}},
+\code{\link{tags-rd-functions}},
 \code{\link{tags-reuse}}
 }
 \concept{documentation tags}

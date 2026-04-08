@@ -67,7 +67,7 @@ the following fields:
 
 - `tag`: the name of the tag.
 
-- `raw`: the raw contents of the tag (i.e. everything from the end of
+- `raw`: the raw contents of the tag (i.e. everything from the end of
   this tag to the beginning of the next).
 
 - `val`: the parsed value, which we’ll come back to shortly.
@@ -515,7 +515,7 @@ roxygen2::roxygenize(roclets = "yourPackage::roclet")
 ```
 
 where `yourPackage::roclet` is the function which creates the roclet,
-e.g. `memo_roclet` above.
+e.g. `memo_roclet` above.
 
 You can also add the roclet to the target package’s DESCRIPTION file,
 like this:

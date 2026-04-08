@@ -155,7 +155,7 @@ important data structures that power roxygen: tags and blocks.</p>
 single tag. It has the following fields:</p>
 <ul>
 <li><p><code>tag</code>: the name of the tag.</p></li>
-<li><p><code>raw</code>: the raw contents of the tag (i.e. everything
+<li><p><code>raw</code>: the raw contents of the tag (i.e. everything
 from the end of this tag to the beginning of the next).</p></li>
 <li><p><code>val</code>: the parsed value, which we’ll come back to
 shortly.</p></li>
@@ -557,7 +557,7 @@ screen:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">roxygen2</span><span class="fu">::</span><span class="fu"><a href="../reference/roxygenize.html">roxygenize</a></span><span class="op">(</span>roclets <span class="op">=</span> <span class="st">"yourPackage::roclet"</span><span class="op">)</span></span></code></pre></div>
 <p>where <code>yourPackage::roclet</code> is the function which creates
-the roclet, e.g. <code>memo_roclet</code> above.</p>
+the roclet, e.g. <code>memo_roclet</code> above.</p>
 <p>You can also add the roclet to the target package’s DESCRIPTION file,
 like this:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>Config<span class="sc">/</span>roxygen2<span class="sc">/</span>roclets<span class="sc">:</span> collate, rd, namespace, yourPackage<span class="sc">::</span>roclet</span></code></pre></div>

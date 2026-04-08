@@ -73,7 +73,7 @@ description, bulleted list, or other more exotic structure.
 
 ``` r
 #' Sum of vector elements
-#' 
+#'
 #' @description
 #' `sum` returns the sum of all the values present in its arguments.
 #'
@@ -93,7 +93,7 @@ three tags: `@param`, `@returns`, and `@examples`.
 
 Use `@param name description` to describe each input to the function.
 The description should provide a succinct summary of parameter type
-(e.g. a string, a numeric vector), and if not obvious from the name,
+(e.g. a string, a numeric vector), and if not obvious from the name,
 what the parameter does. The description is a sentence so should start
 with a capital letter and end with a full stop. It can span multiple
 lines (or even paragraphs) if necessary. All parameters must be

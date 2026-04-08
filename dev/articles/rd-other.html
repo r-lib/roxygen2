@@ -134,14 +134,14 @@ dataset’s name. For example, this is the roxygen2 block used for
 <span><span class="co">#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}</span></span>
 <span><span class="co">#'   \item{table}{width of top of diamond relative to widest point (43--95)}</span></span>
 <span><span class="co">#' }</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' @source {ggplot2} tidyverse R package.</span></span>
 <span><span class="st">"diamonds"</span></span></code></pre></div>
 <p>The default usage depends on the <code>LazyData</code> setting in
 your <code>DESCRIPTION</code>. If you have <code>LazyData: true</code>,
-the usage will be just the dataset name (e.g. <code>diamonds</code>).
-Otherwise, the usage will be wrapped in <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code>
-(e.g. <code>data(diamonds)</code>).</p>
+the usage will be just the dataset name (e.g. <code>diamonds</code>).
+Otherwise, the usage will be wrapped in <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> (e.g.
+<code>data(diamonds)</code>).</p>
 <p>Note the use of two additional tags that are particularly useful for
 documenting data:</p>
 <ul>
@@ -168,7 +168,7 @@ authors, and useful URLs.</p>
 <code>usethis::use_package_doc()</code> to set up automatically.</p>
 <p>Here’s an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @keywords internal </span></span>
+<code class="sourceCode R"><span><span class="co">#' @keywords internal</span></span>
 <span><span class="st">"_PACKAGE"</span></span></code></pre></div>
 <p>Package documentation is a good place to put
 <code># Package options</code> that documents options used by the
@@ -216,7 +216,7 @@ generics, you can do this in the description:</p>
 <span><span class="co">#' @description</span></span>
 <span><span class="co">#' `frobnpolicate()` is an S3 generic that ..., with methods available for</span></span>
 <span><span class="co">#' the following classes:</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' `r doclisting::methods_inline("frobnpolicate")`</span></span></code></pre></div>
 <p>For more complicated generics, you can use a <code># Methods</code>
 section to provide more detail:</p>
@@ -227,9 +227,9 @@ section to provide more detail:</p>
 <span><span class="co">#' `frobnpolicate()` does ...</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' # Methods</span></span>
-<span><span class="co">#' `frobnpolicate()` is an S3 generic with methods available for the following </span></span>
+<span><span class="co">#' `frobnpolicate()` is an S3 generic with methods available for the following</span></span>
 <span><span class="co">#' classes:</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' `r doclisting::methods_list("frobnpolicate")`</span></span></code></pre></div>
 <p>You might also want to include a section that provides additional
 details for developers implementing their own methods.</p>
@@ -237,7 +237,7 @@ details for developers implementing their own methods.</p>
 automatically generate a list of methods, with links to their help
 topics. These examples use <a href="reuse.html#inline-code">inline R
 code</a> (<code>`r `</code>), which generates the list at documentation
-time (i.e. when you run <code>devtools::document()</code>). This only
+time (i.e. when you run <code>devtools::document()</code>). This only
 requires including doclisting in <code>Suggests</code>.</p>
 <p>If you want the list to dynamically reflect all methods that are
 currently registered (including methods registered by other packages),
@@ -259,7 +259,7 @@ NOTE about unused imports:</p>
 <p>S3 <strong>classes</strong> have no formal definition, so document
 the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor" class="external-link">constructor</a>.
 Export the constructor if you want users to create instances of your
-class or other developers to extend it (e.g. by creating subclasses).
+class or other developers to extend it (e.g. by creating subclasses).
 Internal constructors don’t need documentation.</p>
 <p>Note that you don’t need to list methods for a class: in S3, methods
 belong to generics, not to classes. Users should look at the generic’s
@@ -305,7 +305,7 @@ to write methods for it. If the generic is internal, you don’t need to
 document it.</p>
 <p>Document <strong>S4 classes</strong> by adding a roxygen block before
 <code>setClass()</code>. Export a class if you want users to create
-instances or other developers to extend it (e.g. by creating
+instances or other developers to extend it (e.g. by creating
 subclasses). Internal classes don’t need documentation. Use
 <code>@slot</code> to document the slots of the class. Here’s a simple
 example:</p>
@@ -313,9 +313,7 @@ example:</p>
 <code class="sourceCode R"><span><span class="co">#' An S4 class to represent a bank account</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @slot balance A length-one numeric vector</span></span>
-<span><span class="va">Account</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"Account"</span>,</span>
-<span>  slots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>balance <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">Account</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"Account"</span>, slots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>balance <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>S4 <strong>methods</strong> are a little more complicated. Unlike S3
 and S7 methods, all S4 methods must be documented. You can document them
 in three places:</p>
@@ -405,7 +403,7 @@ generic using <code>@rdname</code>:</p>
 </h3>
 <p>S7 <strong>classes</strong> are constructor functions, so document
 them much like you’d document any other function. Export a class if you
-want users to create instances or other developers to extend it (e.g. by
+want users to create instances or other developers to extend it (e.g. by
 creating subclasses). Internal classes don’t need documentation.</p>
 <p>Use <code>@param</code> to document the constructor arguments (which
 correspond to class properties), and <code>@returns</code> to describe
@@ -423,19 +421,22 @@ use <code>@prop</code> to document them.</p>
 <span><span class="co">#' @prop length Length of the range (read-only).</span></span>
 <span><span class="co">#' @returns An `Range` S7 object.</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">Range</span> <span class="op">&lt;-</span> <span class="fu">new_class</span><span class="op">(</span><span class="st">"Range"</span>, properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  start <span class="op">=</span> <span class="va">class_numeric</span>,</span>
-<span>  end <span class="op">=</span> <span class="va">class_numeric</span>,</span>
-<span>  length <span class="op">=</span> <span class="fu">new_property</span><span class="op">(</span>getter <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">self</span><span class="op">)</span> <span class="va">self</span><span class="op">@</span><span class="va">end</span> <span class="op">-</span> <span class="va">self</span><span class="op">@</span><span class="va">start</span><span class="op">)</span>,</span>
-<span>  validator <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">self</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">self</span><span class="op">@</span><span class="va">start</span> <span class="op">&gt;</span> <span class="va">self</span><span class="op">@</span><span class="va">end</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="st">"start must be less than or equal to end"</span></span>
+<span><span class="va">Range</span> <span class="op">&lt;-</span> <span class="fu">new_class</span><span class="op">(</span></span>
+<span>  <span class="st">"Range"</span>,</span>
+<span>  properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    start <span class="op">=</span> <span class="va">class_numeric</span>,</span>
+<span>    end <span class="op">=</span> <span class="va">class_numeric</span>,</span>
+<span>    length <span class="op">=</span> <span class="fu">new_property</span><span class="op">(</span>getter <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">self</span><span class="op">)</span> <span class="va">self</span><span class="op">@</span><span class="va">end</span> <span class="op">-</span> <span class="va">self</span><span class="op">@</span><span class="va">start</span><span class="op">)</span>,</span>
+<span>    validator <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">self</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="va">self</span><span class="op">@</span><span class="va">start</span> <span class="op">&gt;</span> <span class="va">self</span><span class="op">@</span><span class="va">end</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="st">"start must be less than or equal to end"</span></span>
+<span>      <span class="op">}</span></span>
 <span>    <span class="op">}</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>If multiple classes share one Rd page (via <code>@rdname</code>), you
 can prefix the property name with the class name to group properties by
-class, e.g. <code>@prop ClassName@prop_name description</code>.</p>
+class, e.g. <code>@prop ClassName@prop_name description</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="methods-1">Methods<a class="anchor" aria-label="anchor" href="#methods-1"></a>
@@ -471,7 +472,7 @@ need to <code>@export</code> them. See
 <h2 id="r6">R6<a class="anchor" aria-label="anchor" href="#r6"></a>
 </h2>
 <ul>
-<li><p>R6 methods can be documented in-line, i.e. the method’s
+<li><p>R6 methods can be documented in-line, i.e. the method’s
 documentation comments come right before the definition of the
 method.</p></li>
 <li><p>Method documentation can use the <code>@description</code>,
@@ -528,9 +529,9 @@ examples must work without errors.</p></li>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @details</span></span>
 <span><span class="co">#' A person can also greet you.</span></span>
-<span><span class="va">Person</span> <span class="op">&lt;-</span> <span class="fu">R6</span><span class="fu">::</span><span class="kw"><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></span><span class="op">(</span><span class="st">"Person"</span>,</span>
-<span>public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span></span>
+<span><span class="va">Person</span> <span class="op">&lt;-</span> <span class="fu">R6</span><span class="fu">::</span><span class="kw"><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Person"</span>,</span>
+<span>  public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="co">#' @field name First or full name of the person.</span></span>
 <span>    name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span></span>

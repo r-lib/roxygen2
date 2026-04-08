@@ -116,7 +116,7 @@ is a little frustrating at first, but soon becomes second-nature.</p>
 <p>In order for your users to use a function<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Including S3 and S4 generics and methods.&lt;/p&gt;"><sup>1</sup></a> in your package, you
 must <strong>export</strong> it. In most cases, you can just use the
 <code>@export</code> tag, and roxygen2 will automatically figure out
-which <code>NAMESPACE</code> directive (i.e. <code>export()</code>,
+which <code>NAMESPACE</code> directive (i.e. <code>export()</code>,
 <code>S3method()</code>, <code>exportClasses()</code>, or
 <code>exportMethods()</code>) you need.</p>
 <p>Note that datasets should never be exported as they are not found in
@@ -133,7 +133,7 @@ must also document it, and since other people will use it, you need to
 be careful if you later change the function interface.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Add two numbers together</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' @param x,y A pair of numbers.</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
@@ -148,7 +148,7 @@ the advice above: if you want users to call it, export; otherwise,
 don’t.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Take an object to bizarro world</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' @param x A vector.</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">bizarro</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
@@ -161,7 +161,7 @@ the method; a user can’t directly access the method definition by typing
 its name. A more technically correct term would be to say that the
 method is <strong>registered</strong> so that the generics can find
 it.</p>
-<p>You must register, i.e. <code>@export</code>, every S3 method
+<p>You must register, i.e. <code>@export</code>, every S3 method
 regardless of whether or not the generic is exported. roxygen2 will warn
 you if you have forgotten.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -190,14 +190,14 @@ and potentially confusing page.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Take an object to bizarro world</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' @description</span></span>
-<span><span class="co">#' This is an S3 generic. This package provides methods for the </span></span>
+<span><span class="co">#' This is an S3 generic. This package provides methods for the</span></span>
 <span><span class="co">#' following classes:</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' * `character`: reverses the order of the letters in each element of </span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' * `character`: reverses the order of the letters in each element of</span></span>
 <span><span class="co">#'    the vector.</span></span>
-<span><span class="co">#' </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="co">#' @param x A vector.</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">bizarro</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
@@ -212,7 +212,7 @@ and potentially confusing page.</li>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">letters_rev</span>, <span class="va">paste</span>, collapse <span class="op">=</span> <span class="st">""</span>, FUN.VALUE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Typically, you will write methods for generics that are either
-defined in the current package or a package that is a hard dependency<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;i.e. it is listed in either the &lt;code&gt;Imports&lt;/code&gt; or
+defined in the current package or a package that is a hard dependency<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;i.e. it is listed in either the &lt;code&gt;Imports&lt;/code&gt; or
 &lt;code&gt;Depends&lt;/code&gt; fields in your &lt;code&gt;DESCRIPTION&lt;/code&gt;.&lt;/p&gt;"><sup>2</sup></a> of your
 package. Sometimes, however, you will want to write a method for a
 suggested dependency. In this case, <code>@export</code> will not work
@@ -224,8 +224,7 @@ be registered when the suggested package is loaded.</p>
 generic name in the following format:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @exportS3Method pkg::generic</span></span>
-<span><span class="va">generic.foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="va">generic.foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
@@ -306,7 +305,7 @@ using <code>::</code>, e.g., <code>pkg::fun()</code>.</p>
 <p>If the repetition of the package name becomes annoying you can
 <code>@importFrom</code> and drop the <code>::</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @importFrom pkg fun </span></span>
+<code class="sourceCode R"><span><span class="co">#' @importFrom pkg fun</span></span>
 <span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="va">y</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -363,9 +362,9 @@ functions.</p></li>
 <li><p><code>@useDynLib package routinea routineb</code> imports
 selected compiled functions.</p></li>
 <li><p>Any <code>@useDynLib</code> specification containing a comma,
-e.g. <code>@useDynLib mypackage, .registration = TRUE</code> will be
-inserted as is into the the NAMESPACE,
-e.g. <code>useDynLib(mypackage, .registration = TRUE)</code></p></li>
+e.g. <code>@useDynLib mypackage, .registration = TRUE</code> will be
+inserted as is into the the NAMESPACE, e.g.
+<code>useDynLib(mypackage, .registration = TRUE)</code></p></li>
 </ul>
 </div>
 </div>

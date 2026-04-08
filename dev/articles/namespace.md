@@ -10,7 +10,7 @@ frustrating at first, but soon becomes second-nature.
 In order for your users to use a function[¹](#fn1) in your package, you
 must **export** it. In most cases, you can just use the `@export` tag,
 and roxygen2 will automatically figure out which `NAMESPACE` directive
-(i.e. `export()`, `S3method()`, `exportClasses()`, or `exportMethods()`)
+(i.e. `export()`, `S3method()`, `exportClasses()`, or `exportMethods()`)
 you need.
 
 Note that datasets should never be exported as they are not found in
@@ -27,7 +27,7 @@ be careful if you later change the function interface.
 
 ``` r
 #' Add two numbers together
-#' 
+#'
 #' @param x,y A pair of numbers.
 #' @export
 add <- function(x, y) {
@@ -42,7 +42,7 @@ advice above: if you want users to call it, export; otherwise, don’t.
 
 ``` r
 #' Take an object to bizarro world
-#' 
+#'
 #' @param x A vector.
 #' @export
 bizarro <- function(x, ...) {
@@ -57,7 +57,7 @@ the method; a user can’t directly access the method definition by typing
 its name. A more technically correct term would be to say that the
 method is **registered** so that the generics can find it.
 
-You must register, i.e. `@export`, every S3 method regardless of whether
+You must register, i.e. `@export`, every S3 method regardless of whether
 or not the generic is exported. roxygen2 will warn you if you have
 forgotten.
 
@@ -90,14 +90,14 @@ You have four options for documenting an S3 method:
 
 ``` r
 #' Take an object to bizarro world
-#' 
+#'
 #' @description
-#' This is an S3 generic. This package provides methods for the 
+#' This is an S3 generic. This package provides methods for the
 #' following classes:
-#' 
-#' * `character`: reverses the order of the letters in each element of 
+#'
+#' * `character`: reverses the order of the letters in each element of
 #'    the vector.
-#' 
+#'
 #' @param x A vector.
 #' @export
 bizarro <- function(x, ...) {
@@ -127,8 +127,7 @@ in the following format:
 
 ``` r
 #' @exportS3Method pkg::generic
-generic.foo <- function(x, ...) {
-}
+generic.foo <- function(x, ...) {}
 ```
 
 ### S4
@@ -195,7 +194,7 @@ If the repetition of the package name becomes annoying you can
 `@importFrom` and drop the `::`:
 
 ``` r
-#' @importFrom pkg fun 
+#' @importFrom pkg fun
 my_function <- function(x, y) {
   fun(x) * y
 }
@@ -251,14 +250,14 @@ To import compiled code from another package, use `@useDynLib`
 - `@useDynLib package routinea routineb` imports selected compiled
   functions.
 
-- Any `@useDynLib` specification containing a comma,
-  e.g. `@useDynLib mypackage, .registration = TRUE` will be inserted as
-  is into the the NAMESPACE,
-  e.g. `useDynLib(mypackage, .registration = TRUE)`
+- Any `@useDynLib` specification containing a comma, e.g.
+  `@useDynLib mypackage, .registration = TRUE` will be inserted as is
+  into the the NAMESPACE, e.g.
+  `useDynLib(mypackage, .registration = TRUE)`
 
 ------------------------------------------------------------------------
 
 1.  Including S3 and S4 generics and methods.
 
-2.  i.e. it is listed in either the `Imports` or `Depends` fields in
+2.  i.e. it is listed in either the `Imports` or `Depends` fields in
     your `DESCRIPTION`.

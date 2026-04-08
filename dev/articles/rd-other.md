@@ -27,15 +27,15 @@ For example, this is the roxygen2 block used for `ggplot2::diamonds`:
 #'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
 #'   \item{table}{width of top of diamond relative to widest point (43--95)}
 #' }
-#' 
+#'
 #' @source {ggplot2} tidyverse R package.
 "diamonds"
 ```
 
 The default usage depends on the `LazyData` setting in your
 `DESCRIPTION`. If you have `LazyData: true`, the usage will be just the
-dataset name (e.g. `diamonds`). Otherwise, the usage will be wrapped in
-[`data()`](https://rdrr.io/r/utils/data.html) (e.g. `data(diamonds)`).
+dataset name (e.g. `diamonds`). Otherwise, the usage will be wrapped in
+[`data()`](https://rdrr.io/r/utils/data.html) (e.g. `data(diamonds)`).
 
 Note the use of two additional tags that are particularly useful for
 documenting data:
@@ -62,7 +62,7 @@ automatically.
 Here’s an example:
 
 ``` r
-#' @keywords internal 
+#' @keywords internal
 "_PACKAGE"
 ```
 
@@ -108,7 +108,7 @@ do this in the description:
 #' @description
 #' `frobnpolicate()` is an S3 generic that ..., with methods available for
 #' the following classes:
-#' 
+#'
 #' `r doclisting::methods_inline("frobnpolicate")`
 ```
 
@@ -122,9 +122,9 @@ provide more detail:
 #' `frobnpolicate()` does ...
 #'
 #' # Methods
-#' `frobnpolicate()` is an S3 generic with methods available for the following 
+#' `frobnpolicate()` is an S3 generic with methods available for the following
 #' classes:
-#' 
+#'
 #' `r doclisting::methods_list("frobnpolicate")`
 ```
 
@@ -135,7 +135,7 @@ Both examples above use the [doclisting](https://doclisting.r-lib.org/)
 package to automatically generate a list of methods, with links to their
 help topics. These examples use [inline R
 code](https://roxygen2.r-lib.org/dev/articles/reuse.html#inline-code)
-(`` `r ` ``), which generates the list at documentation time (i.e. when
+(`` `r ` ``), which generates the list at documentation time (i.e. when
 you run `devtools::document()`). This only requires including doclisting
 in `Suggests`.
 
@@ -163,7 +163,7 @@ ignore_unused_imports <- function() {
 S3 **classes** have no formal definition, so document the
 [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor). Export
 the constructor if you want users to create instances of your class or
-other developers to extend it (e.g. by creating subclasses). Internal
+other developers to extend it (e.g. by creating subclasses). Internal
 constructors don’t need documentation.
 
 Note that you don’t need to list methods for a class: in S3, methods
@@ -211,7 +211,7 @@ it.
 
 Document **S4 classes** by adding a roxygen block before `setClass()`.
 Export a class if you want users to create instances or other developers
-to extend it (e.g. by creating subclasses). Internal classes don’t need
+to extend it (e.g. by creating subclasses). Internal classes don’t need
 documentation. Use `@slot` to document the slots of the class. Here’s a
 simple example:
 
@@ -219,9 +219,7 @@ simple example:
 #' An S4 class to represent a bank account
 #'
 #' @slot balance A length-one numeric vector
-Account <- setClass("Account",
-  slots = list(balance = "numeric")
-)
+Account <- setClass("Account", slots = list(balance = "numeric"))
 ```
 
 S4 **methods** are a little more complicated. Unlike S3 and S7 methods,
@@ -320,7 +318,7 @@ method(size, class_any) <- function(x, ...) {
 
 S7 **classes** are constructor functions, so document them much like
 you’d document any other function. Export a class if you want users to
-create instances or other developers to extend it (e.g. by creating
+create instances or other developers to extend it (e.g. by creating
 subclasses). Internal classes don’t need documentation.
 
 Use `@param` to document the constructor arguments (which correspond to
@@ -340,21 +338,24 @@ document them.
 #' @prop length Length of the range (read-only).
 #' @returns An `Range` S7 object.
 #' @export
-Range <- new_class("Range", properties = list(
-  start = class_numeric,
-  end = class_numeric,
-  length = new_property(getter = function(self) self@end - self@start),
-  validator = function(self) {
-    if (self@start > self@end) {
-      "start must be less than or equal to end"
+Range <- new_class(
+  "Range",
+  properties = list(
+    start = class_numeric,
+    end = class_numeric,
+    length = new_property(getter = function(self) self@end - self@start),
+    validator = function(self) {
+      if (self@start > self@end) {
+        "start must be less than or equal to end"
+      }
     }
-  }
-))
+  )
+)
 ```
 
 If multiple classes share one Rd page (via `@rdname`), you can prefix
-the property name with the class name to group properties by class,
-e.g. `@prop ClassName@prop_name description`.
+the property name with the class name to group properties by class, e.g.
+`@prop ClassName@prop_name description`.
 
 ### Methods
 
@@ -390,7 +391,7 @@ for details.
 
 ## R6
 
-- R6 methods can be documented in-line, i.e. the method’s documentation
+- R6 methods can be documented in-line, i.e. the method’s documentation
   comments come right before the definition of the method.
 
 - Method documentation can use the `@description`, `@details`, `@param`,
@@ -450,9 +451,9 @@ An example from the R6 tutorial:
 #'
 #' @details
 #' A person can also greet you.
-Person <- R6::R6Class("Person",
-public = list(
-
+Person <- R6::R6Class(
+  "Person",
+  public = list(
     #' @field name First or full name of the person.
     name = NULL,
 

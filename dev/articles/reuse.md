@@ -28,7 +28,7 @@ when all functions have the same (or very similar) arguments.
 ### `@rdname`
 
 Use `@rdname <destination>`[¹](#fn1) to include multiple functions in
-the same page. Tags (e.g. `@title`, `@description`, `@examples`) will be
+the same page. Tags (e.g. `@title`, `@description`, `@examples`) will be
 combined, across blocks but often this yields text that is hard to
 understand. So we recommend that you make one block that contains the
 title, description, common parameters, examples and so on, and then only
@@ -37,7 +37,7 @@ document individual parameters in the other blocks.
 There are two basic ways to do that. You can create a standalone
 documentation block and then add the functions to it. This typically
 works best when you have a family of related functions and you want to
-link to that family from other functions (i.e. `trig` in the examples
+link to that family from other functions (i.e. `trig` in the examples
 below).
 
 ``` r
@@ -215,7 +215,7 @@ together. For example, `dplyr::left_join()` has:
 ```
 
 When joint parameter documentation is inherited, it’s all or nothing,
-i.e. if a function has `@inheritParams left_join` it will only inherit
+i.e. if a function has `@inheritParams left_join` it will only inherit
 the documentation for `x` and `y` if it has both `x` and `y` arguments
 and neither is documented by the inheriting function.
 
@@ -381,7 +381,7 @@ that you’re documenting so you can call internal functions.
 You can use `` `Rd ` `` to run code that is evaluated when a user views
 the help page, rather than when roxygen2 builds the documentation. This
 is useful for documentation that needs to be dynamic, reflecting the
-current state of R, of the user’s library and system (e.g. what
+current state of R, of the user’s library and system (e.g. what
 dependencies are installed), not the state when the package was built.
 It works by using the `\Sexpr` tag, so that `` `Rd myFun()` ``
 generates`\Sexpr[stage=render,results=rd]{myFun()}`.

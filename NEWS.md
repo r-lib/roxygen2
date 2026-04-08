@@ -1,6 +1,7 @@
 # roxygen2 (development version)
-* `vignette("rd-other")` now includes improved advice for documenting S3 generics, classes, and methods, including how to use the new [doclisting](https://doclisting.r-lib.org/) package to automatically list methods for a generic (#1513).
-* Added initial support for S7 classes, generics, and methods (#1484). 
+* `vignette("rd-other")` has been split into individual vignettes: `vignette("rd-datasets")`, `vignette("rd-packages")`, `vignette("rd-S3")`, `vignette("rd-S4")`, and `vignette("rd-R6")`. `vignette("rd")` has been renamed to `vignette("rd-functions")`, and the basics section has been moved to `vignette("roxygen2")`.
+* `vignette("rd-S3")` now includes improved advice for documenting S3 generics, classes, and methods, including how to use the new [doclisting](https://doclisting.r-lib.org/) package to automatically list methods for a generic (#1513).
+* Added initial support for S7 classes, generics, and methods (#1484). `vignette("rd-S7")` documents best practices.
   * S7 generics are documented like regular functions.
   * S7 classes are documented like regular functions, but you can use `@prop` to document additional properties that are not constructor parameters. If multiple classes share one page, use `@prop ClassName@prop_name description` to group properties by class. 
   * S7 methods registered with `method(generic, class) <- fn` are detected automatically and generate usage with `## S7 method for class <ClassName>`.
@@ -439,7 +440,7 @@
 
 * `@includeRmd {path.Rmd}` converts an `.Rmd`/`.md` file to `.Rd` and includes
   it in the manual page. This allows sharing text between vignettes,
-  `README.Rmd`, and the documentation. See `vignette("rd")` for details (#902).
+  `README.Rmd`, and the documentation. See `vignette("rd-functions")` for details (#902).
 
 * `@order {n}` tag controls the order in which blocks are processed. You can
   use it to override the usual ordering which proceeds from the top of
@@ -484,7 +485,7 @@
 
 ### R6
 
-roxygen2 can now document R6 classes (#922). See `vignette("rd")` for details.
+roxygen2 can now document R6 classes (#922). See `vignette("rd-R6")` for details.
 
 ### Markdown improvements
 
@@ -737,7 +738,7 @@ A big thanks goes to @mikldk for starting on the vignette and motivating me to m
 
 * `@inherits` can now inherit examples (#588).
 
-* `vignette("rd")` received a thorough updating for current best-practices.
+* `vignette("rd-functions")` received a thorough updating for current best-practices.
   The vignette still needs more work so pull requests are greatly appreciated
   (#650).
 

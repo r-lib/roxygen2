@@ -9,7 +9,7 @@ rd_roclet()
 \description{
 This \link{roclet} automates the production of the \code{.Rd} files that
 R uses to document functions, datasets, packages, classes, and more.
-See \code{vignette("rd")} for details.
+See \code{vignette("rd-functions")} for details.
 
 It is run by default by \code{\link[=roxygenize]{roxygenize()}}.
 }

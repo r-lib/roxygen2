@@ -1,0 +1,53 @@
+---
+title: "Documenting S4"
+description: >
+  How to document S4 generics, methods, and classes.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Documenting S4}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+S4 **generics** are also functions, so document them as such.
+Export a generic if you want users to call it or other developers to write methods for it.
+If the generic is internal, you don't need to document it.
+
+Document **S4 classes** by adding a roxygen block before `setClass()`.
+Export a class if you want users to create instances or other developers to extend it (e.g.
+by creating subclasses).
+Internal classes don't need documentation.
+Use `@slot` to document the slots of the class.
+Here's a simple example:
+
+```{r}
+#| eval: false
+#' An S4 class to represent a bank account
+#'
+#' @slot balance A length-one numeric vector
+Account <- setClass("Account", slots = list(balance = "numeric"))
+```
+
+S4 **methods** are a little more complicated.
+Unlike S3 and S7 methods, all S4 methods must be documented.
+You can document them in three places:
+
+- In the class.
+  Most appropriate if the corresponding generic uses single dispatch and you created the class.
+
+- In the generic.
+  Most appropriate if the generic uses multiple dispatches and you control it.
+
+- In its own file.
+  Most appropriate if the method is complex or the either two options don't apply.
+
+Use either `@rdname` or `@describeIn` to control where method documentation goes.
+See `vignette("reuse")` for more details.

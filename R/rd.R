@@ -3,7 +3,7 @@
 #' @description
 #' This [roclet] automates the production of the `.Rd` files that
 #' R uses to document functions, datasets, packages, classes, and more.
-#' See `vignette("rd")` for details.
+#' See `vignette("rd-functions")` for details.
 #'
 #' It is run by default by [roxygenize()].
 #'

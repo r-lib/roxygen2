@@ -15,26 +15,8 @@ vignette: >
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
-This vignette introduces the basics of roxygen2 for documenting functions.
-See `vignette("rd-other")` for documenting other types of objects and `vignette("reuse")` for reusing documentation across topics.
-
-## Basics
-
-A roxygen **block** is a sequence of lines starting with `#'` (optionally preceded by white space).
-
-The first lines of the block is called the **introduction** and forms the title, description, and details, as described below.
-The introduction continues until the first **tag**.
-
-Tags start with `@`, like `@details` or `@param`.
-Tags must appear at the beginning of a line and their content extends to the start of the next tag or the end of the block.
-Text within the description or tags can be formatted using Markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
-
-A block ends when it hits R code, usually a function or object assignment.
-Blocks ignore empty lines, including lines made up of non-roxygen comments.
-If you need to separate two blocks, use `NULL`.
-
-If you want to use roxygen2 documentation tags without generating an `.Rd` file, you can use `@noRd` to suppress file generation for a given topic.
-This is useful if you want to use roxygen2 conventions for documenting an internal function; only people reading the source doc will be able to read the docs.
+This vignette describes the most important roxygen2 tags for documenting functions.
+See `vignette("reuse")` for reusing documentation across topics.
 
 ## The introduction
 
@@ -79,7 +61,7 @@ This is unnecessary unless you want to have a multi-paragraph description, bulle
 #' first argument.
 ```
 
-## Functions
+## Required tags
 
 Functions are the most commonly documented objects.
 Functions require three tags: `@param`, `@returns`, and `@examples`.

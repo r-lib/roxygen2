@@ -53,7 +53,7 @@ To get started, first read `vignette("roxygen2")`. Then read more about the spec
 
 * `vignette("rd-functions")` describes how to document your functions with roxygen2.
 
-* `vignette("rd-S3")`, `vignette("rd-S4")`, `vignette("rd-S7")`, and `vignette("rd-R6")` discuss documenting the various OOP systems.
+* `vignette("rd-S3")`, `vignette("rd-S4")`, `vignette("rd-R6")`, and `vignette("rd-S7")` discuss documenting the various OOP systems.
 
 * `vignette("rd-datasets")` and `vignette("rd-packages")` cover documenting datasets and the package itself.
 

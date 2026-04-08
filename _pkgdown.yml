@@ -47,8 +47,8 @@ articles:
   - rd-functions
   - rd-S3
   - rd-S4
-  - rd-S7
   - rd-R6
+  - rd-S7
   - rd-datasets
   - rd-packages
   - reuse

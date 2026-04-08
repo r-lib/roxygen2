@@ -98,6 +98,10 @@ Documenting [S3 code](https://adv-r.hadley.nz/s3.html) well requires thinking ab
 ### Generics
 
 S3 **generics** are regular functions, so document them as such.
+Export a generic if you want users to call it or other developers to
+write methods for it. If the generic is internal, you don't need to
+document it.
+
 The documentation should mention that the function is a generic, because this
 tells the reader that the behavior may vary depending on the input and that
 they can write their own methods. For simple generics, you can do this
@@ -165,6 +169,10 @@ ignore_unused_imports <- function() {
 ### Classes
 
 S3 **classes** have no formal definition, so document the [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
+Export the constructor if you want users to create instances of your
+class or other developers to extend it (e.g. by creating subclasses).
+Internal constructors don't need documentation.
+
 Note that you don't need to list methods for a class: in S3, methods
 belong to generics, not to classes. Users should look at the generic's
 help page to learn about available methods.
@@ -200,8 +208,14 @@ is ambiguity. For example, is `all.equal.data.frame()` the
 ## S4
 
 S4 **generics** are also functions, so document them as such.
+Export a generic if you want users to call it or other developers to
+write methods for it. If the generic is internal, you don't need to
+document it.
 
 Document **S4 classes** by adding a roxygen block before `setClass()`.
+Export a class if you want users to create instances or other developers
+to extend it (e.g. by creating subclasses). Internal classes don't need
+documentation.
 Use `@slot` to document the slots of the class.
 Here's a simple example:
 
@@ -217,7 +231,7 @@ Account <- setClass("Account",
 ```
 
 S4 **methods** are a little more complicated.
-Unlike S3 methods, all S4 methods must be documented.
+Unlike S3 and S7 methods, all S4 methods must be documented.
 You can document them in three places:
 
 -   In the class.
@@ -227,11 +241,9 @@ You can document them in three places:
     Most appropriate if the generic uses multiple dispatches and you control it.
 
 -   In its own file.
-    Most appropriate if the method is complex.
-    or the either two options don't apply.
+    Most appropriate if the method is complex or the either two options don't apply.
 
-Use either `@rdname` or `@describeIn` to control where method documentation goes.
-See the next section for more details.
+Use either `@rdname` or `@describeIn` to control where method documentation goes. See `vignette("reuse")` for more details.
 
 ## S7
 
@@ -246,6 +258,10 @@ Documenting S7 code well requires thinking about three things:
 ### Generics
 
 S7 **generics** are functions, so document them as such.
+Export a generic if you want users to call it or other developers to
+write methods for it. If the generic is internal, you don't need to
+document it.
+
 The documentation should mention that the function is a generic, because
 this tells the reader that the behavior may vary depending on the input
 and that they can write their own methods. For simple generics, you can
@@ -312,7 +328,11 @@ method(size, class_any) <- function(x, ...) {
 ### Classes
 
 S7 **classes** are constructor functions, so document them much like
-you'd document any other function. Use `@param` to document the
+you'd document any other function. Export a class if you want users to
+create instances or other developers to extend it (e.g. by creating
+subclasses). Internal classes don't need documentation.
+
+Use `@param` to document the 
 constructor arguments (which correspond to class properties), and
 `@returns` to describe the object that is returned. If the class has
 additional properties that are not part of the constructor (e.g.
@@ -374,9 +394,9 @@ method(size, Range) <- function(x, ...) {
 }
 ```
 
-Note that S7 methods are registered at load time via
+S7 methods are registered at load time via
 `S7::methods_register()` in your `.onLoad()` function, not through
-`NAMESPACE` directives. See `vignette("packages", package = "S7")` for
+`NAMESPACE` directives, so you never need to `@export` them. See `vignette("packages", package = "S7")` for
 details.
 
 ## R6

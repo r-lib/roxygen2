@@ -10,7 +10,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -19,13 +20,13 @@ knitr::opts_chunk$set(
 
 roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
 
--   Combine documentation for closely related functions into a single file with `@describeIn` or `@rdname`.
+- Combine documentation for closely related functions into a single file with `@describeIn` or `@rdname`.
 
--   Automatically copy tags with `@inheritParams`, `@inheritSection`, or `@inherit`.
+- Automatically copy tags with `@inheritParams`, `@inheritSection`, or `@inherit`.
 
--   Use functions to generate repeated text with inline R code.
+- Use functions to generate repeated text with inline R code.
 
--   Share text between documentation and vignettes with child documents.
+- Share text between documentation and vignettes with child documents.
 
 The chapter concludes by showing you how to update superseded reuse mechanisms that we no longer recommend: `@includeRmd`, `@eval`/`@evalRd`, and `@template`.
 
@@ -38,7 +39,8 @@ Use it when all functions have the same (or very similar) arguments.
 ### `@rdname`
 
 Use `@rdname <destination>`[^1] to include multiple functions in the same page.
-Tags (e.g. `@title`, `@description`, `@examples`) will be combined, across blocks but often this yields text that is hard to understand.
+Tags (e.g.
+`@title`, `@description`, `@examples`) will be combined, across blocks but often this yields text that is hard to understand.
 So we recommend that you make one block that contains the title, description, common parameters, examples and so on, and then only document individual parameters in the other blocks.
 
 [^1]: The destination is a topic name.
@@ -46,7 +48,8 @@ So we recommend that you make one block that contains the title, description, co
 
 There are two basic ways to do that.
 You can create a standalone documentation block and then add the functions to it.
-This typically works best when you have a family of related functions and you want to link to that family from other functions (i.e. `trig` in the examples below).
+This typically works best when you have a family of related functions and you want to link to that family from other functions (i.e.
+`trig` in the examples below).
 
 ```{r}
 #' Trigonometric approximations
@@ -70,7 +73,8 @@ tan_ish <- function(x) x + x^3 / 3
 Alternatively, you can add docs to an existing function.
 This tends to work better if you have a "primary" function with some variants or some helpers.
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 #' Logarithms
 #'
 #' @param x A numeric vector
@@ -117,10 +121,10 @@ times <- function(x, y) x * y
 
 If two or more functions share have similarities but are different or complex enough that you don't want to document them in a single file, you can use one of the four `@inherit` tags to automatically copy various components from another topic:
 
--   `@inheritParams foo` will copy `@param` contents from `foo`.
--   `@inherit foo` will copy all supported components from `foo`.
--   `@inheritSection foo {Section title}` will copy the `@section {Section title}` section from `foo`.
--   `@inheritDotParams foo` will generate documentation for `…` by copying the documentation for `foo()`'s arguments.
+- `@inheritParams foo` will copy `@param` contents from `foo`.
+- `@inherit foo` will copy all supported components from `foo`.
+- `@inheritSection foo {Section title}` will copy the `@section {Section title}` section from `foo`.
+- `@inheritDotParams foo` will generate documentation for `…` by copying the documentation for `foo()`'s arguments.
 
 We think of this as "inheritance" rather than just copying, because anything you inherit can be overridden by a more specific definition in the documentation.
 This applies particularly to `@inheritParams` which allows you to copy the documentation for some parameters while documenting others directly.
@@ -177,7 +181,9 @@ Since no other function in dplyr has an argument with this name, its documentati
 
 ### Recursive inheritance
 
-`@inheritParams` (like all `@inherits` functions) works recursively, so if `g` inherits parameters from `h`, then `f` can also inherit those parameters from `g`. However, this technique is best used sparingly: it's very easy to create complex dependency webs that are hard to reason about where making changing the documentation in one function cascades out in unexpected ways across your package. If you want to be more explicit, you should consider writing helper functions and using inline R code, as described below.
+`@inheritParams` (like all `@inherits` functions) works recursively, so if `g` inherits parameters from `h`, then `f` can also inherit those parameters from `g`.
+However, this technique is best used sparingly: it's very easy to create complex dependency webs that are hard to reason about where making changing the documentation in one function cascades out in unexpected ways across your package.
+If you want to be more explicit, you should consider writing helper functions and using inline R code, as described below.
 
 ### Multiple parameters
 
@@ -190,7 +196,8 @@ For example, `dplyr::left_join()` has:
 #'   more details.
 ```
 
-When joint parameter documentation is inherited, it's all or nothing, i.e. if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documented by the inheriting function.
+When joint parameter documentation is inherited, it's all or nothing, i.e.
+if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documented by the inheriting function.
 
 ### The dot prefix
 
@@ -223,21 +230,21 @@ This technique is inspired by the documentation for `plot()`, where `...` can ta
 `@inheritDotParams` has two components: the function to inherit from and the arguments to inherit.
 Since you'll typically only want to document the most important arguments, `@inheritDotParams` comes with a flexible specification for argument selection inspired by `dplyr::select()`:
 
--   `@inheritDotParams foo` takes all parameters from `foo()`.
--   `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`.
--   `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
+- `@inheritDotParams foo` takes all parameters from `foo()`.
+- `@inheritDotParams foo a b e:h` takes parameters `a`, `b`, and all parameters between `e` and `h`.
+- `@inheritDotParams foo -x -y` takes all parameters except for `x` and `y`.
 
 ### Inheriting from other packages
 
 It's most common to inherit from other documentation topics within the current package, but roxygen2 also supports inheriting documentation from other packages by using `package::function` syntax, e.g.:
 
--   `@inheritParams package::function`
+- `@inheritParams package::function`
 
--   `@inherit package::function`
+- `@inherit package::function`
 
--   `@inheritSection package::function Section title`
+- `@inheritSection package::function Section title`
 
--   `@inheritDotParams package::function`
+- `@inheritDotParams package::function`
 
 When inheriting documentation from another package bear in mind that you're now taking a fairly strong dependency on an external package, and to ensure every developer produces the same documentation you'll need to make sure that they all have the same version of the package installed.
 And if the package changes the name of the topic or section, your documentation will require an update.
@@ -268,7 +275,8 @@ To insert code inline, enclose it in `` `r ` ``.
 Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value.
 Here's a simple example:
 
-```{r include = FALSE}
+```{r}
+#| include: false
 roxygen2:::markdown_on()
 
 simple_inline <- "#' Title `r 1 + 1`
@@ -278,12 +286,12 @@ foo <- function() NULL
 "
 ```
 
-```{r code=simple_inline}
+```{r, code=simple_inline}
 ```
 
 This is equivalent to writing:
 
-```{r code = roxygen2:::markdown(simple_inline)}
+```{r, code=roxygen2:::markdown(simple_inline)}
 ```
 
 The resulting text, together with the whole tag is interpreted as markdown, as usual.
@@ -298,7 +306,8 @@ alphabet <- function(n) {
 
 You could then write:
 
-```{r echo=FALSE}
+```{r}
+#| echo: false
 env <- new.env()
 env$alphabet <- alphabet
 roxygen2:::roxy_meta_set("evalenv", env)
@@ -310,12 +319,12 @@ foo <- function(x) NULL
 "
 ```
 
-```{r code = backtick}
+```{r, code=backtick}
 ```
 
 The result is equivalent to writing the following by hand:
 
-```{r code = roxygen2:::markdown_evaluate(backtick)}
+```{r, code=roxygen2:::markdown_evaluate(backtick)}
 ```
 
 This is a powerful technique for reducing duplication because you can flexibly parameterise the function however best meets your needs.
@@ -324,7 +333,8 @@ Note that the evaluation environment is deliberately a child of the package that
 ## Inline Rd code
 
 You can use `` `Rd ` `` to run code that is evaluated when a user views the help page, rather than when roxygen2 builds the documentation.
-This is useful for documentation that needs to be dynamic, reflecting the current state of R, of the user's library and system (e.g. what dependencies are installed), not the state when the package was built.
+This is useful for documentation that needs to be dynamic, reflecting the current state of R, of the user's library and system (e.g.
+what dependencies are installed), not the state when the package was built.
 It works by using the `\Sexpr` tag, so that `` `Rd myFun()` `` generates`\Sexpr[stage=render,results=rd]{myFun()}`.
 
 Here's a simple example, which will greet the user appropriately, depending on the time of day:
@@ -347,20 +357,21 @@ greeting <- function() {
 foo <- function() NULL
 ```
 
-Note that compared to inline R code, the function is run in the global environment by R's documentation system, not inside the package namespace by roxygen2. 
+Note that compared to inline R code, the function is run in the global environment by R's documentation system, not inside the package namespace by roxygen2.
 This generally means that you'll want to use `:::` to explicitly call an internal function.
 
 ## Child documents
 
 You can use the same `.Rmd` or `.md` document in the documentation, `README.Rmd`, and vignettes by using child documents:
 
-````         
+````
 ```{r child = "common.Rmd"}`r ''`
 ```
 ````
 
 The included Rmd file can have roxygen Markdown-style links to other help topics.
-E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2.
+E.g.
+`[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2.
 See `vignette("rd-formatting")` for details.
 
 If the Rmd file contains roxygen (Markdown-style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default.
@@ -368,7 +379,7 @@ A workaround is to specify external HTML links for them.
 These external locations will *not* be used for the manual which instead always links to the help topics in the manual.
 Example:
 
-```         
+```
 See also the [roxygen2::roxygenize()] function.
 
 [roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html
@@ -384,11 +395,11 @@ This warning originates in Pandoc, and it is harmless.
 Over the years, we have experimented with a number of other ways to reduce duplication across documentation files.
 A number of these are now superseded and we recommend changing them to use the techniques described above:
 
--   Instead of `@includeRmd man/rmd/example.Rmd`, use a child document.
+- Instead of `@includeRmd man/rmd/example.Rmd`, use a child document.
 
--   Instead of `@eval` or `@evalRd`, use inline R code.
+- Instead of `@eval` or `@evalRd`, use inline R code.
 
--   Instead of `@template` and `@templateVars` write your own function and call it from inline R code.
+- Instead of `@template` and `@templateVars` write your own function and call it from inline R code.
 
 Inline R markdown can only generate markdown text within a tag so in principle it is less flexible than `@eval`/`@evalRd`/`@template`.
 However, our experience has revealed that generating multiple tags at once tends to be rather inflexible, and you often end up refactoring into smaller pieces so we don't believe this reflects a real loss of functionality.

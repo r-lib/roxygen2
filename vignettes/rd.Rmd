@@ -1,7 +1,7 @@
 ---
 title: "Documenting functions"
 description: >
-  The basics of roxygen2 tags and how to use them for 
+  The basics of roxygen2 tags and how to use them for
   documenting functions.
 output: rmarkdown::html_vignette
 vignette: >
@@ -10,7 +10,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
@@ -32,8 +33,8 @@ A block ends when it hits R code, usually a function or object assignment.
 Blocks ignore empty lines, including lines made up of non-roxygen comments.
 If you need to separate two blocks, use `NULL`.
 
-If you want to use roxygen2 documentation tags without generating an `.Rd` file, you can use `@noRd` to suppress file generation for a given topic. This is useful if you want to use roxygen2 conventions for documenting an internal function; only people reading the source doc will be able to read the docs.
-
+If you want to use roxygen2 documentation tags without generating an `.Rd` file, you can use `@noRd` to suppress file generation for a given topic.
+This is useful if you want to use roxygen2 conventions for documenting an internal function; only people reading the source doc will be able to read the docs.
 
 ## The introduction
 
@@ -54,20 +55,20 @@ sum <- function(..., na.rm = TRUE) {}
 
 This introductory block is broken up as follows:
 
--   The first sentence is the **title**: that's what you see when you look at `help(package = mypackage)` and is shown at the top of each help file.
-    It should generally fit on one line, be written in sentence case, and not end in a full stop.
+- The first sentence is the **title**: that's what you see when you look at `help(package = mypackage)` and is shown at the top of each help file.
+  It should generally fit on one line, be written in sentence case, and not end in a full stop.
 
--   The second paragraph is the **description**: this comes first in the documentation and should briefly describe what the function does.
+- The second paragraph is the **description**: this comes first in the documentation and should briefly describe what the function does.
 
--   The third and subsequent paragraphs go into the **details**: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates.
-    The details are optional.
+- The third and subsequent paragraphs go into the **details**: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates.
+  The details are optional.
 
 You can also use explicit `@title`, `@description`, and `@details` tags.
 This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.
 
 ```{r}
 #' Sum of vector elements
-#' 
+#'
 #' @description
 #' `sum` returns the sum of all the values present in its arguments.
 #'
@@ -86,7 +87,8 @@ Functions require three tags: `@param`, `@returns`, and `@examples`.
 ### Inputs
 
 Use `@param name description` to describe each input to the function.
-The description should provide a succinct summary of parameter type (e.g. a string, a numeric vector), and if not obvious from the name, what the parameter does.
+The description should provide a succinct summary of parameter type (e.g.
+a string, a numeric vector), and if not obvious from the name, what the parameter does.
 The description is a sentence so should start with a capital letter and end with a full stop.
 It can span multiple lines (or even paragraphs) if necessary.
 All parameters must be documented.
@@ -112,18 +114,20 @@ You can do this by wrapping the code in `try()` or using `\dontrun{}` to exclude
 
 For finer control, you can use `@examplesIf`:
 
-``` r
+```r
 #' @examplesIf interactive()
 #' browseURL("https://roxygen2.r-lib.org")
 ```
 
 This generates
 
-    \examples{
-    \dontshow{if (interactive() (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-    gh_organizations(since = 42)
-    \dontshow{\}) # examplesIf}
-    }
+```
+\examples{
+\dontshow{if (interactive() (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+gh_organizations(since = 42)
+\dontshow{\}) # examplesIf}
+}
+```
 
 This way, the code evaluating whether the example can be run is not shown to users reading the help, but it still prevents R CMD check failures.
 

@@ -187,43 +187,129 @@ the package that users might find helpful.</p></li>
 <div class="section level2">
 <h2 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>
 </h2>
+<p>Documenting <a href="https://adv-r.hadley.nz/s3.html" class="external-link">S3 code</a>
+well requires thinking about three things:</p>
 <ul>
-<li><p>S3 <strong>generics</strong> are regular functions, so document
-them as such. If necessary, include a section that provides additional
-details for developers implementing methods.</p></li>
-<li><p>S3 <strong>classes</strong> have no formal definition, so
-document the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor" class="external-link">constructor</a>.</p></li>
 <li>
+<strong>Generics</strong>: mention that the function is a generic
+and list the available methods.</li>
+<li>
+<strong>Methods</strong>: link back to the generic; only document
+individually when the method has unique behavior or arguments.</li>
+<li>
+<strong>Classes</strong>: document the constructor.</li>
+</ul>
+<div class="section level3">
+<h3 id="generics">Generics<a class="anchor" aria-label="anchor" href="#generics"></a>
+</h3>
+<p>S3 <strong>generics</strong> are regular functions, so document them
+as such. Export a generic if you want users to call it or other
+developers to write methods for it. If the generic is internal, you
+don’t need to document it.</p>
+<p>The documentation should mention that the function is a generic,
+because this tells the reader that the behavior may vary depending on
+the input and that they can write their own methods. For simple
+generics, you can do this in the description:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Frobnpolicate an object</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @description</span></span>
+<span><span class="co">#' `frobnpolicate()` is an S3 generic that ..., with methods available for</span></span>
+<span><span class="co">#' the following classes:</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' `r doclisting::methods_inline("frobnpolicate")`</span></span></code></pre></div>
+<p>For more complicated generics, you can use a <code># Methods</code>
+section to provide more detail:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Frobnpolicate an object</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @description</span></span>
+<span><span class="co">#' `frobnpolicate()` does ...</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' # Methods</span></span>
+<span><span class="co">#' `frobnpolicate()` is an S3 generic with methods available for the following </span></span>
+<span><span class="co">#' classes:</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' `r doclisting::methods_list("frobnpolicate")`</span></span></code></pre></div>
+<p>You might also want to include a section that provides additional
+details for developers implementing their own methods.</p>
+<p>Both examples above use the <a href="https://doclisting.r-lib.org/" class="external-link">doclisting</a> package to
+automatically generate a list of methods, with links to their help
+topics. These examples use <a href="reuse.html#inline-code">inline R
+code</a> (<code>`r `</code>), which generates the list at documentation
+time (i.e. when you run <code>devtools::document()</code>). This only
+requires including doclisting in <code>Suggests</code>.</p>
+<p>If you want the list to dynamically reflect all methods that are
+currently registered (including methods registered by other packages),
+use an <a href="reuse.html#inline-rd-code">inline Rd code</a> block
+(<code>`Rd `</code>) instead:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' `Rd doclisting::methods_list("frobnpolicate")`</span></span></code></pre></div>
+<p>Using <code>`Rd `</code> requires doclisting in <code>Imports</code>,
+and you’ll need a dummy call to eliminate the <code>R CMD check</code>
+NOTE about unused imports:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ignore_unused_imports</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">doclisting</span><span class="fu">::</span><span class="va">methods_list</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="classes">Classes<a class="anchor" aria-label="anchor" href="#classes"></a>
+</h3>
+<p>S3 <strong>classes</strong> have no formal definition, so document
+the <a href="https://adv-r.hadley.nz/s3.html#s3-constructor" class="external-link">constructor</a>.
+Export the constructor if you want users to create instances of your
+class or other developers to extend it (e.g. by creating subclasses).
+Internal constructors don’t need documentation.</p>
+<p>Note that you don’t need to list methods for a class: in S3, methods
+belong to generics, not to classes. Users should look at the generic’s
+help page to learn about available methods.</p>
+</div>
+<div class="section level3">
+<h3 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
+</h3>
 <p>It is your choice whether or not to document S3
 <strong>methods</strong>. Generally, it’s not necessary to document
 straightforward methods for common generics like <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>.
 (You should, however, always <code>@export</code> S3 methods, even
-internal ones).</p>
-<p>If your method is more complicated, you should document it by setting
-<code>@rdname</code> or <code>@describeIn</code>. For complicated
-methods, you might document in their own file
-(i.e. <code>@name generic.class</code>; for simpler methods you might
-document with the generic (i.e. <code>@rdname generic)</code>. Learn
-more about these tags in <code><a href="../articles/reuse.html">vignette("reuse")</a></code>.</p>
-</li>
-<li><p>Generally, roxygen2 will automatically figure out the generic
-that the method belongs to, and you should only need to use
+internal ones.)</p>
+<p>It’s good practice, however, to document methods that have unique
+behavior or arguments. For example, the clock package documents the
+methods for <a href="https://clock.r-lib.org/reference/date_group.html" class="external-link"><code>date_group()</code></a>
+on their own pages (<a href="https://clock.r-lib.org/reference/date-group.html" class="external-link">Date</a>, <a href="https://clock.r-lib.org/reference/posixt-group.html" class="external-link">POSIXt</a>)
+because the methods accept different <code>precision</code> values and
+have type-specific return value semantics and examples. The generic page
+serves only as a signpost linking to the individual method pages.</p>
+<p>When documenting a method, always include a link back to the generic
+using <code>[generic_name()]</code> so the reader can easily find the
+full documentation and other methods.</p>
+</div>
+<div class="section level3">
+<h3 id="method-disambiguation">Method disambiguation<a class="anchor" aria-label="anchor" href="#method-disambiguation"></a>
+</h3>
+<p>Generally, roxygen2 will automatically figure out the generic that
+the method belongs to, and you should only need to use
 <code>@method</code> if there is ambiguity. For example, is
 <code>all.equal.data.frame()</code> the <code>equal.data.frame</code>
 method for <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code>, or the <code>data.frame</code> method for
-<code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal()</a></code>?. If this happens to you, disambiguate with
-(e.g.) <code>@method all.equal data.frame</code>.</p></li>
-</ul>
+<code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal()</a></code>? If this happens to you, disambiguate with
+(e.g.) <code>@method all.equal data.frame</code>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="s4">S4<a class="anchor" aria-label="anchor" href="#s4"></a>
 </h2>
 <p>S4 <strong>generics</strong> are also functions, so document them as
-such.</p>
+such. Export a generic if you want users to call it or other developers
+to write methods for it. If the generic is internal, you don’t need to
+document it.</p>
 <p>Document <strong>S4 classes</strong> by adding a roxygen block before
-<code>setClass()</code>. Use <code>@slot</code> to document the slots of
-the class. Here’s a simple example:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code>setClass()</code>. Export a class if you want users to create
+instances or other developers to extend it (e.g. by creating
+subclasses). Internal classes don’t need documentation. Use
+<code>@slot</code> to document the slots of the class. Here’s a simple
+example:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' An S4 class to represent a bank account</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @slot balance A length-one numeric vector</span></span>
@@ -231,31 +317,102 @@ the class. Here’s a simple example:</p>
 <span>  slots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>balance <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>S4 <strong>methods</strong> are a little more complicated. Unlike S3
-methods, all S4 methods must be documented. You can document them in
-three places:</p>
+and S7 methods, all S4 methods must be documented. You can document them
+in three places:</p>
 <ul>
 <li><p>In the class. Most appropriate if the corresponding generic uses
 single dispatch and you created the class.</p></li>
 <li><p>In the generic. Most appropriate if the generic uses multiple
 dispatches and you control it.</p></li>
-<li><p>In its own file. Most appropriate if the method is complex. or
-the either two options don’t apply.</p></li>
+<li><p>In its own file. Most appropriate if the method is complex or the
+either two options don’t apply.</p></li>
 </ul>
 <p>Use either <code>@rdname</code> or <code>@describeIn</code> to
-control where method documentation goes. See the next section for more
-details.</p>
+control where method documentation goes. See
+<code><a href="../articles/reuse.html">vignette("reuse")</a></code> for more details.</p>
 </div>
 <div class="section level2">
 <h2 id="s7">S7<a class="anchor" aria-label="anchor" href="#s7"></a>
 </h2>
+<p>Documenting S7 code well requires thinking about three things:</p>
+<ul>
+<li>
+<strong>Generics</strong>: mention that the function is a generic
+and list the available methods.</li>
+<li>
+<strong>Methods</strong>: link back to the generic; only document
+individually when the method has unique behavior or arguments.</li>
+<li>
+<strong>Classes</strong>: document the constructor.</li>
+</ul>
+<div class="section level3">
+<h3 id="generics-1">Generics<a class="anchor" aria-label="anchor" href="#generics-1"></a>
+</h3>
+<p>S7 <strong>generics</strong> are functions, so document them as such.
+Export a generic if you want users to call it or other developers to
+write methods for it. If the generic is internal, you don’t need to
+document it.</p>
+<p>The documentation should mention that the function is a generic,
+because this tells the reader that the behavior may vary depending on
+the input and that they can write their own methods. For simple
+generics, you can do this in the description:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Size of an object</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @description</span></span>
+<span><span class="co">#' `size()` is an S7 generic that determines the size of an object,</span></span>
+<span><span class="co">#' with methods available for the following classes:</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' `r doclisting::methods_inline("size")`</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param x An object.</span></span>
+<span><span class="co">#' @param ... Not used.</span></span>
+<span><span class="co">#' @returns A single number.</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu">new_generic</span><span class="op">(</span><span class="st">"size"</span>, <span class="st">"x"</span><span class="op">)</span></span></code></pre></div>
+<p>For more complicated generics, you can use a <code># Methods</code>
+section to provide more detail:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Size of an object</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @description</span></span>
+<span><span class="co">#' `size()` determines the size of an object.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' # Methods</span></span>
+<span><span class="co">#' `size()` is an S7 generic with methods available for the following</span></span>
+<span><span class="co">#' classes:</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' `r doclisting::methods_list("size")`</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param x An object.</span></span>
+<span><span class="co">#' @param ... Not used.</span></span>
+<span><span class="co">#' @returns A single number.</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu">new_generic</span><span class="op">(</span><span class="st">"size"</span>, <span class="st">"x"</span><span class="op">)</span></span></code></pre></div>
+<p>See the <a href="#generics">S3 Generics section</a> above for more
+about using the <a href="https://doclisting.r-lib.org/" class="external-link">doclisting</a>
+package to automatically generate method lists.</p>
+<p>It’s good practice to document the default method alongside the
+generic using <code>@rdname</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @rdname size</span></span>
+<span><span class="fu">method</span><span class="op">(</span><span class="va">size</span>, <span class="va">class_any</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="classes-1">Classes<a class="anchor" aria-label="anchor" href="#classes-1"></a>
+</h3>
 <p>S7 <strong>classes</strong> are constructor functions, so document
-them much like you’d document any other function. Use
-<code>@param</code> to document the constructor arguments (which
+them much like you’d document any other function. Export a class if you
+want users to create instances or other developers to extend it (e.g. by
+creating subclasses). Internal classes don’t need documentation.</p>
+<p>Use <code>@param</code> to document the constructor arguments (which
 correspond to class properties), and <code>@returns</code> to describe
 the object that is returned. If the class has additional properties that
 are not part of the constructor (e.g. read-only computed properties),
 use <code>@prop</code> to document them.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' A range</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' Create a range represented by a numeric `start` and `end`. The start must</span></span>
@@ -279,34 +436,23 @@ use <code>@prop</code> to document them.</p>
 <p>If multiple classes share one Rd page (via <code>@rdname</code>), you
 can prefix the property name with the class name to group properties by
 class, e.g. <code>@prop ClassName@prop_name description</code>.</p>
-<p>S7 <strong>generics</strong> are also functions, so document them as
-such. It’s good practice to document the default method alongside the
-generic using <code>@rdname</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Size of an object</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' An S7 generic for determining the size of an object. The default method </span></span>
-<span><span class="co">#' uses [length()], but other classes may have more specific implementations.</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param x An object.</span></span>
-<span><span class="co">#' @param ... Not used.</span></span>
-<span><span class="co">#' @returns A single number.</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu">new_generic</span><span class="op">(</span><span class="st">"size"</span>, <span class="st">"x"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#' @rdname size</span></span>
-<span><span class="fu">method</span><span class="op">(</span><span class="va">size</span>, <span class="va">class_any</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>S7 <strong>methods</strong> are registered with
-<code>method(generic, class) &lt;- fn</code>. You don’t need to document
-methods, but you <em>may</em> want to do so for particularly complicated
-implementations or methods with extra arguments. If you do decided to
-document a method, give it its own roxygen block:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+</div>
+<div class="section level3">
+<h3 id="methods-1">Methods<a class="anchor" aria-label="anchor" href="#methods-1"></a>
+</h3>
+<p>It is your choice whether or not to document S7
+<strong>methods</strong>. S7 methods are registered with
+<code>method(generic, class) &lt;- fn</code>. Generally, it’s not
+necessary to document straightforward methods.</p>
+<p>It’s good practice, however, to document methods that have unique
+behavior or arguments. If you do document a method, give it its own
+roxygen block. When documenting a method, always include a link back to
+the generic using <code>[generic_name()]</code> so the reader can easily
+find the full documentation and other methods.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Size of a range</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' The size of a range is its length.</span></span>
+<span><span class="co">#' The size of a range is its [size()], i.e. its length.</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @param x A `Range` object.</span></span>
 <span><span class="co">#' @param ... Not used.</span></span>
@@ -314,10 +460,12 @@ document a method, give it its own roxygen block:</p>
 <span><span class="fu">method</span><span class="op">(</span><span class="va">size</span>, <span class="va">Range</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">x</span><span class="op">@</span><span class="va">length</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Note that S7 methods are registered at load time via
+<p>S7 methods are registered at load time via
 <code><a href="https://rconsortium.github.io/S7/reference/methods_register.html" class="external-link">S7::methods_register()</a></code> in your <code>.onLoad()</code>
-function, not through <code>NAMESPACE</code> directives. See
+function, not through <code>NAMESPACE</code> directives, so you never
+need to <code>@export</code> them. See
 <code><a href="https://rconsortium.github.io/S7/articles/packages.html" class="external-link">vignette("packages", package = "S7")</a></code> for details.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="r6">R6<a class="anchor" aria-label="anchor" href="#r6"></a>
@@ -351,7 +499,7 @@ block with the class.</p></li>
 <code>@R6method Class$method</code> to explicitly associate a
 documentation block with a method. Place it in a standalone roxygen
 block above <code>NULL</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @R6method Person$set_hair</span></span>
 <span><span class="co">#' @description Change hair color.</span></span>
 <span><span class="co">#' @param val New hair color.</span></span>
@@ -372,7 +520,7 @@ examples. This section is run by <code>R CMD check</code>, so method
 examples must work without errors.</p></li>
 </ul>
 <p>An example from the R6 tutorial:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' R6 Class Representing a Person</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @description</span></span>

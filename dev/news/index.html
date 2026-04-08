@@ -63,7 +63,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li>Added initial support for S7 classes, generics, and methods (<a href="https://github.com/r-lib/roxygen2/issues/1484" class="external-link">#1484</a>).
+<ul><li>
+<code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> now includes improved advice for documenting S3 generics, classes, and methods, including how to use the new <a href="https://doclisting.r-lib.org/" class="external-link">doclisting</a> package to automatically list methods for a generic (<a href="https://github.com/r-lib/roxygen2/issues/1513" class="external-link">#1513</a>).</li>
+<li>Added initial support for S7 classes, generics, and methods (<a href="https://github.com/r-lib/roxygen2/issues/1484" class="external-link">#1484</a>).
 <ul><li>S7 generics are documented like regular functions.</li>
 <li>S7 classes are documented like regular functions, but you can use <code>@prop</code> to document additional properties that are not constructor parameters. If multiple classes share one page, use <code>@prop ClassName@prop_name description</code> to group properties by class.</li>
 <li>S7 methods registered with <code>method(generic, class) &lt;- fn</code> are detected automatically and generate usage with <code>## S7 method for class &lt;ClassName&gt;</code>.</li>

@@ -81,41 +81,139 @@ Some notes:
 
 ## S3
 
-- S3 **generics** are regular functions, so document them as such. If
-  necessary, include a section that provides additional details for
-  developers implementing methods.
+Documenting [S3 code](https://adv-r.hadley.nz/s3.html) well requires
+thinking about three things:
 
-- S3 **classes** have no formal definition, so document the
-  [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
+- **Generics**: mention that the function is a generic and list the
+  available methods.
+- **Methods**: link back to the generic; only document individually when
+  the method has unique behavior or arguments.
+- **Classes**: document the constructor.
 
-- It is your choice whether or not to document S3 **methods**.
-  Generally, it’s not necessary to document straightforward methods for
-  common generics like [`print()`](https://rdrr.io/r/base/print.html).
-  (You should, however, always `@export` S3 methods, even internal
-  ones).
+### Generics
 
-  If your method is more complicated, you should document it by setting
-  `@rdname` or `@describeIn`. For complicated methods, you might
-  document in their own file (i.e. `@name generic.class`; for simpler
-  methods you might document with the generic (i.e. `@rdname generic)`.
-  Learn more about these tags in
-  [`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md).
+S3 **generics** are regular functions, so document them as such. Export
+a generic if you want users to call it or other developers to write
+methods for it. If the generic is internal, you don’t need to document
+it.
 
-- Generally, roxygen2 will automatically figure out the generic that the
-  method belongs to, and you should only need to use `@method` if there
-  is ambiguity. For example, is `all.equal.data.frame()` the
-  `equal.data.frame` method for
-  [`all()`](https://rdrr.io/r/base/all.html), or the `data.frame` method
-  for [`all.equal()`](https://rdrr.io/r/base/all.equal.html)?. If this
-  happens to you, disambiguate with (e.g.)
-  `@method all.equal data.frame`.
+The documentation should mention that the function is a generic, because
+this tells the reader that the behavior may vary depending on the input
+and that they can write their own methods. For simple generics, you can
+do this in the description:
+
+``` r
+#' Frobnpolicate an object
+#'
+#' @description
+#' `frobnpolicate()` is an S3 generic that ..., with methods available for
+#' the following classes:
+#' 
+#' `r doclisting::methods_inline("frobnpolicate")`
+```
+
+For more complicated generics, you can use a `# Methods` section to
+provide more detail:
+
+``` r
+#' Frobnpolicate an object
+#'
+#' @description
+#' `frobnpolicate()` does ...
+#'
+#' # Methods
+#' `frobnpolicate()` is an S3 generic with methods available for the following 
+#' classes:
+#' 
+#' `r doclisting::methods_list("frobnpolicate")`
+```
+
+You might also want to include a section that provides additional
+details for developers implementing their own methods.
+
+Both examples above use the [doclisting](https://doclisting.r-lib.org/)
+package to automatically generate a list of methods, with links to their
+help topics. These examples use [inline R
+code](https://roxygen2.r-lib.org/dev/articles/reuse.html#inline-code)
+(`` `r ` ``), which generates the list at documentation time (i.e. when
+you run `devtools::document()`). This only requires including doclisting
+in `Suggests`.
+
+If you want the list to dynamically reflect all methods that are
+currently registered (including methods registered by other packages),
+use an [inline Rd
+code](https://roxygen2.r-lib.org/dev/articles/reuse.html#inline-rd-code)
+block (`` `Rd ` ``) instead:
+
+``` r
+#' `Rd doclisting::methods_list("frobnpolicate")`
+```
+
+Using `` `Rd ` `` requires doclisting in `Imports`, and you’ll need a
+dummy call to eliminate the `R CMD check` NOTE about unused imports:
+
+``` r
+ignore_unused_imports <- function() {
+  doclisting::methods_list
+}
+```
+
+### Classes
+
+S3 **classes** have no formal definition, so document the
+[constructor](https://adv-r.hadley.nz/s3.html#s3-constructor). Export
+the constructor if you want users to create instances of your class or
+other developers to extend it (e.g. by creating subclasses). Internal
+constructors don’t need documentation.
+
+Note that you don’t need to list methods for a class: in S3, methods
+belong to generics, not to classes. Users should look at the generic’s
+help page to learn about available methods.
+
+### Methods
+
+It is your choice whether or not to document S3 **methods**. Generally,
+it’s not necessary to document straightforward methods for common
+generics like [`print()`](https://rdrr.io/r/base/print.html). (You
+should, however, always `@export` S3 methods, even internal ones.)
+
+It’s good practice, however, to document methods that have unique
+behavior or arguments. For example, the clock package documents the
+methods for
+[`date_group()`](https://clock.r-lib.org/reference/date_group.html) on
+their own pages
+([Date](https://clock.r-lib.org/reference/date-group.html),
+[POSIXt](https://clock.r-lib.org/reference/posixt-group.html)) because
+the methods accept different `precision` values and have type-specific
+return value semantics and examples. The generic page serves only as a
+signpost linking to the individual method pages.
+
+When documenting a method, always include a link back to the generic
+using `[generic_name()]` so the reader can easily find the full
+documentation and other methods.
+
+### Method disambiguation
+
+Generally, roxygen2 will automatically figure out the generic that the
+method belongs to, and you should only need to use `@method` if there is
+ambiguity. For example, is `all.equal.data.frame()` the
+`equal.data.frame` method for
+[`all()`](https://rdrr.io/r/base/all.html), or the `data.frame` method
+for [`all.equal()`](https://rdrr.io/r/base/all.equal.html)? If this
+happens to you, disambiguate with (e.g.) `@method all.equal data.frame`.
 
 ## S4
 
-S4 **generics** are also functions, so document them as such.
+S4 **generics** are also functions, so document them as such. Export a
+generic if you want users to call it or other developers to write
+methods for it. If the generic is internal, you don’t need to document
+it.
 
 Document **S4 classes** by adding a roxygen block before `setClass()`.
-Use `@slot` to document the slots of the class. Here’s a simple example:
+Export a class if you want users to create instances or other developers
+to extend it (e.g. by creating subclasses). Internal classes don’t need
+documentation. Use `@slot` to document the slots of the class. Here’s a
+simple example:
 
 ``` r
 #' An S4 class to represent a bank account
@@ -126,8 +224,9 @@ Account <- setClass("Account",
 )
 ```
 
-S4 **methods** are a little more complicated. Unlike S3 methods, all S4
-methods must be documented. You can document them in three places:
+S4 **methods** are a little more complicated. Unlike S3 and S7 methods,
+all S4 methods must be documented. You can document them in three
+places:
 
 - In the class. Most appropriate if the corresponding generic uses
   single dispatch and you created the class.
@@ -135,20 +234,100 @@ methods must be documented. You can document them in three places:
 - In the generic. Most appropriate if the generic uses multiple
   dispatches and you control it.
 
-- In its own file. Most appropriate if the method is complex. or the
+- In its own file. Most appropriate if the method is complex or the
   either two options don’t apply.
 
 Use either `@rdname` or `@describeIn` to control where method
-documentation goes. See the next section for more details.
+documentation goes. See
+[`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md)
+for more details.
 
 ## S7
 
+Documenting S7 code well requires thinking about three things:
+
+- **Generics**: mention that the function is a generic and list the
+  available methods.
+- **Methods**: link back to the generic; only document individually when
+  the method has unique behavior or arguments.
+- **Classes**: document the constructor.
+
+### Generics
+
+S7 **generics** are functions, so document them as such. Export a
+generic if you want users to call it or other developers to write
+methods for it. If the generic is internal, you don’t need to document
+it.
+
+The documentation should mention that the function is a generic, because
+this tells the reader that the behavior may vary depending on the input
+and that they can write their own methods. For simple generics, you can
+do this in the description:
+
+``` r
+#' Size of an object
+#'
+#' @description
+#' `size()` is an S7 generic that determines the size of an object,
+#' with methods available for the following classes:
+#'
+#' `r doclisting::methods_inline("size")`
+#'
+#' @param x An object.
+#' @param ... Not used.
+#' @returns A single number.
+#' @export
+size <- new_generic("size", "x")
+```
+
+For more complicated generics, you can use a `# Methods` section to
+provide more detail:
+
+``` r
+#' Size of an object
+#'
+#' @description
+#' `size()` determines the size of an object.
+#'
+#' # Methods
+#' `size()` is an S7 generic with methods available for the following
+#' classes:
+#'
+#' `r doclisting::methods_list("size")`
+#'
+#' @param x An object.
+#' @param ... Not used.
+#' @returns A single number.
+#' @export
+size <- new_generic("size", "x")
+```
+
+See the [S3 Generics section](#generics) above for more about using the
+[doclisting](https://doclisting.r-lib.org/) package to automatically
+generate method lists.
+
+It’s good practice to document the default method alongside the generic
+using `@rdname`:
+
+``` r
+#' @rdname size
+method(size, class_any) <- function(x, ...) {
+  length(x)
+}
+```
+
+### Classes
+
 S7 **classes** are constructor functions, so document them much like
-you’d document any other function. Use `@param` to document the
-constructor arguments (which correspond to class properties), and
-`@returns` to describe the object that is returned. If the class has
-additional properties that are not part of the constructor (e.g.
-read-only computed properties), use `@prop` to document them.
+you’d document any other function. Export a class if you want users to
+create instances or other developers to extend it (e.g. by creating
+subclasses). Internal classes don’t need documentation.
+
+Use `@param` to document the constructor arguments (which correspond to
+class properties), and `@returns` to describe the object that is
+returned. If the class has additional properties that are not part of
+the constructor (e.g. read-only computed properties), use `@prop` to
+document them.
 
 ``` r
 #' A range
@@ -177,38 +356,22 @@ If multiple classes share one Rd page (via `@rdname`), you can prefix
 the property name with the class name to group properties by class,
 e.g. `@prop ClassName@prop_name description`.
 
-S7 **generics** are also functions, so document them as such. It’s good
-practice to document the default method alongside the generic using
-`@rdname`:
+### Methods
 
-``` r
-#' Size of an object
-#' 
-#' An S7 generic for determining the size of an object. The default method 
-#' uses [length()], but other classes may have more specific implementations.
-#'
-#' @param x An object.
-#' @param ... Not used.
-#' @returns A single number.
-#' @export
-size <- new_generic("size", "x")
+It is your choice whether or not to document S7 **methods**. S7 methods
+are registered with `method(generic, class) <- fn`. Generally, it’s not
+necessary to document straightforward methods.
 
-#' @rdname size
-method(size, class_any) <- function(x, ...) {
-  length(x)
-}
-```
-
-S7 **methods** are registered with `method(generic, class) <- fn`. You
-don’t need to document methods, but you *may* want to do so for
-particularly complicated implementations or methods with extra
-arguments. If you do decided to document a method, give it its own
-roxygen block:
+It’s good practice, however, to document methods that have unique
+behavior or arguments. If you do document a method, give it its own
+roxygen block. When documenting a method, always include a link back to
+the generic using `[generic_name()]` so the reader can easily find the
+full documentation and other methods.
 
 ``` r
 #' Size of a range
 #'
-#' The size of a range is its length.
+#' The size of a range is its [size()], i.e. its length.
 #'
 #' @param x A `Range` object.
 #' @param ... Not used.
@@ -218,9 +381,10 @@ method(size, Range) <- function(x, ...) {
 }
 ```
 
-Note that S7 methods are registered at load time via
+S7 methods are registered at load time via
 [`S7::methods_register()`](https://rconsortium.github.io/S7/reference/methods_register.html)
-in your `.onLoad()` function, not through `NAMESPACE` directives. See
+in your `.onLoad()` function, not through `NAMESPACE` directives, so you
+never need to `@export` them. See
 [`vignette("packages", package = "S7")`](https://rconsortium.github.io/S7/articles/packages.html)
 for details.
 

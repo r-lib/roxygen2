@@ -2,6 +2,12 @@
 
 ## roxygen2 (development version)
 
+- [`vignette("rd-other")`](https://roxygen2.r-lib.org/dev/articles/rd-other.md)
+  now includes improved advice for documenting S3 generics, classes, and
+  methods, including how to use the new
+  [doclisting](https://doclisting.r-lib.org/) package to automatically
+  list methods for a generic
+  ([\#1513](https://github.com/r-lib/roxygen2/issues/1513)).
 - Added initial support for S7 classes, generics, and methods
   ([\#1484](https://github.com/r-lib/roxygen2/issues/1484)).
   - S7 generics are documented like regular functions.

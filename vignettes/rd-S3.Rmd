@@ -26,8 +26,8 @@ Documenting [S3 code](https://adv-r.hadley.nz/s3.html) well requires thinking ab
 ## Generics
 
 S3 **generics** are regular functions, so document them as such.
-Export a generic if you want users to call it or other developers to write methods for it.
-If the generic is internal, you don't need to document it.
+`@export` a generic if you want users to call it or other developers to write methods for it.
+If the generic is internal, you don't need to export or document it.
 
 The documentation should mention that the function is a generic, because this tells the reader that the behavior may vary depending on the input and that they can write their own methods.
 For simple generics, you can do this in the description:
@@ -85,7 +85,7 @@ ignore_unused_imports <- function() {
 ## Classes
 
 S3 **classes** have no formal definition, so document the [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
-Export the constructor if you want users to create instances of your class or other developers to extend it (e.g.
+`@export` the constructor if you want users to create instances of your class or other developers to extend it (e.g.
 by creating subclasses).
 Internal constructors don't need documentation.
 
@@ -96,17 +96,54 @@ Users should look at the generic's help page to learn about available methods.
 
 It is your choice whether or not to document S3 **methods**.
 Generally, it's not necessary to document straightforward methods for common generics like `print()`.
-(You should, however, always `@export` S3 methods, even internal ones.)
 
-It's good practice, however, to document methods that have unique behavior or arguments.
+You must, however, always `@export` S3 methods, even for internal generics.
+This **registers** the method so that the generic can find it; a user can't directly access the method definition by typing its name.
+roxygen2 will warn you if you have forgotten.
+
+```{r}
+#| eval: false
+#' @export
+bizarro.character <- function(x, ...) {
+  letters <- strsplit(x, "")
+  letters_rev <- lapply(letters, rev)
+  vapply(letters_rev, paste, collapse = "", FUN.VALUE = character(1))
+}
+```
+
+If you are exporting a method in some other way, you can use `@exportS3Method NULL` to suppress the warning.
+
+It's good practice to document methods that have unique behavior or arguments.
 For example, the clock package documents the methods for [`date_group()`](https://clock.r-lib.org/reference/date_group.html) on their own pages ([Date](https://clock.r-lib.org/reference/date-group.html), [POSIXt](https://clock.r-lib.org/reference/posixt-group.html)) because the methods accept different `precision` values and have type-specific return value semantics and examples.
 The generic page serves only as a signpost linking to the individual method pages.
 
 When documenting a method, always include a link back to the generic using `[generic_name()]` so the reader can easily find the full documentation and other methods.
 
+### Methods for generics in suggested packages
+
+Sometimes you will want to write a method for a generic in a suggested (not imported) package.
+In this case, `@export` will not work because it assumes the generic is available in your `NAMESPACE`.
+Instead, use `@exportS3Method pkg::generic` which uses delayed method registration, meaning the method will only be registered when the suggested package is loaded.
+
+```{r}
+#| eval: false
+#' @exportS3Method pkg::generic
+generic.foo <- function(x, ...) {}
+```
+
 ## Method disambiguation
 
 Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use `@method` if there is ambiguity.
 For example, is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, or the `data.frame` method for `all.equal()`?
-If this happens to you, disambiguate with (e.g.)
-`@method all.equal data.frame`.
+If this happens to you, disambiguate with `@method`:
+
+```{r}
+#| eval: false
+#' @method all.equal data.frame
+#' @export
+all.equal.data.frame <- function(target, current, ...) {
+  # ...
+}
+```
+
+(roxygen2 does automatically handle the `all.equal` case for you, but this illustrates the basic problem and how to fix it.)

@@ -29,114 +29,12 @@ In most cases, you can just use the `@export` tag, and roxygen2 will automatical
 Note that datasets should never be exported as they are not found in `NAMESPACE`.
 Instead, datasets will either be automatically exported if you set `LazyData: true` in your `DESCRIPTION`, or made available after calling `data()` if not.
 
-### Functions
+For details and examples of exporting functions, and S3, S4, and S7 classes/generics/methods, see the corresponding vignettes:
 
-A function should be exported if it is user facing; it should not be exported if it's for internal use only.
-If you export a function, you must also document it, and since other people will use it, you need to be careful if you later change the function interface.
-
-```{r}
-#' Add two numbers together
-#'
-#' @param x,y A pair of numbers.
-#' @export
-add <- function(x, y) {
-  x + y
-}
-```
-
-### S3
-
-An S3 generic works like a regular R function so export it following the advice above: if you want users to call it, export; otherwise, don't.
-
-```{r}
-#' Take an object to bizarro world
-#'
-#' @param x A vector.
-#' @export
-bizarro <- function(x, ...) {
-  UseMethod("bizarro")
-}
-```
-
-While S3 methods are regular functions with a special naming scheme, their "export" works a bit differently.
-S3 methods are exported only in the sense that calling the generic with the appropriate class will call the method; a user can't directly access the method definition by typing its name.
-A more technically correct term would be to say that the method is **registered** so that the generics can find it.
-
-You must register, i.e.
-`@export`, every S3 method regardless of whether or not the generic is exported.
-roxygen2 will warn you if you have forgotten.
-
-```{r}
-#' @export
-bizarro.character <- function(x, ...) {
-  letters <- strsplit(x, "")
-  letters_rev <- lapply(letters, rev)
-  vapply(letters_rev, paste, collapse = "", FUN.VALUE = character(1))
-}
-```
-
-If you are exporting a method in some other way, you can use `@exportS3Method NULL` to suppress the warning.
-
-You have four options for documenting an S3 method:
-
-- Don't document it; it's not required, and not needed for simple generics where the user won't care about the details.
-- If the method is particularly complex or has many arguments that the generic does not, you can document it in its own file.
-  In this case, just document it as if it's a function.
-- You can use `@rdname` to document it with other methods for the generic.
-  This is a good option if it's your generic, and you're providing a bunch of methods for different classes.
-- You can use `@rdname` to document it with other methods for the class.
-  This is typically the least appealing option because the different generics will have different arguments, leading to a cluttered and potentially confusing page.
-
-```{r}
-#' Take an object to bizarro world
-#'
-#' @description
-#' This is an S3 generic. This package provides methods for the
-#' following classes:
-#'
-#' * `character`: reverses the order of the letters in each element of
-#'    the vector.
-#'
-#' @param x A vector.
-#' @export
-bizarro <- function(x, ...) {
-  UseMethod("bizarro")
-}
-
-#' @export
-#' @rdname bizarro
-bizarro.character <- function(x, ...) {
-  letters <- strsplit(x, "")
-  letters_rev <- lapply(letters, rev)
-  vapply(letters_rev, paste, collapse = "", FUN.VALUE = character(1))
-}
-```
-
-Typically, you will write methods for generics that are either defined in the current package or a package that is a hard dependency[^2] of your package.
-Sometimes, however, you will want to write a method for a suggested dependency.
-In this case, `@export` will not work because it assumes the generic is included or imported in your `NAMESPACE`.
-Instead, use `@exportS3Method`.
-This will use "delayed" method registration, which means the method will only be registered when the suggested package is loaded.
-
-[^2]: i.e.
-    it is listed in either the `Imports` or `Depends` fields in your `DESCRIPTION`.
-
-To use `@exportS3Method` you must provide the package and generic name in the following format:
-
-```{r}
-#' @exportS3Method pkg::generic
-generic.foo <- function(x, ...) {}
-```
-
-### S4
-
-- **Classes**: export the class object if you want others to be able to extend it.
-
-- **Generics:** treat it like a function and `@export` if user facing.
-
-- **Methods**: you only need to `@export` a method, if the generic lives in another package.
-  Unlike S3, you must document S4 methods.
-  Because method details are often not that important, it's common to use `@rdname` to put the documentation for unimportant methods into a single topic with `@keywords internal`.
+- `vignette("rd-functions")` for regular functions.
+- `vignette("rd-S3")` for S3 generics and methods, including delayed registration with `@exportS3Method`.
+- `vignette("rd-S4")` for S4 generics, classes, and methods.
+- S7 methods are registered at load time, not through `NAMESPACE`; see `vignette("rd-S7")`.
 
 ### Manual exports
 

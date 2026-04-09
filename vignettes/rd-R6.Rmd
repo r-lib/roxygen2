@@ -54,8 +54,7 @@ roxygen2 automatically generates additional sections:
 - An 'Examples' section that contains all class and method examples.
   This section is run by `R CMD check`, so method examples must work without errors.
 
-`@param` tags that appear at the class level (i.e.
-before the `R6Class()` call) are automatically inherited by all methods, if needed.
+`@param` tags that appear at the class level (i.e. before the `R6Class()` call) are automatically inherited by all methods, if needed.
 
 ## Fields and active bindings
 

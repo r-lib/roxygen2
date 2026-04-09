@@ -62,8 +62,7 @@ For more complicated generics, you can use a `# Methods` section to provide more
 You might also want to include a section that provides additional details for developers implementing their own methods.
 
 Both examples above use the [doclisting](https://doclisting.r-lib.org/) package to automatically generate a list of methods, with links to their help topics.
-These examples use [inline R code](reuse.html#inline-code) (`` `r ` ``), which generates the list at documentation time (i.e.
-when you run `devtools::document()`).
+These examples use [inline R code](reuse.html#inline-code) (`` `r ` ``), which generates the list at documentation time (i.e. when you run `devtools::document()`).
 This only requires including doclisting in `Suggests`.
 
 If you want the list to dynamically reflect all methods that are currently registered (including methods registered by other packages), use an [inline Rd code](reuse.html#inline-rd-code) block (`` `Rd ` ``) instead:
@@ -85,8 +84,7 @@ ignore_unused_imports <- function() {
 ## Classes
 
 S3 **classes** have no formal definition, so document the [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor).
-`@export` the constructor if you want users to create instances of your class or other developers to extend it (e.g.
-by creating subclasses).
+`@export` the constructor if you want users to create instances of your class or other developers to extend it (e.g. by creating subclasses).
 Internal constructors don't need documentation.
 
 Note that you don't need to list methods for a class: in S3, methods belong to generics, not to classes.
@@ -149,7 +147,8 @@ There are three cases you need to be aware of:
 
 Generally, roxygen2 can automatically figure out which generic the method belongs to.
 But there is occasionally ambiguity if the generic name contains `.`.
-You can avoid this problem in your own packages by not using `.` in generic names.
+You can avoid this problem in your own packages by not using `.`
+in generic names.
 But you might encounter it when writing methods for generics in other packages.
 For example, is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, or the `data.frame` method for `all.equal()`?
 If this happens to you, disambiguate with `@method`:
@@ -164,4 +163,5 @@ all.equal.data.frame <- function(target, current, ...) {
 ```
 
 roxygen2 does now automatically handle the `all.equal` case for you, so this should happen very very rarely.
-And, again it can be avoided by not using `.` in generic or class names.
+And, again it can be avoided by not using `.`
+in generic or class names.

@@ -57,8 +57,7 @@ The most important details are described below.
 ### Sections and subsections
 
 The usual Markdown heading markup creates sections and subsections.
-Top level headings (e.g.
-`# title`) create sections with the `\section{}` Rd tag.
+Top level headings (e.g. `# title`) create sections with the `\section{}` Rd tag.
 This largely supersedes use of the older `@section` tag.
 
 Top-level headings can only appear after the `@description` and `@details` tags.
@@ -78,8 +77,7 @@ Since `@details` can appear multiple times in a block, you can always precede a 
 Top level sections are placed at a fixed position in the manual page, after the parameters and the details, but before `\note{}`, `\seealso{}` and the `\examples{}`.
 Their order will be the same as in the roxygen block.
 
-Headings at level two and above may appear inside any roxygen tag that formats lines of text, e.g.
-`@description`, `@details`, `@return`, and create subsections with the `\subsection{}` Rd tag.
+Headings at level two and above may appear inside any roxygen tag that formats lines of text, e.g. `@description`, `@details`, `@return`, and create subsections with the `\subsection{}` Rd tag.
 
 ```r
 #' @details
@@ -211,32 +209,31 @@ The image files must be in the `man/figures` directory:
 Markdown notation can also be used to create links to other help topics.
 There are three basic forms for linking to topics in the current package or its dependencies.
 
-| Markdown        | Code | Rd                            |
-| :-------------- | :--- | :---------------------------- |
-| `[func()]`      | yes  | `\code{\link[=func]{func()}}` |
-| `[topic]`       | no   | `\link{topic}`                |
-| `` [`topic`] `` | yes  | `\code{\link{topic}}`         |
+  | Markdown        | Code | Rd                            |
+  | :-------------- | :--- | :---------------------------- |
+  | `[func()]`      | yes  | `\code{\link[=func]{func()}}` |
+  | `[topic]`       | no   | `\link{topic}`                |
+  | `` [`topic`] `` | yes  | `\code{\link{topic}}`         |
 
 R 4.5.0 and later requires that links to all topics outside of your package be explicitly qualified with the package name.
 roxygen2 will attempt to do this for you by looking at the dependencies of your package.
-If this fails, e.g.
-if multiple dependencies document the same topic, you'll need to manually resolve using the syntax below.
+If this fails, e.g. if multiple dependencies document the same topic, you'll need to manually resolve using the syntax below.
 
-| Markdown             | Code | Rd                                    |
-| :------------------- | :--- | :------------------------------------ |
-| `[pkg::func()]`      | yes  | `\code{\link[pkg:func]{pkg::func()}}` |
-| `[pkg::topic]`       | no   | `\link[pkg:topic]{pkg::topic}`        |
-| `` [`pkg::topic`] `` | yes  | `\code{\link[pkg:topic]{pkg::topic}}` |
+  | Markdown             | Code | Rd                                    |
+  | :------------------- | :--- | :------------------------------------ |
+  | `[pkg::func()]`      | yes  | `\code{\link[pkg:func]{pkg::func()}}` |
+  | `[pkg::topic]`       | no   | `\link[pkg:topic]{pkg::topic}`        |
+  | `` [`pkg::topic`] `` | yes  | `\code{\link[pkg:topic]{pkg::topic}}` |
 
 You can also provide your own link text.
 In this case there's no advantage to supplying a function call, as you control the formatting of the text.
 
-| Markdown                   | Code | Rd                              |
-| :------------------------- | :--- | :------------------------------ |
-| `[text][topic]`            | no   | `\link[=topic]{text}`           |
-| `` [`text`][topic] ``      | yes  | `\code{\link[=topic]{text}}`    |
-| `[text][pkg::topic]`       | no   | `\link[pkg:topic]{text}`        |
-| `` [`text`][pkg::topic] `` | yes  | `\code{\link[pkg:topic]{text}}` |
+  | Markdown                   | Code | Rd                              |
+  | :------------------------- | :--- | :------------------------------ |
+  | `[text][topic]`            | no   | `\link[=topic]{text}`           |
+  | `` [`text`][topic] ``      | yes  | `\code{\link[=topic]{text}}`    |
+  | `[text][pkg::topic]`       | no   | `\link[pkg:topic]{text}`        |
+  | `` [`text`][pkg::topic] `` | yes  | `\code{\link[pkg:topic]{text}}` |
 
 ## Code chunks
 
@@ -284,8 +281,7 @@ This is particularly useful for reducing duplication in your documentation so is
 
 ### Chunk options
 
-Code blocks support some knitr chunk options, e.g.
-to keep the output of several expressions together, you can specify `results="hold"`:
+Code blocks support some knitr chunk options, e.g. to keep the output of several expressions together, you can specify `results="hold"`:
 
 ````r
 #' ```{r results="hold"}

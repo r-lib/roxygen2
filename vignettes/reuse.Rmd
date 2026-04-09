@@ -39,8 +39,7 @@ Use it when all functions have the same (or very similar) arguments.
 ### `@rdname`
 
 Use `@rdname <destination>`[^1] to include multiple functions in the same page.
-Tags (e.g.
-`@title`, `@description`, `@examples`) will be combined, across blocks but often this yields text that is hard to understand.
+Tags (e.g. `@title`, `@description`, `@examples`) will be combined, across blocks but often this yields text that is hard to understand.
 So we recommend that you make one block that contains the title, description, common parameters, examples and so on, and then only document individual parameters in the other blocks.
 
 [^1]: The destination is a topic name.
@@ -48,8 +47,7 @@ So we recommend that you make one block that contains the title, description, co
 
 There are two basic ways to do that.
 You can create a standalone documentation block and then add the functions to it.
-This typically works best when you have a family of related functions and you want to link to that family from other functions (i.e.
-`trig` in the examples below).
+This typically works best when you have a family of related functions and you want to link to that family from other functions (i.e. `trig` in the examples below).
 
 ```{r}
 #' Trigonometric approximations
@@ -196,18 +194,19 @@ For example, `dplyr::left_join()` has:
 #'   more details.
 ```
 
-When joint parameter documentation is inherited, it's all or nothing, i.e.
-if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documented by the inheriting function.
+When joint parameter documentation is inherited, it's all or nothing, i.e. if a function has `@inheritParams left_join` it will only inherit the documentation for `x` and `y` if it has both `x` and `y` arguments and neither is documented by the inheriting function.
 
 ### The dot prefix
 
-Many tidyverse functions that accept named arguments in `...` also use a `.` prefix for their own arguments.
+Many tidyverse functions that accept named arguments in `...` also use a `.`
+prefix for their own arguments.
 This reduces the risk of an argument going to the wrong place.
 For example, `dplyr::mutate()` has `.by`, `.keep`, `.before`, and `.after` arguments, because if they didn't have that prefix, you wouldn't be able to create new variables called `by`, `keep`, `before`, or `after`.
 We call this pattern the [dot prefix](https://design.tidyverse.org/dots-prefix.html).
 
 This means that an argument with the same meaning can come in one of two forms: with and without the `.`.
-`@inheritParams` knows about this common pattern so ignores a `.` prefix when matching argument name.
+`@inheritParams` knows about this common pattern so ignores a `.`
+prefix when matching argument name.
 In other words, `.x` will inherit documentation for `x`, and `x` will inherit documentation from `.x`.
 
 ### Inheriting other components
@@ -333,8 +332,7 @@ Note that the evaluation environment is deliberately a child of the package that
 ## Inline Rd code
 
 You can use `` `Rd ` `` to run code that is evaluated when a user views the help page, rather than when roxygen2 builds the documentation.
-This is useful for documentation that needs to be dynamic, reflecting the current state of R, of the user's library and system (e.g.
-what dependencies are installed), not the state when the package was built.
+This is useful for documentation that needs to be dynamic, reflecting the current state of R, of the user's library and system (e.g. what dependencies are installed), not the state when the package was built.
 It works by using the `\Sexpr` tag, so that `` `Rd myFun()` `` generates`\Sexpr[stage=render,results=rd]{myFun()}`.
 
 Here's a simple example, which will greet the user appropriately, depending on the time of day:
@@ -370,8 +368,7 @@ You can use the same `.Rmd` or `.md` document in the documentation, `README.Rmd`
 ````
 
 The included Rmd file can have roxygen Markdown-style links to other help topics.
-E.g.
-`[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2.
+E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2.
 See `vignette("rd-formatting")` for details.
 
 If the Rmd file contains roxygen (Markdown-style) links to other help topics, then some care is needed, as those links will not work in Rmd files by default.

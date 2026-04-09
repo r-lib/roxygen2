@@ -32,8 +32,7 @@ If the generic is internal, you don't need to export or document it.
 ## Classes
 
 Document **S4 classes** by adding a roxygen block before `setClass()`.
-`@export` a class if you want users to create instances or other developers to extend it (e.g.
-by creating subclasses).
+`@export` a class if you want users to create instances or other developers to extend it (e.g. by creating subclasses).
 Internal classes don't need documentation.
 Use `@slot` to document the slots of the class.
 Here's a simple example:

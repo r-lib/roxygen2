@@ -42,8 +42,7 @@ But if you're going to extend roxygen2, you'll need to know exactly what's happe
 
 - Runs the different methods of all those roclets, in order and independently: clean (`roclet_clean`), preprocess (`roclet_preprocess()`), process (`roclet_process()`), and output (`roclet_output()`).
   Only process and output are routinely used.
-  For example, if you think of the Rd roclet, its process method digests information from the tag parsing, combines inherits, etc.
-  to create the content of each documentation topic, and its output method writes those topics to disk.
+  For example, if you think of the Rd roclet, its process method digests information from the tag parsing, combines inherits, etc. to create the content of each documentation topic, and its output method writes those topics to disk.
 
 ## Key data structures
 
@@ -56,8 +55,7 @@ It has the following fields:
 
 - `tag`: the name of the tag.
 
-- `raw`: the raw contents of the tag (i.e.
-  everything from the end of this tag to the beginning of the next).
+- `raw`: the raw contents of the tag (i.e. everything from the end of this tag to the beginning of the next).
 
 - `val`: the parsed value, which we'll come back to shortly.
 
@@ -408,8 +406,7 @@ To use a roclet when developing a package, call
 roxygen2::roxygenize(roclets = "yourPackage::roclet")
 ```
 
-where `yourPackage::roclet` is the function which creates the roclet, e.g.
-`memo_roclet` above.
+where `yourPackage::roclet` is the function which creates the roclet, e.g. `memo_roclet` above.
 
 You can also add the roclet to the target package's DESCRIPTION file, like this:
 

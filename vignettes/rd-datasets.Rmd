@@ -50,10 +50,8 @@ For example, this is the roxygen2 block used for `ggplot2::diamonds`:
 Datasets should never be exported with `@export` because they are not found in the `NAMESPACE`.
 Instead, datasets will either be automatically available if you set `LazyData: true` in your `DESCRIPTION`, or available after calling `data()` if not.
 This field also affects the default usage.
-If you have `LazyData: true`, the usage will be just the dataset name (e.g.
-`diamonds`).
-Otherwise, the usage will be wrapped in `data()` (e.g.
-`data(diamonds)`).
+If you have `LazyData: true`, the usage will be just the dataset name (e.g. `diamonds`).
+Otherwise, the usage will be wrapped in `data()` (e.g. `data(diamonds)`).
 
 Note the use of two additional tags that are particularly useful for documenting data:
 

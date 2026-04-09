@@ -103,9 +103,8 @@ This is risky if you import functions from more than one package, because while 
 ### S3
 
 S3 generics are just functions, so the same rules for functions apply.
-S3 methods always accompany the generic, so as long as you can access the generic (either implicitly or explicitly), the methods will also be available.
-In other words, you don't need to do anything special for S3 methods.
-As long as you've imported the generic, all the methods will also be available.
+S3 methods always accompany the generic, so as long as you can access the generic, the methods will also be available.
+In other words, you don't need to do anything to import an S3 method.
 
 ### S4
 

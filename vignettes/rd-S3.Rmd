@@ -119,21 +119,38 @@ The generic page serves only as a signpost linking to the individual method page
 
 When documenting a method, always include a link back to the generic using `[generic_name()]` so the reader can easily find the full documentation and other methods.
 
-### Methods for generics in suggested packages
+### Methods for generics in other packages
 
-Sometimes you will want to write a method for a generic in a suggested (not imported) package.
-In this case, `@export` will not work because it assumes the generic is available in your `NAMESPACE`.
-Instead, use `@exportS3Method pkg::generic` which uses delayed method registration, meaning the method will only be registered when the suggested package is loaded.
+It's common to write methods for generics defined in other packages.
+There are three cases you need to be aware of:
 
-```{r}
-#| eval: false
-#' @exportS3Method pkg::generic
-generic.foo <- function(x, ...) {}
-```
+- **Base packages**: you don't need to do anything special: just `@export` the method and roxygen2 will generate the correct `S3method()` directive.
 
-## Method disambiguation
+- **Imported packages**: You have two options.
+  Firstly, import the generic with `@importFrom` and `@export` the method:.
 
-Generally, roxygen2 will automatically figure out the generic that the method belongs to, and you should only need to use `@method` if there is ambiguity.
+  ```{r}
+  #| eval: false
+  #' @importFrom pkg generic
+  #' @export
+  generic.foo <- function(x, ...) {}
+  ```
+
+  Alternatively, use `@exportS3Method pkg::generic`:
+
+  ```{r}
+  #| eval: false
+  #' @exportS3Method pkg::generic
+  generic.foo <- function(x, ...) {}
+  ```
+
+- **Suggested packages**: you can't import the generic for a suggested package, so you must use `@exportS3Method pkg::generic`.
+  This uses delayed registration, so the method is only be registered when the suggested package is loaded.
+
+Generally, roxygen2 can automatically figure out which generic the method belongs to.
+But there is occasionally ambiguity if the generic name contains `.`.
+You can avoid this problem in your own packages by not using `.` in generic names.
+But you might encounter it when writing methods for generics in other packages.
 For example, is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, or the `data.frame` method for `all.equal()`?
 If this happens to you, disambiguate with `@method`:
 
@@ -146,4 +163,5 @@ all.equal.data.frame <- function(target, current, ...) {
 }
 ```
 
-(roxygen2 does automatically handle the `all.equal` case for you, but this illustrates the basic problem and how to fix it.)
+roxygen2 does now automatically handle the `all.equal` case for you, so this should happen very very rarely.
+And, again it can be avoided by not using `.` in generic or class names.

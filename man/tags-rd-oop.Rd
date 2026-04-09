@@ -4,12 +4,14 @@
 \alias{tags-rd-oop}
 \alias{@field}
 \alias{@method}
+\alias{@prop}
 \alias{@R6method}
 \alias{@slot}
 \title{Tags for documenting classes}
 \usage{
 #' @field ${1:name} ${2:description}
 #' @method ${1:generic} ${2:class}
+#' @prop ${1:name} ${2:description}
 #' @R6method ${1:Class}$${2:method}
 #' @slot ${1:name} ${2:description}
 }
@@ -20,6 +22,7 @@ Key tags:
 \itemize{
 \item \verb{@field $\{1:name\} $\{2:description\}}: Describe a R6 or refClass field.
 \item \verb{@method $\{1:generic\} $\{2:class\}}: Force a function to be recognised as an S3 method. This affects the default usage and the \code{NAMESPACE} directive produced by \verb{@export}. Only needed if automatic detection fails.
+\item \verb{@prop $\{1:name\} $\{2:description\}}: Describe an S7 class property that is not a constructor parameter.
 \item \verb{@slot $\{1:name\} $\{2:description\}}: Describe the slot of an S4 class.
 }
 

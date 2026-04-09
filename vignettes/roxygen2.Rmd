@@ -10,7 +10,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
@@ -23,11 +24,11 @@ R provides a standard way of documenting packages: you write `.Rd` files in the 
 These files use a custom syntax, loosely based on LaTeX.
 roxygen2 provides a number of advantages over writing `.Rd` files by hand:
 
--   Code and documentation are adjacent so when you modify your code, it's easy to remember that you need to update the documentation.
+- Code and documentation are adjacent so when you modify your code, it's easy to remember that you need to update the documentation.
 
--   roxygen2 dynamically inspects the objects that it's documenting, so it can automatically add data that you'd otherwise have to write by hand.
+- roxygen2 dynamically inspects the objects that it's documenting, so it can automatically add data that you'd otherwise have to write by hand.
 
--   It abstracts over the differences in documenting S3 and S4 methods, generics and classes, so you need to learn fewer details.
+- It abstracts over the differences in documenting S3 and S4 methods, generics and classes, so you need to learn fewer details.
 
 As well as generating `.Rd` files, roxygen will also create a `NAMESPACE` for you, and will manage the `Collate` field in `DESCRIPTION`.
 
@@ -36,25 +37,25 @@ As well as generating `.Rd` files, roxygen will also create a `NAMESPACE` for yo
 This vignette provides a high-level description of roxygen2 and the overall workflow you'll use with it.
 The other vignettes provide more detail on the most important individual components:
 
--   Start with `vignette("rd")` to learn how document your functions with roxygen2.
+- Start with `vignette("rd")` to learn how document your functions with roxygen2.
 
--   `vignette("rd-other")` discusses how to document other things like datasets, the package itself, and the various pieces used by R's OOP systems.
+- `vignette("rd-other")` discusses how to document other things like datasets, the package itself, and the various pieces used by R's OOP systems.
 
--   `vignette("rd-formatting")` gives the details of roxygen2's rmarkdown support.
+- `vignette("rd-formatting")` gives the details of roxygen2's rmarkdown support.
 
--   `vignette("reuse")` demonstrates the tools available to reuse documentation in multiple places.
+- `vignette("reuse")` demonstrates the tools available to reuse documentation in multiple places.
 
--   `vignette("namespace")` describes how to generate a `NAMESPACE` file, how namespacing works in R, and how you can use roxygen2 to be specific about what your package needs and supplies.
+- `vignette("namespace")` describes how to generate a `NAMESPACE` file, how namespacing works in R, and how you can use roxygen2 to be specific about what your package needs and supplies.
 
 ## Running roxygen
 
 There are three main ways to run roxygen:
 
--   `roxygen2::roxygenise()`.
+- `roxygen2::roxygenise()`.
 
--   `devtools::document()`.
+- `devtools::document()`.
 
--   `Ctrl + Shift + D`, if you're using RStudio or Positron (with [RStudio keybindings](https://positron.posit.co/migrate-rstudio-keybindings.html) enabled).
+- `Ctrl + Shift + D`, if you're using RStudio or Positron (with [RStudio keybindings](https://positron.posit.co/migrate-rstudio-keybindings.html) enabled).
 
 You can mix handwritten Rd and roxygen2; roxygen2 will never overwrite a file it didn't create.
 
@@ -62,14 +63,15 @@ You can mix handwritten Rd and roxygen2; roxygen2 will never overwrite a file it
 
 There are three steps in the transformation from roxygen comments in your source file to human readable documentation:
 
-1.  You add roxygen comments to your source file.
-2.  `roxygen2::roxygenise()` converts roxygen comments to `.Rd` files.
-3.  R converts `.Rd` files to human readable documentation.
+1. You add roxygen comments to your source file.
+2. `roxygen2::roxygenise()` converts roxygen comments to `.Rd` files.
+3. R converts `.Rd` files to human readable documentation.
 
 The process starts when you add specially formatted roxygen comments to your source file.
 Roxygen comments start with `#'` so you can continue to use regular comments for other purposes.
 
-```{r, echo = FALSE}
+```{r}
+#| echo: false
 example <- "#' Add together two numbers
 #'
 #' @param x A number.
@@ -85,12 +87,14 @@ add <- function(x, y) {
 "
 ```
 
-```{r code=example}
+```{r, code=example}
 ```
 
 For the example above, this will generate `man/add.Rd` that looks like:
 
-```{r, echo=FALSE, results="asis"}
+```{r}
+#| echo: false
+#| results: "asis"
 cat(
   "\x60\x60\x60rd\n",
   format(roxygen2::roc_proc_text(roxygen2::rd_roclet(), example)[[1]]),
@@ -113,7 +117,9 @@ For this reason, we recommend that you use roxygen2 in conjunction with devtools
 
 The example above, that includes an `@export` tag to indicate the `add()` function should be part of the interface of the package available to users, would also be converted by `roxygenize()` into a line in the `NAMESPACE` file:
 
-```{r, echo=FALSE, results="asis"}
+```{r}
+#| echo: false
+#| results: "asis"
 cat(
   "\x60\x60\x60txt\n",
   roxygen2::roc_proc_text(roxygen2::namespace_roclet(), example),

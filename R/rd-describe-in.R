@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_parse.roxy_tag_describeIn <- function(x) {
-  if (!is.na(x$raw) && !str_detect(x$raw, "[[:space:]]+")) {
+  if (!is.na(x$raw) && !grepl("[[:space:]]+", x$raw)) {
     warn_roxy_tag(
       x,
       c(

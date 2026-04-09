@@ -75,6 +75,31 @@ object_usage.s4method <- function(x) {
   function_usage(x$value@generic, formals(x$value), s4method)
 }
 
+#' @export
+object_usage.s7class <- object_usage.function
+
+#' @export
+object_usage.s7generic <- object_usage.function
+
+#' @export
+object_usage.s7method <- function(x) {
+  generic <- x$value$generic
+  classes <- x$value$classes
+
+  formatted <- map_chr(classes, \(nms) paste0("<", nms, ">", collapse = "/"))
+  if (length(formatted) == 1) {
+    comment <- paste0("## S7 method for class ", formatted)
+  } else {
+    comment <- paste0(
+      "## S7 method for classes ",
+      paste0(formatted, collapse = ", ")
+    )
+  }
+
+  usage <- function_usage(generic, formals(x$value$fn), identity)
+  rd(paste0(comment, "\n", usage))
+}
+
 # Function usage ----------------------------------------------------------
 
 # Usage:
@@ -83,7 +108,7 @@ object_usage.s4method <- function(x) {
 
 function_usage <- function(name, formals, format_name = identity) {
   if (is_replacement_fun(name) && !is_infix_fun(name)) {
-    name <- str_replace(name, fixed("<-"), "")
+    name <- sub("<-", "", name, fixed = TRUE)
     if (identical(format_name, identity)) {
       name <- auto_backtick(name)
     }
@@ -109,7 +134,7 @@ function_usage <- function(name, formals, format_name = identity) {
 }
 
 is_replacement_fun <- function(name) {
-  str_detect(name, fixed("<-"))
+  grepl("<-", name, fixed = TRUE)
 }
 is_infix_fun <- function(name) {
   ops <- c(
@@ -133,7 +158,7 @@ is_infix_fun <- function(name) {
     "::",
     ":::"
   )
-  str_detect(name, "^%.*%$") | name %in% ops
+  grepl("^%.*%$", name) | name %in% ops
 }
 is_padded_infix_fun <- function(name) {
   ops <- c(
@@ -150,7 +175,7 @@ is_padded_infix_fun <- function(name) {
     "&",
     "|"
   )
-  str_detect(name, "^%.*%$") || name %in% ops
+  grepl("^%.*%$", name) || name %in% ops
 }
 
 usage_args <- function(args) {
@@ -203,7 +228,7 @@ wrap_usage <- function(name, format_name, formals, suffix = NULL, width = 80L) {
   args <- args_string(usage_args(formals))
   bare <- args_call(name, args)
 
-  if (!str_detect(bare, "\n") && nchar(bare, type = "width") < width) {
+  if (!grepl("\n", bare, fixed = TRUE) && nchar(bare, type = "width") < width) {
     # Don't need to wrap
     out <- args_call(format_name(name), args)
   } else {

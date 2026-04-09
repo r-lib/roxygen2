@@ -25,3 +25,4 @@
 ^\.claude$
 ^[.]?air[.]toml$
 ^\.vscode$
+^panache\.toml$

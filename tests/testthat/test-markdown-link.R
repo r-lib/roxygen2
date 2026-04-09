@@ -169,7 +169,7 @@ test_that("short and sweet links work", {
   block <- "
     #' Title
     #'
-    #' Description, see [name words][stringr::bar111].
+    #' Description, see [name words][cli::bar111].
     #' @md
     foo <- function() {}
   "
@@ -180,7 +180,7 @@ test_that("short and sweet links work", {
     "
     #' Title
     #'
-    #' Description, see \\link[stringr:bar111]{name words}.
+    #' Description, see \\link[cli:bar111]{name words}.
     foo <- function() {}"
   )[[1]]
   expect_equivalent_rd(out1, out2)
@@ -628,7 +628,7 @@ test_that("generates informative warnings", {
   expect_snapshot({
     tag <- roxy_test_tag()
     check_topic("11papaya", "foo", tag)
-    check_topic("stringr", "foofofofoo", tag)
+    check_topic("cli", "foofofofoo", tag)
   })
 })
 

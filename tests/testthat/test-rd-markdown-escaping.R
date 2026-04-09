@@ -92,9 +92,9 @@ test_that("find_fragile_rd_tags", {
 })
 
 
-test_that("str_sub_same", {
+test_that("re_sub_same", {
   expect_equal(
-    str_sub_same(
+    re_sub_same(
       "123456789ab",
       data.frame(start = c(1, 6), end = c(2, 10), argend = c(2, 10)),
       "xxx"
@@ -103,7 +103,7 @@ test_that("str_sub_same", {
   )
 
   expect_equal(
-    str_sub_same(
+    re_sub_same(
       "123456789ab",
       data.frame(start = c(1, 8), end = c(7, 10), argend = c(7, 10)),
       "xxx"
@@ -112,7 +112,7 @@ test_that("str_sub_same", {
   )
 
   expect_equal(
-    str_sub_same(
+    re_sub_same(
       "123456789ab",
       data.frame(start = numeric(), end = numeric(), argend = numeric()),
       "xxx"

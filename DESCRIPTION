@@ -31,13 +31,13 @@ Imports:
     pkgload (>= 1.0.2),
     R6 (>= 2.1.2),
     rlang (>= 1.1.0),
-    stringr (>= 1.0.0),
     utils,
     withr,
     xml2
 Suggests: 
     covr,
     R.methodsS3,
+    S7,
     R.oo,
     rmarkdown (>= 2.16),
     testthat (>= 3.1.2),

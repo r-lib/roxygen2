@@ -2,7 +2,7 @@
 roxy_tag_parse.roxy_tag_aliases <- function(x) tag_words(x, min = 1)
 #' @export
 format.rd_section_alias <- function(x, ...) {
-  x$value <- str_replace_all(x$value, fixed("%"), "\\%")
+  x$value <- gsub("%", "\\%", x$value, fixed = TRUE)
   format_rd(x, ..., sort = FALSE)
 }
 
@@ -10,7 +10,7 @@ format.rd_section_alias <- function(x, ...) {
 roxy_tag_parse.roxy_tag_name <- function(x) tag_value(x)
 #' @export
 format.rd_section_name <- function(x, ...) {
-  x$value <- str_replace_all(x$value, fixed("%"), "\\%")
+  x$value <- gsub("%", "\\%", x$value, fixed = TRUE)
   format_first(x, ...)
 }
 

@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Documenting [R6 classes](https://adv-r.hadley.nz/r6.html) well requires thinking about three things:
+There are three things that you might document for [R6](https://adv-r.hadley.nz/r6.html):
 
 - **Classes**: document the class as a whole with a roxygen block before `R6Class()`.
 - **Fields**: document fields and active bindings in-line with `@field`.

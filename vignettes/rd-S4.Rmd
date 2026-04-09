@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Documenting S4 code well requires thinking about three things:
+There are three things that you might document for [S4](https://adv-r.hadley.nz/s4.html):
 
 - **Generics**: document as functions; mention that they are generics.
 - **Methods**: unlike S3/S7, all S4 methods must be documented.

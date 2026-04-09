@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Documenting S7 code well requires thinking about three things:
+There are three things that you might document for [S7](https://rconsortium.github.io/S7/):
 
 - **Generics**: mention that the function is a generic and list the available methods.
 - **Methods**: link back to the generic; only document individually when the method has unique behavior or arguments.

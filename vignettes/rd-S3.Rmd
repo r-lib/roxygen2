@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Documenting [S3 code](https://adv-r.hadley.nz/s3.html) well requires thinking about three things:
+There are three things that you might document for [S3](https://adv-r.hadley.nz/s3.html):
 
 - **Generics**: mention that the function is a generic and list the available methods.
 - **Methods**: link back to the generic; only document individually when the method has unique behavior or arguments.

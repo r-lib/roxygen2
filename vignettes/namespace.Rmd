@@ -20,14 +20,11 @@ This is a little frustrating at first, but soon becomes second-nature.
 
 ## Exports
 
-In order for your users to use a function[^1] in your package, you must **export** it.
+In order for your users to use a function[^1] from your package, you must **export** it.
 In most cases, you can just use the `@export` tag, and roxygen2 will automatically figure out which `NAMESPACE` directive (i.e.
 `export()`, `S3method()`, `exportClasses()`, or `exportMethods()`) you need.
 
-[^1]: Including S3 and S4 generics and methods.
-
-Note that datasets should never be exported as they are not found in `NAMESPACE`.
-Instead, datasets will either be automatically exported if you set `LazyData: true` in your `DESCRIPTION`, or made available after calling `data()` if not.
+[^1]: Including S3/S4/S7 generics and constructors.
 
 For details and examples of exporting functions, and S3, S4, and S7 classes/generics/methods, see the corresponding vignettes:
 
@@ -35,6 +32,9 @@ For details and examples of exporting functions, and S3, S4, and S7 classes/gene
 - `vignette("rd-S3")` for S3 generics and methods, including delayed registration with `@exportS3Method`.
 - `vignette("rd-S4")` for S4 generics, classes, and methods.
 - S7 methods are registered at load time, not through `NAMESPACE`; see `vignette("rd-S7")`.
+
+Datasets should never be exported as they are not found in `NAMESPACE`.
+Learn more in `vignette("rd-datasets")`.
 
 ### Manual exports
 
@@ -52,12 +52,14 @@ This is useful if you need a conditional import or export, e.g.
 ```{r}
 # From dplyr:
 #' @rawNamespace import(vctrs, except = data_frame)
+NULL
 
 # From backports:
 #' @rawNamespace if (getRversion() < "4.0.0") export(stopifnot)
+NULL
 ```
 
-If you need to automate this, `@evalNamespace fun()` will evaluate `fun()` in the package environment and insert the results into `NAMESPACE`.
+If you need to automate this, `@evalNamespace fun()` will evaluate `fun()` in your package environment and insert the results into `NAMESPACE`.
 Note that because `evalNamespace()` is run in the package environment, it can only generate exports, not imports.
 
 ## Imports

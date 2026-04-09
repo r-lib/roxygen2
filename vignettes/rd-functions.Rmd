@@ -18,6 +18,28 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 This vignette describes the most important roxygen2 tags for documenting functions.
 See `vignette("reuse")` for reusing documentation across topics.
 
+## Exporting
+
+For a user to use a function in your package, you must **export** it with `@export`.
+If you export a function, you must also document it, and since other people will use it, you need to be careful if you later change the function interface.
+We usually put `@export` in between `@returns` and `@examples`:
+
+```{r}
+#| eval: false
+#' Add two numbers together
+#'
+#' @param x,y A pair of numbers.
+#' @returns A number.
+#' @export
+#' @examples
+#' 1 + 2
+add <- function(x, y) {
+  x + y
+}
+```
+
+You'll learn what all these are pieces are next!
+
 ## The introduction
 
 Each documentation block starts with some text which defines the title, the description, and the details.
@@ -251,21 +273,3 @@ All functions must have examples for initial CRAN submission.
 In most cases, the function usage (which appears beneath the description in the generated docs) will be automatically derived from the function specification.
 For the cases where it is not, please [file an issue](https://github.com/r-lib/roxygen2/issues) and use `@usage` to override the default with what you want.
 If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use `@usage NULL`.
-
-## Exporting
-
-For a user to use a function in your package, you must **export** it with `@export`.
-A function should be exported if it is user facing; it should not be exported if it's for internal use only.
-If you export a function, you must also document it, and since other people will use it, you need to be careful if you later change the function interface.
-
-```{r}
-#| eval: false
-#' Add two numbers together
-#'
-#' @param x,y A pair of numbers.
-#' @returns A number.
-#' @export
-add <- function(x, y) {
-  x + y
-}
-```

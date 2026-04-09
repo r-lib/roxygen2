@@ -201,23 +201,20 @@ inherit_params <- function(topic, topics) {
   # Work through inherited params seeing if any match the parameters
   # we're missing
   for (inheritor in inheritors) {
+    source <- topic$get_name()
     inherited_params <- find_params(
       inheritor,
       topics,
-      source = topic$get_name(),
+      source = source,
       tag = "@inheritParams"
     )
 
     # Apply argument filter if specified via @inheritParams foo args
     params_args <- topic$get_value("inherit_params_args")
     args_filter <- params_args$args[params_args$source == inheritor]
-    if (length(args_filter) == 1 && nzchar(args_filter)) {
-      doc_args <- unlist(lapply(inherited_params, "[[", "name"))
-      selected <- select_args_text(
-        doc_args,
-        args_filter,
-        topic_name = topic$get_name()
-      )
+    if (length(args_filter) == 1 && args_filter != "") {
+      doc_args <- map_chr(inherited_params, "[[", "name")
+      selected <- select_args_text(doc_args, args_filter, topic_name = source)
       inherited_params <- Filter(
         function(p) any(p$name %in% selected),
         inherited_params

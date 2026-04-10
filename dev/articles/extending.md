@@ -317,11 +317,11 @@ tags I recommend using your package name as the common prefix.
 Now that the three methods are created, we still need to make them
 available to
 [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md).
-First, you need to export the method:
-
-- If the package defining the tag *imports* roxygen2, use `@export`.
-- If the package defining the tag only *suggests* roxygen2, use
-  `@exportMethod`.
+First, you need to export the method so that it’s registered correctly.
+Since your methods will be for generics defined in roxygen2 (another
+package), you’ll need to follow the advice in [Methods for generics in
+other
+packages](https://roxygen2.r-lib.org/dev/articles/rd-S3.html#methods-for-generics-in-other-packages).
 
 Next, you’ll need to load the tag-defining package in the package where
 you want to use it. For example, if you created some new tags in

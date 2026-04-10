@@ -384,13 +384,10 @@ tags I recommend using your package name as the common prefix.</p>
 </h3>
 <p>Now that the three methods are created, we still need to make them
 available to <code><a href="../reference/roxygenize.html">roxygenize()</a></code>. First, you need to export the
-method:</p>
-<ul>
-<li>If the package defining the tag <em>imports</em> roxygen2, use
-<code>@export</code>.</li>
-<li>If the package defining the tag only <em>suggests</em> roxygen2, use
-<code>@exportMethod</code>.</li>
-</ul>
+method so that it’s registered correctly. Since your methods will be for
+generics defined in roxygen2 (another package), you’ll need to follow
+the advice in <a href="rd-S3.html#methods-for-generics-in-other-packages">Methods for
+generics in other packages</a>.</p>
 <p>Next, you’ll need to load the tag-defining package in the package
 where you want to use it. For example, if you created some new tags in
 {packageFoo}, and would like to use these tags in your documentation for

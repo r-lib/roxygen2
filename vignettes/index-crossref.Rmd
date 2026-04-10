@@ -11,7 +11,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -39,7 +40,8 @@ By default `@family {family}`, will generate the see also text "Other {family}:"
 
 If you want to override the default title, you can provide an `rd_family_title` element in a list stored in `man/roxygen/meta.R`:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 list(
   rd_family_title = list(aggregations = "Aggregation functions")
 )
@@ -60,10 +62,10 @@ You can add additional aliases with `@aliases alias1 alias2 alias3` or remove de
 
 As well as looking in the aliases, `help.search()` and `???` also look in the `@title`, `@keywords`, and `@concept`s tags.
 
--   `@keywords` adds standard keywords, which must be present in `file.path(R.home("doc"), "KEYWORDS")`.
+- `@keywords` adds standard keywords, which must be present in `file.path(R.home("doc"), "KEYWORDS")`.
 
--   `@concept` adds arbitrary key words or phrases.
-    Each `@concept` should contain a single word or phrase.
+- `@concept` adds arbitrary key words or phrases.
+  Each `@concept` should contain a single word or phrase.
 
 Generally speaking, `@keywords` and `@concepts` are not terribly useful because most people find documentation using Google, not R's built-in search.
 
@@ -74,7 +76,9 @@ It's useful because it removes the function from the documentation index; it's u
 
 The original source location is added as a comment to the second line of each generated `.Rd` file in the following form:
 
-    % Please edit documentation in ...
+```
+% Please edit documentation in ...
+```
 
 `roxygen2` tries to capture all locations from which the documentation is assembled.
 For code that *generates* R code with Roxygen comments (e.g., the Rcpp package), the `@backref` tag is provided.

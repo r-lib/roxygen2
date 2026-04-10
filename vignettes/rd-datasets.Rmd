@@ -1,0 +1,62 @@
+---
+title: "Documenting datasets"
+description: >
+  How to document datasets stored in `data/`.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Documenting datasets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Datasets are stored in `data/`, not as regular R objects in the package.
+This means you need to document them in a slightly different way: instead of documenting the data directly, you quote the dataset's name.
+For example, this is the roxygen2 block used for `ggplot2::diamonds`:
+
+```{r}
+#| eval: false
+#' Prices of over 50,000 round cut diamonds
+#'
+#' A dataset containing the prices and other attributes of almost 54,000
+#'  diamonds. The variables are as follows:
+#'
+#' @format A data frame with 53940 rows and 10 variables:
+#' \describe{
+#'   \item{price}{price in US dollars ($326--$18,823)}
+#'   \item{carat}{weight of the diamond (0.2--5.01)}
+#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}
+#'   \item{color}{diamond colour, from D (best) to J (worst)}
+#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,
+#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}
+#'   \item{x}{length in mm (0--10.74)}
+#'   \item{y}{width in mm (0--58.9)}
+#'   \item{z}{depth in mm (0--31.8)}
+#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
+#'   \item{table}{width of top of diamond relative to widest point (43--95)}
+#' }
+#'
+#' @source {ggplot2} tidyverse R package.
+"diamonds"
+```
+
+Datasets should never be exported with `@export` because they are not found in the `NAMESPACE`.
+Instead, datasets will either be automatically available if you set `LazyData: true` in your `DESCRIPTION`, or available after calling `data()` if not.
+This field also affects the default usage.
+If you have `LazyData: true`, the usage will be just the dataset name (e.g. `diamonds`).
+Otherwise, the usage will be wrapped in `data()` (e.g. `data(diamonds)`).
+
+Note the use of two additional tags that are particularly useful for documenting data:
+
+- `@format`, which gives an overview of the structure of the dataset.
+  This should include a **definition list** that describes each variable.
+  There's currently no way to generate this with Markdown, so this is one of the few places you'll need to Rd markup directly.
+
+- `@source` where you got the data form, often a URL.

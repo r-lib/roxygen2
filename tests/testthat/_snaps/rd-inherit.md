@@ -70,7 +70,7 @@
     Code
       . <- roc_proc_text(rd_roclet(), text)
     Message
-      x In topic 'bar': @inheritDotsParam failed.
+      x In topic 'bar': argument selection failed.
       Caused by error in `FUN()`:
       ! object 'z' not found
       x In topic 'bar': @inheritDotParams failed.

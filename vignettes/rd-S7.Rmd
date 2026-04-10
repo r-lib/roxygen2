@@ -1,0 +1,149 @@
+---
+title: "Documenting S7"
+description: >
+  How to document S7 generics, methods, and classes.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Documenting S7}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+There are three things that you might document for [S7](https://rconsortium.github.io/S7/):
+
+- **Generics**: mention that the function is a generic and list the available methods.
+- **Methods**: link back to the generic; only document individually when the method has unique behavior or arguments.
+- **Classes**: document the constructor.
+
+## Generics
+
+S7 **generics** are functions, so document them as such.
+Export a generic if you want users to call it or other developers to write methods for it.
+If the generic is internal, you don't need to document it.
+
+The documentation should mention that the function is a generic, because this tells the reader that the behavior may vary depending on the input and that they can write their own methods.
+For simple generics, you can do this in the description:
+
+```{r}
+#| eval: false
+#' Size of an object
+#'
+#' @description
+#' `size()` is an S7 generic that determines the size of an object,
+#' with methods available for the following classes:
+#'
+#' `r doclisting::methods_inline("size")`
+#'
+#' @param x An object.
+#' @param ... Not used.
+#' @returns A single number.
+#' @export
+size <- new_generic("size", "x")
+```
+
+For more complicated generics, you can use a `# Methods` section to provide more detail:
+
+```{r}
+#| eval: false
+#' Size of an object
+#'
+#' @description
+#' `size()` determines the size of an object.
+#'
+#' # Methods
+#' `size()` is an S7 generic with methods available for the following
+#' classes:
+#'
+#' `r doclisting::methods_list("size")`
+#'
+#' @param x An object.
+#' @param ... Not used.
+#' @returns A single number.
+#' @export
+size <- new_generic("size", "x")
+```
+
+See the [S3 Generics section](rd-S3.html#generics) for more about using the [doclisting](https://doclisting.r-lib.org/) package to automatically generate method lists.
+
+It's good practice to document the default method alongside the generic using `@rdname`:
+
+```{r}
+#| eval: false
+#' @rdname size
+method(size, class_any) <- function(x, ...) {
+  length(x)
+}
+```
+
+## Classes
+
+S7 **classes** are constructor functions, so document them much like you'd document any other function.
+Export a class if you want users to create instances or other developers to extend it (e.g. by creating subclasses).
+Internal classes don't need documentation.
+
+Use `@param` to document the constructor arguments (which correspond to class properties), and `@returns` to describe the object that is returned.
+If the class has additional properties that are not part of the constructor (e.g. read-only computed properties), use `@prop` to document them.
+
+```{r}
+#| eval: false
+#' A range
+#'
+#' Create a range represented by a numeric `start` and `end`. The start must
+#' always be less than the end.
+#'
+#' @param start Start of range.
+#' @param end End of range.
+#' @prop length Length of the range (read-only).
+#' @returns An `Range` S7 object.
+#' @export
+Range <- new_class(
+  "Range",
+  properties = list(
+    start = class_numeric,
+    end = class_numeric,
+    length = new_property(getter = function(self) self@end - self@start),
+    validator = function(self) {
+      if (self@start > self@end) {
+        "start must be less than or equal to end"
+      }
+    }
+  )
+)
+```
+
+If multiple classes share one Rd page (via `@rdname`), you can prefix the property name with the class name to group properties by class, e.g. `@prop ClassName@prop_name description`.
+
+## Methods
+
+It is your choice whether or not to document S7 **methods**.
+S7 methods are registered with `method(generic, class) <- fn`.
+Generally, it's not necessary to document straightforward methods.
+
+It's good practice, however, to document methods that have unique behavior or arguments.
+If you do document a method, give it its own roxygen block.
+When documenting a method, always include a link back to the generic using `[generic_name()]` so the reader can easily find the full documentation and other methods.
+
+```{r}
+#| eval: false
+#' Size of a range
+#'
+#' The size of a range is its [size()], i.e. its length.
+#'
+#' @param x A `Range` object.
+#' @param ... Not used.
+#' @returns A single number.
+method(size, Range) <- function(x, ...) {
+  x@length
+}
+```
+
+S7 methods are registered at load time via `S7::methods_register()` in your `.onLoad()` function, not through `NAMESPACE` directives, so you never need to `@export` them.
+See `vignette("packages", package = "S7")` for details.

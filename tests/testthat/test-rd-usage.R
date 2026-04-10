@@ -477,6 +477,71 @@ test_that("old wrapping style doesn't change unexpectedly", {
   })
 })
 
+test_that("S7 class usage is constructor", {
+  skip_unless_r(">= 4.3.0")
+  expect_equal(
+    call_to_usage({
+      Dog <- S7::new_class(
+        "Dog",
+        properties = list(
+          name = S7::class_character,
+          age = S7::class_numeric
+        )
+      )
+    }),
+    "Dog(name = character(0), age = integer(0))"
+  )
+})
+
+test_that("S7 generic usage is function signature", {
+  skip_unless_r(">= 4.3.0")
+  expect_equal(
+    call_to_usage({
+      speak <- S7::new_generic("speak", "x")
+    }),
+    "speak(x, ...)"
+  )
+})
+
+test_that("S7 method usage includes comment", {
+  skip_unless_r(">= 4.3.0")
+  expect_equal(
+    call_to_usage({
+      Dog <- S7::new_class("Dog")
+      speak <- S7::new_generic("speak", "x")
+      S7::method(speak, Dog) <- function(x) "Woof"
+    }),
+    "## S7 method for class <Dog>\nspeak(x)"
+  )
+})
+
+test_that("S7 multi-dispatch method usage includes all classes", {
+  skip_unless_r(">= 4.3.0")
+  expect_equal(
+    call_to_usage({
+      Dog <- S7::new_class("Dog")
+      Cat <- S7::new_class("Cat")
+      greet <- S7::new_generic("greet", c("x", "y"))
+      S7::method(greet, list(Dog, Cat)) <- function(x, y) "hi"
+    }),
+    "## S7 method for classes <Dog>, <Cat>\ngreet(x, y)"
+  )
+})
+
+test_that("S7 union method usage shows member classes", {
+  skip_unless_r(">= 4.3.0")
+  expect_equal(
+    call_to_usage({
+      Dog <- S7::new_class("Dog")
+      Cat <- S7::new_class("Cat")
+      Pet <- S7::new_union(Dog, Cat)
+      speak <- S7::new_generic("speak", "x")
+      S7::method(speak, Pet) <- function(x) "hi"
+    }),
+    "## S7 method for class <Dog>/<Cat>\nspeak(x)"
+  )
+})
+
 test_that("preserves non-breaking-space", {
   expect_equal(
     call_to_usage(f <- function(a = "\u{A0}") {}),

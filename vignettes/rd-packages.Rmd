@@ -1,0 +1,41 @@
+---
+title: "Documenting packages"
+description: >
+  How to document a package as a whole using the
+  `"_PACKAGE"` sentinel.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Documenting packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel `"_PACKAGE"`.
+This automatically includes information parsed from the `DESCRIPTION`, including title, description, list of authors, and useful URLs.
+
+We recommend placing package documentation in `{pkgname}-package.R`, and have `@keywords internal`.
+Use `usethis::use_package_doc()` to set up automatically.
+Here's an example:
+
+```{r}
+#| eval: false
+#' @keywords internal
+"_PACKAGE"
+```
+
+Package documentation is a good place to put `# Package options` that documents options used by the package.
+
+Some notes:
+
+- By default, aliases will be added so that both `?pkgname` and `package?pkgname` will find the package help.
+  If there's an existing function called `pkgname`, use `@aliases {pkgname}-package NULL` to override the default.
+
+- Use `@references` to point to published material about the package that users might find helpful.

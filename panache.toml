@@ -1,0 +1,5 @@
+[format]
+wrap = "sentence"
+
+[formatters]
+r = "air"

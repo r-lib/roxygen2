@@ -69,19 +69,37 @@ tags_rd_desc <- function(tags, section) {
 
 #' Tags for documenting functions
 #'
-#' @eval tags_rd("rd")
+#' @eval tags_rd("rd-functions")
 #' @family documentation tags
 NULL
 
 #' Tags for documenting datasets
 #'
-#' @eval tags_rd("rd-data", vignette = "rd-other")
+#' @eval tags_rd("rd-datasets")
 #' @family documentation tags
 NULL
 
-#' Tags for documenting classes
+#' Tags for documenting S3
 #'
-#' @eval tags_rd("rd-oop", vignette = "rd-other")
+#' @eval tags_rd("rd-S3")
+#' @family documentation tags
+NULL
+
+#' Tags for documenting S4
+#'
+#' @eval tags_rd("rd-S4")
+#' @family documentation tags
+NULL
+
+#' Tags for documenting S7
+#'
+#' @eval tags_rd("rd-S7")
+#' @family documentation tags
+NULL
+
+#' Tags for documenting R6
+#'
+#' @eval tags_rd("rd-R6")
 #' @family documentation tags
 NULL
 

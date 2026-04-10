@@ -240,7 +240,7 @@ parse_description <- function(tags) {
   }
 
   intro <- tags[[1]]
-  intro$val <- str_trim(intro$raw)
+  intro$val <- trimws(intro$raw)
   if (intro$val == "") {
     return(tags[-1])
   }
@@ -248,8 +248,8 @@ parse_description <- function(tags) {
   tags <- tags[-1]
   tag_names <- tag_names[-1]
 
-  paragraphs <- str_split(intro$val, fixed('\n\n'))[[1]]
-  lines <- str_count(paragraphs, "\n") + rep(2, length(paragraphs))
+  paragraphs <- strsplit(intro$val, '\n\n', fixed = TRUE)[[1]]
+  lines <- re_count(paragraphs, "\n") + rep(2, length(paragraphs))
   offsets <- c(0, cumsum(lines))
 
   # 1st paragraph = title (unless has @title)

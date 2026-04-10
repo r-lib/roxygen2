@@ -214,6 +214,125 @@ test_that("finds arguments when S4 method wrapped inside .local()", {
 })
 
 
+# S7 ----------------------------------------------------------------------
+
+test_that("finds S7 classes", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class(
+      "Dog",
+      properties = list(
+        name = S7::class_character,
+        age = S7::class_numeric
+      )
+    )
+  })
+  expect_s3_class(obj, "s7class")
+  expect_equal(obj$topic, "Dog")
+  expect_equal(obj$alias, "Dog")
+})
+
+test_that("finds S7 generics", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    speak <- S7::new_generic("speak", "x")
+  })
+
+  expect_s3_class(obj, "s7generic")
+  expect_equal(obj$topic, "speak")
+  expect_equal(obj$alias, "speak")
+})
+
+test_that("finds S7 methods", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    speak <- S7::new_generic("speak", "x")
+    S7::method(speak, Dog) <- function(x) "Woof"
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "speak,Dog-method")
+  expect_equal(obj$value$generic, "speak")
+  expect_equal(obj$value$classes, list("Dog"))
+})
+
+test_that("finds S7 multi-dispatch methods", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    Cat <- S7::new_class("Cat")
+    greet <- S7::new_generic("greet", c("x", "y"))
+    S7::method(greet, list(Dog, Cat)) <- function(x, y) "hi"
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "greet,Dog,Cat-method")
+  expect_equal(obj$value$classes, list("Dog", "Cat"))
+})
+
+test_that("S7 union method has aliases for individual classes", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    Cat <- S7::new_class("Cat")
+    Pet <- S7::new_union(Dog, Cat)
+    speak <- S7::new_generic("speak", "x")
+    S7::method(speak, Pet) <- function(x) "hi"
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "speak,Dog/Cat-method")
+  expect_equal(obj$alias, c("speak,Dog-method", "speak,Cat-method"))
+})
+
+test_that("S7 non-union method has no extra aliases", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    speak <- S7::new_generic("speak", "x")
+    S7::method(speak, Dog) <- function(x) "Woof"
+  })
+  expect_equal(obj$topic, "speak,Dog-method")
+  # alias is _extra_ aliases, apart from topic name
+  expect_null(obj$alias)
+})
+
+test_that("finds S7 methods for S3 generics", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog")
+    S7::method(print, Dog) <- function(x, ...) cat("Dog\n")
+  })
+  expect_s3_class(obj, "s7method")
+  expect_equal(obj$topic, "print,Dog-method")
+  expect_equal(obj$value$generic, "print")
+})
+
+test_that("S7 method topic includes package prefix in class name", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog", package = "mypkg")
+    speak <- S7::new_generic("speak", "x")
+    S7::method(speak, Dog) <- function(x) "Woof"
+  })
+  expect_equal(obj$topic, "speak,mypkg::Dog-method")
+  expect_equal(obj$value$classes, list("mypkg::Dog"))
+})
+
+test_that("S7 method on S3 generic includes package prefix in class name", {
+  skip_unless_r(">= 4.3.0")
+  obj <- call_to_object({
+    Dog <- S7::new_class("Dog", package = "mypkg")
+    S7::method(print, Dog) <- function(x, ...) cat("Dog\n")
+  })
+  expect_equal(obj$topic, "print,mypkg::Dog-method")
+  expect_equal(obj$value$generic, "print")
+})
+
+test_that("S7 method with unknown class type warns", {
+  skip_unless_r(">= 4.3.0")
+  block <- roxy_block(tags = list(), file = "test.R", line = 1, call = quote(x))
+  expect_snapshot(s7_class_name(42L, block))
+})
+
 # R.oo / R.methodsS3 ------------------------------------------------------
 
 test_that("can define constructor with R.oo", {

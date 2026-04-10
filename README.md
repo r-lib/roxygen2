@@ -51,9 +51,11 @@ When you `roxygenise()` (or `devtools::document()`) your package these comments 
 
 To get started, first read `vignette("roxygen2")`. Then read more about the specific package component that you want to generate:
 
-* Start with `vignette("rd")` to learn how document your functions with roxygen2.
+* `vignette("rd-functions")` describes how to document your functions with roxygen2.
 
-* `vignette("rd-other")` discusses how to document other things like datasets, the package itself, and the various pieces used by R's OOP systems.
+* `vignette("rd-S3")`, `vignette("rd-S4")`, `vignette("rd-R6")`, and `vignette("rd-S7")` discuss documenting the various OOP systems.
+
+* `vignette("rd-datasets")` and `vignette("rd-packages")` cover documenting datasets and the package itself.
 
 * `vignette("rd-formatting")` gives the details of roxygen2's rmarkdown support.
 

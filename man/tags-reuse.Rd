@@ -22,7 +22,7 @@
 #' @includeRmd man/rmd/${1:filename}.Rmd
 #' @inherit ${1:source} ${2:components}
 #' @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}
-#' @inheritParams ${1:source}
+#' @inheritParams ${1:source} ${2:arg1 arg2 arg3}
 #' @inheritSection ${1:source} ${2:section name}
 #' @order ${1:number}
 #' @rdname ${1:topic-name}
@@ -37,8 +37,8 @@ Key tags:
 \item \verb{@describeIn $\{1:destination\} $\{2:description\}}: Document a function or method in the \code{destination} topic.
 \item \verb{@inherit $\{1:source\} $\{2:components\}}: Inherit one or more documentation components from another topic. If \code{components} is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of \code{params}, \code{return}, \code{title}, \code{description}, \code{details}, \code{seealso}, \code{sections}, \code{references}, \code{examples}, \code{author}, \code{source}, \code{note}, and \code{format}.
-\item \verb{@inheritDotParams $\{1:source\} $\{2:arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function.
-\item \verb{@inheritParams $\{1:source\}}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
+\item \verb{@inheritDotParams $\{1:source\} $\{2:arg1 arg2 arg3\}}: Automatically generate documentation for \code{...} when you're passing dots along to another function. We recommend supplying explicit argument names for maximum clarity and consistency.
+\item \verb{@inheritParams $\{1:source\} $\{2:arg1 arg2 arg3\}}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally. Optionally followed by a list of argument names to include or exclude, using the same syntax as \verb{@inheritDotParams}.
 \item \verb{@inheritSection $\{1:source\} $\{2:section name\}}: Inherit a specific named section from another topic.
 \item \verb{@order $\{1:number\}}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
 \item \verb{@rdname $\{1:topic-name\}}: Override the file name of generated \code{.Rd} file. Can be used to combine multiple blocks into a single documentation topic.
@@ -56,8 +56,11 @@ Other less frequently used tags:
 \seealso{
 Other documentation tags:
 \code{\link{tags-index-crossref}},
-\code{\link{tags-rd}},
-\code{\link{tags-rd-data}},
-\code{\link{tags-rd-oop}}
+\code{\link{tags-rd-R6}},
+\code{\link{tags-rd-S3}},
+\code{\link{tags-rd-S4}},
+\code{\link{tags-rd-S7}},
+\code{\link{tags-rd-datasets}},
+\code{\link{tags-rd-functions}}
 }
 \concept{documentation tags}

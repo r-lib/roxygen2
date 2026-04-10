@@ -35,7 +35,7 @@ Options in \code{man/roxygen/meta.R} override those present in \code{DESCRIPTION
 \item \code{r6} \verb{<flag>}: document R6 classes?
 \item \code{current_package} \verb{<string>} (read only): name of package being documented.
 \item \code{rd_family_title} \verb{<list>}: overrides for \verb{@family} titles. See the
-\emph{rd} vignette for details: \code{vignette("rd", package = "roxygen2")}
+\emph{rd-functions} vignette for details: \code{vignette("rd-functions")}
 \item \code{knitr_chunk_options} \verb{<list>}: default chunk options used for knitr.
 \item \code{restrict_image_formats} \verb{<flag>}: if \code{TRUE} then PDF images are only
 included in the PDF manual, and SVG images are only included in the HTML

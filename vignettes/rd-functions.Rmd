@@ -1,0 +1,275 @@
+---
+title: "Documenting functions"
+description: >
+  The basics of roxygen2 tags and how to use them for
+  documenting functions.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Documenting functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+```
+
+This vignette describes the most important roxygen2 tags for documenting functions.
+See `vignette("reuse")` for reusing documentation across topics.
+
+## Exporting
+
+For a user to use a function in your package, you must **export** it with `@export`.
+If you export a function, you must also document it, and since other people will use it, you need to be careful if you later change the function interface.
+We usually put `@export` in between `@returns` and `@examples`:
+
+```{r}
+#| eval: false
+#' Add two numbers together
+#'
+#' @param x,y A pair of numbers.
+#' @returns A number.
+#' @export
+#' @examples
+#' 1 + 2
+add <- function(x, y) {
+  x + y
+}
+```
+
+You'll learn what all these are pieces are next!
+
+## The introduction
+
+Each documentation block starts with some text which defines the title, the description, and the details.
+Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
+
+```{r}
+#' Sum of vector elements
+#'
+#' `sum` returns the sum of all the values present in its arguments.
+#'
+#' This is a generic function: methods can be defined for it directly
+#' or via the [Summary()] group generic. For this to work properly,
+#' the arguments `...` should be unnamed, and dispatch is on the
+#' first argument.
+sum <- function(..., na.rm = TRUE) {}
+```
+
+This introductory block is broken up as follows:
+
+- The first sentence is the **title**: that's what you see when you look at `help(package = mypackage)` and is shown at the top of each help file.
+  It should generally fit on one line, be written in sentence case, and not end in a full stop.
+
+- The second paragraph is the **description**: this comes first in the documentation and should briefly describe what the function does.
+
+- The third and subsequent paragraphs go into the **details**: this is a (often long) section that comes after the argument description and should provide any other important details of how the function operates.
+  The details are optional.
+
+### Title
+
+The title appears in package indexes and search results, so think about how users will find your function.
+Use synonyms to describe what the function does.
+For example, dplyr uses titles like:
+
+- "Keep rows that match a condition" (`filter()`)
+- "Create, modify, and delete columns" (`mutate()`)
+- "Summarise each group down to one row" (`summarise()`)
+
+### Description
+
+The description should briefly summarize the goal of the function, usually in one paragraph.
+This can be challenging for simple functions, because it can feel like you’re just repeating the title of the function.
+Try to find a slightly different wording, if you can.
+It’s okay if this feels a little repetitive; it’s often useful for users to see the same thing expressed in two different ways.
+It’s a little extra work, but the extra effort is often worth it.
+
+```{r}
+#| eval: false
+#' Detect the presence/absence of a match
+#'
+#' `str_detect()` returns a logical vector with `TRUE` for each element of
+#' `string` that matches `pattern` and `FALSE` otherwise. It's equivalent to
+#' `grepl(pattern, string)`.
+```
+
+If you need a multi-paragraph description, use an explicit `@description` tag:
+
+```{r}
+#| eval: false
+#' View strings and matches
+#'
+#' @description
+#' `str_view()` is used to print the underlying representation of a string and
+#' to see how a `pattern` matches.
+#'
+#' Matches are surrounded by `<>` and unusual whitespace (i.e. all whitespace
+#' apart from `" "` and `"\n"`) are surrounded by `{}` and escaped.
+```
+
+Basically, if you’re going to include an empty line in your description, you’ll need to use an explicit `@description` tag.
+
+### Details
+
+The details section is optional and comes after the argument description in the rendered help.
+Use informative markdown headings to break up long details.
+
+```{r}
+#' Sum of vector elements
+#'
+#' @description
+#' `sum` returns the sum of all the values present in its arguments.
+#'
+#' @details
+#' This is a generic function: methods can be defined for it directly
+#' or via the [Summary()] group generic. For this to work properly,
+#' the arguments `...` should be unnamed, and dispatch is on the
+#' first argument.
+```
+
+## Required tags
+
+Functions are the most commonly documented objects.
+Functions require three tags: `@param`, `@returns`, and `@examples`.
+
+### Inputs
+
+Use `@param name description` to describe each input to the function.
+The description should provide a succinct summary of the parameter type (e.g. a string, a numeric vector), and if not obvious from the name, what the parameter does.
+The description is a sentence so should start with a capital letter and end with a full stop.
+It can span multiple lines (or even paragraphs) if necessary.
+All parameters must be documented.
+
+```{r}
+#| eval: false
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression, as described in
+#'   `vignette("regular-expressions")`. Use [regex()] for finer control of the
+#'   matching behaviour.
+#'
+#' @param string Input vector. Either a character vector, or something
+#'   coercible to one.
+```
+
+It's a good idea to describe the default value in the `@param` description, particularly when the default is non-obvious or the signature and the rendered argument documentation are far apart.
+
+```{r}
+#| eval: false
+#' @param na.rm Remove missing values? If `FALSE` (the default), the result
+#'   will be `NA` if any element of `string` is `NA`.
+```
+
+For arguments with a small fixed set of possible values, list them in the description:
+
+```{r}
+#| eval: false
+#' @param side Side on which to remove whitespace: `"left"`, `"right"`, or
+#'   `"both"` (the default).
+```
+
+If each value needs more explanation, use a bulleted list:
+
+```{r}
+#| eval: false
+#' @param whitespace_only A boolean.
+#'   * `TRUE` (the default): wrapping will only occur at whitespace.
+#'   * `FALSE`: can break on any non-word character (e.g. `/`, `-`).
+```
+
+If two or more arguments are tightly coupled, you can document them in one place by separating the names with commas (no spaces).
+For example, to document both `x` and `y`, you can say `@param x,y Numeric vectors`.
+
+### Outputs
+
+`@returns description` describes the output from the function.
+Briefly describe the type/shape of the output, not the details.
+
+All functions must have a documented return value for initial CRAN submission.
+
+For simple cases, a single sentence suffices:
+
+```{r}
+#| eval: false
+#' @returns A logical vector the same length as `string`.
+```
+
+For functions returning data frames, describe how the output relates to the input:
+
+```{r}
+#| eval: false
+#' @returns
+#' An object of the same type as `.data`. The output has the following
+#' properties:
+#'
+#' * Rows are a subset of the input, but appear in the same order.
+#' * Columns are not modified.
+#' * The number of groups may be reduced (if `.preserve` is not `TRUE`).
+#' * Data frame attributes are preserved.
+```
+
+### Examples
+
+`@examples` provides executable R code showing how to use the function in practice.
+This is a very important part of the documentation because many people look at the examples before reading anything.
+Example code must work without errors as it is run automatically as part of `R CMD check`.
+
+Focus on demonstrating the most important features with realistic, typical usage.
+Use comments to break examples into sections:
+
+```{r}
+#| eval: false
+#' @examples
+#' fruit <- c("apple", "banana", "pear", "pineapple")
+#' str_detect(fruit, "a")
+#' str_detect(fruit, "^a")
+#' str_detect(fruit, "a$")
+#'
+#' # Also vectorised over pattern
+#' str_detect("aecfg", letters)
+```
+
+Examples must be self-contained and not change the user's state: if you modify `options()`, reset them; create files in `tempdir()` and delete them; don't change the working directory or write to the clipboard.
+
+For the purpose of illustration, it's often useful to include code that causes an error.
+`try()` is the best way to do this, because users will see the error message:
+
+```{r}
+#| eval: false
+#' @examples
+#' # Row sizes must be compatible when column-binding
+#' try(bind_cols(tibble(x = 1:3), tibble(y = 1:2)))
+```
+
+You can also use `\dontrun{}` to prevent code from executing, but `try()` is generally preferred.
+
+For code that only works in certain environments, use `@examplesIf`:
+
+```r
+#' @examplesIf interactive()
+#' browseURL("https://roxygen2.r-lib.org")
+```
+
+This generates
+
+```
+\examples{
+\dontshow{if (interactive() (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+gh_organizations(since = 42)
+\dontshow{\}) # examplesIf}
+}
+```
+
+This way, the code evaluating whether the example can be run is not shown to users reading the help, but it still prevents R CMD check failures.
+`@examplesIf` is preferred over wrapping code in `if()` because users don't see the machinery, and unlike `\dontrun{}`, the code still runs when the condition is met.
+
+Instead of including examples directly in the documentation, you can put them in separate files and use `@example path/relative/to/package/root` to insert them into the documentation.
+
+All functions must have examples for initial CRAN submission.
+
+### Usage
+
+In most cases, the function usage (which appears beneath the description in the generated docs) will be automatically derived from the function specification.
+For the cases where it is not, please [file an issue](https://github.com/r-lib/roxygen2/issues) and use `@usage` to override the default with what you want.
+If you want to suppress the usage altogether (which is sometimes useful for internal or deprecated functions), you can use `@usage NULL`.

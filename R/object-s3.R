@@ -86,7 +86,7 @@ find_generic <- function(name, env = parent.frame()) {
     return(c("all.equal", method))
   }
 
-  pieces <- str_split(name, fixed("."))[[1]]
+  pieces <- strsplit(name, ".", fixed = TRUE)[[1]]
   n <- length(pieces)
 
   # No . in name, so can't be method

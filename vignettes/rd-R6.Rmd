@@ -1,0 +1,155 @@
+---
+title: "Documenting R6"
+description: >
+  How to document R6 classes, methods, and fields.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Documenting R6}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+There are three things that you might document for [R6](https://adv-r.hadley.nz/r6.html):
+
+- **Classes**: document the class as a whole with a roxygen block before `R6Class()`.
+- **Fields**: document fields and active bindings in-line with `@field`.
+- **Methods**: document methods in-line; every method doc must start with a tag.
+
+R6 documentation works differently from regular function documentation because much of it is written **in-line**, inside the class definition.
+Additionally, because `R CMD check` doesn't know about R6, roxygen2 is in charge of checking that all public methods, fields, active bindings, and method arguments are documented.
+It'll issue warnings for anything that's missing, which you can suppress using the techniques described below.
+
+## Classes
+
+Document an R6 class by placing a roxygen block before the `R6Class()` call.
+Use `@export` to make the class available to users.
+
+```{r}
+#| eval: false
+#' R6 Class Representing a Person
+#'
+#' A person has a name and a hair color.
+#' @export
+Person <- R6::R6Class(
+  "Person",
+  public = list(
+    # ... fields and methods ...
+  )
+)
+```
+
+roxygen2 automatically generates additional sections:
+
+- A section with information about the superclass(es) of the class, with links.
+  In HTML this includes a list of all inherited methods, with links.
+
+- An 'Examples' section that contains all class and method examples.
+  This section is run by `R CMD check`, so method examples must work without errors.
+
+`@param` tags that appear at the class level (i.e. before the `R6Class()` call) are automatically inherited by all methods, if needed.
+
+## Fields and active bindings
+
+Fields and active bindings are documented **in-line** using the `@field` tag, right before the field definition:
+
+```{r}
+#| eval: false
+Person <- R6::R6Class(
+  "Person",
+  public = list(
+    #' @field name First or full name of the person.
+    name = NULL,
+
+    #' @field birthdate Date of birth, as a [Date].
+    birthdate = NULL
+  ),
+  active = list(
+    #' @field age Age in years, computed from `birthdate` (read-only).
+    age = function() {
+      as.numeric(difftime(Sys.Date(), self$birthdate, units = "days")) / 365.25
+    }
+  )
+)
+```
+
+To suppress documentation of a field or active binding, use `@field name NULL`.
+
+## Methods
+
+Methods are also documented **in-line**, right before the method definition.
+Unlike regular function documentation, all roxygen comment lines for a method must appear **after a tag** --- you can't start with a plain text introduction.
+Use `@description` to provide the method's description:
+
+```{r}
+#| eval: false
+Person <- R6::R6Class(
+  "Person",
+  public = list(
+    #' @description
+    #' Create a new person object.
+    #' @param name Name.
+    #' @param hair Hair color.
+    #' @returns A new `Person` object.
+    initialize = function(name = NA, hair = NA) {
+      self$name <- name
+      self$hair <- hair
+      self$greet()
+    },
+
+    #' @description
+    #' Change hair color.
+    #' @param val New hair color.
+    set_hair = function(val) {
+      self$hair <- val
+    },
+
+    #' @description
+    #' Say hi.
+    greet = function() {
+      cat(paste0("Hello, my name is ", self$name, ".\n"))
+    }
+  )
+)
+```
+
+Like functions, methods can use the `@description`, `@details`, `@param`, `@returns`, and `@examples` tags.
+These are used to create a subsection for the method, within a separate 'Methods' section in the rendered help.
+
+If you want to leave a method without documentation, use `@noRd` to suppress the warning.
+
+### Dynamic methods
+
+If a method is added dynamically with `$set()`, you can document it by placing a roxygen block directly above the `$set()` call:
+
+```{r}
+#| eval: false
+#' @description
+#' Say goodbye.
+Person$set("public", "goodbye", function() {
+  cat(paste0("Goodbye from ", self$name, ".\n"))
+})
+```
+
+roxygen2 will automatically associate the block with the class.
+
+If roxygen2 can't automatically discover a method, you can use `@R6method Class$method` to explicitly associate a documentation block with a method.
+Place it in a standalone roxygen block above `NULL`:
+
+```r
+#' @R6method Person$set_hair
+#' @description Change hair color.
+#' @param val New hair color.
+NULL
+```
+
+## Opting out
+
+To turn off the special handling of R6 classes and go back to the roxygen2 6.x.x behavior, add `Config/roxygen2/r6: false` to your `DESCRIPTION` file.

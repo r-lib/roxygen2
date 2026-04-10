@@ -9,7 +9,7 @@ rd_roclet()
 \description{
 This \link{roclet} automates the production of the \code{.Rd} files that
 R uses to document functions, datasets, packages, classes, and more.
-See \code{vignette("rd")} for details.
+See \code{vignette("rd-functions")} for details.
 
 It is run by default by \code{\link[=roxygenize]{roxygenize()}}.
 }
@@ -27,6 +27,7 @@ add <- function(x, y) {
 }
 }
 \seealso{
-\link{tags-rd}, \link{tags-rd-data}, \link{tags-rd-oop}, \link{tags-reuse},
+\link{tags-rd-functions}, \link{tags-rd-datasets}, \link{tags-rd-S3}, \link{tags-rd-S4},
+\link{tags-rd-S7}, \link{tags-rd-R6}, \link{tags-reuse},
 \link{tags-index-crossref} for tags provided by this roclet.
 }

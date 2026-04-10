@@ -25,7 +25,7 @@
 #' * `current_package` `<string>` (read only): name of package being documented.
 #'
 #' * `rd_family_title` `<list>`: overrides for `@family` titles. See the
-#'    _rd_ vignette for details: `vignette("rd", package = "roxygen2")`
+#'    _rd-functions_ vignette for details: `vignette("rd-functions")`
 #'
 #' * `knitr_chunk_options` `<list>`: default chunk options used for knitr.
 #'

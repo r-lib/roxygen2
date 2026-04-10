@@ -8,10 +8,21 @@ roxy_tag_rd.roxy_tag_inherit <- function(x, base_path, env) {
 }
 
 #' @export
-roxy_tag_parse.roxy_tag_inheritParams <- function(x) tag_value(x)
+roxy_tag_parse.roxy_tag_inheritParams <- function(x) {
+  tag_two_part(
+    x,
+    "a source",
+    "an argument list",
+    required = FALSE,
+    markdown = FALSE
+  )
+}
 #' @export
 roxy_tag_rd.roxy_tag_inheritParams <- function(x, base_path, env) {
-  rd_section_inherit(x$val, list("params"))
+  list(
+    rd_section_inherit(x$val$name, list("params")),
+    rd_section_inherit_params_args(x$val$name, x$val$description)
+  )
 }
 
 #' @export
@@ -107,6 +118,28 @@ merge.rd_section_inherit_dot_params <- function(x, y, ...) {
   )
 }
 
+rd_section_inherit_params_args <- function(source, args) {
+  check_string(source)
+  check_string(args)
+
+  if (!nzchar(args)) {
+    return(NULL)
+  }
+  rd_section("inherit_params_args", list(source = source, args = args))
+}
+
+#' @export
+format.rd_section_inherit_params_args <- function(x, ...) NULL
+
+#' @export
+merge.rd_section_inherit_params_args <- function(x, y, ...) {
+  stopifnot(identical(class(x), class(y)))
+  rd_section_inherit_params_args(
+    c(x$value$source, y$value$source),
+    c(x$value$args, y$value$args)
+  )
+}
+
 
 # Process inheritance -----------------------------------------------------
 
@@ -168,12 +201,25 @@ inherit_params <- function(topic, topics) {
   # Work through inherited params seeing if any match the parameters
   # we're missing
   for (inheritor in inheritors) {
+    source <- topic$get_name()
     inherited_params <- find_params(
       inheritor,
       topics,
-      source = topic$get_name(),
+      source = source,
       tag = "@inheritParams"
     )
+
+    # Apply argument filter if specified via @inheritParams foo args
+    params_args <- topic$get_value("inherit_params_args")
+    args_filter <- params_args$args[params_args$source == inheritor]
+    if (length(args_filter) == 1 && args_filter != "") {
+      doc_args <- map_chr(inherited_params, "[[", "name")
+      selected <- select_args_text(doc_args, args_filter, topic_name = source)
+      inherited_params <- Filter(
+        function(p) any(p$name %in% selected),
+        inherited_params
+      )
+    }
 
     for (param in inherited_params) {
       match <- match_param(param$name, missing)
@@ -214,13 +260,8 @@ inherit_dot_params <- function(topic, topics, env) {
     return()
   }
 
-  # Need to find formals for each source
-  funs <- lapply(inheritors$source, function(x) {
-    eval(parse(text = x), envir = env)
-  })
-  args <- map2(funs, inheritors$args, select_args_text, topic = topic)
-
-  # Then pull out the ones we need
+  # Find documented params for each source — this determines which args are
+  # available, matching how @inheritParams uses docs rather than formals.
   docs <- lapply(
     inheritors$source,
     find_params,
@@ -228,6 +269,18 @@ inherit_dot_params <- function(topic, topics, env) {
     source = topic$get_name(),
     tag = "@inheritDotParams"
   )
+
+  # Get unique documented param names for arg selection
+  doc_args <- lapply(docs, function(d) {
+    unlist(lapply(d, "[[", "name"))
+  })
+  args <- map2(
+    doc_args,
+    inheritors$args,
+    select_args_text,
+    topic_name = topic$get_name()
+  )
+
   arg_matches <- function(args, docs) {
     matched_names <- lapply(docs, \(x) match_param(x$name, args))
     match <- !map_lgl(matched_names, is.null)
@@ -259,7 +312,7 @@ inherit_dot_params <- function(topic, topics, env) {
   src <- inheritors$source
   from <- map_chr(src, function(x) {
     if (is_namespaced(x)) {
-      parts <- str_split_fixed(x, "::", n = 2)
+      parts <- re_split_half(x, "::")
       rd_link(parts[1], parts[2], x, code = TRUE)
     } else {
       rd_link(NA_character_, x, x, code = TRUE)
@@ -319,7 +372,7 @@ find_params <- function(name, topics, source, tag = "@inherits") {
     return()
   }
 
-  param_names <- str_trim(names(params))
+  param_names <- trimws(names(params))
   param_names <- strsplit(param_names, ",\\s*")
   param_names <- lapply(param_names, function(x) {
     x[x == "\\dots"] <- "..."
@@ -457,7 +510,7 @@ find_field <- function(topic, field_name) {
     value <- tag[[1]]
     attr(value, "Rd_tag") <- NULL
 
-    str_trim(rd2text(value, attr(topic, "package")))
+    trimws(rd2text(value, attr(topic, "package")))
   } else {
     topic$get_value(field_name)
   }

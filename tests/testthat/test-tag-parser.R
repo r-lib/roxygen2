@@ -63,6 +63,12 @@ test_that("tag_two_part() gives useful warnings", {
   })
 })
 
+test_that("tag_two_part() falls back to space split for unclosed backtick", {
+  tag <- roxy_test_tag("`unclosed description")
+  out <- tag_two_part(tag, "a name", "a value", required = FALSE)
+  expect_equal(out$val, list(name = "`unclosed", description = "description"))
+})
+
 test_that("tag_words() gives useful warnings", {
   expect_snapshot({
     tag <- roxy_test_tag("a b")

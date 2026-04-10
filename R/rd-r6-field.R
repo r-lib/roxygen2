@@ -40,7 +40,7 @@ r6_field_names <- function(rd_fields) {
     return(character())
   }
   labels <- map_chr(rd_fields, \(x) x$name)
-  str_trim(unlist(strsplit(labels, ",")))
+  trimws(unlist(strsplit(labels, ",")))
 }
 
 # Rd ---------------------------------------------------------------------------

@@ -78,7 +78,7 @@ tag_is <- function(tag, name) {
 }
 
 tag_names <- function(tag) {
-  str_trim(strsplit(tag$val$name, ",")[[1]])
+  trimws(strsplit(tag$val$name, ",")[[1]])
 }
 
 tag_has_name <- function(tag, names) {
@@ -212,7 +212,7 @@ r6_resolve_method_params <- function(method, parent_docs, topic_name) {
     # Re-order according to formals
     firstnames <- map_chr(
       strsplit(map_chr(method$params, \(x) x$name), ","),
-      \(x) str_trim(x[[1]])
+      \(x) trimws(x[[1]])
     )
     method$params <- method$params[order(match(firstnames, fnames))]
   }
@@ -251,7 +251,7 @@ r6_find_super_params <- function(method_name, missing, parent_docs) {
 
     result <- list()
     for (param in super_method$params) {
-      param_names <- str_trim(unlist(strsplit(param$name, ",")))
+      param_names <- trimws(unlist(strsplit(param$name, ",")))
       if (any(param_names %in% missing)) {
         result <- c(result, list(param))
         missing <- setdiff(missing, param_names)

@@ -44,8 +44,13 @@ articles:
 - title: Documentation
   navbar: Documentation
   contents:
-  - rd
-  - rd-other
+  - rd-functions
+  - rd-S3
+  - rd-S4
+  - rd-R6
+  - rd-S7
+  - rd-datasets
+  - rd-packages
   - reuse
   - index-crossref
   - rd-formatting

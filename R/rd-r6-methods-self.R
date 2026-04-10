@@ -191,7 +191,7 @@ r6_resolve_params <- function(method, block) {
   # Order them according to formals
   firstnames <- map_chr(
     strsplit(map_chr(params, \(x) x$name), ","),
-    \(x) str_trim(x[[1]])
+    \(x) trimws(x[[1]])
   )
   params[order(match(firstnames, fnames))]
 }
@@ -209,7 +209,7 @@ r6_param_names <- function(params) {
   if (length(params) == 0) {
     return(character())
   }
-  str_trim(unlist(strsplit(map_chr(params, \(x) x$name), ",")))
+  trimws(unlist(strsplit(map_chr(params, \(x) x$name), ",")))
 }
 
 r6_method_name <- function(class, method) {

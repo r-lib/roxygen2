@@ -25,31 +25,31 @@ As well as generating `.Rd` files, roxygen will also create a
 `NAMESPACE` for you, and will manage the `Collate` field in
 `DESCRIPTION`.
 
-## Learn more
+## Basics
 
-This vignette provides a high-level description of roxygen2 and the
-overall workflow you’ll use with it. The other vignettes provide more
-detail on the most important individual components:
+A roxygen **block** is a sequence of lines starting with `#'`
+(optionally preceded by white space).
 
-- Start with
-  [`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md) to
-  learn how document your functions with roxygen2.
+The first lines of the block is called the **introduction** and forms
+the title, description, and details, as described below. The
+introduction continues until the first **tag**.
 
-- [`vignette("rd-other")`](https://roxygen2.r-lib.org/dev/articles/rd-other.md)
-  discusses how to document other things like datasets, the package
-  itself, and the various pieces used by R’s OOP systems.
+Tags start with `@`, like `@details` or `@param`. Tags must appear at
+the beginning of a line and their content extends to the start of the
+next tag or the end of the block. Text within the description or tags
+can be formatted using Markdown or `Rd` commands; see
+[`vignette("rd-formatting")`](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md)
+for details.
 
-- [`vignette("rd-formatting")`](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md)
-  gives the details of roxygen2’s rmarkdown support.
+A block ends when it hits R code, usually a function or object
+assignment. Blocks ignore empty lines, including lines made up of
+non-roxygen comments. If you need to separate two blocks, use `NULL`.
 
-- [`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md)
-  demonstrates the tools available to reuse documentation in multiple
-  places.
-
-- [`vignette("namespace")`](https://roxygen2.r-lib.org/dev/articles/namespace.md)
-  describes how to generate a `NAMESPACE` file, how namespacing works in
-  R, and how you can use roxygen2 to be specific about what your package
-  needs and supplies.
+If you want to use roxygen2 documentation tags without generating an
+`.Rd` file, you can use `@noRd` to suppress file generation for a given
+topic. This is useful if you want to use roxygen2 conventions for
+documenting an internal function; only people reading the source doc
+will be able to read the docs.
 
 ## Running roxygen
 
@@ -150,3 +150,35 @@ into a line in the `NAMESPACE` file:
 ``` txt
 export(add)
 ```
+
+## Learn more
+
+The other vignettes provide more detail on the most important individual
+components:
+
+- [`vignette("rd-functions")`](https://roxygen2.r-lib.org/dev/articles/rd-functions.md)
+  describes how to document your functions with roxygen2.
+
+- [`vignette("rd-datasets")`](https://roxygen2.r-lib.org/dev/articles/rd-datasets.md)
+  and
+  [`vignette("rd-packages")`](https://roxygen2.r-lib.org/dev/articles/rd-packages.md)
+  cover documenting datasets and the package itself.
+
+- [`vignette("rd-S3")`](https://roxygen2.r-lib.org/dev/articles/rd-S3.md),
+  [`vignette("rd-S4")`](https://roxygen2.r-lib.org/dev/articles/rd-S4.md),
+  [`vignette("rd-R6")`](https://roxygen2.r-lib.org/dev/articles/rd-R6.md),
+  and
+  [`vignette("rd-S7")`](https://roxygen2.r-lib.org/dev/articles/rd-S7.md)
+  discuss documenting the various OOP systems.
+
+- [`vignette("rd-formatting")`](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md)
+  gives the details of roxygen2’s rmarkdown support.
+
+- [`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md)
+  demonstrates the tools available to reuse documentation in multiple
+  places.
+
+- [`vignette("namespace")`](https://roxygen2.r-lib.org/dev/articles/namespace.md)
+  describes how to generate a `NAMESPACE` file, how namespacing works in
+  R, and how you can use roxygen2 to be specific about what your package
+  needs and supplies.

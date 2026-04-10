@@ -45,8 +45,13 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -155,7 +160,7 @@ important data structures that power roxygen: tags and blocks.</p>
 single tag. It has the following fields:</p>
 <ul>
 <li><p><code>tag</code>: the name of the tag.</p></li>
-<li><p><code>raw</code>: the raw contents of the tag (i.e. everything
+<li><p><code>raw</code>: the raw contents of the tag (i.e. everything
 from the end of this tag to the beginning of the next).</p></li>
 <li><p><code>val</code>: the parsed value, which we’ll come back to
 shortly.</p></li>
@@ -557,7 +562,7 @@ screen:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">roxygen2</span><span class="fu">::</span><span class="fu"><a href="../reference/roxygenize.html">roxygenize</a></span><span class="op">(</span>roclets <span class="op">=</span> <span class="st">"yourPackage::roclet"</span><span class="op">)</span></span></code></pre></div>
 <p>where <code>yourPackage::roclet</code> is the function which creates
-the roclet, e.g. <code>memo_roclet</code> above.</p>
+the roclet, e.g. <code>memo_roclet</code> above.</p>
 <p>You can also add the roclet to the target package’s DESCRIPTION file,
 like this:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>Config<span class="sc">/</span>roxygen2<span class="sc">/</span>roclets<span class="sc">:</span> collate, rd, namespace, yourPackage<span class="sc">::</span>roclet</span></code></pre></div>

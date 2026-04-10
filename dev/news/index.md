@@ -2,7 +2,18 @@
 
 ## roxygen2 (development version)
 
-- [`vignette("rd-other")`](https://roxygen2.r-lib.org/dev/articles/rd-other.md)
+- `vignette("rd-other")` has been split into individual vignettes:
+  [`vignette("rd-datasets")`](https://roxygen2.r-lib.org/dev/articles/rd-datasets.md),
+  [`vignette("rd-packages")`](https://roxygen2.r-lib.org/dev/articles/rd-packages.md),
+  [`vignette("rd-S3")`](https://roxygen2.r-lib.org/dev/articles/rd-S3.md),
+  [`vignette("rd-S4")`](https://roxygen2.r-lib.org/dev/articles/rd-S4.md),
+  and
+  [`vignette("rd-R6")`](https://roxygen2.r-lib.org/dev/articles/rd-R6.md).
+  `vignette("rd")` has been renamed to
+  [`vignette("rd-functions")`](https://roxygen2.r-lib.org/dev/articles/rd-functions.md),
+  and the basics section has been moved to
+  [`vignette("roxygen2")`](https://roxygen2.r-lib.org/dev/articles/roxygen2.md).
+- [`vignette("rd-S3")`](https://roxygen2.r-lib.org/dev/articles/rd-S3.md)
   now includes improved advice for documenting S3 generics, classes, and
   methods, including how to use the new
   [doclisting](https://doclisting.r-lib.org/) package to automatically
@@ -10,6 +21,8 @@
   ([\#1513](https://github.com/r-lib/roxygen2/issues/1513)).
 - Added initial support for S7 classes, generics, and methods
   ([\#1484](https://github.com/r-lib/roxygen2/issues/1484)).
+  [`vignette("rd-S7")`](https://roxygen2.r-lib.org/dev/articles/rd-S7.md)
+  documents best practices.
   - S7 generics are documented like regular functions.
   - S7 classes are documented like regular functions, but you can use
     `@prop` to document additional properties that are not constructor
@@ -423,10 +436,10 @@ CRAN release: 2022-07-18
 ### Tags
 
 - All built-in tags are now documented so that you can do (e.g.)
-  [`?"@param"`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md) to
-  get a basic description of `@param` and a pointer where to learn more
-  ([\#1165](https://github.com/r-lib/roxygen2/issues/1165)). This is
-  powered by a new
+  [`?"@param"`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  to get a basic description of `@param` and a pointer where to learn
+  more ([\#1165](https://github.com/r-lib/roxygen2/issues/1165)). This
+  is powered by a new
   [`tags_list()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)
   lists all tags defined by roxygen2 and
   [`tags_metadata()`](https://roxygen2.r-lib.org/dev/reference/tags_list.md)
@@ -763,8 +776,8 @@ CRAN release: 2019-11-12
 - `@includeRmd {path.Rmd}` converts an `.Rmd`/`.md` file to `.Rd` and
   includes it in the manual page. This allows sharing text between
   vignettes, `README.Rmd`, and the documentation. See
-  [`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md) for
-  details ([\#902](https://github.com/r-lib/roxygen2/issues/902)).
+  [`vignette("rd-functions")`](https://roxygen2.r-lib.org/dev/articles/rd-functions.md)
+  for details ([\#902](https://github.com/r-lib/roxygen2/issues/902)).
 
 - `@order {n}` tag controls the order in which blocks are processed. You
   can use it to override the usual ordering which proceeds from the top
@@ -811,8 +824,8 @@ CRAN release: 2019-11-12
 
 roxygen2 can now document R6 classes
 ([\#922](https://github.com/r-lib/roxygen2/issues/922)). See
-[`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md) for
-details.
+[`vignette("rd-R6")`](https://roxygen2.r-lib.org/dev/articles/rd-R6.md)
+for details.
 
 #### Markdown improvements
 
@@ -1153,7 +1166,7 @@ CRAN release: 2018-07-27
 - `@inherits` can now inherit examples
   ([\#588](https://github.com/r-lib/roxygen2/issues/588)).
 
-- [`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md)
+- [`vignette("rd-functions")`](https://roxygen2.r-lib.org/dev/articles/rd-functions.md)
   received a thorough updating for current best-practices. The vignette
   still needs more work so pull requests are greatly appreciated
   ([\#650](https://github.com/r-lib/roxygen2/issues/650)).

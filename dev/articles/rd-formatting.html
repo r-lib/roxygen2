@@ -50,8 +50,13 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -150,7 +155,7 @@ described below.</p>
 <h3 id="sections-and-subsections">Sections and subsections<a class="anchor" aria-label="anchor" href="#sections-and-subsections"></a>
 </h3>
 <p>The usual Markdown heading markup creates sections and subsections.
-Top level headings (e.g. <code># title</code>) create sections with the
+Top level headings (e.g. <code># title</code>) create sections with the
 <code>\section{}</code> Rd tag. This largely supersedes use of the older
 <code>@section</code> tag.</p>
 <p>Top-level headings can only appear after the
@@ -173,7 +178,7 @@ after the parameters and the details, but before <code>\note{}</code>,
 <code>\seealso{}</code> and the <code>\examples{}</code>. Their order
 will be the same as in the roxygen block.</p>
 <p>Headings at level two and above may appear inside any roxygen tag
-that formats lines of text, e.g. <code>@description</code>,
+that formats lines of text, e.g. <code>@description</code>,
 <code>@details</code>, <code>@return</code>, and create subsections with
 the <code>\subsection{}</code> Rd tag.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -315,7 +320,7 @@ package or its dependencies.</p>
 <p>R 4.5.0 and later requires that links to all topics outside of your
 package be explicitly qualified with the package name. roxygen2 will
 attempt to do this for you by looking at the dependencies of your
-package. If this fails, e.g. if multiple dependencies document the same
+package. If this fails, e.g. if multiple dependencies document the same
 topic, you’ll need to manually resolve using the syntax below.</p>
 <table class="table">
 <thead><tr class="header">
@@ -423,7 +428,7 @@ documentation so is documented in <code><a href="../articles/reuse.html">vignett
 <div class="section level3">
 <h3 id="chunk-options">Chunk options<a class="anchor" aria-label="anchor" href="#chunk-options"></a>
 </h3>
-<p>Code blocks support some knitr chunk options, e.g. to keep the output
+<p>Code blocks support some knitr chunk options, e.g. to keep the output
 of several expressions together, you can specify
 <code>results="hold"</code>:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">

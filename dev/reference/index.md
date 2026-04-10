@@ -29,9 +29,26 @@
 
   Tags for managing the `NAMESPACE`
 
-- [`tags-rd-data`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
-  [`@format`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
-  [`@source`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
+- [`tags-rd-R6`](https://roxygen2.r-lib.org/dev/reference/tags-rd-R6.md)
+  [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-R6.md)
+  [`@R6method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-R6.md)
+  : Tags for documenting R6
+
+- [`tags-rd-S3`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S3.md)
+  [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S3.md) :
+  Tags for documenting S3
+
+- [`tags-rd-S4`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S4.md)
+  [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S4.md) :
+  Tags for documenting S4
+
+- [`tags-rd-S7`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S7.md)
+  [`@prop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S7.md) :
+  Tags for documenting S7
+
+- [`tags-rd-datasets`](https://roxygen2.r-lib.org/dev/reference/tags-rd-datasets.md)
+  [`@format`](https://roxygen2.r-lib.org/dev/reference/tags-rd-datasets.md)
+  [`@source`](https://roxygen2.r-lib.org/dev/reference/tags-rd-datasets.md)
   : Tags for documenting datasets
 
 - [`tags-rd-formatting`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
@@ -40,28 +57,20 @@
   [`@section`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
   : Tags related to markdown support
 
-- [`tags-rd-oop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@prop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@R6method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md) :
-  Tags for documenting classes
-
-- [`tags-rd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@description`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@details`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@example`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@examples`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@examplesIf`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@noRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@param`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@rawRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@return`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@returns`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@title`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@usage`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md) : Tags
-  for documenting functions
+- [`tags-rd-functions`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@description`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@details`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@example`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@examples`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@examplesIf`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@noRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@param`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@rawRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@return`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@returns`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@title`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@usage`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  : Tags for documenting functions
 
 - [`tags-reuse`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
   [`@describeIn`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)

@@ -51,8 +51,8 @@ roxy_meta_get(key = NULL, default = NULL)
   documented.
 
 - `rd_family_title` `<list>`: overrides for `@family` titles. See the
-  *rd* vignette for details:
-  [`vignette("rd", package = "roxygen2")`](https://roxygen2.r-lib.org/dev/articles/rd.md)
+  *rd-functions* vignette for details:
+  [`vignette("rd-functions")`](https://roxygen2.r-lib.org/dev/articles/rd-functions.md)
 
 - `knitr_chunk_options` `<list>`: default chunk options used for knitr.
 

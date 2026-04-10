@@ -5,12 +5,17 @@ articles:
   extending: extending.html
   index-crossref: index-crossref.html
   namespace: namespace.html
+  rd-datasets: rd-datasets.html
   rd-formatting: rd-formatting.html
-  rd-other: rd-other.html
-  rd: rd.html
+  rd-functions: rd-functions.html
+  rd-packages: rd-packages.html
+  rd-R6: rd-R6.html
+  rd-S3: rd-S3.html
+  rd-S4: rd-S4.html
+  rd-S7: rd-S7.html
   reuse: reuse.html
   roxygen2: roxygen2.html
-last_built: 2026-04-10T12:38Z
+last_built: 2026-04-10T12:46Z
 urls:
   reference: https://roxygen2.r-lib.org/reference
   article: https://roxygen2.r-lib.org/articles

@@ -59,13 +59,20 @@ To get started, first read
 Then read more about the specific package component that you want to
 generate:
 
-- Start with
-  [`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md) to
-  learn how document your functions with roxygen2.
+- [`vignette("rd-functions")`](https://roxygen2.r-lib.org/dev/articles/rd-functions.md)
+  describes how to document your functions with roxygen2.
 
-- [`vignette("rd-other")`](https://roxygen2.r-lib.org/dev/articles/rd-other.md)
-  discusses how to document other things like datasets, the package
-  itself, and the various pieces used by R’s OOP systems.
+- [`vignette("rd-S3")`](https://roxygen2.r-lib.org/dev/articles/rd-S3.md),
+  [`vignette("rd-S4")`](https://roxygen2.r-lib.org/dev/articles/rd-S4.md),
+  [`vignette("rd-R6")`](https://roxygen2.r-lib.org/dev/articles/rd-R6.md),
+  and
+  [`vignette("rd-S7")`](https://roxygen2.r-lib.org/dev/articles/rd-S7.md)
+  discuss documenting the various OOP systems.
+
+- [`vignette("rd-datasets")`](https://roxygen2.r-lib.org/dev/articles/rd-datasets.md)
+  and
+  [`vignette("rd-packages")`](https://roxygen2.r-lib.org/dev/articles/rd-packages.md)
+  cover documenting datasets and the package itself.
 
 - [`vignette("rd-formatting")`](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md)
   gives the details of roxygen2’s rmarkdown support.

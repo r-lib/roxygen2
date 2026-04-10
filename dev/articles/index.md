@@ -3,16 +3,36 @@
 ### Documentation
 
 - [Documenting
-  functions](https://roxygen2.r-lib.org/dev/articles/rd.md):
+  functions](https://roxygen2.r-lib.org/dev/articles/rd-functions.md):
 
   The basics of roxygen2 tags and how to use them for documenting
   functions.
 
-- [Documenting other
-  objects](https://roxygen2.r-lib.org/dev/articles/rd-other.md):
+- [Documenting S3](https://roxygen2.r-lib.org/dev/articles/rd-S3.md):
 
-  How to document datasets, packages, and the classes, generics, and
-  methods of S3, S4, S7, and R6.
+  How to document S3 generics, methods, and classes.
+
+- [Documenting S4](https://roxygen2.r-lib.org/dev/articles/rd-S4.md):
+
+  How to document S4 generics, methods, and classes.
+
+- [Documenting R6](https://roxygen2.r-lib.org/dev/articles/rd-R6.md):
+
+  How to document R6 classes, methods, and fields.
+
+- [Documenting S7](https://roxygen2.r-lib.org/dev/articles/rd-S7.md):
+
+  How to document S7 generics, methods, and classes.
+
+- [Documenting
+  datasets](https://roxygen2.r-lib.org/dev/articles/rd-datasets.md):
+
+  How to document datasets stored in `data/`.
+
+- [Documenting
+  packages](https://roxygen2.r-lib.org/dev/articles/rd-packages.md):
+
+  How to document a package as a whole using the `"_PACKAGE"` sentinel.
 
 - [Reusing
   documentation](https://roxygen2.r-lib.org/dev/articles/reuse.md):

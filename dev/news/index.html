@@ -21,8 +21,13 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -64,8 +69,10 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
 <ul><li>
-<code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> now includes improved advice for documenting S3 generics, classes, and methods, including how to use the new <a href="https://doclisting.r-lib.org/" class="external-link">doclisting</a> package to automatically list methods for a generic (<a href="https://github.com/r-lib/roxygen2/issues/1513" class="external-link">#1513</a>).</li>
-<li>Added initial support for S7 classes, generics, and methods (<a href="https://github.com/r-lib/roxygen2/issues/1484" class="external-link">#1484</a>).
+<code>vignette("rd-other")</code> has been split into individual vignettes: <code><a href="../articles/rd-datasets.html">vignette("rd-datasets")</a></code>, <code><a href="../articles/rd-packages.html">vignette("rd-packages")</a></code>, <code><a href="../articles/rd-S3.html">vignette("rd-S3")</a></code>, <code><a href="../articles/rd-S4.html">vignette("rd-S4")</a></code>, and <code><a href="../articles/rd-R6.html">vignette("rd-R6")</a></code>. <code>vignette("rd")</code> has been renamed to <code><a href="../articles/rd-functions.html">vignette("rd-functions")</a></code>, and the basics section has been moved to <code><a href="../articles/roxygen2.html">vignette("roxygen2")</a></code>.</li>
+<li>
+<code><a href="../articles/rd-S3.html">vignette("rd-S3")</a></code> now includes improved advice for documenting S3 generics, classes, and methods, including how to use the new <a href="https://doclisting.r-lib.org/" class="external-link">doclisting</a> package to automatically list methods for a generic (<a href="https://github.com/r-lib/roxygen2/issues/1513" class="external-link">#1513</a>).</li>
+<li>Added initial support for S7 classes, generics, and methods (<a href="https://github.com/r-lib/roxygen2/issues/1484" class="external-link">#1484</a>). <code><a href="../articles/rd-S7.html">vignette("rd-S7")</a></code> documents best practices.
 <ul><li>S7 generics are documented like regular functions.</li>
 <li>S7 classes are documented like regular functions, but you can use <code>@prop</code> to document additional properties that are not constructor parameters. If multiple classes share one page, use <code>@prop ClassName@prop_name description</code> to group properties by class.</li>
 <li>S7 methods registered with <code>method(generic, class) &lt;- fn</code> are detected automatically and generate usage with <code>## S7 method for class &lt;ClassName&gt;</code>.</li>
@@ -218,7 +225,7 @@
 <h2 class="pkg-version" data-toc-text="7.2.1" id="roxygen2-721">roxygen2 7.2.1<a class="anchor" aria-label="anchor" href="#roxygen2-721"></a></h2><p class="text-muted">CRAN release: 2022-07-18</p>
 <div class="section level3">
 <h3 id="tags-7-2-1">Tags<a class="anchor" aria-label="anchor" href="#tags-7-2-1"></a></h3>
-<ul><li><p>All built-in tags are now documented so that you can do (e.g.) <code><a href="../reference/tags-rd.html">?"@param"</a></code> to get a basic description of <code>@param</code> and a pointer where to learn more (<a href="https://github.com/r-lib/roxygen2/issues/1165" class="external-link">#1165</a>). This is powered by a new <code><a href="../reference/tags_list.html">tags_list()</a></code> lists all tags defined by roxygen2 and <code><a href="../reference/tags_list.html">tags_metadata()</a></code> provides some useful information about them for use by (e.g.) IDEs (<a href="https://github.com/r-lib/roxygen2/issues/1375" class="external-link">#1375</a>).</p></li>
+<ul><li><p>All built-in tags are now documented so that you can do (e.g.) <code><a href="../reference/tags-rd-functions.html">?"@param"</a></code> to get a basic description of <code>@param</code> and a pointer where to learn more (<a href="https://github.com/r-lib/roxygen2/issues/1165" class="external-link">#1165</a>). This is powered by a new <code><a href="../reference/tags_list.html">tags_list()</a></code> lists all tags defined by roxygen2 and <code><a href="../reference/tags_list.html">tags_metadata()</a></code> provides some useful information about them for use by (e.g.) IDEs (<a href="https://github.com/r-lib/roxygen2/issues/1375" class="external-link">#1375</a>).</p></li>
 <li><p><code>@describeIn</code> can now be used to combine more types of functions (generics, methods and other functions) into a single topic. The resulting section organises the functions by type (<a href="https://github.com/r-lib/roxygen2/issues/1181" class="external-link">#1181</a>) and displays methods like function calls. Methods are recognized only if they extend the generic in the destination,or if the destination can heuristically be identified as a constructor.</p></li>
 <li><p>Code evaluated in inline markdown code chunks and <code>@eval</code>/<code>@evalRd</code>/ <code>@evalNamespace</code> is now evaluated in an environment designed to be more reproducible and to suppress output that won’t work in Rd (e.g. turning off colour and unicode support in cli) (<a href="https://github.com/r-lib/roxygen2/issues/1351" class="external-link">#1351</a>). They now also set knitr options <code>comment = #&gt;</code> (<a href="https://github.com/r-lib/roxygen2/issues/1380" class="external-link">#1380</a>) and <code>collapse = TRUE</code> (<a href="https://github.com/r-lib/roxygen2/issues/1376" class="external-link">#1376</a>).</p></li>
 <li><p><code>@export</code> will now export both the class and constructor function when applied to expressions like <code>foo &lt;- setClass("foo")</code> (<a href="https://github.com/r-lib/roxygen2/issues/1216" class="external-link">#1216</a>).</p></li>
@@ -342,7 +349,7 @@
 <h3 id="new-features-7-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-7-0-0"></a></h3>
 <div class="section level4">
 <h4 id="new-tags-7-0-0">New tags<a class="anchor" aria-label="anchor" href="#new-tags-7-0-0"></a></h4>
-<ul><li><p><code>@includeRmd {path.Rmd}</code> converts an <code>.Rmd</code>/<code>.md</code> file to <code>.Rd</code> and includes it in the manual page. This allows sharing text between vignettes, <code>README.Rmd</code>, and the documentation. See <code><a href="../articles/rd.html">vignette("rd")</a></code> for details (<a href="https://github.com/r-lib/roxygen2/issues/902" class="external-link">#902</a>).</p></li>
+<ul><li><p><code>@includeRmd {path.Rmd}</code> converts an <code>.Rmd</code>/<code>.md</code> file to <code>.Rd</code> and includes it in the manual page. This allows sharing text between vignettes, <code>README.Rmd</code>, and the documentation. See <code><a href="../articles/rd-functions.html">vignette("rd-functions")</a></code> for details (<a href="https://github.com/r-lib/roxygen2/issues/902" class="external-link">#902</a>).</p></li>
 <li><p><code>@order {n}</code> tag controls the order in which blocks are processed. You can use it to override the usual ordering which proceeds from the top of each file to the bottom. <code>@order 1</code> will be processed before <code>@order 2</code>, and before any blocks that don’t have an explicit order set (<a href="https://github.com/r-lib/roxygen2/issues/863" class="external-link">#863</a>).</p></li>
 <li>
 <p><code>@exportS3Method</code> tag allows you to generate <code>S3method()</code> namespace directives (note the different in capitalisation) (<a href="https://github.com/r-lib/roxygen2/issues/796" class="external-link">#796</a>). Its primary use is for “delayed” method registration, which allows you to define methods for generics found in suggested packages (available in R 3.6 and greater). For example,</p>
@@ -364,7 +371,7 @@
 </ul></div>
 <div class="section level4">
 <h4 id="r6-7-0-0">R6<a class="anchor" aria-label="anchor" href="#r6-7-0-0"></a></h4>
-<p>roxygen2 can now document R6 classes (<a href="https://github.com/r-lib/roxygen2/issues/922" class="external-link">#922</a>). See <code><a href="../articles/rd.html">vignette("rd")</a></code> for details.</p>
+<p>roxygen2 can now document R6 classes (<a href="https://github.com/r-lib/roxygen2/issues/922" class="external-link">#922</a>). See <code><a href="../articles/rd-R6.html">vignette("rd-R6")</a></code> for details.</p>
 </div>
 <div class="section level4">
 <h4 id="markdown-improvements-7-0-0">Markdown improvements<a class="anchor" aria-label="anchor" href="#markdown-improvements-7-0-0"></a></h4>
@@ -482,7 +489,7 @@
 </ol></li>
 <li><p><code>@evalNamespace</code> does for <code>NAMESPACE</code> what <code>@evalRd</code> does for Rd files: you give it R code that produces a literal entry in <code>NAMESPACE</code> when run. This should make it easier to export functions that are generated by other functions in your package (<a href="https://github.com/r-lib/roxygen2/issues/531" class="external-link">#531</a>, <a href="https://github.com/egnha" class="external-link">@egnha</a>).</p></li>
 <li><p><code>@inherits</code> can now inherit examples (<a href="https://github.com/r-lib/roxygen2/issues/588" class="external-link">#588</a>).</p></li>
-<li><p><code><a href="../articles/rd.html">vignette("rd")</a></code> received a thorough updating for current best-practices. The vignette still needs more work so pull requests are greatly appreciated (<a href="https://github.com/r-lib/roxygen2/issues/650" class="external-link">#650</a>).</p></li>
+<li><p><code><a href="../articles/rd-functions.html">vignette("rd-functions")</a></code> received a thorough updating for current best-practices. The vignette still needs more work so pull requests are greatly appreciated (<a href="https://github.com/r-lib/roxygen2/issues/650" class="external-link">#650</a>).</p></li>
 <li><p><code><a href="../reference/roxygenize.html">roxygenise()</a></code> uses <code><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">pkgload::load_all()</a></code> instead of a home grown solution to simulate package loading (this is needed because roxygen2 uses run-time information to generate the documentation). This should reduce S4 related problems and ensures that <code>devtools::document()</code> and <code><a href="../reference/roxygenize.html">roxygenise()</a></code> always have exactly the same behaviour (<a href="https://github.com/r-lib/roxygen2/issues/568" class="external-link">#568</a>, <a href="https://github.com/r-lib/roxygen2/issues/595" class="external-link">#595</a>).</p></li>
 <li><p>If an inherited section cannot be found, the warning contains the help page from which that section was requested (<a href="https://github.com/r-lib/roxygen2/issues/732" class="external-link">#732</a>, <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</p></li>
 <li><p>roxygen2 now always reads and writes using UTF-8 encoding. If used with a package that does not have <code>Encoding: UTF-8</code> in the DESCRIPTION, you’ll now get a warning (<a href="https://github.com/r-lib/roxygen2/issues/564" class="external-link">#564</a>, <a href="https://github.com/r-lib/roxygen2/issues/592" class="external-link">#592</a>).</p></li>

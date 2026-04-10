@@ -48,7 +48,10 @@ Other less frequently used tags:
 ## See also
 
 Other documentation tags:
-[`tags-rd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md),
-[`tags-rd-data`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md),
-[`tags-rd-oop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md),
+[`tags-rd-R6`](https://roxygen2.r-lib.org/dev/reference/tags-rd-R6.md),
+[`tags-rd-S3`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S3.md),
+[`tags-rd-S4`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S4.md),
+[`tags-rd-S7`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S7.md),
+[`tags-rd-datasets`](https://roxygen2.r-lib.org/dev/reference/tags-rd-datasets.md),
+[`tags-rd-functions`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md),
 [`tags-reuse`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)

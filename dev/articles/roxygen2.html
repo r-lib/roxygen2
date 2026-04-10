@@ -50,8 +50,13 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -131,26 +136,29 @@ details.</p></li>
 create a <code>NAMESPACE</code> for you, and will manage the
 <code>Collate</code> field in <code>DESCRIPTION</code>.</p>
 <div class="section level2">
-<h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+<h2 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
 </h2>
-<p>This vignette provides a high-level description of roxygen2 and the
-overall workflow you’ll use with it. The other vignettes provide more
-detail on the most important individual components:</p>
-<ul>
-<li><p>Start with <code><a href="../articles/rd.html">vignette("rd")</a></code> to learn how document your
-functions with roxygen2.</p></li>
-<li><p><code><a href="../articles/rd-other.html">vignette("rd-other")</a></code> discusses how to document other
-things like datasets, the package itself, and the various pieces used by
-R’s OOP systems.</p></li>
-<li><p><code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> gives the details of
-roxygen2’s rmarkdown support.</p></li>
-<li><p><code><a href="../articles/reuse.html">vignette("reuse")</a></code> demonstrates the tools available
-to reuse documentation in multiple places.</p></li>
-<li><p><code><a href="../articles/namespace.html">vignette("namespace")</a></code> describes how to generate a
-<code>NAMESPACE</code> file, how namespacing works in R, and how you can
-use roxygen2 to be specific about what your package needs and
-supplies.</p></li>
-</ul>
+<p>A roxygen <strong>block</strong> is a sequence of lines starting with
+<code>#'</code> (optionally preceded by white space).</p>
+<p>The first lines of the block is called the
+<strong>introduction</strong> and forms the title, description, and
+details, as described below. The introduction continues until the first
+<strong>tag</strong>.</p>
+<p>Tags start with <code>@</code>, like <code>@details</code> or
+<code>@param</code>. Tags must appear at the beginning of a line and
+their content extends to the start of the next tag or the end of the
+block. Text within the description or tags can be formatted using
+Markdown or <code>Rd</code> commands; see
+<code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> for details.</p>
+<p>A block ends when it hits R code, usually a function or object
+assignment. Blocks ignore empty lines, including lines made up of
+non-roxygen comments. If you need to separate two blocks, use
+<code>NULL</code>.</p>
+<p>If you want to use roxygen2 documentation tags without generating an
+<code>.Rd</code> file, you can use <code>@noRd</code> to suppress file
+generation for a given topic. This is useful if you want to use roxygen2
+conventions for documenting an internal function; only people reading
+the source doc will be able to read the docs.</p>
 </div>
 <div class="section level2">
 <h2 id="running-roxygen">Running roxygen<a class="anchor" aria-label="anchor" href="#running-roxygen"></a>
@@ -245,6 +253,30 @@ of the package available to users, would also be converted by
 <code><a href="../reference/roxygenize.html">roxygenize()</a></code> into a line in the <code>NAMESPACE</code>
 file:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>export(add)</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
+<p>The other vignettes provide more detail on the most important
+individual components:</p>
+<ul>
+<li><p><code><a href="../articles/rd-functions.html">vignette("rd-functions")</a></code> describes how to document
+your functions with roxygen2.</p></li>
+<li><p><code><a href="../articles/rd-datasets.html">vignette("rd-datasets")</a></code> and
+<code><a href="../articles/rd-packages.html">vignette("rd-packages")</a></code> cover documenting datasets and the
+package itself.</p></li>
+<li><p><code><a href="../articles/rd-S3.html">vignette("rd-S3")</a></code>, <code><a href="../articles/rd-S4.html">vignette("rd-S4")</a></code>,
+<code><a href="../articles/rd-R6.html">vignette("rd-R6")</a></code>, and <code><a href="../articles/rd-S7.html">vignette("rd-S7")</a></code>
+discuss documenting the various OOP systems.</p></li>
+<li><p><code><a href="../articles/rd-formatting.html">vignette("rd-formatting")</a></code> gives the details of
+roxygen2’s rmarkdown support.</p></li>
+<li><p><code><a href="../articles/reuse.html">vignette("reuse")</a></code> demonstrates the tools available
+to reuse documentation in multiple places.</p></li>
+<li><p><code><a href="../articles/namespace.html">vignette("namespace")</a></code> describes how to generate a
+<code>NAMESPACE</code> file, how namespacing works in R, and how you can
+use roxygen2 to be specific about what your package needs and
+supplies.</p></li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

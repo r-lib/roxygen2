@@ -59,13 +59,20 @@ To get started, first read
 Then read more about the specific package component that you want to
 generate:
 
-- Start with
-  [`vignette("rd")`](https://roxygen2.r-lib.org/dev/articles/rd.md) to
-  learn how document your functions with roxygen2.
+- [`vignette("rd-functions")`](https://roxygen2.r-lib.org/dev/articles/rd-functions.md)
+  describes how to document your functions with roxygen2.
 
-- [`vignette("rd-other")`](https://roxygen2.r-lib.org/dev/articles/rd-other.md)
-  discusses how to document other things like datasets, the package
-  itself, and the various pieces used by R’s OOP systems.
+- [`vignette("rd-S3")`](https://roxygen2.r-lib.org/dev/articles/rd-S3.md),
+  [`vignette("rd-S4")`](https://roxygen2.r-lib.org/dev/articles/rd-S4.md),
+  [`vignette("rd-R6")`](https://roxygen2.r-lib.org/dev/articles/rd-R6.md),
+  and
+  [`vignette("rd-S7")`](https://roxygen2.r-lib.org/dev/articles/rd-S7.md)
+  discuss documenting the various OOP systems.
+
+- [`vignette("rd-datasets")`](https://roxygen2.r-lib.org/dev/articles/rd-datasets.md)
+  and
+  [`vignette("rd-packages")`](https://roxygen2.r-lib.org/dev/articles/rd-packages.md)
+  cover documenting datasets and the package itself.
 
 - [`vignette("rd-formatting")`](https://roxygen2.r-lib.org/dev/articles/rd-formatting.md)
   gives the details of roxygen2’s rmarkdown support.
@@ -112,9 +119,26 @@ generate:
 
   Tags for managing the `NAMESPACE`
 
-- [`tags-rd-data`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
-  [`@format`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
-  [`@source`](https://roxygen2.r-lib.org/dev/reference/tags-rd-data.md)
+- [`tags-rd-R6`](https://roxygen2.r-lib.org/dev/reference/tags-rd-R6.md)
+  [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-R6.md)
+  [`@R6method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-R6.md)
+  : Tags for documenting R6
+
+- [`tags-rd-S3`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S3.md)
+  [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S3.md) :
+  Tags for documenting S3
+
+- [`tags-rd-S4`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S4.md)
+  [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S4.md) :
+  Tags for documenting S4
+
+- [`tags-rd-S7`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S7.md)
+  [`@prop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-S7.md) :
+  Tags for documenting S7
+
+- [`tags-rd-datasets`](https://roxygen2.r-lib.org/dev/reference/tags-rd-datasets.md)
+  [`@format`](https://roxygen2.r-lib.org/dev/reference/tags-rd-datasets.md)
+  [`@source`](https://roxygen2.r-lib.org/dev/reference/tags-rd-datasets.md)
   : Tags for documenting datasets
 
 - [`tags-rd-formatting`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
@@ -123,28 +147,20 @@ generate:
   [`@section`](https://roxygen2.r-lib.org/dev/reference/tags-rd-formatting.md)
   : Tags related to markdown support
 
-- [`tags-rd-oop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@field`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@prop`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@R6method`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md)
-  [`@slot`](https://roxygen2.r-lib.org/dev/reference/tags-rd-oop.md) :
-  Tags for documenting classes
-
-- [`tags-rd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@description`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@details`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@example`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@examples`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@examplesIf`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@noRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@param`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@rawRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@return`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@returns`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@title`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md)
-  [`@usage`](https://roxygen2.r-lib.org/dev/reference/tags-rd.md) : Tags
-  for documenting functions
+- [`tags-rd-functions`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@description`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@details`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@example`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@examples`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@examplesIf`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@noRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@param`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@rawRd`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@return`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@returns`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@title`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  [`@usage`](https://roxygen2.r-lib.org/dev/reference/tags-rd-functions.md)
+  : Tags for documenting functions
 
 - [`tags-reuse`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
   [`@describeIn`](https://roxygen2.r-lib.org/dev/reference/tags-reuse.md)
@@ -258,16 +274,36 @@ comments. Each roclet handles a different type of output.
 ### Documentation
 
 - [Documenting
-  functions](https://roxygen2.r-lib.org/dev/articles/rd.md):
+  functions](https://roxygen2.r-lib.org/dev/articles/rd-functions.md):
 
   The basics of roxygen2 tags and how to use them for documenting
   functions.
 
-- [Documenting other
-  objects](https://roxygen2.r-lib.org/dev/articles/rd-other.md):
+- [Documenting S3](https://roxygen2.r-lib.org/dev/articles/rd-S3.md):
 
-  How to document datasets, packages, and the classes, generics, and
-  methods of S3, S4, S7, and R6.
+  How to document S3 generics, methods, and classes.
+
+- [Documenting S4](https://roxygen2.r-lib.org/dev/articles/rd-S4.md):
+
+  How to document S4 generics, methods, and classes.
+
+- [Documenting R6](https://roxygen2.r-lib.org/dev/articles/rd-R6.md):
+
+  How to document R6 classes, methods, and fields.
+
+- [Documenting S7](https://roxygen2.r-lib.org/dev/articles/rd-S7.md):
+
+  How to document S7 generics, methods, and classes.
+
+- [Documenting
+  datasets](https://roxygen2.r-lib.org/dev/articles/rd-datasets.md):
+
+  How to document datasets stored in `data/`.
+
+- [Documenting
+  packages](https://roxygen2.r-lib.org/dev/articles/rd-packages.md):
+
+  How to document a package as a whole using the `"_PACKAGE"` sentinel.
 
 - [Reusing
   documentation](https://roxygen2.r-lib.org/dev/articles/reuse.md):

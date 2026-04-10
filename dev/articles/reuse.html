@@ -50,8 +50,13 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -138,7 +143,7 @@ arguments.</p>
 correspondence between topic names and &lt;code&gt;.Rd&lt;/code&gt; files where a
 topic called &lt;code&gt;foo&lt;/code&gt; will produce a file called
 &lt;code&gt;man/foo.Rd&lt;/code&gt;.&lt;/p&gt;"><sup>1</sup></a> to include multiple
-functions in the same page. Tags (e.g. <code>@title</code>,
+functions in the same page. Tags (e.g. <code>@title</code>,
 <code>@description</code>, <code>@examples</code>) will be combined,
 across blocks but often this yields text that is hard to understand. So
 we recommend that you make one block that contains the title,
@@ -147,7 +152,7 @@ document individual parameters in the other blocks.</p>
 <p>There are two basic ways to do that. You can create a standalone
 documentation block and then add the functions to it. This typically
 works best when you have a family of related functions and you want to
-link to that family from other functions (i.e. <code>trig</code> in the
+link to that family from other functions (i.e. <code>trig</code> in the
 examples below).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Trigonometric approximations</span></span>
@@ -340,7 +345,7 @@ together. For example, <code>dplyr::left_join()</code> has:</p>
 <span><span class="co">#'   lazy data frames (e.g. from dbplyr or dtplyr). See *Methods*, below, for</span></span>
 <span><span class="co">#'   more details.</span></span></code></pre></div>
 <p>When joint parameter documentation is inherited, it’s all or nothing,
-i.e. if a function has <code>@inheritParams left_join</code> it will
+i.e. if a function has <code>@inheritParams left_join</code> it will
 only inherit the documentation for <code>x</code> and <code>y</code> if
 it has both <code>x</code> and <code>y</code> arguments and neither is
 documented by the inheriting function.</p>
@@ -501,7 +506,7 @@ that you’re documenting so you can call internal functions.</p>
 user views the help page, rather than when roxygen2 builds the
 documentation. This is useful for documentation that needs to be
 dynamic, reflecting the current state of R, of the user’s library and
-system (e.g. what dependencies are installed), not the state when the
+system (e.g. what dependencies are installed), not the state when the
 package was built. It works by using the <code>\Sexpr</code> tag, so
 that <code>`Rd myFun()`</code>
 generates<code>\Sexpr[stage=render,results=rd]{myFun()}</code>.</p>

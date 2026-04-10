@@ -51,7 +51,7 @@ important details are described below.
 ### Sections and subsections
 
 The usual Markdown heading markup creates sections and subsections. Top
-level headings (e.g. `# title`) create sections with the `\section{}` Rd
+level headings (e.g. `# title`) create sections with the `\section{}` Rd
 tag. This largely supersedes use of the older `@section` tag.
 
 Top-level headings can only appear after the `@description` and
@@ -76,7 +76,7 @@ and the `\examples{}`. Their order will be the same as in the roxygen
 block.
 
 Headings at level two and above may appear inside any roxygen tag that
-formats lines of text, e.g. `@description`, `@details`, `@return`, and
+formats lines of text, e.g. `@description`, `@details`, `@return`, and
 create subsections with the `\subsection{}` Rd tag.
 
 ``` r
@@ -222,7 +222,7 @@ or its dependencies.
 R 4.5.0 and later requires that links to all topics outside of your
 package be explicitly qualified with the package name. roxygen2 will
 attempt to do this for you by looking at the dependencies of your
-package. If this fails, e.g. if multiple dependencies document the same
+package. If this fails, e.g. if multiple dependencies document the same
 topic, you’ll need to manually resolve using the syntax below.
 
 | Markdown             | Code | Rd                                    |
@@ -304,7 +304,7 @@ documentation so is documented in
 
 ### Chunk options
 
-Code blocks support some knitr chunk options, e.g. to keep the output of
+Code blocks support some knitr chunk options, e.g. to keep the output of
 several expressions together, you can specify `results="hold"`:
 
 ``` r

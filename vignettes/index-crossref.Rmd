@@ -53,16 +53,14 @@ If the object you're documenting has connections to the scientific literature, u
 
 ## Aliases
 
-`?`
-and `help()` look for topic aliases; `?foo` will find any topic that contains the `foo` alias.
+`?` and `help()` look for topic aliases; `?foo` will find any topic that contains the `foo` alias.
 
 roxygen2 generates a default alias for you based on the object you're documenting.
 You can add additional aliases with `@aliases alias1 alias2 alias3` or remove default alias with `@aliases NULL`.
 
 ## Search
 
-As well as looking in the aliases, `help.search()` and `???`
-also look in the `@title`, `@keywords`, and `@concept`s tags.
+As well as looking in the aliases, `help.search()` and `???` also look in the `@title`, `@keywords`, and `@concept`s tags.
 
 - `@keywords` adds standard keywords, which must be present in `file.path(R.home("doc"), "KEYWORDS")`.
 

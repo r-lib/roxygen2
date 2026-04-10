@@ -114,8 +114,7 @@ When you use `?x`, `help("x")` or `example("x")` R looks for an Rd file containi
 It then parses the file, converts it into HTML and displays it.
 These functions look for an Rd file in *installed* packages.
 This isn't very useful for package development, because you want to use the `.Rd` files in the *source* package.
-For this reason, we recommend that you use roxygen2 in conjunction with devtools: `devtools::load_all()` automatically adds shims so that `?`
-and friends will look in the development package.
+For this reason, we recommend that you use roxygen2 in conjunction with devtools: `devtools::load_all()` automatically adds shims so that `?` and friends will look in the development package.
 
 ## Basic process: making functions available to users
 

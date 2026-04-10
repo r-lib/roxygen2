@@ -147,8 +147,7 @@ There are three cases you need to be aware of:
 
 Generally, roxygen2 can automatically figure out which generic the method belongs to.
 But there is occasionally ambiguity if the generic name contains `.`.
-You can avoid this problem in your own packages by not using `.`
-in generic names.
+You can avoid this problem in your own packages by not using `.` in generic names.
 But you might encounter it when writing methods for generics in other packages.
 For example, is `all.equal.data.frame()` the `equal.data.frame` method for `all()`, or the `data.frame` method for `all.equal()`?
 If this happens to you, disambiguate with `@method`:
@@ -163,5 +162,4 @@ all.equal.data.frame <- function(target, current, ...) {
 ```
 
 roxygen2 does now automatically handle the `all.equal` case for you, so this should happen very very rarely.
-And, again it can be avoided by not using `.`
-in generic or class names.
+And, again it can be avoided by not using `.` in generic or class names.

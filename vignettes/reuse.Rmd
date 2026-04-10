@@ -198,15 +198,13 @@ When joint parameter documentation is inherited, it's all or nothing, i.e. if a 
 
 ### The dot prefix
 
-Many tidyverse functions that accept named arguments in `...` also use a `.`
-prefix for their own arguments.
+Many tidyverse functions that accept named arguments in `...` also use a `.` prefix for their own arguments.
 This reduces the risk of an argument going to the wrong place.
 For example, `dplyr::mutate()` has `.by`, `.keep`, `.before`, and `.after` arguments, because if they didn't have that prefix, you wouldn't be able to create new variables called `by`, `keep`, `before`, or `after`.
 We call this pattern the [dot prefix](https://design.tidyverse.org/dots-prefix.html).
 
 This means that an argument with the same meaning can come in one of two forms: with and without the `.`.
-`@inheritParams` knows about this common pattern so ignores a `.`
-prefix when matching argument name.
+`@inheritParams` knows about this common pattern so ignores a `.` prefix when matching argument name.
 In other words, `.x` will inherit documentation for `x`, and `x` will inherit documentation from `.x`.
 
 ### Inheriting other components

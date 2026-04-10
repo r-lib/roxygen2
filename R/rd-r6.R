@@ -198,6 +198,9 @@ r6_find_super_fields <- function(missing, parent_docs, section) {
 
 # Param inheritance ----------------------------------------------------------
 
+# Inherit params from parent classes (child -> parent -> grandparent).
+# Within-class param resolution (method -> class-level -> @field) is handled
+# earlier by r6_resolve_params().
 r6_resolve_method_params <- function(method, parent_docs, topic_name) {
   fnames <- names(method$formals)
   if (length(fnames) == 0) {
@@ -217,6 +220,7 @@ r6_resolve_method_params <- function(method, parent_docs, topic_name) {
     method$params <- method$params[order(match(firstnames, fnames))]
   }
 
+  # Only now, after two rounds of resolution can we warn about missing params.
   miss <- setdiff(fnames, r6_param_names(method$params))
   for (m in miss) {
     warn_roxy_topic(

@@ -143,6 +143,9 @@ r6_method_from_row <- function(method, block) {
   )
 }
 
+# Resolve params within a class: method @param -> class-level @param -> @field.
+# Cross-class inheritance from parent classes is handled later by
+# r6_resolve_method_params().
 r6_resolve_params <- function(method, block) {
   tags <- method$tags[[1]]
   par_tags <- keep(tags, \(t) t$tag == "param")
@@ -166,7 +169,7 @@ r6_resolve_params <- function(method, block) {
     return(list())
   }
 
-  # Add missing from class-level @param
+  # 1. Add class-level @param
   miss <- setdiff(fnames, pnames)
   cls_tags <- keep(block$tags, function(t) {
     !is.na(t$line) &&
@@ -176,7 +179,7 @@ r6_resolve_params <- function(method, block) {
   })
   params <- c(params, r6_tags_to_params(cls_tags))
 
-  # For initialize(), inherit from @field tags for any still-missing params
+  # 2. For initialize() only, inherit from @field
   if (method$name == "initialize") {
     miss <- setdiff(fnames, r6_param_names(params))
 

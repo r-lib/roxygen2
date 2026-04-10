@@ -33,13 +33,16 @@
   lines, catching common mistakes. Affected tags: `@aliases`,
   `@concept`, `@encoding`, `@exportClass`, `@exportMethod`,
   `@exportPattern`, `@exportS3Method`, `@importFrom`,
-  `@importClassesFrom`, `@importMethodsFrom`, `@include`,
-  `@inheritParams`, `@keywords`, `@method`, `@name`, `@order`,
-  `@rdname`, `@S3method`, `@template`, and `@useDynLib`
-  ([\#1642](https://github.com/r-lib/roxygen2/issues/1642),
+  `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@keywords`,
+  `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and
+  `@useDynLib` ([\#1642](https://github.com/r-lib/roxygen2/issues/1642),
   [\#1688](https://github.com/r-lib/roxygen2/issues/1688)). This may
   break some existing usage, but it prevents a wide class of otherwise
   silent errors.
+- `@inheritParams` now supports argument filtering using the same syntax
+  as `@inheritDotParams`. For example, `@inheritParams foo x y` inherits
+  only `x` and `y`, and `@inheritParams foo -z` inherits everything
+  except `z` ([\#1849](https://github.com/r-lib/roxygen2/issues/1849)).
 - `@examplesIf` now warns when there is no example code after the
   condition ([\#1695](https://github.com/r-lib/roxygen2/issues/1695)).
 - [`tag_words_line()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md)

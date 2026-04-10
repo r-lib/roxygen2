@@ -199,9 +199,13 @@ if `g` inherits parameters from `h`, then `f` can also inherit those
 parameters from `g`. However, this technique is best used sparingly:
 it’s very easy to create complex dependency webs that are hard to reason
 about where making changing the documentation in one function cascades
-out in unexpected ways across your package. If you want to be more
-explicit, you should consider writing helper functions and using inline
-R code, as described below.
+out in unexpected ways across your package. You can avoid this problem
+by being more explicit about which parameters are inherited:
+
+- `@inheritParams foo x y` inherits only `x` and `y`.
+- `@inheritParams foo -z` inherits all parameters except `z`.
+- `@inheritParams foo first:third` inherits parameters `first` through
+  `third` (in argument order).
 
 ### Multiple parameters
 

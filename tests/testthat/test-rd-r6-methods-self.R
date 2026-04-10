@@ -331,6 +331,46 @@ test_that("initialize() inherits params from superclass initialize()", {
   )
 })
 
+test_that("child initialize() inherits params from superclass @field", {
+  text <- "
+    #' Parent
+    A <- R6::R6Class('A', cloneable = FALSE,
+      public = list(
+        #' @field x An x value.
+        x = NULL,
+        #' @field y A y value.
+        y = NULL,
+        #' @description Create.
+        initialize = function(x, y) {
+          self$x <- x
+          self$y <- y
+        }
+      )
+    )
+
+    #' Child
+    B <- R6::R6Class('B', cloneable = FALSE,
+      inherit = A,
+      public = list(
+        #' @description Create child.
+        #' @param z A z value.
+        initialize = function(x, y, z) {
+          super$initialize(x, y)
+        }
+      )
+    )"
+  docs <- r6_doc(text)
+  init <- docs$methods$self[[1]]
+  expect_equal(
+    init$params,
+    list(
+      list(name = "x", description = "An x value."),
+      list(name = "y", description = "A y value."),
+      list(name = "z", description = "A z value.")
+    )
+  )
+})
+
 test_that("method inherits params through multiple levels", {
   text <- "
     #' Grandparent

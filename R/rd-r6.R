@@ -1,6 +1,9 @@
+# Pass 1: within-class resolution ---------------------------------------------
+# Resolves params from method @param -> class-level @param -> @field.
+# See r6_resolve_params() for the core logic.
+
 topic_add_r6_methods <- function(rd, block, env, base_path) {
   docs <- r6_class_from_block(block, env)
-
   block <- r6_fix_intro(block)
 
   # Add class-level tags (skip tags stamped for a specific method)
@@ -92,9 +95,6 @@ tag_has_name <- function(tag, names) {
 topics_process_r6_inherit <- function(topics) {
   r6_deps <- function(topic) {
     docs <- topic$get_value("r6_class")
-    if (is.null(docs)) {
-      return(character())
-    }
     docs$superclasses$classname
   }
 

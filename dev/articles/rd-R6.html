@@ -184,8 +184,10 @@ definition:</p>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>To suppress documentation of a field or active binding, use
-<code>@field name NULL</code>.</p>
+<p>If a field or active binding is inherited from a superclass and
+documented there, the child class will automatically inherit the
+documentation. To suppress documentation of a field or active binding,
+use <code>@field name NULL</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
@@ -229,6 +231,11 @@ tag</strong> — you can’t start with a plain text introduction. Use
 <code>@examples</code> tags. These are used to create a subsection for
 the method, within a separate ‘Methods’ section in the rendered
 help.</p>
+<p>If a method parameter is not documented with <code>@param</code>,
+roxygen2 will look for documentation in the following order: class-level
+<code>@param</code> tags, <code>@field</code> tags (for
+<code>initialize()</code> only), and then the same method in parent
+classes.</p>
 <p>If you want to leave a method without documentation, use
 <code>@noRd</code> to suppress the warning.</p>
 <div class="section level3">

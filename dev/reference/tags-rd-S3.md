@@ -5,10 +5,8 @@ Learn the full details in
 
 Key tags:
 
-- `@method ${1:generic} ${2:class}`: Force a function to be recognised
-  as an S3 method. This affects the default usage and the `NAMESPACE`
-  directive produced by `@export`. Only needed if automatic detection
-  fails.
+- `@method ${1:generic} ${2:class}`: If ambiguous, clarify which generic
+  an S3 method belongs too. Only needed in very rare cases.
 
 ## Usage
 

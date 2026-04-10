@@ -72,8 +72,10 @@ Person <- R6::R6Class(
 )
 ```
 
-To suppress documentation of a field or active binding, use
-`@field name NULL`.
+If a field or active binding is inherited from a superclass and
+documented there, the child class will automatically inherit the
+documentation. To suppress documentation of a field or active binding,
+use `@field name NULL`.
 
 ## Methods
 
@@ -118,6 +120,11 @@ Like functions, methods can use the `@description`, `@details`,
 `@param`, `@returns`, and `@examples` tags. These are used to create a
 subsection for the method, within a separate ‘Methods’ section in the
 rendered help.
+
+If a method parameter is not documented with `@param`, roxygen2 will
+look for documentation in the following order: class-level `@param`
+tags, `@field` tags (for `initialize()` only), and then the same method
+in parent classes.
 
 If you want to leave a method without documentation, use `@noRd` to
 suppress the warning.

@@ -108,6 +108,11 @@
     need to duplicate descriptions. Explicit `@param` tags still take
     precedence
     ([\#1004](https://github.com/r-lib/roxygen2/issues/1004)).
+  - R6 subclass methods now automatically inherit parameter
+    documentation from the same-named superclass method when parameters
+    are not documented locally. Fields and active bindings also inherit
+    documentation from superclasses
+    ([\#996](https://github.com/r-lib/roxygen2/issues/996)).
 - New
   [`needs_roxygenize()`](https://roxygen2.r-lib.org/dev/reference/needs_roxygenize.md)
   provides a lightweight check that man pages are up-to-date by

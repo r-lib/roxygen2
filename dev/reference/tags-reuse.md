@@ -21,9 +21,11 @@ Key tags:
   another function. We recommend supplying explicit argument names for
   maximum clarity and consistency.
 
-- `@inheritParams ${1:source}`: Inherit argument documentation from
-  another function. Only inherits documentation for arguments that
-  aren't already documented locally.
+- `@inheritParams ${1:source} ${2:arg1 arg2 arg3}`: Inherit argument
+  documentation from another function. Only inherits documentation for
+  arguments that aren't already documented locally. Optionally followed
+  by a list of argument names to include or exclude, using the same
+  syntax as `@inheritDotParams`.
 
 - `@inheritSection ${1:source} ${2:section name}`: Inherit a specific
   named section from another topic.
@@ -64,7 +66,7 @@ Other less frequently used tags:
 #' @includeRmd man/rmd/${1:filename}.Rmd
 #' @inherit ${1:source} ${2:components}
 #' @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}
-#' @inheritParams ${1:source}
+#' @inheritParams ${1:source} ${2:arg1 arg2 arg3}
 #' @inheritSection ${1:source} ${2:section name}
 #' @order ${1:number}
 #' @rdname ${1:topic-name}

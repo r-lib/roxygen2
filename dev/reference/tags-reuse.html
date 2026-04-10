@@ -5,7 +5,7 @@ Key tags:
 @inherit ${1:source} ${2:components}: Inherit one or more documentation components from another topic. If components is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of params, return, title, description, details, seealso, sections, references, examples, author, source, note, and format.
 @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}: Automatically generate documentation for ... when you're passing dots along to another function. We recommend supplying explicit argument names for maximum clarity and consistency.
-@inheritParams ${1:source}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
+@inheritParams ${1:source} ${2:arg1 arg2 arg3}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally. Optionally followed by a list of argument names to include or exclude, using the same syntax as @inheritDotParams.
 @inheritSection ${1:source} ${2:section name}: Inherit a specific named section from another topic.
 @order ${1:number}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
 @rdname ${1:topic-name}: Override the file name of generated .Rd file. Can be used to combine multiple blocks into a single documentation topic.
@@ -24,7 +24,7 @@ Key tags:
 @inherit ${1:source} ${2:components}: Inherit one or more documentation components from another topic. If components is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of params, return, title, description, details, seealso, sections, references, examples, author, source, note, and format.
 @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}: Automatically generate documentation for ... when you're passing dots along to another function. We recommend supplying explicit argument names for maximum clarity and consistency.
-@inheritParams ${1:source}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
+@inheritParams ${1:source} ${2:arg1 arg2 arg3}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally. Optionally followed by a list of argument names to include or exclude, using the same syntax as @inheritDotParams.
 @inheritSection ${1:source} ${2:section name}: Inherit a specific named section from another topic.
 @order ${1:number}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
 @rdname ${1:topic-name}: Override the file name of generated .Rd file. Can be used to combine multiple blocks into a single documentation topic.
@@ -111,7 +111,7 @@ Other less frequently used tags:
 <li><p><code>@inherit ${1:source} ${2:components}</code>: Inherit one or more documentation components from another topic. If <code>components</code> is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of <code>params</code>, <code>return</code>, <code>title</code>, <code>description</code>, <code>details</code>, <code>seealso</code>, <code>sections</code>, <code>references</code>, <code>examples</code>, <code>author</code>, <code>source</code>, <code>note</code>, and <code>format</code>.</p></li>
 <li><p><code>@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}</code>: Automatically generate documentation for <code>...</code> when you're passing dots along to another function. We recommend supplying explicit argument names for maximum clarity and consistency.</p></li>
-<li><p><code>@inheritParams ${1:source}</code>: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.</p></li>
+<li><p><code>@inheritParams ${1:source} ${2:arg1 arg2 arg3}</code>: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally. Optionally followed by a list of argument names to include or exclude, using the same syntax as <code>@inheritDotParams</code>.</p></li>
 <li><p><code>@inheritSection ${1:source} ${2:section name}</code>: Inherit a specific named section from another topic.</p></li>
 <li><p><code>@order ${1:number}</code>: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.</p></li>
 <li><p><code>@rdname ${1:topic-name}</code>: Override the file name of generated <code>.Rd</code> file. Can be used to combine multiple blocks into a single documentation topic.</p></li>
@@ -130,7 +130,7 @@ Otherwise, specify individual components to inherit by picking one or more of <c
 <span><span class="co">#' @includeRmd man/rmd/${1:filename}.Rmd</span></span>
 <span><span class="co">#' @inherit ${1:source} ${2:components}</span></span>
 <span><span class="co">#' @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}</span></span>
-<span><span class="co">#' @inheritParams ${1:source}</span></span>
+<span><span class="co">#' @inheritParams ${1:source} ${2:arg1 arg2 arg3}</span></span>
 <span><span class="co">#' @inheritSection ${1:source} ${2:section name}</span></span>
 <span><span class="co">#' @order ${1:number}</span></span>
 <span><span class="co">#' @rdname ${1:topic-name}</span></span>

@@ -231,10 +231,8 @@ Note that there is no namespacing so if you're defining multiple new tags I reco
 ### Using your new tag
 
 Now that the three methods are created, we still need to make them available to `roxygenize()`.
-First, you need to export the method:
-
-- If the package defining the tag *imports* roxygen2, use `@export`.
-- If the package defining the tag only *suggests* roxygen2, use `@exportMethod`.
+First, you need to export the method so that it's registered correctly.
+Since your methods will be for generics defined in roxygen2 (another package), you'll need to follow the advice in [Methods for generics in other packages](rd-S3.html#methods-for-generics-in-other-packages).
 
 Next, you'll need to load the tag-defining package in the package where you want to use it.
 For example, if you created some new tags in {packageFoo}, and would like to use these tags in your documentation for {packageBar}, append this line to the `DESCRIPTION` of {packageBar}:

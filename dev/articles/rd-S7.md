@@ -28,7 +28,7 @@ do this in the description:
 #' `size()` is an S7 generic that determines the size of an object,
 #' with methods available for the following classes:
 #'
-#' `r doclisting::methods_inline("size")`
+#' `r doclisting::methods_list("size")`
 #'
 #' @param x An object.
 #' @param ... Not used.

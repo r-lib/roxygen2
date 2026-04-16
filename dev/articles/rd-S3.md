@@ -28,7 +28,7 @@ do this in the description:
 #' `frobnpolicate()` is an S3 generic that ..., with methods available for
 #' the following classes:
 #'
-#' `r doclisting::methods_inline("frobnpolicate")`
+#' `r doclisting::methods_list("frobnpolicate")`
 ```
 
 For more complicated generics, you can use a `# Methods` section to

@@ -30,15 +30,6 @@ test_that("can eval inline code", {
   expect_equal(out1$get_value("description"), "Description 4")
 })
 
-test_that("uppercase R in inline code gives warning", {
-  text <- "
-    #' @title Title `R 1 + 1`
-    #' @md
-    foo <- function() NULL
-  "
-  expect_snapshot(. <- roc_proc_text(rd_roclet(), text))
-})
-
 test_that("can eval fenced code", {
   out1 <- roc_proc_text(
     rd_roclet(),

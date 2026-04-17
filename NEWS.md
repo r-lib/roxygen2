@@ -11,7 +11,6 @@
 * `` `Rd expr` `` inline code now generates `\Sexpr[stage=render,results=rd]{expr}`, providing a convenient syntax for evaluating R code at documentation render time (#1214).
 * Indented bullet lists in `@param` and other two-part tags are no longer incorrectly nested (#1102).
 * Horizontal rules (e.g. `----`) now generate a clear warning instead of an internal error about an unknown `thematic_break` xml node (#1707).
-* Inline code with uppercase `` `R ` `` now warns that you should use lowercase `` `r ` `` instead, since knitr only supports lowercase.
 * Inline R code (`` `r expr` ``) in non-indented list continuation lines no longer causes an error (#1651).
 * Link text now supports non-code markup like bold and italic, e.g., `[*italic text*][func]` generates `\link[=func]{\emph{italic text}}`, matching R's support for markup in `\link` text in R 4.5.0.
 * Links now do a better job of resolving package names: the process is cached for better performance (#1724); it works with infix operators (e.g. `[%in%]`) (#1728); no longer changes the link text (#1662); and includes base packages when reporting ambiguous functions (#1725). Links to external packages now use the topic alias instead of the Rd file name as the anchor. This fixes "Non-topic package-anchored link(s)" notes from R CMD check (#1709).

@@ -335,10 +335,6 @@ mdxml_break <- function(state) {
 mdxml_code <- function(xml, tag) {
   code <- xml_text(xml)
 
-  if (grepl("^R ", code)) {
-    warn_roxy_tag(tag$tag, "use ` r`, not `R `, for inline code")
-  }
-
   if (grepl("^Rd ", code)) {
     paste0(
       "\\Sexpr[stage=render,results=rd]{",

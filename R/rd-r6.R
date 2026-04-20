@@ -13,12 +13,20 @@ topic_add_r6_methods <- function(rd, block, env, base_path) {
     }
   }
 
-  # Store unresolved R6 docs; pass 2 will inherit and format
-  rd$add(rd_section("r6_class", docs))
+  # Store unresolved R6 docs; pass 2 will inherit and format. The value is a
+  # named list keyed by classname so that multiple R6 classes sharing a topic
+  # (via @rdname) can coexist and be looked up individually.
+  classname <- block$object$value$classname %||% ""
+  rd$add(rd_section("r6_class", set_names(list(docs), classname)))
 }
 
 #' @export
 format.rd_section_r6_class <- function(x, ...) NULL
+
+#' @export
+merge.rd_section_r6_class <- function(x, y, ...) {
+  rd_section("r6_class", c(x$value, y$value))
+}
 
 # When an R6 class has inline @description tags for methods, parse_description()
 # parser puts the class description into @details instead of @description.
@@ -94,21 +102,44 @@ tag_has_name <- function(tag, names) {
 # to topics. Mirrors topics_process_inherit() but for R6 field/param docs.
 topics_process_r6_inherit <- function(topics) {
   r6_deps <- function(topic) {
-    docs <- topic$get_value("r6_class")
-    docs$superclasses$classname
+    docs_list <- topic$get_value("r6_class")
+    unlist(lapply(docs_list, \(d) d$superclasses$classname))
   }
 
   topics$topo_apply(r6_deps, r6_resolve_topic)
 }
 
 r6_resolve_topic <- function(topic, topics) {
-  docs <- topic$get_value("r6_class")
-  if (is.null(docs)) {
+  docs_list <- topic$get_value("r6_class")
+  if (is.null(docs_list)) {
     return()
   }
 
   topic_name <- topic$get_name()
 
+  resolved <- lapply(docs_list, function(docs) {
+    r6_resolve_class(docs, topic_name, topics)
+  })
+
+  # Update stored docs (now resolved, so child classes can read them)
+  topic$sections$r6_class <- rd_section("r6_class", resolved)
+
+  # Format and inject into topic. Each class produces its own block of Rd.
+  rd_lines <- unlist(lapply(resolved, format))
+  topic$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
+
+  # Add combined examples across all methods of all classes in the topic
+  all_methods <- list(
+    self = unlist(lapply(resolved, \(d) d$methods$self), recursive = FALSE)
+  )
+  ex_lines <- r6_all_examples(all_methods)
+  if (length(ex_lines) > 0) {
+    ex_txt <- paste0(ex_lines, collapse = "\n")
+    topic$add(rd_section("examples", ex_txt), overwrite = FALSE)
+  }
+}
+
+r6_resolve_class <- function(docs, topic_name, topics) {
   # Collect resolved parent docs from already-processed topics
   parent_docs <- list()
   for (classname in docs$superclasses$classname) {
@@ -120,7 +151,9 @@ r6_resolve_topic <- function(topic, topics) {
     if (is.null(parent_topic)) {
       next
     }
-    parent_docs[[classname]] <- parent_topic$get_value("r6_class")
+    parent_r6 <- parent_topic$get_value("r6_class")
+    # Parent topic may contain multiple R6 classes; pick the one by name
+    parent_docs[[classname]] <- parent_r6[[classname]]
   }
 
   # Inherit fields and active bindings
@@ -136,19 +169,7 @@ r6_resolve_topic <- function(topic, topics) {
     r6_resolve_method_params(method, parent_docs, topic_name)
   })
 
-  # Update stored docs (now resolved, so child classes can read them)
-  topic$sections$r6_class <- rd_section("r6_class", docs)
-
-  # Format and inject into topic
-  rd_lines <- format(docs)
-  topic$add(rd_section("rawRd", paste(rd_lines, collapse = "\n")))
-
-  # Add combined examples for all methods
-  ex_lines <- r6_all_examples(docs$methods)
-  if (length(ex_lines) > 0) {
-    ex_txt <- paste0(ex_lines, collapse = "\n")
-    topic$add(rd_section("examples", ex_txt), overwrite = FALSE)
-  }
+  docs
 }
 
 # Field inheritance ----------------------------------------------------------

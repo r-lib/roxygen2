@@ -48,8 +48,6 @@
 - Horizontal rules (e.g. `----`) now generate a clear warning instead of
   an internal error about an unknown `thematic_break` xml node
   ([\#1707](https://github.com/r-lib/roxygen2/issues/1707)).
-- Inline code with uppercase `` `R ` `` now warns that you should use
-  lowercase `` `r ` `` instead, since knitr only supports lowercase.
 - Inline R code (`` `r expr` ``) in non-indented list continuation lines
   no longer causes an error
   ([\#1651](https://github.com/r-lib/roxygen2/issues/1651)).

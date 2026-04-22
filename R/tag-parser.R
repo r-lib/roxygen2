@@ -119,13 +119,22 @@ tag_name <- function(x) {
 #' @param required Is the second part required (TRUE) or can it be blank
 #'   (FALSE)?
 #' @param markdown Should the second part be parsed as markdown?
-tag_two_part <- function(x, first, second, required = TRUE, markdown = TRUE) {
+tag_two_part <- function(
+  x,
+  first,
+  second,
+  required = TRUE,
+  markdown = TRUE,
+  multiline = FALSE
+) {
   if (trimws(x$raw) == "") {
     if (!required) {
       warn_roxy_tag(x, "requires {first}")
     } else {
       warn_roxy_tag(x, "requires two parts: {first} and {second}")
     }
+    NULL
+  } else if (!multiline && warn_if_multiline(x, trimws(x$raw))) {
     NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")

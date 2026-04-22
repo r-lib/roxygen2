@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_parse.roxy_tag_field <- function(x) {
-  tag_two_part(x, "a field name", "a description")
+  tag_two_part(x, "a field name", "a description", multiline = TRUE)
 }
 #' @export
 roxy_tag_rd.roxy_tag_field <- function(x, base_path, env) {
@@ -14,7 +14,7 @@ format.rd_section_field <- function(x, ...) {
 
 #' @export
 roxy_tag_parse.roxy_tag_slot <- function(x) {
-  tag_two_part(x, "a slot name", "a description")
+  tag_two_part(x, "a slot name", "a description", multiline = TRUE)
 }
 #' @export
 roxy_tag_rd.roxy_tag_slot <- function(x, base_path, env) {

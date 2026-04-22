@@ -87,6 +87,17 @@ test_that("tag_words() warns on multi-line content", {
   })
 })
 
+test_that("tag_two_part() warns on multi-line content by default", {
+  expect_snapshot({
+    tag <- roxy_test_tag("foo bar\nbaz")
+    expect_parse_failure(tag_two_part(tag, "a name", "a value"))
+  })
+
+  tag <- roxy_test_tag("foo bar\nbaz")
+  out <- tag_two_part(tag, "a name", "a value", multiline = TRUE)
+  expect_equal(out$val, list(name = "foo", description = "bar\nbaz"))
+})
+
 test_that("tag_value() warns on multi-line content", {
   expect_snapshot({
     tag <- roxy_test_tag("a\nb")

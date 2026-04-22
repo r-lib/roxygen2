@@ -74,7 +74,7 @@ See `vignette("rd-S7")` for best practices.
 
 ## Individual tags
 
-* Tags that expect single-line input now warn when they span multiple lines, catching a common class of mistake. Affected tags: `@aliases`, `@concept`, `@encoding`, `@exportClass`, `@exportMethod`, `@exportPattern`, `@exportS3Method`, `@importFrom`, `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@keywords`, `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and `@useDynLib` (#1642, #1688). This may break some existing usage, but it prevents a wide range of otherwise silent errors.
+* Tags that expect single-line input now warn when they span multiple lines, catching a common class of mistake. Affected tags: `@aliases`, `@concept`, `@encoding`, `@exportClass`, `@exportMethod`, `@exportPattern`, `@exportS3Method`, `@importFrom`, `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@includeRmd`, `@inheritDotParams`, `@inheritParams`, `@inheritSection`, `@keywords`, `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and `@useDynLib` (#1642, #1688). This may break some existing usage, but it prevents a wide range of otherwise silent errors.
 * Reexported functions now display with `()` appended (e.g. `fun()` instead of `fun`) on the reexports page, except for infix operators like `%>%` (#1222). They also use the modern (>= 4.1.0) linking style.
 * `@description` no longer errors when the markdown text starts with a heading (#1705).
 * `@examples` no longer warns about unmatched braces inside raw strings, or inside strings within R comments, e.g. `# '{greeting}'` (#1492).

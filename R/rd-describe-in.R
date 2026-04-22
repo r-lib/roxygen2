@@ -10,7 +10,7 @@ roxy_tag_parse.roxy_tag_describeIn <- function(x) {
     )
     NULL
   } else {
-    tag_two_part(x, "a topic name", "a description")
+    tag_two_part(x, "a topic name", "a description", multiline = TRUE)
   }
 }
 

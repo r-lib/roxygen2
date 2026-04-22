@@ -5,7 +5,7 @@ roxy_tag_parse.roxy_tag_template <- function(x) {
 
 #' @export
 roxy_tag_parse.roxy_tag_templateVar <- function(x) {
-  tag_two_part(x, "a variable name", "a value")
+  tag_two_part(x, "a variable name", "a value", multiline = TRUE)
 }
 
 process_templates <- function(block, base_path) {

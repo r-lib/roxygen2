@@ -182,6 +182,17 @@
       x test.R:1: @test must be only 1 line long, not 3.
       i The first line is "a"
 
+# tag_two_part() warns on multi-line content by default
+
+    Code
+      tag <- roxy_test_tag("foo bar\nbaz")
+      expect_parse_failure(tag_two_part(tag, "a name", "a value"))
+    Output
+      <message/rlang_message>
+      Message:
+      x test.R:1: @test must be only 1 line long, not 2.
+      i The first line is "foo bar"
+
 # tag_value() warns on multi-line content
 
     Code

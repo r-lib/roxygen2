@@ -22,7 +22,14 @@ tag_inherit(x)
 
 tag_name(x)
 
-tag_two_part(x, first, second, required = TRUE, markdown = TRUE)
+tag_two_part(
+  x,
+  first,
+  second,
+  required = TRUE,
+  markdown = TRUE,
+  multiline = FALSE
+)
 
 tag_name_description(x)
 

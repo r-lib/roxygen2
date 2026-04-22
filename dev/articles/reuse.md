@@ -128,8 +128,8 @@ various components from another topic:
 - `@inherit foo` will copy all supported components from `foo`.
 - `@inheritSection foo {Section title}` will copy the
   `@section {Section title}` section from `foo`.
-- `@inheritDotParams foo` will generate documentation for `…` by copying
-  the documentation for `foo()`’s arguments.
+- `@inheritDotParams foo` will generate documentation for `...` by
+  copying the documentation for `foo()`’s arguments.
 
 We think of this as “inheritance” rather than just copying, because
 anything you inherit can be overridden by a more specific definition in

@@ -211,7 +211,8 @@ for best practices.
   lines, catching a common class of mistake. Affected tags: `@aliases`,
   `@concept`, `@encoding`, `@exportClass`, `@exportMethod`,
   `@exportPattern`, `@exportS3Method`, `@importFrom`,
-  `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@keywords`,
+  `@importClassesFrom`, `@importMethodsFrom`, `@include`, `@includeRmd`,
+  `@inheritDotParams`, `@inheritParams`, `@inheritSection`, `@keywords`,
   `@method`, `@name`, `@order`, `@rdname`, `@S3method`, `@template`, and
   `@useDynLib` ([\#1642](https://github.com/r-lib/roxygen2/issues/1642),
   [\#1688](https://github.com/r-lib/roxygen2/issues/1688)). This may

@@ -1,3 +1,13 @@
+# parsing warnings only fire once
+
+    Code
+      roxygenise(path)
+    Message
+      Writing 'NAMESPACE'
+      i Loading testNamespace
+      x multiline.R:1: @importFrom must be only 1 line long, not 2.
+      i The first line is "stats median"
+
 # @exportS3Method generates fully automatically
 
     Code

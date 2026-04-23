@@ -16,6 +16,20 @@ test_that("end-to-end NAMESPACE generation works", {
   )
 })
 
+test_that("parsing warnings only fire once", {
+  path <- local_package_copy(test_path("testNamespace"))
+  write_lines(
+    c("#' @importFrom stats median", "#'   ave", "NULL"),
+    file.path(path, "R", "multiline.R")
+  )
+  withr::defer(pkgload::unload("testNamespace"))
+
+  # Warning fires once (during the main parse_package() pass),
+  # not also during update_namespace_imports()'s early pass.
+  expect_snapshot(roxygenise(path))
+})
+
+
 # @export -----------------------------------------------------------------
 
 test_that("export quote object name appropriate", {

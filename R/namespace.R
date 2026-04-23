@@ -93,7 +93,13 @@ namespace_imports <- function(base_path = ".") {
   paths <- package_files(base_path)
   parsed <- lapply(paths, parse, keep.source = TRUE)
   srcrefs <- lapply(parsed, utils::getSrcref)
-  blocks <- unlist(lapply(srcrefs, namespace_imports_blocks), recursive = FALSE)
+  # Ensure parse warnings only fire once during the main parse_package() pass
+  suppressMessages(
+    blocks <- unlist(
+      lapply(srcrefs, namespace_imports_blocks),
+      recursive = FALSE
+    )
+  )
 
   blocks_to_ns(blocks, emptyenv())
 }

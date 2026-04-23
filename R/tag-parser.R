@@ -27,9 +27,7 @@ tag_value <- function(x, multiline = FALSE) {
     return(NULL)
   }
 
-  if (!multiline && warn_if_multiline(x, x$val)) {
-    return(NULL)
-  }
+  warn_if_multiline(x, x$val, multiline)
 
   if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
@@ -134,12 +132,11 @@ tag_two_part <- function(
       warn_roxy_tag(x, "requires two parts: {first} and {second}")
     }
     NULL
-  } else if (!multiline && warn_if_multiline(x, trimws(x$raw))) {
-    NULL
   } else if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
+    warn_if_multiline(x, trimws(x$raw), multiline)
     pieces <- split_two_part(trimws(x$raw))
 
     if (required && pieces[[2]] == "") {
@@ -192,9 +189,7 @@ tag_name_description <- function(x) {
 tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
   val <- trimws(x$raw)
 
-  if (!multiline && warn_if_multiline(x, val)) {
-    return(NULL)
-  }
+  warn_if_multiline(x, val, multiline)
 
   if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
@@ -221,8 +216,11 @@ tag_words_line <- function(x) {
   tag_words(x)
 }
 
-# Returns TRUE (and warns) if val contains multiple lines, FALSE otherwise.
-warn_if_multiline <- function(x, val) {
+# Warns if multiline is FALSE and val contains multiple lines.
+warn_if_multiline <- function(x, val, multiline) {
+  if (multiline) {
+    return(invisible())
+  }
   n_lines <- re_count(val, "\n")
   if (n_lines >= 1) {
     first_line <- re_split_half(val, "\n")[[1]]
@@ -233,10 +231,8 @@ warn_if_multiline <- function(x, val) {
         i = "The first line is {.str {first_line}}"
       )
     )
-    TRUE
-  } else {
-    FALSE
   }
+  invisible()
 }
 
 #' @export

@@ -77,35 +77,32 @@ test_that("tag_words() gives useful warnings", {
   })
 })
 
-test_that("tag_words() warns on multi-line content", {
+test_that("tag_words() warns on multi-line content and preserves value", {
   expect_snapshot({
     tag <- roxy_test_tag("a\nb")
-    expect_parse_failure(tag_words(tag))
-
-    tag <- roxy_test_tag("a\nb\nc")
-    expect_parse_failure(tag_words(tag))
+    out <- tag_words(tag)
   })
+  expect_equal(out$val, c("a", "b"))
 })
 
-test_that("tag_two_part() warns on multi-line content by default", {
+test_that("tag_two_part() warns on multi-line content and preserves value", {
   expect_snapshot({
     tag <- roxy_test_tag("foo bar\nbaz")
-    expect_parse_failure(tag_two_part(tag, "a name", "a value"))
+    out <- tag_two_part(tag, "a name", "a value")
   })
+  expect_equal(out$val, list(name = "foo", description = "bar\nbaz"))
 
   tag <- roxy_test_tag("foo bar\nbaz")
-  out <- tag_two_part(tag, "a name", "a value", multiline = TRUE)
+  out <- expect_silent(tag_two_part(tag, "a name", "a value", multiline = TRUE))
   expect_equal(out$val, list(name = "foo", description = "bar\nbaz"))
 })
 
-test_that("tag_value() warns on multi-line content", {
+test_that("tag_value() warns on multi-line content and preserves value", {
   expect_snapshot({
     tag <- roxy_test_tag("a\nb")
-    expect_parse_failure(tag_value(tag))
-
-    tag <- roxy_test_tag("a\nb\nc")
-    expect_parse_failure(tag_value(tag))
+    out <- tag_value(tag)
   })
+  expect_equal(out$val, "a\nb")
 })
 
 test_that("tag_words_line() is deprecated", {

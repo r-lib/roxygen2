@@ -330,8 +330,8 @@ test_that("S7 method on S3 generic includes package prefix in class name", {
 test_that("S7 method with special classes any and missing", {
   skip_unless_r(">= 4.3.0")
   block <- roxy_block(tags = list(), file = "test.R", line = 1, call = quote(x))
-  expect_snapshot(s7_class_name(S7::class_any, block))
-  expect_snapshot(s7_class_name(S7::class_missing, block))
+  expect_equal(s7_class_name(S7::class_any, block), "any")
+  expect_equal(s7_class_name(S7::class_missing, block), "missing")
 })
 
 test_that("S7 method with unknown class type warns", {

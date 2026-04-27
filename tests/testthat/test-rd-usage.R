@@ -542,28 +542,6 @@ test_that("S7 union method usage shows member classes", {
   )
 })
 
-test_that("S7 class_any method usage shows any class", {
-  skip_unless_r(">= 4.3.0")
-  expect_equal(
-    call_to_usage({
-      speak <- S7::new_generic("speak", "x")
-      S7::method(speak, S7::class_any) <- function(x) "hi"
-    }),
-    "## S7 method for class <any>\nspeak(x)"
-  )
-})
-
-test_that("S7 class_missing method usage shows missing class", {
-  skip_unless_r(">= 4.3.0")
-  expect_equal(
-    call_to_usage({
-      speak <- S7::new_generic("speak", "x")
-      S7::method(speak, S7::class_missing) <- function(x) "hi"
-    }),
-    "## S7 method for class <missing>\nspeak(x)"
-  )
-})
-
 test_that("preserves non-breaking-space", {
   expect_equal(
     call_to_usage(f <- function(a = "\u{A0}") {}),

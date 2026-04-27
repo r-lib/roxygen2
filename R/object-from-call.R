@@ -289,6 +289,10 @@ s7_class_name <- function(cls, block) {
     unlist(lapply(cls$classes, s7_class_name, block = block))
   } else if (inherits(cls, "S7_S3_class")) {
     cls$class
+  } else if (inherits(cls, "S7_any")) {
+    "any"
+  } else if (inherits(cls, "S7_missing")) {
+    "missing"
   } else {
     warn_roxy_block(block, "Unknown S7 class type")
     paste0(deparse(cls), collapse = " ")

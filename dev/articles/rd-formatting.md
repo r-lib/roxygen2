@@ -26,6 +26,7 @@ or off for a documentation block.
 Here is an example roxygen chunk that uses Markdown.
 
 ``` r
+
 #' Use roxygen to document a package
 #'
 #' This function is a wrapper for the [roxygen2::roxygenize()] function from
@@ -60,6 +61,7 @@ you can always precede a ‘`#`’ section with `@details`, if you want put
 it near the end of the block, after `@return` for example:
 
 ``` r
+
 #' @details
 #' Trim the leading and trailing whitespace from a character vector.
 #'
@@ -80,6 +82,7 @@ formats lines of text, e.g. `@description`, `@details`, `@return`, and
 create subsections with the `\subsection{}` Rd tag.
 
 ``` r
+
 #' @details
 #' ## Subsection within details
 #' ### Sub-subsection
@@ -92,6 +95,7 @@ For *emphasis*, put the text between asterisks or underline characters.
 For **strong** text, use two asterisks at both sides.
 
 ``` r
+
 #' @references
 #' Robert E Tarjan and Mihalis Yannakakis. (1984). Simple
 #' linear-time algorithms to test chordality of graphs, test acyclicity
@@ -100,6 +104,7 @@ For **strong** text, use two asterisks at both sides.
 ```
 
 ``` r
+
 #' See `::is_falsy` for the definition of what is _falsy_
 #' and what is _truthy_.
 ```
@@ -109,6 +114,7 @@ For **strong** text, use two asterisks at both sides.
 Inline code is supported via backticks.
 
 ``` r
+
 #' @param ns Optionally, a named vector giving prefix-url pairs, as
 #'   produced by `xml_ns`. If provided, all names will be explicitly
 #'   qualified with the ns prefix, i.e. if the element `bar` is defined ...
@@ -117,6 +123,7 @@ Inline code is supported via backticks.
 For blocks of code, put your code between triple backticks:
 
 ``` r
+
 #' ```
 #' pkg <- make_packages(
 #'   foo1 = { f <- function() print("hello!") ; d <- 1:10 },
@@ -139,6 +146,7 @@ Regular Markdown lists are recognized and converted to `\enumerate{}` or
 `\itemize{}` lists:
 
 ``` r
+
 #' There are two ways to use this function:
 #' 1. If its first argument is not named, then it returns a function
 #'    that can be used to color strings.
@@ -149,6 +157,7 @@ Regular Markdown lists are recognized and converted to `\enumerate{}` or
 ```
 
 ``` r
+
 #' The style (the `...` argument) can be anything of the
 #' following:
 #' * An R color name, see `colors()`.
@@ -186,6 +195,7 @@ center aligned columns:
 Markdown hyperlinks work as usual:
 
 ``` r
+
 #' See more about the Markdown markup at the
 #' [Commonmark web site](http://commonmark.org/help)
 ```
@@ -194,6 +204,7 @@ URLs inside angle brackets are also automatically converted to
 hyperlinks:
 
 ``` r
+
 #' The main R web site is at <https://r-project.org>.
 ```
 
@@ -203,6 +214,7 @@ Markdown syntax for inline images works. The image files must be in the
 `man/figures` directory:
 
 ``` r
+
 #' Here is an example plot:
 #' ![](example-plot.jpg "Example Plot Title")
 ```
@@ -248,6 +260,7 @@ You can insert executable code with ```` ```{r} ```` just like in knitr
 documents. For example:
 
 ``` r
+
 #' @title Title
 #' @details Details
 #' ```{r lorem}
@@ -308,6 +321,7 @@ Code blocks support some knitr chunk options, e.g. to keep the output of
 several expressions together, you can specify `results="hold"`:
 
 ``` r
+
 #' ```{r results="hold"}
 #' names(mtcars)
 #' nrow(mtcars)
@@ -333,6 +347,7 @@ increase the size of your package leading to challenges for CRAN
 submission.
 
 ``` r
+
 #' ```{r iris-pairs-plot}
 #' pairs(iris[1:4], main = "Anderson's Iris Data -- 3 species",
 #'   pch = 21, bg = c("red", "green3", "blue")[unclass(iris$Species)])
@@ -382,6 +397,7 @@ this might lead to unintended lists if a line starts with a number
 followed by a dot, or with an asterisk followed by white space:
 
 ``` r
+
 #' You can see more about this topic in the book cited below, on page
 #' 42. Clearly, the numbered list that starts here is not intentional.
 ```

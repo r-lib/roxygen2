@@ -11,6 +11,7 @@ web (using a url) or to related functions (with a function link like
 this might look like:
 
 ``` r
+
 #' @seealso [prod()] for products, [cumsum()] for cumulative sums, and
 #'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.
 ```
@@ -29,6 +30,7 @@ If you want to override the default title, you can provide an
 `rd_family_title` element in a list stored in `man/roxygen/meta.R`:
 
 ``` r
+
 list(
   rd_family_title = list(aggregations = "Aggregation functions")
 )
@@ -84,6 +86,7 @@ specifying the “true” source of the documentation, and will substitute
 the default list of source files. Use one tag per source file:
 
 ``` r
+
 #' @backref src/file.cpp
 #' @backref src/file.h
 ```

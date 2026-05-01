@@ -23,6 +23,7 @@ don’t need documentation. Use `@slot` to document the slots of the
 class. Here’s a simple example:
 
 ``` r
+
 #' An S4 class to represent a bank account
 #'
 #' @slot balance A length-one numeric vector

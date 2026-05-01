@@ -23,6 +23,7 @@ Document an R6 class by placing a roxygen block before the `R6Class()`
 call. Use `@export` to make the class available to users.
 
 ``` r
+
 #' R6 Class Representing a Person
 #'
 #' A person has a name and a hair color.
@@ -54,6 +55,7 @@ Fields and active bindings are documented **in-line** using the `@field`
 tag, right before the field definition:
 
 ``` r
+
 Person <- R6::R6Class(
   "Person",
   public = list(
@@ -86,6 +88,7 @@ plain text introduction. Use `@description` to provide the method’s
 description:
 
 ``` r
+
 Person <- R6::R6Class(
   "Person",
   public = list(
@@ -135,6 +138,7 @@ If a method is added dynamically with `$set()`, you can document it by
 placing a roxygen block directly above the `$set()` call:
 
 ``` r
+
 #' @description
 #' Say goodbye.
 Person$set("public", "goodbye", function() {
@@ -149,6 +153,7 @@ If roxygen2 can’t automatically discover a method, you can use
 with a method. Place it in a standalone roxygen block above `NULL`:
 
 ``` r
+
 #' @R6method Person$set_hair
 #' @description Change hair color.
 #' @param val New hair color.

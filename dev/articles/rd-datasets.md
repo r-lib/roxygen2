@@ -6,6 +6,7 @@ instead of documenting the data directly, you quote the dataset’s name.
 For example, this is the roxygen2 block used for `ggplot2::diamonds`:
 
 ``` r
+
 #' Prices of over 50,000 round cut diamonds
 #'
 #' A dataset containing the prices and other attributes of almost 54,000

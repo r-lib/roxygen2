@@ -22,6 +22,7 @@ and that they can write their own methods. For simple generics, you can
 do this in the description:
 
 ``` r
+
 #' Frobnpolicate an object
 #'
 #' @description
@@ -35,6 +36,7 @@ For more complicated generics, you can use a `# Methods` section to
 provide more detail:
 
 ``` r
+
 #' Frobnpolicate an object
 #'
 #' @description
@@ -65,6 +67,7 @@ code](https://roxygen2.r-lib.org/dev/articles/reuse.html#inline-rd-code)
 block (`` `Rd ` ``) instead:
 
 ``` r
+
 #' `Rd doclisting::methods_list("frobnpolicate")`
 ```
 
@@ -72,6 +75,7 @@ Using `` `Rd ` `` requires doclisting in `Imports`, and you’ll need a
 dummy call to eliminate the `R CMD check` NOTE about unused imports:
 
 ``` r
+
 ignore_unused_imports <- function() {
   doclisting::methods_list
 }
@@ -101,6 +105,7 @@ a user can’t directly access the method definition by typing its name.
 roxygen2 will warn you if you have forgotten.
 
 ``` r
+
 #' @export
 bizarro.character <- function(x, ...) {
   letters <- strsplit(x, "")
@@ -139,6 +144,7 @@ There are three cases you need to be aware of:
   generic with `@importFrom` and `@export` the method:.
 
   ``` r
+
   #' @importFrom pkg generic
   #' @export
   generic.foo <- function(x, ...) {}
@@ -147,6 +153,7 @@ There are three cases you need to be aware of:
   Alternatively, use `@exportS3Method pkg::generic`:
 
   ``` r
+
   #' @exportS3Method pkg::generic
   generic.foo <- function(x, ...) {}
   ```
@@ -167,6 +174,7 @@ for [`all.equal()`](https://rdrr.io/r/base/all.equal.html)? If this
 happens to you, disambiguate with `@method`:
 
 ``` r
+
 #' @method all.equal data.frame
 #' @export
 all.equal.data.frame <- function(target, current, ...) {

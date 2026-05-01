@@ -11,6 +11,7 @@ have `@keywords internal`. Use `usethis::use_package_doc()` to set up
 automatically. Here’s an example:
 
 ``` r
+
 #' @keywords internal
 "_PACKAGE"
 ```

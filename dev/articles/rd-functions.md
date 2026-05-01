@@ -14,6 +14,7 @@ change the function interface. We usually put `@export` in between
 `@returns` and `@examples`:
 
 ``` r
+
 #' Add two numbers together
 #'
 #' @param x,y A pair of numbers.
@@ -36,6 +37,7 @@ documentation for [`sum()`](https://rdrr.io/r/base/sum.html) might look
 like if it had been written with roxygen:
 
 ``` r
+
 #' Sum of vector elements
 #'
 #' `sum` returns the sum of all the values present in its arguments.
@@ -84,6 +86,7 @@ see the same thing expressed in two different ways. It’s a little extra
 work, but the extra effort is often worth it.
 
 ``` r
+
 #' Detect the presence/absence of a match
 #'
 #' `str_detect()` returns a logical vector with `TRUE` for each element of
@@ -95,6 +98,7 @@ If you need a multi-paragraph description, use an explicit
 `@description` tag:
 
 ``` r
+
 #' View strings and matches
 #'
 #' @description
@@ -115,6 +119,7 @@ in the rendered help. Use informative markdown headings to break up long
 details.
 
 ``` r
+
 #' Sum of vector elements
 #'
 #' @description
@@ -143,6 +148,7 @@ lines (or even paragraphs) if necessary. All parameters must be
 documented.
 
 ``` r
+
 #' @param pattern Pattern to look for.
 #'
 #'   The default interpretation is a regular expression, as described in
@@ -158,6 +164,7 @@ description, particularly when the default is non-obvious or the
 signature and the rendered argument documentation are far apart.
 
 ``` r
+
 #' @param na.rm Remove missing values? If `FALSE` (the default), the result
 #'   will be `NA` if any element of `string` is `NA`.
 ```
@@ -166,6 +173,7 @@ For arguments with a small fixed set of possible values, list them in
 the description:
 
 ``` r
+
 #' @param side Side on which to remove whitespace: `"left"`, `"right"`, or
 #'   `"both"` (the default).
 ```
@@ -173,6 +181,7 @@ the description:
 If each value needs more explanation, use a bulleted list:
 
 ``` r
+
 #' @param whitespace_only A boolean.
 #'   * `TRUE` (the default): wrapping will only occur at whitespace.
 #'   * `FALSE`: can break on any non-word character (e.g. `/`, `-`).
@@ -193,6 +202,7 @@ submission.
 For simple cases, a single sentence suffices:
 
 ``` r
+
 #' @returns A logical vector the same length as `string`.
 ```
 
@@ -200,6 +210,7 @@ For functions returning data frames, describe how the output relates to
 the input:
 
 ``` r
+
 #' @returns
 #' An object of the same type as `.data`. The output has the following
 #' properties:
@@ -222,6 +233,7 @@ Focus on demonstrating the most important features with realistic,
 typical usage. Use comments to break examples into sections:
 
 ``` r
+
 #' @examples
 #' fruit <- c("apple", "banana", "pear", "pineapple")
 #' str_detect(fruit, "a")
@@ -243,6 +255,7 @@ causes an error. [`try()`](https://rdrr.io/r/base/try.html) is the best
 way to do this, because users will see the error message:
 
 ``` r
+
 #' @examples
 #' # Row sizes must be compatible when column-binding
 #' try(bind_cols(tibble(x = 1:3), tibble(y = 1:2)))
@@ -254,6 +267,7 @@ You can also use `\dontrun{}` to prevent code from executing, but
 For code that only works in certain environments, use `@examplesIf`:
 
 ``` r
+
 #' @examplesIf interactive()
 #' browseURL("https://roxygen2.r-lib.org")
 ```

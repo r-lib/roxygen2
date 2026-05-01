@@ -21,13 +21,13 @@ Source:
 [`DESCRIPTION`](https://github.com/r-lib/roxygen2/blob/main/DESCRIPTION)
 
 Wickham H, Danenberg P, Csárdi G, Eugster M (2026). *roxygen2: In-Line
-Documentation for R*. R package version 7.3.3.9000,
+Documentation for R*. R package version 8.0.0.9000,
 <https://roxygen2.r-lib.org/>.
 
     @Manual{,
       title = {roxygen2: In-Line Documentation for R},
       author = {Hadley Wickham and Peter Danenberg and Gábor Csárdi and Manuel Eugster},
       year = {2026},
-      note = {R package version 7.3.3.9000},
+      note = {R package version 8.0.0.9000},
       url = {https://roxygen2.r-lib.org/},
     }

@@ -27,8 +27,8 @@ when all functions have the same (or very similar) arguments.
 
 ### `@rdname`
 
-Use `@rdname <destination>`[¹](#fn1) to include multiple functions in
-the same page. Tags (e.g. `@title`, `@description`, `@examples`) will be
+Use `@rdname <destination>`[^1] to include multiple functions in the
+same page. Tags (e.g. `@title`, `@description`, `@examples`) will be
 combined, across blocks but often this yields text that is hard to
 understand. So we recommend that you make one block that contains the
 title, description, common parameters, examples and so on, and then only
@@ -41,6 +41,7 @@ link to that family from other functions (i.e. `trig` in the examples
 below).
 
 ``` r
+
 #' Trigonometric approximations
 #' @param x Input, in radians.
 #' @name trig
@@ -65,6 +66,7 @@ work better if you have a “primary” function with some variants or some
 helpers.
 
 ``` r
+
 #' Logarithms
 #'
 #' @param x A numeric vector
@@ -108,6 +110,7 @@ following the block would place `times` first in `arith.Rd` because 1
 comes before 2.
 
 ``` r
+
 #' @rdname arith
 #' @order 2
 add <- function(x, y) x + y
@@ -147,6 +150,7 @@ inherit those docs elsewhere. For example, take the dplyr functions
 called `.data`. `arrange()` is documented like so:
 
 ``` r
+
 #' @param .data A data frame, data frame extension (e.g. a tibble), or a
 #'   lazy data frame (e.g. from dbplyr or dtplyr). See *Methods*, below, for
 #'   more details.
@@ -160,6 +164,7 @@ Then `mutate()` and `summarise()` don’t need to provide `@param .data`
 but can instead inherit the documentation from `arrange()`:
 
 ``` r
+
 #' @inheritParams arrange
 mutate <- function(.data, ...) {}
 
@@ -173,6 +178,7 @@ has a different interpretation in these functions. So, for example,
 `mutate()` provides its own definition for `...`:
 
 ``` r
+
 #' @inheritParams arrange
 #' @param ... <[`data-masking`][rlang::args_data_masking]> Name-value pairs.
 #'   The name gives the name of the column in the output.
@@ -213,6 +219,7 @@ Sometimes you document two (or more) tightly coupled parameters
 together. For example, `dplyr::left_join()` has:
 
 ``` r
+
 #' @param x,y A pair of data frames, data frame extensions (e.g. a tibble), or
 #'   lazy data frames (e.g. from dbplyr or dtplyr). See *Methods*, below, for
 #'   more details.
@@ -311,6 +318,7 @@ Creating a custom tag might be a strategy for repeating yourself less.
 For instance you could create a tag that allows
 
 ``` r
+
 #' @git rebase
 ```
 
@@ -332,6 +340,7 @@ the rest of the text within backticks as R code and evaluate it, and
 replace the backtick expression with its value. Here’s a simple example:
 
 ``` r
+
 #' Title `r 1 + 1`
 #'
 #' Description `r 2 + 2`
@@ -341,6 +350,7 @@ foo <- function() NULL
 This is equivalent to writing:
 
 ``` r
+
 #' Title 2
 #'
 #' Description 4
@@ -352,6 +362,7 @@ markdown, as usual. This means that you can use R to dynamically write
 markdown. For example if you defined this function in your package:
 
 ``` r
+
 alphabet <- function(n) {
   paste0("`", letters[1:n], "`", collapse = ", ")
 }
@@ -360,6 +371,7 @@ alphabet <- function(n) {
 You could then write:
 
 ``` r
+
 #' Title
 #' 
 #' @param x A string. Must be one of `r alphabet(5)`
@@ -369,6 +381,7 @@ foo <- function(x) NULL
 The result is equivalent to writing the following by hand:
 
 ``` r
+
 #' Title
 #' 
 #' @param x A string. Must be one of `a`, `b`, `c`, `d`, `e`
@@ -394,6 +407,7 @@ Here’s a simple example, which will greet the user appropriately,
 depending on the time of day:
 
 ``` r
+
 greeting <- function() {
   hour <- as.POSIXlt(Sys.time(), tz = "UTC")$hour
   if (hour < 12) {
@@ -468,8 +482,6 @@ once tends to be rather inflexible, and you often end up refactoring
 into smaller pieces so we don’t believe this reflects a real loss of
 functionality.
 
-------------------------------------------------------------------------
-
-1.  The destination is a topic name. There’s a one-to-one correspondence
-    between topic names and `.Rd` files where a topic called `foo` will
-    produce a file called `man/foo.Rd`.
+[^1]: The destination is a topic name. There’s a one-to-one
+    correspondence between topic names and `.Rd` files where a topic
+    called `foo` will produce a file called `man/foo.Rd`.

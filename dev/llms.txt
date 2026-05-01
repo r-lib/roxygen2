@@ -8,6 +8,7 @@ and, if needed, the `Collate` field in `DESCRIPTION`.
 ## Installation
 
 ``` r
+
 # Install roxygen2 from CRAN
 install.packages("roxygen2")
 
@@ -25,6 +26,7 @@ example](https://stringr.tidyverse.org/reference/str_length.html) from
 the stringr package:
 
 ``` r
+
 #' The length of a string
 #'
 #' Technically this returns the number of "code points", in a string. One

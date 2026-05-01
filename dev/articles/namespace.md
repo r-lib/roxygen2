@@ -7,11 +7,11 @@ frustrating at first, but soon becomes second-nature.
 
 ## Exports
 
-In order for your users to use a function[¹](#fn1) from your package,
-you must **export** it. In most cases, you can just use the `@export`
-tag, and roxygen2 will automatically figure out which `NAMESPACE`
-directive (i.e. `export()`, `S3method()`, `exportClasses()`, or
-`exportMethods()`) you need.
+In order for your users to use a function[^1] from your package, you
+must **export** it. In most cases, you can just use the `@export` tag,
+and roxygen2 will automatically figure out which `NAMESPACE` directive
+(i.e. `export()`, `S3method()`, `exportClasses()`, or `exportMethods()`)
+you need.
 
 For details and examples of exporting functions, and S3, S4, and S7
 classes/generics/methods, see the corresponding vignettes:
@@ -47,6 +47,7 @@ inserts `code` literally into the `NAMESPACE`. This is useful if you
 need a conditional import or export, e.g.
 
 ``` r
+
 # From dplyr:
 #' @rawNamespace import(vctrs, except = data_frame)
 NULL
@@ -76,6 +77,7 @@ recommending adding the package to the `Imports:` field of the
 e.g., `pkg::fun()`.
 
 ``` r
+
 my_function <- function(x, y) {
   pkg::fun(x) * y
 }
@@ -85,6 +87,7 @@ If the repetition of the package name becomes annoying you can
 `@importFrom` and drop the `::`:
 
 ``` r
+
 #' @importFrom pkg fun
 my_function <- function(x, y) {
   fun(x) * y
@@ -96,6 +99,7 @@ them in a central place, like `{packagename}-package.R`. This is
 automated by `usethis::use_import_from()`.
 
 ``` r
+
 #' @importFrom pkg fun1 fun2
 #' @importFrom pkg2 fun3
 #' @importFrom pkg3 fun4
@@ -144,6 +148,4 @@ To import compiled code from another package, use `@useDynLib`
   is into the the NAMESPACE,
   e.g. `useDynLib(mypackage, .registration = TRUE)`
 
-------------------------------------------------------------------------
-
-1.  Including S3/S4/S7 generics and constructors.
+[^1]: Including S3/S4/S7 generics and constructors.

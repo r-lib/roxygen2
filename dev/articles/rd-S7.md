@@ -22,6 +22,7 @@ and that they can write their own methods. For simple generics, you can
 do this in the description:
 
 ``` r
+
 #' Size of an object
 #'
 #' @description
@@ -41,6 +42,7 @@ For more complicated generics, you can use a `# Methods` section to
 provide more detail:
 
 ``` r
+
 #' Size of an object
 #'
 #' @description
@@ -68,6 +70,7 @@ It’s good practice to document the default method alongside the generic
 using `@rdname`:
 
 ``` r
+
 #' @rdname size
 method(size, class_any) <- function(x, ...) {
   length(x)
@@ -88,6 +91,7 @@ the constructor (e.g. read-only computed properties), use `@prop` to
 document them.
 
 ``` r
+
 #' A range
 #'
 #' Create a range represented by a numeric `start` and `end`. The start must
@@ -130,6 +134,7 @@ the generic using `[generic_name()]` so the reader can easily find the
 full documentation and other methods.
 
 ``` r
+
 #' Size of a range
 #'
 #' The size of a range is its [size()], i.e. its length.

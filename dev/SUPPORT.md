@@ -23,6 +23,7 @@ two general techniques that can help:
   and text snippet:
 
   ``` r
+
   library(roxygen2)
   roc_proc_text(rd_roclet(), "
     #' Title

@@ -18,6 +18,7 @@ can use its two extension points:
   to compute anything you want or produce any artefact you can imagine.
 
 ``` r
+
 library(roxygen2)
 ```
 
@@ -80,6 +81,7 @@ You *can* construct tag objects by hand with
 [`roxy_tag()`](https://roxygen2.r-lib.org/dev/reference/roxy_tag.md):
 
 ``` r
+
 roxy_tag("name", "Hadley")
 #> [????:???] @name 'Hadley' {unparsed}
 str(roxy_tag("name", "Hadley"))
@@ -113,6 +115,7 @@ is to generate one by parsing a roxygen block with
 [`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
 
 ``` r
+
 text <- "
   #' This is a title
   #'
@@ -174,6 +177,7 @@ create a bulleted list of tips about how to use a function. The idea is
 to take something like this:
 
 ``` r
+
 #' @tip The mean of a logical vector is the proportion of `TRUE` values.
 #' @tip You can compute means of dates and date-times!
 ```
@@ -199,6 +203,7 @@ want to process the text using Markdown so we can just use
 [`tag_markdown()`](https://roxygen2.r-lib.org/dev/reference/tag_parsers.md):
 
 ``` r
+
 roxy_tag_parse.roxy_tag_tip <- function(x) {
   tag_markdown(x)
 }
@@ -211,6 +216,7 @@ We can check this works by using
 [`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
 
 ``` r
+
 text <- "
   #' Title
   #'
@@ -259,6 +265,7 @@ We’re going to create a new custom section called `tip`. It will contain
 a character vector of tips:
 
 ``` r
+
 roxy_tag_rd.roxy_tag_tip <- function(x, base_path, env) {
   rd_section("tip", x$val)
 }
@@ -284,6 +291,7 @@ We then need to define a
 object into text for the `.Rd` file:
 
 ``` r
+
 format.rd_section_tip <- function(x, ...) {
   paste0(
     "\\section{Tips and tricks}{\n",
@@ -298,6 +306,7 @@ format.rd_section_tip <- function(x, ...) {
 We can now try this out with `roclet_text()`:
 
 ``` r
+
 topic <- roc_proc_text(rd_roclet(), text)[[1]]
 topic$get_section("tip")
 #> \section{Tips and tricks}{
@@ -339,7 +348,7 @@ for more details.
 Creating a new roclet is usually a two part process. First, you define
 new tags that your roclet will work with, unless your roclet only needs
 information from existing tags, or only needs the path to the package
-source[¹](#fn1). Second, you define a roclet that tells
+source[^1]. Second, you define a roclet that tells
 [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
 what to compute and produce based on this information.
 
@@ -350,12 +359,14 @@ remember what you’re planning to work on in the future by displaying
 notes when you document your package. We choose this syntax for `@memo`:
 
 ``` r
+
 #' @memo [Headline] Description
 ```
 
 For example:
 
 ``` r
+
 #' @memo [EFFICIENCY] Currently brute-force; find better algorithm.
 ```
 
@@ -363,6 +374,7 @@ As above, we first define a parse method. This time we use custom format
 based on a regular expression:
 
 ``` r
+
 roxy_tag_parse.roxy_tag_memo <- function(x) {
   if (!grepl("^\\[.*\\].*$", x$raw)) {
     roxy_tag_warning(x, "Invalid memo format")
@@ -383,6 +395,7 @@ Then we check it works with
 [`parse_text()`](https://roxygen2.r-lib.org/dev/reference/parse_package.md):
 
 ``` r
+
 text <- "
   #' @memo [TBI] Remember to implement this!
   #' @memo [API] Check best API
@@ -417,7 +430,7 @@ str(block$tags[[1]])
 ```
 
 We don’t need a format method because our tag won’t be used to produce
-Rd sections[²](#fn2).
+Rd sections[^2].
 
 ### The roclet
 
@@ -426,6 +439,7 @@ Next, we create a constructor for the roclet, which uses
 `memo` roclet doesn’t have any options so this is very simple:
 
 ``` r
+
 memo_roclet <- function() {
   roclet("memo")
 }
@@ -447,6 +461,7 @@ For this roclet, we’ll have
 collect all the memo tags into a named list:
 
 ``` r
+
 roclet_process.roclet_memo <- function(x, blocks, env, base_path) {
   results <- list()
 
@@ -468,6 +483,7 @@ And then have
 print them to the screen:
 
 ``` r
+
 roclet_output.roclet_memo <- function(x, results, base_path, ...) {
   for (header in names(results)) {
     messages <- results[[header]]
@@ -483,6 +499,7 @@ Then you can test if it works by using
 [`roc_proc_text()`](https://roxygen2.r-lib.org/dev/reference/roc_proc_text.md):
 
 ``` r
+
 results <- roc_proc_text(
   memo_roclet(),
   "
@@ -511,6 +528,7 @@ roclet_output(memo_roclet(), results)
 To use a roclet when developing a package, call
 
 ``` r
+
 roxygen2::roxygenize(roclets = "yourPackage::roclet")
 ```
 
@@ -534,6 +552,7 @@ package, which doesn’t correspond precisely to any field in the
 and hence put it in the `Suggests:` field:
 
 ``` r
+
 usethis::use_package("yourPackage", type = "Suggests")
 ```
 
@@ -555,17 +574,15 @@ parsing features from roxygen2, and does not use
 [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
 at all.
 
-------------------------------------------------------------------------
-
-1.  For example, the no-longer recommended
+[^1]: For example, the no-longer recommended
     [`vignette_roclet()`](https://roxygen2.r-lib.org/dev/reference/vignette_roclet.md)
     only needs the path to the package source as input; it does not use
     information from the tag parsing step. Or the {roxylint} package
     only uses existing tags; its job is to warn you about suboptimal
     roxygen2 style.
 
-2.  Some tags in roxygen2 itself, like `@importFrom`, are not meant for
-    the
+[^2]: Some tags in roxygen2 itself, like `@importFrom`, are not meant
+    for the
     \[[`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md)\]
     (`@importFrom` is meant for the
     [`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md)).

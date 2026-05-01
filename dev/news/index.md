@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+## roxygen2 8.0.0
+
+CRAN release: 2026-05-01
+
 - roxygen2 now requires R 4.1
   ([\#1632](https://github.com/r-lib/roxygen2/issues/1632)) and no
   longer depends on purrr, stringr, or stringi. As a result, no package
@@ -676,6 +680,7 @@ CRAN release: 2020-03-11
   the same notation as the knitr package. For example:
 
   ``` r
+
   #' This manual was generated at: `r Sys.time()`.
   #' ...
   #' `mtcars` is a data frame with `r ncol(mtcars)` columns, here
@@ -811,6 +816,7 @@ CRAN release: 2019-11-12
   and greater). For example,
 
   ``` r
+
   #' @exportS3Method package::generic
   generic.foo <- function(x, ...) {
 
@@ -829,6 +835,7 @@ CRAN release: 2019-11-12
   `S3method()` directives:
 
   ``` r
+
   #' @exportS3Method generic class
   NULL
   ```
@@ -891,6 +898,7 @@ for details.
   smallest number of lines, e.g.:
 
   ``` r
+
   parse_package(path = ".", env = env_package(path),
     registry = default_tags(), global_options = list())
   ```
@@ -899,6 +907,7 @@ for details.
   ([\#820](https://github.com/r-lib/roxygen2/issues/820)):
 
   ``` r
+
   parse_package(
     path = ".",
     env = env_package(path),
@@ -1554,6 +1563,7 @@ CRAN release: 2015-10-28
   another package:
 
   ``` r
+
   #' @export
   magrittr::`%>%`
   ```
@@ -1568,6 +1578,7 @@ CRAN release: 2015-10-28
   [\#349](https://github.com/r-lib/roxygen2/issues/349)):
 
   ``` r
+
   #' @details Details
   "_PACKAGE"
   ```
@@ -1815,6 +1826,7 @@ created by roxygen2.
   to document an dataset called `mydata`, you can do:
 
   ``` r
+
   #' Mydata set
   #'
   #' Some data I collected about myself

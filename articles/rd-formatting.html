@@ -23,7 +23,7 @@
 <meta property="og:description" content="The details of the (R)Markdown support provided by roxygen2.
 ">
 <meta property="og:image" content="https://roxygen2.r-lib.org/logo.png">
-<script defer data-domain="roxygen2.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="roxygen2.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">8.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,8 +49,13 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -66,6 +71,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news">
 <li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://opensource.posit.co/blog/2026-05-01_roxygen2-8-0-0/">Version 8.0.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/roxygen2-7-3-0/">Version 7.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">Version 7.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a></li>
@@ -115,7 +121,7 @@ this vignette to figure out what’s going on and how to fix it.</p>
 </h2>
 <p>To turn on Markdown support for a package, insert this entry into the
 <code>DESCRIPTION</code> file of the package:</p>
-<pre><code><span><span class="va">Roxygen</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>markdown <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="va">Config</span><span class="op">/</span><span class="va">roxygen2</span><span class="op">/</span><span class="va">markdown</span><span class="op">:</span> <span class="cn">TRUE</span></span></code></pre>
 <p>If you use devtools/usethis, this will be automatically inserted for
 you when you create a new package. If you’re updating an existing
 package, we recommend <code>usethis::use_roxygen_md()</code> which will
@@ -285,162 +291,98 @@ the <code>man/figures</code> directory:</p>
 <h2 id="function-links">Function links<a class="anchor" aria-label="anchor" href="#function-links"></a>
 </h2>
 <p>Markdown notation can also be used to create links to other help
-topics. There are two basic forms:</p>
-<ul>
-<li>
-<code>[topic]</code>: The link text is automatically generated from
-the topic.</li>
-<li>
-<code>[text][topic]</code>: You supply the link text.</li>
-</ul>
-<p>If <code>topic</code> is not a help topic within the package you are
-documenting, but it is in one of its dependent packages, roxygen2 will
-try to find which package it is coming from to generate a fully
-qualified link. Fully qualified links are required by R 4.5.0 and
-later.</p>
-<p>If multiple dependent packages document <code>topic</code>, then
-roxygen2 will stop with an error. Re-exported functions and objects do
-not generate an error, however, but roxygen2 will link to the package
-that originally defines the re-exported object.</p>
-<div class="section level3">
-<h3 id="default-link-text">Default link text<a class="anchor" aria-label="anchor" href="#default-link-text"></a>
-</h3>
-<p>First we explore the simplest form: <code>[ref]</code>. The presence
-of trailing parentheses, e.g., <code>[func()]</code>, signals that the
-target <code>func</code> is a function, which causes two things to
-happen:</p>
-<ul>
-<li>The link text <code>func()</code> is automatically typeset as
-code.</li>
-<li>The parentheses are stripped in the derived Rd link target.</li>
-</ul>
-<table style="width:99%;" class="table">
-<colgroup>
-<col width="25%">
-<col width="23%">
-<col width="50%">
-</colgroup>
+topics. There are three basic forms for linking to topics in the current
+package or its dependencies.</p>
+<table class="table">
 <thead><tr class="header">
 <th align="left">Markdown</th>
-<th align="left">Links to help<br>
-topic for …</th>
-<th align="left">Notes</th>
+<th align="left">Code</th>
+<th align="left">Rd</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">
-<code>[func()]</code><br><code>[pkg::func()]</code>
-</td>
-<td align="left">a function in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Always typeset as code.<br>
-Produces Rd: <code>\code{\link[=func]{func()}}</code><br>
-or <code>\code{\link[pkg:func]{pkg::func()}}</code>
-</td>
+<td align="left"><code>[func()]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[=func]{func()}}</code></td>
 </tr>
 <tr class="even">
-<td align="left">
-<code>[thing]</code><br><code>[pkg::thing]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Use for a dataset or general doc page.<br>
-Not typeset as code.<br>
-Produces Rd: <code>\link{thing}</code> or<br><code>\link[pkg:thing]{pkg::thing}</code>
-</td>
+<td align="left"><code>[topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link{topic}</code></td>
 </tr>
 <tr class="odd">
-<td align="left">
-<code>[`thing`]</code><br><code>[`pkg::thing`]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Same as above, but explicit backticks<br>
-mean that it <strong>is</strong> typeset as code.<br>
-Good for documenting a class.<br>
-Produces Rd: <code>\code{\link{thing}}</code> or<br><code>\code{\link[pkg:thing]{pkg::thing}}</code>
-</td>
+<td align="left"><code>[`topic`]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link{topic}}</code></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section level3">
-<h3 id="custom-link-text">Custom link text<a class="anchor" aria-label="anchor" href="#custom-link-text"></a>
-</h3>
-<p>Use the second form <code>[text][ref]</code> to link to the topic
-specified by <code>ref</code>, but with <code>text</code> as the link
-text.</p>
-<table style="width:99%;" class="table">
-<colgroup>
-<col width="30%">
-<col width="23%">
-<col width="44%">
-</colgroup>
+<p>R 4.5.0 and later requires that links to all topics outside of your
+package be explicitly qualified with the package name. roxygen2 will
+attempt to do this for you by looking at the dependencies of your
+package. If this fails, e.g. if multiple dependencies document the same
+topic, you’ll need to manually resolve using the syntax below.</p>
+<table class="table">
 <thead><tr class="header">
 <th align="left">Markdown</th>
-<th align="left">Links to help<br>
-topic for …</th>
-<th align="left">Notes</th>
+<th align="left">Code</th>
+<th align="left">Rd</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">
-<code>[text][func()]</code><br><code>[text][pkg::func()]</code>
-</td>
-<td align="left">a function in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Text is not typeset as code.<br>
-Produces Rd: <code>\link[=func]{text}</code> or<br><code>\link[pkg:func]{text}</code>
-</td>
+<td align="left"><code>[pkg::func()]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[pkg:func]{pkg::func()}}</code></td>
 </tr>
 <tr class="even">
-<td align="left">
-<code>[text][thing]</code><br><code>[text][pkg::thing]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Text is not typeset as code.<br>
-Use for a topic that documents <code>NULL</code><br>
-and name is set via <code>@name</code>,<br>
-e.g., a dataset or concept.<br>
-Produces Rd: <code>\link[=thing]{text}</code> or<br><code>\link[pkg:thing]{text}</code>
-</td>
+<td align="left"><code>[pkg::topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link[pkg:topic]{pkg::topic}</code></td>
 </tr>
 <tr class="odd">
-<td align="left">
-<code>[`text`][thing]</code><br><code>[`text`][pkg::thing]</code>
-</td>
-<td align="left">a topic in same<br>
-package or in <code>pkg</code>
-</td>
-<td align="left">Same as above, but explicit backticks<br>
-mean that text is typeset as code.<br>
-Produces Rd: <code>\code{\link{=thing}}</code> or<br><code>\code{\link[pkg:thing]{pkg::thing}}</code>
-</td>
+<td align="left"><code>[`pkg::topic`]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[pkg:topic]{pkg::topic}}</code></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section level3">
-<h3 id="operators">Operators<a class="anchor" aria-label="anchor" href="#operators"></a>
-</h3>
-<p>Links to operators or objects that contain special characters do not
-currently work. So to link to (e.g.) the <code>%&gt;%</code> operator in
-the <code>magrittr</code> package, instead of
-<code>[magrittr::%&gt;%]</code>, you will need to use the
-<code>Rd</code> notation:
-<code>\code{\link[magrittr]{\%&gt;\%}}</code>.</p>
-</div>
+<p>You can also provide your own link text. In this case there’s no
+advantage to supplying a function call, as you control the formatting of
+the text.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Markdown</th>
+<th align="left">Code</th>
+<th align="left">Rd</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>[text][topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link[=topic]{text}</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>[`text`][topic]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[=topic]{text}}</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>[text][pkg::topic]</code></td>
+<td align="left">no</td>
+<td align="left"><code>\link[pkg:topic]{text}</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>[`text`][pkg::topic]</code></td>
+<td align="left">yes</td>
+<td align="left"><code>\code{\link[pkg:topic]{text}}</code></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="code-chunks">Code chunks<a class="anchor" aria-label="anchor" href="#code-chunks"></a>
 </h2>
-<p>You can insert executable code with <code>```{r}</code>, just like in
+<p>You can insert executable code with <code>```{r}</code> just like in
 knitr documents. For example:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Title</span></span>
@@ -480,6 +422,9 @@ available) <code><a href="https://rdrr.io/pkg/knitr/man/knit_print.html" class="
 may generate markdown not supported by roxygen2. If needed, override the
 automatic methods to have your R calls return your own markdown as a
 character vector, wrapped in <code><a href="https://rdrr.io/pkg/knitr/man/asis_output.html" class="external-link">knitr::asis_output()</a></code>.</p>
+<p>You can also use <code>`r `</code> to insert the results of running R
+code. This is particularly useful for reducing duplication in your
+documentation so is documented in <code><a href="../articles/reuse.html">vignette("reuse")</a></code>.</p>
 <div class="section level3">
 <h3 id="chunk-options">Chunk options<a class="anchor" aria-label="anchor" href="#chunk-options"></a>
 </h3>
@@ -587,7 +532,7 @@ followed by a dot, or with an asterisk followed by white space:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer>

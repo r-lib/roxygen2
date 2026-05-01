@@ -3,7 +3,7 @@
 roxy_tag_warning() is superseded by warn_roxy_tag(); use to generate a
 warning that includes the location of the tag."><meta property="og:description" content="roxy_tag() is the constructor for tag objects.
 roxy_tag_warning() is superseded by warn_roxy_tag(); use to generate a
-warning that includes the location of the tag."><meta property="og:image" content="https://roxygen2.r-lib.org/logo.png"><script defer data-domain="roxygen2.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+warning that includes the location of the tag."><meta property="og:image" content="https://roxygen2.r-lib.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="roxygen2.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -11,7 +11,7 @@ warning that includes the location of the tag."><meta property="og:image" conten
 
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">8.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,8 +25,13 @@ warning that includes the location of the tag."><meta property="og:image" conten
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -40,6 +45,7 @@ warning that includes the location of the tag."><meta property="og:image" conten
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://opensource.posit.co/blog/2026-05-01_roxygen2-8-0-0/">Version 8.0.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/roxygen2-7-3-0/">Version 7.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">Version 7.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a></li>
@@ -108,6 +114,38 @@ a list. Usually filled in by <code>tag_parsers</code></p></dd>
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A tag</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Additional data to be stored in the condition object.
+If you supply condition fields, you should usually provide a
+<code>class</code> argument. You may consider prefixing condition fields
+with the name of your package or organisation to prevent name
+collisions.</p></dd>
+
+
+<dt id="arg-message">message<a class="anchor" aria-label="anchor" href="#arg-message"></a></dt>
+<dd><p>Warning message</p></dd>
+
+
+<dt id="arg-parent">parent<a class="anchor" aria-label="anchor" href="#arg-parent"></a></dt>
+<dd><p>Supply <code>parent</code> when you rethrow an error from a
+condition handler (e.g. with <code><a href="https://rlang.r-lib.org/reference/try_fetch.html" class="external-link">try_fetch()</a></code>).</p><ul><li><p>If <code>parent</code> is a condition object, a <em>chained error</em> is
+created, which is useful when you want to enhance an error with
+more details, while still retaining the original information.</p></li>
+<li><p>If <code>parent</code> is <code>NA</code>, it indicates an unchained rethrow, which
+is useful when you want to take ownership over an error and
+rethrow it with a custom message that better fits the
+surrounding context.</p>
+<p>Technically, supplying <code>NA</code> lets <code>abort()</code> know it is called
+from a condition handler. This helps it create simpler
+backtraces where the condition handling context is hidden by
+default.</p></li>
+</ul><p>For more information about error calls, see <a href="https://rlang.r-lib.org/reference/topic-error-chaining.html" class="external-link">Including contextual information with error chains</a>.</p></dd>
+
+
+<dt id="arg-envir">envir<a class="anchor" aria-label="anchor" href="#arg-envir"></a></dt>
+<dd><p>passed to <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::warn()</a></code> as <code>.envir</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
@@ -115,6 +153,19 @@ a list. Usually filled in by <code>tag_parsers</code></p></dd>
 
 <p>Define a method for <code>roxy_tag_parse</code> to support new tags. See <a href="tag_parsers.html">tag_parsers</a>
 for more details.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other extending:
+<code><a href="load_options.html">load_options()</a></code>,
+<code><a href="parse_package.html">parse_package()</a></code>,
+<code><a href="rd_section.html">rd_section()</a></code>,
+<code><a href="roc_proc_text.html">roc_proc_text()</a></code>,
+<code><a href="roclet_find.html">roclet_find()</a></code>,
+<code><a href="roxy_block.html">roxy_block()</a></code>,
+<code><a href="roxy_tag_rd.html">roxy_tag_rd()</a></code>,
+<code><a href="tag_parsers.html">tag_parsers</a></code>,
+<code><a href="tags_list.html">tags_list()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -128,7 +179,7 @@ for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>

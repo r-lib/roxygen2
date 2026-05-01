@@ -4,8 +4,8 @@ Key tags:
 @describeIn ${1:destination} ${2:description}: Document a function or method in the destination topic.
 @inherit ${1:source} ${2:components}: Inherit one or more documentation components from another topic. If components is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of params, return, title, description, details, seealso, sections, references, examples, author, source, note, and format.
-@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}: Automatically generate documentation for ... when you're passing dots along to another function.
-@inheritParams ${1:source}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
+@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}: Automatically generate documentation for ... when you're passing dots along to another function. We recommend supplying explicit argument names for maximum clarity and consistency.
+@inheritParams ${1:source} ${2:arg1 arg2 arg3}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally. Optionally followed by a list of argument names to include or exclude, using the same syntax as @inheritDotParams.
 @inheritSection ${1:source} ${2:section name}: Inherit a specific named section from another topic.
 @order ${1:number}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
 @rdname ${1:topic-name}: Override the file name of generated .Rd file. Can be used to combine multiple blocks into a single documentation topic.
@@ -23,8 +23,8 @@ Key tags:
 @describeIn ${1:destination} ${2:description}: Document a function or method in the destination topic.
 @inherit ${1:source} ${2:components}: Inherit one or more documentation components from another topic. If components is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of params, return, title, description, details, seealso, sections, references, examples, author, source, note, and format.
-@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}: Automatically generate documentation for ... when you're passing dots along to another function.
-@inheritParams ${1:source}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.
+@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}: Automatically generate documentation for ... when you're passing dots along to another function. We recommend supplying explicit argument names for maximum clarity and consistency.
+@inheritParams ${1:source} ${2:arg1 arg2 arg3}: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally. Optionally followed by a list of argument names to include or exclude, using the same syntax as @inheritDotParams.
 @inheritSection ${1:source} ${2:section name}: Inherit a specific named section from another topic.
 @order ${1:number}: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.
 @rdname ${1:topic-name}: Override the file name of generated .Rd file. Can be used to combine multiple blocks into a single documentation topic.
@@ -37,7 +37,7 @@ Other less frequently used tags:
 @template ${1:path-to-template}: Use a roxygen2 template. Now superseded in favour of inline R code.
 @templateVar ${1:name} ${2:value}: Define variables for use in a roxygen2 template.
 
-"><meta property="og:image" content="https://roxygen2.r-lib.org/logo.png"><script defer data-domain="roxygen2.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+"><meta property="og:image" content="https://roxygen2.r-lib.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="roxygen2.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -45,7 +45,7 @@ Other less frequently used tags:
 
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">7.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">8.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,8 +59,13 @@ Other less frequently used tags:
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Documentation</h6></li>
-    <li><a class="dropdown-item" href="../articles/rd.html">Documenting functions</a></li>
-    <li><a class="dropdown-item" href="../articles/rd-other.html">Documenting other objects</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-functions.html">Documenting functions</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S3.html">Documenting S3</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S4.html">Documenting S4</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-R6.html">Documenting R6</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-S7.html">Documenting S7</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-datasets.html">Documenting datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/rd-packages.html">Documenting packages</a></li>
     <li><a class="dropdown-item" href="../articles/reuse.html">Reusing documentation</a></li>
     <li><a class="dropdown-item" href="../articles/index-crossref.html">Indexing and cross-references</a></li>
     <li><a class="dropdown-item" href="../articles/rd-formatting.html">(R)Markdown support</a></li>
@@ -74,6 +79,7 @@ Other less frequently used tags:
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://opensource.posit.co/blog/2026-05-01_roxygen2-8-0-0/">Version 8.0.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/roxygen2-7-3-0/">Version 7.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">Version 7.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2020/03/roxygen2-7-1-0/">Version 7.1.0</a></li>
@@ -105,8 +111,8 @@ Other less frequently used tags:
 <p>Key tags:</p><ul><li><p><code>@describeIn ${1:destination} ${2:description}</code>: Document a function or method in the <code>destination</code> topic.</p></li>
 <li><p><code>@inherit ${1:source} ${2:components}</code>: Inherit one or more documentation components from another topic. If <code>components</code> is omitted, all supported components will be inherited.
 Otherwise, specify individual components to inherit by picking one or more of <code>params</code>, <code>return</code>, <code>title</code>, <code>description</code>, <code>details</code>, <code>seealso</code>, <code>sections</code>, <code>references</code>, <code>examples</code>, <code>author</code>, <code>source</code>, <code>note</code>, and <code>format</code>.</p></li>
-<li><p><code>@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}</code>: Automatically generate documentation for <code>...</code> when you're passing dots along to another function.</p></li>
-<li><p><code>@inheritParams ${1:source}</code>: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally.</p></li>
+<li><p><code>@inheritDotParams ${1:source} ${2:arg1 arg2 arg3}</code>: Automatically generate documentation for <code>...</code> when you're passing dots along to another function. We recommend supplying explicit argument names for maximum clarity and consistency.</p></li>
+<li><p><code>@inheritParams ${1:source} ${2:arg1 arg2 arg3}</code>: Inherit argument documentation from another function. Only inherits documentation for arguments that aren't already documented locally. Optionally followed by a list of argument names to include or exclude, using the same syntax as <code>@inheritDotParams</code>.</p></li>
 <li><p><code>@inheritSection ${1:source} ${2:section name}</code>: Inherit a specific named section from another topic.</p></li>
 <li><p><code>@order ${1:number}</code>: Override the default (lexigraphic) order in which multiple blocks are combined into a single topic.</p></li>
 <li><p><code>@rdname ${1:topic-name}</code>: Override the file name of generated <code>.Rd</code> file. Can be used to combine multiple blocks into a single documentation topic.</p></li>
@@ -125,7 +131,7 @@ Otherwise, specify individual components to inherit by picking one or more of <c
 <span><span class="co">#' @includeRmd man/rmd/${1:filename}.Rmd</span></span>
 <span><span class="co">#' @inherit ${1:source} ${2:components}</span></span>
 <span><span class="co">#' @inheritDotParams ${1:source} ${2:arg1 arg2 arg3}</span></span>
-<span><span class="co">#' @inheritParams ${1:source}</span></span>
+<span><span class="co">#' @inheritParams ${1:source} ${2:arg1 arg2 arg3}</span></span>
 <span><span class="co">#' @inheritSection ${1:source} ${2:section name}</span></span>
 <span><span class="co">#' @order ${1:number}</span></span>
 <span><span class="co">#' @rdname ${1:topic-name}</span></span>
@@ -137,8 +143,12 @@ Otherwise, specify individual components to inherit by picking one or more of <c
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other documentation tags:
 <code><a href="tags-index-crossref.html">tags-index-crossref</a></code>,
-<code><a href="tags-rd.html">tags-rd</a></code>,
-<code><a href="tags-rd-other.html">tags-rd-other</a></code></p></div>
+<code><a href="tags-rd-R6.html">tags-rd-R6</a></code>,
+<code><a href="tags-rd-S3.html">tags-rd-S3</a></code>,
+<code><a href="tags-rd-S4.html">tags-rd-S4</a></code>,
+<code><a href="tags-rd-S7.html">tags-rd-S7</a></code>,
+<code><a href="tags-rd-datasets.html">tags-rd-datasets</a></code>,
+<code><a href="tags-rd-functions.html">tags-rd-functions</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -152,7 +162,7 @@ Otherwise, specify individual components to inherit by picking one or more of <c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>

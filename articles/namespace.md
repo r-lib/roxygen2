@@ -1,0 +1,151 @@
+# Managing imports and exports
+
+The package `NAMESPACE` is one of the most confusing parts of building a
+package. roxygen2 aims to make it as easy as possible to build a package
+that is a well-behaved member of the R ecosystem. This is a little
+frustrating at first, but soon becomes second-nature.
+
+## Exports
+
+In order for your users to use a function[^1] from your package, you
+must **export** it. In most cases, you can just use the `@export` tag,
+and roxygen2 will automatically figure out which `NAMESPACE` directive
+(i.e. `export()`, `S3method()`, `exportClasses()`, or `exportMethods()`)
+you need.
+
+For details and examples of exporting functions, and S3, S4, and S7
+classes/generics/methods, see the corresponding vignettes:
+
+- [`vignette("rd-functions")`](https://roxygen2.r-lib.org/articles/rd-functions.md)
+  for regular functions.
+- [`vignette("rd-S3")`](https://roxygen2.r-lib.org/articles/rd-S3.md)
+  for S3 generics and methods, including delayed registration with
+  `@exportS3Method`.
+- [`vignette("rd-S4")`](https://roxygen2.r-lib.org/articles/rd-S4.md)
+  for S4 generics, classes, and methods.
+- S7 methods are registered at load time, not through `NAMESPACE`; see
+  [`vignette("rd-S7")`](https://roxygen2.r-lib.org/articles/rd-S7.md).
+
+Datasets should never be exported as they are not found in `NAMESPACE`.
+Learn more in
+[`vignette("rd-datasets")`](https://roxygen2.r-lib.org/articles/rd-datasets.md).
+
+### Manual exports
+
+If `@export` does not automatically generate the correct `NAMESPACE`
+directive, you can use one of the tags below to exercise greater
+control:
+
+- `@export foo` generates `export(foo)`
+- `@exportS3Method generic method` generates `S3method(generic, method)`
+- `@exportClass foo` generates `exportClasses(foo)`
+- `@exportMethod foo` generates `exportMethods(foo)`
+- `@exportPattern foo` generates `exportPattern(foo)`
+
+For even more specialised cases you can use `@rawNamespace code` which
+inserts `code` literally into the `NAMESPACE`. This is useful if you
+need a conditional import or export, e.g.
+
+``` r
+
+# From dplyr:
+#' @rawNamespace import(vctrs, except = data_frame)
+NULL
+#> NULL
+
+# From backports:
+#' @rawNamespace if (getRversion() < "4.0.0") export(stopifnot)
+NULL
+#> NULL
+```
+
+If you need to automate this, `@evalNamespace fun()` will evaluate
+`fun()` in your package environment and insert the results into
+`NAMESPACE`. Note that because `evalNamespace()` is run in the package
+environment, it can only generate exports, not imports.
+
+## Imports
+
+The `NAMESPACE` also controls which functions from other packages are
+made available to your package.
+
+### Functions
+
+If you are using just a few functions from another package, we
+recommending adding the package to the `Imports:` field of the
+`DESCRIPTION` file and calling the functions explicitly using `::`,
+e.g., `pkg::fun()`.
+
+``` r
+
+my_function <- function(x, y) {
+  pkg::fun(x) * y
+}
+```
+
+If the repetition of the package name becomes annoying you can
+`@importFrom` and drop the `::`:
+
+``` r
+
+#' @importFrom pkg fun
+my_function <- function(x, y) {
+  fun(x) * y
+}
+```
+
+Imports affect every function in a package, so it’s common to collect
+them in a central place, like `{packagename}-package.R`. This is
+automated by `usethis::use_import_from()`.
+
+``` r
+
+#' @importFrom pkg fun1 fun2
+#' @importFrom pkg2 fun3
+#' @importFrom pkg3 fun4
+NULL
+#> NULL
+```
+
+Note the use of `NULL` here: you must provide something for roxygen2 to
+document, so we use `NULL` as placeholder.
+
+It is possible, but not generally recommended to import all functions
+from a package with `@import package`. This is risky if you import
+functions from more than one package, because while it might be ok
+today, in the future the packages might end up with a function having
+the same name, and your users will get a warning every time your package
+is loaded.
+
+### S3
+
+S3 generics are just functions, so the same rules for functions apply.
+S3 methods always accompany the generic, so as long as you can access
+the generic, the methods will also be available. In other words, you
+don’t need to do anything to import an S3 method.
+
+### S4
+
+- To use classes defined in another package,
+  place `@importClassesFrom package ClassA ClassB ...` next to the
+  classes that inherit from the imported classes, or next to the methods
+  that implement a generic for the imported classes.
+- To use generics defined in another package,
+  place `@importMethodsFrom package GenericA GenericB ...` next to the
+  methods that use the imported generics.
+
+### Compiled code
+
+To import compiled code from another package, use `@useDynLib`
+
+- `@useDynLib package` imports all compiled functions.
+
+- `@useDynLib package routinea routineb` imports selected compiled
+  functions.
+
+- Any `@useDynLib` specification containing a comma,
+  e.g. `@useDynLib mypackage, .registration = TRUE` will be inserted as
+  is into the the NAMESPACE,
+  e.g. `useDynLib(mypackage, .registration = TRUE)`
+
+[^1]: Including S3/S4/S7 generics and constructors.

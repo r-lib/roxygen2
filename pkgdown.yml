@@ -1,16 +1,21 @@
-pandoc: 3.1.11
-pkgdown: 2.1.3
+pandoc: 3.8.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   extending: extending.html
   index-crossref: index-crossref.html
   namespace: namespace.html
+  rd-datasets: rd-datasets.html
   rd-formatting: rd-formatting.html
-  rd-other: rd-other.html
-  rd: rd.html
+  rd-functions: rd-functions.html
+  rd-packages: rd-packages.html
+  rd-R6: rd-R6.html
+  rd-S3: rd-S3.html
+  rd-S4: rd-S4.html
+  rd-S7: rd-S7.html
   reuse: reuse.html
   roxygen2: roxygen2.html
-last_built: 2025-09-03T22:55Z
+last_built: 2026-05-01T20:36Z
 urls:
   reference: https://roxygen2.r-lib.org/reference
   article: https://roxygen2.r-lib.org/articles

@@ -2,6 +2,12 @@
 
 ## roxygen2 (development version)
 
+- The automatic usage for a data object that is conditional on the
+  `LazyData` option in the `DESCRIPTION` (see below) now correctly
+  detects all ways to specify a true value, e.g. also `yes`, `Yes` or
+  `True` ([@jranke](https://github.com/jranke),
+  [\#1881](https://github.com/r-lib/roxygen2/issues/1881)).
+
 ## roxygen2 8.0.0
 
 CRAN release: 2026-05-01

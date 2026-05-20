@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* The automatic usage for a data object that is conditional on the `LazyData` option in the `DESCRIPTION` (see below) now correctly detects all ways to specify a true value, e.g. also `yes`, `Yes` or `True` (@jranke, #1881).
+
 # roxygen2 8.0.0
 
 * roxygen2 now requires R 4.1 (#1632) and no longer depends on purrr, stringr, or stringi. As a result, no package in the devtools constellation depends on stringr, which means you no longer need stringi, making it a bit easier to install in constrained Linux environments.

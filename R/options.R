@@ -103,7 +103,7 @@ load_options_roxygen <- function(base_path = ".") {
 
   opts$current_package <- dcf[[1, 2]]
   opts$current_package_dir <- normalizePath(base_path)
-  opts$lazy_data <- identical(dcf[[1, 3]], "true")
+  opts$lazy_data <- tolower(dcf[[1, 3]]) %in% c("true", "yes")
   opts
 }
 

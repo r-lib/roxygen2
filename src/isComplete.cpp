@@ -85,7 +85,7 @@ int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0, in
 
   State state = State::Rd;
   char string_delim = '\0';
-  int braces = 0, r_braces = 0;
+  int braces = 0;
 
   for (int i = start; i < n; i++) {
     char cur = string[i];

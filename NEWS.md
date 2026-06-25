@@ -2,6 +2,7 @@
 
 * S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage (#1883).
 * `Config/roxygen2/` flag fields in `DESCRIPTION` (like `markdown`) are now parsed case-insensitively, so `true` and `True` work as well as `TRUE`, and an invalid value gives a clear error (#1875).
+* `@section` titles can now contain code that includes a colon (#1878).
 * The automatic usage for a data object that is conditional on the `LazyData` option in the `DESCRIPTION` (see below) now correctly detects all ways to specify a true value, e.g. also `yes`, `Yes` or `True` (@jranke, #1881).
 * `@import` now inserts the directive as is into `NAMESPACE` when it contains a comma, making it possible to use other forms like `@import rlang, except = ":="`.
 

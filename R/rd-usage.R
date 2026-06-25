@@ -107,7 +107,17 @@ object_usage.s7method <- function(x) {
 # function, s3 method, s4 method, data
 
 function_usage <- function(name, formals, format_name = identity) {
-  if (is_replacement_fun(name) && !is_infix_fun(name)) {
+  if (is_bracket_fun(name) && identical(format_name, identity)) {
+    # `[`, `[[`, and their replacement forms have no Rd method macro, so we
+    # render them directly using subsetting syntax, e.g. `x[i, ...]`.
+    if (is_replacement_fun(name)) {
+      name <- sub("<-", "", name, fixed = TRUE)
+      formals$value <- NULL
+      bracket_usage(name, formals, suffix = " <- value")
+    } else {
+      bracket_usage(name, formals)
+    }
+  } else if (is_replacement_fun(name) && !is_infix_fun(name)) {
     name <- sub("<-", "", name, fixed = TRUE)
     if (identical(format_name, identity)) {
       name <- auto_backtick(name)
@@ -135,6 +145,17 @@ function_usage <- function(name, formals, format_name = identity) {
 
 is_replacement_fun <- function(name) {
   grepl("<-", name, fixed = TRUE)
+}
+is_bracket_fun <- function(name) {
+  name %in% c("[", "[[", "[<-", "[[<-")
+}
+
+bracket_usage <- function(name, formals, suffix = NULL) {
+  close <- if (name == "[[") "]]" else "]"
+  args <- args_string(usage_args(formals))
+  obj <- args[[1]]
+  inner <- paste0(args[-1], collapse = ", ")
+  rd(paste0(obj, name, inner, close, suffix))
 }
 is_infix_fun <- function(name) {
   ops <- c(

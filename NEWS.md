@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage (#1883).
 * The automatic usage for a data object that is conditional on the `LazyData` option in the `DESCRIPTION` (see below) now correctly detects all ways to specify a true value, e.g. also `yes`, `Yes` or `True` (@jranke, #1881).
 
 # roxygen2 8.0.0

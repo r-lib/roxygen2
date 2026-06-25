@@ -13,6 +13,9 @@
   detects all ways to specify a true value, e.g. also `yes`, `Yes` or
   `True` ([@jranke](https://github.com/jranke),
   [\#1881](https://github.com/r-lib/roxygen2/issues/1881)).
+- `@import` now inserts the directive as is into `NAMESPACE` when it
+  contains a comma, making it possible to use other forms like
+  `@import rlang, except = ":="`.
 
 ## roxygen2 8.0.0
 

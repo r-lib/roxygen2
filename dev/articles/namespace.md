@@ -115,7 +115,9 @@ from a package with `@import package`. This is risky if you import
 functions from more than one package, because while it might be ok
 today, in the future the packages might end up with a function having
 the same name, and your users will get a warning every time your package
-is loaded.
+is loaded. Any `@import` specification containing a comma,
+e.g. `@import rlang, except = ":="` will be inserted as is into the the
+NAMESPACE, e.g. `import(rlang, except = ":=")`.
 
 ### S3
 

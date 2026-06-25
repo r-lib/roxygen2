@@ -230,7 +230,10 @@ from a package with <code>@import package</code>. This is risky if you
 import functions from more than one package, because while it might be
 ok today, in the future the packages might end up with a function having
 the same name, and your users will get a warning every time your package
-is loaded.</p>
+is loaded. Any <code>@import</code> specification containing a comma,
+e.g. <code>@import rlang, except = ":="</code> will be inserted as is
+into the the NAMESPACE,
+e.g. <code>import(rlang, except = ":=")</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="s3">S3<a class="anchor" aria-label="anchor" href="#s3"></a>

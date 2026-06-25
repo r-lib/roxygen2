@@ -1,5 +1,6 @@
 # roxygen2 (development version)
 
+* `Config/roxygen2/` flag fields in `DESCRIPTION` (like `markdown`) are now parsed case-insensitively, so `true` and `True` work as well as `TRUE`, and an invalid value gives a clear error (#1875).
 * The automatic usage for a data object that is conditional on the `LazyData` option in the `DESCRIPTION` (see below) now correctly detects all ways to specify a true value, e.g. also `yes`, `Yes` or `True` (@jranke, #1881).
 
 # roxygen2 8.0.0

@@ -35,7 +35,7 @@ Learn the full details in \code{vignette('namespace')}.
 Key tags:
 \itemize{
 \item \verb{@export}: Export this function, method, generic, or class so it's available outside of the package.
-\item \verb{@exportS3Method $\{1:package\}::$\{2:generic\}}: Export an S3 method. Only needed when the method is for a generic from a suggested package.
+\item \verb{@exportS3Method $\{1:package\}::$\{2:generic\}}: Export an S3 method. Only needed when the method is for a generic from a suggested package. Use \verb{@exportS3Method NULL} to suppress the missing export warning when it's a false positive, e.g. you're registering the  method some other way.
 \item \verb{@importFrom $\{1:package\} $\{2:function\}}: Import specific functions from a package.
 \item \verb{@useDynLib $\{1:package\}}: Import compiled code from another package.
 }

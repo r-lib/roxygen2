@@ -25,6 +25,17 @@ test_that("parse_config_value handles scalars and vectors", {
   expect_equal(parse_config_value("a, b, c"), c("a", "b", "c"))
 })
 
+test_that("flag fields are parsed case-insensitively", {
+  expect_equal(parse_config_value("true", "markdown"), TRUE)
+  expect_equal(parse_config_value("false", "markdown"), FALSE)
+  expect_equal(parse_config_value("TRUE", "markdown"), TRUE)
+  expect_equal(parse_config_value("True", "markdown"), TRUE)
+})
+
+test_that("flag fields error on invalid values", {
+  expect_snapshot(parse_config_value("yes", "markdown"), error = TRUE)
+})
+
 test_that("warns on invalid meta.R files", {
   expect_warning(
     load_options_meta(test_path("test-options"), "meta-error.R"),

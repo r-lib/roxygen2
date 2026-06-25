@@ -117,16 +117,24 @@ config_fields <- c(
   "roclets"
 )
 
+# Fields that should be parsed as a single TRUE/FALSE value
+config_flags <- c(
+  "markdown",
+  "old_usage",
+  "r6",
+  "restrict_image_formats"
+)
+
 load_options_config <- function(base_path = ".") {
   fields <- paste0("Config/roxygen2/", config_fields)
   values <- desc::desc_get(fields, file = base_path)
   names(values) <- config_fields
 
   values <- values[!is.na(values)]
-  lapply(values, parse_config_value)
+  Map(parse_config_value, values, names(values))
 }
 
-parse_config_value <- function(x) {
+parse_config_value <- function(x, field = "") {
   values <- scan(
     text = x,
     what = "character",
@@ -134,6 +142,18 @@ parse_config_value <- function(x) {
     strip.white = TRUE,
     quiet = TRUE
   )
+
+  if (field %in% config_flags) {
+    flag <- as.logical(toupper(values))
+    if (length(flag) != 1 || is.na(flag)) {
+      cli::cli_abort(
+        "{.field Config/roxygen2/{field}} must be {.val TRUE} or {.val FALSE}, not {.val {x}}.",
+        call = NULL
+      )
+    }
+    return(flag)
+  }
+
   utils::type.convert(values, as.is = TRUE)
 }
 

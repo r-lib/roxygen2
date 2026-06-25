@@ -1,3 +1,21 @@
+test_that("colons inside code in the title are ignored", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' Foo
+    #'
+    #' @md
+    #' @section Similar to `base::split()`: Content.
+    foo <- function(x) x
+  "
+  )[[1]]
+
+  expect_equal(
+    out$get_section("section"),
+    rd_section_section("Similar to \\code{base::split()}", " Content.")
+  )
+})
+
 test_that("warn if forgotten colon", {
   block <- "
     #' Foo

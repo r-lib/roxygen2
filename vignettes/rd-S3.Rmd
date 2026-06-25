@@ -115,7 +115,7 @@ bizarro.character <- function(x, ...) {
 }
 ```
 
-If you are exporting a method in some other way, you can use `@exportS3Method NULL` to suppress the warning.
+If you are registering a method in some other way, you can use `@exportS3Method NULL` to suppress the warning.
 
 It's good practice to document methods that have unique behavior or arguments.
 For example, the clock package documents the methods for [`date_group()`](https://clock.r-lib.org/reference/date_group.html) on their own pages ([Date](https://clock.r-lib.org/reference/date-group.html), [POSIXt](https://clock.r-lib.org/reference/posixt-group.html)) because the methods accept different `precision` values and have type-specific return value semantics and examples.

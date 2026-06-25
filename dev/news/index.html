@@ -69,7 +69,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
-<ul><li>
+<ul><li>S7 methods for <code>[</code>, <code>[[</code>, <code>[&lt;-</code>, and <code>[[&lt;-</code> now generate valid usage (<a href="https://github.com/r-lib/roxygen2/issues/1883" class="external-link">#1883</a>).</li>
+<li>
 <code>Config/roxygen2/</code> flag fields in <code>DESCRIPTION</code> (like <code>markdown</code>) are now parsed case-insensitively, so <code>true</code> and <code>True</code> work as well as <code>TRUE</code>, and an invalid value gives a clear error (<a href="https://github.com/r-lib/roxygen2/issues/1875" class="external-link">#1875</a>).</li>
 <li>The automatic usage for a data object that is conditional on the <code>LazyData</code> option in the <code>DESCRIPTION</code> (see below) now correctly detects all ways to specify a true value, e.g. also <code>yes</code>, <code>Yes</code> or <code>True</code> (<a href="https://github.com/jranke" class="external-link">@jranke</a>, <a href="https://github.com/r-lib/roxygen2/issues/1881" class="external-link">#1881</a>).</li>
 </ul></div>

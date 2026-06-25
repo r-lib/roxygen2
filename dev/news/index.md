@@ -2,6 +2,8 @@
 
 ## roxygen2 (development version)
 
+- S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage
+  ([\#1883](https://github.com/r-lib/roxygen2/issues/1883)).
 - `Config/roxygen2/` flag fields in `DESCRIPTION` (like `markdown`) are
   now parsed case-insensitively, so `true` and `True` work as well as
   `TRUE`, and an invalid value gives a clear error

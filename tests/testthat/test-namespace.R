@@ -19,7 +19,7 @@ test_that("end-to-end NAMESPACE generation works", {
 test_that("parsing warnings only fire once", {
   path <- local_package_copy(test_path("testNamespace"))
   write_lines(
-    c("#' @importFrom stats median", "#'   ave", "NULL"),
+    c("#' @import stats", "#'   utils", "NULL"),
     file.path(path, "R", "multiline.R")
   )
   withr::defer(pkgload::unload("testNamespace"))
@@ -298,13 +298,49 @@ test_that("poorly formed importFrom throws error", {
   expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
-test_that("multiline importFrom generates warning", {
-  block <- "
+test_that("multiline importFrom is accepted", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
     #' @importFrom test test1
     #'   test2
     NULL
   "
-  expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
+  )
+  expect_equal(
+    sort(out),
+    sort(c("importFrom(test,test1)", "importFrom(test,test2)"))
+  )
+})
+
+test_that("multiline importClassesFrom is accepted", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importClassesFrom test test1
+    #'   test2
+    NULL
+  "
+  )
+  expect_equal(
+    sort(out),
+    sort(c("importClassesFrom(test,test1)", "importClassesFrom(test,test2)"))
+  )
+})
+
+test_that("multiline importMethodsFrom is accepted", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importMethodsFrom test test1
+    #'   test2
+    NULL
+  "
+  )
+  expect_equal(
+    sort(out),
+    sort(c("importMethodsFrom(test,test1)", "importMethodsFrom(test,test2)"))
+  )
 })
 
 test_that("import doesn't quote if comma present", {

@@ -5,8 +5,8 @@
     Message
       Writing 'NAMESPACE'
       i Loading testNamespace
-      x multiline.R:1: @importFrom must be only 1 line long, not 2.
-      i The first line is "stats median"
+      x multiline.R:1: @import must be only 1 line long, not 2.
+      i The first line is "stats"
 
 # @exportS3Method generates fully automatically
 
@@ -42,14 +42,6 @@
       . <- roc_proc_text(namespace_roclet(), block)
     Message
       x <text>:2: @importFrom must have at least 2 words, not 1.
-
-# multiline importFrom generates warning
-
-    Code
-      . <- roc_proc_text(namespace_roclet(), block)
-    Message
-      x <text>:2: @importFrom must be only 1 line long, not 2.
-      i The first line is "test test1"
 
 # can regenerate NAMESPACE even if its broken
 

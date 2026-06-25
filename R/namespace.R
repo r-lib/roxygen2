@@ -267,7 +267,7 @@ roxy_tag_ns.roxy_tag_import <- function(x, block, env) {
 
 #' @export
 roxy_tag_parse.roxy_tag_importClassesFrom <- function(x) {
-  tag_words(x, min = 2)
+  tag_words(x, min = 2, multiline = TRUE)
 }
 #' @export
 roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env) {
@@ -276,7 +276,7 @@ roxy_tag_ns.roxy_tag_importClassesFrom <- function(x, block, env) {
 
 #' @export
 roxy_tag_parse.roxy_tag_importFrom <- function(x) {
-  tag_words(x, min = 2)
+  tag_words(x, min = 2, multiline = TRUE)
 }
 #' @export
 roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
@@ -301,7 +301,7 @@ roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
 
 #' @export
 roxy_tag_parse.roxy_tag_importMethodsFrom <- function(x) {
-  tag_words(x, min = 2)
+  tag_words(x, min = 2, multiline = TRUE)
 }
 #' @export
 roxy_tag_ns.roxy_tag_importMethodsFrom <- function(x, block, env) {

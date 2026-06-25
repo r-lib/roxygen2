@@ -261,7 +261,8 @@ roxy_tag_parse.roxy_tag_import <- function(x) {
 }
 #' @export
 roxy_tag_ns.roxy_tag_import <- function(x, block, env) {
-  one_per_line_ignore_current("import", x$val)
+  ns_verbatim("import", x$val) %||%
+    one_per_line_ignore_current("import", x$val)
 }
 
 #' @export
@@ -326,14 +327,8 @@ roxy_tag_ns.roxy_tag_useDynLib <- function(x, block, env) {
     return(paste0("useDynLib(", auto_quote(x$val), ")"))
   }
 
-  if (any(grepl(",", x$val))) {
-    # If there's a comma in list, don't quote output. This makes it possible
-    # for roxygen2 to support other NAMESPACE forms not otherwise mapped
-    args <- paste0(x$val, collapse = " ")
-    paste0("useDynLib(", args, ")")
-  } else {
+  ns_verbatim("useDynLib", x$val) %||%
     repeat_first("useDynLib", x$val)
-  }
 }
 
 # Default export methods --------------------------------------------------
@@ -373,6 +368,15 @@ export_s4_method <- function(x) one_per_line("exportMethods", x)
 export_s3_method <- function(x) {
   args <- paste0(x, collapse = ",")
   paste0("S3method(", args, ")")
+}
+
+# Escape hatch: if a directive contains a comma, insert it verbatim rather than
+# quoting each word.
+ns_verbatim <- function(name, x) {
+  if (!any(grepl(",", x))) {
+    return(NULL)
+  }
+  paste0(name, "(", paste0(x, collapse = " "), ")")
 }
 
 one_per_line <- function(name, x) {

@@ -307,6 +307,17 @@ test_that("multiline importFrom generates warning", {
   expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
+test_that("import doesn't quote if comma present", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @import rlang, except = ':='
+    NULL"
+  )
+
+  expect_equal(sort(out), "import(rlang, except = ':=')")
+})
+
 test_that("useDynLib imports only selected functions", {
   out <- roc_proc_text(
     namespace_roclet(),

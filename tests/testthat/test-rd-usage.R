@@ -542,6 +542,42 @@ test_that("S7 union method usage shows member classes", {
   )
 })
 
+test_that("S7 bracket methods use subsetting syntax", {
+  skip_unless_r(">= 4.3.0")
+  expect_equal(
+    call_to_usage({
+      Vec <- S7::new_class("Vec")
+      `[` <- S7::new_generic("[", "x")
+      S7::method(`[`, Vec) <- function(x, i, ...) x
+    }),
+    "## S7 method for class <Vec>\nx[i, ...]"
+  )
+  expect_equal(
+    call_to_usage({
+      Vec <- S7::new_class("Vec")
+      `[<-` <- S7::new_generic("[<-", "x")
+      S7::method(`[<-`, Vec) <- function(x, i, ..., value) x
+    }),
+    "## S7 method for class <Vec>\nx[i, ...] <- value"
+  )
+  expect_equal(
+    call_to_usage({
+      Vec <- S7::new_class("Vec")
+      `[[` <- S7::new_generic("[[", "x")
+      S7::method(`[[`, Vec) <- function(x, i) x
+    }),
+    "## S7 method for class <Vec>\nx[[i]]"
+  )
+  expect_equal(
+    call_to_usage({
+      Vec <- S7::new_class("Vec")
+      `[[<-` <- S7::new_generic("[[<-", "x")
+      S7::method(`[[<-`, Vec) <- function(x, i, value) x
+    }),
+    "## S7 method for class <Vec>\nx[[i]] <- value"
+  )
+})
+
 test_that("preserves non-breaking-space", {
   expect_equal(
     call_to_usage(f <- function(a = "\u{A0}") {}),

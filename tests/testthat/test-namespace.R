@@ -267,6 +267,106 @@ test_that("other namespace tags produce correct output", {
   )
 })
 
+test_that("importFrom symbols are merged per package, keeping other lines in place", {
+  lines <- sort_c(c(
+    "export(foo)",
+    "import(rlang)",
+    "importFrom(stats,ave)",
+    "importFrom(stats,median)",
+    "importFrom(utils,head)",
+    "importMethodsFrom(pkg,show)"
+  ))
+
+  expect_equal(
+    merge_imports_from(lines),
+    c(
+      "export(foo)",
+      "import(rlang)",
+      "importFrom(\n  stats,\n  ave,\n  median\n)",
+      "importFrom(utils,head)",
+      "importMethodsFrom(pkg,show)"
+    )
+  )
+})
+
+test_that("merge_imports_from keeps single-symbol importFrom inline", {
+  expect_equal(
+    merge_imports_from("importFrom(stats,median)"),
+    "importFrom(stats,median)"
+  )
+})
+
+test_that("merge_imports_from is a no-op without importFrom lines", {
+  lines <- c("export(foo)", "import(rlang)")
+  expect_equal(merge_imports_from(lines), lines)
+})
+
+test_that("merge_imports_from splits a package around an interspersed line", {
+  # A non-importFrom line sorting between a package's symbols breaks the run, so
+  # the package ends up in two blocks. Correct, just not maximally merged. Only
+  # @rawNamespace can produce such a line.
+  lines <- c(
+    "importFrom(stats,ave)",
+    "importFrom(stats,median)\nif (TRUE) export(foo)",
+    "importFrom(stats,sd)",
+    "importFrom(stats,var)"
+  )
+
+  expect_equal(
+    merge_imports_from(lines),
+    c(
+      "importFrom(stats,ave)",
+      "importFrom(stats,median)\nif (TRUE) export(foo)",
+      "importFrom(\n  stats,\n  sd,\n  var\n)"
+    )
+  )
+})
+
+test_that("a multiline rawNamespace block is preserved, not folded into the merge", {
+  # The raw block is multiline and names the same package (`stats`) as the
+  # generated imports. A non-line-oriented regex (`.` matching newlines) would
+  # match it as an `importFrom(stats, ...)` directive and fold its text into the
+  # merged block. It must instead pass through verbatim.
+  block <- "
+    #' @importFrom stats median sd
+    #' @rawNamespace importFrom(stats,vcov)
+    #'   if (TRUE) export(foo)
+    NULL"
+
+  out <- roc_proc_text(namespace_roclet(), block)
+  expect_snapshot(cat(merge_imports_from(out), sep = "\n"))
+})
+
+test_that("a multi-symbol importFrom() one-liner merges with odd formatting", {
+  # Documents a known cosmetic limitation. A one-liner like
+  # `importFrom(stats,ave,median)` (only reachable via @rawNamespace) matches the
+  # merge regex with `sym` = "ave,median", so when the package has another import
+  # the symbols share a line instead of one per line. Still valid and equivalent,
+  # just not pretty.
+  block <- "
+    #' @importFrom stats sd
+    #' @rawNamespace importFrom(stats,ave,median)
+    NULL"
+
+  out <- roc_proc_text(namespace_roclet(), block)
+  expect_snapshot(cat(merge_imports_from(out), sep = "\n"))
+})
+
+test_that("a bare importFrom() via rawNamespace is merged, not kept verbatim", {
+  # Documents a known limitation: by the time we merge we only see sorted
+  # strings, so a single-line `importFrom(pkg,sym)` from @rawNamespace is
+  # indistinguishable from a generated one and gets folded into the block. This
+  # is semantically equivalent. Complex raw directives (conditionals, multiline)
+  # never match the merge regex, so they still pass through verbatim.
+  block <- "
+    #' @importFrom stats median
+    #' @rawNamespace importFrom(stats,sd)
+    NULL"
+
+  out <- roc_proc_text(namespace_roclet(), block)
+  expect_snapshot(cat(merge_imports_from(out), sep = "\n"))
+})
+
 test_that("import directives for current package are ignored", {
   withr::local_envvar(c("ROXYGEN_PKG" = "ignored"))
 
@@ -406,6 +506,39 @@ test_that("rawNamespace does not break idempotency", {
 
   # contents unchanged
   expect_equal(read_lines(NAMESPACE), lines_orig)
+})
+
+test_that("merged importFrom blocks survive a re-document unchanged", {
+  pkg <- withr::local_tempdir()
+  dir.create(file.path(pkg, "R"))
+  write_lines(
+    c(
+      "Package: testMerge",
+      "Title: T",
+      "Description: D.",
+      "License: GPL-2",
+      "Version: 0.0.1",
+      "Encoding: UTF-8",
+      paste0("RoxygenNote: ", as.character(packageVersion("roxygen2")))
+    ),
+    file.path(pkg, "DESCRIPTION")
+  )
+  write_lines(
+    c(
+      "#' @importFrom stats median sd",
+      "#' @importFrom utils head tail",
+      "NULL"
+    ),
+    file.path(pkg, "R", "a.R")
+  )
+
+  NAMESPACE <- file.path(pkg, "NAMESPACE")
+  suppressMessages(roxygenize(pkg, "namespace"))
+  ns1 <- read_lines(NAMESPACE)
+  suppressMessages(roxygenize(pkg, "namespace"))
+
+  expect_true("importFrom(" %in% ns1)
+  expect_equal(read_lines(NAMESPACE), ns1)
 })
 
 # @evalNamespace ----------------------------------------------------------

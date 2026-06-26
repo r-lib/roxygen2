@@ -47,7 +47,7 @@ roclet_process.roclet_namespace <- function(x, blocks, env, base_path) {
 #' @export
 roclet_output.roclet_namespace <- function(x, results, base_path, ...) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
-  results <- c(made_by("#"), results)
+  results <- c(made_by("#"), merge_imports_from(results))
 
   # Always check for roxygen2 header before overwriting NAMESPACE (#436),
   # even when running for the first time
@@ -81,7 +81,7 @@ update_namespace_imports <- function(base_path) {
   }
 
   lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
-  results <- c(made_by("#"), sort_c(unique(trimws(lines))))
+  results <- c(made_by("#"), merge_imports_from(sort_c(unique(trimws(lines)))))
   write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible()
@@ -140,6 +140,67 @@ blocks_to_ns <- function(blocks, env) {
   lines <- unlist(lines) %||% character()
 
   sort_c(unique(lines))
+}
+
+# `loadNamespace()` processes each NAMESPACE directive separately and its
+# performance scales linearly with the number of `importFrom()` in the file.
+# Merging the import-from directives by package avoids the O(n) performance hit.
+#
+# The callers sort `lines` first, which puts a package's symbols next to each
+# other so they merge into one block. We only touch single-line
+# `importFrom(pkg,sym)` directives. Anything else, including verbatim
+# `@rawNamespace` text that happens to sort into the importFrom span, passes
+# through untouched and in place.
+merge_imports_from <- function(lines) {
+  # `perl = TRUE` so `.` is line-oriented (it matches newlines in R's default
+  # regex). This avoids issues with e.g. multiline `@rawNamespace`.
+  matches <- regmatches(
+    lines,
+    regexec("^importFrom\\(([^,]+),(.*)\\)$", lines, perl = TRUE)
+  )
+  is_import_from <- lengths(matches) > 0
+  if (!any(is_import_from)) {
+    return(lines)
+  }
+
+  # Collapse each run of consecutive importFrom lines on its own, rather than
+  # all matches at once: `@rawNamespace` can insert arbitrary lines into the
+  # middle of the `importFrom` span.
+  n <- length(lines)
+  joins <- is_import_from[-n] != is_import_from[-1]
+  run_ids <- cumsum(c(TRUE, joins))
+
+  pieces <- lapply(split(seq_len(n), run_ids), function(run) {
+    if (!is_import_from[[run[[1]]]]) {
+      return(lines[run])
+    }
+
+    pkgs <- map_chr(matches[run], \(x) x[[2]])
+    syms <- map_chr(matches[run], \(x) x[[3]])
+
+    # Keep packages in appearance order (the `sort_c()` order). A plain
+    # character `split()` orders groups by locale-dependent factor levels, which
+    # can disagree with `sort_c()` and shuffle the blocks. Pinning the levels to
+    # the appearance order avoids that.
+    groups <- split(syms, factor(pkgs, levels = unique(pkgs)))
+    unlist(imap(groups, merge_imports_from_pkg), use.names = FALSE)
+  })
+
+  unlist(pieces, use.names = FALSE)
+}
+
+merge_imports_from_pkg <- function(sym, pkg) {
+  if (length(sym) == 1) {
+    sprintf("importFrom(%s,%s)", pkg, sym)
+  } else {
+    paste0(
+      "importFrom(\n  ",
+      pkg,
+      ",\n",
+      paste0("  ", sym, collapse = ",\n"),
+      "\n)"
+    )
+  }
 }
 
 block_to_ns <- function(block, env) {

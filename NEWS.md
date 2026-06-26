@@ -5,6 +5,7 @@
 * `@section` titles can now contain code that includes a colon (#1878).
 * The automatic usage for a data object that is conditional on the `LazyData` option in the `DESCRIPTION` (see below) now correctly detects all ways to specify a true value, e.g. also `yes`, `Yes` or `True` (@jranke, #1881).
 * `@import` now inserts the directive as is into `NAMESPACE` when it contains a comma, making it possible to use other forms like `@import rlang, except = ":="`.
+* `@importFrom` now generates a single multiline `importFrom()` directive per package instead of one directive per symbol. This fixes a performance issue with `loadNamespace()` for packages that import many symbols.
 
 # roxygen2 8.0.0
 
@@ -127,7 +128,7 @@ See `vignette("rd-S7")` for best practices.
   (#1563, @krlmlr).
 
 * `@importFrom` works again for quoted non-syntactic names, e.g.
-  `@importFrom magrittr "%>%"` or ``@importFrom rlang `:=` `` 
+  `@importFrom magrittr "%>%"` or ``@importFrom rlang `:=` ``
   (#1570, @MichaelChirico). The unquoted form `@importFrom magrittr %>%`
   continues to work. Relatedly, `@importFrom` directives matching no known
   functions (e.g. `@importFrom utils plot pdf`) produce valid NAMESPACE files

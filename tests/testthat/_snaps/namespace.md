@@ -36,6 +36,41 @@
     Message
       x <text>:2: @exportS3Method generic ("foo") doesn't match function ("foo1.bar").
 
+# a multiline rawNamespace block is preserved, not folded into the merge
+
+    Code
+      cat(merge_imports_from(out), sep = "\n")
+    Output
+      importFrom(
+        stats,
+        median,
+        sd
+      )
+      importFrom(stats,vcov)
+        if (TRUE) export(foo)
+
+# a multi-symbol importFrom() one-liner merges with odd formatting
+
+    Code
+      cat(merge_imports_from(out), sep = "\n")
+    Output
+      importFrom(
+        stats,
+        ave,median,
+        sd
+      )
+
+# a bare importFrom() via rawNamespace is merged, not kept verbatim
+
+    Code
+      cat(merge_imports_from(out), sep = "\n")
+    Output
+      importFrom(
+        stats,
+        median,
+        sd
+      )
+
 # poorly formed importFrom throws error
 
     Code

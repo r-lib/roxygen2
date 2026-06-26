@@ -19,11 +19,12 @@ NULL
 #' @param multiline Controls how the tag may span multiple lines:
 #'   * `FALSE` (the default): the tag must be a single line, and spanning
 #'     multiple lines generates a warning.
-#'   * `"paragraph"`: the tag may span multiple lines, but a blank line (either
-#'     empty or a bare roxygen comment) ends the tag. Anything after the blank
-#'     line is ignored, with a warning. Use this for tags where multiline input
-#'     is convenient but a blank line almost always signals a missing tag (e.g.,
-#'     `@importFrom`).
+#'   * `"indent"`: the tag may span multiple lines, but continuation lines must
+#'     use a hanging indent (i.e. be indented more than the first line). The
+#'     first line that is not indented (including a blank line) ends the tag,
+#'     and anything after it is ignored, with a warning. Use this for tags where
+#'     multiline input is convenient but a flush line almost always signals a
+#'     missing tag (e.g., `@importFrom`).
 #'   * `TRUE`: the tag may span any number of lines and paragraphs. Use this for
 #'     tags where multiline content is expected (e.g., `@usage`, `@rawRd`).
 tag_value <- function(x, multiline = FALSE) {
@@ -224,25 +225,16 @@ tag_words_line <- function(x) {
 }
 
 # Applies the multiline policy for a tag's value, warning when it is violated
-# and returning the value to use (possibly truncated to its first paragraph).
-# See the `multiline` parameter of `tag_value()` for the meaning of each mode.
+# and returning the value to use (possibly truncated to its hanging-indented
+# continuation). See the `multiline` parameter of `tag_value()` for the meaning
+# of each mode.
 check_multiline <- function(x, val, multiline) {
   if (isTRUE(multiline)) {
     return(val)
   }
 
-  if (identical(multiline, "paragraph")) {
-    paragraphs <- strsplit(val, "\n[[:space:]]*\n")[[1]]
-    if (length(paragraphs) > 1) {
-      warn_roxy_tag(
-        x,
-        c(
-          "must be a single paragraph",
-          i = "A blank line ends the tag; did you forget a tag like {.code @examples}?"
-        )
-      )
-    }
-    return(paragraphs[[1]])
+  if (identical(multiline, "indent")) {
+    return(check_indent(x, val))
   }
 
   n_lines <- re_count(val, "\n")
@@ -258,6 +250,33 @@ check_multiline <- function(x, val, multiline) {
   }
 
   val
+}
+
+# Keeps the first line of `val` plus any immediately following lines that use a
+# hanging indent (indented more than the first line). The first flush or blank
+# line ends the tag; anything after it is dropped with a warning, since a flush
+# line usually signals a forgotten tag (e.g. a missing `@examples`).
+check_indent <- function(x, val) {
+  lines <- strsplit(val, "\n", fixed = TRUE)[[1]]
+  if (length(lines) <= 1) {
+    return(val)
+  }
+
+  indent <- leadingSpaces(lines)
+  continues <- nzchar(trimws(lines[-1])) & indent[-1] > indent[[1]]
+
+  ends_at <- if (all(continues)) length(lines) else which(!continues)[[1]]
+  if (ends_at < length(lines)) {
+    warn_roxy_tag(
+      x,
+      c(
+        "must use a hanging indent to span multiple lines",
+        i = "Continuation lines must be indented; did you forget a tag like {.code @examples}?"
+      )
+    )
+  }
+
+  paste(lines[seq_len(ends_at)], collapse = "\n")
 }
 
 #' @export

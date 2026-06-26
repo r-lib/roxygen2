@@ -48,8 +48,16 @@
     Code
       out <- roc_proc_text(namespace_roclet(), block)
     Message
-      x <text>:2: @importFrom must be a single paragraph.
-      i A blank line ends the tag; did you forget a tag like `@examples`?
+      x <text>:2: @importFrom must use a hanging indent to span multiple lines.
+      i Continuation lines must be indented; did you forget a tag like `@examples`?
+
+# flush line ends a multiline importFrom
+
+    Code
+      out <- roc_proc_text(namespace_roclet(), block)
+    Message
+      x <text>:2: @importFrom must use a hanging indent to span multiple lines.
+      i Continuation lines must be indented; did you forget a tag like `@examples`?
 
 # can regenerate NAMESPACE even if its broken
 

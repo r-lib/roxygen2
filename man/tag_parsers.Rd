@@ -54,11 +54,12 @@ tag_markdown_with_sections(x)
 \itemize{
 \item \code{FALSE} (the default): the tag must be a single line, and spanning
 multiple lines generates a warning.
-\item \code{"paragraph"}: the tag may span multiple lines, but a blank line (either
-empty or a bare roxygen comment) ends the tag. Anything after the blank
-line is ignored, with a warning. Use this for tags where multiline input
-is convenient but a blank line almost always signals a missing tag (e.g.,
-\verb{@importFrom}).
+\item \code{"indent"}: the tag may span multiple lines, but continuation lines must
+use a hanging indent (i.e. be indented more than the first line). The
+first line that is not indented (including a blank line) ends the tag,
+and anything after it is ignored, with a warning. Use this for tags where
+multiline input is convenient but a flush line almost always signals a
+missing tag (e.g., \verb{@importFrom}).
 \item \code{TRUE}: the tag may span any number of lines and paragraphs. Use this for
 tags where multiline content is expected (e.g., \verb{@usage}, \verb{@rawRd}).
 }}

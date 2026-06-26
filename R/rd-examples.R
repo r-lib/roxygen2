@@ -38,7 +38,7 @@ roxy_tag_parse.roxy_tag_examplesIf <- function(x) {
 }
 #' @export
 roxy_tag_parse.roxy_tag_example <- function(x) {
-  x <- tag_value(x, multiline = TRUE)
+  x <- tag_value(x, multiline = "always")
 
   nl <- re_count(x$val, "\n")
   if (any(nl) > 0) {

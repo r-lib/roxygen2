@@ -17,7 +17,7 @@ NULL
 #' @export
 #' @rdname tag_parsers
 #' @param multiline Controls how the tag may span multiple lines:
-#'   * `FALSE` (the default): the tag must be a single line, and spanning
+#'   * `"never"` (the default): the tag must be a single line, and spanning
 #'     multiple lines generates a warning.
 #'   * `"indent"`: the tag may span multiple lines, but continuation lines must
 #'     use a hanging indent (i.e. be indented more than the first line). The
@@ -25,9 +25,12 @@ NULL
 #'     and anything after it is ignored, with a warning. Use this for tags where
 #'     multiline input is convenient but a flush line almost always signals a
 #'     missing tag (e.g., `@importFrom`).
-#'   * `TRUE`: the tag may span any number of lines and paragraphs. Use this for
-#'     tags where multiline content is expected (e.g., `@usage`, `@rawRd`).
-tag_value <- function(x, multiline = FALSE) {
+#'   * `"always"`: the tag may span any number of lines and paragraphs. Use this
+#'     for tags where multiline content is expected (e.g., `@usage`, `@rawRd`).
+#'
+#'   For backward compatibility, `FALSE` and `TRUE` are accepted as synonyms for
+#'   `"never"` and `"always"` respectively.
+tag_value <- function(x, multiline = "never") {
   x$val <- trimws(x$raw)
 
   if (x$val == "") {
@@ -131,7 +134,7 @@ tag_two_part <- function(
   second,
   required = TRUE,
   markdown = TRUE,
-  multiline = FALSE
+  multiline = "never"
 ) {
   if (trimws(x$raw) == "") {
     if (!required) {
@@ -194,7 +197,7 @@ tag_name_description <- function(x) {
 #' @export
 #' @rdname tag_parsers
 #' @param min,max Minimum and maximum number of words
-tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
+tag_words <- function(x, min = 0, max = Inf, multiline = "never") {
   val <- trimws(x$raw)
 
   val <- check_multiline(x, val, multiline)
@@ -224,16 +227,32 @@ tag_words_line <- function(x) {
   tag_words(x)
 }
 
+# Normalises the `multiline` argument to one of "never", "indent", or "always",
+# silently translating the legacy `FALSE`/`TRUE` values for backward
+# compatibility.
+as_multiline <- function(multiline, error_call = caller_env()) {
+  if (isTRUE(multiline)) {
+    return("always")
+  }
+  if (isFALSE(multiline)) {
+    return("never")
+  }
+
+  arg_match0(multiline, c("never", "indent", "always"), error_call = error_call)
+}
+
 # Applies the multiline policy for a tag's value, warning when it is violated
 # and returning the value to use (possibly truncated to its hanging-indented
 # continuation). See the `multiline` parameter of `tag_value()` for the meaning
 # of each mode.
 check_multiline <- function(x, val, multiline) {
-  if (isTRUE(multiline)) {
+  multiline <- as_multiline(multiline)
+
+  if (multiline == "always") {
     return(val)
   }
 
-  if (identical(multiline, "indent")) {
+  if (multiline == "indent") {
     return(check_indent(x, val))
   }
 

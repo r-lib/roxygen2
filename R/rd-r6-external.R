@@ -5,7 +5,7 @@ roxy_tag_parse.roxy_tag_R6method <- function(x) {
     warn_roxy_tag(x, "requires a value like {.code Class$method}")
     return(NULL)
   }
-  raw <- check_multiline(x, raw, multiline = FALSE)
+  raw <- check_multiline(x, raw, multiline = "never")
 
   pieces <- strsplit(raw, "\\$")[[1]]
   if (length(pieces) != 2 || pieces[1] == "" || pieces[2] == "") {

@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_parse.roxy_tag_prop <- function(x) {
-  x <- tag_two_part(x, "a property name", "a description", multiline = TRUE)
+  x <- tag_two_part(x, "a property name", "a description", multiline = "always")
   if (is.null(x)) {
     return()
   }

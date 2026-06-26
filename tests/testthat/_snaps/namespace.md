@@ -43,6 +43,14 @@
     Message
       x <text>:2: @importFrom must have at least 2 words, not 1.
 
+# blank line ends a multiline importFrom
+
+    Code
+      out <- roc_proc_text(namespace_roclet(), block)
+    Message
+      x <text>:2: @importFrom must be a single paragraph.
+      i A blank line ends the tag; did you forget a tag like `@examples`?
+
 # can regenerate NAMESPACE even if its broken
 
     Code

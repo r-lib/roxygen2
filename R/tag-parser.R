@@ -16,9 +16,16 @@ NULL
 
 #' @export
 #' @rdname tag_parsers
-#' @param multiline If `FALSE` (the default), tags that span multiple lines
-#'   will generate a warning. Set to `TRUE` for tags where multiline content
-#'   is expected (e.g., `@usage`, `@rawRd`).
+#' @param multiline Controls how the tag may span multiple lines:
+#'   * `FALSE` (the default): the tag must be a single line, and spanning
+#'     multiple lines generates a warning.
+#'   * `"paragraph"`: the tag may span multiple lines, but a blank line (either
+#'     empty or a bare roxygen comment) ends the tag. Anything after the blank
+#'     line is ignored, with a warning. Use this for tags where multiline input
+#'     is convenient but a blank line almost always signals a missing tag (e.g.,
+#'     `@importFrom`).
+#'   * `TRUE`: the tag may span any number of lines and paragraphs. Use this for
+#'     tags where multiline content is expected (e.g., `@usage`, `@rawRd`).
 tag_value <- function(x, multiline = FALSE) {
   x$val <- trimws(x$raw)
 
@@ -27,7 +34,7 @@ tag_value <- function(x, multiline = FALSE) {
     return(NULL)
   }
 
-  warn_if_multiline(x, x$val, multiline)
+  x$val <- check_multiline(x, x$val, multiline)
 
   if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
@@ -136,8 +143,8 @@ tag_two_part <- function(
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    warn_if_multiline(x, trimws(x$raw), multiline)
-    pieces <- split_two_part(trimws(x$raw))
+    val <- check_multiline(x, trimws(x$raw), multiline)
+    pieces <- split_two_part(val)
 
     if (required && pieces[[2]] == "") {
       warn_roxy_tag(x, "requires two parts: {first} and {second}")
@@ -189,9 +196,9 @@ tag_name_description <- function(x) {
 tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
   val <- trimws(x$raw)
 
-  warn_if_multiline(x, val, multiline)
+  val <- check_multiline(x, val, multiline)
 
-  if (!rdComplete(x$raw, is_code = FALSE)) {
+  if (!rdComplete(val, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     return(NULL)
   }
@@ -216,11 +223,28 @@ tag_words_line <- function(x) {
   tag_words(x)
 }
 
-# Warns if multiline is FALSE and val contains multiple lines.
-warn_if_multiline <- function(x, val, multiline) {
-  if (multiline) {
-    return(invisible())
+# Applies the multiline policy for a tag's value, warning when it is violated
+# and returning the value to use (possibly truncated to its first paragraph).
+# See the `multiline` parameter of `tag_value()` for the meaning of each mode.
+check_multiline <- function(x, val, multiline) {
+  if (isTRUE(multiline)) {
+    return(val)
   }
+
+  if (identical(multiline, "paragraph")) {
+    paragraphs <- strsplit(val, "\n[[:space:]]*\n")[[1]]
+    if (length(paragraphs) > 1) {
+      warn_roxy_tag(
+        x,
+        c(
+          "must be a single paragraph",
+          i = "A blank line ends the tag; did you forget a tag like {.code @examples}?"
+        )
+      )
+    }
+    return(paragraphs[[1]])
+  }
+
   n_lines <- re_count(val, "\n")
   if (n_lines >= 1) {
     first_line <- re_split_half(val, "\n")[[1]]
@@ -232,7 +256,8 @@ warn_if_multiline <- function(x, val, multiline) {
       )
     )
   }
-  invisible()
+
+  val
 }
 
 #' @export

@@ -343,6 +343,20 @@ test_that("multiline importMethodsFrom is accepted", {
   )
 })
 
+test_that("blank line ends a multiline importFrom", {
+  block <- "
+    #' @importFrom test test1 test2
+    #'
+    #' a <- 1
+    NULL
+  "
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(
+    sort(out),
+    sort(c("importFrom(test,test1)", "importFrom(test,test2)"))
+  )
+})
+
 test_that("import doesn't quote if comma present", {
   out <- roc_proc_text(
     namespace_roclet(),

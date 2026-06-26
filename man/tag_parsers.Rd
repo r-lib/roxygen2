@@ -50,9 +50,18 @@ tag_markdown_with_sections(x)
 \arguments{
 \item{x}{A \link{roxy_tag} object to parse}
 
-\item{multiline}{If \code{FALSE} (the default), tags that span multiple lines
-will generate a warning. Set to \code{TRUE} for tags where multiline content
-is expected (e.g., \verb{@usage}, \verb{@rawRd}).}
+\item{multiline}{Controls how the tag may span multiple lines:
+\itemize{
+\item \code{FALSE} (the default): the tag must be a single line, and spanning
+multiple lines generates a warning.
+\item \code{"paragraph"}: the tag may span multiple lines, but a blank line (either
+empty or a bare roxygen comment) ends the tag. Anything after the blank
+line is ignored, with a warning. Use this for tags where multiline input
+is convenient but a blank line almost always signals a missing tag (e.g.,
+\verb{@importFrom}).
+\item \code{TRUE}: the tag may span any number of lines and paragraphs. Use this for
+tags where multiline content is expected (e.g., \verb{@usage}, \verb{@rawRd}).
+}}
 
 \item{first, second}{Name of first and second parts of two part tags}
 

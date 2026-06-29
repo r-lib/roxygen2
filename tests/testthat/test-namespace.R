@@ -471,36 +471,15 @@ test_that("rawNamespace does not break idempotency", {
 })
 
 test_that("merged importFrom blocks survive a re-document unchanged", {
-  pkg <- withr::local_tempdir()
-  dir.create(file.path(pkg, "R"))
-  write_lines(
-    c(
-      "Package: testMerge",
-      "Title: T",
-      "Description: D.",
-      "License: GPL-2",
-      "Version: 0.0.1",
-      "Encoding: UTF-8",
-      paste0("RoxygenNote: ", as.character(packageVersion("roxygen2")))
-    ),
-    file.path(pkg, "DESCRIPTION")
-  )
-  write_lines(
-    c(
-      "#' @importFrom stats median sd",
-      "#' @importFrom utils head tail",
-      "NULL"
-    ),
-    file.path(pkg, "R", "a.R")
-  )
+  test_pkg <- local_package_copy(test_path("testImportFrom"))
+  NAMESPACE <- file.path(test_pkg, "NAMESPACE")
 
-  NAMESPACE <- file.path(pkg, "NAMESPACE")
-  suppressMessages(roxygenize(pkg, "namespace"))
-  ns1 <- read_lines(NAMESPACE)
-  suppressMessages(roxygenize(pkg, "namespace"))
+  lines_orig <- read_lines(NAMESPACE)
 
-  expect_true("importFrom(" %in% ns1)
-  expect_equal(read_lines(NAMESPACE), ns1)
+  expect_no_error(suppressMessages(roxygenize(test_pkg, "namespace")))
+
+  # contents unchanged
+  expect_equal(read_lines(NAMESPACE), lines_orig)
 })
 
 # @evalNamespace ----------------------------------------------------------

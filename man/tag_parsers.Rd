@@ -16,7 +16,7 @@
 \alias{tag_markdown_with_sections}
 \title{Parse tags}
 \usage{
-tag_value(x, multiline = FALSE)
+tag_value(x, multiline = "never")
 
 tag_inherit(x)
 
@@ -28,12 +28,12 @@ tag_two_part(
   second,
   required = TRUE,
   markdown = TRUE,
-  multiline = FALSE
+  multiline = "never"
 )
 
 tag_name_description(x)
 
-tag_words(x, min = 0, max = Inf, multiline = FALSE)
+tag_words(x, min = 0, max = Inf, multiline = "never")
 
 tag_words_line(x)
 
@@ -50,9 +50,22 @@ tag_markdown_with_sections(x)
 \arguments{
 \item{x}{A \link{roxy_tag} object to parse}
 
-\item{multiline}{If \code{FALSE} (the default), tags that span multiple lines
-will generate a warning. Set to \code{TRUE} for tags where multiline content
-is expected (e.g., \verb{@usage}, \verb{@rawRd}).}
+\item{multiline}{Controls how the tag may span multiple lines:
+\itemize{
+\item \code{"never"} (the default): the tag must be a single line, and spanning
+multiple lines generates a warning.
+\item \code{"indent"}: the tag may span multiple lines, but continuation lines must
+use a hanging indent (i.e. be indented more than the first line). The
+first line that is not indented (including a blank line) ends the tag,
+and anything after it is ignored, with a warning. Use this for tags where
+multiline input is convenient but a flush line almost always signals a
+missing tag (e.g., \verb{@importFrom}).
+\item \code{"always"}: the tag may span any number of lines and paragraphs. Use this
+for tags where multiline content is expected (e.g., \verb{@usage}, \verb{@rawRd}).
+}
+
+For backward compatibility, \code{FALSE} and \code{TRUE} are accepted as synonyms for
+\code{"never"} and \code{"always"} respectively.}
 
 \item{first, second}{Name of first and second parts of two part tags}
 

@@ -1,6 +1,6 @@
 #' @export
 roxy_tag_parse.roxy_tag_param <- function(x) {
-  tag_two_part(x, "an argument name", "a description", multiline = TRUE)
+  tag_two_part(x, "an argument name", "a description", multiline = "always")
 }
 
 #' @export

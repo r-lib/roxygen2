@@ -159,7 +159,10 @@ block_directives <- function(blocks, env) {
 ns_format <- function(directives) {
   is_import <- map_lgl(directives, \(x) inherits(x, "import_from"))
 
-  text <- unique(as.character(unlist(directives[!is_import], use.names = FALSE)))
+  text <- unique(as.character(unlist(
+    directives[!is_import],
+    use.names = FALSE
+  )))
   blocks <- merge_import_from(directives[is_import])
 
   block_keys <- if (length(blocks)) {
@@ -182,7 +185,10 @@ merge_import_from <- function(imports) {
     factor(packages, levels = sort_c(unique(packages)))
   )
   blocks <- map_chr(names(funs), function(package) {
-    syms <- sort_c(unique(auto_quote(unlist(funs[[package]], use.names = FALSE))))
+    syms <- sort_c(unique(auto_quote(unlist(
+      funs[[package]],
+      use.names = FALSE
+    ))))
     format_import_from(package, syms)
   })
   set_names(blocks, names(funs))
@@ -338,6 +344,10 @@ roxy_tag_parse.roxy_tag_importFrom <- function(x) {
 #' @export
 roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
   pkg <- x$val[1L]
+  if (identical(pkg, peek_roxygen_pkg())) {
+    return(NULL)
+  }
+
   funs <- x$val[-1L]
   if (requireNamespace(pkg, quietly = TRUE)) {
     # be sure to match '%>%', `%>%`, "%>%" all to %>% given by getNamespaceExports, #1570
@@ -349,13 +359,11 @@ roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
       )
       funs <- funs[!unknown_idx]
     }
+    if (length(funs) == 0) {
+      return(NULL)
+    }
   }
 
-  # Ignore the directive entirely if there's nothing left to import, or if it
-  # imports from the package being documented.
-  if (length(funs) == 0 || identical(pkg, peek_roxygen_pkg())) {
-    return(NULL)
-  }
   import_from(pkg, funs)
 }
 

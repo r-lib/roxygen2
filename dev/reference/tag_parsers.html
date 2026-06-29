@@ -80,7 +80,7 @@ returning <code>NULL</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tag_value</span><span class="op">(</span><span class="va">x</span>, multiline <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tag_value</span><span class="op">(</span><span class="va">x</span>, multiline <span class="op">=</span> <span class="st">"never"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tag_inherit</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
@@ -92,12 +92,12 @@ returning <code>NULL</code>.</p>
 <span>  <span class="va">second</span>,</span>
 <span>  required <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  markdown <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  multiline <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  multiline <span class="op">=</span> <span class="st">"never"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tag_name_description</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tag_words</span><span class="op">(</span><span class="va">x</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="cn">Inf</span>, multiline <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">tag_words</span><span class="op">(</span><span class="va">x</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="cn">Inf</span>, multiline <span class="op">=</span> <span class="st">"never"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tag_words_line</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
@@ -121,9 +121,18 @@ returning <code>NULL</code>.</p>
 
 
 <dt id="arg-multiline">multiline<a class="anchor" aria-label="anchor" href="#arg-multiline"></a></dt>
-<dd><p>If <code>FALSE</code> (the default), tags that span multiple lines
-will generate a warning. Set to <code>TRUE</code> for tags where multiline content
-is expected (e.g., <code>@usage</code>, <code>@rawRd</code>).</p></dd>
+<dd><p>Controls how the tag may span multiple lines:</p><ul><li><p><code>"never"</code> (the default): the tag must be a single line, and spanning
+multiple lines generates a warning.</p></li>
+<li><p><code>"indent"</code>: the tag may span multiple lines, but continuation lines must
+use a hanging indent (i.e. be indented more than the first line). The
+first line that is not indented (including a blank line) ends the tag,
+and anything after it is ignored, with a warning. Use this for tags where
+multiline input is convenient but a flush line almost always signals a
+missing tag (e.g., <code>@importFrom</code>).</p></li>
+<li><p><code>"always"</code>: the tag may span any number of lines and paragraphs. Use this
+for tags where multiline content is expected (e.g., <code>@usage</code>, <code>@rawRd</code>).</p></li>
+</ul><p>For backward compatibility, <code>FALSE</code> and <code>TRUE</code> are accepted as synonyms for
+<code>"never"</code> and <code>"always"</code> respectively.</p></dd>
 
 
 <dt id="arg-first-second">first, second<a class="anchor" aria-label="anchor" href="#arg-first-second"></a></dt>

@@ -77,6 +77,8 @@
 <li>The automatic usage for a data object that is conditional on the <code>LazyData</code> option in the <code>DESCRIPTION</code> (see below) now correctly detects all ways to specify a true value, e.g. also <code>yes</code>, <code>Yes</code> or <code>True</code> (<a href="https://github.com/jranke" class="external-link">@jranke</a>, <a href="https://github.com/r-lib/roxygen2/issues/1881" class="external-link">#1881</a>).</li>
 <li>
 <code>@import</code> now inserts the directive as is into <code>NAMESPACE</code> when it contains a comma, making it possible to use other forms like <code>@import rlang, except = ":="</code>.</li>
+<li>
+<code>@importFrom</code>, <code>@importClassesFrom</code>, and <code>@importMethodsFrom</code> now accept multi-line input, restoring the ability to spread imports across multiple lines for readability; continuation lines must use a hanging indent, so the first flush or blank line ends the tag and content after it (e.g. from a forgotten <code>@examples</code>) is no longer silently absorbed into the namespace (<a href="https://github.com/r-lib/roxygen2/issues/1890" class="external-link">#1890</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.0.0" id="roxygen2-800">roxygen2 8.0.0<a class="anchor" aria-label="anchor" href="#roxygen2-800"></a></h2><p class="text-muted">CRAN release: 2026-05-01</p>

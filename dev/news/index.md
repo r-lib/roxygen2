@@ -18,6 +18,13 @@
 - `@import` now inserts the directive as is into `NAMESPACE` when it
   contains a comma, making it possible to use other forms like
   `@import rlang, except = ":="`.
+- `@importFrom`, `@importClassesFrom`, and `@importMethodsFrom` now
+  accept multi-line input, restoring the ability to spread imports
+  across multiple lines for readability; continuation lines must use a
+  hanging indent, so the first flush or blank line ends the tag and
+  content after it (e.g. from a forgotten `@examples`) is no longer
+  silently absorbed into the namespace
+  ([\#1890](https://github.com/r-lib/roxygen2/issues/1890)).
 
 ## roxygen2 8.0.0
 

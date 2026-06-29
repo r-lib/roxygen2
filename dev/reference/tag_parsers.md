@@ -7,7 +7,7 @@ warning and returning `NULL`.
 ## Usage
 
 ``` r
-tag_value(x, multiline = FALSE)
+tag_value(x, multiline = "never")
 
 tag_inherit(x)
 
@@ -19,12 +19,12 @@ tag_two_part(
   second,
   required = TRUE,
   markdown = TRUE,
-  multiline = FALSE
+  multiline = "never"
 )
 
 tag_name_description(x)
 
-tag_words(x, min = 0, max = Inf, multiline = FALSE)
+tag_words(x, min = 0, max = Inf, multiline = "never")
 
 tag_words_line(x)
 
@@ -48,9 +48,24 @@ tag_markdown_with_sections(x)
 
 - multiline:
 
-  If `FALSE` (the default), tags that span multiple lines will generate
-  a warning. Set to `TRUE` for tags where multiline content is expected
-  (e.g., `@usage`, `@rawRd`).
+  Controls how the tag may span multiple lines:
+
+  - `"never"` (the default): the tag must be a single line, and spanning
+    multiple lines generates a warning.
+
+  - `"indent"`: the tag may span multiple lines, but continuation lines
+    must use a hanging indent (i.e. be indented more than the first
+    line). The first line that is not indented (including a blank line)
+    ends the tag, and anything after it is ignored, with a warning. Use
+    this for tags where multiline input is convenient but a flush line
+    almost always signals a missing tag (e.g., `@importFrom`).
+
+  - `"always"`: the tag may span any number of lines and paragraphs. Use
+    this for tags where multiline content is expected (e.g., `@usage`,
+    `@rawRd`).
+
+  For backward compatibility, `FALSE` and `TRUE` are accepted as
+  synonyms for `"never"` and `"always"` respectively.
 
 - first, second:
 

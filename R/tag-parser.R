@@ -16,10 +16,21 @@ NULL
 
 #' @export
 #' @rdname tag_parsers
-#' @param multiline If `FALSE` (the default), tags that span multiple lines
-#'   will generate a warning. Set to `TRUE` for tags where multiline content
-#'   is expected (e.g., `@usage`, `@rawRd`).
-tag_value <- function(x, multiline = FALSE) {
+#' @param multiline Controls how the tag may span multiple lines:
+#'   * `"never"` (the default): the tag must be a single line, and spanning
+#'     multiple lines generates a warning.
+#'   * `"indent"`: the tag may span multiple lines, but continuation lines must
+#'     use a hanging indent (i.e. be indented more than the first line). The
+#'     first line that is not indented (including a blank line) ends the tag,
+#'     and anything after it is ignored, with a warning. Use this for tags where
+#'     multiline input is convenient but a flush line almost always signals a
+#'     missing tag (e.g., `@importFrom`).
+#'   * `"always"`: the tag may span any number of lines and paragraphs. Use this
+#'     for tags where multiline content is expected (e.g., `@usage`, `@rawRd`).
+#'
+#'   For backward compatibility, `FALSE` and `TRUE` are accepted as synonyms for
+#'   `"never"` and `"always"` respectively.
+tag_value <- function(x, multiline = "never") {
   x$val <- trimws(x$raw)
 
   if (x$val == "") {
@@ -27,7 +38,7 @@ tag_value <- function(x, multiline = FALSE) {
     return(NULL)
   }
 
-  warn_if_multiline(x, x$val, multiline)
+  x$val <- check_multiline(x, x$val, multiline)
 
   if (!rdComplete(x$raw, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
@@ -123,7 +134,7 @@ tag_two_part <- function(
   second,
   required = TRUE,
   markdown = TRUE,
-  multiline = FALSE
+  multiline = "never"
 ) {
   if (trimws(x$raw) == "") {
     if (!required) {
@@ -136,8 +147,8 @@ tag_two_part <- function(
     warn_roxy_tag(x, "has mismatched braces or quotes")
     NULL
   } else {
-    warn_if_multiline(x, trimws(x$raw), multiline)
-    pieces <- split_two_part(trimws(x$raw))
+    val <- check_multiline(x, trimws(x$raw), multiline)
+    pieces <- split_two_part(val)
 
     if (required && pieces[[2]] == "") {
       warn_roxy_tag(x, "requires two parts: {first} and {second}")
@@ -186,12 +197,12 @@ tag_name_description <- function(x) {
 #' @export
 #' @rdname tag_parsers
 #' @param min,max Minimum and maximum number of words
-tag_words <- function(x, min = 0, max = Inf, multiline = FALSE) {
+tag_words <- function(x, min = 0, max = Inf, multiline = "never") {
   val <- trimws(x$raw)
 
-  warn_if_multiline(x, val, multiline)
+  val <- check_multiline(x, val, multiline)
 
-  if (!rdComplete(x$raw, is_code = FALSE)) {
+  if (!rdComplete(val, is_code = FALSE)) {
     warn_roxy_tag(x, "has mismatched braces or quotes")
     return(NULL)
   }
@@ -216,11 +227,35 @@ tag_words_line <- function(x) {
   tag_words(x)
 }
 
-# Warns if multiline is FALSE and val contains multiple lines.
-warn_if_multiline <- function(x, val, multiline) {
-  if (multiline) {
-    return(invisible())
+# Normalises the `multiline` argument to one of "never", "indent", or "always",
+# silently translating the legacy `FALSE`/`TRUE` values for backward
+# compatibility.
+as_multiline <- function(multiline, error_call = caller_env()) {
+  if (isTRUE(multiline)) {
+    return("always")
   }
+  if (isFALSE(multiline)) {
+    return("never")
+  }
+
+  arg_match0(multiline, c("never", "indent", "always"), error_call = error_call)
+}
+
+# Applies the multiline policy for a tag's value, warning when it is violated
+# and returning the value to use (possibly truncated to its hanging-indented
+# continuation). See the `multiline` parameter of `tag_value()` for the meaning
+# of each mode.
+check_multiline <- function(x, val, multiline) {
+  multiline <- as_multiline(multiline)
+
+  if (multiline == "always") {
+    return(val)
+  }
+
+  if (multiline == "indent") {
+    return(check_indent(x, val))
+  }
+
   n_lines <- re_count(val, "\n")
   if (n_lines >= 1) {
     first_line <- re_split_half(val, "\n")[[1]]
@@ -232,7 +267,35 @@ warn_if_multiline <- function(x, val, multiline) {
       )
     )
   }
-  invisible()
+
+  val
+}
+
+# Keeps the first line of `val` plus any immediately following lines that use a
+# hanging indent (indented more than the first line). The first flush or blank
+# line ends the tag; anything after it is dropped with a warning, since a flush
+# line usually signals a forgotten tag (e.g. a missing `@examples`).
+check_indent <- function(x, val) {
+  lines <- strsplit(val, "\n", fixed = TRUE)[[1]]
+  if (length(lines) <= 1) {
+    return(val)
+  }
+
+  indent <- leadingSpaces(lines)
+  continues <- nzchar(trimws(lines[-1])) & indent[-1] > indent[[1]]
+
+  ends_at <- if (all(continues)) length(lines) else which(!continues)[[1]]
+  if (ends_at < length(lines)) {
+    warn_roxy_tag(
+      x,
+      c(
+        "must use a hanging indent to span multiple lines",
+        i = "Continuation lines must be indented; did you forget a tag like {.code @examples}?"
+      )
+    )
+  }
+
+  paste(lines[seq_len(ends_at)], collapse = "\n")
 }
 
 #' @export

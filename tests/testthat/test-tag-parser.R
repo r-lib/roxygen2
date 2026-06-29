@@ -97,6 +97,15 @@ test_that("tag_two_part() warns on multi-line content and preserves value", {
   expect_equal(out$val, list(name = "foo", description = "bar\nbaz"))
 })
 
+test_that("multiline accepts string strategies and legacy booleans", {
+  expect_equal(as_multiline("never"), "never")
+  expect_equal(as_multiline("indent"), "indent")
+  expect_equal(as_multiline("always"), "always")
+  expect_equal(as_multiline(FALSE), "never")
+  expect_equal(as_multiline(TRUE), "always")
+  expect_error(as_multiline("nope"))
+})
+
 test_that("tag_value() warns on multi-line content and preserves value", {
   expect_snapshot({
     tag <- roxy_test_tag("a\nb")

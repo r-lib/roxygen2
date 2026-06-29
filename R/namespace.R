@@ -146,47 +146,75 @@ blocks_to_ns <- function(blocks, env) {
 # performance scales linearly with the number of `importFrom()` in the file.
 # Merging the import-from directives by package avoids the O(n) performance hit.
 #
-# The callers sort `lines` first, which puts a package's symbols next to each
-# other so they merge into one block. We only touch single-line
-# `importFrom(pkg,sym)` directives. Anything else, including verbatim
-# `@rawNamespace` text that happens to sort into the importFrom span, passes
-# through untouched and in place.
+# We parse each directive into its top-level expressions and merge every
+# `importFrom()` call for a package into one block, wherever they appear,
+# as this offers a decent performance improvement where many imports are
+# used.
 merge_imports_from <- function(lines) {
-  # `perl = TRUE` so `.` is line-oriented (it matches newlines in R's default
-  # regex). This avoids issues with e.g. multiline `@rawNamespace`.
-  matches <- regmatches(
-    lines,
-    regexec("^importFrom\\(([^,]+),(.*)\\)$", lines, perl = TRUE)
-  )
-  is_import_from <- lengths(matches) > 0
+  items <- unlist(lapply(lines, parse_ns_directive), recursive = FALSE)
+
+  is_import_from <- map_lgl(items, \(x) x$import_from)
   if (!any(is_import_from)) {
     return(lines)
   }
 
-  # Collapse each run of consecutive importFrom lines on its own, rather than
-  # all matches at once: `@rawNamespace` can insert arbitrary lines into the
-  # middle of the `importFrom` span.
-  n <- length(lines)
-  joins <- is_import_from[-n] != is_import_from[-1]
-  run_ids <- cumsum(c(TRUE, joins))
+  import_items <- items[is_import_from]
+  pkgs <- map_chr(import_items, \(x) x$pkg)
+  syms <- lapply(import_items, \(x) x$syms)
 
-  pieces <- lapply(split(seq_len(n), run_ids), function(run) {
-    if (!is_import_from[[run[[1]]]]) {
-      return(lines[run])
-    }
-
-    pkgs <- map_chr(matches[run], \(x) x[[2]])
-    syms <- map_chr(matches[run], \(x) x[[3]])
-
-    # Keep packages in appearance order (the `sort_c()` order). A plain
-    # character `split()` orders groups by locale-dependent factor levels, which
-    # can disagree with `sort_c()` and shuffle the blocks. Pinning the levels to
-    # the appearance order avoids that.
-    groups <- split(syms, factor(pkgs, levels = unique(pkgs)))
-    unlist(imap(groups, merge_imports_from_pkg), use.names = FALSE)
+  groups <- split(syms, factor(pkgs, levels = unique(pkgs)))
+  merged <- imap(groups, \(sym, pkg) {
+    merge_imports_from_pkg(unlist(sym, use.names = FALSE), pkg)
   })
 
-  unlist(pieces, use.names = FALSE)
+  # Sort verbatim directives and merged blocks together. A multiline
+  # `importFrom(\n  pkg,\n ...)` block can't sort itself (its embedded newline
+  # sorts before the package name), so key each block on `importFrom(pkg`.
+  verbatim <- map_chr(items[!is_import_from], \(x) x$text)
+  pieces <- c(verbatim, unlist(merged, use.names = FALSE))
+  keys <- c(verbatim, paste0("importFrom(", names(groups)))
+  pieces[order_c(keys)]
+}
+
+# Split a NAMESPACE directive into its top-level expressions. A single
+# `@rawNamespace` block can hold several (e.g. an `importFrom()` alongside a
+# conditional `export()`); splitting lets us merge the `importFrom()` part while
+# leaving the rest in place. Each expression becomes a list recording whether
+# it's a mergeable `importFrom()` call (with its package and symbols) or
+# verbatim text to pass through.
+parse_ns_directive <- function(line) {
+  exprs <- tryCatch(
+    parse(text = line, keep.source = TRUE),
+    error = function(e) NULL
+  )
+  # Unparseable text (shouldn't happen for a valid NAMESPACE) is left verbatim.
+  if (is.null(exprs)) {
+    return(list(list(import_from = FALSE, text = line)))
+  }
+
+  # Preserve the original text exactly when the directive is a single
+  # expression; only fall back to deparsed source when we actually split.
+  if (length(exprs) == 1) {
+    texts <- line
+  } else {
+    texts <- map_chr(attr(exprs, "srcref"), \(x) {
+      paste(as.character(x), collapse = "\n")
+    })
+  }
+
+  lapply(seq_along(exprs), function(i) {
+    expr <- exprs[[i]]
+    if (is_call(expr, "importFrom")) {
+      args <- as.list(expr)[-1]
+      list(
+        import_from = TRUE,
+        pkg = deparse1(args[[1]]),
+        syms = map_chr(args[-1], deparse1)
+      )
+    } else {
+      list(import_from = FALSE, text = texts[[i]])
+    }
+  })
 }
 
 merge_imports_from_pkg <- function(sym, pkg) {

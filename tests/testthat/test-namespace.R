@@ -301,66 +301,36 @@ test_that("merge_imports_from is a no-op without importFrom lines", {
   expect_equal(merge_imports_from(lines), lines)
 })
 
-test_that("merge_imports_from splits a package around an interspersed line", {
-  # A non-importFrom line sorting between a package's symbols breaks the run, so
-  # the package ends up in two blocks. Correct, just not maximally merged. Only
-  # @rawNamespace can produce such a line.
+test_that("importFrom is merged across an interspersed non-import expression", {
+  # A non-importFrom expression (only @rawNamespace can produce one mid-block)
+  # doesn't split the package: every symbol still merges into one block, and the
+  # other expression passes through verbatim.
   lines <- c(
     "importFrom(stats,ave)",
     "importFrom(stats,median)\nif (TRUE) export(foo)",
-    "importFrom(stats,sd)",
-    "importFrom(stats,var)"
+    "importFrom(stats,sd)"
   )
 
   expect_equal(
     merge_imports_from(lines),
     c(
-      "importFrom(stats,ave)",
-      "importFrom(stats,median)\nif (TRUE) export(foo)",
-      "importFrom(\n  stats,\n  sd,\n  var\n)"
+      "if (TRUE) export(foo)",
+      "importFrom(\n  stats,\n  ave,\n  median,\n  sd\n)"
     )
   )
 })
 
-test_that("a multiline rawNamespace block is preserved, not folded into the merge", {
-  # The raw block is multiline and names the same package (`stats`) as the
-  # generated imports. A non-line-oriented regex (`.` matching newlines) would
-  # match it as an `importFrom(stats, ...)` directive and fold its text into the
-  # merged block. It must instead pass through verbatim.
-  block <- "
-    #' @importFrom stats median sd
-    #' @rawNamespace importFrom(stats,vcov)
-    #'   if (TRUE) export(foo)
-    NULL"
-
-  out <- roc_proc_text(namespace_roclet(), block)
-  expect_snapshot(cat(merge_imports_from(out), sep = "\n"))
-})
-
-test_that("a multi-symbol importFrom() one-liner merges with odd formatting", {
-  # Documents a known cosmetic limitation. A one-liner like
-  # `importFrom(stats,ave,median)` (only reachable via @rawNamespace) matches the
-  # merge regex with `sym` = "ave,median", so when the package has another import
-  # the symbols share a line instead of one per line. Still valid and equivalent,
-  # just not pretty.
-  block <- "
-    #' @importFrom stats sd
-    #' @rawNamespace importFrom(stats,ave,median)
-    NULL"
-
-  out <- roc_proc_text(namespace_roclet(), block)
-  expect_snapshot(cat(merge_imports_from(out), sep = "\n"))
-})
-
-test_that("a bare importFrom() via rawNamespace is merged, not kept verbatim", {
-  # Documents a known limitation: by the time we merge we only see sorted
-  # strings, so a single-line `importFrom(pkg,sym)` from @rawNamespace is
-  # indistinguishable from a generated one and gets folded into the block. This
-  # is semantically equivalent. Complex raw directives (conditionals, multiline)
-  # never match the merge regex, so they still pass through verbatim.
+test_that("importFrom() directives from @rawNamespace are merged", {
+  # @rawNamespace importFrom() calls parse to the same calls as generated ones,
+  # so they merge into the per-package block: a bare one-liner is folded in, a
+  # multi-symbol one-liner is split to one symbol per line, and a multi-statement
+  # block has its importFrom() merged while the rest passes through verbatim.
   block <- "
     #' @importFrom stats median
     #' @rawNamespace importFrom(stats,sd)
+    #' @rawNamespace importFrom(stats,ave,var)
+    #' @rawNamespace importFrom(stats,vcov)
+    #'   if (TRUE) export(foo)
     NULL"
 
   out <- roc_proc_text(namespace_roclet(), block)

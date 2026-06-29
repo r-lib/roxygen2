@@ -47,7 +47,7 @@ roclet_process.roclet_namespace <- function(x, blocks, env, base_path) {
 #' @export
 roclet_output.roclet_namespace <- function(x, results, base_path, ...) {
   NAMESPACE <- file.path(base_path, "NAMESPACE")
-  results <- c(made_by("#"), merge_imports_from(results))
+  results <- c(made_by("#"), results)
 
   # Always check for roxygen2 header before overwriting NAMESPACE (#436),
   # even when running for the first time
@@ -80,15 +80,20 @@ update_namespace_imports <- function(base_path) {
     return(invisible())
   }
 
-  lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
-  results <- c(made_by("#"), merge_imports_from(sort_c(unique(trimws(lines)))))
+  directives <- c(
+    namespace_imports(base_path),
+    as.list(namespace_exports(NAMESPACE))
+  )
+  results <- c(made_by("#"), ns_format(directives))
   write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible()
 }
 
 # Here we hand roll parsing and tokenisation from roxygen2 primitives so
-# we can filter tags that we know don't require package code.
+# we can filter tags that we know don't require package code. Returns the
+# unformatted directives (see `block_to_ns()`) so the caller can merge them
+# with the existing exports in `ns_format()`.
 namespace_imports <- function(base_path = ".") {
   paths <- package_files(base_path)
   parsed <- lapply(paths, parse, keep.source = TRUE)
@@ -101,7 +106,7 @@ namespace_imports <- function(base_path = ".") {
     )
   )
 
-  blocks_to_ns(blocks, emptyenv())
+  block_directives(blocks, emptyenv())
 }
 
 namespace_imports_blocks <- function(srcref) {
@@ -136,103 +141,68 @@ namespace_exports <- function(path) {
 # NAMESPACE generation ----------------------------------------------------
 
 blocks_to_ns <- function(blocks, env) {
-  lines <- map(blocks, block_to_ns, env = env)
-  lines <- unlist(lines) %||% character()
-
-  sort_c(unique(lines))
+  ns_format(block_directives(blocks, env))
 }
 
-# `loadNamespace()` processes each NAMESPACE directive separately and its
-# performance scales linearly with the number of `importFrom()` in the file.
-# Merging the import-from directives by package avoids the O(n) performance hit.
-#
-# We parse each directive into its top-level expressions and merge every
-# `importFrom()` call for a package into one block, wherever they appear,
-# as this offers a decent performance improvement where many imports are
-# used.
-merge_imports_from <- function(lines) {
-  items <- unlist(lapply(lines, parse_ns_directive), recursive = FALSE)
-
-  is_import_from <- map_lgl(items, \(x) x$import_from)
-  if (!any(is_import_from)) {
-    return(lines)
-  }
-
-  import_items <- items[is_import_from]
-  pkgs <- map_chr(import_items, \(x) x$pkg)
-  syms <- lapply(import_items, \(x) x$syms)
-
-  groups <- split(syms, factor(pkgs, levels = unique(pkgs)))
-  merged <- imap(groups, \(sym, pkg) {
-    merge_imports_from_pkg(unlist(sym, use.names = FALSE), pkg)
-  })
-
-  # Sort verbatim directives and merged blocks together. A multiline
-  # `importFrom(\n  pkg,\n ...)` block can't sort itself (its embedded newline
-  # sorts before the package name), so key each block on `importFrom(pkg`.
-  verbatim <- map_chr(items[!is_import_from], \(x) x$text)
-  pieces <- c(verbatim, unlist(merged, use.names = FALSE))
-  keys <- c(verbatim, paste0("importFrom(", names(groups)))
-  pieces[order_c(keys)]
-}
-
-# Split a NAMESPACE directive into its top-level expressions. A single
-# `@rawNamespace` block can hold several (e.g. an `importFrom()` alongside a
-# conditional `export()`); splitting lets us merge the `importFrom()` part while
-# leaving the rest in place. Each expression becomes a list recording whether
-# it's a mergeable `importFrom()` call (with its package and symbols) or
-# verbatim text to pass through.
-parse_ns_directive <- function(line) {
-  exprs <- tryCatch(
-    parse(text = line, keep.source = TRUE),
-    error = function(e) NULL
-  )
-  # Unparseable text (shouldn't happen for a valid NAMESPACE) is left verbatim.
-  if (is.null(exprs)) {
-    return(list(list(import_from = FALSE, text = line)))
-  }
-
-  # Preserve the original text exactly when the directive is a single
-  # expression; only fall back to deparsed source when we actually split.
-  if (length(exprs) == 1) {
-    texts <- line
-  } else {
-    texts <- map_chr(attr(exprs, "srcref"), \(x) {
-      paste(as.character(x), collapse = "\n")
-    })
-  }
-
-  lapply(seq_along(exprs), function(i) {
-    expr <- exprs[[i]]
-    if (is_call(expr, "importFrom")) {
-      args <- as.list(expr)[-1]
-      list(
-        import_from = TRUE,
-        pkg = deparse1(args[[1]]),
-        syms = map_chr(args[-1], deparse1)
-      )
-    } else {
-      list(import_from = FALSE, text = texts[[i]])
-    }
-  })
-}
-
-merge_imports_from_pkg <- function(sym, pkg) {
-  if (length(sym) == 1) {
-    sprintf("importFrom(%s,%s)", pkg, sym)
-  } else {
-    paste0(
-      "importFrom(\n  ",
-      pkg,
-      ",\n",
-      paste0("  ", sym, collapse = ",\n"),
-      "\n)"
-    )
-  }
+block_directives <- function(blocks, env) {
+  directives <- map(blocks, block_to_ns, env = env)
+  compact(list_c(directives))
 }
 
 block_to_ns <- function(block, env) {
   map(block$tags, roxy_tag_ns, block = block, env = env)
+}
+
+# `roxy_tag_ns()` returns either a rendered directive (a character vector) or,
+# for `@importFrom`, a structured `import_from()` so that all the imports from a
+# package can be merged into a single directive here. This dodges a
+# `loadNamespace()` performance issue that scales with the number of
+# `importFrom()` directives.
+ns_format <- function(directives) {
+  is_import <- map_lgl(directives, \(x) inherits(x, "import_from"))
+
+  text <- unique(as.character(unlist(directives[!is_import], use.names = FALSE)))
+  blocks <- merge_import_from(directives[is_import])
+
+  block_keys <- if (length(blocks)) {
+    paste0("importFrom(", auto_quote(names(blocks)))
+  }
+  lines <- c(text, unname(blocks))
+  keys <- c(text, block_keys)
+  lines[order_c(keys)]
+}
+
+import_from <- function(package, funs) {
+  structure(list(package = package, funs = funs), class = "import_from")
+}
+
+# Merge the `import_from()` directives by package into one `importFrom()` each.
+merge_import_from <- function(imports) {
+  packages <- map_chr(imports, \(x) x$package)
+  funs <- split(
+    lapply(imports, \(x) x$funs),
+    factor(packages, levels = sort_c(unique(packages)))
+  )
+  blocks <- map_chr(names(funs), function(package) {
+    syms <- sort_c(unique(auto_quote(unlist(funs[[package]], use.names = FALSE))))
+    format_import_from(package, syms)
+  })
+  set_names(blocks, names(funs))
+}
+
+format_import_from <- function(package, funs) {
+  package <- auto_quote(package)
+  if (length(funs) == 1) {
+    sprintf("importFrom(%s,%s)", package, funs)
+  } else {
+    paste0(
+      "importFrom(\n  ",
+      package,
+      ",\n",
+      paste0("  ", funs, collapse = ",\n"),
+      "\n)"
+    )
+  }
 }
 
 # Namespace tag methods ---------------------------------------------------
@@ -370,22 +340,25 @@ roxy_tag_parse.roxy_tag_importFrom <- function(x) {
 #' @export
 roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
   pkg <- x$val[1L]
+  funs <- x$val[-1L]
   if (requireNamespace(pkg, quietly = TRUE)) {
-    importing <- x$val[-1L]
     # be sure to match '%>%', `%>%`, "%>%" all to %>% given by getNamespaceExports, #1570
-    unknown_idx <- !strip_quotes(importing) %in% getNamespaceExports(pkg)
+    unknown_idx <- !strip_quotes(funs) %in% getNamespaceExports(pkg)
     if (any(unknown_idx)) {
       warn_roxy_tag(
         x,
-        "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} from {.package {pkg}}: {.code {importing[unknown_idx]}}"
+        "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} from {.package {pkg}}: {.code {funs[unknown_idx]}}"
       )
-      if (all(unknown_idx)) {
-        return(NULL)
-      }
-      x$val <- c(pkg, importing[!unknown_idx])
+      funs <- funs[!unknown_idx]
     }
   }
-  repeat_first_ignore_current("importFrom", x$val)
+
+  # Ignore the directive entirely if there's nothing left to import, or if it
+  # imports from the package being documented.
+  if (length(funs) == 0 || identical(pkg, peek_roxygen_pkg())) {
+    return(NULL)
+  }
+  import_from(pkg, funs)
 }
 
 #' @export

@@ -257,8 +257,7 @@ test_that("other namespace tags produce correct output", {
     sort(c(
       "exportPattern(test)",
       "import(test)",
-      "importFrom(test,test1)",
-      "importFrom(test,test2)",
+      "importFrom(\n  test,\n  test1,\n  test2\n)",
       "importClassesFrom(test,test1)",
       "importClassesFrom(test,test2)",
       "importMethodsFrom(test,test1)",
@@ -267,18 +266,18 @@ test_that("other namespace tags produce correct output", {
   )
 })
 
-test_that("importFrom symbols are merged per package, keeping other lines in place", {
-  lines <- sort_c(c(
+test_that("ns_format merges importFrom directives per package", {
+  directives <- list(
     "export(foo)",
     "import(rlang)",
-    "importFrom(stats,ave)",
-    "importFrom(stats,median)",
-    "importFrom(utils,head)",
+    import_from("stats", "median"),
+    import_from("stats", "ave"),
+    import_from("utils", "head"),
     "importMethodsFrom(pkg,show)"
-  ))
+  )
 
   expect_equal(
-    merge_imports_from(lines),
+    ns_format(directives),
     c(
       "export(foo)",
       "import(rlang)",
@@ -289,52 +288,45 @@ test_that("importFrom symbols are merged per package, keeping other lines in pla
   )
 })
 
-test_that("merge_imports_from keeps single-symbol importFrom inline", {
+test_that("ns_format keeps a single-symbol importFrom inline", {
   expect_equal(
-    merge_imports_from("importFrom(stats,median)"),
+    ns_format(list(import_from("stats", "median"))),
     "importFrom(stats,median)"
   )
 })
 
-test_that("merge_imports_from is a no-op without importFrom lines", {
-  lines <- c("export(foo)", "import(rlang)")
-  expect_equal(merge_imports_from(lines), lines)
+test_that("ns_format leaves directives without imports untouched", {
+  directives <- list("export(foo)", "import(rlang)")
+  expect_equal(ns_format(directives), c("export(foo)", "import(rlang)"))
 })
 
-test_that("importFrom is merged across an interspersed non-import expression", {
-  # A non-importFrom expression (only @rawNamespace can produce one mid-block)
-  # doesn't split the package: every symbol still merges into one block, and the
-  # other expression passes through verbatim.
-  lines <- c(
-    "importFrom(stats,ave)",
-    "importFrom(stats,median)\nif (TRUE) export(foo)",
-    "importFrom(stats,sd)"
-  )
+test_that("@importFrom is merged into one directive per package", {
+  block <- "
+    #' @importFrom stats median sd
+    #' @importFrom stats ave
+    #' @importFrom utils head
+    NULL"
+  out <- roc_proc_text(namespace_roclet(), block)
 
   expect_equal(
-    merge_imports_from(lines),
+    out,
     c(
-      "if (TRUE) export(foo)",
-      "importFrom(\n  stats,\n  ave,\n  median,\n  sd\n)"
+      "importFrom(\n  stats,\n  ave,\n  median,\n  sd\n)",
+      "importFrom(utils,head)"
     )
   )
 })
 
-test_that("importFrom() directives from @rawNamespace are merged", {
-  # @rawNamespace importFrom() calls parse to the same calls as generated ones,
-  # so they merge into the per-package block: a bare one-liner is folded in, a
-  # multi-symbol one-liner is split to one symbol per line, and a multi-statement
-  # block has its importFrom() merged while the rest passes through verbatim.
+test_that("importFrom() from @rawNamespace is not merged with @importFrom", {
+  # Only `@importFrom` tags are merged; an `importFrom()` produced another way
+  # (e.g. via `@rawNamespace`) is left exactly as written.
   block <- "
     #' @importFrom stats median
     #' @rawNamespace importFrom(stats,sd)
-    #' @rawNamespace importFrom(stats,ave,var)
-    #' @rawNamespace importFrom(stats,vcov)
-    #'   if (TRUE) export(foo)
     NULL"
-
   out <- roc_proc_text(namespace_roclet(), block)
-  expect_snapshot(cat(merge_imports_from(out), sep = "\n"))
+
+  expect_equal(out, c("importFrom(stats,median)", "importFrom(stats,sd)"))
 })
 
 test_that("import directives for current package are ignored", {
@@ -669,11 +661,7 @@ test_that("non-syntactic imports can use multiple quoting forms", {
   import <- expect_no_warning(roc_proc_text(namespace_roclet(), lines))
   expect_equal(
     import,
-    c(
-      "importFrom(stringr,\"%>%\")",
-      "importFrom(stringr,'%>%')",
-      "importFrom(stringr,`%>%`)"
-    )
+    "importFrom(\n  stringr,\n  \"%>%\",\n  '%>%',\n  `%>%`\n)"
   )
 })
 

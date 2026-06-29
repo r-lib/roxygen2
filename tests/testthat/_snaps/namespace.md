@@ -36,21 +36,6 @@
     Message
       x <text>:2: @exportS3Method generic ("foo") doesn't match function ("foo1.bar").
 
-# importFrom() directives from @rawNamespace are merged
-
-    Code
-      cat(merge_imports_from(out), sep = "\n")
-    Output
-      if (TRUE) export(foo)
-      importFrom(
-        stats,
-        ave,
-        var,
-        median,
-        sd,
-        vcov
-      )
-
 # poorly formed importFrom throws error
 
     Code

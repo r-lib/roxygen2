@@ -92,8 +92,8 @@ update_namespace_imports <- function(base_path) {
 
 # Here we hand roll parsing and tokenisation from roxygen2 primitives so
 # we can filter tags that we know don't require package code. Returns the
-# unformatted directives (see `block_to_ns()`) so the caller can merge them
-# with the existing exports in `ns_format()`.
+# unformatted directives (see `block_directives()`) so the caller can merge
+# them with the existing exports in `ns_format()`.
 namespace_imports <- function(base_path = ".") {
   paths <- package_files(base_path)
   parsed <- lapply(paths, parse, keep.source = TRUE)
@@ -145,12 +145,10 @@ blocks_to_ns <- function(blocks, env) {
 }
 
 block_directives <- function(blocks, env) {
-  directives <- map(blocks, block_to_ns, env = env)
+  directives <- map(blocks, function(block) {
+    map(block$tags, roxy_tag_ns, block = block, env = env)
+  })
   compact(list_c(directives))
-}
-
-block_to_ns <- function(block, env) {
-  map(block$tags, roxy_tag_ns, block = block, env = env)
 }
 
 # `roxy_tag_ns()` returns either a rendered directive (a character vector) or,

@@ -257,7 +257,7 @@ test_that("other namespace tags produce correct output", {
     sort(c(
       "exportPattern(test)",
       "import(test)",
-      "importFrom(\n  test,\n  test1,\n  test2\n)",
+      "importFrom(test,\n  test1,\n  test2\n)",
       "importClassesFrom(test,test1)",
       "importClassesFrom(test,test2)",
       "importMethodsFrom(test,test1)",
@@ -281,7 +281,7 @@ test_that("ns_format merges importFrom directives per package", {
     c(
       "export(foo)",
       "import(rlang)",
-      "importFrom(\n  stats,\n  ave,\n  median\n)",
+      "importFrom(stats,\n  ave,\n  median\n)",
       "importFrom(utils,head)",
       "importMethodsFrom(pkg,show)"
     )
@@ -311,7 +311,7 @@ test_that("@importFrom is merged into one directive per package", {
   expect_equal(
     out,
     c(
-      "importFrom(\n  stats,\n  ave,\n  median,\n  sd\n)",
+      "importFrom(stats,\n  ave,\n  median,\n  sd\n)",
       "importFrom(utils,head)"
     )
   )
@@ -369,10 +369,7 @@ test_that("multiline importFrom is accepted", {
     NULL
   "
   )
-  expect_equal(
-    sort(out),
-    sort(c("importFrom(test,test1)", "importFrom(test,test2)"))
-  )
+  expect_equal(out, "importFrom(test,\n  test1,\n  test2\n)")
 })
 
 test_that("multiline importClassesFrom is accepted", {
@@ -413,10 +410,7 @@ test_that("blank line ends a multiline importFrom", {
     NULL
   "
   expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
-  expect_equal(
-    sort(out),
-    sort(c("importFrom(test,test1)", "importFrom(test,test2)"))
-  )
+  expect_equal(out, "importFrom(test,\n  test1,\n  test2\n)")
 })
 
 test_that("flush line ends a multiline importFrom", {
@@ -426,10 +420,7 @@ test_that("flush line ends a multiline importFrom", {
     NULL
   "
   expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
-  expect_equal(
-    sort(out),
-    sort(c("importFrom(test,test1)", "importFrom(test,test2)"))
-  )
+  expect_equal(out, "importFrom(test,\n  test1,\n  test2\n)")
 })
 
 test_that("import doesn't quote if comma present", {
@@ -703,7 +694,7 @@ test_that("non-syntactic imports can use multiple quoting forms", {
   import <- expect_no_warning(roc_proc_text(namespace_roclet(), lines))
   expect_equal(
     import,
-    "importFrom(\n  stringr,\n  \"%>%\",\n  '%>%',\n  `%>%`\n)"
+    "importFrom(stringr,\n  \"%>%\",\n  '%>%',\n  `%>%`\n)"
   )
 })
 

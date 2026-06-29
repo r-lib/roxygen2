@@ -289,22 +289,19 @@ export(vignette_roclet)
 export(warn_roxy_tag)
 import(rlang)
 importFrom(R6,R6Class)
-importFrom(
-  knitr,
+importFrom(knitr,
   knit,
   opts_chunk
 )
 importFrom(lifecycle,deprecated)
 importFrom(stats,setNames)
-importFrom(
-  utils,
+importFrom(utils,
   URLdecode,
   URLencode,
   head,
   tail
 )
-importFrom(
-  xml2,
+importFrom(xml2,
   xml_attr,
   xml_children,
   xml_contents,

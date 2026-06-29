@@ -165,12 +165,8 @@ ns_format <- function(directives) {
   )))
   blocks <- merge_import_from(directives[is_import])
 
-  block_keys <- if (length(blocks)) {
-    paste0("importFrom(", auto_quote(names(blocks)))
-  }
   lines <- c(text, unname(blocks))
-  keys <- c(text, block_keys)
-  lines[order_c(keys)]
+  lines[order_c(lines)]
 }
 
 import_from <- function(package, funs) {
@@ -200,7 +196,7 @@ format_import_from <- function(package, funs) {
     sprintf("importFrom(%s,%s)", package, funs)
   } else {
     paste0(
-      "importFrom(\n  ",
+      "importFrom(",
       package,
       ",\n",
       paste0("  ", funs, collapse = ",\n"),

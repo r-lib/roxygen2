@@ -434,6 +434,128 @@ test_that("import doesn't quote if comma present", {
   expect_equal(sort(out), "import(rlang, except = ':=')")
 })
 
+test_that("@import expands to importFrom over all exports", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @import utils
+    NULL"
+  )
+
+  syms <- sort_c(unique(auto_quote(getNamespaceExports("utils"))))
+  expect_equal(out, format_import_from("utils", syms))
+})
+
+test_that("@import falls back to import() when package isn't installed", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @import notarealpkgxyz
+    NULL"
+  )
+
+  expect_equal(out, "import(notarealpkgxyz)")
+})
+
+test_that("@import expands each package independently", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @import utils stats notarealpkgxyz
+    NULL"
+  )
+
+  # Each installed package expands to its own importFrom() directive, and the
+  # uninstalled one falls back to import().
+  expect_true(any(startsWith(out, "importFrom(utils")))
+  expect_true(any(startsWith(out, "importFrom(stats")))
+  expect_true("import(notarealpkgxyz)" %in% out)
+})
+
+test_that("expanded @import conflicting with another package errors", {
+  imports <- list(
+    import_from("pkgA", c("foo", "bar"), expanded = TRUE),
+    import_from("pkgB", "foo")
+  )
+  expect_snapshot(check_import_conflicts(imports), error = TRUE)
+})
+
+test_that("two expanded @import sharing a symbol errors", {
+  imports <- list(
+    import_from("pkgA", "foo", expanded = TRUE),
+    import_from("pkgB", "foo", expanded = TRUE)
+  )
+  expect_error(check_import_conflicts(imports), "conflicting import")
+})
+
+test_that("@import conflict detection ignores overlaps without expansion", {
+  imports <- list(
+    import_from("pkgA", "foo"),
+    import_from("pkgB", "foo")
+  )
+  expect_no_error(check_import_conflicts(imports))
+})
+
+test_that("@import conflict detection ignores same-package duplicates", {
+  imports <- list(
+    import_from("pkgA", "foo", expanded = TRUE),
+    import_from("pkgA", "foo")
+  )
+  expect_no_error(check_import_conflicts(imports))
+})
+
+test_that("@import conflict detection normalises quoted symbols", {
+  # Expanded imports arrive unquoted from getNamespaceExports(), but an explicit
+  # @importFrom of a non-syntactic name can be quoted; they must still match.
+  imports <- list(
+    import_from("pkgA", "%||%", expanded = TRUE),
+    import_from("pkgB", "`%||%`")
+  )
+  expect_error(check_import_conflicts(imports), "conflicting import")
+})
+
+test_that("each conflicting symbol is reported with its own packages", {
+  # `foo` clashes across one pair of packages, `baz` across a disjoint pair.
+  imports <- list(
+    import_from("pkgA", "foo", expanded = TRUE),
+    import_from("pkgB", "foo"),
+    import_from("pkgC", "baz", expanded = TRUE),
+    import_from("pkgD", "baz")
+  )
+  expect_snapshot(check_import_conflicts(imports), error = TRUE)
+})
+
+test_that("expanding @import errors on a conflict with another import", {
+  # `stats` expands to include `sd`, which also comes in via the @importFrom.
+  block <- "
+    #' @import stats
+    #' @importFrom anotherpkg sd
+    NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "conflicting import"
+  )
+})
+
+test_that("expanding @import doesn't conflict on re-exports", {
+  skip_if_not_installed("purrr")
+
+  # `rlang` and `purrr` both re-export the identical `is_logical`, so importing
+  # it from purrr alongside the expanded rlang import is not a real conflict.
+  block <- "
+    #' @import rlang
+    #' @importFrom purrr is_logical
+    NULL"
+  expect_no_error(roc_proc_text(namespace_roclet(), block))
+})
+
+test_that("is_reexport compares the exported objects", {
+  # Same object from each package (here trivially, the same package twice).
+  expect_true(is_reexport("abort", c("rlang", "rlang")))
+  # Can't read a package's value, so we can't prove the objects match.
+  expect_false(is_reexport("abort", c("rlang", "anotherpkg")))
+})
+
 test_that("useDynLib imports only selected functions", {
   out <- roc_proc_text(
     namespace_roclet(),
@@ -513,6 +635,10 @@ test_that("rawNamespace inserted unchanged", {
 })
 
 test_that("rawNamespace does not break idempotency", {
+  # `@import testImports` expands using this package's fixed exports.
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
   test_pkg <- local_package_copy(test_path("testRawNamespace"))
   NAMESPACE <- file.path(test_pkg, "NAMESPACE")
 

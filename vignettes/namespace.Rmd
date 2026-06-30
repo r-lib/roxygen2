@@ -97,9 +97,10 @@ NULL
 
 Note the use of `NULL` here: you must provide something for roxygen2 to document, so we use `NULL` as placeholder.
 
-It is possible, but not generally recommended to import all functions from a package with `@import package`.
-This is risky if you import functions from more than one package, because while it might be ok today, in the future the packages might end up with a function having the same name, and your users will get a warning every time your package is loaded.
-Any `@import` specification containing a comma, e.g. `@import rlang, except = ":="` will be inserted as is into the the NAMESPACE, e.g. `import(rlang, except = ":=")`.
+It is possible to import all functions from a package with `@import package`.
+Be aware that if you bulk-import more than one package, you might need to maintain a list of exceptions in case of conflicts.
+Conflicts never arise in a user-visible way at load-time because roxygen builds the imported set at document-time.
+When it detects a conflict, roxygen fails with an error that recommends resolving the conflict with an `except =` clause, e.g. `@import package, except = sym`.
 
 ### S3
 

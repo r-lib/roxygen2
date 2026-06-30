@@ -59,6 +59,27 @@
       x <text>:2: @importFrom must use a hanging indent to span multiple lines.
       i Continuation lines must be indented; did you forget a tag like `@examples`?
 
+# expanded @import conflicting with another package errors
+
+    Code
+      check_import_conflicts(imports)
+    Condition
+      Error in `check_import_conflicts()`:
+      ! Found 1 conflicting import from `@import`.
+      * `foo` is exported by pkgA and pkgB
+      i Exclude unwanted symbols with e.g. `@import pkgA, except = foo`.
+
+# each conflicting symbol is reported with its own packages
+
+    Code
+      check_import_conflicts(imports)
+    Condition
+      Error in `check_import_conflicts()`:
+      ! Found 2 conflicting imports from `@import`.
+      * `baz` is exported by pkgC and pkgD
+      * `foo` is exported by pkgA and pkgB
+      i Exclude unwanted symbols with e.g. `@import pkgC, except = baz`.
+
 # can regenerate NAMESPACE even if its broken
 
     Code

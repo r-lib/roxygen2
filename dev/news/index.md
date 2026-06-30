@@ -18,6 +18,11 @@
 - `@import` now inserts the directive as is into `NAMESPACE` when it
   contains a comma, making it possible to use other forms like
   `@import rlang, except = ":="`.
+- `@importFrom` now generates a single multiline `importFrom()`
+  directive per package instead of one directive per symbol. This fixes
+  a performance issue with
+  [`loadNamespace()`](https://rdrr.io/r/base/ns-load.html) for packages
+  that import many symbols.
 - `@importFrom`, `@importClassesFrom`, and `@importMethodsFrom` now
   accept multi-line input, restoring the ability to spread imports
   across multiple lines for readability; continuation lines must use a

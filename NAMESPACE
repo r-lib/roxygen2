@@ -289,20 +289,26 @@ export(vignette_roclet)
 export(warn_roxy_tag)
 import(rlang)
 importFrom(R6,R6Class)
-importFrom(knitr,knit)
-importFrom(knitr,opts_chunk)
+importFrom(knitr,
+  knit,
+  opts_chunk
+)
 importFrom(lifecycle,deprecated)
 importFrom(stats,setNames)
-importFrom(utils,URLdecode)
-importFrom(utils,URLencode)
-importFrom(utils,head)
-importFrom(utils,tail)
-importFrom(xml2,xml_attr)
-importFrom(xml2,xml_children)
-importFrom(xml2,xml_contents)
-importFrom(xml2,xml_find_all)
-importFrom(xml2,xml_name)
-importFrom(xml2,xml_ns_strip)
-importFrom(xml2,xml_text)
-importFrom(xml2,xml_type)
+importFrom(utils,
+  URLdecode,
+  URLencode,
+  head,
+  tail
+)
+importFrom(xml2,
+  xml_attr,
+  xml_children,
+  xml_contents,
+  xml_find_all,
+  xml_name,
+  xml_ns_strip,
+  xml_text,
+  xml_type
+)
 useDynLib(roxygen2, .registration=TRUE)

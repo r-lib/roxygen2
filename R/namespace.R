@@ -80,15 +80,20 @@ update_namespace_imports <- function(base_path) {
     return(invisible())
   }
 
-  lines <- c(namespace_imports(base_path), namespace_exports(NAMESPACE))
-  results <- c(made_by("#"), sort_c(unique(trimws(lines))))
+  directives <- c(
+    namespace_imports(base_path),
+    as.list(namespace_exports(NAMESPACE))
+  )
+  results <- c(made_by("#"), ns_format(directives))
   write_if_different(NAMESPACE, results, check = TRUE)
 
   invisible()
 }
 
 # Here we hand roll parsing and tokenisation from roxygen2 primitives so
-# we can filter tags that we know don't require package code.
+# we can filter tags that we know don't require package code. Returns the
+# unformatted directives (see `block_directives()`) so the caller can merge
+# them with the existing exports in `ns_format()`.
 namespace_imports <- function(base_path = ".") {
   paths <- package_files(base_path)
   parsed <- lapply(paths, parse, keep.source = TRUE)
@@ -101,7 +106,7 @@ namespace_imports <- function(base_path = ".") {
     )
   )
 
-  blocks_to_ns(blocks, emptyenv())
+  block_directives(blocks, emptyenv())
 }
 
 namespace_imports_blocks <- function(srcref) {
@@ -136,14 +141,60 @@ namespace_exports <- function(path) {
 # NAMESPACE generation ----------------------------------------------------
 
 blocks_to_ns <- function(blocks, env) {
-  lines <- map(blocks, block_to_ns, env = env)
-  lines <- unlist(lines) %||% character()
-
-  sort_c(unique(lines))
+  ns_format(block_directives(blocks, env))
 }
 
-block_to_ns <- function(block, env) {
-  map(block$tags, roxy_tag_ns, block = block, env = env)
+block_directives <- function(blocks, env) {
+  directives <- map(blocks, function(block) {
+    map(block$tags, roxy_tag_ns, block = block, env = env)
+  })
+  compact(list_c(directives))
+}
+
+# `roxy_tag_ns()` returns either a rendered directive (a character vector) or,
+# for `@importFrom`, a structured `import_from()` so that all the imports from a
+# package can be merged into a single directive here. This dodges a
+# `loadNamespace()` performance issue that scales with the number of
+# `importFrom()` directives.
+ns_format <- function(directives) {
+  is_import <- map_lgl(directives, \(x) inherits(x, "import_from"))
+
+  text <- unique(as.character(unlist(
+    directives[!is_import],
+    use.names = FALSE
+  )))
+  import_from <- merge_import_from(directives[is_import])
+
+  lines <- c(text, import_from)
+  lines[order_c(lines)]
+}
+
+import_from <- function(package, funs) {
+  structure(list(package = package, funs = funs), class = "import_from")
+}
+
+# Merge the `import_from()` directives by package into one `importFrom()` each.
+merge_import_from <- function(imports) {
+  packages <- map_chr(imports, \(x) x$package)
+  funs <- split(
+    lapply(imports, \(x) x$funs),
+    factor(packages, levels = sort_c(unique(packages)))
+  )
+  map_chr(names(funs), function(package) {
+    funs <- unlist(funs[[package]], use.names = FALSE)
+    funs <- sort_c(unique(auto_quote(funs)))
+    format_import_from(package, funs)
+  })
+}
+
+format_import_from <- function(package, funs) {
+  package <- auto_quote(package)
+  if (length(funs) == 1) {
+    sprintf("importFrom(%s,%s)", package, funs)
+  } else {
+    fun_lines <- paste0("  ", funs, collapse = ",\n")
+    paste0("importFrom(", package, ",\n", fun_lines, "\n)")
+  }
 }
 
 # Namespace tag methods ---------------------------------------------------
@@ -281,22 +332,27 @@ roxy_tag_parse.roxy_tag_importFrom <- function(x) {
 #' @export
 roxy_tag_ns.roxy_tag_importFrom <- function(x, block, env) {
   pkg <- x$val[1L]
+  if (identical(pkg, peek_roxygen_pkg())) {
+    return(NULL)
+  }
+
+  funs <- x$val[-1L]
   if (requireNamespace(pkg, quietly = TRUE)) {
-    importing <- x$val[-1L]
     # be sure to match '%>%', `%>%`, "%>%" all to %>% given by getNamespaceExports, #1570
-    unknown_idx <- !strip_quotes(importing) %in% getNamespaceExports(pkg)
+    unknown_idx <- !strip_quotes(funs) %in% getNamespaceExports(pkg)
     if (any(unknown_idx)) {
       warn_roxy_tag(
         x,
-        "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} from {.package {pkg}}: {.code {importing[unknown_idx]}}"
+        "Excluding unknown {cli::qty(sum(unknown_idx))} export{?s} from {.package {pkg}}: {.code {funs[unknown_idx]}}"
       )
-      if (all(unknown_idx)) {
-        return(NULL)
-      }
-      x$val <- c(pkg, importing[!unknown_idx])
+      funs <- funs[!unknown_idx]
+    }
+    if (length(funs) == 0) {
+      return(NULL)
     }
   }
-  repeat_first_ignore_current("importFrom", x$val)
+
+  import_from(pkg, funs)
 }
 
 #' @export

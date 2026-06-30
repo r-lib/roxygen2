@@ -1,0 +1,9 @@
+Package: testImportFrom
+Title: Check that merged @importFrom directives are idempotent
+License: GPL-2
+Description: testImportFrom.
+Author: Hadley <hadley@rstudio.com>
+Maintainer: Hadley <hadley@rstudio.com>
+Encoding: UTF-8
+Version: 0.1
+RoxygenNote: 7.3.3.9000

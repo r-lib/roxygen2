@@ -36,7 +36,12 @@ NULL
 
 # This results in the following lines in `NAMESPACE`:
 # importFrom(magrittr,"\%>\%")
-# import(rlang)
+# importFrom(rlang, <symbols rlang exports>)
+#
+# `@import` expands to an `importFrom()` expression so that
+# the imported set is frozen at document-time. This prevents
+# load-time conflicts when an updated package now exports new
+# symbols that happen to conflict with other imported symbols.
 }
 \seealso{
 \link{tags-namespace} for tags that generate \code{NAMESPACE} directives.

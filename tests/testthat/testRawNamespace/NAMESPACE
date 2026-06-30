@@ -6,5 +6,8 @@ if (TRUE) {
 } else {
   import(methods)
 }
-import(graphics)
-import(utils)
+importFrom(testImports,
+  import_a,
+  import_b,
+  import_c
+)

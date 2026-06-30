@@ -163,9 +163,9 @@ ns_format <- function(directives) {
     directives[!is_import],
     use.names = FALSE
   )))
-  blocks <- merge_import_from(directives[is_import])
+  import_from <- merge_import_from(directives[is_import])
 
-  lines <- c(text, unname(blocks))
+  lines <- c(text, import_from)
   lines[order_c(lines)]
 }
 
@@ -180,14 +180,11 @@ merge_import_from <- function(imports) {
     lapply(imports, \(x) x$funs),
     factor(packages, levels = sort_c(unique(packages)))
   )
-  blocks <- map_chr(names(funs), function(package) {
-    syms <- sort_c(unique(auto_quote(unlist(
-      funs[[package]],
-      use.names = FALSE
-    ))))
-    format_import_from(package, syms)
+  map_chr(names(funs), function(package) {
+    funs <- unlist(funs[[package]], use.names = FALSE)
+    funs <- sort_c(unique(auto_quote(funs)))
+    format_import_from(package, funs)
   })
-  set_names(blocks, names(funs))
 }
 
 format_import_from <- function(package, funs) {
@@ -195,13 +192,8 @@ format_import_from <- function(package, funs) {
   if (length(funs) == 1) {
     sprintf("importFrom(%s,%s)", package, funs)
   } else {
-    paste0(
-      "importFrom(",
-      package,
-      ",\n",
-      paste0("  ", funs, collapse = ",\n"),
-      "\n)"
-    )
+    fun_lines <- paste0("  ", funs, collapse = ",\n")
+    paste0("importFrom(", package, ",\n", fun_lines, "\n)")
   }
 }
 

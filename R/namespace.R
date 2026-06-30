@@ -32,7 +32,12 @@
 #'
 #' # This results in the following lines in `NAMESPACE`:
 #' # importFrom(magrittr,"%>%")
-#' # import(rlang)
+#' # importFrom(rlang, <symbols rlang exports>)
+#' #
+#' # `@import` expands to an `importFrom()` expression so that
+#' # the imported set is frozen at document-time. This prevents
+#' # load-time conflicts when an updated package now exports new
+#' # symbols that happen to conflict with other imported symbols.
 namespace_roclet <- function() {
   roclet("namespace")
 }
@@ -148,7 +153,16 @@ block_directives <- function(blocks, env) {
   directives <- map(blocks, function(block) {
     map(block$tags, roxy_tag_ns, block = block, env = env)
   })
-  compact(list_c(directives))
+  compact(splice_directives(list_c(directives)))
+}
+
+# A `roxy_tag_ns()` method usually returns a single directive, but `@import`
+# expands to one `importFrom()` per package, so it returns a bare list of
+# directives. `import_from()` objects are themselves lists, so we only splice
+# unclassed lists, which leaves those objects (and character directives)
+# untouched.
+splice_directives <- function(directives) {
+  list_c(map(directives, \(x) if (is_bare_list(x)) x else list(x)))
 }
 
 # `roxy_tag_ns()` returns either a rendered directive (a character vector) or,
@@ -158,19 +172,82 @@ block_directives <- function(blocks, env) {
 # `importFrom()` directives.
 ns_format <- function(directives) {
   is_import <- map_lgl(directives, \(x) inherits(x, "import_from"))
+  imports <- directives[is_import]
+  check_import_conflicts(imports)
 
   text <- unique(as.character(unlist(
     directives[!is_import],
     use.names = FALSE
   )))
-  blocks <- merge_import_from(directives[is_import])
+  blocks <- merge_import_from(imports)
 
   lines <- c(text, unname(blocks))
   lines[order_c(lines)]
 }
 
-import_from <- function(package, funs) {
-  structure(list(package = package, funs = funs), class = "import_from")
+import_from <- function(package, funs, expanded = FALSE) {
+  structure(
+    list(package = package, funs = funs, expanded = expanded),
+    class = "import_from"
+  )
+}
+
+# Conflicting `@import` directives are detected at document-time. An error is
+# thrown so the user has to resolve the conflict to build the package.
+check_import_conflicts <- function(imports) {
+  syms <- map(imports, \(x) strip_quotes(x$funs))
+  imported <- data.frame(
+    sym = unlist(syms, use.names = FALSE) %||% character(),
+    pkg = rep(map_chr(imports, \(x) x$package), lengths(syms)),
+    expanded = rep(map_lgl(imports, \(x) x$expanded %||% FALSE), lengths(syms))
+  )
+
+  # A symbol conflicts when it's imported from more than one package and at
+  # least one of those imports came from an expanded `@import`.
+  by_sym <- split(imported, imported$sym)
+  conflicts <- keep(
+    by_sym,
+    \(x) length(unique(x$pkg)) > 1 && any(x$expanded)
+  )
+
+  # Re-exports aren't real conflicts: when several packages export the same
+  # object (e.g. `%>%`), importing it from more than one is harmless.
+  conflicts <- discard(conflicts, \(x) is_reexport(x$sym[[1]], unique(x$pkg)))
+
+  if (length(conflicts) == 0) {
+    return(invisible())
+  }
+
+  bullets <- map_chr(conflicts, function(x) {
+    where <- sort_c(unique(x$pkg))
+    cli::format_inline("{.code {x$sym[[1]]}} is exported by {.package {where}}")
+  })
+
+  conflict <- conflicts[[1]]
+  example_sym <- conflict$sym[[1]]
+  example_pkg <- conflict$pkg[conflict$expanded][[1]]
+
+  cli::cli_abort(c(
+    "Found {length(conflicts)} conflicting import{?s} from {.code @import}.",
+    set_names(bullets, rep("*", length(bullets))),
+    i = "Exclude unwanted symbols with e.g. {.code @import {example_pkg}, except = {example_sym}}."
+  ))
+}
+
+# TRUE when every package exports the identical object for `sym`, so importing
+# it from more than one of them doesn't actually clash. Returns FALSE if any
+# package's value can't be read (e.g. it isn't installed), since we then can't
+# prove they match and would rather flag a false conflict than miss a real one.
+is_reexport <- function(sym, pkgs) {
+  values <- map(pkgs, function(pkg) {
+    tryCatch(getExportedValue(pkg, sym), error = function(cnd) NULL)
+  })
+  # A failed lookup comes back NULL, meaning we can't prove a match
+  if (some(values, is.null)) {
+    return(FALSE)
+  }
+
+  every(values[-1], \(x) identical(x, values[[1]]))
 }
 
 # Merge the `import_from()` directives by package into one `importFrom()` each.
@@ -321,7 +398,7 @@ roxy_tag_parse.roxy_tag_import <- function(x) {
 #' @export
 roxy_tag_ns.roxy_tag_import <- function(x, block, env) {
   ns_verbatim("import", x$val) %||%
-    one_per_line_ignore_current("import", x$val)
+    expand_import(x$val)
 }
 
 #' @export
@@ -454,16 +531,36 @@ repeat_first <- function(name, x) {
   paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
 }
 
-one_per_line_ignore_current <- function(name, x) {
+# `import(pkg)` imports everything `pkg` exports. We expand it to an explicit
+# `importFrom(pkg, ...)` over every current export so the imported set is frozen
+# at document-time. This way a package that later adds new exports doesn't inject
+# new conflicts into the namespace at load-time.
+expand_import <- function(pkgs) {
   current <- peek_roxygen_pkg()
 
-  # Ignore any occurrence of `current` inside `x`
+  # Ignore any occurrence of `current` inside `pkgs`
   if (is_string(current)) {
-    x <- x[x != current]
+    pkgs <- pkgs[pkgs != current]
   }
 
-  one_per_line(name, x)
+  map(pkgs, expand_import_pkg)
 }
+
+# Falls back to an unexpanded `import(pkg)` when `pkg` isn't installed, since we
+# can't read its exports without it.
+expand_import_pkg <- function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    return(one_per_line("import", pkg))
+  }
+
+  exports <- getNamespaceExports(pkg)
+  if (length(exports) == 0) {
+    one_per_line("import", pkg)
+  } else {
+    import_from(pkg, exports, expanded = TRUE)
+  }
+}
+
 repeat_first_ignore_current <- function(name, x) {
   current <- peek_roxygen_pkg()
 

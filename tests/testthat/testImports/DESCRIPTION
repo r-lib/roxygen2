@@ -1,0 +1,7 @@
+Package: testImports
+Title: Stable export set for @import expansion tests
+License: GPL-2
+Description: Exports a fixed set of objects so that @import expansion is
+    version-independent in tests.
+Encoding: UTF-8
+Version: 0.1

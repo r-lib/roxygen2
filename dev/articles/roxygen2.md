@@ -86,7 +86,7 @@ to use regular comments for other purposes.
 #'
 #' @param x A number.
 #' @param y A number.
-#' @return A number.
+#' @returns A number.
 #' @export
 #' @examples
 #' add(1, 1)

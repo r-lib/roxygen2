@@ -59,15 +59,22 @@
       x <text>:2: @importFrom must use a hanging indent to span multiple lines.
       i Continuation lines must be indented; did you forget a tag like `@examples`?
 
-# expanded @import conflicting with another package errors
+# @importAllFrom warns about an exclusion that isn't an export
+
+    Code
+      out <- roc_proc_text(namespace_roclet(), block)
+    Message
+      x <text>:2: @importAllFrom Ignoring unknown exclusion for testImports: `improt_b`.
+
+# expanded @importAllFrom conflicting with another package errors
 
     Code
       check_import_conflicts(imports)
     Condition
       Error in `check_import_conflicts()`:
-      ! Found 1 conflicting import from `@import`.
+      ! Found 1 conflicting import from `@importAllFrom`.
       * `foo` is exported by pkgA and pkgB
-      i Exclude unwanted symbols with e.g. `@import pkgA, except = foo`.
+      i Exclude unwanted symbols with e.g. `@importAllFrom pkgA -foo`.
 
 # each conflicting symbol is reported with its own packages
 
@@ -75,10 +82,10 @@
       check_import_conflicts(imports)
     Condition
       Error in `check_import_conflicts()`:
-      ! Found 2 conflicting imports from `@import`.
+      ! Found 2 conflicting imports from `@importAllFrom`.
       * `baz` is exported by pkgC and pkgD
       * `foo` is exported by pkgA and pkgB
-      i Exclude unwanted symbols with e.g. `@import pkgC, except = baz`.
+      i Exclude unwanted symbols with e.g. `@importAllFrom pkgC -baz`.
 
 # can regenerate NAMESPACE even if its broken
 

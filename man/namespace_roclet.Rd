@@ -36,12 +36,25 @@ NULL
 
 # This results in the following lines in `NAMESPACE`:
 # importFrom(magrittr,"\%>\%")
-# importFrom(rlang, <symbols rlang exports>)
-#
-# `@import` expands to an `importFrom()` expression so that
-# the imported set is frozen at document-time. This prevents
-# load-time conflicts when an updated package now exports new
-# symbols that happen to conflict with other imported symbols.
+# import(rlang)
+
+# There is a new experimental way to bulk-import a package:
+#' @importAllFrom rlang
+
+# This results in the following lines:
+# importFrom(rlang,
+#   "!!!",
+#   "!!",
+#   "\%&&\%",
+#   ...
+# )
+
+# The exported objects are all explicitly imported one by one, which prevents
+# load-time issues for the users of your package when an update creates an
+# import conflict. The only time a conflict can arise is when you regenerate
+# your namespace file, at which point you can manually resolve any conflicts by
+# excluding a symbol with a `-` prefix:
+#' @importAllFrom rlang -list2 -`:=`
 }
 \seealso{
 \link{tags-namespace} for tags that generate \code{NAMESPACE} directives.

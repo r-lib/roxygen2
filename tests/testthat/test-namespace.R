@@ -434,7 +434,7 @@ test_that("import doesn't quote if comma present", {
   expect_equal(sort(out), "import(rlang, except = ':=')")
 })
 
-test_that("@import expands to importFrom over all exports", {
+test_that("@import never expands, even for an installed package", {
   out <- roc_proc_text(
     namespace_roclet(),
     "
@@ -442,37 +442,149 @@ test_that("@import expands to importFrom over all exports", {
     NULL"
   )
 
+  expect_equal(out, "import(utils)")
+})
+
+test_that("@importAllFrom drops symbols excluded with a - prefix", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports -import_b
+    NULL"
+  )
+
+  expect_equal(out, "importFrom(testImports,\n  import_a,\n  import_c\n)")
+})
+
+test_that("@importAllFrom accepts several - exclusions", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports -import_b -import_c
+    NULL"
+  )
+
+  expect_equal(out, "importFrom(testImports,import_a)")
+})
+
+test_that("@importAllFrom warns about an exclusion that isn't an export", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  # `-improt_b` is a typo for `-import_b`, so it excludes nothing.
+  block <- "
+    #' @importAllFrom testImports -improt_b
+    NULL"
+  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
+  expect_equal(
+    out,
+    "importFrom(testImports,\n  import_a,\n  import_b,\n  import_c\n)"
+  )
+})
+
+test_that("parse_import_all_from splits the package from its - exclusions", {
+  spec <- parse_import_all_from(c("utils", "-head", "-tail"))
+  expect_equal(spec$pkg, "utils")
+  expect_equal(spec$excluded, c("head", "tail"))
+})
+
+test_that("parse_import_all_from unquotes non-syntactic exclusions", {
+  # A non-syntactic name can itself start with `-` (e.g. the S3 method `-.class`)
+  # and can be quoted with any of the three styles roxygen accepts.
+  spec <- parse_import_all_from(c(
+    "somepkg",
+    "-\"-.class\"",
+    "-`%op%`",
+    "-':='"
+  ))
+  expect_equal(spec$pkg, "somepkg")
+  expect_equal(spec$excluded, c("-.class", "%op%", ":="))
+})
+
+test_that("@importAllFrom errors when given more than one package", {
+  block <- "
+    #' @importAllFrom utils stats
+    NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "Can't import multiple packages"
+  )
+})
+
+test_that("@importAllFrom errors when given no package", {
+  block <- "
+    #' @importAllFrom -head
+    NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "needs a package to import from"
+  )
+})
+
+test_that("@importAllFrom imports nothing when exclusions remove every export", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports -import_a -import_b -import_c
+    NULL"
+  )
+
+  expect_equal(out, character())
+})
+
+test_that("excluding a conflicting symbol keeps the rest of @importAllFrom pinned", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  # `import_a` still conflicts with the @importFrom, since only `import_b` was
+  # excluded.
+  block <- "
+    #' @importAllFrom testImports -import_b
+    #' @importFrom anotherpkg import_a
+    NULL"
+  expect_error(roc_proc_text(namespace_roclet(), block), "conflicting import")
+
+  # Excluding the actual conflicting symbol resolves it without losing the
+  # pinning for the rest of testImports's exports.
+  block2 <- "
+    #' @importAllFrom testImports -import_a
+    #' @importFrom anotherpkg import_a
+    NULL"
+  expect_no_error(roc_proc_text(namespace_roclet(), block2))
+})
+
+test_that("@importAllFrom expands to importFrom over all exports", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom utils
+    NULL"
+  )
+
   syms <- sort_c(unique(auto_quote(getNamespaceExports("utils"))))
   expect_equal(out, format_import_from("utils", syms))
 })
 
-test_that("@import falls back to import() when package isn't installed", {
-  out <- roc_proc_text(
-    namespace_roclet(),
-    "
-    #' @import notarealpkgxyz
+test_that("@importAllFrom errors when the package isn't installed", {
+  block <- "
+    #' @importAllFrom notarealpkgxyz
     NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "must be installed"
   )
-
-  expect_equal(out, "import(notarealpkgxyz)")
 })
 
-test_that("@import expands each package independently", {
-  out <- roc_proc_text(
-    namespace_roclet(),
-    "
-    #' @import utils stats notarealpkgxyz
-    NULL"
-  )
-
-  # Each installed package expands to its own importFrom() directive, and the
-  # uninstalled one falls back to import().
-  expect_true(any(startsWith(out, "importFrom(utils")))
-  expect_true(any(startsWith(out, "importFrom(stats")))
-  expect_true("import(notarealpkgxyz)" %in% out)
-})
-
-test_that("expanded @import conflicting with another package errors", {
+test_that("expanded @importAllFrom conflicting with another package errors", {
   imports <- list(
     import_from("pkgA", c("foo", "bar"), expanded = TRUE),
     import_from("pkgB", "foo")
@@ -480,7 +592,7 @@ test_that("expanded @import conflicting with another package errors", {
   expect_snapshot(check_import_conflicts(imports), error = TRUE)
 })
 
-test_that("two expanded @import sharing a symbol errors", {
+test_that("two expanded @importAllFrom sharing a symbol errors", {
   imports <- list(
     import_from("pkgA", "foo", expanded = TRUE),
     import_from("pkgB", "foo", expanded = TRUE)
@@ -488,7 +600,7 @@ test_that("two expanded @import sharing a symbol errors", {
   expect_error(check_import_conflicts(imports), "conflicting import")
 })
 
-test_that("@import conflict detection ignores overlaps without expansion", {
+test_that("@importAllFrom conflict detection ignores overlaps without expansion", {
   imports <- list(
     import_from("pkgA", "foo"),
     import_from("pkgB", "foo")
@@ -496,7 +608,7 @@ test_that("@import conflict detection ignores overlaps without expansion", {
   expect_no_error(check_import_conflicts(imports))
 })
 
-test_that("@import conflict detection ignores same-package duplicates", {
+test_that("@importAllFrom conflict detection ignores same-package duplicates", {
   imports <- list(
     import_from("pkgA", "foo", expanded = TRUE),
     import_from("pkgA", "foo")
@@ -504,7 +616,7 @@ test_that("@import conflict detection ignores same-package duplicates", {
   expect_no_error(check_import_conflicts(imports))
 })
 
-test_that("@import conflict detection normalises quoted symbols", {
+test_that("@importAllFrom conflict detection normalises quoted symbols", {
   # Expanded imports arrive unquoted from getNamespaceExports(), but an explicit
   # @importFrom of a non-syntactic name can be quoted; they must still match.
   imports <- list(
@@ -525,10 +637,10 @@ test_that("each conflicting symbol is reported with its own packages", {
   expect_snapshot(check_import_conflicts(imports), error = TRUE)
 })
 
-test_that("expanding @import errors on a conflict with another import", {
+test_that("expanding @importAllFrom errors on a conflict with another import", {
   # `stats` expands to include `sd`, which also comes in via the @importFrom.
   block <- "
-    #' @import stats
+    #' @importAllFrom stats
     #' @importFrom anotherpkg sd
     NULL"
   expect_error(
@@ -537,13 +649,13 @@ test_that("expanding @import errors on a conflict with another import", {
   )
 })
 
-test_that("expanding @import doesn't conflict on re-exports", {
+test_that("expanding @importAllFrom doesn't conflict on re-exports", {
   skip_if_not_installed("purrr")
 
   # `rlang` and `purrr` both re-export the identical `is_logical`, so importing
   # it from purrr alongside the expanded rlang import is not a real conflict.
   block <- "
-    #' @import rlang
+    #' @importAllFrom rlang
     #' @importFrom purrr is_logical
     NULL"
   expect_no_error(roc_proc_text(namespace_roclet(), block))
@@ -635,7 +747,7 @@ test_that("rawNamespace inserted unchanged", {
 })
 
 test_that("rawNamespace does not break idempotency", {
-  # `@import testImports` expands using this package's fixed exports.
+  # `@importAllFrom testImports` expands using this package's fixed exports.
   pkgload::load_all(test_path("testImports"), quiet = TRUE)
   withr::defer(pkgload::unload("testImports"))
 

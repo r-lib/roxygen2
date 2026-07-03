@@ -1,4 +1,4 @@
-#' @import testImports
+#' @importAllFrom testImports
 #' @rawNamespace
 #' if (TRUE) {
 #'   import(grDevices)

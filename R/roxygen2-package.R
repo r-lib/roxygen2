@@ -1,6 +1,6 @@
 #' @useDynLib roxygen2, .registration=TRUE
 #' @keywords internal
-#' @import rlang
+#' @importAllFrom rlang
 "_PACKAGE"
 
 ## usethis namespace: start

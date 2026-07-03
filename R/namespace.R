@@ -32,12 +32,25 @@
 #'
 #' # This results in the following lines in `NAMESPACE`:
 #' # importFrom(magrittr,"%>%")
-#' # importFrom(rlang, <symbols rlang exports>)
-#' #
-#' # `@import` expands to an `importFrom()` expression so that
-#' # the imported set is frozen at document-time. This prevents
-#' # load-time conflicts when an updated package now exports new
-#' # symbols that happen to conflict with other imported symbols.
+#' # import(rlang)
+#'
+#' # There is a new experimental way to bulk-import a package:
+#' #' @importAllFrom rlang
+#'
+#' # This results in the following lines:
+#' # importFrom(rlang,
+#' #   "!!!",
+#' #   "!!",
+#' #   "%&&%",
+#' #   ...
+#' # )
+#'
+#' # The exported objects are all explicitly imported one by one, which prevents
+#' # load-time issues for the users of your package when an update creates an
+#' # import conflict. The only time a conflict can arise is when you regenerate
+#' # your namespace file, at which point you can manually resolve any conflicts by
+#' # excluding a symbol with a `-` prefix:
+#' #' @importAllFrom rlang -list2 -`:=`
 namespace_roclet <- function() {
   roclet("namespace")
 }
@@ -118,7 +131,12 @@ namespace_imports_blocks <- function(srcref) {
   comment_refs <- comments(srcref)
   tokens <- lapply(comment_refs, tokenise_ref)
 
-  import_tags <- c(import_directives, "rawNamespace")
+  # `import_directives` contains the tags that map to literal `NAMESPACE` import
+  # calls. Two more tags need to be treated here: `importAllFrom` expands to
+  # multiple `importFrom()` directives rather than appearing literally, and
+  # `rawNamespace` inserts verbatim text that can itself contain import
+  # directives.
+  import_tags <- c(import_directives, "importAllFrom", "rawNamespace")
   tokens_filtered <- lapply(tokens, function(tokens) {
     tokens[map_lgl(tokens, \(x) x$tag %in% import_tags)]
   })
@@ -153,16 +171,7 @@ block_directives <- function(blocks, env) {
   directives <- map(blocks, function(block) {
     map(block$tags, roxy_tag_ns, block = block, env = env)
   })
-  compact(splice_directives(list_c(directives)))
-}
-
-# A `roxy_tag_ns()` method usually returns a single directive, but `@import`
-# expands to one `importFrom()` per package, so it returns a bare list of
-# directives. `import_from()` objects are themselves lists, so we only splice
-# unclassed lists, which leaves those objects (and character directives)
-# untouched.
-splice_directives <- function(directives) {
-  list_c(map(directives, \(x) if (is_bare_list(x)) x else list(x)))
+  compact(list_c(directives))
 }
 
 # `roxy_tag_ns()` returns either a rendered directive (a character vector) or,
@@ -192,8 +201,8 @@ import_from <- function(package, funs, expanded = FALSE) {
   )
 }
 
-# Conflicting `@import` directives are detected at document-time. An error is
-# thrown so the user has to resolve the conflict to build the package.
+# Conflicting `@importAllFrom` directives are detected at document-time. An
+# error is thrown so the user has to resolve the conflict to build the package.
 check_import_conflicts <- function(imports) {
   syms <- map(imports, \(x) strip_quotes(x$funs))
   imported <- data.frame(
@@ -203,7 +212,7 @@ check_import_conflicts <- function(imports) {
   )
 
   # A symbol conflicts when it's imported from more than one package and at
-  # least one of those imports came from an expanded `@import`.
+  # least one of those imports came from an `@importAllFrom`.
   by_sym <- split(imported, imported$sym)
   conflicts <- keep(
     by_sym,
@@ -224,13 +233,13 @@ check_import_conflicts <- function(imports) {
   })
 
   conflict <- conflicts[[1]]
-  example_sym <- conflict$sym[[1]]
+  example_sym <- auto_quote(conflict$sym[[1]])
   example_pkg <- conflict$pkg[conflict$expanded][[1]]
 
   cli::cli_abort(c(
-    "Found {length(conflicts)} conflicting import{?s} from {.code @import}.",
+    "Found {length(conflicts)} conflicting import{?s} from {.code @importAllFrom}.",
     set_names(bullets, rep("*", length(bullets))),
-    i = "Exclude unwanted symbols with e.g. {.code @import {example_pkg}, except = {example_sym}}."
+    i = "Exclude unwanted symbols with e.g. {.code @importAllFrom {example_pkg} -{example_sym}}."
   ))
 }
 
@@ -390,7 +399,16 @@ roxy_tag_parse.roxy_tag_import <- function(x) {
 #' @export
 roxy_tag_ns.roxy_tag_import <- function(x, block, env) {
   ns_verbatim("import", x$val) %||%
-    expand_import(x$val)
+    one_per_line_ignore_current("import", x$val)
+}
+
+#' @export
+roxy_tag_parse.roxy_tag_importAllFrom <- function(x) {
+  tag_words(x, min = 1)
+}
+#' @export
+roxy_tag_ns.roxy_tag_importAllFrom <- function(x, block, env) {
+  expand_import(x)
 }
 
 #' @export
@@ -523,34 +541,85 @@ repeat_first <- function(name, x) {
   paste0(name, "(", auto_quote(x[1]), ",", auto_quote(x[-1]), ")")
 }
 
-# `import(pkg)` imports everything `pkg` exports. We expand it to an explicit
-# `importFrom(pkg, ...)` over every current export so the imported set is frozen
-# at document-time. This way a package that later adds new exports doesn't inject
-# new conflicts into the namespace at load-time.
-expand_import <- function(pkgs) {
+one_per_line_ignore_current <- function(name, x) {
   current <- peek_roxygen_pkg()
 
-  # Ignore any occurrence of `current` inside `pkgs`
+  # Ignore any occurrence of `current` inside `x`
   if (is_string(current)) {
-    pkgs <- pkgs[pkgs != current]
+    x <- x[x != current]
   }
 
-  map(pkgs, expand_import_pkg)
+  one_per_line(name, x)
 }
 
-# Falls back to an unexpanded `import(pkg)` when `pkg` isn't installed, since we
-# can't read its exports without it.
-expand_import_pkg <- function(pkg) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
-    return(one_per_line("import", pkg))
+# `@importAllFrom pkg` expands to explicit `importFrom(pkg, ...)` over every
+# object currently exported by `pkg`. This early expansion pins the set of
+# imports at document-time and prevents user-visible conflicts at load-time when
+# a package update introduces a conflict with other imported symbols.
+expand_import <- function(x) {
+  current <- peek_roxygen_pkg()
+  spec <- parse_import_all_from(x$val)
+  pkg <- spec$pkg
+  excluded <- spec$excluded
+
+  # Ignore an `@importAllFrom` for the package being documented
+  if (identical(current, pkg)) {
+    return(character())
   }
 
-  exports <- getNamespaceExports(pkg)
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    cli::cli_abort(c(
+      "Can't expand {.code @importAllFrom {pkg}}.",
+      x = "{.package {pkg}} must be installed to enumerate its exports."
+    ))
+  }
+
+  all_exports <- getNamespaceExports(pkg)
+
+  # Warn on exclusions that don't match an export, so a typo like `-improt_b`
+  # isn't silently dropped and left to resurface as the conflict it was meant to
+  # resolve.
+  unknown <- setdiff(excluded, all_exports)
+  if (length(unknown) > 0) {
+    warn_roxy_tag(
+      x,
+      "Ignoring unknown {cli::qty(length(unknown))} exclusion{?s} for {.package {pkg}}: {.code {unknown}}"
+    )
+  }
+
+  exports <- setdiff(all_exports, excluded)
   if (length(exports) == 0) {
-    one_per_line("import", pkg)
+    # Nothing left to import, either because `pkg` exports nothing or because
+    # the exclusions removed every export. Import nothing in this case instead
+    # of falling back to `import(pkg)`.
+    character()
   } else {
     import_from(pkg, exports, expanded = TRUE)
   }
+}
+
+# Splits an `@importAllFrom` value into the package to expand and the symbols to
+# leave out. An exclusion is a word with a `-` prefix, e.g. `-abort`. Exclusions
+# may be quoted: `-"-.Date"`, ``-`-.Date` ``, or `-'-.Date'`.
+parse_import_all_from <- function(vals) {
+  is_excluded <- startsWith(vals, "-")
+
+  pkg <- vals[!is_excluded]
+  if (length(pkg) == 0) {
+    cli::cli_abort("{.code @importAllFrom} needs a package to import from.")
+  }
+  if (length(pkg) > 1) {
+    cli::cli_abort(
+      "Can't import multiple packages with {.code @importAllFrom}."
+    )
+  }
+
+  excluded <- strip_quotes(sub("^-", "", vals[is_excluded]))
+
+  list(
+    pkg = pkg,
+    excluded = excluded
+  )
 }
 
 repeat_first_ignore_current <- function(name, x) {

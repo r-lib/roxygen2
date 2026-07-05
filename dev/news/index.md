@@ -2,6 +2,13 @@
 
 ## roxygen2 (development version)
 
+- Markdown link targets are now resolved against a per-run index of each
+  package’s help topics, instead of one
+  [`help()`](https://rdrr.io/r/utils/help.html) call per topic and
+  package. This substantially speeds up documenting packages with many
+  cross-reference links,
+  e.g. [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+  on testthat is about a third faster.
 - S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage
   ([\#1883](https://github.com/r-lib/roxygen2/issues/1883)).
 - `Config/roxygen2/` flag fields in `DESCRIPTION` (like `markdown`) are

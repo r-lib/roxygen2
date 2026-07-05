@@ -99,6 +99,15 @@
       x Level 1 headings are not supported in @seealso
       i Do you want to put the heading in @description or @details?
 
+# % inside a fragile tag argument breaks protection, with a warning
+
+    Code
+      out <- markdown("\\code{a % b} *x*")
+    Message
+      x markdown translation failed
+      x \code has an unterminated argument
+      i Rd tag arguments must have balanced braces, and an unescaped % comments out the rest of the line: write \% for a literal %
+
 # markdown() warnings work without a tag
 
     Code

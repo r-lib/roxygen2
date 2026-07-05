@@ -745,6 +745,8 @@ test_that("backslash escapes in text", {
   expect_equal(markdown("50\\% \\{x\\} a\\_b"), "50\\% \\{x\\} a\\_b")
   expect_equal(markdown("A \\\\ B"), "A \\\\ B")
   expect_equal(markdown("a \\` b"), "a \\` b")
+  # an escaped closing bracket used to leak a link reference definition
+  expect_equal(markdown("\\[foo] and [bar\\]"), "[foo] and [bar]")
 })
 
 test_that("Rd tags in code spans and code blocks are inserted as typed", {
@@ -806,8 +808,9 @@ test_that("multi-line fragile tags are protected across paragraphs", {
   )
 })
 
-test_that("% inside a fragile tag argument breaks protection (known quirk)", {
-  expect_equal(markdown("\\code{a % b} *x*"), "\\code{a \\% b} \\emph{x}")
+test_that("% inside a fragile tag argument breaks protection, with a warning", {
+  expect_snapshot(out <- markdown("\\code{a % b} *x*"))
+  expect_equal(out, "\\code{a \\% b} \\emph{x}")
 })
 
 test_that("markdown() warnings work without a tag", {

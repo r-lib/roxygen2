@@ -6,7 +6,7 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
       text
     }
   )
-  tokens <- md_tokenize(expanded_text)
+  tokens <- md_tokenize(expanded_text, tag)
   tryCatch(
     markdown_pass2(tokens, tag = tag, sections = sections),
     error = function(e) {

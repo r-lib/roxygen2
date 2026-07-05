@@ -18,7 +18,12 @@ test_that("brace matching follows Rd rules", {
   expect_equal(md_tokenize("\\code{a {b} c}")$tokens, "\\code{a {b} c}")
   # % comments out the rest of the line, so this group never completes and
   # the tag falls back to a bare name, with the braces left to markdown
-  expect_equal(md_tokenize("\\code{a % b}")$tokens, "\\code")
+  expect_message(
+    tk <- md_tokenize("\\code{a % b}"),
+    "unterminated argument"
+  )
+  expect_equal(tk$tokens, "\\code")
+  expect_equal(tk$incomplete, "code")
 })
 
 test_that("escapes and lone backslashes are tokenized", {

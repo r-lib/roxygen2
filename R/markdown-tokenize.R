@@ -69,11 +69,21 @@ verbatim_rd_tags <- c(
   "verb"
 )
 
-md_tokenize <- function(text) {
+md_tokenize <- function(text, tag = NULL) {
   out <- tokenizeMd(text, verbatim_rd_tags)
   if (out$stripped > 0) {
     cli::cli_warn(
       "Removed {out$stripped} private-use unicode character{?s} (U+E000/U+E001), which roxygen2 uses internally."
+    )
+  }
+  for (name in unique(out$incomplete)) {
+    warn_roxy_tag(
+      tag,
+      c(
+        "markdown translation failed",
+        x = paste0("\\", name, " has an unterminated argument"),
+        i = "Rd tag arguments must have balanced braces, and an unescaped % comments out the rest of the line: write \\% for a literal %"
+      )
     )
   }
   out

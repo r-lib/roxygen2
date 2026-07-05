@@ -103,6 +103,7 @@ cpp11::writable::list tokenizeMd(std::string text,
   out.reserve(n);
   std::vector<std::string> tokens;
   std::vector<std::string> types;
+  std::vector<std::string> incomplete;
   int n_stripped = 0;
 
   for (int i = 0; i < n; i++) {
@@ -135,11 +136,14 @@ cpp11::writable::list tokenizeMd(std::string text,
       if (vtags.count(name)) {
         type = "verbatim";
         // Consume all complete brace groups; an incomplete group is left
-        // to markdown, like the brace groups of non-verbatim tags
+        // to markdown, like the brace groups of non-verbatim tags, and
+        // reported so that the caller can warn
         while (end + 1 < n && text[end + 1] == '{') {
           int gend;
-          if (!scan_brace_group(text, end + 1, &gend))
+          if (!scan_brace_group(text, end + 1, &gend)) {
+            incomplete.push_back(name);
             break;
+          }
           end = gend;
         }
       } else {
@@ -178,10 +182,15 @@ cpp11::writable::list tokenizeMd(std::string text,
     rtokens[t] = tokens[t];
     rtypes[t] = types[t];
   }
+  cpp11::writable::strings rincomplete(incomplete.size());
+  for (size_t t = 0; t < incomplete.size(); t++) {
+    rincomplete[t] = incomplete[t];
+  }
 
   return cpp11::writable::list(
       {"text"_nm = cpp11::writable::strings({out}),
        "tokens"_nm = rtokens,
        "types"_nm = rtypes,
+       "incomplete"_nm = rincomplete,
        "stripped"_nm = cpp11::writable::integers({n_stripped})});
 }

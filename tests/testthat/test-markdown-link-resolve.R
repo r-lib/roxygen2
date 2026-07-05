@@ -83,3 +83,19 @@ test_that("find_source traces re-exported non-function to source package", {
   skip_if_not_installed("tidyselect")
   expect_equal(find_source(".data", "tidyselect"), "rlang")
 })
+
+test_that("pkg_topics uses the installed alias index", {
+  expect_true(has_topic("mean", "base"))
+  expect_false(has_topic("no-such-topic", "base"))
+  expect_false(has_topic("mean", "no-such-package"))
+})
+
+test_that("man_dir_aliases parses and unescapes aliases", {
+  path <- withr::local_tempdir()
+  write_lines(
+    c("\\name{foo}", "\\alias{foo}", "\\alias{\\%in\\%}", "\\title{foo}"),
+    file.path(path, "foo.Rd")
+  )
+  expect_equal(man_dir_aliases(path), c("foo", "%in%"))
+  expect_equal(man_dir_aliases(file.path(path, "no-man")), character())
+})

@@ -171,8 +171,7 @@ check_topic <- function(pkg, topic, tag = NULL) {
     return(invisible())
   }
 
-  help_path <- utils::help((topic), (pkg))[1]
-  if (is.na(basename(help_path))) {
+  if (!has_topic(topic, pkg)) {
     warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}")
   }
   invisible()

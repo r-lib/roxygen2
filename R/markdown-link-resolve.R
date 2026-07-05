@@ -37,13 +37,11 @@ find_package <- function(topic, tag = NULL) {
 }
 
 find_package_cache <- new_environment()
-# run in roxygenize() because the documented functions might change between runs
+# run in roxygenize() because the documented functions and installed
+# packages might change between runs
 find_package_cache_reset <- function() {
   env_unbind(find_package_cache, env_names(find_package_cache))
-
-  # also reset the cache used by dev_help() (used by has_topic())
-  pkg <- roxy_meta_get("current_package")
-  if (!is.null(pkg)) pkgload::dev_topic_index_reset(pkg)
+  env_unbind(pkg_topics_cache, env_names(pkg_topics_cache))
 }
 find_package_cached <- function(topic, pkg, pkg_dir) {
   key <- paste0(pkg, "::", topic)
@@ -82,6 +80,42 @@ find_package_lookup <- function(topic, pkg, pkg_dir) {
   } else {
     pkg_has_topic
   }
+}
+
+# The topics (help aliases) of a package, cached per roxygenize() run.
+# Reading the index once and doing hash lookups is orders of magnitude
+# faster than calling help() for every (topic, package) pair.
+pkg_topics_cache <- new_environment()
+
+pkg_topics <- function(package) {
+  env_cache(pkg_topics_cache, package, pkg_topics_lookup(package))
+}
+
+pkg_topics_lookup <- function(package) {
+  path <- tryCatch(find.package(package), error = function(e) NULL)
+  if (is.null(path)) {
+    return(character())
+  }
+
+  aliases <- file.path(path, "help", "aliases.rds")
+  if (file.exists(aliases)) {
+    # An installed package: use the alias index that ships with it
+    names(readRDS(aliases))
+  } else {
+    # A package loaded from source, i.e. the package being documented or a
+    # dependency loaded with pkgload::load_all(): scan man/ like
+    # pkgload::dev_help() does
+    man_dir_aliases(file.path(path, "man"))
+  }
+}
+
+man_dir_aliases <- function(path) {
+  rd <- list.files(path, pattern = "[.][Rr]d$", full.names = TRUE)
+  lines <- unlist(lapply(rd, read_lines))
+  aliases <- grep("^\\s*\\\\alias\\{", lines, value = TRUE)
+  aliases <- sub("^\\s*\\\\alias\\{(.*)\\}\\s*$", "\\1", aliases)
+  # aliases are Rd-escaped in the file, e.g. \alias{\%in\%}
+  gsub("\\\\([%{}\\\\])", "\\1", aliases)
 }
 
 pkg_deps <- function(pkgdir) {

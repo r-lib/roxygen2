@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Markdown processing has been rewritten around a single tokenizer for the combined markdown/Rd grammar, replacing the old escape/unescape passes. Processing large documentation files is now substantially faster, and Rd tags behave consistently in every markdown context.
+* Markdown text containing `\%` now renders as `%`; previously it produced `\\%` in the Rd file, which truncated the displayed line at the `%`.
 * Markdown processing now handles multibyte characters inside Rd tags correctly; previously a tag like `\code{café}` would corrupt the markdown interpretation of the text that followed it.
 * Markdown warnings triggered by a `rd_family_title` prefix (e.g. for an unsupported level 1 heading) no longer error.
 * S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage (#1883).

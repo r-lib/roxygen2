@@ -2,6 +2,11 @@
 
 ## roxygen2 (development version)
 
+- Markdown processing now handles multibyte characters inside Rd tags
+  correctly; previously a tag like `\code{café}` would corrupt the
+  markdown interpretation of the text that followed it.
+- Markdown warnings triggered by a `rd_family_title` prefix (e.g. for an
+  unsupported level 1 heading) no longer error.
 - Markdown link targets are now resolved against a per-run index of each
   package’s help topics, instead of one
   [`help()`](https://rdrr.io/r/utils/help.html) call per topic and

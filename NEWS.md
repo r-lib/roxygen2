@@ -2,6 +2,7 @@
 
 * Markdown processing now handles multibyte characters inside Rd tags correctly; previously a tag like `\code{café}` would corrupt the markdown interpretation of the text that followed it.
 * Markdown warnings triggered by a `rd_family_title` prefix (e.g. for an unsupported level 1 heading) no longer error.
+* Markdown link targets are now resolved against a per-run index of each package's help topics, instead of one `help()` call per topic and package. This substantially speeds up documenting packages with many cross-reference links, e.g. `roxygenize()` on testthat is about a third faster.
 * S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage (#1883).
 * `Config/roxygen2/` flag fields in `DESCRIPTION` (like `markdown`) are now parsed case-insensitively, so `true` and `True` work as well as `TRUE`, and an invalid value gives a clear error (#1875).
 * `@section` titles can now contain code that includes a colon (#1878).

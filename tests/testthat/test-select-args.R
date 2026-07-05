@@ -15,6 +15,9 @@ test_that("negative initial starts from everything", {
 })
 
 test_that("can alternative exclusion and inclusion", {
-  expect_equal(select_args_text(c("x", "y", "z"), "-z z", "test"), c("x", "y", "z"))
+  expect_equal(
+    select_args_text(c("x", "y", "z"), "-z z", "test"),
+    c("x", "y", "z")
+  )
   expect_equal(select_args_text(c("x", "y", "z"), "z -z", "test"), character())
 })

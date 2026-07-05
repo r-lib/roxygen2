@@ -83,3 +83,16 @@ test_that("find_source traces re-exported non-function to source package", {
   skip_if_not_installed("tidyselect")
   expect_equal(find_source(".data", "tidyselect"), "rlang")
 })
+
+test_that("pkg_topics uses the installed alias index", {
+  expect_true(has_topic("mean", "base"))
+  expect_false(has_topic("no-such-topic", "base"))
+  expect_false(has_topic("mean", "no-such-package"))
+})
+
+test_that("pkg_topics falls back to pkgload's index for source packages", {
+  # roxygen2 itself is either loaded from source (devtools::test()) or
+  # installed (R CMD check); both branches must find its topics
+  expect_true(has_topic("roxygenize", "roxygen2"))
+  expect_false(has_topic("no-such-topic", "roxygen2"))
+})

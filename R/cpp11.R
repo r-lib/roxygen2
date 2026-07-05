@@ -24,6 +24,10 @@ find_includes <- function(path) {
   .Call(`_roxygen2_find_includes`, path)
 }
 
+tokenizeMd <- function(text, verbatim) {
+  .Call(`_roxygen2_tokenizeMd`, text, verbatim)
+}
+
 wrapUsage <- function(string, width, indent) {
   .Call(`_roxygen2_wrapUsage`, string, width, indent)
 }

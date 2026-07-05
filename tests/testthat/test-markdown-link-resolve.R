@@ -90,12 +90,9 @@ test_that("pkg_topics uses the installed alias index", {
   expect_false(has_topic("mean", "no-such-package"))
 })
 
-test_that("man_dir_aliases parses and unescapes aliases", {
-  path <- withr::local_tempdir()
-  write_lines(
-    c("\\name{foo}", "\\alias{foo}", "\\alias{\\%in\\%}", "\\title{foo}"),
-    file.path(path, "foo.Rd")
-  )
-  expect_equal(man_dir_aliases(path), c("foo", "%in%"))
-  expect_equal(man_dir_aliases(file.path(path, "no-man")), character())
+test_that("pkg_topics falls back to pkgload's index for source packages", {
+  # roxygen2 itself is either loaded from source (devtools::test()) or
+  # installed (R CMD check); both branches must find its topics
+  expect_true(has_topic("roxygenize", "roxygen2"))
+  expect_false(has_topic("no-such-topic", "roxygen2"))
 })

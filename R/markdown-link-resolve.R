@@ -42,6 +42,10 @@ find_package_cache <- new_environment()
 find_package_cache_reset <- function() {
   env_unbind(find_package_cache, env_names(find_package_cache))
   env_unbind(pkg_topics_cache, env_names(pkg_topics_cache))
+
+  # also reset the index that pkg_topics() uses for source packages
+  pkg <- roxy_meta_get("current_package")
+  if (!is.null(pkg)) pkgload::dev_topic_index_reset(pkg)
 }
 find_package_cached <- function(topic, pkg, pkg_dir) {
   key <- paste0(pkg, "::", topic)
@@ -103,19 +107,10 @@ pkg_topics_lookup <- function(package) {
     names(readRDS(aliases))
   } else {
     # A package loaded from source, i.e. the package being documented or a
-    # dependency loaded with pkgload::load_all(): scan man/ like
-    # pkgload::dev_help() does
-    man_dir_aliases(file.path(path, "man"))
+    # dependency loaded with pkgload::load_all(): use pkgload's cached
+    # index of the aliases in man/
+    names(pkgload::dev_topic_index(path))
   }
-}
-
-man_dir_aliases <- function(path) {
-  rd <- list.files(path, pattern = "[.][Rr]d$", full.names = TRUE)
-  lines <- unlist(lapply(rd, read_lines))
-  aliases <- grep("^\\s*\\\\alias\\{", lines, value = TRUE)
-  aliases <- sub("^\\s*\\\\alias\\{(.*)\\}\\s*$", "\\1", aliases)
-  # aliases are Rd-escaped in the file, e.g. \alias{\%in\%}
-  gsub("\\\\([%{}\\\\])", "\\1", aliases)
 }
 
 pkg_deps <- function(pkgdir) {

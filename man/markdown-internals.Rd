@@ -30,12 +30,8 @@ original text is added as an attribute for each placeholder.
 \code{escape_rd_for_md()} replaces fragile Rd tags with placeholders, to avoid
 interpreting them as markdown. \code{unescape_rd_for_md()} puts the original
 text back in place of the placeholders after the markdown parsing is done.
-The fragile tags are listed in \code{escaped_for_md}.
-
-Some Rd macros are treated specially:
-\itemize{
-\item For \code{if}, markdown is only allowed in the second argument.
-\item For \code{ifelse} markdown is allowed in the second and third arguments.
-}
+The fragile tags are listed in \code{escaped_for_md}. A fragile tag is
+protected together with all of its brace arguments, so markdown is never
+interpreted inside them.
 }
 \keyword{internal}

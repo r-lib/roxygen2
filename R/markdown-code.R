@@ -49,6 +49,12 @@
 #' @keywords internal
 markdown_evaluate <- function(text) {
   text <- paste(text, collapse = "\n")
+  # Code is delimited by backticks (`r ...`, ``` fences) or tilde fences
+  # (~~~{r}), so without either we can skip the (relatively expensive)
+  # markdown parsing altogether
+  if (!grepl("[`~]", text)) {
+    return(text)
+  }
   mdxml <- xml_ns_strip(md_to_mdxml(text, sourcepos = TRUE))
   code_nodes <- xml_find_all(mdxml, ".//code | .//code_block")
   rcode_nodes <- keep(code_nodes, is_markdown_code_node)
@@ -165,7 +171,7 @@ re_set_all_pos <- function(text, pos, value, nodes) {
   # continuation lines: https://github.com/commonmark/cmark/issues/296
   types <- xml_name(nodes)
   if (any(types == "code" & pos$start_line != pos$end_line)) {
-    cli::cli_abort("multi-line `r ` markup is not supported", call = NULL)
+    cli::cli_abort("Multi-line `r ` markup is not supported.", call = NULL)
   }
 
   # Need to split the string, because of the potential multi-line

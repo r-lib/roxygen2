@@ -508,6 +508,11 @@ test_that("Escaping is kept", {
   expect_equivalent_rd(out1, out2)
 })
 
+test_that("multibyte characters in Rd tags don't break protection", {
+  expect_equal(markdown("\\code{café} `x`"), "\\code{café} \\code{x}")
+  expect_equal(markdown("\\code{ééé} *x*"), "\\code{ééé} \\emph{x}")
+})
+
 test_that("Do not pick up `` in arguments \\item #519", {
   out1 <- roc_proc_text(
     rd_roclet(),
@@ -728,6 +733,10 @@ test_that("headings and empty sections", {
   "
   out1 <- roc_proc_text(rd_roclet(), text1)[[1]]
   expect_false("details" %in% names(out1$fields))
+})
+
+test_that("markdown() warnings work without a tag", {
+  expect_snapshot(out <- markdown("# Heading"))
 })
 
 test_that("markdown() on empty input", {

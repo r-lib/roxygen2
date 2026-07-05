@@ -34,7 +34,7 @@ topics_process_family_prefix <- function(family) {
     return(default)
   }
 
-  prefix <- markdown(prefix, tag = "family")
+  prefix <- markdown(prefix)
   # Ensure prefix ends with a colon (#1656)
   if (!grepl(":$", prefix)) {
     prefix <- paste0(prefix, ":")

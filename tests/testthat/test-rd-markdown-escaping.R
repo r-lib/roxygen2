@@ -70,6 +70,17 @@ test_that("find_all_rd_tags", {
   }
 })
 
+test_that("find_all_rd_tags uses character offsets for multibyte text", {
+  expect_equal(
+    find_all_rd_tags("x \\code{café} y"),
+    tag_df("\\code", 3, 7, 13)
+  )
+  expect_equal(
+    find_all_rd_tags("é \\mytag{ééé}{ü} é"),
+    tag_df("\\mytag", 3, 8, 16)
+  )
+})
+
 test_that("find_fragile_rd_tags", {
   fragile <- c(r"(\frag)", r"(\frag1)", r"(\frag2)")
 

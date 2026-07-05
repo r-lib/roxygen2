@@ -4,12 +4,9 @@
 #' `escape_rd_for_md()` replaces fragile Rd tags with placeholders, to avoid
 #' interpreting them as markdown. `unescape_rd_for_md()` puts the original
 #' text back in place of the placeholders after the markdown parsing is done.
-#' The fragile tags are listed in `escaped_for_md`.
-#'
-#' Some Rd macros are treated specially:
-#'
-#' * For `if`, markdown is only allowed in the second argument.
-#' * For `ifelse` markdown is allowed in the second and third arguments.
+#' The fragile tags are listed in `escaped_for_md`. A fragile tag is
+#' protected together with all of its brace arguments, so markdown is never
+#' interpreted inside them.
 #'
 #' @param text Input text. Potentially contains Rd and/or
 #'   markdown markup.

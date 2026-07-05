@@ -74,11 +74,21 @@ int scan_raw_string(std::string string, int i) {
   return -1;
 }
 
+// Continuation bytes of a multi-byte UTF-8 character
+bool is_continuation_byte(char c) {
+  return (c & 0xC0) == 0x80;
+}
+
 // The two functions are very similar, so we use a common
 // implementation and select the functionality via the
 // mode argument:
 // mode == 0: rdComplete
 // mode == 1: findEndOfTag
+//
+// `start` and the return value of mode 1 are *character* offsets, so that
+// they can be combined with the character-based string functions in R
+// (regexpr(), substr(), nchar(), ...). Internally we scan bytes, assuming
+// UTF-8 input.
 
 int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0, int start = 0) {
   int n = string.length();
@@ -87,8 +97,21 @@ int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0, in
   char string_delim = '\0';
   int braces = 0;
 
-  for (int i = start; i < n; i++) {
+  // Convert `start` from a character offset to a byte offset
+  int byte_start = 0;
+  for (int chars = 0; byte_start < n && chars < start; chars++) {
+    byte_start++;
+    while (byte_start < n && is_continuation_byte(string[byte_start]))
+      byte_start++;
+  }
+
+  // Character offset of the character containing byte i
+  int char_i = start - 1;
+
+  for (int i = byte_start; i < n; i++) {
     char cur = string[i];
+    if (!is_continuation_byte(cur))
+      char_i++;
 
     switch (state) {
     case State::Rd:
@@ -125,12 +148,18 @@ int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0, in
       case 'R':
         if (is_code) {
           int end = scan_raw_string(string, i);
-          if (end >= 0) {
-            i = end;
-          } else if (i + 1 < n && (string[i + 1] == '"' || string[i + 1] == '\'')) {
+          if (end < 0 && i + 1 < n &&
+              (string[i + 1] == '"' || string[i + 1] == '\'')) {
             // Looks like a raw string but incomplete
             state = State::String;
-            i = n - 1;
+            end = n - 1;
+          }
+          if (end >= 0) {
+            for (int j = i + 1; j <= end; j++) {
+              if (!is_continuation_byte(string[j]))
+                char_i++;
+            }
+            i = end;
           }
         }
         break;
@@ -177,7 +206,7 @@ int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0, in
     if (mode == 1) {
       bool complete = is_complete(braces, state);
       if (complete && i + 1 < n && string[i + 1] != '{') {
-        return i;
+        return char_i;
       }
     }
   }
@@ -186,7 +215,7 @@ int roxygen_parse_tag(std::string string, bool is_code = false, int mode = 0, in
   if (mode == 0) {
     return complete ? 1 : 0;
   } else {
-    return complete ? n - 1 : -1;
+    return complete ? char_i : -1;
   }
 }
 

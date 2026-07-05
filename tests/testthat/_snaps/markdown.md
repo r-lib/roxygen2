@@ -99,6 +99,15 @@
       x Level 1 headings are not supported in @seealso
       i Do you want to put the heading in @description or @details?
 
+# markdown() warnings work without a tag
+
+    Code
+      out <- markdown("# Heading")
+    Message
+      x markdown translation failed
+      x Level 1 headings are not supported in this tag
+      i Do you want to put the heading in @description or @details?
+
 # image formats work
 
     Code

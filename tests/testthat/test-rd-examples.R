@@ -177,6 +177,13 @@ test_that("strip_rd_example_tags preserves surrounding code", {
   )
 })
 
+test_that("strip_rd_example_tags handles multibyte characters", {
+  expect_equal(
+    strip_rd_example_tags("x <- 'café'\n\\dontrun{\ny <- 'naïve'\n}"),
+    "x <- 'café'\ny <- 'naïve'"
+  )
+})
+
 test_that("strip_rd_example_tags handles nested tags", {
   expect_equal(
     strip_rd_example_tags("\\dontrun{\n\\dontshow{setup}\n1 + 1\n}"),

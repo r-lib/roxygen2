@@ -9,9 +9,9 @@
 # it lands in:
 #
 # * `text`: regular Rd text. Verbatim tags come back as live Rd; the
-#   markdown bracket escapes `\[` and `\]` drop their backslash (their
-#   only purpose was to hide the bracket from the markdown parser);
-#   everything else comes back as typed.
+#   escaped bracket escapes `\\[` and `\\]` drop one backslash (matching
+#   what the markdown escape `\[` does to a bare bracket); everything
+#   else comes back as typed.
 # * `verb`: inside `\verb{}`, `\code{}` or `\preformatted{}`. Everything
 #   renders literally, so token text is Rd-escaped -- except verbatim Rd
 #   tags, which are inserted as typed: the Rd parser keeps unknown macros
@@ -94,7 +94,7 @@ restore_tokens <- function(x, state, mode = c("text", "verb", "raw")) {
     switch(
       mode,
       raw = src,
-      text = ifelse(src %in% c("\\[", "\\]"), substr(src, 2, 2), src),
+      text = ifelse(src %in% c("\\\\[", "\\\\]"), substring(src, 2), src),
       verb = ifelse(type == "verbatim", src, escape_rd_verb(src))
     )
   })

@@ -22,9 +22,20 @@ test_that("brace matching follows Rd rules", {
 })
 
 test_that("escapes and lone backslashes are tokenized", {
-  tk <- md_tokenize("\\% \\[ \\\\ \\")
-  expect_equal(tk$tokens, c("\\%", "\\[", "\\\\", "\\"))
-  expect_equal(tk$types, c("escape", "escape", "escape", "backslash"))
+  tk <- md_tokenize("\\% \\\\ \\")
+  expect_equal(tk$tokens, c("\\%", "\\\\", "\\"))
+  expect_equal(tk$types, c("escape", "escape", "backslash"))
+})
+
+test_that("bracket escapes are left for the markdown parser", {
+  tk <- md_tokenize("\\[x\\]")
+  expect_equal(tk$text, "\\[x\\]")
+  expect_equal(tk$tokens, character())
+
+  # but \\[ hides its bracket, because it renders as \[
+  tk <- md_tokenize("\\\\[x\\\\]")
+  expect_equal(tk$text, paste0(ph(1), "x", ph(2)))
+  expect_equal(tk$tokens, c("\\\\[", "\\\\]"))
 })
 
 test_that("a backslash never consumes a backtick", {
@@ -46,20 +57,20 @@ test_that("pre-existing sentinel characters are stripped with a warning", {
 })
 
 test_that("restore_tokens restores according to context", {
-  tk <- md_tokenize("\\code{x} \\emph \\% \\[ \\] \\")
+  tk <- md_tokenize("\\code{x} \\emph \\% \\\\[ \\")
   state <- as.environment(tk)
 
   expect_equal(
     restore_tokens(tk$text, state, "text"),
-    "\\code{x} \\emph \\% [ ] \\"
+    "\\code{x} \\emph \\% \\[ \\"
   )
   expect_equal(
     restore_tokens(tk$text, state, "verb"),
-    "\\code{x} \\\\emph \\\\\\% \\\\[ \\\\] \\\\"
+    "\\code{x} \\\\emph \\\\\\% \\\\\\\\[ \\\\"
   )
   expect_equal(
     restore_tokens(tk$text, state, "raw"),
-    "\\code{x} \\emph \\% \\[ \\] \\"
+    "\\code{x} \\emph \\% \\\\[ \\"
   )
 })
 

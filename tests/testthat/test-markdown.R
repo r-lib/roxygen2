@@ -741,7 +741,8 @@ test_that("headings and empty sections", {
 test_that("backslash escapes in text", {
   expect_equal(markdown("\\[ not a link \\]"), "[ not a link ]")
   expect_equal(markdown("\\\\[ nor this \\\\]"), "\\[ nor this \\]")
-  expect_equal(markdown("50\\% \\{x\\} a\\_b"), "50\\\\% \\{x\\} a\\_b")
+  # \% used to become \\%, which truncated the rendered line at the %
+  expect_equal(markdown("50\\% \\{x\\} a\\_b"), "50\\% \\{x\\} a\\_b")
   expect_equal(markdown("A \\\\ B"), "A \\\\ B")
   expect_equal(markdown("a \\` b"), "a \\` b")
 })

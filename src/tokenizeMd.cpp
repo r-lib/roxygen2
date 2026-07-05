@@ -20,9 +20,14 @@ using namespace cpp11::literals;
 //
 //   bs_token := "\" NAME braces*   NAME in `verbatim` -> tag + all brace args
 //             | "\" NAME           other NAME (args remain markdown)
-//             | "\" PUNCT          two-character escape, e.g. \% \\ \[ \]
+//             | "\" PUNCT          two-character escape, e.g. \% \\ \{
 //             | "\"                lone backslash (also before a backtick,
 //                                  so code-span delimiters are never eaten)
+//
+// Two exceptions, because \[ and \] are markdown bracket escapes: "\[" and
+// "\]" are passed through for commonmark to handle, and "\\[" / "\\]" are
+// single three-character tokens (the trailing bracket must not become an
+// active markdown bracket).
 //
 // All scanning is over UTF-8 bytes; multibyte characters can never match
 // ASCII specials, so they pass through untouched.
@@ -140,10 +145,23 @@ cpp11::writable::list tokenizeMd(std::string text,
       } else {
         type = "tag";
       }
+    } else if (i + 1 < n && (text[i + 1] == '[' || text[i + 1] == ']')) {
+      // Markdown bracket escape: the only backslash construct that
+      // commonmark must see, so that \[ suppresses link parsing
+      out += c;
+      out += text[i + 1];
+      i++;
+      continue;
     } else if (i + 1 < n && is_ascii_punct(text[i + 1]) &&
                text[i + 1] != '`') {
       type = "escape";
       end = i + 1;
+      // \\[ renders as a backslash + literal bracket, so the bracket
+      // must be hidden from the markdown parser along with the backslashes
+      if (text[i + 1] == '\\' && i + 2 < n &&
+          (text[i + 2] == '[' || text[i + 2] == ']')) {
+        end = i + 2;
+      }
     }
 
     tokens.push_back(text.substr(i, end - i + 1));

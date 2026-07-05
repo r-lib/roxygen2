@@ -112,5 +112,6 @@ make_as_character_rd <- function() {
 }
 
 has_topic <- function(topic, package) {
-  topic %in% pkg_topics(package)
+  # env_has() errors on the empty string, unlike %in%
+  nzchar(topic) && env_has(pkg_topics(package), topic)
 }

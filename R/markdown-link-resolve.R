@@ -40,6 +40,7 @@ find_package_cache <- new_environment()
 # run in roxygenize() because the documented functions might change between runs
 find_package_cache_reset <- function() {
   env_unbind(find_package_cache, env_names(find_package_cache))
+  env_unbind(pkg_deps_cache, env_names(pkg_deps_cache))
 
   # Only the documented package's topics change from run to run, so evict
   # it from the topic cache (ours and pkgload's) and keep everything else
@@ -88,11 +89,13 @@ find_package_lookup <- function(topic, pkg, pkg_dir) {
   }
 }
 
-# The topics (help aliases) of a package. Reading an index once and doing
-# hash lookups is orders of magnitude faster than calling help() for every
-# (topic, package) pair. Topics are cached for the whole session; the only
-# package whose topics change between runs is the one being documented,
-# and find_package_cache_reset() evicts it at the start of each run.
+# The topics (help aliases) of a package, as a hashed environment so that
+# has_topic() is a single O(1) lookup: reading an index once is orders of
+# magnitude faster than calling help() for every (topic, package) pair,
+# and `%in%` on the alias vector would rebuild a hash table per call.
+# Topics are cached for the whole session; the only package whose topics
+# change between runs is the one being documented, and
+# find_package_cache_reset() evicts it at the start of each run.
 pkg_topics_cache <- new_environment()
 
 pkg_topics <- function(package) {
@@ -101,12 +104,13 @@ pkg_topics <- function(package) {
   }
 
   topics <- pkg_topics_lookup(package)
+  index <- new_environment(rep_named(topics, list(TRUE)))
   # Don't cache failure, so that installing a missing dependency
   # mid-session is picked up right away
   if (length(topics) > 0) {
-    env_poke(pkg_topics_cache, package, topics)
+    env_poke(pkg_topics_cache, package, index)
   }
-  topics
+  index
 }
 
 pkg_topics_lookup <- function(package) {
@@ -127,7 +131,15 @@ pkg_topics_lookup <- function(package) {
   }
 }
 
+# Cached because find_package_lookup() needs the dependencies for every
+# unresolved topic, and parsing DESCRIPTION each time is slow
+pkg_deps_cache <- new_environment()
+
 pkg_deps <- function(pkgdir) {
+  env_cache(pkg_deps_cache, pkgdir %||% ".", pkg_deps_lookup(pkgdir))
+}
+
+pkg_deps_lookup <- function(pkgdir) {
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
   deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]

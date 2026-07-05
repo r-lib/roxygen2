@@ -89,13 +89,12 @@ find_package_lookup <- function(topic, pkg, pkg_dir) {
   }
 }
 
+has_topic <- function(topic, package) {
+  nzchar(topic) && env_has(pkg_topics(package), topic)
+}
+
 # The topics (help aliases) of a package, as a hashed environment so that
-# has_topic() is a single O(1) lookup: reading an index once is orders of
-# magnitude faster than calling help() for every (topic, package) pair,
-# and `%in%` on the alias vector would rebuild a hash table per call.
-# Topics are cached for the whole session; the only package whose topics
-# change between runs is the one being documented, and
-# find_package_cache_reset() evicts it at the start of each run.
+# has_topic() is a single O(1) lookup
 pkg_topics_cache <- new_environment()
 
 pkg_topics <- function(package) {
@@ -121,12 +120,8 @@ pkg_topics_lookup <- function(package) {
 
   aliases <- file.path(path, "help", "aliases.rds")
   if (file.exists(aliases)) {
-    # An installed package: use the alias index that ships with it
     names(readRDS(aliases))
   } else {
-    # A package loaded from source, i.e. the package being documented or a
-    # dependency loaded with pkgload::load_all(): use pkgload's index of
-    # the aliases in man/
     names(pkgload::dev_topic_index(path))
   }
 }

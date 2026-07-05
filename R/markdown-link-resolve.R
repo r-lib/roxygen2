@@ -40,10 +40,15 @@ find_package_cache <- new_environment()
 # run in roxygenize() because the documented functions might change between runs
 find_package_cache_reset <- function() {
   env_unbind(find_package_cache, env_names(find_package_cache))
+  env_unbind(pkg_deps_cache, env_names(pkg_deps_cache))
 
-  # also reset the cache used by dev_help() (used by has_topic())
+  # Only the documented package's topics change from run to run, so evict
+  # it from the topic cache (ours and pkgload's) and keep everything else
   pkg <- roxy_meta_get("current_package")
-  if (!is.null(pkg)) pkgload::dev_topic_index_reset(pkg)
+  if (!is.null(pkg)) {
+    env_unbind(pkg_topics_cache, pkg)
+    pkgload::dev_topic_index_reset(pkg)
+  }
 }
 find_package_cached <- function(topic, pkg, pkg_dir) {
   key <- paste0(pkg, "::", topic)
@@ -84,7 +89,52 @@ find_package_lookup <- function(topic, pkg, pkg_dir) {
   }
 }
 
+has_topic <- function(topic, package) {
+  nzchar(topic) && env_has(pkg_topics(package), topic)
+}
+
+# The topics (help aliases) of a package, as a hashed environment so that
+# has_topic() is a single O(1) lookup
+pkg_topics_cache <- new_environment()
+
+pkg_topics <- function(package) {
+  if (env_has(pkg_topics_cache, package)) {
+    return(env_get(pkg_topics_cache, package))
+  }
+
+  topics <- pkg_topics_lookup(package)
+  index <- new_environment(rep_named(topics, list(TRUE)))
+  # Don't cache failure, so that installing a missing dependency
+  # mid-session is picked up right away
+  if (length(topics) > 0) {
+    env_poke(pkg_topics_cache, package, index)
+  }
+  index
+}
+
+pkg_topics_lookup <- function(package) {
+  path <- tryCatch(find.package(package), error = function(e) NULL)
+  if (is.null(path)) {
+    return(character())
+  }
+
+  aliases <- file.path(path, "help", "aliases.rds")
+  if (file.exists(aliases)) {
+    names(readRDS(aliases))
+  } else {
+    names(pkgload::dev_topic_index(path))
+  }
+}
+
+# Cached because find_package_lookup() needs the dependencies for every
+# unresolved topic, and parsing DESCRIPTION each time is slow
+pkg_deps_cache <- new_environment()
+
 pkg_deps <- function(pkgdir) {
+  env_cache(pkg_deps_cache, pkgdir %||% ".", pkg_deps_lookup(pkgdir))
+}
+
+pkg_deps_lookup <- function(pkgdir) {
   deps <- desc::desc_get_deps(pkgdir)
   deps <- deps[deps$package != "R", ]
   deps <- deps[deps$type %in% c("Depends", "Imports", "Suggests"), ]

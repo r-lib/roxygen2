@@ -988,7 +988,7 @@ test_that("can inherit all from single function", {
 
 test_that("useful warnings if can't find topics", {
   expect_snapshot({
-    get_rd("not_installed::pkg", source = "source")
+    get_rd("notinstalled::pkg", source = "source")
     get_rd("base::doesntexist", source = "source")
     get_rd("doesntexist", RoxyTopics$new(), source = "source")
   })

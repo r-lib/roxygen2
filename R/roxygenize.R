@@ -108,6 +108,7 @@ roxygenize <- function(
     base_path = base_path,
     is_first = is_first
   )
+  rdtools::pkg_cache_reset(roxy_meta_get("current_package"))
   invisible(out)
 }
 

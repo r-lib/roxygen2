@@ -146,7 +146,9 @@ parse_link <- function(destination, contents, state) {
     pkg <- NA_character_
     explicit_pkg <- FALSE
   }
-  check_topic(pkg, topic, state$tag)
+  if (explicit_pkg) {
+    check_topic(pkg, topic, state$tag)
+  }
 
   ## To understand this, look at the RD column of the table above
   if (!has_link_text) {
@@ -166,14 +168,14 @@ check_topic <- function(pkg, topic, tag = NULL) {
     return(invisible())
   }
 
-  if (!is_installed(pkg)) {
-    warn_roxy_tag(tag, "refers to un-installed package {pkg}")
-    return(invisible())
+  if (!has_topic(topic, pkg)) {
+    if (is_installed(pkg)) {
+      warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}")
+    } else {
+      warn_roxy_tag(tag, "refers to un-installed package {pkg}")
+    }
   }
 
-  if (!has_topic(topic, pkg)) {
-    warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}")
-  }
   invisible()
 }
 

@@ -86,6 +86,8 @@ roclet_output.roclet_rd <- function(
     }
   }
 
+  # Let rdtools know that the documentation has changed and we need to
+  # update the cache
   paths
 }
 

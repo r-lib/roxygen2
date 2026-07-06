@@ -566,11 +566,8 @@ tweak_links <- function(x, package) {
 get_rd <- function(name, topics, source, tag = "@inherits") {
   if (is_namespaced(name)) {
     # External package
-    parsed <- parse_expr(name)
-    pkg <- as.character(parsed[[2]])
-    fun <- as.character(parsed[[3]])
-
-    get_rd_from_help(pkg, fun, source, tag = tag)
+    parsed <- rdtools::topic_parse(name)
+    get_rd_from_help(parsed$package, parsed$topic, source, tag = tag)
   } else {
     # Current package
     rd_name <- topics$find_filename(name)
@@ -585,21 +582,19 @@ get_rd <- function(name, topics, source, tag = "@inherits") {
 }
 
 get_rd_from_help <- function(package, alias, source, tag = "@inherits") {
-  if (!is_installed(package)) {
-    warn_roxy_topic(
-      source,
-      "{tag} failed because {.pkg {package}} is not installed"
-    )
+  if (!rdtools::topic_exists(alias, package)) {
+    if (is_installed(package)) {
+      warn_roxy_topic(source, "{tag} failed to find topic {package}::{alias}")
+    } else {
+      warn_roxy_topic(
+        source,
+        "{tag} failed because {.pkg {package}} is not installed"
+      )
+    }
     return()
   }
 
-  help <- utils::help((alias), (package))
-  if (length(help) == 0) {
-    warn_roxy_topic(source, "{tag} failed to find topic {package}::{alias}")
-    return()
-  }
-
-  out <- internal_f("utils", ".getHelpFile")(help)
+  out <- rdtools::topic_rd(alias, package)
   attr(out, "package") <- package
   out
 }

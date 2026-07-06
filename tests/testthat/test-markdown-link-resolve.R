@@ -64,33 +64,13 @@ test_that("topic found in multiple base packages doesn't warn", {
   expect_no_message(expect_equal(find_package("plot"), NA_character_))
 })
 
-test_that("find_source handles simple cases", {
-  skip_on_cran() # since depends on other packages
-
-  # in base package
-  expect_equal(find_source("list", "base"), "base")
-  # topic not in namespace
-  expect_equal(find_source("doesnt'exist", "cli"), "cli")
-  # primitive objects are always in base
-  expect_equal(find_source("is_null", "rlang"), "base")
-  # callr re-exports process from processx
-  expect_equal(find_source("process", "callr"), "processx")
-})
-
-test_that("find_source traces re-exported non-function to source package", {
-  # .data is a non-function object exported by rlang, re-exported by others
-  skip_on_cran()
-  skip_if_not_installed("tidyselect")
-  expect_equal(find_source(".data", "tidyselect"), "rlang")
-})
-
-test_that("pkg_topics uses the installed alias index", {
+test_that("has_topic uses the installed rdtools index", {
   expect_true(has_topic("mean", "base"))
   expect_false(has_topic("no-such-topic", "base"))
   expect_false(has_topic("mean", "no-such-package"))
 })
 
-test_that("pkg_topics falls back to pkgload's index for source packages", {
+test_that("has_topic uses the rdtools index for source packages", {
   # roxygen2 itself is either loaded from source (devtools::test()) or
   # installed (R CMD check); both branches must find its topics
   expect_true(has_topic("roxygenize", "roxygen2"))

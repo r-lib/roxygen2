@@ -16,6 +16,10 @@ leadingSpaces <- function(lines) {
   .Call(`_roxygen2_leadingSpaces`, lines)
 }
 
+mdxmlToRd <- function(xml, tokens, types, has_sections, section_tag, restrict_images, resolve_link, is_r_code, warn) {
+  .Call(`_roxygen2_mdxmlToRd`, xml, tokens, types, has_sections, section_tag, restrict_images, resolve_link, is_r_code, warn)
+}
+
 tokenise_block <- function(lines, file, offset) {
   .Call(`_roxygen2_tokenise_block`, lines, file, offset)
 }

@@ -61,25 +61,18 @@ test_that("pre-existing sentinel characters are stripped with a warning", {
   expect_equal(tk$tokens, character())
 })
 
-test_that("restore_tokens restores according to context", {
-  tk <- md_tokenize("\\code{x} \\emph \\% \\\\[ \\")
-  state <- as.environment(tk)
-
+test_that("tokens are restored according to context", {
+  # text context: verbatim tags and escapes come back as typed, except
+  # \\[ which loses a backslash like the markdown escape \[ does
   expect_equal(
-    restore_tokens(tk$text, state, "text"),
-    "\\code{x} \\emph \\% \\[ \\"
+    markdown("\\code{x} \\emph \\% \\\\[ x"),
+    "\\code{x} \\emph \\% \\[ x"
   )
+  # verb context: everything is Rd-escaped, except verbatim tags
   expect_equal(
-    restore_tokens(tk$text, state, "verb"),
-    "\\code{x} \\\\emph \\\\\\% \\\\\\\\[ \\\\"
+    markdown("`\\code{x} \\emph \\% \\\\[`"),
+    "\\verb{\\code{x} \\\\emph \\\\\\% \\\\\\\\[}"
   )
-  expect_equal(
-    restore_tokens(tk$text, state, "raw"),
-    "\\code{x} \\emph \\% \\\\[ \\"
-  )
-})
-
-test_that("restore_tokens leaves token-free text alone", {
-  state <- as.environment(list(tokens = character(), types = character()))
-  expect_equal(restore_tokens("plain *text*", state, "text"), "plain *text*")
+  # raw context: tokens come back as typed
+  expect_equal(markdown("`Rd \\out{z} \\% x`"), "\\Sexpr[stage=render,results=rd]{\\out{z} \\% x}")
 })

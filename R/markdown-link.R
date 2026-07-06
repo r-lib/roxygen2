@@ -102,6 +102,7 @@ parse_link <- function(destination, contents, state) {
     return(NULL)
   }
   destination <- sub("^R:", "", URLdecode(destination))
+  Encoding(destination) <- "UTF-8" # restore encoding dropped URLdecodse
 
   ## if contents is a `code tag`, then we need to move this outside
   is_code <- FALSE

@@ -49,10 +49,18 @@
 #' @keywords internal
 markdown_evaluate <- function(text) {
   text <- paste(text, collapse = "\n")
-  # Code is delimited by backticks (`r ...`, ``` fences) or tilde fences
-  # (~~~{r}), so without either we can skip the (relatively expensive)
-  # markdown parsing altogether
-  if (!grepl("[`~]", text)) {
+  # Evaluation is triggered by an inline code span whose text starts with
+  # "r ", or a fenced block with braced chunk options. Only parse the
+  # (relatively expensive) markdown when the raw text shows one of those
+  # shapes; each pattern may over-match, which just means a wasted parse.
+  has_code <-
+    # `r ...` (commonmark strips one leading space from a code span)
+    grepl("`[ ]?r[ \n]", text) ||
+    # ```{r ...} or ~~~{r ...} fences
+    grepl("(```+|~~~+)[^\n]*\\{", text) ||
+    # a code block whose first line starts with "r ", e.g. indented blocks
+    grepl("(^|\n)[ \t]*r[ \t\n]", text)
+  if (!has_code) {
     return(text)
   }
   mdxml <- xml_ns_strip(md_to_mdxml(text, sourcepos = TRUE))

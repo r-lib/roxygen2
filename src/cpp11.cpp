@@ -33,6 +33,13 @@ extern "C" SEXP _roxygen2_leadingSpaces(SEXP lines) {
     return cpp11::as_sexp(leadingSpaces(cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(lines)));
   END_CPP11
 }
+// mdxmlToRd.cpp
+cpp11::writable::list mdxmlToRd(std::string xml, cpp11::strings tokens, cpp11::strings types, bool has_sections, std::string section_tag, bool restrict_images, cpp11::function resolve_link, cpp11::function is_r_code, cpp11::function warn);
+extern "C" SEXP _roxygen2_mdxmlToRd(SEXP xml, SEXP tokens, SEXP types, SEXP has_sections, SEXP section_tag, SEXP restrict_images, SEXP resolve_link, SEXP is_r_code, SEXP warn) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(mdxmlToRd(cpp11::as_cpp<cpp11::decay_t<std::string>>(xml), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(tokens), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(types), cpp11::as_cpp<cpp11::decay_t<bool>>(has_sections), cpp11::as_cpp<cpp11::decay_t<std::string>>(section_tag), cpp11::as_cpp<cpp11::decay_t<bool>>(restrict_images), cpp11::as_cpp<cpp11::decay_t<cpp11::function>>(resolve_link), cpp11::as_cpp<cpp11::decay_t<cpp11::function>>(is_r_code), cpp11::as_cpp<cpp11::decay_t<cpp11::function>>(warn)));
+  END_CPP11
+}
 // parser2.cpp
 cpp11::list tokenise_block(cpp11::strings lines, std::string file, int offset);
 extern "C" SEXP _roxygen2_tokenise_block(SEXP lines, SEXP file, SEXP offset) {
@@ -68,6 +75,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_roxygen2_findEndOfTag",   (DL_FUNC) &_roxygen2_findEndOfTag,   3},
     {"_roxygen2_find_includes",  (DL_FUNC) &_roxygen2_find_includes,  1},
     {"_roxygen2_leadingSpaces",  (DL_FUNC) &_roxygen2_leadingSpaces,  1},
+    {"_roxygen2_mdxmlToRd",      (DL_FUNC) &_roxygen2_mdxmlToRd,      9},
     {"_roxygen2_rdComplete",     (DL_FUNC) &_roxygen2_rdComplete,     2},
     {"_roxygen2_tokenise_block", (DL_FUNC) &_roxygen2_tokenise_block, 3},
     {"_roxygen2_tokenizeMd",     (DL_FUNC) &_roxygen2_tokenizeMd,     2},

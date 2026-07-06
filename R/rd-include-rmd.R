@@ -100,7 +100,11 @@ rmd_linkrefs_from_file <- function(path) {
 rmd_eval_rd <- function(path, tag) {
   mdtxt <- paste(read_lines(path), collapse = "\n")
   mdesc <- add_linkrefs_to_md(mdtxt)
-  mdxml <- md_to_mdxml(mdesc)
+  mdxml <- commonmark::markdown_xml(
+    mdesc,
+    hardbreaks = TRUE,
+    extensions = "table"
+  )
   state <- new.env(parent = emptyenv())
   state$tag <- tag
   state$has_sections <- TRUE

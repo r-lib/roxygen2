@@ -1,7 +1,6 @@
 #include <cpp11/list.hpp>
 #include <cpp11/strings.hpp>
 #include <cpp11/integers.hpp>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -87,14 +86,21 @@ static bool is_ascii_punct(char c) {
          (c >= '[' && c <= '`') || (c >= '{' && c <= '~');
 }
 
+// Linear scan beats building a lookup structure: texts contain few Rd
+// tags, but tokenizeMd() is called for every tag of every block
+static bool is_verbatim_tag(const cpp11::strings& verbatim,
+                            const std::string& name) {
+  for (R_xlen_t v = 0; v < verbatim.size(); v++) {
+    if (name == CHAR(STRING_ELT(verbatim, v))) {
+      return true;
+    }
+  }
+  return false;
+}
+
 [[cpp11::register]]
 cpp11::writable::list tokenizeMd(std::string text,
                                  cpp11::strings verbatim) {
-  std::set<std::string> vtags;
-  for (R_xlen_t v = 0; v < verbatim.size(); v++) {
-    vtags.insert(std::string(verbatim[v]));
-  }
-
   static const std::string OPEN = "\xEE\x80\x80";  // U+E000
   static const std::string CLOSE = "\xEE\x80\x81"; // U+E001
 
@@ -133,7 +139,7 @@ cpp11::writable::list tokenizeMd(std::string text,
       end = j - 1;
 
       std::string name = text.substr(i + 1, j - i - 1);
-      if (vtags.count(name)) {
+      if (is_verbatim_tag(verbatim, name)) {
         type = "verbatim";
         // Consume all complete brace groups; an incomplete group is left
         // to markdown, like the brace groups of non-verbatim tags, and

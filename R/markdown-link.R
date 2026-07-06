@@ -96,23 +96,17 @@ get_md_linkrefs <- function(text) {
 
 # Link parsing -----------------------------------------------------------------
 
-parse_link <- function(destination, contents, state) {
-  ## Not a [] or [][] type link, remove prefix if it is
-  if (!grepl("^R:", destination)) {
-    return(NULL)
-  }
+# Called back from the C++ tree walk (src/mdxmlToRd.cpp) for every
+# `[topic]` or `[text][topic]` style link. `text` is the concatenated
+# plain text of the link contents, `rendered` is the contents already
+# translated to Rd, and `is_code` signals that the contents was a single
+# code span (whose \code becomes the outermost layer).
+parse_link <- function(destination, text, has_nontext, is_code, rendered, state) {
   destination <- sub("^R:", "", URLdecode(destination))
   Encoding(destination) <- "UTF-8" # restore encoding dropped URLdecodse
 
-  ## if contents is a `code tag`, then we need to move this outside
-  is_code <- FALSE
-  if (length(contents) == 1 && xml_name(contents) == "code") {
-    is_code <- TRUE
-
-    contents <- xml_contents(contents)
+  if (is_code) {
     destination <- sub("`$", "", sub("^`", "", destination))
-
-    local_bindings(.env = state, in_link_code = TRUE)
   }
 
   ## If the supplied link text is the same as the reference text,
@@ -120,8 +114,7 @@ parse_link <- function(destination, contents, state) {
   ## it was not specified explicitly. In this case `()` links are
   ## turned to `\\code{}`.
   ## We also assume link text if we see a non-text XML tag in contents.
-  has_link_text <- paste(xml_text(contents), collapse = "") != destination ||
-    any(xml_name(contents) != "text")
+  has_link_text <- text != destination || has_nontext
 
   ## if (is_code) then we'll need \\code
   ## `pkg` is package or NA
@@ -158,7 +151,7 @@ parse_link <- function(destination, contents, state) {
     }
     text <- escape(text)
   } else {
-    text <- mdxml_link_text(contents, state)
+    text <- rendered
   }
   rd_link(pkg, escape(topic), text, code = is_code)
 }

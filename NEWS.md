@@ -1,6 +1,7 @@
 # roxygen2 (development version)
 
 * Markdown processing has been rewritten around a single tokenizer for the combined markdown/Rd grammar, replacing the old escape/unescape passes. Processing large documentation files is now substantially faster, and Rd tags behave consistently in every markdown context.
+* Markdown processing is also considerably faster: the markdown to Rd translation now happens in C++, and text is only parsed for inline R code when it might contain some. Together this makes parsing a markdown-heavy package like testthat about 1.4x faster.
 * Markdown text containing `\%` now renders as `%`; previously it produced `\\%` in the Rd file, which truncated the displayed line at the `%`.
 * Markdown links with an escaped closing bracket (e.g. `[bar\]`) no longer leak a link reference definition into the generated Rd.
 * An Rd tag with an unterminated argument (e.g. `\code{a % b}`, where the unescaped `%` comments out the closing brace) now generates a warning instead of being silently reinterpreted as markdown.

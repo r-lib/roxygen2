@@ -87,7 +87,10 @@ roclet_output.roclet_rd <- function(
   }
 
   # Let rdtools know that the documentation has changed and we need to
-  # update the cache
+  # update the cache.
+  rdtools::pkg_cache_reset(roxy_meta_get("current_package"))
+  rdtools::pkg_cache_reset(roxy_meta_get("current_package_dir"))
+
   paths
 }
 

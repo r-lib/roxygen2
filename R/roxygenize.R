@@ -46,7 +46,6 @@ roxygenize <- function(
   base_path <- normalizePath(package.dir)
   is_first <- roxygen_setup(base_path)
 
-  find_package_cache_reset()
   roxy_meta_load(base_path)
   # Load required packages for method registration
   packages <- roxy_meta_get("packages")
@@ -108,7 +107,6 @@ roxygenize <- function(
     base_path = base_path,
     is_first = is_first
   )
-  rdtools::pkg_cache_reset(roxy_meta_get("current_package"))
   invisible(out)
 }
 

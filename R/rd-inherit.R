@@ -582,7 +582,8 @@ get_rd <- function(name, topics, source, tag = "@inherits") {
 }
 
 get_rd_from_help <- function(package, alias, source, tag = "@inherits") {
-  if (!rdtools::topic_exists(alias, package)) {
+  out <- rdtools::topic_rd(alias, package)
+  if (is.null(out)) {
     if (is_installed(package)) {
       warn_roxy_topic(source, "{tag} failed to find topic {package}::{alias}")
     } else {
@@ -594,7 +595,6 @@ get_rd_from_help <- function(package, alias, source, tag = "@inherits") {
     return()
   }
 
-  out <- rdtools::topic_rd(alias, package)
   attr(out, "package") <- package
   out
 }

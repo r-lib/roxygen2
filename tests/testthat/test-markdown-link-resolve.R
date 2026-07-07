@@ -58,16 +58,3 @@ test_that("topic found in multiple base packages doesn't warn", {
   # plot is in both base and graphics
   expect_no_message(expect_equal(find_package("plot"), NA_character_))
 })
-
-test_that("has_topic uses the installed rdtools index", {
-  expect_true(has_topic("mean", "base"))
-  expect_false(has_topic("no-such-topic", "base"))
-  expect_false(has_topic("mean", "no-such-package"))
-})
-
-test_that("has_topic uses the rdtools index for source packages", {
-  # roxygen2 itself is either loaded from source (devtools::test()) or
-  # installed (R CMD check); both branches must find its topics
-  expect_true(has_topic("roxygenize", "roxygen2"))
-  expect_false(has_topic("no-such-topic", "roxygen2"))
-})

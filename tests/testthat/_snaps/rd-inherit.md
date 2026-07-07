@@ -113,3 +113,4 @@
       x In topic 'source': @inherits failed to find topic "doesntexist" in current package.
     Output
       NULL
+

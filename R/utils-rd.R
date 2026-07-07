@@ -87,10 +87,15 @@ parse_rd <- function(x) {
 
 # Generated in .onLoad()
 as_character_rd <- NULL
+# On R 4.1/4.2, as.character.Rd() mishandles \ifelse (its three arguments get
+# wrapped in a single brace pair), so we patch its TWOARG list to include it.
+# R >= 4.3 rewrote as.character.Rd() to handle \ifelse/\if/\href correctly, so
+# we use it as is.
 make_as_character_rd <- function() {
-  # "as.character.Rd" appears to a few commands in TWOARGS
-  # this code hacks the body of the function to add it
   fn <- internal_f("tools", "as.character.Rd")
+  if (getRversion() >= "4.3.0") {
+    return(fn)
+  }
 
   body <- body(fn)
   idx <- detect_index(

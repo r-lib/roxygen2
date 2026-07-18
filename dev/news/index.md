@@ -7,13 +7,12 @@
   markdown interpretation of the text that followed it.
 - Markdown warnings triggered by a `rd_family_title` prefix (e.g. for an
   unsupported level 1 heading) no longer error.
-- Markdown link targets are now resolved against a per-run index of each
-  package’s help topics, instead of one
-  [`help()`](https://rdrr.io/r/utils/help.html) call per topic and
-  package. This substantially speeds up documenting packages with many
-  cross-reference links,
-  e.g. [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
-  on testthat is about a third faster.
+- Markdown link targets and inherited Rd topics are now resolved with
+  cached indexes provided by the new rdtools package, replacing repeated
+  [`help()`](https://rdrr.io/r/utils/help.html) calls and roxygen2’s own
+  topic lookup and package-qualification code. This substantially speeds
+  up packages with many cross-references, e.g. Rd generation for
+  testthat is nearly twice as fast.
 - S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage
   ([\#1883](https://github.com/r-lib/roxygen2/issues/1883)).
 - `Config/roxygen2/` flag fields in `DESCRIPTION` (like `markdown`) are

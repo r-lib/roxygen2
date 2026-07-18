@@ -30,7 +30,7 @@ Imports:
     methods,
     pkgload (>= 1.5.2),
     R6 (>= 2.1.2),
-    rdtools,
+    rdtools (>= 0.1.0),
     rlang (>= 1.1.0),
     utils,
     withr,
@@ -56,4 +56,3 @@ Config/testthat/edition: 3
 Config/testthat/parallel: TRUE
 Encoding: UTF-8
 Language: en-GB
-Remotes: r-lib/rdtools

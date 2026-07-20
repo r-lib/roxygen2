@@ -201,8 +201,9 @@ import_from <- function(package, funs, expanded = FALSE) {
   )
 }
 
-# Conflicting `@importAllFrom` directives are detected at document-time. An
-# error is thrown so the user has to resolve the conflict to build the package.
+# Conflicting `@importAllFrom` directives (either with another `@importAllFrom`
+# or a regular `@importFrom`) are detected at document-time. An error is thrown
+# so the user has to resolve the conflict to build the package.
 check_import_conflicts <- function(imports) {
   syms <- map(imports, \(x) strip_quotes(x$funs))
   imported <- data.frame(
@@ -222,7 +223,6 @@ check_import_conflicts <- function(imports) {
   # Re-exports aren't real conflicts: when several packages export the same
   # object (e.g. `%>%`), importing it from more than one is harmless.
   conflicts <- discard(conflicts, \(x) is_reexport(x$sym[[1]], unique(x$pkg)))
-
   if (length(conflicts) == 0) {
     return(invisible())
   }
@@ -235,7 +235,6 @@ check_import_conflicts <- function(imports) {
   conflict <- conflicts[[1]]
   example_sym <- auto_quote(conflict$sym[[1]])
   example_pkg <- conflict$pkg[conflict$expanded][[1]]
-
   cli::cli_abort(c(
     "Found {length(conflicts)} conflicting import{?s} from {.code @importAllFrom}.",
     set_names(bullets, rep("*", length(bullets))),

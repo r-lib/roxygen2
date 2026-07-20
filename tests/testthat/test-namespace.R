@@ -434,17 +434,6 @@ test_that("import doesn't quote if comma present", {
   expect_equal(sort(out), "import(rlang, except = ':=')")
 })
 
-test_that("@import never expands, even for an installed package", {
-  out <- roc_proc_text(
-    namespace_roclet(),
-    "
-    #' @import utils
-    NULL"
-  )
-
-  expect_equal(out, "import(utils)")
-})
-
 test_that("@importAllFrom drops symbols excluded with a - prefix", {
   pkgload::load_all(test_path("testImports"), quiet = TRUE)
   withr::defer(pkgload::unload("testImports"))

@@ -59,12 +59,17 @@
       x <text>:2: @importFrom must use a hanging indent to span multiple lines.
       i Continuation lines must be indented; did you forget a tag like `@examples`?
 
-# @importAllFrom warns about an exclusion that isn't an export
+# @importAllFrom errors on an exclusion that isn't an export
 
     Code
-      out <- roc_proc_text(namespace_roclet(), block)
-    Message
-      x <text>:2: @importAllFrom Ignoring unknown exclusion for testImports: `improt_b`.
+      roc_proc_text(namespace_roclet(), block)
+    Condition
+      Error:
+      ! Can't expand `@importAllFrom testImports`.
+      Caused by message:
+      ! x In topic 'testImports': argument selection failed.
+      Caused by error in `FUN()`:
+      ! object 'improt_b' not found
 
 # expanded @importAllFrom conflicting with another package errors
 

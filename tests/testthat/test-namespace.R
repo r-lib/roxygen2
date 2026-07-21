@@ -462,47 +462,49 @@ test_that("@importAllFrom accepts several - exclusions", {
   expect_equal(out, "importFrom(testImports,import_a)")
 })
 
-test_that("@importAllFrom warns about an exclusion that isn't an export", {
+test_that("@importAllFrom errors on an exclusion that isn't an export", {
   pkgload::load_all(test_path("testImports"), quiet = TRUE)
   withr::defer(pkgload::unload("testImports"))
 
-  # `-improt_b` is a typo for `-import_b`, so it excludes nothing.
+  # `-improt_b` is a typo for `-import_b`, so it doesn't match any export.
   block <- "
     #' @importAllFrom testImports -improt_b
     NULL"
-  expect_snapshot(out <- roc_proc_text(namespace_roclet(), block))
-  expect_equal(
-    out,
-    "importFrom(testImports,\n  import_a,\n  import_b,\n  import_c\n)"
+  expect_snapshot(roc_proc_text(namespace_roclet(), block), error = TRUE)
+})
+
+test_that("@importAllFrom drops a backtick-quoted non-syntactic export", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom rlang -`%||%`
+    NULL"
   )
+
+  expect_false(any(grepl('"%||%"', out, fixed = TRUE)))
 })
 
-test_that("parse_import_all_from splits the package from its - exclusions", {
-  spec <- parse_import_all_from(c("utils", "-head", "-tail"))
-  expect_equal(spec$pkg, "utils")
-  expect_equal(spec$excluded, c("head", "tail"))
+test_that("@importAllFrom treats a bare word as a positive selection", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports import_a import_b
+    NULL"
+  )
+
+  expect_equal(out, "importFrom(testImports,\n  import_a,\n  import_b\n)")
 })
 
-test_that("parse_import_all_from unquotes non-syntactic exclusions", {
-  # A non-syntactic name can itself start with `-` (e.g. the S3 method `-.class`)
-  # and can be quoted with any of the three styles roxygen accepts.
-  spec <- parse_import_all_from(c(
-    "somepkg",
-    "-\"-.class\"",
-    "-`%op%`",
-    "-':='"
-  ))
-  expect_equal(spec$pkg, "somepkg")
-  expect_equal(spec$excluded, c("-.class", "%op%", ":="))
-})
-
-test_that("@importAllFrom errors when given more than one package", {
+test_that("@importAllFrom errors when a positive selection isn't an export", {
   block <- "
     #' @importAllFrom utils stats
     NULL"
   expect_error(
     roc_proc_text(namespace_roclet(), block),
-    "Can't import multiple packages"
+    "Can't expand"
   )
 })
 

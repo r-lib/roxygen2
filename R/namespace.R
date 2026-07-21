@@ -403,7 +403,13 @@ roxy_tag_ns.roxy_tag_import <- function(x, block, env) {
 
 #' @export
 roxy_tag_parse.roxy_tag_importAllFrom <- function(x) {
-  tag_words(x, min = 1)
+  tag_two_part(
+    x,
+    "a package",
+    "an export selection",
+    required = FALSE,
+    markdown = FALSE
+  )
 }
 #' @export
 roxy_tag_ns.roxy_tag_importAllFrom <- function(x, block, env) {
@@ -555,11 +561,17 @@ one_per_line_ignore_current <- function(name, x) {
 # object currently exported by `pkg`. This early expansion pins the set of
 # imports at document-time and prevents user-visible conflicts at load-time when
 # a package update introduces a conflict with other imported symbols.
+#
+# Imports are handled by `select_args_text()` with `-sym` / `sym` selection
+# syntax (same as `@inheritParams`).
 expand_import <- function(x) {
   current <- peek_roxygen_pkg()
-  spec <- parse_import_all_from(x$val)
-  pkg <- spec$pkg
-  excluded <- spec$excluded
+  pkg <- x$val$name
+  select <- x$val$description
+
+  if (startsWith(pkg, "-")) {
+    cli::cli_abort("{.code @importAllFrom} needs a package to import from.")
+  }
 
   # Ignore an `@importAllFrom` for the package being documented
   if (identical(current, pkg)) {
@@ -575,50 +587,25 @@ expand_import <- function(x) {
 
   all_exports <- getNamespaceExports(pkg)
 
-  # Warn on exclusions that don't match an export, so a typo like `-improt_b`
-  # isn't silently dropped and left to resurface as the conflict it was meant to
-  # resolve.
-  unknown <- setdiff(excluded, all_exports)
-  if (length(unknown) > 0) {
-    warn_roxy_tag(
-      x,
-      "Ignoring unknown {cli::qty(length(unknown))} exclusion{?s} for {.package {pkg}}: {.code {unknown}}"
-    )
-  }
+  exports <- tryCatch(
+    select_args_text(all_exports, select, topic_name = pkg),
+    roxygen2_select_args_failed = function(cnd) {
+      cli::cli_abort(
+        "Can't expand {.code @importAllFrom {pkg}}.",
+        parent = cnd,
+        call = NULL
+      )
+    }
+  )
 
-  exports <- setdiff(all_exports, excluded)
   if (length(exports) == 0) {
     # Nothing left to import, either because `pkg` exports nothing or because
-    # the exclusions removed every export. Import nothing in this case instead
+    # the selection removed every export. Import nothing in this case instead
     # of falling back to `import(pkg)`.
     character()
   } else {
     import_from(pkg, exports, expanded = TRUE)
   }
-}
-
-# Splits an `@importAllFrom` value into the package to expand and the symbols to
-# leave out. An exclusion is a word with a `-` prefix, e.g. `-abort`. Exclusions
-# may be quoted: `-"-.Date"`, ``-`-.Date` ``, or `-'-.Date'`.
-parse_import_all_from <- function(vals) {
-  is_excluded <- startsWith(vals, "-")
-
-  pkg <- vals[!is_excluded]
-  if (length(pkg) == 0) {
-    cli::cli_abort("{.code @importAllFrom} needs a package to import from.")
-  }
-  if (length(pkg) > 1) {
-    cli::cli_abort(
-      "Can't import multiple packages with {.code @importAllFrom}."
-    )
-  }
-
-  excluded <- strip_quotes(sub("^-", "", vals[is_excluded]))
-
-  list(
-    pkg = pkg,
-    excluded = excluded
-  )
 }
 
 repeat_first_ignore_current <- function(name, x) {

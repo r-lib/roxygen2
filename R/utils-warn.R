@@ -63,9 +63,10 @@ warn_roxy_topic <- function(
   topic,
   message,
   parent = NULL,
+  class = NULL,
   envir = parent.frame()
 ) {
   message[[1]] <- paste0("In topic '", topic, "': ", message[[1]], ".")
   names(message)[[1]] <- "x"
-  cli::cli_inform(message, parent = parent, .envir = envir)
+  cli::cli_inform(message, parent = parent, class = class, .envir = envir)
 }

@@ -105,7 +105,7 @@ If you do want to import everything from a package, `@importAllFrom package` is 
 When two `@importAllFrom` directives end up exporting the same name, an error is thrown to invite you to resolve the conflict.
 You can do so by excluding the unwanted symbol from one of the import directives with a `-` prefix, e.g. `@importAllFrom package -sym`.
 This drops `sym` from the expansion and keeps the rest of `package`'s exports pinned.
-You can quote the excluded name if it contains special characters, e.g. `@importAllFrom package -"-.Date"`.
+Backtick-quote the excluded name if it is non-syntactic, e.g. `` @importAllFrom package -`-.Date` ``.
 
 ### S3
 

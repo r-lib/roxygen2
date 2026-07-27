@@ -2,6 +2,13 @@
 
 ## roxygen2 (development version)
 
+- The migration from `RoxygenNote` to `Config/roxygen2/version` now
+  happens whenever it’s needed, not just when the roxygen2 version has
+  changed. This fixes two cases where the deprecated `RoxygenNote` field
+  was left in `DESCRIPTION` forever: when a collaborator using roxygen2
+  7.x re-added it after the package had already been migrated, and when
+  its value happened to match the installed version
+  ([\#1876](https://github.com/r-lib/roxygen2/issues/1876)).
 - Markdown processing now handles multibyte characters inside Rd tags
   correctly; previously a tag like `\code{café}` would corrupt the
   markdown interpretation of the text that followed it.

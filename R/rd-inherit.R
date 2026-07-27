@@ -119,13 +119,18 @@ merge.rd_section_inherit_dot_params <- function(x, y, ...) {
 }
 
 rd_section_inherit_params_args <- function(source, args) {
-  check_string(source)
-  check_string(args)
+  check_character(source)
+  check_character(args)
+  stopifnot(length(source) == length(args))
 
-  if (!nzchar(args)) {
+  keep <- nzchar(args)
+  if (!any(keep)) {
     return(NULL)
   }
-  rd_section("inherit_params_args", list(source = source, args = args))
+  rd_section(
+    "inherit_params_args",
+    list(source = source[keep], args = args[keep])
+  )
 }
 
 #' @export
@@ -211,8 +216,11 @@ inherit_params <- function(topic, topics) {
 
     # Apply argument filter if specified via @inheritParams foo args
     params_args <- topic$get_value("inherit_params_args")
-    args_filter <- params_args$args[params_args$source == inheritor]
-    if (length(args_filter) == 1 && args_filter != "") {
+    args_filter <- paste0(
+      params_args$args[params_args$source == inheritor],
+      collapse = " "
+    )
+    if (nzchar(args_filter)) {
       doc_args <- map_chr(inherited_params, "[[", "name")
       selected <- select_args_text(doc_args, args_filter, topic_name = source)
       inherited_params <- Filter(

@@ -737,6 +737,57 @@ test_that("@inheritParams filtering works with external packages", {
   expect_false("na.rm" %in% names(params))
 })
 
+test_that("multiple @inheritParams can each filter args (#1879)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A.
+    #'
+    #' @param x X
+    #' @param y Y
+    a <- function(x, y) {}
+
+    #' B.
+    #'
+    #' @param z Z
+    #' @param w W
+    b <- function(z, w) {}
+
+    #' C
+    #'
+    #' @inheritParams a x
+    #' @inheritParams b -w
+    c <- function(x, y, z, w) {}
+    "
+  )[[3]]
+
+  params <- out$get_value("param")
+  expect_equal(params, c(x = "X", z = "Z"))
+})
+
+test_that("@inheritParams filters are combined for a repeated source", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A.
+    #'
+    #' @param x X
+    #' @param y Y
+    #' @param z Z
+    a <- function(x, y, z) {}
+
+    #' B
+    #'
+    #' @inheritParams a x
+    #' @inheritParams a z
+    b <- function(x, y, z) {}
+    "
+  )[[2]]
+
+  params <- out$get_value("param")
+  expect_equal(params, c(x = "X", z = "Z"))
+})
+
 test_that("@inheritParams without args still works", {
   out <- roc_proc_text(
     rd_roclet(),

@@ -14,6 +14,13 @@ generic if you want users to call it or other developers to write
 methods for it. If the generic is internal, you don’t need to export or
 document it.
 
+### Supported syntax
+
+- `setGeneric("balance", function(x) standardGeneric("balance"))`
+
+- `setGroupGeneric("Ops2", function(e1, e2) ...)`, which defines a group
+  generic and is otherwise documented just like `setGeneric()`.
+
 ## Classes
 
 Document **S4 classes** by adding a roxygen block before `setClass()`.
@@ -30,6 +37,13 @@ class. Here’s a simple example:
 #' @export
 Account <- setClass("Account", slots = list(balance = "numeric"))
 ```
+
+### Supported syntax
+
+- `setClass("Account", slots = list(balance = "numeric"))`
+
+- `setClassUnion("Number", c("numeric", "integer"))`, which defines a
+  class and is otherwise documented just like `setClass()`.
 
 ## Methods
 
@@ -52,3 +66,19 @@ Use either `@rdname` or `@describeIn` to control where method
 documentation goes. See
 [`vignette("reuse")`](https://roxygen2.r-lib.org/dev/articles/reuse.md)
 for more details.
+
+### Supported syntax
+
+- `setMethod("show", "Account", function(object) ...)`
+
+- `setReplaceMethod("balance", "Account", function(x, value) ...)`,
+  which documents the `balance<-` method, aliased as
+  `balance<-,Account-method`.
+
+- `setAs("numeric", "Account", function(from) ...)`, which documents the
+  `coerce()` method. The usage comes from `coerce()`, so must you
+  document `@param to` and `@param strict` even if your definition only
+  takes `from`.
+
+  If you supply `replace`, only the `coerce()` method is documented; use
+  `@aliases` if you also want to document `coerce<-`.

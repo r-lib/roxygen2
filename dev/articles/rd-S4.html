@@ -131,6 +131,16 @@ documented.</li>
 <code>@export</code> a generic if you want users to call it or other
 developers to write methods for it. If the generic is internal, you
 don’t need to export or document it.</p>
+<div class="section level3">
+<h3 id="supported-syntax">Supported syntax<a class="anchor" aria-label="anchor" href="#supported-syntax"></a>
+</h3>
+<ul>
+<li><p><code>setGeneric("balance", function(x) standardGeneric("balance"))</code></p></li>
+<li><p><code>setGroupGeneric("Ops2", function(e1, e2) ...)</code>, which
+defines a group generic and is otherwise documented just like
+<code>setGeneric()</code>.</p></li>
+</ul>
+</div>
 </div>
 <div class="section level2">
 <h2 id="classes">Classes<a class="anchor" aria-label="anchor" href="#classes"></a>
@@ -147,6 +157,16 @@ example:</p>
 <span><span class="co">#' @slot balance A length-one numeric vector</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">Account</span> <span class="op">&lt;-</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">"Account"</span>, slots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>balance <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="supported-syntax-1">Supported syntax<a class="anchor" aria-label="anchor" href="#supported-syntax-1"></a>
+</h3>
+<ul>
+<li><p><code>setClass("Account", slots = list(balance = "numeric"))</code></p></li>
+<li><p><code>setClassUnion("Number", c("numeric", "integer"))</code>,
+which defines a class and is otherwise documented just like
+<code>setClass()</code>.</p></li>
+</ul>
+</div>
 </div>
 <div class="section level2">
 <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
@@ -167,6 +187,26 @@ either two options don’t apply.</p></li>
 <p>Use either <code>@rdname</code> or <code>@describeIn</code> to
 control where method documentation goes. See
 <code><a href="../articles/reuse.html">vignette("reuse")</a></code> for more details.</p>
+<div class="section level3">
+<h3 id="supported-syntax-2">Supported syntax<a class="anchor" aria-label="anchor" href="#supported-syntax-2"></a>
+</h3>
+<ul>
+<li><p><code>setMethod("show", "Account", function(object) ...)</code></p></li>
+<li><p><code>setReplaceMethod("balance", "Account", function(x, value) ...)</code>,
+which documents the <code>balance&lt;-</code> method, aliased as
+<code>balance&lt;-,Account-method</code>.</p></li>
+<li>
+<p><code>setAs("numeric", "Account", function(from) ...)</code>,
+which documents the <code>coerce()</code> method. The usage comes from
+<code>coerce()</code>, so must you document <code>@param to</code> and
+<code>@param strict</code> even if your definition only takes
+<code>from</code>.</p>
+<p>If you supply <code>replace</code>, only the <code>coerce()</code>
+method is documented; use <code>@aliases</code> if you also want to
+document <code>coerce&lt;-</code>.</p>
+</li>
+</ul>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

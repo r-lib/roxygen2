@@ -72,6 +72,8 @@
 <ul><li>Markdown processing now handles multibyte characters inside Rd tags correctly; previously a tag like <code>\code{café}</code> would corrupt the markdown interpretation of the text that followed it.</li>
 <li>Markdown warnings triggered by a <code>rd_family_title</code> prefix (e.g. for an unsupported level 1 heading) no longer error.</li>
 <li>Markdown link targets and inherited Rd topics are now resolved with cached indexes provided by the new rdtools package, replacing repeated <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code> calls and roxygen2’s own topic lookup and package-qualification code. This substantially speeds up packages with many cross-references, e.g. Rd generation for testthat is nearly twice as fast.</li>
+<li>
+<code>setAs()</code> and <code>setGroupGeneric()</code> are now recognised, so they get the same automatic alias and <code>\usage</code> as <code>setMethod()</code> and <code>setGeneric()</code>, fixing the “Rd files without ” note from <code>R CMD check</code> (<a href="https://github.com/r-lib/roxygen2/issues/1908" class="external-link">#1908</a>).</li>
 <li>S7 methods for <code>[</code>, <code>[[</code>, <code>[&lt;-</code>, and <code>[[&lt;-</code> now generate valid usage (<a href="https://github.com/r-lib/roxygen2/issues/1883" class="external-link">#1883</a>).</li>
 <li>
 <code>Config/roxygen2/</code> flag fields in <code>DESCRIPTION</code> (like <code>markdown</code>) are now parsed case-insensitively, so <code>true</code> and <code>True</code> work as well as <code>TRUE</code>, and an invalid value gives a clear error (<a href="https://github.com/r-lib/roxygen2/issues/1875" class="external-link">#1875</a>).</li>

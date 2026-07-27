@@ -6,9 +6,9 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
       text
     }
   )
-  escaped_text <- escape_rd_for_md(expanded_text)
+  tokens <- md_tokenize(expanded_text, tag)
   tryCatch(
-    markdown_pass2(escaped_text, tag = tag, sections = sections),
+    markdown_pass2(tokens, tag = tag, sections = sections),
     error = function(e) {
       warn_roxy_tag(tag, "markdown failed to process", parent = e)
       text
@@ -16,16 +16,29 @@ markdown <- function(text, tag = NULL, sections = FALSE) {
   )
 }
 
-markdown_pass2 <- function(text, tag = NULL, sections = FALSE) {
-  esc_text_linkrefs <- add_linkrefs_to_md(text)
+markdown_pass2 <- function(tokens, tag = NULL, sections = FALSE) {
+  text_linkrefs <- add_linkrefs_to_md(tokens$text)
 
-  mdxml <- md_to_mdxml(esc_text_linkrefs)
+  mdxml <- md_to_mdxml(text_linkrefs)
   state <- new.env(parent = emptyenv())
   state$tag <- tag
   state$has_sections <- sections
+  state$tokens <- tokens$tokens
+  state$types <- tokens$types
   rd <- mdxml_children_to_rd_top(mdxml, state)
 
-  map_chr(rd, unescape_rd_for_md, text)
+  # Restore the tokens that landed in regular text; verbatim and raw
+  # contexts have already restored theirs during the tree walk
+  rd[] <- map_chr(rd, restore_tokens, state = state, mode = "text")
+  if (!is.null(names(rd))) {
+    names(rd) <- map_chr(
+      names(rd),
+      restore_tokens,
+      state = state,
+      mode = "text"
+    )
+  }
+  rd
 }
 
 md_to_mdxml <- function(x, ...) {
@@ -82,7 +95,7 @@ mdxml_node_to_rd <- function(xml, state) {
 
     paragraph = paste0("\n\n", mdxml_children_to_rd(xml, state)),
     text = if (is_true(state$in_link_code)) {
-      escape_verb(xml_text(xml))
+      restore_tokens(escape_verb(xml_text(xml)), state, "verb")
     } else {
       escape_comment(xml_text(xml))
     },
@@ -138,21 +151,27 @@ mdxml_break <- function(state) {
   if (isTRUE(state$inlink)) " " else "\n"
 }
 
-mdxml_code <- function(xml, tag) {
+mdxml_code <- function(xml, state) {
   code <- xml_text(xml)
+  # Decide what the code is based on its original source
+  raw_code <- restore_tokens(code, state, "raw")
 
-  if (grepl("^Rd ", code)) {
+  if (grepl("^Rd ", raw_code)) {
     paste0(
       "\\Sexpr[stage=render,results=rd]{",
-      substr(code, 4, nchar(code)),
+      substr(raw_code, 4, nchar(raw_code)),
       "}"
     )
-  } else if (can_parse(code) || code %in% special) {
+  } else if (can_parse(raw_code) || raw_code %in% special) {
     # See escaping details at
     # https://cran.rstudio.com/doc/manuals/r-devel/R-exts.html#Insertions
-    paste0("\\code{", gsub("%", "\\\\%", code), "}")
+    paste0(
+      "\\code{",
+      restore_tokens(gsub("%", "\\\\%", code), state, "verb"),
+      "}"
+    )
   } else {
-    paste0("\\verb{", escape_verb(code), "}")
+    paste0("\\verb{", restore_tokens(escape_verb(code), state, "verb"), "}")
   }
 }
 
@@ -207,7 +226,7 @@ mdxml_code_block <- function(xml, state) {
     if (!is.na(info)) paste0(" ", info),
     "\">}}",
     "\\preformatted{",
-    escape_verb(xml_text(xml)),
+    restore_tokens(escape_verb(xml_text(xml)), state, "verb"),
     "}",
     "\\if{html}{\\out{</div>}}"
   )
@@ -224,7 +243,8 @@ can_parse <- function(x) {
 }
 
 escape_verb <- function(x) {
-  # Don't need to escape \\ because that's already handled in double_escape_md()
+  # No need to escape backslashes: they are all tokenized, and
+  # restore_tokens() escapes them as it puts them back
   x <- gsub("%", "\\%", x, fixed = TRUE)
   x <- gsub("{", "\\{", x, fixed = TRUE)
   x <- gsub("}", "\\}", x, fixed = TRUE)

@@ -735,6 +735,84 @@ test_that("headings and empty sections", {
   expect_false("details" %in% names(out1$fields))
 })
 
+# Characterization tests: pin down the interaction between Rd markup and
+# markdown before replacing the escaping machinery ---------------------------
+
+test_that("backslash escapes in text", {
+  expect_equal(markdown("\\[ not a link \\]"), "[ not a link ]")
+  expect_equal(markdown("\\\\[ nor this \\\\]"), "\\[ nor this \\]")
+  # \% used to become \\%, which truncated the rendered line at the %
+  expect_equal(markdown("50\\% \\{x\\} a\\_b"), "50\\% \\{x\\} a\\_b")
+  expect_equal(markdown("A \\\\ B"), "A \\\\ B")
+  expect_equal(markdown("a \\` b"), "a \\` b")
+  # an escaped closing bracket used to leak a link reference definition
+  expect_equal(markdown("\\[foo] and [bar\\]"), "[foo] and [bar]")
+})
+
+test_that("Rd tags in code spans and code blocks are inserted as typed", {
+  expect_equal(markdown("`\\code{x}`"), "\\verb{\\code{x}}")
+  expect_equal(
+    markdown("```\n\\code{x} \\%\n```"),
+    paste0(
+      "\\if{html}{\\out{<div class=\"sourceCode\">}}",
+      "\\preformatted{\\code{x} \\\\\\%\n}",
+      "\\if{html}{\\out{</div>}}"
+    )
+  )
+  expect_equal(
+    markdown("text\n\n    \\code{x} indented\n    more\n\nafter"),
+    paste0(
+      "text\n\n",
+      "\\if{html}{\\out{<div class=\"sourceCode\">}}",
+      "\\preformatted{\\code{x} indented\nmore\n}",
+      "\\if{html}{\\out{</div>}}",
+      "\n\nafter"
+    )
+  )
+})
+
+test_that("Rd tags work inside links, tables, and HTML", {
+  expect_equal(
+    markdown("[\\code{x}] and [`y`][print]"),
+    "\\link{\\code{x}} and \\code{\\link[=print]{y}}"
+  )
+  expect_equal(
+    markdown("a <span>\\code{x}</span> b"),
+    "a \\if{html}{\\out{<span>}}\\code{x}\\if{html}{\\out{</span>}} b"
+  )
+  expect_equal(
+    markdown("<div>\n\\code{x} *y*\n</div>\n"),
+    "\\if{html}{\\out{\n<div>\n\\code{x} *y*\n</div>\n}}"
+  )
+  expect_equal(
+    markdown("| \\code{x} | *y* |\n|---|---|\n| a | b |"),
+    "\\tabular{ll}{\n   \\code{x} \\tab \\emph{y} \\cr\n   a \\tab b \\cr\n}"
+  )
+  expect_equal(
+    markdown("`Rd \\out{z}`"),
+    "\\Sexpr[stage=render,results=rd]{\\out{z}}"
+  )
+})
+
+test_that("non-fragile tags allow markdown in their arguments", {
+  expect_equal(
+    markdown("\\emph{*x*} \\strong{`y`}"),
+    "\\emph{\\emph{x}} \\strong{\\code{y}}"
+  )
+})
+
+test_that("multi-line fragile tags are protected across paragraphs", {
+  expect_equal(
+    markdown("\\preformatted{\n  a *b*\n\n  c\n} *after*"),
+    "\\preformatted{\n  a *b*\n\n  c\n} \\emph{after}"
+  )
+})
+
+test_that("% inside a fragile tag argument breaks protection, with a warning", {
+  expect_snapshot(out <- markdown("\\code{a % b} *x*"))
+  expect_equal(out, "\\code{a \\% b} \\emph{x}")
+})
+
 test_that("markdown() warnings work without a tag", {
   expect_snapshot(out <- markdown("# Heading"))
 })

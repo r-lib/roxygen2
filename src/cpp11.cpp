@@ -47,6 +47,13 @@ extern "C" SEXP _roxygen2_find_includes(SEXP path) {
     return cpp11::as_sexp(find_includes(cpp11::as_cpp<cpp11::decay_t<std::string>>(path)));
   END_CPP11
 }
+// tokenizeMd.cpp
+cpp11::writable::list tokenizeMd(std::string text, cpp11::strings verbatim);
+extern "C" SEXP _roxygen2_tokenizeMd(SEXP text, SEXP verbatim) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(tokenizeMd(cpp11::as_cpp<cpp11::decay_t<std::string>>(text), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(verbatim)));
+  END_CPP11
+}
 // wrapUsage.cpp
 std::string wrapUsage(std::string string, int width, int indent);
 extern "C" SEXP _roxygen2_wrapUsage(SEXP string, SEXP width, SEXP indent) {
@@ -63,6 +70,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_roxygen2_leadingSpaces",  (DL_FUNC) &_roxygen2_leadingSpaces,  1},
     {"_roxygen2_rdComplete",     (DL_FUNC) &_roxygen2_rdComplete,     2},
     {"_roxygen2_tokenise_block", (DL_FUNC) &_roxygen2_tokenise_block, 3},
+    {"_roxygen2_tokenizeMd",     (DL_FUNC) &_roxygen2_tokenizeMd,     2},
     {"_roxygen2_wrapUsage",      (DL_FUNC) &_roxygen2_wrapUsage,      3},
     {NULL, NULL, 0}
 };

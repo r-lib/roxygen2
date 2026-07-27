@@ -70,8 +70,9 @@ get_md_linkrefs <- function(text) {
       paste0(
         "(?x)",
         "(?<=[^\\]\\\\]|^)", # must not be preceded by ] or \
-        "\\[([^\\]\\[]+)\\]", # match anything inside of []
-        "(?:\\[([^\\]\\[]+)\\])?", # match optional second pair of []
+        # match anything inside of [], not ending with \ (an escaped bracket)
+        "\\[([^\\]\\[]*[^\\]\\[\\\\])\\]",
+        "(?:\\[([^\\]\\[]*[^\\]\\[\\\\])\\])?", # optional second pair of []
         "(?=[^\\[{]|$)" # must not be followed by [ or {
       ),
       text,
@@ -101,6 +102,7 @@ parse_link <- function(destination, contents, state) {
     return(NULL)
   }
   destination <- sub("^R:", "", URLdecode(destination))
+  Encoding(destination) <- "UTF-8" # restore encoding dropped URLdecodse
 
   ## if contents is a `code tag`, then we need to move this outside
   is_code <- FALSE

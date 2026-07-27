@@ -302,7 +302,7 @@ test_that("another markdown link bug is fixed", {
     "
     #' Title
     #'
-    #' Description, see [escape_rd_for_md()].
+    #' Description, see [md_tokenize()].
     #'
     #' And also [object].
     #' @md
@@ -313,7 +313,7 @@ test_that("another markdown link bug is fixed", {
     "
     #' Title
     #'
-    #' Description, see \\code{\\link[=escape_rd_for_md]{escape_rd_for_md()}}.
+    #' Description, see \\code{\\link[=md_tokenize]{md_tokenize()}}.
     #'
     #' And also \\link{object}.
     foo <- function() {}"

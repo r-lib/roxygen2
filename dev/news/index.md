@@ -45,6 +45,13 @@
   a performance issue with
   [`loadNamespace()`](https://rdrr.io/r/base/ns-load.html) for packages
   that import many symbols.
+- `@inheritParams` no longer errors when a topic uses argument selection
+  in more than one tag, e.g. `@inheritParams a x` followed by
+  `@inheritParams b y`
+  ([\#1879](https://github.com/r-lib/roxygen2/issues/1879)). If the same
+  source is used in multiple tags, the union of their selections is now
+  inherited instead of the selection being ignored, so an unfiltered tag
+  inherits every parameter.
 - `@importFrom`, `@importClassesFrom`, and `@importMethodsFrom` now
   accept multi-line input, restoring the ability to spread imports
   across multiple lines for readability; continuation lines must use a

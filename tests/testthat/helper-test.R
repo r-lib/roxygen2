@@ -62,7 +62,7 @@ local_package_copy <- function(path, env = caller_env(), set_version = TRUE) {
   if (set_version) {
     desc::desc_set(
       file = pkg_path,
-      RoxygenNote = as.character(packageVersion("roxygen2"))
+      "Config/roxygen2/version" = as.character(packageVersion("roxygen2"))
     )
   }
 

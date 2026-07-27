@@ -50,3 +50,17 @@
     Output
       [1] FALSE
 
+# removes old RoxygenNote field even if already migrated (#1876)
+
+    Code
+      roxygen_setup(path, cur_version = "8.0.0")
+    Output
+      [1] FALSE
+
+# doesn't touch DESCRIPTION if already up to date
+
+    Code
+      roxygen_setup(path, cur_version = "8.0.0")
+    Output
+      [1] FALSE
+

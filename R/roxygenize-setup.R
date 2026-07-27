@@ -59,21 +59,30 @@ update_roxygen_version <- function(path, cur_version = NULL) {
       x = "Installed {.pkg roxygen2} is older than the version used with this package",
       i = "You have {.val {cur}} but you need {.val {prev}}"
     ))
-  } else if (!identical(cur, prev)) {
-    if (!is.na(prev) && numeric_version(prev) <= "6.1.99") {
-      cli::cli_rule()
-      cli::cli_inform(c(
-        "Changes in {.pkg roxygen2} 7.0.0:",
-        "* `%` is now escaped automatically in Markdown mode.",
-        "Please carefully check .Rd files for changes"
-      ))
-      cli::cli_rule()
-    }
+    return(invisible())
+  }
 
+  if (
+    !identical(cur, prev) && !is.na(prev) && numeric_version(prev) <= "6.1.99"
+  ) {
+    cli::cli_rule()
+    cli::cli_inform(c(
+      "Changes in {.pkg roxygen2} 7.0.0:",
+      "* `%` is now escaped automatically in Markdown mode.",
+      "Please carefully check .Rd files for changes"
+    ))
+    cli::cli_rule()
+  }
+
+  # Check the fields individually, rather than relying on `prev`, since an
+  # older roxygen2 might have re-added `RoxygenNote` after migration (#1876)
+  if (!identical(trimws(desc_version(path)), cur)) {
     cli::cli_inform(c(
       i = "Setting {.field Config/roxygen2/version} to {.val {cur}}"
     ))
     desc::desc_set("Config/roxygen2/version" = cur, file = path)
+  }
+  if (desc::desc_has_fields("RoxygenNote", file = path)) {
     desc::desc_del("RoxygenNote", file = path)
   }
 }
@@ -96,9 +105,13 @@ first_time <- function(path) {
 }
 
 roxygen_version <- function(path = ".") {
-  version <- desc::desc_get("Config/roxygen2/version", file = path)[[1]]
+  version <- desc_version(path)
   if (is.na(version)) {
     version <- desc::desc_get("RoxygenNote", file = path)[[1]]
   }
   trimws(version)
+}
+
+desc_version <- function(path = ".") {
+  desc::desc_get("Config/roxygen2/version", file = path)[[1]]
 }

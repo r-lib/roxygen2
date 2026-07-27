@@ -9,7 +9,7 @@
 * The automatic usage for a data object that is conditional on the `LazyData` option in the `DESCRIPTION` (see below) now correctly detects all ways to specify a true value, e.g. also `yes`, `Yes` or `True` (@jranke, #1881).
 * `@import` now inserts the directive as is into `NAMESPACE` when it contains a comma, making it possible to use other forms like `@import rlang, except = ":="`.
 * `@importFrom` now generates a single multiline `importFrom()` directive per package instead of one directive per symbol. This fixes a performance issue with `loadNamespace()` for packages that import many symbols.
-* `@inheritParams` no longer errors when a topic uses argument selection in more than one tag, e.g. `@inheritParams a x` followed by `@inheritParams b y` (#1879). If the same source is used in multiple tags, their selections are now combined instead of being ignored.
+* `@inheritParams` no longer errors when a topic uses argument selection in more than one tag, e.g. `@inheritParams a x` followed by `@inheritParams b y` (#1879). If the same source is used in multiple tags, the union of their selections is now inherited instead of the selection being ignored, so an unfiltered tag inherits every parameter.
 * `@importFrom`, `@importClassesFrom`, and `@importMethodsFrom` now accept multi-line input, restoring the ability to spread imports across multiple lines for readability; continuation lines must use a hanging indent, so the first flush or blank line ends the tag and content after it (e.g. from a forgotten `@examples`) is no longer silently absorbed into the namespace (#1890).
 
 # roxygen2 8.0.0

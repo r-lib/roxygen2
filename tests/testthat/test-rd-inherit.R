@@ -765,10 +765,13 @@ test_that("multiple @inheritParams can each filter args (#1879)", {
   expect_equal(params, c(x = "X", z = "Z"))
 })
 
-test_that("@inheritParams filters are combined for a repeated source", {
-  out <- roc_proc_text(
-    rd_roclet(),
-    "
+test_that("@inheritParams filters are unioned for a repeated source", {
+  filter <- function(...) {
+    tags <- paste0("    #' @inheritParams ", c(...), collapse = "\n")
+    out <- roc_proc_text(
+      rd_roclet(),
+      paste0(
+        "
     #' A.
     #'
     #' @param x X
@@ -778,14 +781,24 @@ test_that("@inheritParams filters are combined for a repeated source", {
 
     #' B
     #'
-    #' @inheritParams a x
-    #' @inheritParams a z
+",
+        tags,
+        "
     b <- function(x, y, z) {}
     "
-  )[[2]]
+      )
+    )[[2]]
+    out$get_value("param")
+  }
 
-  params <- out$get_value("param")
-  expect_equal(params, c(x = "X", z = "Z"))
+  expect_equal(filter("a x", "a z"), c(x = "X", z = "Z"))
+  expect_equal(filter("a x", "a -y"), c(x = "X", z = "Z"))
+  # Each tag selects independently, so the order of tags doesn't matter
+  expect_equal(filter("a -y", "a x"), c(x = "X", z = "Z"))
+  expect_equal(filter("a x", "a -x"), c(x = "X", y = "Y", z = "Z"))
+  # An unfiltered tag selects everything
+  expect_equal(filter("a x", "a"), c(x = "X", y = "Y", z = "Z"))
+  expect_equal(filter("a", "a x"), c(x = "X", y = "Y", z = "Z"))
 })
 
 test_that("@inheritParams without args still works", {

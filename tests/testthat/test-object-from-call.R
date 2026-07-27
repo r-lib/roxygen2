@@ -193,6 +193,20 @@ test_that("finds S4 generics and methods", {
     setReplaceMethod("bar", "Foo", function(x, value) {})
   })
   expect_s3_class(obj, "s4method")
+
+  obj <- call_to_object({
+    setGroupGeneric("Quux", function(e1, e2) NULL)
+  })
+  expect_s3_class(obj, "s4generic")
+})
+
+test_that("finds S4 coercion methods", {
+  obj <- call_to_object({
+    setClass("Foo", representation(x = "numeric"))
+    setAs("numeric", "Foo", function(from) new("Foo", x = from))
+  })
+  expect_s3_class(obj, "s4method")
+  expect_equal(obj$topic, "coerce,numeric,Foo-method")
 })
 
 test_that("finds correct parser even when namespaced", {
@@ -200,6 +214,12 @@ test_that("finds correct parser even when namespaced", {
     setClass("Foo")
     setGeneric("baz", function(x) standardGeneric("baz"))
     methods::setMethod('baz', 'Foo', function(x) {})
+  })
+  expect_s3_class(obj, "s4method")
+
+  obj <- call_to_object({
+    setClass("Foo", representation(x = "numeric"))
+    methods::setAs("numeric", "Foo", function(from) new("Foo", x = from))
   })
   expect_s3_class(obj, "s4method")
 })

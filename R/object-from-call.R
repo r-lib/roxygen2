@@ -30,10 +30,14 @@ object_from_call <- function(call, env, block, file) {
       "setRefClass" = parser_setRefClass(call, env, block),
       "methods::setGeneric" = ,
       "setGeneric" = parser_setGeneric(call, env, block),
+      "methods::setGroupGeneric" = ,
+      "setGroupGeneric" = parser_setGeneric(call, env, block),
       "methods::setMethod" = ,
       "setMethod" = parser_setMethod(call, env, block),
       "methods::setReplaceMethod" = ,
       "setReplaceMethod" = parser_setReplaceMethod(call, env, block),
+      "methods::setAs" = ,
+      "setAs" = parser_setAs(call, env, block),
 
       "R.methodsS3::setMethodS3" = ,
       "setMethodS3" = parser_setMethodS3(call, env, block),
@@ -204,6 +208,16 @@ parser_setMethod <- function(call, env, block) {
 parser_setReplaceMethod <- function(call, env, block) {
   name <- paste0(as.character(call$f), "<-")
   value <- methods::getMethod(name, eval(call[[3]]), where = env)
+  value@.Data <- extract_method_fun(value@.Data)
+
+  object(value, NULL, "s4method")
+}
+
+# setAs() defines a method for the coerce() generic (and, if `replace` is
+# supplied, for coerce<-(), which we don't document).
+parser_setAs <- function(call, env, block) {
+  signature <- c(eval(call$from, env), eval(call$to, env))
+  value <- methods::getMethod("coerce", signature, where = env)
   value@.Data <- extract_method_fun(value@.Data)
 
   object(value, NULL, "s4method")

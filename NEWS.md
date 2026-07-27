@@ -3,6 +3,7 @@
 * Markdown processing now handles multibyte characters inside Rd tags correctly; previously a tag like `\code{café}` would corrupt the markdown interpretation of the text that followed it.
 * Markdown warnings triggered by a `rd_family_title` prefix (e.g. for an unsupported level 1 heading) no longer error.
 * Markdown link targets and inherited Rd topics are now resolved with cached indexes provided by the new rdtools package, replacing repeated `help()` calls and roxygen2's own topic lookup and package-qualification code. This substantially speeds up packages with many cross-references, e.g. Rd generation for testthat is nearly twice as fast.
+* `setAs()` and `setGroupGeneric()` are now recognised, so they get the same automatic alias and `\usage` as `setMethod()` and `setGeneric()`, fixing the "Rd files without \usage" note from `R CMD check` (#1908).
 * S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage (#1883).
 * `Config/roxygen2/` flag fields in `DESCRIPTION` (like `markdown`) are now parsed case-insensitively, so `true` and `True` work as well as `TRUE`, and an invalid value gives a clear error (#1875).
 * `@section` titles can now contain code that includes a colon (#1878).

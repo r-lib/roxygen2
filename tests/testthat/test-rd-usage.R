@@ -286,6 +286,16 @@ test_that("default usage correct for S4 methods", {
   )
 })
 
+test_that("default usage correct for S4 coercion methods", {
+  expect_equal(
+    call_to_usage({
+      setClass("Foo", representation(x = "numeric"))
+      setAs("numeric", "Foo", function(from) new("Foo", x = from))
+    }),
+    r"(\S4method{coerce}{numeric,Foo}(from, to = "Foo", strict = TRUE))"
+  )
+})
+
 test_that("default usage correct for S4 methods with different args to generic", {
   expect_equal(
     call_to_usage({

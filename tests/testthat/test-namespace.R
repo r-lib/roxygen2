@@ -434,6 +434,231 @@ test_that("import doesn't quote if comma present", {
   expect_equal(sort(out), "import(rlang, except = ':=')")
 })
 
+test_that("@importAllFrom drops symbols excluded with a - prefix", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports -import_b
+    NULL"
+  )
+
+  expect_equal(out, "importFrom(testImports,\n  import_a,\n  import_c\n)")
+})
+
+test_that("@importAllFrom accepts several - exclusions", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports -import_b -import_c
+    NULL"
+  )
+
+  expect_equal(out, "importFrom(testImports,import_a)")
+})
+
+test_that("@importAllFrom errors on an exclusion that isn't an export", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  # `-improt_b` is a typo for `-import_b`, so it doesn't match any export.
+  block <- "
+    #' @importAllFrom testImports -improt_b
+    NULL"
+  expect_snapshot(roc_proc_text(namespace_roclet(), block), error = TRUE)
+})
+
+test_that("@importAllFrom drops a backtick-quoted non-syntactic export", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom rlang -`%||%`
+    NULL"
+  )
+
+  expect_false(any(grepl('"%||%"', out, fixed = TRUE)))
+})
+
+test_that("@importAllFrom treats a bare word as a positive selection", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports import_a import_b
+    NULL"
+  )
+
+  expect_equal(out, "importFrom(testImports,\n  import_a,\n  import_b\n)")
+})
+
+test_that("@importAllFrom errors when a positive selection isn't an export", {
+  block <- "
+    #' @importAllFrom utils stats
+    NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "Can't expand"
+  )
+})
+
+test_that("@importAllFrom errors when given no package", {
+  block <- "
+    #' @importAllFrom -head
+    NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "needs a package to import from"
+  )
+})
+
+test_that("@importAllFrom imports nothing when exclusions remove every export", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom testImports -import_a -import_b -import_c
+    NULL"
+  )
+
+  expect_equal(out, character())
+})
+
+test_that("excluding a conflicting symbol keeps the rest of @importAllFrom pinned", {
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
+  # `import_a` still conflicts with the @importFrom, since only `import_b` was
+  # excluded.
+  block <- "
+    #' @importAllFrom testImports -import_b
+    #' @importFrom anotherpkg import_a
+    NULL"
+  expect_error(roc_proc_text(namespace_roclet(), block), "conflicting import")
+
+  # Excluding the actual conflicting symbol resolves it without losing the
+  # pinning for the rest of testImports's exports.
+  block2 <- "
+    #' @importAllFrom testImports -import_a
+    #' @importFrom anotherpkg import_a
+    NULL"
+  expect_no_error(roc_proc_text(namespace_roclet(), block2))
+})
+
+test_that("@importAllFrom expands to importFrom over all exports", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @importAllFrom utils
+    NULL"
+  )
+
+  syms <- sort_c(unique(auto_quote(getNamespaceExports("utils"))))
+  expect_equal(out, format_import_from("utils", syms))
+})
+
+test_that("@importAllFrom errors when the package isn't installed", {
+  block <- "
+    #' @importAllFrom notarealpkgxyz
+    NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "must be installed"
+  )
+})
+
+test_that("expanded @importAllFrom conflicting with another package errors", {
+  imports <- list(
+    import_from("pkgA", c("foo", "bar"), expanded = TRUE),
+    import_from("pkgB", "foo")
+  )
+  expect_snapshot(check_import_conflicts(imports), error = TRUE)
+})
+
+test_that("two expanded @importAllFrom sharing a symbol errors", {
+  imports <- list(
+    import_from("pkgA", "foo", expanded = TRUE),
+    import_from("pkgB", "foo", expanded = TRUE)
+  )
+  expect_error(check_import_conflicts(imports), "conflicting import")
+})
+
+test_that("@importAllFrom conflict detection ignores overlaps without expansion", {
+  imports <- list(
+    import_from("pkgA", "foo"),
+    import_from("pkgB", "foo")
+  )
+  expect_no_error(check_import_conflicts(imports))
+})
+
+test_that("@importAllFrom conflict detection ignores same-package duplicates", {
+  imports <- list(
+    import_from("pkgA", "foo", expanded = TRUE),
+    import_from("pkgA", "foo")
+  )
+  expect_no_error(check_import_conflicts(imports))
+})
+
+test_that("@importAllFrom conflict detection normalises quoted symbols", {
+  # Expanded imports arrive unquoted from getNamespaceExports(), but an explicit
+  # @importFrom of a non-syntactic name can be quoted; they must still match.
+  imports <- list(
+    import_from("pkgA", "%||%", expanded = TRUE),
+    import_from("pkgB", "`%||%`")
+  )
+  expect_error(check_import_conflicts(imports), "conflicting import")
+})
+
+test_that("each conflicting symbol is reported with its own packages", {
+  # `foo` clashes across one pair of packages, `baz` across a disjoint pair.
+  imports <- list(
+    import_from("pkgA", "foo", expanded = TRUE),
+    import_from("pkgB", "foo"),
+    import_from("pkgC", "baz", expanded = TRUE),
+    import_from("pkgD", "baz")
+  )
+  expect_snapshot(check_import_conflicts(imports), error = TRUE)
+})
+
+test_that("expanding @importAllFrom errors on a conflict with another import", {
+  # `stats` expands to include `sd`, which also comes in via the @importFrom.
+  block <- "
+    #' @importAllFrom stats
+    #' @importFrom anotherpkg sd
+    NULL"
+  expect_error(
+    roc_proc_text(namespace_roclet(), block),
+    "conflicting import"
+  )
+})
+
+test_that("expanding @importAllFrom doesn't conflict on re-exports", {
+  skip_if_not_installed("purrr")
+
+  # `rlang` and `purrr` both re-export the identical `is_logical`, so importing
+  # it from purrr alongside the expanded rlang import is not a real conflict.
+  block <- "
+    #' @importAllFrom rlang
+    #' @importFrom purrr is_logical
+    NULL"
+  expect_no_error(roc_proc_text(namespace_roclet(), block))
+})
+
+test_that("is_reexport compares the exported objects", {
+  # Same object from each package (here trivially, the same package twice).
+  expect_true(is_reexport("abort", c("rlang", "rlang")))
+  # Can't read a package's value, so we can't prove the objects match.
+  expect_false(is_reexport("abort", c("rlang", "anotherpkg")))
+})
+
 test_that("useDynLib imports only selected functions", {
   out <- roc_proc_text(
     namespace_roclet(),
@@ -513,6 +738,10 @@ test_that("rawNamespace inserted unchanged", {
 })
 
 test_that("rawNamespace does not break idempotency", {
+  # `@importAllFrom testImports` expands using this package's fixed exports.
+  pkgload::load_all(test_path("testImports"), quiet = TRUE)
+  withr::defer(pkgload::unload("testImports"))
+
   test_pkg <- local_package_copy(test_path("testRawNamespace"))
   NAMESPACE <- file.path(test_pkg, "NAMESPACE")
 

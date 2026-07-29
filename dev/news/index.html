@@ -69,26 +69,34 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="roxygen2-development-version">roxygen2 (development version)<a class="anchor" aria-label="anchor" href="#roxygen2-development-version"></a></h2>
+<ul><li>Markdown support:
+<ul><li>Multibyte characters inside Rd tags are now handled correctly; previously a tag like <code>\code{café}</code> would corrupt the markdown processing of the text that followed it.</li>
+<li>Warnings triggered by an <code>rd_family_title</code> prefix (e.g. for an unsupported level 1 heading) no longer error.</li>
+<li>Link targets and inherited Rd topics are now resolved with cached indexes provided by the new rdtools package, replacing repeated <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code> calls and roxygen2’s own topic lookup and package-qualification code. This substantially speeds up documenting packages with many cross-references, e.g. Rd generation for testthat is nearly twice as fast.</li>
+</ul></li>
+<li>
+<code>DESCRIPTION</code>:
 <ul><li>The migration from <code>RoxygenNote</code> to <code>Config/roxygen2/version</code> now happens whenever it’s needed, not just when the roxygen2 version has changed. This fixes two cases where the deprecated <code>RoxygenNote</code> field was left in <code>DESCRIPTION</code> forever: when a collaborator using roxygen2 7.x re-added it after the package had already been migrated, and when its value happened to match the installed version (<a href="https://github.com/r-lib/roxygen2/issues/1876" class="external-link">#1876</a>).</li>
-<li>Markdown processing now handles multibyte characters inside Rd tags correctly; previously a tag like <code>\code{café}</code> would corrupt the markdown interpretation of the text that followed it.</li>
-<li>Markdown warnings triggered by a <code>rd_family_title</code> prefix (e.g. for an unsupported level 1 heading) no longer error.</li>
-<li>Markdown link targets and inherited Rd topics are now resolved with cached indexes provided by the new rdtools package, replacing repeated <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code> calls and roxygen2’s own topic lookup and package-qualification code. This substantially speeds up packages with many cross-references, e.g. Rd generation for testthat is nearly twice as fast.</li>
 <li>
-<code>setAs()</code> and <code>setGroupGeneric()</code> are now recognised, so they get the same automatic alias and <code>\usage</code> as <code>setMethod()</code> and <code>setGeneric()</code>, fixing the “Rd files without ” note from <code>R CMD check</code> (<a href="https://github.com/r-lib/roxygen2/issues/1908" class="external-link">#1908</a>).</li>
-<li>S7 methods for <code>[</code>, <code>[[</code>, <code>[&lt;-</code>, and <code>[[&lt;-</code> now generate valid usage (<a href="https://github.com/r-lib/roxygen2/issues/1883" class="external-link">#1883</a>).</li>
+<code>Config/roxygen2/</code> flag fields (like <code>markdown</code>) are now parsed case-insensitively, so <code>true</code> and <code>True</code> work as well as <code>TRUE</code>, and an invalid value gives a clear error (<a href="https://github.com/r-lib/roxygen2/issues/1875" class="external-link">#1875</a>).</li>
+<li>The automatic usage for a data object now recognises all the ways of setting <code>LazyData</code> to true, e.g. <code>yes</code>, <code>Yes</code>, and <code>True</code> (<a href="https://github.com/jranke" class="external-link">@jranke</a>, <a href="https://github.com/r-lib/roxygen2/issues/1881" class="external-link">#1881</a>).</li>
+</ul></li>
 <li>
-<code>Config/roxygen2/</code> flag fields in <code>DESCRIPTION</code> (like <code>markdown</code>) are now parsed case-insensitively, so <code>true</code> and <code>True</code> work as well as <code>TRUE</code>, and an invalid value gives a clear error (<a href="https://github.com/r-lib/roxygen2/issues/1875" class="external-link">#1875</a>).</li>
+<code>NAMESPACE</code>:
+<ul><li>
+<code>@import</code> now inserts the directive as is when it contains a comma, making it possible to use other forms like <code>@import rlang, except = ":="</code>.</li>
+<li>
+<code>@importFrom</code> now generates a single multi-line <code>importFrom()</code> directive per package instead of one directive per symbol. This fixes a performance issue with <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">loadNamespace()</a></code> for packages that import many symbols.</li>
+<li>
+<code>@importFrom</code>, <code>@importClassesFrom</code>, and <code>@importMethodsFrom</code> now accept multi-line input, restoring the ability to spread imports across multiple lines for readability. Continuation lines must use a hanging indent, so the tag ends at the first unindented or blank line, and content after it (e.g. from a forgotten <code>@examples</code>) is no longer silently absorbed into the namespace (<a href="https://github.com/r-lib/roxygen2/issues/1890" class="external-link">#1890</a>).</li>
+</ul></li>
+<li>
+<code>@inheritParams</code> no longer errors when a topic uses argument selection in more than one tag, e.g. <code>@inheritParams a x</code> followed by <code>@inheritParams b y</code> (<a href="https://github.com/r-lib/roxygen2/issues/1879" class="external-link">#1879</a>). If the same source is used in multiple tags, the union of their selections is now inherited, rather than the selections being ignored, so an unfiltered tag inherits every parameter.</li>
 <li>
 <code>@section</code> titles can now contain code that includes a colon (<a href="https://github.com/r-lib/roxygen2/issues/1878" class="external-link">#1878</a>).</li>
-<li>The automatic usage for a data object that is conditional on the <code>LazyData</code> option in the <code>DESCRIPTION</code> (see below) now correctly detects all ways to specify a true value, e.g. also <code>yes</code>, <code>Yes</code> or <code>True</code> (<a href="https://github.com/jranke" class="external-link">@jranke</a>, <a href="https://github.com/r-lib/roxygen2/issues/1881" class="external-link">#1881</a>).</li>
+<li>S7 methods for <code>[</code>, <code>[[</code>, <code>[&lt;-</code>, and <code>[[&lt;-</code> now generate valid usage (<a href="https://github.com/r-lib/roxygen2/issues/1883" class="external-link">#1883</a>).</li>
 <li>
-<code>@import</code> now inserts the directive as is into <code>NAMESPACE</code> when it contains a comma, making it possible to use other forms like <code>@import rlang, except = ":="</code>.</li>
-<li>
-<code>@importFrom</code> now generates a single multiline <code>importFrom()</code> directive per package instead of one directive per symbol. This fixes a performance issue with <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">loadNamespace()</a></code> for packages that import many symbols.</li>
-<li>
-<code>@inheritParams</code> no longer errors when a topic uses argument selection in more than one tag, e.g. <code>@inheritParams a x</code> followed by <code>@inheritParams b y</code> (<a href="https://github.com/r-lib/roxygen2/issues/1879" class="external-link">#1879</a>). If the same source is used in multiple tags, the union of their selections is now inherited instead of the selection being ignored, so an unfiltered tag inherits every parameter.</li>
-<li>
-<code>@importFrom</code>, <code>@importClassesFrom</code>, and <code>@importMethodsFrom</code> now accept multi-line input, restoring the ability to spread imports across multiple lines for readability; continuation lines must use a hanging indent, so the first flush or blank line ends the tag and content after it (e.g. from a forgotten <code>@examples</code>) is no longer silently absorbed into the namespace (<a href="https://github.com/r-lib/roxygen2/issues/1890" class="external-link">#1890</a>).</li>
+<code>setAs()</code> and <code>setGroupGeneric()</code> are now recognised, so they get the same automatic alias and <code>\usage</code> as <code>setMethod()</code> and <code>setGeneric()</code>, fixing the “Rd files without ” note from <code>R CMD check</code> (<a href="https://github.com/r-lib/roxygen2/issues/1908" class="external-link">#1908</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.0.0" id="roxygen2-800">roxygen2 8.0.0<a class="anchor" aria-label="anchor" href="#roxygen2-800"></a></h2><p class="text-muted">CRAN release: 2026-05-01</p>

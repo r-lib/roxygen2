@@ -23,7 +23,7 @@
 #' collation order.
 #'
 #' `update_collate()` is not not technically a [roclet], like [rd_roclet()]
-#' and [namespace_roclet()], because you have to be able to load the pacakge
+#' and [namespace_roclet()], because you have to be able to load the package
 #' before you can process it with roclets. However, because it was historical
 #' implemented as a roclet, it's still controlled by the `roclets` argument of
 #' [roxygenize()].

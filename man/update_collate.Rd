@@ -32,7 +32,7 @@ run automatically by any package that needs to load your R files in
 collation order.
 
 \code{update_collate()} is not not technically a \link{roclet}, like \code{\link[=rd_roclet]{rd_roclet()}}
-and \code{\link[=namespace_roclet]{namespace_roclet()}}, because you have to be able to load the pacakge
+and \code{\link[=namespace_roclet]{namespace_roclet()}}, because you have to be able to load the package
 before you can process it with roclets. However, because it was historical
 implemented as a roclet, it's still controlled by the \code{roclets} argument of
 \code{\link[=roxygenize]{roxygenize()}}.

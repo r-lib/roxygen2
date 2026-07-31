@@ -24,7 +24,7 @@ collation order.
 [`rd_roclet()`](https://roxygen2.r-lib.org/dev/reference/rd_roclet.md)
 and
 [`namespace_roclet()`](https://roxygen2.r-lib.org/dev/reference/namespace_roclet.md),
-because you have to be able to load the pacakge before you can process
+because you have to be able to load the package before you can process
 it with roclets. However, because it was historical implemented as a
 roclet, it's still controlled by the `roclets` argument of
 [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md).

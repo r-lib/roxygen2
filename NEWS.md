@@ -1,5 +1,15 @@
 # roxygen2 (development version)
 
+* R6 classes: a deep chain of R6 inheritance could produce Rd files that grow
+  with the total number of inherited methods across every ancestor, since
+  each subclass's page mixed every ancestor's methods into one flat list.
+  This is now controlled by the new `r6_inherited_documentation_display`
+  option, with three settings: `"grouped"` (the new default) collapses
+  inherited methods into one subsection per ancestor class, each starting
+  collapsed behind a disclosure triangle; `"single"` collapses all of it
+  into a single fixed-size pointer to the immediate parent class,
+  regardless of inheritance depth or method count; `"original"` restores
+  the previous flat-list rendering exactly.
 * Markdown support:
   * Multibyte characters inside Rd tags are now handled correctly; previously a tag like `\code{café}` would corrupt the markdown processing of the text that followed it.
   * Warnings triggered by an `rd_family_title` prefix (e.g. for an unsupported level 1 heading) no longer error.

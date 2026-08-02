@@ -208,7 +208,7 @@
           \item \href{#method-B-clone}{\code{B$clone()}}
         }
       }
-      \if{html}{\out{<details open><summary>Inherited methods</summary>
+      \if{html}{\out{<details><summary>+ inherited public methods from A</summary>
       <ul>
         <li><code>A$meth2()</code></li>
         <li><code>A$meth3()</code></li>
@@ -312,11 +312,15 @@
           \item \href{#method-C-meth5}{\code{C$meth5()}}
         }
       }
-      \if{html}{\out{<details open><summary>Inherited methods</summary>
+      \if{html}{\out{<details><summary>+ inherited public methods from B</summary>
       <ul>
-        <li><code>A$meth3()</code></li>
         <li><code>B$meth1()</code></li>
         <li><code>B$meth4()</code></li>
+      </ul>
+      </details>
+      <details><summary>+ inherited public methods from A</summary>
+      <ul>
+        <li><code>A$meth3()</code></li>
       </ul>
       </details>}}
       \if{html}{\out{<hr>}}

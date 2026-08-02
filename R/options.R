@@ -22,6 +22,20 @@
 #'
 #' * `r6` `<flag>`: document R6 classes?
 #'
+#' * `r6_inherited_documentation_display` `<string>`: how to render an R6
+#'   class's inherited public methods. One of:
+#'   * `"grouped"` (the default): one collapsed subsection per ancestor
+#'     class that actually contributed an inherited method ("+ inherited
+#'     public methods from `<ancestor>`"), nearest ancestor first, each
+#'     listing its own methods as a linked bullet list.
+#'   * `"single"`: a single fixed-size pointer to the immediate parent
+#'     class only ("+ inherited public methods from `<parent>`."),
+#'     regardless of how many methods are inherited or how deep the
+#'     inheritance chain is. The most compact option.
+#'   * `"original"`: the pre-8.1.0 rendering -- a single flat list mixing
+#'     every ancestor's methods together, auto-expanded when there are 5
+#'     or fewer. The most bloated option.
+#'
 #' * `current_package` `<string>` (read only): name of package being documented.
 #'
 #' * `rd_family_title` `<list>`: overrides for `@family` titles. See the
@@ -68,6 +82,7 @@ load_options <- function(base_path = ".") {
     old_usage = FALSE,
     markdown = FALSE,
     r6 = TRUE,
+    r6_inherited_documentation_display = "grouped",
     current_package = NA_character_,
     current_package_dir = NA_character_,
     rd_family_title = list(),
@@ -112,6 +127,7 @@ config_fields <- c(
   "load",
   "old_usage",
   "r6",
+  "r6_inherited_documentation_display",
   "restrict_image_formats",
   "packages",
   "roclets"

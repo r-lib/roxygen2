@@ -76,7 +76,7 @@
           \item \href{#method-B-clone}{\code{B$clone()}}
         }
       }
-      \if{html}{\out{<details open><summary>Inherited methods</summary>
+      \if{html}{\out{<details><summary>+ inherited public methods from R_GlobalEnv::A</summary>
       <ul>
         <li><code>R_GlobalEnv::A$only_a()</code></li>
       </ul>

@@ -2,6 +2,8 @@
 
 ## roxygen2 (development version)
 
+## roxygen2 8.1.0
+
 - Markdown support:
   - Multibyte characters inside Rd tags are now handled correctly;
     previously a tag like `\code{café}` would corrupt the markdown

@@ -114,7 +114,7 @@ bizarro.character <- function(x, ...) {
 }
 ```
 
-If you are exporting a method in some other way, you can use
+If you are registering a method in some other way, you can use
 `@exportS3Method NULL` to suppress the warning.
 
 It’s good practice to document methods that have unique behavior or

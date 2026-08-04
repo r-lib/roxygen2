@@ -1,5 +1,67 @@
 # Changelog
 
+## roxygen2 8.1.0
+
+- Markdown support:
+  - Multibyte characters inside Rd tags are now handled correctly;
+    previously a tag like `\code{café}` would corrupt the markdown
+    processing of the text that followed it.
+  - Warnings triggered by an `rd_family_title` prefix (e.g. for an
+    unsupported level 1 heading) no longer error.
+  - Link targets and inherited Rd topics are now resolved with cached
+    indexes provided by the new rdtools package, replacing repeated
+    [`help()`](https://rdrr.io/r/utils/help.html) calls and roxygen2’s
+    own topic lookup and package-qualification code. This substantially
+    speeds up documenting packages with many cross-references, e.g. Rd
+    generation for testthat is nearly twice as fast.
+- `DESCRIPTION`:
+  - The migration from `RoxygenNote` to `Config/roxygen2/version` now
+    happens whenever it’s needed, not just when the roxygen2 version has
+    changed. This fixes two cases where the deprecated `RoxygenNote`
+    field was left in `DESCRIPTION` forever: when a collaborator using
+    roxygen2 7.x re-added it after the package had already been
+    migrated, and when its value happened to match the installed version
+    ([\#1876](https://github.com/r-lib/roxygen2/issues/1876)).
+  - `Config/roxygen2/` flag fields (like `markdown`) are now parsed
+    case-insensitively, so `true` and `True` work as well as `TRUE`, and
+    an invalid value gives a clear error
+    ([\#1875](https://github.com/r-lib/roxygen2/issues/1875)).
+  - The automatic usage for a data object now recognises all the ways of
+    setting `LazyData` to true, e.g. `yes`, `Yes`, and `True`
+    ([@jranke](https://github.com/jranke),
+    [\#1881](https://github.com/r-lib/roxygen2/issues/1881)).
+- `NAMESPACE`:
+  - `@import` now inserts the directive as is when it contains a comma,
+    making it possible to use other forms like
+    `@import rlang, except = ":="`.
+  - `@importFrom` now generates a single multi-line `importFrom()`
+    directive per package instead of one directive per symbol. This
+    fixes a performance issue with
+    [`loadNamespace()`](https://rdrr.io/r/base/ns-load.html) for
+    packages that import many symbols.
+  - `@importFrom`, `@importClassesFrom`, and `@importMethodsFrom` now
+    accept multi-line input, restoring the ability to spread imports
+    across multiple lines for readability. Continuation lines must use a
+    hanging indent, so the tag ends at the first unindented or blank
+    line, and content after it (e.g. from a forgotten `@examples`) is no
+    longer silently absorbed into the namespace
+    ([\#1890](https://github.com/r-lib/roxygen2/issues/1890)).
+- `@inheritParams` no longer errors when a topic uses argument selection
+  in more than one tag, e.g. `@inheritParams a x` followed by
+  `@inheritParams b y`
+  ([\#1879](https://github.com/r-lib/roxygen2/issues/1879)). If the same
+  source is used in multiple tags, the union of their selections is now
+  inherited, rather than the selections being ignored, so an unfiltered
+  tag inherits every parameter.
+- `@section` titles can now contain code that includes a colon
+  ([\#1878](https://github.com/r-lib/roxygen2/issues/1878)).
+- S7 methods for `[`, `[[`, `[<-`, and `[[<-` now generate valid usage
+  ([\#1883](https://github.com/r-lib/roxygen2/issues/1883)).
+- `setAs()` and `setGroupGeneric()` are now recognised, so they get the
+  same automatic alias and `\usage` as `setMethod()` and `setGeneric()`,
+  fixing the “Rd files without ” note from `R CMD check`
+  ([\#1908](https://github.com/r-lib/roxygen2/issues/1908)).
+
 ## roxygen2 8.0.0
 
 CRAN release: 2026-05-01

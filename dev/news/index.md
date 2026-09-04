@@ -4,6 +4,8 @@
 
 ## roxygen2 8.1.0
 
+CRAN release: 2026-08-04
+
 - Markdown support:
   - Multibyte characters inside Rd tags are now handled correctly;
     previously a tag like `\code{café}` would corrupt the markdown

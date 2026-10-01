@@ -571,7 +571,8 @@ get_rd <- function(name, topics, source, tag = "@inherits") {
   if (is_namespaced(name)) {
     # External package
     parsed <- rdtools::topic_split(name)
-    get_rd_from_help(parsed$package, parsed$topic, source, tag = tag)
+    topic <- as.character(parse_expr(parsed$topic))
+    get_rd_from_help(parsed$package, topic, source, tag = tag)
   } else {
     # Current package
     rd_name <- topics$find_filename(name)

@@ -172,6 +172,19 @@ test_that("can inherit return value from external function", {
   expect_match(out$get_value("value"), "^If \\\\code")
 })
 
+test_that("can inherit from external topic with backticked name", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A1
+    #' @inherit base::`+` description
+    a1 <- function(x) {}
+  "
+  )[[1]]
+
+  expect_match(out$get_value("description"), "arithmetic")
+})
+
 
 # Inherit seealso ---------------------------------------------------------
 

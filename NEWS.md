@@ -1,6 +1,7 @@
 # roxygen2 (development version)
 
 * `@inherit` and friends once again find external topics whose name needs backticks, like ``pkg::`foo-class` `` (#1918).
+* `@inherit foo returns` now inherits the return value, like `@inherit foo return`, instead of warning about an unknown type (#1919).
 
 # roxygen2 8.1.0
 

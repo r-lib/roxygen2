@@ -109,6 +109,37 @@ test_that("some options overrides defaults", {
   expect_equal(block_get_tag_value(block, "inherit")$fields, "return")
 })
 
+test_that("returns is accepted as an alias for return", {
+  expect_no_warning(
+    block <- parse_text(
+      "
+      #' @inherit fun returns seealso
+      NULL
+    "
+    )[[1]]
+  )
+  expect_equal(
+    block_get_tag_value(block, "inherit")$fields,
+    c("return", "seealso")
+  )
+
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A.
+    #'
+    #' @return ABC
+    a <- function(x) {}
+
+    #' B
+    #'
+    #' @inherit a returns
+    b <- function(y) {}
+  "
+  )[[2]]
+  expect_equal(out$get_value("value"), "ABC")
+})
+
 
 # Inherit return values ---------------------------------------------------
 

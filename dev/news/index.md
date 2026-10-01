@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- `@inherit` and friends once again find external topics whose name
+  needs backticks, like `` pkg::`foo-class` ``
+  ([\#1918](https://github.com/r-lib/roxygen2/issues/1918)).
+
 ## roxygen2 8.1.0
 
 CRAN release: 2026-08-04

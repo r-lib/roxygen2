@@ -288,6 +288,19 @@ test_that("ns_format merges importFrom directives per package", {
   )
 })
 
+test_that("ns_format double-quotes non-syntactic importFrom names", {
+  # Base R only strips backticks from the first name in an importFrom()
+  # directive, so non-syntactic names must be double-quoted (#1915)
+  expect_equal(
+    ns_format(list(import_from("pkg", c("`foo<-`", "bar")))),
+    'importFrom(pkg,\n  "foo<-",\n  bar\n)'
+  )
+  expect_equal(
+    ns_format(list(import_from("pkg", "`foo<-`"))),
+    'importFrom(pkg,"foo<-")'
+  )
+})
+
 test_that("ns_format keeps a single-symbol importFrom inline", {
   expect_equal(
     ns_format(list(import_from("stats", "median"))),
@@ -692,10 +705,8 @@ test_that("non-syntactic imports can use multiple quoting forms", {
   )
 
   import <- expect_no_warning(roc_proc_text(namespace_roclet(), lines))
-  expect_equal(
-    import,
-    "importFrom(stringr,\n  \"%>%\",\n  '%>%',\n  `%>%`\n)"
-  )
+  # All quoting forms are normalised to double quotes (#1915)
+  expect_equal(import, "importFrom(stringr,\"%>%\")")
 })
 
 # warn_missing_s3_exports -------------------------------------------------

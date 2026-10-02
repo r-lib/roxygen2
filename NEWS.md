@@ -1,6 +1,7 @@
 # roxygen2 (development version)
 
 * roxygen2 now recognises the walrus operator `:=` as assignment, so S7 code like `Foo := new_class()` is documented the same as `Foo <- new_class()` (#1916).
+* `@importFrom` now double-quotes non-syntactic names (like `` `model<-` ``) in the combined `importFrom()` directive, working around a base R bug that only strips backticks from the first name in a directive and broke installation of packages that re-export such functions (#1915).
 * `@inherit` and friends once again find external topics whose name needs backticks, like ``pkg::`foo-class` `` (@taekop, #1918).
 * `@inherit foo returns` now inherits the return value, like `@inherit foo return`, instead of warning about an unknown type (@taekop, #1919).
 

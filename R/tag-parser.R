@@ -77,6 +77,7 @@ tag_inherit <- function(x) {
   } else {
     pieces <- strsplit(trimws(x$raw), "\\s+")[[1]]
     fields <- pieces[-1]
+    fields[fields == "returns"] <- "return"
 
     all <- inherit_components
     if (length(fields) == 0) {

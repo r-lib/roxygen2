@@ -182,7 +182,10 @@ merge_import_from <- function(imports) {
   )
   map_chr(names(funs), function(package) {
     funs <- unlist(funs[[package]], use.names = FALSE)
-    funs <- sort_c(unique(auto_quote(funs)))
+    # Normalise to double quotes: due to a base R bug, backticked names are
+    # only parsed correctly in the first position of an importFrom()
+    # directive, while double-quoted names work in any position (#1915)
+    funs <- sort_c(unique(auto_quote(strip_quotes(funs))))
     format_import_from(package, funs)
   })
 }

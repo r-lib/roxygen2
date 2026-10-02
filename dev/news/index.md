@@ -4,7 +4,12 @@
 
 - `@inherit` and friends once again find external topics whose name
   needs backticks, like `` pkg::`foo-class` ``
-  ([\#1918](https://github.com/r-lib/roxygen2/issues/1918)).
+  ([@taekop](https://github.com/taekop),
+  [\#1918](https://github.com/r-lib/roxygen2/issues/1918)).
+- `@inherit foo returns` now inherits the return value, like
+  `@inherit foo return`, instead of warning about an unknown type
+  ([@taekop](https://github.com/taekop),
+  [\#1919](https://github.com/r-lib/roxygen2/issues/1919)).
 
 ## roxygen2 8.1.0
 

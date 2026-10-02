@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- roxygen2 now recognises the walrus operator `:=` as assignment, so S7
+  code like `Foo := new_class()` is documented the same as
+  `Foo <- new_class()`
+  ([\#1916](https://github.com/r-lib/roxygen2/issues/1916)).
 - `@inherit` and friends once again find external topics whose name
   needs backticks, like `` pkg::`foo-class` ``
   ([@taekop](https://github.com/taekop),

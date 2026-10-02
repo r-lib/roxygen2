@@ -6,6 +6,11 @@
   code like `Foo := new_class()` is documented the same as
   `Foo <- new_class()`
   ([\#1916](https://github.com/r-lib/roxygen2/issues/1916)).
+- `@importFrom` now double-quotes non-syntactic names (like
+  `` `model<-` ``) in the combined `importFrom()` directive, working
+  around a base R bug that only strips backticks from the first name in
+  a directive and broke installation of packages that re-export such
+  functions ([\#1915](https://github.com/r-lib/roxygen2/issues/1915)).
 - `@inherit` and friends once again find external topics whose name
   needs backticks, like `` pkg::`foo-class` ``
   ([@taekop](https://github.com/taekop),

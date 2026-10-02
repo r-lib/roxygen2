@@ -70,6 +70,17 @@ test_that("finds function created with assignment", {
   expect_s3_class(obj, "function")
 })
 
+test_that("finds function created with walrus assignment", {
+  obj <- call_to_object({
+    `:=` <- function(x, y) {
+      assign(deparse(substitute(x)), y, envir = parent.frame())
+    }
+    foo := function(x, y, z) {}
+  })
+  expect_s3_class(obj, "function")
+  expect_equal(obj$alias, "foo")
+})
+
 test_that("finds S3 generic created with assignment", {
   obj <- call_to_object({
     foo <- function(x, y, z) UseMethod("foo")

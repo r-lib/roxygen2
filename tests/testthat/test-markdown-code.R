@@ -152,6 +152,9 @@ test_that("multi-line inline code gives useful warning", {
 })
 
 test_that("inline code gives useful warning", {
+  # knitr 1.50 changed the format of its "Quitting from" message
+  skip_if_not_installed("knitr", "1.50")
+
   block <- "
     #' Title
     #'

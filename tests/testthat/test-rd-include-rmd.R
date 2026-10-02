@@ -325,6 +325,8 @@ test_that("order of sections is correct", {
 })
 
 test_that("useful warnings", {
+  # knitr 1.50 changed the format of its "Quitting from" message
+  skip_if_not_installed("knitr", "1.50")
   skip_if_not(rmarkdown::pandoc_available("2.17"))
 
   block <- "

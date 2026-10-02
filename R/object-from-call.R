@@ -18,7 +18,8 @@ object_from_call <- function(call, env, block, file) {
       name,
       "=" = ,
       "<-" = ,
-      "<<-" = parser_assignment(call, env, block),
+      "<<-" = ,
+      ":=" = parser_assignment(call, env, block),
       "delayedAssign" = parser_delayedAssign(call, env, block),
       "::" = parser_import(call, env, block),
 

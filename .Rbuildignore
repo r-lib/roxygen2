@@ -27,3 +27,4 @@
 ^\.vscode$
 ^panache\.toml$
 ^\.panache-cache$
+^AGENTS\.md$

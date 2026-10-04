@@ -19,6 +19,10 @@
   `@inherit foo return`, instead of warning about an unknown type
   ([@taekop](https://github.com/taekop),
   [\#1919](https://github.com/r-lib/roxygen2/issues/1919)).
+- `@inheritParams` with an argument filter (e.g. `@inheritParams foo z`)
+  no longer fails when the source topic documents multiple arguments
+  with a shared description (e.g. `@param x,y x and y`)
+  ([\#1925](https://github.com/r-lib/roxygen2/issues/1925)).
 
 ## roxygen2 8.1.0
 

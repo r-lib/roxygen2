@@ -215,7 +215,7 @@ inherit_params <- function(topic, topics) {
     # Each tag selects independently; a source used in multiple tags inherits
     # the union of their selections, so an unfiltered tag inherits everything.
     if (length(args_filters) > 0 && all(nzchar(args_filters))) {
-      doc_args <- map_chr(inherited_params, "[[", "name")
+      doc_args <- unlist(lapply(inherited_params, `[[`, "name"))
       selected <- unlist(lapply(args_filters, function(args_filter) {
         select_args_text(doc_args, args_filter, topic_name = source)
       }))

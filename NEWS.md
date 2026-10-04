@@ -4,6 +4,7 @@
 * `@importFrom` now double-quotes non-syntactic names (like `` `model<-` ``) in the combined `importFrom()` directive, working around a base R bug that only strips backticks from the first name in a directive and broke installation of packages that re-export such functions (#1915).
 * `@inherit` and friends once again find external topics whose name needs backticks, like ``pkg::`foo-class` `` (@taekop, #1918).
 * `@inherit foo returns` now inherits the return value, like `@inherit foo return`, instead of warning about an unknown type (@taekop, #1919).
+* `@inheritParams` with an argument filter (e.g. `@inheritParams foo z`) no longer fails when the source topic documents multiple arguments with a shared description (e.g. `@param x,y x and y`) (#1925).
 
 # roxygen2 8.1.0
 

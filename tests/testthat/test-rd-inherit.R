@@ -744,6 +744,27 @@ test_that("@inheritParams can include specific args", {
   expect_equal(params, c(x = "X", z = "Z"))
 })
 
+test_that("@inheritParams filtering works with shared param docs (#1925)", {
+  out <- roc_proc_text(
+    rd_roclet(),
+    "
+    #' A.
+    #'
+    #' @param x X
+    #' @param y,z Y and Z
+    a <- function(x, y, z) {}
+
+    #' B
+    #'
+    #' @inheritParams a x
+    b <- function(x) {}
+    "
+  )[[2]]
+
+  params <- out$get_value("param")
+  expect_equal(params, c(x = "X"))
+})
+
 test_that("@inheritParams can exclude specific args", {
   out <- roc_proc_text(
     rd_roclet(),

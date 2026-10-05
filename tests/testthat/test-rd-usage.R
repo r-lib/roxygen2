@@ -521,7 +521,7 @@ test_that("S7 method usage includes comment", {
       speak <- S7::new_generic("speak", "x")
       S7::method(speak, Dog) <- function(x) "Woof"
     }),
-    "## S7 method for class <Dog>\nspeak(x)"
+    "## S7 method for class <Dog>\n\\special{speak(x)}"
   )
 })
 
@@ -534,7 +534,7 @@ test_that("S7 multi-dispatch method usage includes all classes", {
       greet <- S7::new_generic("greet", c("x", "y"))
       S7::method(greet, list(Dog, Cat)) <- function(x, y) "hi"
     }),
-    "## S7 method for classes <Dog>, <Cat>\ngreet(x, y)"
+    "## S7 method for classes <Dog>, <Cat>\n\\special{greet(x, y)}"
   )
 })
 
@@ -548,7 +548,7 @@ test_that("S7 union method usage shows member classes", {
       speak <- S7::new_generic("speak", "x")
       S7::method(speak, Pet) <- function(x) "hi"
     }),
-    "## S7 method for class <Dog>/<Cat>\nspeak(x)"
+    "## S7 method for class <Dog>/<Cat>\n\\special{speak(x)}"
   )
 })
 
@@ -560,7 +560,7 @@ test_that("S7 bracket methods use subsetting syntax", {
       `[` <- S7::new_generic("[", "x")
       S7::method(`[`, Vec) <- function(x, i, ...) x
     }),
-    "## S7 method for class <Vec>\nx[i, ...]"
+    "## S7 method for class <Vec>\n\\special{x[i, ...]}"
   )
   expect_equal(
     call_to_usage({
@@ -568,7 +568,7 @@ test_that("S7 bracket methods use subsetting syntax", {
       `[<-` <- S7::new_generic("[<-", "x")
       S7::method(`[<-`, Vec) <- function(x, i, ..., value) x
     }),
-    "## S7 method for class <Vec>\nx[i, ...] <- value"
+    "## S7 method for class <Vec>\n\\special{x[i, ...] <- value}"
   )
   expect_equal(
     call_to_usage({
@@ -576,7 +576,7 @@ test_that("S7 bracket methods use subsetting syntax", {
       `[[` <- S7::new_generic("[[", "x")
       S7::method(`[[`, Vec) <- function(x, i) x
     }),
-    "## S7 method for class <Vec>\nx[[i]]"
+    "## S7 method for class <Vec>\n\\special{x[[i]]}"
   )
   expect_equal(
     call_to_usage({
@@ -584,7 +584,7 @@ test_that("S7 bracket methods use subsetting syntax", {
       `[[<-` <- S7::new_generic("[[<-", "x")
       S7::method(`[[<-`, Vec) <- function(x, i, value) x
     }),
-    "## S7 method for class <Vec>\nx[[i]] <- value"
+    "## S7 method for class <Vec>\n\\special{x[[i]] <- value}"
   )
 })
 

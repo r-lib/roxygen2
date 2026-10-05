@@ -96,8 +96,11 @@ object_usage.s7method <- function(x) {
     )
   }
 
+  # Wrap in \special{} because R CMD check can't (yet) find S7 methods, so
+  # codoc() would otherwise compare this usage against the generic.
+  # https://github.com/RConsortium/S7/issues/725
   usage <- function_usage(generic, formals(x$value$fn), identity)
-  rd(paste0(comment, "\n", usage))
+  rd(paste0(comment, "\n\\special{", usage, "}"))
 }
 
 # Function usage ----------------------------------------------------------

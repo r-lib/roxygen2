@@ -6,6 +6,9 @@
   code like `Foo := new_class()` is documented the same as
   `Foo <- new_class()`
   ([\#1916](https://github.com/r-lib/roxygen2/issues/1916)).
+- S7 method usage is now wrapped in `\special{}`, so documenting methods
+  with extra arguments no longer triggers “codoc mismatches” in
+  `R CMD check` (RConsortium/S7#725).
 - `@importFrom` now double-quotes non-syntactic names (like
   `` `model<-` ``) in the combined `importFrom()` directive, working
   around a base R bug that only strips backticks from the first name in

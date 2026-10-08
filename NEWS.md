@@ -1,4 +1,4 @@
-# roxygen2 (development version)
+# roxygen2 8.1.1
 
 * roxygen2 now recognises the walrus operator `:=` as assignment, so S7 code like `Foo := new_class()` is documented the same as `Foo <- new_class()` (#1916).
 * S7 method usage is now wrapped in `\special{}`, so documenting methods with extra arguments no longer triggers "codoc mismatches" in `R CMD check` (RConsortium/S7#725).

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">roxygen2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">8.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">8.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="8.1.0" id="roxygen2-810">roxygen2 8.1.0<a class="anchor" aria-label="anchor" href="#roxygen2-810"></a></h2>
+<h2 class="pkg-version" data-toc-text="8.1.1" id="roxygen2-811">roxygen2 8.1.1<a class="anchor" aria-label="anchor" href="#roxygen2-811"></a></h2><p class="text-muted">CRAN release: 2026-10-08</p>
+<ul><li>roxygen2 now recognises the walrus operator <code>:=</code> as assignment, so S7 code like <code>Foo := new_class()</code> is documented the same as <code>Foo &lt;- new_class()</code> (<a href="https://github.com/r-lib/roxygen2/issues/1916" class="external-link">#1916</a>).</li>
+<li>S7 method usage is now wrapped in <code>\special{}</code>, so documenting methods with extra arguments no longer triggers “codoc mismatches” in <code>R CMD check</code> (RConsortium/S7#725).</li>
+<li>
+<code>@importFrom</code> now double-quotes non-syntactic names (like <code>`model&lt;-`</code>) in the combined <code>importFrom()</code> directive, working around a base R bug that only strips backticks from the first name in a directive and broke installation of packages that re-export such functions (<a href="https://github.com/r-lib/roxygen2/issues/1915" class="external-link">#1915</a>).</li>
+<li>
+<code>@inherit</code> and friends once again find external topics whose name needs backticks, like <code>pkg::`foo-class`</code> (<a href="https://github.com/taekop" class="external-link">@taekop</a>, <a href="https://github.com/r-lib/roxygen2/issues/1918" class="external-link">#1918</a>).</li>
+<li>
+<code>@inherit foo returns</code> now inherits the return value, like <code>@inherit foo return</code>, instead of warning about an unknown type (<a href="https://github.com/taekop" class="external-link">@taekop</a>, <a href="https://github.com/r-lib/roxygen2/issues/1919" class="external-link">#1919</a>).</li>
+<li>
+<code>@inheritParams</code> with an argument filter (e.g. <code>@inheritParams foo z</code>) no longer fails when the source topic documents multiple arguments with a shared description (e.g. <code>@param x,y x and y</code>) (<a href="https://github.com/r-lib/roxygen2/issues/1925" class="external-link">#1925</a>).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.1.0" id="roxygen2-810">roxygen2 8.1.0<a class="anchor" aria-label="anchor" href="#roxygen2-810"></a></h2><p class="text-muted">CRAN release: 2026-08-04</p>
 <ul><li>Markdown support:
 <ul><li>Multibyte characters inside Rd tags are now handled correctly; previously a tag like <code>\code{café}</code> would corrupt the markdown processing of the text that followed it.</li>
 <li>Warnings triggered by an <code>rd_family_title</code> prefix (e.g. for an unsupported level 1 heading) no longer error.</li>

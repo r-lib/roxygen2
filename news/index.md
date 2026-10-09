@@ -1,6 +1,37 @@
 # Changelog
 
+## roxygen2 8.1.1
+
+CRAN release: 2026-10-08
+
+- roxygen2 now recognises the walrus operator `:=` as assignment, so S7
+  code like `Foo := new_class()` is documented the same as
+  `Foo <- new_class()`
+  ([\#1916](https://github.com/r-lib/roxygen2/issues/1916)).
+- S7 method usage is now wrapped in `\special{}`, so documenting methods
+  with extra arguments no longer triggers “codoc mismatches” in
+  `R CMD check` (RConsortium/S7#725).
+- `@importFrom` now double-quotes non-syntactic names (like
+  `` `model<-` ``) in the combined `importFrom()` directive, working
+  around a base R bug that only strips backticks from the first name in
+  a directive and broke installation of packages that re-export such
+  functions ([\#1915](https://github.com/r-lib/roxygen2/issues/1915)).
+- `@inherit` and friends once again find external topics whose name
+  needs backticks, like `` pkg::`foo-class` ``
+  ([@taekop](https://github.com/taekop),
+  [\#1918](https://github.com/r-lib/roxygen2/issues/1918)).
+- `@inherit foo returns` now inherits the return value, like
+  `@inherit foo return`, instead of warning about an unknown type
+  ([@taekop](https://github.com/taekop),
+  [\#1919](https://github.com/r-lib/roxygen2/issues/1919)).
+- `@inheritParams` with an argument filter (e.g. `@inheritParams foo z`)
+  no longer fails when the source topic documents multiple arguments
+  with a shared description (e.g. `@param x,y x and y`)
+  ([\#1925](https://github.com/r-lib/roxygen2/issues/1925)).
+
 ## roxygen2 8.1.0
+
+CRAN release: 2026-08-04
 
 - Markdown support:
   - Multibyte characters inside Rd tags are now handled correctly;

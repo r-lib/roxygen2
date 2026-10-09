@@ -1,3 +1,5 @@
+# roxygen2 (development version)
+
 # roxygen2 8.1.1
 
 * roxygen2 now recognises the walrus operator `:=` as assignment, so S7 code like `Foo := new_class()` is documented the same as `Foo <- new_class()` (#1916).

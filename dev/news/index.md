@@ -2,6 +2,12 @@
 
 ## roxygen2 (development version)
 
+- [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
+  can now use a roclet defined in the package being documented,
+  e.g. `roclets = "mypkg::my_roclet"` when documenting mypkg, without
+  mypkg needing to be installed. Roclets are now found after the package
+  code is loaded.
+
 ## roxygen2 8.1.1
 
 CRAN release: 2026-10-08

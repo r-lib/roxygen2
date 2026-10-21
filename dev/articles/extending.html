@@ -568,8 +568,11 @@ like this:</p>
 <p>See <code><a href="../reference/load_options.html">load_options()</a></code> for more details.</p>
 <p>Your package only needs to be installed when the user documents the
 package, which doesn’t correspond precisely to any field in the
-<code>DESCRIPTION</code>. However, you can think of it as a development
-dependency and hence put it in the <code>Suggests:</code> field:</p>
+<code>DESCRIPTION</code>. (If the target package is the package defining
+the roclet, it doesn’t need to be installed: roxygen2 finds roclets
+after loading the package code.) However, you can think of it as a
+development dependency and hence put it in the <code>Suggests:</code>
+field:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_package</span><span class="op">(</span><span class="st">"yourPackage"</span>, type <span class="op">=</span> <span class="st">"Suggests"</span><span class="op">)</span></span></code></pre></div>
 <p>You don’t have to do this, but it will help other developers working

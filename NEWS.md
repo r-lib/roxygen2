@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* `roxygenize()` can now use a roclet defined in the package being documented, e.g. `roclets = "mypkg::my_roclet"` when documenting mypkg, without mypkg needing to be installed. Roclets are now found after the package code is loaded.
+
 # roxygen2 8.1.1
 
 * roxygen2 now recognises the walrus operator `:=` as assignment, so S7 code like `Foo := new_class()` is documented the same as `Foo <- new_class()` (#1916).

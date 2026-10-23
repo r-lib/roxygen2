@@ -422,7 +422,6 @@ Config/roxygen2/roclets: collate, rd, namespace, yourPackage::roclet
 See `load_options()` for more details.
 
 Your package only needs to be installed when the user documents the package, which doesn't correspond precisely to any field in the `DESCRIPTION`.
-(If the target package is the package defining the roclet, it doesn't need to be installed: roxygen2 finds roclets after loading the package code.)
 However, you can think of it as a development dependency and hence put it in the `Suggests:` field:
 
 ```r
@@ -430,6 +429,25 @@ usethis::use_package("yourPackage", type = "Suggests")
 ```
 
 You don't have to do this, but it will help other developers working on the target package.
+
+### Using a roclet in the package that defines it
+
+A package can use its own roclet without being installed[^version], because roxygen2 finds roclets after loading the package code[^load].
+
+[^version]: This requires roxygen2 8.1.1.9000 or later.
+
+[^load]: This relies on the default `load = "pkgload"` strategy; it won't work with `load = "installed"`.
+
+Here are some gotchas to be able to use a roclet in the package that defines it:
+
+- In `DESCRIPTION`, if the roclet is not exported, use `yourPackage:::roclet`.
+- Run `roxygenize()` twice after first adding the roclet's S3 methods: the code is loaded before the `@exportS3Method` lines reach `NAMESPACE`.
+
+If the roclet is only for development and shouldn't ship with your package:
+
+- Add its file to `.Rbuildignore`.
+- Register the methods in the roclet constructor rather than in `NAMESPACE`, e.g. `registerS3method("roclet_output", "roclet_yourroclet", roclet_output.roclet_yourroclet, envir = asNamespace("roxygen2"))`.
+- List its dependencies in `Config/Needs/roxygen2` rather than `Imports` or `Suggests`, and use `yourPackage:::roclet` since it isn't exported.
 
 ## Conclusion: further extension ideas
 

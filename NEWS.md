@@ -1,5 +1,7 @@
 # roxygen2 (development version)
 
+* Package documentation now shows RORs as plain text rather than links, since ror.org's rate limiting frequently caused `R CMD check` URL checks to fail (#1933).
+
 # roxygen2 8.1.1
 
 * roxygen2 now recognises the walrus operator `:=` as assignment, so S7 code like `Foo := new_class()` is documented the same as `Foo <- new_class()` (#1916).

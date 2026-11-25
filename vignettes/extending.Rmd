@@ -422,6 +422,7 @@ Config/roxygen2/roclets: collate, rd, namespace, yourPackage::roclet
 See `load_options()` for more details.
 
 Your package only needs to be installed when the user documents the package, which doesn't correspond precisely to any field in the `DESCRIPTION`.
+(If the target package is the package defining the roclet, it doesn't need to be installed: roxygen2 finds roclets after loading the package code.)
 However, you can think of it as a development dependency and hence put it in the `Suggests:` field:
 
 ```r

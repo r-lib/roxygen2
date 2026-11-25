@@ -66,8 +66,6 @@ roxygenize <- function(
     return(invisible())
   }
 
-  roclets <- lapply(roclets, roclet_find)
-
   if (!is_interactive()) {
     withr::local_options(warn = 1)
   }
@@ -75,6 +73,9 @@ roxygenize <- function(
   # Now load code
   env <- load_code(base_path)
   local_roxy_meta_set("env", env)
+
+  # Find roclets after loading code so the package can use its own roclets
+  roclets <- lapply(roclets, roclet_find)
 
   # Tokenise each file
   blocks <- parse_package(base_path, env = NULL)

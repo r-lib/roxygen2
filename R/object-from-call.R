@@ -81,7 +81,7 @@ object_from_name <- function(name, env, block) {
     # S4 methods need munging to get real function def
     value@.Data <- extract_method_fun(value@.Data)
     type <- "s4method"
-  } else if (methods::is(value, "standardGeneric")) {
+  } else if (methods::is(value, "genericFunction")) {
     type <- "s4generic"
   } else if (inherits(value, "S7_class")) {
     type <- "s7class"

@@ -148,7 +148,7 @@ method(size, Range) <- function(x, ...) {
 ```
 
 S7 methods are registered at load time via
-[`S7::methods_register()`](https://rconsortium.github.io/S7/reference/methods_register.html)
+[`S7::methods_register()`](https://rconsortium.github.io/S7/reference/S7_on_load.html)
 in your `.onLoad()` function, not through `NAMESPACE` directives, so you
 never need to `@export` them. See
 [`vignette("packages", package = "S7")`](https://rconsortium.github.io/S7/articles/packages.html)

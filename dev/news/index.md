@@ -2,6 +2,10 @@
 
 ## roxygen2 (development version)
 
+- Package documentation now shows RORs as plain text rather than links,
+  since ror.org’s rate limiting frequently caused `R CMD check` URL
+  checks to fail
+  ([\#1933](https://github.com/r-lib/roxygen2/issues/1933)).
 - [`roxygenize()`](https://roxygen2.r-lib.org/dev/reference/roxygenize.md)
   can now use a roclet defined in the package being documented,
   e.g. `roclets = "mypkg::my_roclet"` when documenting mypkg, without

@@ -27,15 +27,15 @@
       # ROR comments
       person_desc(comment = c(ROR = "03wc8by49"))
     Output
-      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR})"
+      [1] "H W \\email{h@w.com} (ROR: 03wc8by49, \\verb{https://ror.org/03wc8by49})"
     Code
       person_desc(comment = c(ROR = "https://ror.org/03wc8by49"))
     Output
-      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR})"
+      [1] "H W \\email{h@w.com} (ROR: 03wc8by49, \\verb{https://ror.org/03wc8by49})"
     Code
       person_desc(comment = c(ROR = "03wc8by49", "extra"))
     Output
-      [1] "H W \\email{h@w.com} (\\href{https://ror.org/03wc8by49}{ROR}) (extra)"
+      [1] "H W \\email{h@w.com} (ROR: 03wc8by49, \\verb{https://ror.org/03wc8by49}) (extra)"
     Code
       # Arbitrary comments (#1746)
       person_desc(comment = c(acronym = "rajo", "Contributed XY"))

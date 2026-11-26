@@ -80,12 +80,16 @@ author_desc <- function(x) {
     }
     if (has_name(x$comment, "ROR")) {
       ror <- x$comment[["ROR"]]
-
-      if (grepl("https?://", ror)) {
-        desc <- paste0(desc, " (\\href{", ror, "}{ROR})")
+      id <- sub("^https?://ror\\.org/", "", ror)
+      url <- if (grepl("https?://", ror)) {
+        ror
       } else {
-        desc <- paste0(desc, " (\\href{https://ror.org/", ror, "}{ROR})")
+        paste0("https://ror.org/", ror)
       }
+
+      # Use \verb{} rather than \href{} because ror.org is heavily rate
+      # limited, so R CMD check's URL checks frequently fail with 429 (#1933)
+      desc <- paste0(desc, " (ROR: ", id, ", \\verb{", url, "})")
       x$comment <- x$comment[!names(x$comment) %in% "ROR"]
     }
 

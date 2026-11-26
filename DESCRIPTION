@@ -39,9 +39,9 @@ Imports:
 Suggests: 
     covr,
     R.methodsS3,
-    S7,
     R.oo,
     rmarkdown (>= 2.16),
+    S7,
     testthat (>= 3.1.2),
     yaml
 LinkingTo: 

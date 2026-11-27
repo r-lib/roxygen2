@@ -177,6 +177,53 @@ test_that("@exportS3Method can extract class from generic", {
   expect_snapshot(. <- roc_proc_text(namespace_roclet(), block))
 })
 
+test_that("@exportS3Method handles regex metacharacters and non-syntactic names", {
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @exportS3Method base::[
+    `[.myclass` <- function(x, ...) x
+  "
+  )
+  expect_equal(out, 'S3method(base::"[",myclass)')
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @exportS3Method base::$
+    `$.myclass` <- function(x, name) x
+  "
+  )
+  expect_equal(out, 'S3method(base::"$",myclass)')
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @exportS3Method
+    `mean.foo-bar` <- function(x) 'foo'
+  "
+  )
+  expect_equal(out, 'S3method(mean,"foo-bar")')
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @exportS3Method
+    `[.myclass` <- function(x, ...) x
+  "
+  )
+  expect_equal(out, 'S3method("[",myclass)')
+
+  out <- roc_proc_text(
+    namespace_roclet(),
+    "
+    #' @exportS3Method base::[ foo-bar
+    NULL
+  "
+  )
+  expect_equal(out, 'S3method(base::"[","foo-bar")')
+})
+
 test_that("exportClass overrides default class name", {
   out <- roc_proc_text(namespace_roclet(), "#' @exportClass b\nsetClass('a')")
   expect_equal(out, 'exportClasses(b)')

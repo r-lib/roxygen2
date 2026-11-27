@@ -290,17 +290,18 @@ roxy_tag_ns.roxy_tag_exportS3Method <- function(x, block, env) {
     }
 
     generic <- re_split_half(x$val, "::")
-    generic_re <- paste0("^", generic[[2]], "\\.")
+    generic_name <- strip_quotes(generic[[2]])
+    prefix <- paste0(generic_name, ".")
 
-    if (!grepl(generic_re, obj$alias)) {
+    if (!startsWith(obj$alias, prefix)) {
       warn_roxy_tag(
         x,
-        "generic ({.str {generic[[2]]}}) doesn't match function ({.str {obj$alias}})",
+        "generic ({.str {generic_name}}) doesn't match function ({.str {obj$alias}})"
       )
       return()
     }
 
-    class <- sub(generic_re, "", obj$alias)
+    class <- substring(obj$alias, nchar(prefix) + 1L)
     method <- c(x$val, class)
   } else {
     method <- x$val
@@ -408,7 +409,7 @@ default_export.s4generic <- function(x, block) export(x$value@generic)
 default_export.s4method <- function(x, block) export_s4_method(x$value@generic)
 #' @export
 default_export.s3method <- function(x, block) {
-  export_s3_method(auto_quote(attr(x$value, "s3method")))
+  export_s3_method(attr(x$value, "s3method"))
 }
 #' @export
 default_export.rcclass <- function(x, block) export_class(x$value@className)
@@ -425,8 +426,19 @@ export <- function(x) one_per_line("export", x)
 export_class <- function(x) one_per_line("exportClasses", x)
 export_s4_method <- function(x) one_per_line("exportMethods", x)
 export_s3_method <- function(x) {
+  x[[1]] <- quote_s3_generic(x[[1]])
+  x[-1] <- auto_quote(x[-1])
   args <- paste0(x, collapse = ",")
   paste0("S3method(", args, ")")
+}
+
+quote_s3_generic <- function(x) {
+  if (!has_quotes(x) && grepl("::", x, fixed = TRUE)) {
+    parts <- re_split_half(x, "::")
+    paste0(auto_quote(parts), collapse = "::")
+  } else {
+    auto_quote(x)
+  }
 }
 
 # Escape hatch: if a directive contains a comma, insert it verbatim rather than
